@@ -1,0 +1,31 @@
+{
+  "name": "Himation",
+  "kind": "garment",
+  "layer": 4,
+  "_about": "the himation: a great woollen mantle wrapped round the body from the left, over the shoulders, open at the right front, to the calves",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "undyed"
+    },
+    "trim": {
+      "pattern": "fabrics/meander",
+      "palette": "meander-red"
+    }
+  },
+  "params": {
+    "hem": 0.03
+  },
+  "use": [
+    {
+      "use": "clothes/components/mantle",
+      "params": {
+        "to": "calf",
+        "centre": 205,
+        "span": 300,
+        "flare": 0.22,
+        "hem": "hem"
+      }
+    }
+  ]
+}

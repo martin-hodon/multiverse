@@ -1,0 +1,345 @@
+{
+ "kind": "item",
+ "name": "Robin",
+ "category": "birds",
+ "era": "everywhere",
+ "region": "Europe",
+ "_about": "a robin: olive-brown above, the red breast and face",
+ "params": {
+  "s": [
+   0.92,
+   1.08
+  ],
+  "pose": {
+   "pick": [
+    "spread",
+    "folded"
+   ]
+  }
+ },
+ "materials": {
+  "back": "plumage-olive",
+  "breast": "robin-red",
+  "head": "plumage-olive",
+  "wing": "plumage-olive",
+  "primaries": "plumage-olive",
+  "tips": "wing-dark",
+  "tail": "plumage-olive",
+  "beak": "beak-dark",
+  "legs": "leg-pink",
+  "eye": "#1a1208"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "sweep",
+   "material": "back",
+   "sides": 9,
+   "seg": 1,
+   "radii": [
+    "s * 0.0057",
+    "s * 0.0230",
+    "s * 0.0250",
+    "s * 0.0160",
+    "s * 0.0056"
+   ],
+   "path": [
+    [
+     "s * 0.0450",
+     "s * 0.0705",
+     0
+    ],
+    [
+     "s * 0.0225",
+     "s * 0.0705",
+     0
+    ],
+    [
+     0,
+     "s * 0.0693",
+     0
+    ],
+    [
+     "s * -0.0270",
+     "s * 0.0718",
+     0
+    ],
+    [
+     "s * -0.0450",
+     "s * 0.0743",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "breast",
+   "type": "sphere",
+   "material": "breast",
+   "r": "s * 0.0184",
+   "sides": 8,
+   "at": [
+    "s * 0.0180",
+    "s * 0.0660",
+    0
+   ],
+   "stretch": [
+    1.7,
+    1.02,
+    1.1
+   ]
+  },
+  {
+   "id": "head",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.0170",
+   "sides": 8,
+   "at": [
+    "s * 0.0570",
+    "s * 0.0835",
+    0
+   ]
+  },
+  {
+   "id": "eye",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0031",
+   "sides": 5,
+   "at": [
+    "s * 0.0646",
+    "s * 0.0878",
+    "s * 0.0136"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "beak",
+   "type": "rod",
+   "material": "beak",
+   "sides": 4,
+   "r0": "s * 0.0030",
+   "r1": "s * 0.0002",
+   "at": [
+    "s * 0.0697",
+    "s * 0.0827",
+    0
+   ],
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0090",
+    "s * -0.0015",
+    0
+   ]
+  },
+  {
+   "id": "thigh",
+   "type": "rod",
+   "material": "legs",
+   "sides": 4,
+   "r": "s * 0.0018",
+   "from": [
+    "s * -0.0045",
+    "s * 0.0480",
+    "s * 0.0087"
+   ],
+   "to": [
+    "s * 0.0018",
+    "s * 0.0260",
+    "s * 0.0100"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tarsus",
+   "type": "rod",
+   "material": "legs",
+   "sides": 4,
+   "r": "s * 0.0014",
+   "from": [
+    "s * 0.0018",
+    "s * 0.0260",
+    "s * 0.0100"
+   ],
+   "to": [
+    "s * 0.0036",
+    0,
+    "s * 0.0100"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "toes",
+   "type": "rod",
+   "material": "legs",
+   "sides": 3,
+   "r0": "s * 0.0011",
+   "r1": "s * 0.0004",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0117",
+    0,
+    0
+   ],
+   "at": [
+    "s * 0.0036",
+    0,
+    "s * 0.0100"
+   ],
+   "around": {
+    "n": 3,
+    "r": 0,
+    "plane": "xz",
+    "start": -35,
+    "span": 70
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "hind toe",
+   "type": "rod",
+   "material": "legs",
+   "sides": 3,
+   "r0": "s * 0.0010",
+   "r1": "s * 0.0004",
+   "from": [
+    "s * 0.0036",
+    0,
+    "s * 0.0100"
+   ],
+   "to": [
+    "s * -0.0029",
+    0,
+    "s * 0.0100"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tail",
+   "type": "feathers",
+   "material": "tail",
+   "tips": "tips",
+   "n": 6,
+   "shape": "rounded",
+   "band": 0,
+   "lift": 0.0008,
+   "roots": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "dir": [
+    "-14.0",
+    "14.0"
+   ],
+   "length": [
+    "s * 0.0450",
+    "s * 0.0450"
+   ],
+   "width": [
+    "s * 0.0080",
+    "s * 0.0080"
+   ],
+   "droop": 0.2,
+   "lead": 1,
+   "at": [
+    "s * -0.0405",
+    "s * 0.0730",
+    0,
+    -90,
+    -10,
+    0
+   ]
+  },
+  {
+   "id": "wing spread",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "spread"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 0.1100",
+    "chord": "s * 0.0400",
+    "pri": 10,
+    "sec": 10,
+    "spread": 1,
+    "sweep": -6,
+    "band": 0
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0135",
+    "s * 0.0830",
+    "s * 0.0200",
+    0,
+    -8,
+    0
+   ]
+  },
+  {
+   "id": "wing folded",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "folded"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 0.1100",
+    "chord": "s * 0.0400",
+    "pri": 10,
+    "sec": 10,
+    "spread": 0,
+    "sweep": -6,
+    "band": 0
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0135",
+    "s * 0.0905",
+    "s * 0.0125",
+    0,
+    70,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.0680",
+   0
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   1,
+   0
+  ]
+ }
+}

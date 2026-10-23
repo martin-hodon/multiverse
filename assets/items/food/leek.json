@@ -1,0 +1,108 @@
+{
+ "kind": "item",
+ "name": "Leek",
+ "category": "food/vegetable",
+ "era": "-2000-1900",
+ "region": "Egypt, Europe",
+ "_about": "a leek: the white shank below, the flat green leaves fanning above",
+ "params": {
+  "s": [
+   0.9,
+   1.15
+  ]
+ },
+ "materials": {
+  "shank": "leek-white",
+  "leaf": "leek-green",
+  "root": "root"
+ },
+ "parts": [
+  {
+   "id": "shank",
+   "type": "lathe",
+   "material": "shank",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     "s * 0.012",
+     "s * 0.005"
+    ],
+    [
+     "s * 0.014",
+     "s * 0.15"
+    ],
+    [
+     "s * 0.012",
+     "s * 0.2"
+    ]
+   ],
+   "sides": 7
+  },
+  {
+   "id": "leaf",
+   "type": "box",
+   "material": "leaf",
+   "size": [
+    0.002,
+    "s * 0.2",
+    "s * 0.022"
+   ],
+   "at": [
+    0,
+    "s * 0.29",
+    0,
+    0,
+    0,
+    -12
+   ],
+   "around": {
+    "n": 5,
+    "r": "s * 0.012",
+    "plane": "xz",
+    "span": 300
+   }
+  },
+  {
+   "id": "roots",
+   "type": "rod",
+   "material": "root",
+   "from": [
+    0,
+    "s * 0.004",
+    0
+   ],
+   "to": [
+    "s * 0.006",
+    "-s * 0.02",
+    0
+   ],
+   "r": 0.0012,
+   "sides": 3,
+   "around": {
+    "n": 6,
+    "r": 0.004,
+    "plane": "xz"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.15",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

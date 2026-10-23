@@ -1,0 +1,1937 @@
+{
+ "kind": "item",
+ "name": "Freight wagon",
+ "category": "components",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "the body of a freight wagon (4.2 m bed on 2 axle(s)): bed, sides, head- and tailboards, the driver's board, footboard, axles and bolsters -- its wheels apart (components/cart-wheel), and its LOAD by `load` (0..4: casks lying in chocked pyramids, standing casks, kegs, sacks in two courses; 5 sheaves heaped, the harvest's, never on the road; -1 empty)",
+ "params": {
+  "load": 0,
+  "seatTop": 1.415,
+  "seatX": 1.75,
+  "bedL": 4.2,
+  "bedW": 1.7,
+  "floor": 0.95,
+  "side": 0.6,
+  "axle1X": 1.55,
+  "wheel1R": 0.6,
+  "axle2X": -1.55,
+  "wheel2R": 0.75
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "#7a5a36",
+    "#6f5433",
+    "#846040",
+    "#6a4a2c"
+   ]
+  },
+  "dark": "#4e3a24"
+ },
+ "parts": [
+  {
+   "id": "bed",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    4.2,
+    0.06,
+    1.7
+   ],
+   "at": [
+    0,
+    0.9199999999999999,
+    0
+   ]
+  },
+  {
+   "id": "sides",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    4.2,
+    0.6,
+    0.05
+   ],
+   "at": [
+    [
+     0,
+     1.25,
+     0.875
+    ],
+    [
+     0,
+     1.25,
+     -0.875
+    ]
+   ]
+  },
+  {
+   "id": "headboard",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.05,
+    0.6,
+    1.8
+   ],
+   "at": [
+    [
+     2.125,
+     1.25,
+     0
+    ],
+    [
+     -2.125,
+     1.25,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "driver's board",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.42,
+    0.05,
+    1.5999999999999999
+   ],
+   "at": [
+    1.75,
+    1.39,
+    0
+   ]
+  },
+  {
+   "id": "board legs",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.05,
+    0.42,
+    0.06
+   ],
+   "at": [
+    [
+     1.75,
+     1.16,
+     0.75
+    ],
+    [
+     1.75,
+     1.16,
+     -0.75
+    ]
+   ]
+  },
+  {
+   "id": "footboard",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.36,
+    0.04,
+    1.5
+   ],
+   "at": [
+    2.3000000000000003,
+    1.03,
+    0
+   ]
+  },
+  {
+   "id": "axle 1",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.05,
+   "from": [
+    1.55,
+    0.6,
+    -1.1
+   ],
+   "to": [
+    1.55,
+    0.6,
+    1.1
+   ],
+   "sides": 8
+  },
+  {
+   "id": "bolster 1",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.16,
+    0.29,
+    1.36
+   ],
+   "at": [
+    1.55,
+    0.745,
+    0
+   ]
+  },
+  {
+   "id": "axle 2",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.05,
+   "from": [
+    -1.55,
+    0.75,
+    -1.1
+   ],
+   "to": [
+    -1.55,
+    0.75,
+    1.1
+   ],
+   "sides": 8
+  },
+  {
+   "id": "bolster 2",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.16,
+    0.14,
+    1.36
+   ],
+   "at": [
+    -1.55,
+    0.82,
+    0
+   ]
+  },
+  {
+   "id": "reach",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    3.8000000000000003,
+    0.08,
+    0.12
+   ],
+   "at": [
+    0,
+    0.84,
+    0
+   ]
+  },
+  {
+   "id": "load 0 cask 1",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -1.6,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 0 cask 2",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.85,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 0 cask 3",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.1,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 2
+  },
+  {
+   "id": "load 0 cask 4",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    0.65,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 3
+  },
+  {
+   "id": "load 0 cask 5",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -1.225,
+    1.9062,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 4
+  },
+  {
+   "id": "load 0 cask 6",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.475,
+    1.9062,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 5
+  },
+  {
+   "id": "load 0 cask 7",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    0.275,
+    1.9062,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 6
+  },
+  {
+   "id": "load 0 cask 8",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    1.3,
+    0.95,
+    0.45
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 7
+  },
+  {
+   "id": "load 0 cask 9",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    1.3,
+    0.95,
+    -0.45
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 8
+  },
+  {
+   "id": "load 1 cask 1",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -1.5,
+    0.95,
+    0.38
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 1 cask 2",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -1.5,
+    0.95,
+    -0.38
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 1 cask 3",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.75,
+    0.95,
+    0.38
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 2
+  },
+  {
+   "id": "load 1 cask 4",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.75,
+    0.95,
+    -0.38
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 3
+  },
+  {
+   "id": "load 1 cask 5",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    0,
+    0.95,
+    0.38
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 4
+  },
+  {
+   "id": "load 1 cask 6",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    0,
+    0.95,
+    -0.38
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 5
+  },
+  {
+   "id": "load 1 cask 7",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    0.75,
+    0.95,
+    0.38
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 6
+  },
+  {
+   "id": "load 1 cask 8",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    0.75,
+    0.95,
+    -0.38
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 7
+  },
+  {
+   "id": "load 2 cask 1",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -1.6,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 2 cask 2",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.85,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 2 cask 3",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.1,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 2
+  },
+  {
+   "id": "load 2 cask 4",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    0.55,
+    0.95,
+    0.55
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 3
+  },
+  {
+   "id": "load 2 cask 5",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    0.55,
+    0.95,
+    0
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 4
+  },
+  {
+   "id": "load 2 cask 6",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    0.55,
+    0.95,
+    -0.55
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 5
+  },
+  {
+   "id": "load 2 cask 7",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    1.0,
+    0.95,
+    0.55
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 6
+  },
+  {
+   "id": "load 2 cask 8",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    1.0,
+    0.95,
+    0
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 7
+  },
+  {
+   "id": "load 2 cask 9",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    1.0,
+    0.95,
+    -0.55
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 8
+  },
+  {
+   "id": "load 3 sack 1",
+   "use": "items/tools/sack",
+   "at": [
+    -1.82,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 2",
+   "use": "items/tools/sack",
+   "at": [
+    -1.3,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 3",
+   "use": "items/tools/sack",
+   "at": [
+    -0.78,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 4",
+   "use": "items/tools/sack",
+   "at": [
+    -0.26,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 5",
+   "use": "items/tools/sack",
+   "at": [
+    0.26,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 6",
+   "use": "items/tools/sack",
+   "at": [
+    0.78,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 7",
+   "use": "items/tools/sack",
+   "at": [
+    1.3,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 8",
+   "use": "items/tools/sack",
+   "at": [
+    1.82,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 9",
+   "use": "items/tools/sack",
+   "at": [
+    -1.56,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 10",
+   "use": "items/tools/sack",
+   "at": [
+    -1.04,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 11",
+   "use": "items/tools/sack",
+   "at": [
+    -0.52,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 12",
+   "use": "items/tools/sack",
+   "at": [
+    0.0,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 13",
+   "use": "items/tools/sack",
+   "at": [
+    0.52,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 14",
+   "use": "items/tools/sack",
+   "at": [
+    1.04,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 15",
+   "use": "items/tools/sack",
+   "at": [
+    1.56,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 4 cask 1",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -1.6,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 4
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 4 cask 2",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.85,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 4
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 4 cask 3",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.1,
+    1.3,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 4
+   },
+   "seed": 2
+  },
+  {
+   "id": "load 4 cask 4",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -1.225,
+    1.9062,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 4
+   },
+   "seed": 3
+  },
+  {
+   "id": "load 4 cask 5",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.475,
+    1.9062,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 4
+   },
+   "seed": 4
+  },
+  {
+   "id": "load 4 sack 6",
+   "use": "items/tools/sack",
+   "at": [
+    0.6,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 4
+   }
+  },
+  {
+   "id": "load 4 sack 7",
+   "use": "items/tools/sack",
+   "at": [
+    1.12,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 4
+   }
+  },
+  {
+   "id": "load 4 sack 8",
+   "use": "items/tools/sack",
+   "at": [
+    1.64,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 4
+   }
+  },
+  {
+   "id": "load 4 sack 9",
+   "use": "items/tools/sack",
+   "at": [
+    0.86,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 4
+   }
+  },
+  {
+   "id": "load 4 sack 10",
+   "use": "items/tools/sack",
+   "at": [
+    1.38,
+    1.35,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 4
+   }
+  },
+  {
+   "id": "load 5 sheaf 1",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.92,
+    0.95,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 2",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.64,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 3",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.36,
+    0.95,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 4",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.08,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 5",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.8,
+    0.95,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 6",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.52,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 7",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.24,
+    0.95,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 8",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.04,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 9",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.32,
+    0.95,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 10",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.6,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 11",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.88,
+    0.95,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 12",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.16,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 13",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.44,
+    0.95,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 14",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.72,
+    0.95,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 15",
+   "use": "items/tools/sheaf",
+   "at": [
+    2.0,
+    0.95,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 16",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.78,
+    1.17,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 17",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.5,
+    1.17,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 18",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.22,
+    1.17,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 19",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.94,
+    1.17,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 20",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.66,
+    1.17,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 21",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.38,
+    1.17,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 22",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.1,
+    1.17,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 23",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.18,
+    1.17,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 24",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.46,
+    1.17,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 25",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.74,
+    1.17,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 26",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.02,
+    1.17,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 27",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.3,
+    1.17,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 28",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.58,
+    1.17,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 29",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.86,
+    1.17,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 30",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.64,
+    1.39,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 31",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.36,
+    1.39,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 32",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.08,
+    1.39,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 33",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.8,
+    1.39,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 34",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.52,
+    1.39,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 35",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.24,
+    1.39,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 36",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.04,
+    1.39,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 37",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.32,
+    1.39,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 38",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.6,
+    1.39,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 39",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.88,
+    1.39,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 40",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.16,
+    1.39,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 41",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.44,
+    1.39,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 42",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.72,
+    1.39,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 43",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.5,
+    1.61,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 44",
+   "use": "items/tools/sheaf",
+   "at": [
+    -1.22,
+    1.61,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 45",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.94,
+    1.61,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 46",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.66,
+    1.61,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 47",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.38,
+    1.61,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 48",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.1,
+    1.61,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 49",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.18,
+    1.61,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 50",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.46,
+    1.61,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 51",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.74,
+    1.61,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 52",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.02,
+    1.61,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 53",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.3,
+    1.61,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 54",
+   "use": "items/tools/sheaf",
+   "at": [
+    1.58,
+    1.61,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  }
+ ]
+}

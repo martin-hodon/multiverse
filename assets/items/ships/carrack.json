@@ -1,0 +1,436 @@
+{
+ "kind": "item",
+ "name": "Carrack",
+ "category": "ship",
+ "era": "1450-1600",
+ "region": "Portugal, Spain, Genoa, England",
+ "_about": "the ocean ship of the discoveries -- the Santa María, the Mary Rose: a deep round hull with tumblehome, a forecastle jutting over the stem and an aftcastle in two tiers, three masts -- square sails fore and main, a lateen mizzen -- and a bowsprit",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   28,
+   36
+  ],
+  "B": "L * 0.3",
+  "D": "B * 0.6",
+  "mastH": "L * 0.8"
+ },
+ "materials": {
+  "planks": "planks",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.55,
+   "tumblehome": 0.15,
+   "plan": [
+    [
+     0,
+     0.2
+    ],
+    [
+     0.12,
+     0.7
+    ],
+    [
+     0.4,
+     1
+    ],
+    [
+     0.6,
+     1
+    ],
+    [
+     0.85,
+     0.7
+    ],
+    [
+     1,
+     0.03
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.3"
+    ],
+    [
+     0.1,
+     0
+    ],
+    [
+     0.9,
+     0
+    ],
+    [
+     1,
+     "D * 0.45"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.15"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.25"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.82",
+     "from": 0.03,
+     "to": 0.97
+    }
+   ],
+   "rail": 0.1,
+   "keelBeam": [
+    0.35,
+    0.35
+   ]
+  },
+  {
+   "id": "aftcastle",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.9",
+    "d": "L * 0.3",
+    "h": "D * 0.45",
+    "rail": 1.0,
+    "crenels": 0,
+    "posts": 0
+   },
+   "at": [
+    "L * 0.02",
+    "D * 0.82",
+    0
+   ]
+  },
+  {
+   "id": "poop",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.75",
+    "d": "L * 0.15",
+    "h": "D * 0.4",
+    "rail": 0.9,
+    "crenels": 0,
+    "posts": 0
+   },
+   "at": [
+    "L * 0.02",
+    "D * 1.27",
+    0
+   ]
+  },
+  {
+   "id": "aftcastle wall",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    "L * 0.3",
+    "D * 0.45",
+    0.1
+   ],
+   "at": [
+    "L * 0.17",
+    "D * 1.05",
+    "B * 0.45"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "poop wall",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    "L * 0.15",
+    "D * 0.4",
+    0.1
+   ],
+   "at": [
+    "L * 0.095",
+    "D * 1.47",
+    "B * 0.37"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "stern wall",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    0.1,
+    "D * 0.85",
+    "B * 0.9"
+   ],
+   "at": [
+    "L * 0.02",
+    "D * 1.25",
+    0
+   ]
+  },
+  {
+   "id": "forecastle",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.7",
+    "d": "L * 0.18",
+    "h": "D * 0.4",
+    "rail": 1.0,
+    "crenels": 0,
+    "posts": 0
+   },
+   "at": [
+    "L * 0.84",
+    "D * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "forecastle wall",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    "L * 0.18",
+    "D * 0.4",
+    0.1
+   ],
+   "at": [
+    "L * 0.93",
+    "D * 1.1",
+    "B * 0.35"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 1.0",
+    "w": "B * 0.08",
+    "tiller": "L * 0.1"
+   },
+   "at": [
+    0,
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.5",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.3,
+    "top": "topmast",
+    "topH": 0.45
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.82",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.82 + mastH * 0.85",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.55",
+    "h": "mastH * 0.5",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.07"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.82 + mastH * 0.85",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.82 + mastH * 1.4",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.28",
+    "h": "mastH * 0.3",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.03"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.82 + mastH * 1.4",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.85",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.65",
+    "r": 0.22,
+    "top": "topmast",
+    "topH": 0.4
+   },
+   "at": [
+    "L * 0.85",
+    "D * 1.3",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.85 D * 1.3 + mastH * 0.58",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.38",
+    "h": "mastH * 0.36",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.05"
+   },
+   "at": [
+    "L * 0.85",
+    "D * 1.3 + mastH * 0.58",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.15",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.5",
+    "r": 0.18,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.15",
+    "D * 1.67",
+    0
+   ]
+  },
+  {
+   "id": "lateen L * 0.15",
+   "use": "items/components/lateen-sail",
+   "params": {
+    "l": "L * 0.42",
+    "tilt": 48,
+    "drop": 0.5,
+    "set": "set"
+   },
+   "at": [
+    "L * 0.15",
+    "D * 1.67 + mastH * 0.4",
+    0
+   ]
+  },
+  {
+   "id": "bowsprit",
+   "use": "items/components/bowsprit",
+   "params": {
+    "l": "L * 0.35",
+    "r": 0.2,
+    "steeve": 28
+   },
+   "at": [
+    "L * 0.97",
+    "D * 1.3",
+    0
+   ]
+  },
+  {
+   "id": "anchor",
+   "use": "items/components/anchor",
+   "params": {
+    "h": "D * 0.45"
+   },
+   "at": [
+    "L * 0.85",
+    "D * 1.0",
+    "B * 0.5"
+   ]
+  },
+  {
+   "id": "stay L * 0.5-L * 0.97",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.82 + mastH * 1.45",
+    0
+   ],
+   "to": [
+    "L * 0.97",
+    "D * 1.35",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.85-L * 1.25",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.85",
+    "D * 1.3 + mastH * 0.65",
+    0
+   ],
+   "to": [
+    "L * 1.25",
+    "D * 1.45",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.5-L * 0.1",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.82 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.1",
+    "D * 2.05",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ]
+}

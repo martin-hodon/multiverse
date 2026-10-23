@@ -1,0 +1,265 @@
+{
+ "kind": "item",
+ "name": "Junk",
+ "category": "ship",
+ "era": "1200-1900",
+ "region": "China, South-East Asia",
+ "_about": "the sea-going junk: a flat-bottomed hull with a blunt bow and a high stern, bulkheads inside, a great stern rudder, and battened lug sails on three masts",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   28,
+   40
+  ],
+  "B": "L * 0.26",
+  "D": "B * 0.5",
+  "mastH": "L * 0.75"
+ },
+ "materials": {
+  "planks": "planks",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "sail-tan",
+  "rope": "hemp",
+  "metal": "iron",
+  "trim": "lacquer-red"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.85,
+   "plan": [
+    [
+     0,
+     0.35
+    ],
+    [
+     0.15,
+     0.8
+    ],
+    [
+     0.45,
+     1
+    ],
+    [
+     0.75,
+     0.95
+    ],
+    [
+     1,
+     0.45
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.5"
+    ],
+    [
+     0.15,
+     0
+    ],
+    [
+     0.85,
+     0
+    ],
+    [
+     1,
+     "D * 0.3"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.7"
+    ],
+    [
+     0.25,
+     "D * 1.1"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.05"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.85",
+     "from": 0.03,
+     "to": 0.99
+    }
+   ],
+   "rail": 0.1,
+   "keelBeam": [
+    0.3,
+    0.2
+   ]
+  },
+  {
+   "id": "poop",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.9",
+    "d": "L * 0.22",
+    "h": "D * 0.55",
+    "windows": 3
+   },
+   "materials": {
+    "wood": "planks",
+    "roofm": "trim"
+   },
+   "at": [
+    "L * 0.02",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 1.4",
+    "w": "B * 0.16",
+    "tiller": "L * 0.15",
+    "thick": 0.12
+   },
+   "at": [
+    0,
+    "D * 1.2",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.55",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.3,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.55",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "main sail",
+   "use": "items/components/junk-sail",
+   "params": {
+    "w": "L * 0.3",
+    "h": "mastH * 0.8",
+    "battens": 6
+   },
+   "at": [
+    "L * 0.55",
+    "D * 0.85 + mastH * 0.92",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.82",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.6",
+    "r": 0.2,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.82",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "fore sail",
+   "use": "items/components/junk-sail",
+   "params": {
+    "w": "L * 0.2",
+    "h": "mastH * 0.48",
+    "battens": 4
+   },
+   "at": [
+    "L * 0.82",
+    "D * 0.85 + mastH * 0.56",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.2",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.45",
+    "r": 0.16,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.2",
+    "D * 0.85 + D * 0.55",
+    0
+   ]
+  },
+  {
+   "id": "mizzen sail",
+   "use": "items/components/junk-sail",
+   "params": {
+    "w": "L * 0.14",
+    "h": "mastH * 0.34",
+    "battens": 3
+   },
+   "at": [
+    "L * 0.2",
+    "D * 1.4 + mastH * 0.42",
+    0
+   ]
+  },
+  {
+   "id": "eye",
+   "type": "lathe",
+   "material": "trim",
+   "at": [
+    "L * 0.9",
+    "D * 0.9",
+    "B * 0.46",
+    0,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.3,
+     0
+    ],
+    [
+     0.3,
+     0.04
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "double": true
+  }
+ ]
+}

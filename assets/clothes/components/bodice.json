@@ -1,0 +1,47 @@
+{
+  "name": "Bodice",
+  "kind": "component",
+  "_about": "A SHEET ROUND THE TORSO from the collar down to the waist or the hips, following the body: the body of a shirt, a tunic, a kirtle, a doublet. Its NECKLINE is cut from its top (a ball round the collar point: round, scoop, v, square, boat, deeper at the front than the back by `neckFront` and `neckBack`); LACING runs down a narrow strip at its front; a HEM band may border its lower edge.",
+  "params": {
+    "from": "collar",
+    "to": "waist",
+    "neckline": "round",
+    "neckFront": 0.02,
+    "neckBack": 0.005,
+    "neckWidth": 60,
+    "lacing": false,
+    "hem": 0
+  },
+  "pieces": [
+    {
+      "name": "body",
+      "on": "torso",
+      "from": "from",
+      "to": "to",
+      "fabric": "main",
+      "opening": {
+        "neckline": "neckline",
+        "front": "neckFront",
+        "back": "neckBack",
+        "width": "neckWidth"
+      },
+      "hem": {
+        "width": "hem",
+        "fabric": "trim"
+      }
+    },
+    {
+      "name": "lacing",
+      "if": "lacing",
+      "on": "torso",
+      "from": "armpit - 0.05",
+      "to": "waist - 0.01",
+      "wrap": [
+        0,
+        10
+      ],
+      "fabric": "lacing",
+      "thick": 0.001
+    }
+  ]
+}

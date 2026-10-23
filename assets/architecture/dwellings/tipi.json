@@ -1,0 +1,92 @@
+{
+ "name": "Tipi",
+ "_about": "The Plains tipi: buffalo hide sewn round a cone of lodgepoles, the poles crossing above the smoke hole, the fire inside (the Great Plains, 1500-1900)",
+ "era": "1500-1900",
+ "region": "the Great Plains",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "cover": {
+   "type": "dome",
+   "sides": 14,
+   "radius": 2.6,
+   "thickness": 0,
+   "head": {
+    "profile": "trigonal",
+    "rise": 5.6
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     -1.5707963
+    ]
+   ],
+   "oculus": 2.0429,
+   "sweep": 0.951
+  },
+  "cover top": {
+   "type": "dome",
+   "sides": 14,
+   "radius": 2.0428571428571427,
+   "thickness": 0,
+   "head": {
+    "profile": "trigonal",
+    "rise": 4.3999999999999995
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     1.2,
+     0,
+     0
+    ]
+   ]
+  },
+  "poles": {
+   "type": "item",
+   "item": "items/components/tent-poles",
+   "params": {
+    "n": 12,
+    "r": 2.5,
+    "h": 5.4,
+    "over": 1.0
+   },
+   "solid": false,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "fire": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.25,
+    "h": 0.5
+   }
+  }
+ },
+ "build": [
+  "cover",
+  "cover top",
+  "poles",
+  "fire"
+ ]
+}

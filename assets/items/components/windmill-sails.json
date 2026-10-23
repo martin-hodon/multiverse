@@ -1,0 +1,47 @@
+{
+ "kind": "item",
+ "name": "Windmill sails",
+ "category": "components",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "the sail cross of a post or tower mill: four arms on the windshaft, R long, the shaft running back into the cap",
+ "params": {
+  "R": 5.0
+ },
+ "materials": {
+  "wood": "#6a5236",
+  "cloth": "canvas"
+ },
+ "parts": [
+  {
+   "id": "arms",
+   "use": "items/components/windmill-arm",
+   "params": {
+    "R": "R"
+   },
+   "around": {
+    "n": 4,
+    "r": 0,
+    "plane": "xy",
+    "start": 90
+   }
+  },
+  {
+   "id": "windshaft",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.24,
+   "from": [
+    0,
+    0,
+    0.2
+   ],
+   "to": [
+    0,
+    0,
+    -1.6
+   ],
+   "sides": 8
+  }
+ ]
+}

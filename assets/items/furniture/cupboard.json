@@ -1,0 +1,152 @@
+{
+ "kind": "item",
+ "name": "Cupboard",
+ "category": "furniture/storage",
+ "era": "1400-1650",
+ "region": "Europe",
+ "_about": "an aumbry: a tall joined cupboard on stiles for legs, two panelled doors with iron hinges, a moulded cornice",
+ "params": {
+  "w": [
+   0.9,
+   1.1
+  ],
+  "d": 0.45,
+  "h": [
+   1.4,
+   1.6
+  ]
+ },
+ "materials": {
+  "wood": "oak",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "case",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    "h - 0.12",
+    "d"
+   ],
+   "at": [
+    0,
+    "0.08 + (h - 0.12) / 2",
+    0
+   ]
+  },
+  {
+   "id": "stiles",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.12,
+    "d"
+   ],
+   "at": [
+    [
+     "0 - w / 2 + 0.03",
+     0.06,
+     0
+    ],
+    [
+     "w / 2 - 0.03",
+     0.06,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "doors",
+   "use": "items/components/panel-door",
+   "params": {
+    "w": "w / 2 - 0.05",
+    "h": "h - 0.35",
+    "s": 0.06
+   },
+   "at": [
+    [
+     "0 - w / 4 + 0.01",
+     "0.12 + (h - 0.35) / 2 + 0.06",
+     "d / 2 + 0.001",
+     0
+    ],
+    [
+     "w / 4 - 0.01",
+     "0.12 + (h - 0.35) / 2 + 0.06",
+     "d / 2 + 0.001",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "hinges",
+   "use": "items/components/strap",
+   "params": {
+    "L": 0.18,
+    "w": 0.03
+   },
+   "at": [
+    [
+     "0 - w / 2 + 0.14",
+     "h * 0.7",
+     "d / 2 + 0.024"
+    ],
+    [
+     "0 - w / 2 + 0.14",
+     "h * 0.25",
+     "d / 2 + 0.024"
+    ],
+    [
+     "w / 2 - 0.14",
+     "h * 0.7",
+     "d / 2 + 0.024",
+     0,
+     0,
+     180
+    ],
+    [
+     "w / 2 - 0.14",
+     "h * 0.25",
+     "d / 2 + 0.024",
+     0,
+     0,
+     180
+    ]
+   ]
+  },
+  {
+   "id": "cornice",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.08",
+    0.06,
+    "d + 0.06"
+   ],
+   "round": 0.01,
+   "at": [
+    0,
+    "h - 0.03",
+    0.02
+   ]
+  },
+  {
+   "id": "frieze",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.12,
+    0.02
+   ],
+   "at": [
+    0,
+    "h - 0.12",
+    "d / 2 + 0.01"
+   ]
+  }
+ ]
+}

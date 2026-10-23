@@ -1,0 +1,64 @@
+{
+ "kind": "item",
+ "name": "Steering oar",
+ "category": "component",
+ "_about": "a side rudder: a broad-bladed oar hung down the starboard quarter, its tiller across the ship",
+ "params": {
+  "l": 3.2,
+  "r": 0.05,
+  "bladeW": 0.42
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "loom",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "l * 0.25",
+    0
+   ],
+   "to": [
+    0,
+    "-l * 0.4",
+    0
+   ],
+   "r0": "r",
+   "r1": "r * 0.9"
+  },
+  {
+   "id": "blade",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "bladeW",
+    "l * 0.6",
+    0.05
+   ],
+   "at": [
+    0,
+    "-l * 0.55",
+    0
+   ]
+  },
+  {
+   "id": "tiller",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "l * 0.2",
+    0
+   ],
+   "to": [
+    0,
+    "l * 0.25",
+    "-l * 0.35"
+   ],
+   "r": "r * 0.6"
+  }
+ ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Doublet",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "the doublet (pourpoint): a padded, fitted jacket buttoned close to the body, a standing collar, tight sleeves to the wrist and a short pleated skirt over the hips -- worn over the shirt with long hose",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/quilted",
+      "palette": "damask-red"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "waist + 0.03",
+        "neckline": "round",
+        "neckFront": 0.004,
+        "neckBack": 0.002
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist",
+        "cuff": 0.012
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist + 0.02",
+        "to": "hip + 0.13",
+        "flare": 0.45,
+        "pleats": 10,
+        "hem": 0.012
+      }
+    }
+  ]
+}

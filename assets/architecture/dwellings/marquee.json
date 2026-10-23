@@ -1,0 +1,87 @@
+{
+ "name": "Marquee",
+ "_about": "The officers' and the feast's marquee: a long canvas room under a hipped roof on two poles (Europe, 1450-1800)",
+ "era": "1450-1800",
+ "region": "Europe",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     6.0,
+     4.0
+    ]
+   },
+   "thickness": 0.03,
+   "height": 2.0,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": 1.6,
+      "sill": 0,
+      "springing": 1.9,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "roof",
+   "form": "hip",
+   "width": 4.3,
+   "length": 6.3,
+   "pitch": 35,
+   "overhang": 0.2,
+   "at": [
+    [
+     0,
+     2.0,
+     0,
+     1.5707963
+    ]
+   ],
+   "shell": 0.03
+  },
+  "poles": {
+   "type": "column",
+   "radius": 0.06,
+   "height": 3.5,
+   "sides": 6,
+   "at": [
+    [
+     -1.4,
+     0,
+     0,
+     0
+    ],
+    [
+     1.4,
+     0,
+     0,
+     0
+    ]
+   ]
+  }
+ },
+ "build": [
+  "walls",
+  "roof",
+  "poles"
+ ]
+}

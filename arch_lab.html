@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture engine</title>
+<style>
+  html, body { margin: 0; overflow: hidden; background: #0e1014; font: 13px/1.5 "Avenir Next", "Segoe UI", sans-serif; color: #eef; }
+  canvas { display: block; }
+  #hud { position: fixed; left: 10px; top: 10px; background: #0b0b12d8; padding: 9px 12px; border-radius: 7px;
+         white-space: pre; font: 12px/1.45 ui-monospace, Menlo, Consolas, monospace; pointer-events: none; }
+  #hud b { color: #9fe8ff; font-weight: 600 }
+  #keys { position: fixed; left: 10px; bottom: 10px; background: #0b0b12c0; padding: 8px 12px; border-radius: 7px;
+          max-width: 62em; pointer-events: none; }
+  #keys kbd { background: #ffffff1a; border: 1px solid #ffffff33; border-radius: 4px; padding: 0 5px; font: 11px ui-monospace, monospace; }
+</style>
+</head>
+<body>
+<div id="hud">building…</div>
+<div id="keys">
+  <kbd>W</kbd><kbd>S</kbd> forward/back · <kbd>A</kbd><kbd>D</kbd> strafe · <kbd>Q</kbd><kbd>E</kbd> down/up ·
+  move the pointer to look (<kbd>click</kbd> captures it) · <kbd>T</kbd> triangle edges · <kbd>F</kbd> flat fill ·
+  <kbd>O</kbd> orbit (<code>?cam=x,y,z,tx,ty,tz</code> to stand still) · <kbd>+</kbd><kbd>-</kbd> curve detail (points per 90°) · <kbd>R</kbd> reload the definition
+</div>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl": "https://unpkg.com/three@0.185.1/build/three.tsl.js"
+} }
+</script>
+<script type="module">
+// THE ARCHITECTURE LAB. A viewer for the engine in arch/: definitions in JSON (assets/architecture), assembled into
+// parts (arch/assemble.js), turned into triangles that meet exactly (arch/build.js, arch/profiles.js).
+//
+// What it is for: seeing whether the geometry is RIGHT. So it draws every triangle's edge in red on demand,
+// counts what it is drawing, and -- headless, ?probe=1 -- checks the three properties the engine promises:
+// that every solid is closed (every edge used by exactly two triangles), that no vertex sits in the middle of
+// another triangle's edge (a T-junction, which is what opens hairline cracks), and that a ring of bays meets
+// itself exactly when it comes round.
+import * as THREE from "three";
+import { wgslFn, uniform, vec3, positionWorld, cameraPosition } from "three/tsl";
+import { plainStone } from "./architecture.js";
+// THE ENGINE IS RE-READ ON EVERY LOAD. A plain static server sends no cache headers, so a browser keeps serving
+// yesterday's build.js to a page that was reloaded -- and a fixed triangulation looks unfixed. Fetching each module
+// with cache:"reload" first refreshes the browser's copy, and the import that follows gets the new one.
+await Promise.all(["./arch/build.js", "./arch/assemble.js"].map((u) => fetch(u, { cache: "reload" }).catch(() => {})));
+const { assemble, loadUses } = await import("./arch/assemble.js");
+
+const hud = document.getElementById("hud");
+const qp = new URLSearchParams(location.search);
+const DEF = qp.get("def") ?? "arena";
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x10141a);
+const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, .1, 4000);
+
+// the plain stone every lab draws a definition with (architecture.js plainStone): flat faces, sharp corners,
+// no pattern -- the shape and nothing else
+const stoneMat = plainStone();
+const flatMat = new THREE.MeshBasicNodeMaterial({ color: 0xb9b2a0, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+const edgeMat = new THREE.LineBasicMaterial({ color: 0xff2d2d });
+
+let built = null, edgeLines = null, wire = false, flat = false, orbit = true, orbitT = 0;
+let fixedView = null;   // ?cam=: where the camera was put, so the walk starts looking that way
+// HOW MANY POINTS EVERYTHING ROUND GETS, in powers of two: segments per 90 degrees of arc (assemble.js). Two
+// is four segments over a Roman arch -- plenty from across a square; sixteen is for a dome seen close. The
+// ladder is the point: each step exactly doubles the points on every curve, and the triangle count says what
+// that costs.
+let detail = +(qp.get("detail") ?? 0) || null;
+
+function geometryOf(part) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(part.geometry.position, 3));
+  g.setIndex(new THREE.BufferAttribute(part.geometry.index, 1));
+  g.computeBoundingSphere();
+  return g;
+}
+
+const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _e = new THREE.Euler(), _v = new THREE.Vector3(), _s = new THREE.Vector3(1, 1, 1);
+const instanceMatrix = (inst, out) => out.compose(_v.set(inst[1], inst[2], inst[3]), _q.setFromEuler(_e.set(0, inst[0], 0)), _s);
+
+// one InstancedMesh per part: a ring's forty bays are one geometry drawn forty times, which is what the
+// engine's exactness is FOR -- the rotation that places a copy is exact, so the copies meet exactly.
+function show(doc) {
+  if (built) for (const o of built.objects) { scene.remove(o); o.geometry.dispose(); }
+  if (edgeLines) { scene.remove(edgeLines); edgeLines.geometry.dispose(); edgeLines = null; }
+  const asm = assemble(doc, { detail });
+  const objects = [];
+  let tris = 0, verts = 0, instances = 0;
+  for (const part of asm.parts) {
+    const geo = geometryOf(part);
+    const im = new THREE.InstancedMesh(geo, flat ? flatMat : stoneMat, part.instances.length);
+    part.instances.forEach((inst, i) => im.setMatrixAt(i, instanceMatrix(inst, _m)));
+    im.instanceMatrix.needsUpdate = true;
+    im.frustumCulled = false;
+    im.name = part.name;
+    scene.add(im);
+    objects.push(im);
+    tris += (geo.index.count / 3) * part.instances.length;
+    verts += geo.attributes.position.count;
+    instances += part.instances.length;
+  }
+  built = { asm, objects, tris, verts, instances };
+  return built;
+}
+
+// the red edges: every triangle's own edges, for all copies, in one line geometry (built only when asked)
+function makeEdges() {
+  if (edgeLines || !built) return;
+  const pts = [];
+  for (const part of built.asm.parts) {
+    const p = part.geometry.position, idx = part.geometry.index;
+    for (const inst of part.instances) {
+      instanceMatrix(inst, _m);
+      for (let i = 0; i < idx.length; i += 3) {
+        const t = [idx[i], idx[i + 1], idx[i + 2]];
+        for (let k = 0; k < 3; k++) {
+          for (const j of [t[k], t[(k + 1) % 3]]) {
+            _v.set(p[j * 3], p[j * 3 + 1], p[j * 3 + 2]).applyMatrix4(_m);
+            pts.push(_v.x, _v.y, _v.z);
+          }
+        }
+      }
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(pts), 3));
+  edgeLines = new THREE.LineSegments(g, edgeMat);
+  edgeLines.frustumCulled = false;
+  scene.add(edgeLines);
+}
+
+async function load() {
+  const r = await fetch(`./assets/architecture/${DEF}.json`, { cache: "no-store" });
+  if (!r.ok) throw new Error(`no definition ./assets/architecture/${DEF}.json`);
+  const doc = await r.json();
+  // a building's components (the definitions it `use`s), fetched before it is built
+  await loadUses(doc, async (path) => (await fetch(`./assets/architecture/${path}.json`, { cache: "no-store" })).json());
+  const b = show(doc);
+  detail = b.asm.params.detail;
+  const p = b.asm.params;
+  // ?cam=x,y,z,tx,ty,tz stands the camera somewhere in particular and stops the orbit -- for looking DOWN a
+  // nave or standing under a vault, which is where a composed building shows whether it is really composed
+  const c = (qp.get("cam") ?? "").split(",").map(Number);
+  if (c.length >= 3 && c.every((v) => Number.isFinite(v))) {
+    orbit = false;
+    camera.position.set(c[0], c[1], c[2]);
+    camera.lookAt(c[3] ?? 0, c[4] ?? c[1], c[5] ?? 0);
+    fixedView = new THREE.Euler().setFromQuaternion(camera.quaternion, "YXZ");
+  } else {
+    camera.position.set(0, (p.storeyH ?? 10) * 1.1, (p.rOuter ?? 40) * 2.1);
+    camera.lookAt(0, (p.storeyH ?? 10) * .4, 0);
+  }
+  return doc;
+}
+
+// ---- the renderer and the frame ------------------------------------------------------------------------------
+const HEADLESS = qp.has("probe");
+const renderer = HEADLESS
+  ? await (await import("./wgprobe.js")).headlessRenderer({ antialias: true })
+  : new THREE.WebGPURenderer({ antialias: true });
+if (HEADLESS) {
+  const post = (t) => fetch("/log", { method: "POST", body: String(t).slice(0, 4000) }).catch(() => {});
+  addEventListener("error", (e) => post("ERR " + (e.message || e.error)));
+  addEventListener("unhandledrejection", (e) => post("ERR " + (e.reason?.message ?? e.reason)));
+  const ce = console.error.bind(console);
+  console.error = (...a) => { post("CONSOLE " + a.map(String).join(" ")); ce(...a); };
+}
+await renderer.init();
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+const hasTimestamps = renderer.backend?.device?.features?.has?.("timestamp-query") === true;
+renderer.backend.trackTimestamp = hasTimestamps;
+
+let doc = await load();
+
+const keys = new Set();
+let yaw = fixedView ? fixedView.y : Math.PI, pitch = fixedView ? fixedView.x : -.12;
+addEventListener("keydown", async (e) => {
+  const k = e.key.toLowerCase();
+  keys.add(k);
+  if (k === "t") { wire = !wire; if (wire) makeEdges(); if (edgeLines) edgeLines.visible = wire; }
+  else if (k === "f") { flat = !flat; show(doc); if (wire) { edgeLines = null; makeEdges(); } }
+  else if (k === "o") orbit = !orbit;
+  else if (k === "+" || k === "=" || k === "-" || k === "_") {   // the curve detail, doubling and halving
+    detail = Math.max(1, Math.min(16, k === "-" || k === "_" ? detail / 2 : detail * 2));
+    show(doc);
+    if (wire) { edgeLines = null; makeEdges(); }
+  }
+  else if (k === "r") { doc = await load(); if (wire) { edgeLines = null; makeEdges(); } }
+});
+addEventListener("keyup", (e) => keys.delete(e.key.toLowerCase()));
+addEventListener("pointermove", (e) => {
+  if (orbit) return;
+  yaw -= (e.movementX ?? 0) * .0022;
+  pitch = Math.max(-1.4, Math.min(1.4, pitch - (e.movementY ?? 0) * .0022));
+});
+addEventListener("click", () => { if (!document.pointerLockElement) renderer.domElement.requestPointerLock(); });
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+const _euler = new THREE.Euler(0, 0, 0, "YXZ");
+function move(dt) {
+  const p = built.asm.params, R = (p.rOuter ?? 40);
+  if (orbit) {   // a slow turn round the building, for looking at it rather than walking in it
+    orbitT += dt * .12;
+    camera.position.set(Math.sin(orbitT) * R * 2.1, (p.storeyH ?? 10) * 1.2, Math.cos(orbitT) * R * 2.1);
+    camera.lookAt(0, (p.storeyH ?? 10) * .42, 0);
+    return;
+  }
+  _euler.set(pitch, yaw, 0);
+  camera.quaternion.setFromEuler(_euler);
+  const sp = (keys.has("shift") ? 60 : 18) * dt, s = Math.sin(yaw), c = Math.cos(yaw);
+  if (keys.has("w")) { camera.position.x -= s * sp; camera.position.z -= c * sp; }
+  if (keys.has("s")) { camera.position.x += s * sp; camera.position.z += c * sp; }
+  if (keys.has("a")) { camera.position.x -= c * sp; camera.position.z += s * sp; }
+  if (keys.has("d")) { camera.position.x += c * sp; camera.position.z -= s * sp; }
+  if (keys.has("e")) camera.position.y += sp;
+  if (keys.has("q")) camera.position.y -= sp;
+}
+
+let last = performance.now(), frames = 0, cpuSum = 0, gpuSum = 0, gpuN = 0, tPrev = performance.now();
+function tick() {
+  requestAnimationFrame(tick);
+  const t0 = performance.now();
+  const dt = Math.min((t0 - tPrev) / 1000, .1);
+  tPrev = t0;
+  renderer.info.reset();      // three resets it only from its own loop; this one is ours
+  move(dt);
+  renderer.render(scene, camera);
+  cpuSum += performance.now() - t0;
+  if (hasTimestamps) {
+    renderer.resolveTimestampsAsync().catch(() => {});
+    const g = renderer.info.render.timestamp;
+    if (g > 0) { gpuSum += g; gpuN++; }
+  }
+  frames++;
+  const now = performance.now();
+  if (now - last > 400) {
+    const ms = (now - last) / frames, cpu = cpuSum / frames, gpu = gpuN ? gpuSum / gpuN : 0;
+    hud.innerHTML =
+      `<b>${(frames * 1000 / (now - last)).toFixed(0)} fps</b>   ${ms.toFixed(2)} ms/frame` +
+      `\ncpu ${cpu.toFixed(2)} ms   gpu ${gpu > 0 ? gpu.toFixed(2) + " ms" : "(not reported)"}   rest ${Math.max(ms - cpu, 0).toFixed(2)} ms` +
+      `\n\n<b>${built.asm.name}</b>   (assets/architecture/${DEF}.json, R reloads)` +
+      `\ntriangles <b>${built.tris.toLocaleString()}</b>   vertices ${built.verts.toLocaleString()} in ${built.asm.parts.length} part(s)` +
+      `\ninstances <b>${built.instances}</b>   draw calls ${renderer.info.render.drawCalls}` +
+      `\ncurve detail <b>${built.asm.params.detail}</b> points per 90 degrees  (+ / -)` +
+      `\n\nedges ${wire ? "on" : "off"} (T)   ${flat ? "flat fill" : "faceted shading"} (F)   ${orbit ? "orbiting" : "walking"} (O)`;
+    frames = 0; cpuSum = gpuSum = gpuN = 0; last = now;
+  }
+}
+
+if (!HEADLESS) tick();
+else {
+  // THE GEOMETRY'S OWN CHECK. Three properties, each one a thing that goes wrong in procedural architecture:
+  //   closed   every edge belongs to exactly two triangles. One means a hole; three means two pieces overlap.
+  //   no T-junctions  no vertex sits in the middle of another triangle's edge. A T-junction is not a hole in
+  //                   the mesh, but it IS a hairline crack on screen, because the two sides round differently.
+  //   the ring closes  turning a bay by one step lands its side face exactly on its neighbour's.
+  const post = (t) => fetch("/log", { method: "POST", body: String(t).slice(0, 4000) }).catch(() => {});
+  const { pixels } = await import("./wgprobe.js");
+  for (const part of built.asm.parts) {
+    const p = part.geometry.position, idx = part.geometry.index, nTri = idx.length / 3;
+    const edges = new Map();
+    for (let i = 0; i < idx.length; i += 3) {
+      for (let k = 0; k < 3; k++) {
+        const a = idx[i + k], b = idx[i + (k + 1) % 3], key = a < b ? `${a},${b}` : `${b},${a}`;
+        edges.set(key, (edges.get(key) ?? 0) + 1);
+      }
+    }
+    let open = 0, over = 0;
+    const where = [];
+    for (const [k, n] of edges) {
+      if (n === 1) {
+        open++;
+        if (where.length < 6) {
+          const [a, b] = k.split(",").map(Number);
+          where.push(`(${((p[a*3]+p[b*3])/2).toFixed(2)},${((p[a*3+1]+p[b*3+1])/2).toFixed(2)},${((p[a*3+2]+p[b*3+2])/2).toFixed(2)})`);
+        }
+      } else if (n > 2) over++;
+    }
+    // T-junctions: a vertex strictly inside another edge. O(V*E), which is fine for one bay.
+    let tj = 0;
+    const tjWhere = [];
+    const E = [...edges.keys()].map((k) => k.split(",").map(Number));
+    for (let v = 0; v < p.length / 3; v++) {
+      const x = p[v * 3], y = p[v * 3 + 1], z = p[v * 3 + 2];
+      for (const [a, b] of E) {
+        if (a === v || b === v) continue;
+        const ax = p[a * 3], ay = p[a * 3 + 1], az = p[a * 3 + 2];
+        const bx = p[b * 3], by = p[b * 3 + 1], bz = p[b * 3 + 2];
+        const ex = bx - ax, ey = by - ay, ez = bz - az, len2 = ex * ex + ey * ey + ez * ez;
+        if (len2 < 1e-18) continue;
+        const t = ((x - ax) * ex + (y - ay) * ey + (z - az) * ez) / len2;
+        if (t <= 1e-7 || t >= 1 - 1e-7) continue;
+        const dx = x - (ax + ex * t), dy = y - (ay + ey * t), dz = z - (az + ez * t);
+        if (dx * dx + dy * dy + dz * dz < 1e-12) {
+          tj++;
+          if (tjWhere.length < 4) tjWhere.push(`(${x.toFixed(2)},${y.toFixed(2)},${z.toFixed(2)})`);
+          break;
+        }
+      }
+    }
+    // where the part actually stands: a storey whose y offset never reached the instances, or a flight that
+    // lands short, shows up here as numbers rather than as something to squint at in the render
+    let lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
+    for (let i = 0; i < p.length; i += 3) for (let k = 0; k < 3; k++) {
+      lo[k] = Math.min(lo[k], p[i + k]); hi[k] = Math.max(hi[k], p[i + k]);
+    }
+    const yOff = part.instances.map((t) => t[2]);
+    const rIn = Math.min(...[[lo[0], lo[2]], [hi[0], hi[2]], [lo[0], hi[2]], [hi[0], lo[2]]].map(([x, z]) => Math.hypot(x, z)));
+    post(`BOX ${part.name}  y ${(lo[1] + Math.min(...yOff)).toFixed(2)} to ${(hi[1] + Math.max(...yOff)).toFixed(2)}` +
+         `   radius ${rIn.toFixed(2)} to ${Math.max(...[[lo[0], lo[2]], [hi[0], hi[2]], [lo[0], hi[2]], [hi[0], lo[2]]].map(([x, z]) => Math.hypot(x, z))).toFixed(2)}`);
+    // A SHELL IS ALLOWED ITS BOUNDARY. A part that asked for only some of its surfaces -- the treads without
+    // the mass under them, a tunnel's soffit and walls without its masonry -- is an open surface on purpose,
+    // so its single-use edges are its border, not holes. Everything else is checked exactly as before: an
+    // edge used by three triangles and a vertex sitting inside a neighbour's edge are faults either way.
+    post(`PART ${part.name} (${part.kind})  ${nTri} triangles, ${p.length / 3} vertices, ${part.instances.length} instances` +
+         (part.shell ? `   boundary edges ${open} (an open surface by design)`
+                     : `   open edges ${open} (0 = closed) at ${where.join(" ") || "-"}`) +
+         `   edges shared by 3+ ${over}   T-junctions ${tj} at ${tjWhere.join(" ") || "-"}`);
+    // a ring must close: rotating the bay by one step must map its left radial face onto its right one
+    if (part.kind === "ring") {
+      const step = 2 * Math.PI / part.count, cs = Math.cos(step), sn = Math.sin(step);
+      const key = (x, y, z) => `${Math.round(x * 1e5)},${Math.round(y * 1e5)},${Math.round(z * 1e5)}`;
+      const here = new Set();
+      for (let v = 0; v < p.length / 3; v++) here.add(key(p[v * 3], p[v * 3 + 1], p[v * 3 + 2]));
+      let touching = 0, matched = 0;
+      for (let v = 0; v < p.length / 3; v++) {
+        const x = p[v * 3], y = p[v * 3 + 1], z = p[v * 3 + 2];
+        const rx = x * cs + z * sn, rz = -x * sn + z * cs;     // the same vertex, one bay round
+        if (!here.has(key(rx, y, rz))) continue;
+        touching++; matched++;
+      }
+      post(`RING ${part.count} bays of ${part.bayWidth.toFixed(3)}m at the outer face:` +
+           ` ${matched} vertices land exactly on the neighbour's when the bay is turned one step` +
+           ` (the side faces have ${touching} shared points; 0 would mean a gap)`);
+    }
+  }
+  const shot = Math.max(64, Math.min(768, +(qp.get("shot") ?? 120)));
+  if (qp.get("edges") === "1") { wire = true; makeEdges(); }
+  renderer.setSize(shot, shot, false);
+  camera.aspect = 1;
+  camera.updateProjectionMatrix();
+  const eye = (qp.get("eye") ?? "").split(",").map(Number);
+  if (eye.length === 3) camera.position.set(...eye);
+  else camera.position.set(built.asm.params.rOuter * 1.35, built.asm.params.storeyH * 1.25, built.asm.params.rOuter * 1.35);
+  const look = (qp.get("look") ?? "").split(",").map(Number);
+  if (look.length === 3) camera.lookAt(...look);
+  else camera.lookAt(0, built.asm.params.storeyH * .42, 0);
+  const px = await pixels(renderer, scene, camera, { w: shot, h: shot, tag: "arch" });
+  let lit = 0;
+  for (let i = 0; i < px.length; i += 3) if (px[i] + px[i + 1] + px[i + 2] > 60) lit++;
+  post(`VIEW ${(100 * lit / (shot * shot)).toFixed(1)}% of the frame is building (0% would mean nothing was drawn)`);
+  post("ARCH DONE");
+}
+</script>
+</body>
+</html>

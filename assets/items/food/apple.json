@@ -1,0 +1,138 @@
+{
+ "kind": "item",
+ "name": "Apple",
+ "category": "food/fruit",
+ "era": "-1000-1900",
+ "region": "everywhere temperate",
+ "_about": "an apple: round, dimpled at the stalk and the eye, a short stalk",
+ "params": {
+  "s": [
+   0.9,
+   1.1
+  ]
+ },
+ "materials": {
+  "skin": {
+   "pick": [
+    "apple-red",
+    "apple-red",
+    "apple-green",
+    "apple-yellow"
+   ]
+  },
+  "stem": "stem",
+  "leaf": "leaf"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "lathe",
+   "material": "skin",
+   "profile": [
+    [
+     0,
+     "s * 0.008"
+    ],
+    [
+     "s * 0.028",
+     "s * 0.006"
+    ],
+    [
+     "s * 0.038",
+     "s * 0.02"
+    ],
+    [
+     "s * 0.04",
+     "s * 0.038"
+    ],
+    [
+     "s * 0.034",
+     "s * 0.06"
+    ],
+    [
+     "s * 0.018",
+     "s * 0.07"
+    ],
+    [
+     0,
+     "s * 0.066"
+    ]
+   ],
+   "sides": 10
+  },
+  {
+   "id": "stem",
+   "type": "rod",
+   "material": "stem",
+   "from": [
+    0,
+    "s * 0.064",
+    0
+   ],
+   "to": [
+    0.004,
+    "s * 0.085",
+    0
+   ],
+   "r": 0.0025,
+   "sides": 4
+  },
+  {
+   "id": "leaf 1",
+   "type": "feathers",
+   "material": "leaf",
+   "n": 1,
+   "shape": "rounded",
+   "lift": 0.0004,
+   "droop": 0.5,
+   "lead": 1,
+   "roots": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "dir": [
+    0.0,
+    0.0
+   ],
+   "length": [
+    "s * 0.05",
+    "s * 0.0425"
+   ],
+   "width": [
+    "s * 0.025",
+    "s * 0.02125"
+   ],
+   "at": [
+    0.003,
+    "s * 0.08",
+    0,
+    0,
+    -25,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.03",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

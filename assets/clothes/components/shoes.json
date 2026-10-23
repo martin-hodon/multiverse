@@ -1,0 +1,28 @@
+{
+  "name": "Shoes",
+  "kind": "component",
+  "_about": "SHOES round the foot, and a BOOT's shaft up the shin to `to` when `boot` is set.",
+  "params": {
+    "boot": false,
+    "to": "calf"
+  },
+  "pieces": [
+    {
+      "name": "shoe",
+      "on": "foot",
+      "fabric": "main"
+    },
+    {
+      "name": "shaft",
+      "if": "boot",
+      "on": "leg",
+      "from": "to",
+      "to": "ankle + 0.03",
+      "fabric": "main",
+      "hem": {
+        "width": 0.012,
+        "fabric": "trim"
+      }
+    }
+  ]
+}

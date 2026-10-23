@@ -1,0 +1,786 @@
+{
+ "name": "Windmill",
+ "_about": "A TOWER WINDMILL of the Middle Ages, walkable: three storeys of round stone tower under the cap -- the meal floor (the meal chute into its bin, the flour sacked), the stone floor (bedstone and runner in the tun, the hopper on its horse fed from the bin above), the bin floor under the cap (the grain bin; overhead the windshaft and its brake wheel driving the wallower on the main shaft) -- steps winding up the wall through a hatch in each floor; the sail cross (items/components/windmill-sails) and the millwork turn with the wind.",
+ "params": {
+  "detail": 4,
+  "h": 10.0,
+  "sailR": 6.8,
+  "sx": 0,
+  "sy": 10.9,
+  "sz": 4.7,
+  "_h": "the tower's top (the cap on it); sx/sy/sz where the sail cross's hub turns, sailR its arms' length"
+ },
+ "parts": {
+  "storey 0": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.6,
+   "rInner": 3.0,
+   "height": 3.6,
+   "y": 0.0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "skip": [
+    4,
+    12
+   ],
+   "solid": true
+  },
+  "storey 0 door 0": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.6,
+   "rInner": 3.0,
+   "height": 3.6,
+   "y": 0.0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    4
+   ],
+   "opening": {
+    "width": 1.2,
+    "sill": 0,
+    "springing": 1.9,
+    "head": {
+     "profile": "semicircular"
+    },
+    "glass": false
+   }
+  },
+  "storey 0 window 1": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.6,
+   "rInner": 3.0,
+   "height": 3.6,
+   "y": 0.0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    12
+   ],
+   "opening": {
+    "width": 0.6,
+    "sill": 1.2,
+    "springing": 1.7,
+    "head": {
+     "profile": "semicircular"
+    },
+    "glass": false
+   }
+  },
+  "storey 1": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.35,
+   "rInner": 2.75,
+   "height": 3.4,
+   "y": 3.6,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "skip": [
+    8,
+    12
+   ],
+   "solid": true
+  },
+  "storey 1 window 0": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.35,
+   "rInner": 2.75,
+   "height": 3.4,
+   "y": 3.6,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    8
+   ],
+   "opening": {
+    "width": 0.6,
+    "sill": 1.2,
+    "springing": 1.7,
+    "head": {
+     "profile": "semicircular"
+    },
+    "glass": false
+   }
+  },
+  "storey 1 window 1": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.35,
+   "rInner": 2.75,
+   "height": 3.4,
+   "y": 3.6,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    12
+   ],
+   "opening": {
+    "width": 0.6,
+    "sill": 1.2,
+    "springing": 1.7,
+    "head": {
+     "profile": "semicircular"
+    },
+    "glass": false
+   }
+  },
+  "storey 2": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.1,
+   "rInner": 2.5,
+   "height": 3.0,
+   "y": 7.0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "skip": [
+    4,
+    10
+   ],
+   "solid": true
+  },
+  "storey 2 window 0": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.1,
+   "rInner": 2.5,
+   "height": 3.0,
+   "y": 7.0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    4
+   ],
+   "opening": {
+    "width": 0.6,
+    "sill": 1.2,
+    "springing": 1.7,
+    "head": {
+     "profile": "semicircular"
+    },
+    "glass": false
+   }
+  },
+  "storey 2 window 1": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.1,
+   "rInner": 2.5,
+   "height": 3.0,
+   "y": 7.0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    10
+   ],
+   "opening": {
+    "width": 0.6,
+    "sill": 1.2,
+    "springing": 1.7,
+    "head": {
+     "profile": "semicircular"
+    },
+    "glass": false
+   }
+  },
+  "ground floor": {
+   "type": "column",
+   "radius": 3.58,
+   "height": 0.15,
+   "sides": 16,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "steps up": {
+   "type": "flight",
+   "run": 0.3,
+   "width": 0.7,
+   "base": 0,
+   "top": 0.2028,
+   "steps": 1,
+   "landing": 0,
+   "spiral": {
+    "count": 18,
+    "radius": 2.98,
+    "y": 0.15,
+    "dy": 0.2028,
+    "turn": 3.1416,
+    "turns": 0.3268
+   }
+  },
+  "steps up 2": {
+   "type": "flight",
+   "run": 0.3,
+   "width": 0.7,
+   "base": 0,
+   "top": 0.2,
+   "steps": 1,
+   "landing": 0,
+   "spiral": {
+    "count": 17,
+    "radius": 2.73,
+    "y": 3.8,
+    "dy": 0.2,
+    "turn": 5.7415,
+    "turns": 0.341
+   }
+  },
+  "stone floor": {
+   "type": "column",
+   "radius": 1.9,
+   "height": 0.2,
+   "sides": 16,
+   "at": [
+    [
+     0,
+     3.6,
+     0,
+     0
+    ]
+   ]
+  },
+  "stone floor ring": {
+   "type": "ring",
+   "count": 24,
+   "rOuter": 3.0,
+   "rInner": 1.9,
+   "height": 0.2,
+   "y": 3.6,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "skip": [
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "solid": true
+  },
+  "bin floor": {
+   "type": "ring",
+   "count": 24,
+   "rOuter": 1.7,
+   "rInner": 0.25,
+   "height": 0.2,
+   "y": 7.0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "solid": true
+  },
+  "bin floor ring": {
+   "type": "ring",
+   "count": 24,
+   "rOuter": 2.75,
+   "rInner": 1.7,
+   "height": 0.2,
+   "y": 7.0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "skip": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "solid": true
+  },
+  "cap": {
+   "type": "dome",
+   "radius": 3.5500000000000003,
+   "sides": 16,
+   "thickness": 0.12,
+   "cap": false,
+   "head": {
+    "profile": "trigonal",
+    "rise": 3.6
+   },
+   "oculus": 0.25,
+   "at": [
+    [
+     0,
+     10.0,
+     0,
+     0
+    ]
+   ]
+  },
+  "bedstone": {
+   "type": "item",
+   "item": "items/components/millstone",
+   "at": [
+    [
+     0,
+     3.8000000000000003,
+     0,
+     0
+    ]
+   ],
+   "params": {
+    "h": 0.24
+   }
+  },
+  "tun": {
+   "type": "item",
+   "item": "items/components/tun",
+   "at": [
+    [
+     0,
+     3.8000000000000003,
+     0,
+     0
+    ]
+   ],
+   "solid": false
+  },
+  "hopper": {
+   "type": "item",
+   "item": "items/components/hopper-horse",
+   "at": [
+    [
+     0.55,
+     4.3500000000000005,
+     0,
+     0
+    ]
+   ],
+   "solid": false
+  },
+  "grain chute": {
+   "type": "box",
+   "width": 0.22,
+   "length": 0.22,
+   "height": 1.9,
+   "at": [
+    [
+     0.6,
+     5.3,
+     0,
+     0
+    ]
+   ]
+  },
+  "grain bin": {
+   "type": "box",
+   "width": 1.2,
+   "length": 0.9,
+   "height": 1.1,
+   "at": [
+    [
+     0.7,
+     7.2,
+     0.2,
+     0
+    ]
+   ]
+  },
+  "meal chute": {
+   "type": "box",
+   "width": 0.2,
+   "length": 0.2,
+   "height": 2.95,
+   "at": [
+    [
+     -1.0,
+     1.0,
+     0,
+     0
+    ]
+   ]
+  },
+  "meal bin": {
+   "type": "box",
+   "width": 1.0,
+   "length": 0.9,
+   "height": 0.85,
+   "at": [
+    [
+     -1.2,
+     0.15,
+     0,
+     0
+    ]
+   ]
+  },
+  "flour": {
+   "type": "item",
+   "item": "items/tools/sack-standing",
+   "at": [
+    [
+     -1.6,
+     0.15,
+     1.0,
+     0
+    ]
+   ],
+   "solid": false
+  },
+  "flour 2": {
+   "type": "item",
+   "item": "items/tools/sack-standing",
+   "at": [
+    [
+     -1.0,
+     0.15,
+     1.2,
+     0.6
+    ]
+   ],
+   "solid": false
+  },
+  "grain sacks": {
+   "type": "item",
+   "item": "items/tools/sack",
+   "at": [
+    [
+     1.6,
+     0.15,
+     -1.3,
+     0.4
+    ]
+   ],
+   "solid": false
+  },
+  "grain sacks 2": {
+   "type": "item",
+   "item": "items/tools/sack",
+   "at": [
+    [
+     1.2,
+     3.8000000000000003,
+     -1.3,
+     0.2
+    ]
+   ],
+   "solid": false
+  },
+  "grain sacks 3": {
+   "type": "item",
+   "item": "items/tools/sack",
+   "at": [
+    [
+     -1.0,
+     7.2,
+     0.6,
+     1.2
+    ]
+   ],
+   "solid": false
+  },
+  "windshaft": {
+   "type": "marker",
+   "role": "spin",
+   "at": [
+    [
+     0,
+     10.9,
+     4.6000000000000005,
+     0
+    ]
+   ],
+   "data": {
+    "item": "items/components/mill-shaft",
+    "params": {
+     "L": 6.4,
+     "r": 0.15,
+     "along": "z"
+    },
+    "axis": "z",
+    "ratio": 1
+   }
+  },
+  "brake wheel": {
+   "type": "marker",
+   "role": "spin",
+   "at": [
+    [
+     0,
+     10.9,
+     0.5,
+     0
+    ]
+   ],
+   "data": {
+    "item": "items/components/face-gear",
+    "params": {
+     "r": 1.3,
+     "n": 32
+    },
+    "axis": "z",
+    "ratio": 1
+   }
+  },
+  "wallower": {
+   "type": "marker",
+   "role": "spin",
+   "at": [
+    [
+     0,
+     9.4,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "item": "items/components/lantern-pinion",
+    "params": {
+     "r": 0.36,
+     "h": 0.4,
+     "n": 8
+    },
+    "axis": "y",
+    "ratio": 4
+   }
+  },
+  "main shaft": {
+   "type": "marker",
+   "role": "spin",
+   "at": [
+    [
+     0,
+     4.26,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "item": "items/components/mill-shaft",
+    "params": {
+     "L": 5.14,
+     "r": 0.11
+    },
+    "axis": "y",
+    "ratio": 4
+   }
+  },
+  "runner stone": {
+   "type": "marker",
+   "role": "spin",
+   "at": [
+    [
+     0,
+     4.04,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "item": "items/components/millstone",
+    "params": {
+     "h": 0.22
+    },
+    "axis": "y",
+    "ratio": 4
+   }
+  },
+  "miller": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     1.5,
+     3.8000000000000003,
+     -0.9,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": "lift",
+    "face": 2.4
+   }
+  },
+  "door marker": {
+   "type": "marker",
+   "role": "door",
+   "at": [
+    [
+     3.3,
+     0.15,
+     0,
+     -1.5707963
+    ]
+   ],
+   "data": {
+    "w": 1.2,
+    "h": 2.35,
+    "spring": 1.75,
+    "head": {
+     "profile": "semicircular"
+    }
+   }
+  },
+  "windows": {
+   "type": "marker",
+   "role": "window",
+   "at": [
+    [
+     -3.3,
+     1.2,
+     -0.0,
+     4.7124
+    ],
+    [
+     0.0,
+     4.8,
+     -3.05,
+     3.1416
+    ],
+    [
+     -3.05,
+     4.8,
+     -0.0,
+     4.7124
+    ],
+    [
+     2.8,
+     8.2,
+     0.0,
+     1.5708
+    ],
+    [
+     -1.9799,
+     8.2,
+     -1.9799,
+     3.927
+    ]
+   ],
+   "data": {
+    "w": 0.6,
+    "h": 0.8,
+    "spring": 0.5,
+    "head": {
+     "profile": "semicircular"
+    }
+   }
+  }
+ },
+ "build": [
+  "storey 0",
+  "storey 0 door 0",
+  "storey 0 window 1",
+  "storey 1",
+  "storey 1 window 0",
+  "storey 1 window 1",
+  "storey 2",
+  "storey 2 window 0",
+  "storey 2 window 1",
+  "ground floor",
+  "steps up",
+  "steps up 2",
+  "stone floor",
+  "stone floor ring",
+  "bin floor",
+  "bin floor ring",
+  "cap",
+  "bedstone",
+  "tun",
+  "hopper",
+  "grain chute",
+  "grain bin",
+  "meal chute",
+  "meal bin",
+  "flour",
+  "flour 2",
+  "grain sacks",
+  "grain sacks 2",
+  "grain sacks 3",
+  "windshaft",
+  "brake wheel",
+  "wallower",
+  "main shaft",
+  "runner stone",
+  "miller",
+  "door marker",
+  "windows"
+ ],
+ "walked": true
+}

@@ -1,0 +1,76 @@
+{
+ "kind": "item",
+ "name": "Gun row",
+ "category": "component",
+ "_about": "a broadside: n gun ports along a side from x = from to x = to at height y in a hull of half-breadth z, each a dark port with a muzzle out of it -- on both sides",
+ "params": {
+  "n": 10,
+  "from": 4,
+  "to": 40,
+  "y": 3,
+  "z": 5,
+  "bore": 0.11,
+  "reach": 0.5
+ },
+ "materials": {
+  "metal": "iron",
+  "port": "#1a1612"
+ },
+ "parts": [
+  {
+   "id": "port",
+   "type": "box",
+   "material": "port",
+   "size": [
+    "bore * 6",
+    "bore * 5.5",
+    0.05
+   ],
+   "along": {
+    "n": "n",
+    "from": [
+     "from",
+     "y",
+     "z"
+    ],
+    "to": [
+     "to",
+     "y",
+     "z"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "muzzle",
+   "type": "rod",
+   "material": "metal",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    0,
+    "reach"
+   ],
+   "r0": "bore * 1.35",
+   "r1": "bore * 1.25",
+   "along": {
+    "n": "n",
+    "from": [
+     "from",
+     "y",
+     "z - 0.1"
+    ],
+    "to": [
+     "to",
+     "y",
+     "z - 0.1"
+    ]
+   },
+   "mirror": "z"
+  }
+ ]
+}

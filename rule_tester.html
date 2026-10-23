@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Spelling → sound rule tester</title>
+<style>
+ * { box-sizing: border-box; } body { font: 13px system-ui, sans-serif; margin: 0; background: #f4f1ea; color: #222; }
+ header { position: sticky; top: 0; z-index: 3; background: #e9e4d8; border-bottom: 1px solid #cbc6b8; padding: 8px 14px; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+ header b { font-size: 15px; } button, select, input, textarea { font: inherit; } button { padding: 3px 10px; border: 1px solid #998; border-radius: 4px; background: #fff; cursor: pointer; } button.go { background: #8a3b12; color: #fff; border-color: #8a3b12; }
+ #score { font-size: 15px; font-weight: 600; } #score small { font-weight: 400; color: #6a675f; }
+ main { display: grid; grid-template-columns: minmax(280px, 420px) minmax(0, 1fr); gap: 14px; padding: 12px 14px 50px; }
+ textarea { width: 100%; height: calc(100vh - 170px); min-height: 320px; font: 13px/1.45 ui-monospace, monospace; white-space: pre; border: 1px solid #cbc6b8; border-radius: 4px; padding: 6px; background: #fbf9f4; }
+ .help { color: #6a675f; margin: 0 0 6px; } .help code, td code { font: 600 12px ui-monospace, monospace; background: #e9e4d8; padding: 0 3px; border-radius: 3px; }
+ .tabs { display: flex; gap: 4px; margin-bottom: 6px; } .tabs button.on { background: #222; color: #fff; border-color: #222; }
+ table { border-collapse: collapse; width: 100%; background: #fbf9f4; } th, td { border: 1px solid #cbc6b8; padding: 2px 8px; text-align: left; vertical-align: top; } th { background: #e9e4d8; position: sticky; top: 52px; }
+ td.ipa { font-family: "DejaVu Sans", "Noto Sans", sans-serif; } td.n { text-align: right; color: #6a675f; } .bad { color: #b3261e; font-weight: 600; } .dim { color: #6a675f; } #err { color: #b3261e; white-space: pre-wrap; }
+ @media (max-width: 820px) { main { grid-template-columns: minmax(0, 1fr); } textarea { height: 300px; } th { position: static; } }
+</style></head><body>
+<header>
+ <b>Rule tester</b>
+ <select id="lang"></select>
+ <label><input type="checkbox" id="stress"> compare stress (ˈ)</label>
+ <label><input type="checkbox" id="length" checked> compare length (ː)</label>
+ <label title="read composed words (ab|biegen) with their joints: ^ and $ are also the edges of a part, no letters or context match across a joint, and a rule can name the joint itself: d(|)=d, (|)s(t)=ʃ, d(|[ptk])=t"><input type="checkbox" id="bounds" checked> use composition marks (|)</label>
+ <button class="go" id="run">Run (Ctrl+Enter)</button>
+ <button id="reload" title="throw away edits and load lang/rules/&lt;language&gt;.txt again">Reload rules file</button>
+ <button id="save">Download rules</button>
+ <span id="score"></span>
+ <span style="margin-left:auto"><a href="lang_stats.html">letter statistics →</a></span>
+</header>
+<main>
+ <div>
+  <p class="help">One rule per line, <code>X=Y</code>. Context in brackets is looked at but not consumed: <code>c(e)=s</code>, <code>(a)ch=x</code>, <code>(^a)b(e)=b</code>. <code>^</code> start and <code>$</code> end of word; <code>[eiy]</code> any one of these; empty right side = silent; <code>#</code> comment. The longest matching <code>X</code> wins (on a tie, the later line — so a fix added below overrides); reading continues after the letters it consumed.</p>
+  <textarea id="rules" spellcheck="false"></textarea>
+  <div id="err"></div>
+ </div>
+ <div>
+  <div class="tabs"><button data-t="miss" class="on">Not matched</button><button data-t="rules">Rules: how often, how often wrong</button><button data-t="try">Try a word</button>
+   <input id="filter" placeholder="filter: letters, a sound, a rule; ^ab  ung$  ^auf|" size="38" title=": finds the length mark ː and ' the stress mark ˈ. ^ and $ stand for the start and end of the word: ^ab, ung$, ^sonne$ -- also in the composed form (^auf|) and the pronunciations (^ʃt)"></div>
+  <div id="view"></div>
+ </div>
+</main>
+<script type="module">
+import { parseRules, parseWords, runTest, pronounce } from "./g2p_rules.js?v=3";   // (v: a browser that cached the engine from before the joints must not keep it)
+const LANGS = { en: "English (American)", "en-GB": "English (British)", de: "German", es: "Spanish", fr: "French", it: "Italian", ru: "Russian", pl: "Polish" };
+const $ = (id) => document.getElementById(id), esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const qp = new URLSearchParams(location.search), STORE = (c) => "rule-tester-" + c;
+let words = new Map(), result = null, set = null, tab = "miss";
+for (const [c, n] of Object.entries(LANGS)) $("lang").append(Object.assign(document.createElement("option"), { value: c, textContent: n }));
+if (LANGS[qp.get("lang")]) $("lang").value = qp.get("lang");
+if (qp.get("filter")) $("filter").value = qp.get("filter");
+
+// where the two pronunciations part: the shared start and end are dimmed, the difference stands out
+function diff(got, want) {
+  const a = [...got], b = [...want]; let p = 0, s = 0;
+  while (p < a.length && p < b.length && a[p] === b[p]) p++;
+  while (s < a.length - p && s < b.length - p && a[a.length - 1 - s] === b[b.length - 1 - s]) s++;
+  return `<span class="dim">${esc(a.slice(0, p).join(""))}</span><span class="bad">${esc(a.slice(p, a.length - s).join("")) || "∅"}</span><span class="dim">${esc(a.slice(a.length - s).join(""))}</span>`;
+}
+// what the keyboard has for the IPA marks: ":" is the length mark ː, "'" the stress mark ˈ, and the two g glyphs are one
+const keys = (t) => t.replace(/:/g, "ː").replace(/'/g, "ˈ").replace(/g/g, "ɡ");
+function show() {
+  if (!result) return;
+  const f = $("filter").value.trim().toLowerCase();
+  if (tab === "miss") {
+    // ^ and $ in the filter are the edges of the word (written, composed or either pronunciation, stress mark aside): ^ab, ung$, ^auf|, ^ʃt
+    const s0 = f.startsWith("^"), e0 = f.endsWith("$") && f.length > (s0 ? 1 : 0), core = f.slice(s0 ? 1 : 0, e0 ? -1 : undefined);
+    const test = (t, c) => s0 && e0 ? t === c : s0 ? t.startsWith(c) : e0 ? t.endsWith(c) : t.includes(c), hit = (t) => test(t, core);
+    const coreIpa = keys(core), hitIpa = (t) => t.split(" / ").some((x) => test(keys(x), coreIpa) || test(keys(x).replace(/ˈ/g, ""), coreIpa));
+    const rows = result.misses.filter((m) => !f || hit(m.word) || hit(m.seg) || hitIpa(m.want) || hitIpa(m.got) || m.rules.some((r) => r.includes(f) || keys(r).includes(keys(f)))).sort((a, b) => a.off - b.off || a.word.localeCompare(b.word));
+    $("view").innerHTML = `<p class="help">${rows.length} of ${result.misses.length} unmatched words${rows.length > 800 ? " (first 800 shown)" : ""}, the nearest misses first. Hover a word for the rules that were applied.</p>` +
+      `<table><tr><th>written</th><th>composed</th><th>dictionary</th><th>rules say</th><th>sounds off</th></tr>` + rows.slice(0, 800).map((m) =>
+      `<tr title="${esc(m.rules.join("   "))}"><td>${esc(m.word)}</td><td class="dim">${m.seg.includes("|") ? esc(m.seg) : ""}</td><td class="ipa">${esc(m.want)}</td><td class="ipa">${diff(m.gotN, m.nearN)}</td><td class="n">${m.off}</td></tr>`).join("") + "</table>";
+  } else if (tab === "rules") {
+    const rows = set.rules.filter((r) => !f || r.text.includes(f) || keys(r.text).includes(keys(f))).sort((a, b) => b.wrong - a.wrong || b.used - a.used);
+    $("view").innerHTML = `<p class="help">"In wrong words" counts a rule whenever the word it was used in came out wrong — the fault may be another rule's. Rules never used are candidates for deletion.</p>` +
+      `<table><tr><th>rule</th><th>line</th><th>used</th><th>in wrong words</th><th>share</th></tr>` + rows.map((r) =>
+      `<tr><td><code>${esc(r.text)}</code></td><td class="n">${r.n}</td><td class="n">${r.used}</td><td class="n">${r.wrong}</td><td class="n">${r.used ? Math.round(100 * r.wrong / r.used) + "%" : '<span class="dim">never used</span>'}</td></tr>`).join("") + "</table>";
+  } else {
+    const typed = f || "example", plain = typed.replace(/\|/g, ""), known = words.get(plain), w = typed.includes("|") ? typed : known?.seg ?? typed;
+    const r = pronounce(set, w, { boundaries: $("bounds").checked });
+    $("view").innerHTML = `<p class="help">Type a word in the filter box — with <code>|</code> to say where it is composed, if it is not in the list.</p><table><tr><th>read as</th><td>${esc(w)}</td></tr><tr><th>rules say</th><td class="ipa">${esc(r.out)}</td></tr>` +
+      `<tr><th>dictionary</th><td class="ipa">${known ? esc(known.ipas.join(" / ")) : '<span class="dim">not in the word list</span>'}</td></tr><tr><th>rules used</th><td>${r.used.map((x) => `<code>${esc(x.text)}</code>`).join(" ") || "—"}</td></tr></table>`;
+  }
+}
+function run() {
+  set = parseRules($("rules").value);
+  $("err").textContent = set.errors.join("\n");
+  result = runTest(set, words, { stress: $("stress").checked, length: $("length").checked, boundaries: $("bounds").checked });
+  const composed = [...words.values()].filter((w) => w.seg.includes("|")).length;
+  const miss = [...result.missing].sort((a, b) => b[1] - a[1]).map(([ch, n]) => `${ch}×${n}`).join(" ");
+  $("score").innerHTML = `${(100 * result.ok / result.n).toFixed(1)}% of words <small>(${result.ok} of ${result.n}) · ${(100 * result.soundAccuracy).toFixed(1)}% of sounds · ${set.rules.length} rules · ${composed} composed words${miss ? ` · no rule for: ${esc(miss)}` : ""}</small>`;
+  try { localStorage.setItem(STORE($("lang").value), $("rules").value); } catch { /* private window */ }
+  show();
+}
+async function load(fromFile) {
+  const c = $("lang").value;
+  words = parseWords(await (await fetch(`lang/words/${c}.txt`, { cache: "no-store" })).text());
+  let text = null; if (!fromFile) try { text = localStorage.getItem(STORE(c)); } catch { /* private window */ }
+  $("rules").value = text ?? await (await fetch(`lang/rules/${c}.txt`, { cache: "no-store" })).text();
+  run();
+}
+$("lang").onchange = () => load(false); $("run").onclick = run; $("reload").onclick = () => load(true);
+$("stress").onchange = run; $("length").onchange = run; $("bounds").onchange = run; $("filter").oninput = show;
+$("rules").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); run(); } });
+for (const b of document.querySelectorAll(".tabs button")) b.onclick = () => { tab = b.dataset.t; for (const x of document.querySelectorAll(".tabs button")) x.classList.toggle("on", x === b); show(); };
+$("save").onclick = () => { const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(new Blob([$("rules").value], { type: "text/plain" })), download: $("lang").value + ".txt" }); document.body.append(a); a.click(); a.remove(); };
+
+// ?gen=1 -- compile the word lists and a STARTER rule set per language from the dictionary and its statistics;
+// ?probe=1 -- run every language's rules file and report. Both post to the development log server.
+if (qp.get("gen") === "1" || qp.get("probe") === "1") {
+  const post = (p, t) => fetch(p, { method: "POST", body: t });
+  try {
+    if (qp.get("gen") === "1") {
+      const st = await import("./lang_stats.js"), results = await st.run(async (p) => (await fetch(p)).text());
+      // British English is DERIVED from the American column (lang_british.js): its word list and starter rules are compiled like the others'
+      { const gb = await import("./lang_british.js"), en = results.find((r) => r.code === "en"), seen = new Set(), pairs = [];
+        for (const d of en.data) { const k = d.word + "|" + d.ipa; if (seen.has(k)) continue; seen.add(k); pairs.push({ word: d.word, seg: d.seg, ipa: gb.toBritish(d.word, d.ipa) }); }
+        results.push({ code: "en-GB", name: "English (British)", data: st.align(pairs, "en").data });
+        const fw = await (await fetch("lang/function-words/en.txt", { cache: "no-store" })).text();
+        var functionGB = fw.split("\n").map((l) => { const m = l.match(/^(\S+) \[([^\]]+)\]$/); return m ? `${m[1]} [${gb.toBritish(m[1], m[2])}]` : l; }).join("\n"); }
+      let bundle = "=== function en-GB\n" + functionGB + (functionGB.endsWith("\n") ? "" : "\n");
+      for (const r of results) {
+        const seen = new Set(), lines = []; for (const d of r.data) { const k = d.word + " {" + d.seg + "} [" + d.ipa + "]"; if (!seen.has(k)) { seen.add(k); lines.push(k); } }
+        bundle += `=== words ${r.code}\n` + lines.sort((a, b) => a.localeCompare(b)).join("\n") + "\n";
+        const obsBy = st.observations(r.data), out = [];
+        for (const [u, obs] of [...obsBy].sort((a, b) => a[0].localeCompare(b[0]))) {
+          if (obs.length < 3) continue;
+          const tally = new Map(); for (const o of obs) tally.set(o.label, (tally.get(o.label) ?? 0) + 1);
+          const top = [...tally].sort((a, b) => b[1] - a[1])[0][0], y = (l) => l === "silent" ? "" : l;
+          out.push(`${u}=${y(top)}`);
+          // ONE direction per letter -- whichever of "the letter after" and "the letter before" explains more. Taking
+          // both lets an accident on one side ((o)ni=...) out-specify the real rule on the other (ni=...).
+          const sp = st.bestSplit(obs, (o) => o.label, { features: ["next", "prev"], minGain: .04, minBucket: 4 });
+          if (sp) for (const rule of sp.rules) if (rule.label !== top) for (const c of rule.contexts) if (c !== "(other)")
+            out.push(sp.feature === "next" ? `${u}(${c === "#" ? "$" : c})=${y(rule.label)}` : `(${c === "#" ? "^" : c})${u}=${y(rule.label)}`);
+          // a joint is read as a word edge unless a rule says otherwise -- so say so wherever the letter does NOT behave
+          // at a joint as it does at the edge of the word (Polish od|bicie keeps the d that od$ loses)
+          const edgeOf = (f) => { const m = out.map((l) => l.match(f === "next" ? /^(.+)\(\$\)=(.*)$/ : /^\(\^\)(.+)=(.*)$/)).find((m) => m && m[1] === u); return m ? m[2] : y(top); };
+          const tallyOf = (list) => { const t = new Map(); for (const o of list) t.set(o.label, (t.get(o.label) ?? 0) + 1); return [...t].sort((a, b) => b[1] - a[1]); };
+          for (const f of ["next", "prev"]) {
+            const lhs = f === "next" ? `${u}(|)=` : `(|)${u}=`; if (out.some((l) => l.startsWith(lhs))) continue;
+            const at = obs.filter((o) => o.ctx[f] === "|"); if (at.length < 4) continue;
+            const [lab, n] = tallyOf(at)[0], clear = n / at.length >= .6, ref = clear ? y(lab) : edgeOf(f);   // (a mixed joint keeps the word-edge answer)
+            if (clear && edgeOf(f) !== y(lab)) out.push(lhs + y(lab));
+            if (f === "prev" || n === at.length) continue;
+            // ...and where the answer depends on how the NEXT part begins, look past the joint: d(|[cfkpst])=t
+            const byLetter = new Map(); for (const o of at) { if (!byLetter.has(o.ctx.over)) byLetter.set(o.ctx.over, []); byLetter.get(o.ctx.over).push(o); }
+            const sets = new Map();
+            for (const [c, list] of byLetter) { const [l2, n2] = tallyOf(list)[0]; if (c && y(l2) !== ref && list.length >= 2 && n2 / list.length >= .7) sets.set(l2, (sets.get(l2) ?? "") + c); }
+            for (const [l2, cs] of sets) out.push(`${u}(|[${[...cs].sort().join("")}])=${y(l2)}`);
+          }
+        }
+        bundle += `=== rules ${r.code}\n# ${r.name}: a STARTER rule set, generated from the dictionary's letter-to-sound statistics (../lang_stats.js).\n` +
+          `# Each letter or combination gets its commonest sound; a context rule is added where the letter before or after\n# changes the answer. Stress cannot be seen in spelling, so vowels that depend on it are only as good as their\n# commonest guess. Edit freely -- ../rule_tester.html shows what every change does. Syntax: see ../g2p_rules.js\n` + out.join("\n") + "\n";
+      }
+      await post("/report", bundle); await post("/log", "GEN DONE " + bundle.length);
+    } else {
+      for (const c of Object.keys(LANGS)) {
+        const w = parseWords(await (await fetch(`lang/words/${c}.txt`, { cache: "no-store" })).text()), s = parseRules(await (await fetch(`lang/rules/${c}.txt`, { cache: "no-store" })).text());
+        const r = runTest(s, w, { stress: false, length: true }), r2 = runTest(s, w, { stress: false, length: false }), r3 = runTest(s, w, { boundaries: false });
+        const comp = [...w.values()].filter((x) => x.seg.includes("|")).length;
+        await post("/log", `TEST ${c}  ${w.size} words (${comp} composed)  ${s.rules.length} rules  words right ${(100 * r.ok / r.n).toFixed(1)}%  (without the marks ${(100 * r3.ok / r3.n).toFixed(1)}%; ignoring length ${(100 * r2.ok / r2.n).toFixed(1)}%)  sounds right ${(100 * r.soundAccuracy).toFixed(1)}%  errors ${s.errors.length}  no-rule letters ${[...r.missing.keys()].join("")}`);
+      }
+      await post("/log", "TEST DONE");
+    }
+  } catch (e) { await post("/log", "ERR " + (e.stack || e)); }
+} else load(false);
+</script></body></html>

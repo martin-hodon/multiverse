@@ -1,0 +1,28 @@
+{
+  "name": "Bell sleeve",
+  "kind": "component",
+  "_about": "A HANGING SLEEVE: from the elbow (or wherever `from` is) a cone of cloth widening to its mouth, standing off the forearm and swinging with it -- the tippets of a cote-hardie, the great sleeves of a houppelande. Dagged if `dags` is given.",
+  "params": {
+    "from": "elbow",
+    "to": "knuckles",
+    "flare": 0.6,
+    "dags": 0,
+    "hem": 0
+  },
+  "pieces": [
+    {
+      "name": "bell",
+      "kind": "hang",
+      "on": "arm",
+      "from": "from",
+      "to": "to",
+      "flare": "flare",
+      "dags": "dags",
+      "fabric": "main",
+      "hem": {
+        "width": "hem",
+        "fabric": "trim"
+      }
+    }
+  ]
+}

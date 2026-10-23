@@ -1,0 +1,67 @@
+{
+  "name": "Ruqun",
+  "kind": "garment",
+  "layer": 3,
+  "skirted": true,
+  "_about": "the ruqun: a short silk jacket with a crossed collar and wide hanging sleeves, and a long pleated skirt tied high over it, at the breast",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/clouds",
+      "palette": "silk-azure"
+    },
+    "skirt": {
+      "pattern": "fabrics/plain",
+      "palette": "silk-red"
+    },
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "silk-white"
+    }
+  },
+  "params": {
+    "hem": 0.03
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "waist",
+        "neckline": "v",
+        "neckFront": 0.14,
+        "neckBack": 0.01,
+        "neckWidth": 28
+      }
+    },
+    {
+      "use": "clothes/components/strip",
+      "params": {
+        "from": "collar",
+        "to": "chest",
+        "centre": -18,
+        "span": 12
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "biceps + 0.02"
+      }
+    },
+    {
+      "use": "clothes/components/bell-sleeve",
+      "params": {
+        "from": "biceps",
+        "to": "knuckles - 0.02",
+        "flare": 0.38,
+        "hem": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/qun",
+      "params": {
+        "from": "chest",
+        "to": "floor - 0.03"
+      }
+    }
+  ]
+}

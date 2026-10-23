@@ -1,0 +1,75 @@
+{
+  "name": "Hood",
+  "kind": "component",
+  "_about": "A HOOD (the chaperon): a COWL round the head -- a ball of cloth cut open at the face -- and a CAPELET: a shallow cone over the shoulders from the collar out past the arms, and a FALL hanging from its rim over the upper arms, `cape` deep, its edge dagged if `dags` is given; a LIRIPIPE, the long tail of its point, if `tail` is set. Numbers on the head are in cranium radii.",
+  "params": {
+    "cape": 0.12,
+    "dags": 0,
+    "tail": false
+  },
+  "pieces": [
+    {
+      "name": "cowl",
+      "kind": "cowl",
+      "centre": [
+        -0.12,
+        0.05
+      ],
+      "radius": 1.38,
+      "axis": [
+        -1,
+        -0.3,
+        0
+      ],
+      "cut": [
+        0.55,
+        0
+      ],
+      "fabric": "main"
+    },
+    {
+      "name": "cape",
+      "kind": "hang",
+      "on": "torso",
+      "from": "collar - 0.03",
+      "to": "armtop",
+      "flare": 0.5,
+      "arms": true,
+      "swing": false,
+      "lid": false,
+      "fabric": "main"
+    },
+    {
+      "name": "fall",
+      "kind": "hang",
+      "on": "torso",
+      "from": "armtop",
+      "to": "armtop + cape",
+      "flare": 0.15,
+      "arms": true,
+      "dags": "dags",
+      "swing": false,
+      "lid": false,
+      "fabric": "main",
+      "fit": "ring"
+    },
+    {
+      "name": "tail",
+      "if": "tail",
+      "kind": "cone",
+      "at": [
+        -0.95,
+        0.35
+      ],
+      "dir": [
+        -0.5,
+        -0.2,
+        0
+      ],
+      "length": 3.2,
+      "radius": 0.35,
+      "tip": 0.1,
+      "fabric": "main"
+    }
+  ]
+}

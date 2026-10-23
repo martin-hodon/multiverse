@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Tract lab — articulatory speech</title>
+<style>
+ :root { --line: #cbc6b8; --head: #e9e4d8; --dim: #6a675f; }
+ * { box-sizing: border-box; } body { font: 13px system-ui, sans-serif; margin: 0; background: #f4f1ea; color: #222; }
+ header { position: sticky; top: 0; z-index: 5; background: var(--head); border-bottom: 1px solid var(--line); padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+ header b { font-size: 15px; } button, select, input, textarea { font: inherit; } button { padding: 3px 10px; border: 1px solid #998; border-radius: 4px; background: #fff; cursor: pointer; }
+ button.go { background: #8a3b12; color: #fff; border-color: #8a3b12; } button.on { background: #1d6b3a; color: #fff; border-color: #1d6b3a; }
+ main { display: grid; grid-template-columns: 452px minmax(0, 1fr); gap: 14px; padding: 12px; } @media (max-width: 980px) { main { grid-template-columns: minmax(0, 1fr); } }
+ canvas { background: #fff; border: 1px solid var(--line); border-radius: 4px; display: block; max-width: 100%; } #head { cursor: grab; touch-action: none; }
+ .sl { display: grid; grid-template-columns: 88px minmax(0, 1fr) 52px; gap: 2px 6px; align-items: center; } .sl input[type=range] { width: 100%; } .sl output { text-align: right; font-variant-numeric: tabular-nums; color: var(--dim); }
+ h3 { margin: 12px 0 4px; font-size: 13px; } .doc { color: var(--dim); margin: 2px 0 6px; } .keys button { padding: 1px 6px; margin: 1px; min-width: 26px; font-family: "DejaVu Sans", "Noto Sans", sans-serif; }
+ details { background: #fbf9f4; border: 1px solid var(--line); border-radius: 4px; margin-bottom: 6px; padding: 4px 8px; } summary { cursor: pointer; font-weight: 600; }
+ fieldset { border: 1px solid var(--line); border-radius: 4px; margin: 4px 0; padding: 4px 8px; } legend { color: var(--dim); padding: 0 4px; }
+ .f { display: inline-flex; gap: 4px; align-items: center; margin: 1px 10px 1px 0; } .f input[type=number] { width: 84px; } .f input[type=text] { width: 120px; }
+ table { border-collapse: collapse; } th, td { border: 1px solid var(--line); padding: 1px 3px; } th { background: var(--head); font-weight: 600; position: sticky; top: 0; } td input { width: 74px; border: 0; background: transparent; } td input.w { width: 150px; }
+ .scroll { overflow: auto; max-height: 420px; } textarea { width: 100%; font: 12px ui-monospace, monospace; } #ipa { font-family: "DejaVu Sans", "Noto Sans", sans-serif; flex-basis: 100%; } #status { color: var(--dim); margin-left: auto; }
+</style></head><body>
+<header>
+ <b>Tract lab</b>
+ <select id="voice"></select><select id="lang"></select>
+ <input id="sent" size="46" value="The old dog is very bad.">
+ <label title="read the sentence as written text, pronounced from the dictionary in lang/ (lexicon.js). Off: the box is IPA."><input type="checkbox" id="dict" checked> dictionary</label>
+ <button class="go" id="say">Say it</button>
+ <button id="hold" title="hold the posture on the left as a continuous sound (live): drag the tongue, hear it change">Hold sound</button>
+ <span style="flex-basis:100%"></span>
+ <button id="expAll">Export everything</button><button id="expDiff">Export changes</button><button id="imp">Import…</button><input type="file" id="file" accept=".json" hidden>
+ <button id="save">Save in browser</button><button id="reset">Reset</button>
+ <button id="rand" title="a new voice from the same parts: every GENERAL setting -- the head's shape, the larynx, the way this person speaks -- drawn again inside its own range. What a sound IS (the phonemes, the vowel targets, the postures, the languages) is never touched. ?random=1 does it on the way in.">Randomize</button><span id="status"></span>
+ <div id="ipa"></div>
+</header>
+<main>
+ <div>
+  <canvas id="head" width="440" height="400"></canvas>
+  <div class="doc">Drag the tongue's body (large dot), its tip, the lower teeth (the jaw) or the lips. The thin lines are where the airway's width is measured.</div>
+  <canvas id="areas" width="440" height="90"></canvas><canvas id="spec" width="440" height="100" style="margin-top:4px"></canvas>
+  <div id="fm" class="doc"></div>
+  <h3>Sounds</h3><div class="keys" id="vowels"></div><div class="keys" id="cons" style="margin-top:3px"></div>
+  <div style="margin-top:4px"><label title="a consonant cannot be held: a stop is silence, then a burst. With this on, clicking a consonant plays it in a loop between the vowel the head was in -- a-pa-pa-pa -- through the real planner (timing, the folds, aspiration and all)"><input type="checkbox" id="cyc" checked> cycle consonants</label>
+   <button id="cycStop" hidden>Stop the cycle</button> <span id="cycInfo" class="doc"></span></div>
+  <div class="doc">A vowel loads its posture. A consonant makes its constriction in the posture the head is in — which is how it is made in speech; with "cycle" on you hear it made over and over between that vowel.</div>
+  <h3>Fit the posture to formants (acoustic-to-articulatory)</h3>
+  <div><span class="f">F1 <input type="number" id="t1"></span><span class="f">F2 <input type="number" id="t2"></span><span class="f">F3 <input type="number" id="t3"></span>
+   <button id="fit">Fit from here</button> <button id="fitAll" title="search from all the starting postures (slower)">Fit from scratch</button></div>
+  <div style="margin-top:4px">store this posture as vowel <input id="storeAs" size="3"> <button id="store">Store</button> &nbsp; <button id="refit" title="re-run the inversion for every vowel target: needed after changing the anatomy">Re-fit all vowels…</button>
+   <button id="refitVoice" title="this voice's head has its own shape (palate, throat, lips, tongue, ring): find the postures that give IT the vowels its size alone would have -- a speaker learns their vowels in their own mouth. Takes a minute or two.">Re-fit for this voice…</button></div>
+  <h3>Articulators</h3><div class="sl" id="arts"></div>
+  <h3>Folds and lungs (for the held sound)</h3><div class="sl" id="src"></div>
+ </div>
+ <div>
+  <canvas id="time" width="900" height="300"></canvas>
+  <div id="held" class="doc" style="color:#a11"></div>
+  <div class="doc">After "Say it": each organ's movement through the utterance (scaled to its own range), the folds' opening, lung pressure and pitch, with the sounds marked.</div>
+  <h3>How this voice speaks</h3><div class="sl" id="person"></div>
+  <div class="doc">One person's way of speaking, on top of the head and larynx (stored with the voice; the full table is under "voices"). In the sentence:
+   <b>*word*</b> emphasises, <b>(slow: …)</b> <b>(fast: …)</b> <b>(high: …)</b> <b>(low: …)</b> <b>(loud: …)</b> <b>(soft: …)</b> <b>(clear: …)</b> <b>(lazy: …)</b> <b>(smile: …)</b> <b>(creaky: …)</b> speak that way while the brackets last (they nest; the names are prosody.styles — add your own),
+   plain <b>(…)</b> is an aside, a comma is a pause and starts a new phrase, and <b>. ? !</b> end the sentence with a fall, a rise, or more force.</div>
+  <div id="panels"></div>
+  <details><summary>Raw JSON</summary><div class="doc">The whole configuration. Edit and press Apply, or use Export / Import.</div><textarea id="raw" rows="16" spellcheck="false"></textarea><button id="applyRaw">Apply</button></details>
+ </div>
+</main>
+<script type="module">
+// THE ENGINE IS RE-READ ON EVERY LOAD. A plain static server sends no cache headers, so a browser keeps serving
+// yesterday's modules -- and an edit to the tract is then not the one being heard. A fetch with cache:"reload" first
+// refreshes the browser's copy; the imports that follow (and the worklet's own imports) get the new one.
+const ENGINE = ["acoustics", "glottis", "anatomy", "measure", "inversion", "vowels", "phonemes", "planner", "synth", "config", "draw"].map((m) => `./tract/${m}.js`);
+await Promise.all([...ENGINE, "./tract/postures.json", "./lexicon.js", "./g2p_rules.js", "./lang_stats.js", "./tract_worklet.js"].map((u) => fetch(u, { cache: "reload" }).catch(() => {})));
+const { CONFIG, DOC, FORMAT, getConfig, setConfig, resetConfig, diffConfig, loadDefaults, POSTURES } = await import("./tract/config.js");
+const { adaptPosture, ARTICULATORS, ANATOMY, neutral, clampArt, areaFunction, toSections, solveTip, solveBody, solveLips, setBodyAt, setTipAt, setJawAt } = await import("./tract/anatomy.js");
+const { formants, response } = await import("./tract/measure.js");
+const { invert, costOf } = await import("./tract/inversion.js");
+const { VOICES, HEAD_SHAPE, anatomyFor, tubeFor, renderIPA } = await import("./tract/synth.js");
+const { CONSONANTS } = await import("./tract/phonemes.js");
+const { drawSagittal, drawAreas, drawSpectrum } = await import("./tract/draw.js");
+const { LEXICON_LANGS, SAMPLES, writtenToIPA, reportHTML, sentences } = await import("./lexicon.js");
+
+const $ = (id) => document.getElementById(id), el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); for (const k of kids) e.append(k); return e; };
+const qp = new URLSearchParams(location.search), STORE = "bannerfield-tract-lab", status = (t) => { $("status").textContent = t; };
+await loadDefaults();
+try { const saved = localStorage.getItem(STORE); if (saved && !qp.has("selftest")) setConfig(JSON.parse(saved), { replace: true }); } catch { /* private window */ }
+
+let art = neutral(), src = { f0: 112, rest: .003, chink: 0, pressure: 8 }, ctx = null, node = null, holding = false, tube = null, anat = null, view = null, lastTracks = null;
+const posturesNow = () => ({ ...Object.fromEntries(Object.entries(POSTURES).map(([k, a]) => [k, adaptPosture(a, anat)])), ...(voice().postures ?? {}) });      // (a voice re-fitted to its own head has its own)
+const voice = () => VOICES[$("voice").value] ?? Object.values(VOICES)[0];
+const PERSON_SLIDERS = { range: [.3, 2, .05, "pitch range ×"], register: [-6, 6, .5, "register (semitones)"], liveliness: [0, 2, .05, "accents ×"], rate: [.6, 1.5, .01, "tempo ×"], finalLengthening: [0, 2.5, .05, "final lengthening ×"], pauseScale: [0, 3, .05, "pauses ×"],
+  legato: [0, 1, .05, "legato (0 staccato … 1)"], anticipation: [0, 2, .05, "anticipation (how early the mouth moves)"], vibratoDepth: [0, 1.5, .05, "vibrato depth (semitones)"], vibratoHz: [3, 8, .1, "vibrato rate (Hz)"], vibratoDelayMs: [0, 500, 10, "vibrato sets in after (ms)"], variability: [0, 1, .05, "variability (monotonous … varied)"], byMovement: [0, 1, .05, "time by movement"], effort: [.4, 1.6, .05, "effort (lazy … careful)"],
+  rest: [-.02, .08, .001, "breathiness: folds apart (cm², <0 pressed)"], breathNoise: [0, 12, .1, "breath noise ×"],
+  closure: [.4, 2.5, .05, "fold closure (warm … bright)"], swing: [.5, 1.6, .05, "fold swing (tight … flow)"], ring: [.6, 2.5, .05, "ring (narrow larynx tube)"], fry: [0, 1, .05, "fry at phrase ends"], creakiness: [0, 1, .05, "creak throughout"],
+  nasality: [0, 1, .05, "nasality"], lipSpread: [-.5, 1, .05, "lip spread (habitual)"], smile: [0, 1, .05, "smile"], larynxHeight: [-1, 1, .05, "larynx (low dark … high bright)"], jawSetting: [-5, 8, .5, "jaw (clenched … open), degrees"], jawFreedom: [0, 1.4, .05, "jaw freedom (fixed … free)"], rShape: [0, 1, .05, "r: bunched … retroflex"], rStrength: [0, 1, .05, "r: weak … full"],
+  palateHeight: [.75, 1.3, .01, "palate height ×"], pharynxDepth: [.7, 1.5, .01, "throat depth ×"], lipWidth: [.7, 1.3, .01, "lip width ×"], lipThickness: [.5, 1.8, .05, "lip thickness ×"], tongueSize: [.94, 1.06, .005, "tongue size ×"], noseSize: [.5, 1.6, .05, "nose size ×"], agility: [.5, 2, .05, "agility (× limits)"], flutter: [0, 4, .1, "pitch wander ×"], jitter: [0, 4, .1, "roughness (jitter) ×"] };
+const FOLDS_ONLY = ["flutter", "jitter", "closure", "swing", "creakiness", "rest", "breathNoise"];
+const personSliders = () => sliders($("person"), PERSON_SLIDERS, (k) => voice()[k] ?? 1, (k, v) => { voice()[k] = v; if (FOLDS_ONLY.includes(k)) node?.port.postMessage({ type: "wobble", voice: Object.fromEntries(FOLDS_ONLY.map((q) => [q, voice()[q]])) }); else if (k === "ring" || HEAD_SHAPE.includes(k)) rebuildHead(); $("raw").value = JSON.stringify(getConfig(), null, 1); });
+function rebuild() { personSliders(); rebuildHead(); }
+function rebuildHead() { anat = anatomyFor(voice(), ANATOMY); tube = tubeFor(48000, anat); src.f0 = voice().f0; src.rest = voice().rest; srcSliders(); node?.port.postMessage({ type: "voice", voice: voice() }); redraw(); }
+
+// ---- the drawing ---------------------------------------------------------------------------------------------------
+let pending = false;
+function redraw() { if (pending) return; pending = true; requestAnimationFrame(() => { pending = false;
+  const af = areaFunction(art, anat), s = toSections(af, tube); tube.shape(s.areas, s.velum, s.lipExtra, s.gloExtra);
+  const c = $("head").getContext("2d"); c.clearRect(0, 0, 440, 400); view = drawSagittal(c, af.sagittal, { x: 0, y: 0, w: 440, h: 400 });
+  drawAreas($("areas").getContext("2d"), af, { w: 440, h: 90 });
+  const f = formants(tube); drawSpectrum($("spec").getContext("2d"), response(tube), f, { w: 440, h: 100 });
+  $("fm").textContent = `formants ${f.slice(0, 4).map((x) => x.hz.toFixed(0)).join("  ")} Hz   ·   tract ${af.length.toFixed(1)} cm   ·   narrowest ${Math.min(...af.As.slice(2)).toFixed(2)} cm²` + (s.short ? "   (shorter than the tube: enlarge voices' scale or shorten it)" : "");
+  for (const k of Object.keys(ARTICULATORS)) { const r = $("a_" + k); if (r && document.activeElement !== r) { r.value = art[k]; r.nextSibling.textContent = (+art[k]).toFixed(2); } }
+  node?.port.postMessage({ type: "art", art }); }); }
+function sliders(host, spec, get, set) { host.replaceChildren(); for (const [k, [lo, hi, step, label]] of Object.entries(spec)) { const r = el("input", { type: "range", min: lo, max: hi, step, value: get(k), id: host.id[0] + "_" + k }), o = el("output", { textContent: (+get(k)).toFixed(step < .01 ? 3 : 2) }); r.oninput = () => { set(k, +r.value); o.textContent = (+r.value).toFixed(step < .01 ? 3 : 2); }; host.append(el("label", { textContent: label ?? k, htmlFor: r.id }), r, o); } }
+const artSliders = () => sliders($("arts"), Object.fromEntries(Object.entries(ARTICULATORS).map(([k, [lo, hi]]) => [k, [lo, hi, (hi - lo) / 200, { jaw: "jaw (deg)", bodyX: "body → front", bodyY: "body ↑", tipX: "tip → front", tipY: "tip ↑", lipH: "lip opening", lipP: "lip protrusion" }[k]]])), (k) => art[k], (k, v) => { art[k] = v; redraw(); });
+const srcSliders = () => sliders($("src"), { f0: [50, 450, 1, "pitch (Hz)"], rest: [-.03, .3, .001, "folds apart (cm²)"], chink: [0, .09, .002, "chink at the back (cm²)"], pressure: [0, 20, .1, "lungs (cm H₂O)"] }, (k) => src[k], (k, v) => { src[k] = v; node?.port.postMessage({ type: "source", ...src, on: holding }); });
+{ // a hand on the head
+  let grab = null; const cv = $("head"), at = (e) => { const r = cv.getBoundingClientRect(), px = (e.clientX - r.left) * cv.width / r.width, py = (e.clientY - r.top) * cv.height / r.height; return [px / view.k - 1.6, (400 - py) / view.k - 1.2]; };
+  cv.onpointerdown = (e) => { const p = at(e), sg = areaFunction(art, anat).sagittal, d = (q) => Math.hypot(q[0] - p[0], q[1] - p[1]);
+    const c = [["tip", d(sg.tip)], ["body", d(sg.C) * .6], ["jaw", d(sg.teeth)], ["lips", d([sg.lip.x + sg.lip.length / 2, (sg.upper[1] + sg.teeth[1]) / 2])]].sort((a, b) => a[1] - b[1])[0]; if (c[1] < 1.6) { grab = { what: c[0], p0: p, lipH: art.lipH, lipP: art.lipP }; cv.setPointerCapture(e.pointerId); cv.style.cursor = "grabbing"; } };
+  cv.onpointermove = (e) => { if (!grab) return; const p = at(e);
+    if (grab.what === "body") setBodyAt(art, p, anat); else if (grab.what === "tip") setTipAt(art, p, anat); else if (grab.what === "jaw") setJawAt(art, p, anat);
+    else { art.lipP = grab.lipP + (p[0] - grab.p0[0]); art.lipH = grab.lipH + (p[1] - grab.p0[1]) * -1 * -1; clampArt(art); }
+    redraw(); };
+  cv.onpointerup = cv.onpointercancel = () => { if (grab) carrier = null; grab = null; cv.style.cursor = "grab"; };
+}
+// ---- sounds ------------------------------------------------------------------------------------------------------------
+// A CONSONANT IS AN EVENT, not a state: to hear one it has to be MADE, again and again. The vowel the head was in becomes a
+// vowel of its own ("◌"), and "◌C◌C◌C◌" goes through the planner and the tube like any word, then loops.
+let carrier = null, cycSrc = null;
+function stopCycle() { try { cycSrc?.stop(); } catch { /* not started */ } cycSrc = null; $("cycStop").hidden = true; $("cycInfo").textContent = ""; if (holding) node?.port.postMessage({ type: "source", ...src, on: true }); }
+async function cycle(sym) {
+  await audio(); stopCycle(); node.port.postMessage({ type: "source", ...src, on: false });
+  const V = "◌", r = renderIPA(`${V}${sym}ˈ${V}${sym}${V}${sym}${V}`, { lang: $("lang").value, voice: voice(), postures: { ...POSTURES, [V]: carrier } });
+  lastTracks = r.tracks; drawTime();
+  const ab = ctx.createBuffer(1, r.samples.length, 48000); ab.copyToChannel(r.samples, 0); cycSrc = ctx.createBufferSource(); cycSrc.buffer = ab; cycSrc.loop = true; cycSrc.connect(ctx.destination); cycSrc.start();
+  $("cycStop").hidden = false; $("cycInfo").textContent = `looping  vowel–${sym}–vowel–${sym}–…  (the timeline on the right shows it)`;
+}
+$("cycStop").onclick = stopCycle;
+function keys() {
+  $("vowels").replaceChildren(...Object.keys(POSTURES).map((v) => el("button", { textContent: v, title: `target ${(CONFIG.vowelTargets[v] ?? []).join(" ")}`, onclick: () => { stopCycle(); carrier = null; art = clampArt({ ...neutral(), ...posturesNow()[v] }); $("storeAs").value = v; const t = CONFIG.vowelTargets[v]; if (t) [$("t1").value, $("t2").value, $("t3").value] = t; redraw(); } })));
+  $("cons").replaceChildren(...Object.entries(CONSONANTS).filter(([, c]) => c.organ).map(([s, c]) => el("button", { textContent: s, title: JSON.stringify(c), onclick: () => {
+    if (!carrier) carrier = { ...art };                         // the vowel this consonant is made in (kept while consonants are tried one after another)
+    art = { ...carrier };
+    if (c.jawMax !== undefined) art.jaw = Math.min(art.jaw, c.jawMax); if (c.round !== undefined) art.lipP = c.round; art.velum = c.velum ?? 0; art.lateral = c.lateral ?? 0;
+    if (c.organ === "posture") Object.assign(art, c.posture); else if (c.organ === "lips") solveLips(art, c.area, anat); else if (c.organ === "tip") solveTip(art, c.place, c.area, anat); else solveBody(art, c.place, c.area, anat);
+    if (c.lipArea !== undefined) solveLips(art, c.lipArea, anat); redraw(); if ($("cyc").checked) cycle(s); } })));
+}
+const targetNow = () => [+$("t1").value || 0, +$("t2").value || 0, +$("t3").value || 0];
+$("fit").onclick = () => { const r = invert(targetNow(), tube, anat, { from: art }); art = r.art; status(`fitted: ${r.formants.slice(0, 3).map((x) => x.toFixed(0)).join(" ")}`); redraw(); };
+$("fitAll").onclick = () => { status("searching…"); setTimeout(() => { const r = invert(targetNow(), tube, anat); art = r.art; status(`fitted: ${r.formants.slice(0, 3).map((x) => x.toFixed(0)).join(" ")}`); redraw(); }, 20); };
+$("store").onclick = () => { const k = $("storeAs").value.trim(); if (!k) return; POSTURES[k] = Object.fromEntries(Object.keys(ARTICULATORS).map((a) => [a, +art[a].toFixed(3)])); keys(); panels(); status(`stored as ${k}`); };
+// a reshaped head gives other vowels for the same movements. What this voice's vowels SHOULD be is what its head gives without the reshaping
+// (its size alone); the inversion then finds, from the reference postures, the movements that make those in the head as it is
+$("refitVoice").onclick = async () => { const v = voice(), plainVoice = { ...v, ring: 1, ...Object.fromEntries(HEAD_SHAPE.map((k) => [k, 1])) };
+  if (HEAD_SHAPE.every((k) => (v[k] ?? 1) === 1) && (v.ring ?? 1) === 1) { delete v.postures; status("this head has the reference shape: it uses the shared postures"); panels(); return; }
+  const plain = anatomyFor(plainVoice, ANATOMY), tPlain = tubeFor(48000, plain), mine = anatomyFor(v, ANATOMY), tMine = tubeFor(48000, mine), own = {}; let worst = 0;
+  for (const name of Object.keys(CONFIG.vowelTargets)) { if (!POSTURES[name]) continue; status(`fitting ${name} to this head…`); await new Promise((r) => setTimeout(r, 10));
+    const a0 = clampArt({ ...neutral(), ...POSTURES[name] }), s = toSections(areaFunction(a0, plain), tPlain); tPlain.shape(s.areas, 0, s.lipExtra, s.gloExtra); tPlain.snap();
+    const target = formants(tPlain, { max: 3 }).map((f) => f.hz); if (target.length < 2) continue;
+    const r = invert(target, tMine, mine, { from: clampArt(adaptPosture(a0, mine)) }); own[name] = Object.fromEntries(Object.entries(r.art).map(([k, x]) => [k, +x.toFixed(3)]));
+    worst = Math.max(worst, Math.abs(Math.log2(r.formants[0] / target[0])), Math.abs(Math.log2(r.formants[1] / target[1]))); }
+  v.postures = own; keys(); panels(); status(`this voice now has its own postures (worst vowel ${(worst * 100).toFixed(0)}% of an octave off)`); };
+$("refit").onclick = async () => { const ref = anatomyFor(VOICES.man, ANATOMY), t = tubeFor(48000, ref); for (const [v, target] of Object.entries(CONFIG.vowelTargets)) { status(`fitting ${v}…`); await new Promise((r) => setTimeout(r, 10)); const r = invert(target, t, ref); POSTURES[v] = { ...Object.fromEntries(Object.entries(r.art).map(([k, x]) => [k, +x.toFixed(3)])), _got: r.formants.slice(0, 3).map(Math.round) }; } keys(); panels(); status("all vowels re-fitted (to the reference male head)"); };
+// ---- audio ---------------------------------------------------------------------------------------------------------------
+async function audio() { if (!ctx) { ctx = new AudioContext({ sampleRate: 48000 }); await ctx.audioWorklet.addModule("tract_worklet.js"); node = new AudioWorkletNode(ctx, "tract", { outputChannelCount: [1] }); node.connect(ctx.destination); node.port.postMessage({ type: "config", config: getConfig() }); node.port.postMessage({ type: "voice", voice: voice() }); node.port.postMessage({ type: "art", art }); } if (ctx.state === "suspended") await ctx.resume(); }
+$("hold").onclick = async () => { await audio(); stopCycle(); holding = !holding; $("hold").classList.toggle("on", holding); $("hold").textContent = holding ? "Holding — click to stop" : "Hold sound"; node.port.postMessage({ type: "source", ...src, on: holding }); };
+async function say() {
+  const lang = $("lang").value, text = $("sent").value; let parts;
+  if ($("dict").checked && LEXICON_LANGS.includes(lang)) { const r = await writtenToIPA(text, lang, undefined, { marks: true }); $("ipa").innerHTML = reportHTML(r); parts = sentences(r.ipa); } else { $("ipa").textContent = ""; parts = sentences(text); }
+  status("rendering…"); await new Promise((r) => setTimeout(r, 15));
+  const t0 = performance.now(), bufs = parts.map((p) => renderIPA(p.ipa, { lang, voice: voice(), postures: POSTURES, mark: p.mark ?? "." }));
+  lastTracks = bufs[0]?.tracks; drawTime();
+  { const held = bufs.flatMap((b, k) => (b.tracks.limited ?? []).map((l) => `${l.track} near "${l.near}" at ${Math.round(l.t0)}ms${bufs.length > 1 ? ` (sentence ${k + 1})` : ""}: ${(l.by / l.of * 100).toFixed(0)}% of its range behind`));
+    const slowed = bufs.flatMap((b) => (b.tracks.slowed ?? []).map((x) => `${x.sym} ×${x.by.toFixed(2)}`));
+    const odd = bufs.flatMap((b) => (b.tracks.odd ?? []).map((o) => `${o.rule}${o.near ? ` (${o.near})` : ""} — ${o.organ} ${o.by}${o.now === undefined ? "" : `, ${o.was}→${o.now} cm²`}`));
+    $("held").textContent = (odd.length ? `Sounds nobody makes, mended (sanity): ${odd.slice(0, 6).join(";  ")}${odd.length > 6 ? `;  … ${odd.length - 6} more` : ""}.  ` : "")
+      + (slowed.length ? `Slowed down where the mouth could not keep up: ${slowed.slice(0, 12).join("  ")}${slowed.length > 12 ? " …" : ""}.  ` : "") + (held.length ? `The plan asked for more than a mouth can do (limits) — held back, red above: ${held.slice(0, 8).join(";  ")}${held.length > 8 ? `;  … ${held.length - 8} more` : ""}` : ""); } status(`rendered ${(bufs.reduce((a, b) => a + b.samples.length, 0) / 48000).toFixed(1)}s of speech in ${((performance.now() - t0) / 1000).toFixed(1)}s`);
+  if (qp.has("selftest")) return bufs;
+  await audio(); let at = ctx.currentTime + .05;
+  for (const b of bufs) { const ab = ctx.createBuffer(1, b.samples.length, 48000); ab.copyToChannel(b.samples, 0); const s = ctx.createBufferSource(); s.buffer = ab; s.connect(ctx.destination); s.start(at); at += ab.duration + .12; }
+  return bufs;
+}
+$("say").onclick = say; $("sent").addEventListener("keydown", (e) => { if (e.key === "Enter") say(); });
+function drawTime() { const T = lastTracks, c = $("time").getContext("2d"), W = 900, H = 300; c.fillStyle = "#fff"; c.fillRect(0, 0, W, H); if (!T) return;
+  const rows = [["jaw", ARTICULATORS.jaw], ["bodyX", ARTICULATORS.bodyX], ["bodyY", ARTICULATORS.bodyY], ["tipX", ARTICULATORS.tipX], ["tipY", ARTICULATORS.tipY], ["lipH", ARTICULATORS.lipH], ["lipP", ARTICULATORS.lipP], ["velum", [0, 1]], ["rest", [0, .32]], ["pressure", [0, 12]], ["f0", [50, 400]]], rh = (H - 18) / rows.length;
+  c.font = "11px sans-serif"; for (const p of T.phones) { const x = p.t0 / T.total * W; c.strokeStyle = "#ddd"; c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H - 16); c.stroke(); c.fillStyle = p.stress ? "#8a3b12" : "#333"; c.fillText(p.sym, x + 2, H - 4); }
+  // where the limiter had to hold an organ back (limits): red, in that organ's row
+  for (const l of T.limited ?? []) { const r = rows.findIndex(([k]) => k === l.track); if (r < 0) continue; c.fillStyle = "rgba(200,30,30,.28)"; c.fillRect(l.t0 / T.total * W, r * rh, Math.max(2, (l.t1 - l.t0) / T.total * W), rh); }
+  rows.forEach(([k, [lo, hi]], r) => { const y0 = r * rh; c.fillStyle = "#777"; c.fillText(k, 2, y0 + 10); c.strokeStyle = "#2a5d8a"; c.beginPath(); for (let i = 0; i < T.n; i++) { const x = i / T.n * W, y = y0 + rh - 2 - Math.max(0, Math.min(1, (T[k][i] - lo) / (hi - lo))) * (rh - 4); i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); }); }
+// ---- every number, editable -----------------------------------------------------------------------------------------------
+const TABLE_SKIPS = { voices: ["postures"] };      // (a voice's own postures are a table of their own: edit them under Raw JSON)
+const TABLES = new Set(["vowelTargets", "postures", "consonants", "voices", "languages", "affricates", "diphthongs", "offglides", "aliases", "articulators"]);
+const changed = () => { node?.port.postMessage({ type: "config", config: getConfig() }); rebuild(); $("raw").value = JSON.stringify(getConfig(), null, 1); };
+const parse = (t) => { try { return JSON.parse(t); } catch { return t; } }, show = (v) => typeof v === "string" ? v : JSON.stringify(v);
+function field(obj, k) { const v = obj[k];
+  if (typeof v === "number") { const i = el("input", { type: "number", step: "any", value: v }); i.onchange = () => { obj[k] = +i.value; changed(); }; return el("span", { className: "f" }, k, i); }
+  if (typeof v === "boolean") { const i = el("input", { type: "checkbox", checked: v }); i.onchange = () => { obj[k] = i.checked; changed(); }; return el("span", { className: "f" }, i, k); }
+  if (v && typeof v === "object" && !Array.isArray(v)) { const fs = el("fieldset", {}, el("legend", { textContent: k })); for (const kk of Object.keys(v)) fs.append(field(v, kk)); return fs; }
+  const i = el("input", { type: "text", value: show(v), style: `width:${Math.min(620, 60 + show(v).length * 7)}px` }); i.onchange = () => { obj[k] = parse(i.value); changed(); }; return el("span", { className: "f" }, k, i); }
+function table(obj, skip = []) { const cols = [...new Set(Object.values(obj).flatMap((r) => r && typeof r === "object" && !Array.isArray(r) ? Object.keys(r).filter((k) => !skip.includes(k)) : ["value"]))], t = el("table"), wrap = el("div", { className: "scroll" }, t);
+  t.append(el("tr", {}, el("th", { textContent: "" }), ...cols.map((c) => el("th", { textContent: c })), el("th")));
+  for (const key of Object.keys(obj)) { const row = obj[key], flat = !(row && typeof row === "object" && !Array.isArray(row)), tr = el("tr", {}, el("th", { textContent: key }));
+    for (const c of cols) { const i = el("input", { value: flat ? show(row) : row[c] === undefined ? "" : show(row[c]), className: flat ? "w" : "" }); i.onchange = () => { const v = i.value === "" ? undefined : parse(i.value); if (flat) obj[key] = v; else if (v === undefined) delete row[c]; else row[c] = v; changed(); }; tr.append(el("td", {}, i)); }
+    tr.append(el("td", {}, el("button", { textContent: "×", onclick: () => { delete obj[key]; changed(); panels(); keys(); } }))); t.append(tr); }
+  wrap.append(el("button", { textContent: "+ add", onclick: () => { const k = prompt("name"); if (k && !(k in obj)) { const first = Object.values(obj)[0]; obj[k] = first && typeof first === "object" && !Array.isArray(first) ? {} : ""; changed(); panels(); keys(); } } })); return wrap; }
+function panels() { $("panels").replaceChildren(...Object.keys(CONFIG).map((sec) => { const d = el("details", {}, el("summary", { textContent: sec }), el("div", { className: "doc", textContent: DOC[sec] ?? "" }));
+  d.addEventListener("toggle", () => { if (d.open && d.children.length === 2) d.append(TABLES.has(sec) ? table(CONFIG[sec], TABLE_SKIPS[sec]) : el("div", {}, ...Object.keys(CONFIG[sec]).map((k) => field(CONFIG[sec], k)))); }); return d; })); $("raw").value = JSON.stringify(getConfig(), null, 1); }
+const download = (name, obj) => { const a = el("a", { href: URL.createObjectURL(new Blob([JSON.stringify(obj, null, 1)], { type: "application/json" })), download: name }); document.body.append(a); a.click(); a.remove(); };
+$("expAll").onclick = () => download("tract-config.json", getConfig()); $("expDiff").onclick = () => download("tract-changes.json", diffConfig());
+$("imp").onclick = () => $("file").click(); $("file").onchange = async () => { try { setConfig(JSON.parse(await $("file").files[0].text())); panels(); keys(); changed(); status("imported"); } catch (e) { status("not imported: " + e.message); } };
+$("applyRaw").onclick = () => { try { setConfig(JSON.parse($("raw").value), { replace: true }); panels(); keys(); changed(); status("applied"); } catch (e) { status("not applied: " + e.message); } };
+$("save").onclick = () => { try { localStorage.setItem(STORE, JSON.stringify(getConfig())); status("saved in this browser"); } catch { status("could not save"); } };
+$("reset").onclick = () => { resetConfig(); try { localStorage.removeItem(STORE); } catch { /* */ } panels(); keys(); changed(); status("back to the shipped configuration"); };
+
+// ---- RANDOMIZE: a different person, from the same parts ---------------------------------------------------
+// Only GENERAL settings move -- the shape of this head, the larynx, and the habits of the way it speaks. What
+// a sound IS stays put: the phonemes, the vowel targets, the postures, the languages, the timing tables. So
+// the new voice says exactly the same things in exactly the same language, and sounds like somebody else.
+//
+// TWO THINGS DECIDE WHETHER IT SOUNDS LIKE A PERSON.
+//   1. A BELL, not a flat draw. Every setting is drawn from a normal distribution about the voice's own
+//      value: near it is likely, far from it is not, and three quarters of a sigma is the whole difference
+//      between two ordinary speakers. A flat draw over a slider's range treats "a mouth that hardly opens"
+//      as exactly as likely as an ordinary jaw, and drawing thirty of those at once is a caricature.
+//   2. IT ALWAYS DRAWS FROM THE SAME PLACE. The first draw for a voice remembers where that voice started,
+//      and every draw after it measures from THERE. Multiplying the current value instead -- which is what
+//      this did at first -- is a random walk: press the button ten times and the head has wandered off, each
+//      press compounding the last, a voice getting stranger and stranger rather than a different person.
+const RAND_SKIP = ["rate", "vibratoDelayMs"];        // tempo and the vibrato's delay: left alone, they are the sentence's business
+const RAND_LOG = { f0: .11, pressure: .1, gain: .07, oral: .055, pharynx: .055 };   // what is a RATIO, not an amount: drawn log-normally about the voice's own
+const RAND_SPREAD = .17;                             // a setting's sigma, as a share of its slider's range
+const randBase = new Map();                          // voice name -> where it stood before the first draw
+function baseFor(name, v) {
+  if (!randBase.has(name)) {
+    const keep = {};
+    for (const k of [...Object.keys(PERSON_SLIDERS), ...Object.keys(RAND_LOG)]) keep[k] = v[k];
+    randBase.set(name, keep);
+  }
+  return randBase.get(name);
+}
+function randomizeVoice(seedTxt = "") {
+  let sd = 2166136261 >>> 0;
+  for (const c of String(seedTxt) + Math.random()) sd = Math.imul(sd ^ c.charCodeAt(0), 16777619) >>> 0;
+  const rnd = () => ((sd = Math.imul(sd ^ (sd >>> 15), 2246822507) >>> 0) >>> 8) / 16777216;
+  // Box-Muller, clipped at two and a half sigma so nothing lands in the far tail
+  const gauss = () => {
+    const u = Math.max(1e-9, rnd()), z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd());
+    return Math.max(-2.5, Math.min(2.5, z));
+  };
+  const name = $("voice").value, v = voice(), base = baseFor(name, v);
+  for (const [k, [lo, hi, step]] of Object.entries(PERSON_SLIDERS)) {
+    if (RAND_SKIP.includes(k) || k in RAND_LOG) continue;
+    // where this voice stands is the middle of the bell; a setting it does not carry sits at the neutral
+    // value its slider is read with (1 for the multipliers, else the middle of the range)
+    const mid = base[k] ?? (lo <= 1 && hi >= 1 ? 1 : (lo + hi) / 2);
+    const x = mid + gauss() * (hi - lo) * RAND_SPREAD;
+    v[k] = +(Math.round(Math.min(hi, Math.max(lo, x)) / step) * step).toFixed(4);
+  }
+  // the head's size, the pitch and the push behind it are RATIOS: a bell in the log, so half again and two
+  // thirds are equally far from the voice it started as
+  for (const [k, sig] of Object.entries(RAND_LOG)) {
+    const b = base[k] ?? (k === "f0" ? 120 : 1);
+    const x = b * Math.exp(gauss() * sig);
+    v[k] = k === "f0" ? Math.round(x) : +x.toFixed(3);
+  }
+  delete v.postures;   // its vowels were fitted to the head it HAD; the shared postures fit the new one until it is re-fitted
+  panels(); changed();   // (changed rebuilds the head and the tube, and re-posts the config to the worklet)
+  status(`a new voice: f0 ${v.f0} Hz, head ${v.oral.toFixed(2)} x ${v.pharynx.toFixed(2)} -- drawn about ${randBase.has(name) ? "the voice as it was" : "itself"}, phonemes untouched`);
+}
+$("rand").onclick = () => randomizeVoice($("sent").value);
+window.__lab = { randomizeVoice, voice, randBase, tube: () => tube };   // (checks: the draw's spread, and that it does not wander)
+// ---- start ---------------------------------------------------------------------------------------------------------------------
+for (const [k, v] of Object.entries(VOICES)) $("voice").append(el("option", { value: k, textContent: v.name }));
+for (const l of [...LEXICON_LANGS, ...Object.keys(CONFIG.languages).filter((l) => !LEXICON_LANGS.includes(l))]) $("lang").append(el("option", { value: l, textContent: LEXICON_LANGS.includes(l) ? l : `${l} (IPA only)` }));   // (a language without a dictionary still has its timing, aspiration, vowel lengths)
+$("voice").onchange = rebuild; $("lang").onchange = () => { if (Object.values(SAMPLES).includes($("sent").value) || $("sent").value === "The old dog is very bad.") $("sent").value = SAMPLES[$("lang").value]; };
+artSliders(); keys(); panels(); rebuild();
+if (qp.has("random")) randomizeVoice(qp.get("random"));   // ?random=1 (or ?random=<anything>, as a seed): a different person on the way in
+if (qp.has("selftest")) { const post = (t) => fetch("/log", { method: "POST", body: String(t).slice(0, 3000) + "\n" });
+  try { $("lang").value = "de"; $("sent").value = SAMPLES.de; const bufs = await say(); let pk = 0, bad = 0; for (const b of bufs) for (const v of b.samples) { if (!isFinite(v)) bad++; pk = Math.max(pk, Math.abs(v)); }
+    for (const d of document.querySelectorAll("details")) d.open = true; await new Promise((r) => setTimeout(r, 50));
+    const cfg = getConfig(), json = JSON.stringify(cfg); setConfig(JSON.parse(json), { replace: true }); const same = JSON.stringify(getConfig()) === json;
+    await post(`LAB selftest: ipa "${$("ipa").textContent.slice(0, 90)}"  ${bufs.length} sentence(s), peak ${pk.toFixed(3)}, NaN ${bad}; inputs ${document.querySelectorAll("input").length}; sections ${Object.keys(cfg).length - 1}; config ${json.length} bytes, round trip ${same}; formants "${$("fm").textContent.slice(0, 60)}"; ${$("status").textContent}`);
+  } catch (e) { await post("LAB ERR " + (e.stack || e)); } await post("LAB DONE"); }
+</script></body></html>

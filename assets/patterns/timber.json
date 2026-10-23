@@ -1,0 +1,956 @@
+{
+ "name": "Timber",
+ "_about": "Timber: the framed wall of a town house (its storey one tile tall, laid with align: part on the storey's foot), close studding, floor boards and plain wood for furniture and stairs; rough planks, weatherboarding, knotty softwood, herringbone and basket-weave parquet, wainscot panelling, a log's end grain, bark.",
+ "patterns": {
+  "frame": {
+   "size": [
+    2.6,
+    2.9
+   ],
+   "palette": "frame-dark",
+   "palettes": [
+    "frame-oxblood",
+    "frame-ochre",
+    "frame-grey"
+   ],
+   "res": 512,
+   "_about": "a storey of timber framing (Fachwerk): sill, plate and a rail at the window-sill line, a post every 1.3m, a brace in each upper panel rising away from the middle post; lime-plastered infill between",
+   "layers": [
+    {
+     "field": "cloud",
+     "colors": [
+      0,
+      3
+     ],
+     "freq": 1.5,
+     "amount": 0.9
+    },
+    {
+     "shape": "line",
+     "from": [
+      -0.12,
+      -0.5
+     ],
+     "to": [
+      -1.2,
+      1.3
+     ],
+     "stroke": 2,
+     "line": 0.15,
+     "vary": 0.08,
+     "seed": 3
+    },
+    {
+     "shape": "line",
+     "from": [
+      0.12,
+      -0.5
+     ],
+     "to": [
+      1.2,
+      1.3
+     ],
+     "stroke": 2,
+     "line": 0.15,
+     "vary": 0.08,
+     "seed": 4
+    },
+    {
+     "shape": "band",
+     "h": 0.12,
+     "fill": 2,
+     "at": [
+      0,
+      -0.55
+     ]
+    },
+    {
+     "shape": "vband",
+     "w": 0.18,
+     "fill": 1,
+     "vary": 0.1,
+     "at": [
+      [
+       -1.3,
+       0
+      ],
+      [
+       0,
+       0
+      ]
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.2,
+     "fill": 1,
+     "at": [
+      0,
+      -1.35
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.16,
+     "fill": 1,
+     "at": [
+      0,
+      1.37
+     ]
+    }
+   ]
+  },
+  "close studding": {
+   "size": [
+    1.2,
+    2.9
+   ],
+   "palette": "frame-dark",
+   "palettes": [
+    "frame-grey",
+    "frame-oxblood"
+   ],
+   "res": 512,
+   "_about": "close studding: studs 40cm apart between a sill and a plate, a mid rail -- the richer house's wall",
+   "layers": [
+    {
+     "field": "cloud",
+     "colors": [
+      0,
+      3
+     ],
+     "freq": 1.5,
+     "amount": 0.9
+    },
+    {
+     "shape": "vband",
+     "w": 0.17,
+     "fill": 1,
+     "vary": 0.1,
+     "at": [
+      [
+       -0.6,
+       0
+      ],
+      [
+       -0.2,
+       0
+      ],
+      [
+       0.2,
+       0
+      ]
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.13,
+     "fill": 2,
+     "at": [
+      0,
+      -0.2
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.2,
+     "fill": 1,
+     "at": [
+      0,
+      -1.35
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.16,
+     "fill": 1,
+     "at": [
+      0,
+      1.37
+     ]
+    }
+   ]
+  },
+  "boards": {
+   "size": [
+    2.4,
+    0.6
+   ],
+   "palette": "oak",
+   "palettes": [
+    "pine",
+    "oak-grey"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "floor boards: 20cm planks laid end to end, their joints staggered, the grain along them",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": 1.19,
+     "h": 0.19,
+     "fill": 1,
+     "vary": 0.12,
+     "grid": {
+      "n": [
+       2,
+       3
+      ],
+      "offset": 0.33
+     }
+    },
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 3,
+     "turns": 9,
+     "amount": 0.8,
+     "alpha": 0.3
+    }
+   ]
+  },
+  "wood": {
+   "size": [
+    1.0,
+    0.5
+   ],
+   "palette": "oak",
+   "palettes": [
+    "pine",
+    "oak-grey"
+   ],
+   "res": 512,
+   "_about": "plain wood, its grain running along u: furniture, stairs, casks, railings (512 texels a metre: sharp at arm's length)",
+   "layers": [
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 3.5,
+     "turns": 6,
+     "amount": 0.9
+    }
+   ]
+  },
+  "planks": {
+   "size": [
+    3.0,
+    0.9
+   ],
+   "palette": "oak-grey",
+   "palettes": [
+    "oak",
+    "larch",
+    "tarred"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "rough sawn planks 30cm wide, full length, a dark gap between them, a knot here and there and weathering over all: barns, sheds, outhouse walls (a rule's `turn: 90` stands them up as vertical cladding)",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": 2.99,
+     "h": 0.285,
+     "fill": 1,
+     "vary": 0.14,
+     "grid": {
+      "n": [
+       1,
+       3
+      ],
+      "offset": 0.4
+     }
+    },
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 2.5,
+     "turns": 9,
+     "amount": 0.8,
+     "alpha": 0.45
+    },
+    {
+     "shape": "ellipse",
+     "rx": 0.03,
+     "ry": 0.018,
+     "fill": 2,
+     "stroke": 0,
+     "line": 0.006,
+     "at": [
+      [
+       -0.9,
+       0.3
+      ],
+      [
+       0.6,
+       -0.02
+      ],
+      [
+       1.25,
+       0.33
+      ],
+      [
+       -0.2,
+       -0.31
+      ]
+     ]
+    },
+    {
+     "field": "cloud",
+     "colors": [
+      3,
+      0
+     ],
+     "freq": 2,
+     "amount": 0.6,
+     "alpha": 0.18
+    }
+   ]
+  },
+  "weatherboard": {
+   "size": [
+    2.0,
+    0.8
+   ],
+   "palette": "oak-grey",
+   "palettes": [
+    "pine",
+    "tarred",
+    "ash"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "weatherboarding (clapboard): horizontal boards 20cm high, each lapped over the one below -- a shadow under its lower edge, the light catching its top",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": 2.0,
+     "h": 0.19,
+     "fill": 1,
+     "vary": 0.08,
+     "grid": {
+      "n": [
+       1,
+       4
+      ]
+     }
+    },
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 3,
+     "turns": 12,
+     "amount": 0.8,
+     "alpha": 0.4
+    },
+    {
+     "shape": "band",
+     "h": 0.03,
+     "fill": 0,
+     "alpha": 0.55,
+     "at": [
+      [
+       0,
+       -0.385
+      ],
+      [
+       0,
+       -0.185
+      ],
+      [
+       0,
+       0.015
+      ],
+      [
+       0,
+       0.215
+      ]
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.015,
+     "fill": 3,
+     "alpha": 0.5,
+     "at": [
+      [
+       0,
+       -0.215
+      ],
+      [
+       0,
+       -0.015
+      ],
+      [
+       0,
+       0.185
+      ],
+      [
+       0,
+       0.385
+      ]
+     ]
+    }
+   ]
+  },
+  "knotty": {
+   "size": [
+    1.0,
+    0.5
+   ],
+   "palette": "pine",
+   "palettes": [
+    "larch",
+    "oak",
+    "ash"
+   ],
+   "res": 512,
+   "_about": "knotty softwood: the grain of plain wood with dark knots, each in a ring of its own grain -- country furniture, panelling, doors",
+   "layers": [
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 3.5,
+     "turns": 7,
+     "amount": 0.9
+    },
+    {
+     "shape": "ellipse",
+     "rx": 0.08,
+     "ry": 0.045,
+     "fill": 2,
+     "alpha": 0.45,
+     "at": [
+      [
+       -0.3,
+       0.1
+      ],
+      [
+       0.28,
+       -0.12
+      ]
+     ]
+    },
+    {
+     "shape": "ellipse",
+     "rx": 0.035,
+     "ry": 0.024,
+     "fill": 0,
+     "vary": 0.2,
+     "at": [
+      [
+       -0.3,
+       0.1
+      ],
+      [
+       0.28,
+       -0.12
+      ],
+      [
+       0.05,
+       0.19
+      ]
+     ]
+    }
+   ]
+  },
+  "herringbone": {
+   "size": [
+    0.5657,
+    0.5657
+   ],
+   "palette": "oak",
+   "palettes": [
+    "walnut",
+    "cherry",
+    "ash"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "herringbone parquet: oak strips 40 x 10cm laid at right angles, end against side, in zigzag columns -- the floor of a palace's rooms",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": 0.394,
+     "h": 0.094,
+     "fill": 1,
+     "vary": 0.12,
+     "rot": 45,
+     "grid": {
+      "n": [
+       1,
+       4
+      ]
+     },
+     "at": [
+      0.1061,
+      0
+     ]
+    },
+    {
+     "shape": "rect",
+     "w": 0.394,
+     "h": 0.094,
+     "fill": 3,
+     "vary": 0.12,
+     "rot": -45,
+     "grid": {
+      "n": [
+       1,
+       4
+      ]
+     },
+     "at": [
+      -0.1768,
+      0.0707
+     ]
+    },
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 4,
+     "turns": 10,
+     "amount": 0.6,
+     "alpha": 0.25
+    }
+   ]
+  },
+  "basket parquet": {
+   "size": [
+    0.6,
+    0.6
+   ],
+   "palette": "oak",
+   "palettes": [
+    "walnut",
+    "chestnut",
+    "ash"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "basket-weave parquet: squares of three strips each, turned a quarter from their neighbours",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": 0.296,
+     "h": 0.094,
+     "fill": 1,
+     "vary": 0.12,
+     "at": [
+      [
+       -0.15,
+       0.04999999999999999
+      ],
+      [
+       -0.15,
+       0.15
+      ],
+      [
+       -0.15,
+       0.25
+      ],
+      [
+       0.15,
+       -0.25
+      ],
+      [
+       0.15,
+       -0.15
+      ],
+      [
+       0.15,
+       -0.04999999999999999
+      ]
+     ]
+    },
+    {
+     "shape": "rect",
+     "w": 0.094,
+     "h": 0.296,
+     "fill": 3,
+     "vary": 0.12,
+     "at": [
+      [
+       0.04999999999999999,
+       0.15
+      ],
+      [
+       0.15,
+       0.15
+      ],
+      [
+       0.25,
+       0.15
+      ],
+      [
+       -0.25,
+       -0.15
+      ],
+      [
+       -0.15,
+       -0.15
+      ],
+      [
+       -0.04999999999999999,
+       -0.15
+      ]
+     ]
+    },
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 5,
+     "turns": 12,
+     "amount": 0.6,
+     "alpha": 0.25
+    }
+   ]
+  },
+  "panelling": {
+   "size": [
+    0.8,
+    1.0
+   ],
+   "palette": "oak",
+   "palettes": [
+    "walnut",
+    "pine",
+    "chestnut"
+   ],
+   "ground": 1,
+   "res": 512,
+   "_about": "wainscot panelling: a frame of stiles and rails 10cm wide round a fielded panel, its bevel shaded light above and dark below -- a hall's or a parlour's walls (align: part sets it on the wall's foot)",
+   "layers": [
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 2.5,
+     "turns": 5,
+     "amount": 0.9,
+     "alpha": 0.6
+    },
+    {
+     "shape": "rect",
+     "w": 0.6,
+     "h": 0.8,
+     "fill": 2,
+     "alpha": 0.55
+    },
+    {
+     "shape": "rect",
+     "w": 0.52,
+     "h": 0.72,
+     "fill": 3,
+     "alpha": 0.35
+    },
+    {
+     "shape": "rect",
+     "w": 0.5,
+     "h": 0.7,
+     "fill": 1,
+     "alpha": 0.85
+    },
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 3,
+     "turns": 7,
+     "amount": 0.6,
+     "alpha": 0.3
+    },
+    {
+     "shape": "frame",
+     "w": 0.6,
+     "h": 0.8,
+     "t": 0.012,
+     "fill": 0,
+     "alpha": 0.6
+    }
+   ]
+  },
+  "end grain": {
+   "size": [
+    0.4,
+    0.4
+   ],
+   "palette": "pine",
+   "palettes": [
+    "oak",
+    "larch",
+    "ash"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "a log's end, sawn: the year rings round the pith, a dark check (a drying crack) out from the middle and the bark round it -- a stacked woodpile, a chopping block, a beam's end",
+   "layers": [
+    {
+     "shape": "circle",
+     "r": 0.195,
+     "fill": 0
+    },
+    {
+     "shape": "circle",
+     "r": 0.18,
+     "fill": 3
+    },
+    {
+     "shape": "ring",
+     "r": 0.19,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "ring",
+     "r": 0.171,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "ring",
+     "r": 0.152,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "ring",
+     "r": 0.133,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "ring",
+     "r": 0.114,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "ring",
+     "r": 0.095,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "ring",
+     "r": 0.076,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "ring",
+     "r": 0.057,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "ring",
+     "r": 0.038,
+     "w": 0.004,
+     "fill": 2,
+     "alpha": 0.7
+    },
+    {
+     "shape": "circle",
+     "r": 0.012,
+     "fill": 2
+    },
+    {
+     "shape": "line",
+     "from": [
+      0.0,
+      0.0
+     ],
+     "to": [
+      0.12,
+      0.06
+     ],
+     "stroke": 0,
+     "line": 0.006
+    },
+    {
+     "field": "cloud",
+     "colors": [
+      1,
+      0
+     ],
+     "freq": 3,
+     "amount": 0.5,
+     "alpha": 0.15
+    }
+   ]
+  },
+  "bark": {
+   "size": [
+    1.0,
+    0.5
+   ],
+   "palette": "oak",
+   "palettes": [
+    "oak-grey",
+    "birch",
+    "chestnut"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "rough bark-like wood: furrows running ALONG u (as plain wood's grain: a beam's, a rail's, a post's length) between uneven ridges -- the rough wood of the village: fences, posts, beams, millwork, poles, logs",
+   "layers": [
+    {
+     "field": "cloud",
+     "colors": [
+      2,
+      3
+     ],
+     "freq": 5,
+     "amount": 0.9
+    },
+    {
+     "shape": "wave",
+     "h": 0.031,
+     "amp": 0.012,
+     "n": 3,
+     "fill": 0,
+     "alpha": 0.75,
+     "vary": 0.2,
+     "at": [
+      0,
+      -0.22
+     ]
+    },
+    {
+     "shape": "wave",
+     "h": 0.02,
+     "amp": 0.012,
+     "n": 2,
+     "fill": 0,
+     "alpha": 0.75,
+     "vary": 0.2,
+     "at": [
+      0,
+      -0.16
+     ]
+    },
+    {
+     "shape": "wave",
+     "h": 0.036,
+     "amp": 0.012,
+     "n": 3,
+     "fill": 0,
+     "alpha": 0.75,
+     "vary": 0.2,
+     "at": [
+      0,
+      -0.1
+     ]
+    },
+    {
+     "shape": "wave",
+     "h": 0.022,
+     "amp": 0.012,
+     "n": 4,
+     "fill": 0,
+     "alpha": 0.75,
+     "vary": 0.2,
+     "at": [
+      0,
+      -0.035
+     ]
+    },
+    {
+     "shape": "wave",
+     "h": 0.034,
+     "amp": 0.012,
+     "n": 2,
+     "fill": 0,
+     "alpha": 0.75,
+     "vary": 0.2,
+     "at": [
+      0,
+      0.03
+     ]
+    },
+    {
+     "shape": "wave",
+     "h": 0.021,
+     "amp": 0.012,
+     "n": 3,
+     "fill": 0,
+     "alpha": 0.75,
+     "vary": 0.2,
+     "at": [
+      0,
+      0.09
+     ]
+    },
+    {
+     "shape": "wave",
+     "h": 0.035,
+     "amp": 0.012,
+     "n": 5,
+     "fill": 0,
+     "alpha": 0.75,
+     "vary": 0.2,
+     "at": [
+      0,
+      0.15
+     ]
+    },
+    {
+     "shape": "wave",
+     "h": 0.022,
+     "amp": 0.012,
+     "n": 2,
+     "fill": 0,
+     "alpha": 0.75,
+     "vary": 0.2,
+     "at": [
+      0,
+      0.21
+     ]
+    },
+    {
+     "field": "cloud",
+     "colors": [
+      0,
+      2
+     ],
+     "freq": 8,
+     "amount": 0.7,
+     "alpha": 0.25
+    }
+   ]
+  }
+ }
+}

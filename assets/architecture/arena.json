@@ -1,0 +1,1161 @@
+{
+  "name": "Arena -- Verona, ground and second storey",
+  "_about": "Verona's amphitheatre at its real scale, as a circle (the ellipse comes later): 69.4m to the facade, 58.4m to the inner ring, a 30.2m arena, 40 rows from a 4m podium to 22m, two 11m storeys of arcade whose second extrados arrives at 22m -- the deck of the upper level and the top row are the same line.\\nTHE THREE FLIGHTS, as the Renaissance section of the building shows them. From the ground ambulatory a stair climbs inward under the seating and opens at row 12, the middle of the lower half. From the same ambulatory another climbs ALONG the ring to the second floor -- eleven metres will not fit in a six-metre corridor going outward, which is why the real ones turn. From the second floor a passage runs straight in and a third flight opens at row 32, the middle of the upper half.\\nWHAT IS DRAWN. Almost none of this building is drawn as a solid. The cavea is 28 metres of concrete whose only visible surfaces are the steps on top of it, the soffit over each tunnel and the walls that tunnel runs between, so that is what the parts emit -- `faces`. Passages use the `parallel` plan, which runs them out along one ray at a fixed width instead of cutting a wedge that would be half again as wide at the facade as at the arena, and their width is the arch they pass through.\\nEvery radius sits on the row lattice and every height on a row: the rows are 70.5cm deep because 47 stair treads of 30cm then measure exactly 20 rows, and 45cm high on a 4m podium because 47 risers of exactly 20cm then arrive at row 12. The upper flight's 37 risers of 20cm arrive at row 32 for the same reason.",
+  "params": {
+    "bays": 60,
+    "detail": 8,
+    "rOuter": 69.4,
+    "wallT": 2.6,
+    "corridorW": 6.0,
+    "innerT": 2.4,
+    "rOuterInner": "rOuter - wallT - corridorW",
+    "rInnerFace": "rOuterInner - innerT",
+    "storeyH": 11.0,
+    "_storeyH": "two storeys of 11m put the second extrados at 22m, which is where the top row of seating arrives",
+    "openW": 4.4,
+    "springing": 5.4,
+    "archCrown": "springing + openW / 2",
+    "innerOpenW": 3.6,
+    "innerSpringing": 4.8,
+    "vaultRise": 2.2,
+    "pathW": "innerOpenW",
+    "_pathW": "every passage is as wide as the arch it comes through, and parallel-sided from end to end",
+    "rArena": 30.2,
+    "podium": 4.0,
+    "podiumT": 0.6,
+    "caveaRows": 40,
+    "caveaTop": 20.0,
+    "rCavea": "rInnerFace",
+    "rowRun": "(rCavea - rArena) / caveaRows",
+    "rowRise": "(caveaTop - podium) / caveaRows",
+    "stairRise": 0.2,
+    "stairRun": 0.25,
+    "vomEvery": 5,
+    "emergeRow": 12,
+    "mouthRow": 15,
+    "passEndRow": 28,
+    "_emergeRow": "44 steps of exactly 20cm from the ground reach the 4m podium plus twelve 40cm rows (8.8m)",
+    "rEmerge": "rArena + emergeRow * rowRun",
+    "rMouth": "rArena + mouthRow * rowRun",
+    "rPassEnd": "rArena + passEndRow * rowRun",
+    "caveaAtEmerge": "podium + emergeRow * rowRise",
+    "tunnelHead": "podium + mouthRow * rowRise",
+    "caveaAtPassEnd": "podium + passEndRow * rowRise",
+    "passHead": 2.6,
+    "_passHead": "the level stretch of a vomitorium is 2.6m under the seating -- a low entrance, against 7.6m to the crown of an arcade arch",
+    "emergeRow2": 28,
+    "mouthRow2": 31,
+    "_emergeRow2": "the upper flight begins only once it is out of the arcade and climbs within the cavea's mass: 21 risers of exactly 20cm from the second floor (11m) reach row 28 (15.2m)",
+    "rEmerge2": "rArena + emergeRow2 * rowRun",
+    "rMouth2": "rArena + mouthRow2 * rowRun",
+    "caveaAtEmerge2": "podium + emergeRow2 * rowRise",
+    "tunnelHead2": "podium + mouthRow2 * rowRise",
+    "stairFoot2": "rEmerge2 + (caveaAtEmerge2 - storeyH) / stairRise * stairRun",
+    "flightW": "innerOpenW",
+    "_flightW": "a flight is as wide as the arch it leaves through, so its tunnel walls run flush with the arch's jambs",
+    "stairA": 28,
+    "stairB": 27,
+    "landingY": "stairA * stairRise",
+    "landingDepth": 3.0,
+    "landingHead": 2.6,
+    "levelRow": 18,
+    "levelHeadRow": 24,
+    "_levelRow": "the second floor is 11m and row 18 is 11.2m, so the path from it runs in dead level and opens there; the seating needs six rows to rise a head's height over it, so that is how long its mouth is",
+    "rLevel": "rArena + levelRow * rowRun",
+    "yLevel": "podium + levelRow * rowRise",
+    "rLevelHead": "rArena + levelHeadRow * rowRun",
+    "yLevelHead": "podium + levelHeadRow * rowRise",
+    "rStairOut": "rInnerFace",
+    "_rStairOut": "the switchback is FULLY PAST the arcade: it starts at the face of the inner ring and both its halves are inside the cavea's own mass, so the ambulatory keeps its vault and its arches all the way round",
+    "rStairIn": "rStairOut - stairA * stairRun",
+    "stairRunB": "(rStairOut - rStairIn) / stairB",
+    "_stairRunB": "the return flight has one riser fewer than the first (28 + 27 of 20cm is the 11m storey), so its treads are 25.9cm rather than 25 -- which is what makes both halves span the same 7m and land the top exactly at the floor above",
+    "rLandIn": "rStairIn - landingDepth",
+    "rLandArc": "rStairIn - landingDepth / 2",
+    "landingArc": "(2 * 3.14159265 * rStairIn / bays + flightW) * rLandArc / rStairIn",
+    "_landingArc": "a bay of arc PLUS a flight's width, measured where the flights meet it: a landing one bay wide reaches only their centre lines and leaves half of each hanging",
+    "soffitA": "landingY + landingHead",
+    "soffitB": "storeyH + landingHead",
+    "backWallArc": "(2 * 3.14159265 * rStairIn / bays - flightW) * rLandArc / rStairIn",
+    "_mouthRow": "the mouth is where the tunnel's sloping ceiling -- a head's height over the flight -- breaks through the seating: three rows above the row the stair arrives at",
+    "stairSlope": "stairRise / stairRun",
+    "ceilAtMouth": "caveaAtEmerge + tunnelHeadroom - (rMouth - rEmerge) * stairSlope",
+    "tunnelHeadroom": "passHead",
+    "ceilAtMouth2": "caveaAtEmerge2 + tunnelHeadroom - (rMouth2 - rEmerge2) * stairSlope",
+    "lintelTop": "innerSpringing + innerOpenW / 2 + 0.4",
+    "_lintelTop": "just over the crown of an inner-arcade arch: what closes the wall between a low tunnel and the tall arch it is entered through",
+    "_caveaTop": "40 rows of 40cm on the 4m podium: a seat is ~40cm high and ~70cm deep (here 70.5), so the top row stands at 20m and the upper arcade's last 2m are the wall behind it",
+    "stairFoot": "rEmerge + caveaAtEmerge / stairRise * stairRun",
+    "_stairFoot": "where the lower flight starts: 44 treads of 25cm (11m) out from the row it arrives at. The level passage runs from there to the arcade.",
+    "_stairRun": "an inner stair is 20cm on a 25cm tread -- steeper than the seating it runs under (40 on 70.5)"
+  },
+  "parts": {
+    "outer arcade": {
+      "type": "ring",
+      "count": "bays",
+      "rOuter": "rOuter",
+      "rInner": "rOuter - wallT",
+      "height": "storeyH",
+      "y": 0,
+      "opening": {
+        "width": "openW",
+        "springing": "springing",
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "inner arcade": {
+      "type": "ring",
+      "count": "bays",
+      "rOuter": "rOuterInner",
+      "rInner": "rInnerFace",
+      "height": "storeyH",
+      "y": 0,
+      "opening": {
+        "width": "innerOpenW",
+        "springing": "innerSpringing",
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "ambulatory vault": {
+      "type": "vault",
+      "count": "bays",
+      "rInner": "rOuterInner",
+      "rOuter": "rOuter - wallT",
+      "springing": "archCrown",
+      "clears": "archCrown",
+      "top": "storeyH",
+      "y": 0,
+      "head": {
+        "profile": "segmental",
+        "rise": "vaultRise"
+      },
+      "_about": "segmental, not semicircular: a half-round vault over a 6m corridor would crown above the storey. It now runs unbroken all the way round -- nothing climbs through it any more."
+    },
+    "outer arcade II": {
+      "type": "ring",
+      "count": "bays",
+      "rOuter": "rOuter",
+      "rInner": "rOuter - wallT",
+      "height": "storeyH",
+      "y": "storeyH",
+      "opening": {
+        "width": "openW",
+        "springing": "springing",
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "inner arcade II": {
+      "type": "ring",
+      "count": "bays",
+      "rOuter": "rOuterInner",
+      "rInner": "rInnerFace",
+      "height": "storeyH",
+      "y": "storeyH",
+      "opening": {
+        "width": "innerOpenW",
+        "springing": "innerSpringing",
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "ambulatory vault II": {
+      "type": "vault",
+      "count": "bays",
+      "rInner": "rOuterInner",
+      "rOuter": "rOuter - wallT",
+      "springing": "archCrown",
+      "clears": "archCrown",
+      "top": "storeyH",
+      "y": "storeyH",
+      "head": {
+        "profile": "segmental",
+        "rise": "vaultRise"
+      },
+      "_about": "the deck of the level above"
+    },
+    "podium wall": {
+      "type": "ring",
+      "count": "bays",
+      "rOuter": "rArena + podiumT",
+      "rInner": "rArena",
+      "height": "podium",
+      "solid": true,
+      "skip": [
+        0,
+        30
+      ],
+      "_about": "the wall the arena is fought in front of; the mass behind it is never seen and is not drawn. It simply stops either side of a main entrance -- at the podium a bay is only 3.2m of arc, so an arch as wide as the 3.6m passage does not fit in one, and the wall's ends stand a hand's width inside the passage walls as its jambs."
+    },
+    "cavea": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rCavea",
+      "base": "podium",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "skip": [
+        1,
+        2,
+        6,
+        7,
+        11,
+        12,
+        16,
+        17,
+        21,
+        22,
+        26,
+        27,
+        31,
+        32,
+        36,
+        37,
+        41,
+        42,
+        46,
+        47,
+        51,
+        52,
+        56,
+        57
+      ],
+      "_about": "40 rows, drawn as the surface they are: treads, risers and the one face at the podium."
+    },
+    "cavea over the main entrance": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rCavea",
+      "base": "podium",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "at": [
+        0,
+        30
+      ]
+    },
+    "main entrance walls": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rCavea - rArena",
+      "rise": "podium",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rCavea",
+      "base": 0,
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "sides"
+      ],
+      "at": [
+        0,
+        30
+      ],
+      "_about": "two parallel walls 28m long: the passage that runs from the facade straight through to the podium."
+    },
+    "main entrance soffit": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rCavea - rArena",
+      "rise": "lintelTop - podium",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rCavea",
+      "base": "podium",
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "base",
+        "end-out"
+      ],
+      "at": [
+        0,
+        30
+      ]
+    },
+    "cavea below the mouth": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rEmerge",
+      "base": "podium",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ],
+      "plan": "flank",
+      "width": "pathW",
+      "mirror": true,
+      "_about": "the rows below a mouth, either side of the passage's line: bay plane on one side, the passage's straight edge on the other -- so their outer edge is the SAME line the stair and the flanking seating start from. A plain wedge ends on a chord five centimetres short of it, and that sliver showed daylight."
+    },
+    "cavea below the mouth, in line with the passage": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rEmerge",
+      "base": "podium",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ],
+      "plan": "parallel",
+      "width": "pathW"
+    },
+    "podium beside the tunnel": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rCavea - rEmerge",
+      "rise": "podium",
+      "rising": "out",
+      "rInner": "rEmerge",
+      "rOuter": "rCavea",
+      "base": 0,
+      "plan": "flank",
+      "width": "pathW",
+      "mirror": true,
+      "faces": [
+        "sides"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ],
+      "_about": "the tunnel's side walls below the seating, from the ground to the podium."
+    },
+    "cavea beside the tunnel": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rEmerge",
+      "rOuter": "rCavea",
+      "base": "podium",
+      "first": "caveaAtEmerge + rowRise - podium",
+      "plan": "flank",
+      "width": "pathW",
+      "mirror": true,
+      "faces": [
+        "top",
+        "sides",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ],
+      "_about": "the seating either side of the tunnel: the bay's radial plane on one side, the passage's straight wall on the other, and that wall IS the part of it you see from inside the tunnel."
+    },
+    "vomitorium stair": {
+      "type": "steps",
+      "count": "bays",
+      "run": "stairRun",
+      "rise": "rowRise",
+      "rising": "in",
+      "rInner": "rEmerge",
+      "rOuter": "stairFoot",
+      "base": 0,
+      "top": "caveaAtEmerge",
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "top"
+      ],
+      "use": "stair",
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ],
+      "_about": "44 steps of exactly 20cm on a 25cm tread, from the passage floor up to row 12."
+    },
+    "cavea over the stair": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rMouth",
+      "rOuter": "rPassEnd",
+      "base": "ceilAtMouth",
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ],
+      "_about": "THE SEATING RUNS ACROSS THE TUNNEL. From the row standing a head's height clear of the stair the vomitorium is roofed and the rows continue over it; the only gap is the mouth, five rows wide.",
+      "first": "podium + (mouthRow + 1) * rowRise - ceilAtMouth"
+    },
+    "cavea over the passage": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rPassEnd",
+      "rOuter": "rCavea",
+      "base": "passHead",
+      "first": "caveaAtPassEnd + rowRise - passHead",
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "top",
+        "base",
+        "end-in",
+        "end-out"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ]
+    },
+    "cavea below the upper mouth": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rEmerge2",
+      "base": "podium",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 2,
+      "only": "every",
+      "plan": "flank",
+      "width": "pathW",
+      "mirror": true,
+      "_about": "the rows below a mouth, either side of the passage's line: bay plane on one side, the passage's straight edge on the other -- so their outer edge is the SAME line the stair and the flanking seating start from. A plain wedge ends on a chord five centimetres short of it, and that sliver showed daylight."
+    },
+    "cavea below the upper mouth, in line with the passage": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rEmerge2",
+      "base": "podium",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 2,
+      "only": "every",
+      "plan": "parallel",
+      "width": "pathW"
+    },
+    "cavea beside the upper tunnel": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rEmerge2",
+      "rOuter": "rCavea",
+      "base": "storeyH",
+      "first": "caveaAtEmerge2 + rowRise - storeyH",
+      "plan": "flank",
+      "width": "pathW",
+      "mirror": true,
+      "faces": [
+        "top",
+        "sides",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 2,
+      "only": "every"
+    },
+    "upper vomitorium stair": {
+      "type": "steps",
+      "count": "bays",
+      "run": "stairRun",
+      "rise": "rowRise",
+      "rising": "in",
+      "rInner": "rEmerge2",
+      "rOuter": "stairFoot2",
+      "base": "storeyH",
+      "top": "caveaAtEmerge2",
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "top"
+      ],
+      "use": "stair",
+      "every": "vomEvery",
+      "offset": 2,
+      "only": "every",
+      "_about": "out of the second-floor ambulatory the path runs LEVEL through the arch of the inner arcade and two metres on; then 21 risers of 20cm climb to row 28."
+    },
+    "cavea over the upper stair": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rMouth2",
+      "rOuter": "rCavea",
+      "base": "ceilAtMouth2",
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "top",
+        "end-in",
+        "end-out"
+      ],
+      "every": "vomEvery",
+      "offset": 2,
+      "only": "every",
+      "first": "podium + (mouthRow2 + 1) * rowRise - ceilAtMouth2"
+    },
+    "stair to the upper floor": {
+      "type": "steps",
+      "count": "bays",
+      "run": "stairRun",
+      "rise": "stairRise",
+      "rising": "in",
+      "rInner": "rStairIn",
+      "rOuter": "rStairOut",
+      "base": 0,
+      "top": "landingY",
+      "plan": "parallel",
+      "width": "flightW",
+      "faces": [
+        "top"
+      ],
+      "use": "stair",
+      "at": [
+        3,
+        13,
+        23,
+        33,
+        43,
+        53
+      ],
+      "_about": "THE FIRST HALF. Level out of the ambulatory through one arch, and the climb begins only past that wall, inside the cavea's mass: 28 risers of exactly 20cm inward to a landing halfway up."
+    },
+    "stair landing": {
+      "type": "steps",
+      "count": "bays",
+      "run": "landingArc",
+      "rise": "stairRise",
+      "rising": "out",
+      "rInner": "rLandIn",
+      "rOuter": "rStairIn",
+      "rArc": "rLandArc",
+      "base": "landingY - stairRise",
+      "steps": 1,
+      "plan": "along",
+      "faces": [
+        "top"
+      ],
+      "at": [
+        3,
+        13,
+        23,
+        33,
+        43,
+        53
+      ],
+      "turn": 0.5,
+      "_about": "the flat between the halves, straddling both bays -- hence the half-bay turn -- and a flight's width wider than a bay, so each flight opens onto it across its whole width."
+    },
+    "stair landing soffit": {
+      "type": "steps",
+      "count": "bays",
+      "run": "landingArc",
+      "rise": "stairRise",
+      "rising": "out",
+      "rInner": "rLandIn",
+      "rOuter": "rStairIn",
+      "rArc": "rLandArc",
+      "base": "soffitA",
+      "steps": 1,
+      "plan": "along",
+      "faces": [
+        "base"
+      ],
+      "at": [
+        3,
+        13,
+        23,
+        33,
+        43,
+        53
+      ],
+      "turn": 0.5
+    },
+    "stair to the upper floor, second half": {
+      "type": "steps",
+      "count": "bays",
+      "run": "stairRunB",
+      "rise": "stairRise",
+      "rising": "out",
+      "rInner": "rStairIn",
+      "rOuter": "rStairOut",
+      "base": "landingY",
+      "top": "storeyH",
+      "plan": "parallel",
+      "width": "flightW",
+      "faces": [
+        "top"
+      ],
+      "use": "stair",
+      "at": [
+        4,
+        14,
+        24,
+        34,
+        44,
+        54
+      ],
+      "_about": "THE SECOND HALF, in the next bay: back outward from the landing, arriving at the floor of the level above exactly at the face of the cavea, where it walks out through the arcade."
+    },
+    "cavea below the level mouth": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rLevel",
+      "base": "podium",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 1,
+      "only": "every",
+      "plan": "flank",
+      "width": "pathW",
+      "mirror": true,
+      "_about": "the rows below a mouth, either side of the passage's line: bay plane on one side, the passage's straight edge on the other -- so their outer edge is the SAME line the stair and the flanking seating start from. A plain wedge ends on a chord five centimetres short of it, and that sliver showed daylight."
+    },
+    "cavea below the level mouth, in line with the passage": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rArena",
+      "rOuter": "rLevel",
+      "base": "podium",
+      "faces": [
+        "top",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 1,
+      "only": "every",
+      "plan": "parallel",
+      "width": "pathW"
+    },
+    "level path from the second floor": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rCavea - rLevel",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rLevel",
+      "rOuter": "rCavea",
+      "base": "storeyH",
+      "first": "yLevel - storeyH",
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "top",
+        "end-out"
+      ],
+      "every": "vomEvery",
+      "offset": 1,
+      "only": "every",
+      "_about": "DEAD LEVEL, no stair: out of the second-floor ambulatory, straight in under the seating, and out into the cavea at row 16 -- 20cm above the floor it starts from, which is the whole climb."
+    },
+    "cavea beside the level path": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rLevel",
+      "rOuter": "rCavea",
+      "base": "yLevel",
+      "plan": "flank",
+      "width": "pathW",
+      "mirror": true,
+      "faces": [
+        "top",
+        "sides",
+        "end-in"
+      ],
+      "every": "vomEvery",
+      "offset": 1,
+      "only": "every"
+    },
+    "cavea over the level path": {
+      "type": "steps",
+      "count": "bays",
+      "run": "rowRun",
+      "rise": "rowRise",
+      "rising": "out",
+      "rInner": "rLevelHead",
+      "rOuter": "rCavea",
+      "base": "yLevelHead",
+      "plan": "parallel",
+      "width": "pathW",
+      "faces": [
+        "top",
+        "base",
+        "end-in",
+        "end-out"
+      ],
+      "every": "vomEvery",
+      "offset": 1,
+      "only": "every"
+    },
+    "stair landing walls": {
+      "type": "steps",
+      "count": "bays",
+      "run": "landingArc",
+      "rise": "soffitA - landingY + stairRise",
+      "rising": "out",
+      "rInner": "rLandIn",
+      "rOuter": "rStairIn",
+      "rArc": "rLandArc",
+      "base": "landingY - stairRise",
+      "steps": 1,
+      "plan": "along",
+      "faces": [
+        "side-in",
+        "ends"
+      ],
+      "at": [
+        3,
+        13,
+        23,
+        33,
+        43,
+        53
+      ],
+      "turn": 0.5,
+      "_about": "the landing's back and its two ends. Its front is left open: that is where the flights arrive."
+    },
+    "stair landing front": {
+      "type": "steps",
+      "count": "bays",
+      "run": "backWallArc",
+      "rise": "soffitA - landingY + stairRise",
+      "rising": "out",
+      "rInner": "rStairIn - 0.2",
+      "rOuter": "rStairIn",
+      "rArc": "rStairIn - 0.1",
+      "base": "landingY - stairRise",
+      "steps": 1,
+      "plan": "along",
+      "faces": [
+        "side-out"
+      ],
+      "at": [
+        3,
+        13,
+        23,
+        33,
+        43,
+        53
+      ],
+      "turn": 0.5,
+      "_about": "the strip of front wall BETWEEN the two flights -- a bay's arc less a flight's width, which is exactly what they do not cover."
+    },
+    "vomitorium tunnel": {
+      "type": "tunnel",
+      "count": "bays",
+      "rInner": "rMouth",
+      "rOuter": "stairFoot",
+      "width": "pathW",
+      "floor": [
+        "caveaAtEmerge - (rMouth - rEmerge) * stairSlope",
+        "0"
+      ],
+      "ceiling": [
+        "ceilAtMouth",
+        "tunnelHeadroom"
+      ],
+      "faces": [
+        "top"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ],
+      "_about": "THE CEILING FOLLOWS THE FLIGHT: straight, at the stair's own angle, a head's height over it, from the level passage's 2.6m up to where it breaks through the seating at the mouth. (The walls are the flanking seating's own straight sides.)"
+    },
+    "vomitorium tunnel, level": {
+      "type": "tunnel",
+      "count": "bays",
+      "rInner": "stairFoot",
+      "rOuter": "rPassEnd",
+      "width": "pathW",
+      "floor": [
+        "0",
+        "0"
+      ],
+      "ceiling": [
+        "tunnelHeadroom",
+        "tunnelHeadroom"
+      ],
+      "faces": [
+        "top"
+      ],
+      "every": "vomEvery",
+      "offset": 0,
+      "only": "every",
+      "skip": [
+        0,
+        30
+      ],
+      "_about": "the few centimetres of level ceiling between the foot of the flight and the row the covering seating is cut at"
+    },
+    "upper vomitorium tunnel": {
+      "type": "tunnel",
+      "count": "bays",
+      "rInner": "rMouth2",
+      "rOuter": "stairFoot2",
+      "width": "pathW",
+      "floor": [
+        "caveaAtEmerge2 - (rMouth2 - rEmerge2) * stairSlope",
+        "storeyH"
+      ],
+      "ceiling": [
+        "ceilAtMouth2",
+        "storeyH + tunnelHeadroom"
+      ],
+      "faces": [
+        "top"
+      ],
+      "every": "vomEvery",
+      "offset": 2,
+      "only": "every"
+    },
+    "upper vomitorium tunnel, level": {
+      "type": "tunnel",
+      "count": "bays",
+      "rInner": "stairFoot2",
+      "rOuter": "rCavea",
+      "width": "pathW",
+      "floor": [
+        "storeyH",
+        "storeyH"
+      ],
+      "ceiling": [
+        "storeyH + tunnelHeadroom",
+        "storeyH + tunnelHeadroom"
+      ],
+      "faces": [
+        "top"
+      ],
+      "every": "vomEvery",
+      "offset": 2,
+      "only": "every",
+      "_about": "flat where the floor is flat: the metre of level passage between the arch and the foot of the flight"
+    },
+    "stair tunnel": {
+      "type": "tunnel",
+      "count": "bays",
+      "rInner": "rStairIn",
+      "rOuter": "rStairOut",
+      "width": "flightW",
+      "floor": [
+        "landingY",
+        "0"
+      ],
+      "ceiling": [
+        "soffitA",
+        "landingHead"
+      ],
+      "faces": [
+        "top",
+        "sides"
+      ],
+      "at": [
+        3,
+        13,
+        23,
+        33,
+        43,
+        53
+      ],
+      "_about": "the first flight's tunnel: ceiling straight at the flight's angle, walls between the flight's line and that ceiling -- it meets the landing's flat ceiling at the top"
+    },
+    "stair tunnel, second half": {
+      "type": "tunnel",
+      "count": "bays",
+      "rInner": "rStairIn",
+      "rOuter": "rStairOut",
+      "width": "flightW",
+      "floor": [
+        "landingY",
+        "storeyH"
+      ],
+      "ceiling": [
+        "soffitA",
+        "soffitB"
+      ],
+      "faces": [
+        "top",
+        "sides"
+      ],
+      "at": [
+        4,
+        14,
+        24,
+        34,
+        44,
+        54
+      ]
+    },
+    "stair lintel": {
+      "type": "steps",
+      "count": "bays",
+      "run": 0.2,
+      "rise": "lintelTop - landingHead",
+      "rising": "out",
+      "rInner": "rStairOut - 0.2",
+      "rOuter": "rStairOut",
+      "base": "landingHead",
+      "plan": "parallel",
+      "width": "flightW",
+      "faces": [
+        "end-out"
+      ],
+      "at": [
+        3,
+        13,
+        23,
+        33,
+        43,
+        53
+      ],
+      "_about": "the arch the flight leaves through is 6.6m to its crown and the tunnel behind it 2.6: this closes the wall between them"
+    },
+    "stair lintel, second half": {
+      "type": "steps",
+      "count": "bays",
+      "run": 0.2,
+      "rise": "storeyH + lintelTop - soffitB",
+      "rising": "out",
+      "rInner": "rStairOut - 0.2",
+      "rOuter": "rStairOut",
+      "base": "soffitB",
+      "plan": "parallel",
+      "width": "flightW",
+      "faces": [
+        "end-out"
+      ],
+      "at": [
+        4,
+        14,
+        24,
+        34,
+        44,
+        54
+      ]
+    }
+  },
+  "build": [
+    {
+      "part": "outer arcade"
+    },
+    {
+      "part": "inner arcade"
+    },
+    {
+      "part": "ambulatory vault"
+    },
+    {
+      "part": "outer arcade II"
+    },
+    {
+      "part": "inner arcade II"
+    },
+    {
+      "part": "ambulatory vault II"
+    },
+    {
+      "part": "podium wall"
+    },
+    {
+      "part": "cavea"
+    },
+    {
+      "part": "cavea over the main entrance"
+    },
+    {
+      "part": "main entrance walls"
+    },
+    {
+      "part": "main entrance soffit"
+    },
+    {
+      "part": "cavea below the mouth"
+    },
+    {
+      "part": "cavea below the mouth, in line with the passage"
+    },
+    {
+      "part": "podium beside the tunnel"
+    },
+    {
+      "part": "cavea beside the tunnel"
+    },
+    {
+      "part": "vomitorium stair"
+    },
+    {
+      "part": "cavea over the stair"
+    },
+    {
+      "part": "cavea over the passage"
+    },
+    {
+      "part": "cavea below the upper mouth"
+    },
+    {
+      "part": "cavea below the upper mouth, in line with the passage"
+    },
+    {
+      "part": "cavea beside the upper tunnel"
+    },
+    {
+      "part": "upper vomitorium stair"
+    },
+    {
+      "part": "cavea over the upper stair"
+    },
+    {
+      "part": "stair to the upper floor"
+    },
+    {
+      "part": "stair landing"
+    },
+    {
+      "part": "stair landing soffit"
+    },
+    {
+      "part": "stair to the upper floor, second half"
+    },
+    {
+      "part": "cavea below the level mouth"
+    },
+    {
+      "part": "cavea below the level mouth, in line with the passage"
+    },
+    {
+      "part": "level path from the second floor"
+    },
+    {
+      "part": "cavea beside the level path"
+    },
+    {
+      "part": "cavea over the level path"
+    },
+    {
+      "part": "stair landing walls"
+    },
+    {
+      "part": "stair landing front"
+    },
+    {
+      "part": "vomitorium tunnel"
+    },
+    {
+      "part": "vomitorium tunnel, level"
+    },
+    {
+      "part": "upper vomitorium tunnel"
+    },
+    {
+      "part": "upper vomitorium tunnel, level"
+    },
+    {
+      "part": "stair tunnel"
+    },
+    {
+      "part": "stair tunnel, second half"
+    },
+    {
+      "part": "stair lintel"
+    },
+    {
+      "part": "stair lintel, second half"
+    }
+  ]
+}

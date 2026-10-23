@@ -1,0 +1,618 @@
+{
+  "name": "Taj Mahal",
+  "_about": "THE TAJ MAHAL, Agra (1632-53), from components at its real size. On a 95m plinth, the tomb: walls 5m thick round a chamfered square 57m across (`enclosure`, its main faces SPLIT into flank, great iwan and flank), every iwan an opening whose reveal is the recess and whose pointed head is its vault, closed at the back by the `iwan` component; two storeys of smaller iwans on the flanks and the chamfers (the faces' TIERS). On the roof the parapet, the pishtaq frames rising over the great iwans, the drum and the onion dome with its finial, and four `chhatri`s; on the plinth's corners the four `minaret`s, each with three balconies and a chhatri of its own. What is drawn for this building alone is its plinth, its roof slab, the drum and the dome -- the rest is components.",
+  "params": {
+    "detail": 4
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "plinth",
+    "tomb",
+    "iwan backs (great)",
+    "iwan backs (flank)",
+    "iwan backs (flank upper)",
+    "iwan backs (chamfer)",
+    "iwan backs (chamfer upper)",
+    "plinth stair",
+    "roof",
+    "parapet",
+    "pishtaq crowns",
+    "drum",
+    "dome",
+    "finial",
+    "chhatris",
+    "minarets"
+  ],
+  "parts": {
+    "plinth": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          95.0,
+          95.0
+        ]
+      },
+      "height": 6.7,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the marble plinth, 95m square"
+    },
+    "tomb": {
+      "type": "enclosure",
+      "glass": false,
+      "plan": {
+        "rect": [
+          56.9,
+          56.9
+        ],
+        "chamfer": 9.5,
+        "split": {
+          "main": [
+            9.0,
+            19.9,
+            9.0
+          ]
+        }
+      },
+      "thickness": 5.0,
+      "height": 29.0,
+      "faces": {
+        "main:1": [
+          {
+            "at": 0,
+            "width": 10.4,
+            "sill": 0,
+            "springing": 19.0,
+            "head": {
+              "profile": "pointed",
+              "spread": 0.3
+            }
+          }
+        ],
+        "main:0": [
+          {
+            "h": 14.5,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.6,
+                "sill": 0,
+                "springing": 9.0,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.3
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.6,
+                "sill": 1.2,
+                "springing": 10.2,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.3
+                }
+              }
+            ]
+          }
+        ],
+        "main:2": [
+          {
+            "h": 14.5,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.6,
+                "sill": 0,
+                "springing": 9.0,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.3
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.6,
+                "sill": 1.2,
+                "springing": 10.2,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.3
+                }
+              }
+            ]
+          }
+        ],
+        "chamfer": [
+          {
+            "h": 14.5,
+            "openings": [
+              {
+                "at": 0,
+                "width": 6.0,
+                "sill": 0,
+                "springing": 9.0,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.3
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 6.0,
+                "sill": 1.2,
+                "springing": 10.2,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.3
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          6.7,
+          0,
+          0
+        ]
+      ],
+      "_about": "the tomb's walls on its chamfered square, 5m thick: every iwan is an opening, its reveal the recess, its pointed head the recess's vault"
+    },
+    "iwan backs (great)": {
+      "type": "component",
+      "use": "components/iwan",
+      "params": {
+        "w": 10.4,
+        "s": 19.0,
+        "spread": 0.3,
+        "t": 0.5,
+        "door": 2.4
+      },
+      "at": [
+        [
+          0.0,
+          6.7,
+          23.45,
+          0.0
+        ],
+        [
+          23.45,
+          6.7,
+          0.0,
+          1.570796
+        ],
+        [
+          0.0,
+          6.7,
+          -23.45,
+          3.141593
+        ],
+        [
+          -23.45,
+          6.7,
+          -0.0,
+          -1.570796
+        ]
+      ],
+      "build": [
+        "back",
+        "back door",
+        "hood"
+      ],
+      "_about": "the great iwans' backs have the doors into the tomb chamber"
+    },
+    "iwan backs (flank)": {
+      "type": "component",
+      "use": "components/iwan",
+      "params": {
+        "w": 4.6,
+        "s": 9.0,
+        "spread": 0.3,
+        "t": 0.5,
+        "door": 2.4
+      },
+      "at": [
+        [
+          -14.45,
+          6.7,
+          23.45,
+          0.0
+        ],
+        [
+          14.45,
+          6.7,
+          23.45,
+          0.0
+        ],
+        [
+          23.45,
+          6.7,
+          14.45,
+          1.570796
+        ],
+        [
+          23.45,
+          6.7,
+          -14.45,
+          1.570796
+        ],
+        [
+          14.45,
+          6.7,
+          -23.45,
+          3.141593
+        ],
+        [
+          -14.45,
+          6.7,
+          -23.45,
+          3.141593
+        ],
+        [
+          -23.45,
+          6.7,
+          -14.45,
+          -1.570796
+        ],
+        [
+          -23.45,
+          6.7,
+          14.45,
+          -1.570796
+        ]
+      ]
+    },
+    "iwan backs (flank upper)": {
+      "type": "component",
+      "use": "components/iwan",
+      "params": {
+        "w": 4.6,
+        "s": 9.0,
+        "spread": 0.3,
+        "t": 0.5,
+        "door": 2.4
+      },
+      "at": [
+        [
+          -14.45,
+          22.4,
+          23.45,
+          0.0
+        ],
+        [
+          14.45,
+          22.4,
+          23.45,
+          0.0
+        ],
+        [
+          23.45,
+          22.4,
+          14.45,
+          1.570796
+        ],
+        [
+          23.45,
+          22.4,
+          -14.45,
+          1.570796
+        ],
+        [
+          14.45,
+          22.4,
+          -23.45,
+          3.141593
+        ],
+        [
+          -14.45,
+          22.4,
+          -23.45,
+          3.141593
+        ],
+        [
+          -23.45,
+          22.4,
+          -14.45,
+          -1.570796
+        ],
+        [
+          -23.45,
+          22.4,
+          14.45,
+          -1.570796
+        ]
+      ]
+    },
+    "iwan backs (chamfer)": {
+      "type": "component",
+      "use": "components/iwan",
+      "params": {
+        "w": 6.0,
+        "s": 9.0,
+        "spread": 0.3,
+        "t": 0.5,
+        "door": 2.4
+      },
+      "at": [
+        [
+          20.1645,
+          6.7,
+          20.1645,
+          0.785398
+        ],
+        [
+          20.1645,
+          6.7,
+          -20.1645,
+          2.356194
+        ],
+        [
+          -20.1645,
+          6.7,
+          -20.1645,
+          -2.356194
+        ],
+        [
+          -20.1645,
+          6.7,
+          20.1645,
+          -0.785398
+        ]
+      ]
+    },
+    "iwan backs (chamfer upper)": {
+      "type": "component",
+      "use": "components/iwan",
+      "params": {
+        "w": 6.0,
+        "s": 9.0,
+        "spread": 0.3,
+        "t": 0.5,
+        "door": 2.4
+      },
+      "at": [
+        [
+          20.1645,
+          22.4,
+          20.1645,
+          0.785398
+        ],
+        [
+          20.1645,
+          22.4,
+          -20.1645,
+          2.356194
+        ],
+        [
+          -20.1645,
+          22.4,
+          -20.1645,
+          -2.356194
+        ],
+        [
+          -20.1645,
+          22.4,
+          20.1645,
+          -0.785398
+        ]
+      ]
+    },
+    "plinth stair": {
+      "type": "flight",
+      "width": 4.0,
+      "run": 0.3,
+      "rise": 0.18,
+      "top": 6.7,
+      "landing": 0,
+      "at": [
+        [
+          2.0,
+          0,
+          58.6,
+          1.5707963
+        ]
+      ],
+      "_about": "the flight up the plinth's front, onto the terrace the tomb stands on"
+    },
+    "roof": {
+      "flatRoof": true,
+      "type": "prism",
+      "plan": {
+        "rect": [
+          47.1,
+          47.1
+        ],
+        "chamfer": 7.5
+      },
+      "height": 1.5,
+      "at": [
+        [
+          0,
+          34.2,
+          0,
+          0
+        ]
+      ],
+      "_about": "the roof over the chambers"
+    },
+    "parapet": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          56.9,
+          56.9
+        ],
+        "chamfer": 9.5
+      },
+      "thickness": 0.7,
+      "height": 1.6,
+      "openings": [],
+      "at": [
+        [
+          0,
+          35.7,
+          0,
+          0
+        ]
+      ]
+    },
+    "pishtaq crowns": {
+      "type": "box",
+      "width": 19.9,
+      "length": 1.6,
+      "height": 4.2,
+      "spiral": {
+        "count": 4,
+        "radius": 27.65,
+        "turn": 0,
+        "y": 35.7
+      },
+      "_about": "each great iwan's frame, the pishtaq, rising above the parapet"
+    },
+    "drum": {
+      "type": "ring",
+      "count": 32,
+      "rOuter": 9.3,
+      "rInner": 8.6,
+      "height": 10,
+      "y": 35.7,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "dome": {
+      "type": "dome",
+      "radius": 9.3,
+      "thickness": 0,
+      "head": {
+        "profile": "onion",
+        "bulge": 1.12,
+        "neck": 0.85
+      },
+      "at": [
+        [
+          0,
+          45.7,
+          0,
+          0
+        ]
+      ],
+      "_about": "the onion, its bulb swelling past the drum"
+    },
+    "finial": {
+      "type": "column",
+      "radius": 0.35,
+      "height": 10,
+      "sides": 8,
+      "taper": 0.3,
+      "at": [
+        [
+          0,
+          66.80000000000001,
+          0,
+          0
+        ]
+      ]
+    },
+    "chhatris": {
+      "type": "component",
+      "use": "components/chhatri",
+      "params": {
+        "r": 3.2,
+        "floor": 0
+      },
+      "at": [
+        [
+          16.5,
+          35.7,
+          16.5,
+          0
+        ],
+        [
+          16.5,
+          35.7,
+          -16.5,
+          0
+        ],
+        [
+          -16.5,
+          35.7,
+          -16.5,
+          0
+        ],
+        [
+          -16.5,
+          35.7,
+          16.5,
+          0
+        ]
+      ],
+      "_about": "the four chhatris round the dome, over the corner chambers"
+    },
+    "minarets": {
+      "type": "component",
+      "use": "components/minaret",
+      "params": {
+        "h": 33,
+        "r": 2.6,
+        "balconies": 3
+      },
+      "at": [
+        [
+          43.5,
+          6.7,
+          43.5,
+          0
+        ],
+        [
+          43.5,
+          6.7,
+          -43.5,
+          0
+        ],
+        [
+          -43.5,
+          6.7,
+          -43.5,
+          0
+        ],
+        [
+          -43.5,
+          6.7,
+          43.5,
+          0
+        ]
+      ],
+      "_about": "the four minarets on the plinth's corners, three balconies each and a chhatri on top"
+    }
+  }
+}

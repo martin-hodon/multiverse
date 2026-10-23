@@ -1,0 +1,237 @@
+{
+ "kind": "item",
+ "name": "Horseshoe armchair",
+ "category": "furniture/seat",
+ "era": "1400-1700",
+ "region": "China",
+ "_about": "the Ming horseshoe-back armchair: a continuous crest rail sweeping from arm to arm round the back, an S-curved splat, a woven seat in a frame, a footrest stretcher",
+ "params": {
+  "h": 0.5,
+  "w": 0.6,
+  "d": 0.47,
+  "backH": 1.0
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "cherry",
+    "walnut",
+    "mahogany"
+   ]
+  },
+  "seat": "cane"
+ },
+ "parts": [
+  {
+   "id": "front posts",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "h + 0.2",
+    0.02
+   ],
+   "r": 0.018,
+   "sides": 8,
+   "at": [
+    [
+     "0 - w / 2 + 0.03",
+     0,
+     "d / 2 - 0.03"
+    ],
+    [
+     "w / 2 - 0.03",
+     0,
+     "d / 2 - 0.03"
+    ]
+   ]
+  },
+  {
+   "id": "back posts",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "backH - 0.04",
+    -0.03
+   ],
+   "r": 0.018,
+   "sides": 8,
+   "at": [
+    [
+     "0 - w / 2 + 0.03",
+     0,
+     "0 - d / 2 + 0.03"
+    ],
+    [
+     "w / 2 - 0.03",
+     0,
+     "0 - d / 2 + 0.03"
+    ]
+   ]
+  },
+  {
+   "id": "crest",
+   "type": "sweep",
+   "material": "wood",
+   "r": 0.018,
+   "seg": 6,
+   "path": [
+    [
+     "0 - w / 2 - 0.02",
+     "h + 0.2",
+     "d / 2"
+    ],
+    [
+     "0 - w / 2 + 0.01",
+     "backH - 0.06",
+     "0 - d / 2 + 0.02"
+    ],
+    [
+     0,
+     "backH",
+     "0 - d / 2 - 0.04"
+    ],
+    [
+     "w / 2 - 0.01",
+     "backH - 0.06",
+     "0 - d / 2 + 0.02"
+    ],
+    [
+     "w / 2 + 0.02",
+     "h + 0.2",
+     "d / 2"
+    ]
+   ]
+  },
+  {
+   "id": "splat",
+   "type": "sweep",
+   "material": "wood",
+   "section": [
+    0.14,
+    0.015
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "path": [
+    [
+     0,
+     "h + 0.02",
+     "0 - d / 2 + 0.02"
+    ],
+    [
+     0,
+     "h + 0.25",
+     "0 - d / 2 - 0.02"
+    ],
+    [
+     0,
+     "backH - 0.03",
+     "0 - d / 2 - 0.03"
+    ]
+   ]
+  },
+  {
+   "id": "frame",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.04,
+    "d"
+   ],
+   "at": [
+    0,
+    "h - 0.02",
+    0
+   ]
+  },
+  {
+   "id": "seat",
+   "type": "box",
+   "material": "seat",
+   "size": [
+    "w - 0.06",
+    0.02,
+    "d - 0.06"
+   ],
+   "at": [
+    0,
+    "h - 0.005",
+    0
+   ]
+  },
+  {
+   "id": "footrest",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.04",
+    0.03,
+    0.05
+   ],
+   "at": [
+    0,
+    0.08,
+    "d / 2 - 0.03"
+   ]
+  },
+  {
+   "id": "stretchers",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0.12,
+    "d / 2 - 0.03"
+   ],
+   "to": [
+    0,
+    0.14,
+    "0 - d / 2 + 0.03"
+   ],
+   "r": 0.012,
+   "at": [
+    [
+     "0 - w / 2 + 0.03",
+     0,
+     0
+    ],
+    [
+     "w / 2 - 0.03",
+     0,
+     0
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "w",
+    "d": "d",
+    "top": "h"
+   }
+  }
+ ]
+}

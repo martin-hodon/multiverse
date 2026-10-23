@@ -1,0 +1,51 @@
+{
+  "name": "Mantle",
+  "kind": "component",
+  "_about": "A MANTLE: a great rectangle of cloth wrapped round the body over the arms -- the Greek himation and chlamys, the Roman toga and palla -- as a cape over the shoulders and the mantle hanging from them clear of the arms down to `to`, both OPEN where the wrap is not: `centre` the middle of the cloth round the body (0 the front, 180 the back; off the back, it is wrapped from one side and pinned or tucked on the other), `span` how far round it goes. A hem band may border it (the toga's purple).",
+  "params": {
+    "from": "collar - 0.03",
+    "to": "knee",
+    "centre": 180,
+    "span": 300,
+    "flare": 0.25,
+    "hem": 0
+  },
+  "pieces": [
+    {
+      "name": "cape",
+      "kind": "hang",
+      "on": "torso",
+      "from": "from",
+      "to": "armtop",
+      "flare": 0.5,
+      "arms": true,
+      "swing": false,
+      "wrap": [
+        "centre",
+        "min(330, span + 20)"
+      ],
+      "fabric": "main",
+      "lid": false
+    },
+    {
+      "name": "body",
+      "kind": "hang",
+      "on": "torso",
+      "from": "armtop",
+      "to": "to",
+      "flare": "flare",
+      "arms": true,
+      "wrap": [
+        "centre",
+        "span"
+      ],
+      "fabric": "main",
+      "fit": "ring",
+      "hem": {
+        "width": "hem",
+        "fabric": "trim"
+      },
+      "trail": 8
+    }
+  ]
+}

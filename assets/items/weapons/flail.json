@@ -1,0 +1,95 @@
+{
+ "kind": "item",
+ "use": "items/weapons/mace",
+ "name": "Flail",
+ "era": "1300-1550",
+ "region": "Europe",
+ "_about": "the war flail: a short haft, a chain, a spiked ball swinging from it",
+ "params": {
+  "haftL": 0.55,
+  "r": 0.017,
+  "never": 0
+ },
+ "materials": {
+  "haft": "oak"
+ },
+ "parts": [
+  {
+   "id": "head",
+   "when": "never"
+  },
+  {
+   "id": "links",
+   "type": "ring",
+   "material": "head",
+   "r": 0.012,
+   "tube": 0.003,
+   "along": {
+    "n": 5,
+    "from": [
+     0,
+     "haftL + 0.02",
+     0
+    ],
+    "to": [
+     0.03,
+     "haftL - 0.18",
+     0
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     90
+    ]
+   ]
+  },
+  {
+   "id": "links2",
+   "type": "ring",
+   "material": "head",
+   "r": 0.012,
+   "tube": 0.003,
+   "along": {
+    "n": 4,
+    "from": [
+     0.004,
+     "haftL",
+     0
+    ],
+    "to": [
+     0.026,
+     "haftL - 0.16",
+     0
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     90,
+     0,
+     90
+    ]
+   ]
+  },
+  {
+   "id": "ball",
+   "use": "items/components/blunt-head",
+   "at": [
+    0.04,
+    "haftL - 0.28",
+    0
+   ],
+   "params": {
+    "style": "spiked",
+    "s": 0.9
+   }
+  }
+ ]
+}

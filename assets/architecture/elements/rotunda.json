@@ -1,0 +1,251 @@
+{
+  "name": "Rotunda (tempietto)",
+  "_about": "A ROUND TEMPLE, Bramante's Tempietto in outline: three round steps, a peristyle of sixteen columns under a ring entablature, the cella inside it (a door and seven windows), a terrace and balustrade over the colonnade walk, a drum and a hemispherical dome with a small lantern. Every piece is a primitive -- rings, a round colonnade, a dome -- stacked by their heights.",
+  "params": {
+    "detail": 8,
+    "base": 0.9,
+    "colH": 3.6,
+    "entH": 0.7,
+    "cellaR": 4.3,
+    "cellaT": 0.7,
+    "drumH": 3.0
+  },
+  "build": [
+    "step 1",
+    "step 2",
+    "step 3",
+    "peristyle",
+    "cella",
+    "door",
+    "terrace",
+    "balustrade",
+    "drum",
+    "dome",
+    "lantern"
+  ],
+  "parts": {
+    "step 1": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 7.2,
+      "rInner": 0.5,
+      "height": 0.3,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "step 2": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 6.8,
+      "rInner": 0.5,
+      "height": 0.3,
+      "y": 0.3,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "step 3": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 6.4,
+      "rInner": 0.5,
+      "height": 0.3,
+      "y": 0.6,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "peristyle": {
+      "type": "colonnade",
+      "plan": "round",
+      "count": 16,
+      "radius": 5.6,
+      "columnR": 0.3,
+      "height": "colH",
+      "entablature": {
+        "h": "entH",
+        "depth": 0.8
+      },
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ]
+    },
+    "cella": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "cellaR",
+      "rInner": "cellaR - cellaT",
+      "height": "colH + entH",
+      "y": "base",
+      "skip": [
+        0
+      ],
+      "opening": {
+        "width": 1.0,
+        "sill": 1.3,
+        "springing": 2.6,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "door": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "cellaR",
+      "rInner": "cellaR - cellaT",
+      "height": "colH + entH",
+      "y": "base",
+      "at": [
+        0
+      ],
+      "opening": {
+        "width": 1.3,
+        "sill": 0,
+        "springing": 2.5,
+        "head": {
+          "profile": "flat"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "terrace": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 6.0,
+      "rInner": "cellaR",
+      "height": 0.25,
+      "y": "base + colH + entH",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "balustrade": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 6.0,
+      "rInner": 5.75,
+      "height": 0.9,
+      "y": "base + colH + entH + 0.25",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "drum": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "cellaR",
+      "rInner": "cellaR - cellaT",
+      "height": "drumH",
+      "y": "base + colH + entH",
+      "opening": {
+        "width": 0.9,
+        "sill": 0.9,
+        "springing": 1.9,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "dome": {
+      "type": "dome",
+      "radius": "cellaR",
+      "thickness": "cellaT",
+      "oculus": 0.6,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          "base + colH + entH + drumH",
+          0,
+          0
+        ]
+      ]
+    },
+    "lantern": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": 0.9,
+      "rInner": 0.6,
+      "height": 1.4,
+      "y": "base + colH + entH + drumH + cellaR - 0.05",
+      "opening": {
+        "width": 0.35,
+        "sill": 0.3,
+        "springing": 0.8,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+ "kind": "item",
+ "name": "Drawer front",
+ "category": "component",
+ "_about": "a drawer's front, `w` by `h`, flush in its case (its face at 0, looking +z), with one knob in the middle or two (knobs), or ring pulls (pull 'ring')",
+ "params": {
+  "w": 0.8,
+  "h": 0.18,
+  "knobs": 2,
+  "pull": "knob",
+  "lip": 0.008
+ },
+ "materials": {
+  "wood": "mahogany",
+  "metal": "brass"
+ },
+ "parts": [
+  {
+   "id": "front",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    "h",
+    0.02
+   ],
+   "round": "lip",
+   "at": [
+    0,
+    0,
+    -0.01
+   ]
+  },
+  {
+   "id": "knob1",
+   "use": "items/components/knob",
+   "when": {
+    "pull": "knob",
+    "knobs": 1
+   },
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "r": "h * 0.07"
+   }
+  },
+  {
+   "id": "knob2",
+   "use": "items/components/knob",
+   "when": {
+    "pull": "knob",
+    "knobs": 2
+   },
+   "at": [
+    [
+     "0 - w * 0.27",
+     0,
+     0
+    ],
+    [
+     "w * 0.27",
+     0,
+     0
+    ]
+   ],
+   "params": {
+    "r": "h * 0.07"
+   }
+  },
+  {
+   "id": "rings",
+   "use": "items/components/ring-pull",
+   "when": {
+    "pull": "ring"
+   },
+   "at": [
+    [
+     "0 - w * 0.27",
+     "h * 0.15",
+     0
+    ],
+    [
+     "w * 0.27",
+     "h * 0.15",
+     0
+    ]
+   ],
+   "params": {
+    "r": "h * 0.12"
+   }
+  }
+ ]
+}

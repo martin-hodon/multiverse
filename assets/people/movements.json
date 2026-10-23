@@ -1,0 +1,28 @@
+{
+  "_about": "MOVEMENTS (motion.js, docs/motion.md): a body going through POSITIONS (assets/people/positions.json) -- from its `start`, each key a position `to` reach in `time` seconds and `hold` there (`via`: the positions it gets to its start through -- onto the floor by a squat and the hands put down, as people do); `hop`: the feet leave the ground together on the way (a jump), else a foot steps only if it must (stance.js). Every angle moves on a minimum-jerk curve between keys. `mirror` is another movement with right and left swapped in every position it names.",
+  "kind": "movements",
+  "movements": {
+    "squat": { "start": "stand", "keys": [{ "to": "squat", "time": 1.4, "hold": 0.3 }, { "to": "stand", "time": 1.2, "hold": 0.3 }] },
+    "half squat": { "start": "stand", "keys": [{ "to": "half squat", "time": 1.0, "hold": 0.2 }, { "to": "stand", "time": 0.9, "hold": 0.2 }] },
+    "lunge right": { "start": "hands on hips", "keys": [{ "to": "lunge right", "time": 1.2, "hold": 0.4 }, { "to": "hands on hips", "time": 1.0, "hold": 0.3 }] },
+    "lunge left": { "mirror": "lunge right" },
+    "jumping jack": { "start": "jack closed", "keys": [{ "to": "jack open", "time": 0.4, "hop": true }, { "to": "jack closed", "time": 0.4, "hop": true }] },
+    "arm circles": { "start": "arms out", "keys": [{ "to": "circle front", "time": 0.25 }, { "to": "circle top", "time": 0.25 }, { "to": "circle back", "time": 0.25 }, { "to": "circle bottom", "time": 0.25 }, { "to": "circle front", "time": 0.25 }] },
+    "toe touch": { "start": "stand", "keys": [{ "to": "toe touch", "time": 1.6, "hold": 0.6 }, { "to": "stand", "time": 1.6, "hold": 0.3 }] },
+    "side bend right": { "start": "stand", "keys": [{ "to": "side bend right", "time": 1.3, "hold": 0.5 }, { "to": "stand", "time": 1.2, "hold": 0.2 }] },
+    "side bend left": { "mirror": "side bend right" },
+    "twist right": { "start": "arms out", "keys": [{ "to": "twist right", "time": 0.9, "hold": 0.2 }, { "to": "arms out", "time": 0.8 }] },
+    "twist left": { "mirror": "twist right" },
+    "high knees": { "start": "stand", "keys": [{ "to": "knee up right", "time": 0.32 }, { "to": "stand", "time": 0.26 }, { "to": "knee up left", "time": 0.32 }, { "to": "stand", "time": 0.26 }] },
+    "march": { "start": "stand", "keys": [{ "to": "march right", "time": 0.5 }, { "to": "stand", "time": 0.4 }, { "to": "march left", "time": 0.5 }, { "to": "stand", "time": 0.4 }] },
+    "calf raise": { "start": "stand", "keys": [{ "to": "calf raise", "time": 0.8, "hold": 0.5 }, { "to": "stand", "time": 0.8, "hold": 0.2 }] },
+    "push-up": { "via": ["hands down"], "start": "push-up up", "keys": [{ "to": "push-up down", "time": 1.1, "hold": 0.2 }, { "to": "push-up up", "time": 1.0, "hold": 0.2 }] },
+    "plank hold": { "via": ["hands down", "push-up up"], "start": "plank", "keys": [{ "to": "plank", "time": 0.5, "hold": 15, "holdTempo": false }] },
+    "crunch": { "via": ["squat", "sit floor"], "start": "crunch down", "keys": [{ "to": "crunch up", "time": 0.9, "hold": 0.3 }, { "to": "crunch down", "time": 0.9, "hold": 0.2 }] },
+    "shoulder press": { "start": "press down", "keys": [{ "to": "press up", "time": 1.0, "hold": 0.2 }, { "to": "press down", "time": 1.1, "hold": 0.2 }] },
+    "lateral raise": { "start": "stand", "keys": [{ "to": "lateral raise", "time": 1.0, "hold": 0.3 }, { "to": "stand", "time": 1.1, "hold": 0.2 }] },
+    "front raise": { "start": "stand", "keys": [{ "to": "front raise", "time": 1.0, "hold": 0.3 }, { "to": "stand", "time": 1.1, "hold": 0.2 }] },
+    "kneel down": { "start": "stand", "keys": [{ "to": "half squat", "time": 0.8 }, { "to": "kneel", "time": 0.9, "hold": 1.0 }, { "to": "half squat", "time": 0.9 }, { "to": "stand", "time": 0.8, "hold": 0.5 }] },
+    "wave": { "start": "stand", "keys": [{ "to": "wave right", "time": 0.6 }, { "to": "wave right", "time": 0.01, "hold": 1.2 }, { "to": "stand", "time": 0.7, "hold": 0.4 }] }
+  }
+}

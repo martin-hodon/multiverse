@@ -1,0 +1,119 @@
+{
+  "name": "Ribbed dome on a drum",
+  "_about": "RIBS ARE LAID ON A DOME, not built into it: the `ribs` part names the dome it stands `on` and takes its meridian, its sides and its placement from that dome, so the two cannot disagree. Florence's eight white ribs stand on the groins of an octagonal cloister vault; St Peter's sixteen on a round dome. Here both: the octagon with a rib on every groin, and a round dome (its facets from the detail level) carrying sixteen.",
+  "params": {
+    "detail": 8,
+    "r": 6,
+    "drumH": 5,
+    "t": 0.7,
+    "oculus": 0.9,
+    "spread": 0.6,
+    "gap": 16
+  },
+  "build": [
+    "drum",
+    "dome",
+    "dome ribs",
+    "round drum",
+    "round dome",
+    "round ribs"
+  ],
+  "parts": {
+    "drum": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "r",
+      "rInner": "r - t",
+      "height": "drumH",
+      "opening": {
+        "width": "r * 0.4",
+        "sill": 0.8,
+        "springing": "0.8 + r * 0.25",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "dome": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "r",
+      "thickness": "t",
+      "oculus": "oculus",
+      "head": {
+        "profile": "pointed",
+        "spread": "spread"
+      },
+      "at": [
+        [
+          0,
+          "drumH",
+          0,
+          0
+        ]
+      ]
+    },
+    "dome ribs": {
+      "type": "ribs",
+      "on": "dome",
+      "width": 0.6,
+      "depth": 0.3
+    },
+    "round drum": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": "r",
+      "rInner": "r - t",
+      "height": "drumH",
+      "opening": {
+        "width": "r * 0.2",
+        "sill": 0.8,
+        "springing": "0.8 + r * 0.25",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          "gap",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "round dome": {
+      "type": "dome",
+      "radius": "r",
+      "thickness": "t",
+      "oculus": "oculus",
+      "head": {
+        "profile": "pointed",
+        "spread": 0.3
+      },
+      "at": [
+        [
+          "gap",
+          "drumH",
+          0,
+          0
+        ]
+      ]
+    },
+    "round ribs": {
+      "type": "ribs",
+      "on": "round dome",
+      "count": 16,
+      "width": 0.4,
+      "depth": 0.25
+    }
+  }
+}

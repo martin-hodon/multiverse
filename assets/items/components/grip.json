@@ -1,0 +1,57 @@
+{
+ "kind": "item",
+ "name": "Grip",
+ "category": "component",
+ "_about": "a sword's or a dagger's grip: a swelling handle, wrapped, along +y from 0 to L",
+ "params": {
+  "L": 0.1,
+  "r": 0.014,
+  "swell": 1.12,
+  "ridges": 0
+ },
+ "materials": {
+  "grip": "leather-dark"
+ },
+ "parts": [
+  {
+   "id": "grip",
+   "type": "lathe",
+   "material": "grip",
+   "profile": [
+    [
+     "r",
+     0
+    ],
+    [
+     "r * swell",
+     "L * 0.5"
+    ],
+    [
+     "r",
+     "L"
+    ]
+   ]
+  },
+  {
+   "id": "ridges",
+   "type": "ring",
+   "when": "ridges",
+   "material": "grip",
+   "r": "r * swell * 0.98",
+   "tube": "r * 0.12",
+   "along": {
+    "n": 4,
+    "from": [
+     0,
+     "L * 0.2",
+     0
+    ],
+    "to": [
+     0,
+     "L * 0.8",
+     0
+    ]
+   }
+  }
+ ]
+}

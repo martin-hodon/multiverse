@@ -1,0 +1,319 @@
+{
+ "kind": "item",
+ "name": "Four-poster bed",
+ "category": "furniture/bed",
+ "era": "1500-1800",
+ "region": "Europe",
+ "_about": "the great bed: four turned posts carrying a tester, a carved headboard, the valances and curtains that draw round it at night, a feather bed under a damask coverlet",
+ "params": {
+  "w": [
+   1.5,
+   1.7
+  ],
+  "l": 2.05,
+  "H": [
+   2.2,
+   2.4
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "walnut",
+    "mahogany"
+   ]
+  },
+  "bedding": "linen",
+  "cloth": {
+   "pick": [
+    "damask-red",
+    "damask-green",
+    "damask-blue",
+    "velvet-red",
+    "brocade"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "posts",
+   "use": "items/components/turned-leg",
+   "params": {
+    "h": "H",
+    "r": 0.045,
+    "style": "column",
+    "block": 0.18
+   },
+   "at": [
+    [
+     "0 - l / 2",
+     0,
+     "0 - w / 2"
+    ],
+    [
+     "l / 2",
+     0,
+     "0 - w / 2"
+    ],
+    [
+     "0 - l / 2",
+     0,
+     "w / 2"
+    ],
+    [
+     "l / 2",
+     0,
+     "w / 2"
+    ]
+   ]
+  },
+  {
+   "id": "rails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l",
+    0.2,
+    0.05
+   ],
+   "at": [
+    [
+     0,
+     0.35,
+     "w / 2"
+    ],
+    [
+     0,
+     0.35,
+     "0 - w / 2"
+    ]
+   ]
+  },
+  {
+   "id": "end rails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.05,
+    0.2,
+    "w"
+   ],
+   "at": [
+    [
+     "0 - l / 2",
+     0.35,
+     0
+    ],
+    [
+     "l / 2",
+     0.35,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "headboard",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    1.1,
+    "w - 0.08"
+   ],
+   "at": [
+    "0 - l / 2",
+    1.0,
+    0
+   ]
+  },
+  {
+   "id": "head panels",
+   "use": "items/components/panel-door",
+   "params": {
+    "w": "w / 2 - 0.06",
+    "h": 0.8,
+    "s": 0.06
+   },
+   "at": [
+    [
+     "0 - l / 2 + 0.035",
+     1.0,
+     "0 - w / 4",
+     90
+    ],
+    [
+     "0 - l / 2 + 0.035",
+     1.0,
+     "w / 4",
+     90
+    ]
+   ]
+  },
+  {
+   "id": "tester",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l + 0.1",
+    0.08,
+    "w + 0.1"
+   ],
+   "at": [
+    0,
+    "H + 0.04",
+    0
+   ]
+  },
+  {
+   "id": "valances",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    "l + 0.14",
+    0.25,
+    0.015
+   ],
+   "at": [
+    [
+     0,
+     "H - 0.12",
+     "w / 2 + 0.06"
+    ],
+    [
+     0,
+     "H - 0.12",
+     "0 - w / 2 - 0.06"
+    ]
+   ],
+   "double": true
+  },
+  {
+   "id": "end valances",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    0.015,
+    0.25,
+    "w + 0.14"
+   ],
+   "at": [
+    [
+     "l / 2 + 0.06",
+     "H - 0.12",
+     0
+    ],
+    [
+     "0 - l / 2 - 0.06",
+     "H - 0.12",
+     0
+    ]
+   ],
+   "double": true
+  },
+  {
+   "id": "curtains",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    0.22,
+    "H - 0.35",
+    0.1
+   ],
+   "round": 0.04,
+   "at": [
+    [
+     "l / 2 - 0.08",
+     "(H - 0.35) / 2 + 0.1",
+     "w / 2 - 0.02"
+    ],
+    [
+     "l / 2 - 0.08",
+     "(H - 0.35) / 2 + 0.1",
+     "0 - w / 2 + 0.02"
+    ],
+    [
+     "0 - l / 2 + 0.12",
+     "(H - 0.35) / 2 + 0.1",
+     "w / 2 - 0.02"
+    ],
+    [
+     "0 - l / 2 + 0.12",
+     "(H - 0.35) / 2 + 0.1",
+     "0 - w / 2 + 0.02"
+    ]
+   ]
+  },
+  {
+   "id": "mattress",
+   "type": "box",
+   "material": "bedding",
+   "size": [
+    "l - 0.06",
+    0.25,
+    "w - 0.06"
+   ],
+   "round": 0.08,
+   "at": [
+    0,
+    0.55,
+    0
+   ]
+  },
+  {
+   "id": "coverlet",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    "l * 0.72",
+    0.05,
+    "w + 0.04"
+   ],
+   "round": 0.02,
+   "at": [
+    "l * 0.12",
+    0.68,
+    0
+   ]
+  },
+  {
+   "id": "pillows",
+   "use": "items/components/cushion",
+   "params": {
+    "w": 0.35,
+    "d": "w * 0.42",
+    "h": 0.12
+   },
+   "at": [
+    [
+     "0 - l / 2 + 0.25",
+     0.66,
+     "0 - w * 0.23"
+    ],
+    [
+     "0 - l / 2 + 0.25",
+     0.66,
+     "w * 0.23"
+    ]
+   ],
+   "materials": {
+    "cloth": "bedding"
+   }
+  }
+ ],
+ "markers": [
+  {
+   "role": "bed",
+   "at": [
+    0,
+    0,
+    0,
+    90
+   ],
+   "data": {
+    "top": 0.68,
+    "foot": "l / 2 + 0.35"
+   }
+  }
+ ]
+}

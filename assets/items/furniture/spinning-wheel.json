@@ -1,0 +1,261 @@
+{
+ "kind": "item",
+ "name": "Spinning wheel",
+ "category": "furniture/other",
+ "era": "1500-1900",
+ "region": "Europe",
+ "_about": "the Saxony spinning wheel: a spoked wheel turned by a treadle, the flyer spinning the thread onto its bobbin, the distaff dressed with flax",
+ "params": {
+  "R": 0.25
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "walnut",
+    "cherry"
+   ]
+  },
+  "fibre": "linen"
+ },
+ "parts": [
+  {
+   "id": "table",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.65,
+    0.05,
+    0.22
+   ],
+   "at": [
+    0,
+    0.4,
+    0,
+    0,
+    0,
+    8
+   ]
+  },
+  {
+   "id": "legs",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0.4,
+    0
+   ],
+   "to": [
+    0,
+    0,
+    0
+   ],
+   "r": 0.016,
+   "sides": 6,
+   "at": [
+    [
+     -0.25,
+     0.04,
+     0.12,
+     0,
+     0,
+     12
+    ],
+    [
+     -0.25,
+     0.04,
+     -0.12,
+     0,
+     0,
+     12
+    ],
+    [
+     0.26,
+     0.08,
+     0,
+     0,
+     0,
+     -10
+    ]
+   ]
+  },
+  {
+   "id": "uprights",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0.1,
+    0.42,
+    0
+   ],
+   "to": [
+    0.1,
+    "0.62 + R",
+    0
+   ],
+   "r": 0.015,
+   "sides": 6,
+   "at": [
+    [
+     0,
+     0,
+     0.04
+    ],
+    [
+     0,
+     0,
+     -0.04
+    ]
+   ]
+  },
+  {
+   "id": "rim",
+   "type": "ring",
+   "material": "wood",
+   "r": "R",
+   "tube": 0.018,
+   "at": [
+    0.1,
+    "0.62 + R",
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "spokes",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "R",
+    0,
+    0
+   ],
+   "r": 0.006,
+   "sides": 5,
+   "around": {
+    "n": 10,
+    "r": 0,
+    "plane": "xy"
+   },
+   "at": [
+    0.1,
+    "0.62 + R",
+    0
+   ]
+  },
+  {
+   "id": "hub",
+   "type": "sphere",
+   "material": "wood",
+   "r": 0.035,
+   "at": [
+    0.1,
+    "0.62 + R",
+    0
+   ]
+  },
+  {
+   "id": "flyer",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    -0.28,
+    0.55,
+    0
+   ],
+   "to": [
+    -0.1,
+    0.55,
+    0
+   ],
+   "r": 0.02,
+   "sides": 8
+  },
+  {
+   "id": "mother",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    -0.22,
+    0.43,
+    0
+   ],
+   "to": [
+    -0.22,
+    0.6,
+    0
+   ],
+   "r": 0.015,
+   "sides": 6
+  },
+  {
+   "id": "treadle",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.3,
+    0.02,
+    0.15
+   ],
+   "at": [
+    0.1,
+    0.05,
+    0
+   ]
+  },
+  {
+   "id": "distaff",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    -0.3,
+    0.45,
+    0
+   ],
+   "to": [
+    -0.36,
+    1.2,
+    0
+   ],
+   "r": 0.01,
+   "sides": 5
+  },
+  {
+   "id": "flax",
+   "type": "lathe",
+   "material": "fibre",
+   "at": [
+    -0.35,
+    1.0,
+    0
+   ],
+   "profile": [
+    [
+     0.01,
+     0.0
+    ],
+    [
+     0.06,
+     0.08
+    ],
+    [
+     0.04,
+     0.18
+    ],
+    [
+     0.0,
+     0.22
+    ]
+   ],
+   "sides": 8
+  }
+ ]
+}

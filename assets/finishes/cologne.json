@@ -1,0 +1,19 @@
+{
+  "name": "Cologne Cathedral",
+  "building": "architecture/cologne",
+  "_about": "Cologne Cathedral: dark trachyte and sandstone, the roofs in slate, the spires in stone; stained glass; inside, pale stone and a chequered floor.",
+  "stone": {
+    "color": "#6f6a60",
+    "accent": "#5a554c",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:glass", "pattern": "painted/stained glass", "palette": "stained", "_about": "the windows' stained glass"},
+    {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/slate", "palette": "slate"},
+    {"parts": "kind:dome", "surface": "roof", "pattern": "stone/ashlar", "palette": "trachyte"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "granite"},
+    {"surface": "wall", "side": "in", "pattern": "stone/ashlar", "palette": "sandstone-grey"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "trachyte"}
+  ]
+}

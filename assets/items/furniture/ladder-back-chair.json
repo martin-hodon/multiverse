@@ -1,0 +1,222 @@
+{
+ "kind": "item",
+ "name": "Ladder-back chair",
+ "category": "furniture/seat",
+ "era": "1600-1800",
+ "region": "Europe",
+ "_about": "a country chair: turned posts, a rush seat woven over its rails, three or four arched slats up the back like a ladder's rungs",
+ "params": {
+  "seatH": 0.44,
+  "w": 0.46,
+  "d": 0.4,
+  "backH": 1.0,
+  "r": 0.02,
+  "slats": {
+   "pick": [
+    3,
+    4
+   ]
+  }
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "walnut",
+    "cherry",
+    "pine"
+   ]
+  },
+  "seat": "rush"
+ },
+ "parts": [
+  {
+   "id": "front legs",
+   "use": "items/components/turned-leg",
+   "params": {
+    "h": "seatH",
+    "r": "r",
+    "style": "bobbin",
+    "block": 0
+   },
+   "at": [
+    [
+     "0 - w / 2 + r",
+     0,
+     "d / 2 - r"
+    ],
+    [
+     "w / 2 - r",
+     0,
+     "d / 2 - r"
+    ]
+   ]
+  },
+  {
+   "id": "back posts",
+   "use": "items/components/turned-leg",
+   "params": {
+    "h": "backH",
+    "r": "r",
+    "style": "plain",
+    "block": 0
+   },
+   "at": [
+    [
+     "0 - w / 2 + r",
+     0,
+     "0 - d / 2 + r"
+    ],
+    [
+     "w / 2 - r",
+     0,
+     "0 - d / 2 + r"
+    ]
+   ]
+  },
+  {
+   "id": "finials",
+   "type": "sphere",
+   "r": "r * 0.95",
+   "at": [
+    [
+     "0 - w / 2 + r",
+     "backH + r * 0.6",
+     "0 - d / 2 + r"
+    ],
+    [
+     "w / 2 - r",
+     "backH + r * 0.6",
+     "0 - d / 2 + r"
+    ]
+   ]
+  },
+  {
+   "id": "seat",
+   "type": "box",
+   "material": "seat",
+   "size": [
+    "w - r",
+    0.035,
+    "d - r"
+   ],
+   "at": [
+    0,
+    "seatH - 0.02",
+    0
+   ]
+  },
+  {
+   "id": "stretchers",
+   "type": "rod",
+   "from": [
+    "0 - w / 2 + r",
+    0.14,
+    "d / 2 - r"
+   ],
+   "to": [
+    "w / 2 - r",
+    0.14,
+    "d / 2 - r"
+   ],
+   "r": "r * 0.45",
+   "at": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0.04,
+     "r * 2 - d"
+    ]
+   ]
+  },
+  {
+   "id": "side stretchers",
+   "type": "rod",
+   "from": [
+    0,
+    0.12,
+    "d / 2 - r"
+   ],
+   "to": [
+    0,
+    0.12,
+    "0 - d / 2 + r"
+   ],
+   "r": "r * 0.45",
+   "at": [
+    [
+     "0 - w / 2 + r",
+     0,
+     0
+    ],
+    [
+     "w / 2 - r",
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "slats",
+   "type": "sweep",
+   "section": [
+    0.012,
+    0.06
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "path": [
+    [
+     "0 - w / 2 + r",
+     0,
+     "0 - d / 2 + r"
+    ],
+    [
+     0,
+     0,
+     "0 - d / 2 - 0.02"
+    ],
+    [
+     "w / 2 - r",
+     0,
+     "0 - d / 2 + r"
+    ]
+   ],
+   "along": {
+    "n": "slats",
+    "from": [
+     0,
+     "seatH + 0.16",
+     0
+    ],
+    "to": [
+     0,
+     "backH - 0.08",
+     0
+    ]
+   }
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "w",
+    "d": "d",
+    "top": "seatH"
+   }
+  }
+ ]
+}

@@ -1,0 +1,265 @@
+{
+  "name": "Omani minaret",
+  "_about": "AN OMANI MINARET: a SQUARE shaft `a` wide rising `hs`, a chamfered step, then an OCTAGONAL shaft to `h`, `balconies` balconies spaced evenly up it (the last at its top) -- each on a flared octagonal corbelling, with its parapet -- and on the top an open octagonal LANTERN of arches under a small pointed dome and a finial. (The `minaret` component is round from its plinth up and crowned with a chhatri or a pencil cap: the square-to-octagon shaft and the domed lantern are this one's.) The Sultan Qaboos Grand Mosque has five: one great and four small.",
+  "params": {
+    "detail": 4,
+    "h": 40,
+    "a": 5,
+    "hs": "h * 0.35",
+    "r": "a * 0.42",
+    "tr": "a * 0.5",
+    "th": 1.2,
+    "ch": 0.5,
+    "balconies": 2,
+    "bw": "r * 0.35",
+    "tier": "(h - hs - ch - th) / balconies",
+    "lr": "r * 0.8",
+    "lh": "r * 2.2",
+    "cr": "lr * 1.12",
+    "fin": "r * 1.4",
+    "_h": "the height of the octagonal shaft's top, where the lantern stands; `a` the square shaft's width, `hs` its height",
+    "_tr": "the octagonal step between the two shafts (`th` tall), over the square's cornice (`ch`)",
+    "_lr": "the lantern's radius and height, `cr` its dome's"
+  },
+  "build": [
+    "square shaft",
+    "cornice",
+    "step",
+    "shaft",
+    "corbelling",
+    "balcony",
+    "parapet",
+    "lantern",
+    "cap",
+    "finial"
+  ],
+  "parts": {
+    "square shaft": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          "a",
+          "a"
+        ]
+      },
+      "height": "hs",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "cornice": {
+      "type": "box",
+      "width": "a + 0.5",
+      "length": "a + 0.5",
+      "height": 0.5,
+      "at": [
+        [
+          0,
+          "hs",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the band on the square shaft's head"
+    },
+    "step": {
+      "type": "column",
+      "radius": "tr",
+      "height": "th",
+      "sides": 8,
+      "taper": "r / tr",
+      "at": [
+        [
+          0,
+          "hs + ch",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the square turning octagonal: a chamfered step"
+    },
+    "shaft": {
+      "type": "column",
+      "radius": "r",
+      "height": "tier - 0.9",
+      "sides": 8,
+      "at": [
+        [
+          0,
+          "hs + ch + th",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "repeat": {
+        "count": "balconies",
+        "step": [
+          0,
+          "tier",
+          0,
+          0
+        ]
+      },
+      "standsOn": [
+        "step"
+      ],
+      "_about": "the octagonal shaft, in lengths from each balcony to the corbelling of the next"
+    },
+    "corbelling": {
+      "type": "column",
+      "radius": "r",
+      "height": 0.9,
+      "sides": 8,
+      "taper": "(r + bw) / r",
+      "at": [
+        [
+          0,
+          "hs + ch + th + tier - 0.9",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "repeat": {
+        "count": "balconies",
+        "step": [
+          0,
+          "tier",
+          0,
+          0
+        ]
+      },
+      "_about": "the flare under each balcony"
+    },
+    "balcony": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "r + bw",
+      "rInner": "r",
+      "height": 0.3,
+      "solid": true,
+      "turn": 0.5,
+      "place": [
+        [
+          0,
+          "hs + ch + th + tier",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "balconies",
+        "step": [
+          0,
+          "tier",
+          0,
+          0
+        ]
+      }
+    },
+    "parapet": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "r + bw",
+      "rInner": "r + bw - 0.18",
+      "height": 1.0,
+      "solid": true,
+      "turn": 0.5,
+      "place": [
+        [
+          0,
+          "hs + ch + th + tier + 0.3",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "balconies",
+        "step": [
+          0,
+          "tier",
+          0,
+          0
+        ]
+      }
+    },
+    "lantern": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "lr",
+      "rInner": "lr - 0.3",
+      "height": "lh",
+      "turn": 0.5,
+      "glass": false,
+      "opening": {
+        "width": "lr * 0.45",
+        "sill": 0,
+        "springing": "lh * 0.55",
+        "head": {
+          "profile": "pointed",
+          "spread": 0.5
+        }
+      },
+      "place": [
+        [
+          0,
+          "h",
+          0,
+          0
+        ]
+      ],
+      "_about": "the open lantern of eight arches on the shaft's top"
+    },
+    "cap": {
+      "type": "dome",
+      "radius": "cr",
+      "sides": 8,
+      "turn": -0.5,
+      "thickness": 0,
+      "head": {
+        "profile": "pointed",
+        "spread": 0.6
+      },
+      "at": [
+        [
+          0,
+          "h + lh",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "lantern"
+      ],
+      "_about": "the small pointed dome"
+    },
+    "finial": {
+      "type": "column",
+      "radius": "r * 0.05 + 0.06",
+      "height": "fin",
+      "sides": 6,
+      "taper": 0.4,
+      "at": [
+        [
+          0,
+          -0.05,
+          0,
+          0
+        ]
+      ],
+      "atop": "cap",
+      "standsOn": [
+        "cap"
+      ]
+    }
+  }
+}

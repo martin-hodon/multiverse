@@ -1,0 +1,98 @@
+{
+ "name": "Igloo",
+ "_about": "The snow house: blocks laid in a rising spiral into a dome, entered by a low tunnel that keeps the cold out (the Arctic (Inuit), 1000-1900)",
+ "era": "1000-1900",
+ "region": "the Arctic (Inuit)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "dome": {
+   "type": "dome",
+   "sides": 14,
+   "radius": 1.9,
+   "thickness": 0.3,
+   "head": {
+    "profile": "semicircular",
+    "rise": 1.9,
+    "seg": 6
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     -1.5707963
+    ]
+   ],
+   "oculus": 1.7457,
+   "sweep": 0.933
+  },
+  "dome top": {
+   "type": "dome",
+   "sides": 14,
+   "radius": 1.745709025009609,
+   "thickness": 0.3,
+   "head": {
+    "profile": "segmental",
+    "rise": 1.15,
+    "seg": 6
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     0.75,
+     0,
+     0
+    ]
+   ]
+  },
+  "tunnel": {
+   "type": "barrel",
+   "width": 0.9,
+   "length": 1.6,
+   "springing": 0.35,
+   "top": 0.8,
+   "head": {
+    "profile": "semicircular",
+    "seg": 6
+   },
+   "at": [
+    [
+     2.3,
+     0,
+     0,
+     1.5707963
+    ]
+   ]
+  },
+  "tunnel walls": {
+   "type": "box",
+   "width": 1.6,
+   "length": 0.25,
+   "height": 0.35,
+   "at": [
+    [
+     2.3,
+     0,
+     0.55,
+     0
+    ],
+    [
+     2.3,
+     0,
+     -0.55,
+     0
+    ]
+   ]
+  }
+ },
+ "build": [
+  "dome",
+  "dome top",
+  "tunnel",
+  "tunnel walls"
+ ]
+}

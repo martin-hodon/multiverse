@@ -1,0 +1,145 @@
+{
+ "kind": "item",
+ "name": "Bench",
+ "category": "furniture/seat",
+ "era": "1000-1800",
+ "region": "Europe",
+ "_about": "a plank bench on two slab ends, notched at the foot, a stretcher between them -- the hall's, the tavern's, the church's",
+ "params": {
+  "h": 0.45,
+  "L": [
+   1.4,
+   1.9
+  ],
+  "d": 0.3
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "pine"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "seat",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L",
+    0.05,
+    "d"
+   ],
+   "round": 0.005,
+   "at": [
+    0,
+    "h - 0.025",
+    0
+   ]
+  },
+  {
+   "id": "ends",
+   "type": "plate",
+   "material": "wood",
+   "thick": 0.05,
+   "at": [
+    [
+     "0 - L / 2 + 0.12",
+     0,
+     0,
+     90,
+     0,
+     0
+    ],
+    [
+     "L / 2 - 0.12",
+     0,
+     0,
+     90,
+     0,
+     0
+    ]
+   ],
+   "outline": [
+    [
+     "0 - d / 2 + 0.02",
+     0
+    ],
+    [
+     "0 - d / 2 + 0.06",
+     0
+    ],
+    [
+     0,
+     0.1
+    ],
+    [
+     "d / 2 - 0.06",
+     0
+    ],
+    [
+     "d / 2 - 0.02",
+     0
+    ],
+    [
+     "d / 2 - 0.02",
+     "h - 0.05"
+    ],
+    [
+     "0 - d / 2 + 0.02",
+     "h - 0.05"
+    ]
+   ]
+  },
+  {
+   "id": "stretcher",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L - 0.24",
+    0.08,
+    0.03
+   ],
+   "at": [
+    0,
+    "h - 0.15",
+    0
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "L",
+    "d": "d",
+    "top": "h"
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     "h",
+     "d * 0.5"
+    ],
+    [
+     "L / 4",
+     "h",
+     "d * 0.5"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5707963
+   }
+  }
+ ]
+}

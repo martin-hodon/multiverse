@@ -1,0 +1,141 @@
+{
+ "kind": "item",
+ "name": "Polearm",
+ "category": "weapon/polearm",
+ "era": "any",
+ "_about": "THE POLE every polearm and spear stands on: an ash pole poleL long with an iron butt, a head at its top (a spearhead or a polearm head), held with both hands. Held 0.8 m up from the butt (less on a short one): where a hand hanging at rest closes on a shaft grounded beside the foot; the other hand half a metre further up. At rest (`rest: ground`) the butt stands on the ground and the hand slides along the shaft to wherever it is.",
+ "params": {
+  "poleL": 2.0,
+  "r": 0.016,
+  "head": "spear",
+  "style": "leaf",
+  "L": 0.28,
+  "w": 0.035,
+  "s": 1,
+  "butt": 1
+ },
+ "materials": {
+  "pole": {
+   "pick": [
+    "ash",
+    "oak"
+   ]
+  },
+  "head": "iron",
+  "butt": "iron"
+ },
+ "parts": [
+  {
+   "id": "pole",
+   "type": "rod",
+   "material": "pole",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "poleL",
+    0
+   ],
+   "r0": "r * 1.05",
+   "r1": "r * 0.95",
+   "sides": 8
+  },
+  {
+   "id": "butt",
+   "type": "lathe",
+   "when": "butt",
+   "material": "butt",
+   "profile": [
+    [
+     "r * 1.1",
+     0.06
+    ],
+    [
+     "r * 1.1",
+     0
+    ],
+    [
+     "r * 0.5",
+     -0.05
+    ],
+    [
+     0,
+     -0.07
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "spearhead",
+   "use": "items/components/spearhead",
+   "when": {
+    "head": "spear"
+   },
+   "at": [
+    0,
+    "poleL",
+    0
+   ],
+   "params": {
+    "L": "L",
+    "w": "w",
+    "style": "style"
+   }
+  },
+  {
+   "id": "polehead",
+   "use": "items/components/polearm-head",
+   "when": {
+    "head": "pole"
+   },
+   "at": [
+    0,
+    "poleL",
+    0
+   ],
+   "params": {
+    "style": "style",
+    "s": "s"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "min(0.8, poleL * 0.42)",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "grip2": [
+   0,
+   "min(0.8, poleL * 0.42) + 0.5",
+   0
+  ],
+  "carry": {
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "follow": 0,
+  "rest": "ground"
+ }
+}

@@ -1,0 +1,158 @@
+{
+ "kind": "item",
+ "name": "Strongbox",
+ "category": "furniture/storage",
+ "era": "1500-1800",
+ "region": "Germany",
+ "_about": "an iron-bound strongbox: an oak box under a lattice of iron bands, a great lock on its front and handles at its ends",
+ "params": {
+  "w": 0.7,
+  "d": 0.42,
+  "h": 0.4
+ },
+ "materials": {
+  "wood": "oak",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "box",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    "h",
+    "d"
+   ],
+   "at": [
+    0,
+    "h / 2",
+    0
+   ]
+  },
+  {
+   "id": "bands",
+   "use": "items/components/strap",
+   "params": {
+    "L": "d + 0.01",
+    "w": 0.035
+   },
+   "along": {
+    "n": 4,
+    "from": [
+     "0 - w * 0.4",
+     "h + 0.001",
+     0
+    ],
+    "to": [
+     "w * 0.4",
+     "h + 0.001",
+     0
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     90,
+     -90,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "front bands",
+   "use": "items/components/strap",
+   "params": {
+    "L": "h - 0.02",
+    "w": 0.035
+   },
+   "along": {
+    "n": 4,
+    "from": [
+     "0 - w * 0.4",
+     "h / 2",
+     "d / 2 + 0.001"
+    ],
+    "to": [
+     "w * 0.4",
+     "h / 2",
+     "d / 2 + 0.001"
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     90
+    ]
+   ]
+  },
+  {
+   "id": "rims",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    "w + 0.01",
+    0.03,
+    "d + 0.01"
+   ],
+   "at": [
+    [
+     0,
+     0.015,
+     0
+    ],
+    [
+     0,
+     "h - 0.015",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "lock",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.18,
+    0.14,
+    0.012
+   ],
+   "at": [
+    0,
+    "h * 0.6",
+    "d / 2 + 0.006"
+   ]
+  },
+  {
+   "id": "handles",
+   "type": "ring",
+   "material": "metal",
+   "r": 0.04,
+   "tube": 0.006,
+   "at": [
+    [
+     "0 - w / 2 - 0.01",
+     "h * 0.7",
+     0,
+     90,
+     90,
+     0
+    ],
+    [
+     "w / 2 + 0.01",
+     "h * 0.7",
+     0,
+     90,
+     90,
+     0
+    ]
+   ]
+  }
+ ]
+}

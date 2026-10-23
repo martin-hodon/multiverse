@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Bannerfield: pregenerate</title></head>
+<body style="font: 13px monospace; background: #22262c; color: #cfd6de"><pre id="log"></pre>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl": "https://unpkg.com/three@0.185.1/build/three.tsl.js",
+    "three/addons/": "https://unpkg.com/three@0.185.1/examples/jsm/"
+} }
+</script>
+<script type="module">
+// THE GENERATOR (docs/pregen.md): builds every landmark and every fabric through the game's own code with pregen.js
+// RECORDING, and writes what it made into pregen/ -- tiles and fabrics as PNG, finished geometry and wall fields as
+// gzipped binaries, and a part of the manifest. `python3 build/pregen.py` opens it headless and takes the POSTs;
+// nothing here decides what a building looks like, it only keeps what the game would have computed.
+// ONE PART A PAGE (?part=NAME; ?part=list names them): a few landmarks, the towns' tiles, the items, the wings, the
+// faces, the fabrics -- each in a browser of its own, its files written as soon as it is done and its manifest as
+// parts/NAME.json (pregen.py merges them), so no one browser holds the whole cache (it ran out of memory whole)
+import { startRecording, codeHash, SECTIONS } from "./pregen.js";
+const log = (t) => { document.getElementById("log").textContent += t + "\n"; console.log(t); };
+const put = (path, body) => fetch("pregen/" + path, { method: "POST", body }).then((r) => { if (!r.ok) throw new Error(`${path}: ${r.status}`); });
+const gzip = (buf) => new Response(new Blob([buf]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer();
+const png = (cv) => (cv.convertToBlob ? cv.convertToBlob({ type: "image/png" }) : new Promise((ok) => cv.toBlob(ok, "image/png")));
+const BATCH = 6;   // landmarks a part
+const ms = (t) => `${(performance.now() - t).toFixed(0)}ms`;
+const PARTS = {
+  // THE LANDMARKS and the village's land, a few at a time
+  async landmarks(R, i) {
+    const { BUILDINGS, LANDMARKS, LAND, buildBuilding } = await import("./architecture.js");
+    for (const k of [...LANDMARKS, ...LAND].slice(i * BATCH, (i + 1) * BATCH)) {
+      R.current = k;
+      const t = performance.now();
+      try { buildBuilding(BUILDINGS[k]); log(`${k}: ${ms(t)}`); }
+      catch (e) { log(`${k}: FAILED ${e.message}`); }
+    }
+  },
+  // THE TOWN (town.js): its houses are laid out by the world's seed, so their geometry is made at startup (or kept by
+  // a recorded world) -- but every tile a town of each style can draw with is baked here, under "town/<style>"
+  async towns(R) {
+    const { STYLES, styleFinishes } = await import("./town.js"), { finishTilesOf } = await import("./architecture.js");
+    for (const kind of Object.keys(STYLES)) {
+      R.current = "town/" + kind;
+      const t = performance.now();
+      for (const f of styleFinishes(kind)) finishTilesOf(f);
+      log(`town/${kind}: ${ms(t)}`);
+    }
+  },
+  // THE ITEMS the world builds loose -- tools in hands, carts, the boat, the mills' sails, the statues' things: every
+  // item of the catalogue once, its tiles kept under "items" (index.html asks for them with the landmarks')
+  async items(R) {
+    R.current = "items";
+    const t = performance.now(), { CATALOGUE } = await import("./catalogue.js"), { itemGroup } = await import("./architecture.js");
+    let n = 0;
+    for (const c of CATALOGUE.categories) if (c.kind === "item") for (const p of c.paths) {
+      if (/^items\/(faces|hair|flowers|jewelry)\//.test(p)) continue;   // (painted, no tiles)
+      try { itemGroup(p); n++; } catch (e) { log(`${p}: FAILED ${e.message}`); }
+    }
+    log(`items: ${n} in ${ms(t)}`);
+  },
+  // THE BUTTERFLIES' WINGS: every species painted (butterflies.js speciesAtlas keeps each under its hash)
+  async wings() {
+    const t = performance.now(), { ASSETS } = await import("./catalogue.js"), B = await import("./butterflies.js");
+    const shapes = ASSETS.get("butterflies/shapes")?.shapes ?? {};
+    let n = 0;
+    for (const [p, d] of ASSETS) if (p.startsWith("butterflies/") && d.kind === "butterfly") { try { B.speciesAtlas(B.resolveSpecies(d, shapes)); n++; } catch (e) { log(`${p}: FAILED ${e.message}`); } }
+    log(`wings: ${n} species in ${ms(t)}`);
+  },
+  // THE FACES: people drawn at random as the world draws them -- every style of dress, every kind, many seeds -- and the
+  // heads they would wear built and kept (heads.js recordFace: a shape once). A person whose exact face is not here gets
+  // another of its family (heads.js); run this again and another random lot is kept.
+  async faces() {
+    const t = performance.now(), CONFIG = (await import("./config.json", { with: { type: "json" } })).default;
+    const { makePerson } = await import("./people.js"), { WARDROBE } = await import("./clothes.js"), H = await import("./heads.js");
+    if (CONFIG.people?.faceDetail !== undefined) H.DETAIL.face = CONFIG.people.faceDetail;
+    const styles = [null, ...Object.keys(WARDROBE.styles ?? {}).filter((k) => !k.startsWith("_"))], kinds = ["man", "woman", "child10", "child5"];
+    const N = Number(new URLSearchParams(location.search).get("faces") ?? 18), base = Math.floor(Math.random() * 1e6);
+    let n = 0, people = 0;
+    for (const style of styles) for (const kind of kinds) for (let i = 0; i < N; i++) {
+      const d = makePerson({ seed: base + people * 7 + 1, kind, style, still: true }); people++;
+      if (d.face && H.recordFace(d.face, { shade: CONFIG.people?.faceShade ?? {} })) n++;
+    }
+    log(`faces: ${n} heads for ${people} people in ${ms(t)}`);
+  },
+  // every fabric the tailor can dress anyone in (clothes.js registers the family and the dyes)
+  async fabrics() {
+    const t = performance.now();
+    await import("./clothes.js");
+    const { fabricIndex } = await import("./fabric.js"), { patternNames } = await import("./patterns.js");
+    let n = 0;
+    for (const f of patternNames().filter((n) => n.startsWith("fabrics/"))) { fabricIndex(f); n++; }
+    log(`fabrics: ${n} in ${ms(t)}`);
+  },
+};
+try {
+  const t0 = performance.now(), part = new URLSearchParams(location.search).get("part") ?? "list";
+  if (part === "list") {
+    const { LANDMARKS, LAND } = await import("./architecture.js");
+    const names = [...Array(Math.ceil((LANDMARKS.length + LAND.length) / BATCH)).keys()].map((i) => "landmarks" + i);
+    window.__pregenDone = { parts: [...names, ...Object.keys(PARTS).filter((k) => k !== "landmarks")] };
+  } else {
+    const R = startRecording(), [, kind, i] = /^([a-z]+?)(\d*)$/.exec(part) ?? [];
+    if (!PARTS[kind]) throw new Error("no part " + part);
+    await PARTS[kind](R, +i || 0);
+    R.current = null;
+    log(`${part}: built in ${((performance.now() - t0) / 1000).toFixed(1)}s -- writing`);
+    // (its part of the manifest: what it made, and the code that made it -- pregen.py merges the parts)
+    const sections = {};
+    for (const [s, sources] of Object.entries(SECTIONS)) sections[s] = { code: await codeHash(sources), sources };
+    const man = { sections, tiles: {}, fabrics: {}, buildings: {}, wings: {}, faces: {} };
+    let bytes = 0;
+    const file = async (dir, key, ext, body) => { const f = `${dir}/${key}.${ext}`; bytes += body.byteLength ?? body.size; await put(f, body); return f; };
+    for (const [k, cv] of R.tiles) if (cv) man.tiles[k] = await file("tiles", k, "png", await png(cv));
+    for (const [k, cv] of R.fabrics) man.fabrics[k] = await file("fabrics", k, "png", await png(cv));
+    for (const [k, cv] of R.wings) man.wings[k] = await file("wings", k, "png", await png(cv));
+    for (const [k, f] of R.faces) man.faces[k] = { file: await file("faces", k, "bin", await gzip(f.buf)), family: f.family };
+    const groupFiles = {}, wallFiles = {};
+    for (const [k, buf] of R.groups) groupFiles[k] = await file("buildings", k, "bin", await gzip(buf));
+    for (const [k, buf] of R.walls) wallFiles[k] = await file("fields", k, "bin", await gzip(buf));
+    for (const [name, b] of Object.entries(R.buildings))
+      man.buildings[name] = { groups: Object.fromEntries(b.groups.map((k) => [k, groupFiles[k]])),
+                              walls: Object.fromEntries(b.walls.map((k) => [k, wallFiles[k]])), tiles: b.tiles.filter((k) => man.tiles[k]) };
+    await put(`parts/${part}.json`, JSON.stringify(man));
+    const counts = { buildings: Object.keys(man.buildings).length, geometry: R.groups.size, walls: R.walls.size, tiles: Object.keys(man.tiles).length,
+                     fabrics: Object.keys(man.fabrics).length, wings: Object.keys(man.wings).length, faces: Object.keys(man.faces).length, mb: +(bytes / 1e6).toFixed(1), s: +((performance.now() - t0) / 1000).toFixed(1) };
+    log("done " + JSON.stringify(counts));
+    window.__pregenDone = counts;
+  }
+} catch (e) { log("FAILED " + (e.stack ?? e)); window.__pregenDone = { error: String(e.stack ?? e) }; }
+</script></body></html>

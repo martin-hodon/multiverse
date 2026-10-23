@@ -1,0 +1,201 @@
+{
+ "kind": "item",
+ "name": "Windsor chair",
+ "category": "furniture/seat",
+ "era": "1720-1850",
+ "region": "England & America",
+ "_about": "the comb-back Windsor: a saddled elm seat, four splayed legs socketed into it with an H of stretchers, a fan of spindles up to a shaped crest rail",
+ "params": {
+  "h": 0.45,
+  "w": 0.46,
+  "d": 0.42,
+  "backH": [
+   1.0,
+   1.1
+  ],
+  "n": {
+   "pick": [
+    7,
+    9
+   ]
+  }
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "ash",
+    "walnut",
+    "cherry"
+   ]
+  },
+  "seat": "oak"
+ },
+ "parts": [
+  {
+   "id": "seat",
+   "type": "box",
+   "material": "seat",
+   "size": [
+    "w",
+    0.05,
+    "d"
+   ],
+   "round": 0.02,
+   "at": [
+    0,
+    "h - 0.025",
+    0
+   ]
+  },
+  {
+   "id": "legs",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "w * 0.34",
+    "h - 0.03",
+    "d * 0.3"
+   ],
+   "to": [
+    "w * 0.48",
+    0,
+    "d * 0.45"
+   ],
+   "r0": 0.017,
+   "r1": 0.022,
+   "sides": 8,
+   "mirror": "x"
+  },
+  {
+   "id": "back legs",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "w * 0.34",
+    "h - 0.03",
+    "0 - d * 0.3"
+   ],
+   "to": [
+    "w * 0.48",
+    0,
+    "0 - d * 0.48"
+   ],
+   "r0": 0.017,
+   "r1": 0.022,
+   "sides": 8,
+   "mirror": "x"
+  },
+  {
+   "id": "side stretchers",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "w * 0.43",
+    0.15,
+    "d * 0.37"
+   ],
+   "to": [
+    "w * 0.43",
+    0.15,
+    "0 - d * 0.38"
+   ],
+   "r": 0.012,
+   "sides": 6,
+   "mirror": "x"
+  },
+  {
+   "id": "middle stretcher",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "0 - w * 0.43",
+    0.15,
+    0
+   ],
+   "to": [
+    "w * 0.43",
+    0.15,
+    0
+   ],
+   "r": 0.012,
+   "sides": 6
+  },
+  {
+   "id": "spindles",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "h",
+    0
+   ],
+   "to": [
+    0,
+    "backH - 0.04",
+    -0.06
+   ],
+   "r0": 0.011,
+   "r1": 0.009,
+   "sides": 6,
+   "along": {
+    "n": "n",
+    "from": [
+     "0 - w * 0.36",
+     0,
+     "0 - d * 0.4"
+    ],
+    "to": [
+     "w * 0.36",
+     0,
+     "0 - d * 0.4"
+    ]
+   }
+  },
+  {
+   "id": "crest",
+   "type": "sweep",
+   "material": "wood",
+   "section": [
+    0.03,
+    0.07
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "path": [
+    [
+     "0 - w * 0.45",
+     "backH - 0.03",
+     "0 - d * 0.4 - 0.05"
+    ],
+    [
+     0,
+     "backH",
+     "0 - d * 0.4 - 0.1"
+    ],
+    [
+     "w * 0.45",
+     "backH - 0.03",
+     "0 - d * 0.4 - 0.05"
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "w",
+    "d": "d",
+    "top": "h"
+   }
+  }
+ ]
+}

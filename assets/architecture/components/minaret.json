@@ -1,0 +1,159 @@
+{
+  "name": "Minaret",
+  "_about": "A MINARET: a plinth, a round shaft, `balconies` balconies spaced evenly up it -- each on a flared corbelling, with its parapet -- and on the last, at the shaft's top, a chhatri (the `chhatri` component, used inside this one). Build it with \"pencil cap\" instead of \"top chhatri\" for the Ottoman kind. The Taj Mahal's four are this with three balconies.",
+  "params": {
+    "detail": 4,
+    "h": 36,
+    "r": 2.4,
+    "base": 1.2,
+    "balconies": 3,
+    "bw": 1.0,
+    "tier": "h / balconies"
+  },
+  "build": [
+    "plinth",
+    "shaft",
+    "corbelling",
+    "balcony",
+    "parapet",
+    "top chhatri"
+  ],
+  "parts": {
+    "plinth": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": "r * 1.4"
+      },
+      "height": "base",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "shaft": {
+      "type": "column",
+      "radius": "r",
+      "height": "h",
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ]
+    },
+    "corbelling": {
+      "type": "column",
+      "radius": "r",
+      "height": 0.9,
+      "taper": "(r + bw) / r",
+      "at": [
+        [
+          0,
+          "base + tier - 0.9",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "balconies",
+        "step": [
+          0,
+          "tier",
+          0,
+          0
+        ]
+      },
+      "_about": "the flare under each balcony"
+    },
+    "balcony": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": "r + bw",
+      "rInner": "r",
+      "height": 0.3,
+      "solid": true,
+      "place": [
+        [
+          0,
+          "base + tier",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "balconies",
+        "step": [
+          0,
+          "tier",
+          0,
+          0
+        ]
+      }
+    },
+    "parapet": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": "r + bw",
+      "rInner": "r + bw - 0.15",
+      "height": 0.9,
+      "solid": true,
+      "place": [
+        [
+          0,
+          "base + tier + 0.3",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "balconies",
+        "step": [
+          0,
+          "tier",
+          0,
+          0
+        ]
+      }
+    },
+    "top chhatri": {
+      "type": "component",
+      "use": "components/chhatri",
+      "params": {
+        "r": "r * 0.85"
+      },
+      "at": [
+        [
+          0,
+          "base + h + 0.3",
+          0,
+          0
+        ]
+      ]
+    },
+    "pencil cap": {
+      "type": "dome",
+      "radius": "r * 1.05",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "r * 4"
+      },
+      "at": [
+        [
+          0,
+          "base + h + 0.3",
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

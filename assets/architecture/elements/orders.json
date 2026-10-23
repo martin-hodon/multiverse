@@ -1,0 +1,137 @@
+{
+  "name": "The orders",
+  "_about": "THE CLASSICAL ORDERS as proportions of the shaft's radius (assemble.js ORDERS -- a new order is a new line of data): DORIC with no base, a sharp taper and a wide echinus, its frieze carrying TRIGLYPHS over every column and every gap; TUSCAN, its plain Roman cousin with a base; IONIC with its volutes; CORINTHIAN with a tall bell under a thin abacus. Each carries an entablature -- architrave and frieze, then a cornice standing proud of them. Last, square shafts: pilasters and piers.",
+  "params": {
+    "detail": 8,
+    "r": 0.4,
+    "h": 5.5,
+    "gap": 7
+  },
+  "build": [
+    "doric",
+    "tuscan",
+    "ionic",
+    "corinthian",
+    "pilasters"
+  ],
+  "parts": {
+    "doric": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 2,
+      "spacing": 3.2,
+      "columnR": "r",
+      "height": "h",
+      "entablature": {
+        "h": "h * 0.2",
+        "cornice": {
+          "h": "h * 0.07",
+          "out": 0.35
+        },
+        "triglyphs": {
+          "w": "r * 1.1",
+          "d": 0.12
+        }
+      },
+      "at": [
+        [
+          "gap * 0",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "tuscan": {
+      "type": "colonnade",
+      "order": "tuscan",
+      "count": 2,
+      "spacing": 3.2,
+      "columnR": "r",
+      "height": "h",
+      "entablature": {
+        "h": "h * 0.2",
+        "cornice": {
+          "h": "h * 0.07",
+          "out": 0.35
+        }
+      },
+      "at": [
+        [
+          "gap * 1",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "ionic": {
+      "type": "colonnade",
+      "order": "ionic",
+      "count": 2,
+      "spacing": 3.2,
+      "columnR": "r",
+      "height": "h",
+      "entablature": {
+        "h": "h * 0.2",
+        "cornice": {
+          "h": "h * 0.07",
+          "out": 0.35
+        }
+      },
+      "at": [
+        [
+          "gap * 2",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "corinthian": {
+      "type": "colonnade",
+      "order": "corinthian",
+      "count": 2,
+      "spacing": 3.2,
+      "columnR": "r",
+      "height": "h",
+      "entablature": {
+        "h": "h * 0.2",
+        "cornice": {
+          "h": "h * 0.07",
+          "out": 0.35
+        }
+      },
+      "at": [
+        [
+          "gap * 3",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "pilasters": {
+      "type": "colonnade",
+      "order": "tuscan",
+      "shaft": "square",
+      "count": 3,
+      "spacing": 2.4,
+      "columnR": 0.3,
+      "height": "h",
+      "entablature": {
+        "h": "h * 0.15",
+        "depth": 0.9
+      },
+      "at": [
+        [
+          "gap * 4",
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "square shafts: pilasters against a wall, piers standing free"
+    }
+  }
+}

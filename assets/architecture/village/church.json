@@ -1,0 +1,692 @@
+{
+ "name": "Village church",
+ "_about": "A VILLAGE CHURCH: a nave with round-headed windows, a lower chancel to the east (+x) through a round chancel arch, a square WEST TOWER entered from the west (its door the church's) with a spiral turret up to the belfry floor; the tower's top is the town's style -- a spire, a pyramid, a saddleback, an onion, or battlements. Its floor is marked by use (zones: seating, altar) and furnished by assets/architecture/furnishing.json.",
+ "params": {
+  "detail": 4,
+  "L": 17,
+  "B": 9,
+  "t": 0.7,
+  "hN": 6.8,
+  "g": 0.2,
+  "chL": 6.5,
+  "chB": 6.6,
+  "chH": 5.6,
+  "S": 7.2,
+  "tH": 17,
+  "dz": 1.8,
+  "belH": 3.4,
+  "pitch": 50,
+  "rows": 5,
+  "tR": 1.8,
+  "tn": 6,
+  "_tR": "the stair turret's radius and bays (tn): a spiral a walker fits in wants 1.8m -- the tower is sized round it, and the way through its foot (dz off its middle) passes clear of it",
+  "_L": "the nave, L long (x) and B broad; hN its walls; chL/chB/chH the chancel east of it; S the tower's square, tH its shaft (the belfry its last belH); dz the way through the tower's foot, off its middle clear of the stair turret"
+ },
+ "parts": {
+  "nave": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "L",
+     "B"
+    ]
+   },
+   "thickness": "t",
+   "height": "hN",
+   "openings": [],
+   "faces": {
+    "0": {
+     "pattern": "3",
+     "width": 1.1,
+     "gap": "L / 4 - 1.1",
+     "pier": 0,
+     "sill": 2.4,
+     "springing": "hN - 1.4",
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    "2": {
+     "pattern": "3",
+     "width": 1.1,
+     "gap": "L / 4 - 1.1",
+     "pier": 0,
+     "sill": 2.4,
+     "springing": "hN - 1.4",
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    "1": [
+     {
+      "at": 0,
+      "width": "chB - 2 * t - 0.6",
+      "sill": 0,
+      "springing": "chH - 1.9",
+      "head": {
+       "profile": "semicircular"
+      },
+      "glass": false
+     }
+    ],
+    "3": [
+     {
+      "at": 0,
+      "width": "S",
+      "sill": 0,
+      "springing": "hN",
+      "head": {
+       "profile": "flat"
+      },
+      "glass": false
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "nave floor": {
+   "type": "box",
+   "width": "L - 0.04",
+   "length": "B - 0.04",
+   "height": "g",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "chancel north": {
+   "type": "wall",
+   "width": "chL - t",
+   "height": "chH",
+   "thickness": "t",
+   "openings": [
+    {
+     "at": "(chL - t) / 2",
+     "width": 0.9,
+     "sill": 2.0,
+     "springing": "chH - 1.3",
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "at": [
+    [
+     "L / 2 + (chL - t) / 2",
+     0,
+     "0 - chB / 2 + t",
+     0
+    ]
+   ]
+  },
+  "chancel south": {
+   "type": "wall",
+   "width": "chL - t",
+   "height": "chH",
+   "thickness": "t",
+   "openings": [
+    {
+     "at": "(chL - t) / 2",
+     "width": 0.9,
+     "sill": 2.0,
+     "springing": "chH - 1.3",
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "at": [
+    [
+     "L / 2 + (chL - t) / 2",
+     0,
+     "chB / 2",
+     0
+    ]
+   ]
+  },
+  "chancel east": {
+   "type": "wall",
+   "width": "chB",
+   "height": "chH",
+   "thickness": "t",
+   "openings": [
+    {
+     "at": "chB / 2",
+     "width": 1.2,
+     "sill": 2.0,
+     "springing": "chH - 1.2",
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "at": [
+    [
+     "L / 2 + chL",
+     0,
+     0,
+     "1.5707963"
+    ]
+   ]
+  },
+  "chancel floor": {
+   "type": "box",
+   "width": "chL - t / 2 + 0.02",
+   "length": "chB - 2 * t",
+   "height": "g",
+   "at": [
+    [
+     "L / 2 - 0.02 + (chL - t / 2 + 0.02) / 2",
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "nave roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": "B",
+   "length": "L - t / 2",
+   "pitch": "pitch",
+   "overhang": 0.45,
+   "at": [
+    [
+     "t / 4",
+     "hN",
+     0,
+     "1.5707963"
+    ]
+   ],
+   "_about": "(its west gable in the middle of the wall, not in the tower's face)"
+  },
+  "chancel roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": "chB",
+   "length": "chL + 0.4",
+   "pitch": "pitch",
+   "overhang": 0.35,
+   "at": [
+    [
+     "L / 2 + chL / 2",
+     "chH",
+     0,
+     "1.5707963"
+    ]
+   ]
+  },
+  "tower": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "S",
+     "S"
+    ]
+   },
+   "thickness": "t",
+   "height": "tH",
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     0,
+     0,
+     0
+    ]
+   ],
+   "faces": {
+    "3": [
+     {
+      "h": 3.4,
+      "openings": [
+       {
+        "at": "dz",
+        "width": 1.6,
+        "sill": 0,
+        "springing": 2.4,
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     },
+     {
+      "h": "tH - 3.4 - belH",
+      "openings": [
+       {
+        "at": 0,
+        "width": 0.35,
+        "sill": 3.0,
+        "springing": 4.0,
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     },
+     {
+      "openings": {
+       "pattern": "2",
+       "width": 0.9,
+       "gap": 0.5,
+       "pier": 0.9,
+       "end": "(S - 2.3) / 2",
+       "sill": 0.8,
+       "springing": "belH - 0.9",
+       "head": {
+        "profile": "semicircular"
+       },
+       "glass": false
+      }
+     }
+    ],
+    "1": [
+     {
+      "h": 3.4,
+      "openings": [
+       {
+        "at": "0 - dz",
+        "width": 1.6,
+        "sill": 0,
+        "springing": 2.4,
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     },
+     {
+      "h": "tH - 3.4 - belH",
+      "openings": []
+     },
+     {
+      "openings": {
+       "pattern": "2",
+       "width": 0.9,
+       "gap": 0.5,
+       "pier": 0.9,
+       "end": "(S - 2.3) / 2",
+       "sill": 0.8,
+       "springing": "belH - 0.9",
+       "head": {
+        "profile": "semicircular"
+       },
+       "glass": false
+      }
+     }
+    ],
+    "0": [
+     {
+      "h": "tH - belH",
+      "openings": [
+       {
+        "at": 0,
+        "width": 0.35,
+        "sill": 6.0,
+        "springing": 7.0,
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     },
+     {
+      "openings": {
+       "pattern": "2",
+       "width": 0.9,
+       "gap": 0.5,
+       "pier": 0.9,
+       "end": "(S - 2.3) / 2",
+       "sill": 0.8,
+       "springing": "belH - 0.9",
+       "head": {
+        "profile": "semicircular"
+       },
+       "glass": false
+      }
+     }
+    ],
+    "2": [
+     {
+      "h": "tH - belH",
+      "openings": []
+     },
+     {
+      "openings": {
+       "pattern": "2",
+       "width": 0.9,
+       "gap": 0.5,
+       "pier": 0.9,
+       "end": "(S - 2.3) / 2",
+       "sill": 0.8,
+       "springing": "belH - 0.9",
+       "head": {
+        "profile": "semicircular"
+       },
+       "glass": false
+      }
+     }
+    ]
+   }
+  },
+  "tower floor": {
+   "type": "box",
+   "width": "S - t",
+   "length": "S - 0.04",
+   "height": "g",
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t - t / 2 + 0.02",
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "tower stair": {
+   "type": "component",
+   "use": "components/tower-stair",
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "g",
+     0,
+     0
+    ]
+   ],
+   "params": {
+    "W": "S - 2 * t",
+    "H": "tH - belH - g",
+    "tR": "tR",
+    "n": "tn",
+    "wall": 0.3,
+    "slab": 0.3,
+    "tx": "S / 2 - t - tR - 0.02",
+    "tz": "0 - (S / 2 - t - tR - 0.02)"
+   }
+  },
+  "spire": {
+   "type": "dome",
+   "sides": 8,
+   "radius": "S / 2 + 0.3",
+   "thickness": 0,
+   "head": {
+    "profile": "trigonal",
+    "rise": "S * 2.4"
+   },
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH",
+     0,
+     0
+    ]
+   ]
+  },
+  "pyramid": {
+   "type": "roof",
+   "form": "pyramid",
+   "width": "S + 0.5",
+   "length": "S + 0.5",
+   "pitch": 62,
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH",
+     0,
+     0
+    ]
+   ]
+  },
+  "saddleback": {
+   "type": "roof",
+   "form": "gable",
+   "width": "S + 0.5",
+   "length": "S + 0.5",
+   "pitch": 58,
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH",
+     0,
+     "1.5707963"
+    ]
+   ]
+  },
+  "onion drum": {
+   "type": "ring",
+   "count": 8,
+   "rOuter": "S / 2 - 0.4",
+   "rInner": "S / 2 - 0.9",
+   "height": 1.4,
+   "y": "tH + 0.3",
+   "solid": true,
+   "place": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "onion base": {
+   "type": "box",
+   "width": "S + 0.3",
+   "length": "S + 0.3",
+   "height": 0.3,
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH",
+     0,
+     0
+    ]
+   ]
+  },
+  "onion": {
+   "type": "dome",
+   "sides": 16,
+   "radius": "S / 2 - 0.2",
+   "thickness": 0,
+   "head": {
+    "profile": "onion",
+    "bulge": 1.3,
+    "neck": 0.85
+   },
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH + 1.7",
+     0,
+     0
+    ]
+   ]
+  },
+  "battlement roof": {
+   "type": "box",
+   "width": "S",
+   "length": "S",
+   "height": 0.3,
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH",
+     0,
+     0
+    ]
+   ]
+  },
+  "battlements": {
+   "type": "component",
+   "use": "components/crenellation",
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH + 0.3",
+     "S / 2 - 0.25",
+     0
+    ],
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH + 0.3",
+     "0 - S / 2 + 0.25",
+     0
+    ]
+   ],
+   "params": {
+    "L": "S",
+    "t": 0.5,
+    "h": 0.9,
+    "step": 1.6,
+    "mh": 0.7
+   },
+   "build": [
+    "parapet",
+    "merlons"
+   ]
+  },
+  "battlements x": {
+   "type": "component",
+   "use": "components/crenellation",
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t + S / 2 - 0.25",
+     "tH + 0.3",
+     0,
+     "1.5707963"
+    ],
+    [
+     "0 - L / 2 - S / 2 + t - S / 2 + 0.25",
+     "tH + 0.3",
+     0,
+     "1.5707963"
+    ]
+   ],
+   "params": {
+    "L": "S - 1.0",
+    "t": 0.5,
+    "h": 0.9,
+    "step": 1.6,
+    "mh": 0.7
+   },
+   "build": [
+    "parapet",
+    "merlons"
+   ]
+  },
+  "cross": {
+   "type": "column",
+   "radius": 0.08,
+   "height": 2.2,
+   "sides": 6,
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH + S * 2.4 - 0.2",
+     0,
+     0
+    ]
+   ]
+  },
+  "cross pyramid": {
+   "type": "column",
+   "radius": 0.08,
+   "height": 2.0,
+   "sides": 6,
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t",
+     "tH + (S + 0.5) / 2 * 1.8807 - 0.2",
+     0,
+     0
+    ]
+   ]
+  },
+  "seating": {
+   "type": "zone",
+   "zone": "seating",
+   "w": "B - 2 * t - 0.6",
+   "d": "L - 2 * t - 4.6",
+   "h": "hN",
+   "at": [
+    [
+     "0 - L / 2 + t + 2.2 + (L - 2 * t - 4.6) / 2",
+     "g",
+     0,
+     0
+    ]
+   ],
+   "_about": "the nave's seating: pews in two ranks on an aisle, from 2.2 m inside the west door up to 2.4 m short of the chancel arch"
+  },
+  "altar": {
+   "type": "zone",
+   "zone": "altar",
+   "w": "chB - 2 * t - 1",
+   "d": 3.2,
+   "h": "chH",
+   "at": [
+    [
+     "L / 2 + chL - t - 1.6",
+     "g",
+     0,
+     0
+    ]
+   ]
+  },
+  "door": {
+   "type": "marker",
+   "role": "door",
+   "at": [
+    [
+     "0 - L / 2 - S / 2 + t - S / 2 + t / 2",
+     "g",
+     "dz",
+     "1.5707963"
+    ]
+   ],
+   "data": {
+    "w": 1.6,
+    "h": "2.4 + 0.8 - g",
+    "spring": "2.4 - g",
+    "head": {
+     "profile": "semicircular"
+    }
+   }
+  }
+ },
+ "build": [
+  "nave",
+  "nave floor",
+  "chancel north",
+  "chancel south",
+  "chancel east",
+  "chancel floor",
+  "nave roof",
+  "chancel roof",
+  "tower",
+  "tower floor",
+  "tower stair",
+  "spire",
+  "cross",
+  "seating",
+  "altar",
+  "door"
+ ],
+ "walked": true
+}

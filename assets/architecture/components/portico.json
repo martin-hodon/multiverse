@@ -1,0 +1,116 @@
+{
+  "name": "Portico",
+  "_about": "A TEMPLE FRONT set against a building: `count` columns of an order across the front on their steps, the entablature, and the pediment roofing it back to the wall; side columns by name. The Pantheon's, the Karlskirche's, St Paul's (two, one over the other) are this.",
+  "params": {
+    "detail": 4,
+    "count": 6,
+    "spacing": 4.0,
+    "colR": 0.7,
+    "colH": 13.0,
+    "order": "corinthian",
+    "entH": 2.2,
+    "depth": 10.0,
+    "pitch": 20,
+    "steps": 4,
+    "stepH": 0.2,
+    "stepOut": 0.5,
+    "sideCount": 2,
+    "W": "(count - 1) * spacing + 4 * colR + 1.0",
+    "floor": "steps * stepH",
+    "top": "floor + colH + entH",
+    "_count": "columns across the front, `spacing` apart; the portico runs `depth` out from the wall it stands against (+z)",
+    "_sideCount": "columns down each side between the front row and the wall (0: none)",
+    "_order": "tuscan, doric, ionic or corinthian (the ORDERS table)"
+  },
+  "build": [
+    "steps",
+    "columns",
+    "pediment"
+  ],
+  "parts": {
+    "steps": {
+      "type": "crepidoma",
+      "width": "W",
+      "length": "depth",
+      "steps": "steps",
+      "stepH": "stepH",
+      "stepOut": "stepOut",
+      "at": [
+        [
+          0,
+          0,
+          "depth / 2",
+          0
+        ]
+      ],
+      "_about": "the steps it stands on"
+    },
+    "columns": {
+      "type": "colonnade",
+      "order": "order",
+      "count": "count",
+      "spacing": "spacing",
+      "columnR": "colR",
+      "height": "colH",
+      "taper": 0.86,
+      "entablature": {
+        "h": "entH",
+        "depth": "colR * 2.6"
+      },
+      "at": [
+        [
+          0,
+          "floor",
+          "depth - colR * 1.8",
+          0
+        ]
+      ],
+      "_about": "the front row and its entablature"
+    },
+    "side columns": {
+      "type": "colonnade",
+      "order": "order",
+      "count": "sideCount",
+      "spacing": "(depth - colR * 1.8) / (sideCount + 1)",
+      "columnR": "colR",
+      "height": "colH",
+      "taper": 0.86,
+      "entablature": {
+        "h": "entH",
+        "depth": "colR * 2.6"
+      },
+      "at": [
+        [
+          "0 - (count - 1) * spacing / 2",
+          "floor",
+          "(depth - colR * 1.8) / 2",
+          1.5707963
+        ],
+        [
+          "(count - 1) * spacing / 2",
+          "floor",
+          "(depth - colR * 1.8) / 2",
+          1.5707963
+        ]
+      ],
+      "_about": "the columns down each side, under the entablature's return (build it by name)"
+    },
+    "pediment": {
+      "type": "roof",
+      "form": "gable",
+      "width": "W",
+      "length": "depth",
+      "pitch": "pitch",
+      "overhang": 0.4,
+      "at": [
+        [
+          0,
+          "top",
+          "depth / 2",
+          0
+        ]
+      ],
+      "_about": "the pediment and the roof back to the wall"
+    }
+  }
+}

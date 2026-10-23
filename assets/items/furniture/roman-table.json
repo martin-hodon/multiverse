@@ -1,0 +1,80 @@
+{
+ "kind": "item",
+ "name": "Roman table",
+ "category": "furniture/table",
+ "era": "-100-400",
+ "region": "Rome",
+ "_about": "a Roman three-legged table: a round marble top on bronze legs curving like an animal's, ending in paws",
+ "params": {
+  "h": 0.7,
+  "r": [
+   0.34,
+   0.4
+  ]
+ },
+ "materials": {
+  "top": {
+   "pick": [
+    "marble",
+    "marble-green",
+    "marble-grey"
+   ]
+  },
+  "wood": "bronze"
+ },
+ "parts": [
+  {
+   "id": "top",
+   "type": "lathe",
+   "material": "top",
+   "profile": [
+    [
+     "r",
+     "h - 0.04"
+    ],
+    [
+     "r + 0.01",
+     "h - 0.02"
+    ],
+    [
+     "r",
+     "h"
+    ]
+   ],
+   "sides": 28
+  },
+  {
+   "id": "legs",
+   "use": "items/components/cabriole-leg",
+   "params": {
+    "h": "h - 0.04",
+    "r": 0.024,
+    "foot": "ball"
+   },
+   "around": {
+    "n": 3,
+    "r": "r * 0.55"
+   },
+   "at": [
+    0,
+    0,
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "ring",
+   "type": "ring",
+   "material": "wood",
+   "r": "r * 0.5",
+   "tube": 0.012,
+   "at": [
+    0,
+    0.2,
+    0
+   ]
+  }
+ ]
+}

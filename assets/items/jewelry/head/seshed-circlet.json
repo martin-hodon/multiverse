@@ -1,0 +1,131 @@
+{
+ "kind": "item",
+ "name": "Seshed circlet",
+ "category": "jewelry",
+ "era": "ancient",
+ "region": "Egypt",
+ "_about": "an Egyptian circlet (seshed): a gold fillet round the head set with rosettes of carnelian, with two streamers at the back",
+ "params": {
+  "scale": 1
+ },
+ "materials": {
+  "metal": "gold",
+  "b1": "carnelian"
+ },
+ "colourways": {
+  "carnelian": {
+   "metal": "gold",
+   "b1": "carnelian"
+  },
+  "turquoise": {
+   "metal": "gold",
+   "b1": "turquoise"
+  }
+ },
+ "parts": [
+  {
+   "id": "band",
+   "type": "band",
+   "fit": "head",
+   "level": [
+    0.062,
+    0.05
+   ],
+   "width": 0.008,
+   "thick": 0.0022,
+   "material": "metal"
+  },
+  {
+   "id": "rosette",
+   "type": "lathe",
+   "material": "metal",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.0075,
+     0
+    ],
+    [
+     0.0075,
+     0.0015
+    ],
+    [
+     0,
+     0.0025
+    ]
+   ],
+   "sides": 10,
+   "scale": "scale",
+   "on": {
+    "fit": "head",
+    "ring": {
+     "n": 9,
+     "from": -150,
+     "to": 150
+    },
+    "level": [
+     0.062,
+     0.05
+    ],
+    "lift": 0.003
+   },
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "rosette heart",
+   "type": "sphere",
+   "material": "b1",
+   "r": 0.0035,
+   "sides": 6,
+   "scale": "scale",
+   "on": {
+    "fit": "head",
+    "ring": {
+     "n": 9,
+     "from": -150,
+     "to": 150
+    },
+    "level": [
+     0.062,
+     0.05
+    ],
+    "lift": 0.0045
+   }
+  },
+  {
+   "id": "streamer",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.008,
+    0.07,
+    0.0015
+   ],
+   "scale": "scale",
+   "on": {
+    "fit": "head",
+    "th": [
+     168,
+     -168
+    ],
+    "level": 0.05,
+    "lift": 0.003
+   },
+   "at": [
+    0,
+    -0.035,
+    0
+   ]
+  }
+ ]
+}

@@ -1,0 +1,271 @@
+{
+ "kind": "item",
+ "name": "Roman merchantman",
+ "category": "ship",
+ "era": "-100-400",
+ "region": "the Mediterranean",
+ "_about": "the corbita of the grain fleets: a deep round hull, a broad square mainsail with a small artemon raked over the bow, a swan's neck over the stern, two steering oars, the master's cabin aft",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   22,
+   28
+  ],
+  "B": "L * 0.32",
+  "D": "B * 0.5",
+  "mastH": "L * 0.5"
+ },
+ "materials": {
+  "planks": "planks",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.55,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.1,
+     0.55
+    ],
+    [
+     0.35,
+     0.98
+    ],
+    [
+     0.6,
+     1
+    ],
+    [
+     0.85,
+     0.7
+    ],
+    [
+     1,
+     0.02
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.5"
+    ],
+    [
+     0.1,
+     0
+    ],
+    [
+     0.9,
+     0
+    ],
+    [
+     1,
+     "D * 0.3"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.35"
+    ],
+    [
+     0.12,
+     "D * 1.08"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.9,
+     "D * 1.05"
+    ],
+    [
+     1,
+     "D * 1.2"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.9",
+     "from": 0.05,
+     "to": 0.95
+    }
+   ],
+   "rail": 0.08,
+   "keelBeam": [
+    0.3,
+    0.35
+   ],
+   "tumblehome": 0.08
+  },
+  {
+   "id": "mast L * 0.5",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.2,
+    "top": "crowsnest",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.9 + mastH * 0.9",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.5",
+    "h": "mastH * 0.6",
+    "foot": 0.92,
+    "set": "set"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.9 + mastH * 0.9",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "artemon",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.4",
+    "r": 0.12
+   },
+   "at": [
+    "L * 0.9",
+    "D * 1.0",
+    0,
+    0,
+    0,
+    -40
+   ]
+  },
+  {
+   "id": "square sail L * 0.9 + mastH * 0.25 D * 1.0 + mastH * 0.3",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.18",
+    "h": "mastH * 0.25",
+    "foot": 0.92,
+    "set": "set"
+   },
+   "at": [
+    "L * 0.9 + mastH * 0.25",
+    "D * 1.0 + mastH * 0.3",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "swan",
+   "use": "items/components/figurehead",
+   "params": {
+    "style": "swan",
+    "s": "D * 0.45"
+   },
+   "at": [
+    0.3,
+    "D * 1.3",
+    0,
+    180,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "cabin",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.6",
+    "d": "L * 0.16",
+    "h": 2.0,
+    "windows": 2
+   },
+   "at": [
+    "L * 0.08",
+    "D * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "steering",
+   "use": "items/components/steering-oar",
+   "params": {
+    "l": "D * 1.6",
+    "bladeW": 0.5
+   },
+   "at": [
+    "L * 0.12",
+    "D * 1.15",
+    "B * 0.45",
+    0,
+    0,
+    10
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "stay L * 0.5-L * 0.96",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.9 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.96",
+    "D * 1.3",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.5-L * 0.05",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.9 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.05",
+    "D * 1.35",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ]
+}

@@ -1,0 +1,874 @@
+{
+  "name": "Zwinger, Dresden",
+  "_about": "THE ZWINGER, Dresden (1710-28), all components: two straight `gallery` wings either side of the Kronentor and one along the north side, a `curved-gallery` closing each end of the court, a `pavilion` at each corner and a larger one at the apex of each curve (the Wallpavillon and the Glockenspielpavillon), and the Kronentor itself -- a square gate tower under an onion on a square plan, with a golden crown of a lantern on top -- and the bridge over the moat to it. The court is about 112 x 92m between the pavilions' middles.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.6,
+    "steps": 2,
+    "stepOut": 0.5,
+    "plan": {
+      "rect": [
+        230,
+        113.0
+      ]
+    }
+  },
+  "build": [
+    "south galleries",
+    "north gallery",
+    "curved galleries north",
+    "curved galleries south",
+    "corner pavilions",
+    "wallpavillon",
+    "glockenspielpavillon",
+    "kronentor",
+    "kronentor crown",
+    "kronentor lantern",
+    "bridge",
+    "bridge steps",
+    "statue Hercules",
+    "pedestal terrace 0",
+    "statue terrace 0",
+    "pedestal terrace 1",
+    "statue terrace 1",
+    "pedestal terrace 2",
+    "statue terrace 2",
+    "pedestal terrace 3",
+    "statue terrace 3",
+    "pedestal terrace 4",
+    "statue terrace 4",
+    "pedestal terrace 5",
+    "statue terrace 5",
+    "pedestal terrace 6",
+    "statue terrace 6",
+    "pedestal terrace 7",
+    "statue terrace 7",
+    "pedestal terrace 8",
+    "statue terrace 8",
+    "pedestal terrace 9",
+    "statue terrace 9",
+    "pedestal terrace 10",
+    "statue terrace 10",
+    "pedestal terrace 11",
+    "statue terrace 11"
+  ],
+  "parts": {
+    "south galleries": {
+      "type": "component",
+      "use": "components/gallery",
+      "params": {
+        "L": 41.5,
+        "D": 9.0,
+        "H": 8.0,
+        "n": 10
+      },
+      "at": [
+        [
+          -27.25,
+          0,
+          46.0,
+          0
+        ],
+        [
+          27.25,
+          0,
+          46.0,
+          0
+        ]
+      ],
+      "_about": "the Langgalerie, each side of the crown gate"
+    },
+    "north gallery": {
+      "type": "component",
+      "use": "components/gallery",
+      "params": {
+        "L": 96.0,
+        "D": 9.0,
+        "H": 8.0,
+        "n": 23
+      },
+      "at": [
+        [
+          0,
+          0,
+          -46.0,
+          0
+        ]
+      ],
+      "_about": "the side toward the Elbe (closed by Semper's gallery in 1855; a gallery wing here)"
+    },
+    "curved galleries north": {
+      "type": "component",
+      "use": "components/curved-gallery",
+      "params": {
+        "R": 46.0,
+        "D": 9.0,
+        "H": 8.0,
+        "count": 64,
+        "from": -15,
+        "to": -3
+      },
+      "at": [
+        [
+          56.0,
+          0,
+          0,
+          1.5707963
+        ],
+        [
+          -56.0,
+          0,
+          0,
+          -1.5707963
+        ]
+      ],
+      "_about": "half of a Bogengalerie: the curves close each end of the court, a pavilion at the apex between the halves"
+    },
+    "curved galleries south": {
+      "type": "component",
+      "use": "components/curved-gallery",
+      "params": {
+        "R": 46.0,
+        "D": 9.0,
+        "H": 8.0,
+        "count": 64,
+        "from": 2,
+        "to": 14
+      },
+      "at": [
+        [
+          56.0,
+          0,
+          0,
+          1.5707963
+        ],
+        [
+          -56.0,
+          0,
+          0,
+          -1.5707963
+        ]
+      ],
+      "_about": "half of a Bogengalerie: the curves close each end of the court, a pavilion at the apex between the halves"
+    },
+    "corner pavilions": {
+      "type": "component",
+      "use": "components/pavilion",
+      "params": {
+        "W": 16.0,
+        "D": 14,
+        "H2": 9.5,
+        "n": 3,
+        "m": 3
+      },
+      "at": [
+        [
+          56.0,
+          0,
+          46.0,
+          0
+        ],
+        [
+          56.0,
+          0,
+          -46.0,
+          0
+        ],
+        [
+          -56.0,
+          0,
+          -46.0,
+          3.14159265
+        ],
+        [
+          -56.0,
+          0,
+          46.0,
+          3.14159265
+        ]
+      ],
+      "_about": "the corner pavilions, each turned so its stair stands on the court's side, away from the curve that runs into it"
+    },
+    "wallpavillon": {
+      "type": "component",
+      "use": "components/pavilion",
+      "params": {
+        "W": 18,
+        "D": 16,
+        "H2": 11,
+        "n": 3,
+        "m": 3
+      },
+      "at": [
+        [
+          102.0,
+          0,
+          0,
+          1.5707963
+        ]
+      ],
+      "_about": "the Wallpavillon at the apex of the west curve"
+    },
+    "glockenspielpavillon": {
+      "type": "component",
+      "use": "components/pavilion",
+      "params": {
+        "W": 18,
+        "D": 16,
+        "H2": 11,
+        "n": 3,
+        "m": 3
+      },
+      "at": [
+        [
+          -102.0,
+          0,
+          0,
+          -1.5707963
+        ]
+      ],
+      "_about": "the Glockenspielpavillon at the apex of the east curve"
+    },
+    "kronentor": {
+      "type": "enclosure",
+      "glass": false,
+      "plan": {
+        "rect": [
+          13.0,
+          13.0
+        ]
+      },
+      "thickness": 1.2,
+      "height": 17,
+      "tiers": [
+        {
+          "h": 9,
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.8,
+              "sill": 3.0,
+              "springing": 6.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 3.0,
+              "sill": 1.0,
+              "springing": 5.2,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 9,
+            "openings": [
+              {
+                "at": 0,
+                "width": 5.0,
+                "sill": 0,
+                "springing": 5.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.0,
+                "sill": 1.0,
+                "springing": 5.2,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ],
+        "2": [
+          {
+            "h": 9,
+            "openings": [
+              {
+                "at": 0,
+                "width": 5.0,
+                "sill": 0,
+                "springing": 5.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.0,
+                "sill": 1.0,
+                "springing": 5.2,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          46.0,
+          0
+        ]
+      ],
+      "_about": "the crown gate: a passage through it on the axis, arched windows above"
+    },
+    "kronentor crown": {
+      "type": "dome",
+      "sides": 4,
+      "radius": 9.190999999999999,
+      "thickness": 0,
+      "head": {
+        "profile": "onion",
+        "bulge": 1.08,
+        "neck": 0.8
+      },
+      "at": [
+        [
+          0,
+          17,
+          46.0,
+          0
+        ]
+      ],
+      "_about": "its roof: an onion on a SQUARE plan -- a dome of four sides"
+    },
+    "kronentor lantern": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 4,
+        "R": 1.6,
+        "H": 2.0,
+        "t": 0.3,
+        "drumR": 1.2,
+        "drumH": 1.0,
+        "kok": 0.3,
+        "capR": 1.5,
+        "bulge": 1.3,
+        "neck": 0.8,
+        "finial": 1.2
+      },
+      "at": [
+        [
+          0,
+          31.8066,
+          46.0,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "_about": "the crown on the crown: a small square lantern and onion"
+    },
+    "bridge": {
+      "type": "component",
+      "use": "components/bridge",
+      "params": {
+        "L": 18.0,
+        "W": 8,
+        "depth": 5.0,
+        "n": 3
+      },
+      "at": [
+        [
+          0,
+          0,
+          52.5,
+          0
+        ]
+      ],
+      "_about": "the bridge over the moat, from the crown gate"
+    },
+    "bridge steps": {
+      "type": "flight",
+      "width": 6,
+      "run": 0.32,
+      "rise": 0.15,
+      "top": 0.6,
+      "base": -0.6,
+      "landing": 0,
+      "at": [
+        [
+          3,
+          0,
+          71.78,
+          1.5707963
+        ]
+      ],
+      "_about": "down from the deck to the ground beyond the moat"
+    },
+    "statue Hercules": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          102.0,
+          26.911,
+          0,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.8,
+        "seed": 5,
+        "face": 0.0
+      }
+    },
+    "pedestal terrace 0": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          -9.958,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 0": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -9.958,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 20,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 1": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          -16.875,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 1": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -16.875,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 21,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 2": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          -23.792,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 2": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -23.792,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 22,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 3": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          -30.708,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 3": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -30.708,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 23,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 4": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          -37.625,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 4": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -37.625,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 24,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 5": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          -44.542,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 5": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -44.542,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 25,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 6": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          9.958,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 6": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          9.958,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 26,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 7": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          16.875,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 7": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          16.875,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 27,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 8": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          23.792,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 8": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          23.792,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 28,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 9": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          30.708,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 9": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          30.708,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 29,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 10": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          37.625,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 10": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          37.625,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 30,
+        "face": -1.5707963
+      }
+    },
+    "pedestal terrace 11": {
+      "type": "box",
+      "width": 0.6,
+      "length": 0.6,
+      "height": 0.55,
+      "at": [
+        [
+          44.542,
+          8.7,
+          50.05,
+          0
+        ]
+      ],
+      "_about": "a figure's pedestal on the gallery terrace"
+    },
+    "statue terrace 11": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          44.542,
+          9.25,
+          50.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.1,
+        "seed": 31,
+        "face": -1.5707963
+      }
+    }
+  }
+}

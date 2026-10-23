@@ -1,0 +1,20 @@
+{
+  "name": "Mainz Cathedral",
+  "building": "architecture/mainz",
+  "_about": "Mainz Cathedral: red sandstone inside and out, the roofs in green copper, the vaults limewashed, the finials gilt; stained glass; a floor chequered in rose and red.",
+  "stone": {
+    "color": "#a4513b",
+    "accent": "#8c4432",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:glass", "pattern": "painted/stained glass", "palette": "stained", "_about": "the windows' stained glass"},
+    {"parts": ["finial", "west tower finial", "east tower finial"], "pattern": "roofs/gold leaf"},
+    {"parts": ["kind:roof", "kind:dome"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
+    {"parts": ["kind:vault", "kind:groin"], "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"parts": "kind:ribs", "pattern": "stone/ashlar fine", "palette": "red-sandstone"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-rose"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "red-sandstone"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "red-sandstone"}
+  ]
+}

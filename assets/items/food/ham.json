@@ -1,0 +1,91 @@
+{
+ "kind": "item",
+ "name": "Ham",
+ "category": "food/meat",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "a cured ham on its bone, hung by a cord",
+ "params": {
+  "s": [
+   0.9,
+   1.1
+  ]
+ },
+ "materials": {
+  "skin": "ham",
+  "bone": "bone"
+ },
+ "parts": [
+  {
+   "id": "ham",
+   "type": "lathe",
+   "material": "skin",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     "s * 0.06",
+     "s * 0.02"
+    ],
+    [
+     "s * 0.1",
+     "s * 0.1"
+    ],
+    [
+     "s * 0.08",
+     "s * 0.2"
+    ],
+    [
+     "s * 0.03",
+     "s * 0.26"
+    ],
+    [
+     0,
+     "s * 0.27"
+    ]
+   ],
+   "sides": 9,
+   "stretch": [
+    1,
+    1,
+    0.75
+   ]
+  },
+  {
+   "id": "bone",
+   "type": "rod",
+   "material": "bone",
+   "r": "s * 0.012",
+   "sides": 5,
+   "from": [
+    0,
+    "s * 0.26",
+    0
+   ],
+   "to": [
+    0,
+    "s * 0.32",
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.3",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

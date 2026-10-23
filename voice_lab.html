@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bannerfield voice lab — every parameter of the speech engine</title>
+<style>
+  :root { --bg: #f4f1ea; --panel: #fbf9f4; --line: #cbc6b8; --ink: #222; --dim: #6a675f; --accent: #8a3b12; --head: #e9e4d8; }
+  * { box-sizing: border-box; }
+  body { font: 13px system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--ink); }
+  header { position: sticky; top: 0; z-index: 5; background: var(--head); border-bottom: 1px solid var(--line); padding: 8px 14px; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+  header b { font-size: 15px; margin-right: 6px; }
+  button, select, input, textarea { font: inherit; }
+  button { padding: 3px 10px; border: 1px solid #998; border-radius: 4px; background: #fff; cursor: pointer; }
+  button:hover { background: #eee8dc; } button.go { background: var(--accent); color: #fff; border-color: var(--accent); }
+  main { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 14px; padding: 12px 14px 60px; }
+  nav { position: sticky; top: 92px; align-self: start; display: flex; flex-direction: column; gap: 2px; }
+  nav a { color: var(--ink); text-decoration: none; padding: 3px 6px; border-radius: 3px; } nav a:hover { background: var(--head); }
+  details { background: var(--panel); border: 1px solid var(--line); border-radius: 5px; margin-bottom: 10px; }
+  details > summary { cursor: pointer; padding: 7px 10px; font-weight: 600; background: var(--head); border-radius: 5px; }
+  details[open] > summary { border-bottom: 1px solid var(--line); border-radius: 5px 5px 0 0; }
+  .body { padding: 8px 10px 10px; }
+  .doc { color: var(--dim); margin: 2px 0 8px; max-width: 95ch; }
+  .prm { display: grid; grid-template-columns: 150px 210px 84px 46px minmax(0, 1fr); gap: 3px 10px; align-items: center; padding: 2px 0; border-bottom: 1px dotted #ddd8ca; }
+  .prm .what { color: var(--dim); } .prm input[type=range] { width: 100%; } .prm input[type=number] { width: 84px; }
+  .prm.changed label:first-child { color: var(--accent); font-weight: 600; }
+  fieldset { border: 1px solid var(--line); border-radius: 4px; margin: 6px 0; padding: 4px 8px 8px; } legend { font-weight: 600; padding: 0 4px; }
+  .kv { display: inline-flex; align-items: center; gap: 4px; margin: 2px 12px 2px 0; } .kv input { width: 76px; } .kv.changed span { color: var(--accent); font-weight: 600; }
+  .scroll { overflow-x: auto; } table { border-collapse: collapse; } th, td { border: 1px solid var(--line); padding: 1px 3px; } th { background: var(--head); font-weight: 600; position: sticky; top: 0; }
+  td input { border: 0; background: transparent; width: 64px; padding: 2px; } td input.key { width: 58px; font-weight: 600; } td input.wide { width: 170px; } td input:focus { background: #fff; outline: 1px solid var(--accent); }
+  td.x button { padding: 0 5px; border: 0; background: transparent; color: #a33; }
+  textarea { width: 100%; min-height: 220px; font: 12px ui-monospace, monospace; }
+  #status { color: var(--dim); margin-left: auto; } .sw { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 2px 10px; padding: 2px 0; }
+  @media (max-width: 760px) { main { grid-template-columns: minmax(0, 1fr); } nav { position: static; flex-direction: row; flex-wrap: wrap; } .prm { grid-template-columns: 120px minmax(0, 1fr) 84px 46px; } .prm .what { grid-column: 1 / -1; } }
+</style>
+</head>
+<body>
+<header>
+  <b>Voice lab</b>
+  profile <input id="pname" size="16" value="My voice">
+  start from <select id="preset"></select>
+  <input id="sent" size="44" value="The old dog is very bad, but I don't lead the horse to water.">
+  <select id="lang"></select><select id="mood"></select>
+  <button class="go" id="say">Say it</button><button id="sayRef" title="the chosen preset, with the engine as shipped">Reference</button>
+  <label title="read the sentence as WRITTEN TEXT, pronounced from the dictionary in lang/ (lexicon.js): function words, then the dictionary, then the spelling rules. Off: the engine's own few words by key (hello, water ...), anything else as IPA."><input type="checkbox" id="dict" checked> written text (dictionary)</label>
+  <label><input type="checkbox" id="auto"> speak on change</label>
+  <span style="flex-basis:100%"></span>
+  <button id="expVoice">Export voice</button><button id="expDiff" title="the voice, plus only the engine settings and table entries you changed">Export changes</button><button id="expAll">Export everything</button>
+  <button id="imp">Import…</button><input type="file" id="file" accept=".json,application/json" hidden>
+  <button id="save">Save in browser</button><button id="reset">Reset engine</button>
+  <span id="status"></span>
+  <div id="ipaOut" style="flex-basis:100%;font-family:'DejaVu Sans','Noto Sans',sans-serif"></div>
+</header>
+<main>
+  <nav id="nav"></nav>
+  <div id="panels"></div>
+</main>
+<script type="module">
+import * as sp from "./speech.js";
+import { LEXICON_LANGS, SAMPLES, writtenToIPA, sayResult, reportHTML } from "./lexicon.js";
+const $ = (id) => document.getElementById(id), el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); for (const k of kids) e.append(k); return e; };
+const STORE = "bannerfield-voice-lab", SHIPPED = sp.getShippedConfig();
+let cfg = sp.getConfig(), voice = {}, base = {}, ctx = null, live = null, timer = 0;
+const status = (t) => { $("status").textContent = t; };
+
+// ---- the engine follows the editor ---------------------------------------------------------------------
+function push(speak = true) {
+  try { sp.setConfig(cfg, { replace: true }); status("applied"); } catch (e) { status("not applied: " + e.message); return; }
+  if (speak && $("auto").checked) { clearTimeout(timer); timer = setTimeout(say, 350); }
+}
+function speaker(v) {
+  if (!ctx) ctx = new AudioContext();
+  if (ctx.state === "suspended") ctx.resume();
+  live?.stop(); live = sp.createSpeaker(ctx, { voice: v });
+  return live;
+}
+// the sentence is WRITTEN TEXT pronounced from the dictionary (lexicon.js) when the box is ticked and the language has
+// one; otherwise the engine's own words by key, anything else as IPA. The lookup is awaited BEFORE the engine is touched,
+// so that a reference render still happens in one synchronous piece.
+async function utter(v, shipped) {
+  const lang = $("lang").value, mood = $("mood").value, text = $("sent").value;
+  const r = $("dict").checked && LEXICON_LANGS.includes(lang) ? await writtenToIPA(text, lang) : null;
+  $("ipaOut").innerHTML = r ? reportHTML(r) : "";
+  if (shipped) sp.resetConfig();
+  const s = speaker(v); if (r) sayResult(s, r, lang, mood); else s.sayText(text, lang, undefined, mood);
+  if (shipped) sp.setConfig(cfg, { replace: true });
+}
+const say = () => utter({ ...voice }, false);
+const sayRef = () => utter($("preset").value, true);   // the preset as shipped: the engine is put back for one render
+
+// ---- small pieces ----------------------------------------------------------------------------------------
+const stepFor = (v) => v === 0 || !Number.isFinite(v) ? .01 : Math.pow(10, Math.floor(Math.log10(Math.abs(v))) - 1);
+const at = (obj, path) => path.reduce((o, k) => o?.[k], obj);
+const parseCell = (txt) => { const t = txt.trim(); if (t === "") return undefined; try { return JSON.parse(t); } catch { return t; } };
+const showCell = (v) => v === undefined ? "" : typeof v === "string" ? v : JSON.stringify(v);
+function panel(id, title, doc) {
+  const body = el("div", { className: "body" }), d = el("details", { id }, el("summary", { textContent: title }), body);
+  if (doc) body.append(el("div", { className: "doc", textContent: doc }));
+  $("panels").append(d); $("nav").append(el("a", { href: "#" + id, textContent: title, onclick: () => { d.open = true; } }));
+  return body;
+}
+
+// ---- the voice: one row per parameter, from the engine's own schema -----------------------------------------
+function voicePanel() {
+  const body = panel("p-voice", "Voice", "One speaker. Everything here is laid over the reference voice (Voice defaults, further down). Parameters marked auto are derived by the engine unless you pin them.");
+  $("p-voice").open = !new URLSearchParams(location.search).get("open");
+  const rows = el("div"); body.append(rows);
+  for (const [k, [label, min, max, step, what, auto]] of Object.entries(sp.VOICE_SCHEMA)) {
+    const range = el("input", { type: "range", min, max, step }), num = el("input", { type: "number", min, max, step });
+    const pin = el("input", { type: "checkbox", title: "pin this value (otherwise the engine derives it)" });
+    const row = el("div", { className: "prm" }, el("label", { textContent: label, title: k }), range, num,
+      auto ? el("label", { title: "auto unless ticked" }, pin, " pin") : el("span"), el("span", { className: "what", textContent: what }));
+    const show = () => {
+      const has = voice[k] !== undefined, v = has ? voice[k] : (range.value || (min + max) / 2);
+      range.value = v; num.value = has ? voice[k] : ""; num.placeholder = auto ? "auto" : ""; pin.checked = has; range.disabled = !!auto && !has;
+      row.classList.toggle("changed", has && voice[k] !== base[k]);
+    };
+    const set = (v) => { voice[k] = +v; show(); push(); };
+    range.oninput = () => set(range.value); num.onchange = () => num.value === "" && auto ? (delete voice[k], show(), push()) : set(num.value);
+    pin.onchange = () => { if (pin.checked) voice[k] = +(range.value); else delete voice[k]; show(); push(); };
+    row.show = show; rows.append(row);
+  }
+  body.refresh = () => { for (const r of rows.children) r.show(); };
+  return body;
+}
+
+// ---- switches -------------------------------------------------------------------------------------------------
+function switchPanel() {
+  const body = panel("p-switches", "Switches", "Each piece of the model can be turned off to hear what it is doing.");
+  const host = el("div"); body.append(host);
+  body.refresh = () => {
+    host.replaceChildren();
+    for (const k of Object.keys(cfg.switches)) {
+      const box = el("input", { type: "checkbox", checked: cfg.switches[k], onchange: () => { cfg.switches[k] = box.checked; push(); } });
+      host.append(el("div", { className: "sw" }, el("label", {}, box, " " + k), el("span", { className: "doc", style: "margin:0", textContent: sp.SWITCH_DOC[k] ?? "" })));
+    }
+  };
+  return body;
+}
+
+// ---- the model: a recursive form over whatever structure it has ------------------------------------------------
+function modelPanel() {
+  const body = panel("p-model", "Model constants", "The engine's own numbers — not a voice's. Every one of these used to be a literal in the code.");
+  const host = el("div"); body.append(host);
+  const field = (path, key, v) => {
+    const shipped = at(SHIPPED.model, path.concat(key)), inp = el("input", { type: "number", step: stepFor(v), value: v });
+    const box = el("label", { className: "kv" }, el("span", { textContent: key }), inp);
+    inp.onchange = () => { const n = +inp.value; if (!Number.isFinite(n)) return; at(cfg.model, path)[key] = n; box.classList.toggle("changed", n !== shipped); push(); };
+    box.classList.toggle("changed", v !== shipped);
+    return box;
+  };
+  const group = (path, obj, into) => {
+    for (const [k, v] of Object.entries(obj)) {
+      if (k === "pairs" && path.length === 0) continue;
+      if (typeof v === "number") into.append(field(path, k, v));
+      else if (Array.isArray(v)) {
+        const fs = el("fieldset", {}, el("legend", { textContent: k }));
+        v.forEach((item, i) => Array.isArray(item) ? (fs.append(el("div", {}, el("span", { textContent: `F${i + 1} `, style: "color:var(--dim)" }))), group(path.concat(k, i), item, fs.lastChild)) : fs.append(field(path.concat(k), i, item)));
+        into.append(fs);
+      } else if (v && typeof v === "object") {
+        const fs = el("fieldset", {}, el("legend", { textContent: path.concat(k).join(".") })), doc = sp.MODEL_DOC[path.concat(k).join(".")];
+        if (doc) fs.append(el("div", { className: "doc", textContent: doc }));
+        group(path.concat(k), v, fs); into.append(fs);
+      }
+    }
+  };
+  body.refresh = () => { host.replaceChildren(); group([], cfg.model, host); };
+  return body;
+}
+
+// ---- a table of entries: rows are keys, columns the union of their fields --------------------------------------------
+function tableEditor(host, getObj, { keyName = "key", wide = [] } = {}) {
+  const draw = () => {
+    const obj = getObj(), keys = Object.keys(obj), scalar = keys.length && keys.every((k) => obj[k] === null || typeof obj[k] !== "object");
+    const count = {}; if (!scalar) for (const k of keys) for (const c of Object.keys(obj[k] ?? {})) count[c] = (count[c] ?? 0) + 1;
+    const cols = scalar ? ["value"] : Object.keys(count).sort((a, b) => count[b] - count[a]);
+    const tb = el("tbody"), table = el("table", {}, el("thead", {}, el("tr", {}, el("th", { textContent: keyName }), ...cols.map((c) => el("th", { textContent: c })), el("th"))), tb);
+    for (const k of keys) {
+      const keyIn = el("input", { className: "key", value: k, onchange: () => { const nk = keyIn.value.trim(); if (!nk || nk in obj) { keyIn.value = k; return; } const o = getObj(), copy = {}; for (const q of Object.keys(o)) copy[q === k ? nk : q] = o[q]; for (const q of Object.keys(o)) delete o[q]; Object.assign(o, copy); push(); draw(); } });
+      const tr = el("tr", {}, el("td", {}, keyIn));
+      for (const c of cols) {
+        const cur = scalar ? obj[k] : obj[k]?.[c], inp = el("input", { value: showCell(cur), className: wide.includes(c) || (typeof cur === "object" && cur) || (typeof cur === "string" && cur.length > 9) ? "wide" : "" });
+        inp.onchange = () => { const v = parseCell(inp.value); if (scalar) obj[k] = v ?? ""; else if (v === undefined) delete obj[k][c]; else obj[k][c] = v; push(); };
+        tr.append(el("td", {}, inp));
+      }
+      tr.append(el("td", { className: "x" }, el("button", { textContent: "✕", title: "remove", onclick: () => { delete getObj()[k]; push(); draw(); } })));
+      tb.append(tr);
+    }
+    const add = el("button", { textContent: "+ add", onclick: () => { const nk = prompt(`new ${keyName} (optionally "new=copyOf")`); if (!nk) return; const [n, from] = nk.split("=").map((t) => t.trim()); const o = getObj(); if (n in o) return; o[n] = scalar ? "" : JSON.parse(JSON.stringify(o[from] ?? {})); push(); draw(); } });
+    host.replaceChildren(el("div", { className: "scroll" }, table), add);
+  };
+  draw(); return draw;
+}
+function tablePanel(id, title, doc, getObj, opts) { const body = panel(id, title, doc), host = el("div"); body.append(host); body.refresh = () => tableEditor(host, getObj, opts); return body; }
+// a map of maps (one table per language, say)
+function nestedPanel(id, title, doc, getObj, opts) {
+  const body = panel(id, title, doc), host = el("div"); body.append(host);
+  body.refresh = () => {
+    host.replaceChildren();
+    for (const k of Object.keys(getObj())) { const sub = el("div"), fs = el("fieldset", {}, el("legend", { textContent: k }), sub); host.append(fs); tableEditor(sub, () => getObj()[k], opts); }
+    host.append(el("button", { textContent: "+ add group", onclick: () => { const k = prompt("name"); if (k && !(k in getObj())) { getObj()[k] = {}; push(); body.refresh(); } } }));
+  };
+  return body;
+}
+function languagePanel() {
+  const body = panel("p-langs", "Languages: prosody and lexicon", "Per language: the pace and melody it is spoken with, and its words in IPA. A word not in the lexicon is read as IPA."), host = el("div"); body.append(host);
+  body.refresh = () => {
+    host.replaceChildren();
+    for (const [code, L] of Object.entries(cfg.languages)) {
+      const pros = el("div"), words = el("div"), fs = el("fieldset", {}, el("legend", { textContent: `${code} — ${L.name ?? ""}` }), el("div", { className: "doc", textContent: "prosody" }), pros, el("div", { className: "doc", textContent: "words" }), words);
+      L.prosody ??= {}; tableEditor(pros, () => ({ prosody: L.prosody }), { keyName: "" }); tableEditor(words, () => L.words ?? (L.words = {}), { keyName: "word", wide: ["value"] });
+      host.append(fs);
+    }
+  };
+  return body;
+}
+function rawPanel() {
+  const body = panel("p-raw", "Raw JSON", "The whole configuration and the voice, as the engine sees them. Edit and apply — this is also what Export everything writes."), ta = el("textarea", { spellcheck: false });
+  body.append(ta, el("button", { textContent: "Apply this JSON", onclick: () => { try { load(JSON.parse(ta.value)); status("applied raw JSON"); } catch (e) { status("not applied: " + e.message); } } }));
+  body.refresh = () => { ta.value = JSON.stringify(everything(), null, 1); };
+  $("p-raw").addEventListener("toggle", () => $("p-raw").open && body.refresh());
+  return body;
+}
+
+// ---- profiles: out and in ---------------------------------------------------------------------------------------------
+const everything = () => ({ ...cfg, name: $("pname").value, voice: { ...voice } });
+function diff(a, b) {                                 // what in b is not as in a
+  if (JSON.stringify(a) === JSON.stringify(b)) return undefined;
+  if (!a || !b || typeof a !== "object" || typeof b !== "object" || Array.isArray(a) || Array.isArray(b)) return b;
+  const out = {}; for (const k of Object.keys(b)) { const d = diff(a[k], b[k]); if (d !== undefined) out[k] = d; }
+  return Object.keys(out).length ? out : undefined;
+}
+function download(name, obj) {
+  const a = el("a", { href: URL.createObjectURL(new Blob([JSON.stringify(obj, null, 1)], { type: "application/json" })), download: name });
+  document.body.append(a); a.click(); a.remove(); status("wrote " + name);
+}
+const fileName = () => ($("pname").value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-") || "voice") + ".voice.json";
+function load(json) {                                  // a profile, whole or partial, into the editor AND the engine
+  if (json.format && json.format !== sp.PROFILE_FORMAT) throw new Error(`"${json.format}" is not ${sp.PROFILE_FORMAT}`);
+  sp.setConfig(json, { replace: false }); cfg = sp.getConfig();
+  if (json.voice) { voice = { ...json.voice }; base = { ...sp.CONFIG.voiceDefaults }; }
+  if (json.name) $("pname").value = json.name;
+  refresh();
+}
+function fromPreset(key) { base = { ...cfg.voiceDefaults, ...(cfg.voices[key]?.set ?? {}) }; voice = { ...base }; panels[0].refresh(); }
+let panels = [];
+const refresh = () => { for (const p of panels) p.refresh(); $("preset").replaceChildren(...Object.entries(cfg.voices).map(([k, v]) => el("option", { value: k, textContent: v.name ?? k }))); };
+
+panels = [
+  voicePanel(), switchPanel(), modelPanel(),
+  tablePanel("p-pairs", "Pairs (diphone overrides)", sp.MODEL_DOC.pairs + ' Example: key "k>i", F2 2600, transMs 70.', () => cfg.model.pairs, { keyName: "a>b" }),
+  tablePanel("p-phonemes", "Phonemes", "Every sound: vowels carry F1–F3 and a duration (ms, citation form); consonants a place (for the loci), voicing, closure and VOT for stops, and `fric` — up to three noise bands [centre Hz, bandwidth Hz, gain]; nasals `anti` (antiformant Hz). Any sound may add `f4`/`f5` (factors on the voice's F4/F5), `bw` ([B1,B2,B3] factors on the bandwidth rule) and `zero` ([Hz, bandwidth]: a lateral's antiformant, or the zero below a fricative's hiss).", () => cfg.phonemes, { keyName: "symbol", wide: ["fric"] }),
+  tablePanel("p-places", "Places of articulation (locus equations)", "What a consonant does to the vowel next to it: F2 at the boundary = k × F2(vowel) + c, F3 shifted by f3, and the burst's noise band [centre, bandwidth, gain]. This table is the engine's coarticulation model.", () => cfg.places, { keyName: "place", wide: ["burst"] }),
+  nestedPanel("p-over", "Language overrides of phonemes", "The same symbol is not the same sound everywhere: a language may change any field of a phoneme.", () => cfg.languageOverrides, { keyName: "symbol" }),
+  tablePanel("p-ipa", "IPA → engine symbols", "Longest match first. A value may be several symbols (a diphthong) or end in _j (palatalised).", () => cfg.ipa, { keyName: "IPA", wide: ["value"] }),
+  nestedPanel("p-ipalang", "IPA, per language", "Where a language reads an IPA letter differently.", () => cfg.ipaByLanguage, { keyName: "IPA" }),
+  languagePanel(),
+  tablePanel("p-moods", "Moods", "Multipliers and offsets laid over the voice for one line.", () => cfg.moods, { keyName: "mood" }),
+  tablePanel("p-tones", "Lexical tones", "Chao levels 1–5 at the start, middle and end of the syllable, and a duration factor.", () => cfg.tones, { keyName: "tone", wide: ["c", "final"] }),
+  tablePanel("p-defaults", "Voice defaults (the reference voice)", "What every voice starts from.", () => ({ reference: cfg.voiceDefaults }), { keyName: "" }),
+  tablePanel("p-voices", "Voice presets", "`set` is laid over the defaults. Importing a profile with a `voice` adds one here.", () => cfg.voices, { keyName: "key", wide: ["name", "set"] }),
+  rawPanel(),
+];
+for (const l of Object.keys(cfg.languages)) $("lang").append(el("option", { value: l, textContent: cfg.languages[l].name ?? l }));
+for (const m of Object.keys(cfg.moods)) $("mood").append(el("option", { value: m, textContent: m }));
+refresh(); fromPreset("woman"); $("preset").value = "woman";
+try { const saved = JSON.parse(localStorage.getItem(STORE) ?? "null"); if (saved) { load(saved); status("restored from this browser"); } } catch { /* a private window, or nothing saved */ }
+
+$("preset").onchange = () => { fromPreset($("preset").value); push(); };
+$("say").onclick = say; $("sayRef").onclick = sayRef;
+// a sample sentence follows the language (and the dictionary box) for as long as the box still holds a sample
+const KEYED = "hello, water and meat please.", isSample = (t) => t === KEYED || Object.values(SAMPLES).includes(t);
+const sample = () => { if (isSample($("sent").value)) $("sent").value = $("dict").checked && SAMPLES[$("lang").value] || KEYED; };
+$("lang").onchange = sample; $("dict").onchange = sample;
+$("expVoice").onclick = () => download(fileName(), { format: sp.PROFILE_FORMAT, name: $("pname").value, voice: { ...voice } });
+$("expDiff").onclick = () => download(fileName(), { format: sp.PROFILE_FORMAT, name: $("pname").value, voice: { ...voice }, ...(diff(SHIPPED, cfg) ?? {}) });
+$("expAll").onclick = () => download(fileName().replace(".voice.", ".full."), everything());
+$("imp").onclick = () => $("file").click();
+$("file").onchange = async () => { const f = $("file").files[0]; if (!f) return; try { load(JSON.parse(await f.text())); status("imported " + f.name); } catch (e) { status("not imported: " + e.message); } $("file").value = ""; };
+$("save").onclick = () => { try { localStorage.setItem(STORE, JSON.stringify({ ...(diff(SHIPPED, cfg) ?? {}), format: sp.PROFILE_FORMAT, name: $("pname").value, voice: { ...voice } })); status("saved in this browser"); } catch (e) { status("could not save: " + e.message); } };
+$("reset").onclick = () => { if (!confirm("Put every table and constant back as shipped? (the voice is kept)")) return; sp.resetConfig(); cfg = sp.getConfig(); try { localStorage.removeItem(STORE); } catch {} refresh(); status("engine reset"); };
+// ?open=p-model,p-phonemes opens panels from the link (the ids are the nav targets)
+for (const id of (new URLSearchParams(location.search).get("open") ?? "").split(",").filter(Boolean)) { const d = $(id); if (d) { d.open = true; } }
+if (location.hash && $(location.hash.slice(1))) $(location.hash.slice(1)).open = true;
+window.__lab = { sp, get cfg() { return cfg; }, get voice() { return voice; }, load, diff, everything };
+
+// ?selftest=1 -- the editor, exercised without a person: build it, change things through it, write a profile, reset, read it back
+if (new URLSearchParams(location.search).get("selftest") === "1") {
+  const post = (t) => fetch("/log", { method: "POST", body: String(t).slice(0, 3000) }).catch(() => {});
+  try {
+    const counts = { panels: panels.length, inputs: document.querySelectorAll("#panels input").length, voiceRows: document.querySelectorAll(".prm").length, tables: document.querySelectorAll("#panels table").length };
+    const ra = [...document.querySelectorAll(".prm")].find((r) => r.firstChild.title === "ra"); ra.querySelector("input[type=checkbox]").click(); const n = ra.querySelector("input[type=number]"); n.value = .004; n.onchange();
+    const mk = [...document.querySelectorAll("#p-model .kv")].find((k) => k.textContent === "beforeVoiced").querySelector("input"); mk.value = 1.4; mk.onchange();
+    cfg.model.pairs["k>i"] = { F2: 2600, transMs: 70 }; cfg.phonemes.i.F2 = 2300; sp.setConfig(cfg, { replace: true });
+    const out = { format: sp.PROFILE_FORMAT, name: "Self test", voice: { ...voice }, ...(diff(SHIPPED, cfg) ?? {}) }, size = JSON.stringify(out).length;
+    const wr = await writtenToIPA(SAMPLES.de, "de"); post(`SELFTEST dictionary: ${wr.ipa}  guessed ${wr.guessed.join(" ") || "-"}  renders ${sp.renderIPA(wr.ipa, "de", { ...voice }).length} samples`);
+    const before = sp.renderText("ki bid", "en", { ...voice }).length;
+    sp.resetConfig(); const shippedLen = sp.renderText("ki bid", "en", "woman").length;
+    load(out); const after = sp.renderText("ki bid", "en", { ...voice }).length;
+    post(`SELFTEST ${JSON.stringify(counts)}  profile ${size} bytes: ${JSON.stringify(out).slice(0, 330)}`);
+    post(`SELFTEST voice.ra ${voice.ra}  model.durations.beforeVoiced ${sp.CONFIG.model.durations.beforeVoiced}  pair ${JSON.stringify(sp.CONFIG.model.pairs["k>i"])}  i.F2 ${sp.CONFIG.phonemes.i.F2}  render ${before} -> reset ${shippedLen} -> reimported ${after}`);
+    post("LAB DONE");
+  } catch (e) { post("ERR " + (e.stack || e)); }
+}
+</script>
+</body>
+</html>

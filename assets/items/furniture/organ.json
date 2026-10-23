@@ -1,0 +1,479 @@
+{
+ "kind": "item",
+ "name": "Pipe organ",
+ "category": "furniture/other",
+ "era": "1400-1900",
+ "region": "Europe",
+ "_about": "a church organ: a wooden case on a plinth, its front a facade of tin pipes in three towers and two flats over the impost, a cornice over them, the console (keyboards and bench) built into the front -- W wide, H tall, facing -x into the nave (the pipes look at the congregation); scaled from a village positive (W 2, H 3.5) to a cathedral's west-end organ (W 8, H 12)",
+ "params": {
+  "W": 3.0,
+  "H": 5.0,
+  "D": 1.2,
+  "impost": "H * 0.42",
+  "cornice": "H * 0.95",
+  "pipeR": "W * 0.012",
+  "foot": "(cornice - impost) * 0.12"
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "walnut",
+    "oak-grey"
+   ]
+  },
+  "pipes": "pewter",
+  "trim": "gilt",
+  "keys": "ivory",
+  "sharps": "ebony"
+ },
+ "parts": [
+  {
+   "id": "plinth",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "D",
+    "impost",
+    "W"
+   ],
+   "at": [
+    0,
+    "impost / 2",
+    0
+   ]
+  },
+  {
+   "id": "impost",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    "D + 0.08",
+    0.08,
+    "W + 0.08"
+   ],
+   "at": [
+    0,
+    "impost + 0.04",
+    0
+   ]
+  },
+  {
+   "id": "upper case",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "D * 0.9",
+    "cornice - impost - 0.08",
+    "W"
+   ],
+   "at": [
+    "D * 0.05",
+    "(cornice + impost + 0.08) / 2",
+    0
+   ]
+  },
+  {
+   "id": "cornice",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    "D + 0.12",
+    0.1,
+    "W + 0.16"
+   ],
+   "at": [
+    0,
+    "cornice + 0.05",
+    0
+   ]
+  },
+  {
+   "id": "top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "D * 0.8",
+    "H - cornice - 0.1",
+    "W * 0.9"
+   ],
+   "at": [
+    "D * 0.1",
+    "(H + cornice + 0.1) / 2",
+    0
+   ]
+  },
+  {
+   "id": "centre tower",
+   "type": "rod",
+   "material": "pipes",
+   "sides": 8,
+   "from": [
+    "0 - D / 2 - pipeR * 1.3",
+    "impost + 0.08 + foot",
+    0
+   ],
+   "to": [
+    "0 - D / 2 - pipeR * 1.3",
+    "cornice - 0.04",
+    0
+   ],
+   "along": {
+    "n": 5,
+    "from": [
+     0,
+     0,
+     "0 - pipeR * 5.5"
+    ],
+    "to": [
+     0,
+     0,
+     "pipeR * 5.5"
+    ]
+   },
+   "r": "pipeR * 1.3"
+  },
+  {
+   "id": "centre tower foot",
+   "type": "rod",
+   "material": "pipes",
+   "r0": "pipeR * 0.3",
+   "r1": "pipeR * 1.3",
+   "sides": 8,
+   "from": [
+    "0 - D / 2 - pipeR * 1.3",
+    "impost + 0.08",
+    0
+   ],
+   "to": [
+    "0 - D / 2 - pipeR * 1.3",
+    "impost + 0.08 + foot",
+    0
+   ],
+   "along": {
+    "n": 5,
+    "from": [
+     0,
+     0,
+     "0 - pipeR * 5.5"
+    ],
+    "to": [
+     0,
+     0,
+     "pipeR * 5.5"
+    ]
+   }
+  },
+  {
+   "id": "side tower",
+   "type": "rod",
+   "material": "pipes",
+   "sides": 8,
+   "from": [
+    "0 - D / 2 - pipeR * 1.15",
+    "impost + 0.08 + foot",
+    "W / 2 - pipeR * 7"
+   ],
+   "to": [
+    "0 - D / 2 - pipeR * 1.15",
+    "cornice - 0.04 - (cornice - impost) * 0.18",
+    "W / 2 - pipeR * 7"
+   ],
+   "along": {
+    "n": 5,
+    "from": [
+     0,
+     0,
+     "0 - pipeR * 4.8"
+    ],
+    "to": [
+     0,
+     0,
+     "pipeR * 4.8"
+    ]
+   },
+   "mirror": "z",
+   "r": "pipeR * 1.15"
+  },
+  {
+   "id": "side tower foot",
+   "type": "rod",
+   "material": "pipes",
+   "r0": "pipeR * 0.3",
+   "r1": "pipeR * 1.15",
+   "sides": 8,
+   "from": [
+    "0 - D / 2 - pipeR * 1.15",
+    "impost + 0.08",
+    "W / 2 - pipeR * 7"
+   ],
+   "to": [
+    "0 - D / 2 - pipeR * 1.15",
+    "impost + 0.08 + foot",
+    "W / 2 - pipeR * 7"
+   ],
+   "along": {
+    "n": 5,
+    "from": [
+     0,
+     0,
+     "0 - pipeR * 4.8"
+    ],
+    "to": [
+     0,
+     0,
+     "pipeR * 4.8"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "flat",
+   "type": "rod",
+   "material": "pipes",
+   "sides": 6,
+   "from": [
+    "0 - D / 2 - pipeR * 0.8",
+    "impost + 0.08 + foot",
+    "W / 4 + pipeR * 0.5"
+   ],
+   "to": [
+    "0 - D / 2 - pipeR * 0.8",
+    "cornice - 0.04 - (cornice - impost) * 0.42",
+    "W / 4 + pipeR * 0.5"
+   ],
+   "along": {
+    "n": 7,
+    "from": [
+     0,
+     0,
+     "0 - (W / 4 - pipeR * 7.5)"
+    ],
+    "to": [
+     0,
+     0,
+     "W / 4 - pipeR * 7.5"
+    ]
+   },
+   "mirror": "z",
+   "r": "pipeR * 0.8"
+  },
+  {
+   "id": "flat foot",
+   "type": "rod",
+   "material": "pipes",
+   "r0": "pipeR * 0.25",
+   "r1": "pipeR * 0.8",
+   "sides": 6,
+   "from": [
+    "0 - D / 2 - pipeR * 0.8",
+    "impost + 0.08",
+    "W / 4 + pipeR * 0.5"
+   ],
+   "to": [
+    "0 - D / 2 - pipeR * 0.8",
+    "impost + 0.08 + foot",
+    "W / 4 + pipeR * 0.5"
+   ],
+   "along": {
+    "n": 7,
+    "from": [
+     0,
+     0,
+     "0 - (W / 4 - pipeR * 7.5)"
+    ],
+    "to": [
+     0,
+     0,
+     "W / 4 - pipeR * 7.5"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "tower foot",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    "pipeR * 3",
+    0.06,
+    "pipeR * 12"
+   ],
+   "at": [
+    "0 - D / 2 - pipeR * 1.3",
+    "impost + 0.11",
+    0
+   ]
+  },
+  {
+   "id": "side foot",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    "pipeR * 2.6",
+    0.06,
+    "pipeR * 10.5"
+   ],
+   "at": [
+    "0 - D / 2 - pipeR * 1.15",
+    "impost + 0.11",
+    "W / 2 - pipeR * 7"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "pipe shade",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    "pipeR * 2.4",
+    "(cornice - impost) * 0.1",
+    "W / 2 - pipeR * 7.5 - pipeR * 0.5"
+   ],
+   "at": [
+    "0 - D / 2 - pipeR * 0.8",
+    "cornice - 0.04 - (cornice - impost) * 0.47",
+    "W / 4 + pipeR * 0.5"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "console desk",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.5,
+    0.12,
+    "min(W * 0.5, 1.5)"
+   ],
+   "at": [
+    "0 - D / 2 - 0.25",
+    "0.84",
+    0
+   ]
+  },
+  {
+   "id": "keys",
+   "type": "box",
+   "material": "keys",
+   "size": [
+    0.16,
+    0.02,
+    "min(W * 0.5, 1.5) - 0.1"
+   ],
+   "at": [
+    "0 - D / 2 - 0.3",
+    "0.91",
+    0
+   ]
+  },
+  {
+   "id": "sharps",
+   "type": "box",
+   "material": "sharps",
+   "size": [
+    0.09,
+    0.012,
+    0.012
+   ],
+   "along": {
+    "n": 22,
+    "from": [
+     "0 - D / 2 - 0.27",
+     0.93,
+     "0 - (min(W * 0.5, 1.5) - 0.2) / 2"
+    ],
+    "to": [
+     "0 - D / 2 - 0.27",
+     0.93,
+     "(min(W * 0.5, 1.5) - 0.2) / 2"
+    ]
+   }
+  },
+  {
+   "id": "upper keys",
+   "type": "box",
+   "material": "keys",
+   "size": [
+    0.14,
+    0.02,
+    "min(W * 0.5, 1.5) - 0.14"
+   ],
+   "at": [
+    "0 - D / 2 - 0.24",
+    "0.96",
+    0
+   ]
+  },
+  {
+   "id": "pedals",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.5,
+    0.025,
+    0.02
+   ],
+   "along": {
+    "n": 15,
+    "from": [
+     "0 - D / 2 - 0.35",
+     0.04,
+     -0.4
+    ],
+    "to": [
+     "0 - D / 2 - 0.35",
+     0.04,
+     0.4
+    ]
+   }
+  },
+  {
+   "id": "bench top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.3,
+    0.04,
+    1.1
+   ],
+   "at": [
+    "0 - D / 2 - 0.95",
+    0.58,
+    0
+   ]
+  },
+  {
+   "id": "bench legs",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.26,
+    0.56,
+    0.04
+   ],
+   "at": [
+    "0 - D / 2 - 0.95",
+    0.28,
+    0.5
+   ],
+   "mirror": "z"
+  }
+ ],
+ "markers": [
+  {
+   "role": "spot",
+   "at": [
+    "0 - D / 2 - 0.9",
+    0.6,
+    0
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 0,
+    "work": 1,
+    "gesture": "play"
+   }
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Chinese roofs and brackets",
+  "_about": "The pieces a Chinese hall is roofed with, side by side. A rectangular roof is any of the engine's forms bent into the JUJIA section (`lo`, `hi`: the slope at the eave and at the ridge -- flat below, steep above) with its corners turned UP and swept OUT (`upturn`, `flare`): the hip roof (wudian, the highest rank), the hip-and-gable (xieshan, the gablet form), the overhanging gable (xuanshan) and the pyramid (cuanjian). A ROUND roof is a dome whose profile is `jujia`: a pavilion's cone, or with an `oculus` the ring of roof round the drum of the tier above. Last, a row of `dougong` bracket sets on an architrave.",
+  "params": { "detail": 4 },
+  "build": ["wudian", "xieshan", "xuanshan", "cuanjian", "round pavilion", "round tier", "tier drum", "architrave", "brackets"],
+  "parts": {
+    "wudian": { "type": "roof", "form": "hip", "width": 10, "length": 18, "pitch": 32, "overhang": 2.2, "lo": 0.35, "hi": 1.3, "upturn": 0.7, "flare": 0.5,
+                "at": [[-44, 0, 0, 0]], "_about": "hip roof (wudian): four slopes, the ridge shortened by the hips" },
+    "xieshan": { "type": "roof", "form": "gablet", "width": 10, "length": 18, "pitch": 32, "hipH": 0.55, "overhang": 2.2, "lo": 0.35, "hi": 1.3, "upturn": 0.7, "flare": 0.5,
+                 "at": [[-22, 0, 0, 0]], "_about": "hip-and-gable (xieshan): a hip to half its height, a gable over it" },
+    "xuanshan": { "type": "roof", "form": "gable", "width": 10, "length": 18, "pitch": 30, "overhang": 1.5, "lo": 0.35, "hi": 1.2, "upturn": 0.3,
+                  "at": [[0, 0, 0, 0]], "_about": "overhanging gable (xuanshan)" },
+    "cuanjian": { "type": "roof", "form": "pyramid", "width": 10, "length": 10, "pitch": 36, "overhang": 2.0, "lo": 0.35, "hi": 1.5, "upturn": 0.6, "flare": 0.4,
+                  "at": [[20, 0, 0, 0]], "_about": "pyramid (cuanjian): a square pavilion's roof" },
+    "round pavilion": { "type": "dome", "radius": 7, "thickness": 0.4, "head": { "profile": "jujia", "lo": 0.3, "hi": 1.6 },
+                        "at": [[38, 0, 0, 0]], "_about": "a round pavilion's roof: the jujia section turned" },
+    "round tier": { "type": "dome", "radius": 9, "thickness": 0.6, "oculus": 5.2, "head": { "profile": "jujia", "lo": 0.25, "hi": 1.1 },
+                    "at": [[60, 0, 0, 0]], "_about": "one tier of a round hall's roof: the jujia ring from the eave in to the drum above" },
+    "tier drum": { "type": "ring", "count": 16, "rOuter": 5.4, "rInner": 5.1, "height": 3, "solid": true, "place": [[60, 0, 0, 0]],
+                   "atop": "round tier", "atopR": 5.4, "_about": "the drum of the next tier, standing on the roof where it has narrowed to its radius" },
+    "architrave": { "type": "box", "width": 9, "length": 0.5, "height": 0.6, "at": [[82, 0, 0, 0]] },
+    "brackets": { "type": "component", "use": "components/dougong", "params": { "s": 1 }, "at": [[78, 0.6, 0.1, 0]], "repeat": { "count": 5, "step": [2, 0, 0, 0] } }
+  }
+}

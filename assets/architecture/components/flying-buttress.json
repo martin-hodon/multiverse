@@ -1,0 +1,13 @@
+{
+  "name": "Flying buttress",
+  "_about": "A FLYING BUTTRESS: the pier outside the aisle, its pinnacle, and the flyer that springs from it across the aisle roof to the clerestory wall, where the nave vault pushes out -- a strut on a rampant arch (`flyer`). Placed with the pier at the origin and the flyer reaching along +x; the cathedral places one per bay down each flank and a ring of them round the apse.",
+  "params": { "detail": 4, "pierW": 1.6, "pierD": 2.6, "pierH": 22, "span": 8, "low": 18, "high": 26, "top0": 21.5, "top1": 29, "flyW": 0.8,
+              "pin": 1.3, "pinH": 3.0, "pinS": 4.0 },
+  "build": ["pier", "flyer", "pinnacle"],
+  "parts": {
+    "pier": { "type": "box", "width": "pierD", "length": "pierW", "height": "pierH", "at": [["0 - pierD / 2", 0, 0, 0]] },
+    "flyer": { "type": "flyer", "span": "span", "low": "low", "high": "high", "top0": "top0", "top1": "top1", "width": "flyW", "at": [[0, 0, 0, 0]] },
+    "pinnacle": { "type": "component", "use": "components/pinnacle", "params": { "w": "pin", "h": "pinH", "s": "pinS" },
+      "at": [["0 - pierD / 2", "pierH", 0, 0]] }
+  }
+}

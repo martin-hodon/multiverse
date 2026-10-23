@@ -1,0 +1,153 @@
+{
+ "name": "Ger (yurt)",
+ "_about": "The ger: a lattice wall wrapped in felt, roof poles to a crown ring that lets the smoke out, a painted wooden door to the south, the stove in the middle (the steppe: Mongols, Kazakhs, Turkic peoples, -500-1900)",
+ "era": "-500-1900",
+ "region": "the steppe: Mongols, Kazakhs, Turkic peoples",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "wall": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 3.0,
+   "rInner": 2.88,
+   "height": 1.5,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "door": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 3.0,
+   "rInner": 2.88,
+   "height": 1.5,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    0
+   ],
+   "opening": {
+    "at": 0,
+    "width": 0.9,
+    "sill": 0,
+    "springing": 1.35,
+    "head": {
+     "profile": "flat"
+    }
+   },
+   "glass": false
+  },
+  "roof": {
+   "type": "dome",
+   "sides": 12,
+   "radius": 3.1,
+   "thickness": 0,
+   "head": {
+    "profile": "trigonal",
+    "rise": 1.2
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     1.5,
+     0,
+     0
+    ]
+   ],
+   "oculus": 0.6
+  },
+  "crown": {
+   "type": "ring",
+   "count": 8,
+   "rOuter": 0.62,
+   "rInner": 0.54,
+   "height": 0.12,
+   "y": 2.46,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "posts": {
+   "type": "column",
+   "radius": 0.06,
+   "height": 2.45,
+   "sides": 6,
+   "at": [
+    [
+     0.3,
+     0,
+     0,
+     0
+    ],
+    [
+     -0.3,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "stove": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.2,
+    "h": 0.35
+   }
+  }
+ },
+ "build": [
+  "wall",
+  "door",
+  "roof",
+  "crown",
+  "posts",
+  "stove"
+ ]
+}

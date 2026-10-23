@@ -1,0 +1,69 @@
+{
+  "name": "Groin vault",
+  "_about": "TWO BARRELS CROSSING, built as FOUR WEBS: split the bay by its diagonals -- a square divided by an X -- and each triangle is the barrel springing from that wall, following the wall's arch vertically and running in straight lines to the groins. Where the two arches rise alike the webs are level; where one crown is lower its web ramps up to meet the other (as a builder stilts the lower arch). The groins are where webs MEET, so their points are made once from both arches' stations and shared: the crease is an edge of the mesh. One `head` serves both directions unless `across` and `along` are given.",
+  "params": {
+    "detail": 6,
+    "width": 8,
+    "length": 8,
+    "springing": 5,
+    "top": 10.6
+  },
+  "build": [
+    "vault",
+    "pier"
+  ],
+  "_build": "which parts to build, and in what order (a caller may ask for a few of them: the village takes a cathedral's arcades from a definition whose walls it builds itself)",
+  "parts": {
+    "vault": {
+      "type": "groin",
+      "width": "width",
+      "length": "length",
+      "springing": "springing",
+      "top": "top",
+      "head": {
+        "profile": "pointed",
+        "spread": 0.35
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "pier": {
+      "type": "column",
+      "radius": 0.55,
+      "height": "springing",
+      "sides": 8,
+      "at": [
+        [
+          "0 - width / 2",
+          0,
+          "0 - length / 2",
+          0
+        ],
+        [
+          "width / 2",
+          0,
+          "0 - length / 2",
+          0
+        ],
+        [
+          "0 - width / 2",
+          0,
+          "length / 2",
+          0
+        ],
+        [
+          "width / 2",
+          0,
+          "length / 2",
+          0
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hieroglyphs</title>
+<style>
+  :root { --bg:#1b1d21; --fg:#d8d4cc; --dim:#8d8a84; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:13px ui-monospace, monospace; }
+  header { padding:8px 12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  select, input, button { background:#2a2d33; color:var(--fg); border:1px solid #444; padding:3px 6px; font:inherit; }
+  #err { color:#e27a6a; white-space:pre-wrap; padding:0 12px; }
+  canvas { display:block; margin:0 auto; }
+</style>
+</head>
+<body>
+<header style="display:var(--hd,flex)">
+  <b>Hieroglyphs</b>
+  <select id="doc"></select>
+  <label>mode <select id="mode"><option value="">polychrome</option></select></label>
+  <label>seed <input id="seed" type="number" value="1" style="width:60px"></label>
+  <span style="color:var(--dim)">a sign: ?sign=G17&amp;px=400 · a sheet: ?doc=glyphs/G · a text: ?doc=glyphs/textures&amp;seed=3 · ?mode=blue</span>
+</header>
+<div id="err"></div>
+<canvas id="cv"></canvas>
+<script type="module">
+// A BENCH for the hieroglyph engine (glyphs.js) without the 3D asset viewer: a category's sheet, one sign big, or the
+// texts -- the same drawing the viewer (assets.html) and the game's walls use
+import { registerGlyphs, drawGlyphSheet, renderGlyph, signOf } from "./glyphs.js";
+const qp = new URLSearchParams(location.search), $ = (id) => document.getElementById(id);
+if (qp.has("bare")) document.documentElement.style.setProperty("--hd", "none");   // (a shot: the drawing alone)
+const base = new URL("./assets/", import.meta.url).href;
+const index = await (await fetch(base + "index.json")).json();
+const paths = index.categories.filter((c) => c.kind === "glyphs" || c.kind === "glyph-texture").flatMap((c) => c.paths);
+const docs = Object.fromEntries(await Promise.all(paths.map(async (p) => [p, await (await fetch(base + p + ".json", { cache: "no-store" })).json()])));
+registerGlyphs(docs);
+docs.all = { name: "every sign", signs: Object.assign({}, ...paths.map((p) => docs[p].signs ?? {})) };   // (the whole list on one sheet)
+for (const p of [...paths, "all"]) $("doc").append(new Option(docs[p].name ?? p, p));
+for (const m of Object.keys(docs["glyphs/colors"]?.modes ?? {})) $("mode").append(new Option(m, m));
+$("doc").value = qp.get("doc") ?? paths.find((p) => docs[p].signs) ?? paths[0];
+$("mode").value = qp.get("mode") ?? ""; $("seed").value = qp.get("seed") ?? 1;
+function draw() {
+  const cv = $("cv"), errs = [];
+  try {
+    if (qp.has("sign") && !draw.used) {
+      const px = +(qp.get("px") ?? 400), code = qp.get("sign"), flip = qp.get("flip") === "1";
+      cv.width = px; cv.height = px;
+      const g = cv.getContext("2d"); g.drawImage(renderGlyph(code, { px, flip, mode: $("mode").value || null, ground: "ground" }), 0, 0);
+      document.title = `${code} ${signOf(code)?.name ?? ""}`;
+    } else {
+      cv.width = Math.min(innerWidth - 20, +(qp.get("w") ?? 1400)); cv.height = 10;
+      errs.push(...drawGlyphSheet(cv, docs[$("doc").value], { cell: +(qp.get("cell") ?? 132), mode: $("mode").value || null, seed: +$("seed").value, only: qp.get("only") }));
+    }
+  } catch (e) { errs.push(String(e.stack ?? e)); }
+  $("err").textContent = errs.join("\n");
+  window.__errs = errs; window.__ready = true;
+}
+for (const id of ["doc", "mode", "seed"]) $(id).onchange = () => { draw.used = true; draw(); };
+draw();
+</script>
+</body>
+</html>

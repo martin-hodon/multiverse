@@ -1,0 +1,148 @@
+{
+ "name": "Pigsty",
+ "_about": "a pigsty: three boarded walls open to -z under a lean-to roof, a trough beside it; its `block` marker keeps the pigs out of its walls",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "floor": {
+   "type": "box",
+   "width": 3.4,
+   "length": 2.6,
+   "height": 0.05,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "back wall": {
+   "type": "box",
+   "width": 3.4,
+   "length": 0.15,
+   "height": 1.5,
+   "at": [
+    [
+     0,
+     0,
+     1.225,
+     0
+    ]
+   ]
+  },
+  "side walls": {
+   "type": "box",
+   "width": 0.15,
+   "length": 2.6,
+   "height": 1.5,
+   "at": [
+    [
+     -1.625,
+     0,
+     0,
+     0
+    ],
+    [
+     1.625,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "front posts": {
+   "type": "box",
+   "width": 0.15,
+   "length": 0.15,
+   "height": 2.0,
+   "at": [
+    [
+     -1.625,
+     0,
+     -1.225,
+     0
+    ],
+    [
+     1.625,
+     0,
+     -1.225,
+     0
+    ]
+   ]
+  },
+  "roof": {
+   "type": "roof",
+   "form": "shed",
+   "width": 3.4000000000000004,
+   "length": 3.8,
+   "pitch": 11,
+   "overhang": 0.1,
+   "at": [
+    [
+     0,
+     1.5,
+     0,
+     "1.5707963"
+    ]
+   ],
+   "_about": "a shed roof rises toward its own +x: turned so it rises toward the open front (-z)"
+  },
+  "trough": {
+   "type": "box",
+   "width": 1.4,
+   "length": 0.45,
+   "height": 0.32,
+   "at": [
+    [
+     -2.9,
+     0,
+     0.6,
+     0
+    ]
+   ]
+  },
+  "slop": {
+   "type": "box",
+   "width": 1.25,
+   "length": 0.32,
+   "height": 0.03,
+   "at": [
+    [
+     -2.9,
+     0.3,
+     0.6,
+     0
+    ]
+   ]
+  },
+  "block": {
+   "type": "marker",
+   "role": "block",
+   "at": [
+    [
+     0,
+     0,
+     0.15,
+     0
+    ]
+   ],
+   "data": {
+    "w": 3.4,
+    "d": 2.3000000000000003
+   }
+  }
+ },
+ "build": [
+  "floor",
+  "back wall",
+  "side walls",
+  "front posts",
+  "roof",
+  "trough",
+  "slop",
+  "block"
+ ]
+}

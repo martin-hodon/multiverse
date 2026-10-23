@@ -1,0 +1,51 @@
+{
+  "name": "Dress",
+  "kind": "garment",
+  "layer": 2,
+  "skirted": true,
+  "_about": "a nineteenth-century woman's dress: a fitted bodice closed high at the throat, long sleeves, and a full skirt from the waist to the floor over petticoats or a crinoline (`fullness` its flare)",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "indigo"
+    },
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "black"
+    }
+  },
+  "params": {
+    "length": "floor - 0.02",
+    "fullness": 0.55,
+    "hem": 0,
+    "neckFront": 0.012
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "waist",
+        "neckline": "round",
+        "neckFront": "neckFront",
+        "neckBack": 0.004
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist",
+        "cuff": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "length",
+        "flare": "fullness",
+        "pleats": 20,
+        "hem": "hem"
+      }
+    }
+  ]
+}

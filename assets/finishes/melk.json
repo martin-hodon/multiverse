@@ -1,0 +1,22 @@
+{
+  "name": "Stift Melk",
+  "building": "architecture/melk",
+  "_about": "Stift Melk: Melk yellow with white trim, red tiled roofs, the church's caps and dome in green copper, the crosses gilt; inside, pink faux marble and frescoed vaults, the floors chequered in red and white.",
+  "stone": {
+    "color": "#e6c36c",
+    "accent": "#f1e9d6",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["finial"], "pattern": "roofs/gold leaf"},
+    {"parts": "drum", "color": "#f1e9d6", "accent": "#e6c36c"},
+    {"parts": ["kind:dome", "cap"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
+    {"parts": ["roof", "kind:roof"], "surface": "roof", "pattern": "roofs/fish scale", "palette": "tile-red"},
+    {"parts": "kind:dome", "side": "in", "pattern": "stone/plaster", "palette": "baroque"},
+    {"surface": "ceiling", "side": "in", "pattern": "stone/plaster", "palette": "baroque"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-rose"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone-grey"},
+    {"surface": "wall", "side": "in", "pattern": "painted/faux marble", "palette": "baroque-rose"},
+    {"surface": "wall", "pattern": "stone/stucco lines", "palette": "plaster-ochre"}
+  ]
+}

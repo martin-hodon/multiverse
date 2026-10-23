@@ -1,0 +1,1169 @@
+{
+  "name": "Ulm Minster",
+  "_about": "ULM MINSTER (Ulmer M\u00fcnster, 1377-1890), from components: the ONE WEST TOWER, 161.5m -- the porch hall with its triple portal, three more square `gothic-tower-stage`s of tall traceried windows (each climbed by its own `tower-stair` turret) to the first gallery at 70m, the openwork `gothic-octagon-stage` to 100m and the ribbed `gothic-spire` with its gables and pinnacles, a round stair (`round-stair-tower`) up the middle of both to the VIEWING GALLERY at 143m and the belvedere and stone cap over it; the FIVE-AISLED basilica -- the `basilica` nave with its rib vault 42m up, double aisles split by slender columns under rib vaults of their own, `flying-buttress`es over them -- and the choir with its polygonal `apse` flanked by the TWO EAST TOWERS, square stages, an octagon and a spire to 86m; pale sandstone under steep grey-tiled roofs.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.6,
+    "steps": 2,
+    "stepOut": 0.5,
+    "margin": 4
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "nave",
+    "aisle walls",
+    "aisle columns",
+    "aisle vaults",
+    "aisle ribs",
+    "aisle east walls",
+    "aisle west walls",
+    "nave roof",
+    "aisle roofs",
+    "flying buttresses",
+    "choir",
+    "chancel gable",
+    "apse",
+    "choir roof",
+    "south east tower foot",
+    "south east tower belfry",
+    "south east tower octagon",
+    "south east tower spire",
+    "north east tower foot",
+    "north east tower belfry",
+    "north east tower octagon",
+    "north east tower spire",
+    "west tower stage 1",
+    "west tower stage 2",
+    "west tower stage 3",
+    "west tower stage 4",
+    "west tower octagon",
+    "west tower spire",
+    "west tower stair",
+    "viewing gallery",
+    "viewing gallery parapet"
+  ],
+  "parts": {
+    "nave": {
+      "type": "component",
+      "use": "basilica",
+      "params": {
+        "bays": 8,
+        "bayLen": 8.5,
+        "naveW": 15.2,
+        "aisleW": 13.3,
+        "pierT": 2.0,
+        "aisleT": 1.5,
+        "openW": 6.5,
+        "spring": 9.0,
+        "crown": 14.6293,
+        "arcadeH": 25.0,
+        "clearH": 31.5,
+        "naveTop": 43.448,
+        "aisleSpring": 14.6293,
+        "aisleTop": 20.9886,
+        "arch": "pointed",
+        "arcSpread": 1,
+        "naveSpread": 0.5,
+        "clearSpread": 1,
+        "naveAlongArch": "pointed",
+        "naveAlongSpread": 2.6978,
+        "clearWinW": 2.8,
+        "clearSill": 2.4,
+        "clearSpring": 5.6
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "build": [
+        "arcade",
+        "clerestory",
+        "nave vault",
+        "nave ribs"
+      ],
+      "_about": "the high nave from the `basilica` definition: pointed arcades, clerestory, and the rib vault 42m up"
+    },
+    "aisle walls": {
+      "type": "wall",
+      "width": 68.0,
+      "height": 22.1886,
+      "thickness": 1.5,
+      "openings": {
+        "pattern": "8",
+        "width": 4.0,
+        "gap": 4.5,
+        "sill": 3.5,
+        "springing": 13.0,
+        "head": {
+          "profile": "pointed",
+          "spread": 1
+        }
+      },
+      "at": [
+        [
+          24.4,
+          0,
+          0,
+          1.5707963267948966
+        ],
+        [
+          -24.4,
+          0,
+          0,
+          -1.5707963267948966
+        ]
+      ],
+      "_about": "the outer walls of the double aisles, a tall traceried window in every bay"
+    },
+    "aisle columns": {
+      "type": "column",
+      "radius": 0.55,
+      "height": 14.6293,
+      "sides": 12,
+      "at": [
+        [
+          -16.25,
+          0,
+          25.5,
+          0
+        ],
+        [
+          -16.25,
+          0,
+          17.0,
+          0
+        ],
+        [
+          -16.25,
+          0,
+          8.5,
+          0
+        ],
+        [
+          -16.25,
+          0,
+          0.0,
+          0
+        ],
+        [
+          -16.25,
+          0,
+          -8.5,
+          0
+        ],
+        [
+          -16.25,
+          0,
+          -17.0,
+          0
+        ],
+        [
+          -16.25,
+          0,
+          -25.5,
+          0
+        ],
+        [
+          16.25,
+          0,
+          25.5,
+          0
+        ],
+        [
+          16.25,
+          0,
+          17.0,
+          0
+        ],
+        [
+          16.25,
+          0,
+          8.5,
+          0
+        ],
+        [
+          16.25,
+          0,
+          0.0,
+          0
+        ],
+        [
+          16.25,
+          0,
+          -8.5,
+          0
+        ],
+        [
+          16.25,
+          0,
+          -17.0,
+          0
+        ],
+        [
+          16.25,
+          0,
+          -25.5,
+          0
+        ]
+      ],
+      "_about": "the slender columns splitting each aisle in two (the five aisles)"
+    },
+    "aisle vaults": {
+      "type": "groin",
+      "width": 6.65,
+      "length": 8.5,
+      "springing": 14.6293,
+      "top": 20.9886,
+      "across": {
+        "profile": "pointed",
+        "spread": 1
+      },
+      "along": {
+        "profile": "pointed",
+        "spread": 0.4181
+      },
+      "at": [
+        [
+          -12.925,
+          0,
+          29.75,
+          0
+        ],
+        [
+          -12.925,
+          0,
+          21.25,
+          0
+        ],
+        [
+          -12.925,
+          0,
+          12.75,
+          0
+        ],
+        [
+          -12.925,
+          0,
+          4.25,
+          0
+        ],
+        [
+          -12.925,
+          0,
+          -4.25,
+          0
+        ],
+        [
+          -12.925,
+          0,
+          -12.75,
+          0
+        ],
+        [
+          -12.925,
+          0,
+          -21.25,
+          0
+        ],
+        [
+          -12.925,
+          0,
+          -29.75,
+          0
+        ],
+        [
+          -19.575000000000003,
+          0,
+          29.75,
+          0
+        ],
+        [
+          -19.575000000000003,
+          0,
+          21.25,
+          0
+        ],
+        [
+          -19.575000000000003,
+          0,
+          12.75,
+          0
+        ],
+        [
+          -19.575000000000003,
+          0,
+          4.25,
+          0
+        ],
+        [
+          -19.575000000000003,
+          0,
+          -4.25,
+          0
+        ],
+        [
+          -19.575000000000003,
+          0,
+          -12.75,
+          0
+        ],
+        [
+          -19.575000000000003,
+          0,
+          -21.25,
+          0
+        ],
+        [
+          -19.575000000000003,
+          0,
+          -29.75,
+          0
+        ],
+        [
+          12.925,
+          0,
+          29.75,
+          0
+        ],
+        [
+          12.925,
+          0,
+          21.25,
+          0
+        ],
+        [
+          12.925,
+          0,
+          12.75,
+          0
+        ],
+        [
+          12.925,
+          0,
+          4.25,
+          0
+        ],
+        [
+          12.925,
+          0,
+          -4.25,
+          0
+        ],
+        [
+          12.925,
+          0,
+          -12.75,
+          0
+        ],
+        [
+          12.925,
+          0,
+          -21.25,
+          0
+        ],
+        [
+          12.925,
+          0,
+          -29.75,
+          0
+        ],
+        [
+          19.575000000000003,
+          0,
+          29.75,
+          0
+        ],
+        [
+          19.575000000000003,
+          0,
+          21.25,
+          0
+        ],
+        [
+          19.575000000000003,
+          0,
+          12.75,
+          0
+        ],
+        [
+          19.575000000000003,
+          0,
+          4.25,
+          0
+        ],
+        [
+          19.575000000000003,
+          0,
+          -4.25,
+          0
+        ],
+        [
+          19.575000000000003,
+          0,
+          -12.75,
+          0
+        ],
+        [
+          19.575000000000003,
+          0,
+          -21.25,
+          0
+        ],
+        [
+          19.575000000000003,
+          0,
+          -29.75,
+          0
+        ]
+      ],
+      "_about": "a rib vault over each bay of each of the four aisles"
+    },
+    "aisle ribs": {
+      "type": "ribs",
+      "on": "aisle vaults",
+      "width": 0.35,
+      "depth": 0.25,
+      "wall": {
+        "width": 0.45,
+        "depth": 0.3
+      }
+    },
+    "aisle east walls": {
+      "type": "wall",
+      "width": 14.799999999999999,
+      "height": 22.1886,
+      "thickness": 1.5,
+      "openings": [],
+      "at": [
+        [
+          -17.0,
+          0,
+          -34.0,
+          0
+        ],
+        [
+          17.0,
+          0,
+          -34.0,
+          0
+        ]
+      ],
+      "_about": "the aisles' east ends, the east towers against them"
+    },
+    "aisle west walls": {
+      "type": "wall",
+      "width": 13.899999999999999,
+      "height": 22.1886,
+      "thickness": 1.5,
+      "openings": {
+        "pattern": "1",
+        "width": 3.2,
+        "sill": 0,
+        "springing": 5.0,
+        "head": {
+          "profile": "pointed",
+          "spread": 1
+        }
+      },
+      "at": [
+        [
+          -17.45,
+          0,
+          35.5,
+          0
+        ],
+        [
+          17.45,
+          0,
+          35.5,
+          0
+        ]
+      ],
+      "_about": "the aisles' west ends either side of the tower, a portal in each"
+    },
+    "nave roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 19.8,
+      "length": 68.0,
+      "pitch": 55,
+      "at": [
+        [
+          0,
+          43.448,
+          0,
+          0
+        ]
+      ],
+      "_about": "the steep grey-tiled roof of the high nave"
+    },
+    "aisle roofs": {
+      "type": "roof",
+      "form": "shed",
+      "width": 14.799999999999999,
+      "length": 69.5,
+      "pitch": 15,
+      "at": [
+        [
+          -17.0,
+          22.1886,
+          0.75,
+          0
+        ],
+        [
+          17.0,
+          22.1886,
+          0.75,
+          3.14159265
+        ]
+      ],
+      "_about": "a lean-to over each pair of aisles"
+    },
+    "flying buttresses": {
+      "type": "component",
+      "use": "components/flying-buttress",
+      "params": {
+        "pierH": 27.5,
+        "span": 16.0,
+        "low": 24.0,
+        "high": 30.5,
+        "top0": 26.8,
+        "top1": 33.7,
+        "pinH": 3.5,
+        "pinS": 5.0
+      },
+      "at": [
+        [
+          25.599999999999998,
+          0,
+          -25.5,
+          3.14159265
+        ],
+        [
+          -25.599999999999998,
+          0,
+          -25.5,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": 7,
+        "step": [
+          0,
+          0,
+          8.5,
+          0
+        ]
+      },
+      "_about": "a flying buttress at every bay's end, both sides, clearing the double aisles to the clerestory"
+    },
+    "choir": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          19.2,
+          26.0
+        ]
+      },
+      "thickness": 1.6,
+      "height": 27.0,
+      "faces": {
+        "0": [
+          {
+            "at": 0,
+            "width": 14.2,
+            "sill": 0,
+            "springing": 15.0,
+            "head": {
+              "profile": "pointed",
+              "spread": 0.6
+            }
+          }
+        ],
+        "1": [
+          {
+            "at": 2.5,
+            "width": 2.6,
+            "sill": 4.0,
+            "springing": 16.0,
+            "head": {
+              "profile": "pointed",
+              "spread": 1
+            }
+          },
+          {
+            "at": 8.5,
+            "width": 2.6,
+            "sill": 4.0,
+            "springing": 16.0,
+            "head": {
+              "profile": "pointed",
+              "spread": 1
+            }
+          }
+        ],
+        "3": [
+          {
+            "at": -2.5,
+            "width": 2.6,
+            "sill": 4.0,
+            "springing": 16.0,
+            "head": {
+              "profile": "pointed",
+              "spread": 1
+            }
+          },
+          {
+            "at": -8.5,
+            "width": 2.6,
+            "sill": 4.0,
+            "springing": 16.0,
+            "head": {
+              "profile": "pointed",
+              "spread": 1
+            }
+          }
+        ],
+        "2": [
+          {
+            "at": 0,
+            "width": 15.0,
+            "sill": 0,
+            "springing": 8.0,
+            "head": {
+              "profile": "pointed",
+              "spread": 0.3
+            }
+          }
+        ]
+      },
+      "openings": [],
+      "at": [
+        [
+          0,
+          0,
+          -47.0,
+          0
+        ]
+      ],
+      "_about": "the choir, open to the nave by the chancel arch and to its apse, tall lancets in its flanks east of the towers"
+    },
+    "chancel gable": {
+      "type": "wall",
+      "width": 19.2,
+      "height": 16.448,
+      "thickness": 1.6,
+      "openings": [],
+      "at": [
+        [
+          0,
+          27.0,
+          -34.0,
+          0
+        ]
+      ],
+      "_about": "the wall over the chancel arch, closing the nave's east end above the choir"
+    },
+    "apse": {
+      "type": "component",
+      "use": "components/apse",
+      "params": {
+        "R": 8.0,
+        "T": 1.6,
+        "H": 27.0,
+        "n": 16,
+        "winW": 2.4,
+        "winSill": 4.0,
+        "winH": 12.0,
+        "winHead": "pointed",
+        "profile": "trigonal",
+        "rise": 15.0,
+        "domeT": 0,
+        "over": 0.5
+      },
+      "at": [
+        [
+          0,
+          0,
+          -60.0,
+          3.14159265
+        ]
+      ],
+      "_about": "the polygonal apse, a tall lancet in each bay, under its half cone (`apse`)"
+    },
+    "choir roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 20.2,
+      "length": 24.4,
+      "pitch": 57,
+      "at": [
+        [
+          0,
+          27.0,
+          -47.8,
+          0
+        ]
+      ],
+      "_about": "the choir's roof, from the back of the chancel gable to the apse"
+    },
+    "south east tower foot": {
+      "type": "component",
+      "use": "components/gothic-tower-stage",
+      "params": {
+        "W": 8.5,
+        "t": 1.1,
+        "wins": 1,
+        "winW": 1.6,
+        "bw": 1.2,
+        "bd": 1.0,
+        "H": 26.0,
+        "low": 6.0,
+        "doorN": 1,
+        "doorW": 1.8
+      },
+      "at": [
+        [
+          13.85,
+          0,
+          -39.75,
+          1.5707963267948966
+        ]
+      ],
+      "build": [
+        "walls door",
+        "slab"
+      ],
+      "_about": "the east towers (`gothic-tower-stage` twice, a `gothic-octagon-stage`, a `gothic-spire`): the foot, a door at the side..."
+    },
+    "south east tower belfry": {
+      "type": "component",
+      "use": "components/gothic-tower-stage",
+      "params": {
+        "W": 8.5,
+        "t": 1.1,
+        "wins": 1,
+        "winW": 1.6,
+        "bw": 1.2,
+        "bd": 1.0,
+        "H": 20.0,
+        "low": 3.0,
+        "glazed": 0,
+        "pinW": 1.0,
+        "pinH": 2.0,
+        "pinS": 3.5
+      },
+      "at": [
+        [
+          13.85,
+          26.0,
+          -39.75,
+          1.5707963267948966
+        ]
+      ],
+      "build": [
+        "walls",
+        "corner pinnacles",
+        "slab"
+      ],
+      "_about": "...the open belfry, pinnacles on its corners..."
+    },
+    "south east tower octagon": {
+      "type": "component",
+      "use": "components/gothic-octagon-stage",
+      "params": {
+        "R": 3.8,
+        "H": 14.0,
+        "t": 0.7,
+        "low": 2.0
+      },
+      "at": [
+        [
+          13.85,
+          46.0,
+          -39.75,
+          0
+        ]
+      ],
+      "_about": "...the octagon..."
+    },
+    "south east tower spire": {
+      "type": "component",
+      "use": "components/gothic-spire",
+      "params": {
+        "R": 3.4,
+        "rise": 26.0,
+        "finial": 3.0,
+        "pinR": 3.4
+      },
+      "at": [
+        [
+          13.85,
+          60.0,
+          -39.75,
+          0
+        ]
+      ],
+      "build": [
+        "spire",
+        "ribs",
+        "gables",
+        "pinnacles",
+        "finial"
+      ],
+      "_about": "...and the ribbed spire with its gables and pinnacles, to 86m"
+    },
+    "north east tower foot": {
+      "type": "component",
+      "use": "components/gothic-tower-stage",
+      "params": {
+        "W": 8.5,
+        "t": 1.1,
+        "wins": 1,
+        "winW": 1.6,
+        "bw": 1.2,
+        "bd": 1.0,
+        "H": 26.0,
+        "low": 6.0,
+        "doorN": 1,
+        "doorW": 1.8
+      },
+      "at": [
+        [
+          -13.85,
+          0,
+          -39.75,
+          -1.5707963267948966
+        ]
+      ],
+      "build": [
+        "walls door",
+        "slab"
+      ]
+    },
+    "north east tower belfry": {
+      "type": "component",
+      "use": "components/gothic-tower-stage",
+      "params": {
+        "W": 8.5,
+        "t": 1.1,
+        "wins": 1,
+        "winW": 1.6,
+        "bw": 1.2,
+        "bd": 1.0,
+        "H": 20.0,
+        "low": 3.0,
+        "glazed": 0,
+        "pinW": 1.0,
+        "pinH": 2.0,
+        "pinS": 3.5
+      },
+      "at": [
+        [
+          -13.85,
+          26.0,
+          -39.75,
+          -1.5707963267948966
+        ]
+      ],
+      "build": [
+        "walls",
+        "corner pinnacles",
+        "slab"
+      ]
+    },
+    "north east tower octagon": {
+      "type": "component",
+      "use": "components/gothic-octagon-stage",
+      "params": {
+        "R": 3.8,
+        "H": 14.0,
+        "t": 0.7,
+        "low": 2.0
+      },
+      "at": [
+        [
+          -13.85,
+          46.0,
+          -39.75,
+          0
+        ]
+      ]
+    },
+    "north east tower spire": {
+      "type": "component",
+      "use": "components/gothic-spire",
+      "params": {
+        "R": 3.4,
+        "rise": 26.0,
+        "finial": 3.0,
+        "pinR": 3.4
+      },
+      "at": [
+        [
+          -13.85,
+          60.0,
+          -39.75,
+          0
+        ]
+      ],
+      "build": [
+        "spire",
+        "ribs",
+        "gables",
+        "pinnacles",
+        "finial"
+      ]
+    },
+    "west tower stage 1": {
+      "type": "component",
+      "use": "components/gothic-tower-stage",
+      "params": {
+        "W": 21.0,
+        "t": 1.6,
+        "bw": 2.6,
+        "bd": 2.4,
+        "H": 20.0,
+        "tx": 6.75,
+        "tz": -6.75,
+        "low": 15.0,
+        "wins": 2,
+        "winW": 2.2,
+        "winGap": 4.0,
+        "doorN": 3,
+        "doorW": 4.2,
+        "doorGap": 1.4,
+        "backW": 6.0
+      },
+      "at": [
+        [
+          0,
+          0.0,
+          44.5,
+          0
+        ]
+      ],
+      "build": [
+        "walls portal",
+        "front buttresses",
+        "front buttresses side",
+        "stair"
+      ],
+      "_about": "the PORCH HALL at the tower's foot: the triple portal open to the west, the minster's portal through its back into the nave, its stair turret in a back corner..."
+    },
+    "west tower stage 2": {
+      "type": "component",
+      "use": "components/gothic-tower-stage",
+      "params": {
+        "W": 21.0,
+        "t": 1.6,
+        "bw": 2.6,
+        "bd": 2.4,
+        "H": 18.0,
+        "tx": -6.75,
+        "tz": -6.75,
+        "low": 3.0,
+        "wins": 2,
+        "winW": 3.6,
+        "winGap": 1.6
+      },
+      "at": [
+        [
+          0,
+          20.0,
+          44.5,
+          0
+        ]
+      ],
+      "build": [
+        "walls",
+        "front buttresses",
+        "front buttresses side",
+        "stair"
+      ],
+      "_about": "...the storey of the great west windows..."
+    },
+    "west tower stage 3": {
+      "type": "component",
+      "use": "components/gothic-tower-stage",
+      "params": {
+        "W": 21.0,
+        "t": 1.6,
+        "bw": 2.6,
+        "bd": 2.4,
+        "H": 18.0,
+        "tx": -6.75,
+        "tz": 6.75,
+        "low": 3.0,
+        "wins": 2,
+        "winW": 3.4,
+        "winGap": 1.8
+      },
+      "at": [
+        [
+          0,
+          38.0,
+          44.5,
+          0
+        ]
+      ],
+      "build": [
+        "walls",
+        "front buttresses",
+        "front buttresses side",
+        "stair"
+      ],
+      "_about": "...a third, each climbed by its own turret, in another corner..."
+    },
+    "west tower stage 4": {
+      "type": "component",
+      "use": "components/gothic-tower-stage",
+      "params": {
+        "W": 21.0,
+        "t": 1.6,
+        "bw": 2.6,
+        "bd": 2.4,
+        "H": 14.0,
+        "tx": 6.75,
+        "tz": 6.75,
+        "low": 2.0,
+        "wins": 2,
+        "winW": 3.2,
+        "winGap": 2.0,
+        "glazed": 0,
+        "pinW": 1.8,
+        "pinH": 4.0,
+        "pinS": 6.0
+      },
+      "at": [
+        [
+          0,
+          56.0,
+          44.5,
+          0
+        ]
+      ],
+      "build": [
+        "walls",
+        "front buttresses",
+        "front buttresses side",
+        "front pinnacles",
+        "corner pinnacles",
+        "parapet",
+        "stair"
+      ],
+      "_about": "...and the open belfry, its head the FIRST GALLERY at 70m behind a parapet and pinnacles, round the octagon's foot"
+    },
+    "west tower octagon": {
+      "type": "component",
+      "use": "components/gothic-octagon-stage",
+      "params": {
+        "R": 7.0,
+        "H": 30.0,
+        "t": 1.0,
+        "low": 4.0
+      },
+      "at": [
+        [
+          0,
+          70.0,
+          44.5,
+          0
+        ]
+      ],
+      "build": [
+        "walls door"
+      ],
+      "_about": "the openwork OCTAGON from the gallery to 100m, a tall lancet in every face and a door from the gallery"
+    },
+    "west tower spire": {
+      "type": "component",
+      "use": "components/gothic-spire",
+      "params": {
+        "R": 6.2,
+        "rise": 91.0759,
+        "topR": 3.3,
+        "pinR": 6.6,
+        "pinW": 1.2,
+        "pinH": 3.0,
+        "pinS": 6.0
+      },
+      "at": [
+        [
+          0,
+          100.0,
+          44.5,
+          0
+        ]
+      ],
+      "_about": "the openwork SPIRE on the octagon, ribbed, gabled and ringed by pinnacles at its foot (`gothic-spire`), cut off at the viewing gallery"
+    },
+    "west tower stair": {
+      "type": "component",
+      "use": "components/round-stair-tower",
+      "params": {
+        "R": 2.2,
+        "wall": 0.4,
+        "H": 73.0,
+        "n": 10,
+        "doorBay": 0,
+        "stageH": 3.4,
+        "capRise": 12.0,
+        "finial": 2.8
+      },
+      "at": [
+        [
+          0,
+          70.0,
+          44.5,
+          0
+        ]
+      ],
+      "_about": "the round stair up the middle of the octagon and the spire (`round-stair-tower`), to the VIEWING GALLERY at 143m; its belvedere, cap and finial are the spire's crown at 161.5m"
+    },
+    "viewing gallery": {
+      "type": "ring",
+      "count": 10,
+      "rOuter": 4.2,
+      "rInner": 2.2,
+      "height": 0.4,
+      "y": 142.6,
+      "place": [
+        [
+          0,
+          0,
+          44.5,
+          0
+        ]
+      ],
+      "solid": true,
+      "walked": true,
+      "_about": "the viewing gallery at 143m, round the stair's belvedere, on the spire's cut"
+    },
+    "viewing gallery parapet": {
+      "type": "ring",
+      "count": 10,
+      "rOuter": 4.2,
+      "rInner": 3.9000000000000004,
+      "height": 1.1,
+      "y": 143.0,
+      "place": [
+        [
+          0,
+          0,
+          44.5,
+          0
+        ]
+      ],
+      "solid": true
+    }
+  }
+}

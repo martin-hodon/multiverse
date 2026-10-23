@@ -1,0 +1,379 @@
+{
+ "kind": "item",
+ "name": "Mallard drake",
+ "category": "birds",
+ "era": "everywhere",
+ "region": "everywhere",
+ "_about": "a mallard drake: the bottle-green head, white collar, chestnut breast, grey flanks, the blue speculum",
+ "params": {
+  "s": [
+   0.92,
+   1.08
+  ],
+  "pose": {
+   "pick": [
+    "spread",
+    "folded"
+   ]
+  }
+ },
+ "materials": {
+  "back": "plumage-grey",
+  "breast": "plumage-chestnut",
+  "head": "plumage-bottle-green",
+  "wing": "plumage-grey",
+  "primaries": "plumage-grey",
+  "tips": "plumage-speculum",
+  "tail": "plumage-black",
+  "beak": "beak-yellow",
+  "legs": "leg-orange",
+  "eye": "#1a1208"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "sweep",
+   "material": "back",
+   "sides": 9,
+   "seg": 1,
+   "radii": [
+    "s * 0.0163",
+    "s * 0.0650",
+    "s * 0.0700",
+    "s * 0.0450",
+    "s * 0.0158"
+   ],
+   "path": [
+    [
+     "s * 0.1600",
+     "s * 0.1330",
+     0
+    ],
+    [
+     "s * 0.0800",
+     "s * 0.1330",
+     0
+    ],
+    [
+     0,
+     "s * 0.1295",
+     0
+    ],
+    [
+     "s * -0.0960",
+     "s * 0.1365",
+     0
+    ],
+    [
+     "s * -0.1600",
+     "s * 0.1435",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "breast",
+   "type": "sphere",
+   "material": "breast",
+   "r": "s * 0.0520",
+   "sides": 8,
+   "at": [
+    "s * 0.0640",
+    "s * 0.1204",
+    0
+   ],
+   "stretch": [
+    1.7,
+    1.02,
+    1.1
+   ]
+  },
+  {
+   "id": "neck",
+   "type": "sweep",
+   "material": "head",
+   "sides": 7,
+   "seg": 2,
+   "radii": [
+    "s * 0.0360",
+    "s * 0.0300",
+    "s * 0.0270"
+   ],
+   "path": [
+    [
+     "s * 0.1280",
+     "s * 0.1330",
+     0
+    ],
+    [
+     "s * 0.1821",
+     "s * 0.1588",
+     0
+    ],
+    [
+     "s * 0.1961",
+     "s * 0.1903",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.0400",
+   "sides": 8,
+   "at": [
+    "s * 0.1961",
+    "s * 0.1903",
+    0
+   ]
+  },
+  {
+   "id": "eye",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0072",
+   "sides": 5,
+   "at": [
+    "s * 0.2141",
+    "s * 0.2003",
+    "s * 0.0320"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "beak",
+   "type": "rod",
+   "material": "beak",
+   "sides": 6,
+   "r0": "s * 0.0140",
+   "r1": "s * 0.0049",
+   "at": [
+    "s * 0.2261",
+    "s * 0.1883",
+    0
+   ],
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0500",
+    "s * -0.0033",
+    0
+   ],
+   "stretch": [
+    1,
+    0.45,
+    1.6
+   ]
+  },
+  {
+   "id": "thigh",
+   "type": "rod",
+   "material": "legs",
+   "sides": 4,
+   "r": "s * 0.0065",
+   "from": [
+    "s * -0.0160",
+    "s * 0.0700",
+    "s * 0.0245"
+   ],
+   "to": [
+    "s * 0.0064",
+    "s * 0.0400",
+    "s * 0.0280"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tarsus",
+   "type": "rod",
+   "material": "legs",
+   "sides": 4,
+   "r": "s * 0.0050",
+   "from": [
+    "s * 0.0064",
+    "s * 0.0400",
+    "s * 0.0280"
+   ],
+   "to": [
+    "s * 0.0128",
+    0,
+    "s * 0.0280"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "toes",
+   "type": "rod",
+   "material": "legs",
+   "sides": 3,
+   "r0": "s * 0.0040",
+   "r1": "s * 0.0015",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0180",
+    0,
+    0
+   ],
+   "at": [
+    "s * 0.0128",
+    0,
+    "s * 0.0280"
+   ],
+   "around": {
+    "n": 3,
+    "r": 0,
+    "plane": "xz",
+    "start": -35,
+    "span": 70
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "hind toe",
+   "type": "rod",
+   "material": "legs",
+   "sides": 3,
+   "r0": "s * 0.0035",
+   "r1": "s * 0.0015",
+   "from": [
+    "s * 0.0128",
+    0,
+    "s * 0.0280"
+   ],
+   "to": [
+    "s * 0.0028",
+    0,
+    "s * 0.0280"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tail",
+   "type": "feathers",
+   "material": "tail",
+   "tips": "tips",
+   "n": 8,
+   "shape": "rounded",
+   "band": 0.3,
+   "lift": 0.0008,
+   "roots": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "dir": [
+    "-17.0",
+    "17.0"
+   ],
+   "length": [
+    "s * 0.0800",
+    "s * 0.0800"
+   ],
+   "width": [
+    "s * 0.0180",
+    "s * 0.0180"
+   ],
+   "droop": 0.2,
+   "lead": 1,
+   "at": [
+    "s * -0.1440",
+    "s * 0.1400",
+    0,
+    -90,
+    -10,
+    0
+   ]
+  },
+  {
+   "id": "wing spread",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "spread"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 0.4200",
+    "chord": "s * 0.1400",
+    "pri": 10,
+    "sec": 8,
+    "spread": 1,
+    "sweep": 12,
+    "band": 0.3
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0480",
+    "s * 0.1680",
+    "s * 0.0560",
+    0,
+    -8,
+    0
+   ]
+  },
+  {
+   "id": "wing folded",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "folded"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 0.4200",
+    "chord": "s * 0.1400",
+    "pri": 10,
+    "sec": 8,
+    "spread": 0,
+    "sweep": 12,
+    "band": 0.3
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0480",
+    "s * 0.1890",
+    "s * 0.0350",
+    0,
+    70,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.1260",
+   0
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   1,
+   0
+  ]
+ }
+}

@@ -1,0 +1,192 @@
+{
+ "name": "Roundhouse",
+ "_about": "The Iron Age roundhouse: a wattle-and-daub wall in a ring of posts, a steep thatched cone down over it, the door toward the sunrise, the hearth in the middle (Iron Age Britain and Gaul, -800-100)",
+ "era": "-800-100",
+ "region": "Iron Age Britain and Gaul",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "wall": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 4.0,
+   "rInner": 3.75,
+   "height": 1.6,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "door": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 4.0,
+   "rInner": 3.75,
+   "height": 1.6,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    0
+   ],
+   "opening": {
+    "at": 0,
+    "width": 1.1,
+    "sill": 0,
+    "springing": 1.5,
+    "head": {
+     "profile": "flat"
+    }
+   },
+   "glass": false
+  },
+  "roof": {
+   "type": "dome",
+   "sides": 16,
+   "radius": 4.6,
+   "thickness": 0.3,
+   "head": {
+    "profile": "trigonal",
+    "rise": 4.6
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     1.4,
+     0,
+     0
+    ]
+   ]
+  },
+  "floor": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 3.75,
+   "rInner": 0.05,
+   "height": 0.05,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "posts": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 3.2,
+   "sides": 6,
+   "at": [
+    [
+     2.6,
+     0,
+     0.0,
+     0
+    ],
+    [
+     1.8385,
+     0,
+     1.8385,
+     0
+    ],
+    [
+     0.0,
+     0,
+     2.6,
+     0
+    ],
+    [
+     -1.8385,
+     0,
+     1.8385,
+     0
+    ],
+    [
+     -2.6,
+     0,
+     0.0,
+     0
+    ],
+    [
+     -1.8385,
+     0,
+     -1.8385,
+     0
+    ],
+    [
+     -0.0,
+     0,
+     -2.6,
+     0
+    ],
+    [
+     1.8385,
+     0,
+     -1.8385,
+     0
+    ]
+   ]
+  },
+  "hearth": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     0,
+     0.05,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.25,
+    "h": 0.5
+   }
+  }
+ },
+ "build": [
+  "wall",
+  "door",
+  "roof",
+  "floor",
+  "posts",
+  "hearth"
+ ]
+}

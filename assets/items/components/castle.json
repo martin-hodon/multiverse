@@ -1,0 +1,145 @@
+{
+ "kind": "item",
+ "name": "Castle",
+ "category": "component",
+ "_about": "a fighting platform raised on posts: a forecastle or an aftcastle, d long (along x, from its origin forward) and w wide, its floor h up, with a parapet round it (crenellated when `crenels`)",
+ "params": {
+  "w": 5,
+  "d": 4,
+  "h": 2.5,
+  "rail": 1.0,
+  "crenels": 1,
+  "posts": 4
+ },
+ "materials": {
+  "wood": "planks",
+  "deck": "deck"
+ },
+ "parts": [
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "deck",
+   "size": [
+    "d",
+    0.12,
+    "w"
+   ],
+   "at": [
+    "d / 2",
+    "h - 0.06",
+    0
+   ]
+  },
+  {
+   "id": "side",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "d",
+    "rail",
+    0.08
+   ],
+   "at": [
+    "d / 2",
+    "h + rail / 2",
+    "w / 2 - 0.04"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "end",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.08,
+    "rail",
+    "w"
+   ],
+   "at": [
+    "d - 0.04",
+    "h + rail / 2",
+    0
+   ]
+  },
+  {
+   "id": "crenel side",
+   "type": "box",
+   "when": "crenels",
+   "material": "wood",
+   "size": [
+    0.35,
+    0.3,
+    0.08
+   ],
+   "along": {
+    "n": "max(2, round(d / 0.8))",
+    "from": [
+     0.3,
+     "h + rail + 0.15",
+     "w / 2 - 0.04"
+    ],
+    "to": [
+     "d - 0.3",
+     "h + rail + 0.15",
+     "w / 2 - 0.04"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "crenel end",
+   "type": "box",
+   "when": "crenels",
+   "material": "wood",
+   "size": [
+    0.08,
+    0.3,
+    0.35
+   ],
+   "along": {
+    "n": "max(2, round(w / 0.8))",
+    "from": [
+     "d - 0.04",
+     "h + rail + 0.15",
+     "-w / 2 + 0.3"
+    ],
+    "to": [
+     "d - 0.04",
+     "h + rail + 0.15",
+     "w / 2 - 0.3"
+    ]
+   }
+  },
+  {
+   "id": "post",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.09,
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "h - 0.12",
+    0
+   ],
+   "when": "posts",
+   "at": [
+    [
+     "d * 0.12",
+     0,
+     "w * 0.4"
+    ],
+    [
+     "d * 0.88",
+     0,
+     "w * 0.4"
+    ]
+   ],
+   "mirror": "z"
+  }
+ ]
+}

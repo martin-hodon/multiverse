@@ -1,0 +1,22 @@
+{
+  "name": "Sleeve",
+  "kind": "component",
+  "_about": "A SHEET ROUND THE ARM from the shoulder seam down to the elbow or the wrist, following it (a fitted sleeve: it bends with the elbow), with a CUFF band at its end if `cuff` is given. Both arms unless `side` says.",
+  "params": {
+    "to": "wrist",
+    "cuff": 0
+  },
+  "pieces": [
+    {
+      "name": "sleeve",
+      "on": "arm",
+      "from": "shoulder",
+      "to": "to",
+      "fabric": "main",
+      "hem": {
+        "width": "cuff",
+        "fabric": "trim"
+      }
+    }
+  ]
+}

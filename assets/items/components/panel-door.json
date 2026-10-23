@@ -1,0 +1,92 @@
+{
+ "kind": "item",
+ "name": "Frame-and-panel door",
+ "category": "component",
+ "_about": "a cupboard's door as a joiner makes it: two stiles and two rails round a thinner panel set back in them; its face at 0 looking +z, `w` by `h`; a knob by its opening edge (side -1 left, 1 right)",
+ "params": {
+  "w": 0.45,
+  "h": 0.9,
+  "s": 0.06,
+  "t": 0.022,
+  "side": 1,
+  "arch": 0
+ },
+ "materials": {
+  "wood": "oak",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "stiles",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "s",
+    "h",
+    "t"
+   ],
+   "at": [
+    [
+     "0 - w / 2 + s / 2",
+     0,
+     "0 - t / 2"
+    ],
+    [
+     "w / 2 - s / 2",
+     0,
+     "0 - t / 2"
+    ]
+   ]
+  },
+  {
+   "id": "rails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 2 * s",
+    "s",
+    "t"
+   ],
+   "at": [
+    [
+     0,
+     "h / 2 - s / 2",
+     "0 - t / 2"
+    ],
+    [
+     0,
+     "0 - h / 2 + s / 2",
+     "0 - t / 2"
+    ]
+   ]
+  },
+  {
+   "id": "panel",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 2 * s + 0.01",
+    "h - 2 * s + 0.01",
+    "t * 0.5"
+   ],
+   "round": 0.004,
+   "at": [
+    0,
+    0,
+    "0 - t * 0.6"
+   ]
+  },
+  {
+   "id": "knob",
+   "use": "items/components/knob",
+   "at": [
+    "(w / 2 - s / 2) * side",
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.013
+   }
+  }
+ ]
+}

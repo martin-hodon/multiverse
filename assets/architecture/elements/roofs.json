@@ -1,0 +1,475 @@
+{
+  "name": "Roofs",
+  "_about": "THE COMMON ROOFS, all one part type (`roof`) because every one of them is a stack of rectangles joined side to side -- the eave, any break line, the ridge -- and a side that comes in between two levels is a SLOPE while one that does not is a GABLE. In the front row, on the same 6 x 9m house: FLAT, SHED (lean-to), GABLE, HIP, PYRAMID (pavilion), MANSARD (steep all round, then a low hip), GAMBREL (the barn's: the same on the long sides only), JERKINHEAD (a gable with its top hipped back -- the clipped gable), GABLET (a hip with a small gable over it -- the Dutch gable) and SALTBOX (a gable with its ridge off the middle). `pitch` is in degrees; `overhang` carries the eave out and down its own slope and the verge out over the gable. Behind them, the TOWER ROOFS, which are domes of `thickness` 0 -- a skin -- struck from arch profiles: the cone (trigonal), the octagonal spire, the onion, the bell (ogee), the flared spire (inflexed) and the tented roof of a square tower. `sides` matches the tower's own bays, so the roof's corners stand on the tower's.",
+  "params": {
+    "detail": 4,
+    "W": 6,
+    "L": 9,
+    "t": 0.4,
+    "eaveH": 3,
+    "eave": 0.4,
+    "gap": 11,
+    "tr": 2.5,
+    "towerH": 8,
+    "row2": 16
+  },
+  "build": [
+    "long walls",
+    "end walls",
+    "flat",
+    "shed",
+    "gable",
+    "hip",
+    "pyramid",
+    "mansard",
+    "gambrel",
+    "jerkinhead",
+    "gablet",
+    "saltbox",
+    "conical tower",
+    "conical",
+    "octagonal spire tower",
+    "octagonal spire",
+    "onion tower",
+    "onion",
+    "bell (ogee) tower",
+    "bell (ogee)",
+    "flared spire (inflexed) tower",
+    "flared spire (inflexed)",
+    "tented (square pyramid) tower",
+    "tented (square pyramid)"
+  ],
+  "parts": {
+    "long walls": {
+      "type": "wall",
+      "width": "L",
+      "height": "eaveH",
+      "thickness": "t",
+      "at": [
+        [
+          "W / 2",
+          0,
+          0,
+          "1.5707963"
+        ],
+        [
+          "0 - W / 2 + t",
+          0,
+          0,
+          "1.5707963"
+        ]
+      ],
+      "repeat": {
+        "count": 10,
+        "step": [
+          "gap",
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "end walls": {
+      "type": "wall",
+      "width": "W - 2 * t",
+      "height": "eaveH",
+      "thickness": "t",
+      "at": [
+        [
+          0,
+          0,
+          "L / 2",
+          0
+        ],
+        [
+          0,
+          0,
+          "0 - L / 2 + t",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": 10,
+        "step": [
+          "gap",
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "flat": {
+      "type": "roof",
+      "form": "flat",
+      "width": "W",
+      "length": "L",
+      "overhang": "eave",
+      "thickness": 0.35,
+      "at": [
+        [
+          "gap * 0",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "shed": {
+      "type": "roof",
+      "form": "shed",
+      "width": "W",
+      "length": "L",
+      "overhang": "eave",
+      "pitch": 15,
+      "at": [
+        [
+          "gap * 1",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "gable": {
+      "type": "roof",
+      "form": "gable",
+      "width": "W",
+      "length": "L",
+      "overhang": "eave",
+      "pitch": 40,
+      "at": [
+        [
+          "gap * 2",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "hip": {
+      "type": "roof",
+      "form": "hip",
+      "width": "W",
+      "length": "L",
+      "overhang": "eave",
+      "pitch": 35,
+      "at": [
+        [
+          "gap * 3",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "pyramid": {
+      "type": "roof",
+      "form": "pyramid",
+      "width": "W",
+      "length": "L",
+      "overhang": "eave",
+      "pitch": 35,
+      "at": [
+        [
+          "gap * 4",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "mansard": {
+      "type": "roof",
+      "form": "mansard",
+      "width": "W",
+      "length": "L",
+      "overhang": 0.12,
+      "pitch": 20,
+      "lowerPitch": 72,
+      "breakH": 2.4,
+      "at": [
+        [
+          "gap * 5",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "gambrel": {
+      "type": "roof",
+      "form": "gambrel",
+      "width": "W",
+      "length": "L",
+      "overhang": 0.15,
+      "pitch": 25,
+      "lowerPitch": 62,
+      "breakH": 2.0,
+      "at": [
+        [
+          "gap * 6",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "jerkinhead": {
+      "type": "roof",
+      "form": "jerkinhead",
+      "width": "W",
+      "length": "L",
+      "overhang": "eave",
+      "pitch": 45,
+      "clip": 0.3,
+      "at": [
+        [
+          "gap * 7",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "gablet": {
+      "type": "roof",
+      "form": "gablet",
+      "width": "W",
+      "length": "L",
+      "overhang": "eave",
+      "pitch": 38,
+      "hipH": 0.6,
+      "at": [
+        [
+          "gap * 8",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "saltbox": {
+      "type": "roof",
+      "form": "saltbox",
+      "width": "W",
+      "length": "L",
+      "overhang": "eave",
+      "pitch": 45,
+      "ridge": 0.35,
+      "at": [
+        [
+          "gap * 9",
+          "eaveH",
+          0,
+          0
+        ]
+      ]
+    },
+    "conical tower": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": "tr",
+      "rInner": "tr - t",
+      "height": "towerH",
+      "solid": true,
+      "place": [
+        [
+          "gap * 0",
+          0,
+          "row2",
+          0
+        ]
+      ]
+    },
+    "conical": {
+      "type": "dome",
+      "sides": 16,
+      "radius": "tr + eave * 0.5",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "tr * 1.8"
+      },
+      "at": [
+        [
+          "gap * 0",
+          "towerH",
+          "row2",
+          0
+        ]
+      ]
+    },
+    "octagonal spire tower": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "tr",
+      "rInner": "tr - t",
+      "height": "towerH",
+      "solid": true,
+      "place": [
+        [
+          "gap * 1",
+          0,
+          "row2",
+          0
+        ]
+      ]
+    },
+    "octagonal spire": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "tr + eave * 0.5",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "tr * 4"
+      },
+      "at": [
+        [
+          "gap * 1",
+          "towerH",
+          "row2",
+          0
+        ]
+      ]
+    },
+    "onion tower": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": "tr",
+      "rInner": "tr - t",
+      "height": "towerH",
+      "solid": true,
+      "place": [
+        [
+          "gap * 2",
+          0,
+          "row2",
+          0
+        ]
+      ]
+    },
+    "onion": {
+      "type": "dome",
+      "sides": 16,
+      "radius": "tr + eave * 0.5",
+      "thickness": 0,
+      "head": {
+        "profile": "onion",
+        "bulge": 1.35,
+        "neck": 0.9
+      },
+      "at": [
+        [
+          "gap * 2",
+          "towerH",
+          "row2",
+          0
+        ]
+      ]
+    },
+    "bell (ogee) tower": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": "tr",
+      "rInner": "tr - t",
+      "height": "towerH",
+      "solid": true,
+      "place": [
+        [
+          "gap * 3",
+          0,
+          "row2",
+          0
+        ]
+      ]
+    },
+    "bell (ogee)": {
+      "type": "dome",
+      "sides": 16,
+      "radius": "tr + eave * 0.5",
+      "thickness": 0,
+      "head": {
+        "profile": "ogee",
+        "neck": 0.9
+      },
+      "at": [
+        [
+          "gap * 3",
+          "towerH",
+          "row2",
+          0
+        ]
+      ]
+    },
+    "flared spire (inflexed) tower": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "tr",
+      "rInner": "tr - t",
+      "height": "towerH",
+      "solid": true,
+      "place": [
+        [
+          "gap * 4",
+          0,
+          "row2",
+          0
+        ]
+      ]
+    },
+    "flared spire (inflexed)": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "tr + eave * 0.5",
+      "thickness": 0,
+      "head": {
+        "profile": "inflexed",
+        "rise": "tr * 3.5",
+        "bow": 0.1
+      },
+      "at": [
+        [
+          "gap * 4",
+          "towerH",
+          "row2",
+          0
+        ]
+      ]
+    },
+    "tented (square pyramid) tower": {
+      "type": "ring",
+      "count": 4,
+      "rOuter": "tr",
+      "rInner": "tr - t",
+      "height": "towerH",
+      "solid": true,
+      "place": [
+        [
+          "gap * 5",
+          0,
+          "row2",
+          0
+        ]
+      ]
+    },
+    "tented (square pyramid)": {
+      "type": "dome",
+      "sides": 4,
+      "radius": "tr + eave * 0.5",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "tr * 1.2"
+      },
+      "at": [
+        [
+          "gap * 5",
+          "towerH",
+          "row2",
+          0
+        ]
+      ]
+    }
+  }
+}

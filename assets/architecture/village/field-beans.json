@@ -1,0 +1,50 @@
+{
+ "name": "Bean field",
+ "_about": "A BEAN FIELD: a tilled plot 12 x 10 m, its beans in rows (painted by the game from the `crop` marker)",
+ "site": {
+  "origin": true
+ },
+ "params": {
+  "detail": 4,
+  "footW": 13,
+  "footD": 11
+ },
+ "parts": {
+  "soil": {
+   "type": "box",
+   "width": 12,
+   "length": 10,
+   "height": 0.12,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "crop": {
+   "type": "marker",
+   "role": "crop",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "crop": "beans",
+    "w": 12,
+    "d": 10
+   }
+  }
+ },
+ "build": [
+  "soil",
+  "crop"
+ ]
+}

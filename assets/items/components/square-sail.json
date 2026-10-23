@@ -1,0 +1,80 @@
+{
+ "kind": "item",
+ "name": "Square sail",
+ "category": "component",
+ "_about": "a yard w wide with its sail hung from it, h deep, its foot `foot` of its head, bellied `belly` toward +z (the wind behind it); `set` full or furled (rolled on the yard); turned by its parent so its x lies across the ship",
+ "params": {
+  "w": 8,
+  "h": 6,
+  "foot": 0.92,
+  "belly": "w * 0.1",
+  "r": "w * 0.011",
+  "set": "full"
+ },
+ "materials": {
+  "wood": "pine",
+  "cloth": "canvas"
+ },
+ "parts": [
+  {
+   "id": "yard",
+   "use": "items/components/yard",
+   "params": {
+    "l": "w * 1.08",
+    "r": "r"
+   }
+  },
+  {
+   "id": "cloth",
+   "type": "sail",
+   "when": {
+    "set": "full"
+   },
+   "material": "cloth",
+   "belly": "belly",
+   "at": [
+    0,
+    "-r * 0.6",
+    0
+   ],
+   "corners": [
+    [
+     "-w / 2",
+     0
+    ],
+    [
+     "w / 2",
+     0
+    ],
+    [
+     "w * foot / 2",
+     "-h"
+    ],
+    [
+     "-w * foot / 2",
+     "-h"
+    ]
+   ]
+  },
+  {
+   "id": "furled",
+   "type": "rod",
+   "when": {
+    "set": "furled"
+   },
+   "material": "cloth",
+   "from": [
+    "-w * 0.5",
+    "-r * 1.5",
+    0
+   ],
+   "to": [
+    "w * 0.5",
+    "-r * 1.5",
+    0
+   ],
+   "r": "h * 0.03",
+   "sides": 8
+  }
+ ]
+}

@@ -1,0 +1,163 @@
+{
+ "kind": "item",
+ "name": "Flintlock pistol",
+ "category": "weapon/firearm",
+ "era": "1650-1800",
+ "region": "Europe",
+ "_about": "a horseman's pistol: a walnut stock curving down into its grip, a barrel forward, a flintlock, a brass cap on the butt",
+ "params": {
+  "barrelL": [
+   0.24,
+   0.3
+  ]
+ },
+ "materials": {
+  "stock": "walnut",
+  "barrel": "iron",
+  "brass": "brass",
+  "lock": "steel"
+ },
+ "parts": [
+  {
+   "id": "stock",
+   "type": "plate",
+   "material": "stock",
+   "thick": 0.034,
+   "outline": [
+    [
+     -0.03,
+     -0.12
+    ],
+    [
+     0.01,
+     -0.13
+    ],
+    [
+     0.02,
+     -0.02
+    ],
+    [
+     "barrelL",
+     0.005
+    ],
+    [
+     "barrelL",
+     0.025
+    ],
+    [
+     0.0,
+     0.035
+    ],
+    [
+     -0.035,
+     0.02
+    ],
+    [
+     -0.045,
+     -0.05
+    ]
+   ]
+  },
+  {
+   "id": "barrel",
+   "type": "rod",
+   "material": "barrel",
+   "from": [
+    0.0,
+    0.028,
+    0
+   ],
+   "to": [
+    "barrelL + 0.02",
+    0.028,
+    0
+   ],
+   "r0": 0.012,
+   "r1": 0.01,
+   "sides": 8
+  },
+  {
+   "id": "lock",
+   "type": "box",
+   "material": "lock",
+   "size": [
+    0.08,
+    0.025,
+    0.01
+   ],
+   "at": [
+    0.01,
+    0.012,
+    0.02
+   ]
+  },
+  {
+   "id": "cap",
+   "type": "sphere",
+   "material": "brass",
+   "r": 0.026,
+   "at": [
+    -0.03,
+    -0.12,
+    0
+   ]
+  },
+  {
+   "id": "guard",
+   "type": "sweep",
+   "material": "brass",
+   "r": 0.0035,
+   "path": [
+    [
+     0.035,
+     -0.005,
+     0
+    ],
+    [
+     0.03,
+     -0.035,
+     0
+    ],
+    [
+     0.0,
+     -0.035,
+     0
+    ],
+    [
+     -0.005,
+     -0.012,
+     0
+    ]
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   -0.01,
+   -0.07,
+   0
+  ],
+  "axis": [
+   0.25,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0,
+    -1,
+    0.3
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

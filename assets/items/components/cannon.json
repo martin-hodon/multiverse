@@ -1,0 +1,144 @@
+{
+ "kind": "item",
+ "name": "Cannon",
+ "category": "component",
+ "_about": "a ship's gun on its carriage, its muzzle to +x: a bronze or iron barrel l long, the truck carriage under it",
+ "params": {
+  "l": 2.4,
+  "bore": 0.11
+ },
+ "materials": {
+  "metal": "iron",
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "barrel",
+   "type": "lathe",
+   "material": "metal",
+   "at": [
+    "-l * 0.4",
+    "bore * 3.2",
+    0,
+    0,
+    0,
+    -90
+   ],
+   "profile": [
+    [
+     "bore * 1.6",
+     0
+    ],
+    [
+     "bore * 1.7",
+     "l * 0.05"
+    ],
+    [
+     "bore * 1.5",
+     "l * 0.06"
+    ],
+    [
+     "bore * 1.3",
+     "l * 0.55"
+    ],
+    [
+     "bore * 1.35",
+     "l * 0.57"
+    ],
+    [
+     "bore * 1.05",
+     "l * 0.9"
+    ],
+    [
+     "bore * 1.3",
+     "l * 0.96"
+    ],
+    [
+     "bore * 1.25",
+     "l"
+    ]
+   ]
+  },
+  {
+   "id": "cascabel",
+   "type": "sphere",
+   "material": "metal",
+   "r": "bore * 0.7",
+   "at": [
+    "-l * 0.47",
+    "bore * 3.2",
+    0
+   ]
+  },
+  {
+   "id": "carriage",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l * 0.5",
+    "bore * 2.2",
+    "bore * 3"
+   ],
+   "at": [
+    "-l * 0.2",
+    "bore * 1.9",
+    0
+   ]
+  },
+  {
+   "id": "truck",
+   "type": "lathe",
+   "material": "wood",
+   "at": [
+    "-l * 0.35",
+    "bore * 0.9",
+    "bore * 1.8",
+    0,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     "bore * 0.9",
+     "-bore * 0.3"
+    ],
+    [
+     "bore * 0.9",
+     "bore * 0.3"
+    ]
+   ],
+   "sides": 10,
+   "stretch": [
+    1,
+    1,
+    1
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "truck fore",
+   "type": "lathe",
+   "material": "wood",
+   "at": [
+    "-l * 0.05",
+    "bore * 0.8",
+    "bore * 1.8",
+    0,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     "bore * 0.8",
+     "-bore * 0.3"
+    ],
+    [
+     "bore * 0.8",
+     "bore * 0.3"
+    ]
+   ],
+   "sides": 10,
+   "mirror": "z"
+  }
+ ]
+}

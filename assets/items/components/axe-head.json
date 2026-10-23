@@ -1,0 +1,336 @@
+{
+ "kind": "item",
+ "name": "Axe head",
+ "category": "component",
+ "_about": "an axe's iron: the eye round the haft (at 0, the haft along y) and the blade forward (+x) in one of its shapes -- bearded (the Northmen's, its beard hooked down), broad (the Dane axe's crescent), felling (the woodsman's wedge with its poll), francisca (the Franks' up-swept throwing axe), hatchet -- thick at the eye, fine at the edge; a back spike (spike) or a hammer poll (poll)",
+ "params": {
+  "s": 1,
+  "style": "bearded",
+  "spike": 0,
+  "poll": 0
+ },
+ "materials": {
+  "head": "iron"
+ },
+ "parts": [
+  {
+   "id": "eye",
+   "type": "lathe",
+   "material": "head",
+   "profile": [
+    [
+     "0.022 * s",
+     "0 - 0.04 * s"
+    ],
+    [
+     "0.025 * s",
+     "0 - 0.03 * s"
+    ],
+    [
+     "0.025 * s",
+     "0.03 * s"
+    ],
+    [
+     "0.022 * s",
+     "0.04 * s"
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "bearded",
+   "type": "plate",
+   "when": {
+    "style": "bearded"
+   },
+   "material": "head",
+   "outline": [
+    [
+     "0.015 * s",
+     "0.03 * s"
+    ],
+    [
+     "0.06 * s",
+     "0.028 * s"
+    ],
+    [
+     "0.1 * s",
+     "0.04 * s"
+    ],
+    [
+     "0.135 * s",
+     "0.07 * s"
+    ],
+    [
+     "0.15 * s",
+     "0.05 * s"
+    ],
+    [
+     "0.155 * s",
+     "0.0 * s"
+    ],
+    [
+     "0.15 * s",
+     "-0.06 * s"
+    ],
+    [
+     "0.14 * s",
+     "-0.1 * s"
+    ],
+    [
+     "0.12 * s",
+     "-0.105 * s"
+    ],
+    [
+     "0.095 * s",
+     "-0.06 * s"
+    ],
+    [
+     "0.06 * s",
+     "-0.03 * s"
+    ],
+    [
+     "0.015 * s",
+     "-0.025 * s"
+    ]
+   ],
+   "taper": [
+    "0.026 * s",
+    "0.004 * s"
+   ]
+  },
+  {
+   "id": "broad",
+   "type": "plate",
+   "when": {
+    "style": "broad"
+   },
+   "material": "head",
+   "outline": [
+    [
+     "0.015 * s",
+     "0.03 * s"
+    ],
+    [
+     "0.08 * s",
+     "0.045 * s"
+    ],
+    [
+     "0.16 * s",
+     "0.12 * s"
+    ],
+    [
+     "0.185 * s",
+     "0.13 * s"
+    ],
+    [
+     "0.2 * s",
+     "0.08 * s"
+    ],
+    [
+     "0.205 * s",
+     "0.0 * s"
+    ],
+    [
+     "0.2 * s",
+     "-0.08 * s"
+    ],
+    [
+     "0.185 * s",
+     "-0.13 * s"
+    ],
+    [
+     "0.16 * s",
+     "-0.12 * s"
+    ],
+    [
+     "0.08 * s",
+     "-0.045 * s"
+    ],
+    [
+     "0.015 * s",
+     "-0.03 * s"
+    ]
+   ],
+   "taper": [
+    "0.026 * s",
+    "0.004 * s"
+   ]
+  },
+  {
+   "id": "felling",
+   "type": "plate",
+   "when": {
+    "style": "felling"
+   },
+   "material": "head",
+   "outline": [
+    [
+     "0.015 * s",
+     "0.035 * s"
+    ],
+    [
+     "0.1 * s",
+     "0.04 * s"
+    ],
+    [
+     "0.15 * s",
+     "0.05 * s"
+    ],
+    [
+     "0.16 * s",
+     "0.045 * s"
+    ],
+    [
+     "0.16 * s",
+     "-0.045 * s"
+    ],
+    [
+     "0.15 * s",
+     "-0.05 * s"
+    ],
+    [
+     "0.1 * s",
+     "-0.04 * s"
+    ],
+    [
+     "0.015 * s",
+     "-0.035 * s"
+    ]
+   ],
+   "taper": [
+    "0.026 * s",
+    "0.004 * s"
+   ]
+  },
+  {
+   "id": "francisca",
+   "type": "plate",
+   "when": {
+    "style": "francisca"
+   },
+   "material": "head",
+   "outline": [
+    [
+     "0.015 * s",
+     "0.028 * s"
+    ],
+    [
+     "0.07 * s",
+     "0.04 * s"
+    ],
+    [
+     "0.13 * s",
+     "0.085 * s"
+    ],
+    [
+     "0.15 * s",
+     "0.08 * s"
+    ],
+    [
+     "0.14 * s",
+     "0.0 * s"
+    ],
+    [
+     "0.12 * s",
+     "-0.05 * s"
+    ],
+    [
+     "0.1 * s",
+     "-0.045 * s"
+    ],
+    [
+     "0.05 * s",
+     "-0.02 * s"
+    ],
+    [
+     "0.015 * s",
+     "-0.022 * s"
+    ]
+   ],
+   "taper": [
+    "0.026 * s",
+    "0.004 * s"
+   ]
+  },
+  {
+   "id": "hatchet",
+   "type": "plate",
+   "when": {
+    "style": "hatchet"
+   },
+   "material": "head",
+   "outline": [
+    [
+     "0.015 * s",
+     "0.025 * s"
+    ],
+    [
+     "0.07 * s",
+     "0.03 * s"
+    ],
+    [
+     "0.1 * s",
+     "0.045 * s"
+    ],
+    [
+     "0.11 * s",
+     "0.0 * s"
+    ],
+    [
+     "0.1 * s",
+     "-0.045 * s"
+    ],
+    [
+     "0.07 * s",
+     "-0.03 * s"
+    ],
+    [
+     "0.015 * s",
+     "-0.025 * s"
+    ]
+   ],
+   "taper": [
+    "0.026 * s",
+    "0.004 * s"
+   ]
+  },
+  {
+   "id": "spike",
+   "type": "plate",
+   "when": "spike",
+   "material": "head",
+   "outline": [
+    [
+     "-0.015 * s",
+     "0.014 * s"
+    ],
+    [
+     "-0.13 * s",
+     "0.0 * s"
+    ],
+    [
+     "-0.015 * s",
+     "-0.014 * s"
+    ]
+   ],
+   "thick": "0.012 * s"
+  },
+  {
+   "id": "poll",
+   "type": "box",
+   "when": "poll",
+   "material": "head",
+   "size": [
+    "0.04 * s",
+    "0.055 * s",
+    "0.04 * s"
+   ],
+   "at": [
+    "0 - 0.035 * s",
+    0,
+    0
+   ]
+  }
+ ]
+}

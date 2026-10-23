@@ -1,0 +1,39 @@
+{
+ "kind": "item",
+ "name": "Spindle",
+ "category": "component",
+ "_about": "a turned spindle from 0 to h: a Windsor chair's, a gallery's, a cradle's",
+ "params": {
+  "h": 0.4,
+  "r": 0.01
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "spindle",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     "r * 0.7",
+     0
+    ],
+    [
+     "r",
+     "h * 0.3"
+    ],
+    [
+     "r * 0.8",
+     "h * 0.55"
+    ],
+    [
+     "r * 0.55",
+     "h"
+    ]
+   ],
+   "sides": 6
+  }
+ ]
+}

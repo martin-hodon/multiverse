@@ -1,0 +1,133 @@
+{
+ "name": "Minka",
+ "_about": "The Japanese farmhouse: a timber frame on stones, plastered walls and sliding doors, a raised floor of boards beside the earthen floor, a great hipped thatch over all (Japan (Edo farmhouse), 1600-1900)",
+ "era": "1600-1900",
+ "region": "Japan (Edo farmhouse)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "raised floor": {
+   "type": "box",
+   "width": 6.0,
+   "length": 7.0,
+   "height": 0.5,
+   "at": [
+    [
+     -2.0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "earth floor": {
+   "type": "box",
+   "width": 4.0,
+   "length": 7.0,
+   "height": 0.05,
+   "at": [
+    [
+     3.0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     10.0,
+     7.0
+    ]
+   },
+   "thickness": 0.15,
+   "height": 2.7,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 2.5,
+      "width": 1.8,
+      "sill": 0,
+      "springing": 2.0,
+      "head": {
+       "profile": "flat"
+      }
+     },
+     {
+      "at": -1.5,
+      "width": 1.8,
+      "sill": 0,
+      "springing": 2.0,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ],
+    "2": [
+     {
+      "at": 0,
+      "width": 1.2,
+      "sill": 1.0,
+      "springing": 1.9,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "roof",
+   "form": "hip",
+   "width": 7.0,
+   "length": 10.0,
+   "pitch": 52,
+   "overhang": 0.9,
+   "at": [
+    [
+     0,
+     2.7,
+     0,
+     1.5707963
+    ]
+   ],
+   "shell": 0.45
+  },
+  "hearth": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     -2.0,
+     0.5,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.3,
+    "h": 0.3
+   }
+  }
+ },
+ "build": [
+  "raised floor",
+  "earth floor",
+  "walls",
+  "roof",
+  "hearth"
+ ]
+}

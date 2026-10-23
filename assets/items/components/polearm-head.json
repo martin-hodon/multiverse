@@ -1,0 +1,539 @@
+{
+ "kind": "item",
+ "name": "Polearm head",
+ "category": "component",
+ "_about": "the heads of the infantry's polearms, on a socket at 0 with langets down the pole: halberd (an axe blade, a hook behind, a spike above), glaive (a long single-edged blade), bill (a hooked blade with its spur and spike), partisan (a broad point with two lugs), poleaxe (a hammer, a small axe, a spike), guandao (the Chinese moon blade), naginata (the Japanese curved blade)",
+ "params": {
+  "style": "halberd",
+  "s": 1
+ },
+ "materials": {
+  "head": "iron"
+ },
+ "parts": [
+  {
+   "id": "socket",
+   "type": "lathe",
+   "material": "head",
+   "profile": [
+    [
+     0.02,
+     -0.08
+    ],
+    [
+     0.018,
+     0
+    ],
+    [
+     0.014,
+     0.04
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "langets",
+   "type": "box",
+   "when": {
+    "style": [
+     "halberd",
+     "bill",
+     "poleaxe",
+     "partisan"
+    ]
+   },
+   "material": "head",
+   "size": [
+    0.006,
+    0.34,
+    0.03
+   ],
+   "at": [
+    [
+     0.019,
+     -0.2,
+     0
+    ],
+    [
+     -0.019,
+     -0.2,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "halberd blade",
+   "type": "plate",
+   "when": {
+    "style": "halberd"
+   },
+   "material": "head",
+   "outline": [
+    [
+     "0.015 * s",
+     "0.1 * s"
+    ],
+    [
+     "0.1 * s",
+     "0.13 * s"
+    ],
+    [
+     "0.15 * s",
+     "0.15 * s"
+    ],
+    [
+     "0.16 * s",
+     "0.02 * s"
+    ],
+    [
+     "0.13 * s",
+     "-0.06 * s"
+    ],
+    [
+     "0.06 * s",
+     "-0.04 * s"
+    ],
+    [
+     "0.015 * s",
+     "0.0 * s"
+    ]
+   ],
+   "taper": [
+    0.014,
+    0.003
+   ]
+  },
+  {
+   "id": "hook",
+   "type": "plate",
+   "when": {
+    "style": [
+     "halberd",
+     "bill"
+    ]
+   },
+   "material": "head",
+   "outline": [
+    [
+     "-0.015 * s",
+     "0.05 * s"
+    ],
+    [
+     "-0.07 * s",
+     "0.08 * s"
+    ],
+    [
+     "-0.11 * s",
+     "0.1 * s"
+    ],
+    [
+     "-0.1 * s",
+     "0.07 * s"
+    ],
+    [
+     "-0.04 * s",
+     "0.02 * s"
+    ],
+    [
+     "-0.015 * s",
+     "0.0 * s"
+    ]
+   ],
+   "thick": 0.01
+  },
+  {
+   "id": "neck",
+   "type": "lathe",
+   "when": {
+    "style": [
+     "halberd",
+     "bill",
+     "poleaxe"
+    ]
+   },
+   "material": "head",
+   "_about": "the socket carried on up through the head to the spike's foot: the blades hang on it, nothing floats",
+   "profile": [
+    [
+     0.014,
+     0.04
+    ],
+    [
+     0.013,
+     "0.16 * s"
+    ]
+   ]
+  },
+  {
+   "id": "top spike",
+   "type": "blade",
+   "when": {
+    "style": [
+     "halberd",
+     "bill",
+     "poleaxe"
+    ]
+   },
+   "material": "head",
+   "at": [
+    0,
+    "0.16 * s",
+    0
+   ],
+   "length": "0.3 * s",
+   "flat": 0.2,
+   "width": [
+    [
+     0,
+     0.018
+    ],
+    [
+     0.7,
+     0.014
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.012,
+    0.004
+   ]
+  },
+  {
+   "id": "glaive",
+   "type": "blade",
+   "when": {
+    "style": "glaive"
+   },
+   "material": "head",
+   "at": [
+    0,
+    0.04,
+    0
+   ],
+   "length": "0.55 * s",
+   "edges": 1,
+   "flat": 0.45,
+   "curve": 0.035,
+   "width": [
+    [
+     0,
+     0.035
+    ],
+    [
+     0.72,
+     0.055
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.009,
+    0.004
+   ]
+  },
+  {
+   "id": "spur",
+   "type": "plate",
+   "when": {
+    "style": [
+     "glaive",
+     "bill"
+    ]
+   },
+   "material": "head",
+   "outline": [
+    [
+     -0.012,
+     0.09
+    ],
+    [
+     -0.05,
+     0.13
+    ],
+    [
+     -0.012,
+     0.12
+    ]
+   ],
+   "thick": 0.008
+  },
+  {
+   "id": "bill blade",
+   "type": "plate",
+   "when": {
+    "style": "bill"
+   },
+   "material": "head",
+   "outline": [
+    [
+     "0.015 * s",
+     "0.0 * s"
+    ],
+    [
+     "0.07 * s",
+     "0.02 * s"
+    ],
+    [
+     "0.09 * s",
+     "0.1 * s"
+    ],
+    [
+     "0.07 * s",
+     "0.18 * s"
+    ],
+    [
+     "0.1 * s",
+     "0.25 * s"
+    ],
+    [
+     "0.07 * s",
+     "0.3 * s"
+    ],
+    [
+     "0.02 * s",
+     "0.3 * s"
+    ],
+    [
+     "0.03 * s",
+     "0.2 * s"
+    ],
+    [
+     "0.015 * s",
+     "0.12 * s"
+    ]
+   ],
+   "taper": [
+    0.012,
+    0.003
+   ]
+  },
+  {
+   "id": "partisan",
+   "type": "blade",
+   "when": {
+    "style": "partisan"
+   },
+   "material": "head",
+   "at": [
+    0,
+    0.04,
+    0
+   ],
+   "length": "0.42 * s",
+   "flat": 0.25,
+   "width": [
+    [
+     0,
+     0.05
+    ],
+    [
+     0.18,
+     0.045
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.012,
+    0.004
+   ]
+  },
+  {
+   "id": "lugs",
+   "type": "plate",
+   "when": {
+    "style": "partisan"
+   },
+   "material": "head",
+   "outline": [
+    [
+     0.03,
+     0.03
+    ],
+    [
+     0.12,
+     0.08
+    ],
+    [
+     0.13,
+     0.05
+    ],
+    [
+     0.04,
+     0.0
+    ]
+   ],
+   "thick": 0.008,
+   "mirror": "x"
+  },
+  {
+   "id": "hammer",
+   "type": "box",
+   "when": {
+    "style": "poleaxe"
+   },
+   "material": "head",
+   "size": [
+    0.06,
+    0.05,
+    0.05
+   ],
+   "at": [
+    -0.05,
+    0.06,
+    0
+   ]
+  },
+  {
+   "id": "small axe",
+   "type": "plate",
+   "when": {
+    "style": "poleaxe"
+   },
+   "material": "head",
+   "outline": [
+    [
+     0.015,
+     0.1
+    ],
+    [
+     0.1,
+     0.13
+    ],
+    [
+     0.11,
+     0.0
+    ],
+    [
+     0.015,
+     0.03
+    ]
+   ],
+   "taper": [
+    0.014,
+    0.003
+   ]
+  },
+  {
+   "id": "moon blade",
+   "type": "blade",
+   "when": {
+    "style": "guandao"
+   },
+   "material": "head",
+   "at": [
+    0,
+    0.04,
+    0
+   ],
+   "length": "0.62 * s",
+   "edges": 1,
+   "flat": 0.45,
+   "curve": 0.09,
+   "width": [
+    [
+     0,
+     0.05
+    ],
+    [
+     0.6,
+     0.075
+    ],
+    [
+     0.9,
+     0.05
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.01,
+    0.004
+   ]
+  },
+  {
+   "id": "dragon",
+   "type": "sphere",
+   "when": {
+    "style": "guandao"
+   },
+   "material": "head",
+   "r": 0.028,
+   "at": [
+    -0.02,
+    0.06,
+    0
+   ]
+  },
+  {
+   "id": "naginata",
+   "type": "blade",
+   "when": {
+    "style": "naginata"
+   },
+   "material": "head",
+   "at": [
+    0,
+    0.04,
+    0
+   ],
+   "length": "0.52 * s",
+   "edges": 1,
+   "flat": 0.5,
+   "curve": 0.08,
+   "width": [
+    [
+     0,
+     0.03
+    ],
+    [
+     0.85,
+     0.036
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.008,
+    0.003
+   ]
+  },
+  {
+   "id": "habaki",
+   "type": "lathe",
+   "when": {
+    "style": [
+     "naginata",
+     "guandao"
+    ]
+   },
+   "material": "head",
+   "profile": [
+    [
+     0.024,
+     0.0
+    ],
+    [
+     0.03,
+     0.02
+    ],
+    [
+     0.024,
+     0.04
+    ]
+   ],
+   "sides": 8
+  }
+ ]
+}

@@ -1,0 +1,1068 @@
+{
+  "name": "spider",
+  "kind": "parts",
+  "flags": {},
+  "parts": [
+    {
+      "id": "body",
+      "parent": null,
+      "shape": "capsule",
+      "size": {
+        "r": 0.011,
+        "len": 0.012
+      },
+      "geomRot": [
+        0,
+        0,
+        90
+      ],
+      "pos": [
+        0,
+        0.024,
+        0
+      ],
+      "color": "#4a3526",
+      "fur": true
+    },
+    {
+      "id": "head",
+      "parent": "body",
+      "shape": "sphere",
+      "size": {
+        "r": 0.009
+      },
+      "scale": [
+        1,
+        0.8,
+        1
+      ],
+      "pos": [
+        0.009,
+        0.002,
+        0
+      ],
+      "color": "#4a3526",
+      "fur": true
+    },
+    {
+      "id": "eyeL",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.012,
+        "r2": 0.012,
+        "len": 0.004335973530119431
+      },
+      "pos": [
+        0.0038362842856208756,
+        0.008139881369630422,
+        -0.00015891560100217617
+      ],
+      "rot": [
+        90,
+        0,
+        32.005383208083494
+      ],
+      "pivot": [
+        0,
+        0.0021679867650597155,
+        0
+      ],
+      "color": "#040302",
+      "edge": 0,
+      "dot": {
+        "iris": "#0a0806",
+        "pupil": "round",
+        "round": true,
+        "role": "eye"
+      }
+    },
+    {
+      "id": "eyeR",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.012,
+        "r2": 0.012,
+        "len": 0.004335973530119431
+      },
+      "pos": [
+        0.001538222910775731,
+        0.008139881369630422,
+        -0.0035179825987500554
+      ],
+      "rot": [
+        90,
+        0,
+        -32.005383208083494
+      ],
+      "pivot": [
+        0,
+        0.0021679867650597155,
+        0
+      ],
+      "color": "#040302",
+      "edge": 0,
+      "dot": {
+        "iris": "#0a0806",
+        "pupil": "round",
+        "round": true,
+        "role": "eye"
+      }
+    },
+    {
+      "id": "eye2L",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.012,
+        "r2": 0.012,
+        "len": 0.007330853495056563
+      },
+      "pos": [
+        0.006462478455763929,
+        0.0062337208032847355,
+        0.0006140823686462173
+      ],
+      "rot": [
+        90,
+        0,
+        39.80557109226519
+      ],
+      "pivot": [
+        0,
+        0.0036654267475282813,
+        0
+      ],
+      "color": "#040302",
+      "edge": 0,
+      "dot": {
+        "iris": "#0a0806",
+        "pupil": "round",
+        "round": true,
+        "role": "eye"
+      }
+    },
+    {
+      "id": "eye2R",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.012,
+        "r2": 0.012,
+        "len": 0.007330853495056563
+      },
+      "pos": [
+        0.001769380412002889,
+        0.0062337208032847355,
+        -0.006245800021159465
+      ],
+      "rot": [
+        90,
+        0,
+        -39.80557109226519
+      ],
+      "pivot": [
+        0,
+        0.0036654267475282813,
+        0
+      ],
+      "color": "#040302",
+      "edge": 0,
+      "dot": {
+        "iris": "#0a0806",
+        "pupil": "round",
+        "round": true,
+        "role": "eye"
+      }
+    },
+    {
+      "id": "abdomen",
+      "parent": "body",
+      "shape": "sphere",
+      "size": {
+        "r": 0.017
+      },
+      "scale": [
+        1.2,
+        0.95,
+        1
+      ],
+      "pos": [
+        -0.03,
+        0.005,
+        0
+      ],
+      "color": "#3a2a1e",
+      "fur": true,
+      "anim": {
+        "axis": "z",
+        "deg": 3,
+        "speed": 0.4,
+        "phase": 0
+      }
+    },
+    {
+      "id": "fangL",
+      "parent": "head",
+      "shape": "sphere",
+      "size": {
+        "r": 0.0035
+      },
+      "pos": [
+        0.008,
+        -0.004,
+        0.003
+      ],
+      "color": "#1a1210"
+    },
+    {
+      "id": "palpL",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0028,
+        "r2": 0.0022,
+        "len": 0.02
+      },
+      "pos": [
+        0.007,
+        -0.002,
+        0.005
+      ],
+      "rot": [
+        -35,
+        0,
+        110
+      ],
+      "pivot": [
+        0,
+        -0.01,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "anim": {
+        "axis": "z",
+        "deg": 8,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "fangR",
+      "parent": "head",
+      "shape": "sphere",
+      "size": {
+        "r": 0.0035
+      },
+      "pos": [
+        0.008,
+        -0.004,
+        -0.003
+      ],
+      "color": "#1a1210"
+    },
+    {
+      "id": "palpR",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0028,
+        "r2": 0.0022,
+        "len": 0.02
+      },
+      "pos": [
+        0.007,
+        -0.002,
+        -0.005
+      ],
+      "rot": [
+        35,
+        0,
+        110
+      ],
+      "pivot": [
+        0,
+        -0.01,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "anim": {
+        "axis": "z",
+        "deg": 8,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "coxa0L",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.003,
+        "len": 0.002
+      },
+      "bone": true,
+      "pos": [
+        0.006,
+        0,
+        0.009
+      ],
+      "rot": [
+        0,
+        -35,
+        0
+      ],
+      "anim": {
+        "axis": "y",
+        "deg": 14,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "femur0L",
+      "parent": "coxa0L",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0046,
+        "r2": 0.004,
+        "len": 0.038500000000000006
+      },
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        120
+      ],
+      "pivot": [
+        0,
+        -0.019250000000000003,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        45
+      ],
+      "anim": {
+        "axis": "z",
+        "deg": 6,
+        "speed": 0.8,
+        "phase": 1.57
+      }
+    },
+    {
+      "id": "tibia0L",
+      "parent": "femur0L",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0038,
+        "r2": 0.0026,
+        "len": 0.05500000000000001
+      },
+      "pos": [
+        0,
+        -0.038500000000000006,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -85
+      ],
+      "pivot": [
+        0,
+        -0.027500000000000004,
+        0
+      ],
+      "color": "#46342a",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        -70
+      ]
+    },
+    {
+      "id": "coxa1L",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.003,
+        "len": 0.002
+      },
+      "bone": true,
+      "pos": [
+        0.001,
+        0,
+        0.009
+      ],
+      "rot": [
+        0,
+        -70,
+        0
+      ],
+      "anim": {
+        "axis": "y",
+        "deg": 14,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "femur1L",
+      "parent": "coxa1L",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0046,
+        "r2": 0.004,
+        "len": 0.035
+      },
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        120
+      ],
+      "pivot": [
+        0,
+        -0.0175,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        45
+      ],
+      "anim": {
+        "axis": "z",
+        "deg": 6,
+        "speed": 0.8,
+        "phase": 4.71
+      }
+    },
+    {
+      "id": "tibia1L",
+      "parent": "femur1L",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0038,
+        "r2": 0.0026,
+        "len": 0.05
+      },
+      "pos": [
+        0,
+        -0.035,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -85
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#46342a",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        -70
+      ]
+    },
+    {
+      "id": "coxa2L",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.003,
+        "len": 0.002
+      },
+      "bone": true,
+      "pos": [
+        -0.004,
+        0,
+        0.009
+      ],
+      "rot": [
+        0,
+        -110,
+        0
+      ],
+      "anim": {
+        "axis": "y",
+        "deg": 14,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "femur2L",
+      "parent": "coxa2L",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0046,
+        "r2": 0.004,
+        "len": 0.035
+      },
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        120
+      ],
+      "pivot": [
+        0,
+        -0.0175,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        45
+      ],
+      "anim": {
+        "axis": "z",
+        "deg": 6,
+        "speed": 0.8,
+        "phase": 1.57
+      }
+    },
+    {
+      "id": "tibia2L",
+      "parent": "femur2L",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0038,
+        "r2": 0.0026,
+        "len": 0.05
+      },
+      "pos": [
+        0,
+        -0.035,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -85
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#46342a",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        -70
+      ]
+    },
+    {
+      "id": "coxa3L",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.003,
+        "len": 0.002
+      },
+      "bone": true,
+      "pos": [
+        -0.009,
+        0,
+        0.009
+      ],
+      "rot": [
+        0,
+        -145,
+        0
+      ],
+      "anim": {
+        "axis": "y",
+        "deg": 14,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "femur3L",
+      "parent": "coxa3L",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0046,
+        "r2": 0.004,
+        "len": 0.038500000000000006
+      },
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        120
+      ],
+      "pivot": [
+        0,
+        -0.019250000000000003,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        45
+      ],
+      "anim": {
+        "axis": "z",
+        "deg": 6,
+        "speed": 0.8,
+        "phase": 4.71
+      }
+    },
+    {
+      "id": "tibia3L",
+      "parent": "femur3L",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0038,
+        "r2": 0.0026,
+        "len": 0.05500000000000001
+      },
+      "pos": [
+        0,
+        -0.038500000000000006,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -85
+      ],
+      "pivot": [
+        0,
+        -0.027500000000000004,
+        0
+      ],
+      "color": "#46342a",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        -70
+      ]
+    },
+    {
+      "id": "coxa0R",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.003,
+        "len": 0.002
+      },
+      "bone": true,
+      "pos": [
+        0.006,
+        0,
+        -0.009
+      ],
+      "rot": [
+        0,
+        35,
+        0
+      ],
+      "anim": {
+        "axis": "y",
+        "deg": 14,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "femur0R",
+      "parent": "coxa0R",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0046,
+        "r2": 0.004,
+        "len": 0.038500000000000006
+      },
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        120
+      ],
+      "pivot": [
+        0,
+        -0.019250000000000003,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        45
+      ],
+      "anim": {
+        "axis": "z",
+        "deg": 6,
+        "speed": 0.8,
+        "phase": 1.57
+      }
+    },
+    {
+      "id": "tibia0R",
+      "parent": "femur0R",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0038,
+        "r2": 0.0026,
+        "len": 0.05500000000000001
+      },
+      "pos": [
+        0,
+        -0.038500000000000006,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -85
+      ],
+      "pivot": [
+        0,
+        -0.027500000000000004,
+        0
+      ],
+      "color": "#46342a",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        -70
+      ]
+    },
+    {
+      "id": "coxa1R",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.003,
+        "len": 0.002
+      },
+      "bone": true,
+      "pos": [
+        0.001,
+        0,
+        -0.009
+      ],
+      "rot": [
+        0,
+        70,
+        0
+      ],
+      "anim": {
+        "axis": "y",
+        "deg": 14,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "femur1R",
+      "parent": "coxa1R",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0046,
+        "r2": 0.004,
+        "len": 0.035
+      },
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        120
+      ],
+      "pivot": [
+        0,
+        -0.0175,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        45
+      ],
+      "anim": {
+        "axis": "z",
+        "deg": 6,
+        "speed": 0.8,
+        "phase": -1.57
+      }
+    },
+    {
+      "id": "tibia1R",
+      "parent": "femur1R",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0038,
+        "r2": 0.0026,
+        "len": 0.05
+      },
+      "pos": [
+        0,
+        -0.035,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -85
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#46342a",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        -70
+      ]
+    },
+    {
+      "id": "coxa2R",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.003,
+        "len": 0.002
+      },
+      "bone": true,
+      "pos": [
+        -0.004,
+        0,
+        -0.009
+      ],
+      "rot": [
+        0,
+        110,
+        0
+      ],
+      "anim": {
+        "axis": "y",
+        "deg": 14,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "femur2R",
+      "parent": "coxa2R",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0046,
+        "r2": 0.004,
+        "len": 0.035
+      },
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        120
+      ],
+      "pivot": [
+        0,
+        -0.0175,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        45
+      ],
+      "anim": {
+        "axis": "z",
+        "deg": 6,
+        "speed": 0.8,
+        "phase": 1.57
+      }
+    },
+    {
+      "id": "tibia2R",
+      "parent": "femur2R",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0038,
+        "r2": 0.0026,
+        "len": 0.05
+      },
+      "pos": [
+        0,
+        -0.035,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -85
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#46342a",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        -70
+      ]
+    },
+    {
+      "id": "coxa3R",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.003,
+        "len": 0.002
+      },
+      "bone": true,
+      "pos": [
+        -0.009,
+        0,
+        -0.009
+      ],
+      "rot": [
+        0,
+        145,
+        0
+      ],
+      "anim": {
+        "axis": "y",
+        "deg": 14,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "femur3R",
+      "parent": "coxa3R",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0046,
+        "r2": 0.004,
+        "len": 0.038500000000000006
+      },
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        120
+      ],
+      "pivot": [
+        0,
+        -0.019250000000000003,
+        0
+      ],
+      "color": "#3a2a20",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        45
+      ],
+      "anim": {
+        "axis": "z",
+        "deg": 6,
+        "speed": 0.8,
+        "phase": -1.57
+      }
+    },
+    {
+      "id": "tibia3R",
+      "parent": "femur3R",
+      "shape": "capsule",
+      "size": {
+        "r": 0.0038,
+        "r2": 0.0026,
+        "len": 0.05500000000000001
+      },
+      "pos": [
+        0,
+        -0.038500000000000006,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -85
+      ],
+      "pivot": [
+        0,
+        -0.027500000000000004,
+        0
+      ],
+      "color": "#46342a",
+      "fur": true,
+      "fold": [
+        0,
+        0,
+        -70
+      ]
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+ "kind": "item",
+ "name": "Finial",
+ "category": "component",
+ "_about": "a turned finial standing from 0: ball, urn, acorn, flame (the 18th century's corkscrew flame, turned), spire (Gothic)",
+ "params": {
+  "r": 0.03,
+  "style": "ball"
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "neck",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     "r * 0.5",
+     0
+    ],
+    [
+     "r * 0.35",
+     "r * 0.3"
+    ],
+    [
+     "r * 0.45",
+     "r * 0.45"
+    ]
+   ]
+  },
+  {
+   "id": "ball",
+   "type": "sphere",
+   "when": {
+    "style": "ball"
+   },
+   "material": "wood",
+   "r": "r",
+   "at": [
+    0,
+    "r * 1.35",
+    0
+   ]
+  },
+  {
+   "id": "urn",
+   "type": "lathe",
+   "when": {
+    "style": "urn"
+   },
+   "material": "wood",
+   "profile": [
+    [
+     "r * 0.45",
+     "r * 0.45"
+    ],
+    [
+     "r",
+     "r * 1.1"
+    ],
+    [
+     "r * 0.7",
+     "r * 1.8"
+    ],
+    [
+     "r * 0.35",
+     "r * 2.0"
+    ],
+    [
+     "r * 0.5",
+     "r * 2.3"
+    ],
+    [
+     0,
+     "r * 2.7"
+    ]
+   ]
+  },
+  {
+   "id": "acorn",
+   "type": "lathe",
+   "when": {
+    "style": "acorn"
+   },
+   "material": "wood",
+   "profile": [
+    [
+     "r * 0.45",
+     "r * 0.45"
+    ],
+    [
+     "r * 0.9",
+     "r * 0.8"
+    ],
+    [
+     "r * 0.95",
+     "r * 1.1"
+    ],
+    [
+     "r * 0.8",
+     "r * 1.6"
+    ],
+    [
+     0,
+     "r * 2.2"
+    ]
+   ]
+  },
+  {
+   "id": "flame",
+   "type": "lathe",
+   "when": {
+    "style": "flame"
+   },
+   "material": "wood",
+   "profile": [
+    [
+     "r * 0.45",
+     "r * 0.45"
+    ],
+    [
+     "r * 0.9",
+     "r * 1.0"
+    ],
+    [
+     "r * 0.6",
+     "r * 1.8"
+    ],
+    [
+     "r * 0.4",
+     "r * 2.5"
+    ],
+    [
+     0,
+     "r * 3.4"
+    ]
+   ],
+   "sides": 9
+  },
+  {
+   "id": "spire",
+   "type": "lathe",
+   "when": {
+    "style": "spire"
+   },
+   "material": "wood",
+   "faceted": true,
+   "sides": 8,
+   "profile": [
+    [
+     "r * 0.7",
+     "r * 0.45"
+    ],
+    [
+     "r * 0.7",
+     "r * 0.9"
+    ],
+    [
+     0,
+     "r * 3.5"
+    ]
+   ]
+  }
+ ]
+}

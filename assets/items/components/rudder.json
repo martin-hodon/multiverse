@@ -1,0 +1,87 @@
+{
+ "kind": "item",
+ "name": "Rudder",
+ "category": "component",
+ "_about": "a stern-hung rudder: a blade h deep and w wide behind the sternpost (at x = 0, the ship's stern to +x), its tiller running forward over the deck",
+ "params": {
+  "h": 3,
+  "w": 0.7,
+  "tiller": 2.5,
+  "thick": 0.09
+ },
+ "materials": {
+  "wood": "oak",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "blade",
+   "type": "plate",
+   "material": "wood",
+   "thick": "thick",
+   "outline": [
+    [
+     0,
+     0
+    ],
+    [
+     "-w * 0.55",
+     0
+    ],
+    [
+     "-w",
+     "-h * 0.35"
+    ],
+    [
+     "-w * 0.8",
+     "-h"
+    ],
+    [
+     0,
+     "-h"
+    ]
+   ]
+  },
+  {
+   "id": "pintles",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.12,
+    0.08,
+    "thick + 0.06"
+   ],
+   "along": {
+    "n": 3,
+    "from": [
+     0,
+     "-h * 0.1",
+     0
+    ],
+    "to": [
+     0,
+     "-h * 0.9",
+     0
+    ]
+   }
+  },
+  {
+   "id": "tiller",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "0.05",
+    0
+   ],
+   "to": [
+    "tiller",
+    "0.25",
+    0
+   ],
+   "r0": 0.06,
+   "r1": 0.04,
+   "when": "tiller"
+  }
+ ]
+}

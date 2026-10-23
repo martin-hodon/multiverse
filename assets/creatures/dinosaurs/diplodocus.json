@@ -1,0 +1,165 @@
+{
+  "name": "diplodocus",
+  "kind": "mammal",
+  "headTurn": 6,
+  "mount": {
+    "h": 4.6,
+    "speed": 1
+  },
+  "rear": [
+    -1.9,
+    3.3,
+    0,
+    2.5,
+    1.55,
+    1.45
+  ],
+  "front": [
+    1.1,
+    3.25,
+    0,
+    2.3,
+    1.42,
+    1.32
+  ],
+  "neck": null,
+  "head": null,
+  "legs": {
+    "front": [
+      1.6,
+      2.3,
+      0.85,
+      1.5
+    ],
+    "hind": [
+      -2.3,
+      2.45,
+      0.9,
+      1.7
+    ],
+    "radii": [
+      0.44,
+      0.34,
+      0.3
+    ],
+    "foot": [
+      0.42,
+      0.16,
+      0.4
+    ],
+    "kneeH": 1
+  },
+  "tail": {
+    "c": [
+      -4,
+      63.3
+    ],
+    "R": 60,
+    "a0": -1.5707963267948966,
+    "a1": -1.7707963267948965,
+    "r1": 0.82,
+    "r2": 0.04,
+    "n": 8,
+    "sway": 9,
+    "speed": 0.25
+  },
+  "extras": [
+    {
+      "id": "neck",
+      "parent": "front",
+      "color": "#6a6a55",
+      "k": 0.12,
+      "pat": "scales",
+      "arc": {
+        "c": [
+          2.7,
+          15.5
+        ],
+        "R": 12,
+        "a0": -1.5507963267948965,
+        "a1": -1.0007963267948967,
+        "r1": 0.62,
+        "r2": 0.2,
+        "n": 6,
+        "tuft": 0.26,
+        "tuftColor": "#757560",
+        "sway": 7,
+        "speed": 0.3,
+        "axis": "y"
+      }
+    },
+    {
+      "raw": {
+        "id": "snout",
+        "parent": "neckTuft",
+        "shape": "capsule",
+        "size": {
+          "r": 0.17,
+          "len": 0.34
+        },
+        "pos": [
+          0.3,
+          0.1,
+          0
+        ],
+        "rot": [
+          0,
+          0,
+          90
+        ],
+        "color": "#8a8a70",
+        "k": 0.05
+      }
+    },
+    {
+      "raw": {
+        "id": "eyeL",
+        "parent": "neckTuft",
+        "shape": "sphere",
+        "size": {
+          "r": 0.055
+        },
+        "pos": [
+          0.02,
+          0.14,
+          0.2
+        ],
+        "color": "#2a2014"
+      }
+    },
+    {
+      "raw": {
+        "id": "eyeR",
+        "parent": "neckTuft",
+        "shape": "sphere",
+        "size": {
+          "r": 0.055
+        },
+        "pos": [
+          0.02,
+          0.14,
+          -0.2
+        ],
+        "color": "#2a2014"
+      }
+    }
+  ],
+  "pat": "scales",
+  "patOn": [
+    "body",
+    "front",
+    "leg",
+    "tail"
+  ],
+  "dinosaur": true,
+  "c": {
+    "body": "#6a6a55",
+    "front": "#6a6a55",
+    "neck": "#6a6a55",
+    "head": "#8a8a70",
+    "leg": "#5f5f4c",
+    "foot": "#4a4a3a",
+    "tail": "#6a6a55",
+    "eye": "#2a2014"
+  }
+}

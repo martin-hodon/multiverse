@@ -1,0 +1,270 @@
+{
+ "kind": "item",
+ "name": "Fauteuil",
+ "category": "furniture/seat",
+ "era": "1730-1780",
+ "region": "France",
+ "_about": "the Louis XV armchair: four cabriole legs, a serpentine seat rail, a cartouche-shaped upholstered back in a carved frame, arms swept back from the front legs",
+ "params": {
+  "h": 0.44,
+  "w": 0.64,
+  "d": 0.54,
+  "backH": [
+   0.95,
+   1.0
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "gilt",
+    "birch"
+   ]
+  },
+  "cloth": {
+   "pick": [
+    "damask-blue",
+    "damask-red",
+    "silk-azure",
+    "velvet-green",
+    "brocade"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "legs",
+   "use": "items/components/cabriole-leg",
+   "params": {
+    "h": "h - 0.05",
+    "r": 0.02
+   },
+   "at": [
+    [
+     "0 - w / 2 + 0.05",
+     0,
+     "d / 2 - 0.05",
+     -30
+    ],
+    [
+     "w / 2 - 0.05",
+     0,
+     "d / 2 - 0.05",
+     30
+    ],
+    [
+     "0 - w / 2 + 0.05",
+     0,
+     "0 - d / 2 + 0.05",
+     -150
+    ],
+    [
+     "w / 2 - 0.05",
+     0,
+     "0 - d / 2 + 0.05",
+     150
+    ]
+   ]
+  },
+  {
+   "id": "rail",
+   "type": "sweep",
+   "material": "wood",
+   "section": [
+    0.03,
+    0.06
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "closed": true,
+   "path": [
+    [
+     "0 - w / 2 + 0.03",
+     "h - 0.06",
+     "d / 2 - 0.03"
+    ],
+    [
+     0,
+     "h - 0.07",
+     "d / 2 + 0.02"
+    ],
+    [
+     "w / 2 - 0.03",
+     "h - 0.06",
+     "d / 2 - 0.03"
+    ],
+    [
+     "w / 2 - 0.05",
+     "h - 0.06",
+     "0 - d / 2 + 0.05"
+    ],
+    [
+     "0 - w / 2 + 0.05",
+     "h - 0.06",
+     "0 - d / 2 + 0.05"
+    ]
+   ]
+  },
+  {
+   "id": "seat",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    "w - 0.06",
+    0.08,
+    "d - 0.06"
+   ],
+   "round": 0.03,
+   "at": [
+    0,
+    "h - 0.01",
+    0
+   ]
+  },
+  {
+   "id": "back frame",
+   "type": "sweep",
+   "material": "wood",
+   "r": 0.018,
+   "closed": true,
+   "seg": 5,
+   "path": [
+    [
+     "0 - w * 0.38",
+     "h + 0.02",
+     "0 - d / 2 + 0.04"
+    ],
+    [
+     "0 - w * 0.4",
+     "h + 0.3",
+     "0 - d / 2 + 0.02"
+    ],
+    [
+     "0 - w * 0.28",
+     "backH - 0.04",
+     "0 - d / 2"
+    ],
+    [
+     0,
+     "backH",
+     "0 - d / 2 - 0.01"
+    ],
+    [
+     "w * 0.28",
+     "backH - 0.04",
+     "0 - d / 2"
+    ],
+    [
+     "w * 0.4",
+     "h + 0.3",
+     "0 - d / 2 + 0.02"
+    ],
+    [
+     "w * 0.38",
+     "h + 0.02",
+     "0 - d / 2 + 0.04"
+    ]
+   ]
+  },
+  {
+   "id": "back",
+   "type": "plate",
+   "material": "cloth",
+   "thick": 0.05,
+   "at": [
+    0,
+    0,
+    "0 - d / 2 + 0.02"
+   ],
+   "outline": [
+    [
+     "0 - w * 0.37",
+     "h + 0.03"
+    ],
+    [
+     "w * 0.37",
+     "h + 0.03"
+    ],
+    [
+     "w * 0.38",
+     "h + 0.3"
+    ],
+    [
+     "w * 0.26",
+     "backH - 0.05"
+    ],
+    [
+     0,
+     "backH - 0.02"
+    ],
+    [
+     "0 - w * 0.26",
+     "backH - 0.05"
+    ],
+    [
+     "0 - w * 0.38",
+     "h + 0.3"
+    ]
+   ]
+  },
+  {
+   "id": "arms",
+   "type": "sweep",
+   "material": "wood",
+   "r": 0.02,
+   "path": [
+    [
+     0,
+     "h + 0.26",
+     "0 - d / 2 + 0.1"
+    ],
+    [
+     0,
+     "h + 0.22",
+     "d / 2 - 0.15"
+    ],
+    [
+     0,
+     "h + 0.18",
+     "d / 2 - 0.05"
+    ],
+    [
+     0,
+     "h - 0.02",
+     "d / 2 - 0.05"
+    ]
+   ],
+   "at": [
+    [
+     "0 - w / 2 + 0.05",
+     0,
+     0
+    ],
+    [
+     "w / 2 - 0.05",
+     0,
+     0
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "w",
+    "d": "d",
+    "top": "h + 0.03"
+   }
+  }
+ ]
+}

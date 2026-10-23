@@ -1,0 +1,108 @@
+{
+ "kind": "item",
+ "name": "Besom",
+ "category": "tool",
+ "era": "-500-1900",
+ "_about": "a besom: birch twigs bound round the end of a pole",
+ "params": {
+  "L": 1.2
+ },
+ "materials": {
+  "wood": "ash",
+  "twigs": "straw",
+  "bind": "hemp"
+ },
+ "parts": [
+  {
+   "id": "pole",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "L",
+    0
+   ],
+   "r": 0.015,
+   "sides": 7
+  },
+  {
+   "id": "twigs",
+   "type": "lathe",
+   "material": "twigs",
+   "profile": [
+    [
+     0.02,
+     "L - 0.25"
+    ],
+    [
+     0.05,
+     "L - 0.1"
+    ],
+    [
+     0.09,
+     "L + 0.25"
+    ],
+    [
+     0.0,
+     "L + 0.27"
+    ]
+   ],
+   "sides": 10
+  },
+  {
+   "id": "bind",
+   "type": "lathe",
+   "material": "bind",
+   "profile": [
+    [
+     0.027,
+     "L - 0.2"
+    ],
+    [
+     0.035,
+     "L - 0.14"
+    ]
+   ],
+   "sides": 10
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.1,
+    -1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "grip2": [
+   0,
+   "L * 0.5",
+   0
+  ]
+ }
+}

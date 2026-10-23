@@ -1,0 +1,106 @@
+{
+  "_about": "THE JOINTS of the human body (joints.js, docs/motion.md): where a person can bend, how, and how far. A joint is the frame of the part it moves -- the shoulder turns the upper arm, the elbow the forearm -- and each of its MOVEMENTS turns that part about one axis of its parent's frame. The first joint of a limb (shoulder, hip) and the trunk's (spine, neck) have three movements, every joint further out one, as in the body. Angles are degrees, positive the movement named, from the anatomical zero: standing straight, arms hanging, palms in. The limits are the active range of an adult (AAOS / Norkin & White, rounded).",
+  "kind": "joints",
+  "_frame": "a part's frame: +x the figure's forward, +y up, +z its RIGHT side. `sign` is which way round the axis the named movement turns; `sided` movements turn the other way on the left (abduction takes either arm away from the body). The movements compose in the order listed: the first turns everything after it.",
+  "_sides": "the rig's parts are named for the side of the drawing, not of the body: `L` parts stand at +z, the figure's RIGHT. Positions and joints here speak of the body's right and left.",
+  "sides": { "right": { "tag": "L", "s": 1 }, "left": { "tag": "R", "s": -1 } },
+
+  "joints": {
+    "spine": {
+      "part": "chest", "_about": "the trunk above the hips, bending about the pelvis (the lumbar spine and the hips' share of a forward bend together)",
+      "movements": {
+        "flexion": { "axis": "z", "sign": -1, "min": -30, "max": 90, "_about": "bending forward; negative: arching back" },
+        "lateral": { "axis": "x", "sign": 1, "min": -35, "max": 35, "_about": "bending to the right side; negative: to the left" },
+        "rotation": { "axis": "y", "sign": -1, "min": -45, "max": 45, "_about": "turning the shoulders to the right; negative: to the left" }
+      }
+    },
+    "neck": {
+      "part": "head", "pivot": "neck", "_about": "the head on the neck, turning about the top of the neck (not the skull's centre)",
+      "movements": {
+        "flexion": { "axis": "z", "sign": -1, "min": -60, "max": 70, "_about": "chin down; negative: looking up" },
+        "lateral": { "axis": "x", "sign": 1, "min": -40, "max": 40, "_about": "ear toward the right shoulder" },
+        "rotation": { "axis": "y", "sign": -1, "min": -80, "max": 80, "_about": "looking to the right" }
+      }
+    },
+    "shoulder": {
+      "part": "arm", "sided": true, "_about": "the upper arm in the shoulder (the glenohumeral joint and the shoulder blade's share above 90 degrees)",
+      "movements": {
+        "flexion": { "axis": "z", "sign": 1, "min": -50, "max": 180, "_about": "raising the arm forward; negative: extension, the arm back" },
+        "abduction": { "axis": "x", "sign": -1, "sided": true, "min": -30, "max": 180, "_about": "raising the arm out to the side; negative: across in front of the body" },
+        "rotation": { "axis": "y", "sign": 1, "sided": true, "min": -90, "max": 70, "_about": "internal rotation (the front of the arm turned in); negative: external" }
+      },
+      "rest": { "abduction": "body:arm.abduction" },
+      "_rest": "a joint's REST, the standing figure's (unset: 0); a string `body:<path>` is read from the human canon (assets/people/body.json) -- the arm hangs out as far as the body is drawn"
+    },
+    "elbow": {
+      "part": "fore", "sided": true,
+      "movements": { "flexion": { "axis": "z", "sign": 1, "min": 0, "max": 145, "_about": "bending the forearm up" } },
+      "rest": { "flexion": 12 }
+    },
+    "wrist": {
+      "part": "hand", "sided": true,
+      "movements": { "flexion": { "axis": "z", "sign": -1, "min": -90, "max": 80, "_about": "bending the palm toward the forearm; negative: extension (70 on its own; 90 with the body's weight on a flat palm -- a push-up)" } }
+    },
+    "hip": {
+      "part": "leg", "sided": true, "_about": "the thigh in the hip",
+      "movements": {
+        "flexion": { "axis": "z", "sign": 1, "min": -20, "max": 125, "_about": "raising the thigh forward; negative: extension, the leg back" },
+        "abduction": { "axis": "x", "sign": -1, "sided": true, "min": -25, "max": 45, "_about": "the leg out to the side; negative: across the other" },
+        "rotation": { "axis": "y", "sign": 1, "sided": true, "min": -45, "max": 40, "_about": "internal rotation (the knee turned in); negative: external" }
+      }
+    },
+    "knee": {
+      "part": "shin", "sided": true,
+      "movements": { "flexion": { "axis": "z", "sign": -1, "min": 0, "max": 140, "_about": "bending the knee: the foot back" } }
+    },
+    "ankle": {
+      "part": "foot", "sided": true,
+      "movements": { "flexion": { "axis": "z", "sign": 1, "min": -50, "max": 30, "_about": "dorsiflexion (the toes up); negative: plantar flexion, on tiptoe" } }
+    }
+  },
+
+  "_collision": "RULES FOR A BODY POSITION (bodycheck.js): which parts must stay clear of which. Each part is the round (or, the torso, flattened) cone it is drawn as; two of them may TOUCH -- a hand on a thigh, the forearms crossed -- but sink into each other no deeper than `tolerance` metres. Next to a joint the two parts it joins always meet, so a part is tested only from `skip` of its length away from the end it hangs on (the upper arm's top fits into the shoulder).",
+  "collision": {
+    "tolerance": 0.012,
+    "skip": { "arm": 0.3, "leg": 0.35, "fore": 0, "hand": 0, "shin": 0, "foot": 0, "head": 0 },
+    "groups": {
+      "trunk": ["chest", "belly", "hips"],
+      "head": ["head", "neck"],
+      "upperArm": ["arm"], "lowerArm": ["fore", "hand"],
+      "upperLeg": ["leg"], "lowerLeg": ["shin", "foot"]
+    },
+    "pairs": [
+      ["upperArm", "trunk"], ["lowerArm", "trunk"], ["lowerArm", "head"],
+      ["upperLeg", "upperLeg*"], ["lowerLeg", "lowerLeg*"], ["upperLeg", "lowerLeg*"],
+      ["lowerArm", "upperLeg"], ["lowerArm", "lowerLeg"], ["upperArm", "upperLeg"],
+      ["lowerArm", "lowerArm*"], ["lowerArm", "upperArm*"],
+      ["lowerLeg", "trunk"], ["upperLeg", "head"], ["lowerLeg", "head"]
+    ],
+    "_pairs": "a group name alone is every side's parts of it; `name*` is the OTHER side's (a leg against the other leg). A pair of the same side's own chain (the forearm and its own upper arm) is never tested: the elbow joins them.",
+    "fix": {
+      "_about": "how a position that breaks a rule is put right, in order: the joint and movement nudged, a step of `step` degrees at a time, up to `max` -- an arm in the trunk is taken out to the side, a leg through the other out the same way",
+      "upperArm": [{ "joint": "shoulder", "movement": "abduction", "step": 3, "max": 40 }],
+      "lowerArm": [{ "joint": "shoulder", "movement": "abduction", "step": 3, "max": 40 }, { "joint": "elbow", "movement": "flexion", "step": -4, "max": 40 }],
+      "upperLeg": [{ "joint": "hip", "movement": "abduction", "step": 2, "max": 34 }],
+      "lowerLeg": [{ "joint": "hip", "movement": "abduction", "step": 2, "max": 34 }]
+    }
+  },
+
+  "_stance": "THE STANCE (stance.js): where the feet and the hands stand on the ground, and how they stay there while the body moves over them. A foot or a hand is ON THE GROUND when its lowest point is within `planted` metres of the floor; on the ground at both ends of a move it keeps its PRINT -- the leg (or the arm) is solved to it every frame, so the knees and elbows take the change, never the sole -- unless the next position wants it more than `step` metres away, and then it STEPS: lifted `lift` at the top of an arc, set down where it is wanted. The foot that stepped last is the one that steps back. A `hop` key (a jumping jack) moves every foot at once and lifts the body `hop` at the top.",
+  "stance": { "planted": 0.025, "step": 0.15, "lift": 0.07, "hop": 0.09 },
+
+  "_reach": "REACHING (reach.js): the hand -- the middle of its palm -- taken to a point. The upper arm and the forearm with the hand are two sides of a triangle whose third side runs from the shoulder to the point; the elbow is where the two first sides meet, anywhere round a circle about that third side. Which point of the circle is the natural one is a COST: the elbow hanging down and a little out (`swivel`, degrees round from straight down, outward), the arm raised forward rather than to the side, never behind the body unless it must, the arm not twisted, every joint inside its range, nothing through the body. A point beyond the arm's reach is reached by leaning the trunk toward it.",
+  "reach": {
+    "swivel": 20,
+    "cost": { "swivel": 1, "abductionOver": 0.6, "extension": 2.5, "rotation": 0.4, "limit": 40, "collision": 60, "lean": 0.8, "miss": 400 },
+    "_cost": "each per radian squared (limit, collision, miss: per radian or metre beyond), weighed against each other: what the person would rather do",
+    "abductionFree": 70,
+    "_abductionFree": "abduction up to this costs nothing beyond the swivel's own; above it the shoulder blade has to turn",
+    "lean": { "flexion": [0, 90], "rotation": [-35, 35], "lateral": [-25, 25], "step": 15,
+              "crouch": { "joints": { "hip": { "flexion": 95, "abduction": 12 }, "knee": { "flexion": 125 }, "ankle": { "flexion": 30 } }, "shares": [0.15, 0.5, 1], "cost": 6 },
+              "bow": { "angles": [15, 30, 45, 60], "cost": 0.8 },
+              "_about": "a point the arm cannot get to is reached by LEANING: the trunk bent, turned, tipped sideways (each range tried from 0 a step at a time); and if that is not enough, a point down low by CROUCHING (both legs a share of the way to the crouch's angles) and BOWING (the pelvis tipped forward over the thighs, as in a toe touch) -- each at its own cost per radian squared (the crouch's per share squared)" },
+    "cone": { "angle": 80, "near": 0.35, "far": 1.1, "_about": "the reach DEMO's points: in a cone round the figure's forward, this many degrees off it, at these shares of the arm's length from the shoulder (beyond 1: a lean)" },
+    "speed": { "base": 0.45, "perMetre": 0.7, "_about": "how long a reach takes: base + perMetre x the hand's travel, seconds (Fitts: longer reaches are slower)" }
+  }
+}

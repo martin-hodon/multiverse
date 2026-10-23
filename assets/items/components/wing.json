@@ -1,0 +1,135 @@
+{
+ "kind": "item",
+ "name": "Wing",
+ "category": "components",
+ "era": "everywhere",
+ "region": "everywhere",
+ "_about": "a bird's wing: the arm and hand under one plate of coverts, the secondaries fanned off the forearm, the primaries off the hand -- each feather its own vane (a component for the birds; params span, chord, pri, sec, shape, spread)",
+ "params": {
+  "span": 0.3,
+  "chord": 0.1,
+  "pri": 10,
+  "sec": 9,
+  "spread": 1,
+  "sweep": 0,
+  "band": 0,
+  "lift": 0.0006
+ },
+ "materials": {
+  "coverts": "wing-brown",
+  "feather": "wing-brown",
+  "tips": "wing-dark"
+ },
+ "parts": [
+  {
+   "id": "primaries",
+   "type": "feathers",
+   "material": "feather",
+   "tips": "tips",
+   "n": "pri",
+   "shape": "pointed",
+   "band": "band",
+   "lift": "lift",
+   "roots": [
+    [
+     "-chord * 0.05 - (1 - spread) * span * 0.4",
+     "span * 0.48 * spread + (1 - spread) * span * 0.12"
+    ],
+    [
+     "-chord * 0.05 - (1 - spread) * span * 0.45",
+     "span * 0.66 * spread + (1 - spread) * span * 0.14"
+    ]
+   ],
+   "dir": [
+    "50 + sweep + (1 - spread) * (90 - 50 - sweep)",
+    "8 + sweep + (1 - spread) * (90 - 8 - sweep)"
+   ],
+   "length": [
+    "chord * 0.9",
+    "span * 0.36 + chord * 0.1"
+   ],
+   "width": [
+    "chord * 0.24",
+    "chord * 0.16"
+   ],
+   "droop": "0.3 * spread",
+   "lead": 1,
+   "tuck": 0.35
+  },
+  {
+   "id": "secondaries",
+   "type": "feathers",
+   "material": "feather",
+   "tips": "tips",
+   "n": "sec",
+   "shape": "rounded",
+   "band": "band",
+   "lift": "lift",
+   "roots": [
+    [
+     "-chord * 0.15",
+     "span * 0.06"
+    ],
+    [
+     "-chord * 0.12 - (1 - spread) * span * 0.4",
+     "span * 0.48 * spread + (1 - spread) * span * 0.12"
+    ]
+   ],
+   "dir": [
+    "82 + (1 - spread) * 8",
+    "62 + sweep * 0.5 + (1 - spread) * (28 - sweep * 0.5)"
+   ],
+   "length": [
+    "chord * 0.85",
+    "chord * 0.9"
+   ],
+   "width": [
+    "chord * 0.28",
+    "chord * 0.24"
+   ],
+   "droop": "0.15 * spread",
+   "lead": 1,
+   "tuck": 0.35
+  },
+  {
+   "id": "coverts",
+   "type": "plate",
+   "material": "coverts",
+   "thick": 0.002,
+   "at": [
+    0,
+    "lift * (pri + sec) + 0.002",
+    0,
+    0,
+    90,
+    0
+   ],
+   "outline": [
+    [
+     "chord * 0.5",
+     0
+    ],
+    [
+     "chord * 0.42 - (1 - spread) * span * 0.3",
+     "span * 0.5 * spread + (1 - spread) * span * 0.12"
+    ],
+    [
+     "chord * 0.28 - (1 - spread) * span * 0.45",
+     "span * 0.68 * spread + (1 - spread) * span * 0.14"
+    ],
+    [
+     "-chord * 0.05 - (1 - spread) * span * 0.45",
+     "span * 0.66 * spread + (1 - spread) * span * 0.14"
+    ],
+    [
+     "-chord * 0.15 - (1 - spread) * span * 0.4",
+     "span * 0.48 * spread + (1 - spread) * span * 0.12"
+    ],
+    [
+     "-chord * 0.2",
+     0
+    ]
+   ]
+  }
+ ]
+}

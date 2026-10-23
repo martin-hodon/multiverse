@@ -1,0 +1,114 @@
+{
+ "name": "Wigwam",
+ "_about": "The wigwam: saplings bent into a dome and covered with bark and reed mats, a low door, a smoke hole over the fire (the Eastern Woodlands (Algonquian peoples), -1000-1850)",
+ "era": "-1000-1850",
+ "region": "the Eastern Woodlands (Algonquian peoples)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "wall": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 2.4,
+   "rInner": 2.34,
+   "height": 1.0,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "door": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 2.4,
+   "rInner": 2.34,
+   "height": 1.0,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    0
+   ],
+   "opening": {
+    "at": 0,
+    "width": 0.8,
+    "sill": 0,
+    "springing": 0.95,
+    "head": {
+     "profile": "flat"
+    }
+   },
+   "glass": false
+  },
+  "dome": {
+   "type": "dome",
+   "sides": 12,
+   "radius": 2.4,
+   "thickness": 0,
+   "head": {
+    "profile": "segmental",
+    "rise": 1.4,
+    "seg": 6
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     1.0,
+     0,
+     0
+    ]
+   ],
+   "oculus": 0.3
+  },
+  "fire": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.25,
+    "h": 0.5
+   }
+  }
+ },
+ "build": [
+  "wall",
+  "door",
+  "dome",
+  "fire"
+ ]
+}

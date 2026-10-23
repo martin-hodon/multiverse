@@ -1,0 +1,344 @@
+{
+  "name": "Domes on pendentives and vaults over squares",
+  "_about": "WHAT HAGIA SOPHIA IS MADE OF, at a third of its size. A square between four great PIERS, spanned by four great ARCHES; between the arches four PENDENTIVES, the spherical triangles that turn the square into a circle; on that circle a ring of forty WINDOWS; on the windows a shallow DOME of forty RIBS. Opening off one side, a SEMIDOME on its own half ring of windows, and a smaller EXEDRA off that. Beside them the vaults a square bay is roofed with: the SAIL VAULT (the pendentives' sphere left whole: the Byzantine aisle), the CLOISTER VAULT (four webs) and the RIB VAULT (the Gothic groin vault with its ribs).",
+  "params": {
+    "detail": 8,
+    "S": 10.4,
+    "pier": 2.4,
+    "spring": 7.0,
+    "archT": 0.8,
+    "ribs": 40,
+    "domeT": 0.5,
+    "winH": 1.6,
+    "bay": 5.0,
+    "_S": "Hagia Sophia's square is 31m; this is a third of it"
+  },
+  "build": [
+    "piers",
+    "great arches",
+    "pendentives",
+    "window ring",
+    "dome",
+    "dome ribs",
+    "semidome windows",
+    "semidome",
+    "exedra",
+    "sail vault",
+    "sail piers",
+    "cloister vault",
+    "rib vault",
+    "rib vault ribs"
+  ],
+  "parts": {
+    "piers": {
+      "type": "box",
+      "width": "pier",
+      "length": "pier",
+      "height": "spring",
+      "at": [
+        [
+          "0 - S / 2 - pier / 2",
+          0,
+          "0 - S / 2 - pier / 2",
+          0
+        ],
+        [
+          "S / 2 + pier / 2",
+          0,
+          "0 - S / 2 - pier / 2",
+          0
+        ],
+        [
+          "0 - S / 2 - pier / 2",
+          0,
+          "S / 2 + pier / 2",
+          0
+        ],
+        [
+          "S / 2 + pier / 2",
+          0,
+          "S / 2 + pier / 2",
+          0
+        ]
+      ],
+      "_about": "the four great piers at the corners of the square"
+    },
+    "great arches": {
+      "type": "barrel",
+      "width": "S",
+      "length": "pier",
+      "springing": "spring",
+      "top": "spring + S / 2 + archT",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "0 - S / 2",
+          0
+        ],
+        [
+          0,
+          0,
+          "S / 2 + pier",
+          0
+        ],
+        [
+          "0 - S / 2",
+          0,
+          0,
+          "1.5707963"
+        ],
+        [
+          "S / 2 + pier",
+          0,
+          0,
+          "1.5707963"
+        ]
+      ],
+      "_about": "the four arches that span from pier to pier over the square's sides: their crowns carry the dome's ring"
+    },
+    "pendentives": {
+      "type": "pendentives",
+      "span": "S",
+      "springing": "spring",
+      "sides": "ribs",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the four spherical triangles between the arches, turning the square into the circle the dome springs from"
+    },
+    "window ring": {
+      "type": "ring",
+      "count": "ribs",
+      "rOuter": "S / 2 + domeT",
+      "rInner": "S / 2",
+      "height": "winH",
+      "y": "spring + S / 2",
+      "turn": 0.5,
+      "opening": {
+        "width": "3.14159 * S / ribs * 0.55",
+        "sill": 0.25,
+        "springing": "winH - 3.14159 * S / ribs * 0.35",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the ring of windows at the dome's foot, one between every two ribs, that makes Hagia Sophia's dome seem to float on light"
+    },
+    "dome": {
+      "type": "dome",
+      "sides": "ribs",
+      "turn": -0.5,
+      "radius": "S / 2 + domeT",
+      "thickness": "domeT",
+      "head": {
+        "profile": "segmental",
+        "rise": "S * 0.42"
+      },
+      "at": [
+        [
+          0,
+          "spring + S / 2 + winH",
+          0,
+          0
+        ]
+      ],
+      "_about": "the dome: a shallow one (Hagia Sophia's rises less than a hemisphere), its corners on the axes like the pendentives' stations"
+    },
+    "dome ribs": {
+      "type": "ribs",
+      "on": "dome",
+      "count": "ribs",
+      "width": 0.25,
+      "depth": 0.2,
+      "_about": "forty ribs on Hagia Sophia's, one over each pier between two windows"
+    },
+    "semidome windows": {
+      "type": "ring",
+      "count": 20,
+      "rOuter": "S / 2 + domeT",
+      "rInner": "S / 2",
+      "height": "winH",
+      "y": "spring - winH",
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "turn": 0.5,
+      "opening": {
+        "width": 0.9,
+        "sill": 0.25,
+        "springing": "winH - 0.6",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          "S / 2 + pier",
+          0
+        ]
+      ],
+      "_about": "a half ring of windows for the semidome to stand on"
+    },
+    "semidome": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 20,
+      "radius": "S / 2 + domeT",
+      "thickness": "domeT",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          "spring",
+          "S / 2 + pier",
+          0
+        ]
+      ],
+      "_about": "the semidome that opens the square into the long nave -- Hagia Sophia has one to the east and one to the west"
+    },
+    "exedra": {
+      "type": "dome",
+      "sweep": 0.5,
+      "radius": "S / 4",
+      "thickness": "domeT",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          "S / 2 + pier + S / 4",
+          "spring * 0.55",
+          "S / 2 + pier + S * 0.2",
+          "1.5707963"
+        ]
+      ],
+      "_about": "a smaller half-dome opening off the big one: the exedrae at the corners of the nave"
+    },
+    "sail vault": {
+      "type": "pendentives",
+      "sail": true,
+      "span": "bay",
+      "springing": "bay * 0.6",
+      "sides": 16,
+      "at": [
+        [
+          "S * 2.2",
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the SAIL VAULT: the pendentives' sphere left whole, the domical vault over a Byzantine aisle bay"
+    },
+    "sail piers": {
+      "type": "column",
+      "radius": 0.35,
+      "height": "bay * 0.6",
+      "sides": 8,
+      "at": [
+        [
+          "S * 2.2 - bay / 2",
+          0,
+          "0 - bay / 2",
+          0
+        ],
+        [
+          "S * 2.2 + bay / 2",
+          0,
+          "0 - bay / 2",
+          0
+        ],
+        [
+          "S * 2.2 - bay / 2",
+          0,
+          "bay / 2",
+          0
+        ],
+        [
+          "S * 2.2 + bay / 2",
+          0,
+          "bay / 2",
+          0
+        ]
+      ]
+    },
+    "cloister vault": {
+      "type": "dome",
+      "sides": 4,
+      "radius": "bay * 0.7071",
+      "thickness": 0.35,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          "S * 2.2",
+          0,
+          "bay * 1.6",
+          0
+        ]
+      ],
+      "_about": "the CLOISTER VAULT: a dome of four webs over a square, its groins in the corners"
+    },
+    "rib vault": {
+      "type": "groin",
+      "width": "bay",
+      "length": "bay",
+      "springing": "bay * 0.6",
+      "top": "bay * 1.4",
+      "head": {
+        "profile": "pointed",
+        "spread": 0.4
+      },
+      "at": [
+        [
+          "S * 2.2",
+          0,
+          "bay * 3.2",
+          0
+        ]
+      ]
+    },
+    "rib vault ribs": {
+      "type": "ribs",
+      "on": "rib vault",
+      "width": 0.22,
+      "depth": 0.18,
+      "wall": {
+        "width": 0.3,
+        "depth": 0.2
+      },
+      "_about": "the RIB VAULT: the groin vault with ribs laid along its groins and round its arches -- the Gothic bay"
+    }
+  }
+}

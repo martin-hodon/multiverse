@@ -1,0 +1,82 @@
+{
+  "name": "Apse",
+  "_about": "AN APSE: a half ring of wall with a window in every bay, and over it a half dome (a vault) or a half cone (a roof's skin, `domeT` 0, `trigonal`) -- set against the end of a choir, its open side (-z) closed by the choir's end wall, which must stand higher than the dome's crown (the check reports a half dome OPEN to the sky otherwise). Place it at the middle of the choir's end, yawed to bulge outward.",
+  "params": {
+    "detail": 4,
+    "R": 6.0,
+    "T": 1.5,
+    "H": 12.0,
+    "n": 16,
+    "winW": 1.8,
+    "winSill": 4.0,
+    "winH": 6.0,
+    "profile": "semicircular",
+    "rise": 10.0,
+    "spread": 0.6,
+    "domeT": "T",
+    "over": 0.0,
+    "_R": "the apse's inside radius; T its walls; H their height; n the bays of the whole circle it is half of (a multiple of four)",
+    "_profile": "the half dome's section; domeT 0 makes it a roof's skin (a half cone: `trigonal` with `rise`), `over` its eave past the wall",
+    "winHead": "semicircular"
+  },
+  "build": [
+    "walls",
+    "half dome"
+  ],
+  "parts": {
+    "walls": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R + T",
+      "rInner": "R",
+      "height": "H",
+      "turn": 0.5,
+      "range": [
+        "n * 3 / 4",
+        "n + n / 4 - 1"
+      ],
+      "opening": {
+        "width": "winW",
+        "sill": "winSill",
+        "springing": "winSill + winH",
+        "head": {
+          "profile": "winHead",
+          "spread": 1.0
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the half ring of wall, a window in every bay, bulging toward +z (its open side, -z, against the choir's end wall)"
+    },
+    "half dome": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": "n",
+      "radius": "R + T + over",
+      "thickness": "domeT",
+      "head": {
+        "profile": "profile",
+        "rise": "rise",
+        "spread": "spread"
+      },
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "walls"
+      ],
+      "_about": "the half dome over it -- or its half-cone roof"
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "_about": "POSITIONS of the human body (motion.js, docs/motion.md): every joint's angles, in degrees, by the joint model's own names (assets/people/joints.json) -- `spine`, `neck`, or `<side> <joint>` with side right, left or both (`both knees`). A movement not named stays at rest; a joint out of its range is clamped and reported. `root` turns the whole body (pitch: + face up, lying on the back at 90; roll; yaw); `anchor` is what keeps its place on the ground (feet, right foot, left foot, hands, knees, pelvis); `support` names two things it rests on at once (feet, hands, forearms, knees, pelvis, back) and the body's tilt is found so both touch. `mirror` is another position's mirror image, `from` another position with some joints changed. `reach` says where the hands go instead of how the arms bend -- { \"hands\": \"toes\" } (both, the trunk bending straight forward), or \"right hand\" / \"left hand\"; places: toes, knees, floor -- and each body finds its own bend (reach.js); `lean` what else may move to get there (true: the trunk, the hips, the knees; \"spine\": the trunk's bend alone; false: the arms alone).",
+  "kind": "positions",
+  "positions": {
+    "stand": { "_about": "relaxed, the arms hanging -- the rest of every joint" },
+    "attention": { "joints": { "both shoulders": { "abduction": 0 }, "both elbows": { "flexion": 4 } } },
+
+    "arms forward": { "joints": { "both shoulders": { "flexion": 90 }, "both elbows": { "flexion": 0 } } },
+    "arms out": { "_about": "the arms straight out to the sides", "joints": { "both shoulders": { "abduction": 90 }, "both elbows": { "flexion": 0 } } },
+    "arms up": { "joints": { "both shoulders": { "flexion": 172, "abduction": 8 }, "both elbows": { "flexion": 0 } } },
+    "hands on hips": { "_about": "the elbows out and back, the hands at the waist's sides (found by search: the palm on the waist, nothing through the trunk)", "joints": { "both shoulders": { "flexion": -30, "abduction": 60, "rotation": 50 }, "both elbows": { "flexion": 120 } } },
+
+    "squat": {
+      "_about": "deep: the thighs level, the knees over the toes, the trunk leaning to keep the weight over the feet, the arms forward to balance",
+      "joints": { "spine": { "flexion": 38 }, "both hips": { "flexion": 95, "abduction": 12 }, "both knees": { "flexion": 125 }, "both ankles": { "flexion": 30 },
+                  "both shoulders": { "flexion": 85 }, "both elbows": { "flexion": 0 }, "neck": { "flexion": -25 } }
+    },
+    "half squat": {
+      "joints": { "spine": { "flexion": 22 }, "both hips": { "flexion": 60, "abduction": 8 }, "both knees": { "flexion": 75 }, "both ankles": { "flexion": 15 },
+                  "both shoulders": { "flexion": 80 }, "both elbows": { "flexion": 0 }, "neck": { "flexion": -12 } }
+    },
+
+    "lunge right": {
+      "_about": "the right foot stepped forward, its knee over the ankle; the left knee down near the floor, the left foot on its toes where it stood (the anchor: the foot that stays)",
+      "from": "hands on hips",
+      "joints": { "right hip": { "flexion": 80 }, "right knee": { "flexion": 85 }, "right ankle": { "flexion": 5 },
+                  "left hip": { "flexion": 0 }, "left knee": { "flexion": 95 }, "left ankle": { "flexion": 10 } },
+      "anchor": "left foot"
+    },
+    "lunge left": { "mirror": "lunge right" },
+
+    "knee up right": {
+      "_about": "a high knee: the right thigh level, the arms swinging the other way as in a run",
+      "joints": { "right hip": { "flexion": 88 }, "right knee": { "flexion": 95 }, "right ankle": { "flexion": -10 },
+                  "left shoulder": { "flexion": 45 }, "right shoulder": { "flexion": -25 }, "both elbows": { "flexion": 85 } },
+      "anchor": "left foot"
+    },
+    "knee up left": { "mirror": "knee up right" },
+    "march right": { "from": "knee up right", "joints": { "right hip": { "flexion": 50 }, "right knee": { "flexion": 60 }, "left shoulder": { "flexion": 25 }, "right shoulder": { "flexion": -15 }, "both elbows": { "flexion": 30 } } },
+    "march left": { "mirror": "march right" },
+
+    "toe touch": {
+      "_about": "bent forward, the hands down to the toes: where they go is said (`reach`), and each body finds its own bend -- the spine curled, the pelvis tipped over the thighs, the knees a little soft if it must (reach.js)",
+      "reach": { "hands": "toes" },
+      "joints": { "neck": { "flexion": 20 } }
+    },
+
+    "side bend right": {
+      "_about": "bending over to the right, the left arm over the head",
+      "joints": { "spine": { "lateral": 30 }, "left shoulder": { "abduction": 165 }, "left elbow": { "flexion": 15 }, "right shoulder": { "abduction": 14 }, "neck": { "lateral": 12 } }
+    },
+    "side bend left": { "mirror": "side bend right" },
+
+    "twist right": {
+      "_about": "the shoulders turned to the right over still hips, the arms out",
+      "joints": { "spine": { "rotation": 40 }, "both shoulders": { "abduction": 88 }, "both elbows": { "flexion": 0 }, "neck": { "rotation": 15 } }
+    },
+    "twist left": { "mirror": "twist right" },
+
+    "jack open": { "_about": "a jumping jack's star: the arms up out to the sides, the feet apart", "joints": { "both shoulders": { "abduction": 160 }, "both elbows": { "flexion": 5 }, "both hips": { "abduction": 18 } } },
+    "jack closed": { "joints": { "both shoulders": { "abduction": 4 }, "both elbows": { "flexion": 5 } } },
+
+    "circle front": { "from": "arms out", "joints": { "both shoulders": { "abduction": 90, "flexion": 18 } } },
+    "circle top": { "from": "arms out", "joints": { "both shoulders": { "abduction": 105 } } },
+    "circle back": { "from": "arms out", "joints": { "both shoulders": { "abduction": 90, "flexion": -18 } } },
+    "circle bottom": { "from": "arms out", "joints": { "both shoulders": { "abduction": 75 } } },
+
+    "calf raise": { "_about": "up on the toes", "joints": { "both ankles": { "flexion": -40 }, "both shoulders": { "abduction": 0 } } },
+
+    "plank": {
+      "_about": "on the forearms and the toes, the body one straight line",
+      "root": { "pitch": -78 },
+      "joints": { "both shoulders": { "flexion": 85 }, "both elbows": { "flexion": 90 }, "both ankles": { "flexion": 10 }, "neck": { "flexion": -60 } },
+      "support": ["forearms", "feet"]
+    },
+    "push-up up": {
+      "_about": "the arms straight, the hands under the shoulders, the body straight from the heels to the head",
+      "root": { "pitch": -70 },
+      "joints": { "both shoulders": { "flexion": 80, "abduction": 8 }, "both elbows": { "flexion": 0 }, "both wrists": { "flexion": -70 }, "both ankles": { "flexion": 10 }, "neck": { "flexion": -55 } },
+      "support": ["hands", "feet"], "anchor": "hands"
+    },
+    "push-up down": {
+      "from": "push-up up",
+      "_about": "the chest a hand's breadth off the floor, the elbows bent back along the body",
+      "root": { "pitch": -84 },
+      "joints": { "both shoulders": { "flexion": 20, "abduction": 18 }, "both elbows": { "flexion": 95 }, "both wrists": { "flexion": -70 } }
+    },
+
+    "hands down": {
+      "_about": "crouched, the knees wide, the trunk leaning between them, the head up, the hands put down on the floor just ahead of the shoulders -- the way down to the floor (and up from it); the trunk leaning as a person does there, the arms alone finding the floor on each body (`lean`: false)",
+      "joints": { "spine": { "flexion": 70 }, "both hips": { "flexion": 100, "abduction": 40 }, "both knees": { "flexion": 125 }, "both ankles": { "flexion": 30 },
+                  "both elbows": { "flexion": 10 }, "neck": { "flexion": -40 } },
+      "reach": { "hands": "floor" }, "lean": false
+    },
+    "sit floor": {
+      "_about": "sitting on the floor, the knees up, the hands on them",
+      "joints": { "both hips": { "flexion": 80 }, "both knees": { "flexion": 110 }, "both ankles": { "flexion": 0 }, "spine": { "flexion": 15 }, "both shoulders": { "flexion": 45 }, "both elbows": { "flexion": 20 } },
+      "anchor": "feet", "support": ["pelvis", "feet"]
+    },
+    "lie back": { "_about": "flat on the back", "root": { "pitch": 90 }, "anchor": "pelvis", "support": ["back", "feet"] },
+    "crunch down": {
+      "_about": "on the back, the knees up, the feet flat, the hands at the temples",
+      "root": { "pitch": 90 }, "anchor": "pelvis",
+      "joints": { "both hips": { "flexion": 55 }, "both knees": { "flexion": 100 }, "both ankles": { "flexion": -40 }, "both shoulders": { "abduction": 140, "rotation": -40 }, "both elbows": { "flexion": 140 } },
+      "support": ["pelvis", "feet"]
+    },
+    "crunch up": { "from": "crunch down", "joints": { "spine": { "flexion": 35 }, "neck": { "flexion": 20 } } },
+
+    "kneel": { "_about": "upright on both knees, on the toes", "joints": { "both knees": { "flexion": 100 }, "both ankles": { "flexion": -20 } }, "anchor": "knees" },
+
+    "press down": { "_about": "a shoulder press, low: the upper arms out level, the forearms up", "joints": { "both shoulders": { "abduction": 85, "rotation": -85 }, "both elbows": { "flexion": 90 } } },
+    "press up": { "_about": "...and pressed overhead", "joints": { "both shoulders": { "abduction": 165, "rotation": -85 }, "both elbows": { "flexion": 10 } } },
+    "lateral raise": { "joints": { "both shoulders": { "abduction": 85 }, "both elbows": { "flexion": 10 } } },
+    "front raise": { "joints": { "both shoulders": { "flexion": 88 }, "both elbows": { "flexion": 5 } } },
+
+    "look right": { "joints": { "neck": { "rotation": 70 } } },
+    "look up": { "joints": { "neck": { "flexion": -45 } } },
+    "wave right": { "joints": { "right shoulder": { "abduction": 120, "rotation": -70 }, "right elbow": { "flexion": 50 }, "right wrist": { "flexion": -20 } } }
+  }
+}

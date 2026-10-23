@@ -1,0 +1,1335 @@
+{
+  "name": "Sultan Qaboos Grand Mosque",
+  "_about": "THE SULTAN QABOOS GRAND MOSQUE, Muscat (2001), from components on its platform: the marble sahn enclosed by four riwaqs (`arcade-walk`: pointed arches on piers, a flat roof, `crenellation`s along both edges), gated through three `portal`s -- iwan-like frames whose reveal is the recess, the `iwan` back closing it round the door; the prayer hall, a square of lower flat-roofed bays round the crossing, whose four piers and pointed arches carry pendentives and the tall drum of sixteen windows with the ribbed, gilded dome (`drum-dome`), entered through its great portal from the court and a portal on each side; the women's prayer hall with its small dome and portal; the great `omani-minaret` (square shaft, octagon, three balconies, lantern and dome) and four smaller ones on the complex's corners.",
+  "params": {
+    "detail": 4
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "south riwaq",
+    "north riwaq",
+    "side riwaqs",
+    "main gate",
+    "side gates",
+    "prayer hall",
+    "piers",
+    "great arches",
+    "pendentives",
+    "hall roof",
+    "hall roof sides",
+    "tympana",
+    "hall parapet",
+    "crossing parapet",
+    "dome",
+    "dome finial",
+    "dome finial knop",
+    "hall portal",
+    "hall side portals",
+    "hall front arcades",
+    "hall side arcades",
+    "women's hall",
+    "women's roof",
+    "women's parapet",
+    "women's parapet sides",
+    "women's dome",
+    "women's finial",
+    "women's finial knop",
+    "women's portal",
+    "great minaret",
+    "corner minarets",
+    "platform",
+    "main flight",
+    "side flights"
+  ],
+  "parts": {
+    "south riwaq": {
+      "type": "component",
+      "use": "components/arcade-walk",
+      "params": {
+        "D": 8.0,
+        "H": 8.0,
+        "t": 0.9,
+        "bay": 5.0,
+        "pw": 1.3,
+        "spread": 0.5,
+        "slab": 0.6,
+        "gw": 4.4,
+        "L": 160.0
+      },
+      "at": [
+        [
+          0,
+          1.2,
+          96.0,
+          3.141592653589793
+        ]
+      ],
+      "build": [
+        "front",
+        "back gate",
+        "roof",
+        "front parapet",
+        "back parapet"
+      ],
+      "_about": "the riwaq along the front, the main gate through its back wall"
+    },
+    "north riwaq": {
+      "type": "component",
+      "use": "components/arcade-walk",
+      "params": {
+        "D": 8.0,
+        "H": 8.0,
+        "t": 0.9,
+        "bay": 5.0,
+        "pw": 1.3,
+        "spread": 0.5,
+        "slab": 0.6,
+        "gw": 4.4,
+        "L": 160.0
+      },
+      "at": [
+        [
+          0,
+          1.2,
+          -96.0,
+          0
+        ]
+      ],
+      "_about": "the riwaq behind the prayer hall"
+    },
+    "side riwaqs": {
+      "type": "component",
+      "use": "components/arcade-walk",
+      "params": {
+        "D": 8.0,
+        "H": 8.0,
+        "t": 0.9,
+        "bay": 5.0,
+        "pw": 1.3,
+        "spread": 0.5,
+        "slab": 0.6,
+        "gw": 4.4,
+        "L": 184.0
+      },
+      "at": [
+        [
+          76.0,
+          1.2,
+          0,
+          -1.5707963267948966
+        ],
+        [
+          -76.0,
+          1.2,
+          0,
+          1.5707963267948966
+        ]
+      ],
+      "build": [
+        "front",
+        "back gate",
+        "roof",
+        "front parapet",
+        "back parapet"
+      ],
+      "_about": "the riwaqs along the sides, a gate through the middle of each"
+    },
+    "main gate": {
+      "type": "component",
+      "use": "components/portal",
+      "params": {
+        "W": 20.0,
+        "Hh": 17.0,
+        "D": 8.0,
+        "w": 9.0,
+        "s": 7.5,
+        "spread": 0.5,
+        "it": 0.6
+      },
+      "at": [
+        [
+          0,
+          1.2,
+          100.0,
+          0
+        ]
+      ],
+      "_about": "the main gate's portal on the front"
+    },
+    "side gates": {
+      "type": "component",
+      "use": "components/portal",
+      "params": {
+        "W": 14.0,
+        "Hh": 14.0,
+        "D": 6.5,
+        "w": 7.0,
+        "s": 6.0,
+        "spread": 0.5,
+        "it": 0.6
+      },
+      "at": [
+        [
+          80.0,
+          1.2,
+          0,
+          1.5707963267948966
+        ],
+        [
+          -80.0,
+          1.2,
+          0,
+          -1.5707963267948966
+        ]
+      ],
+      "_about": "the side gates' portals"
+    },
+    "prayer hall": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          64.0,
+          64.0
+        ]
+      },
+      "thickness": 2.0,
+      "height": 14.0,
+      "faces": {
+        "0": {
+          "pattern": "3",
+          "width": 2.4,
+          "gap": 14.3,
+          "sill": 2.5,
+          "springing": 8.0,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.5
+          },
+          "middle": {
+            "width": 5.0,
+            "sill": 0,
+            "springing": 6.0
+          }
+        },
+        "1": {
+          "pattern": "3",
+          "width": 2.4,
+          "gap": 14.3,
+          "sill": 2.5,
+          "springing": 8.0,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.5
+          },
+          "middle": {
+            "width": 3.2,
+            "sill": 0,
+            "springing": 4.4
+          }
+        },
+        "3": {
+          "pattern": "3",
+          "width": 2.4,
+          "gap": 14.3,
+          "sill": 2.5,
+          "springing": 8.0,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.5
+          },
+          "middle": {
+            "width": 3.2,
+            "sill": 0,
+            "springing": 4.4
+          }
+        },
+        "2": {
+          "pattern": "5",
+          "width": 2.4,
+          "gap": 9.0,
+          "sill": 2.5,
+          "springing": 8.0,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.5
+          }
+        }
+      },
+      "at": [
+        [
+          0,
+          1.2,
+          -50.0,
+          0
+        ]
+      ],
+      "_about": "the prayer hall's walls: the great door toward the court, a door on each side, pointed windows"
+    },
+    "piers": {
+      "type": "box",
+      "width": 3.0,
+      "length": 3.0,
+      "height": 25.5,
+      "at": [
+        [
+          -15.5,
+          1.2,
+          -65.5,
+          0
+        ],
+        [
+          -15.5,
+          1.2,
+          -34.5,
+          0
+        ],
+        [
+          15.5,
+          1.2,
+          -65.5,
+          0
+        ],
+        [
+          15.5,
+          1.2,
+          -34.5,
+          0
+        ]
+      ],
+      "_about": "the four great piers under the dome, rising over the roofs"
+    },
+    "great arches": {
+      "type": "barrel",
+      "width": 28.0,
+      "length": 3.0,
+      "springing": 11.0,
+      "top": 25.5,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          1.2,
+          -64.0,
+          0
+        ],
+        [
+          0,
+          1.2,
+          -33.0,
+          0
+        ],
+        [
+          -14.0,
+          1.2,
+          -50.0,
+          1.5707963267948966
+        ],
+        [
+          17.0,
+          1.2,
+          -50.0,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the arches from pier to pier; above the roofs their backs are the crossing's square walls"
+    },
+    "pendentives": {
+      "type": "pendentives",
+      "span": 28.0,
+      "springing": 11.0,
+      "sides": 16,
+      "at": [
+        [
+          0,
+          1.2,
+          -50.0,
+          0
+        ]
+      ],
+      "deck": {
+        "thickness": 0.5,
+        "out": 3.0
+      },
+      "_about": "the pendentives, and the roof round the drum's foot"
+    },
+    "hall roof": {
+      "flatRoof": true,
+      "type": "box",
+      "width": 64.0,
+      "length": 15.0,
+      "height": 0.8,
+      "at": [
+        [
+          0,
+          15.2,
+          -74.5,
+          0
+        ],
+        [
+          0,
+          15.2,
+          -25.5,
+          0
+        ]
+      ],
+      "_about": "the flat roofs of the bays round the crossing"
+    },
+    "hall roof sides": {
+      "flatRoof": true,
+      "type": "box",
+      "width": 15.0,
+      "length": 34.0,
+      "height": 0.8,
+      "at": [
+        [
+          -24.5,
+          15.2,
+          -50.0,
+          0
+        ],
+        [
+          24.5,
+          15.2,
+          -50.0,
+          0
+        ]
+      ]
+    },
+    "tympana": {
+      "type": "wall",
+      "width": 28.0,
+      "height": 10.7,
+      "thickness": 1.0,
+      "openings": {
+        "pattern": "3",
+        "width": 2.4,
+        "gap": 5.0,
+        "sill": 1.5,
+        "springing": 5.0,
+        "head": {
+          "profile": "pointed",
+          "spread": 0.5
+        }
+      },
+      "at": [
+        [
+          0,
+          16.0,
+          -66.0,
+          0
+        ],
+        [
+          0,
+          16.0,
+          -34.0,
+          3.141592653589793
+        ],
+        [
+          -17.0,
+          16.0,
+          -50.0,
+          -1.5707963267948966
+        ],
+        [
+          17.0,
+          16.0,
+          -50.0,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the tympana closing the great arches over the roofs, each with three pointed windows: the crossing's clerestory"
+    },
+    "hall parapet": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": 64.0,
+        "t": 0.6,
+        "h": 0.9,
+        "step": 2.4
+      },
+      "at": [
+        [
+          0,
+          16.0,
+          -18.3,
+          0
+        ],
+        [
+          0,
+          16.0,
+          -81.7,
+          0
+        ],
+        [
+          31.7,
+          16.0,
+          -50.0,
+          1.5707963267948966
+        ],
+        [
+          -31.7,
+          16.0,
+          -50.0,
+          1.5707963267948966
+        ]
+      ],
+      "standsOn": [
+        "hall roof",
+        "hall roof sides"
+      ],
+      "_about": "the crenellated parapet round the hall's roofs"
+    },
+    "crossing parapet": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": 34.0,
+        "t": 0.6,
+        "h": 0.9,
+        "step": 2.4
+      },
+      "at": [
+        [
+          0,
+          26.7,
+          -33.3,
+          0
+        ],
+        [
+          0,
+          26.7,
+          -66.7,
+          0
+        ],
+        [
+          16.7,
+          26.7,
+          -50.0,
+          1.5707963267948966
+        ],
+        [
+          -16.7,
+          26.7,
+          -50.0,
+          1.5707963267948966
+        ]
+      ],
+      "standsOn": [
+        "pendentives"
+      ],
+      "_about": "and round the crossing's square head, at the drum's foot"
+    },
+    "dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 14.0,
+        "dt": 1.2,
+        "H": 13.0,
+        "n": 16,
+        "every": 1,
+        "winW": 2.4,
+        "winSill": 3.0,
+        "winH": 6.0,
+        "profile": "pointed",
+        "spread": 0.25,
+        "domeT": 0.8,
+        "ribsN": 32,
+        "ribW": 0.35
+      },
+      "at": [
+        [
+          0,
+          26.2,
+          -50.0,
+          0
+        ]
+      ],
+      "build": [
+        "drum",
+        "dome",
+        "ribs"
+      ],
+      "_about": "the tall drum, a pointed window in every bay, the gilded dome with its ribs and the gold finial"
+    },
+    "dome finial": {
+      "type": "column",
+      "radius": 0.4,
+      "height": 8.0,
+      "sides": 8,
+      "taper": 0.25,
+      "at": [
+        [
+          0,
+          57.7161,
+          -50.0,
+          0
+        ]
+      ],
+      "_about": "the gilded finial on the great dome"
+    },
+    "dome finial knop": {
+      "type": "column",
+      "radius": 0.72,
+      "height": 1.2,
+      "sides": 8,
+      "taper": 0.6,
+      "at": [
+        [
+          0,
+          60.5161,
+          -50.0,
+          0
+        ]
+      ]
+    },
+    "hall portal": {
+      "type": "component",
+      "use": "components/portal",
+      "params": {
+        "W": 24.0,
+        "Hh": 22.0,
+        "D": 9.0,
+        "w": 12.0,
+        "s": 10.0,
+        "spread": 0.5,
+        "it": 0.7
+      },
+      "at": [
+        [
+          0,
+          1.2,
+          -18.0,
+          0
+        ]
+      ],
+      "_about": "the prayer hall's great portal, toward the court"
+    },
+    "hall side portals": {
+      "type": "component",
+      "use": "components/portal",
+      "params": {
+        "W": 13.0,
+        "Hh": 16.0,
+        "D": 6.0,
+        "w": 6.5,
+        "s": 6.5,
+        "spread": 0.5,
+        "it": 0.5
+      },
+      "at": [
+        [
+          32.0,
+          1.2,
+          -50.0,
+          1.5707963267948966
+        ],
+        [
+          -32.0,
+          1.2,
+          -50.0,
+          -1.5707963267948966
+        ]
+      ],
+      "_about": "the side portals"
+    },
+    "hall front arcades": {
+      "type": "component",
+      "use": "components/arcade-walk",
+      "params": {
+        "D": 7.0,
+        "H": 10.5,
+        "t": 0.9,
+        "bay": 4.4,
+        "pw": 1.1,
+        "spread": 0.5,
+        "slab": 0.6,
+        "L": 20.0
+      },
+      "at": [
+        [
+          -22.0,
+          1.2,
+          -14.5,
+          0
+        ],
+        [
+          22.0,
+          1.2,
+          -14.5,
+          0
+        ]
+      ],
+      "build": [
+        "front",
+        "roof",
+        "front parapet"
+      ],
+      "_about": "the arcaded walks along the hall's front, either side of its great portal"
+    },
+    "hall side arcades": {
+      "type": "component",
+      "use": "components/arcade-walk",
+      "params": {
+        "D": 7.0,
+        "H": 10.5,
+        "t": 0.9,
+        "bay": 4.4,
+        "pw": 1.1,
+        "spread": 0.5,
+        "slab": 0.6,
+        "L": 25.5
+      },
+      "at": [
+        [
+          -35.5,
+          1.2,
+          -69.25,
+          -1.5707963267948966
+        ],
+        [
+          -35.5,
+          1.2,
+          -30.75,
+          -1.5707963267948966
+        ],
+        [
+          35.5,
+          1.2,
+          -69.25,
+          1.5707963267948966
+        ],
+        [
+          35.5,
+          1.2,
+          -30.75,
+          1.5707963267948966
+        ]
+      ],
+      "build": [
+        "front",
+        "roof",
+        "front parapet"
+      ],
+      "_about": "and along its sides"
+    },
+    "women's hall": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          18.0,
+          22.0
+        ]
+      },
+      "thickness": 1.2,
+      "height": 9.0,
+      "faces": {
+        "0": [
+          {
+            "at": 0,
+            "width": 3.2,
+            "sill": 0,
+            "springing": 3.8,
+            "head": {
+              "profile": "pointed",
+              "spread": 0.5
+            }
+          }
+        ],
+        "1": {
+          "pattern": "3",
+          "width": 1.8,
+          "gap": 3.6,
+          "sill": 2.5,
+          "springing": 5.5,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.5
+          }
+        },
+        "2": {
+          "pattern": "3",
+          "width": 1.8,
+          "gap": 3.6,
+          "sill": 2.5,
+          "springing": 5.5,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.5
+          }
+        },
+        "3": {
+          "pattern": "3",
+          "width": 1.8,
+          "gap": 3.6,
+          "sill": 2.5,
+          "springing": 5.5,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.5
+          }
+        }
+      },
+      "at": [
+        [
+          54.0,
+          1.2,
+          -56.0,
+          0
+        ]
+      ],
+      "_about": "the women's prayer hall: its door toward the court, pointed windows"
+    },
+    "women's roof": {
+      "flatRoof": true,
+      "type": "box",
+      "width": 18.0,
+      "length": 22.0,
+      "height": 0.6,
+      "at": [
+        [
+          54.0,
+          10.2,
+          -56.0,
+          0
+        ]
+      ]
+    },
+    "women's parapet": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": 18.0,
+        "t": 0.5,
+        "h": 0.8,
+        "step": 2.2
+      },
+      "at": [
+        [
+          54.0,
+          10.8,
+          -45.25,
+          0
+        ],
+        [
+          54.0,
+          10.8,
+          -66.75,
+          0
+        ]
+      ],
+      "standsOn": [
+        "women's roof"
+      ]
+    },
+    "women's parapet sides": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": 22.0,
+        "t": 0.5,
+        "h": 0.8,
+        "step": 2.2
+      },
+      "at": [
+        [
+          62.75,
+          10.8,
+          -56.0,
+          1.5707963267948966
+        ],
+        [
+          45.25,
+          10.8,
+          -56.0,
+          1.5707963267948966
+        ]
+      ],
+      "standsOn": [
+        "women's roof"
+      ]
+    },
+    "women's dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 4.5,
+        "dt": 0.6,
+        "H": 3.5,
+        "n": 12,
+        "every": 1,
+        "winW": 1.2,
+        "winSill": 0.8,
+        "winH": 1.6,
+        "profile": "pointed",
+        "spread": 0.3,
+        "domeT": 0.4
+      },
+      "at": [
+        [
+          54.0,
+          10.8,
+          -56.0,
+          0
+        ]
+      ],
+      "build": [
+        "drum",
+        "dome"
+      ],
+      "_about": "its small dome on a drum over the roof"
+    },
+    "women's finial": {
+      "type": "column",
+      "radius": 0.15000000000000002,
+      "height": 3.0,
+      "sides": 8,
+      "taper": 0.25,
+      "at": [
+        [
+          54.0,
+          20.651,
+          -56.0,
+          0
+        ]
+      ],
+      "_about": "and on the women's hall's dome"
+    },
+    "women's finial knop": {
+      "type": "column",
+      "radius": 0.27,
+      "height": 0.44999999999999996,
+      "sides": 8,
+      "taper": 0.6,
+      "at": [
+        [
+          54.0,
+          21.701,
+          -56.0,
+          0
+        ]
+      ]
+    },
+    "women's portal": {
+      "type": "component",
+      "use": "components/portal",
+      "params": {
+        "W": 9.0,
+        "Hh": 12.0,
+        "D": 4.2,
+        "w": 5.4,
+        "s": 5.0,
+        "spread": 0.5,
+        "it": 0.4
+      },
+      "at": [
+        [
+          54.0,
+          1.2,
+          -45.0,
+          0
+        ]
+      ],
+      "_about": "its portal toward the court"
+    },
+    "great minaret": {
+      "type": "component",
+      "use": "components/omani-minaret",
+      "params": {
+        "h": 76.0,
+        "a": 8.0,
+        "hs": 26.0,
+        "balconies": 3
+      },
+      "at": [
+        [
+          -50.0,
+          1.2,
+          -22.0,
+          0
+        ]
+      ],
+      "_about": "the great minaret, 90m: the square shaft, the octagon with three balconies, the lantern and dome"
+    },
+    "corner minarets": {
+      "type": "component",
+      "use": "components/omani-minaret",
+      "params": {
+        "h": 38.0,
+        "a": 5.0,
+        "hs": 12.0,
+        "balconies": 2
+      },
+      "at": [
+        [
+          -80.0,
+          1.2,
+          -100.0,
+          0
+        ],
+        [
+          -80.0,
+          1.2,
+          100.0,
+          0
+        ],
+        [
+          80.0,
+          1.2,
+          -100.0,
+          0
+        ],
+        [
+          80.0,
+          1.2,
+          100.0,
+          0
+        ]
+      ],
+      "_about": "the four smaller minarets on the complex's corners, 45m"
+    },
+    "platform": {
+      "type": "box",
+      "width": 30.0,
+      "length": 28.0,
+      "height": 1.2,
+      "walked": true,
+      "at": [
+        [
+          -75.0,
+          0,
+          -92.0,
+          0
+        ],
+        [
+          -75.0,
+          0,
+          -64.0,
+          0
+        ],
+        [
+          -75.0,
+          0,
+          -36.0,
+          0
+        ],
+        [
+          -75.0,
+          0,
+          -8.0,
+          0
+        ],
+        [
+          -75.0,
+          0,
+          20.0,
+          0
+        ],
+        [
+          -75.0,
+          0,
+          48.0,
+          0
+        ],
+        [
+          -75.0,
+          0,
+          76.0,
+          0
+        ],
+        [
+          -75.0,
+          0,
+          104.0,
+          0
+        ],
+        [
+          -45.0,
+          0,
+          -92.0,
+          0
+        ],
+        [
+          -45.0,
+          0,
+          -64.0,
+          0
+        ],
+        [
+          -45.0,
+          0,
+          -36.0,
+          0
+        ],
+        [
+          -45.0,
+          0,
+          -8.0,
+          0
+        ],
+        [
+          -45.0,
+          0,
+          20.0,
+          0
+        ],
+        [
+          -45.0,
+          0,
+          48.0,
+          0
+        ],
+        [
+          -45.0,
+          0,
+          76.0,
+          0
+        ],
+        [
+          -45.0,
+          0,
+          104.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          -92.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          -64.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          -36.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          -8.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          20.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          48.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          76.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          104.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          -92.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          -64.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          -36.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          -8.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          20.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          48.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          76.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          104.0,
+          0
+        ],
+        [
+          45.0,
+          0,
+          -92.0,
+          0
+        ],
+        [
+          45.0,
+          0,
+          -64.0,
+          0
+        ],
+        [
+          45.0,
+          0,
+          -36.0,
+          0
+        ],
+        [
+          45.0,
+          0,
+          -8.0,
+          0
+        ],
+        [
+          45.0,
+          0,
+          20.0,
+          0
+        ],
+        [
+          45.0,
+          0,
+          48.0,
+          0
+        ],
+        [
+          45.0,
+          0,
+          76.0,
+          0
+        ],
+        [
+          45.0,
+          0,
+          104.0,
+          0
+        ],
+        [
+          75.0,
+          0,
+          -92.0,
+          0
+        ],
+        [
+          75.0,
+          0,
+          -64.0,
+          0
+        ],
+        [
+          75.0,
+          0,
+          -36.0,
+          0
+        ],
+        [
+          75.0,
+          0,
+          -8.0,
+          0
+        ],
+        [
+          75.0,
+          0,
+          20.0,
+          0
+        ],
+        [
+          75.0,
+          0,
+          48.0,
+          0
+        ],
+        [
+          75.0,
+          0,
+          76.0,
+          0
+        ],
+        [
+          75.0,
+          0,
+          104.0,
+          0
+        ]
+      ],
+      "_about": "the raised platform of the whole complex, its top the sahn's white marble"
+    },
+    "main flight": {
+      "type": "flight",
+      "width": 16.0,
+      "run": 0.35,
+      "rise": 0.15,
+      "top": 1.2,
+      "landing": 0,
+      "at": [
+        [
+          8.0,
+          0,
+          120.8,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the broad flight up to the platform before the main gate"
+    },
+    "side flights": {
+      "type": "flight",
+      "width": 10.0,
+      "run": 0.35,
+      "rise": 0.15,
+      "top": 1.2,
+      "landing": 0,
+      "at": [
+        [
+          92.8,
+          0,
+          -5.0,
+          3.141592653589793
+        ],
+        [
+          -92.8,
+          0,
+          5.0,
+          0
+        ]
+      ],
+      "_about": "and before the side gates"
+    }
+  }
+}

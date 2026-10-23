@@ -1,0 +1,142 @@
+{
+ "kind": "item",
+ "name": "Kitchen table",
+ "category": "furniture/table",
+ "era": "1600-1900",
+ "region": "Europe",
+ "_about": "a scrubbed farmhouse table: a pine top on square tapered legs, a deep apron with a drawer for the knives",
+ "params": {
+  "h": 0.76,
+  "L": [
+   1.3,
+   1.7
+  ],
+  "d": 0.75
+ },
+ "materials": {
+  "wood": "pine",
+  "top": "birch",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "top",
+   "type": "box",
+   "material": "top",
+   "size": [
+    "L",
+    0.04,
+    "d"
+   ],
+   "at": [
+    0,
+    "h - 0.02",
+    0
+   ]
+  },
+  {
+   "id": "legs",
+   "use": "items/components/square-leg",
+   "params": {
+    "h": "h - 0.04",
+    "w": 0.065,
+    "taper": 0.7
+   },
+   "at": [
+    [
+     "0 - L / 2 + 0.07",
+     0,
+     "0 - d / 2 + 0.07"
+    ],
+    [
+     "L / 2 - 0.07",
+     0,
+     "0 - d / 2 + 0.07"
+    ],
+    [
+     "0 - L / 2 + 0.07",
+     0,
+     "d / 2 - 0.07"
+    ],
+    [
+     "L / 2 - 0.07",
+     0,
+     "d / 2 - 0.07"
+    ]
+   ]
+  },
+  {
+   "id": "apron",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L - 0.14",
+    0.13,
+    "d - 0.14"
+   ],
+   "at": [
+    0,
+    "h - 0.105",
+    0
+   ]
+  },
+  {
+   "id": "drawer",
+   "use": "items/components/drawer",
+   "params": {
+    "w": 0.4,
+    "h": 0.09,
+    "knobs": 1
+   },
+   "at": [
+    0,
+    "h - 0.105",
+    "d / 2 - 0.06"
+   ],
+   "materials": {
+    "wood": "wood",
+    "metal": "wood"
+   }
+  }
+ ],
+ "markers": [
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     0.46,
+     "d / 2 + 0.25"
+    ],
+    [
+     "L / 4",
+     0.46,
+     "d / 2 + 0.25"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 1.5707963
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     0.46,
+     "0 - d / 2 - 0.25"
+    ],
+    [
+     "L / 4",
+     0.46,
+     "0 - d / 2 - 0.25"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5707963
+   }
+  }
+ ]
+}

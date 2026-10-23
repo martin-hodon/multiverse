@@ -1,0 +1,18 @@
+{
+  "name": "Zwinger, Dresden",
+  "building": "architecture/zwinger",
+  "_about": "The Zwinger: Elbe sandstone, copper roofs gone green, the Kronentor's crown and lantern gilt; floors in flags outside and in grey marble within.",
+  "stone": {
+    "color": "#dcc8a0",
+    "accent": "#c0aa7e",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["kronentor lantern/cap", "kronentor lantern/finial", "kronentor lantern/tower", "kronentor lantern/drum"], "pattern": "roofs/gold leaf"},
+    {"parts": ["kind:dome", "kind:roof"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone-grey"},
+    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "sandstone"}
+  ]
+}

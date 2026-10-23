@@ -1,0 +1,71 @@
+{
+  "name": "Courts",
+  "_about": "THE COURT: a ring of rooms round a courtyard as one part -- outer and courtyard walls, windows every `axis` metres, doors from the court into the rooms, floors on every storey, a stair up every storey, a gate through into the court, a roof on every side. The same part on a rectangle (a palace's quadrangle, Melk's Pr\u00e4latenhof) and on a pentagon (Schwerin's).",
+  "params": {
+    "detail": 4
+  },
+  "build": [
+    "quadrangle",
+    "pentagon"
+  ],
+  "parts": {
+    "quadrangle": {
+      "type": "court",
+      "plan": {
+        "rect": [
+          60,
+          44
+        ]
+      },
+      "depth": 13,
+      "storeys": 3,
+      "storeyH": 4.8,
+      "gate": {
+        "face": 0,
+        "width": 4,
+        "height": 5
+      },
+      "roof": {
+        "form": "hip",
+        "pitch": 38
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "a quadrangle of three storeys, its gate on the +z side"
+    },
+    "pentagon": {
+      "type": "court",
+      "plan": {
+        "sides": 5,
+        "radius": 34
+      },
+      "depth": 12,
+      "storeys": 3,
+      "storeyH": 4.6,
+      "gate": {
+        "face": 0,
+        "width": 4,
+        "height": 5
+      },
+      "roof": {
+        "form": "hip",
+        "pitch": 48
+      },
+      "at": [
+        [
+          90,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the same on a pentagon"
+    }
+  }
+}

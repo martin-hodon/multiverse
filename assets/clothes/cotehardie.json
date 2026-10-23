@@ -1,0 +1,54 @@
+{
+  "name": "Cote-hardie",
+  "kind": "garment",
+  "layer": 3,
+  "_about": "the cote-hardie: fitted close to the hips, a low belt, sleeves to the elbow with hanging tippets, a short skirt; dagged edges for the fashionable",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "green"
+    },
+    "trim": {
+      "pattern": "fabrics/vine",
+      "palette": "green-braid"
+    }
+  },
+  "params": {
+    "dags": 0
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip",
+        "neckline": "round",
+        "neckFront": 0.015
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "elbow"
+      }
+    },
+    {
+      "use": "clothes/components/bell-sleeve",
+      "params": {
+        "from": "elbow - 0.02",
+        "to": "wrist + 0.05",
+        "flare": 0.35,
+        "dags": "dags"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip - 0.005",
+        "to": "thigh + 0.08",
+        "flare": 0.3,
+        "dags": "dags",
+        "hem": 0.025
+      }
+    }
+  ]
+}

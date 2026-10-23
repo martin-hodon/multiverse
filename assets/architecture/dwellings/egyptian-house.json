@@ -1,0 +1,163 @@
+{
+ "name": "Egyptian house",
+ "_about": "The mud-brick house of Egypt: small windows high in thick walls, a flat roof with its parapet where the family slept in summer, a stair up to it, a reed shelter on the roof (Egypt, -2000--500)",
+ "era": "-2000--500",
+ "region": "Egypt",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     8.0,
+     10.0
+    ]
+   },
+   "thickness": 0.5,
+   "height": 3.2,
+   "openings": {
+    "pattern": "2",
+    "width": 0.5,
+    "gap": 2.0,
+    "sill": 2.3,
+    "springing": 2.8,
+    "head": {
+     "profile": "flat"
+    }
+   },
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": 1.0,
+      "sill": 0,
+      "springing": 2.1,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "roof",
+   "form": "flat",
+   "width": 8.0,
+   "length": 10.0,
+   "pitch": 0,
+   "overhang": 0.0,
+   "at": [
+    [
+     0,
+     3.2,
+     0,
+     0
+    ]
+   ],
+   "thickness": 0.3
+  },
+  "parapet": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     8.0,
+     10.0
+    ]
+   },
+   "thickness": 0.15,
+   "height": 0.6,
+   "openings": [],
+   "at": [
+    [
+     0,
+     3.5,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "shelter posts": {
+   "type": "column",
+   "radius": 0.08,
+   "height": 1.9,
+   "sides": 6,
+   "at": [
+    [
+     -2.5,
+     3.5,
+     -3.5,
+     0
+    ],
+    [
+     -2.5,
+     3.5,
+     -1.0,
+     0
+    ],
+    [
+     0.5,
+     3.5,
+     -3.5,
+     0
+    ],
+    [
+     0.5,
+     3.5,
+     -1.0,
+     0
+    ]
+   ]
+  },
+  "shelter roof": {
+   "type": "box",
+   "width": 3.4,
+   "length": 3.0,
+   "height": 0.1,
+   "at": [
+    [
+     -1.0,
+     5.4,
+     -2.25,
+     0
+    ]
+   ]
+  },
+  "stair": {
+   "type": "flight",
+   "run": 0.28,
+   "rise": 0.2,
+   "width": 0.9,
+   "base": 0,
+   "top": 3.5,
+   "landing": 0,
+   "at": [
+    [
+     -4.0,
+     0,
+     4.7,
+     1.5707963
+    ]
+   ]
+  }
+ },
+ "build": [
+  "walls",
+  "roof",
+  "parapet",
+  "shelter posts",
+  "shelter roof",
+  "stair"
+ ]
+}

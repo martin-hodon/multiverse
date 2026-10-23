@@ -1,0 +1,273 @@
+{
+  "name": "Walls round plans",
+  "_about": "WALLS ROUND ANY PLAN (`enclosure`): each edge of the outline a wall face with its own openings, the faces meeting on their mitres -- a square hall, the chamfered square of the Taj Mahal or the Frauenkirche, an octagonal baptistery. `openings` is every face's (a pattern, centred on the face) and `faces` overrides it by face. A round window is an opening with a FOOT as well as a head -- a semicircle under a semicircle -- and a rose is a big one. Beside them: a PRISM on the same kinds of plan (a plinth), FLYING BUTTRESSES (a strut on a rampant quarter-arch from a pier to the wall), and BELL domes (concave below the waist, convex above it -- `waist` and `lift` say where it turns: the Frauenkirche's stone bell).",
+  "params": {
+    "detail": 8,
+    "gap": 22
+  },
+  "build": [
+    "hall",
+    "chamfered",
+    "octagon",
+    "plinth",
+    "nave wall",
+    "piers",
+    "flyers",
+    "bell",
+    "tall bell"
+  ],
+  "parts": {
+    "hall": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          12,
+          16
+        ]
+      },
+      "thickness": 0.8,
+      "height": 9,
+      "openings": {
+        "pattern": "3",
+        "width": 1.4,
+        "gap": 1.6,
+        "pier": 1.6,
+        "sill": 1.2,
+        "springing": 4.2,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "faces": {
+        "0": [
+          {
+            "h": 3.8,
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.0,
+                "sill": 0,
+                "springing": 2.6,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.2,
+                "sill": 2.0,
+                "springing": 2.0,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "foot": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "chamfered": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          14,
+          14
+        ],
+        "chamfer": 3.5
+      },
+      "thickness": 0.9,
+      "height": 10,
+      "openings": [
+        {
+          "at": 0,
+          "width": 2.4,
+          "sill": 1.0,
+          "springing": 5.4,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.6
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "octagon": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": 6
+      },
+      "thickness": 0.7,
+      "height": 8,
+      "openings": [
+        {
+          "at": 0,
+          "width": 1.6,
+          "sill": 3.6,
+          "springing": 5.2,
+          "head": {
+            "profile": "semicircular"
+          },
+          "foot": {
+            "profile": "trefoil"
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 2",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "plinth": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          16,
+          16
+        ],
+        "chamfer": 4
+      },
+      "height": 1.2,
+      "at": [
+        [
+          "gap",
+          -1.2,
+          0,
+          0
+        ]
+      ]
+    },
+    "nave wall": {
+      "type": "box",
+      "width": 16,
+      "length": 1.0,
+      "height": 18,
+      "at": [
+        [
+          0,
+          0,
+          "gap",
+          0
+        ]
+      ]
+    },
+    "piers": {
+      "type": "box",
+      "width": 1.4,
+      "length": 2.2,
+      "height": 14,
+      "at": [
+        [
+          -5,
+          0,
+          "gap + 7.6",
+          0
+        ],
+        [
+          0,
+          0,
+          "gap + 7.6",
+          0
+        ],
+        [
+          5,
+          0,
+          "gap + 7.6",
+          0
+        ]
+      ]
+    },
+    "flyers": {
+      "type": "flyer",
+      "span": 6.0,
+      "low": 11.0,
+      "high": 15.0,
+      "top0": 14.0,
+      "top1": 17.0,
+      "width": 0.7,
+      "at": [
+        [
+          -5,
+          0,
+          "gap + 6.5",
+          "1.5707963"
+        ],
+        [
+          0,
+          0,
+          "gap + 6.5",
+          "1.5707963"
+        ],
+        [
+          5,
+          0,
+          "gap + 6.5",
+          "1.5707963"
+        ]
+      ]
+    },
+    "bell": {
+      "type": "dome",
+      "radius": 5,
+      "thickness": 0.6,
+      "oculus": 0.8,
+      "head": {
+        "profile": "bell",
+        "waist": 0.78,
+        "lift": 1.0
+      },
+      "at": [
+        [
+          "gap",
+          0,
+          "gap",
+          0
+        ]
+      ]
+    },
+    "tall bell": {
+      "type": "dome",
+      "radius": 5,
+      "thickness": 0,
+      "head": {
+        "profile": "bell",
+        "waist": 0.7,
+        "lift": 1.8
+      },
+      "at": [
+        [
+          "gap * 2",
+          0,
+          "gap",
+          0
+        ]
+      ]
+    }
+  }
+}

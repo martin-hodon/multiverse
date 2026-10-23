@@ -1,0 +1,165 @@
+{
+ "kind": "item",
+ "name": "Felucca",
+ "category": "ship",
+ "era": "1500-1900",
+ "region": "Egypt, the Levant",
+ "_about": "the Nile's sailing boat: a shallow hull, a great lateen on a raked mast, a small mizzen, an awning aft",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   10,
+   14
+  ],
+  "B": "L * 0.3",
+  "D": "B * 0.4",
+  "mastH": "L * 0.65"
+ },
+ "materials": {
+  "planks": "planks-pine",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.5,
+   "plan": [
+    [
+     0,
+     0.35
+    ],
+    [
+     0.15,
+     0.8
+    ],
+    [
+     0.45,
+     1
+    ],
+    [
+     0.8,
+     0.7
+    ],
+    [
+     1,
+     0.03
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.25"
+    ],
+    [
+     0.1,
+     0
+    ],
+    [
+     0.9,
+     0
+    ],
+    [
+     1,
+     "D * 0.5"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.1"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.4"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.8",
+     "from": 0.03,
+     "to": 0.97
+    }
+   ],
+   "rail": 0.06
+  },
+  {
+   "id": "mast",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.15
+   },
+   "at": [
+    "L * 0.6",
+    "D * 0.8",
+    0,
+    0,
+    0,
+    -12
+   ]
+  },
+  {
+   "id": "lateen L * 0.6 + mastH * 0.19",
+   "use": "items/components/lateen-sail",
+   "params": {
+    "l": "L * 1.1",
+    "tilt": 58,
+    "drop": 0.55,
+    "set": "set"
+   },
+   "at": [
+    "L * 0.6 + mastH * 0.19",
+    "D * 0.8 + mastH * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "awning",
+   "use": "items/components/awning",
+   "params": {
+    "w": "B * 0.9",
+    "d": "L * 0.25",
+    "h": 1.8
+   },
+   "at": [
+    "L * 0.03",
+    "D * 0.8",
+    0
+   ]
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 1.1",
+    "w": "B * 0.12",
+    "tiller": "L * 0.12",
+    "thick": 0.06
+   },
+   "at": [
+    0,
+    "D * 0.95",
+    0
+   ]
+  }
+ ]
+}

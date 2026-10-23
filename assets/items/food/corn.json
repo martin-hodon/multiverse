@@ -1,0 +1,115 @@
+{
+ "kind": "item",
+ "name": "Ear of maize",
+ "category": "food/vegetable",
+ "era": "1550-1900",
+ "region": "the Americas, then the Mediterranean",
+ "_about": "an ear of maize, its yellow kernels in rows, the husk peeled back",
+ "params": {
+  "s": [
+   0.9,
+   1.1
+  ]
+ },
+ "materials": {
+  "kernels": "maize",
+  "husk": "husk"
+ },
+ "parts": [
+  {
+   "id": "ear",
+   "type": "lathe",
+   "material": "kernels",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     "s * 0.018",
+     "s * 0.01"
+    ],
+    [
+     "s * 0.024",
+     "s * 0.06"
+    ],
+    [
+     "s * 0.022",
+     "s * 0.14"
+    ],
+    [
+     "s * 0.01",
+     "s * 0.18"
+    ],
+    [
+     0,
+     "s * 0.19"
+    ]
+   ],
+   "sides": 10,
+   "faceted": true
+  },
+  {
+   "id": "husk",
+   "type": "plate",
+   "material": "husk",
+   "thick": 0.001,
+   "at": [
+    0,
+    0,
+    0,
+    90,
+    12,
+    0
+   ],
+   "outline": [
+    [
+     0,
+     0
+    ],
+    [
+     "s * 0.03",
+     "s * 0.06"
+    ],
+    [
+     "s * 0.02",
+     "s * 0.16"
+    ],
+    [
+     0,
+     "s * 0.2"
+    ],
+    [
+     "-s * 0.02",
+     "s * 0.16"
+    ],
+    [
+     "-s * 0.03",
+     "s * 0.06"
+    ]
+   ],
+   "around": {
+    "n": 3,
+    "r": "s * 0.024",
+    "plane": "xz"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.08",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

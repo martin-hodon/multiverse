@@ -1,0 +1,175 @@
+{
+  "name": "Curved gallery",
+  "_about": "A GALLERY ON AN ARC: the gallery wing bent round a centre -- an outer and an inner ring of arched windows, a roof ring and a balustrade following the curve. The Zwinger's curved galleries (Bogengalerien) are two of these, each closing one end of the court. `R` the middle of its depth, `from` and `to` the bays of `count` round the full circle it runs through.",
+  "params": {
+    "detail": 4,
+    "R": 40,
+    "D": 9,
+    "H": 8,
+    "count": 48,
+    "winW": 2.2,
+    "t": 0.9,
+    "slab": 0.7,
+    "from": -12,
+    "to": 11,
+    "_from": "the bays it runs through, `from` to `to` of `count` round the circle, bay 0 starting at +z and counting toward +x: two ranges with a gap between them leave room for a pavilion at the apex",
+    "sill": 0.9,
+    "_sill": "the openings' sill: 0.9 for windows, 0 for an open arcade",
+    "terrace": 1,
+    "_terrace": "1: its roof is a terrace, walked (reached from the pavilions at its ends); 0: a roof"
+  },
+  "build": [
+    "outer wall",
+    "inner wall",
+    "roof",
+    "balustrade",
+    "inner balustrade"
+  ],
+  "parts": {
+    "outer wall": {
+      "type": "ring",
+      "count": "count",
+      "turn": 0.5,
+      "range": [
+        "from",
+        "to"
+      ],
+      "rOuter": "R + D / 2",
+      "rInner": "R + D / 2 - t",
+      "height": "H",
+      "opening": {
+        "width": "winW",
+        "sill": "sill",
+        "springing": "H - winW / 2 - 1.2",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "inner wall": {
+      "type": "ring",
+      "count": "count",
+      "turn": 0.5,
+      "range": [
+        "from",
+        "to"
+      ],
+      "rOuter": "R - D / 2 + t",
+      "rInner": "R - D / 2",
+      "height": "H",
+      "opening": {
+        "width": "winW * 0.9",
+        "sill": "sill",
+        "springing": "H - winW / 2 - 1.2",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "roof": {
+      "type": "ring",
+      "count": "count",
+      "turn": 0.5,
+      "range": [
+        "from",
+        "to"
+      ],
+      "solid": true,
+      "rOuter": "R + D / 2 + 0.3",
+      "rInner": "R - D / 2 - 0.3",
+      "height": "slab",
+      "y": "H",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "walked": "terrace"
+    },
+    "balustrade": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": "(to - from + 1) / count * 360",
+      "count": "(to - from + 1) / count * 6.2832 * (R + D / 2) / 0.5",
+      "radius": "R + D / 2 + 0.05",
+      "order": "tuscan",
+      "columnR": 0.09,
+      "height": 0.8,
+      "taper": 0.6,
+      "base": {
+        "h": 0.06,
+        "r": 0.11
+      },
+      "capital": {
+        "h": 0.08,
+        "r": 0.11
+      },
+      "entablature": {
+        "h": 0.14,
+        "depth": 0.32
+      },
+      "at": [
+        [
+          0,
+          "H + slab",
+          0,
+          "(from + to + 1) / 2 / count * 6.2832"
+        ]
+      ],
+      "sides": 6,
+      "_about": "the balustrade along the outer edge of the roof terrace..."
+    },
+    "inner balustrade": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": "(to - from + 1) / count * 360",
+      "count": "(to - from + 1) / count * 6.2832 * (R - D / 2) / 0.5",
+      "radius": "R - D / 2 - 0.05",
+      "order": "tuscan",
+      "columnR": 0.09,
+      "height": 0.8,
+      "taper": 0.6,
+      "base": {
+        "h": 0.06,
+        "r": 0.11
+      },
+      "capital": {
+        "h": 0.08,
+        "r": 0.11
+      },
+      "entablature": {
+        "h": 0.14,
+        "depth": 0.32
+      },
+      "at": [
+        [
+          0,
+          "H + slab",
+          0,
+          "(from + to + 1) / 2 / count * 6.2832"
+        ]
+      ],
+      "sides": 6,
+      "_about": "...and along the inner edge, as the straight gallery has along both of its"
+    }
+  }
+}

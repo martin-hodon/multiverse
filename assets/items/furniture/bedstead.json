@@ -1,0 +1,243 @@
+{
+ "kind": "item",
+ "name": "Bedstead",
+ "category": "furniture/bed",
+ "era": "1300-1850",
+ "region": "Europe",
+ "_about": "the joined bed of a farmhouse or a burgher's chamber: four square posts, side and end rails pegged into them, a panelled headboard at -x with finials on its posts, a lower footboard, a board bottom -- and on it the straw pallet (items/furniture/pallet, a component: its tick, blanket and bolster, and its place to sleep, which is the bed's). Lies along x, the head at -x, like every bed here.",
+ "params": {
+  "w": [
+   1.3,
+   1.5
+  ],
+  "l": 2.0,
+  "h": 0.4,
+  "headH": [
+   0.95,
+   1.15
+  ],
+  "footH": 0.6,
+  "post": 0.075,
+  "finial": {
+   "pick": [
+    "ball",
+    "acorn",
+    "urn"
+   ]
+  }
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "pine",
+    "walnut",
+    "oak-grey"
+   ]
+  },
+  "blanket": {
+   "pick": [
+    "wool",
+    "linen",
+    "damask-red",
+    "damask-green"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "head posts",
+   "use": "items/components/square-leg",
+   "params": {
+    "h": "headH",
+    "w": "post",
+    "taper": 1
+   },
+   "at": [
+    [
+     "0 - l / 2 + post / 2",
+     0,
+     "w / 2 - post / 2"
+    ],
+    [
+     "0 - l / 2 + post / 2",
+     0,
+     "0 - w / 2 + post / 2"
+    ]
+   ]
+  },
+  {
+   "id": "foot posts",
+   "use": "items/components/square-leg",
+   "params": {
+    "h": "footH",
+    "w": "post",
+    "taper": 1
+   },
+   "at": [
+    [
+     "l / 2 - post / 2",
+     0,
+     "w / 2 - post / 2"
+    ],
+    [
+     "l / 2 - post / 2",
+     0,
+     "0 - w / 2 + post / 2"
+    ]
+   ]
+  },
+  {
+   "id": "finials",
+   "use": "items/components/finial",
+   "params": {
+    "r": "post * 0.45",
+    "style": "finial"
+   },
+   "at": [
+    [
+     "0 - l / 2 + post / 2",
+     "headH",
+     "w / 2 - post / 2"
+    ],
+    [
+     "0 - l / 2 + post / 2",
+     "headH",
+     "0 - w / 2 + post / 2"
+    ]
+   ]
+  },
+  {
+   "id": "side rails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l - 2 * post",
+    0.2,
+    0.045
+   ],
+   "at": [
+    [
+     0,
+     "h - 0.1",
+     "w / 2 - post / 2"
+    ],
+    [
+     0,
+     "h - 0.1",
+     "0 - w / 2 + post / 2"
+    ]
+   ]
+  },
+  {
+   "id": "end rails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.045,
+    0.2,
+    "w - 2 * post"
+   ],
+   "at": [
+    [
+     "0 - l / 2 + post / 2",
+     "h - 0.1",
+     0
+    ],
+    [
+     "l / 2 - post / 2",
+     "h - 0.1",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "bottom",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l - 2 * post",
+    0.025,
+    "w - 2 * post"
+   ],
+   "at": [
+    0,
+    "h - 0.13",
+    0
+   ]
+  },
+  {
+   "id": "head rail",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.05,
+    0.09,
+    "w - 2 * post"
+   ],
+   "at": [
+    "0 - l / 2 + post / 2",
+    "headH - 0.1",
+    0
+   ]
+  },
+  {
+   "id": "head panel",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.025,
+    "headH - h - 0.15",
+    "w - 2 * post - 0.02"
+   ],
+   "at": [
+    "0 - l / 2 + post / 2",
+    "h + (headH - h - 0.15) / 2",
+    0
+   ]
+  },
+  {
+   "id": "foot rail",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.05,
+    0.08,
+    "w - 2 * post"
+   ],
+   "at": [
+    "l / 2 - post / 2",
+    "footH - 0.06",
+    0
+   ]
+  },
+  {
+   "id": "foot panel",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.025,
+    "footH - h - 0.1",
+    "w - 2 * post - 0.02"
+   ],
+   "at": [
+    "l / 2 - post / 2",
+    "h + (footH - h - 0.1) / 2",
+    0
+   ]
+  },
+  {
+   "id": "bedding",
+   "use": "items/furniture/pallet",
+   "params": {
+    "l": "l - 2 * post - 0.02",
+    "w": "w - 2 * post - 0.02"
+   },
+   "at": [
+    0,
+    "h - 0.12",
+    0
+   ]
+  }
+ ]
+}

@@ -1,0 +1,110 @@
+{
+ "kind": "item",
+ "use": "items/weapons/mace",
+ "name": "Quarterstaff",
+ "era": "1200-1800",
+ "region": "England",
+ "_about": "a staff of oak or ash as long as a man and a half, its ends shod with iron, gripped in both hands",
+ "params": {
+  "haftL": [
+   1.9,
+   2.2
+  ],
+  "r": 0.017,
+  "never": 0
+ },
+ "materials": {
+  "haft": {
+   "pick": [
+    "oak",
+    "ash"
+   ]
+  },
+  "grip": "haft"
+ },
+ "parts": [
+  {
+   "id": "haft",
+   "type": "rod",
+   "material": "haft",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "haftL",
+    0
+   ],
+   "r0": "r",
+   "r1": "r"
+  },
+  {
+   "id": "caps",
+   "type": "lathe",
+   "material": "head",
+   "profile": [
+    [
+     "r * 1.1",
+     0
+    ],
+    [
+     "r * 1.1",
+     0.06
+    ]
+   ],
+   "at": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     "haftL - 0.06",
+     0
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "head",
+   "when": "never"
+  },
+  {
+   "id": "grip",
+   "when": "never"
+  },
+  {
+   "id": "end",
+   "when": "never"
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "haftL * 0.35",
+   0
+  ],
+  "grip2": [
+   0,
+   "haftL * 0.62",
+   0
+  ],
+  "rest": "ground",
+  "follow": 0,
+  "carry": {
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

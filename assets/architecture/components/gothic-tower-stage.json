@@ -1,0 +1,557 @@
+{
+  "name": "Gothic tower stage",
+  "_about": "ONE SQUARE STOREY OF A GOTHIC TOWER, stacked to build one: walls `W` square and `H` high, a blind band (`low`) and over it tall pointed windows, `wins` to a face (open with `glazed` 0: a belfry); the walls may instead have an arcade of `doorN` arches in the band on the +z face (`walls door`) and a portal through the back as well (`walls portal`: the porch hall); two buttresses at every corner (`buttresses`, or only at the +z corners, `front buttresses`), pinnacles on them (`pinnacles` / `front pinnacles`) or on the walls' corners (`corner pinnacles`), a `parapet`; and the storey's STAIR -- a `tower-stair` turret at (`tx`, `tz`) from this storey's floor to the floor at its head, cut round the turret -- or a plain `slab`. Place it at its middle, at its floor. Ulm's west tower is four of these, each turret in another corner.",
+  "params": {
+    "detail": 4,
+    "W": 20.0,
+    "H": 18.0,
+    "t": 1.6,
+    "low": "H * 0.25",
+    "wins": 2,
+    "winW": 2.4,
+    "winGap": 2.4,
+    "winSill": 1.0,
+    "winSpring": "H - low - 1.4 - winW * 0.8661",
+    "glazed": 1,
+    "doorN": 1,
+    "doorW": 3.0,
+    "doorGap": 1.6,
+    "doorSpring": "low - 1.0 - doorW * 0.8661",
+    "backW": 4.0,
+    "backSpring": "low - 1.0 - backW * 0.8661",
+    "bw": 2.0,
+    "bd": 1.8,
+    "pinW": "min(bw, bd) * 0.8",
+    "pinH": 3.0,
+    "pinS": 5.0,
+    "parapetH": 1.2,
+    "tR": 2.1,
+    "c": "W / 2 - t - tR - 0.05",
+    "tx": "c",
+    "tz": "c",
+    "hand": "right",
+    "n": 8,
+    "_winSpring": "the windows' springing over the band: their heads (equilateral) end 1.4m under the storey's top",
+    "_c": "a turret touching two walls in the (+x, +z) inner corner; tx, tz place it"
+  },
+  "build": [
+    "walls",
+    "buttresses",
+    "buttresses side",
+    "stair"
+  ],
+  "parts": {
+    "walls": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "W"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "tiers": [
+        {
+          "h": "low",
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "wins",
+            "width": "winW",
+            "gap": "winGap",
+            "sill": "winSill",
+            "springing": "winSpring",
+            "head": {
+              "profile": "pointed",
+              "spread": 1
+            }
+          },
+          "glass": "glazed"
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the storey's walls: a blind band below, tall pointed windows (`wins` to a face) over it"
+    },
+    "walls door": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "W"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "tiers": [
+        {
+          "h": "low",
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "wins",
+            "width": "winW",
+            "gap": "winGap",
+            "sill": "winSill",
+            "springing": "winSpring",
+            "head": {
+              "profile": "pointed",
+              "spread": 1
+            }
+          },
+          "glass": "glazed"
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "low",
+            "openings": {
+              "pattern": "doorN",
+              "width": "doorW",
+              "gap": "doorGap",
+              "sill": 0,
+              "springing": "doorSpring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            },
+            "glass": false
+          },
+          {
+            "openings": {
+              "pattern": "wins",
+              "width": "winW",
+              "gap": "winGap",
+              "sill": "winSill",
+              "springing": "winSpring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            },
+            "glass": "glazed"
+          }
+        ]
+      },
+      "_about": "...or with `doorN` arches in the band below on the +z face"
+    },
+    "walls portal": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "W"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "tiers": [
+        {
+          "h": "low",
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "wins",
+            "width": "winW",
+            "gap": "winGap",
+            "sill": "winSill",
+            "springing": "winSpring",
+            "head": {
+              "profile": "pointed",
+              "spread": 1
+            }
+          },
+          "glass": "glazed"
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "low",
+            "openings": {
+              "pattern": "doorN",
+              "width": "doorW",
+              "gap": "doorGap",
+              "sill": 0,
+              "springing": "doorSpring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            },
+            "glass": false
+          },
+          {
+            "openings": {
+              "pattern": "wins",
+              "width": "winW",
+              "gap": "winGap",
+              "sill": "winSill",
+              "springing": "winSpring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            },
+            "glass": "glazed"
+          }
+        ],
+        "2": [
+          {
+            "h": "low",
+            "openings": {
+              "pattern": "1",
+              "width": "backW",
+              "sill": 0,
+              "springing": "backSpring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            },
+            "glass": false
+          },
+          {
+            "openings": {
+              "pattern": "wins",
+              "width": "winW",
+              "gap": "winGap",
+              "sill": "winSill",
+              "springing": "winSpring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            },
+            "glass": "glazed"
+          }
+        ]
+      },
+      "_about": "...or the porch: the arcade in front and a portal `backW` wide through the back"
+    },
+    "buttresses": {
+      "type": "box",
+      "width": "bw",
+      "length": "bd",
+      "height": "H",
+      "at": [
+        [
+          "1 * (W / 2 - bw / 2)",
+          0,
+          "1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 - bw / 2)",
+          0,
+          "1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "1 * (W / 2 - bw / 2)",
+          0,
+          "-1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 - bw / 2)",
+          0,
+          "-1 * (W / 2 + bd / 2)",
+          0
+        ]
+      ],
+      "_about": "two buttresses at every corner, one continuing each face (`bd` proud, `bw` wide)"
+    },
+    "buttresses side": {
+      "type": "box",
+      "width": "bd",
+      "length": "bw",
+      "height": "H",
+      "at": [
+        [
+          "1 * (W / 2 + bd / 2)",
+          0,
+          "1 * (W / 2 - bw / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 + bd / 2)",
+          0,
+          "1 * (W / 2 - bw / 2)",
+          0
+        ],
+        [
+          "1 * (W / 2 + bd / 2)",
+          0,
+          "-1 * (W / 2 - bw / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 + bd / 2)",
+          0,
+          "-1 * (W / 2 - bw / 2)",
+          0
+        ]
+      ]
+    },
+    "front buttresses": {
+      "type": "box",
+      "width": "bw",
+      "length": "bd",
+      "height": "H",
+      "at": [
+        [
+          "1 * (W / 2 - bw / 2)",
+          0,
+          "1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 - bw / 2)",
+          0,
+          "1 * (W / 2 + bd / 2)",
+          0
+        ]
+      ],
+      "_about": "...or only the four at the +z corners (a tower whose back stands against a nave)"
+    },
+    "front buttresses side": {
+      "type": "box",
+      "width": "bd",
+      "length": "bw",
+      "height": "H",
+      "at": [
+        [
+          "1 * (W / 2 + bd / 2)",
+          0,
+          "1 * (W / 2 - bw / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 + bd / 2)",
+          0,
+          "1 * (W / 2 - bw / 2)",
+          0
+        ]
+      ]
+    },
+    "pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": "pinW",
+        "h": "pinH",
+        "s": "pinS"
+      },
+      "at": [
+        [
+          "1 * (W / 2 - bw / 2)",
+          "H",
+          "1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "1 * (W / 2 + bd / 2)",
+          "H",
+          "1 * (W / 2 - bw / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 - bw / 2)",
+          "H",
+          "1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 + bd / 2)",
+          "H",
+          "1 * (W / 2 - bw / 2)",
+          0
+        ],
+        [
+          "1 * (W / 2 - bw / 2)",
+          "H",
+          "-1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "1 * (W / 2 + bd / 2)",
+          "H",
+          "-1 * (W / 2 - bw / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 - bw / 2)",
+          "H",
+          "-1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 + bd / 2)",
+          "H",
+          "-1 * (W / 2 - bw / 2)",
+          0
+        ]
+      ],
+      "_about": "a pinnacle on every buttress's head"
+    },
+    "front pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": "pinW",
+        "h": "pinH",
+        "s": "pinS"
+      },
+      "at": [
+        [
+          "1 * (W / 2 - bw / 2)",
+          "H",
+          "1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "1 * (W / 2 + bd / 2)",
+          "H",
+          "1 * (W / 2 - bw / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 - bw / 2)",
+          "H",
+          "1 * (W / 2 + bd / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 + bd / 2)",
+          "H",
+          "1 * (W / 2 - bw / 2)",
+          0
+        ]
+      ]
+    },
+    "corner pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": "pinW",
+        "h": "pinH",
+        "s": "pinS"
+      },
+      "at": [
+        [
+          "1 * (W / 2 - pinW / 2)",
+          "H",
+          "1 * (W / 2 - pinW / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 - pinW / 2)",
+          "H",
+          "1 * (W / 2 - pinW / 2)",
+          0
+        ],
+        [
+          "1 * (W / 2 - pinW / 2)",
+          "H",
+          "-1 * (W / 2 - pinW / 2)",
+          0
+        ],
+        [
+          "-1 * (W / 2 - pinW / 2)",
+          "H",
+          "-1 * (W / 2 - pinW / 2)",
+          0
+        ]
+      ],
+      "_about": "a pinnacle on each corner of the walls' head"
+    },
+    "parapet": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "W"
+        ]
+      },
+      "thickness": 0.4,
+      "height": "parapetH",
+      "openings": [],
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "_about": "the parapet round the walls' head (the gallery behind it)"
+    },
+    "stair": {
+      "type": "component",
+      "use": "components/tower-stair",
+      "params": {
+        "W": "W - 2 * t",
+        "H": "H",
+        "tR": "tR",
+        "tx": "tx",
+        "tz": "tz",
+        "hand": "hand",
+        "n": "n"
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the stair up this storey (`tower-stair`): a turret at (tx, tz), its door on the floor below, the floor at the top round its head. Stacked stages put their turrets in different corners"
+    },
+    "slab": {
+      "type": "box",
+      "width": "W - 2 * t + 0.2",
+      "length": "W - 2 * t + 0.2",
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          "H - 0.4",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "...or a plain slab closing the storey's head, not walked (a tower not climbed)"
+    }
+  }
+}

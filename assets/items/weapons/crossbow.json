@@ -1,0 +1,207 @@
+{
+ "kind": "item",
+ "name": "Crossbow",
+ "category": "weapon/bow",
+ "era": "1100-1550",
+ "region": "Europe",
+ "_about": "the crossbow: a walnut tiller, a steel prod across its head with a stirrup for the foot, a string drawn back to the nut, a long trigger under the stock -- carried by the stock, the prod down and the tiller's top turned out",
+ "params": {
+  "L": [
+   0.8,
+   0.9
+  ],
+  "span": [
+   0.62,
+   0.72
+  ]
+ },
+ "materials": {
+  "stock": "walnut",
+  "prod": "steel",
+  "string": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "tiller",
+   "type": "box",
+   "material": "stock",
+   "size": [
+    0.05,
+    "L",
+    0.065
+   ],
+   "round": 0.01,
+   "at": [
+    0,
+    "L / 2",
+    0
+   ]
+  },
+  {
+   "id": "butt",
+   "type": "box",
+   "material": "stock",
+   "size": [
+    0.06,
+    0.14,
+    0.08
+   ],
+   "round": 0.015,
+   "at": [
+    0,
+    0.07,
+    -0.01
+   ]
+  },
+  {
+   "id": "prod",
+   "type": "sweep",
+   "material": "prod",
+   "section": [
+    0.03,
+    0.012
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "path": [
+    [
+     "0 - span / 2",
+     "L - 0.05",
+     -0.05
+    ],
+    [
+     0,
+     "L - 0.02",
+     0.015
+    ],
+    [
+     "span / 2",
+     "L - 0.05",
+     -0.05
+    ]
+   ]
+  },
+  {
+   "id": "string",
+   "type": "rod",
+   "material": "string",
+   "from": [
+    "0 - span / 2",
+    "L - 0.05",
+    -0.05
+   ],
+   "to": [
+    0,
+    "L * 0.45",
+    0.035
+   ],
+   "r": 0.002,
+   "sides": 3
+  },
+  {
+   "id": "string2",
+   "type": "rod",
+   "material": "string",
+   "from": [
+    "span / 2",
+    "L - 0.05",
+    -0.05
+   ],
+   "to": [
+    0,
+    "L * 0.45",
+    0.035
+   ],
+   "r": 0.002,
+   "sides": 3
+  },
+  {
+   "id": "stirrup",
+   "type": "ring",
+   "material": "metal",
+   "r": 0.055,
+   "tube": 0.006,
+   "at": [
+    0,
+    "L + 0.05",
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "nut",
+   "type": "sphere",
+   "material": "metal",
+   "r": 0.012,
+   "at": [
+    0,
+    "L * 0.45",
+    0.035
+   ]
+  },
+  {
+   "id": "trigger",
+   "type": "sweep",
+   "material": "metal",
+   "r": 0.004,
+   "path": [
+    [
+     0,
+     "L * 0.42",
+     -0.03
+    ],
+    [
+     0,
+     "L * 0.3",
+     -0.06
+    ],
+    [
+     0,
+     "L * 0.15",
+     -0.055
+    ]
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.2,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "grip2": [
+   0,
+   "L * 0.55",
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.1,
+    -1,
+    0
+   ],
+   "face": [
+    0,
+    0,
+    1
+   ]
+  },
+  "follow": 0
+ }
+}

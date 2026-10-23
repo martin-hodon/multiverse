@@ -1,0 +1,111 @@
+{
+ "kind": "item",
+ "name": "Coracle",
+ "category": "ship",
+ "era": "-500-1900",
+ "region": "Wales, Ireland, Iraq, India",
+ "_about": "the one-man basket boat: hide or tarred cloth over a woven frame, round, paddled from the bow",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   1.5,
+   1.8
+  ],
+  "B": "L * 0.92",
+  "D": "L * 0.3"
+ },
+ "materials": {
+  "planks": "hide",
+  "deck": "deck",
+  "wood": "ash",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.45,
+   "double": true,
+   "stations": 16,
+   "sides": 6,
+   "plan": [
+    [
+     0,
+     0.05
+    ],
+    [
+     0.15,
+     0.75
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.85,
+     0.75
+    ],
+    [
+     1,
+     0.05
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.35"
+    ],
+    [
+     0.2,
+     0
+    ],
+    [
+     0.8,
+     0
+    ],
+    [
+     1,
+     "D * 0.35"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.05"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.05"
+    ]
+   ],
+   "rail": 0.03,
+   "thwarts": {
+    "n": 1,
+    "y": "D * 0.6",
+    "w": 0.15,
+    "from": 0.5,
+    "to": 0.5
+   },
+   "ribs": {
+    "n": 7,
+    "w": 0.03
+   }
+  }
+ ]
+}

@@ -1,0 +1,211 @@
+{
+ "kind": "item",
+ "name": "Longcase clock",
+ "category": "furniture/other",
+ "era": "1680-1800",
+ "region": "England & the Low Countries",
+ "_about": "the tall-case clock: a hood over the brass dial, the pendulum's trunk with its door, a plinth; finials on its pediment",
+ "params": {
+  "w": 0.5,
+  "d": 0.28,
+  "h": [
+   2.1,
+   2.3
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "mahogany",
+    "oak",
+    "lacquer-black"
+   ]
+  },
+  "dial": "brass",
+  "face": "ivory",
+  "metal": "brass"
+ },
+ "parts": [
+  {
+   "id": "plinth",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.45,
+    "d"
+   ],
+   "at": [
+    0,
+    0.225,
+    0
+   ]
+  },
+  {
+   "id": "trunk",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.1",
+    "h - 0.95",
+    "d - 0.06"
+   ],
+   "at": [
+    0,
+    "0.45 + (h - 0.95) / 2",
+    -0.02
+   ]
+  },
+  {
+   "id": "door",
+   "use": "items/components/panel-door",
+   "params": {
+    "w": "w - 0.2",
+    "h": "h - 1.15",
+    "s": 0.05,
+    "side": 1
+   },
+   "at": [
+    0,
+    "0.55 + (h - 1.15) / 2",
+    "d / 2 - 0.045"
+   ]
+  },
+  {
+   "id": "hood",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.02",
+    0.5,
+    "d + 0.02"
+   ],
+   "at": [
+    0,
+    "h - 0.3",
+    0
+   ]
+  },
+  {
+   "id": "dial",
+   "type": "box",
+   "material": "dial",
+   "size": [
+    "w - 0.12",
+    "w - 0.12",
+    0.006
+   ],
+   "at": [
+    0,
+    "h - 0.3",
+    "d / 2 + 0.013"
+   ]
+  },
+  {
+   "id": "face",
+   "type": "lathe",
+   "material": "face",
+   "at": [
+    0,
+    "h - 0.3",
+    "d / 2 + 0.016",
+    0,
+    90,
+    0
+   ],
+   "profile": [
+    [
+     "w * 0.3",
+     0
+    ],
+    [
+     "w * 0.3",
+     0.003
+    ]
+   ],
+   "sides": 24
+  },
+  {
+   "id": "hands",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.006,
+    0.12,
+    0.004
+   ],
+   "at": [
+    [
+     0,
+     "h - 0.25",
+     "d / 2 + 0.021",
+     0,
+     0,
+     30
+    ],
+    [
+     0,
+     "h - 0.27",
+     "d / 2 + 0.021",
+     0,
+     0,
+     -60
+    ]
+   ]
+  },
+  {
+   "id": "pediment",
+   "type": "plate",
+   "material": "wood",
+   "thick": "d",
+   "at": [
+    0,
+    "h - 0.05",
+    0
+   ],
+   "outline": [
+    [
+     "0 - w / 2 - 0.02",
+     0
+    ],
+    [
+     "w / 2 + 0.02",
+     0
+    ],
+    [
+     0,
+     0.14
+    ]
+   ]
+  },
+  {
+   "id": "finials",
+   "use": "items/components/finial",
+   "params": {
+    "r": 0.025,
+    "style": "ball"
+   },
+   "at": [
+    [
+     "0 - w / 2",
+     "h - 0.05",
+     0
+    ],
+    [
+     "w / 2",
+     "h - 0.05",
+     0
+    ],
+    [
+     0,
+     "h + 0.08",
+     0
+    ]
+   ],
+   "materials": {
+    "wood": "metal"
+   }
+  }
+ ]
+}

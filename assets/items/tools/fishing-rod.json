@@ -1,0 +1,83 @@
+{
+ "kind": "item",
+ "name": "Fishing rod",
+ "category": "tool",
+ "era": "-500-1900",
+ "_about": "a hazel rod tapering to its tip, the line hanging from it",
+ "params": {
+  "L": [
+   2.3,
+   2.6
+  ]
+ },
+ "materials": {
+  "wood": "birch",
+  "line": "gut"
+ },
+ "parts": [
+  {
+   "id": "rod",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    -0.1,
+    0
+   ],
+   "to": [
+    0,
+    "L",
+    0
+   ],
+   "r0": 0.014,
+   "r1": 0.004,
+   "sides": 6
+  },
+  {
+   "id": "line",
+   "type": "rod",
+   "material": "line",
+   "from": [
+    0,
+    "L",
+    0
+   ],
+   "to": [
+    0.4,
+    "L - 1.4",
+    0
+   ],
+   "r": 0.0012,
+   "sides": 3
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    1,
+    0.65,
+    0
+   ],
+   "face": [
+    0,
+    1,
+    0
+   ]
+  }
+ }
+}

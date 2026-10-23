@@ -1,0 +1,131 @@
+{
+ "kind": "item",
+ "name": "Shield",
+ "category": "shield",
+ "era": "any",
+ "_about": "THE SHIELD every shield stands on: planks under a painted face in the shape the params give (round, oval, kite, heater, rect), curved across (bend: the radius) and domed (dish), a rim, a boss over the hand, the handle behind it. The face is a heraldic panel fitted to its size (assets/patterns/heraldry.json), in a pair of tinctures.",
+ "params": {
+  "shape": "round",
+  "w": 0.8,
+  "h": "w",
+  "bend": 0,
+  "dish": 0,
+  "thick": 0.018,
+  "rim": 0.015,
+  "bossR": 0.075,
+  "bossH": 0.06,
+  "boss": 1
+ },
+ "materials": {
+  "face": {
+   "pattern": "heraldry/plain",
+   "palette": "viking-red",
+   "fit": true
+  },
+  "rim": "leather",
+  "back": "pine",
+  "boss": "iron",
+  "handle": "oak"
+ },
+ "parts": [
+  {
+   "id": "face",
+   "type": "shield",
+   "shape": "shape",
+   "w": "w",
+   "h": "h",
+   "bend": "bend",
+   "dish": "dish",
+   "thick": "thick",
+   "rim": "rim",
+   "material": "face",
+   "rimMaterial": "rim",
+   "backMaterial": "back"
+  },
+  {
+   "id": "boss",
+   "use": "items/components/boss",
+   "when": "boss",
+   "at": [
+    0,
+    0,
+    "dish",
+    0,
+    90,
+    0
+   ],
+   "params": {
+    "r": "bossR",
+    "h": "bossH"
+   }
+  },
+  {
+   "id": "handle",
+   "type": "rod",
+   "material": "handle",
+   "from": [
+    0,
+    -0.07,
+    "dish - thick - 0.03"
+   ],
+   "to": [
+    0,
+    0.07,
+    "dish - thick - 0.03"
+   ],
+   "r": 0.014
+  },
+  {
+   "id": "posts",
+   "type": "box",
+   "material": "handle",
+   "size": [
+    0.02,
+    0.02,
+    0.03
+   ],
+   "at": [
+    [
+     0,
+     -0.07,
+     "dish - thick - 0.015"
+    ],
+    [
+     0,
+     0.07,
+     "dish - thick - 0.015"
+    ]
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0,
+   "dish - thick - 0.03"
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "face": [
+    0.707,
+    0,
+    -0.707
+   ]
+  },
+  "follow": 0
+ }
+}

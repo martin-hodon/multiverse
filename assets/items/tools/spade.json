@@ -1,0 +1,139 @@
+{
+ "kind": "item",
+ "name": "Spade",
+ "category": "tool",
+ "era": "800-1900",
+ "_about": "a digging spade: a D-handle, an ash shaft, an iron-shod blade",
+ "params": {
+  "L": [
+   0.9,
+   1.0
+  ]
+ },
+ "materials": {
+  "wood": "ash",
+  "blade": "iron"
+ },
+ "parts": [
+  {
+   "id": "shaft",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0.04,
+    0
+   ],
+   "to": [
+    0,
+    "L",
+    0
+   ],
+   "r": 0.017,
+   "sides": 7
+  },
+  {
+   "id": "D",
+   "type": "sweep",
+   "material": "wood",
+   "r": 0.012,
+   "path": [
+    [
+     0,
+     0.06,
+     -0.02
+    ],
+    [
+     0,
+     0.0,
+     -0.06
+    ],
+    [
+     0,
+     -0.03,
+     0
+    ],
+    [
+     0,
+     0.0,
+     0.06
+    ],
+    [
+     0,
+     0.06,
+     0.02
+    ]
+   ]
+  },
+  {
+   "id": "blade",
+   "type": "plate",
+   "material": "blade",
+   "at": [
+    0,
+    0,
+    0,
+    90,
+    0,
+    0
+   ],
+   "thick": 0.006,
+   "outline": [
+    [
+     -0.1,
+     "L"
+    ],
+    [
+     0.1,
+     "L"
+    ],
+    [
+     0.11,
+     "L + 0.22"
+    ],
+    [
+     0,
+     "L + 0.27"
+    ],
+    [
+     -0.11,
+     "L + 0.22"
+    ]
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   -0.02,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.2,
+    -1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "grip2": [
+   0,
+   "L * 0.55",
+   0
+  ]
+ }
+}

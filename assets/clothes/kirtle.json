@@ -1,0 +1,55 @@
+{
+  "name": "Kirtle",
+  "kind": "garment",
+  "layer": 2,
+  "skirted": true,
+  "_about": "the kirtle: a fitted gown laced at the front, a scooped neck, long sleeves, and a full skirt from the waist to the floor, pleated",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "woad"
+    },
+    "lacing": {
+      "pattern": "fabrics/lacing",
+      "palette": "gold-braid"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "params": {
+    "lacing": true,
+    "hem": 0,
+    "length": "floor - 0.06"
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "waist + 0.02",
+        "neckline": "scoop",
+        "neckFront": 0.07,
+        "neckBack": 0.02,
+        "lacing": "lacing"
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist",
+        "cuff": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "length",
+        "flare": 0.38,
+        "pleats": 16,
+        "hem": "hem"
+      }
+    }
+  ]
+}

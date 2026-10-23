@@ -1,0 +1,144 @@
+{
+ "kind": "item",
+ "name": "Reed boat",
+ "category": "ship",
+ "era": "-4000-1900",
+ "region": "Egypt, Mesopotamia, Lake Titicaca",
+ "_about": "bundles of reed lashed into a boat, both ends swept up into points -- the Nile's papyrus skiff, the totora boat of Titicaca",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   4,
+   6
+  ],
+  "B": "L * 0.28",
+  "D": "B * 0.45"
+ },
+ "materials": {
+  "planks": "reed",
+  "deck": "deck",
+  "wood": "reed",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.45,
+   "stations": 20,
+   "sides": 6,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.2,
+     0.75
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.8,
+     0.75
+    ],
+    [
+     1,
+     0.02
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 1.3"
+    ],
+    [
+     0.1,
+     "D * 0.3"
+    ],
+    [
+     0.3,
+     0
+    ],
+    [
+     0.7,
+     0
+    ],
+    [
+     0.9,
+     "D * 0.3"
+    ],
+    [
+     1,
+     "D * 1.3"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 2.1"
+    ],
+    [
+     0.15,
+     "D * 1.2"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.85,
+     "D * 1.2"
+    ],
+    [
+     1,
+     "D * 2.1"
+    ]
+   ],
+   "rail": "B * 0.13",
+   "railMaterial": "wood"
+  },
+  {
+   "id": "lashing",
+   "type": "ring",
+   "material": "rope",
+   "r": "B * 0.5",
+   "tube": 0.02,
+   "along": {
+    "n": 6,
+    "from": [
+     "L * 0.2",
+     "D * 0.65",
+     0
+    ],
+    "to": [
+     "L * 0.8",
+     "D * 0.65",
+     0
+    ]
+   },
+   "at": [
+    0,
+    0,
+    0,
+    90,
+    0,
+    0
+   ]
+  }
+ ]
+}

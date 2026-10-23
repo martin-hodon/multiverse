@@ -1,0 +1,631 @@
+{
+ "kind": "item",
+ "name": "Cart",
+ "category": "components",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "the body of a cart (1.6 m bed on 1 axle(s)): bed, sides, head- and tailboards, the driver's board, footboard, axles and bolsters -- its wheels apart (components/cart-wheel), and its LOAD by `load` (0..4: casks lying in chocked pyramids, standing casks, kegs, sacks in two courses; 5 sheaves heaped, the harvest's, never on the road; -1 empty)",
+ "params": {
+  "load": 0,
+  "seatTop": 1.265,
+  "seatX": 0.5,
+  "bedL": 1.6,
+  "bedW": 1.05,
+  "floor": 0.8,
+  "side": 0.35,
+  "axle1X": -0.1,
+  "wheel1R": 0.75
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "#7a5a36",
+    "#6f5433",
+    "#846040",
+    "#6a4a2c"
+   ]
+  },
+  "dark": "#4e3a24"
+ },
+ "parts": [
+  {
+   "id": "bed",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.6,
+    0.06,
+    1.05
+   ],
+   "at": [
+    0,
+    0.77,
+    0
+   ]
+  },
+  {
+   "id": "sides",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.6,
+    0.35,
+    0.05
+   ],
+   "at": [
+    [
+     0,
+     0.9750000000000001,
+     0.55
+    ],
+    [
+     0,
+     0.9750000000000001,
+     -0.55
+    ]
+   ]
+  },
+  {
+   "id": "headboard",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.05,
+    0.35,
+    1.1500000000000001
+   ],
+   "at": [
+    [
+     0.8250000000000001,
+     0.9750000000000001,
+     0
+    ],
+    [
+     -0.8250000000000001,
+     0.9750000000000001,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "driver's board",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.42,
+    0.05,
+    0.9500000000000001
+   ],
+   "at": [
+    0.5,
+    1.24,
+    0
+   ]
+  },
+  {
+   "id": "board legs",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.05,
+    0.42,
+    0.06
+   ],
+   "at": [
+    [
+     0.5,
+     1.01,
+     0.42500000000000004
+    ],
+    [
+     0.5,
+     1.01,
+     -0.42500000000000004
+    ]
+   ]
+  },
+  {
+   "id": "footboard",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.36,
+    0.04,
+    0.8500000000000001
+   ],
+   "at": [
+    1.0,
+    0.88,
+    0
+   ]
+  },
+  {
+   "id": "axle 1",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.05,
+   "from": [
+    -0.1,
+    0.75,
+    -0.775
+   ],
+   "to": [
+    -0.1,
+    0.75,
+    0.775
+   ],
+   "sides": 8
+  },
+  {
+   "id": "bolster 1",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.16,
+    0.04,
+    0.8400000000000001
+   ],
+   "at": [
+    -0.1,
+    0.745,
+    0
+   ]
+  },
+  {
+   "id": "load 0 cask 1",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.15,
+    1.15,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 0 cask 2",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    0.5,
+    0.8,
+    0
+   ],
+   "when": {
+    "load": 0
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 1 cask 1",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    -0.45,
+    0.8,
+    0.25
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 1 cask 2",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    -0.45,
+    0.8,
+    -0.25
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 1 cask 3",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    0.05,
+    0.8,
+    0.25
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 2
+  },
+  {
+   "id": "load 1 cask 4",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    0.05,
+    0.8,
+    -0.25
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 3
+  },
+  {
+   "id": "load 1 cask 5",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.21,
+    "h": 0.55,
+    "bulge": 0.19
+   },
+   "at": [
+    0.5,
+    0.8,
+    0
+   ],
+   "when": {
+    "load": 1
+   },
+   "seed": 4
+  },
+  {
+   "id": "load 2 cask 1",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.35,
+    0.8,
+    0
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 2 cask 2",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    0.4,
+    0.8,
+    0
+   ],
+   "when": {
+    "load": 2
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 3 sack 1",
+   "use": "items/tools/sack",
+   "at": [
+    -0.55,
+    0.8,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 2",
+   "use": "items/tools/sack",
+   "at": [
+    -0.03,
+    0.8,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 3",
+   "use": "items/tools/sack",
+   "at": [
+    0.49,
+    0.8,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 4",
+   "use": "items/tools/sack",
+   "at": [
+    -0.29,
+    1.2,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 3 sack 5",
+   "use": "items/tools/sack",
+   "at": [
+    0.23,
+    1.2,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 3
+   }
+  },
+  {
+   "id": "load 4 cask 1",
+   "use": "items/furniture/cask",
+   "params": {
+    "r": 0.35,
+    "h": 0.95,
+    "bulge": 0.171
+   },
+   "at": [
+    -0.3,
+    1.15,
+    -0.475,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 4
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 4 sack 2",
+   "use": "items/tools/sack",
+   "at": [
+    0.35,
+    0.8,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 4
+   }
+  },
+  {
+   "id": "load 5 sheaf 1",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.62,
+    0.8,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 2",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.34,
+    0.8,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 3",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.06,
+    0.8,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 4",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.22,
+    0.8,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 5",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.5,
+    0.8,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 6",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.48,
+    1.02,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 7",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.2,
+    1.02,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 8",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.08,
+    1.02,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 9",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.36,
+    1.02,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 10",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.34,
+    1.24,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 11",
+   "use": "items/tools/sheaf",
+   "at": [
+    -0.06,
+    1.24,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  },
+  {
+   "id": "load 5 sheaf 12",
+   "use": "items/tools/sheaf",
+   "at": [
+    0.22,
+    1.24,
+    0,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 5
+   }
+  }
+ ]
+}

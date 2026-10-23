@@ -1,0 +1,48 @@
+{
+  "name": "Stairs and seating",
+  "_about": "STEPS, as a cross-section swept: a flight is one with a 30cm tread and an 18cm rise, a tier of seating the same shape with a metre-deep tread and half a metre of rise. Here a straight flight, and beside it the seating it is the small cousin of.",
+  "params": {
+    "detail": 4,
+    "run": 0.3,
+    "rise": 0.18,
+    "w": 2.4,
+    "top": 4.5
+  },
+  "build": [
+    "flight",
+    "seating"
+  ],
+  "_build": "which parts to build, and in what order (a caller may ask for a few of them: the village takes a cathedral's arcades from a definition whose walls it builds itself)",
+  "parts": {
+    "flight": {
+      "type": "flight",
+      "width": "w",
+      "run": "run",
+      "rise": "rise",
+      "top": "top",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "seating": {
+      "type": "steps",
+      "count": 12,
+      "rInner": 6,
+      "rOuter": 11,
+      "run": 1.0,
+      "rise": 0.5,
+      "base": 0,
+      "at": [
+        0,
+        1,
+        2
+      ],
+      "plan": "radial"
+    }
+  }
+}

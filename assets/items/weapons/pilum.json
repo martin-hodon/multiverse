@@ -1,0 +1,74 @@
+{
+ "kind": "item",
+ "use": "items/weapons/polearm",
+ "name": "Pilum",
+ "era": "-300-250",
+ "region": "Rome",
+ "_about": "the legionary's heavy javelin: a wooden shaft, a long thin iron shank that bends in the shield it strikes, a small pyramidal point",
+ "params": {
+  "poleL": [
+   1.2,
+   1.3
+  ],
+  "head": "none",
+  "butt": 0
+ },
+ "parts": [
+  {
+   "id": "block",
+   "type": "box",
+   "material": "head",
+   "size": [
+    0.04,
+    0.08,
+    0.04
+   ],
+   "at": [
+    0,
+    "poleL",
+    0
+   ]
+  },
+  {
+   "id": "shank",
+   "type": "rod",
+   "material": "head",
+   "from": [
+    0,
+    "poleL + 0.04",
+    0
+   ],
+   "to": [
+    0,
+    "poleL + 0.62",
+    0
+   ],
+   "r": 0.005,
+   "sides": 6
+  },
+  {
+   "id": "point",
+   "type": "lathe",
+   "material": "head",
+   "at": [
+    0,
+    "poleL + 0.62",
+    0,
+    45,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     0.01,
+     0
+    ],
+    [
+     0,
+     0.05
+    ]
+   ],
+   "sides": 4
+  }
+ ]
+}

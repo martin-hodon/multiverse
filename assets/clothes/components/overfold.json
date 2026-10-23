@@ -1,0 +1,50 @@
+{
+  "name": "Overfold",
+  "kind": "component",
+  "_about": "AN OVERFOLD: the Doric peplos's apoptygma -- the top of the cloth folded down over the body from the shoulders to the waist or below, hanging free in a front panel and a back one (the sides open, where the arms come out). A hem band may border it.",
+  "params": {
+    "from": "armpit - 0.03",
+    "to": "waist + 0.08",
+    "span": 125,
+    "flare": 0.2,
+    "hem": 0
+  },
+  "pieces": [
+    {
+      "name": "front",
+      "kind": "hang",
+      "on": "torso",
+      "from": "from",
+      "to": "to",
+      "flare": "flare",
+      "wrap": [
+        0,
+        "span"
+      ],
+      "fabric": "main",
+      "lid": false,
+      "hem": {
+        "width": "hem",
+        "fabric": "trim"
+      }
+    },
+    {
+      "name": "back",
+      "kind": "hang",
+      "on": "torso",
+      "from": "from",
+      "to": "to",
+      "flare": "flare",
+      "wrap": [
+        180,
+        "span"
+      ],
+      "fabric": "main",
+      "lid": false,
+      "hem": {
+        "width": "hem",
+        "fabric": "trim"
+      }
+    }
+  ]
+}

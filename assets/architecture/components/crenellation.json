@@ -1,0 +1,88 @@
+{
+  "name": "Crenellation",
+  "_about": "A CRENELLATED PARAPET: a low wall `L` long, `t` thick and `h` tall, centred on its placement along x, and on it a row of MERLONS every `step` metres, each stepped (a smaller block on a larger -- the Omani and Persian kind); build it without \"merlon tops\" for plain square merlons, or without \"parapet\" to set the merlons straight on a wall's head.",
+  "params": {
+    "detail": 4,
+    "L": 20,
+    "t": 0.5,
+    "h": 0.9,
+    "step": 2.0,
+    "mw": "step * 0.45",
+    "mh": 0.8,
+    "n": "max(1, floor(L / step))",
+    "_n": "how many merlons: as many whole steps as the parapet holds, the row centred on it"
+  },
+  "build": [
+    "parapet",
+    "merlons",
+    "merlon tops"
+  ],
+  "parts": {
+    "parapet": {
+      "type": "box",
+      "width": "L",
+      "length": "t",
+      "height": "h",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "merlons": {
+      "type": "box",
+      "width": "mw",
+      "length": "t",
+      "height": "mh",
+      "at": [
+        [
+          "0 - (n - 1) * step / 2",
+          "h",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "step",
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "the merlons, centred on the parapet",
+      "perch": 0.06
+    },
+    "merlon tops": {
+      "type": "box",
+      "width": "mw * 0.5",
+      "length": "t",
+      "height": "mh * 0.6",
+      "at": [
+        [
+          "0 - (n - 1) * step / 2",
+          "h + mh",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "step",
+          0,
+          0,
+          0
+        ]
+      },
+      "standsOn": [
+        "merlons"
+      ],
+      "_about": "the step on each merlon"
+    }
+  }
+}

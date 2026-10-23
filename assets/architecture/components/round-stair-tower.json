@@ -1,0 +1,219 @@
+{
+  "name": "Round stair tower",
+  "_about": "A ROUND STAIR TOWER standing on its own (against a wall, in the angle of a choir): a ring of `n` bays, a door at its foot in bay `doorBay`, a spiral inside from the ground up to `H`, where it arrives on its landing at a door out (bay `exitBay`, worked out from where the spiral ends) -- onto a terrace or a gallery the caller builds there; above that an open belvedere of arches over a parapet, a cornice and a cone. Place it at its middle. `steps` may be chosen (12-22cm each) so the stair arrives facing the way the caller wants. Mainz's east towers.",
+  "params": {
+    "detail": 4,
+    "R": 3.6,
+    "wall": 0.8,
+    "H": 20.0,
+    "n": 12,
+    "newel": 0.2,
+    "turn": 24,
+    "steps": "round(H / 0.19)",
+    "doorBay": 0,
+    "stageH": 4.0,
+    "capRise": 6.0,
+    "finial": 1.6,
+    "_R": "the tower's outside radius; `wall` its thickness; H the level the stair arrives at (the terrace's)",
+    "_steps": "the spiral's steps: the landing's bearing follows from their number, so a caller picks it to arrive facing the door it wants",
+    "sr": "R - wall - 0.05",
+    "rA": "(sr + newel) / 2",
+    "land": "max(1.2, sr - newel)",
+    "exitBay": "round(doorBay + steps * turn * n / 360 + land / rA / 2 * n / 6.2831853)",
+    "_exitBay": "the bay the landing reaches: the first step's bearing, the steps' turns, and half the landing's arc"
+  },
+  "build": [
+    "shaft",
+    "shaft door",
+    "stair",
+    "belvedere",
+    "belvedere door",
+    "cornice",
+    "cap",
+    "finial"
+  ],
+  "parts": {
+    "shaft": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R",
+      "rInner": "R - wall",
+      "height": "H",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "skip": [
+        "doorBay"
+      ],
+      "solid": true,
+      "_about": "the round shaft, from the ground to the stair's head"
+    },
+    "shaft door": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R",
+      "rInner": "R - wall",
+      "height": "H",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "at": [
+        "doorBay"
+      ],
+      "opening": {
+        "width": 1.2,
+        "sill": 0,
+        "springing": 2.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "stair": {
+      "type": "spiral-stair",
+      "radius": "sr",
+      "newel": "newel",
+      "turn": "turn",
+      "top": "H",
+      "steps": "steps",
+      "soffit": 0.2,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          "doorBay * 6.2831853 / n"
+        ]
+      ],
+      "_about": "the spiral, its first step at the door, its landing at the door out"
+    },
+    "belvedere": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R",
+      "rInner": "R - wall",
+      "height": "stageH",
+      "y": "H",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "skip": [
+        "exitBay"
+      ],
+      "glass": false,
+      "opening": {
+        "width": 1.1,
+        "sill": 1.0,
+        "springing": "stageH - 0.6 - 0.55",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "the belvedere at the stair's head: an arch in every bay over a parapet..."
+    },
+    "belvedere door": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R",
+      "rInner": "R - wall",
+      "height": "stageH",
+      "y": "H",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "at": [
+        "exitBay"
+      ],
+      "glass": false,
+      "opening": {
+        "width": 1.2,
+        "sill": 0,
+        "springing": "stageH - 0.6 - 0.6",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "...and the door out, where the landing arrives"
+    },
+    "cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": "n",
+        "radius": "R + 0.2"
+      },
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          "H + stageH",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "belvedere"
+      ],
+      "_about": "the ceiling over the belvedere and the cornice the cone stands on"
+    },
+    "cap": {
+      "type": "dome",
+      "sides": "n",
+      "radius": "R + 0.2",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "capRise"
+      },
+      "at": [
+        [
+          0,
+          "H + stageH + 0.35",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "cornice"
+      ]
+    },
+    "finial": {
+      "type": "column",
+      "radius": 0.12,
+      "height": "finial",
+      "sides": 6,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "cap",
+      "standsOn": [
+        "cap"
+      ]
+    }
+  }
+}

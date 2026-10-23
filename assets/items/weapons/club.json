@@ -1,0 +1,63 @@
+{
+ "kind": "item",
+ "use": "items/weapons/mace",
+ "name": "Club",
+ "era": "-10000-1800",
+ "region": "everywhere",
+ "_about": "a cudgel: a hardwood staff thickening to a knob",
+ "params": {
+  "haftL": 0.8,
+  "never": 0
+ },
+ "materials": {
+  "haft": {
+   "pick": [
+    "oak",
+    "ash"
+   ]
+  },
+  "grip": "leather"
+ },
+ "parts": [
+  {
+   "id": "haft",
+   "type": "lathe",
+   "material": "haft",
+   "profile": [
+    [
+     "r * 1.2",
+     0
+    ],
+    [
+     "r * 1.4",
+     "haftL * 0.5"
+    ],
+    [
+     "r * 2.6",
+     "haftL * 0.82"
+    ],
+    [
+     "r * 3.0",
+     "haftL * 0.92"
+    ],
+    [
+     "r * 1.8",
+     "haftL"
+    ],
+    [
+     0,
+     "haftL + 0.02"
+    ]
+   ],
+   "sides": 9
+  },
+  {
+   "id": "head",
+   "when": "never"
+  },
+  {
+   "id": "end",
+   "when": "never"
+  }
+ ]
+}

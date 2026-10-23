@@ -1,0 +1,237 @@
+{
+ "kind": "item",
+ "name": "Pommel",
+ "category": "component",
+ "_about": "a hilt's end, standing up from 0 (the sword turns it to hang below its grip): a wheel, a ball, a brazil nut, a scent-stopper, a Viking's lobed cap, a sabre's cap, a disc (a rondel dagger's)",
+ "params": {
+  "r": 0.024,
+  "style": "wheel"
+ },
+ "materials": {
+  "pommel": "iron"
+ },
+ "parts": [
+  {
+   "id": "wheel",
+   "type": "lathe",
+   "when": {
+    "style": "wheel"
+   },
+   "material": "pommel",
+   "at": [
+    0,
+    "r",
+    0,
+    0,
+    90,
+    0
+   ],
+   "profile": [
+    [
+     "r * 0.45",
+     "0 - r * 0.32"
+    ],
+    [
+     "r * 0.95",
+     "0 - r * 0.28"
+    ],
+    [
+     "r",
+     0
+    ],
+    [
+     "r * 0.95",
+     "r * 0.28"
+    ],
+    [
+     "r * 0.45",
+     "r * 0.32"
+    ]
+   ]
+  },
+  {
+   "id": "ball",
+   "type": "sphere",
+   "when": {
+    "style": "ball"
+   },
+   "material": "pommel",
+   "r": "r",
+   "at": [
+    0,
+    "r * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "nut",
+   "type": "lathe",
+   "when": {
+    "style": "nut"
+   },
+   "material": "pommel",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     "r * 0.55",
+     "r * 0.1"
+    ],
+    [
+     "r",
+     "r * 0.7"
+    ],
+    [
+     "r * 0.8",
+     "r * 1.4"
+    ],
+    [
+     0,
+     "r * 1.75"
+    ]
+   ]
+  },
+  {
+   "id": "stopper",
+   "type": "lathe",
+   "when": {
+    "style": "stopper"
+   },
+   "material": "pommel",
+   "profile": [
+    [
+     "r * 0.4",
+     0
+    ],
+    [
+     "r * 0.75",
+     "r * 0.35"
+    ],
+    [
+     "r",
+     "r * 0.95"
+    ],
+    [
+     "r * 0.75",
+     "r * 1.45"
+    ],
+    [
+     "r * 0.3",
+     "r * 1.8"
+    ],
+    [
+     "r * 0.38",
+     "r * 2.15"
+    ],
+    [
+     0,
+     "r * 2.3"
+    ]
+   ]
+  },
+  {
+   "id": "cap",
+   "type": "box",
+   "when": {
+    "style": "lobed"
+   },
+   "material": "pommel",
+   "size": [
+    "r * 2.6",
+    "r * 0.55",
+    "r * 1.0"
+   ],
+   "round": "r * 0.2",
+   "at": [
+    0,
+    "r * 0.28",
+    0
+   ]
+  },
+  {
+   "id": "lobes",
+   "type": "sphere",
+   "when": {
+    "style": "lobed"
+   },
+   "material": "pommel",
+   "r": "r * 0.45",
+   "at": [
+    [
+     "0 - r * 0.8",
+     "r * 0.75",
+     0
+    ],
+    [
+     0,
+     "r * 0.95",
+     0
+    ],
+    [
+     "r * 0.8",
+     "r * 0.75",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "dome",
+   "type": "lathe",
+   "when": {
+    "style": "cap"
+   },
+   "material": "pommel",
+   "profile": [
+    [
+     "r * 0.7",
+     0
+    ],
+    [
+     "r * 0.9",
+     "r * 0.35"
+    ],
+    [
+     "r * 0.6",
+     "r * 0.9"
+    ],
+    [
+     0,
+     "r * 1.05"
+    ]
+   ]
+  },
+  {
+   "id": "disc",
+   "type": "lathe",
+   "when": {
+    "style": "disc"
+   },
+   "material": "pommel",
+   "at": [
+    0,
+    "r * 0.12",
+    0
+   ],
+   "profile": [
+    [
+     "r * 0.3",
+     "0 - r * 0.12"
+    ],
+    [
+     "r * 1.4",
+     "0 - r * 0.12"
+    ],
+    [
+     "r * 1.4",
+     "r * 0.12"
+    ],
+    [
+     "r * 0.3",
+     "r * 0.12"
+    ]
+   ]
+  }
+ ]
+}

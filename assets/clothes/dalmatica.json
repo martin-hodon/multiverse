@@ -1,0 +1,51 @@
+{
+  "name": "Dalmatica",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "the Byzantine dalmatica: a wide over-tunic of silk or wool with broad sleeves to the forearm (the tunic's tight ones show under them), to the calf (a lady's to the floor), a woven border at its hem and cuffs -- worn with clavi over it",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/damask",
+      "palette": "damask-red"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "params": {
+    "length": "calf - 0.02",
+    "hem": 0.04
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip",
+        "neckline": "round",
+        "neckFront": 0.025,
+        "neckBack": 0.008,
+        "neckWidth": 55
+      }
+    },
+    {
+      "use": "clothes/components/bell-sleeve",
+      "params": {
+        "from": "shoulder",
+        "to": "forearm",
+        "flare": 0.32,
+        "hem": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip - 0.005",
+        "to": "length",
+        "flare": 0.24,
+        "pleats": 10,
+        "hem": "hem"
+      }
+    }
+  ]
+}

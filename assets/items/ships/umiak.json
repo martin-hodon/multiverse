@@ -1,0 +1,125 @@
+{
+ "kind": "item",
+ "name": "Umiak",
+ "category": "ship",
+ "era": "-1000-1900",
+ "region": "the Arctic: Inuit",
+ "_about": "the open skin boat of the Arctic for a family or a whaling crew: walrus hide over a lashed frame, broad and flat, rowed and paddled",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   8,
+   10
+  ],
+  "B": "L * 0.22",
+  "D": "B * 0.45"
+ },
+ "materials": {
+  "planks": "hide",
+  "deck": "deck",
+  "wood": "ash",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.65,
+   "double": true,
+   "stations": 20,
+   "sides": 5,
+   "plan": [
+    [
+     0,
+     0.3
+    ],
+    [
+     0.2,
+     0.8
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.8,
+     0.8
+    ],
+    [
+     1,
+     0.15
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.3"
+    ],
+    [
+     0.15,
+     0
+    ],
+    [
+     0.85,
+     0
+    ],
+    [
+     1,
+     "D * 0.4"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.15"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.25"
+    ]
+   ],
+   "rail": 0.04,
+   "thwarts": {
+    "n": 5,
+    "y": "D * 0.6",
+    "w": 0.15,
+    "from": 0.15,
+    "to": 0.85
+   },
+   "ribs": {
+    "n": 12,
+    "w": 0.05
+   }
+  },
+  {
+   "id": "oars",
+   "use": "items/components/oars",
+   "params": {
+    "n": 4,
+    "from": "L * 0.25",
+    "to": "L * 0.75",
+    "y": "D * 1.0",
+    "z": "B * 0.5",
+    "l": "L * 0.35",
+    "dip": 18,
+    "reach": 0.3
+   }
+  }
+ ]
+}

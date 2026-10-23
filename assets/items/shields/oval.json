@@ -1,0 +1,62 @@
+{
+ "kind": "item",
+ "use": "items/shields/shield",
+ "name": "Celtic shield",
+ "era": "-400-100",
+ "region": "Gaul & Britain",
+ "_about": "the Celts' tall oval: planks under hide, an iron spine running top to bottom, a boss over the grip",
+ "params": {
+  "shape": "oval",
+  "w": [
+   0.5,
+   0.56
+  ],
+  "h": [
+   1.05,
+   1.15
+  ],
+  "bend": 1.0,
+  "rim": 0.01,
+  "bossR": 0.06,
+  "bossH": 0.045
+ },
+ "materials": {
+  "face": {
+   "pattern": {
+    "pick": [
+     "heraldry/plain",
+     "heraldry/pale",
+     "heraldry/per-fess"
+    ]
+   },
+   "palette": {
+    "pick": [
+     "viking-green",
+     "viking-red",
+     "sable-argent",
+     "vert-or"
+    ]
+   },
+   "fit": true
+  },
+  "rim": "iron"
+ },
+ "parts": [
+  {
+   "id": "spine",
+   "type": "box",
+   "material": "boss",
+   "size": [
+    0.04,
+    "h * 0.8",
+    0.02
+   ],
+   "at": [
+    0,
+    0,
+    0.012
+   ],
+   "round": 0.008
+  }
+ ]
+}

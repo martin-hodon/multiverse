@@ -1,0 +1,79 @@
+{
+ "kind": "item",
+ "name": "Mill shaft",
+ "category": "components",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "a mill's shaft: an oak spindle L long and r thick, up along y from its origin (`along` y) or back along -z (`along` z: a windshaft)",
+ "params": {
+  "L": 4.0,
+  "r": 0.1,
+  "along": "y"
+ },
+ "materials": {
+  "oak": "oak-grey",
+  "dark": "#4e3a24"
+ },
+ "parts": [
+  {
+   "id": "shaft",
+   "type": "rod",
+   "material": "oak",
+   "r": "r",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "L",
+    0
+   ],
+   "sides": 8,
+   "when": {
+    "along": "y"
+   }
+  },
+  {
+   "id": "shaft z",
+   "type": "rod",
+   "material": "oak",
+   "r": "r",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    0,
+    "0 - L"
+   ],
+   "sides": 8,
+   "when": {
+    "along": "z"
+   }
+  },
+  {
+   "id": "iron",
+   "type": "rod",
+   "material": "dark",
+   "r": "r * 1.25",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    0.12,
+    0
+   ],
+   "sides": 8,
+   "when": {
+    "along": "y"
+   }
+  }
+ ]
+}

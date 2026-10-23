@@ -1,0 +1,22 @@
+{
+  "name": "St Isaac's Cathedral",
+  "building": "architecture/st-isaacs",
+  "_about": "St Isaac's: grey marble facing, the porticoes' columns red granite on granite steps, the domes gilt, the roofs in lead; inside, grey marble revetment and a patterned marble floor.",
+  "stone": {
+    "color": "#bdbab2",
+    "accent": "#a6a39b",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:railing", "color": "#2e2f31", "accent": "#1f2022", "_about": "iron railings"},
+    {"parts": ["porticoes/pediment", "porticoes/columns entablature", "porticoes/side columns entablature"], "pattern": "stone/ashlar fine", "palette": "marble-grey"},
+    {"parts": "porticoes/steps", "pattern": "stone/granite", "palette": "granite"},
+    {"parts": "porticoes", "pattern": "stone/granite", "palette": "granite-red"},
+    {"parts": "kind:dome", "surface": "roof", "pattern": "roofs/gold leaf"},
+    {"parts": "dome/dome", "surface": ["wall", "ceiling"], "side": "in", "pattern": "stone/plaster", "palette": "baroque", "_about": "the dome shell inside"},
+    {"surface": "floor", "side": "in", "pattern": "floors/cosmati", "palette": "marble-bw"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "granite"},
+    {"surface": "wall", "side": "in", "pattern": "stone/revetment", "palette": "marble-grey"},
+    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "marble-grey"}
+  ]
+}

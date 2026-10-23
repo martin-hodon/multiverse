@@ -1,0 +1,149 @@
+{
+  "name": "Portal",
+  "_about": "A MONUMENTAL PORTAL, iwan-like (a pishtaq): a frame `W` wide and `Hh` tall, `D` deep, standing out from a building's face -- its back on the placement's plane (z = 0), its front at z = D, facing +z. Its opening (`w` wide, springing at `s`, pointed by `spread`) goes right through, so the reveal is the recess and the arch head its vault; the `iwan` component closes it at the back with its half cylinder and semidome, `door` wide through its middle bay (by default as wide as the iwan's middle bay allows) (the building behind wants its own door there). A `crenellation` along the top, and a slender octagonal shaft with a small cap at each front corner. `D` must exceed w / 2 + it (the iwan's radius).",
+  "params": {
+    "detail": 4,
+    "W": 16,
+    "Hh": 18,
+    "D": 7,
+    "w": 8,
+    "s": 8,
+    "spread": 0.5,
+    "it": 0.6,
+    "door": "min(3.2, (w / 2 + it) * 0.5 - 0.25)",
+    "sr": "W * 0.03 + 0.25",
+    "sh": "Hh + 2.5",
+    "_sr": "the corner shafts' radius and height"
+  },
+  "build": [
+    "frame",
+    "iwan",
+    "crenellation",
+    "shafts",
+    "shaft caps"
+  ],
+  "parts": {
+    "frame": {
+      "type": "wall",
+      "width": "W",
+      "height": "Hh",
+      "thickness": "D",
+      "glass": false,
+      "openings": [
+        {
+          "at": "W / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "s",
+          "head": {
+            "profile": "pointed",
+            "spread": "spread"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          "D",
+          0
+        ]
+      ],
+      "_about": "the frame: its reveal is the recess, its pointed head the recess's vault"
+    },
+    "iwan": {
+      "type": "component",
+      "use": "components/iwan",
+      "params": {
+        "w": "w",
+        "s": "s",
+        "spread": "spread",
+        "t": "it",
+        "door": "door"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "w / 2 + it",
+          0
+        ]
+      ],
+      "build": [
+        "back",
+        "back door",
+        "hood"
+      ],
+      "_about": "the recess's back: half cylinder and semidome, the door in its middle bay"
+    },
+    "crenellation": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": "W",
+        "t": 0.6,
+        "h": 0.6,
+        "step": 2.0
+      },
+      "at": [
+        [
+          0,
+          "Hh",
+          "D - 0.3",
+          0
+        ]
+      ],
+      "standsOn": [
+        "frame"
+      ]
+    },
+    "shafts": {
+      "type": "column",
+      "radius": "sr",
+      "height": "sh",
+      "sides": 8,
+      "at": [
+        [
+          "0 - W / 2 + sr",
+          0,
+          "D + sr * 0.5",
+          0
+        ],
+        [
+          "W / 2 - sr",
+          0,
+          "D + sr * 0.5",
+          0
+        ]
+      ],
+      "_about": "the slender shafts at the frame's front corners, rising over it"
+    },
+    "shaft caps": {
+      "type": "dome",
+      "radius": "sr * 1.3",
+      "sides": 8,
+      "thickness": 0,
+      "head": {
+        "profile": "pointed",
+        "spread": 0.6
+      },
+      "at": [
+        [
+          "0 - W / 2 + sr",
+          "sh",
+          "D + sr * 0.5",
+          0
+        ],
+        [
+          "W / 2 - sr",
+          "sh",
+          "D + sr * 0.5",
+          0
+        ]
+      ],
+      "standsOn": [
+        "shafts"
+      ]
+    }
+  }
+}

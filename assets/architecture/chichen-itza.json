@@ -1,0 +1,330 @@
+{
+  "name": "Chichen Itza",
+  "_about": "EL CASTILLO, CHICHEN ITZA (the Temple of Kukulcan): a stepped pyramid of nine battered terraces (a `crepidoma` whose steps lean in), 55m square and 24m to its top; up the middle of each face a staircase of 91 steep steps, projecting from the pyramid's foot, its stone balustrades (the stairs' railings, `railing` stone) and the serpent heads at their foot; and on top the temple, three doors to the north, one to each other side, under its flat roof and crest.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.3,
+    "steps": 1,
+    "stepOut": 0.5,
+    "margin": 3
+  },
+  "railing": {
+    "type": "stone",
+    "height": 1.0
+  },
+  "_railing": "the stairs' balustrades: stone, a metre high, sloping with the flights",
+  "build": [
+    "pyramid",
+    "north stair",
+    "north serpent head left",
+    "north serpent head right",
+    "west stair",
+    "west serpent head left",
+    "west serpent head right",
+    "south stair",
+    "south serpent head left",
+    "south serpent head right",
+    "east stair",
+    "east serpent head left",
+    "east serpent head right",
+    "temple",
+    "temple roof",
+    "roof crest"
+  ],
+  "parts": {
+    "pyramid": {
+      "type": "crepidoma",
+      "width": 19.5,
+      "length": 19.5,
+      "steps": 9,
+      "stepH": 2.6667,
+      "stepOut": 1.9889,
+      "batter": 0.8,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "nine terraces, each face leaning in (the talud) and each set back from the one below"
+    },
+    "north stair": {
+      "type": "flight",
+      "steep": true,
+      "width": 8.9,
+      "run": 0.26374,
+      "rise": 0.26374,
+      "base": 0,
+      "top": 24.0,
+      "landing": 0,
+      "at": [
+        [
+          4.45,
+          0,
+          33.75,
+          1.570796
+        ]
+      ],
+      "_about": "a staircase up each face: 91 steps of 26cm on 26cm -- steep, as the real ones are -- arriving on the top platform"
+    },
+    "north serpent head left": {
+      "type": "box",
+      "width": 1.2,
+      "length": 2.2,
+      "height": 1.3,
+      "at": [
+        [
+          -4.8,
+          0,
+          34.95,
+          0.0
+        ]
+      ],
+      "_about": "the serpent heads at the foot of each balustrade (Kukulcan's shadow runs down to them at the equinox)"
+    },
+    "north serpent head right": {
+      "type": "box",
+      "width": 1.2,
+      "length": 2.2,
+      "height": 1.3,
+      "at": [
+        [
+          4.8,
+          0,
+          34.95,
+          0.0
+        ]
+      ]
+    },
+    "west stair": {
+      "type": "flight",
+      "steep": true,
+      "width": 8.9,
+      "run": 0.26374,
+      "rise": 0.26374,
+      "base": 0,
+      "top": 24.0,
+      "landing": 0,
+      "at": [
+        [
+          33.75,
+          0,
+          -4.45,
+          3.141593
+        ]
+      ]
+    },
+    "west serpent head left": {
+      "type": "box",
+      "width": 1.2,
+      "length": 2.2,
+      "height": 1.3,
+      "at": [
+        [
+          34.95,
+          0,
+          4.8,
+          1.570796
+        ]
+      ]
+    },
+    "west serpent head right": {
+      "type": "box",
+      "width": 1.2,
+      "length": 2.2,
+      "height": 1.3,
+      "at": [
+        [
+          34.95,
+          0,
+          -4.8,
+          1.570796
+        ]
+      ]
+    },
+    "south stair": {
+      "type": "flight",
+      "steep": true,
+      "width": 8.9,
+      "run": 0.26374,
+      "rise": 0.26374,
+      "base": 0,
+      "top": 24.0,
+      "landing": 0,
+      "at": [
+        [
+          -4.45,
+          0,
+          -33.75,
+          4.712389
+        ]
+      ]
+    },
+    "south serpent head left": {
+      "type": "box",
+      "width": 1.2,
+      "length": 2.2,
+      "height": 1.3,
+      "at": [
+        [
+          4.8,
+          0,
+          -34.95,
+          3.141593
+        ]
+      ]
+    },
+    "south serpent head right": {
+      "type": "box",
+      "width": 1.2,
+      "length": 2.2,
+      "height": 1.3,
+      "at": [
+        [
+          -4.8,
+          0,
+          -34.95,
+          3.141593
+        ]
+      ]
+    },
+    "east stair": {
+      "type": "flight",
+      "steep": true,
+      "width": 8.9,
+      "run": 0.26374,
+      "rise": 0.26374,
+      "base": 0,
+      "top": 24.0,
+      "landing": 0,
+      "at": [
+        [
+          -33.75,
+          0,
+          4.45,
+          6.283185
+        ]
+      ]
+    },
+    "east serpent head left": {
+      "type": "box",
+      "width": 1.2,
+      "length": 2.2,
+      "height": 1.3,
+      "at": [
+        [
+          -34.95,
+          0,
+          -4.8,
+          4.712389
+        ]
+      ]
+    },
+    "east serpent head right": {
+      "type": "box",
+      "width": 1.2,
+      "length": 2.2,
+      "height": 1.3,
+      "at": [
+        [
+          -34.95,
+          0,
+          4.8,
+          4.712389
+        ]
+      ]
+    },
+    "temple": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          12.5,
+          12.5
+        ]
+      },
+      "thickness": 1.3,
+      "height": 6.5,
+      "openings": [
+        {
+          "at": 0,
+          "width": 1.9,
+          "sill": 0,
+          "springing": 2.6,
+          "head": {
+            "profile": "flat"
+          }
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "at": -3.2,
+            "width": 1.9,
+            "sill": 0,
+            "springing": 2.6,
+            "head": {
+              "profile": "flat"
+            }
+          },
+          {
+            "at": 0,
+            "width": 1.9,
+            "sill": 0,
+            "springing": 2.6,
+            "head": {
+              "profile": "flat"
+            }
+          },
+          {
+            "at": 3.2,
+            "width": 1.9,
+            "sill": 0,
+            "springing": 2.6,
+            "head": {
+              "profile": "flat"
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          24.0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the temple: three doors to the north between its serpent columns, one on each other side"
+    },
+    "temple roof": {
+      "type": "box",
+      "width": 13.1,
+      "length": 13.1,
+      "height": 0.7,
+      "at": [
+        [
+          0,
+          30.5,
+          0,
+          0
+        ]
+      ]
+    },
+    "roof crest": {
+      "type": "box",
+      "width": 0.8,
+      "length": 0.8,
+      "height": 0.8,
+      "spiral": {
+        "count": 24,
+        "radius": 6.05,
+        "y": 31.2
+      },
+      "_about": "the merlons along the roof's edge"
+    }
+  }
+}

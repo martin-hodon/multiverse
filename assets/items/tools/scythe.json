@@ -1,0 +1,150 @@
+{
+ "kind": "item",
+ "name": "Scythe",
+ "category": "tool",
+ "era": "1000-1900",
+ "_about": "the mower's scythe: a long ash snath with two hand-nibs, the blade hung square to it at its foot",
+ "params": {
+  "L": [
+   1.4,
+   1.5
+  ],
+  "bladeL": [
+   0.6,
+   0.7
+  ]
+ },
+ "materials": {
+  "wood": "ash",
+  "blade": "steel"
+ },
+ "parts": [
+  {
+   "id": "snath",
+   "type": "sweep",
+   "material": "wood",
+   "path": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0.02,
+     "L * 0.35",
+     0
+    ],
+    [
+     -0.02,
+     "L * 0.7",
+     0
+    ],
+    [
+     0.01,
+     "L",
+     0
+    ]
+   ],
+   "r": 0.018,
+   "sides": 7
+  },
+  {
+   "id": "nibs",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0.12,
+    0,
+    0
+   ],
+   "r": 0.012,
+   "at": [
+    [
+     0,
+     0.02,
+     0
+    ],
+    [
+     0,
+     "L * 0.45",
+     0
+    ]
+   ],
+   "sides": 6
+  },
+  {
+   "id": "blade",
+   "type": "blade",
+   "material": "blade",
+   "at": [
+    0.01,
+    "L",
+    0,
+    0,
+    90,
+    0
+   ],
+   "length": "bladeL",
+   "edges": 1,
+   "flat": 0.5,
+   "curve": 0.12,
+   "width": [
+    [
+     0,
+     0.05
+    ],
+    [
+     0.7,
+     0.04
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.004,
+    0.0015
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0.06,
+   0.02,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.35,
+    -1,
+    0.15
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "grip2": [
+   0.06,
+   "L * 0.45",
+   0
+  ]
+ }
+}

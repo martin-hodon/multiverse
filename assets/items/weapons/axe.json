@@ -1,0 +1,119 @@
+{
+ "kind": "item",
+ "name": "Axe",
+ "category": "weapon/axe",
+ "era": "any",
+ "_about": "THE AXE every axe stands on: an ash haft (haftL), a head near its top (axe-head: its style and scale), held low on the haft",
+ "params": {
+  "haftL": 0.75,
+  "r": 0.016,
+  "style": "bearded",
+  "s": 1,
+  "spike": 0,
+  "poll": 0,
+  "wrap": 0
+ },
+ "materials": {
+  "haft": {
+   "pick": [
+    "ash",
+    "oak"
+   ]
+  },
+  "head": "iron",
+  "wrap": "leather"
+ },
+ "parts": [
+  {
+   "id": "haft",
+   "type": "lathe",
+   "material": "haft",
+   "profile": [
+    [
+     "r * 1.15",
+     0
+    ],
+    [
+     "r",
+     "haftL * 0.3"
+    ],
+    [
+     "r * 0.95",
+     "haftL"
+    ],
+    [
+     "r * 0.7",
+     "haftL + 0.012"
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "wrap",
+   "type": "lathe",
+   "when": "wrap",
+   "material": "wrap",
+   "profile": [
+    [
+     "r * 1.2",
+     0.02
+    ],
+    [
+     "r * 1.2",
+     0.18
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "head",
+   "use": "items/components/axe-head",
+   "at": [
+    0,
+    "haftL - 0.05 * s",
+    0
+   ],
+   "params": {
+    "s": "s",
+    "style": "style",
+    "spike": "spike",
+    "poll": "poll"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "haftL * 0.1",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "grip2": [
+   0,
+   "haftL * 0.45",
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.1,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "follow": 0.35
+ }
+}

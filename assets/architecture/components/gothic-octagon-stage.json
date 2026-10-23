@@ -1,0 +1,153 @@
+{
+  "name": "Gothic octagon stage",
+  "_about": "THE OCTAGONAL STOREY OF A GOTHIC TOWER, over its square stages and under its spire: eight walls (`R` to the corners, `t` thick, `H` high), a band below and a tall lancet in every face -- open tracery with `glazed` 0; `walls door` has a door in the band of face 0; `slab` closes its head (not walked). Place it at its middle on the square tower's head; the spire (`gothic-spire`) stands on its walls.",
+  "params": {
+    "detail": 4,
+    "R": 7.0,
+    "H": 30.0,
+    "t": 1.0,
+    "low": 4.0,
+    "winW": "R * 0.36",
+    "winSill": 1.0,
+    "winSpring": "H - low - 1.5 - winW * 0.8661",
+    "glazed": 0,
+    "doorW": 1.6,
+    "doorSpring": 2.4
+  },
+  "build": [
+    "walls"
+  ],
+  "parts": {
+    "walls": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "tiers": [
+        {
+          "h": "low",
+          "openings": []
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": "winW",
+              "sill": "winSill",
+              "springing": "winSpring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            }
+          ],
+          "glass": "glazed"
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "eight walls, a tall lancet in each over a blind band"
+    },
+    "walls door": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "tiers": [
+        {
+          "h": "low",
+          "openings": []
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": "winW",
+              "sill": "winSill",
+              "springing": "winSpring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            }
+          ],
+          "glass": "glazed"
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "low",
+            "openings": [
+              {
+                "at": 0,
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorSpring",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 1
+                }
+              }
+            ],
+            "glass": false
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "winSill",
+                "springing": "winSpring",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 1
+                }
+              }
+            ],
+            "glass": "glazed"
+          }
+        ]
+      },
+      "_about": "...or with a door in the band of face 0"
+    },
+    "slab": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": "R - t * 0.6"
+      },
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          "H - 0.4",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "a slab closing the head, its edge buried in the walls"
+    }
+  }
+}

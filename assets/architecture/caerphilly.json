@@ -1,0 +1,910 @@
+{
+ "name": "Caerphilly Castle",
+ "_about": "CAERPHILLY CASTLE: the concentric water castle (1268-71) -- the island plinth, a low outer curtain with gates front and back and corner turrets, the high inner ward with its wall-walk, four drum towers with lifts onto their decks, the twin-towered gatehouse, the great hall against the rear wall with a table and chairs, straight stairs up both side walls, and the timber bridge over the moat. Its own origin is the island's middle; `site.moat` is the water the game carves round it.",
+ "site": {
+  "origin": true,
+  "moat": {
+   "hw": 34,
+   "hd": 30,
+   "w": 13,
+   "depth": 4.4
+  }
+ },
+ "params": {
+  "detail": 4,
+  "footW": 98,
+  "footD": 90
+ },
+ "railing": {
+  "type": "stone",
+  "height": 1.0
+ },
+ "parts": {
+  "island": {
+   "type": "box",
+   "width": 68,
+   "length": 60,
+   "height": 0.4,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "outer curtain": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     58,
+     50
+    ]
+   },
+   "thickness": 1.5,
+   "height": 5.5,
+   "openings": [],
+   "at": [
+    [
+     0,
+     0.4,
+     0,
+     0
+    ]
+   ],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": 4.2,
+      "sill": 0,
+      "springing": 4.4,
+      "head": {
+       "profile": "flat"
+      },
+      "glass": false
+     }
+    ],
+    "2": [
+     {
+      "at": 0,
+      "width": 4.2,
+      "sill": 0,
+      "springing": 4.4,
+      "head": {
+       "profile": "flat"
+      },
+      "glass": false
+     }
+    ]
+   }
+  },
+  "turrets": {
+   "type": "column",
+   "radius": 1.9,
+   "height": 7.9,
+   "sides": 10,
+   "at": [
+    [
+     -29,
+     0.4,
+     -25,
+     0
+    ],
+    [
+     -29,
+     0.4,
+     25,
+     0
+    ],
+    [
+     29,
+     0.4,
+     -25,
+     0
+    ],
+    [
+     29,
+     0.4,
+     25,
+     0
+    ]
+   ]
+  },
+  "turret parapet": {
+   "type": "ring",
+   "count": 10,
+   "rOuter": 1.88,
+   "rInner": 1.52,
+   "height": 0.75,
+   "y": 8.3,
+   "solid": true,
+   "place": [
+    [
+     -29,
+     0,
+     -25,
+     0
+    ],
+    [
+     -29,
+     0,
+     25,
+     0
+    ],
+    [
+     29,
+     0,
+     -25,
+     0
+    ],
+    [
+     29,
+     0,
+     25,
+     0
+    ]
+   ]
+  },
+  "turret merlons": {
+   "type": "ring",
+   "count": 14,
+   "rOuter": 1.88,
+   "rInner": 1.52,
+   "height": 0.95,
+   "y": 9.05,
+   "solid": true,
+   "at": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12
+   ],
+   "place": [
+    [
+     -29,
+     0,
+     -25,
+     0
+    ],
+    [
+     -29,
+     0,
+     25,
+     0
+    ],
+    [
+     29,
+     0,
+     -25,
+     0
+    ],
+    [
+     29,
+     0,
+     25,
+     0
+    ]
+   ]
+  },
+  "inner curtain": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     36.2,
+     28.2
+    ]
+   },
+   "thickness": 2.2,
+   "height": 9,
+   "openings": [],
+   "at": [
+    [
+     0,
+     0.4,
+     0,
+     0
+    ]
+   ],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": 3.6,
+      "sill": 0,
+      "springing": 4.4,
+      "head": {
+       "profile": "flat"
+      },
+      "glass": false
+     }
+    ],
+    "2": [
+     {
+      "at": 0,
+      "width": 3.6,
+      "sill": 0,
+      "springing": 4.4,
+      "head": {
+       "profile": "flat"
+      },
+      "glass": false
+     }
+    ]
+   },
+   "walked": true
+  },
+  "walk parapets": {
+   "type": "box",
+   "width": 36.2,
+   "length": 0.3,
+   "height": 1.15,
+   "at": [
+    [
+     0,
+     9.4,
+     -13.95,
+     0
+    ],
+    [
+     0,
+     9.4,
+     -12.05,
+     0
+    ],
+    [
+     0,
+     9.4,
+     12.05,
+     0
+    ],
+    [
+     0,
+     9.4,
+     13.95,
+     0
+    ]
+   ]
+  },
+  "walk parapets ends": {
+   "type": "box",
+   "width": 0.3,
+   "length": 26,
+   "height": 1.15,
+   "at": [
+    [
+     -17.95,
+     9.4,
+     0,
+     0
+    ],
+    [
+     17.95,
+     9.4,
+     0,
+     0
+    ]
+   ]
+  },
+  "walk parapets inner": {
+   "type": "box",
+   "width": 0.3,
+   "length": 18.6,
+   "height": 1.15,
+   "at": [
+    [
+     -16.05,
+     9.4,
+     -3.7,
+     0
+    ],
+    [
+     16.05,
+     9.4,
+     -3.7,
+     0
+    ]
+   ]
+  },
+  "walk parapets inner 2": {
+   "type": "box",
+   "width": 0.3,
+   "length": 4.300000000000001,
+   "height": 1.15,
+   "at": [
+    [
+     -16.05,
+     9.4,
+     10.85,
+     0
+    ],
+    [
+     16.05,
+     9.4,
+     10.85,
+     0
+    ]
+   ]
+  },
+  "towers": {
+   "type": "column",
+   "radius": 5.2,
+   "height": 14.5,
+   "sides": 14,
+   "at": [
+    [
+     -17,
+     0.4,
+     -13,
+     0
+    ],
+    [
+     -17,
+     0.4,
+     13,
+     0
+    ],
+    [
+     17,
+     0.4,
+     -13,
+     0
+    ],
+    [
+     17,
+     0.4,
+     13,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "tower parapet": {
+   "type": "ring",
+   "count": 14,
+   "rOuter": 5.18,
+   "rInner": 4.82,
+   "height": 0.75,
+   "y": 14.9,
+   "solid": true,
+   "place": [
+    [
+     -17,
+     0,
+     -13,
+     0
+    ],
+    [
+     -17,
+     0,
+     13,
+     0
+    ],
+    [
+     17,
+     0,
+     -13,
+     0
+    ],
+    [
+     17,
+     0,
+     13,
+     0
+    ]
+   ]
+  },
+  "tower merlons": {
+   "type": "ring",
+   "count": 40,
+   "rOuter": 5.18,
+   "rInner": 4.82,
+   "height": 0.95,
+   "y": 15.65,
+   "solid": true,
+   "at": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    22,
+    24,
+    26,
+    28,
+    30,
+    32,
+    34,
+    36,
+    38
+   ],
+   "place": [
+    [
+     -17,
+     0,
+     -13,
+     0
+    ],
+    [
+     -17,
+     0,
+     13,
+     0
+    ],
+    [
+     17,
+     0,
+     -13,
+     0
+    ],
+    [
+     17,
+     0,
+     13,
+     0
+    ]
+   ]
+  },
+  "tower lifts": {
+   "type": "marker",
+   "role": "lift",
+   "at": [
+    [
+     -17,
+     9.4,
+     -6.4,
+     0
+    ],
+    [
+     -17,
+     9.4,
+     6.4,
+     0
+    ],
+    [
+     17,
+     9.4,
+     -6.4,
+     0
+    ],
+    [
+     17,
+     9.4,
+     6.4,
+     0
+    ]
+   ],
+   "data": {
+    "dx": 0,
+    "dy": 5.5,
+    "dz": [
+     -6.6,
+     6.6,
+     -6.6,
+     6.6
+    ]
+   }
+  },
+  "gate towers": {
+   "type": "column",
+   "radius": 3.1,
+   "height": 12,
+   "sides": 12,
+   "at": [
+    [
+     -4.5,
+     0.4,
+     14.2,
+     0
+    ],
+    [
+     4.5,
+     0.4,
+     14.2,
+     0
+    ]
+   ]
+  },
+  "gate tower parapet": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 3.08,
+   "rInner": 2.72,
+   "height": 0.75,
+   "y": 12.4,
+   "solid": true,
+   "place": [
+    [
+     -4.5,
+     0,
+     14.2,
+     0
+    ],
+    [
+     4.5,
+     0,
+     14.2,
+     0
+    ]
+   ]
+  },
+  "gate tower merlons": {
+   "type": "ring",
+   "count": 24,
+   "rOuter": 3.08,
+   "rInner": 2.72,
+   "height": 0.95,
+   "y": 13.15,
+   "solid": true,
+   "at": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    22
+   ],
+   "place": [
+    [
+     -4.5,
+     0,
+     14.2,
+     0
+    ],
+    [
+     4.5,
+     0,
+     14.2,
+     0
+    ]
+   ]
+  },
+  "gatehouse": {
+   "type": "box",
+   "width": 10.4,
+   "length": 6.2,
+   "height": 3.4,
+   "at": [
+    [
+     0,
+     5.9,
+     13.8,
+     0
+    ]
+   ]
+  },
+  "hall front": {
+   "type": "wall",
+   "width": 15,
+   "height": 5.5,
+   "thickness": 1,
+   "at": [
+    [
+     -1,
+     0.4,
+     -5.5,
+     0
+    ]
+   ],
+   "openings": [
+    {
+     "at": 3.5,
+     "width": 1.6,
+     "sill": 0,
+     "springing": 2.6,
+     "head": {
+      "profile": "flat"
+     },
+     "glass": false
+    },
+    {
+     "at": 9.5,
+     "width": 1.6,
+     "sill": 1.4,
+     "springing": 3.2,
+     "head": {
+      "profile": "flat"
+     },
+     "glass": false
+    },
+    {
+     "at": 12.7,
+     "width": 1.6,
+     "sill": 1.4,
+     "springing": 3.2,
+     "head": {
+      "profile": "flat"
+     },
+     "glass": false
+    }
+   ]
+  },
+  "hall ends": {
+   "type": "box",
+   "width": 1,
+   "length": 6.5,
+   "height": 5.5,
+   "at": [
+    [
+     -8.5,
+     0.4,
+     -9.25,
+     0
+    ],
+    [
+     6.5,
+     0.4,
+     -9.25,
+     0
+    ]
+   ]
+  },
+  "hall roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 8,
+   "length": 16.5,
+   "pitch": 40.365,
+   "overhang": 0,
+   "at": [
+    [
+     -1,
+     5.9,
+     -9.4,
+     1.5707963
+    ]
+   ]
+  },
+  "hall table": {
+   "type": "item",
+   "item": "items/furniture/plain-table",
+   "at": [
+    [
+     -3,
+     0.4,
+     -9,
+     0
+    ]
+   ]
+  },
+  "hall chairs": {
+   "type": "item",
+   "item": "items/furniture/plain-chair",
+   "at": [
+    [
+     -3,
+     0.4,
+     -7.8,
+     3.14159265
+    ],
+    [
+     -1.6,
+     0.4,
+     -9.8,
+     1.5707963
+    ]
+   ]
+  },
+  "wall stairs": {
+   "type": "flight",
+   "run": 0.2872,
+   "width": 1.8,
+   "base": 0,
+   "top": 9,
+   "steps": 47,
+   "landing": 1.0,
+   "at": [
+    [
+     -16.0,
+     0.4,
+     -6.5,
+     -1.5707963
+    ],
+    [
+     14.2,
+     0.4,
+     -6.5,
+     -1.5707963
+    ]
+   ],
+   "_about": "(yaw -90: the flight climbs toward +z, its width toward +x from its placement)"
+  },
+  "bridge deck": {
+   "type": "box",
+   "width": 4.6,
+   "length": 21,
+   "height": 0.5,
+   "at": [
+    [
+     0,
+     -0.05,
+     38.5,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "bridge apron": {
+   "type": "box",
+   "width": 4.6,
+   "length": 3,
+   "height": 0.3,
+   "at": [
+    [
+     0,
+     0,
+     49.5,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "bridge rails": {
+   "type": "box",
+   "width": 0.3,
+   "length": 21,
+   "height": 1.1,
+   "at": [
+    [
+     -2.15,
+     0.45,
+     38.5,
+     0
+    ],
+    [
+     2.15,
+     0.45,
+     38.5,
+     0
+    ]
+   ]
+  },
+  "bridge piers": {
+   "type": "column",
+   "radius": 0.9,
+   "height": 4,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     -3.85,
+     33.5,
+     0
+    ],
+    [
+     0,
+     -3.85,
+     39.5,
+     0
+    ]
+   ],
+   "taper": 0.8889
+  },
+  "doors": {
+   "type": "marker",
+   "role": "door",
+   "at": [
+    [
+     0,
+     0.4,
+     13,
+     0
+    ],
+    [
+     -5,
+     0.4,
+     -6,
+     0
+    ]
+   ],
+   "data": {
+    "w": [
+     3.4,
+     1.6
+    ],
+    "h": [
+     4.2,
+     2.6
+    ]
+   }
+  },
+  "hall window": {
+   "type": "marker",
+   "role": "window",
+   "at": [
+    [
+     1,
+     1.85,
+     -5.5,
+     0
+    ]
+   ],
+   "data": {
+    "w": 1.5,
+    "h": 1.7
+   }
+  },
+  "cobwebs": {
+   "type": "marker",
+   "role": "cobweb",
+   "at": [
+    [
+     -8,
+     5.9,
+     -6.5,
+     0
+    ],
+    [
+     6,
+     5.9,
+     -12.1,
+     0
+    ]
+   ],
+   "data": {
+    "sx": [
+     1,
+     -1
+    ],
+    "sz": [
+     -1,
+     1
+    ],
+    "d": [
+     0.7,
+     0.6
+    ]
+   }
+  }
+ },
+ "build": [
+  "island",
+  "outer curtain",
+  "turrets",
+  "turret parapet",
+  "turret merlons",
+  "inner curtain",
+  "walk parapets",
+  "walk parapets ends",
+  "walk parapets inner",
+  "walk parapets inner 2",
+  "towers",
+  "tower parapet",
+  "tower merlons",
+  "tower lifts",
+  "gate towers",
+  "gate tower parapet",
+  "gate tower merlons",
+  "gatehouse",
+  "hall front",
+  "hall ends",
+  "hall roof",
+  "hall table",
+  "hall chairs",
+  "wall stairs",
+  "bridge deck",
+  "bridge apron",
+  "bridge rails",
+  "bridge piers",
+  "doors",
+  "hall window",
+  "cobwebs"
+ ]
+}

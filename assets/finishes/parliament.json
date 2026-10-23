@@ -1,0 +1,18 @@
+{
+  "name": "Hungarian Parliament",
+  "building": "architecture/parliament",
+  "_about": "The Hungarian Parliament: white limestone, red tiled roofs and a red dome between white ribs; inside, Zsolnay-tiled floors (octagon and dot) and faux marble.",
+  "stone": {
+    "color": "#e9e3d3",
+    "accent": "#d2cab6",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:ribs", "color": "#f1ece0"},
+    {"parts": ["kind:roof", "kind:dome"], "surface": "roof", "pattern": "roofs/fish scale", "palette": "tile-red"},
+    {"surface": "floor", "side": "in", "pattern": "floors/octagon and dot", "palette": "marble-rose"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "limestone"},
+    {"surface": "wall", "side": "in", "pattern": "painted/faux marble", "palette": "baroque"},
+    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "limestone"}
+  ]
+}

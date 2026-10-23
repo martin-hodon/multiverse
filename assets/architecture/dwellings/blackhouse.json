@@ -1,0 +1,84 @@
+{
+ "name": "Blackhouse",
+ "_about": "The blackhouse: walls of dry stone two metres thick, rounded at the corners, the thatch sitting on the inner edge roped down with stones, people at one end and the cattle at the other, the peat fire in the middle with no chimney (the Hebrides, the Highlands, 1700-1900)",
+ "era": "1700-1900",
+ "region": "the Hebrides, the Highlands",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     14.0,
+     6.5
+    ],
+    "chamfer": 1.8
+   },
+   "thickness": 1.5,
+   "height": 1.8,
+   "openings": [],
+   "faces": {
+    "2": [
+     {
+      "at": -1.0,
+      "width": 0.9,
+      "sill": 0,
+      "springing": 1.6,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "roof",
+   "form": "hip",
+   "width": 3.8,
+   "length": 11.2,
+   "pitch": 40,
+   "overhang": 0.3,
+   "at": [
+    [
+     0,
+     1.8,
+     0,
+     1.5707963
+    ]
+   ],
+   "shell": 0.35
+  },
+  "fire": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     -2.0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.3,
+    "h": 0.3
+   }
+  }
+ },
+ "build": [
+  "walls",
+  "roof",
+  "fire"
+ ]
+}

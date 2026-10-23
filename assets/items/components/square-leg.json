@@ -1,0 +1,41 @@
+{
+ "kind": "item",
+ "name": "Square leg",
+ "category": "component",
+ "_about": "a leg of square section standing from 0 to h, `w` across at its top, tapering to `taper` of that at its foot (Hepplewhite's, a Chinese table's), faced flat",
+ "params": {
+  "h": 0.72,
+  "w": 0.045,
+  "taper": 0.7
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "leg",
+   "type": "lathe",
+   "material": "wood",
+   "faceted": true,
+   "sides": 4,
+   "at": [
+    0,
+    0,
+    0,
+    45,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     "w * taper * 0.7071",
+     0
+    ],
+    [
+     "w * 0.7071",
+     "h"
+    ]
+   ]
+  }
+ ]
+}

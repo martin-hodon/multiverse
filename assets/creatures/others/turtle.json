@@ -1,0 +1,289 @@
+{
+  "name": "turtle",
+  "kind": "parts",
+  "flags": {
+    "shy": 2.5,
+    "shore": true
+  },
+  "parts": [
+    {
+      "id": "body",
+      "parent": null,
+      "shape": "sphere",
+      "size": {
+        "r": 0.12
+      },
+      "scale": [
+        1.2,
+        0.55,
+        1
+      ],
+      "pos": [
+        0,
+        0.085,
+        0
+      ],
+      "color": "#4a5a2e",
+      "pat": "scutes"
+    },
+    {
+      "id": "plastron",
+      "parent": "body",
+      "shape": "sphere",
+      "size": {
+        "r": 0.1
+      },
+      "scale": [
+        1.2,
+        0.3,
+        0.95
+      ],
+      "pos": [
+        0,
+        -0.04,
+        0
+      ],
+      "color": "#b8a878"
+    },
+    {
+      "id": "neck",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.022,
+        "len": 0.06
+      },
+      "pos": [
+        0.13,
+        -0.01,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -80
+      ],
+      "pivot": [
+        0,
+        0.03,
+        0
+      ],
+      "color": "#6a7a3a"
+    },
+    {
+      "id": "head",
+      "parent": "neck",
+      "shape": "sphere",
+      "size": {
+        "r": 0.03
+      },
+      "scale": [
+        1.3,
+        0.9,
+        0.9
+      ],
+      "pos": [
+        0,
+        0.07,
+        0
+      ],
+      "color": "#6a7a3a",
+      "anim": {
+        "axis": "y",
+        "deg": 18,
+        "speed": 0.3,
+        "phase": 0
+      }
+    },
+    {
+      "id": "eyeL",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.012,
+        "r2": 0.012,
+        "len": 0.021213779380795644
+      },
+      "pos": [
+        0.022340042863347093,
+        0.01257392312938737,
+        0.015582648747888532
+      ],
+      "rot": [
+        90,
+        0,
+        57.81489410810922
+      ],
+      "pivot": [
+        0,
+        0.010606889690397822,
+        0
+      ],
+      "color": "#090606",
+      "edge": 0,
+      "dot": {
+        "iris": "#1a1210",
+        "pupil": "round",
+        "round": true,
+        "role": "eye"
+      }
+    },
+    {
+      "id": "eyeR",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.012,
+        "r2": 0.012,
+        "len": 0.021213779380795644
+      },
+      "pos": [
+        0.004386149758351519,
+        0.01257392312938737,
+        -0.026882301751032598
+      ],
+      "rot": [
+        90,
+        0,
+        -57.81489410810922
+      ],
+      "pivot": [
+        0,
+        0.010606889690397822,
+        0
+      ],
+      "color": "#090606",
+      "edge": 0,
+      "dot": {
+        "iris": "#1a1210",
+        "pupil": "round",
+        "round": true,
+        "role": "eye"
+      }
+    },
+    {
+      "id": "tail",
+      "parent": "body",
+      "shape": "cone",
+      "size": {
+        "r": 0.015,
+        "h": 0.05
+      },
+      "pos": [
+        -0.14,
+        -0.03,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        100
+      ],
+      "color": "#6a7a3a"
+    },
+    {
+      "id": "legFL",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.02,
+        "len": 0.05
+      },
+      "pos": [
+        0.09,
+        -0.04,
+        0.09
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#6a7a3a",
+      "anim": {
+        "axis": "z",
+        "deg": 24,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "legFR",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.02,
+        "len": 0.05
+      },
+      "pos": [
+        0.09,
+        -0.04,
+        -0.09
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#6a7a3a",
+      "anim": {
+        "axis": "z",
+        "deg": 24,
+        "speed": 0.8,
+        "phase": 3.141592653589793
+      }
+    },
+    {
+      "id": "legBL",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.02,
+        "len": 0.05
+      },
+      "pos": [
+        -0.09,
+        -0.04,
+        0.09
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#6a7a3a",
+      "anim": {
+        "axis": "z",
+        "deg": 24,
+        "speed": 0.8,
+        "phase": 3.141592653589793
+      }
+    },
+    {
+      "id": "legBR",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.02,
+        "len": 0.05
+      },
+      "pos": [
+        -0.09,
+        -0.04,
+        -0.09
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#6a7a3a",
+      "anim": {
+        "axis": "z",
+        "deg": 24,
+        "speed": 0.8,
+        "phase": 0
+      }
+    }
+  ]
+}

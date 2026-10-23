@@ -1,0 +1,18 @@
+{
+  "name": "Notre-Dame de Paris",
+  "building": "architecture/notre-dame",
+  "_about": "Notre-Dame: Paris limestone, the roofs in lead, the fleche in lead; stained glass; inside, pale stone and a chequered floor.",
+  "stone": {
+    "color": "#cfc6b0",
+    "accent": "#b3aa94",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:glass", "pattern": "painted/stained glass", "palette": "stained", "_about": "the windows' stained glass"},
+    {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"parts": "kind:dome", "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "granite"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "limestone"}
+  ]
+}

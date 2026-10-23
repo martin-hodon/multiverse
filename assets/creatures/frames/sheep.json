@@ -1,0 +1,29 @@
+{
+  "_about": "THE SHEEP FRAME: a wool barrel on short legs (1 = a ewe, back ~.95m), a dark face under a fleece cap. The ram is this at 1.1 with horns.",
+  "kind": "mammal",
+  "params": { "s": 1 },
+  "pupil": "bar",
+  "headScale": 0.64,
+
+  "rear":  ["-0.25*s", "0.65*s", 0, "0.38*s", "0.3*s", "0.28*s"],
+  "front": ["0.2*s", "0.66*s", 0, "0.36*s", "0.3*s", "0.27*s"],
+  "neck":   ["0.48*s", "0.75*s", 0, "0.62*s", "0.88*s", 0, "0.13*s", "0.11*s"],
+  "head":   ["0.68*s", "0.9*s", 0, "0.15*s"],
+  "muzzle": ["0.82*s", "0.85*s", 0, "0.12*s", "0.08*s", "0.09*s"],
+  "ears":   ["0.68*s", "0.92*s", "0.12*s", "0.66*s", "0.9*s", "0.27*s", "0.045*s", "0.03*s"],
+  "eyes":   ["0.78*s", "0.95*s", "0.1*s", "0.025*s"],
+
+  "legs": {
+    "front": ["0.28*s", "0.45*s", "0.16*s", "0.2*s"],
+    "hind": ["-0.28*s", "0.45*s", "0.17*s", "0.22*s"],
+    "radii": ["0.055*s", "0.045*s", "0.035*s"],
+    "foot": ["0.055*s", "0.035*s", "0.05*s"]
+  },
+  "tail": { "c": ["-0.89*s", "0.72*s"], "R": "0.28*s", "a0": 0, "a1": -0.8, "r1": "0.05*s", "r2": "0.035*s", "n": 3, "sway": 16, "speed": 0.8 },
+
+  "extras": [
+    { "_about": "headPiece: the fleece cap is part of the skull, and shrinks with it",
+      "id": "wool", "parent": "head", "headPiece": true,
+      "ell": ["0.62*s", "1.0*s", 0, "0.14*s", "0.1*s", "0.13*s"], "color": ["@wool", "@body"], "k": "0.1*s" }
+  ]
+}

@@ -1,0 +1,273 @@
+{
+ "kind": "item",
+ "name": "Knarr",
+ "category": "ship",
+ "era": "800-1200",
+ "region": "Scandinavia, the North Atlantic",
+ "_about": "the Norsemen's cargo ship, the one that reached Iceland, Greenland and Vinland: broader and deeper than the longship, half-decked at bow and stern with an open hold between, one square sail and a few oars for harbour work",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   14,
+   18
+  ],
+  "B": "L * 0.3",
+  "D": "B * 0.45",
+  "mastH": "L * 0.6"
+ },
+ "materials": {
+  "planks": {
+   "pick": [
+    "planks",
+    "planks-tarred"
+   ]
+  },
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.5,
+   "double": true,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.1,
+     0.5
+    ],
+    [
+     0.4,
+     1
+    ],
+    [
+     0.6,
+     1
+    ],
+    [
+     0.9,
+     0.5
+    ],
+    [
+     1,
+     0.02
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.6"
+    ],
+    [
+     0.1,
+     0
+    ],
+    [
+     0.9,
+     0
+    ],
+    [
+     1,
+     "D * 0.6"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.6"
+    ],
+    [
+     0.1,
+     "D * 1.15"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.9,
+     "D * 1.15"
+    ],
+    [
+     1,
+     "D * 1.6"
+    ]
+   ],
+   "rail": 0.07,
+   "keelBeam": [
+    0.2,
+    0.3
+   ],
+   "postRise": "D * 0.15",
+   "deck": [
+    {
+     "y": "D * 0.75",
+     "from": 0.05,
+     "to": 0.28
+    },
+    {
+     "y": "D * 0.75",
+     "from": 0.72,
+     "to": 0.95
+    }
+   ],
+   "ribs": {
+    "n": 10,
+    "w": 0.07
+   }
+  },
+  {
+   "id": "oars",
+   "use": "items/components/oars",
+   "params": {
+    "n": 3,
+    "from": "L * 0.1",
+    "to": "L * 0.22",
+    "y": "D * 0.9",
+    "z": "B * 0.5",
+    "l": "L * 0.25",
+    "dip": 16,
+    "reach": 0.3
+   }
+  },
+  {
+   "id": "cargo",
+   "type": "lathe",
+   "material": "oak",
+   "at": [
+    "L * 0.5",
+    "D * 0.15",
+    0
+   ],
+   "profile": [
+    [
+     0.3,
+     0
+    ],
+    [
+     0.4,
+     0.5
+    ],
+    [
+     0.3,
+     1.0
+    ]
+   ],
+   "sides": 12,
+   "along": {
+    "n": 4,
+    "from": [
+     "-L * 0.12",
+     0,
+     "-B * 0.18"
+    ],
+    "to": [
+     "L * 0.12",
+     0,
+     "B * 0.18"
+    ]
+   }
+  },
+  {
+   "id": "mast L * 0.45",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.17,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.45",
+    "D * 0.15",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.45 D * 0.15 + mastH * 0.94",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.55",
+    "h": "mastH * 0.6",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.06"
+   },
+   "at": [
+    "L * 0.45",
+    "D * 0.15 + mastH * 0.94",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "steering",
+   "use": "items/components/steering-oar",
+   "params": {
+    "l": "D * 2",
+    "bladeW": 0.5
+   },
+   "at": [
+    "L * 0.1",
+    "D * 1.1",
+    "B * 0.5",
+    0,
+    0,
+    8
+   ]
+  },
+  {
+   "id": "stay L * 0.45-L * 0.96",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.45",
+    "D * 0.15 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.96",
+    "D * 1.5",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.45-L * 0.05",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.45",
+    "D * 0.15 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.05",
+    "D * 1.5",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ]
+}

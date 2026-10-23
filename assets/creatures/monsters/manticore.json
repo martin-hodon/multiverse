@@ -1,0 +1,71 @@
+{
+  "name": "manticore",
+  "use": "creatures/frames/cat",
+  "params": {
+    "s": 0.9,
+    "tuft": 0.14,
+    "tailSway": 18
+  },
+  "colors": {
+    "body": "#8e3b28",
+    "head": "#a04a30",
+    "muzzle": "#c27a52",
+    "ear": "#5a2418",
+    "leg": "#7a3222",
+    "eye": "#d9a520",
+    "nose": "#3a1a14",
+    "tuft": "#3a2a20"
+  },
+  "mount": {
+    "h": 2.7,
+    "speed": 1.7,
+    "fly": true
+  },
+  "extras": [
+    {
+      "id": "mane",
+      "parent": "body",
+      "ell": [
+        0.66,
+        0.93,
+        0,
+        0.28,
+        0.28,
+        0.26
+      ],
+      "color": "#5a2418",
+      "k": 0.12,
+      "_about": "a lion's mane, in the lion's own proportions: its centre a fifth of a metre BEHIND the skull and half again its radius, so the face stands clear of it",
+      "thorns": {
+        "rows": 8,
+        "cols": 22,
+        "every": 3,
+        "length": 0.75,
+        "comb": [
+          -1,
+          -0.35,
+          0
+        ],
+        "blend": 0.45,
+        "vary": 0.45,
+        "_about": "the mane in thorns, as the lion's (manes.js): it is part lion",
+        "inset": 1.15
+      }
+    },
+    {
+      "component": "batWing",
+      "k": 0.76,
+      "at": [
+        0.38,
+        0.93,
+        0.17
+      ],
+      "bone": "#4a2a3a",
+      "mem": "#4a2a3a",
+      "deg": 14,
+      "speed": 0.5,
+      "_about": "the wings (mammals.js batWing): arm and hand, four membrane lobes sharing their corners at the joints; `at` the shoulder"
+    }
+  ],
+  "monster": true
+}

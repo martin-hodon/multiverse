@@ -1,0 +1,327 @@
+{
+ "kind": "item",
+ "name": "Fluyt",
+ "category": "ship",
+ "era": "1600-1750",
+ "region": "the Netherlands",
+ "_about": "the Dutch fluyt that carried the Baltic trade: a capacious hull narrowing steeply at the deck (to dodge the Sound dues), a round stern, plain rigging on three masts with few hands",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   28,
+   34
+  ],
+  "B": "L * 0.24",
+  "D": "B * 0.7",
+  "mastH": "L * 0.75"
+ },
+ "materials": {
+  "planks": "planks",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.6,
+   "tumblehome": 0.42,
+   "plan": [
+    [
+     0,
+     0.12
+    ],
+    [
+     0.1,
+     0.6
+    ],
+    [
+     0.35,
+     1
+    ],
+    [
+     0.65,
+     1
+    ],
+    [
+     0.9,
+     0.55
+    ],
+    [
+     1,
+     0.03
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.2"
+    ],
+    [
+     0.08,
+     0
+    ],
+    [
+     0.92,
+     0
+    ],
+    [
+     1,
+     "D * 0.3"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.2"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.1"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.85",
+     "from": 0.03,
+     "to": 0.97
+    }
+   ],
+   "rail": 0.1,
+   "keelBeam": [
+    0.35,
+    0.35
+   ]
+  },
+  {
+   "id": "poop",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.5",
+    "d": "L * 0.2",
+    "h": "D * 0.35",
+    "windows": 2
+   },
+   "at": [
+    "L * 0.02",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 1.0",
+    "w": "B * 0.08",
+    "tiller": "L * 0.1"
+   },
+   "at": [
+    0,
+    "D * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.5",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.3,
+    "top": "topmast",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.85 + mastH * 0.85",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.45",
+    "h": "mastH * 0.45",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.05"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.85 + mastH * 0.85",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.85 + mastH * 1.42",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.26",
+    "h": "mastH * 0.32",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.03"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.85 + mastH * 1.42",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.82",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.8",
+    "r": 0.24,
+    "top": "topmast",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.82",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.82 D * 0.85 + mastH * 0.68",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.36",
+    "h": "mastH * 0.36",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.04"
+   },
+   "at": [
+    "L * 0.82",
+    "D * 0.85 + mastH * 0.68",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.82 D * 0.85 + mastH * 1.14",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.2",
+    "h": "mastH * 0.25",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.02"
+   },
+   "at": [
+    "L * 0.82",
+    "D * 0.85 + mastH * 1.14",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.18",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.55",
+    "r": 0.18,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.18",
+    "D * 1.2",
+    0
+   ]
+  },
+  {
+   "id": "lateen L * 0.18",
+   "use": "items/components/lateen-sail",
+   "params": {
+    "l": "L * 0.35",
+    "tilt": 48,
+    "drop": 0.5,
+    "set": "set"
+   },
+   "at": [
+    "L * 0.18",
+    "D * 1.2 + mastH * 0.45",
+    0
+   ]
+  },
+  {
+   "id": "bowsprit",
+   "use": "items/components/bowsprit",
+   "params": {
+    "l": "L * 0.3",
+    "r": 0.2,
+    "steeve": 28
+   },
+   "at": [
+    "L * 0.98",
+    "D * 1.05",
+    0
+   ]
+  },
+  {
+   "id": "stay L * 0.5-L * 0.98",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.85 + mastH * 1.5",
+    0
+   ],
+   "to": [
+    "L * 0.98",
+    "D * 1.1",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.82-L * 1.25",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.82",
+    "D * 0.85 + mastH * 1.2",
+    0
+   ],
+   "to": [
+    "L * 1.25",
+    "D * 1.19",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ]
+}

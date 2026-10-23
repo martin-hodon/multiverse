@@ -1,0 +1,165 @@
+{
+ "name": "Hen yard",
+ "_about": "A fenced yard with a hen house on legs in its south-west corner, grain scattered before it -- the fence a `fence` component a side, the gate open to the street, the shed a component; `pen` and `block` markers say where the stock may go, `trough` where it drinks (index.html).",
+ "params": {
+  "detail": 4,
+  "W": 15,
+  "D": 12,
+  "fence": "rails",
+  "gateW": 1.6,
+  "gx": "0 - W / 2 + 3.5",
+  "_W": "the yard W by D inside the fence; the gate on the north side (-z, toward the street) gateW wide, gx from the middle; `fence` the fence's style (components/fence)"
+ },
+ "parts": {
+  "fence north west": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     "0 - W / 2",
+     0,
+     "0 - D / 2",
+     0
+    ]
+   ],
+   "params": {
+    "L": "gx - gateW / 2 - (0 - W / 2)",
+    "style": "fence"
+   }
+  },
+  "fence north east": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     "gx + gateW / 2",
+     0,
+     "0 - D / 2",
+     0
+    ]
+   ],
+   "params": {
+    "L": "W / 2 - (gx + gateW / 2)",
+    "style": "fence"
+   }
+  },
+  "fence east": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     "W / 2",
+     0,
+     "0 - D / 2",
+     "0 - 1.5707963"
+    ]
+   ],
+   "params": {
+    "L": "D",
+    "style": "fence"
+   }
+  },
+  "fence south": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     "W / 2",
+     0,
+     "D / 2",
+     "3.14159265"
+    ]
+   ],
+   "params": {
+    "L": "W",
+    "style": "fence"
+   }
+  },
+  "fence west": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     "0 - W / 2",
+     0,
+     "D / 2",
+     "1.5707963"
+    ]
+   ],
+   "params": {
+    "L": "D",
+    "style": "fence"
+   }
+  },
+  "gate": {
+   "type": "component",
+   "use": "components/gate",
+   "at": [
+    [
+     "gx - gateW / 2",
+     0,
+     "0 - D / 2",
+     0
+    ]
+   ],
+   "params": {
+    "W": "gateW",
+    "open": 80
+   }
+  },
+  "shed": {
+   "type": "component",
+   "use": "components/hen-house",
+   "at": [
+    [
+     "0 - W / 2 + 2.6",
+     0,
+     "D / 2 - 2.2",
+     0
+    ]
+   ]
+  },
+  "pen": {
+   "type": "marker",
+   "role": "pen",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "w": "W - 1.4",
+    "d": "D - 1.4",
+    "kind": "hens"
+   }
+  },
+  "grain": {
+   "type": "box",
+   "width": 1.1,
+   "length": 0.8,
+   "height": 0.04,
+   "at": [
+    [
+     -1.5,
+     0,
+     -1.2,
+     0
+    ]
+   ]
+  }
+ },
+ "build": [
+  "fence north west",
+  "fence north east",
+  "fence east",
+  "fence south",
+  "fence west",
+  "gate",
+  "shed",
+  "pen",
+  "grain"
+ ]
+}

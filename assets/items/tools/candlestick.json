@@ -1,0 +1,128 @@
+{
+ "kind": "item",
+ "name": "Candlestick",
+ "category": "tool",
+ "era": "1200-1900",
+ "_about": "a turned brass candlestick with its tallow candle; its flame is a `fire` marker (candle: one small flickering cone of the fires' mesh, silent) wherever a building stands it",
+ "params": {},
+ "materials": {
+  "metal": {
+   "pick": [
+    "brass",
+    "pewter",
+    "silver"
+   ]
+  },
+  "wax": "ivory"
+ },
+ "parts": [
+  {
+   "id": "stick",
+   "type": "lathe",
+   "material": "metal",
+   "profile": [
+    [
+     0.06,
+     0
+    ],
+    [
+     0.06,
+     0.01
+    ],
+    [
+     0.02,
+     0.03
+    ],
+    [
+     0.012,
+     0.06
+    ],
+    [
+     0.016,
+     0.1
+    ],
+    [
+     0.011,
+     0.15
+    ],
+    [
+     0.022,
+     0.17
+    ],
+    [
+     0.022,
+     0.18
+    ],
+    [
+     0.012,
+     0.19
+    ]
+   ],
+   "sides": 12
+  },
+  {
+   "id": "candle",
+   "type": "lathe",
+   "material": "wax",
+   "profile": [
+    [
+     0.011,
+     0.18
+    ],
+    [
+     0.011,
+     0.34
+    ],
+    [
+     0.004,
+     0.345
+    ]
+   ],
+   "sides": 8
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.08,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ },
+ "markers": [
+  {
+   "role": "fire",
+   "at": [
+    0,
+    0.345,
+    0
+   ],
+   "data": {
+    "r": 0.012,
+    "h": 0.06,
+    "candle": 1
+   }
+  }
+ ]
+}

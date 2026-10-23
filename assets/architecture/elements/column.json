@@ -1,0 +1,85 @@
+{
+  "name": "Column",
+  "_about": "A DRUM of `sides` flat faces, capped top and bottom: a pier, a shaft, a post. At eight sides it is a pier, at twenty-four it reads as round. Everything that carries a load and is not a wall is one of these.",
+  "params": {
+    "detail": 6,
+    "h": 5
+  },
+  "build": [
+    "square pier",
+    "octagonal",
+    "round",
+    "base"
+  ],
+  "_build": "which parts to build, and in what order (a caller may ask for a few of them: the village takes a cathedral's arcades from a definition whose walls it builds itself)",
+  "parts": {
+    "square pier": {
+      "type": "column",
+      "radius": 0.5,
+      "height": "h",
+      "sides": 4,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "octagonal": {
+      "type": "column",
+      "radius": 0.5,
+      "height": "h",
+      "sides": 8,
+      "at": [
+        [
+          2,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "round": {
+      "type": "column",
+      "radius": 0.5,
+      "height": "h",
+      "sides": 24,
+      "at": [
+        [
+          4,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "base": {
+      "type": "column",
+      "radius": 0.7,
+      "height": 0.35,
+      "sides": 24,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

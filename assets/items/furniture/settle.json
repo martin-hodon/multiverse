@@ -1,0 +1,192 @@
+{
+ "kind": "item",
+ "name": "Settle",
+ "category": "furniture/seat",
+ "era": "1500-1850",
+ "region": "England",
+ "_about": "the settle by the hearth: a bench with a tall panelled back and wings at its ends, to keep the draught off the backs of those sitting in it",
+ "params": {
+  "h": 0.44,
+  "L": [
+   1.4,
+   1.7
+  ],
+  "d": 0.45,
+  "backH": 1.5
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "seat",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L",
+    0.04,
+    "d"
+   ],
+   "at": [
+    0,
+    "h - 0.02",
+    0
+   ]
+  },
+  {
+   "id": "front",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L",
+    "h - 0.04",
+    0.03
+   ],
+   "at": [
+    0,
+    "(h - 0.04) / 2",
+    "d / 2 - 0.015"
+   ]
+  },
+  {
+   "id": "panels",
+   "use": "items/components/panel-door",
+   "params": {
+    "w": "L / 3 - 0.01",
+    "h": "backH - h - 0.06",
+    "s": 0.05
+   },
+   "at": [
+    [
+     "0 - L / 3",
+     "(backH + h) / 2",
+     "0 - d / 2 + 0.03"
+    ],
+    [
+     0,
+     "(backH + h) / 2",
+     "0 - d / 2 + 0.03"
+    ],
+    [
+     "L / 3",
+     "(backH + h) / 2",
+     "0 - d / 2 + 0.03"
+    ]
+   ]
+  },
+  {
+   "id": "back",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L",
+    "backH",
+    0.03
+   ],
+   "at": [
+    0,
+    "backH / 2",
+    "0 - d / 2 + 0.005"
+   ]
+  },
+  {
+   "id": "wings",
+   "type": "plate",
+   "material": "wood",
+   "thick": 0.035,
+   "at": [
+    [
+     "0 - L / 2",
+     0,
+     0,
+     90,
+     0,
+     0
+    ],
+    [
+     "L / 2",
+     0,
+     0,
+     90,
+     0,
+     0
+    ]
+   ],
+   "outline": [
+    [
+     "0 - d / 2",
+     0
+    ],
+    [
+     "d / 2",
+     0
+    ],
+    [
+     "d / 2",
+     "h + 0.2"
+    ],
+    [
+     "d / 2 - 0.1",
+     "h + 0.25"
+    ],
+    [
+     0,
+     "backH - 0.15"
+    ],
+    [
+     "0 - d / 2",
+     "backH"
+    ]
+   ]
+  },
+  {
+   "id": "cap",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L + 0.04",
+    0.04,
+    0.08
+   ],
+   "at": [
+    0,
+    "backH + 0.02",
+    "0 - d / 2 + 0.01"
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "L",
+    "d": "d",
+    "top": "h"
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     "h",
+     "d * 0.3"
+    ],
+    [
+     "L / 4",
+     "h",
+     "d * 0.3"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5707963
+   }
+  }
+ ]
+}

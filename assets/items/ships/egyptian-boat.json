@@ -1,0 +1,240 @@
+{
+ "kind": "item",
+ "name": "Egyptian river boat",
+ "category": "ship",
+ "era": "-2500--500",
+ "region": "Egypt",
+ "_about": "the Nile's timber boat of the pharaohs: a papyriform hull with both ends rising, a broad low sail on a single mast, two steering oars over the stern quarters and a shelter of a deckhouse",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   12,
+   16
+  ],
+  "B": "L * 0.24",
+  "D": "B * 0.42",
+  "mastH": "L * 0.7"
+ },
+ "materials": {
+  "planks": "planks-pine",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "linen",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.5,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.15,
+     0.6
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.85,
+     0.6
+    ],
+    [
+     1,
+     0.02
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.9"
+    ],
+    [
+     0.08,
+     "D * 0.25"
+    ],
+    [
+     0.25,
+     0
+    ],
+    [
+     0.75,
+     0
+    ],
+    [
+     0.92,
+     "D * 0.25"
+    ],
+    [
+     1,
+     "D * 0.9"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.9"
+    ],
+    [
+     0.1,
+     "D * 1.15"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.9,
+     "D * 1.15"
+    ],
+    [
+     1,
+     "D * 1.9"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.88",
+     "from": 0.08,
+     "to": 0.92
+    }
+   ],
+   "rail": 0.06
+  },
+  {
+   "id": "mast L * 0.48",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.14,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.48",
+    "D * 0.88",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.48 D * 0.88 + mastH * 0.93",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.55",
+    "h": "mastH * 0.5",
+    "foot": 1.0,
+    "set": "set"
+   },
+   "at": [
+    "L * 0.48",
+    "D * 0.88 + mastH * 0.93",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "boom",
+   "use": "items/components/yard",
+   "params": {
+    "l": "L * 0.58",
+    "r": 0.06
+   },
+   "at": [
+    "L * 0.48",
+    "D * 0.88 + mastH * 0.42",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "cabin",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.6",
+    "d": "L * 0.18",
+    "h": 1.5,
+    "windows": 1
+   },
+   "materials": {
+    "wood": "reed",
+    "roofm": "reed"
+   },
+   "at": [
+    "L * 0.2",
+    "D * 0.88",
+    0
+   ]
+  },
+  {
+   "id": "steering",
+   "use": "items/components/steering-oar",
+   "params": {
+    "l": "L * 0.28",
+    "bladeW": 0.5
+   },
+   "at": [
+    "L * 0.06",
+    "D * 1.3",
+    "B * 0.4",
+    0,
+    0,
+    12
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "stay L * 0.48-L * 0.95",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.48",
+    "D * 0.88 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.95",
+    "D * 1.5",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.48-L * 0.06",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.48",
+    "D * 0.88 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.06",
+    "D * 1.5",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ]
+}

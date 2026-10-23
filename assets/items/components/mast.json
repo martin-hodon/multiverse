@@ -1,0 +1,139 @@
+{
+ "kind": "item",
+ "name": "Mast",
+ "category": "component",
+ "_about": "a mast standing from 0 to h, tapering; `top`: none, a topmast doubled above it (top * h more), or a crow's nest (a cup near the head)",
+ "params": {
+  "h": 10,
+  "r": 0.16,
+  "top": "none",
+  "topH": 0.5
+ },
+ "materials": {
+  "wood": "pine"
+ },
+ "parts": [
+  {
+   "id": "lower",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "h",
+    0
+   ],
+   "r0": "r",
+   "r1": "r * 0.62"
+  },
+  {
+   "id": "cap",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "r * 3",
+    "r * 1.2",
+    "r * 2"
+   ],
+   "at": [
+    0,
+    "h",
+    0
+   ]
+  },
+  {
+   "id": "topmast",
+   "type": "rod",
+   "when": {
+    "top": "topmast"
+   },
+   "material": "wood",
+   "from": [
+    "-r * 0.9",
+    "h * 0.86",
+    0
+   ],
+   "to": [
+    "-r * 0.9",
+    "h * (1 + topH)",
+    0
+   ],
+   "r0": "r * 0.55",
+   "r1": "r * 0.3"
+  },
+  {
+   "id": "top",
+   "type": "box",
+   "when": {
+    "top": "topmast"
+   },
+   "material": "wood",
+   "size": [
+    "r * 9",
+    "r * 0.6",
+    "r * 9"
+   ],
+   "at": [
+    0,
+    "h * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "nest",
+   "type": "lathe",
+   "when": {
+    "top": "crowsnest"
+   },
+   "material": "wood",
+   "caps": false,
+   "double": true,
+   "at": [
+    0,
+    "h * 0.86",
+    0
+   ],
+   "profile": [
+    [
+     "r * 1.1",
+     0
+    ],
+    [
+     "r * 3.2",
+     0
+    ],
+    [
+     "r * 3.4",
+     "r * 4"
+    ]
+   ]
+  },
+  {
+   "id": "nest floor",
+   "type": "lathe",
+   "when": {
+    "top": "crowsnest"
+   },
+   "material": "wood",
+   "at": [
+    0,
+    "h * 0.86",
+    0
+   ],
+   "profile": [
+    [
+     "r * 3.2",
+     0
+    ],
+    [
+     "r * 3.2",
+     "r * 0.3"
+    ]
+   ]
+  }
+ ]
+}

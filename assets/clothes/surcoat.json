@@ -1,0 +1,36 @@
+{
+  "name": "Sideless surcoat",
+  "kind": "garment",
+  "layer": 3,
+  "skirted": true,
+  "_about": "the sideless surcoat over a kirtle: front and back panels on a yoke, open at the sides from the armpits to the hips, and its own skirt to the floor",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/damask",
+      "palette": "damask-red"
+    },
+    "trim": {
+      "pattern": "fabrics/fur",
+      "palette": "fur-white"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/panels",
+      "params": {
+        "to": "hip",
+        "hem": 0.025
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip",
+        "to": "floor - 0.1",
+        "flare": 0.42,
+        "pleats": 12,
+        "hem": 0.04
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Chlamys",
+  "kind": "garment",
+  "layer": 4,
+  "_about": "the chlamys: a short woollen cloak pinned at the right shoulder, open down the right side -- a horseman's, a traveller's",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "madder"
+    },
+    "trim": {
+      "pattern": "fabrics/meander",
+      "palette": "meander-black"
+    }
+  },
+  "params": {
+    "hem": 0.02
+  },
+  "use": [
+    {
+      "use": "clothes/components/mantle",
+      "params": {
+        "to": "hip + 0.12",
+        "centre": 250,
+        "span": 290,
+        "flare": 0.3,
+        "hem": "hem"
+      }
+    }
+  ]
+}

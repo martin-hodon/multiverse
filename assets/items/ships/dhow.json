@@ -1,0 +1,219 @@
+{
+ "kind": "item",
+ "name": "Dhow",
+ "category": "ship",
+ "era": "800-1900",
+ "region": "Arabia, the Persian Gulf, East Africa, India",
+ "_about": "the trading dhow of the monsoon: a sharp raked stem, a square transom stern with a cabin, and great lateen sails on a mainmast and a mizzen",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   18,
+   26
+  ],
+  "B": "L * 0.27",
+  "D": "B * 0.55",
+  "mastH": "L * 0.65"
+ },
+ "materials": {
+  "planks": "planks-pine",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.45,
+   "plan": [
+    [
+     0,
+     0.3
+    ],
+    [
+     0.15,
+     0.75
+    ],
+    [
+     0.4,
+     1
+    ],
+    [
+     0.65,
+     0.95
+    ],
+    [
+     0.9,
+     0.45
+    ],
+    [
+     1,
+     0.03
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.2"
+    ],
+    [
+     0.1,
+     0
+    ],
+    [
+     0.85,
+     0
+    ],
+    [
+     1,
+     "D * 0.7"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.15"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.35"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.85",
+     "from": 0.03,
+     "to": 0.97
+    }
+   ],
+   "rail": 0.08,
+   "keelBeam": [
+    0.28,
+    0.3
+   ]
+  },
+  {
+   "id": "cabin",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.85",
+    "d": "L * 0.18",
+    "h": 1.8,
+    "windows": 2
+   },
+   "at": [
+    "L * 0.02",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.55",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.24,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.55",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "lateen L * 0.55",
+   "use": "items/components/lateen-sail",
+   "params": {
+    "l": "L * 0.95",
+    "tilt": 45,
+    "drop": 0.5,
+    "set": "set"
+   },
+   "at": [
+    "L * 0.55",
+    "D * 0.85 + mastH * 0.92",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.2",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.6",
+    "r": 0.16,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.2",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "lateen L * 0.2",
+   "use": "items/components/lateen-sail",
+   "params": {
+    "l": "L * 0.5",
+    "tilt": 48,
+    "drop": 0.5,
+    "set": "set"
+   },
+   "at": [
+    "L * 0.2",
+    "D * 0.85 + mastH * 0.55",
+    0
+   ]
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 1.1",
+    "w": "B * 0.1",
+    "tiller": "L * 0.1"
+   },
+   "at": [
+    0,
+    "D * 1.0",
+    0
+   ]
+  },
+  {
+   "id": "stay L * 0.55-L * 0.97",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.55",
+    "D * 0.85 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.97",
+    "D * 1.4",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ]
+}

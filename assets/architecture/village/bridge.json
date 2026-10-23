@@ -1,0 +1,326 @@
+{
+ "name": "Stone bridge",
+ "_about": "THE STONE BRIDGE: three semicircular arches on two piers (the middle span clears a barge, ~4.3 m over the water), the side spans reaching the banks, the deck 2.9 m over the banks between parapets, earth ramps faced in stone 14 m long at either end; each pier and abutment footed in the bed where it stands (hw, water, bedL, bedR, bedAL, bedAR: the river's numbers there).",
+ "params": {
+  "detail": 4,
+  "hw": 10.8,
+  "water": -2.21,
+  "deckW": 4.4,
+  "bedL": -4.71,
+  "bedR": -4.71,
+  "bedAL": -4.71,
+  "bedAR": -4.71,
+  "spring": "water + 0.3",
+  "rMid": 4.3,
+  "pierT": 1.2,
+  "wallT": 0.5,
+  "halfL": "hw + 0.7",
+  "zAbut": "halfL - 0.6",
+  "zPier": "rMid + pierT / 2",
+  "rSide": "max(1.6, (zAbut - 0.6 - (zPier + pierT / 2)) / 2)",
+  "zSide": "zPier + pierT / 2 + rSide",
+  "deckTop": "spring + rMid + 0.5",
+  "deckBot": "deckTop - 0.4",
+  "ramp": 14,
+  "rampPitch": "atan2(deckTop, ramp) * 57.29578",
+  "_hw": "the river's half-width where it stands, water its level, bedL/bedR the bed's height under the -z / +z pier (bedAL/bedAR under the abutments): the footings go down to them"
+ },
+ "parts": {
+  "faces": {
+   "type": "wall",
+   "width": "2 * zAbut",
+   "height": "deckBot - spring",
+   "thickness": "wallT",
+   "glass": false,
+   "openings": [
+    {
+     "at": "zAbut",
+     "width": "2 * rMid",
+     "sill": 0,
+     "springing": 0,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": "zAbut + zSide",
+     "width": "2 * rSide",
+     "sill": 0,
+     "springing": 0,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": "zAbut - zSide",
+     "width": "2 * rSide",
+     "sill": 0,
+     "springing": 0,
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "at": [
+    [
+     "deckW / 2 - wallT / 2",
+     "spring",
+     0,
+     1.5707963
+    ],
+    [
+     "0 - deckW / 2 + wallT / 2",
+     "spring",
+     0,
+     1.5707963
+    ]
+   ],
+   "_about": "the two faces from the springing to the deck, the three arches through them"
+  },
+  "pier L": {
+   "type": "box",
+   "width": "deckW",
+   "length": "pierT + 0.3",
+   "height": "spring - bedL",
+   "at": [
+    [
+     0,
+     "bedL",
+     "0 - zPier",
+     0
+    ]
+   ]
+  },
+  "pier R": {
+   "type": "box",
+   "width": "deckW",
+   "length": "pierT + 0.3",
+   "height": "spring - bedR",
+   "at": [
+    [
+     0,
+     "bedR",
+     "zPier",
+     0
+    ]
+   ]
+  },
+  "pier fill": {
+   "type": "box",
+   "width": "deckW - wallT",
+   "length": "pierT",
+   "height": "deckBot - spring",
+   "at": [
+    [
+     0,
+     "spring",
+     "0 - zPier",
+     0
+    ],
+    [
+     0,
+     "spring",
+     "zPier",
+     0
+    ]
+   ]
+  },
+  "abutment L": {
+   "type": "box",
+   "width": "deckW + 0.3",
+   "length": 1.2,
+   "height": "deckBot - bedAL",
+   "at": [
+    [
+     0,
+     "bedAL",
+     "0 - zAbut",
+     0
+    ]
+   ]
+  },
+  "abutment R": {
+   "type": "box",
+   "width": "deckW + 0.3",
+   "length": 1.2,
+   "height": "deckBot - bedAR",
+   "at": [
+    [
+     0,
+     "bedAR",
+     "zAbut",
+     0
+    ]
+   ]
+  },
+  "cutwaters L": {
+   "type": "box",
+   "width": 1.1,
+   "length": 1.1,
+   "height": "spring - bedL + 0.4",
+   "at": [
+    [
+     "deckW / 2 + 0.2",
+     "bedL",
+     "0 - zPier",
+     0.7853982
+    ],
+    [
+     "0 - deckW / 2 - 0.2",
+     "bedL",
+     "0 - zPier",
+     0.7853982
+    ]
+   ]
+  },
+  "cutwaters R": {
+   "type": "box",
+   "width": 1.1,
+   "length": 1.1,
+   "height": "spring - bedR + 0.4",
+   "at": [
+    [
+     "deckW / 2 + 0.2",
+     "bedR",
+     "zPier",
+     0.7853982
+    ],
+    [
+     "0 - deckW / 2 - 0.2",
+     "bedR",
+     "zPier",
+     0.7853982
+    ]
+   ]
+  },
+  "deck": {
+   "type": "box",
+   "width": "deckW",
+   "length": "2 * halfL",
+   "height": 0.4,
+   "at": [
+    [
+     0,
+     "deckTop - 0.4",
+     0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "parapets": {
+   "type": "box",
+   "width": 0.35,
+   "length": "2 * halfL",
+   "height": 0.95,
+   "at": [
+    [
+     "deckW / 2 - 0.175",
+     "deckTop",
+     0,
+     0
+    ],
+    [
+     "0 - deckW / 2 + 0.175",
+     "deckTop",
+     0,
+     0
+    ]
+   ]
+  },
+  "coping": {
+   "type": "box",
+   "width": 0.45,
+   "length": "2 * halfL + 0.1",
+   "height": 0.1,
+   "at": [
+    [
+     "deckW / 2 - 0.175",
+     "deckTop + 0.94",
+     0,
+     0
+    ],
+    [
+     "0 - deckW / 2 + 0.175",
+     "deckTop + 0.94",
+     0,
+     0
+    ]
+   ]
+  },
+  "ramps": {
+   "type": "roof",
+   "form": "shed",
+   "width": "ramp",
+   "length": "deckW",
+   "pitch": "rampPitch",
+   "overhang": 0,
+   "at": [
+    [
+     0,
+     0,
+     "halfL + ramp / 2",
+     1.5707963
+    ],
+    [
+     0,
+     0,
+     "0 - halfL - ramp / 2",
+     -1.5707963
+    ]
+   ],
+   "walked": true
+  },
+  "ramp walls": {
+   "type": "roof",
+   "form": "shed",
+   "width": "ramp",
+   "length": 0.3,
+   "pitch": "rampPitch",
+   "overhang": 0,
+   "shell": 0.6,
+   "at": [
+    [
+     "deckW / 2 - 0.15",
+     0.6,
+     "halfL + ramp / 2",
+     1.5707963
+    ],
+    [
+     "0 - deckW / 2 + 0.15",
+     0.6,
+     "halfL + ramp / 2",
+     1.5707963
+    ],
+    [
+     "deckW / 2 - 0.15",
+     0.6,
+     "0 - halfL - ramp / 2",
+     -1.5707963
+    ],
+    [
+     "0 - deckW / 2 + 0.15",
+     0.6,
+     "0 - halfL - ramp / 2",
+     -1.5707963
+    ]
+   ]
+  }
+ },
+ "build": [
+  "faces",
+  "pier L",
+  "pier R",
+  "pier fill",
+  "abutment L",
+  "abutment R",
+  "cutwaters L",
+  "cutwaters R",
+  "deck",
+  "parapets",
+  "coping",
+  "ramps",
+  "ramp walls"
+ ],
+ "walked": true
+}

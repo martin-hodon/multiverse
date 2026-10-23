@@ -1,0 +1,144 @@
+{
+ "name": "Pavilion",
+ "_about": "The knight's round pavilion of the tourney and the camp: a striped canvas wall on a ring, a conical roof over a centre pole, the valance round its eave, a pennant on top (Europe, 1250-1600)",
+ "era": "1250-1600",
+ "region": "Europe",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "wall": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 2.5,
+   "rInner": 2.47,
+   "height": 2.0,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "door": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 2.5,
+   "rInner": 2.47,
+   "height": 2.0,
+   "y": 0,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    0
+   ],
+   "opening": {
+    "at": 0,
+    "width": 1.1,
+    "sill": 0,
+    "springing": 1.9,
+    "head": {
+     "profile": "flat"
+    }
+   },
+   "glass": false
+  },
+  "valance": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 2.66,
+   "rInner": 2.63,
+   "height": 0.35,
+   "y": 1.85,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "roof": {
+   "type": "dome",
+   "sides": 12,
+   "radius": 2.66,
+   "thickness": 0,
+   "head": {
+    "profile": "trigonal",
+    "rise": 2.3
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     2.2,
+     0,
+     0
+    ]
+   ]
+  },
+  "pole": {
+   "type": "column",
+   "radius": 0.06,
+   "height": 4.9,
+   "sides": 6,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "pennant": {
+   "type": "box",
+   "width": 0.6,
+   "length": 0.02,
+   "height": 0.35,
+   "at": [
+    [
+     0.3,
+     4.45,
+     0,
+     0
+    ]
+   ]
+  }
+ },
+ "build": [
+  "wall",
+  "door",
+  "valance",
+  "roof",
+  "pole",
+  "pennant"
+ ]
+}

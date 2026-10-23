@@ -1,0 +1,85 @@
+{
+ "kind": "item",
+ "name": "Lateen sail",
+ "category": "component",
+ "_about": "the triangular sail of the Mediterranean and the Indian Ocean: a long yard slung at `tilt` degrees, its tack low and forward (-x), its peak high and aft; the clew hangs below the peak. In the ship's frame as it is (its x fore and aft), bellied to +z",
+ "params": {
+  "l": 14,
+  "tilt": 52,
+  "drop": 0.55,
+  "belly": "l * 0.07",
+  "r": "l * 0.009",
+  "set": "full"
+ },
+ "materials": {
+  "wood": "pine",
+  "cloth": "canvas"
+ },
+ "parts": [
+  {
+   "id": "yard",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "-l * 0.42 * cos(tilt * 0.017453)",
+    "-l * 0.42 * sin(tilt * 0.017453)",
+    0
+   ],
+   "to": [
+    "l * 0.58 * cos(tilt * 0.017453)",
+    "l * 0.58 * sin(tilt * 0.017453)",
+    0
+   ],
+   "r0": "r",
+   "r1": "r * 0.7"
+  },
+  {
+   "id": "cloth",
+   "type": "sail",
+   "when": {
+    "set": "full"
+   },
+   "material": "cloth",
+   "belly": "belly",
+   "at": [
+    0,
+    0,
+    "-r"
+   ],
+   "corners": [
+    [
+     "-l * 0.42 * cos(tilt * 0.017453)",
+     "-l * 0.42 * sin(tilt * 0.017453)"
+    ],
+    [
+     "l * 0.58 * cos(tilt * 0.017453)",
+     "l * 0.58 * sin(tilt * 0.017453)"
+    ],
+    [
+     "l * 0.58 * cos(tilt * 0.017453) - l * 0.12",
+     "l * 0.58 * sin(tilt * 0.017453) - l * drop"
+    ]
+   ]
+  },
+  {
+   "id": "furled",
+   "type": "rod",
+   "when": {
+    "set": "furled"
+   },
+   "material": "cloth",
+   "from": [
+    "-l * 0.4 * cos(tilt * 0.017453)",
+    "-l * 0.4 * sin(tilt * 0.017453) - r * 2",
+    0
+   ],
+   "to": [
+    "l * 0.56 * cos(tilt * 0.017453)",
+    "l * 0.56 * sin(tilt * 0.017453) - r * 2",
+    0
+   ],
+   "r": "l * 0.018",
+   "sides": 8
+  }
+ ]
+}

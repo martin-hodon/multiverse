@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bannerfield performance lab</title>
+<style>
+  html, body { margin: 0; overflow: hidden; background: #101018; font: 13px/1.5 "Avenir Next", "Segoe UI", sans-serif; color: #eef; }
+  canvas { display: block; }
+  #hud { position: fixed; left: 10px; top: 10px; background: #0b0b12d8; padding: 9px 12px; border-radius: 7px;
+         white-space: pre; font: 12px/1.45 ui-monospace, Menlo, Consolas, monospace; pointer-events: none; }
+  #hud b { color: #9fe8ff; font-weight: 600 }
+  #keys { position: fixed; left: 10px; bottom: 10px; background: #0b0b12c0; padding: 8px 12px; border-radius: 7px;
+          max-width: 62em; pointer-events: none; }
+  #keys kbd { background: #ffffff1a; border: 1px solid #ffffff33; border-radius: 4px; padding: 0 5px; font: 11px ui-monospace, monospace; }
+</style>
+</head>
+<body>
+<div id="hud">starting…</div>
+<div id="keys">
+  <kbd>W</kbd><kbd>S</kbd> forward/back (level) · <kbd>A</kbd><kbd>D</kbd> strafe · <kbd>Q</kbd><kbd>E</kbd> down/up ·
+  move the pointer to look (no button; <kbd>click</kbd> to capture it, <kbd>Esc</kbd> to release) ·
+  <kbd>M</kbd> next shape · <kbd>N</kbd> fix it where it stands (then M for the next) ·
+  <kbd>F</kbd> quads follow the eye (for stacking cost) · <kbd>B</kbd> how many N places (1/5/20/50) · <kbd>K</kbd> shapes per banner (1/2/4/8) · <kbd>R</kbd> rebuild the configured scene · <kbd>O</kbd> drop a wall · <kbd>C</kbd> stencil bound pass · <kbd>X</kbd> clear · <kbd>L</kbd> quad outline · <kbd>T</kbd> surface texture (none/procedural/1 fetch/triplanar) · <kbd>Z</kbd> per-pixel depth on/off (early-z) · <kbd>U</kbd> uncapped frame loop
+</div>
+<script>
+if (location.protocol === "file:") document.getElementById("hud").textContent =
+  "Open this page over http:// (your local server), not file:// -- a module page cannot import its neighbours from the filesystem.";
+</script>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl": "https://unpkg.com/three@0.185.1/build/three.tsl.js"
+} }
+</script>
+<script type="module">
+// THE PERFORMANCE LAB. What does a banner's pixel actually cost -- against the cheapest thing a GPU can do
+// (read a texture), against each 2D silhouette, and against the exact 3D hits the world's engines really pay?
+//
+// How it measures: every banner is placed to COVER THE WHOLE VIEW, so one banner is one full screen of that
+// shape's fragment work. Leave them standing with N and the layers stack: two banners is two screens of it,
+// eight is eight. Nothing else changes between shapes -- same quad, same coverage, same camera -- so the
+// ms/frame difference between two catalogue entries IS the difference between those two shaders.
+//
+// The background is a texture, not a clear colour, and it SCROLLS BY ONE PIXEL EVERY FRAME. A static frame is
+// a lie on a tiled or deferred GPU (and a lie to your own eyes: you cannot see a stutter in a still picture);
+// scrolling it means the frame is genuinely redrawn and the comparison is honest.
+import * as THREE from "three";
+import { wgslFn, uniform, texture, uv, vec3, vec4, vec2, float, attribute, varying, positionGeometry,
+         positionWorld, normalWorld, cameraPosition, cameraViewMatrix, cameraProjectionMatrix } from "three/tsl";
+
+const hud = document.getElementById("hud");
+
+// ---- the background: a sunset gradient, baked once, scrolled a pixel a frame ------------------------------
+const BG = 512;
+function sunsetTexture() {
+  const cv = document.createElement("canvas");
+  cv.width = cv.height = BG;
+  const g = cv.getContext("2d");
+  // a smooth vertical ramp through the colours a sunset actually runs: high blue, through rose, to the ember
+  // band at the horizon. A touch of sideways warmth so a one-pixel scroll is visible in x as well as y.
+  const grad = g.createLinearGradient(0, 0, 0, BG);
+  for (const [t, c] of [[0, "#1d2a52"], [.28, "#4a3f78"], [.52, "#9c5a7a"], [.70, "#d97a5a"], [.85, "#f2a65a"], [1, "#ffd9a0"]]) grad.addColorStop(t, c);
+  g.fillStyle = grad; g.fillRect(0, 0, BG, BG);
+  const warm = g.createLinearGradient(0, 0, BG, 0);
+  warm.addColorStop(0, "#00000022"); warm.addColorStop(.5, "#ffffff10"); warm.addColorStop(1, "#00000022");
+  g.fillStyle = warm; g.fillRect(0, 0, BG, BG);
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+// A SURFACE TEXTURE for the solids (T): squares in shades, so what lands on a shape is its own colour, lighter
+// and darker. It exists to be priced, in three tiers -- see surfaceMode below.
+function squaresTexture() {
+  const N = 256, cell = N / 8;
+  const cv = document.createElement("canvas");
+  cv.width = cv.height = N;
+  const g = cv.getContext("2d");
+  for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) {
+    const v = Math.round(160 + 95 * (((x * 7 + y * 13) % 5) / 4));   // a spread of shades, tiling exactly
+    g.fillStyle = `rgb(${v},${v},${v})`;
+    g.fillRect(x * cell, y * cell, cell, cell);
+  }
+  g.strokeStyle = "#0000001a";
+  g.lineWidth = 2;
+  for (let i = 0; i <= 8; i++) { g.beginPath(); g.moveTo(i * cell, 0); g.lineTo(i * cell, N); g.moveTo(0, i * cell); g.lineTo(N, i * cell); g.stroke(); }
+  // AND HOLES. One shade of the five is cleared to nothing: where such a square lands on a surface the pixel
+  // is thrown away and you see straight through the solid. That is a real question about cost, not a
+  // decoration -- a cut-out surface pays for its shape TWICE (the march that found it, then the alpha that
+  // rejects it), it cannot be resolved before the shader runs, and every pixel it drops is a pixel of
+  // whatever stands behind, drawn instead. It is how the world's leaves are cut out (foliage.js).
+  for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) {
+    if ((x * 7 + y * 13) % 5 === 0) g.clearRect(x * cell, y * cell, cell, cell);
+  }
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  return t;
+}
+let squaresTex = null;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, .05, 400);
+camera.position.set(0, 1.6, 0);
+
+const bgTex = texture(sunsetTexture());
+const uScroll = uniform(new THREE.Vector2());
+const bgFn = wgslFn(`
+  fn bgFn(tex: texture_2d<f32>, samp: sampler, uvc: vec2<f32>, scroll: vec2<f32>) -> vec3<f32> {
+    return textureSample(tex, samp, uvc + scroll).rgb;
+  }
+`);
+const bgMat = new THREE.MeshBasicNodeMaterial({ depthTest: false, depthWrite: false });
+bgMat.vertexNode = vec4(positionGeometry.xy, 0.0, 1.0);   // a screen-filling quad, no camera involved
+bgMat.colorNode = bgFn({ tex: bgTex, samp: bgTex, uvc: uv(), scroll: uScroll });
+const bgQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMat);
+bgQuad.frustumCulled = false;
+bgQuad.renderOrder = -3;   // behind the wall, the bound pass and the banners
+scene.add(bgQuad);
+
+// ---- the catalogue ---------------------------------------------------------------------------------------
+// Each entry is one shader. `sdf` is a 2D signed distance in the banner's own plane (what a banner cuts its
+// silhouette with -- the cheap half of the engine); `hit3` entries do what the world's engines really do: the
+// pixel's view ray against the true 3D solid, closed form, for an exact surface, a normal AND the pixel's own
+// depth. That last one is the expensive half, and the reason the figures cost what they do.
+// (The 3D primitives are the set the engines use: sphere, capsule, round cone, ellipsoid, rounded box -- the
+// same catalogue as examples/chiton_demo_v15.html and sdf_animals_v16.html.)
+const SHAPES = [
+  // nothing to place: what N leaves you holding, and one stop on M's round
+  { name: "none", none: true },
+
+  // the two baselines: what a pixel costs when it is NOT an SDF at all
+  { name: "texture (baseline)", tex: true, r: 4 },
+  { name: "flat fill (no shading)", flat: true, r: 4 },
+
+  // CLOSED FORM -- the engines' own primitives, solved in one step along the ray (hit point + normal)
+  { name: "sphere (closed form)", r: 3.2, hit3: `
+      let b = dot(ro, rd); let c = dot(ro, ro) - 3.2 * 3.2;
+      let h = b * b - c;
+      if (h < 0.0) { return vec4<f32>(0.0, 0.0, 0.0, -1.0); }
+      let t = -b - sqrt(h);
+      if (t < 0.0) { return vec4<f32>(0.0, 0.0, 0.0, -1.0); }
+      return vec4<f32>(normalize(ro + rd * t), t);` },
+  { name: "ellipsoid (closed form)", r: 5.0, hit3: `
+      let r3 = vec3<f32>(5.0, 1.6, 3.2);
+      let o = ro / r3; let d = rd / r3;
+      let a = dot(d, d); let b = dot(o, d); let c = dot(o, o) - 1.0;
+      let h = b * b - a * c;
+      if (h < 0.0) { return vec4<f32>(0.0, 0.0, 0.0, -1.0); }
+      let t = (-b - sqrt(h)) / a;
+      if (t < 0.0) { return vec4<f32>(0.0, 0.0, 0.0, -1.0); }
+      let q = ro + rd * t;
+      return vec4<f32>(normalize(q / (r3 * r3)), t);` },
+  { name: "round cone / capsule (closed form)", r: 4.9, hit3: `
+      let a3 = vec3<f32>(-2.6, -1.0, 0.0); let b3 = vec3<f32>(2.6, 1.1, 0.0);
+      let ra = 2.0; let rb = 1.0;
+      let ba = b3 - a3; let oa = ro - a3; let ob = ro - b3;
+      let m0 = dot(ba, ba); let rr = ra - rb;
+      let m1 = dot(ba, oa); let m2 = dot(ba, rd); let m3 = dot(rd, oa);
+      let m5 = dot(oa, oa); let m6 = dot(ob, rd); let m7 = dot(ob, ob);
+      let d2 = m0 - rr * rr;
+      let k2 = d2 - m2 * m2;
+      let k1 = d2 * m3 - m1 * m2 + m2 * rr * ra;
+      let k0 = d2 * m5 - m1 * m1 + m1 * rr * ra * 2.0 - m0 * ra * ra;
+      let h = k1 * k1 - k0 * k2;
+      if (h < 0.0) { return vec4<f32>(0.0, 0.0, 0.0, -1.0); }
+      var t = (-sqrt(h) - k1) / k2;
+      let y = m1 - ra * rr + t * m2;
+      if (y < 0.0 || y > d2) {                       // past the barrel: the end caps
+        let h1 = m3 * m3 - m5 + ra * ra;
+        let h2 = m6 * m6 - m7 + rb * rb;
+        var r = 1e20;
+        if (h1 > 0.0) { r = -m3 - sqrt(h1); }
+        if (h2 > 0.0) { r = min(r, -m6 - sqrt(h2)); }
+        if (r > 1e19) { return vec4<f32>(0.0, 0.0, 0.0, -1.0); }
+        t = r;
+      }
+      if (t < 0.0) { return vec4<f32>(0.0, 0.0, 0.0, -1.0); }
+      let q = ro + rd * t;
+      let sp = clamp(dot(q - a3, ba) / m0, 0.0, 1.0);
+      return vec4<f32>(normalize(q - (a3 + ba * sp)), t);` },
+
+  // SPHERE-TRACED -- fields with no closed form: the honest cost of walking the ray, plus six more field
+  // evaluations for the normal
+  { name: "rounded box (traced)", r: 5.4, march3: `
+      let d = abs(q) - vec3<f32>(3.0, 2.0, 2.0);
+      return length(max(d, vec3<f32>(0.0))) + min(max(d.x, max(d.y, d.z)), 0.0) - 0.6;` },
+  { name: "torus (traced)", r: 4.2, march3: `
+      let w = vec2<f32>(length(q.xz) - 3.0, q.y);
+      return length(w) - 1.1;` },
+  { name: "octahedron (traced)", r: 4.6, march3: `
+      let p = abs(q);
+      return (p.x + p.y + p.z - 4.4) * 0.57735027;` },
+  { name: "hex prism (traced)", r: 4.0, march3: `
+      let k = vec3<f32>(-0.8660254, 0.5, 0.57735);
+      var p = abs(q);
+      let xy = p.xy - 2.0 * min(dot(k.xy, p.xy), 0.0) * k.xy;
+      let d = vec2<f32>(length(xy - vec2<f32>(clamp(xy.x, -k.z * 2.6, k.z * 2.6), 2.6)) * sign(xy.y - 2.6),
+                        p.z - 2.2);
+      return min(max(d.x, d.y), 0.0) + length(max(d, vec2<f32>(0.0)));` },
+  { name: "capped cone (traced)", r: 3.7, march3: `
+      let h = 2.6; let r1 = 2.4; let r2 = 0.6;
+      let w = vec2<f32>(length(q.xz), q.y);
+      let k1 = vec2<f32>(r2, h);
+      let k2 = vec2<f32>(r2 - r1, 2.0 * h);
+      let ca = vec2<f32>(w.x - min(w.x, select(r2, r1, w.y < 0.0)), abs(w.y) - h);
+      let cb = w - k1 + k2 * clamp(dot(k1 - w, k2) / dot(k2, k2), 0.0, 1.0);
+      let sg = select(1.0, -1.0, cb.x < 0.0 && ca.y < 0.0);
+      return sg * sqrt(min(dot(ca, ca), dot(cb, cb)));` },
+  { name: "twisted box (traced)", r: 5.0, march3: `
+      let a = q.y * 0.22;                           // the domain itself bent: what a twist costs
+      let c = cos(a); let s = sin(a);
+      let p = vec3<f32>(c * q.x - s * q.z, q.y, s * q.x + c * q.z);
+      let d = abs(p) - vec3<f32>(2.2, 3.0, 2.2);
+      return length(max(d, vec3<f32>(0.0))) + min(max(d.x, max(d.y, d.z)), 0.0) - 0.3;` },
+  { name: "metaballs x5 (traced union)", r: 4.8, march3: `
+      var d = 1e9;
+      for (var i: i32 = 0; i < 5; i = i + 1) {
+        let fi = f32(i);
+        let c = vec3<f32>(sin(fi * 2.1) * 2.2, cos(fi * 1.7) * 1.5, sin(fi * 1.1) * 1.5);
+        let di = length(q - c) - 1.5;
+        let h = max(1.2 - abs(d - di), 0.0) / 1.2;   // the figures' own smooth union
+        d = min(d, di) - h * h * 1.2 * 0.25;
+      }
+      return d;` },
+];
+
+// HOW A BANNER IS DRAWN: ONE DRAW CALL PER KIND, NOT ONE PER BANNER.
+// A banner used to be its own THREE.Mesh with its own material (its anchor, colour and turn were uniforms).
+// That is the honest way to write it once, and the wrong way to write it forty times: three pays a per-object
+// price -- world matrix, frustum test, bind group, uniform upload, a pipeline lookup -- for every mesh in the
+// scene, every frame, and with eighty objects (a banner and its stencil stand-in each) that JavaScript cost
+// grows past the fragment cost the lab exists to measure. So banners of the same kind now ride in ONE
+// instanced draw: the anchor, the colour and the turn are per-instance attributes, and the quad itself --
+// camera-facing, fitted to that solid's silhouette from where the eye happens to be -- is built in the VERTEX
+// SHADER. Nothing about a standing banner is touched by the CPU between frames. (instanced.js and foliage.js
+// draw the world's herds and forests the same way, for the same reason.)
+const DIST = 10;                        // units in front of the eye when placed
+const CAP0 = 64;                        // instances a group starts with; it doubles when it must
+
+const uSlack  = uniform(1.04);          // how much wider than the silhouette the quad is cut (the self-check widens it)
+const uCover  = uniform(0);             // F: quads ride with the eye, each covering the whole view
+const uDist   = uniform(DIST);
+const uFov    = uniform(1);
+const uFaceEye = uniform(1);            // 1: each quad turns to face its own solid; 0: it faces the screen,
+                                        // the way it used to -- the self-check compares the two
+const uAspect = uniform(1);
+
+// a turn carried as a quaternion, because an instance attribute is four floats where a matrix is nine
+const QUAT_WGSL = `
+  fn qrot(q: vec4<f32>, v: vec3<f32>) -> vec3<f32> {
+    let t = 2.0 * cross(q.xyz, v);
+    return v + q.w * t + cross(q.xyz, t);
+  }
+  fn qinv(q: vec4<f32>) -> vec4<f32> { return vec4<f32>(-q.xyz, q.w); }
+`;
+const quatFns = wgslFn(QUAT_WGSL);
+
+// THE QUAD, per instance, in the vertex shader.
+// It faces the camera (the view's own right and up), stands at the solid's anchor, and is exactly as wide as
+// that solid's silhouette from here and no wider: a sphere of radius r at distance d subtends a disc of
+// half-width r*d/sqrt(d^2-r^2) in the plane through its centre, which is a little more than r. Every pixel of
+// quad beyond that runs the shader and misses -- and for a traced shape a miss is the expensive case, since it
+// marches the whole budget before giving up.
+//   pull = 1  the conservative stand-in of the stencil pass: the same silhouette seen from the solid's
+//             NEAREST point, so the mark it leaves can only ever be too generous, never too tight.
+//   cover = 1 (F) not fitted at all but filling the view, which is the other question the lab asks: what N
+//             full screens of this shader cost.
+const quadPointFn = wgslFn(`
+  fn quadPoint(corner: vec3<f32>, anchor: vec3<f32>, r: f32, pull: f32, slack: f32, cover: f32, dist: f32,
+               fov: f32, aspect: f32, faceEye: f32, eye: vec3<f32>, view: mat4x4<f32>) -> vec3<f32> {
+    let camRight = vec3<f32>(view[0][0], view[1][0], view[2][0]);
+    let camUp    = vec3<f32>(view[0][1], view[1][1], view[2][1]);
+    let fwd      = -vec3<f32>(view[0][2], view[1][2], view[2][2]);
+    let toC = anchor - eye;
+    let dAnchor = max(length(toC), 0.05);
+    var centre: vec3<f32>;
+    var right = camRight;
+    var up = camUp;
+    var size: f32;
+    if (cover > 0.5) {                                    // F: not fitted at all, but filling the view
+      var d = dist;
+      if (pull > 0.5) { d = max(dAnchor - r, 0.05); }      // the stand-in, one solid's radius nearer
+      centre = eye + fwd * d;
+      size = 2.0 * d * tan(fov * 0.5) * 1.02 * max(1.0, aspect);
+    } else {
+      let dir = toC / dAnchor;
+      let d = max(dAnchor - pull * r, 0.05);
+      centre = eye + dir * d;
+      // THE QUAD FACES THE SOLID, NOT THE SCREEN. A screen-facing quad stands at an angle to the eye->solid
+      // line wherever the solid is not in the middle of the view, and the tangent cone then cuts its plane
+      // obliquely: an ellipse, wider than the head-on silhouette -- so the fit has to be widened by how far
+      // off-centre the solid stands, which is what used to slice solids off at the edge of the screen, and
+      // widening for it makes quads swell as you turn (without bound as a solid leaves the view). Turned to
+      // face the eye instead, the section is the head-on circle at EVERY angle: the smallest quad that covers
+      // the solid, and a size that does not change when you turn on the spot.
+      if (faceEye > 0.5) {
+        var upRef = camUp;
+        if (abs(dot(upRef, dir)) > 0.985) { upRef = camRight; }   // looking straight down it: pick another
+        right = normalize(cross(upRef, dir));
+        up = cross(dir, right);
+      }
+      let dd = max(d, r * 1.01 + 0.01);                   // inside the solid there is no silhouette to fit
+      size = 2.0 * r * slack * (dd / sqrt(dd * dd - r * r));
+    }
+    return centre + right * (corner.x * size) + up * (corner.y * size);
+  }
+`);
+
+// ---- one KIND of banner's material -------------------------------------------------------------------------
+// Built per (shape, copies, depth mode, surface tier) and shared by every banner of that kind: the switches
+// bake into the WGSL, exactly as they do in the world's engines, so nothing is paid for a branch not taken.
+// K sets how many COPIES of the shape one banner carries: not more pixels, the SAME pixel asked about more
+// shapes -- which is what a figure made of many parts costs. They are combined the way the engines combine
+// them:
+//   closed form  the nearest hit wins the pixel (composite.js picks the nearest exact surface the same way)
+//   traced       a SMOOTH union of the fields (the figures' smin), so the cost of melting shapes together is
+//                in the reading too
+// The quad's own edge is drawn as a hairline: it is worth SEEING how much screen a banner covers, because that
+// is what the cost line is counting. One and a half pixels wide at any distance (the derivative of the edge
+// distance is how many uv a pixel spans here), and in the banner's own colour, so with eight stacked you can
+// still tell whose is whose.
+let edgeOn = true;                      // L: the hairline round each quad (a sight, not a feature -- it costs
+                                        // a little and paints over the solid's own rim)
+const EDGE = () => edgeOn ? `
+    let ed = min(min(uvc.x, 1.0 - uvc.x), min(uvc.y, 1.0 - uvc.y));
+    let ew = max(abs(dpdx(ed)) + abs(dpdy(ed)), 1e-7) * 1.5;` : `
+    let ed = 1.0;
+    let ew = 0.0;`;
+
+// what a texture on an implicit surface costs, in the three ways it is actually done:
+//   0 none        the shape's flat colour: the baseline the others are read against
+//   1 procedural  squares worked out from the surface point -- arithmetic only, no memory touched
+//   2 one fetch   a planar projection down the surface's dominant axis: one sample, one mip chain
+//   3 triplanar   three samples blended by the normal -- the standard way to texture a solid, and the
+//                 honest price of it (the engines' own patternAt is tier 1; the buildings' tiles are tier 2)
+// Each tier answers with a colour AND an alpha: the texture's holes (above) come back as alpha 0, and the
+// caller throws the pixel away. Tier 0 has no texture and so no holes -- it is the plain baseline the others
+// are read against.
+const SURFACE = (mode) => mode === 0 ? `
+    fn surfaceAt(col: vec3<f32>, pl: vec3<f32>, n: vec3<f32>, tex: texture_2d<f32>, samp: sampler) -> vec4<f32> {
+      return vec4<f32>(col, 1.0);
+    }` : mode === 1 ? `
+    fn surfaceAt(col: vec3<f32>, pl: vec3<f32>, n: vec3<f32>, tex: texture_2d<f32>, samp: sampler) -> vec4<f32> {
+      let q = floor(pl * 2.2);
+      let chk = q.x + q.y + q.z;
+      let shade = 0.82 + 0.36 * fract(chk * 0.5) + 0.12 * fract(dot(q, vec3<f32>(0.31, 0.17, 0.11)));
+      // the same one-in-five hole, worked out rather than fetched (fract keeps it positive on both sides of 0)
+      let hole = select(1.0, 0.0, fract((q.x * 7.0 + q.y * 13.0 + q.z * 5.0) / 5.0) < 0.001);
+      return vec4<f32>(col * shade, hole);
+    }` : mode === 2 ? `
+    fn surfaceAt(col: vec3<f32>, pl: vec3<f32>, n: vec3<f32>, tex: texture_2d<f32>, samp: sampler) -> vec4<f32> {
+      let a = abs(n);
+      var uvp = pl.xy;                                   // down whichever axis the surface faces most
+      if (a.x > a.y && a.x > a.z) { uvp = pl.zy; }
+      else if (a.y > a.z) { uvp = pl.xz; }
+      let t = textureSample(tex, samp, uvp * 0.45);
+      return vec4<f32>(col * t.rgb * 1.35, t.a);
+    }` : `
+    fn surfaceAt(col: vec3<f32>, pl: vec3<f32>, n: vec3<f32>, tex: texture_2d<f32>, samp: sampler) -> vec4<f32> {
+      let w = normalize(abs(n) + 1e-4);                  // triplanar: three samples, blended by the normal
+      let wn = w / (w.x + w.y + w.z);
+      let cx = textureSample(tex, samp, pl.zy * 0.45);
+      let cy = textureSample(tex, samp, pl.xz * 0.45);
+      let cz = textureSample(tex, samp, pl.xy * 0.45);
+      let c = cx * wn.x + cy * wn.y + cz * wn.z;         // the holes blend too: a hole seen edge-on closes up
+      return vec4<f32>(col * c.rgb * 1.35, c.a);
+    }`;
+
+// the per-instance channels, and the quad the vertex stage builds from them
+function instanceNodes(r, pull) {
+  const A = { anchor: attribute("aAnchor", "vec3"), tint: attribute("aTint", "vec3"), quat: attribute("aQuat", "vec4") };
+  const pw = quadPointFn({ corner: positionGeometry, anchor: A.anchor, r, pull: float(pull), slack: uSlack,
+                           cover: uCover, dist: uDist, fov: uFov, aspect: uAspect, faceEye: uFaceEye,
+                           eye: cameraPosition, view: cameraViewMatrix });
+  return { A, pw, clip: cameraProjectionMatrix.mul(cameraViewMatrix.mul(vec4(pw, 1.0))) };
+}
+
+// K scatters its copies around the solid's centre (by up to |(2.6,1.8,1.6)| = 3.6 units), so a quad cut to
+// the single shape's radius would slice them off -- the quad has to cover what is actually there. It means a
+// banner carrying copies is a BIGGER banner as well as a busier one; the readout says so.
+const COPY_REACH = 3.6;
+const kindRadius = (shapeIndex, blend) => {
+  const S = SHAPES[shapeIndex];
+  return (S.r ?? 4) + (blend > 1 && !S.flat && !S.tex ? COPY_REACH : 0);   // the baselines have no copies
+};
+
+function bannerMaterial(shapeIndex, blend, deep = pixelDepth, surface = surfaceMode) {
+  const S = SHAPES[shapeIndex];
+  const uR = uniform(kindRadius(shapeIndex, blend));
+  const { A, pw, clip } = instanceNodes(uR, 0);
+  if (!squaresTex) squaresTex = squaresTexture();
+  const sq = texture(squaresTex);
+  const mat = new THREE.MeshBasicNodeMaterial({ transparent: false, side: THREE.DoubleSide });
+  mat.vertexNode = clip;
+  // what the fragment stage gets from its instance: where its solid stands, its colour, and its own turn
+  const vPw = varying(pw, "vPw");
+  const vTint = varying(A.tint, "vTint");
+  const vQuat = varying(A.quat, "vQuat");
+  const vAnchor = varying(A.anchor, "vAnchor");
+  const vUvc = varying(vec2(positionGeometry.x.add(0.5), positionGeometry.y.add(0.5)), "vUvc");
+
+  if (S.flat) {   // one baseline: the quad rasterised and filled, no shading at all
+    const frag = wgslFn(`
+      fn frag(uvc: vec2<f32>, tint: vec3<f32>) -> vec3<f32> {
+${EDGE()}
+        if (ed < ew) { return mix(tint, vec3<f32>(1.0), 0.6); }
+        return tint * 0.5;
+      }
+    `);
+    mat.colorNode = frag({ uvc: vUvc, tint: vTint });
+    return mat;
+  }
+
+  if (S.tex) {   // the other baseline: one texture read, nothing else -- the cheapest pixel a GPU can draw
+    const t = texture(sunsetTexture());
+    const frag = wgslFn(`
+      fn frag(tex: texture_2d<f32>, samp: sampler, uvc: vec2<f32>, scroll: vec2<f32>, tint: vec3<f32>) -> vec3<f32> {
+${EDGE()}
+        if (ed < ew) { return mix(tint, vec3<f32>(1.0), 0.6); }
+        return textureSample(tex, samp, uvc + scroll).rgb * tint * 1.6;
+      }
+    `);
+    mat.colorNode = frag({ tex: t, samp: t, uvc: vUvc, scroll: uScroll, tint: vTint });
+    return mat;
+  }
+
+  if (S.hit3) {
+    // THE ENGINES' REAL WORK. The banner is a camera-facing quad; the SOLID stands in the world at the quad's
+    // centre, and this pixel's own view ray (eye -> the point of the quad it lands on) is intersected with it.
+    // That is what keeps a banner's 3D honest as you move: walk round it and you see the solid's other side,
+    // because it never was a picture. It also writes the pixel's own depth, so two of them interpenetrate
+    // properly -- and that is the part which costs early-z in the real engines.
+    // The solid is solved in its own axes, so the RAY is turned into its frame going in (the instance's
+    // quaternion, inverted) and the surface normal turned back out again. A rigid turn leaves the distance
+    // along the ray alone, so the depth it writes needs no correction.
+    const hitFn = wgslFn(`fn hitAt(ro: vec3<f32>, rd: vec3<f32>) -> vec4<f32> { ${S.hit3} }`);
+    const frag = wgslFn(`
+      fn frag(pw: vec3<f32>, eye: vec3<f32>, centre: vec3<f32>, view: mat4x4<f32>, proj: mat4x4<f32>,
+              uvc: vec2<f32>, tint: vec3<f32>, q: vec4<f32>, tex: texture_2d<f32>, samp: sampler) -> mat4x4<f32> {
+${EDGE()}
+        let cq = proj * (view * vec4<f32>(pw, 1.0));              // the quad's own depth, for the hairline
+        if (ed < ew) {
+          return mat4x4<f32>(vec4<f32>(mix(tint, vec3<f32>(1.0), 0.6), 1.0),
+                             vec4<f32>(clamp(cq.z / cq.w, 0.0, 1.0), 0.0, 0.0, 0.0),
+                             vec4<f32>(0.0), vec4<f32>(0.0));
+        }
+        let rd = normalize(pw - eye);
+        let qi = qinv(q);                          // into the solid's own frame
+        let rdl = qrot(qi, rd);
+        let rol = qrot(qi, eye - centre);
+        var best = vec4<f32>(0.0, 0.0, 0.0, -1.0);
+        for (var i: i32 = 0; i < ${blend}; i = i + 1) {
+          let fi = f32(i);
+          let off = vec3<f32>(sin(fi * 2.3) * 2.6, cos(fi * 1.9) * 1.8, sin(fi * 1.3) * 1.6) * ${blend > 1 ? 1 : 0}.0;
+          let h = hitAt(rol - off, rdl);
+          if (h.w > 0.0 && (best.w < 0.0 || h.w < best.w)) { best = h; }   // the nearest surface wins the pixel
+        }
+        if (best.w < 0.0) { discard; }
+        let n = qrot(q, best.xyz);                 // ...and the normal back out
+        let k = 0.82 + 0.2 * n.y + 0.1 * n.x + 0.06 * n.z;                // the world's own flat-light shading
+        let hitP = eye + rd * best.w;
+        let pl = qrot(qi, hitP - centre);          // the surface point in the solid's frame: the texture sticks to it
+        let surf = surfaceAt(tint, pl, best.xyz, tex, samp);
+        if (surf.a < 0.5) { discard; }             // a hole in the texture is a hole in the solid
+        let tinted = surf.rgb;
+        let c = proj * (view * vec4<f32>(hitP, 1.0));
+        return mat4x4<f32>(vec4<f32>(tinted * k, 1.0),
+                           vec4<f32>(clamp(c.z / c.w, 0.0, 1.0), 0.0, 0.0, 0.0),
+                           vec4<f32>(0.0), vec4<f32>(0.0));
+      }
+    `, [hitFn, quatFns, wgslFn(SURFACE(surface))]);
+    const out = frag({ pw: vPw, eye: cameraPosition, centre: vAnchor,
+                       view: cameraViewMatrix, proj: cameraProjectionMatrix, uvc: vUvc, tint: vTint, q: vQuat,
+                       tex: sq, samp: sq });
+    mat.colorNode = out.element(0).xyz;
+    // THE EARLY-Z SWITCH. With a depth of its own the pixel carries its true surface depth -- and the GPU can
+    // no longer reject it before running this shader, because only this shader knows where the surface is.
+    // Without it the quad's flat plane depth stands: the picture is wrong where solids interpenetrate, but the
+    // early depth test comes back, and the difference between the two readings IS what per-pixel depth costs.
+    if (deep) mat.depthNode = out.element(1).x;
+    return mat;
+  }
+
+  // sphere tracing: the honest cost of a field with no closed form -- up to 48 steps down the true view ray
+  const fieldFn = wgslFn(`fn fieldAt(q: vec3<f32>) -> f32 { ${S.march3} }`);
+  const frag = wgslFn(`
+    fn frag(pw: vec3<f32>, eye: vec3<f32>, centre: vec3<f32>, view: mat4x4<f32>, proj: mat4x4<f32>,
+            uvc: vec2<f32>, tint: vec3<f32>, q: vec4<f32>, tex: texture_2d<f32>, samp: sampler) -> mat4x4<f32> {
+${EDGE()}
+      let cq = proj * (view * vec4<f32>(pw, 1.0));
+      if (ed < ew) {
+        return mat4x4<f32>(vec4<f32>(mix(tint, vec3<f32>(1.0), 0.6), 1.0),
+                           vec4<f32>(clamp(cq.z / cq.w, 0.0, 1.0), 0.0, 0.0, 0.0),
+                           vec4<f32>(0.0), vec4<f32>(0.0));
+      }
+      let rdw = normalize(pw - eye);
+      let qi = qinv(q);                            // the march runs in the solid's own frame
+      let rd = qrot(qi, rdw);
+      let ro = qrot(qi, eye - centre);
+      let reach = 7.0;                            // the solids here are a few metres across; start just outside
+      var t = max(length(ro) - reach, 0.02);
+      var hit = false;
+      for (var s: i32 = 0; s < ${Math.max(12, Math.round(48 / blend))}; s = s + 1) {   // the step budget is SHARED between the copies: 48 steps x 8 shapes x several stacked layers is enough work to trip a driver watchdog, and a lost context reads as a browser crash
+        var d = 1e9;
+        for (var i: i32 = 0; i < ${blend}; i = i + 1) {
+          let fi = f32(i);
+          let off = vec3<f32>(sin(fi * 2.3) * 2.6, cos(fi * 1.9) * 1.8, sin(fi * 1.3) * 1.6) * ${blend > 1 ? 1 : 0}.0;
+          let dj = fieldAt(ro + rd * t - off);
+          let hj = max(1.2 - abs(d - dj), 0.0) / 1.2;      // the figures' own smooth union, term for term
+          d = min(d, dj) - hj * hj * 1.2 * 0.25;
+        }
+        if (d < 0.004 * max(t, 1.0)) { hit = true; break; }   // the tolerance grows with distance: a far pixel is bigger
+        t = t + d;
+        if (t > length(ro) + reach) { break; }
+      }
+      if (!hit) { discard; }
+      let qp = ro + rd * t;
+      let e = vec2<f32>(0.01, 0.0);
+      let nl = normalize(vec3<f32>(fieldAt(qp + e.xyy) - fieldAt(qp - e.xyy),
+                                   fieldAt(qp + e.yxy) - fieldAt(qp - e.yxy),
+                                   fieldAt(qp + e.yyx) - fieldAt(qp - e.yyx)));
+      let n = qrot(q, nl);                         // back to the world for the shading
+      let k = 0.82 + 0.2 * n.y + 0.1 * n.x + 0.06 * n.z;
+      let surf = surfaceAt(tint, qp, nl, tex, samp);
+      if (surf.a < 0.5) { discard; }               // ...see the note in the closed-form branch above
+      let tinted = surf.rgb;
+      let c = proj * (view * vec4<f32>(eye + rdw * t, 1.0));   // (a rigid turn: the distance along the ray is the same)
+      return mat4x4<f32>(vec4<f32>(tinted * k, 1.0),
+                         vec4<f32>(clamp(c.z / c.w, 0.0, 1.0), 0.0, 0.0, 0.0),
+                         vec4<f32>(0.0), vec4<f32>(0.0));
+    }
+  `, [fieldFn, quatFns, wgslFn(SURFACE(surface))]);
+  const out = frag({ pw: vPw, eye: cameraPosition, centre: vAnchor,
+                     view: cameraViewMatrix, proj: cameraProjectionMatrix, uvc: vUvc, tint: vTint, q: vQuat,
+                     tex: sq, samp: sq });
+  mat.colorNode = out.element(0).xyz;
+  if (deep) mat.depthNode = out.element(1).x;   // see the note above: this is the early-z switch
+  return mat;
+}
+
+// ---- CONSERVATIVE DEPTH, EMULATED (C) -------------------------------------------------------------------
+// A banner writes its own depth, so the hardware cannot reject it early: only the shader knows where the
+// surface is. The feature that would fix this -- conservative depth, where the shader promises never to come
+// nearer than the interpolated plane -- is not exposed in WebGPU. But early STENCIL is not disabled by writing
+// depth, so the promise can be kept in a stencil mask instead:
+//
+//   pass 1 (bound)   the same instanced quad, pulled forward to the solid's NEAREST point, colour off, depth
+//                    off, no frag_depth at all -- so it gets full hardware early-z -- writing stencil = 1
+//                    where it passes the depth test. What survives is "this solid is not definitely behind
+//                    the world".
+//   pass 2 (banner)  unchanged, frag_depth and all, but testing stencil == 1. Hidden pixels never reach it.
+//
+// The bound MUST be conservative (at or in front of the solid), or visible pixels get culled and the solids
+// show holes -- so the stand-in stands at the solid's own nearest point, which each entry declares as its
+// radius (and which the self-check's clipping sweep proves is big enough).
+let stencilCull = true;
+function boundMaterial(shapeIndex, blend) {
+  const uR = uniform(kindRadius(shapeIndex, blend));
+  const { clip } = instanceNodes(uR, 1);
+  const m = new THREE.MeshBasicNodeMaterial({ colorWrite: false, depthWrite: false, depthTest: true, side: THREE.DoubleSide });
+  m.vertexNode = clip;
+  m.colorNode = vec3(0, 0, 0);
+  m.stencilWrite = true;
+  m.stencilFunc = THREE.AlwaysStencilFunc;
+  m.stencilRef = 1;
+  m.stencilZPass = THREE.ReplaceStencilOp;     // depth passed: mark it as possibly visible
+  m.stencilFail = THREE.KeepStencilOp;
+  m.stencilZFail = THREE.KeepStencilOp;
+  return m;
+}
+
+function applyStencil() {   // the banners test the mask; they never write it
+  for (const g of groups.values()) {
+    const m = g.mat;
+    m.stencilWrite = stencilCull;                     // (three only builds stencil state when this is set)
+    m.stencilFunc = THREE.EqualStencilFunc;
+    m.stencilRef = 1;
+    m.stencilFail = THREE.KeepStencilOp;
+    m.stencilZFail = THREE.KeepStencilOp;
+    m.stencilZPass = THREE.KeepStencilOp;
+    m.needsUpdate = true;
+    g.boundMesh.visible = stencilCull && g.count > 0;
+  }
+}
+
+// ---- the groups: one instanced draw per kind of banner ---------------------------------------------------
+const groups = new Map();
+// The walls wear the SAME surface as the solids (T switches both together). That is the comparison the lab is
+// for: a texture on a rasterised triangle against the same texture on an implicit surface -- the fetch is the
+// same fetch, and what differs is the work that had to happen before it to know where the surface was.
+function wallMaterial(surface = surfaceMode) {
+  if (!squaresTex) squaresTex = squaresTexture();
+  const sq = texture(squaresTex);
+  const m = new THREE.MeshBasicNodeMaterial();
+  const frag = wgslFn(`
+    fn wallFrag(pw: vec3<f32>, nrm: vec3<f32>, tex: texture_2d<f32>, samp: sampler) -> vec3<f32> {
+      let base = vec3<f32>(0.42, 0.45, 0.55);
+      let n = normalize(nrm);
+      let k = 0.82 + 0.2 * n.y + 0.1 * n.x + 0.06 * n.z;      // the same flat-light shading the solids get
+      let surf = surfaceAt(base, pw, n, tex, samp);
+      if (surf.a < 0.5) { discard; }                          // the walls are cut out by the same holes
+      return surf.rgb * k;
+    }
+  `, [wgslFn(SURFACE(surface))]);
+  m.colorNode = frag({ pw: positionWorld, nrm: normalWorld, tex: sq, samp: sq });
+  return m;
+}
+let wallMat = wallMaterial(0);
+// THE WALLS ARE INSTANCED TOO. A configured scene may ask for thousands of them (they are what the stencil
+// bound pass has to reject against, and a village has a lot of opaque geometry in it); as separate meshes they
+// would cost more CPU per frame than every banner put together, and the lab would end up measuring three's
+// object loop instead of a shader. One InstancedMesh: one draw, one matrix upload when a wall is added.
+let wallMesh = null, wallCount = 0, wallCap = 0;
+const _wm = new THREE.Matrix4(), _wq = new THREE.Quaternion(), _ws = new THREE.Vector3(), _we = new THREE.Euler();
+function ensureWalls(n) {
+  if (wallMesh && n <= wallCap) return;
+  const cap = Math.max(64, n * 2);
+  const m = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), wallMat, cap);
+  m.frustumCulled = false;
+  m.renderOrder = -2;                 // before the bound pass: its depth has to be there to reject against
+  m.count = wallCount;
+  if (wallMesh) {
+    for (let i = 0; i < wallCount; i++) { wallMesh.getMatrixAt(i, _wm); m.setMatrixAt(i, _wm); }
+    scene.remove(wallMesh);
+    wallMesh.dispose();
+  }
+  wallMesh = m; wallCap = cap;
+  scene.add(m);
+}
+function addWall(pos, quat, w, h, d = .6) {
+  ensureWalls(wallCount + 1);
+  _wm.compose(pos, quat, _ws.set(w, h, d));
+  wallMesh.setMatrixAt(wallCount++, _wm);
+  wallMesh.count = wallCount;
+  wallMesh.instanceMatrix.needsUpdate = true;
+}
+function clearWalls() { wallCount = 0; if (wallMesh) wallMesh.count = 0; }
+const standing = [];                    // the banners left in the world, as records (no mesh of their own)
+let shapeIndex = 0, blend = 1, batch = 1, live = null, follow = false;   // shape 0 is "none": nothing in hand to start with
+let pixelDepth = true;                  // Z: the fragment's own depth (and so no early-z), or the quad's plane
+let surfaceMode = 0;                    // T: the surface texture -- none, procedural, one fetch, triplanar
+const SURFACE_NAME = ["none", "procedural squares", "one texture fetch", "triplanar (3 fetches)"];
+
+function makeGroup(shapeIndex, blend) {
+  const quad = new THREE.PlaneGeometry(1, 1);
+  const geo = new THREE.InstancedBufferGeometry();
+  geo.index = quad.index;
+  geo.setAttribute("position", quad.getAttribute("position"));
+  const g = {
+    shape: shapeIndex, blend, count: 0, cap: CAP0, recs: [], dirty: false, geo,
+    mat: bannerMaterial(shapeIndex, blend, pixelDepth, surfaceMode),
+    boundMat: boundMaterial(shapeIndex, blend),
+  };
+  allocate(g, CAP0);
+  geo.instanceCount = 0;
+  g.mesh = new THREE.Mesh(geo, g.mat);
+  g.mesh.frustumCulled = false;
+  g.mesh.visible = false;
+  g.boundMesh = new THREE.Mesh(geo, g.boundMat);
+  g.boundMesh.frustumCulled = false;
+  g.boundMesh.renderOrder = -1;         // before the banners: the mask has to exist when they are drawn
+  g.boundMesh.visible = false;
+  scene.add(g.mesh);
+  scene.add(g.boundMesh);
+  return g;
+}
+
+function allocate(g, cap) {   // the per-instance channels: where its solid stands, its colour, its turn
+  const grow = (old, n) => { const a = new Float32Array(cap * n); if (old) a.set(old.array.subarray(0, Math.min(old.array.length, a.length))); return new THREE.InstancedBufferAttribute(a, n).setUsage(THREE.DynamicDrawUsage); };
+  g.anchor = grow(g.anchor, 3);
+  g.tint = grow(g.tint, 3);
+  g.quat = grow(g.quat, 4);
+  g.cap = cap;
+  g.geo.setAttribute("aAnchor", g.anchor);
+  g.geo.setAttribute("aTint", g.tint);
+  g.geo.setAttribute("aQuat", g.quat);
+}
+
+function groupFor(shapeIndex, blend) {
+  const key = `${shapeIndex}|${blend}`;
+  let g = groups.get(key);
+  if (!g) { g = makeGroup(shapeIndex, blend); groups.set(key, g); applyStencil(); }
+  return g;
+}
+
+function writeRec(rec) {   // one instance's three attributes; the upload waits for the end of the frame
+  const g = rec.group, i = rec.index;
+  g.anchor.setXYZ(i, rec.position.x, rec.position.y, rec.position.z);
+  g.tint.setXYZ(i, rec.tint.r, rec.tint.g, rec.tint.b);
+  g.quat.setXYZW(i, rec.quat.x, rec.quat.y, rec.quat.z, rec.quat.w);
+  g.dirty = true;
+}
+
+function flushGroups() {
+  for (const g of groups.values()) {
+    if (!g.dirty) continue;
+    g.anchor.needsUpdate = g.tint.needsUpdate = g.quat.needsUpdate = true;
+    g.dirty = false;
+  }
+}
+
+// A BANNER IS A RECORD: its shape, where its solid stands, its colour and its turn. Nothing else -- no mesh,
+// no material, no matrix. Adding one appends an instance to its kind's draw.
+function addBanner(shapeIndex, blend, pos, tintColor = null, quat = null) {
+  const g = groupFor(shapeIndex, blend);
+  if (g.count === g.cap) allocate(g, g.cap * 2);
+  const rec = {
+    shape: shapeIndex, blend, group: g, index: g.count,
+    position: (pos ?? new THREE.Vector3()).clone(),
+    tint: tintColor ? tintColor.clone() : new THREE.Color().setHSL(Math.random(), .55 + Math.random() * .3, .52 + Math.random() * .12),
+    quat: (quat ?? new THREE.Quaternion().setFromEuler(new THREE.Euler(
+      Math.random() * 6.2832, Math.random() * 6.2832, Math.random() * 6.2832))).clone(),
+  };
+  rec.baseQuat = rec.quat.clone();      // its turn in the WORLD (the one in hand is turned with the eye, below)
+  g.recs.push(rec);
+  g.count++;
+  g.geo.instanceCount = g.count;
+  g.mesh.visible = true;
+  g.boundMesh.visible = stencilCull;
+  writeRec(rec);
+  return rec;
+}
+
+function dropBanner(rec) {   // swap-remove: the last instance moves into the hole
+  const g = rec.group;
+  const last = g.recs[g.count - 1];
+  if (last !== rec) { last.index = rec.index; g.recs[rec.index] = last; writeRec(last); }
+  g.recs.length = --g.count;
+  g.geo.instanceCount = g.count;
+  if (g.count === 0) { g.mesh.visible = false; g.boundMesh.visible = false; }
+  g.dirty = true;
+}
+
+function clearStanding() {
+  for (const rec of standing.slice()) dropBanner(rec);
+  standing.length = 0;
+}
+
+// Z, T and L change the SHADER, so every group is thrown away and built again -- but the banners themselves
+// are records and outlive it: each one keeps its place, its colour and its turn.
+function rebuildGroups() {
+  const kept = standing.map((r) => ({ shape: r.shape, blend: r.blend, position: r.position.clone(), tint: r.tint.clone(), quat: r.baseQuat.clone() }));
+  const hand = live ? { shape: live.shape, blend: live.blend, tint: live.tint.clone(), quat: live.baseQuat.clone() } : null;
+  for (const g of groups.values()) {
+    scene.remove(g.mesh); scene.remove(g.boundMesh);
+    g.geo.dispose(); g.mat.dispose(); g.boundMat.dispose();
+  }
+  groups.clear();
+  const oldWall = wallMat;
+  wallMat = wallMaterial();
+  if (wallMesh) wallMesh.material = wallMat;
+  oldWall.dispose();
+  standing.length = 0;
+  live = null;
+  for (const k of kept) standing.push(addBanner(k.shape, k.blend, k.position, k.tint, k.quat));
+  if (hand) live = addBanner(hand.shape, hand.blend, camera.position, hand.tint, hand.quat);
+  applyStencil();
+}
+
+function makeLive() {   // the one in hand, riding ahead of the eye
+  if (live) dropBanner(live);
+  live = null;
+  if (SHAPES[shapeIndex].none) return;   // nothing to place until M picks a shape
+  live = addBanner(shapeIndex, blend, camera.position);
+}
+
+// A CROWD, not a cursor. One solid tells you what one costs; a village tells you what a frame costs, and the
+// two are not a simple multiple: they stand at different distances, cover different shares of the screen, and
+// hide one another. B chooses how many N leaves behind -- scattered round the eye, on the same level, each at
+// its own distance, angle and turn.
+function placeMany(n) {
+  const kept = [];
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * 6.2832, d = 6 + Math.random() * 54;
+    const p = new THREE.Vector3(camera.position.x + Math.sin(a) * d, camera.position.y, camera.position.z + Math.cos(a) * d);
+    const rec = addBanner(shapeIndex, blend, p);
+    standing.push(rec);
+    kept.push(rec);
+  }
+  return kept;
+}
+
+// EVERY FRAME, the whole scene's per-object work: four camera uniforms, and the one banner in hand.
+// The standing ones are not touched at all -- their quads are rebuilt by the vertex shader from the camera the
+// GPU already has. That is the difference between a lab whose CPU line reads ten times its GPU line and one
+// where the number on the screen is the shader's.
+const _fwd = new THREE.Vector3();
+function placeBanners() {
+  uCover.value = follow ? 1 : 0;
+  uFov.value = THREE.MathUtils.degToRad(camera.fov);
+  uAspect.value = camera.aspect;
+  if (live) {
+    // THE ONE IN HAND is carried, not passed: it rides ahead of the eye, so if its turn stayed fixed in the
+    // world, turning on the spot would swing it round and show you its other side -- which looks like the
+    // shape spinning by itself. Turning it WITH the eye keeps one face toward you while it is in hand; N then
+    // leaves it standing in exactly the attitude you were looking at.
+    live.position.copy(camera.position).addScaledVector(camera.getWorldDirection(_fwd), DIST);
+    live.quat.copy(camera.quaternion).multiply(live.baseQuat);
+    writeRec(live);
+  }
+  flushGroups();
+}
+makeLive();
+
+// ---- the configured scene (perf_lab.json) ----------------------------------------------------------------
+// A measurement wants a scene you can describe, not one you built by hand with M and N: so many of each shape,
+// so many walls, and -- the part that makes the number mean something -- a BOUND ON DEPTH COMPLEXITY. Every
+// solid is placed so it intersects nothing in space and so its silhouette, seen from where you start, overlaps
+// at most overlapMax-1 others. Any ray from the starting point therefore passes through at most overlapMax of
+// them, and a frame time can be compared with another frame time.
+const SCENE_DEFAULT = {
+  spread: 70, near: 8, overlapMax: 3, camera: { x: 0, y: 1.6, z: 0 },
+  shapes: [{ shape: "sphere", count: 8 }, { shape: "round cone", count: 6 }, { shape: "rounded box", count: 5 }],
+  walls: { count: 4, width: 26, height: 12, from: 12, to: 45 },
+  surface: 0, blend: 1, stencil: true,
+};
+let SCENE = SCENE_DEFAULT;
+try {
+  const r = await fetch("./perf_lab.json");
+  if (r.ok) SCENE = { ...SCENE_DEFAULT, ...(await r.json()) };
+} catch { /* the defaults above are the whole scene if the file is not there */ }
+
+const shapeByName = (name) => {
+  const i = SHAPES.findIndex((sh) => sh.name.toLowerCase().startsWith(String(name).toLowerCase()));
+  return i < 0 ? -1 : i;
+};
+
+// a spot for one solid: on the level, out of everything else's way, and not piling up along any one direction
+function findSpot(r, placed, cfg) {
+  const eye = new THREE.Vector3(cfg.camera.x, cfg.camera.y, cfg.camera.z);
+  for (let attempt = 0; attempt < 400; attempt++) {
+    const a = Math.random() * 6.2832;
+    const d = cfg.near + Math.random() * (cfg.spread - cfg.near);
+    const p = new THREE.Vector3(eye.x + Math.sin(a) * d, eye.y, eye.z + Math.cos(a) * d);
+    let clear = true, overlaps = 0;
+    const dist = p.distanceTo(eye), half = Math.asin(Math.min(.999, r / Math.max(dist, r + .01)));
+    const dir = p.clone().sub(eye).normalize();
+    for (const q of placed) {
+      if (p.distanceTo(q.p) < r + q.r + 1.5) { clear = false; break; }        // never intersecting in space
+      const qd = q.p.distanceTo(eye), qHalf = Math.asin(Math.min(.999, q.r / Math.max(qd, q.r + .01)));
+      const ang = Math.acos(Math.min(1, dir.dot(q.p.clone().sub(eye).normalize())));
+      if (ang < half + qHalf) {                                              // their silhouettes overlap
+        overlaps++;
+        if (overlaps >= cfg.overlapMax - 1 || q.overlaps >= cfg.overlapMax - 1) { clear = false; break; }
+      }
+    }
+    if (!clear) continue;
+    for (const q of placed) {                                                // book the overlap on both sides
+      const qd = q.p.distanceTo(eye), qHalf = Math.asin(Math.min(.999, q.r / Math.max(qd, q.r + .01)));
+      const ang = Math.acos(Math.min(1, dir.dot(q.p.clone().sub(eye).normalize())));
+      if (ang < half + qHalf) q.overlaps++;
+    }
+    return { p, r, overlaps };
+  }
+  return null;   // the field is full at this density: better to place fewer than to break the bound
+}
+
+function buildScene(cfg = SCENE) {
+  clearStanding();
+  clearWalls();
+  camera.position.set(cfg.camera.x, cfg.camera.y, cfg.camera.z);
+  const want = { surface: cfg.surface ?? 0, blend: cfg.blend ?? 1 };
+  const shaderChanged = want.surface !== surfaceMode;
+  surfaceMode = want.surface;
+  blend = want.blend;
+  stencilCull = cfg.stencil !== false;
+  if (shaderChanged) rebuildGroups();      // the surface tier is baked into the WGSL
+  const placed = [];
+  let asked = 0;
+  for (const entry of cfg.shapes ?? []) {
+    const idx = shapeByName(entry.shape);
+    if (idx < 0) { console.warn(`perf lab: no shape starting "${entry.shape}"`); continue; }
+    for (let i = 0; i < (entry.count ?? 1); i++) {
+      asked++;
+      const r = kindRadius(idx, blend);      // the room a solid takes is the room its quad takes
+      const spot = findSpot(r, placed, cfg);
+      if (!spot) continue;
+      placed.push(spot);
+      standing.push(addBanner(idx, blend, spot.p));
+    }
+  }
+  // the walls: opaque, upright, scattered between the eye and the field -- what the bound pass rejects against
+  const wc = cfg.walls ?? {};
+  for (let i = 0; i < (wc.count ?? 0); i++) {
+    const a = Math.random() * 6.2832, d = (wc.from ?? 12) + Math.random() * ((wc.to ?? 45) - (wc.from ?? 12));
+    addWall(new THREE.Vector3(camera.position.x + Math.sin(a) * d, camera.position.y, camera.position.z + Math.cos(a) * d),
+            _wq.setFromEuler(_we.set(0, a + (Math.random() - .5) * .8, 0)), wc.width ?? 26, wc.height ?? 12);
+  }
+  applyStencil();
+  return { placed: standing.length, asked, walls: wallCount,
+           worst: placed.reduce((m, q) => Math.max(m, q.overlaps + 1), 0) };
+}
+
+// ---- controls --------------------------------------------------------------------------------------------
+// Looking needs no button held (a touchpad has none to spare): moving the pointer turns the view, and a click
+// captures the pointer so the turn keeps going past the screen's edge. W and S move in the LEVEL plane -- the
+// view may point at the sky, the walk does not -- and Q/E go straight down and up.
+const keys = new Set();
+let yaw = 0, pitch = 0, uncapped = false;
+addEventListener("keydown", (e) => {
+  const k = e.key.toLowerCase();
+  keys.add(k);
+  if (k === "m") { shapeIndex = (shapeIndex + 1) % SHAPES.length; makeLive(); }
+  else if (k === "n" && live) {   // fix it where it stands -- and then your hands are empty until M
+    // its solid stops here: the quad may still follow the eye, but what it draws stays put. It stops turning
+    // with you too: the attitude it had in hand becomes its attitude in the world, and a rebuild (T, Z, L)
+    // must keep THAT one, not the turn it was born with.
+    live.baseQuat.copy(live.quat);
+    writeRec(live);
+    standing.push(live);
+    live = null;
+    if (batch > 1) placeMany(batch - 1);   // ...and the rest of the crowd around you
+    shapeIndex = 0;               // "none": nothing to place, nothing to fix
+  }
+  else if (k === "f") { follow = !follow; }                                      // ride with the eye, or stay put
+  else if (k === "b") { batch = batch === 1 ? 5 : batch === 5 ? 20 : batch === 20 ? 50 : 1; }
+  else if (k === "k") { blend = blend >= 8 ? 1 : blend * 2; makeLive(); }   // (the ones already standing keep the count they were placed with)
+  else if (k === "r") { const b = buildScene(); console.log(`perf lab scene: ${b.placed}/${b.asked} solids, ${b.walls} walls, at most ${b.worst} overlapping`); }
+  else if (k === "x") { clearStanding(); }
+  else if (k === "c") { stencilCull = !stencilCull; applyStencil(); }   // the emulated conservative depth, on and off -- the measurement is the ms/frame line
+  else if (k === "o") {   // a wall to hide things behind: without one there is nothing for the mask to reject
+    const at = camera.position.clone().addScaledVector(camera.getWorldDirection(_fwd), 5);
+    at.y = camera.position.y;
+    addWall(at, camera.quaternion, 34, 16);
+  }
+  else if (k === "z" || k === "t" || k === "l") {
+    // these three are baked into the WGSL, so every kind's shader is built again -- the banners themselves are
+    // records and survive it, each keeping its place, its colour and its turn
+    if (k === "z") pixelDepth = !pixelDepth;
+    else if (k === "l") edgeOn = !edgeOn;
+    else surfaceMode = (surfaceMode + 1) % 4;
+    rebuildGroups();
+  }
+  else if (k === "u") { uncapped = !uncapped; }   // the running loop picks it up when it next schedules
+});
+addEventListener("keyup", (e) => keys.delete(e.key.toLowerCase()));
+const LOOK = .0022;
+addEventListener("pointermove", (e) => {
+  const dx = document.pointerLockElement ? e.movementX : e.movementX ?? 0;
+  const dy = document.pointerLockElement ? e.movementY : e.movementY ?? 0;
+  yaw -= dx * LOOK;
+  pitch = Math.max(-1.4, Math.min(1.4, pitch - dy * LOOK));
+});
+addEventListener("click", () => { if (!document.pointerLockElement) renderer.domElement.requestPointerLock(); });
+
+const _e = new THREE.Euler(0, 0, 0, "YXZ");
+function move(dt) {
+  _e.set(pitch, yaw, 0);
+  camera.quaternion.setFromEuler(_e);
+  const speed = (keys.has("shift") ? 40 : 12) * dt;   // the solids stand ten units off: this walks round one in a few seconds
+  const s = Math.sin(yaw), c = Math.cos(yaw);
+  if (keys.has("w")) { camera.position.x -= s * speed; camera.position.z -= c * speed; }   // level: the pitch does not lift you
+  if (keys.has("s")) { camera.position.x += s * speed; camera.position.z += c * speed; }
+  if (keys.has("a")) { camera.position.x -= c * speed; camera.position.z += s * speed; }
+  if (keys.has("d")) { camera.position.x += c * speed; camera.position.z -= s * speed; }
+  if (keys.has("e")) camera.position.y += speed;
+  if (keys.has("q")) camera.position.y -= speed;
+}
+
+// ---- the renderer and the frame --------------------------------------------------------------------------
+// ?probe=1 is the headless self-check (docs/webgpu.md): it builds EVERY catalogue entry, draws each one alone
+// into a render target and reports what covered the frame -- so a shape whose WGSL will not compile, or draws
+// nothing, is caught without a screen. Chromium runs WebGPU headless but cannot present it.
+const HEADLESS = new URLSearchParams(location.search).has("probe");
+const renderer = HEADLESS
+  ? await (await import("./wgprobe.js")).headlessRenderer({ antialias: false, stencil: true })
+  : new THREE.WebGPURenderer({ antialias: false, stencil: true });
+if (HEADLESS) {
+  const post = (t) => fetch("/log", { method: "POST", body: String(t).slice(0, 4000) }).catch(() => {});
+  addEventListener("error", (e) => post("ERR " + (e.message || e.error)));
+  addEventListener("unhandledrejection", (e) => post("ERR " + (e.reason?.message ?? e.reason)));
+  const ce = console.error.bind(console);
+  console.error = (...a) => { post("CONSOLE " + a.map(String).join(" ")); ce(...a); };
+}
+await renderer.init();
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+// the GPU's own time for the frame's draws -- where the adapter has timestamp queries at all. They must be
+// resolved every frame or three's query pool fills and the readings stop.
+const hasTimestamps = renderer.backend?.device?.features?.has?.("timestamp-query") === true;
+renderer.backend.trackTimestamp = hasTimestamps;
+{   // why the page died, if it does: a lost device, or the validation error that came before it
+  const dev = renderer.backend?.device;
+  const say = (msg) => { console.error(msg); hud.textContent = msg; };
+  dev?.lost?.then((info) => say(`WebGPU device lost (${info.reason || "unknown"}): ${info.message || "no message"}`));
+  if (dev && "onuncapturederror" in dev) dev.addEventListener("uncapturederror", (e) => say("WebGPU error: " + (e.error?.message ?? String(e.error)).slice(0, 300)));
+}
+const webgpu = !!renderer.backend?.isWebGPUBackend;
+if (!webgpu) hud.innerHTML = "<b>This browser has no WebGPU.</b>\nThe lab's shaders are WGSL, so nothing will draw." +
+  "\nChrome or Edge will run it; Firefox needs Nightly with dom.webgpu.enabled.";
+
+let last = performance.now(), frames = 0, cpuSum = 0, gpuSum = 0, gpuN = 0, tPrev = performance.now();
+let fps = 0, ms = 0, cpu = 0, gpu = 0;
+// UNCAPPED, without drowning. Re-entering on a zero timer submits frames faster than the device can drain
+// them: the queue grows, every input waits behind it, and the camera stops answering -- the loop looks stuck
+// while it is in fact running flat out. So an uncapped frame WAITS for the GPU to finish what it was given,
+// then yields once to the event loop (which is where the pointer and the keys are read) before going again.
+// That is still as fast as the machine allows -- it is what "as fast as the machine allows" actually means.
+let inFlight = false;
+function schedule() {
+  if (!uncapped) { requestAnimationFrame(tick); return; }
+  const done = renderer.backend?.device?.queue?.onSubmittedWorkDone?.();
+  if (done) done.then(() => setTimeout(tick, 0)); else setTimeout(tick, 0);
+}
+function tick() {
+  if (inFlight) return;
+  inFlight = true;
+  const t0 = performance.now();
+  const dt = Math.min((t0 - tPrev) / 1000, .1);
+  tPrev = t0;
+
+  move(dt);
+  placeBanners();
+  // the background moves ONE PIXEL a frame: the frame is genuinely redrawn, and a stall is visible
+  uScroll.value.x = (uScroll.value.x + 1 / BG) % 1;
+  uScroll.value.y = (uScroll.value.y + 1 / BG) % 1;
+  renderer.render(scene, camera);
+
+  cpuSum += performance.now() - t0;        // this frame's JavaScript: movement, placement, draw submission
+  if (hasTimestamps) {
+    renderer.resolveTimestampsAsync().catch(() => {});
+    const g = renderer.info.render.timestamp;
+    if (g > 0) { gpuSum += g; gpuN++; }
+  }
+  frames++;
+  inFlight = false;
+  schedule();
+  const now = performance.now();
+  if (now - last > 400) {
+    fps = frames * 1000 / (now - last);
+    ms = (now - last) / frames;
+    cpu = cpuSum / frames;
+    gpu = gpuN ? gpuSum / gpuN : 0;
+    frames = 0; cpuSum = 0; gpuSum = 0; gpuN = 0; last = now;
+    readout();
+  }
+}
+
+const px = () => renderer.domElement.width * renderer.domElement.height;
+function readout() {
+  const layers = standing.length + 1;
+  const name = SHAPES[shapeIndex].name;
+  const rest = ms - cpu;
+  hud.innerHTML =
+    `<b>${fps.toFixed(0)} fps</b>   ${ms.toFixed(2)} ms/frame` +
+    `\ncpu ${cpu.toFixed(2)} ms   gpu ${gpu > 0 ? gpu.toFixed(2) + " ms" : "(not reported)"}   rest ${rest.toFixed(2)} ms` +
+    `\n\nin hand <b>${name}</b>   ${shapeIndex + 1}/${SHAPES.length}   (M cycles, N fixes)` +
+    `\nshapes per banner <b>${blend}</b>   (K)   ${SHAPES[shapeIndex].march3 ? "smooth union" : SHAPES[shapeIndex].hit3 ? "nearest hit wins" : ""}` +
+    `${blend > 1 ? "   (the copies stand apart, so the quad is wider too)" : ""}` +
+    `\nN places <b>${batch}</b> at once   (B)` +
+    `\nstanding <b>${standing.length}</b> banners   (N leaves one, X clears, R rebuilds the config's scene)` +
+    // WHAT THE CPU IS ACTUALLY ASKED FOR. Banners of a kind ride in one instanced draw and the walls in
+    // another, so this number stays small however crowded the field gets -- which is the difference between
+    // measuring a shader and measuring three's object loop.
+    `\ndraws <b>${[...groups.values()].reduce((n, g) => n + (g.count ? 1 + (g.boundMesh.visible ? 1 : 0) : 0), 0) + (wallCount ? 1 : 0) + 1}</b>` +
+    `   objects ${scene.children.length}   (a mesh per banner would be ${standing.length * 2 + wallCount + 1})` +
+    `\n\nfull-screen layers ${layers}   buffer ${renderer.domElement.width}x${renderer.domElement.height}` +
+    `\nfragments ~${(layers * px() / 1e6).toFixed(1)}M/frame   ${(layers * px() / 1e6 / Math.max(ms, .001) * 1000).toFixed(0)} Mfrag/s` +
+    `\nsurface: <b>${SURFACE_NAME[surfaceMode]}</b>   (T)${surfaceMode ? "   one square in five is a hole: the pixel is thrown away" : ""}` +
+    `   quad outline ${edgeOn ? "on" : "off"} (L)` +
+    `\ndepth: <b>${pixelDepth ? "per pixel (no early-z)" : "the quad's plane (early-z lives)"}</b>   (Z)` +
+    `\nstencil bound pass: <b>${stencilCull ? "on" : "off"}</b>   (C)   walls ${wallCount}   (O drops one)` +
+    `\n${follow ? "quads follow the eye: every layer covers the view (F)" : "quads anchored: walk round the solids (F)"}` +
+    `\n${uncapped ? "uncapped loop" : "vsync (U for uncapped)"}   ${webgpu ? "WebGPU" : "WebGL (fallback!)"}`;
+}
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+const built = buildScene();
+console.log(`perf lab scene: ${built.placed}/${built.asked} solids, ${built.walls} walls, at most ${built.worst} overlapping from the start`);
+
+if (HEADLESS) {
+  // THE SELF-CHECK. Every catalogue entry is built, drawn alone, and asked what it covered -- so a shape whose
+  // WGSL will not compile, or draws nothing, is caught without a screen. Then the things that are easy to
+  // believe and hard to see: that a fitted quad is not clipping its solid at ANY angle, that a standing solid
+  // really is a solid, that the stencil bound pass changes no picture, and that each surface tier does work.
+  const { pixels } = await import("./wgprobe.js");
+  const post = (t) => fetch("/log", { method: "POST", body: String(t).slice(0, 4000) }).catch(() => {});
+  renderer.setSize(160, 160, false);
+  camera.aspect = 1;
+  camera.updateProjectionMatrix();
+  bgQuad.visible = false;            // the shapes alone, so "covered nothing" means the shape drew nothing
+  clearStanding(); clearWalls();     // ...and the configured scene out of the way: one shape at a time here
+  const SHOT = 64;
+  const shoot = async () => {
+    placeBanners();
+    return await pixels(renderer, scene, camera, { w: SHOT, h: SHOT, report: false });
+  };
+  const litOf = (a) => { let n = 0; for (let k = 0; k < a.length; k += 3) if (a[k] + a[k + 1] + a[k + 2] > 24) n++; return n; };
+  // TWO FRAMES, AND THE SECOND ONE COUNTS. three builds a pipeline when it first needs it, and the draw that
+  // asked for it can be dropped while it does -- so a single shot after anything new enters the scene
+  // (a material, a freshly filled instance buffer) can report a picture that was never meant to be.
+  const count = async () => { await shoot(); return litOf(await shoot()); };
+  // ...and which parts of the check to run: ?probe=1 is all of it, ?probe=corner just that section
+  const PROBE = new URLSearchParams(location.search).get("probe") || "1";
+  const want = (name) => PROBE === "1" || PROBE === name;
+  const look = (x, y, z) => {        // the eye somewhere on a sphere round the origin, facing the middle
+    camera.position.set(x, y, z);
+    camera.lookAt(0, 0, 0);
+    camera.updateMatrixWorld(true);
+  };
+  // the hairline is counted as shape and grows with the quad, so it stays off for the whole check
+  edgeOn = false; rebuildGroups();
+  shapeIndex = 0; makeLive();        // nothing in hand: the cursor would stand in front of everything
+
+  // A QUAD MUST NOT CLIP ITS SOLID -- AT ANY ANGLE. The quad is cut to the solid's declared radius; if that
+  // radius is short of the real thing, the shape is sliced off at the quad's edge, and which side gets sliced
+  // depends on how the solid is turned and where you stand. So each shape is checked from several viewpoints
+  // with several turns, and against the one thing that settles it: widening the quad by 60% must reveal NO
+  // more of the shape. (That is also why the widening is a uniform now -- it costs no rebuild.)
+  const TURNS = [[0, 0, 0], [.9, .5, .3], [1.9, 2.6, 1.1]].map(([x, y, z]) => new THREE.Quaternion().setFromEuler(new THREE.Euler(x, y, z)));
+  const EYES = [[0, 0, 14], [9, 4, 10], [2, 13, 5]];
+  for (let i = 0; want("shapes") && i < SHAPES.length; i++) {
+    if (SHAPES[i].none) continue;
+    for (const b of [1, 4]) {
+      clearStanding();
+      const rec = addBanner(i, b, new THREE.Vector3(0, 0, 0), new THREE.Color(.8, .8, .85), TURNS[0]);
+      standing.push(rec);
+      look(0, 0, 14);
+      const lit = await count();
+      let worstClip = 0, worstAt = "", ladder = "";
+      if (b === 1 && !SHAPES[i].flat && !SHAPES[i].tex) {
+        for (let t = 0; t < TURNS.length; t++) {
+          rec.baseQuat.copy(TURNS[t]); rec.quat.copy(TURNS[t]); writeRec(rec);
+          look(...EYES[t]);
+          const fitted = await count();
+          uSlack.value = 1.6;
+          const wide = await count();
+          uSlack.value = 1.04;
+          const more = 100 * (wide - fitted) / Math.max(fitted, 1);
+          if (more > worstClip) { worstClip = more; worstAt = ` (turn ${t}, eye ${EYES[t].join()})`; }
+          if (more >= worstClip) {   // how it grows at the worst angle: a pixel or two is an edge, a rising ladder is a cut
+            const row = [fitted, wide];
+            for (const w of [2.4]) { uSlack.value = w; row.push(await count()); }
+            uSlack.value = 1.04;
+            ladder = row.join("/");
+          }
+        }
+      }
+      post(`SHAPE ${String(i).padStart(2)} blend ${b}  ${(100 * lit / (SHOT * SHOT)).toFixed(1)}% covered  ${SHAPES[i].name}` +
+           (ladder ? `   worst clipping ${worstClip.toFixed(1)}% more with a 60% wider quad${worstAt}   [lit px 1.04/1.6/2.4 wide: ${ladder}]` : ""));
+    }
+  }
+  clearStanding();
+
+  // OFF-CENTRE, which is where the cut-off was. A quad faces the camera, but the solid is seen down the
+  // eye->centre line; at the edge of the screen those differ by 30-40 degrees, the tangent cone meets the
+  // quad's plane obliquely, and a quad cut to the head-on silhouette is too small -- the solid is sliced off.
+  // Each shape is put near the corner of the view and asked the same question: does a wider quad show more?
+  for (const name of want("corner") ? ["sphere", "rounded box", "capped cone", "hex prism"] : []) {
+    const i = SHAPES.findIndex((sh) => sh.name.startsWith(name));
+    clearStanding();
+    const rec = addBanner(i, 1, new THREE.Vector3(0, 0, 0), new THREE.Color(.8, .8, .85), TURNS[1]);
+    standing.push(rec);
+    camera.position.set(0, 0, 14);
+    camera.lookAt(-4.5, -2.5, 0);                  // the solid sits well off to one side, still fully in frame
+                                                   // (push it into the corner and the SCREEN crops it, which
+                                                   // hides the very clipping this is trying to catch)
+    camera.updateMatrixWorld(true);
+    await shoot(); await shoot();                  // the group is new: let its pipelines be built first
+    const fitted = await count();
+    uSlack.value = 1.9;
+    const wide = await count();
+    uSlack.value = 0.7;                            // ...and a deliberately too-small quad, to prove the fit
+    const narrow = await count();                  // is what decides the coverage at all
+    uSlack.value = 1.04;
+    uFaceEye.value = 0;                            // ...and the same fit on a screen-facing quad
+    const flatFit = await count();
+    uSlack.value = 1.9;
+    const flatWide = await count();
+    uSlack.value = 1.04;
+    uFaceEye.value = 1;
+    post(`CORNER ${name.padEnd(11)} fitted ${fitted} lit, 90% wider ${wide} (clipping if more), 30% narrower ${narrow}` +
+         `   |  on a screen-facing quad: ${flatFit} -> ${flatWide}`);
+  }
+  clearStanding();
+  edgeOn = true; rebuildGroups();   // (the hairline stays off through both checks: it is counted as shape, and
+                                    // how much of it lands on screen depends on how big the quad is)
+
+  // ...and the point of the whole thing: a STANDING solid must look different from different sides. Two views
+  // of the same anchored ellipsoid -- from its side, and from above -- have to disagree, or it is a picture.
+  if (want("sides")) {
+    const i = SHAPES.findIndex((sh) => sh.name.startsWith("ellipsoid"));
+    const rec = addBanner(i, 1, new THREE.Vector3(0, 0, 0));
+    standing.push(rec);
+    follow = false;
+    look(0, 0, 14);
+    const side = await shoot();
+    look(0, 14, 0.01);
+    const top = await shoot();
+    let same = 0;
+    for (let k = 0; k < side.length; k += 3) {
+      const l = side[k] + side[k + 1] + side[k + 2] > 24, r = top[k] + top[k + 1] + top[k + 2] > 24;
+      if (l === r) same++;
+    }
+    post(`SIDES  side view ${(100 * litOf(side) / (SHOT * SHOT)).toFixed(1)}% covered, top view ${(100 * litOf(top) / (SHOT * SHOT)).toFixed(1)}%` +
+         `, silhouettes agree on ${(100 * same / (SHOT * SHOT)).toFixed(1)}% of pixels (a picture would agree on 100%)`);
+    clearStanding();
+  }
+
+  // THE STENCIL BOUND PASS, checked two ways: it must not change the picture when nothing occludes the solid,
+  // and it must leave nothing of it when a wall does. (What it saves is time, which a software renderer cannot
+  // report honestly -- that reading belongs on a real GPU, with C.)
+  if (want("stencil")) {
+    const i = SHAPES.findIndex((sh) => sh.name.startsWith("sphere"));
+    const rec = addBanner(i, 1, new THREE.Vector3(0, 0, 0), new THREE.Color(1, 0, 0));   // a colour nothing else has
+    standing.push(rec);
+    look(0, 0, 14);
+    const red = async () => {
+      const a = await shoot();
+      let n = 0, grey = 0;   // the solid's own red, and separately the wall, so "hidden" can be told from "not drawn"
+      for (let k = 0; k < a.length; k += 3) {
+        if (a[k] > 90 && a[k + 1] < 70 && a[k + 2] < 70) n++;
+        else if (a[k] > 20 && a[k + 2] > a[k]) grey++;
+      }
+      return `${(100 * n / (SHOT * SHOT)).toFixed(1)}%r/${(100 * grey / (SHOT * SHOT)).toFixed(0)}%w`;
+    };
+    stencilCull = false; applyStencil();
+    const openOff = await red();
+    stencilCull = true; applyStencil();
+    const openOn = await red();
+    addWall(new THREE.Vector3(0, 0, 7), new THREE.Quaternion(), 34, 16);   // now put a wall in front of it
+    await shoot();                                 // ...and one warm-up frame: the first draw with a new
+                                                   // material or a freshly filled instance buffer can be
+                                                   // dropped while three builds its pipeline
+    const hiddenOn = await red();
+    const hiddenOn2 = await red();                 // ...twice: a first frame after the wall appears proves nothing
+    for (const g of groups.values()) g.boundMesh.visible = false;   // the test still on, but nothing writes the mask
+    const hiddenNoMask = await red();
+    for (const g of groups.values()) g.boundMesh.visible = g.count > 0;
+    stencilCull = false; applyStencil();
+    const hiddenOff = await red();
+    clearWalls();
+    stencilCull = true; applyStencil();
+    post(`STENCIL  open view: ${openOff} without the bound pass, ${openOn} with it (must match)` +
+         `  |  behind a wall: ${hiddenOff} without, ${hiddenOn} with, ${hiddenOn2} again, ${hiddenNoMask} with the mask never written` +
+         ` (all must be 0% red; %w says the wall itself is drawn)`);
+    clearStanding();
+  }
+
+  // the crowd: twenty at once must be twenty DIFFERENT places, at a spread of distances
+  if (want("crowd")) {
+    shapeIndex = SHAPES.findIndex((sh) => sh.name.startsWith("round cone"));
+    blend = 1;
+    look(0, 0, 0);
+    const crowd = placeMany(20);
+    let dMin = 1e9, dMax = 0, tooClose = 0;
+    for (const b of crowd) {
+      const d = camera.position.distanceTo(b.position);
+      dMin = Math.min(dMin, d); dMax = Math.max(dMax, d);
+      for (const o of crowd) if (o !== b && o.position.distanceTo(b.position) < .5) tooClose++;
+    }
+    post(`CROWD ${crowd.length} placed, ${dMin.toFixed(1)}m to ${dMax.toFixed(1)}m away, ${tooClose} sharing a spot`);
+    // AND WHAT THEY COST THE CPU: with the banners instanced, twenty of them are one draw and no per-object
+    // work at all, so the frame's JavaScript must not grow with the crowd. (The GPU time is the lab's subject;
+    // this line is about the other half, which used to be ten times larger.)
+    const drawsOf = () => { let n = 0; for (const g of groups.values()) if (g.count) n += 1 + (g.boundMesh.visible ? 1 : 0); return n; };
+    const cpuOf = async (reps) => { const t0 = performance.now(); for (let k = 0; k < reps; k++) placeBanners(); return (performance.now() - t0) / reps; };
+    const many = await cpuOf(200);
+    const drawsMany = drawsOf();
+    clearStanding();
+    const none = await cpuOf(200);
+    post(`CPU  placement costs ${many.toFixed(3)} ms/frame with ${crowd.length} banners and ${none.toFixed(3)} ms with none` +
+         `;  ${drawsMany} draw calls for the crowd (one per kind, plus its bound pass)`);
+  }
+
+  // every surface tier must compile AND change the picture: a texture that silently does nothing would look
+  // like a cheap texture in the timings, which is the one lie this lab must not tell
+  if (want("surface")) {
+    const i = SHAPES.findIndex((sh) => sh.name.startsWith("rounded box"));
+    let base = null;
+    for (let mode = 0; mode < 4; mode++) {
+      clearStanding();
+      surfaceMode = mode;
+      rebuildGroups();                       // the tier is baked into the WGSL
+      standing.push(addBanner(i, 1, new THREE.Vector3(0, 0, 0), new THREE.Color(.7, .55, .4), TURNS[1]));
+      look(0, 0, 14);
+      const a = await shoot();
+      let lit = 0, diff = 0;
+      for (let k = 0; k < a.length; k += 3) {
+        if (a[k] + a[k + 1] + a[k + 2] > 24) lit++;
+        if (base && Math.abs(a[k] - base[k]) + Math.abs(a[k + 1] - base[k + 1]) + Math.abs(a[k + 2] - base[k + 2]) > 12) diff++;
+      }
+      if (!base) base = a;
+      post(`SURFACE ${mode} ${SURFACE_NAME[mode]}: ${(100 * lit / (SHOT * SHOT)).toFixed(1)}% covered` +
+           (mode ? `, ${(100 * diff / (SHOT * SHOT)).toFixed(1)}% of pixels differ from plain` +
+                   ` (it covers LESS than plain because one square in five is a hole)` : ""));
+    }
+    surfaceMode = 0;
+    rebuildGroups();
+    clearStanding();
+  }
+
+  // the configured scene: it must place what the file asks for, and the bound on overlapping must HOLD --
+  // a scene whose depth complexity is unknown is a measurement of nothing
+  if (want("scene")) {
+    const sc = buildScene();
+    const eye = camera.position.clone();
+    const half = (b) => {
+      const r = kindRadius(b.shape, b.blend);
+      const d = Math.max(b.position.distanceTo(eye), r + .01);
+      return Math.asin(Math.min(.999, r / d));
+    };
+    let worst = 0, intersect = 0;
+    for (const b of standing) {
+      let n = 1;
+      const db = b.position.clone().sub(eye).normalize();
+      for (const o of standing) {
+        if (o === b) continue;
+        if (o.position.distanceTo(b.position) < (kindRadius(o.shape, o.blend) + kindRadius(b.shape, b.blend))) intersect++;
+        const ang = Math.acos(Math.min(1, db.dot(o.position.clone().sub(eye).normalize())));
+        if (ang < half(b) + half(o)) n++;
+      }
+      worst = Math.max(worst, n);
+    }
+    post(`SCENE ${sc.placed}/${sc.asked} solids, ${sc.walls} walls;  most overlapping along one direction: ${worst}` +
+         ` (config allows ${SCENE.overlapMax});  solids intersecting in space: ${intersect / 2}` +
+         `;  ${groups.size} kinds -> ${[...groups.values()].filter((g) => g.count).length * 2} draw calls`);
+    clearStanding();
+  }
+
+  // turning ON THE SPOT must not turn a standing solid: the silhouette may shift across the screen, but the
+  // face it shows you is the world's business, not the camera's
+  if (want("fixed")) {
+    clearWalls();                      // the configured scene's walls would otherwise fill the frame
+    const i = SHAPES.findIndex((sh) => sh.name.startsWith("hex prism"));
+    standing.push(addBanner(i, 1, new THREE.Vector3(0, 0, -12), null, TURNS[1]));
+    const shotYaw = async (yaw) => {
+      camera.position.set(0, 0, 0);
+      camera.quaternion.setFromEuler(new THREE.Euler(0, yaw, 0, "YXZ"));
+      camera.updateMatrixWorld(true);
+      return await shoot();
+    };
+    const centred = await shotYaw(0);
+    const turned = await shotYaw(0.26);        // ~15 degrees: the shape moves across the screen, keeps its face
+    post(`FIXED a standing solid seen straight on covers ${(100 * litOf(centred) / (SHOT * SHOT)).toFixed(1)}%,` +
+         ` and after turning 15 degrees on the spot ${(100 * litOf(turned) / (SHOT * SHOT)).toFixed(1)}%` +
+         ` (its silhouette moves; its area should barely change)`);
+  }
+  post("SHAPES DONE");
+} else {
+  tick();
+}
+</script>
+</body>
+</html>

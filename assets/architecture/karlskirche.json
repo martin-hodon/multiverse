@@ -1,0 +1,959 @@
+{
+  "name": "Karlskirche",
+  "_about": "THE KARLSKIRCHE, Vienna (1716-37), from components: the church round in plan (an `enclosure` of sixteen faces standing for its oval), a drum of eight windows and the tall dome with its lantern (`domed-tower`); before it a Corinthian PORTICO, six columns under a pediment, on its steps; either side of the portico a GIANT COLUMN after Trajan's, a relief band wound up its shaft, a lantern on its capital; and the front running out to a gate PAVILION at each end, arches through it, under a bell roof.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.6,
+    "steps": 2,
+    "stepOut": 0.5,
+    "margin": 3
+  },
+  "build": [
+    "church",
+    "roof ring",
+    "dome",
+    "portico steps",
+    "portico columns",
+    "portico side columns",
+    "pediment",
+    "west column pedestal",
+    "west column",
+    "west column band",
+    "west column capital",
+    "west column lantern",
+    "east column pedestal",
+    "east column",
+    "east column band",
+    "east column capital",
+    "east column lantern",
+    "west hall",
+    "west hall roof",
+    "west pavilion",
+    "west pavilion floor",
+    "west pavilion ceiling",
+    "west pavilion roof",
+    "east hall",
+    "east hall roof",
+    "east pavilion",
+    "east pavilion floor",
+    "east pavilion ceiling",
+    "east pavilion roof",
+    "statue pediment apex",
+    "statue pediment left",
+    "statue pediment right",
+    "pedestal old covenant",
+    "statue old covenant",
+    "pedestal new covenant",
+    "statue new covenant"
+  ],
+  "parts": {
+    "church": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 16,
+        "radius": 16.0
+      },
+      "thickness": 1.6,
+      "height": 26.0,
+      "tiers": [
+        {
+          "h": 13,
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.4,
+              "sill": 4.0,
+              "springing": 9.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.2,
+              "sill": 2.0,
+              "springing": 7.5,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.4
+              }
+            }
+          ]
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 13,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.0,
+                "sill": 0,
+                "springing": 8.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.2,
+                "sill": 2.0,
+                "springing": 7.5,
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.4
+                }
+              }
+            ]
+          }
+        ],
+        "2": [
+          {
+            "h": 13,
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.4,
+                "sill": 0,
+                "springing": 3.6,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.2,
+                "sill": 2.0,
+                "springing": 7.5,
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.4
+                }
+              }
+            ]
+          }
+        ],
+        "14": [
+          {
+            "h": 13,
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.4,
+                "sill": 0,
+                "springing": 3.6,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.2,
+                "sill": 2.0,
+                "springing": 7.5,
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.4
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the church, round (the real one is an oval): two tiers of windows, the door behind the portico, and doors into the side halls"
+    },
+    "roof ring": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 14.3687,
+      "rInner": 12.0,
+      "height": 0.6,
+      "y": 25.4,
+      "turn": 0.5,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the flat roof round the drum, from the church's walls in to it"
+    },
+    "dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 12.0,
+        "dt": 1.0,
+        "H": 9.0,
+        "n": 16,
+        "every": 2,
+        "winW": 2.0,
+        "winSill": 2.0,
+        "winH": 4.4,
+        "profile": "pointed",
+        "spread": 0.8,
+        "domeT": 1.0,
+        "lanternR": 2.2,
+        "lanternH": 5.0
+      },
+      "at": [
+        [
+          0,
+          26.0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the drum with eight windows, the dome -- taller than a hemisphere, a steep pointed section -- and its lantern"
+    },
+    "portico steps": {
+      "type": "crepidoma",
+      "width": 22.0,
+      "length": 10.0,
+      "steps": 4,
+      "stepH": 0.2,
+      "stepOut": 0.5,
+      "at": [
+        [
+          0,
+          0,
+          20.0,
+          0
+        ]
+      ],
+      "_about": "the portico's steps"
+    },
+    "portico columns": {
+      "type": "colonnade",
+      "order": "corinthian",
+      "count": 6,
+      "spacing": 4.0,
+      "columnR": 0.7,
+      "height": 13.0,
+      "taper": 0.86,
+      "entablature": {
+        "h": 2.2,
+        "depth": 1.8
+      },
+      "at": [
+        [
+          0,
+          0.8,
+          23.8,
+          0
+        ]
+      ],
+      "_about": "six Corinthian columns and their entablature: a Greek temple's front"
+    },
+    "portico side columns": {
+      "type": "colonnade",
+      "order": "corinthian",
+      "count": 2,
+      "spacing": 4.0,
+      "columnR": 0.7,
+      "height": 13.0,
+      "taper": 0.86,
+      "entablature": {
+        "h": 2.2,
+        "depth": 1.8
+      },
+      "at": [
+        [
+          -10.0,
+          0.8,
+          18.8,
+          1.5707963267948966
+        ],
+        [
+          10.0,
+          0.8,
+          18.8,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "pediment": {
+      "type": "roof",
+      "form": "gable",
+      "width": 22.0,
+      "length": 11.0,
+      "pitch": 20,
+      "overhang": 0.4,
+      "at": [
+        [
+          0,
+          16.0,
+          19.5,
+          0
+        ]
+      ],
+      "_about": "the pediment over it"
+    },
+    "west column pedestal": {
+      "type": "box",
+      "width": 6.0,
+      "length": 6.0,
+      "height": 6.0,
+      "at": [
+        [
+          -20.0,
+          0,
+          23.0,
+          0
+        ]
+      ],
+      "_about": "the two giant columns, each on its pedestal: a shaft wound with reliefs (a spiral band), a capital, a lantern with an eagle's cage of a cap"
+    },
+    "west column": {
+      "type": "column",
+      "radius": 2.0,
+      "height": 30.0,
+      "sides": 16,
+      "taper": 0.92,
+      "at": [
+        [
+          -20.0,
+          6.0,
+          23.0,
+          0
+        ]
+      ]
+    },
+    "west column band": {
+      "type": "box",
+      "width": 0.5,
+      "length": 0.9,
+      "height": 0.35,
+      "spiral": {
+        "count": 160,
+        "turns": 6,
+        "radius": 2.0,
+        "x": -20.0,
+        "z": 23.0,
+        "y": 7.0,
+        "dy": 0.17,
+        "dr": -0.001
+      },
+      "_about": "the relief band wound round the shaft"
+    },
+    "west column capital": {
+      "type": "box",
+      "width": 5.0,
+      "length": 5.0,
+      "height": 1.2,
+      "at": [
+        [
+          -20.0,
+          36.0,
+          23.0,
+          0
+        ]
+      ]
+    },
+    "west column lantern": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 1.7,
+        "H": 3.0,
+        "t": 0.3,
+        "drumR": 1.1,
+        "drumH": 0.8,
+        "cap": "bell",
+        "capR": 1.4,
+        "waist": 0.75,
+        "lift": 1.0,
+        "kok": 0.2,
+        "finial": 1.5,
+        "doorH": 1.0
+      },
+      "at": [
+        [
+          -20.0,
+          37.2,
+          23.0,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "cap",
+        "finial"
+      ]
+    },
+    "east column pedestal": {
+      "type": "box",
+      "width": 6.0,
+      "length": 6.0,
+      "height": 6.0,
+      "at": [
+        [
+          20.0,
+          0,
+          23.0,
+          0
+        ]
+      ]
+    },
+    "east column": {
+      "type": "column",
+      "radius": 2.0,
+      "height": 30.0,
+      "sides": 16,
+      "taper": 0.92,
+      "at": [
+        [
+          20.0,
+          6.0,
+          23.0,
+          0
+        ]
+      ]
+    },
+    "east column band": {
+      "type": "box",
+      "width": 0.5,
+      "length": 0.9,
+      "height": 0.35,
+      "spiral": {
+        "count": 160,
+        "turns": 6,
+        "radius": 2.0,
+        "x": 20.0,
+        "z": 23.0,
+        "y": 7.0,
+        "dy": 0.17,
+        "dr": -0.001
+      },
+      "_about": "the relief band wound round the shaft"
+    },
+    "east column capital": {
+      "type": "box",
+      "width": 5.0,
+      "length": 5.0,
+      "height": 1.2,
+      "at": [
+        [
+          20.0,
+          36.0,
+          23.0,
+          0
+        ]
+      ]
+    },
+    "east column lantern": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 1.7,
+        "H": 3.0,
+        "t": 0.3,
+        "drumR": 1.1,
+        "drumH": 0.8,
+        "cap": "bell",
+        "capR": 1.4,
+        "waist": 0.75,
+        "lift": 1.0,
+        "kok": 0.2,
+        "finial": 1.5,
+        "doorH": 1.0
+      },
+      "at": [
+        [
+          20.0,
+          37.2,
+          23.0,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "cap",
+        "finial"
+      ]
+    },
+    "west hall": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          23.5,
+          7.100000000000001
+        ]
+      },
+      "thickness": 0.9,
+      "height": 12.0,
+      "openings": {
+        "pattern": "4",
+        "width": 2.0,
+        "gap": 3.2,
+        "sill": 1.2,
+        "springing": 6.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "faces": {
+        "3": [
+          {
+            "at": 0,
+            "width": 4.2,
+            "sill": 0,
+            "springing": 6.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "1": []
+      },
+      "at": [
+        [
+          -21.75,
+          0,
+          14.05,
+          0
+        ]
+      ],
+      "_about": "the side wings: halls from the church to the gate pavilions, windows front and back, a door from the church at one end and an arch into the pavilion at the other"
+    },
+    "west hall roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": 7.100000000000001,
+      "length": 23.5,
+      "pitch": 24,
+      "overhang": 0.3,
+      "at": [
+        [
+          -21.75,
+          12.0,
+          14.05,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "west pavilion": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          9.0,
+          9.0
+        ]
+      },
+      "thickness": 1.4,
+      "height": 20.0,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 9.0,
+          "openings": [
+            {
+              "at": 0,
+              "width": 4.2,
+              "sill": 0,
+              "springing": 6.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.0,
+              "sill": 3.0,
+              "springing": 7.5,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -38.0,
+          0,
+          14.05,
+          0
+        ]
+      ],
+      "_about": "a gate pavilion at each end of the front, an arch through it every way, its belfry over"
+    },
+    "west pavilion floor": {
+      "flatRoof": true,
+      "type": "box",
+      "width": 6.2,
+      "length": 6.2,
+      "height": 0.4,
+      "at": [
+        [
+          -38.0,
+          8.6,
+          14.05,
+          0
+        ]
+      ],
+      "_about": "the belfry floor over the passage, and under the roof"
+    },
+    "west pavilion ceiling": {
+      "type": "box",
+      "width": 6.2,
+      "length": 6.2,
+      "height": 0.4,
+      "at": [
+        [
+          -38.0,
+          19.6,
+          14.05,
+          0
+        ]
+      ]
+    },
+    "west pavilion roof": {
+      "type": "dome",
+      "sides": 4,
+      "radius": 6.363899999999999,
+      "thickness": 0,
+      "head": {
+        "profile": "bell",
+        "waist": 0.7,
+        "lift": 0.6
+      },
+      "at": [
+        [
+          -38.0,
+          20.0,
+          14.05,
+          0
+        ]
+      ]
+    },
+    "east hall": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          23.5,
+          7.100000000000001
+        ]
+      },
+      "thickness": 0.9,
+      "height": 12.0,
+      "openings": {
+        "pattern": "4",
+        "width": 2.0,
+        "gap": 3.2,
+        "sill": 1.2,
+        "springing": 6.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "faces": {
+        "1": [
+          {
+            "at": 0,
+            "width": 4.2,
+            "sill": 0,
+            "springing": 6.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "3": []
+      },
+      "at": [
+        [
+          21.75,
+          0,
+          14.05,
+          0
+        ]
+      ]
+    },
+    "east hall roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": 7.100000000000001,
+      "length": 23.5,
+      "pitch": 24,
+      "overhang": 0.3,
+      "at": [
+        [
+          21.75,
+          12.0,
+          14.05,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "east pavilion": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          9.0,
+          9.0
+        ]
+      },
+      "thickness": 1.4,
+      "height": 20.0,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 9.0,
+          "openings": [
+            {
+              "at": 0,
+              "width": 4.2,
+              "sill": 0,
+              "springing": 6.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.0,
+              "sill": 3.0,
+              "springing": 7.5,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          38.0,
+          0,
+          14.05,
+          0
+        ]
+      ]
+    },
+    "east pavilion floor": {
+      "flatRoof": true,
+      "type": "box",
+      "width": 6.2,
+      "length": 6.2,
+      "height": 0.4,
+      "at": [
+        [
+          38.0,
+          8.6,
+          14.05,
+          0
+        ]
+      ]
+    },
+    "east pavilion ceiling": {
+      "type": "box",
+      "width": 6.2,
+      "length": 6.2,
+      "height": 0.4,
+      "at": [
+        [
+          38.0,
+          19.6,
+          14.05,
+          0
+        ]
+      ]
+    },
+    "east pavilion roof": {
+      "type": "dome",
+      "sides": 4,
+      "radius": 6.363899999999999,
+      "thickness": 0,
+      "head": {
+        "profile": "bell",
+        "waist": 0.7,
+        "lift": 0.6
+      },
+      "at": [
+        [
+          38.0,
+          20.0,
+          14.05,
+          0
+        ]
+      ]
+    },
+    "statue pediment apex": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0,
+          19.704,
+          24.8,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.7,
+        "seed": 3,
+        "face": -1.5707963
+      }
+    },
+    "statue pediment left": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -10.2,
+          16.0,
+          24.9,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.4,
+        "seed": 5,
+        "face": -1.5707963
+      }
+    },
+    "statue pediment right": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          10.2,
+          16.0,
+          24.9,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.4,
+        "seed": 7,
+        "face": -1.5707963
+      }
+    },
+    "pedestal old covenant": {
+      "type": "box",
+      "width": 1.6,
+      "length": 1.6,
+      "height": 2.2,
+      "at": [
+        [
+          -9.6,
+          0,
+          27.6,
+          0
+        ]
+      ],
+      "_about": "the pedestal of the angel of the old covenant"
+    },
+    "statue old covenant": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -9.6,
+          2.2,
+          27.6,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.5,
+        "seed": 11,
+        "face": -1.5707963,
+        "hold": {
+          "R": "items/tools/book"
+        }
+      }
+    },
+    "pedestal new covenant": {
+      "type": "box",
+      "width": 1.6,
+      "length": 1.6,
+      "height": 2.2,
+      "at": [
+        [
+          9.6,
+          0,
+          27.6,
+          0
+        ]
+      ],
+      "_about": "the pedestal of the angel of the new covenant"
+    },
+    "statue new covenant": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          9.6,
+          2.2,
+          27.6,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.5,
+        "seed": 13,
+        "face": -1.5707963,
+        "hold": {
+          "R": "items/tools/book"
+        }
+      }
+    }
+  }
+}

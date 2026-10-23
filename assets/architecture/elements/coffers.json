@@ -1,0 +1,119 @@
+{
+  "name": "Coffered ceiling and dome",
+  "_about": "COFFERS ARE CUT INTO A SURFACE: a grid of frames left at the surface and stepped pockets sunk behind them. On the left a hall's flat ceiling of eight by six coffers in two steps; on the right a dome on a drum with four rows of sixteen cut into its soffit (the dome's `coffers`), the plain soffit above them running on to the oculus. Look up from inside: F frames, W/A/S/D and Q/E fly in.",
+  "params": {
+    "detail": 8,
+    "W": 16,
+    "L": 12,
+    "H": 7,
+    "t": 0.6
+  },
+  "build": [
+    "walls long",
+    "walls end",
+    "ceiling",
+    "drum",
+    "dome"
+  ],
+  "parts": {
+    "walls long": {
+      "type": "box",
+      "width": "W + 2 * t",
+      "length": "t",
+      "height": "H",
+      "at": [
+        [
+          0,
+          0,
+          "L / 2 + t / 2",
+          0
+        ],
+        [
+          0,
+          0,
+          "0 - L / 2 - t / 2",
+          0
+        ]
+      ]
+    },
+    "walls end": {
+      "type": "box",
+      "width": "t",
+      "length": "L",
+      "height": "H",
+      "at": [
+        [
+          "W / 2 + t / 2",
+          0,
+          0,
+          0
+        ],
+        [
+          "0 - W / 2 - t / 2",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "ceiling": {
+      "type": "coffered-ceiling",
+      "width": "W + 2 * t",
+      "length": "L + 2 * t",
+      "thickness": 0.8,
+      "nx": 8,
+      "nz": 6,
+      "depth": 0.45,
+      "steps": 2,
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ]
+    },
+    "drum": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 7,
+      "rInner": 6,
+      "height": 5,
+      "solid": true,
+      "place": [
+        [
+          20,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "dome": {
+      "type": "dome",
+      "radius": 7,
+      "thickness": 1.0,
+      "oculus": 1.2,
+      "head": {
+        "profile": "semicircular"
+      },
+      "coffers": {
+        "count": 16,
+        "rows": 4,
+        "from": 0.04,
+        "to": 0.66,
+        "depth": 0.55,
+        "steps": 1
+      },
+      "at": [
+        [
+          20,
+          5,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

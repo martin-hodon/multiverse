@@ -1,0 +1,82 @@
+{
+ "kind": "item",
+ "name": "Water trough",
+ "category": "tableware",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "a stone water trough, open at the top (the water at its level: tableware.js)",
+ "params": {
+  "w": 2.2,
+  "h": 0.5,
+  "d": 0.7,
+  "t": 0.09,
+  "floor": 0.12
+ },
+ "materials": {
+  "stone": {
+   "pattern": "stone/ashlar",
+   "palette": "sandstone-grey"
+  }
+ },
+ "parts": [
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "stone",
+   "size": [
+    "w",
+    "floor",
+    "d"
+   ],
+   "at": [
+    0,
+    "floor / 2",
+    0
+   ]
+  },
+  {
+   "id": "long sides",
+   "type": "box",
+   "material": "stone",
+   "size": [
+    "w",
+    "h",
+    "t"
+   ],
+   "at": [
+    [
+     0,
+     "h / 2",
+     "(d - t) / 2"
+    ],
+    [
+     0,
+     "h / 2",
+     "0 - (d - t) / 2"
+    ]
+   ]
+  },
+  {
+   "id": "ends",
+   "type": "box",
+   "material": "stone",
+   "size": [
+    "t",
+    "h",
+    "d - 2 * t"
+   ],
+   "at": [
+    [
+     "(w - t) / 2",
+     "h / 2",
+     0
+    ],
+    [
+     "0 - (w - t) / 2",
+     "h / 2",
+     0
+    ]
+   ]
+  }
+ ]
+}

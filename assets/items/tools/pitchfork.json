@@ -1,0 +1,124 @@
+{
+ "kind": "item",
+ "name": "Pitchfork",
+ "category": "tool",
+ "era": "800-1900",
+ "_about": "a hay fork: two long curved iron tines on an ash shaft",
+ "params": {
+  "L": [
+   1.5,
+   1.7
+  ]
+ },
+ "materials": {
+  "wood": "ash",
+  "tines": "iron"
+ },
+ "parts": [
+  {
+   "id": "shaft",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "L",
+    0
+   ],
+   "r": 0.016,
+   "sides": 7
+  },
+  {
+   "id": "ferrule",
+   "type": "lathe",
+   "material": "tines",
+   "profile": [
+    [
+     0.019,
+     "L - 0.05"
+    ],
+    [
+     0.019,
+     "L + 0.01"
+    ],
+    [
+     0.012,
+     "L + 0.03"
+    ]
+   ],
+   "sides": 7
+  },
+  {
+   "id": "tines",
+   "type": "sweep",
+   "material": "tines",
+   "radii": [
+    0.008,
+    0.007,
+    0.004,
+    0.0015
+   ],
+   "path": [
+    [
+     0,
+     "L + 0.02",
+     0
+    ],
+    [
+     0,
+     "L + 0.06",
+     0.05
+    ],
+    [
+     0.015,
+     "L + 0.2",
+     0.06
+    ],
+    [
+     0.04,
+     "L + 0.35",
+     0.055
+    ]
+   ],
+   "mirror": "x"
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.1,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "grip2": [
+   0,
+   "L * 0.45",
+   0
+  ]
+ }
+}

@@ -1,0 +1,222 @@
+{
+  "name": "Riwaq",
+  "_about": "A RIWAQ: the arcaded portico round a mosque's courtyard -- a pointed arcade under a row of small domes on every side (`domed-arcade`), the corner bays in the rows along x, the gates in the middle of the back walls. Centred on the court; its arcades' pier axes are nx * B by nz * B, and the portico reaches B - p / 2 beyond them to the back walls' inside (p more to their outside). A side is left out with its flag (sF sB sL sR); a row standing against a hall has no back wall of its own (bF bB bL bR).",
+  "params": {
+    "detail": 4,
+    "nx": 7,
+    "nz": 7,
+    "B": 7.0,
+    "p": 1.3,
+    "_nx": "the court: nx by nz bays between the arcades' pier axes (odd, for a gate in the middle of each back wall); B the bays, p the piers and walls",
+    "hx": "nx * B / 2",
+    "hz": "nz * B / 2",
+    "sF": 1,
+    "sB": 1,
+    "sL": 1,
+    "sR": 1,
+    "_sF": "which sides have a row (1) -- front -z, back +z, left -x, right +x",
+    "bF": 1,
+    "bB": 1,
+    "bL": 1,
+    "bR": 1,
+    "_bF": "which rows have a back wall of their own (0: they stand against a building -- a mosque's hall)",
+    "SP": 4.2,
+    "ow": 3.8,
+    "os": 4.0,
+    "cw": 3.2,
+    "cs": 3.6,
+    "wW": 1.4,
+    "wSill": 1.2,
+    "wSpr": 3.2,
+    "gW": 3.6,
+    "gS": 4.0,
+    "dk": 0.4,
+    "dh": 0.8,
+    "dt": 0.3,
+    "cn": 12
+  },
+  "build": [
+    "front",
+    "back",
+    "left",
+    "right"
+  ],
+  "parts": {
+    "front": {
+      "type": "component",
+      "use": "components/domed-arcade",
+      "params": {
+        "B": "B",
+        "p": "p",
+        "SP": "SP",
+        "ow": "ow",
+        "os": "os",
+        "cw": "cw",
+        "cs": "cs",
+        "wW": "wW",
+        "wSill": "wSill",
+        "wSpr": "wSpr",
+        "gW": "gW",
+        "gS": "gS",
+        "dk": "dk",
+        "dh": "dh",
+        "dt": "dt",
+        "cn": "cn",
+        "n": "nx + 2",
+        "arcL": "(nx + 2) * B + p",
+        "ends": 1,
+        "back": "bF"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "0 - hz",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "sF",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "the row along -z, its corner bays at both ends"
+    },
+    "back": {
+      "type": "component",
+      "use": "components/domed-arcade",
+      "params": {
+        "B": "B",
+        "p": "p",
+        "SP": "SP",
+        "ow": "ow",
+        "os": "os",
+        "cw": "cw",
+        "cs": "cs",
+        "wW": "wW",
+        "wSill": "wSill",
+        "wSpr": "wSpr",
+        "gW": "gW",
+        "gS": "gS",
+        "dk": "dk",
+        "dh": "dh",
+        "dt": "dt",
+        "cn": "cn",
+        "n": "nx + 2",
+        "arcL": "(nx + 2) * B + p",
+        "ends": 1,
+        "back": "bB"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "hz",
+          3.141592653589793
+        ]
+      ],
+      "repeat": {
+        "count": "sB",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "the row along +z, its corner bays at both ends"
+    },
+    "left": {
+      "type": "component",
+      "use": "components/domed-arcade",
+      "params": {
+        "B": "B",
+        "p": "p",
+        "SP": "SP",
+        "ow": "ow",
+        "os": "os",
+        "cw": "cw",
+        "cs": "cs",
+        "wW": "wW",
+        "wSill": "wSill",
+        "wSpr": "wSpr",
+        "gW": "gW",
+        "gS": "gS",
+        "dk": "dk",
+        "dh": "dh",
+        "dt": "dt",
+        "cn": "cn",
+        "n": "nz",
+        "arcL": "nz * B - p",
+        "ends": 0,
+        "back": "bL"
+      },
+      "at": [
+        [
+          "0 - hx",
+          0,
+          0,
+          1.5707963267948966
+        ]
+      ],
+      "repeat": {
+        "count": "sL",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "the row along -x, between the corner bays"
+    },
+    "right": {
+      "type": "component",
+      "use": "components/domed-arcade",
+      "params": {
+        "B": "B",
+        "p": "p",
+        "SP": "SP",
+        "ow": "ow",
+        "os": "os",
+        "cw": "cw",
+        "cs": "cs",
+        "wW": "wW",
+        "wSill": "wSill",
+        "wSpr": "wSpr",
+        "gW": "gW",
+        "gS": "gS",
+        "dk": "dk",
+        "dh": "dh",
+        "dt": "dt",
+        "cn": "cn",
+        "n": "nz",
+        "arcL": "nz * B - p",
+        "ends": 0,
+        "back": "bR"
+      },
+      "at": [
+        [
+          "hx",
+          0,
+          0,
+          -1.5707963267948966
+        ]
+      ],
+      "repeat": {
+        "count": "sR",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "the row along +x, between the corner bays"
+    }
+  }
+}

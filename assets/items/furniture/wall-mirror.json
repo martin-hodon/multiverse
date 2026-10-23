@@ -1,0 +1,117 @@
+{
+ "kind": "item",
+ "name": "Pier glass",
+ "category": "furniture/other",
+ "era": "1680-1800",
+ "region": "France & England",
+ "_about": "a tall looking glass for the wall between the windows: a carved and gilded frame round its silvered glass, a cresting at its head",
+ "params": {
+  "w": [
+   0.7,
+   0.9
+  ],
+  "h": [
+   1.4,
+   1.8
+  ],
+  "y0": 0.9
+ },
+ "materials": {
+  "frame": {
+   "pick": [
+    "gilt",
+    "walnut",
+    "ebony"
+   ]
+  },
+  "glass": "silver"
+ },
+ "parts": [
+  {
+   "id": "glass",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    "w - 0.1",
+    "h - 0.1",
+    0.01
+   ],
+   "at": [
+    0,
+    "y0 + h / 2",
+    0.005
+   ]
+  },
+  {
+   "id": "frame",
+   "type": "sweep",
+   "material": "frame",
+   "section": [
+    0.06,
+    0.04
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": true,
+   "seg": 1,
+   "path": [
+    [
+     "0 - w / 2",
+     "y0",
+     0.02
+    ],
+    [
+     "w / 2",
+     "y0",
+     0.02
+    ],
+    [
+     "w / 2",
+     "y0 + h",
+     0.02
+    ],
+    [
+     "0 - w / 2",
+     "y0 + h",
+     0.02
+    ]
+   ]
+  },
+  {
+   "id": "cresting",
+   "type": "plate",
+   "material": "frame",
+   "thick": 0.03,
+   "at": [
+    0,
+    "y0 + h",
+    0.02
+   ],
+   "outline": [
+    [
+     "0 - w * 0.35",
+     0
+    ],
+    [
+     "w * 0.35",
+     0
+    ],
+    [
+     "w * 0.2",
+     0.1
+    ],
+    [
+     0,
+     0.2
+    ],
+    [
+     "0 - w * 0.2",
+     0.1
+    ]
+   ]
+  }
+ ]
+}

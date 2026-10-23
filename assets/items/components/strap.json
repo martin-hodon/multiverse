@@ -1,0 +1,82 @@
+{
+ "kind": "item",
+ "name": "Iron strap",
+ "category": "component",
+ "_about": "a strap of wrought iron -- a chest's band, a door's hinge -- `L` long along x on a face looking +z, riveted, its end split in a fleur",
+ "params": {
+  "L": 0.5,
+  "w": 0.03
+ },
+ "materials": {
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "strap",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    "L",
+    "w",
+    0.004
+   ],
+   "at": [
+    0,
+    0,
+    0.002
+   ]
+  },
+  {
+   "id": "rivets",
+   "type": "sphere",
+   "material": "metal",
+   "r": 0.004,
+   "along": {
+    "n": "max(2, round(L / 0.1))",
+    "from": [
+     "0 - L / 2 + 0.03",
+     0,
+     0.005
+    ],
+    "to": [
+     "L / 2 - 0.03",
+     0,
+     0.005
+    ]
+   }
+  },
+  {
+   "id": "fleur",
+   "type": "plate",
+   "material": "metal",
+   "thick": 0.004,
+   "at": [
+    "L / 2",
+    0,
+    0.002
+   ],
+   "outline": [
+    [
+     0,
+     "w * 0.5"
+    ],
+    [
+     "w * 0.8",
+     "w * 0.9"
+    ],
+    [
+     "w * 1.3",
+     0
+    ],
+    [
+     "w * 0.8",
+     "0 - w * 0.9"
+    ],
+    [
+     0,
+     "0 - w * 0.5"
+    ]
+   ]
+  }
+ ]
+}

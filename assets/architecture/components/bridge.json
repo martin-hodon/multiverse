@@ -1,0 +1,67 @@
+{
+  "name": "Bridge",
+  "_about": "A STONE BRIDGE of arches: its body is a wall as thick as the bridge is wide, its ARCHES openings through that thickness (the water runs through them, across the bridge), its top the deck, with a parapet along both edges. Laid along +z from its placement, the deck at the placement's height and the body going `depth` down into the moat or river. `n` arches on piers `pier` wide.",
+  "params": {
+    "detail": 4,
+    "L": 18,
+    "W": 8,
+    "depth": 5,
+    "n": 3,
+    "pier": 1.8,
+    "parapet": 1.0
+  },
+  "build": [
+    "body",
+    "parapets"
+  ],
+  "parts": {
+    "body": {
+      "type": "wall",
+      "width": "L",
+      "height": "depth",
+      "thickness": "W",
+      "center": false,
+      "openings": {
+        "pattern": "n",
+        "width": "(L - (n + 1) * pier) / n",
+        "gap": "pier",
+        "pier": "pier",
+        "end": "pier",
+        "sill": 0,
+        "springing": "depth * 0.3",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "at": [
+        [
+          "0 - W / 2",
+          "0 - depth",
+          0,
+          -1.5707963
+        ]
+      ],
+      "_about": "the arches and the masonry over them, deck on top"
+    },
+    "parapets": {
+      "type": "box",
+      "width": 0.45,
+      "length": "L",
+      "height": "parapet",
+      "at": [
+        [
+          "W / 2 - 0.225",
+          0,
+          "L / 2",
+          0
+        ],
+        [
+          "0 - W / 2 + 0.225",
+          0,
+          "L / 2",
+          0
+        ]
+      ]
+    }
+  }
+}

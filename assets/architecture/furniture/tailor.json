@@ -1,0 +1,318 @@
+{
+ "name": "Tailor",
+ "_about": "the cutting table with a length of cloth laid out and the shears on it, bolts of cloth in their colours on the shelves behind, a garment on its form, the stool",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "table": {
+   "type": "item",
+   "item": "items/furniture/trestle-table",
+   "at": [
+    [
+     0,
+     0,
+     -0.2,
+     0
+    ]
+   ],
+   "params": {
+    "L": 1.8,
+    "d": 0.9,
+    "h": 0.85
+   },
+   "markers": false
+  },
+  "laid cloth": {
+   "type": "box",
+   "width": 1.2,
+   "length": 0.7,
+   "height": 0.01,
+   "at": [
+    [
+     -0.1,
+     0.85,
+     -0.2,
+     0.08
+    ]
+   ]
+  },
+  "shears iron": {
+   "type": "box",
+   "width": 0.03,
+   "length": 0.22,
+   "height": 0.012,
+   "at": [
+    [
+     0.55,
+     0.86,
+     -0.15,
+     0.4
+    ],
+    [
+     0.57,
+     0.86,
+     -0.15,
+     -0.3
+    ]
+   ]
+  },
+  "shelf": {
+   "type": "box",
+   "width": 2.0,
+   "length": 0.45,
+   "height": 0.04,
+   "at": [
+    [
+     0,
+     0.8,
+     -1.55,
+     0
+    ],
+    [
+     0,
+     1.45,
+     -1.55,
+     0
+    ]
+   ]
+  },
+  "shelf posts": {
+   "type": "box",
+   "width": 0.05,
+   "length": 0.45,
+   "height": 1.9,
+   "at": [
+    [
+     -0.98,
+     0,
+     -1.55,
+     0
+    ],
+    [
+     0.98,
+     0,
+     -1.55,
+     0
+    ]
+   ]
+  },
+  "bolts madder": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 0.6,
+   "sides": 8,
+   "at": [
+    [
+     -0.75,
+     0.84,
+     -1.55,
+     0
+    ],
+    [
+     0.15,
+     1.49,
+     -1.55,
+     0
+    ]
+   ]
+  },
+  "bolts woad": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 0.6,
+   "sides": 8,
+   "at": [
+    [
+     -0.45,
+     0.84,
+     -1.55,
+     0
+    ],
+    [
+     0.45,
+     1.49,
+     -1.55,
+     0
+    ]
+   ]
+  },
+  "bolts weld": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 0.6,
+   "sides": 8,
+   "at": [
+    [
+     -0.15,
+     0.84,
+     -1.55,
+     0
+    ],
+    [
+     -0.75,
+     1.49,
+     -1.55,
+     0
+    ]
+   ]
+  },
+  "bolts linen": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 0.6,
+   "sides": 8,
+   "at": [
+    [
+     0.15,
+     0.84,
+     -1.55,
+     0
+    ],
+    [
+     0.75,
+     1.49,
+     -1.55,
+     0
+    ]
+   ]
+  },
+  "bolts russet": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 0.6,
+   "sides": 8,
+   "at": [
+    [
+     0.45,
+     0.84,
+     -1.55,
+     0
+    ],
+    [
+     0.75,
+     0.84,
+     -1.55,
+     0
+    ],
+    [
+     -0.45,
+     1.49,
+     -1.55,
+     0
+    ]
+   ]
+  },
+  "form stand": {
+   "type": "column",
+   "radius": 0.03,
+   "height": 1.0,
+   "sides": 6,
+   "at": [
+    [
+     1.35,
+     0,
+     0.6,
+     0
+    ]
+   ]
+  },
+  "form foot": {
+   "type": "column",
+   "radius": 0.22,
+   "height": 0.05,
+   "sides": 8,
+   "at": [
+    [
+     1.35,
+     0,
+     0.6,
+     0
+    ]
+   ]
+  },
+  "garment madder": {
+   "type": "column",
+   "radius": 0.2,
+   "height": 0.62,
+   "sides": 10,
+   "at": [
+    [
+     1.35,
+     0.95,
+     0.6,
+     0
+    ]
+   ],
+   "taper": 1.25
+  },
+  "stool": {
+   "type": "item",
+   "item": "items/furniture/stool",
+   "at": [
+    [
+     0.9,
+     0,
+     0.6,
+     0
+    ]
+   ],
+   "params": {
+    "h": 0.5
+   },
+   "markers": false
+  },
+  "worker": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     0,
+     0,
+     0.9,
+     0
+    ]
+   ],
+   "data": {
+    "work": 1,
+    "gesture": "sew",
+    "face": 1.5707963,
+    "pose": "stand"
+   }
+  },
+  "customer": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     1.2,
+     0,
+     1.4,
+     0
+    ]
+   ],
+   "data": {
+    "face": 1.5707963,
+    "pose": "stand"
+   }
+  }
+ },
+ "build": [
+  "table",
+  "laid cloth",
+  "shears iron",
+  "shelf",
+  "shelf posts",
+  "bolts madder",
+  "bolts woad",
+  "bolts weld",
+  "bolts linen",
+  "bolts russet",
+  "form stand",
+  "form foot",
+  "garment madder",
+  "stool",
+  "worker",
+  "customer"
+ ]
+}

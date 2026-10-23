@@ -1,0 +1,19 @@
+{
+  "name": "Frauenkirche, Dresden",
+  "building": "architecture/frauenkirche",
+  "_about": "The Frauenkirche: sandstone blocks, the stone bell of a dome too, the roofs in copper; inside, the galleries and walls painted in pale faux marble, the floor in sandstone flags.",
+  "stone": {
+    "color": "#d9c9a6",
+    "accent": "#b9a680",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["dome", "corner towers", "lantern"], "surface": "roof", "pattern": "stone/ashlar", "palette": "sandstone"},
+    {"parts": ["roof", "choir roof"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
+    {"parts": "dome", "side": "in", "pattern": "stone/plaster", "palette": "baroque"},
+    {"surface": "floor", "side": "in", "pattern": "floors/flagstones", "palette": "sandstone"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone-grey"},
+    {"surface": "wall", "side": "in", "pattern": "painted/faux marble", "palette": "baroque"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "sandstone"}
+  ]
+}

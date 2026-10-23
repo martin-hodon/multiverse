@@ -1,0 +1,379 @@
+{
+ "kind": "item",
+ "name": "Greylag goose",
+ "category": "birds",
+ "era": "everywhere",
+ "region": "everywhere",
+ "_about": "a goose: grey-brown, a long neck held high, the orange beak and pink legs",
+ "params": {
+  "s": [
+   0.92,
+   1.08
+  ],
+  "pose": {
+   "pick": [
+    "spread",
+    "folded"
+   ]
+  }
+ },
+ "materials": {
+  "back": "plumage-brown-grey",
+  "breast": "plumage-grey",
+  "head": "plumage-brown-grey",
+  "wing": "plumage-brown-grey",
+  "primaries": "wing-dark",
+  "tips": "wing-dark",
+  "tail": "plumage-white",
+  "beak": "beak-orange",
+  "legs": "leg-pink",
+  "eye": "#1a1208"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "sweep",
+   "material": "back",
+   "sides": 9,
+   "seg": 1,
+   "radii": [
+    "s * 0.0250",
+    "s * 0.1000",
+    "s * 0.1100",
+    "s * 0.0700",
+    "s * 0.0245"
+   ],
+   "path": [
+    [
+     "s * 0.2500",
+     "s * 0.2490",
+     0
+    ],
+    [
+     "s * 0.1250",
+     "s * 0.2490",
+     0
+    ],
+    [
+     0,
+     "s * 0.2435",
+     0
+    ],
+    [
+     "s * -0.1500",
+     "s * 0.2545",
+     0
+    ],
+    [
+     "s * -0.2500",
+     "s * 0.2655",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "breast",
+   "type": "sphere",
+   "material": "breast",
+   "r": "s * 0.0800",
+   "sides": 8,
+   "at": [
+    "s * 0.1000",
+    "s * 0.2292",
+    0
+   ],
+   "stretch": [
+    1.7,
+    1.02,
+    1.1
+   ]
+  },
+  {
+   "id": "neck",
+   "type": "sweep",
+   "material": "head",
+   "sides": 7,
+   "seg": 2,
+   "radii": [
+    "s * 0.0480",
+    "s * 0.0400",
+    "s * 0.0360"
+   ],
+   "path": [
+    [
+     "s * 0.2000",
+     "s * 0.2490",
+     0
+    ],
+    [
+     "s * 0.2914",
+     "s * 0.3420",
+     0
+    ],
+    [
+     "s * 0.3177",
+     "s * 0.4557",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.0500",
+   "sides": 8,
+   "at": [
+    "s * 0.3177",
+    "s * 0.4557",
+    0
+   ]
+  },
+  {
+   "id": "eye",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.3402",
+    "s * 0.4682",
+    "s * 0.0400"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "beak",
+   "type": "rod",
+   "material": "beak",
+   "sides": 6,
+   "r0": "s * 0.0180",
+   "r1": "s * 0.0063",
+   "at": [
+    "s * 0.3552",
+    "s * 0.4532",
+    0
+   ],
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0600",
+    "s * -0.0060",
+    0
+   ],
+   "stretch": [
+    1,
+    0.45,
+    1.6
+   ]
+  },
+  {
+   "id": "thigh",
+   "type": "rod",
+   "material": "legs",
+   "sides": 4,
+   "r": "s * 0.0104",
+   "from": [
+    "s * -0.0250",
+    "s * 0.1500",
+    "s * 0.0385"
+   ],
+   "to": [
+    "s * 0.0100",
+    "s * 0.0900",
+    "s * 0.0440"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tarsus",
+   "type": "rod",
+   "material": "legs",
+   "sides": 4,
+   "r": "s * 0.0080",
+   "from": [
+    "s * 0.0100",
+    "s * 0.0900",
+    "s * 0.0440"
+   ],
+   "to": [
+    "s * 0.0200",
+    0,
+    "s * 0.0440"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "toes",
+   "type": "rod",
+   "material": "legs",
+   "sides": 3,
+   "r0": "s * 0.0064",
+   "r1": "s * 0.0024",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0405",
+    0,
+    0
+   ],
+   "at": [
+    "s * 0.0200",
+    0,
+    "s * 0.0440"
+   ],
+   "around": {
+    "n": 3,
+    "r": 0,
+    "plane": "xz",
+    "start": -35,
+    "span": 70
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "hind toe",
+   "type": "rod",
+   "material": "legs",
+   "sides": 3,
+   "r0": "s * 0.0056",
+   "r1": "s * 0.0024",
+   "from": [
+    "s * 0.0200",
+    0,
+    "s * 0.0440"
+   ],
+   "to": [
+    "s * -0.0025",
+    0,
+    "s * 0.0440"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tail",
+   "type": "feathers",
+   "material": "tail",
+   "tips": "tips",
+   "n": 10,
+   "shape": "rounded",
+   "band": 0,
+   "lift": 0.0008,
+   "roots": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "dir": [
+    "-18.0",
+    "18.0"
+   ],
+   "length": [
+    "s * 0.1000",
+    "s * 0.1000"
+   ],
+   "width": [
+    "s * 0.0240",
+    "s * 0.0240"
+   ],
+   "droop": 0.2,
+   "lead": 1,
+   "at": [
+    "s * -0.2250",
+    "s * 0.2600",
+    0,
+    -90,
+    -5,
+    0
+   ]
+  },
+  {
+   "id": "wing spread",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "spread"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 0.7500",
+    "chord": "s * 0.2400",
+    "pri": 11,
+    "sec": 14,
+    "spread": 1,
+    "sweep": -10,
+    "band": 0
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0750",
+    "s * 0.3040",
+    "s * 0.0880",
+    0,
+    -8,
+    0
+   ]
+  },
+  {
+   "id": "wing folded",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "folded"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 0.7500",
+    "chord": "s * 0.2400",
+    "pri": 11,
+    "sec": 14,
+    "spread": 0,
+    "sweep": -10,
+    "band": 0
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0750",
+    "s * 0.3370",
+    "s * 0.0550",
+    0,
+    70,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.2380",
+   0
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   1,
+   0
+  ]
+ }
+}

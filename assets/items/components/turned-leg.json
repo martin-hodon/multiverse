@@ -1,0 +1,193 @@
+{
+ "kind": "item",
+ "name": "Turned leg",
+ "category": "component",
+ "_about": "a leg turned on a lathe, standing from 0 to h: plain (tapering), a baluster (the vase of the 17th century), bobbin (a string of beads), a column (a Doric shaft), with a square block at its top where the rails are jointed in (block)",
+ "params": {
+  "h": 0.45,
+  "r": 0.022,
+  "style": "baluster",
+  "block": 0.12
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "plain",
+   "type": "lathe",
+   "when": {
+    "style": "plain"
+   },
+   "material": "wood",
+   "profile": [
+    [
+     "r * 0.7",
+     0
+    ],
+    [
+     "r",
+     "h"
+    ]
+   ]
+  },
+  {
+   "id": "baluster",
+   "type": "lathe",
+   "when": {
+    "style": "baluster"
+   },
+   "material": "wood",
+   "profile": [
+    [
+     "r * 0.6",
+     0
+    ],
+    [
+     "r * 0.75",
+     "h * 0.03"
+    ],
+    [
+     "r * 0.55",
+     "h * 0.08"
+    ],
+    [
+     "r * 0.95",
+     "h * 0.3"
+    ],
+    [
+     "r * 0.9",
+     "h * 0.42"
+    ],
+    [
+     "r * 0.5",
+     "h * 0.6"
+    ],
+    [
+     "r * 0.75",
+     "h * 0.66"
+    ],
+    [
+     "r * 0.55",
+     "h * 0.72"
+    ],
+    [
+     "r * 0.7",
+     "h * (1 - block)"
+    ]
+   ]
+  },
+  {
+   "id": "bobbin",
+   "type": "lathe",
+   "when": {
+    "style": "bobbin"
+   },
+   "material": "wood",
+   "profile": [
+    [
+     "r * 0.6",
+     0
+    ],
+    [
+     "r * 0.9",
+     "h * 0.06"
+    ],
+    [
+     "r * 0.55",
+     "h * 0.13"
+    ],
+    [
+     "r * 0.9",
+     "h * 0.2"
+    ],
+    [
+     "r * 0.55",
+     "h * 0.27"
+    ],
+    [
+     "r * 0.9",
+     "h * 0.34"
+    ],
+    [
+     "r * 0.55",
+     "h * 0.41"
+    ],
+    [
+     "r * 0.9",
+     "h * 0.48"
+    ],
+    [
+     "r * 0.55",
+     "h * 0.55"
+    ],
+    [
+     "r * 0.9",
+     "h * 0.62"
+    ],
+    [
+     "r * 0.55",
+     "h * 0.7"
+    ],
+    [
+     "r * 0.9",
+     "h * 0.77"
+    ],
+    [
+     "r * 0.6",
+     "h * (1 - block)"
+    ]
+   ]
+  },
+  {
+   "id": "column",
+   "type": "lathe",
+   "when": {
+    "style": "column"
+   },
+   "material": "wood",
+   "profile": [
+    [
+     "r",
+     0
+    ],
+    [
+     "r",
+     "h * 0.05"
+    ],
+    [
+     "r * 0.8",
+     "h * 0.08"
+    ],
+    [
+     "r * 0.7",
+     "h * (0.9 - block)"
+    ],
+    [
+     "r * 0.9",
+     "h * (0.93 - block)"
+    ],
+    [
+     "r * 0.9",
+     "h * (1 - block)"
+    ]
+   ]
+  },
+  {
+   "id": "block",
+   "type": "box",
+   "when": "block",
+   "material": "wood",
+   "size": [
+    "r * 2",
+    "h * block",
+    "r * 2"
+   ],
+   "at": [
+    0,
+    "h * (1 - block / 2)",
+    0
+   ]
+  }
+ ]
+}

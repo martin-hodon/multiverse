@@ -1,0 +1,1797 @@
+{
+  "name": "Mainz Cathedral",
+  "_about": "MAINZ CATHEDRAL (Mainzer Dom St. Martin, 975-1239), Romanesque, in red sandstone: a DOUBLE-CHOIR basilica. The nave is the `basilica` definition -- ten round arches a side, clerestory, aisle walls, rib-vaulted aisles -- under rib vaults of its own over double bays (the bound system); the EAST choir, a square bay under the octagonal crossing tower with its gables and tent roof, its apse with a dwarf gallery under a half cone, and the two ROUND STAIR TOWERS (`round-stair-tower`) in the angles, each a spiral from the choir to the terrace round the octagon's foot and an open belvedere under a stone cone; the WEST transept with a portal and a round window in each end, the crossing under the tall stepped octagon -- Romanesque stage and its gables, Gothic belfry, Neumann's baroque stages, bell cap, lantern and spire, 83m -- and the TREFOIL west choir, a square bay with an apse on each of its three free sides.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.6,
+    "steps": 3,
+    "stepOut": 0.5,
+    "margin": 3
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "nave",
+    "nave vault",
+    "nave ribs",
+    "nave roof",
+    "aisle roofs",
+    "east choir",
+    "east choir vault",
+    "east terrace",
+    "east terrace parapets",
+    "east terrace flank parapets",
+    "east tower",
+    "east tower head",
+    "east tower gables",
+    "east tower roof",
+    "east tower finial",
+    "east apse",
+    "east apse gallery",
+    "east apse conch",
+    "east apse roof",
+    "south stair tower",
+    "north stair tower",
+    "aisle east walls",
+    "west crossing",
+    "west crossing vault",
+    "transept arms",
+    "transept vaults",
+    "transept roofs",
+    "west choir",
+    "west choir vault",
+    "west choir roofs",
+    "west apse",
+    "west apse gallery",
+    "west apse conch",
+    "west apse roof",
+    "north apse",
+    "north apse gallery",
+    "north apse conch",
+    "north apse roof",
+    "south apse",
+    "south apse gallery",
+    "south apse conch",
+    "south apse roof",
+    "west crossing floor",
+    "west tower 1",
+    "west tower 1 head",
+    "west tower 1 cornice",
+    "west tower gables",
+    "west tower 2",
+    "west tower 2 head",
+    "west tower 2 cornice",
+    "west tower 3",
+    "west tower 3 head",
+    "west tower 3 cornice",
+    "west tower 4",
+    "west tower 4 head",
+    "west tower 4 cornice",
+    "west tower cap",
+    "west tower lantern",
+    "west tower spire",
+    "west tower finial"
+  ],
+  "parts": {
+    "nave": {
+      "type": "component",
+      "use": "basilica",
+      "params": {
+        "bays": 10,
+        "bayLen": 5.4,
+        "naveW": 13.6,
+        "aisleW": 6.8,
+        "pierT": 1.8,
+        "aisleT": 1.6,
+        "openW": 3.6,
+        "spring": 7.5,
+        "crown": 9.3,
+        "arcadeH": 16.0,
+        "clearH": 23.0,
+        "naveTop": 31.0,
+        "aisleSpring": 9.3,
+        "aisleTop": 13.3,
+        "arch": "semicircular",
+        "winW": 2.0,
+        "winSill": 5.0,
+        "clearWinW": 2.0,
+        "clearSill": 2.2,
+        "clearSpring": 5.0
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "build": [
+        "arcade",
+        "clerestory",
+        "aisle wall",
+        "aisle vault",
+        "aisle ribs"
+      ],
+      "_about": "the nave from the `basilica` definition: ten round arches a side on square piers, the clerestory, the aisle walls, and the aisles' rib vaults, one to an arch"
+    },
+    "nave vault": {
+      "type": "groin",
+      "width": 13.6,
+      "length": 10.8,
+      "springing": 23.0,
+      "top": 31.0,
+      "clears": 9.3,
+      "across": {
+        "profile": "semicircular"
+      },
+      "along": {
+        "profile": "pointed",
+        "spread": 0.29287
+      },
+      "at": [
+        [
+          0,
+          0,
+          -21.6,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": 5,
+        "step": [
+          0,
+          0,
+          10.8,
+          0
+        ]
+      },
+      "_about": "the nave's vaults, one over every TWO arcade arches: round across, a little pointed along, meeting at one crown"
+    },
+    "nave ribs": {
+      "type": "ribs",
+      "on": "nave vault",
+      "width": 0.5,
+      "depth": 0.3,
+      "wall": {
+        "width": 0.7,
+        "depth": 0.35
+      }
+    },
+    "nave roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 17.8,
+      "length": 54.0,
+      "pitch": 45,
+      "at": [
+        [
+          0,
+          31.0,
+          0,
+          0
+        ]
+      ]
+    },
+    "aisle roofs": {
+      "type": "roof",
+      "form": "shed",
+      "width": 8.4,
+      "length": 54.0,
+      "pitch": 15,
+      "at": [
+        [
+          -12.8,
+          14.5,
+          0,
+          0
+        ],
+        [
+          12.8,
+          14.5,
+          0,
+          3.141592653589793
+        ]
+      ],
+      "_about": "a lean-to over each aisle, under the clerestory's sills"
+    },
+    "east choir": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          17.2,
+          17.2
+        ]
+      },
+      "thickness": 1.8,
+      "height": 31.0,
+      "openings": [],
+      "faces": {
+        "0": [
+          {
+            "at": 0,
+            "width": 13.0,
+            "sill": 0,
+            "springing": 23.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "2": [
+          {
+            "at": 0,
+            "width": 13.0,
+            "sill": 0,
+            "springing": 20.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "1": [
+          {
+            "h": 12,
+            "openings": [
+              {
+                "at": 5.0,
+                "width": 1.4,
+                "sill": 0,
+                "springing": 2.2,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.0,
+                "sill": 2.0,
+                "springing": 5.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ],
+        "3": [
+          {
+            "h": 12,
+            "openings": [
+              {
+                "at": -5.0,
+                "width": 1.4,
+                "sill": 0,
+                "springing": 2.2,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.0,
+                "sill": 2.0,
+                "springing": 5.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          -35.6,
+          0
+        ]
+      ],
+      "_about": "the east choir, a square bay open to the nave and to the apse; a door in each flank into a stair tower"
+    },
+    "east choir vault": {
+      "type": "groin",
+      "width": 13.6,
+      "length": 13.6,
+      "springing": 23.0,
+      "top": 31.0,
+      "across": {
+        "profile": "semicircular"
+      },
+      "along": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          -35.6,
+          0
+        ]
+      ]
+    },
+    "east terrace": {
+      "type": "box",
+      "width": 17.2,
+      "length": 17.2,
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          31.0,
+          -35.6,
+          0
+        ]
+      ],
+      "walked": true,
+      "_about": "the terrace on the choir's walls and vault, round the octagon's foot: the stair towers come out onto it"
+    },
+    "east terrace parapets": {
+      "type": "wall",
+      "height": 1.1,
+      "thickness": 0.4,
+      "width": 17.2,
+      "at": [
+        [
+          0,
+          31.4,
+          -27.0,
+          0
+        ],
+        [
+          0,
+          31.4,
+          -44.2,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the terrace's parapets: across its two ends..."
+    },
+    "east terrace flank parapets": {
+      "type": "wall",
+      "height": 1.1,
+      "thickness": 0.4,
+      "width": 10.9873,
+      "at": [
+        [
+          8.6,
+          31.4,
+          -32.8936,
+          1.5707963267948966
+        ],
+        [
+          -8.6,
+          31.4,
+          -32.8936,
+          -1.5707963267948966
+        ]
+      ],
+      "_about": "...and down its flanks from the stair towers"
+    },
+    "east tower": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": 7.5767
+      },
+      "thickness": 1.2,
+      "height": 13.0,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 6.0,
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "2",
+            "width": 1.1,
+            "gap": 0.9,
+            "pier": 0.9,
+            "sill": 0.6,
+            "springing": 3.6,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          31.4,
+          -35.6,
+          0
+        ]
+      ],
+      "_about": "the east crossing tower, an octagon on the choir, two round-arched belfry openings in every face"
+    },
+    "east tower head": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 6.8767
+      },
+      "height": 0.3,
+      "at": [
+        [
+          0,
+          44.1,
+          -35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "east tower"
+      ]
+    },
+    "east tower gables": {
+      "type": "roof",
+      "form": "gable",
+      "width": 5.599,
+      "length": 0.6,
+      "pitch": 50,
+      "spiral": {
+        "count": 8,
+        "radius": 6.7,
+        "y": 44.4,
+        "z": -35.6
+      },
+      "standsOn": [
+        "east tower"
+      ],
+      "_about": "a gable over every face of the octagon"
+    },
+    "east tower roof": {
+      "type": "dome",
+      "sides": 8,
+      "radius": 7.8767,
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 13.0
+      },
+      "at": [
+        [
+          0,
+          44.4,
+          -35.6,
+          0
+        ]
+      ],
+      "standsOn": [
+        "east tower head"
+      ],
+      "_about": "its tent roof, rising between the gables"
+    },
+    "east tower finial": {
+      "type": "column",
+      "radius": 0.2,
+      "height": 2.5,
+      "sides": 6,
+      "at": [
+        [
+          0,
+          0,
+          -35.6,
+          0
+        ]
+      ],
+      "atop": "east tower roof",
+      "standsOn": [
+        "east tower roof"
+      ]
+    },
+    "east apse": {
+      "type": "ring",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        12,
+        13,
+        14,
+        15
+      ],
+      "rOuter": 8.6,
+      "rInner": 6.8,
+      "place": [
+        [
+          0,
+          0,
+          -44.2,
+          3.141592653589793
+        ]
+      ],
+      "height": 20.0,
+      "opening": {
+        "width": 2.0,
+        "sill": 5.0,
+        "springing": 11.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "the east apse: round-arched windows, a dwarf gallery under the eaves, the stone conch inside and a half cone over it"
+    },
+    "east apse gallery": {
+      "type": "ring",
+      "count": 32,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "rOuter": 8.6,
+      "rInner": 6.8,
+      "place": [
+        [
+          0,
+          0,
+          -44.2,
+          3.141592653589793
+        ]
+      ],
+      "y": 20.0,
+      "height": 5.5,
+      "glass": false,
+      "opening": {
+        "width": 0.9,
+        "sill": 1.2,
+        "springing": 3.4,
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "east apse conch": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 8.6,
+      "thickness": 1.8,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          20.0,
+          -44.2,
+          3.141592653589793
+        ]
+      ]
+    },
+    "east apse roof": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 8.9,
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 5.5
+      },
+      "at": [
+        [
+          0,
+          25.5,
+          -44.2,
+          3.141592653589793
+        ]
+      ]
+    },
+    "south stair tower": {
+      "type": "component",
+      "use": "components/round-stair-tower",
+      "params": {
+        "R": 3.6,
+        "H": 31.4,
+        "steps": 163,
+        "doorBay": 9,
+        "stageH": 4.2,
+        "capRise": 7.0
+      },
+      "at": [
+        [
+          11.399999999999999,
+          0,
+          -40.6,
+          0
+        ]
+      ],
+      "_about": "the two ROUND STAIR TOWERS between the choir and its apse: a spiral from the choir up to the terrace round the octagon, an open belvedere at its head, a stone cone"
+    },
+    "north stair tower": {
+      "type": "component",
+      "use": "components/round-stair-tower",
+      "params": {
+        "R": 3.6,
+        "H": 31.4,
+        "steps": 163,
+        "doorBay": 3,
+        "stageH": 4.2,
+        "capRise": 7.0
+      },
+      "at": [
+        [
+          -11.399999999999999,
+          0,
+          -40.6,
+          0
+        ]
+      ]
+    },
+    "aisle east walls": {
+      "type": "wall",
+      "width": 8.4,
+      "height": 14.5,
+      "thickness": 1.6,
+      "openings": [
+        {
+          "at": 4.2,
+          "width": 2.0,
+          "sill": 4.5,
+          "springing": 8.0,
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          12.8,
+          0,
+          -28.6,
+          3.141592653589793
+        ],
+        [
+          -12.8,
+          0,
+          -28.6,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the aisles' east ends, a window in each"
+    },
+    "west crossing": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          17.2,
+          17.2
+        ]
+      },
+      "thickness": 1.8,
+      "height": 31.0,
+      "openings": [
+        {
+          "at": 0,
+          "width": 13.0,
+          "sill": 0,
+          "springing": 23.0,
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          35.6,
+          0
+        ]
+      ],
+      "_about": "the west crossing: a great arch in each face, to the nave, the transept arms and the west choir"
+    },
+    "west crossing vault": {
+      "type": "groin",
+      "width": 13.6,
+      "length": 13.6,
+      "springing": 23.0,
+      "top": 31.0,
+      "across": {
+        "profile": "semicircular"
+      },
+      "along": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          35.6,
+          0
+        ]
+      ]
+    },
+    "transept arms": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          15.0,
+          17.2
+        ]
+      },
+      "thickness": 1.8,
+      "height": 31.0,
+      "openings": [],
+      "tiers": [
+        {
+          "h": 14,
+          "openings": {
+            "pattern": "2",
+            "width": 2.2,
+            "gap": 4.4,
+            "sill": 5.0,
+            "springing": 10.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "2",
+            "width": 2.0,
+            "gap": 4.6,
+            "sill": 2.5,
+            "springing": 8.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "at": [
+        [
+          16.1,
+          0,
+          35.6,
+          0
+        ],
+        [
+          -16.1,
+          0,
+          35.6,
+          3.141592653589793
+        ]
+      ],
+      "faces": {
+        "3": [
+          {
+            "at": 0,
+            "width": 13.0,
+            "sill": 0,
+            "springing": 23.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "2": [
+          {
+            "h": 14,
+            "openings": [
+              {
+                "at": 4.1,
+                "width": 5.0,
+                "sill": 0,
+                "springing": 9.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ],
+        "0": [
+          {
+            "h": 14,
+            "openings": [
+              {
+                "at": -4.1,
+                "width": 5.0,
+                "sill": 0,
+                "springing": 9.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ],
+        "1": [
+          {
+            "h": 14,
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.6,
+                "sill": 0,
+                "springing": 5.2,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 5.0,
+                "sill": 3.0,
+                "springing": 3.0,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "foot": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "_about": "the west transept's arms (the south one turned round, so its -z face is the north one's +z): an arch from the crossing, an arch from the aisle and a door opposite it, a portal and a round window in the end"
+    },
+    "transept vaults": {
+      "type": "groin",
+      "width": 11.4,
+      "length": 13.6,
+      "springing": 23.0,
+      "top": 31.0,
+      "across": {
+        "profile": "semicircular"
+      },
+      "along": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          16.1,
+          0,
+          35.6,
+          0
+        ],
+        [
+          -16.1,
+          0,
+          35.6,
+          0
+        ]
+      ]
+    },
+    "transept roofs": {
+      "type": "roof",
+      "form": "gable",
+      "width": 17.8,
+      "length": 15.0,
+      "pitch": 45,
+      "at": [
+        [
+          16.1,
+          31.0,
+          35.6,
+          1.5707963267948966
+        ],
+        [
+          -16.1,
+          31.0,
+          35.6,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "west choir": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          17.2,
+          17.2
+        ]
+      },
+      "thickness": 1.8,
+      "height": 31.0,
+      "openings": [
+        {
+          "at": 0,
+          "width": 13.0,
+          "sill": 0,
+          "springing": 20.0,
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "faces": {
+        "2": [
+          {
+            "at": 0,
+            "width": 13.0,
+            "sill": 0,
+            "springing": 23.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          52.8,
+          0
+        ]
+      ],
+      "_about": "the west choir, the TREFOIL: a square bay open to the crossing and by an arch on each other side into an apse"
+    },
+    "west choir vault": {
+      "type": "groin",
+      "width": 13.6,
+      "length": 13.6,
+      "springing": 23.0,
+      "top": 31.0,
+      "across": {
+        "profile": "semicircular"
+      },
+      "along": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          52.8,
+          0
+        ]
+      ]
+    },
+    "west choir roofs": {
+      "type": "roof",
+      "form": "gable",
+      "width": 17.8,
+      "length": 17.2,
+      "pitch": 45,
+      "at": [
+        [
+          0,
+          31.0,
+          52.8,
+          0
+        ],
+        [
+          0,
+          31.0,
+          52.8,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "two gables crossing over the choir bay, one over each pair of its apses"
+    },
+    "west apse": {
+      "type": "ring",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        12,
+        13,
+        14,
+        15
+      ],
+      "rOuter": 8.6,
+      "rInner": 6.8,
+      "place": [
+        [
+          0,
+          0,
+          61.4,
+          0.0
+        ]
+      ],
+      "height": 20.0,
+      "opening": {
+        "width": 2.0,
+        "sill": 5.0,
+        "springing": 11.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "the trefoil's three apses: the west one..."
+    },
+    "west apse gallery": {
+      "type": "ring",
+      "count": 32,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "rOuter": 8.6,
+      "rInner": 6.8,
+      "place": [
+        [
+          0,
+          0,
+          61.4,
+          0.0
+        ]
+      ],
+      "y": 20.0,
+      "height": 5.5,
+      "glass": false,
+      "opening": {
+        "width": 0.9,
+        "sill": 1.2,
+        "springing": 3.4,
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "west apse conch": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 8.6,
+      "thickness": 1.8,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          20.0,
+          61.4,
+          0.0
+        ]
+      ]
+    },
+    "west apse roof": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 8.9,
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 5.5
+      },
+      "at": [
+        [
+          0,
+          25.5,
+          61.4,
+          0.0
+        ]
+      ]
+    },
+    "north apse": {
+      "type": "ring",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        12,
+        13,
+        14,
+        15
+      ],
+      "rOuter": 8.6,
+      "rInner": 6.8,
+      "place": [
+        [
+          -8.6,
+          0,
+          52.8,
+          -1.5707963267948966
+        ]
+      ],
+      "height": 20.0,
+      "opening": {
+        "width": 2.0,
+        "sill": 5.0,
+        "springing": 11.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "...and the two at its sides"
+    },
+    "north apse gallery": {
+      "type": "ring",
+      "count": 32,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "rOuter": 8.6,
+      "rInner": 6.8,
+      "place": [
+        [
+          -8.6,
+          0,
+          52.8,
+          -1.5707963267948966
+        ]
+      ],
+      "y": 20.0,
+      "height": 5.5,
+      "glass": false,
+      "opening": {
+        "width": 0.9,
+        "sill": 1.2,
+        "springing": 3.4,
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "north apse conch": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 8.6,
+      "thickness": 1.8,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          -8.6,
+          20.0,
+          52.8,
+          -1.5707963267948966
+        ]
+      ]
+    },
+    "north apse roof": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 8.9,
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 5.5
+      },
+      "at": [
+        [
+          -8.6,
+          25.5,
+          52.8,
+          -1.5707963267948966
+        ]
+      ]
+    },
+    "south apse": {
+      "type": "ring",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        12,
+        13,
+        14,
+        15
+      ],
+      "rOuter": 8.6,
+      "rInner": 6.8,
+      "place": [
+        [
+          8.6,
+          0,
+          52.8,
+          1.5707963267948966
+        ]
+      ],
+      "height": 20.0,
+      "opening": {
+        "width": 2.0,
+        "sill": 5.0,
+        "springing": 11.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "south apse gallery": {
+      "type": "ring",
+      "count": 32,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "rOuter": 8.6,
+      "rInner": 6.8,
+      "place": [
+        [
+          8.6,
+          0,
+          52.8,
+          1.5707963267948966
+        ]
+      ],
+      "y": 20.0,
+      "height": 5.5,
+      "glass": false,
+      "opening": {
+        "width": 0.9,
+        "sill": 1.2,
+        "springing": 3.4,
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "south apse conch": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 8.6,
+      "thickness": 1.8,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          8.6,
+          20.0,
+          52.8,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "south apse roof": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 8.9,
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 5.5
+      },
+      "at": [
+        [
+          8.6,
+          25.5,
+          52.8,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "west crossing floor": {
+      "type": "box",
+      "width": 17.2,
+      "length": 17.2,
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          31.0,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the slab over the crossing's vault that the tower stands on"
+    },
+    "west tower 1": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": 8.0097
+      },
+      "thickness": 1.4,
+      "height": 13.0,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 3.0,
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "2",
+            "width": 1.2,
+            "gap": 1.0,
+            "pier": 1.0,
+            "sill": 0.8,
+            "springing": 3.8,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          31.4,
+          35.6,
+          0
+        ]
+      ],
+      "standsOn": [
+        "west crossing floor"
+      ],
+      "_about": "Romanesque stage: paired round-arched openings"
+    },
+    "west tower 1 head": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 7.1697
+      },
+      "height": 0.3,
+      "at": [
+        [
+          0,
+          44.1,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "west tower 1"
+      ]
+    },
+    "west tower 1 cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 8.2597
+      },
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          44.4,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "west tower 1"
+      ]
+    },
+    "west tower gables": {
+      "type": "roof",
+      "form": "gable",
+      "width": 5.8304,
+      "length": 0.6,
+      "pitch": 48,
+      "spiral": {
+        "count": 8,
+        "radius": 7.3,
+        "y": 44.75,
+        "z": 35.6
+      },
+      "standsOn": [
+        "west tower 1 cornice"
+      ],
+      "_about": "the Romanesque octagon's eight gables, round the foot of the belfry"
+    },
+    "west tower 2": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": 6.9273
+      },
+      "thickness": 1.0,
+      "height": 10.5,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 1.0,
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "1",
+            "width": 2.0,
+            "sill": 1.5,
+            "springing": 6.5,
+            "head": {
+              "profile": "pointed",
+              "spread": 1.0
+            }
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          44.75,
+          35.6,
+          0
+        ]
+      ],
+      "standsOn": [
+        "west tower 1 cornice"
+      ],
+      "_about": "the Gothic belfry, a tall lancet in every face"
+    },
+    "west tower 2 head": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 6.3273
+      },
+      "height": 0.3,
+      "at": [
+        [
+          0,
+          54.95,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "west tower 2"
+      ]
+    },
+    "west tower 2 cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 7.1773
+      },
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          55.25,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "west tower 2"
+      ]
+    },
+    "west tower 3": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": 5.5202
+      },
+      "thickness": 0.8,
+      "height": 7.0,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 1.0,
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "1",
+            "width": 1.6,
+            "sill": 1.2,
+            "springing": 4.6,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          55.6,
+          35.6,
+          0
+        ]
+      ],
+      "standsOn": [
+        "west tower 2 cornice"
+      ],
+      "_about": "Neumann's baroque stages..."
+    },
+    "west tower 3 head": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 5.0402
+      },
+      "height": 0.3,
+      "at": [
+        [
+          0,
+          62.3,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "west tower 3"
+      ]
+    },
+    "west tower 3 cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 5.7702
+      },
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          62.6,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "west tower 3"
+      ]
+    },
+    "west tower 4": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": 4.2213
+      },
+      "thickness": 0.6,
+      "height": 5.0,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 1.0,
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "1",
+            "width": 1.2,
+            "sill": 1.0,
+            "springing": 3.2,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          62.95,
+          35.6,
+          0
+        ]
+      ],
+      "standsOn": [
+        "west tower 3 cornice"
+      ]
+    },
+    "west tower 4 head": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 3.8613
+      },
+      "height": 0.3,
+      "at": [
+        [
+          0,
+          67.65,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "west tower 4"
+      ]
+    },
+    "west tower 4 cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 4.4713
+      },
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          67.95,
+          35.6,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "west tower 4"
+      ]
+    },
+    "west tower cap": {
+      "type": "dome",
+      "sides": 8,
+      "radius": 4.3213,
+      "thickness": 0,
+      "head": {
+        "profile": "bell",
+        "waist": 0.72,
+        "lift": 1.0,
+        "rise": 6.5
+      },
+      "at": [
+        [
+          0,
+          68.3,
+          35.6,
+          0
+        ]
+      ],
+      "standsOn": [
+        "west tower 4 cornice"
+      ],
+      "_about": "the baroque bell cap..."
+    },
+    "west tower lantern": {
+      "type": "column",
+      "radius": 1.3,
+      "height": 3.2,
+      "sides": 8,
+      "at": [
+        [
+          0,
+          0,
+          35.6,
+          0
+        ]
+      ],
+      "atop": "west tower cap",
+      "atopR": 1.3,
+      "standsOn": [
+        "west tower cap"
+      ],
+      "_about": "...its lantern..."
+    },
+    "west tower spire": {
+      "type": "dome",
+      "sides": 8,
+      "radius": 1.5,
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 6.0
+      },
+      "at": [
+        [
+          0,
+          3.2,
+          35.6,
+          0
+        ]
+      ],
+      "atop": "west tower cap",
+      "atopR": 1.3,
+      "standsOn": [
+        "west tower lantern"
+      ],
+      "_about": "...and the pointed spire (on the lantern: set from the cap, as `atop` does not chain)"
+    },
+    "west tower finial": {
+      "type": "column",
+      "radius": 0.12,
+      "height": 2.2,
+      "sides": 6,
+      "at": [
+        [
+          0,
+          9.2,
+          35.6,
+          0
+        ]
+      ],
+      "atop": "west tower cap",
+      "atopR": 1.3,
+      "standsOn": [
+        "west tower spire"
+      ]
+    }
+  }
+}

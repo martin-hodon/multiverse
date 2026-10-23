@@ -1,0 +1,41 @@
+{
+ "kind": "item",
+ "name": "Tent poles",
+ "category": "components",
+ "era": "everywhere",
+ "region": "everywhere",
+ "_about": "a cone of n poles leaning in from a ring of radius r on the ground to cross at height h, each running on `over` metres past the crossing -- a tipi's lodgepoles, a lavvu's",
+ "params": {
+  "n": 12,
+  "r": 2.5,
+  "h": 5.4,
+  "over": 1.0
+ },
+ "materials": {
+  "wood": "pine"
+ },
+ "parts": [
+  {
+   "id": "pole",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.035,
+   "sides": 5,
+   "from": [
+    "r",
+    0,
+    0
+   ],
+   "to": [
+    "0 - r * over / sqrt(r * r + h * h)",
+    "h + h * over / sqrt(r * r + h * h)",
+    0
+   ],
+   "around": {
+    "n": "n",
+    "r": 0,
+    "plane": "xz"
+   }
+  }
+ ]
+}

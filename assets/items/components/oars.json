@@ -1,0 +1,50 @@
+{
+ "kind": "item",
+ "name": "Oars",
+ "category": "component",
+ "_about": "a bank of n oars a side, from x = from to x = to at the gunwale's height y and half-breadth z, thrust out and down `dip` degrees, on both sides",
+ "params": {
+  "n": 12,
+  "from": 3,
+  "to": 20,
+  "y": 1.6,
+  "z": 2.2,
+  "l": 4.5,
+  "dip": 18,
+  "reach": 0.3
+ },
+ "materials": {
+  "wood": "ash"
+ },
+ "parts": [
+  {
+   "id": "oar",
+   "use": "items/components/oar",
+   "params": {
+    "l": "l"
+   },
+   "along": {
+    "n": "n",
+    "from": [
+     "from",
+     "y",
+     "z * (1 - reach)"
+    ],
+    "to": [
+     "to",
+     "y",
+     "z * (1 - reach)"
+    ]
+   },
+   "at": [
+    0,
+    0,
+    0,
+    -90,
+    0,
+    "-dip"
+   ],
+   "mirror": "z"
+  }
+ ]
+}

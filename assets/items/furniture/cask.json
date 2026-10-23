@@ -1,0 +1,144 @@
+{
+ "kind": "item",
+ "name": "Cask",
+ "category": "furniture/storage",
+ "era": "-100-1900",
+ "region": "Europe",
+ "_about": "a cooper's cask stood on its end: oak staves bulging to its middle, flat iron hoops driven on at the chimes and the quarters, the head let into its groove at the top -- a cellar's, a tavern's, a cooper's stock",
+ "params": {
+  "r": [
+   0.3,
+   0.37
+  ],
+  "h": [
+   0.85,
+   1.0
+  ],
+  "bulge": 0.12
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "oak-grey"
+   ]
+  },
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "staves",
+   "type": "lathe",
+   "material": "wood",
+   "sides": 16,
+   "caps": false,
+   "double": true,
+   "profile": [
+    [
+     "r * (1 - bulge)",
+     0
+    ],
+    [
+     "r * (1 - bulge * 0.45)",
+     "h * 0.2"
+    ],
+    [
+     "r",
+     "h * 0.5"
+    ],
+    [
+     "r * (1 - bulge * 0.45)",
+     "h * 0.8"
+    ],
+    [
+     "r * (1 - bulge)",
+     "h"
+    ]
+   ]
+  },
+  {
+   "id": "hoop low",
+   "type": "lathe",
+   "material": "metal",
+   "sides": 16,
+   "caps": false,
+   "profile": [
+    [
+     "r * (1 - bulge * 0.835) + 0.004",
+     "h * 0.06 - 0.018"
+    ],
+    [
+     "r * (1 - bulge * 0.835) + 0.004",
+     "h * 0.06 + 0.018"
+    ]
+   ]
+  },
+  {
+   "id": "hoop 2",
+   "type": "lathe",
+   "material": "metal",
+   "sides": 16,
+   "caps": false,
+   "profile": [
+    [
+     "r * (1 - bulge * 0.3) + 0.004",
+     "h * 0.3 - 0.018"
+    ],
+    [
+     "r * (1 - bulge * 0.3) + 0.004",
+     "h * 0.3 + 0.018"
+    ]
+   ]
+  },
+  {
+   "id": "hoop 3",
+   "type": "lathe",
+   "material": "metal",
+   "sides": 16,
+   "caps": false,
+   "profile": [
+    [
+     "r * (1 - bulge * 0.3) + 0.004",
+     "h * 0.7 - 0.018"
+    ],
+    [
+     "r * (1 - bulge * 0.3) + 0.004",
+     "h * 0.7 + 0.018"
+    ]
+   ]
+  },
+  {
+   "id": "hoop high",
+   "type": "lathe",
+   "material": "metal",
+   "sides": 16,
+   "caps": false,
+   "profile": [
+    [
+     "r * (1 - bulge * 0.835) + 0.004",
+     "h * 0.94 - 0.018"
+    ],
+    [
+     "r * (1 - bulge * 0.835) + 0.004",
+     "h * 0.94 + 0.018"
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "type": "lathe",
+   "material": "wood",
+   "sides": 16,
+   "profile": [
+    [
+     "r * (1 - bulge) - 0.02",
+     "h - 0.03"
+    ],
+    [
+     "r * (1 - bulge) - 0.02",
+     "h - 0.012"
+    ]
+   ]
+  }
+ ]
+}

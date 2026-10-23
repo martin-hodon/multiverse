@@ -1,0 +1,79 @@
+{
+ "kind": "item",
+ "name": "Cart wheel",
+ "category": "components",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "a spoked cart wheel r in radius: hub, n radial spokes, iron-shod felloe segments -- rolled about z by the game",
+ "params": {
+  "r": 0.75,
+  "n": 12
+ },
+ "materials": {
+  "dark": "#4e3a24",
+  "spoke": "#846040"
+ },
+ "parts": [
+  {
+   "id": "hub",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.1,
+   "from": [
+    0,
+    0,
+    -0.12
+   ],
+   "to": [
+    0,
+    0,
+    0.12
+   ],
+   "sides": 10
+  },
+  {
+   "id": "spokes",
+   "type": "box",
+   "material": "spoke",
+   "size": [
+    "r - 0.04 - 0.035 - 0.08",
+    0.04,
+    0.04
+   ],
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    90
+   ],
+   "around": {
+    "n": "n",
+    "r": "(0.08 + r - 0.04 - 0.035) / 2",
+    "plane": "xy"
+   }
+  },
+  {
+   "id": "felloes",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    "2 * (r - 0.04) * sin(3.14159265 / n) / cos(3.14159265 / n) + 0.015",
+    0.08,
+    0.06
+   ],
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "around": {
+    "n": "n",
+    "r": "r - 0.04",
+    "plane": "xy",
+    "start": "180 / n"
+   }
+  }
+ ]
+}

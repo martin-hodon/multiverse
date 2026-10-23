@@ -1,0 +1,32 @@
+{
+  "name": "Hose",
+  "kind": "component",
+  "_about": "HOSE: a sheet round each leg from the hip to the ankle (or the foot), fitted, and one over the seat from the waist down -- joined hose, or breeches when they stop at the knee.",
+  "params": {
+    "from": "waist",
+    "to": "ankle",
+    "feet": true
+  },
+  "pieces": [
+    {
+      "name": "seat",
+      "on": "torso",
+      "from": "from",
+      "to": "crotch",
+      "fabric": "main"
+    },
+    {
+      "name": "leg",
+      "on": "leg",
+      "from": "hip",
+      "to": "to",
+      "fabric": "main"
+    },
+    {
+      "name": "foot",
+      "if": "feet",
+      "on": "foot",
+      "fabric": "main"
+    }
+  ]
+}

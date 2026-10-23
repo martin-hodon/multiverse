@@ -1,0 +1,10 @@
+{
+ "_about": "WHAT A ZONE IS FILLED WITH (arch/assemble.js part type `zone`): a church or hall marks floor areas by what belongs there -- `zone` the rule's name here, `w` across (the zone's z), `d` deep (its x), `h` the headroom, `at` its centre and turn, its +x THE WAY THE FURNITURE FACES (toward the altar) -- and the rule puts the furniture in: `one` thing at the centre (a component of assets/architecture or an item of assets/items, `yaw` turned, `params` as expressions over w, d, h), or `rows` of a component across the zone (`pitch` apart along x, from the back, `margin` kept free at the sides, split by an `aisle` when the zone is wider than `aisleOver`; L is a row's length)",
+ "zones": {
+  "seating": {"kind": "rows", "use": "furniture/pew", "params": {"L": "L"}, "pitch": 1.6, "margin": 0.4, "aisle": 1.6, "aisleOver": 5},
+  "altar": {"kind": "one", "use": "furniture/altar"},
+  "organ": {"kind": "one", "item": "items/furniture/organ", "yaw": 3.14159265, "params": {"W": "min(w, h * 0.7)", "H": "h * 0.8", "D": "min(1.4, d)"}, "markers": ["spot"]},
+  "lectern": {"kind": "one", "item": "items/furniture/lectern", "yaw": 3.14159265},
+  "choir": {"kind": "rows", "use": "furniture/pew", "params": {"L": "L"}, "pitch": 1.4, "margin": 0.2}
+ }
+}

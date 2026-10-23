@@ -1,0 +1,186 @@
+{
+ "name": "Norse longhouse",
+ "_about": "The Norse longhouse: thick walls of turf and stone, a turf roof on two rows of posts, the long fire down the hall, a door in the long side (Scandinavia, Iceland, 800-1100)",
+ "era": "800-1100",
+ "region": "Scandinavia, Iceland",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     20.0,
+     6.0
+    ],
+    "chamfer": 1.2
+   },
+   "thickness": 1.0,
+   "height": 1.5,
+   "openings": [],
+   "faces": {
+    "2": [
+     {
+      "at": -4.0,
+      "width": 1.1,
+      "sill": 0,
+      "springing": 1.4,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 6.6,
+   "length": 20.6,
+   "pitch": 45,
+   "overhang": 0.2,
+   "at": [
+    [
+     0,
+     1.5,
+     0,
+     1.5707963
+    ]
+   ],
+   "shell": 0.4
+  },
+  "posts": {
+   "type": "column",
+   "radius": 0.15,
+   "height": 3.6,
+   "sides": 6,
+   "at": [
+    [
+     -7.5,
+     0,
+     -1.3,
+     0
+    ],
+    [
+     -7.5,
+     0,
+     1.3,
+     0
+    ],
+    [
+     -4.5,
+     0,
+     -1.3,
+     0
+    ],
+    [
+     -4.5,
+     0,
+     1.3,
+     0
+    ],
+    [
+     -1.5,
+     0,
+     -1.3,
+     0
+    ],
+    [
+     -1.5,
+     0,
+     1.3,
+     0
+    ],
+    [
+     1.5,
+     0,
+     -1.3,
+     0
+    ],
+    [
+     1.5,
+     0,
+     1.3,
+     0
+    ],
+    [
+     4.5,
+     0,
+     -1.3,
+     0
+    ],
+    [
+     4.5,
+     0,
+     1.3,
+     0
+    ],
+    [
+     7.5,
+     0,
+     -1.3,
+     0
+    ],
+    [
+     7.5,
+     0,
+     1.3,
+     0
+    ]
+   ]
+  },
+  "long fire": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.5,
+    "h": 0.4
+   }
+  },
+  "benches": {
+   "type": "box",
+   "width": 16.0,
+   "length": 0.9,
+   "height": 0.4,
+   "at": [
+    [
+     0,
+     0,
+     -1.9,
+     0
+    ],
+    [
+     0,
+     0,
+     1.9,
+     0
+    ]
+   ]
+  }
+ },
+ "build": [
+  "walls",
+  "roof",
+  "posts",
+  "long fire",
+  "benches"
+ ]
+}

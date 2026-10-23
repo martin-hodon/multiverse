@@ -1,0 +1,162 @@
+{
+ "kind": "item",
+ "name": "Outrigger canoe",
+ "category": "ship",
+ "era": "-1000-1900",
+ "region": "Polynesia, Micronesia, Melanesia",
+ "_about": "the Oceanic canoe: a narrow dugout hull with washstrakes, a float held out on two booms, a crab-claw sail on a raked mast",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   7,
+   10
+  ],
+  "B": "L * 0.1",
+  "D": "B * 0.75",
+  "mastH": "L * 0.5"
+ },
+ "materials": {
+  "planks": "oak-grey",
+  "deck": "deck",
+  "wood": "bamboo",
+  "cloth": "matting",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.45,
+   "double": true,
+   "stations": 20,
+   "sides": 5,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.15,
+     0.7
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.85,
+     0.7
+    ],
+    [
+     1,
+     0.02
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.5"
+    ],
+    [
+     0.12,
+     0
+    ],
+    [
+     0.88,
+     0
+    ],
+    [
+     1,
+     "D * 0.5"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.5"
+    ],
+    [
+     0.15,
+     "D * 1.05"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.85,
+     "D * 1.05"
+    ],
+    [
+     1,
+     "D * 1.5"
+    ]
+   ],
+   "rail": 0.04,
+   "thwarts": {
+    "n": 3,
+    "y": "D * 0.7",
+    "w": 0.15,
+    "from": 0.25,
+    "to": 0.75
+   }
+  },
+  {
+   "id": "outrigger",
+   "use": "items/components/outrigger",
+   "params": {
+    "l": "L * 0.6",
+    "r": "B * 0.3",
+    "out": "L * 0.3",
+    "span": "L * 0.35"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "mast",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "L * 0.55",
+    "D * 0.3",
+    0
+   ],
+   "to": [
+    "L * 0.62",
+    "D * 0.3 + mastH",
+    0
+   ],
+   "r0": 0.06,
+   "r1": 0.04
+  },
+  {
+   "id": "sail",
+   "use": "items/components/crab-claw-sail",
+   "params": {
+    "l": "mastH * 1.15",
+    "lift": 65,
+    "spread": 40
+   },
+   "at": [
+    "L * 0.62",
+    "D * 0.4",
+    0
+   ]
+  }
+ ]
+}

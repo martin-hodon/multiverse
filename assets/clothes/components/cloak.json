@@ -1,0 +1,81 @@
+{
+  "name": "Cloak",
+  "kind": "component",
+  "_about": "A CLOAK: a cape over the shoulders from the collar, and the cloak itself hanging from them clear of the arms down to `to`, both OPEN at the front (their `wrap` an arc about the back); the cloak in three, the back and a panel either side of the opening, each panel lifted by the arm under it as it swings forward (`follow`: its share of the arm's swing, skeleton.js LIFT) -- a raised hand lifts the cloth's edge instead of coming through it. The body has no lid of its own at its top: the cape covers its join (a second flat layer under the cape's was all it was).",
+  "params": {
+    "to": "knee",
+    "span": 290,
+    "flare": 0.25
+  },
+  "pieces": [
+    {
+      "name": "cape",
+      "kind": "hang",
+      "on": "torso",
+      "from": "collar - 0.03",
+      "to": "armtop",
+      "flare": 0.5,
+      "arms": true,
+      "swing": false,
+      "wrap": [
+        180,
+        330
+      ],
+      "fabric": "main",
+      "lid": false
+    },
+    {
+      "name": "body",
+      "kind": "hang",
+      "on": "torso",
+      "from": "armtop",
+      "to": "to",
+      "flare": "flare",
+      "arms": true,
+      "wrap": [
+        180,
+        "span - 140"
+      ],
+      "fabric": "main",
+      "fit": "ring",
+      "lid": false,
+      "trail": 14
+    },
+    {
+      "name": "front a",
+      "kind": "hang",
+      "on": "torso",
+      "from": "armtop",
+      "to": "to",
+      "flare": "flare",
+      "arms": true,
+      "wrap": [
+        "180 - span / 2 + 35",
+        70
+      ],
+      "fabric": "main",
+      "fit": "ring",
+      "lid": false,
+      "trail": 14,
+      "follow": 0.5
+    },
+    {
+      "name": "front b",
+      "kind": "hang",
+      "on": "torso",
+      "from": "armtop",
+      "to": "to",
+      "flare": "flare",
+      "arms": true,
+      "wrap": [
+        "180 + span / 2 - 35",
+        70
+      ],
+      "fabric": "main",
+      "fit": "ring",
+      "lid": false,
+      "trail": 14,
+      "follow": 0.5
+    }
+  ]
+}

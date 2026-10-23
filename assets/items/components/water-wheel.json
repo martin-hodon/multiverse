@@ -1,0 +1,153 @@
+{
+ "kind": "item",
+ "name": "Water wheel",
+ "category": "components",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "an undershot mill wheel: two rims of fourteen felloes on seven spokes each, paddle boards between them, the axle back through the wall to the pit wheel inside -- turned about z by the game",
+ "params": {
+  "r": 3.05,
+  "w": 1.2,
+  "axleBack": 5.2,
+  "axleFwd": 0.95,
+  "paddles": 14
+ },
+ "materials": {
+  "dark": "#4e3a24",
+  "plank": "#7a5a36"
+ },
+ "parts": [
+  {
+   "id": "hub",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.22,
+   "from": [
+    0,
+    0,
+    "0 - (w + 0.3) / 2"
+   ],
+   "to": [
+    0,
+    0,
+    "(w + 0.3) / 2"
+   ],
+   "sides": 10
+  },
+  {
+   "id": "axle",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.14,
+   "from": [
+    0,
+    0,
+    "0 - axleBack"
+   ],
+   "to": [
+    0,
+    0,
+    "axleFwd"
+   ],
+   "sides": 8
+  },
+  {
+   "id": "pit wheel",
+   "use": "items/components/face-gear",
+   "params": {
+    "r": 1.05,
+    "w": 0.16,
+    "n": 24
+   },
+   "at": [
+    0,
+    0,
+    "0 - axleBack + 0.3"
+   ]
+  },
+  {
+   "id": "felloes",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    "2 * (r - 0.08) * 0.2282 + 0.02",
+    0.16,
+    0.1
+   ],
+   "at": [
+    [
+     0,
+     0,
+     "w / 2"
+    ],
+    [
+     0,
+     0,
+     "0 - w / 2"
+    ]
+   ],
+   "around": {
+    "n": 14,
+    "r": "r - 0.08",
+    "plane": "xy",
+    "start": 12.857
+   }
+  },
+  {
+   "id": "spokes",
+   "type": "box",
+   "material": "plank",
+   "size": [
+    "r - 0.08 - 0.28",
+    0.1,
+    0.08
+   ],
+   "at": [
+    [
+     0,
+     0,
+     "w / 2",
+     0,
+     0,
+     90
+    ],
+    [
+     0,
+     0,
+     "0 - w / 2",
+     0,
+     0,
+     90
+    ]
+   ],
+   "around": {
+    "n": 7,
+    "r": "(r - 0.08 - 0.08 + 0.2) / 2",
+    "plane": "xy"
+   }
+  },
+  {
+   "id": "paddles",
+   "type": "box",
+   "material": "plank",
+   "size": [
+    0.6,
+    0.05,
+    "w - 0.12"
+   ],
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    90
+   ],
+   "around": {
+    "n": "paddles",
+    "r": "r - 0.32",
+    "plane": "xy"
+   }
+  }
+ ]
+}

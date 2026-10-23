@@ -1,0 +1,401 @@
+{
+  "name": "Basilica -- nave, aisles and barrel vaults",
+  "_about": "A cathedral the way one is actually composed, rather than a massing of boxes: two ARCADES of piers and arches carry the nave walls; the aisles either side are roofed with their own barrel vaults; the nave is roofed with a barrel twice their span, springing well clear of the arcade's crowns; a clerestory stands between the arcade and that springing line and lets the light in over the aisle roofs. The west front carries the portal and the rose between two towers; the east end closes with a wall of three lancets.\nEVERY HEIGHT IS A CONSEQUENCE. The arcade springs at 9m and its round heads crown at 12m; the clerestory stands from there to 22m, which is where the nave vault springs, and its crown is 29m. The aisle vault springs at 9m -- the arcade's own springing -- and its extrados at 13m is below the clerestory's sills, so the roof of the aisle does not cross a window. Change naveW and the nave's crown follows it, because a round barrel's rise IS half its span.\nWHAT IS DRAWN is the masonry: walls with their openings and vaults with their haunches, each one solid, closed and welded. There is no roof over the vaults yet, and no transept.",
+  "params": {
+    "detail": 8,
+    "bays": 8,
+    "bayLen": 9.0,
+    "naveL": "bays * bayLen",
+    "naveW": 14.0,
+    "_naveW": "between the inner faces of the two arcades: a round vault over it rises naveW / 2",
+    "aisleW": 8.0,
+    "pierT": 2.0,
+    "_pierT": "the arcade wall's thickness -- the depth of a pier",
+    "aisleT": 1.4,
+    "openW": 6.0,
+    "spring": 9.0,
+    "crown": "spring + openW / 2",
+    "_crown": "a round head rises half its span, so the arcade's arches crown here -- what everything above must clear",
+    "arcadeH": 17.0,
+    "clearH": 24.0,
+    "_clearH": "the top of the clerestory, and the line the nave vault springs from",
+    "naveTop": "clearH + naveW / 2 + 1.6",
+    "aisleSpring": "crown",
+    "aisleTop": "crown + aisleW / 2 + 0.6",
+    "winW": 3.0,
+    "winSill": 5.0,
+    "clearWinW": 2.6,
+    "towerW": 12.0,
+    "towerT": 1.6,
+    "towerH": 48.0,
+    "halfB": "naveW / 2 + pierT",
+    "halfA": "naveW / 2 + pierT + aisleW + aisleT / 2",
+    "quarter": 1.5707963,
+    "frontZ": "naveL / 2",
+    "towerZ": "naveL / 2 + towerW / 2",
+    "bodyW": "naveW + 2 * pierT + 2 * aisleW + 2 * aisleT",
+    "_bodyW": "the whole body across: nave, both arcades, both aisles and their outer walls",
+    "roseY": "crown + 2.0",
+    "roseW": 7.0,
+    "arch": "semicircular",
+    "_arch": "the profile EVERY opening is drawn with: semicircular for a Roman basilica, pointed for a Gothic one -- one word changes the whole building",
+    "zc": 0,
+    "_zc": "where the body's middle lies along its own axis: the village stands a cathedral's nave behind its towers, so the components have to follow it",
+    "clearSill": 1.6,
+    "clearSpring": 3.0,
+    "arcSpread": 1,
+    "naveSpread": 1,
+    "aisleSpread": 1,
+    "clearSpread": 1,
+    "naveArch": "arch",
+    "aisleArch": "arch",
+    "naveRise": "naveW * 0.49",
+    "aisleRise": "aisleW * 0.49",
+    "_spread": "how far a pointed head's two centres stand apart, in half-widths: 1 is the equilateral arch, less is a drop arch, 0 is the semicircle. It is how an arch is fitted to a height.",
+    "_arcadeH": "the arcade wall runs up to the aisle's roof line: its arches crown at 12, the aisle's vault rides from there to 16.6, and the clerestory stands over that",
+    "naveAlongArch": "arch",
+    "naveAlongSpread": "naveSpread",
+    "naveAlongRise": "bayLen * 0.49",
+    "aisleAlongArch": "arch",
+    "aisleAlongSpread": "aisleSpread",
+    "aisleAlongRise": "bayLen * 0.49",
+    "_along": "a bay is rarely square, and a groin vault's crown is set by its LONGER arch: the arch along the nave is fitted to the height the vault has, flattening to a segmental one where a pointed head would not fit",
+    "aisleBays": "bays",
+    "_aisleBays": "how many bays of aisle vault, from the east: a cathedral whose west towers stand over its aisles' last bays leaves those to the towers",
+    "_halfB": "where the arcade and aisle walls are placed: a wall's thickness lies behind its line (toward the nave, turned a quarter), so the arcade's line is its OUTER face, and the aisle wall's is halfA + aisleT / 2"
+  },
+  "parts": {
+    "arcade": {
+      "type": "wall",
+      "width": "naveL",
+      "height": "arcadeH",
+      "thickness": "pierT",
+      "openings": {
+        "pattern": "bays",
+        "width": "openW",
+        "gap": "bayLen - openW",
+        "sill": 0,
+        "springing": "spring",
+        "head": {
+          "profile": "arch",
+          "spread": "arcSpread"
+        }
+      },
+      "at": [
+        [
+          "halfB",
+          0,
+          "zc",
+          "quarter"
+        ],
+        [
+          "0 - halfB",
+          0,
+          "zc",
+          "0 - quarter"
+        ]
+      ]
+    },
+    "clerestory": {
+      "type": "wall",
+      "width": "naveL",
+      "height": "naveTop - arcadeH",
+      "thickness": "pierT",
+      "openings": {
+        "pattern": "bays",
+        "width": "clearWinW",
+        "gap": "bayLen - clearWinW",
+        "sill": "clearSill",
+        "springing": "clearSpring",
+        "head": {
+          "profile": "arch",
+          "spread": "clearSpread"
+        }
+      },
+      "at": [
+        [
+          "halfB",
+          "arcadeH",
+          "zc",
+          "quarter"
+        ],
+        [
+          "0 - halfB",
+          "arcadeH",
+          "zc",
+          "0 - quarter"
+        ]
+      ],
+      "_about": "the clerestory wall, up to the vault's top: it closes the lunette under every wall arch, which would otherwise stand open to the sky"
+    },
+    "aisle wall": {
+      "type": "wall",
+      "width": "naveL",
+      "height": "aisleTop + 1.2",
+      "thickness": "aisleT",
+      "openings": {
+        "pattern": "bays",
+        "width": "winW",
+        "gap": "bayLen - winW",
+        "sill": "winSill",
+        "springing": "winSill + 2.4",
+        "head": {
+          "profile": "arch"
+        }
+      },
+      "at": [
+        [
+          "halfA + aisleT / 2",
+          0,
+          "zc",
+          "quarter"
+        ],
+        [
+          "0 - halfA - aisleT / 2",
+          0,
+          "zc",
+          "0 - quarter"
+        ]
+      ]
+    },
+    "nave vault": {
+      "type": "groin",
+      "width": "naveW",
+      "length": "bayLen",
+      "springing": "clearH",
+      "top": "naveTop",
+      "clears": "crown",
+      "_about": "one bay of the nave's vault: two barrels crossing, so it meets the arcade along the arcade's own arch and the wall of the bay along the transverse one",
+      "across": {
+        "profile": "naveArch",
+        "spread": "naveSpread",
+        "rise": "naveRise"
+      },
+      "along": {
+        "profile": "naveAlongArch",
+        "spread": "naveAlongSpread",
+        "rise": "naveAlongRise"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "zc - naveL / 2 + bayLen / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "bays",
+        "step": [
+          0,
+          0,
+          "bayLen",
+          0
+        ]
+      }
+    },
+    "aisle vault": {
+      "type": "groin",
+      "width": "aisleW",
+      "length": "bayLen",
+      "springing": "aisleSpring",
+      "top": "aisleTop",
+      "clears": "crown",
+      "across": {
+        "profile": "aisleArch",
+        "spread": "aisleSpread",
+        "rise": "aisleRise"
+      },
+      "along": {
+        "profile": "aisleAlongArch",
+        "spread": "aisleAlongSpread",
+        "rise": "aisleAlongRise"
+      },
+      "at": [
+        [
+          "naveW / 2 + pierT + aisleW / 2",
+          0,
+          "zc - naveL / 2 + bayLen / 2",
+          0
+        ],
+        [
+          "0 - naveW / 2 - pierT - aisleW / 2",
+          0,
+          "zc - naveL / 2 + bayLen / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "aisleBays",
+        "step": [
+          0,
+          0,
+          "bayLen",
+          0
+        ]
+      }
+    },
+    "west front": {
+      "type": "wall",
+      "width": "bodyW",
+      "height": "roseY",
+      "thickness": "pierT",
+      "_about": "the portal and the aisle windows. The ROSE is a part of its own, stacked on this one: a wall face is cut into vertical strips, so two openings cannot share the same span of wall -- and a rose sits squarely over its portal. Standing it on the front as a separate course is how the building is built anyway.",
+      "openings": [
+        {
+          "at": "bodyW / 2",
+          "width": "openW",
+          "sill": 0,
+          "springing": "spring",
+          "head": {
+            "profile": "arch"
+          }
+        },
+        {
+          "at": "bodyW / 2 - aisleW - 1",
+          "width": "winW",
+          "sill": "winSill",
+          "springing": "winSill + 2.4",
+          "head": {
+            "profile": "arch"
+          }
+        },
+        {
+          "at": "bodyW / 2 + aisleW + 1",
+          "width": "winW",
+          "sill": "winSill",
+          "springing": "winSill + 2.4",
+          "head": {
+            "profile": "arch"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          "zc + (frontZ + pierT)",
+          0
+        ]
+      ]
+    },
+    "east wall": {
+      "type": "wall",
+      "width": "bodyW",
+      "height": "clearH",
+      "thickness": "pierT",
+      "openings": [
+        {
+          "at": "bodyW / 2",
+          "width": "winW",
+          "sill": "winSill + 3",
+          "springing": "winSill + 6",
+          "head": {
+            "profile": "arch"
+          }
+        },
+        {
+          "at": "bodyW / 2 - 5.5",
+          "width": "winW",
+          "sill": "winSill + 1",
+          "springing": "winSill + 4",
+          "head": {
+            "profile": "arch"
+          }
+        },
+        {
+          "at": "bodyW / 2 + 5.5",
+          "width": "winW",
+          "sill": "winSill + 1",
+          "springing": "winSill + 4",
+          "head": {
+            "profile": "arch"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          "zc + (0 - naveL / 2)",
+          0
+        ]
+      ]
+    },
+    "tower wall": {
+      "type": "wall",
+      "width": "towerW",
+      "height": "towerH",
+      "thickness": "towerT",
+      "openings": {
+        "pattern": "1",
+        "width": "3.4",
+        "gap": 2,
+        "sill": "towerH - 14",
+        "springing": "towerH - 11",
+        "head": {
+          "profile": "arch"
+        }
+      },
+      "at": []
+    },
+    "west rose": {
+      "type": "wall",
+      "width": "bodyW",
+      "height": "clearH + 3 - roseY",
+      "thickness": "pierT",
+      "openings": [
+        {
+          "at": "bodyW / 2",
+          "width": "roseW",
+          "sill": 1.2,
+          "springing": "1.2 + roseW / 2",
+          "head": {
+            "profile": "arch"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "roseY",
+          "zc + (frontZ + pierT)",
+          0
+        ]
+      ]
+    },
+    "nave ribs": {
+      "type": "ribs",
+      "on": "nave vault",
+      "width": 0.45,
+      "depth": 0.3,
+      "wall": {
+        "width": 0.6,
+        "depth": 0.35
+      },
+      "_about": "the nave's RIB VAULT: diagonal ribs along each bay's groins and transverse ribs on its arches, laid on the vault"
+    },
+    "aisle ribs": {
+      "type": "ribs",
+      "on": "aisle vault",
+      "width": 0.35,
+      "depth": 0.25,
+      "wall": {
+        "width": 0.45,
+        "depth": 0.3
+      }
+    }
+  },
+  "build": [
+    "arcade",
+    "clerestory",
+    "aisle wall",
+    "nave vault",
+    "nave ribs",
+    "aisle vault",
+    "aisle ribs",
+    "west front",
+    "west rose",
+    "east wall"
+  ]
+}

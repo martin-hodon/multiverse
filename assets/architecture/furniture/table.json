@@ -1,0 +1,57 @@
+{
+ "name": "Table and benches",
+ "_about": "a trestle table (items/furniture/trestle-table), a bench either side, a seat and two places to eat on each",
+ "params": {
+  "detail": 4,
+  "L": 1.8,
+  "look": 1
+ },
+ "parts": {
+  "table": {
+   "type": "item",
+   "item": "items/furniture/trestle-table",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "params": {
+    "L": "L",
+    "d": 0.8
+   },
+   "seed": "look"
+  },
+  "benches": {
+   "type": "item",
+   "item": "items/furniture/bench",
+   "at": [
+    [
+     0,
+     0,
+     0.68,
+     0
+    ],
+    [
+     0,
+     0,
+     -0.68,
+     3.14159265
+    ]
+   ],
+   "params": {
+    "L": "L"
+   },
+   "seed": "look + 1",
+   "markers": [
+    "seat"
+   ]
+  }
+ },
+ "build": [
+  "table",
+  "benches"
+ ]
+}

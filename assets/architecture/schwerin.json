@@ -1,0 +1,473 @@
+{
+  "name": "Schloss Schwerin",
+  "_about": "SCHLOSS SCHWERIN, the castle on its island (rebuilt 1845-57), from components: a `court` round its five-sided courtyard, one ring of rooms walked all the way round on every storey; a round `domed-tower` over every corner of the court, covering the joint where two wings meet, under a gilded bell cupola; the great gate tower in the middle of the town front, its gate at the foot and a gilded dome with a lantern over its drum; and the `bridge` over the lake to the gate. The lake is carved round the island by the game.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.6,
+    "steps": 2,
+    "stepOut": 0.5,
+    "plan": {
+      "rect": [
+        95.0802,
+        87.5426
+      ]
+    }
+  },
+  "_moat": {
+    "hw": 48.04,
+    "hd": 44.27,
+    "w": 16.0
+  },
+  "build": [
+    "court",
+    "corner towers",
+    "gate storey",
+    "gate storey floor",
+    "gate tower",
+    "gate lantern",
+    "bridge",
+    "bridge steps"
+  ],
+  "parts": {
+    "court": {
+      "type": "court",
+      "plan": {
+        "points": [
+          [
+            22.3358,
+            -32.3713
+          ],
+          [
+            -22.3358,
+            -32.3713
+          ],
+          [
+            -36.1401,
+            10.114
+          ],
+          [
+            0.0,
+            36.3713
+          ],
+          [
+            36.1401,
+            10.114
+          ]
+        ]
+      },
+      "depth": 12.0,
+      "storeys": 4,
+      "storeyH": 4.6,
+      "axis": 3.4,
+      "gate": {
+        "face": 0,
+        "width": 4.0,
+        "height": 5.5
+      },
+      "roof": {
+        "form": "hip",
+        "pitch": 52
+      },
+      "_about": "the castle's five wings round its court, one ring of rooms walked all the way round, entered through the gate tower"
+    },
+    "corner towers": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 7.4,
+        "H": 25.4,
+        "t": 0.9,
+        "drumR": 4.588,
+        "drumH": 3.2,
+        "capR": 4.884,
+        "kok": 0.6,
+        "finial": 2.4,
+        "doorH": 3.2,
+        "cap": "bell",
+        "waist": 0.78,
+        "lift": 1.05
+      },
+      "at": [
+        [
+          -22.3358,
+          0,
+          -32.3713,
+          0
+        ],
+        [
+          22.3358,
+          0,
+          -32.3713,
+          0
+        ],
+        [
+          36.1401,
+          0,
+          10.114,
+          0
+        ],
+        [
+          0.0,
+          0,
+          36.3713,
+          0
+        ],
+        [
+          -36.1401,
+          0,
+          10.114,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "_about": "a round tower over every corner of the court, taller than the wings, under a gilded bell cupola"
+    },
+    "gate storey": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          16.0,
+          16.0
+        ]
+      },
+      "thickness": 1.4,
+      "height": 22.4,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 10.0,
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "2",
+            "width": 1.6,
+            "gap": 3.0,
+            "sill": 2.0,
+            "springing": 5.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 10.0,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.4,
+                "sill": 0,
+                "springing": 4.8,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": {
+              "pattern": "2",
+              "width": 1.6,
+              "gap": 3.0,
+              "sill": 2.0,
+              "springing": 5.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          }
+        ],
+        "2": [
+          {
+            "h": 10.0,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.4,
+                "sill": 0,
+                "springing": 4.8,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": {
+              "pattern": "2",
+              "width": 1.6,
+              "gap": 3.0,
+              "sill": 2.0,
+              "springing": 5.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          }
+        ],
+        "1": [
+          {
+            "h": 4.6,
+            "openings": [
+              {
+                "at": -5.1,
+                "width": 1.6,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "h": 4.6,
+            "openings": [
+              {
+                "at": -5.1,
+                "width": 1.6,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "h": 4.6,
+            "openings": [
+              {
+                "at": -5.1,
+                "width": 1.6,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "h": 4.6,
+            "openings": [
+              {
+                "at": -5.1,
+                "width": 1.6,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "h": 4.6,
+            "openings": [
+              {
+                "at": 5.1,
+                "width": 1.6,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "h": 4.6,
+            "openings": [
+              {
+                "at": 5.1,
+                "width": 1.6,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "h": 4.6,
+            "openings": [
+              {
+                "at": 5.1,
+                "width": 1.6,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "h": 4.6,
+            "openings": [
+              {
+                "at": 5.1,
+                "width": 1.6,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "at": [
+        [
+          0.0,
+          0,
+          -32.3713,
+          0
+        ]
+      ],
+      "_about": "the gate tower's square storey on the town front: the gateway straight through it, from the bridge to the court's gate"
+    },
+    "gate storey floor": {
+      "flatRoof": true,
+      "type": "box",
+      "width": 13.2,
+      "length": 13.2,
+      "height": 0.5,
+      "at": [
+        [
+          0.0,
+          20.299999999999997,
+          -32.3713,
+          0
+        ]
+      ],
+      "_about": "the floor closing the gate storey under its octagon, low over the attic (a void, not a room)"
+    },
+    "gate tower": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 7.6,
+        "H": 12.0,
+        "t": 1.2,
+        "drumR": 5.76,
+        "drumH": 6.0,
+        "cap": "semicircular",
+        "capR": 6.24,
+        "kok": 0.8,
+        "finial": 5.0,
+        "doorH": 3.0,
+        "winW": 2.0
+      },
+      "at": [
+        [
+          0.0,
+          22.4,
+          -32.3713,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "kokoshniki",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "_about": "over it the octagon, the drum and the gilded dome"
+    },
+    "gate lantern": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 1.6,
+        "H": 3.0,
+        "t": 0.3,
+        "drumR": 1.1,
+        "drumH": 0.8,
+        "capR": 1.2,
+        "kok": 0.2,
+        "finial": 2.0,
+        "doorH": 1.0,
+        "cap": "bell",
+        "waist": 0.78,
+        "lift": 1.05
+      },
+      "at": [
+        [
+          0.0,
+          46.839999999999996,
+          -32.3713,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "cap",
+        "finial"
+      ],
+      "_about": "the lantern on the dome"
+    },
+    "bridge": {
+      "type": "component",
+      "use": "components/bridge",
+      "params": {
+        "L": 20.9,
+        "W": 7,
+        "depth": 5.0,
+        "n": 4
+      },
+      "at": [
+        [
+          0.0,
+          0,
+          -40.3713,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the bridge over the lake to the gate"
+    },
+    "bridge steps": {
+      "type": "flight",
+      "width": 6,
+      "run": 0.32,
+      "rise": 0.15,
+      "top": 0.6,
+      "base": -0.6,
+      "landing": 0,
+      "at": [
+        [
+          -3.0,
+          0,
+          -62.5513,
+          -1.5707963
+        ]
+      ],
+      "_about": "down from the deck to the shore"
+    }
+  }
+}

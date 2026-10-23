@@ -1,0 +1,85 @@
+{
+ "name": "Hogan",
+ "_about": "The hogan: eight walls of logs, the roof corbelled inward in rings and covered with earth, the door to the east, the smoke hole over the fire (the Southwest (Navajo), 1500-1900)",
+ "era": "1500-1900",
+ "region": "the Southwest (Navajo)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "sides": 8,
+    "radius": 3.0
+   },
+   "thickness": 0.35,
+   "height": 1.6,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": 0.9,
+      "sill": 0,
+      "springing": 1.5,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "dome",
+   "sides": 8,
+   "radius": 3.3,
+   "thickness": 0.45,
+   "head": {
+    "profile": "segmental",
+    "rise": 1.4,
+    "seg": 6
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     1.6,
+     0,
+     0
+    ]
+   ],
+   "oculus": 0.35
+  },
+  "hearth": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.25,
+    "h": 0.5
+   }
+  }
+ },
+ "build": [
+  "walls",
+  "roof",
+  "hearth"
+ ]
+}

@@ -1,0 +1,575 @@
+{
+  "name": "St Isaac's Cathedral",
+  "_about": "ST ISAAC'S CATHEDRAL, St Petersburg (1818-58), from components: the great body under a flat roof walked on; inside, four piers and great arches carrying pendentives and their deck; over the roof a round stylobate, and on it the `drum-dome` -- a PERISTYLE of 24 columns, the gilded dome, the lantern; an octastyle `portico` on each of the four fronts; four small gilded domes on colonnaded drums at the roof's corners; a `tower-stair` to the roof in one corner, and a flight on up to the colonnade round the drum.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.8,
+    "steps": 4,
+    "stepOut": 0.5,
+    "margin": 4
+  },
+  "railing": {
+    "type": "iron"
+  },
+  "build": [
+    "body",
+    "piers",
+    "great arches",
+    "pendentives",
+    "roof",
+    "roof front",
+    "roof front corner",
+    "roof sides",
+    "roof stair",
+    "stylobate",
+    "colonnade stair",
+    "dome",
+    "porticoes",
+    "belfry bases",
+    "belfries"
+  ],
+  "parts": {
+    "body": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          60.0,
+          76.0
+        ]
+      },
+      "thickness": 2.5,
+      "height": 30.0,
+      "faces": {
+        "0": [
+          {
+            "h": 15,
+            "openings": {
+              "pattern": "5",
+              "width": 2.6,
+              "gap": 6.4,
+              "sill": 4.5,
+              "springing": 10.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "middle": {
+                "width": 5.0,
+                "sill": 0,
+                "springing": 8.0
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "5",
+              "width": 2.2,
+              "gap": 6.8,
+              "sill": 3.0,
+              "springing": 9.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          }
+        ],
+        "2": [
+          {
+            "h": 15,
+            "openings": {
+              "pattern": "5",
+              "width": 2.6,
+              "gap": 6.4,
+              "sill": 4.5,
+              "springing": 10.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "middle": {
+                "width": 5.0,
+                "sill": 0,
+                "springing": 8.0
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "5",
+              "width": 2.2,
+              "gap": 6.8,
+              "sill": 3.0,
+              "springing": 9.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          }
+        ],
+        "1": [
+          {
+            "h": 15,
+            "openings": {
+              "pattern": "7",
+              "width": 2.6,
+              "gap": 6.4,
+              "sill": 4.5,
+              "springing": 10.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "middle": {
+                "width": 5.0,
+                "sill": 0,
+                "springing": 8.0
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "7",
+              "width": 2.2,
+              "gap": 6.8,
+              "sill": 3.0,
+              "springing": 9.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          }
+        ],
+        "3": [
+          {
+            "h": 15,
+            "openings": {
+              "pattern": "7",
+              "width": 2.6,
+              "gap": 6.4,
+              "sill": 4.5,
+              "springing": 10.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "middle": {
+                "width": 5.0,
+                "sill": 0,
+                "springing": 8.0
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "7",
+              "width": 2.2,
+              "gap": 6.8,
+              "sill": 3.0,
+              "springing": 9.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the body: two storeys of windows, a great door in the middle of every front, behind its portico"
+    },
+    "piers": {
+      "type": "box",
+      "width": 3.0,
+      "length": 3.0,
+      "height": 17.0,
+      "at": [
+        [
+          -14.5,
+          0,
+          -14.5,
+          0
+        ],
+        [
+          -14.5,
+          0,
+          14.5,
+          0
+        ],
+        [
+          14.5,
+          0,
+          -14.5,
+          0
+        ],
+        [
+          14.5,
+          0,
+          14.5,
+          0
+        ]
+      ],
+      "_about": "the four great piers under the dome"
+    },
+    "great arches": {
+      "type": "barrel",
+      "width": 26.0,
+      "length": 3.0,
+      "springing": 17.0,
+      "top": 30.4,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          -13.0,
+          0
+        ],
+        [
+          0,
+          0,
+          16.0,
+          0
+        ],
+        [
+          -13.0,
+          0,
+          0,
+          1.5707963267948966
+        ],
+        [
+          16.0,
+          0,
+          0,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the arches from pier to pier"
+    },
+    "pendentives": {
+      "type": "pendentives",
+      "span": 26.0,
+      "springing": 17.0,
+      "sides": 24,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "deck": {
+        "thickness": 0.4,
+        "out": 3.0
+      },
+      "_about": "the pendentives, and the roof round the drum's foot"
+    },
+    "roof": {
+      "walked": true,
+      "type": "box",
+      "width": 55.0,
+      "length": 19.5,
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          30.0,
+          -25.75,
+          0
+        ]
+      ],
+      "_about": "the flat roof, walked on: round the dome's deck, but for the corner the stair arrives in"
+    },
+    "roof front": {
+      "walked": true,
+      "type": "box",
+      "width": 47.0,
+      "length": 19.5,
+      "height": 0.4,
+      "at": [
+        [
+          -4.0,
+          30.0,
+          25.75,
+          0
+        ]
+      ]
+    },
+    "roof front corner": {
+      "walked": true,
+      "type": "box",
+      "width": 8.0,
+      "length": 11.5,
+      "height": 0.4,
+      "at": [
+        [
+          23.5,
+          30.0,
+          21.75,
+          0
+        ]
+      ]
+    },
+    "roof sides": {
+      "walked": true,
+      "type": "box",
+      "width": 11.5,
+      "length": 32.0,
+      "height": 0.4,
+      "at": [
+        [
+          -21.75,
+          30.0,
+          0,
+          0
+        ],
+        [
+          21.75,
+          30.0,
+          0,
+          0
+        ]
+      ]
+    },
+    "roof stair": {
+      "type": "component",
+      "use": "components/tower-stair",
+      "params": {
+        "W": 8.0,
+        "H": 30.4
+      },
+      "at": [
+        [
+          23.5,
+          0,
+          31.5,
+          0
+        ]
+      ],
+      "_about": "the stair to the roof, in the body's corner: its turret and spiral, and the corner of the roof round its head"
+    },
+    "stylobate": {
+      "walked": true,
+      "type": "ring",
+      "count": 24,
+      "rOuter": 21.0,
+      "rInner": 13.0,
+      "height": 5.0,
+      "y": 30.0,
+      "turn": 0.5,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the round base the colonnade stands on: its top is the gallery walked round the drum"
+    },
+    "colonnade stair": {
+      "type": "flight",
+      "width": 3.0,
+      "run": 0.3,
+      "rise": 0.16,
+      "base": 30.4,
+      "top": 35.0,
+      "landing": 0,
+      "at": [
+        [
+          1.5,
+          0,
+          29.7,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the flight from the roof up onto the colonnade's gallery"
+    },
+    "dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 13.0,
+        "dt": 1.5,
+        "H": 22.0,
+        "n": 24,
+        "every": 2,
+        "winW": 2.0,
+        "winSill": 4.0,
+        "winH": 8.0,
+        "profile": "pointed",
+        "spread": 0.3,
+        "domeT": 1.2,
+        "colN": 24,
+        "colR": 0.95,
+        "colH": 17.0,
+        "pw": 3.8,
+        "lanternR": 3.0,
+        "lanternH": 12.0
+      },
+      "at": [
+        [
+          0,
+          35.0,
+          0,
+          0
+        ]
+      ],
+      "build": [
+        "drum",
+        "drum piers",
+        "peristyle",
+        "peristyle deck",
+        "dome",
+        "lantern"
+      ],
+      "_about": "the drum and its peristyle of 24 columns, the gilded dome and the lantern"
+    },
+    "porticoes": {
+      "type": "component",
+      "use": "components/portico",
+      "params": {
+        "count": 8,
+        "spacing": 3.9,
+        "colR": 0.95,
+        "colH": 17.0,
+        "entH": 3.0,
+        "depth": 12.0,
+        "order": "corinthian",
+        "pitch": 16,
+        "sideCount": 2
+      },
+      "at": [
+        [
+          0,
+          0,
+          38.0,
+          0
+        ],
+        [
+          0,
+          0,
+          -38.0,
+          3.141592653589793
+        ],
+        [
+          30.0,
+          0,
+          0,
+          1.5707963267948966
+        ],
+        [
+          -30.0,
+          0,
+          0,
+          -1.5707963267948966
+        ]
+      ],
+      "build": [
+        "steps",
+        "columns",
+        "side columns",
+        "pediment"
+      ],
+      "_about": "an octastyle portico on every front, its columns in granite, under a pediment"
+    },
+    "belfry bases": {
+      "flatRoof": true,
+      "type": "box",
+      "width": 8.0,
+      "length": 8.0,
+      "height": 6.0,
+      "at": [
+        [
+          -23.0,
+          30.4,
+          -31.0,
+          0
+        ],
+        [
+          -23.0,
+          30.4,
+          31.0,
+          0
+        ],
+        [
+          23.0,
+          30.4,
+          -31.0,
+          0
+        ],
+        [
+          23.0,
+          30.4,
+          23.0,
+          0
+        ]
+      ],
+      "_about": "the four belfries' square bases on the roof's corners (the one by the stair set in from it)"
+    },
+    "belfries": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 2.4,
+        "dt": 0.5,
+        "H": 4.5,
+        "n": 8,
+        "every": 2,
+        "winW": 0.8,
+        "winSill": 0.8,
+        "winH": 2.0,
+        "profile": "semicircular",
+        "domeT": 0.3,
+        "colN": 8,
+        "colR": 0.28,
+        "colH": 3.7,
+        "pw": 0.9,
+        "lanternR": 0.7,
+        "lanternH": 2.2
+      },
+      "at": [
+        [
+          -23.0,
+          36.4,
+          -31.0,
+          0
+        ],
+        [
+          -23.0,
+          36.4,
+          31.0,
+          0
+        ],
+        [
+          23.0,
+          36.4,
+          -31.0,
+          0
+        ],
+        [
+          23.0,
+          36.4,
+          23.0,
+          0
+        ]
+      ],
+      "build": [
+        "drum",
+        "drum piers",
+        "peristyle",
+        "peristyle deck",
+        "dome",
+        "lantern"
+      ],
+      "_about": "and on each a small gilded dome on a colonnaded drum"
+    }
+  }
+}

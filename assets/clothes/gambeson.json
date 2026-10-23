@@ -1,0 +1,37 @@
+{
+  "name": "Gambeson",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "a quilted gambeson: padded, stitched in diamonds, to mid-thigh, long sleeves",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/quilted",
+      "palette": "undyed"
+    }
+  },
+  "thick": 0.012,
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip",
+        "neckline": "round",
+        "neckFront": 0.01
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip - 0.005",
+        "to": "thigh + 0.06",
+        "flare": 0.12
+      }
+    }
+  ]
+}

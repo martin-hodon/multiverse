@@ -1,0 +1,49 @@
+{
+  "name": "Peplos",
+  "kind": "garment",
+  "layer": 2,
+  "skirted": true,
+  "_about": "the Doric peplos: a tube of wool pinned at the shoulders, sleeveless, its top folded down over the body to below the waist, girded, falling to the feet",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "saffron"
+    },
+    "trim": {
+      "pattern": "fabrics/meander",
+      "palette": "meander-black"
+    }
+  },
+  "params": {
+    "hem": 0.03
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip",
+        "neckline": "boat",
+        "neckFront": 0.03,
+        "neckBack": 0.02,
+        "neckWidth": 90
+      }
+    },
+    {
+      "use": "clothes/components/overfold",
+      "params": {
+        "to": "waist + 0.11",
+        "hem": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "floor - 0.05",
+        "flare": 0.3,
+        "pleats": 18,
+        "hem": "hem"
+      }
+    }
+  ]
+}

@@ -1,0 +1,606 @@
+{
+  "name": "Roofs",
+  "_about": "WHAT A ROOF OR A DOME IS COVERED WITH: rows of glazed tube tiles (a Chinese roof), Roman coppi, slates, fish-scale tiles, sheets of lead or copper with their seams, gold leaf; and the patterned coverings -- the Stephansdom's glazed zigzags, St Basil's stripes, spirals and diamonds, glazed diamonds (El Pilar, the Zsolnay roofs of Budapest). On a dome or a round roof u runs round it (a whole number of tiles each way round, so the rows meet) and v up the slope: the rows of a round roof converge toward its crown as they do on the real ones.",
+  "patterns": {
+    "tube tiles": {
+      "size": [
+        0.3,
+        0.36
+      ],
+      "palette": "glazed-blue",
+      "palettes": [
+        "glazed-yellow",
+        "glazed-green",
+        "tile-red"
+      ],
+      "ground": 1,
+      "_about": "Chinese glazed roof: rows of tube tiles (tongwa) over the pan tiles in the channels between, each tube in lengths",
+      "layers": [
+        {
+          "shape": "vband",
+          "w": 0.15,
+          "fill": 0
+        },
+        {
+          "shape": "vband",
+          "w": 0.03,
+          "fill": 2,
+          "at": [
+            -0.035,
+            0
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.15,
+          "h": 0.022,
+          "fill": 3,
+          "alpha": 0.7,
+          "at": [
+            0,
+            -0.17
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.13,
+          "h": 0.012,
+          "fill": 3,
+          "alpha": 0.5,
+          "at": [
+            0.15,
+            0.0
+          ]
+        }
+      ]
+    },
+    "coppi": {
+      "size": [
+        0.32,
+        0.45
+      ],
+      "palette": "tile-red",
+      "palettes": [
+        "terracotta",
+        "brick"
+      ],
+      "ground": 1,
+      "_about": "Roman coppi: half-round clay tiles in lengths, each lapping over the one below",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.15,
+          "h": 0.215,
+          "r": 0.06,
+          "fill": 0,
+          "vary": 0.12,
+          "grid": {
+            "n": [
+              1,
+              2
+            ],
+            "offset": 0
+          }
+        },
+        {
+          "shape": "rect",
+          "w": 0.03,
+          "h": 0.2,
+          "fill": 2,
+          "alpha": 0.6,
+          "grid": {
+            "n": [
+              1,
+              2
+            ]
+          },
+          "at": [
+            -0.03,
+            0
+          ]
+        }
+      ]
+    },
+    "slate": {
+      "size": [
+        0.6,
+        0.4
+      ],
+      "palette": "slate",
+      "palettes": [
+        "lead",
+        "tile-red"
+      ],
+      "ground": 3,
+      "_about": "slates, 29 by 19cm showing, in courses set off by half",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.29,
+          "h": 0.19,
+          "fill": 0,
+          "vary": 0.08,
+          "grid": {
+            "n": [
+              2,
+              2
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "fish scale": {
+      "size": [
+        0.36,
+        0.3
+      ],
+      "palette": "slate",
+      "palettes": [
+        "tile-red",
+        "glazed-green",
+        "st-basil",
+        "copper"
+      ],
+      "_about": "round-ended tiles (or shingles), each row lapping the one above",
+      "layers": [
+        {
+          "shape": "circle",
+          "r": 0.1,
+          "fill": 0,
+          "stroke": 3,
+          "line": 0.006,
+          "vary": 0.08,
+          "grid": {
+            "n": [
+              2,
+              4
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "sheet metal": {
+      "size": [
+        0.6,
+        1.5
+      ],
+      "palette": "lead",
+      "palettes": [
+        "copper",
+        "gold"
+      ],
+      "_about": "lead or copper in sheets 60cm wide, joined in standing seams up the roof and lapped across it",
+      "layers": [
+        {
+          "field": "cloud",
+          "colors": [
+            0,
+            2
+          ],
+          "freq": 2,
+          "amount": 1.3
+        },
+        {
+          "shape": "vband",
+          "w": 0.024,
+          "fill": 3,
+          "at": [
+            0.3,
+            0
+          ]
+        },
+        {
+          "shape": "vband",
+          "w": 0.008,
+          "fill": 2,
+          "at": [
+            0.316,
+            0
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.6,
+          "h": 0.008,
+          "fill": 3,
+          "alpha": 0.6,
+          "at": [
+            0,
+            0.75
+          ]
+        }
+      ]
+    },
+    "gold leaf": {
+      "size": [
+        0.8,
+        0.8
+      ],
+      "palette": "gold",
+      "palettes": [
+        "copper"
+      ],
+      "_about": "gilding: leaves of gold laid edge to edge, each catching the light its own way",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.198,
+          "h": 0.198,
+          "fill": 0,
+          "vary": 0.07,
+          "grid": [
+            4,
+            4
+          ]
+        },
+        {
+          "field": "cloud",
+          "colors": [
+            2,
+            1
+          ],
+          "freq": 2,
+          "amount": 1,
+          "alpha": 0.35
+        }
+      ]
+    },
+    "glazed chevrons": {
+      "size": [
+        1.2,
+        0.9
+      ],
+      "palette": "stephansdom",
+      "palettes": [
+        "zsolnay",
+        "el-pilar",
+        "st-basil"
+      ],
+      "_about": "the Stephansdom's roof: 230,000 glazed tiles laid in zigzag bands of yellow, green, black and white",
+      "layers": [
+        {
+          "shape": "zigzag",
+          "amp": 0.2,
+          "h": 0.225,
+          "n": 2,
+          "fill": 1,
+          "at": [
+            0,
+            0.3375
+          ]
+        },
+        {
+          "shape": "zigzag",
+          "amp": 0.2,
+          "h": 0.225,
+          "n": 2,
+          "fill": 3,
+          "at": [
+            0,
+            0.1125
+          ]
+        },
+        {
+          "shape": "zigzag",
+          "amp": 0.2,
+          "h": 0.225,
+          "n": 2,
+          "fill": 2,
+          "at": [
+            0,
+            -0.1125
+          ]
+        },
+        {
+          "shape": "circle",
+          "r": 0.05,
+          "stroke": 2,
+          "line": 0.004,
+          "alpha": 0.25,
+          "grid": {
+            "n": [
+              12,
+              9
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "onion stripes": {
+      "size": [
+        0.9,
+        1.2
+      ],
+      "palette": "st-basil",
+      "palettes": [
+        "el-pilar",
+        "russian"
+      ],
+      "ground": 1,
+      "_about": "a dome in stripes from its foot to its tip (on a dome u runs round it: stripes follow the meridians)",
+      "layers": [
+        {
+          "shape": "vband",
+          "w": 0.3,
+          "fill": 0,
+          "at": [
+            -0.3,
+            0
+          ]
+        },
+        {
+          "shape": "vband",
+          "w": 0.3,
+          "fill": 2,
+          "at": [
+            0,
+            0
+          ]
+        },
+        {
+          "shape": "vband",
+          "w": 0.025,
+          "fill": 3,
+          "at": [
+            [
+              -0.15,
+              0
+            ],
+            [
+              0.15,
+              0
+            ],
+            [
+              0.45,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "onion spiral": {
+      "size": [
+        1.0,
+        1.0
+      ],
+      "palette": "st-basil",
+      "palettes": [
+        "el-pilar",
+        "russian"
+      ],
+      "ground": 1,
+      "_about": "stripes wound round a dome (St Basil's twisted onions)",
+      "layers": [
+        {
+          "shape": "band",
+          "h": 0.25,
+          "rot": 45,
+          "fill": 0
+        },
+        {
+          "shape": "band",
+          "h": 0.25,
+          "rot": 45,
+          "fill": 2,
+          "at": [
+            0.5,
+            0
+          ]
+        },
+        {
+          "shape": "band",
+          "h": 0.02,
+          "rot": 45,
+          "fill": 3,
+          "at": [
+            [
+              0.18,
+              0
+            ],
+            [
+              0.68,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "onion diamonds": {
+      "size": [
+        0.5,
+        0.5
+      ],
+      "palette": "st-basil",
+      "palettes": [
+        "el-pilar",
+        "zsolnay"
+      ],
+      "ground": 1,
+      "_about": "a dome faceted in diamonds, a boss in each",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.34,
+          "h": 0.34,
+          "rot": 45,
+          "fill": 0,
+          "at": [
+            0,
+            0
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.34,
+          "h": 0.34,
+          "rot": 45,
+          "fill": 2,
+          "at": [
+            0.25,
+            0.25
+          ]
+        },
+        {
+          "shape": "circle",
+          "r": 0.04,
+          "fill": 3,
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              0.25,
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    "glazed diamonds": {
+      "size": [
+        0.4,
+        0.4
+      ],
+      "palette": "el-pilar",
+      "palettes": [
+        "zsolnay",
+        "glazed-green"
+      ],
+      "_about": "glazed tiles set diagonally in two colours with a third at their crossings (El Pilar's cupolas, Budapest's roofs)",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.26,
+          "h": 0.26,
+          "rot": 45,
+          "fill": 0,
+          "stroke": 4,
+          "line": 0.006
+        },
+        {
+          "shape": "rect",
+          "w": 0.26,
+          "h": 0.26,
+          "rot": 45,
+          "fill": 1,
+          "stroke": 4,
+          "line": 0.006,
+          "at": [
+            0.2,
+            0.2
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.07,
+          "h": 0.07,
+          "rot": 45,
+          "fill": 2,
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              0.2,
+              0.2
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.05,
+          "h": 0.05,
+          "rot": 45,
+          "fill": 3,
+          "at": [
+            [
+              0.2,
+              0
+            ],
+            [
+              0,
+              0.2
+            ]
+          ]
+        }
+      ]
+    },
+    "thatch": {
+      "size": [
+        1.0,
+        0.6
+      ],
+      "palette": "thatch",
+      "palettes": [
+        "thatch-grey"
+      ],
+      "ground": 0,
+      "res": 512,
+      "_about": "thatch: straw laid in courses, its cut ends showing down the slope in shaggy rows",
+      "layers": [
+        {
+          "field": "cloud",
+          "colors": [
+            0,
+            3
+          ],
+          "freq": 3,
+          "amount": 0.7
+        },
+        {
+          "shape": "rect",
+          "w": 0.012,
+          "h": 0.26,
+          "fill": 1,
+          "vary": 0.3,
+          "seed": 5,
+          "grid": {
+            "n": [
+              40,
+              2
+            ],
+            "offset": 0.5
+          }
+        },
+        {
+          "shape": "rect",
+          "w": 0.01,
+          "h": 0.2,
+          "fill": 2,
+          "vary": 0.3,
+          "seed": 9,
+          "grid": {
+            "n": [
+              33,
+              2
+            ],
+            "offset": 0.37
+          }
+        },
+        {
+          "shape": "zigzag",
+          "h": 0.035,
+          "amp": 0.012,
+          "n": 17,
+          "fill": 3,
+          "alpha": 0.55,
+          "at": [
+            [
+              0,
+              0.14
+            ],
+            [
+              0,
+              -0.16
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

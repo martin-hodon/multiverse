@@ -1,0 +1,87 @@
+{
+ "kind": "item",
+ "name": "Straw pallet",
+ "category": "furniture/bed",
+ "era": "-1000-1900",
+ "region": "everywhere",
+ "_about": "the bed of most people who ever lived: a straw-stuffed tick on the floor, a woollen blanket, a bolster",
+ "params": {
+  "l": 1.9,
+  "w": 0.8
+ },
+ "materials": {
+  "tick": "canvas",
+  "blanket": {
+   "pick": [
+    "wool",
+    "fur"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "tick",
+   "type": "box",
+   "material": "tick",
+   "size": [
+    "l",
+    0.14,
+    "w"
+   ],
+   "round": 0.06,
+   "at": [
+    0,
+    0.07,
+    0
+   ]
+  },
+  {
+   "id": "blanket",
+   "type": "box",
+   "material": "blanket",
+   "size": [
+    "l * 0.7",
+    0.04,
+    "w + 0.02"
+   ],
+   "round": 0.015,
+   "at": [
+    "l * 0.12",
+    0.15,
+    0
+   ]
+  },
+  {
+   "id": "bolster",
+   "type": "rod",
+   "material": "tick",
+   "from": [
+    "0 - l / 2 + 0.15",
+    0.17,
+    "0 - w / 2 + 0.06"
+   ],
+   "to": [
+    "0 - l / 2 + 0.15",
+    0.17,
+    "w / 2 - 0.06"
+   ],
+   "r": 0.07,
+   "sides": 10
+  }
+ ],
+ "markers": [
+  {
+   "role": "bed",
+   "at": [
+    0,
+    0,
+    0,
+    90
+   ],
+   "data": {
+    "top": 0.16,
+    "foot": "l / 2 + 0.35"
+   }
+  }
+ ]
+}

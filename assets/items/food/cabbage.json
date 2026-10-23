@@ -1,0 +1,76 @@
+{
+ "kind": "item",
+ "name": "Cabbage",
+ "category": "food/vegetable",
+ "era": "-500-1900",
+ "region": "Europe",
+ "_about": "a cabbage: a pale green head with its darker outer leaves cupping it from below",
+ "params": {
+  "s": [
+   0.9,
+   1.15
+  ]
+ },
+ "materials": {
+  "head": "cabbage",
+  "leaf": "cabbage-leaf"
+ },
+ "parts": [
+  {
+   "id": "head",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.075",
+   "sides": 8,
+   "at": [
+    0,
+    "s * 0.075",
+    0
+   ]
+  },
+  {
+   "id": "leaves",
+   "type": "lathe",
+   "material": "leaf",
+   "profile": [
+    [
+     "s * 0.03",
+     0
+    ],
+    [
+     "s * 0.085",
+     "s * 0.025"
+    ],
+    [
+     "s * 0.1",
+     "s * 0.075"
+    ],
+    [
+     "s * 0.095",
+     "s * 0.115"
+    ]
+   ],
+   "sides": 9,
+   "caps": false,
+   "double": true,
+   "faceted": true
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.03",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

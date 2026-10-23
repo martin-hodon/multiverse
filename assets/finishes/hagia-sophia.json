@@ -1,0 +1,24 @@
+{
+  "name": "Hagia Sophia",
+  "building": "architecture/hagia-sophia",
+  "_about": "Hagia Sophia: rendered walls in their ochre-pink plaster, the domes and roofs in lead; inside, the walls revetted in book-matched marble to the galleries and gold mosaic above -- vaults, semidomes, pendentives and dome -- columns of verde antico, the floor of great grey slabs.",
+  "stone": {
+    "color": "#c8906c",
+    "accent": "#b07a58",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["kind:dome", "kind:vault"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"parts": ["aisle roof", "aisle roof east", "aisle roof west", "narthex roof"], "surface": "floor", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"parts": "minarets/pencil cap", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"parts": "minarets", "surface": "wall", "pattern": "stone/ashlar fine", "palette": "limestone"},
+    {"parts": ["aisle columns", "gallery columns"], "pattern": "stone/marble", "palette": "marble-green"},
+    {"parts": ["dome", "semidomes", "pendentives", "great arches", "kind:vault"], "surface": ["wall", "ceiling"], "side": "in", "pattern": "painted/gold mosaic"},
+    {"surface": "wall", "side": "in", "below": 14, "pattern": "stone/revetment", "palette": "marble-grey"},
+    {"surface": "ceiling", "side": "in", "pattern": "painted/gold mosaic"},
+    {"surface": "floor", "side": "in", "pattern": "stone/marble", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "limestone"},
+    {"surface": "wall", "side": "in", "pattern": "painted/gold mosaic"},
+    {"surface": "wall", "pattern": "stone/plaster", "palette": "plaster-rose"}
+  ]
+}

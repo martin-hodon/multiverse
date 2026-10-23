@@ -1,0 +1,52 @@
+{
+  "name": "Houppelande",
+  "kind": "garment",
+  "layer": 3,
+  "skirted": true,
+  "_about": "the houppelande: a voluminous gown from a high collar to the floor, pleated, belted high, with great bell sleeves to the knuckles, their edges dagged",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/brocade",
+      "palette": "damask-blue"
+    },
+    "trim": {
+      "pattern": "fabrics/fur",
+      "palette": "fur-grey"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "chest + 0.04",
+        "neckline": "round",
+        "neckFront": 0.004
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "elbow"
+      }
+    },
+    {
+      "use": "clothes/components/bell-sleeve",
+      "params": {
+        "from": "elbow - 0.04",
+        "to": "knuckles + 0.04",
+        "flare": 0.45,
+        "dags": 7
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "chest + 0.04",
+        "to": "floor - 0.03",
+        "flare": 0.45,
+        "pleats": 20,
+        "hem": 0.05
+      }
+    }
+  ]
+}

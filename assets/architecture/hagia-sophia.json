@@ -1,0 +1,1526 @@
+{
+  "name": "Hagia Sophia",
+  "_about": "HAGIA SOPHIA, Constantinople (532-37), at its real size and from the Byzantine kit (elements/byzantine.json): the 31m square between four piers and four great arches; PENDENTIVES turning it into the circle of forty windows the ribbed dome stands on, 55m up; east and west the SEMIDOMES on their own half rings of windows, each over a two-storey half-ring arcade opening into the space behind; the TYMPANUM walls closing the north and south arches, arcaded below and full of windows above; aisles and over them the GALLERIES, walked on, reached by a stair along each outer wall; the NARTHEX with nine doors into the nave and its own gallery; the APSE; the great BUTTRESSES; and the four Ottoman `minaret`s.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.6,
+    "steps": 2,
+    "stepOut": 0.5,
+    "margin": 3
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "piers",
+    "great arches",
+    "pendentives",
+    "dome",
+    "exedra arcade",
+    "exedra gallery",
+    "semidome windows",
+    "semidomes",
+    "tympana",
+    "outer walls",
+    "gallery floor 1",
+    "gallery floor 2",
+    "gallery floor 3",
+    "gallery floor 4",
+    "gallery floor 5",
+    "gallery floor 6",
+    "gallery floor 7",
+    "gallery floor 8",
+    "gallery floor 9",
+    "gallery floor 10",
+    "gallery floor east",
+    "gallery floor west",
+    "aisle roof 1",
+    "aisle roof 2",
+    "aisle roof 3",
+    "aisle roof 4",
+    "aisle roof 5",
+    "aisle roof 6",
+    "aisle roof east",
+    "aisle roof west",
+    "north gallery stair",
+    "south gallery stair",
+    "aisle columns",
+    "gallery columns",
+    "narthex front",
+    "narthex ends",
+    "narthex gallery",
+    "narthex roof",
+    "apse",
+    "buttresses",
+    "buttress feet",
+    "minarets"
+  ],
+  "parts": {
+    "piers": {
+      "type": "box",
+      "width": 5.0,
+      "length": 5.0,
+      "height": 24.0,
+      "at": [
+        [
+          -18.0,
+          0,
+          -18.0,
+          0
+        ],
+        [
+          -18.0,
+          0,
+          18.0,
+          0
+        ],
+        [
+          18.0,
+          0,
+          -18.0,
+          0
+        ],
+        [
+          18.0,
+          0,
+          18.0,
+          0
+        ]
+      ],
+      "_about": "the four great piers at the corners of the square"
+    },
+    "great arches": {
+      "type": "barrel",
+      "width": 31.0,
+      "length": 5.0,
+      "springing": 24.0,
+      "top": 41.0,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          -15.5,
+          0
+        ],
+        [
+          0,
+          0,
+          20.5,
+          0
+        ],
+        [
+          -15.5,
+          0,
+          0,
+          1.5707963267948966
+        ],
+        [
+          20.5,
+          0,
+          0,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the four arches from pier to pier: their crowns carry the dome's ring"
+    },
+    "pendentives": {
+      "type": "pendentives",
+      "span": 31.0,
+      "springing": 24.0,
+      "sides": 40,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the spherical triangles between the arches that turn the square into the dome's circle"
+    },
+    "dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 15.5,
+        "dt": 1.0,
+        "H": 4.5,
+        "n": 40,
+        "every": 1,
+        "winW": 1.4,
+        "winSill": 0.4,
+        "winH": 3.1,
+        "profile": "segmental",
+        "rise": 11.5,
+        "domeT": 1.0,
+        "ribW": 0.6
+      },
+      "build": [
+        "drum",
+        "dome",
+        "ribs"
+      ],
+      "at": [
+        [
+          0,
+          39.5,
+          0,
+          0
+        ]
+      ],
+      "_about": "the ring of forty windows at the dome's foot -- the dome seems to float on light -- the dome, 31m across and rising less than a hemisphere, and its forty ribs"
+    },
+    "exedra arcade": {
+      "type": "ring",
+      "count": 20,
+      "rOuter": 16.5,
+      "rInner": 15.5,
+      "height": 13.0,
+      "y": 0,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "opening": {
+        "width": 3.2,
+        "sill": 0,
+        "springing": 9.5,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          20.5,
+          0
+        ],
+        [
+          0,
+          0,
+          -20.5,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the ground storey of each half ring: arches into the space behind, under the gallery"
+    },
+    "exedra gallery": {
+      "type": "ring",
+      "count": 20,
+      "rOuter": 16.5,
+      "rInner": 15.5,
+      "height": 7.0,
+      "y": 13.0,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "opening": {
+        "width": 2.6,
+        "sill": 1.0,
+        "springing": 5.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          20.5,
+          0
+        ],
+        [
+          0,
+          0,
+          -20.5,
+          3.141592653589793
+        ]
+      ],
+      "glass": false,
+      "_about": "the gallery storey over it: open arches, their sills the gallery's parapet"
+    },
+    "semidome windows": {
+      "type": "ring",
+      "count": 20,
+      "rOuter": 16.5,
+      "rInner": 15.5,
+      "height": 4.0,
+      "y": 20.0,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "opening": {
+        "width": 1.6,
+        "sill": 0.4,
+        "springing": 3.0,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          20.5,
+          0
+        ],
+        [
+          0,
+          0,
+          -20.5,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the half ring of windows each semidome stands on, over the aisle roofs"
+    },
+    "semidomes": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 20,
+      "radius": 16.5,
+      "thickness": 1.0,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          24.0,
+          20.5,
+          0
+        ],
+        [
+          0,
+          24.0,
+          -20.5,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the semidomes east and west, their crowns under the great arches': the nave is 70m long under one sweep of vaults"
+    },
+    "tympana": {
+      "type": "wall",
+      "width": 31.0,
+      "height": 39.5,
+      "thickness": 1.2,
+      "at": [
+        [
+          18.6,
+          0,
+          0,
+          1.5707963267948966
+        ],
+        [
+          -17.4,
+          0,
+          0,
+          1.5707963267948966
+        ]
+      ],
+      "tiers": [
+        {
+          "h": 13.0,
+          "openings": {
+            "pattern": "5",
+            "width": 3.2,
+            "gap": 2.6,
+            "sill": 0,
+            "springing": 9.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "h": 7.0,
+          "glass": false,
+          "openings": {
+            "pattern": "7",
+            "width": 2.2,
+            "gap": 1.6,
+            "sill": 1.0,
+            "springing": 5.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "h": 9.0,
+          "openings": {
+            "pattern": "7",
+            "width": 1.8,
+            "gap": 1.8,
+            "sill": 2.5,
+            "springing": 6.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "5",
+            "width": 1.6,
+            "gap": 2.4,
+            "sill": 1.5,
+            "springing": 4.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "_about": "the walls that close the north and south arches: an arcade to the aisle, the gallery's arcade, and two rows of windows in the lunette (the wall above the arch's curve is inside the arch)"
+    },
+    "outer walls": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          72.0,
+          79.0
+        ]
+      },
+      "thickness": 1.5,
+      "height": 21.200000000000003,
+      "tiers": [
+        {
+          "h": 13.0,
+          "openings": {
+            "pattern": "9",
+            "width": 1.8,
+            "gap": 5.6,
+            "sill": 4.0,
+            "springing": 8.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "h": 7.0,
+          "openings": {
+            "pattern": "9",
+            "width": 1.6,
+            "gap": 5.8,
+            "sill": 1.2,
+            "springing": 4.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": []
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 13.0,
+            "openings": [
+              {
+                "at": 0,
+                "width": 11.0,
+                "sill": 0,
+                "springing": 7.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "h": 7.0,
+            "openings": {
+              "pattern": "9",
+              "width": 1.6,
+              "gap": 5.8,
+              "sill": 1.2,
+              "springing": 4.5,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          },
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "h": 13.0,
+            "openings": {
+              "pattern": "9",
+              "width": 2.4,
+              "gap": 3.2,
+              "sill": 0,
+              "springing": 5.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          },
+          {
+            "h": 7.0,
+            "openings": {
+              "pattern": "9",
+              "width": 1.6,
+              "gap": 5.8,
+              "sill": 0,
+              "springing": 3.2,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "_about": "the walls round aisles and galleries: windows in both storeys; nine doors from the narthex (west), and the gallery doors over them; the apse's arch east"
+    },
+    "gallery floor 1": {
+      "type": "box",
+      "width": 13.9,
+      "length": 31.0,
+      "height": 0.6,
+      "at": [
+        [
+          -25.55,
+          12.4,
+          0,
+          0
+        ]
+      ],
+      "_about": "the galleries, walked on: over the aisles, round the semidomes' half rings, each with a hatch along the outer wall where its stair comes up"
+    },
+    "gallery floor 2": {
+      "type": "box",
+      "width": 2,
+      "length": 7.3,
+      "height": 0.6,
+      "at": [
+        [
+          -33.5,
+          12.4,
+          -11.85,
+          0
+        ]
+      ]
+    },
+    "gallery floor 3": {
+      "type": "box",
+      "width": 2,
+      "length": 15.9,
+      "height": 0.6,
+      "at": [
+        [
+          -33.5,
+          12.4,
+          7.55,
+          0
+        ]
+      ]
+    },
+    "gallery floor 4": {
+      "type": "box",
+      "width": 14.0,
+      "length": 22.5,
+      "height": 0.6,
+      "at": [
+        [
+          -27.5,
+          12.4,
+          -26.75,
+          0
+        ]
+      ]
+    },
+    "gallery floor 5": {
+      "type": "box",
+      "width": 14.0,
+      "length": 22.5,
+      "height": 0.6,
+      "at": [
+        [
+          -27.5,
+          12.4,
+          26.75,
+          0
+        ]
+      ]
+    },
+    "gallery floor 6": {
+      "type": "box",
+      "width": 13.9,
+      "length": 31.0,
+      "height": 0.6,
+      "at": [
+        [
+          25.55,
+          12.4,
+          0,
+          0
+        ]
+      ]
+    },
+    "gallery floor 7": {
+      "type": "box",
+      "width": 2,
+      "length": 7.3,
+      "height": 0.6,
+      "at": [
+        [
+          33.5,
+          12.4,
+          -11.85,
+          0
+        ]
+      ]
+    },
+    "gallery floor 8": {
+      "type": "box",
+      "width": 2,
+      "length": 15.9,
+      "height": 0.6,
+      "at": [
+        [
+          33.5,
+          12.4,
+          7.55,
+          0
+        ]
+      ]
+    },
+    "gallery floor 9": {
+      "type": "box",
+      "width": 14.0,
+      "length": 22.5,
+      "height": 0.6,
+      "at": [
+        [
+          27.5,
+          12.4,
+          -26.75,
+          0
+        ]
+      ]
+    },
+    "gallery floor 10": {
+      "type": "box",
+      "width": 14.0,
+      "length": 22.5,
+      "height": 0.6,
+      "at": [
+        [
+          27.5,
+          12.4,
+          26.75,
+          0
+        ]
+      ]
+    },
+    "gallery floor east": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            20.5,
+            20.5
+          ],
+          [
+            20.5,
+            38.0
+          ],
+          [
+            -20.5,
+            38.0
+          ],
+          [
+            -20.5,
+            20.5
+          ],
+          [
+            -16.5,
+            20.5
+          ],
+          [
+            -15.6924,
+            25.5988
+          ],
+          [
+            -13.3488,
+            30.1985
+          ],
+          [
+            -9.6985,
+            33.8488
+          ],
+          [
+            -5.0988,
+            36.1924
+          ],
+          [
+            0.0,
+            37.0
+          ],
+          [
+            5.0988,
+            36.1924
+          ],
+          [
+            9.6985,
+            33.8488
+          ],
+          [
+            13.3488,
+            30.1985
+          ],
+          [
+            15.6924,
+            25.5988
+          ],
+          [
+            16.5,
+            20.5
+          ]
+        ]
+      },
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          12.4,
+          0,
+          0
+        ]
+      ]
+    },
+    "gallery floor west": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            20.5,
+            -20.5
+          ],
+          [
+            20.5,
+            -38.0
+          ],
+          [
+            -20.5,
+            -38.0
+          ],
+          [
+            -20.5,
+            -20.5
+          ],
+          [
+            -16.5,
+            -20.5
+          ],
+          [
+            -15.6924,
+            -25.5988
+          ],
+          [
+            -13.3488,
+            -30.1985
+          ],
+          [
+            -9.6985,
+            -33.8488
+          ],
+          [
+            -5.0988,
+            -36.1924
+          ],
+          [
+            0.0,
+            -37.0
+          ],
+          [
+            5.0988,
+            -36.1924
+          ],
+          [
+            9.6985,
+            -33.8488
+          ],
+          [
+            13.3488,
+            -30.1985
+          ],
+          [
+            15.6924,
+            -25.5988
+          ],
+          [
+            16.5,
+            -20.5
+          ]
+        ]
+      },
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          12.4,
+          0,
+          0
+        ]
+      ]
+    },
+    "aisle roof 1": {
+      "type": "box",
+      "width": 15.9,
+      "length": 31.0,
+      "height": 0.6,
+      "at": [
+        [
+          -26.55,
+          20.0,
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "aisle roof 2": {
+      "type": "box",
+      "width": 14.0,
+      "length": 22.5,
+      "height": 0.6,
+      "at": [
+        [
+          -27.5,
+          20.0,
+          -26.75,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "aisle roof 3": {
+      "type": "box",
+      "width": 14.0,
+      "length": 22.5,
+      "height": 0.6,
+      "at": [
+        [
+          -27.5,
+          20.0,
+          26.75,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "aisle roof 4": {
+      "type": "box",
+      "width": 15.9,
+      "length": 31.0,
+      "height": 0.6,
+      "at": [
+        [
+          26.55,
+          20.0,
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "aisle roof 5": {
+      "type": "box",
+      "width": 14.0,
+      "length": 22.5,
+      "height": 0.6,
+      "at": [
+        [
+          27.5,
+          20.0,
+          -26.75,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "aisle roof 6": {
+      "type": "box",
+      "width": 14.0,
+      "length": 22.5,
+      "height": 0.6,
+      "at": [
+        [
+          27.5,
+          20.0,
+          26.75,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "aisle roof east": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            20.5,
+            20.5
+          ],
+          [
+            20.5,
+            38.0
+          ],
+          [
+            -20.5,
+            38.0
+          ],
+          [
+            -20.5,
+            20.5
+          ],
+          [
+            -16.5,
+            20.5
+          ],
+          [
+            -15.6924,
+            25.5988
+          ],
+          [
+            -13.3488,
+            30.1985
+          ],
+          [
+            -9.6985,
+            33.8488
+          ],
+          [
+            -5.0988,
+            36.1924
+          ],
+          [
+            0.0,
+            37.0
+          ],
+          [
+            5.0988,
+            36.1924
+          ],
+          [
+            9.6985,
+            33.8488
+          ],
+          [
+            13.3488,
+            30.1985
+          ],
+          [
+            15.6924,
+            25.5988
+          ],
+          [
+            16.5,
+            20.5
+          ]
+        ]
+      },
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          20.0,
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "aisle roof west": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            20.5,
+            -20.5
+          ],
+          [
+            20.5,
+            -38.0
+          ],
+          [
+            -20.5,
+            -38.0
+          ],
+          [
+            -20.5,
+            -20.5
+          ],
+          [
+            -16.5,
+            -20.5
+          ],
+          [
+            -15.6924,
+            -25.5988
+          ],
+          [
+            -13.3488,
+            -30.1985
+          ],
+          [
+            -9.6985,
+            -33.8488
+          ],
+          [
+            -5.0988,
+            -36.1924
+          ],
+          [
+            0.0,
+            -37.0
+          ],
+          [
+            5.0988,
+            -36.1924
+          ],
+          [
+            9.6985,
+            -33.8488
+          ],
+          [
+            13.3488,
+            -30.1985
+          ],
+          [
+            15.6924,
+            -25.5988
+          ],
+          [
+            16.5,
+            -20.5
+          ]
+        ]
+      },
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          20.0,
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "north gallery stair": {
+      "type": "staircase",
+      "flight": 40,
+      "width": 2.0,
+      "run": 0.32,
+      "rise": 0.1625,
+      "soffit": 0.35,
+      "landing": {
+        "depth": 2.0,
+        "then": [
+          {
+            "from": "ahead",
+            "flight": 40,
+            "width": 2.0
+          }
+        ]
+      },
+      "at": [
+        [
+          33.5,
+          0,
+          -30.0,
+          -1.5707963267948966
+        ]
+      ],
+      "_about": "up the aisle along its wall: a flight, a landing halfway, a flight on to a landing flush with the gallery floor"
+    },
+    "south gallery stair": {
+      "type": "staircase",
+      "flight": 40,
+      "width": 2.0,
+      "run": 0.32,
+      "rise": 0.1625,
+      "soffit": 0.35,
+      "landing": {
+        "depth": 2.0,
+        "then": [
+          {
+            "from": "ahead",
+            "flight": 40,
+            "width": 2.0
+          }
+        ]
+      },
+      "at": [
+        [
+          -33.5,
+          0,
+          -30.0,
+          -1.5707963267948966
+        ]
+      ],
+      "_about": "up the aisle along its wall: a flight, a landing halfway, a flight on to a landing flush with the gallery floor"
+    },
+    "aisle columns": {
+      "type": "column",
+      "radius": 0.55,
+      "height": 12.4,
+      "sides": 12,
+      "at": [
+        [
+          -27.5,
+          0,
+          -30.0,
+          0
+        ],
+        [
+          -27.5,
+          0,
+          -22.5,
+          0
+        ],
+        [
+          -27.5,
+          0,
+          -7.5,
+          0
+        ],
+        [
+          -27.5,
+          0,
+          0.0,
+          0
+        ],
+        [
+          -27.5,
+          0,
+          7.5,
+          0
+        ],
+        [
+          -27.5,
+          0,
+          22.5,
+          0
+        ],
+        [
+          -27.5,
+          0,
+          30.0,
+          0
+        ],
+        [
+          27.5,
+          0,
+          -30.0,
+          0
+        ],
+        [
+          27.5,
+          0,
+          -22.5,
+          0
+        ],
+        [
+          27.5,
+          0,
+          -7.5,
+          0
+        ],
+        [
+          27.5,
+          0,
+          0.0,
+          0
+        ],
+        [
+          27.5,
+          0,
+          7.5,
+          0
+        ],
+        [
+          27.5,
+          0,
+          22.5,
+          0
+        ],
+        [
+          27.5,
+          0,
+          30.0,
+          0
+        ]
+      ],
+      "_about": "the columns that carry the galleries"
+    },
+    "gallery columns": {
+      "type": "column",
+      "radius": 0.45,
+      "height": 7.0,
+      "sides": 12,
+      "at": [
+        [
+          -27.5,
+          13.0,
+          -30.0,
+          0
+        ],
+        [
+          -27.5,
+          13.0,
+          -22.5,
+          0
+        ],
+        [
+          -27.5,
+          13.0,
+          -7.5,
+          0
+        ],
+        [
+          -27.5,
+          13.0,
+          0.0,
+          0
+        ],
+        [
+          -27.5,
+          13.0,
+          7.5,
+          0
+        ],
+        [
+          -27.5,
+          13.0,
+          22.5,
+          0
+        ],
+        [
+          -27.5,
+          13.0,
+          30.0,
+          0
+        ],
+        [
+          27.5,
+          13.0,
+          -30.0,
+          0
+        ],
+        [
+          27.5,
+          13.0,
+          -22.5,
+          0
+        ],
+        [
+          27.5,
+          13.0,
+          -7.5,
+          0
+        ],
+        [
+          27.5,
+          13.0,
+          0.0,
+          0
+        ],
+        [
+          27.5,
+          13.0,
+          7.5,
+          0
+        ],
+        [
+          27.5,
+          13.0,
+          22.5,
+          0
+        ],
+        [
+          27.5,
+          13.0,
+          30.0,
+          0
+        ]
+      ]
+    },
+    "narthex front": {
+      "type": "wall",
+      "width": 72.0,
+      "height": 21.200000000000003,
+      "thickness": 1.5,
+      "at": [
+        [
+          0,
+          0,
+          -46.5,
+          0
+        ]
+      ],
+      "tiers": [
+        {
+          "h": 13.0,
+          "openings": {
+            "pattern": "5",
+            "width": 3.0,
+            "gap": 8.0,
+            "sill": 0,
+            "springing": 5.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "h": 7.0,
+          "openings": {
+            "pattern": "9",
+            "width": 1.6,
+            "gap": 5.8,
+            "sill": 1.2,
+            "springing": 4.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": []
+        }
+      ],
+      "_about": "the narthex's west front: five doors, the windows of the west gallery over them"
+    },
+    "narthex ends": {
+      "type": "wall",
+      "width": 7.0,
+      "height": 21.200000000000003,
+      "thickness": 1.5,
+      "openings": [],
+      "at": [
+        [
+          36.0,
+          0,
+          -43.0,
+          1.5707963267948966
+        ],
+        [
+          -34.5,
+          0,
+          -43.0,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "narthex gallery": {
+      "type": "box",
+      "width": 69.0,
+      "length": 7.0,
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          12.4,
+          -43.0,
+          0
+        ]
+      ],
+      "_about": "the west gallery over the narthex, through doors from the nave's"
+    },
+    "narthex roof": {
+      "type": "box",
+      "flatRoof": true,
+      "width": 69.0,
+      "length": 7.0,
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          20.0,
+          -43.0,
+          0
+        ]
+      ]
+    },
+    "apse": {
+      "type": "component",
+      "use": "components/apse",
+      "params": {
+        "R": 5.5,
+        "T": 1.5,
+        "H": 14.0,
+        "n": 16,
+        "winW": 1.4,
+        "winSill": 6.0,
+        "winH": 4.5,
+        "domeT": 1.5
+      },
+      "at": [
+        [
+          0,
+          0,
+          39.5,
+          0
+        ]
+      ],
+      "_about": "the apse beyond the east wall, windows high in it, under its half dome (`apse`)"
+    },
+    "buttresses": {
+      "type": "box",
+      "width": 18.0,
+      "length": 5.0,
+      "height": 13.4,
+      "at": [
+        [
+          -29.5,
+          20.6,
+          -18.0,
+          0
+        ],
+        [
+          -29.5,
+          20.6,
+          18.0,
+          0
+        ],
+        [
+          29.5,
+          20.6,
+          -18.0,
+          0
+        ],
+        [
+          29.5,
+          20.6,
+          18.0,
+          0
+        ]
+      ],
+      "_about": "the great buttresses over the aisle roofs, carrying the thrust of the north and south arches out to the walls"
+    },
+    "buttress feet": {
+      "type": "box",
+      "width": 2.5,
+      "length": 5.0,
+      "height": 20.6,
+      "at": [
+        [
+          -37.25,
+          0,
+          -18.0,
+          0
+        ],
+        [
+          -37.25,
+          0,
+          18.0,
+          0
+        ],
+        [
+          37.25,
+          0,
+          -18.0,
+          0
+        ],
+        [
+          37.25,
+          0,
+          18.0,
+          0
+        ]
+      ]
+    },
+    "minarets": {
+      "type": "component",
+      "use": "components/minaret",
+      "params": {
+        "h": 48,
+        "r": 2.1,
+        "balconies": 2
+      },
+      "build": [
+        "plinth",
+        "shaft",
+        "corbelling",
+        "balcony",
+        "parapet",
+        "pencil cap"
+      ],
+      "at": [
+        [
+          -42.0,
+          0,
+          -50.5,
+          0
+        ],
+        [
+          -42.0,
+          0,
+          36.0,
+          0
+        ],
+        [
+          42.0,
+          0,
+          -50.5,
+          0
+        ],
+        [
+          42.0,
+          0,
+          36.0,
+          0
+        ]
+      ],
+      "_about": "the four Ottoman minarets, pencil-capped"
+    }
+  }
+}

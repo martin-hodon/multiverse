@@ -1,0 +1,185 @@
+{
+ "kind": "item",
+ "name": "Refectory table",
+ "category": "furniture/table",
+ "era": "1550-1700",
+ "region": "England & the Low Countries",
+ "_about": "a joined table for a hall or a college: a thick top on six bulbous turned legs, deep rails under it, stretchers round the foot",
+ "params": {
+  "h": 0.76,
+  "L": [
+   2.2,
+   2.8
+  ],
+  "d": 0.82
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L",
+    0.06,
+    "d"
+   ],
+   "round": 0.01,
+   "at": [
+    0,
+    "h - 0.03",
+    0
+   ]
+  },
+  {
+   "id": "legs",
+   "use": "items/components/turned-leg",
+   "params": {
+    "h": "h - 0.06",
+    "r": 0.05,
+    "style": "baluster",
+    "block": 0.2
+   },
+   "at": [
+    [
+     "0 - L / 2 + 0.12",
+     0,
+     "0 - d / 2 + 0.08"
+    ],
+    [
+     0,
+     0,
+     "0 - d / 2 + 0.08"
+    ],
+    [
+     "L / 2 - 0.12",
+     0,
+     "0 - d / 2 + 0.08"
+    ],
+    [
+     "0 - L / 2 + 0.12",
+     0,
+     "d / 2 - 0.08"
+    ],
+    [
+     0,
+     0,
+     "d / 2 - 0.08"
+    ],
+    [
+     "L / 2 - 0.12",
+     0,
+     "d / 2 - 0.08"
+    ]
+   ]
+  },
+  {
+   "id": "rails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L - 0.2",
+    0.12,
+    0.03
+   ],
+   "at": [
+    [
+     0,
+     "h - 0.12",
+     "d / 2 - 0.08"
+    ],
+    [
+     0,
+     "h - 0.12",
+     "0 - d / 2 + 0.08"
+    ]
+   ]
+  },
+  {
+   "id": "stretchers",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L - 0.2",
+    0.05,
+    0.05
+   ],
+   "at": [
+    [
+     0,
+     0.06,
+     "d / 2 - 0.08"
+    ],
+    [
+     0,
+     0.06,
+     "0 - d / 2 + 0.08"
+    ]
+   ]
+  },
+  {
+   "id": "end stretchers",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.05,
+    0.05,
+    "d - 0.16"
+   ],
+   "at": [
+    [
+     "0 - L / 2 + 0.12",
+     0.06,
+     0
+    ],
+    [
+     "L / 2 - 0.12",
+     0.06,
+     0
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     0.46,
+     "d / 2 + 0.25"
+    ],
+    [
+     "L / 4",
+     0.46,
+     "d / 2 + 0.25"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 1.5707963
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     0.46,
+     "0 - d / 2 - 0.25"
+    ],
+    [
+     "L / 4",
+     0.46,
+     "0 - d / 2 - 0.25"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5707963
+   }
+  }
+ ]
+}

@@ -1,0 +1,271 @@
+{
+  "name": "Domed tower",
+  "_about": "A TOWER WITH A DOME ON A DRUM: a polygonal tower of `sides` faces with a window in each, a ring of KOKOSHNIKI (the stacked gables of Russian churches: small gables all round the tower's head), a drum with windows, and a cap struck from any profile -- `cap` is a word: \"onion\" (St Basil's chapels), \"bell\" (the Frauenkirche's corner towers), \"trigonal\" (a tent) -- and a finial. The chapels of St Basil's are this nine times at different sizes; its central tower is this with a tall tent (`cap` \"trigonal\", `capRise` high). A door at the foot of its first face -- the face centred 180/sides degrees round from +z toward +x (45 degrees for an octagon, 90 for a square): to face a direction w (degrees from +z toward +x), place it with yaw w - 180/sides. Each part says what it stands on (`standsOn`): asking for the cap builds the drum, the neck and the tower under it.",
+  "params": {
+    "detail": 4,
+    "sides": 8,
+    "R": 4,
+    "H": 12,
+    "t": 0.7,
+    "drumR": "R * 0.62",
+    "drumH": "R * 0.8",
+    "cap": "onion",
+    "bulge": 1.3,
+    "neck": 0.9,
+    "waist": 0.78,
+    "lift": 1.0,
+    "capRise": "drumR * 1.6",
+    "capR": "drumR * 1.05",
+    "winW": "R * 0.22",
+    "kok": "R * 0.5",
+    "finial": "R * 0.4",
+    "capRibs": 16,
+    "doorH": "H * 0.3",
+    "glazed": 1,
+    "_glazed": "1: glass in the tower's and the drum's windows; 0: they are open arches (a belfry)"
+  },
+  "build": [
+    "tower",
+    "kokoshniki",
+    "head",
+    "neck",
+    "drum",
+    "cornice",
+    "cap",
+    "finial"
+  ],
+  "parts": {
+    "tower": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "tiers": [
+        {
+          "h": "H * 0.4",
+          "openings": []
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": "winW",
+              "sill": "H * 0.05",
+              "springing": "H * 0.05 + winW * 1.6",
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ],
+          "glass": "glazed"
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "H * 0.4",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.3",
+                "sill": 0,
+                "springing": "doorH - R * 0.15",
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H * 0.05",
+                "springing": "H * 0.05 + winW * 1.6",
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ],
+            "glass": "glazed"
+          }
+        ]
+      }
+    },
+    "kokoshniki": {
+      "type": "roof",
+      "form": "gable",
+      "width": "R * 0.62",
+      "length": 0.4,
+      "pitch": 55,
+      "spiral": {
+        "count": "sides",
+        "radius": "R * 0.9",
+        "y": "H"
+      },
+      "_about": "a gable on every face, standing on the tower's head and turned to face out",
+      "standsOn": [
+        "tower"
+      ]
+    },
+    "head": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R - t * 0.6"
+      },
+      "height": 0.3,
+      "at": [
+        [
+          0,
+          "H - 0.3",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "tower"
+      ],
+      "_about": "the floor closing the tower's head, its edge buried in the walls: what the neck, drum and cap stand on (its top is a ceiling, not a floor: `flatRoof`)",
+      "flatRoof": true
+    },
+    "neck": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R * 0.8"
+      },
+      "height": "kok",
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "head"
+      ],
+      "flatRoof": true
+    },
+    "drum": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "drumR"
+      },
+      "thickness": "t * 0.7",
+      "height": "drumH",
+      "openings": [
+        {
+          "at": 0,
+          "width": "drumR * 0.25",
+          "sill": "drumH * 0.3",
+          "springing": "drumH * 0.62",
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "H + kok",
+          0,
+          0
+        ]
+      ],
+      "glass": "glazed",
+      "standsOn": [
+        "neck"
+      ]
+    },
+    "cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": "capRibs",
+        "radius": "(max(capR, drumR) + 0.1) * 1.08"
+      },
+      "height": "min(0.3, drumH * 0.2)",
+      "at": [
+        [
+          0,
+          "H + kok + drumH - min(0.3, drumH * 0.2)",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "drum"
+      ],
+      "_about": "the drum's cornice, the ring the cap's rim sits on (a cap may be wider than its drum)"
+    },
+    "cap": {
+      "type": "dome",
+      "radius": "capR",
+      "thickness": 0,
+      "head": {
+        "profile": "cap",
+        "bulge": "bulge",
+        "neck": "neck",
+        "waist": "waist",
+        "lift": "lift",
+        "rise": "capRise"
+      },
+      "at": [
+        [
+          0,
+          "H + kok + drumH",
+          0,
+          0
+        ]
+      ],
+      "sides": "capRibs",
+      "standsOn": [
+        "cornice"
+      ]
+    },
+    "finial": {
+      "type": "column",
+      "radius": "R * 0.04",
+      "height": "finial",
+      "sides": 6,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "cap",
+      "standsOn": [
+        "cap"
+      ]
+    },
+    "cap ribs": {
+      "type": "ribs",
+      "count": "capRibs",
+      "width": "capR * 0.12",
+      "depth": "capR * 0.05",
+      "_about": "ribs laid on the cap -- St Basil's onions are ribbed; build it with \"cap ribs\" to have them",
+      "standsOn": [
+        "cap"
+      ],
+      "on": "cap"
+    }
+  }
+}

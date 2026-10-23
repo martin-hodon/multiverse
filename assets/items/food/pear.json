@@ -1,0 +1,137 @@
+{
+ "kind": "item",
+ "name": "Pear",
+ "category": "food/fruit",
+ "era": "-1000-1900",
+ "region": "everywhere temperate",
+ "_about": "a pear: its belly below, its neck narrowing up to the stalk",
+ "params": {
+  "s": [
+   0.9,
+   1.1
+  ]
+ },
+ "materials": {
+  "skin": {
+   "pick": [
+    "pear",
+    "pear",
+    "apple-green"
+   ]
+  },
+  "stem": "stem",
+  "leaf": "leaf"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "lathe",
+   "material": "skin",
+   "profile": [
+    [
+     0,
+     "s * 0.004"
+    ],
+    [
+     "s * 0.03",
+     "s * 0.004"
+    ],
+    [
+     "s * 0.04",
+     "s * 0.03"
+    ],
+    [
+     "s * 0.035",
+     "s * 0.055"
+    ],
+    [
+     "s * 0.02",
+     "s * 0.075"
+    ],
+    [
+     "s * 0.012",
+     "s * 0.09"
+    ],
+    [
+     0,
+     "s * 0.096"
+    ]
+   ],
+   "sides": 10
+  },
+  {
+   "id": "stem",
+   "type": "rod",
+   "material": "stem",
+   "from": [
+    0,
+    "s * 0.094",
+    0
+   ],
+   "to": [
+    0.005,
+    "s * 0.115",
+    0
+   ],
+   "r": 0.0025,
+   "sides": 4
+  },
+  {
+   "id": "leaf 1",
+   "type": "feathers",
+   "material": "leaf",
+   "n": 1,
+   "shape": "rounded",
+   "lift": 0.0004,
+   "droop": 0.5,
+   "lead": 1,
+   "roots": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "dir": [
+    0.0,
+    0.0
+   ],
+   "length": [
+    "s * 0.05",
+    "s * 0.0425"
+   ],
+   "width": [
+    "s * 0.022",
+    "s * 0.018699999999999998"
+   ],
+   "at": [
+    0.004,
+    "s * 0.11",
+    0,
+    40,
+    -20,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.03",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

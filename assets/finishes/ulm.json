@@ -1,0 +1,19 @@
+{
+  "name": "Ulm Minster",
+  "building": "architecture/ulm",
+  "_about": "Ulm Minster: grey-white limestone, the roofs in slate, the spires in stone tracery; stained glass; a grey chequered floor.",
+  "stone": {
+    "color": "#cfc5b0",
+    "accent": "#b9ae98",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:glass", "pattern": "painted/stained glass", "palette": "stained", "_about": "the windows' stained glass"},
+    {"parts": ["kind:roof", "half dome"], "surface": "roof", "pattern": "roofs/slate", "palette": "slate"},
+    {"parts": "kind:dome", "surface": "roof", "pattern": "stone/ashlar", "palette": "limestone"},
+    {"parts": "kind:groin", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "granite"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "limestone"}
+  ]
+}

@@ -1,0 +1,50 @@
+{
+ "name": "Barley field",
+ "_about": "A BARLEY FIELD: a tilled plot 14 x 12 m, its barley in rows (painted by the game from the `crop` marker)",
+ "site": {
+  "origin": true
+ },
+ "params": {
+  "detail": 4,
+  "footW": 15,
+  "footD": 13
+ },
+ "parts": {
+  "soil": {
+   "type": "box",
+   "width": 14,
+   "length": 12,
+   "height": 0.12,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "crop": {
+   "type": "marker",
+   "role": "crop",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "crop": "barley",
+    "w": 14,
+    "d": 12
+   }
+  }
+ },
+ "build": [
+  "soil",
+  "crop"
+ ]
+}

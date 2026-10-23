@@ -1,0 +1,39 @@
+{
+  "name": "Stola",
+  "kind": "garment",
+  "layer": 3,
+  "skirted": true,
+  "_about": "the stola: a Roman matron's long sleeveless dress over her tunica, girded high under the breast, falling in folds to the feet",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "saffron"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "chest + 0.03",
+        "neckline": "square",
+        "neckFront": 0.08,
+        "neckBack": 0.05,
+        "neckWidth": 70
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "chest + 0.03",
+        "to": "floor - 0.03",
+        "flare": 0.3,
+        "pleats": 20,
+        "hem": 0.02
+      }
+    }
+  ]
+}

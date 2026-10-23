@@ -1,0 +1,67 @@
+{
+ "kind": "item",
+ "name": "Flower chaplet",
+ "category": "jewelry",
+ "era": "medieval",
+ "region": "Europe",
+ "_about": "a chaplet of flowers: fresh blooms bound on a green cord round the head -- a May Day or a wedding (the flower assets themselves)",
+ "params": {
+  "scale": 1,
+  "bloom": {
+   "pick": [
+    "items/flowers/blooms/daisy",
+    "items/flowers/blooms/rose",
+    "items/flowers/blooms/cornflower",
+    "items/flowers/blooms/buttercup"
+   ]
+  }
+ },
+ "materials": {
+  "stem": "stem-green"
+ },
+ "colourways": {
+  "green": {
+   "stem": "stem-green"
+  }
+ },
+ "parts": [
+  {
+   "id": "cord",
+   "type": "band",
+   "fit": "head",
+   "level": [
+    0.076,
+    0.05
+   ],
+   "width": 0.004,
+   "thick": 0.003,
+   "material": "stem"
+  },
+  {
+   "id": "bloom",
+   "use": "bloom",
+   "scale": "scale * 0.45",
+   "on": {
+    "fit": "head",
+    "ring": {
+     "n": 11,
+     "from": -165,
+     "to": 165
+    },
+    "level": [
+     0.076,
+     0.05
+    ],
+    "lift": 0.002
+   },
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  }
+ ]
+}

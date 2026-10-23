@@ -1,0 +1,619 @@
+{
+ "kind": "butterfly-shapes",
+ "name": "Butterfly wing shapes",
+ "_about": "the wing outlines as POLAR profiles from the wing's root (butterflies.js wingProfile): for the forewing and the hindwing, `from` / `to` the costa's and the inner margin's direction (degrees from the body's forward), `R` [[degrees, radius x the forewing's length], ...] through a smooth curve, `veins` how many reach the margin (the cells between them), `scallop` { amp, n }, `tail` { at (degrees), length, width (degrees), round }; `hindRoot` the hindwing's root behind the forewing's. A species names one and may override any number of it.",
+ "shapes": {
+  "nymphalid": {
+   "_about": "the brush-foots' broad triangular forewing and rounded hindwing (admirals, monarchs, painted ladies)",
+   "fore": {
+    "from": 70,
+    "to": 124,
+    "veins": 9,
+    "R": [
+     [
+      70,
+      0.96
+     ],
+     [
+      78,
+      1.0
+     ],
+     [
+      88,
+      0.95
+     ],
+     [
+      100,
+      0.86
+     ],
+     [
+      112,
+      0.78
+     ],
+     [
+      119,
+      0.72
+     ],
+     [
+      124,
+      0.62
+     ]
+    ]
+   },
+   "hind": {
+    "from": 96,
+    "to": 190,
+    "veins": 8,
+    "R": [
+     [
+      96,
+      0.5
+     ],
+     [
+      110,
+      0.66
+     ],
+     [
+      130,
+      0.76
+     ],
+     [
+      150,
+      0.76
+     ],
+     [
+      168,
+      0.68
+     ],
+     [
+      182,
+      0.53
+     ],
+     [
+      190,
+      0.42
+     ]
+    ]
+   },
+   "hindRoot": [
+    -0.05,
+    0
+   ]
+  },
+  "nymphalid-scalloped": {
+   "_about": "a nymphalid with the margins scalloped between the veins (peacock, tortoiseshell)",
+   "fore": {
+    "from": 70,
+    "to": 124,
+    "veins": 9,
+    "scallop": {
+     "amp": 0.04,
+     "n": 9
+    },
+    "R": [
+     [
+      70,
+      0.96
+     ],
+     [
+      78,
+      1.0
+     ],
+     [
+      86,
+      0.95
+     ],
+     [
+      96,
+      0.9
+     ],
+     [
+      106,
+      0.84
+     ],
+     [
+      116,
+      0.76
+     ],
+     [
+      124,
+      0.62
+     ]
+    ]
+   },
+   "hind": {
+    "from": 96,
+    "to": 190,
+    "veins": 8,
+    "scallop": {
+     "amp": 0.06,
+     "n": 8
+    },
+    "R": [
+     [
+      96,
+      0.5
+     ],
+     [
+      110,
+      0.66
+     ],
+     [
+      130,
+      0.77
+     ],
+     [
+      150,
+      0.77
+     ],
+     [
+      168,
+      0.68
+     ],
+     [
+      182,
+      0.53
+     ],
+     [
+      190,
+      0.42
+     ]
+    ]
+   },
+   "hindRoot": [
+    -0.05,
+    0
+   ]
+  },
+  "papilio": {
+   "_about": "the swallowtails: a long forewing, the hindwing scalloped and drawn into a TAIL at vein M3",
+   "fore": {
+    "from": 68,
+    "to": 122,
+    "veins": 9,
+    "R": [
+     [
+      68,
+      1.0
+     ],
+     [
+      76,
+      1.05
+     ],
+     [
+      88,
+      0.95
+     ],
+     [
+      102,
+      0.84
+     ],
+     [
+      114,
+      0.74
+     ],
+     [
+      122,
+      0.62
+     ]
+    ]
+   },
+   "hind": {
+    "from": 96,
+    "to": 192,
+    "veins": 8,
+    "scallop": {
+     "amp": 0.07,
+     "n": 7
+    },
+    "tail": {
+     "at": 150,
+     "length": 0.3,
+     "width": 5,
+     "round": 4
+    },
+    "R": [
+     [
+      96,
+      0.48
+     ],
+     [
+      112,
+      0.62
+     ],
+     [
+      132,
+      0.7
+     ],
+     [
+      150,
+      0.7
+     ],
+     [
+      170,
+      0.62
+     ],
+     [
+      184,
+      0.5
+     ],
+     [
+      192,
+      0.38
+     ]
+    ]
+   },
+   "hindRoot": [
+    -0.04,
+    0
+   ]
+  },
+  "pierid": {
+   "_about": "the whites and yellows: a rounded apex, a round hindwing",
+   "fore": {
+    "from": 70,
+    "to": 124,
+    "veins": 9,
+    "R": [
+     [
+      70,
+      0.92
+     ],
+     [
+      80,
+      0.98
+     ],
+     [
+      92,
+      0.95
+     ],
+     [
+      104,
+      0.88
+     ],
+     [
+      116,
+      0.78
+     ],
+     [
+      124,
+      0.64
+     ]
+    ]
+   },
+   "hind": {
+    "from": 96,
+    "to": 190,
+    "veins": 8,
+    "R": [
+     [
+      96,
+      0.5
+     ],
+     [
+      112,
+      0.65
+     ],
+     [
+      132,
+      0.72
+     ],
+     [
+      152,
+      0.7
+     ],
+     [
+      170,
+      0.62
+     ],
+     [
+      184,
+      0.5
+     ],
+     [
+      190,
+      0.4
+     ]
+    ]
+   },
+   "hindRoot": [
+    -0.04,
+    0
+   ]
+  },
+  "gonepteryx": {
+   "_about": "the brimstone: the forewing's apex hooked, the hindwing pointed at a vein",
+   "fore": {
+    "from": 70,
+    "to": 124,
+    "veins": 9,
+    "R": [
+     [
+      70,
+      0.95
+     ],
+     [
+      78,
+      1.04
+     ],
+     [
+      84,
+      0.98
+     ],
+     [
+      96,
+      0.86
+     ],
+     [
+      110,
+      0.78
+     ],
+     [
+      124,
+      0.64
+     ]
+    ]
+   },
+   "hind": {
+    "from": 96,
+    "to": 190,
+    "veins": 8,
+    "tail": {
+     "at": 148,
+     "length": 0.06,
+     "width": 9,
+     "round": 1.5
+    },
+    "R": [
+     [
+      96,
+      0.52
+     ],
+     [
+      114,
+      0.68
+     ],
+     [
+      134,
+      0.77
+     ],
+     [
+      148,
+      0.78
+     ],
+     [
+      164,
+      0.7
+     ],
+     [
+      180,
+      0.57
+     ],
+     [
+      190,
+      0.42
+     ]
+    ]
+   },
+   "hindRoot": [
+    -0.04,
+    0
+   ]
+  },
+  "lycaenid": {
+   "_about": "the blues, coppers and hairstreaks: a small, rounded pair",
+   "fore": {
+    "from": 72,
+    "to": 126,
+    "veins": 8,
+    "R": [
+     [
+      72,
+      0.92
+     ],
+     [
+      82,
+      0.97
+     ],
+     [
+      96,
+      0.92
+     ],
+     [
+      110,
+      0.84
+     ],
+     [
+      126,
+      0.66
+     ]
+    ]
+   },
+   "hind": {
+    "from": 96,
+    "to": 190,
+    "veins": 7,
+    "R": [
+     [
+      96,
+      0.5
+     ],
+     [
+      112,
+      0.64
+     ],
+     [
+      132,
+      0.7
+     ],
+     [
+      152,
+      0.68
+     ],
+     [
+      170,
+      0.6
+     ],
+     [
+      184,
+      0.48
+     ],
+     [
+      190,
+      0.38
+     ]
+    ]
+   },
+   "hindRoot": [
+    -0.04,
+    0
+   ]
+  },
+  "morpho": {
+   "_about": "the morphos and owls: very large, broad wings",
+   "fore": {
+    "from": 68,
+    "to": 126,
+    "veins": 9,
+    "R": [
+     [
+      68,
+      0.95
+     ],
+     [
+      78,
+      1.0
+     ],
+     [
+      92,
+      0.96
+     ],
+     [
+      106,
+      0.9
+     ],
+     [
+      118,
+      0.82
+     ],
+     [
+      126,
+      0.7
+     ]
+    ]
+   },
+   "hind": {
+    "from": 94,
+    "to": 192,
+    "veins": 8,
+    "scallop": {
+     "amp": 0.03,
+     "n": 8
+    },
+    "R": [
+     [
+      94,
+      0.58
+     ],
+     [
+      110,
+      0.76
+     ],
+     [
+      130,
+      0.84
+     ],
+     [
+      150,
+      0.84
+     ],
+     [
+      170,
+      0.76
+     ],
+     [
+      184,
+      0.6
+     ],
+     [
+      192,
+      0.45
+     ]
+    ]
+   },
+   "hindRoot": [
+    -0.05,
+    0
+   ]
+  },
+  "heliconius": {
+   "_about": "the longwings: a long narrow forewing, a small hindwing",
+   "fore": {
+    "from": 68,
+    "to": 118,
+    "veins": 9,
+    "R": [
+     [
+      68,
+      1.0
+     ],
+     [
+      76,
+      1.03
+     ],
+     [
+      88,
+      0.9
+     ],
+     [
+      102,
+      0.74
+     ],
+     [
+      112,
+      0.62
+     ],
+     [
+      118,
+      0.5
+     ]
+    ]
+   },
+   "hind": {
+    "from": 96,
+    "to": 186,
+    "veins": 8,
+    "R": [
+     [
+      96,
+      0.46
+     ],
+     [
+      112,
+      0.58
+     ],
+     [
+      132,
+      0.62
+     ],
+     [
+      152,
+      0.58
+     ],
+     [
+      172,
+      0.5
+     ],
+     [
+      186,
+      0.38
+     ]
+    ]
+   },
+   "hindRoot": [
+    -0.04,
+    0
+   ]
+  }
+ }
+}

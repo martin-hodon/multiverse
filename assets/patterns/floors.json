@@ -1,0 +1,754 @@
+{
+  "name": "Floors",
+  "_about": "FLOORS: stone and tile laid to a design -- the chequer in all its turns, the Pantheon's opus sectile of discs and squares, the octagon-and-dot and the star-and-cross, brick in basketweave, flagstones, terracotta, a Cosmatesque roundel, and a compass rose (a PANEL: drawn once, not repeated, and set where the finish puts it). A floor lies in the plan: u east, v north.",
+  "patterns": {
+    "checker": {
+      "size": [
+        1.2,
+        1.2
+      ],
+      "palette": "marble-bw",
+      "palettes": [
+        "florence",
+        "marble-rose",
+        "red-sandstone"
+      ],
+      "_about": "sixty-centimetre squares, two stones",
+      "layers": [
+        {
+          "field": "veins",
+          "colors": [
+            0,
+            3
+          ],
+          "freq": 1,
+          "turns": 1,
+          "amount": 0.6
+        },
+        {
+          "shape": "rect",
+          "w": 0.6,
+          "h": 0.6,
+          "fill": 1,
+          "at": [
+            [
+              -0.3,
+              0.3
+            ],
+            [
+              0.3,
+              -0.3
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.6,
+          "h": 0.6,
+          "grid": [
+            2,
+            2
+          ],
+          "stroke": 2,
+          "line": 0.004
+        }
+      ]
+    },
+    "checker diagonal": {
+      "size": [
+        0.8485,
+        0.8485
+      ],
+      "palette": "marble-bw",
+      "palettes": [
+        "florence",
+        "marble-grey"
+      ],
+      "_about": "the chequer turned to the diagonal (St Paul's)",
+      "layers": [
+        {
+          "field": "veins",
+          "colors": [
+            0,
+            3
+          ],
+          "freq": 1,
+          "turns": 1,
+          "amount": 0.5
+        },
+        {
+          "shape": "rect",
+          "w": 0.6,
+          "h": 0.6,
+          "rot": 45,
+          "fill": 1
+        },
+        {
+          "shape": "rect",
+          "w": 0.6,
+          "h": 0.6,
+          "rot": 45,
+          "stroke": 2,
+          "line": 0.004,
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              0.42425,
+              0.42425
+            ]
+          ]
+        }
+      ]
+    },
+    "opus sectile": {
+      "size": [
+        3.6,
+        3.6
+      ],
+      "palette": "porphyry",
+      "palettes": [
+        "florence",
+        "marble-bw"
+      ],
+      "_about": "the Pantheon's floor: squares of giallo antico, in them by turns a disc of porphyry and a square of green porphyry, each in a pale band",
+      "layers": [
+        {
+          "field": "veins",
+          "colors": [
+            0,
+            3
+          ],
+          "freq": 0.8,
+          "turns": 1,
+          "amount": 0.5
+        },
+        {
+          "shape": "circle",
+          "r": 0.66,
+          "fill": 3,
+          "at": [
+            [
+              -0.9,
+              0.9
+            ],
+            [
+              0.9,
+              -0.9
+            ]
+          ]
+        },
+        {
+          "shape": "circle",
+          "r": 0.6,
+          "fill": 1,
+          "at": [
+            [
+              -0.9,
+              0.9
+            ],
+            [
+              0.9,
+              -0.9
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 1.32,
+          "h": 1.32,
+          "fill": 3,
+          "at": [
+            [
+              0.9,
+              0.9
+            ],
+            [
+              -0.9,
+              -0.9
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 1.2,
+          "h": 1.2,
+          "fill": 2,
+          "at": [
+            [
+              0.9,
+              0.9
+            ],
+            [
+              -0.9,
+              -0.9
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 1.8,
+          "h": 1.8,
+          "grid": [
+            2,
+            2
+          ],
+          "stroke": 4,
+          "line": 0.015
+        }
+      ]
+    },
+    "octagon and dot": {
+      "size": [
+        0.4,
+        0.4
+      ],
+      "palette": "marble-bw",
+      "palettes": [
+        "terracotta",
+        "florence"
+      ],
+      "ground": 3,
+      "_about": "octagons with a small square set diagonally where four meet",
+      "layers": [
+        {
+          "shape": "poly",
+          "n": 8,
+          "r": 0.2135,
+          "rot": 22.5,
+          "fill": 0,
+          "vary": 0.03
+        },
+        {
+          "shape": "rect",
+          "w": 0.118,
+          "h": 0.118,
+          "rot": 45,
+          "fill": 1,
+          "at": [
+            0.2,
+            0.2
+          ]
+        },
+        {
+          "shape": "poly",
+          "n": 8,
+          "r": 0.2135,
+          "rot": 22.5,
+          "stroke": 2,
+          "line": 0.004
+        }
+      ]
+    },
+    "star and cross": {
+      "size": [
+        0.5,
+        0.5
+      ],
+      "palette": "mughal",
+      "palettes": [
+        "marble-bw",
+        "zellige"
+      ],
+      "_about": "eight-pointed stars, each two squares, and the crosses between them (the Taj Mahal's floors)",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.25,
+          "h": 0.25,
+          "fill": 1,
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              0.25,
+              0.25
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.25,
+          "h": 0.25,
+          "rot": 45,
+          "fill": 1,
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              0.25,
+              0.25
+            ]
+          ]
+        },
+        {
+          "shape": "star",
+          "n": 8,
+          "r": 0.08,
+          "inner": 0.55,
+          "rot": 22.5,
+          "fill": 4,
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              0.25,
+              0.25
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.25,
+          "h": 0.25,
+          "stroke": 4,
+          "line": 0.004,
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              0.25,
+              0.25
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.25,
+          "h": 0.25,
+          "rot": 45,
+          "stroke": 4,
+          "line": 0.004,
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              0.25,
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    "basketweave": {
+      "size": [
+        0.4,
+        0.4
+      ],
+      "palette": "brick",
+      "palettes": [
+        "terracotta",
+        "sandstone"
+      ],
+      "_about": "brick paving: pairs of bricks laid by turns across and along",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.19,
+          "h": 0.09,
+          "fill": 1,
+          "vary": 0.1,
+          "at": [
+            [
+              -0.1,
+              0.15
+            ],
+            [
+              -0.1,
+              0.05
+            ],
+            [
+              0.1,
+              -0.05
+            ],
+            [
+              0.1,
+              -0.15
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.09,
+          "h": 0.19,
+          "fill": 1,
+          "vary": 0.1,
+          "at": [
+            [
+              0.05,
+              0.1
+            ],
+            [
+              0.15,
+              0.1
+            ],
+            [
+              -0.15,
+              -0.1
+            ],
+            [
+              -0.05,
+              -0.1
+            ]
+          ]
+        }
+      ]
+    },
+    "flagstones": {
+      "size": [
+        2.4,
+        1.6
+      ],
+      "palette": "limestone",
+      "palettes": [
+        "sandstone",
+        "granite",
+        "red-sandstone"
+      ],
+      "ground": 2,
+      "_about": "rectangular flags in rows of unequal stones",
+      "layers": [
+        {
+          "shape": "rect",
+          "h": 0.49,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.79,
+          "at": [
+            -0.8,
+            0.55
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.49,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.59,
+          "at": [
+            -0.1,
+            0.55
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.49,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.99,
+          "at": [
+            0.7,
+            0.55
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.59,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.49,
+          "at": [
+            -0.95,
+            0
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.59,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.89,
+          "at": [
+            -0.25,
+            0
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.59,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.69,
+          "at": [
+            0.55,
+            0
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.59,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.29,
+          "at": [
+            1.05,
+            0
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.49,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.69,
+          "at": [
+            -0.85,
+            -0.55
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.49,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.69,
+          "at": [
+            -0.15,
+            -0.55
+          ]
+        },
+        {
+          "shape": "rect",
+          "h": 0.49,
+          "fill": 0,
+          "vary": 0.09,
+          "w": 0.99,
+          "at": [
+            0.7,
+            -0.55
+          ]
+        },
+        {
+          "field": "cloud",
+          "colors": [
+            1,
+            3
+          ],
+          "freq": 2,
+          "amount": 1.3,
+          "alpha": 0.3
+        }
+      ]
+    },
+    "terracotta": {
+      "size": [
+        0.6,
+        0.6
+      ],
+      "palette": "terracotta",
+      "palettes": [
+        "brick",
+        "plaster-ochre"
+      ],
+      "_about": "square terracotta tiles, 29cm",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.29,
+          "h": 0.29,
+          "fill": 1,
+          "vary": 0.1,
+          "grid": [
+            2,
+            2
+          ]
+        }
+      ]
+    },
+    "cosmati": {
+      "size": [
+        2.0,
+        2.0
+      ],
+      "palette": "porphyry",
+      "palettes": [
+        "florence",
+        "marble-bw"
+      ],
+      "ground": 3,
+      "_about": "a Cosmatesque roundel: a porphyry disc in a white band with a star in it, smaller discs at the corners, all in a ground of pale marble",
+      "layers": [
+        {
+          "shape": "ring",
+          "r": 0.82,
+          "w": 0.1,
+          "fill": 1
+        },
+        {
+          "shape": "circle",
+          "r": 0.62,
+          "fill": 1
+        },
+        {
+          "shape": "star",
+          "n": 8,
+          "r": 0.5,
+          "inner": 0.55,
+          "fill": 3
+        },
+        {
+          "shape": "star",
+          "n": 8,
+          "r": 0.28,
+          "inner": 0.55,
+          "rot": 22.5,
+          "fill": 2
+        },
+        {
+          "shape": "circle",
+          "r": 0.16,
+          "fill": 2,
+          "at": [
+            [
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "shape": "ring",
+          "r": 0.2,
+          "w": 0.03,
+          "fill": 1,
+          "at": [
+            [
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.12,
+          "h": 0.12,
+          "rot": 45,
+          "fill": 2,
+          "grid": {
+            "n": [
+              8,
+              1
+            ],
+            "span": [
+              2,
+              2
+            ]
+          },
+          "at": [
+            0,
+            -1
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.12,
+          "h": 0.12,
+          "rot": 45,
+          "fill": 2,
+          "grid": {
+            "n": [
+              1,
+              8
+            ],
+            "span": [
+              2,
+              2
+            ]
+          },
+          "at": [
+            -1,
+            0
+          ]
+        }
+      ]
+    },
+    "compass": {
+      "size": [
+        8,
+        8
+      ],
+      "repeat": false,
+      "palette": "marble-bw",
+      "palettes": [
+        "florence",
+        "porphyry"
+      ],
+      "res": 1024,
+      "_about": "a compass rose, a PANEL: rings and a sixteen-pointed star, set once under a dome's crossing",
+      "layers": [
+        {
+          "field": "veins",
+          "colors": [
+            0,
+            3
+          ],
+          "freq": 0.5,
+          "turns": 1,
+          "amount": 0.5
+        },
+        {
+          "shape": "ring",
+          "r": 3.9,
+          "w": 0.3,
+          "fill": 1
+        },
+        {
+          "shape": "ring",
+          "r": 3.4,
+          "w": 0.08,
+          "fill": 1
+        },
+        {
+          "shape": "star",
+          "n": 16,
+          "r": 3.3,
+          "inner": 0.36,
+          "fill": 1
+        },
+        {
+          "shape": "star",
+          "n": 8,
+          "r": 3.3,
+          "inner": 0.2,
+          "fill": 2
+        },
+        {
+          "shape": "star",
+          "n": 4,
+          "r": 3.3,
+          "inner": 0.14,
+          "fill": 1
+        },
+        {
+          "shape": "circle",
+          "r": 0.7,
+          "fill": 0
+        },
+        {
+          "shape": "ring",
+          "r": 0.7,
+          "w": 0.08,
+          "fill": 1
+        },
+        {
+          "shape": "star",
+          "n": 8,
+          "r": 0.55,
+          "inner": 0.5,
+          "fill": 2
+        }
+      ]
+    }
+  }
+}

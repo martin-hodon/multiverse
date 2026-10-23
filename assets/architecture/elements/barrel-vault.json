@@ -1,0 +1,56 @@
+{
+  "name": "Barrel vault",
+  "_about": "A BARREL VAULT: an arch's head carried along a straight line, with the masonry above it flat on top where the floor or the roof sits. Its soffit is the arch, its haunches the solid either side, `top` its extrados. Raise `springing` and the vault rides higher; change the head's profile and the whole roof changes with it.",
+  "params": {
+    "detail": 6,
+    "span": 6,
+    "length": 10,
+    "springing": 4,
+    "top": 8.5
+  },
+  "build": [
+    "vault",
+    "wall"
+  ],
+  "_build": "which parts to build, and in what order (a caller may ask for a few of them: the village takes a cathedral's arcades from a definition whose walls it builds itself)",
+  "parts": {
+    "vault": {
+      "type": "barrel",
+      "width": "span",
+      "length": "length",
+      "springing": "springing",
+      "top": "top",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "wall": {
+      "type": "wall",
+      "width": "length",
+      "height": "springing",
+      "thickness": 0.8,
+      "at": [
+        [
+          "0 - span / 2 - 0.4",
+          0,
+          0,
+          "1.5707963"
+        ],
+        [
+          "span / 2 + 0.4",
+          0,
+          0,
+          "1.5707963"
+        ]
+      ]
+    }
+  }
+}

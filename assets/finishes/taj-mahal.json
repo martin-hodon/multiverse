@@ -1,0 +1,19 @@
+{
+  "name": "Taj Mahal",
+  "building": "architecture/taj-mahal",
+  "_about": "The Taj Mahal: white Makrana marble, its panels framed in black inlay and flowering in pietra dura, the windows jalis; the minarets' blocks outlined in black; floors in stars and crosses; the finials gilt.",
+  "stone": {
+    "color": "#eeeae2",
+    "accent": "#d9d2c4",
+    "pat": "marble"
+  },
+  "rules": [
+    {"parts": ["finial"], "pattern": "roofs/gold leaf"},
+    {"parts": ["dome", "chhatris"], "surface": "roof", "pattern": "stone/marble", "palette": "carrara"},
+    {"parts": "minarets", "surface": "wall", "pattern": "stone/ashlar fine", "palette": "marble-inlay"},
+    {"parts": "plinth", "surface": "wall", "pattern": "stone/ashlar fine", "palette": "marble-inlay"},
+    {"surface": "floor", "side": "in", "pattern": "floors/star and cross", "palette": "mughal"},
+    {"surface": "floor", "pattern": "floors/star and cross", "palette": "marble-bw"},
+    {"surface": "wall", "pattern": "panels/pietra dura", "palette": "mughal"}
+  ]
+}

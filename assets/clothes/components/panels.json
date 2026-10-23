@@ -1,0 +1,54 @@
+{
+  "name": "Front and back panels",
+  "kind": "component",
+  "_about": "A SIDELESS body: a yoke over the shoulders, and below the armpits only a front panel and a back panel, the sides open from the armpit to the hips -- the late medieval sideless surcoat's 'windows of hell', where the kirtle shows. Two open sheets (their `wrap`: an arc about the front and one about the back) under a closed one.",
+  "params": {
+    "to": "hip",
+    "span": 110,
+    "neckline": "boat",
+    "neckFront": 0.03,
+    "neckBack": 0.02,
+    "hem": 0.02
+  },
+  "pieces": [
+    {
+      "name": "yoke",
+      "on": "torso",
+      "from": "collar",
+      "to": "armpit + 0.02",
+      "fabric": "main",
+      "opening": {
+        "neckline": "neckline",
+        "front": "neckFront",
+        "back": "neckBack",
+        "width": 70
+      }
+    },
+    {
+      "name": "front",
+      "on": "torso",
+      "from": "armpit",
+      "to": "to",
+      "wrap": [
+        0,
+        "span"
+      ],
+      "fabric": "main",
+      "hem": {
+        "width": "hem",
+        "fabric": "trim"
+      }
+    },
+    {
+      "name": "back",
+      "on": "torso",
+      "from": "armpit",
+      "to": "to",
+      "wrap": [
+        180,
+        "span"
+      ],
+      "fabric": "main"
+    }
+  ]
+}

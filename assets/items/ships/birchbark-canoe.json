@@ -1,0 +1,128 @@
+{
+ "kind": "item",
+ "name": "Birchbark canoe",
+ "category": "ship",
+ "era": "-1000-1900",
+ "region": "North America",
+ "_about": "the canoe of the northern forests: birch bark sewn over cedar ribs and gunwales, its ends rising, three thwarts, light enough to carry",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   4.5,
+   6
+  ],
+  "B": "L * 0.18",
+  "D": "B * 0.48"
+ },
+ "materials": {
+  "planks": "birch",
+  "deck": "deck",
+  "wood": "cedar",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.4,
+   "double": true,
+   "stations": 20,
+   "sides": 5,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.15,
+     0.65
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.85,
+     0.65
+    ],
+    [
+     1,
+     0.02
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.6"
+    ],
+    [
+     0.12,
+     "D * 0.1"
+    ],
+    [
+     0.3,
+     0
+    ],
+    [
+     0.7,
+     0
+    ],
+    [
+     0.88,
+     "D * 0.1"
+    ],
+    [
+     1,
+     "D * 0.6"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.6"
+    ],
+    [
+     0.12,
+     "D * 1.1"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.88,
+     "D * 1.1"
+    ],
+    [
+     1,
+     "D * 1.6"
+    ]
+   ],
+   "rail": 0.035,
+   "thwarts": {
+    "n": 3,
+    "y": "D * 0.85",
+    "w": 0.08,
+    "from": 0.25,
+    "to": 0.75,
+    "thick": 0.025
+   },
+   "ribs": {
+    "n": 16,
+    "w": 0.04
+   }
+  }
+ ]
+}

@@ -1,0 +1,1022 @@
+{
+  "name": "Fabrics",
+  "_about": "THE CLOTHS people are dressed in (clothes.js, docs/clothes.md): patterns of at most FOUR colour slots -- 0 the dye, 1 a second thread or yarn, 2 an accent, 3 a dark -- because the figure engine keeps each one as the weights of its slots (fabric.js) and takes the colours from the garment. The tile's x runs ROUND the body, its y DOWN it from the garment's top edge: a `vband` is a stripe down a tunic, a `band` a hoop round it. Sizes are real: a weave's rib is millimetres, a stripe a few centimetres, a tartan's sett fifteen.",
+  "patterns": {
+    "plain": {
+      "size": [
+        0.3,
+        0.3
+      ],
+      "palette": "madder",
+      "palettes": [
+        "woad",
+        "weld",
+        "green",
+        "undyed"
+      ],
+      "_about": "plain-woven wool or linen: a tabby weave too fine to see at a few metres, and the dye's own unevenness",
+      "layers": [
+        {
+          "field": "cloud",
+          "colors": [
+            0,
+            1
+          ],
+          "freq": 3,
+          "amount": 0.55
+        }
+      ]
+    },
+    "linen": {
+      "size": [
+        0.08,
+        0.08
+      ],
+      "palette": "linen",
+      "palettes": [
+        "undyed",
+        "wool-grey"
+      ],
+      "_about": "linen: its slubbed yarn, thicker and thinner threads running along the warp",
+      "layers": [
+        {
+          "field": "cloud",
+          "colors": [
+            0,
+            2
+          ],
+          "freq": 3,
+          "amount": 0.4
+        },
+        {
+          "shape": "vband",
+          "w": 0.0012,
+          "fill": 1,
+          "alpha": 0.45,
+          "at": [
+            [
+              -0.031,
+              0
+            ],
+            [
+              -0.017,
+              0
+            ],
+            [
+              0.004,
+              0
+            ],
+            [
+              0.022,
+              0
+            ],
+            [
+              0.036,
+              0
+            ]
+          ]
+        },
+        {
+          "shape": "band",
+          "h": 0.0012,
+          "fill": 1,
+          "alpha": 0.3,
+          "at": [
+            [
+              0,
+              -0.025
+            ],
+            [
+              0,
+              0.011
+            ],
+            [
+              0,
+              0.03
+            ]
+          ]
+        }
+      ]
+    },
+    "twill": {
+      "size": [
+        0.014,
+        0.014
+      ],
+      "palette": "woad",
+      "palettes": [
+        "russet",
+        "wool-grey",
+        "madder"
+      ],
+      "_about": "twill: the weave's diagonal ribs (a serge, a worsted), each rib a darker thread",
+      "layers": [
+        {
+          "shape": "band",
+          "h": 0.0035,
+          "rot": 45,
+          "fill": 1
+        }
+      ]
+    },
+    "herringbone": {
+      "size": [
+        0.04,
+        0.03
+      ],
+      "palette": "wool-grey",
+      "palettes": [
+        "russet",
+        "woad",
+        "undyed"
+      ],
+      "_about": "herringbone: twill reversed every column, ribs meeting in chevrons down the cloth",
+      "layers": [
+        {
+          "shape": "zigzag",
+          "amp": 0.01,
+          "h": 0.003,
+          "n": 1,
+          "rot": 90,
+          "fill": 1,
+          "at": [
+            [
+              -0.01,
+              0
+            ],
+            [
+              0.01,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "stripes": {
+      "size": [
+        0.07,
+        0.07
+      ],
+      "palette": "stripe-woad",
+      "palettes": [
+        "stripe-madder",
+        "stripe-green"
+      ],
+      "_about": "stripes down the cloth, a broad one edged by two narrow in the accent",
+      "layers": [
+        {
+          "shape": "vband",
+          "w": 0.02,
+          "fill": 1
+        },
+        {
+          "shape": "vband",
+          "w": 0.004,
+          "fill": 2,
+          "at": [
+            [
+              -0.016,
+              0
+            ],
+            [
+              0.016,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "pinstripe": {
+      "size": [
+        0.025,
+        0.025
+      ],
+      "palette": "stripe-madder",
+      "palettes": [
+        "stripe-woad",
+        "black"
+      ],
+      "_about": "pinstripe: one thread of a second colour every few centimetres",
+      "layers": [
+        {
+          "field": "cloud",
+          "colors": [
+            0,
+            2
+          ],
+          "freq": 2,
+          "amount": 0.2
+        },
+        {
+          "shape": "vband",
+          "w": 0.0025,
+          "fill": 1
+        }
+      ]
+    },
+    "hoops": {
+      "size": [
+        0.09,
+        0.09
+      ],
+      "palette": "stripe-green",
+      "palettes": [
+        "stripe-madder",
+        "stripe-woad"
+      ],
+      "_about": "stripes round the body: hose, a jester's sleeve, a sailor's shirt",
+      "layers": [
+        {
+          "shape": "band",
+          "h": 0.03,
+          "fill": 1
+        },
+        {
+          "shape": "band",
+          "h": 0.004,
+          "fill": 2,
+          "at": [
+            [
+              0,
+              0.022
+            ],
+            [
+              0,
+              -0.022
+            ]
+          ]
+        }
+      ]
+    },
+    "checks": {
+      "size": [
+        0.05,
+        0.05
+      ],
+      "palette": "check-russet",
+      "palettes": [
+        "stripe-woad",
+        "stripe-madder"
+      ],
+      "_about": "a two-colour check: bands both ways at half strength, stronger where they cross",
+      "layers": [
+        {
+          "shape": "vband",
+          "w": 0.025,
+          "fill": 1,
+          "alpha": 0.55
+        },
+        {
+          "shape": "band",
+          "h": 0.025,
+          "fill": 1,
+          "alpha": 0.55
+        }
+      ]
+    },
+    "tartan": {
+      "size": [
+        0.16,
+        0.16
+      ],
+      "palette": "tartan-green",
+      "palettes": [
+        "tartan-red",
+        "check-russet"
+      ],
+      "_about": "a tartan sett: broad bands of the second colour both ways, narrow ones of the accent, a dark over-check",
+      "layers": [
+        {
+          "shape": "vband",
+          "w": 0.05,
+          "fill": 1,
+          "alpha": 0.6
+        },
+        {
+          "shape": "band",
+          "h": 0.05,
+          "fill": 1,
+          "alpha": 0.6
+        },
+        {
+          "shape": "vband",
+          "w": 0.006,
+          "fill": 2,
+          "alpha": 0.8,
+          "at": [
+            [
+              0.055,
+              0
+            ],
+            [
+              -0.055,
+              0
+            ]
+          ]
+        },
+        {
+          "shape": "band",
+          "h": 0.006,
+          "fill": 2,
+          "alpha": 0.8,
+          "at": [
+            [
+              0,
+              0.055
+            ],
+            [
+              0,
+              -0.055
+            ]
+          ]
+        },
+        {
+          "shape": "vband",
+          "w": 0.012,
+          "fill": 3,
+          "alpha": 0.5,
+          "at": [
+            0.08,
+            0
+          ]
+        },
+        {
+          "shape": "band",
+          "h": 0.012,
+          "fill": 3,
+          "alpha": 0.5,
+          "at": [
+            0,
+            0.08
+          ]
+        }
+      ]
+    },
+    "lozenge": {
+      "size": [
+        0.05,
+        0.05
+      ],
+      "palette": "russet",
+      "palettes": [
+        "woad",
+        "madder",
+        "undyed"
+      ],
+      "_about": "diamond twill: a lattice of lozenges woven into the cloth",
+      "layers": [
+        {
+          "field": "cloud",
+          "colors": [
+            0,
+            2
+          ],
+          "freq": 2,
+          "amount": 0.3
+        },
+        {
+          "shape": "rect",
+          "w": 0.0354,
+          "h": 0.0354,
+          "rot": 45,
+          "stroke": 1,
+          "line": 0.003
+        }
+      ]
+    },
+    "dots": {
+      "size": [
+        0.05,
+        0.05
+      ],
+      "palette": "woad",
+      "palettes": [
+        "madder",
+        "green",
+        "black"
+      ],
+      "_about": "spots in a half-drop, woven or printed",
+      "layers": [
+        {
+          "shape": "circle",
+          "r": 0.005,
+          "fill": 2,
+          "grid": {
+            "n": [
+              2,
+              2
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "damask": {
+      "size": [
+        0.16,
+        0.2
+      ],
+      "palette": "damask-red",
+      "palettes": [
+        "damask-blue",
+        "damask-green"
+      ],
+      "_about": "silk damask: a flower in the cloth's own sheen (the second slot, one tone off the dye) in a half-drop, gold at its heart",
+      "layers": [
+        {
+          "shape": "petals",
+          "n": 6,
+          "r": 0.045,
+          "inner": 0.012,
+          "w": 0.011,
+          "fill": 1,
+          "grid": {
+            "n": [
+              1,
+              2
+            ],
+            "offset": 0.5
+          }
+        },
+        {
+          "shape": "lens",
+          "r": 0.03,
+          "w": 0.01,
+          "fill": 1,
+          "rot": 90,
+          "at": [
+            [
+              0,
+              0.06
+            ],
+            [
+              0,
+              -0.06
+            ]
+          ],
+          "grid": {
+            "n": [
+              1,
+              2
+            ],
+            "offset": 0.5
+          }
+        },
+        {
+          "shape": "circle",
+          "r": 0.008,
+          "fill": 2,
+          "grid": {
+            "n": [
+              1,
+              2
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "brocade": {
+      "size": [
+        0.18,
+        0.18
+      ],
+      "palette": "damask-blue",
+      "palettes": [
+        "damask-red",
+        "damask-green"
+      ],
+      "_about": "brocade: a pomegranate woven in gold thread on a coloured silk, in a lattice",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.127,
+          "h": 0.127,
+          "rot": 45,
+          "stroke": 1,
+          "line": 0.004
+        },
+        {
+          "shape": "petals",
+          "n": 8,
+          "r": 0.036,
+          "inner": 0.012,
+          "w": 0.01,
+          "fill": 2
+        },
+        {
+          "shape": "circle",
+          "r": 0.013,
+          "fill": 3
+        },
+        {
+          "shape": "circle",
+          "r": 0.007,
+          "fill": 2
+        }
+      ]
+    },
+    "quilted": {
+      "size": [
+        0.08,
+        0.08
+      ],
+      "palette": "undyed",
+      "palettes": [
+        "wool-grey",
+        "russet",
+        "black"
+      ],
+      "_about": "a quilted gambeson: the padding stitched through in a lattice of diamonds, each diamond puffed",
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.052,
+          "h": 0.052,
+          "rot": 45,
+          "fill": 2,
+          "alpha": 0.35
+        },
+        {
+          "shape": "rect",
+          "w": 0.0566,
+          "h": 0.0566,
+          "rot": 45,
+          "stroke": 3,
+          "line": 0.003
+        }
+      ]
+    },
+    "mail": {
+      "size": [
+        0.024,
+        0.02
+      ],
+      "palette": "steel",
+      "palettes": [
+        "iron"
+      ],
+      "_about": "riveted mail: rows of rings, each through four others, the gaps dark",
+      "ground": 3,
+      "layers": [
+        {
+          "shape": "ring",
+          "r": 0.0045,
+          "w": 0.0022,
+          "fill": 0,
+          "grid": {
+            "n": [
+              2,
+              2
+            ],
+            "offset": 0.5
+          }
+        },
+        {
+          "shape": "arc",
+          "r": 0.0045,
+          "a0": 30,
+          "a1": 110,
+          "stroke": 2,
+          "line": 0.001,
+          "grid": {
+            "n": [
+              2,
+              2
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "leather": {
+      "size": [
+        0.25,
+        0.25
+      ],
+      "palette": "leather",
+      "palettes": [
+        "leather-dark",
+        "leather-red"
+      ],
+      "_about": "leather: its grain and the scuffs of wear, a mottle and fine creases",
+      "layers": [
+        {
+          "field": "cloud",
+          "colors": [
+            0,
+            1
+          ],
+          "freq": 4,
+          "amount": 1.0
+        },
+        {
+          "field": "speckle",
+          "colors": [
+            0,
+            3
+          ],
+          "grain": 0.003,
+          "amount": 0.25,
+          "alpha": 0.5
+        }
+      ]
+    },
+    "fur": {
+      "size": [
+        0.12,
+        0.12
+      ],
+      "palette": "fur-brown",
+      "palettes": [
+        "fur-grey",
+        "fur-white"
+      ],
+      "_about": "fur: short tufts lying down the pelt, light tips and dark roots",
+      "layers": [
+        {
+          "field": "speckle",
+          "colors": [
+            0,
+            1,
+            2
+          ],
+          "grain": 0.004,
+          "amount": 1.0
+        }
+      ]
+    },
+    "straw": {
+      "size": [
+        0.03,
+        0.03
+      ],
+      "palette": "straw",
+      "palettes": [
+        "russet"
+      ],
+      "_about": "plaited straw: a hat's braid, over and under in squares",
+      "ground": 3,
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.0145,
+          "h": 0.006,
+          "r": 0.002,
+          "fill": 0,
+          "at": [
+            [
+              -0.0075,
+              -0.0045
+            ],
+            [
+              -0.0075,
+              0.0045
+            ],
+            [
+              0.0075,
+              -0.0105
+            ],
+            [
+              0.0075,
+              0.0105
+            ]
+          ]
+        },
+        {
+          "shape": "rect",
+          "w": 0.006,
+          "h": 0.0145,
+          "r": 0.002,
+          "fill": 1,
+          "at": [
+            [
+              0.0045,
+              -0.0075
+            ],
+            [
+              0.0105,
+              0.0075
+            ],
+            [
+              -0.0045,
+              0.0075
+            ],
+            [
+              -0.0105,
+              -0.0075
+            ]
+          ]
+        }
+      ]
+    },
+    "braid": {
+      "size": [
+        0.04,
+        0.04
+      ],
+      "palette": "gold-braid",
+      "palettes": [
+        "blue-braid",
+        "green-braid"
+      ],
+      "_about": "a woven braid for a hem or a cuff: chevrons in the second colour between two fine lines of the accent",
+      "layers": [
+        {
+          "shape": "zigzag",
+          "amp": 0.008,
+          "h": 0.005,
+          "n": 2,
+          "fill": 1
+        },
+        {
+          "shape": "band",
+          "h": 0.002,
+          "fill": 2,
+          "at": [
+            [
+              0,
+              0.015
+            ],
+            [
+              0,
+              -0.015
+            ]
+          ]
+        }
+      ]
+    },
+    "vine": {
+      "size": [
+        0.12,
+        0.05
+      ],
+      "palette": "gold-braid",
+      "palettes": [
+        "blue-braid",
+        "green-braid"
+      ],
+      "_about": "an embroidered border: a vine winding along the edge, a flower in each bay",
+      "layers": [
+        {
+          "shape": "wave",
+          "amp": 0.01,
+          "h": 0.003,
+          "n": 1,
+          "fill": 2
+        },
+        {
+          "shape": "petals",
+          "n": 5,
+          "r": 0.009,
+          "inner": 0.003,
+          "w": 0.003,
+          "fill": 1,
+          "at": [
+            [
+              -0.03,
+              0.012
+            ],
+            [
+              0.03,
+              -0.012
+            ]
+          ]
+        },
+        {
+          "shape": "band",
+          "h": 0.002,
+          "fill": 2,
+          "at": [
+            [
+              0,
+              0.022
+            ],
+            [
+              0,
+              -0.022
+            ]
+          ]
+        }
+      ]
+    },
+    "lacing": {
+      "size": [
+        0.05,
+        0.05
+      ],
+      "palette": "gold-braid",
+      "palettes": [
+        "leather",
+        "linen"
+      ],
+      "_about": "front lacing: a cord crossing between two rows of eyelets, down a bodice's opening (the gap under it shows the dye's dark)",
+      "ground": 3,
+      "layers": [
+        {
+          "shape": "zigzag",
+          "amp": 0.016,
+          "h": 0.004,
+          "n": 1,
+          "rot": 90,
+          "fill": 1
+        },
+        {
+          "shape": "circle",
+          "r": 0.004,
+          "fill": 2,
+          "at": [
+            [
+              -0.019,
+              0
+            ],
+            [
+              0.019,
+              0
+            ],
+            [
+              -0.019,
+              0.025
+            ],
+            [
+              0.019,
+              0.025
+            ]
+          ]
+        }
+      ]
+    },
+    "buckle": {
+      "size": [
+        0.05,
+        0.05
+      ],
+      "palette": "brass",
+      "palettes": [
+        "steel"
+      ],
+      "_about": "a belt's buckle: a brass frame with its pin, the strap dark behind it",
+      "ground": 3,
+      "layers": [
+        {
+          "shape": "frame",
+          "w": 0.046,
+          "h": 0.046,
+          "t": 0.008,
+          "fill": 0
+        },
+        {
+          "shape": "rect",
+          "w": 0.004,
+          "h": 0.03,
+          "fill": 2
+        }
+      ]
+    },
+    "meander": {
+      "size": [
+        0.06,
+        0.032
+      ],
+      "palette": "meander-red",
+      "palettes": [
+        "meander-black",
+        "gold-braid"
+      ],
+      "_about": "the Greek key: a running fret between two fine lines, each step hooked in on itself -- a hem's border (and the Chinese hui fret the same)",
+      "layers": [
+        {
+          "shape": "band",
+          "h": 0.003,
+          "fill": 1,
+          "at": [
+            [
+              0,
+              0.0135
+            ],
+            [
+              0,
+              -0.0135
+            ]
+          ]
+        },
+        {
+          "shape": "path",
+          "d": "M -0.03 -0.009 L -0.015 -0.009 L -0.015 0.009 L 0.015 0.009 L 0.015 -0.009 L 0.03 -0.009",
+          "stroke": 1,
+          "line": 0.003
+        },
+        {
+          "shape": "path",
+          "d": "M -0.007 0.009 L -0.007 -0.002 L 0.006 -0.002",
+          "stroke": 1,
+          "line": 0.003
+        }
+      ]
+    },
+    "clouds": {
+      "size": [
+        0.12,
+        0.1
+      ],
+      "palette": "silk-red",
+      "palettes": [
+        "silk-azure",
+        "silk-jade",
+        "silk-plum",
+        "silk-white"
+      ],
+      "_about": "auspicious clouds (xiangyun) woven in a silk: puffs of three rounds with a scroll curling off each, in rows set off by half",
+      "layers": [
+        {
+          "layers": [
+            {
+              "shape": "circle",
+              "r": 0.011,
+              "fill": 1,
+              "at": [
+                [
+                  -0.013,
+                  0
+                ],
+                [
+                  0,
+                  0.007
+                ],
+                [
+                  0.013,
+                  0
+                ]
+              ]
+            },
+            {
+              "shape": "arc",
+              "r": 0.008,
+              "a0": 180,
+              "a1": 450,
+              "stroke": 3,
+              "line": 0.0025,
+              "at": [
+                0.024,
+                -0.004
+              ]
+            },
+            {
+              "shape": "arc",
+              "r": 0.006,
+              "a0": 0,
+              "a1": 270,
+              "stroke": 3,
+              "line": 0.0025,
+              "at": [
+                -0.024,
+                -0.003
+              ]
+            }
+          ],
+          "grid": {
+            "n": [
+              1,
+              2
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "straps": {
+      "size": [
+        0.05,
+        0.06
+      ],
+      "palette": "sandal",
+      "palettes": [
+        "leather",
+        "leather-dark"
+      ],
+      "_about": "a sandal's thongs: straps across the foot and one along its top, the foot's own tone between",
+      "layers": [
+        {
+          "shape": "band",
+          "h": 0.012,
+          "fill": 1,
+          "at": [
+            [
+              0,
+              0.018
+            ],
+            [
+              0,
+              -0.012
+            ]
+          ]
+        },
+        {
+          "shape": "vband",
+          "w": 0.01,
+          "fill": 1
+        }
+      ]
+    }
+  }
+}

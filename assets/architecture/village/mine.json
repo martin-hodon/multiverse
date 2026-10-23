@@ -1,0 +1,2385 @@
+{
+ "name": "Mine",
+ "_about": "A MINE of the Middle Ages (silver, copper or salt: `ore`): on the surface the shaft house over the hauling shaft with its windlass and kibbles, the walking shaft with its steep flights under a little roof, the spoil heap, the dressing bench, pit timber; ten metres down the shaft bottom, timbered galleries with a plank track and wooden carts, and the stopes where miners work the vein with pick and hammer by the light of their lamps. The ground is open only over the shafts.",
+ "site": {
+  "origin": true,
+  "dig": [
+   [
+    -1.0,
+    -0.8,
+    1.0,
+    0.8
+   ],
+   [
+    6.0,
+    -1.2,
+    10.5,
+    1.2
+   ]
+  ]
+ },
+ "params": {
+  "detail": 4,
+  "ore": "silver",
+  "footW": 24,
+  "footD": 18,
+  "_ore": "silver | copper | salt: the rock and the vein (the finishes mine-<ore>), and whether the galleries are timbered (salt stands without)"
+ },
+ "parts": {
+  "hauling shaft lining n": {
+   "type": "box",
+   "width": 2.4,
+   "length": 0.2,
+   "height": 7.9,
+   "at": [
+    [
+     0.0,
+     -7.0,
+     0.9,
+     0
+    ]
+   ]
+  },
+  "hauling shaft lining s": {
+   "type": "box",
+   "width": 2.4,
+   "length": 0.2,
+   "height": 7.9,
+   "at": [
+    [
+     0.0,
+     -7.0,
+     -0.9,
+     0
+    ]
+   ]
+  },
+  "hauling shaft lining e": {
+   "type": "box",
+   "width": 0.2,
+   "length": 1.6,
+   "height": 7.9,
+   "at": [
+    [
+     1.1,
+     -7.0,
+     0.0,
+     0
+    ]
+   ]
+  },
+  "hauling shaft lining w": {
+   "type": "box",
+   "width": 0.2,
+   "length": 1.6,
+   "height": 7.9,
+   "at": [
+    [
+     -1.1,
+     -7.0,
+     0.0,
+     0
+    ]
+   ]
+  },
+  "shaft house": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     6.4,
+     5.2
+    ]
+   },
+   "thickness": 0.12,
+   "height": 2.6,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 1.4,
+      "width": 1.3,
+      "sill": 0,
+      "springing": 2.0,
+      "head": {
+       "profile": "flat"
+      },
+      "glass": false
+     }
+    ],
+    "2": [
+     {
+      "at": 0,
+      "width": 0.8,
+      "sill": 1.0,
+      "springing": 1.7,
+      "head": {
+       "profile": "flat"
+      },
+      "glass": false
+     }
+    ]
+   }
+  },
+  "shaft house roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 5.6,
+   "length": 6.9,
+   "pitch": 40,
+   "overhang": 0.2,
+   "at": [
+    [
+     0,
+     2.6,
+     0,
+     1.5707963267948966
+    ]
+   ]
+  },
+  "windlass posts": {
+   "type": "box",
+   "width": 0.18,
+   "length": 0.18,
+   "height": 1.25,
+   "at": [
+    [
+     0,
+     0,
+     -1.25,
+     0
+    ],
+    [
+     0,
+     0,
+     1.25,
+     0
+    ]
+   ]
+  },
+  "windlass drum": {
+   "type": "box",
+   "width": 0.28,
+   "length": 2.7,
+   "height": 0.28,
+   "at": [
+    [
+     0,
+     0.92,
+     0,
+     0
+    ]
+   ]
+  },
+  "windlass cranks": {
+   "type": "box",
+   "width": 0.06,
+   "length": 0.06,
+   "height": 0.42,
+   "at": [
+    [
+     0,
+     0.85,
+     -1.42,
+     0
+    ],
+    [
+     0,
+     0.85,
+     1.42,
+     0
+    ]
+   ]
+  },
+  "windlass handles": {
+   "type": "box",
+   "width": 0.36,
+   "length": 0.05,
+   "height": 0.05,
+   "at": [
+    [
+     0.18,
+     0.62,
+     -1.48,
+     0
+    ],
+    [
+     -0.18,
+     1.2,
+     1.48,
+     0
+    ]
+   ]
+  },
+  "ropes": {
+   "type": "column",
+   "radius": 0.014,
+   "height": 10.32,
+   "sides": 5,
+   "at": [
+    [
+     0.3,
+     -9.4,
+     0,
+     0
+    ]
+   ]
+  },
+  "rope up": {
+   "type": "column",
+   "radius": 0.014,
+   "height": 2.4,
+   "sides": 5,
+   "at": [
+    [
+     -0.3,
+     -1.5,
+     0,
+     0
+    ]
+   ]
+  },
+  "kibbles": {
+   "type": "item",
+   "item": "items/tools/bucket",
+   "at": [
+    [
+     0.3,
+     -10.0,
+     0,
+     0
+    ],
+    [
+     -0.3,
+     -1.9,
+     0,
+     0
+    ]
+   ],
+   "solid": false
+  },
+  "windlass men": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     0.2,
+     0,
+     -1.75,
+     0
+    ],
+    [
+     -0.2,
+     0,
+     1.75,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": "lift",
+    "face": [
+     1.5707963267948966,
+     -1.5707963267948966
+    ],
+    "crew": "miner"
+   }
+  },
+  "walking shaft lining n": {
+   "type": "box",
+   "width": 4.9,
+   "length": 0.2,
+   "height": 10.9,
+   "at": [
+    [
+     8.25,
+     -10.0,
+     1.3,
+     0
+    ]
+   ]
+  },
+  "walking shaft lining s": {
+   "type": "box",
+   "width": 4.9,
+   "length": 0.2,
+   "height": 10.9,
+   "at": [
+    [
+     8.25,
+     -10.0,
+     -1.3,
+     0
+    ]
+   ]
+  },
+  "walking shaft lining e": {
+   "type": "box",
+   "width": 0.2,
+   "length": 2.4,
+   "height": 10.9,
+   "at": [
+    [
+     10.6,
+     -10.0,
+     0.0,
+     0
+    ]
+   ]
+  },
+  "walking shaft lining w": {
+   "type": "box",
+   "width": 0.2,
+   "length": 2.4,
+   "height": 7.7,
+   "at": [
+    [
+     5.9,
+     -7.7,
+     0.0,
+     0
+    ]
+   ]
+  },
+  "walking flight 0": {
+   "type": "flight",
+   "run": 0.25,
+   "width": 1.1,
+   "base": 0,
+   "top": 2.5,
+   "steps": 10,
+   "steep": true,
+   "landing": 0,
+   "at": [
+    [
+     9.5,
+     -2.5,
+     -1.2,
+     3.1416
+    ]
+   ]
+  },
+  "walking flight 1": {
+   "type": "flight",
+   "run": 0.25,
+   "width": 1.1,
+   "base": 0,
+   "top": 2.5,
+   "steps": 10,
+   "steep": true,
+   "landing": 0,
+   "at": [
+    [
+     7.0,
+     -5.0,
+     1.2,
+     0
+    ]
+   ]
+  },
+  "walking flight 2": {
+   "type": "flight",
+   "run": 0.25,
+   "width": 1.1,
+   "base": 0,
+   "top": 2.5,
+   "steps": 10,
+   "steep": true,
+   "landing": 0,
+   "at": [
+    [
+     9.5,
+     -7.5,
+     -1.2,
+     3.1416
+    ]
+   ]
+  },
+  "walking flight 3": {
+   "type": "flight",
+   "run": 0.25,
+   "width": 1.1,
+   "base": 0,
+   "top": 2.5,
+   "steps": 10,
+   "steep": true,
+   "landing": 0,
+   "at": [
+    [
+     7.0,
+     -10.0,
+     1.2,
+     0
+    ]
+   ]
+  },
+  "walking landing 0": {
+   "type": "box",
+   "width": 1.0,
+   "length": 2.4,
+   "height": 0.2,
+   "at": [
+    [
+     6.5,
+     -0.2,
+     0.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "walking landing 1": {
+   "type": "box",
+   "width": 1.0,
+   "length": 2.4,
+   "height": 0.2,
+   "at": [
+    [
+     10.0,
+     -2.7,
+     0.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "walking landing 2": {
+   "type": "box",
+   "width": 1.0,
+   "length": 2.4,
+   "height": 0.2,
+   "at": [
+    [
+     6.5,
+     -5.2,
+     0.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "walking landing 3": {
+   "type": "box",
+   "width": 1.0,
+   "length": 2.4,
+   "height": 0.2,
+   "at": [
+    [
+     10.0,
+     -7.7,
+     0.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "walking landing 4": {
+   "type": "box",
+   "width": 1.7,
+   "length": 2.4,
+   "height": 0.2,
+   "at": [
+    [
+     6.15,
+     -10.2,
+     0.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "walking shaft bottom": {
+   "type": "box",
+   "width": 2.5,
+   "length": 2.4,
+   "height": 0.3,
+   "at": [
+    [
+     8.25,
+     -10.3,
+     0.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "walking shaft roof posts": {
+   "type": "box",
+   "width": 0.14,
+   "length": 0.14,
+   "height": 2.3,
+   "at": [
+    [
+     5.7,
+     0,
+     -1.55,
+     0
+    ],
+    [
+     10.8,
+     0,
+     -1.55,
+     0
+    ],
+    [
+     5.7,
+     0,
+     1.55,
+     0
+    ],
+    [
+     10.8,
+     0,
+     1.55,
+     0
+    ]
+   ]
+  },
+  "walking shaft roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 3.8,
+   "length": 5.8,
+   "pitch": 32,
+   "overhang": 0.1,
+   "at": [
+    [
+     8.25,
+     2.3,
+     0,
+     1.5707963267948966
+    ]
+   ]
+  },
+  "spoil heap": {
+   "type": "column",
+   "radius": 4.2,
+   "height": 2.0,
+   "sides": 12,
+   "taper": 0.12,
+   "at": [
+    [
+     -8.0,
+     0,
+     4.5,
+     0
+    ]
+   ]
+  },
+  "dressing bench": {
+   "type": "box",
+   "width": 2.2,
+   "length": 0.7,
+   "height": 0.8,
+   "at": [
+    [
+     -6.5,
+     0,
+     -5.0,
+     0
+    ]
+   ]
+  },
+  "ore pile": {
+   "type": "column",
+   "radius": 0.7,
+   "height": 0.45,
+   "sides": 8,
+   "taper": 0.2,
+   "at": [
+    [
+     -4.4,
+     0,
+     -5.4,
+     0
+    ],
+    [
+     -6.5,
+     0.8,
+     -5.0,
+     0
+    ]
+   ]
+  },
+  "dressers": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     -6.5,
+     0,
+     -4.05,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": "tend",
+    "face": 1.5707963267948966
+   }
+  },
+  "baskets": {
+   "type": "item",
+   "item": "items/tools/basket",
+   "at": [
+    [
+     -7.5,
+     0,
+     -4.2,
+     0
+    ],
+    [
+     -8.2,
+     0,
+     -5.3,
+     0.6
+    ]
+   ],
+   "solid": false
+  },
+  "sacks": {
+   "type": "item",
+   "item": "items/tools/sack-standing",
+   "at": [
+    [
+     -5.0,
+     0,
+     -4.0,
+     0
+    ],
+    [
+     -4.6,
+     0,
+     -3.6,
+     1.0
+    ]
+   ],
+   "solid": false
+  },
+  "pit timber": {
+   "type": "box",
+   "width": 3.0,
+   "length": 0.16,
+   "height": 0.16,
+   "at": [
+    [
+     4.0,
+     0.0,
+     5.5,
+     0
+    ],
+    [
+     4.0,
+     0.0,
+     5.68,
+     0
+    ],
+    [
+     4.0,
+     0.0,
+     5.86,
+     0
+    ],
+    [
+     4.0,
+     0.0,
+     6.04,
+     0
+    ],
+    [
+     4.0,
+     0.16,
+     5.5,
+     0
+    ],
+    [
+     4.0,
+     0.16,
+     5.68,
+     0
+    ],
+    [
+     4.0,
+     0.16,
+     5.86,
+     0
+    ],
+    [
+     4.0,
+     0.32,
+     5.5,
+     0
+    ],
+    [
+     4.0,
+     0.32,
+     5.68,
+     0
+    ]
+   ]
+  },
+  "shaft bottom floor": {
+   "type": "box",
+   "width": 8.8,
+   "length": 6.0,
+   "height": 0.3,
+   "at": [
+    [
+     1.4,
+     -10.3,
+     0.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "shaft bottom ceiling 0": {
+   "type": "box",
+   "width": 2.3,
+   "length": 7.0,
+   "height": 0.4,
+   "at": [
+    [
+     -2.35,
+     -7.0,
+     0.0,
+     0
+    ]
+   ]
+  },
+  "shaft bottom ceiling 1": {
+   "type": "box",
+   "width": 2.4,
+   "length": 2.5,
+   "height": 0.4,
+   "at": [
+    [
+     0.0,
+     -7.0,
+     -2.25,
+     0
+    ]
+   ]
+  },
+  "shaft bottom ceiling 2": {
+   "type": "box",
+   "width": 2.4,
+   "length": 2.5,
+   "height": 0.4,
+   "at": [
+    [
+     0.0,
+     -7.0,
+     2.25,
+     0
+    ]
+   ]
+  },
+  "shaft bottom ceiling 3": {
+   "type": "box",
+   "width": 5.1,
+   "length": 7.0,
+   "height": 0.4,
+   "at": [
+    [
+     3.75,
+     -7.0,
+     0.0,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall n0": {
+   "type": "box",
+   "width": 1.2,
+   "length": 0.5,
+   "height": 3.0,
+   "at": [
+    [
+     -2.9,
+     -10.0,
+     3.25,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall n1": {
+   "type": "box",
+   "width": 1.6,
+   "length": 0.5,
+   "height": 0.9,
+   "at": [
+    [
+     -1.5,
+     -7.9,
+     3.25,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall n2": {
+   "type": "box",
+   "width": 7.0,
+   "length": 0.5,
+   "height": 3.0,
+   "at": [
+    [
+     2.8,
+     -10.0,
+     3.25,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall s0": {
+   "type": "box",
+   "width": 4.2,
+   "length": 0.5,
+   "height": 3.0,
+   "at": [
+    [
+     -1.4,
+     -10.0,
+     -3.25,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall s1": {
+   "type": "box",
+   "width": 1.6,
+   "length": 0.5,
+   "height": 0.9,
+   "at": [
+    [
+     1.5,
+     -7.9,
+     -3.25,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall s2": {
+   "type": "box",
+   "width": 4.0,
+   "length": 0.5,
+   "height": 3.0,
+   "at": [
+    [
+     4.3,
+     -10.0,
+     -3.25,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall e0": {
+   "type": "box",
+   "width": 0.5,
+   "length": 1.8,
+   "height": 3.0,
+   "at": [
+    [
+     6.05,
+     -10.0,
+     -2.1,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall e1": {
+   "type": "box",
+   "width": 0.5,
+   "length": 2.4,
+   "height": 0.7,
+   "at": [
+    [
+     6.05,
+     -7.7,
+     0.0,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall e2": {
+   "type": "box",
+   "width": 0.5,
+   "length": 1.8,
+   "height": 3.0,
+   "at": [
+    [
+     6.05,
+     -10.0,
+     2.1,
+     0
+    ]
+   ]
+  },
+  "shaft bottom wall w0": {
+   "type": "box",
+   "width": 0.5,
+   "length": 6.0,
+   "height": 3.0,
+   "at": [
+    [
+     -3.25,
+     -10.0,
+     0.0,
+     0
+    ]
+   ]
+  },
+  "hooker": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     1.2,
+     -10.0,
+     0.0,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": "lift",
+    "face": 3.141592653589793,
+    "crew": "miner"
+   }
+  },
+  "shaft bottom lamps": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     -2.9,
+     -8.1,
+     -1.5,
+     0
+    ],
+    [
+     5.7,
+     -8.1,
+     2.0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.035,
+    "h": 0.09,
+    "candle": true
+   }
+  },
+  "shaft bottom cart": {
+   "type": "component",
+   "use": "components/mine-cart",
+   "at": [
+    [
+     -1.5,
+     -10.0,
+     1.8,
+     0
+    ]
+   ]
+  },
+  "main gallery floor": {
+   "type": "box",
+   "width": 1.6,
+   "length": 27.0,
+   "height": 0.3,
+   "at": [
+    [
+     -1.5,
+     -10.3,
+     16.5,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "main gallery rock left": {
+   "type": "box",
+   "width": 0.5,
+   "length": 27.0,
+   "height": 2.5,
+   "at": [
+    [
+     -2.55,
+     -10.0,
+     16.5,
+     0
+    ]
+   ]
+  },
+  "main gallery rock right": {
+   "type": "box",
+   "width": 0.5,
+   "length": 27.0,
+   "height": 2.5,
+   "at": [
+    [
+     -0.45,
+     -10.0,
+     16.5,
+     0
+    ]
+   ]
+  },
+  "main gallery rock over": {
+   "type": "box",
+   "width": 2.6,
+   "length": 27.0,
+   "height": 0.4,
+   "at": [
+    [
+     -1.5,
+     -7.9,
+     16.5,
+     0
+    ]
+   ]
+  },
+  "main gallery set posts": {
+   "type": "box",
+   "width": 0.14,
+   "length": 0.14,
+   "height": 1.94,
+   "at": [
+    [
+     -2.2,
+     -10.0,
+     3.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     3.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     5.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     5.25,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     6.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     6.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     8.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     8.25,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     9.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     9.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     11.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     11.25,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     12.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     12.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     14.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     14.25,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     15.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     15.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     17.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     17.25,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     18.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     18.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     20.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     20.25,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     21.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     21.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     23.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     23.25,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     24.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     24.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     26.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     26.25,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     27.75,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     27.75,
+     0
+    ],
+    [
+     -2.2,
+     -10.0,
+     29.25,
+     0
+    ],
+    [
+     -0.8,
+     -10.0,
+     29.25,
+     0
+    ]
+   ],
+   "when": {
+    "ore": [
+     "silver",
+     "copper"
+    ]
+   }
+  },
+  "main gallery set caps": {
+   "type": "box",
+   "width": 1.56,
+   "length": 0.16,
+   "height": 0.16,
+   "at": [
+    [
+     -1.5,
+     -8.06,
+     3.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     5.25,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     6.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     8.25,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     9.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     11.25,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     12.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     14.25,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     15.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     17.25,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     18.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     20.25,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     21.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     23.25,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     24.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     26.25,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     27.75,
+     0
+    ],
+    [
+     -1.5,
+     -8.06,
+     29.25,
+     0
+    ]
+   ],
+   "when": {
+    "ore": [
+     "silver",
+     "copper"
+    ]
+   }
+  },
+  "main gallery track": {
+   "type": "box",
+   "width": 0.12,
+   "length": 27.0,
+   "height": 0.04,
+   "at": [
+    [
+     -1.86,
+     -10.0,
+     16.5,
+     0
+    ]
+   ]
+  },
+  "main gallery track 2": {
+   "type": "box",
+   "width": 0.12,
+   "length": 27.0,
+   "height": 0.04,
+   "at": [
+    [
+     -1.14,
+     -10.0,
+     16.5,
+     0
+    ]
+   ]
+  },
+  "side gallery floor": {
+   "type": "box",
+   "width": 1.6,
+   "length": 17.0,
+   "height": 0.3,
+   "at": [
+    [
+     1.5,
+     -10.3,
+     -11.5,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "side gallery rock left": {
+   "type": "box",
+   "width": 0.5,
+   "length": 17.0,
+   "height": 2.5,
+   "at": [
+    [
+     0.45,
+     -10.0,
+     -11.5,
+     0
+    ]
+   ]
+  },
+  "side gallery rock right": {
+   "type": "box",
+   "width": 0.5,
+   "length": 17.0,
+   "height": 2.5,
+   "at": [
+    [
+     2.55,
+     -10.0,
+     -11.5,
+     0
+    ]
+   ]
+  },
+  "side gallery rock over": {
+   "type": "box",
+   "width": 2.6,
+   "length": 17.0,
+   "height": 0.4,
+   "at": [
+    [
+     1.5,
+     -7.9,
+     -11.5,
+     0
+    ]
+   ]
+  },
+  "side gallery set posts": {
+   "type": "box",
+   "width": 0.14,
+   "length": 0.14,
+   "height": 1.94,
+   "at": [
+    [
+     0.8,
+     -10.0,
+     -19.2273,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -19.2273,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -17.6818,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -17.6818,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -16.1364,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -16.1364,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -14.5909,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -14.5909,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -13.0455,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -13.0455,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -11.5,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -11.5,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -9.9545,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -9.9545,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -8.4091,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -8.4091,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -6.8636,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -6.8636,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -5.3182,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -5.3182,
+     0
+    ],
+    [
+     0.8,
+     -10.0,
+     -3.7727,
+     0
+    ],
+    [
+     2.2,
+     -10.0,
+     -3.7727,
+     0
+    ]
+   ],
+   "when": {
+    "ore": [
+     "silver",
+     "copper"
+    ]
+   }
+  },
+  "side gallery set caps": {
+   "type": "box",
+   "width": 1.56,
+   "length": 0.16,
+   "height": 0.16,
+   "at": [
+    [
+     1.5,
+     -8.06,
+     -19.2273,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -17.6818,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -16.1364,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -14.5909,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -13.0455,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -11.5,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -9.9545,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -8.4091,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -6.8636,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -5.3182,
+     0
+    ],
+    [
+     1.5,
+     -8.06,
+     -3.7727,
+     0
+    ]
+   ],
+   "when": {
+    "ore": [
+     "silver",
+     "copper"
+    ]
+   }
+  },
+  "side gallery track": {
+   "type": "box",
+   "width": 0.12,
+   "length": 17.0,
+   "height": 0.04,
+   "at": [
+    [
+     1.14,
+     -10.0,
+     -11.5,
+     0
+    ]
+   ]
+  },
+  "side gallery track 2": {
+   "type": "box",
+   "width": 0.12,
+   "length": 17.0,
+   "height": 0.04,
+   "at": [
+    [
+     1.86,
+     -10.0,
+     -11.5,
+     0
+    ]
+   ]
+  },
+  "north stope floor": {
+   "type": "box",
+   "width": 7.0,
+   "length": 6.0,
+   "height": 0.3,
+   "at": [
+    [
+     -1.5,
+     -10.3,
+     33.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "north stope ceiling 0": {
+   "type": "box",
+   "width": 8.0,
+   "length": 7.0,
+   "height": 0.4,
+   "at": [
+    [
+     -1.5,
+     -6.6,
+     33.0,
+     0
+    ]
+   ]
+  },
+  "north stope wall n0": {
+   "type": "box",
+   "width": 8.0,
+   "length": 0.5,
+   "height": 3.4,
+   "at": [
+    [
+     -1.5,
+     -10.0,
+     36.25,
+     0
+    ]
+   ]
+  },
+  "north stope wall s0": {
+   "type": "box",
+   "width": 3.2,
+   "length": 0.5,
+   "height": 3.4,
+   "at": [
+    [
+     -3.9,
+     -10.0,
+     29.75,
+     0
+    ]
+   ]
+  },
+  "north stope wall s1": {
+   "type": "box",
+   "width": 1.6,
+   "length": 0.5,
+   "height": 1.3,
+   "at": [
+    [
+     -1.5,
+     -7.9,
+     29.75,
+     0
+    ]
+   ]
+  },
+  "north stope wall s2": {
+   "type": "box",
+   "width": 3.2,
+   "length": 0.5,
+   "height": 3.4,
+   "at": [
+    [
+     0.9,
+     -10.0,
+     29.75,
+     0
+    ]
+   ]
+  },
+  "north stope wall e0": {
+   "type": "box",
+   "width": 0.5,
+   "length": 6.0,
+   "height": 3.4,
+   "at": [
+    [
+     2.25,
+     -10.0,
+     33.0,
+     0
+    ]
+   ]
+  },
+  "north stope wall w0": {
+   "type": "box",
+   "width": 0.5,
+   "length": 6.0,
+   "height": 3.4,
+   "at": [
+    [
+     -5.25,
+     -10.0,
+     33.0,
+     0
+    ]
+   ]
+  },
+  "south stope floor": {
+   "type": "box",
+   "width": 7.0,
+   "length": 6.0,
+   "height": 0.3,
+   "at": [
+    [
+     1.5,
+     -10.3,
+     -23.0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "south stope ceiling 0": {
+   "type": "box",
+   "width": 8.0,
+   "length": 7.0,
+   "height": 0.4,
+   "at": [
+    [
+     1.5,
+     -6.8,
+     -23.0,
+     0
+    ]
+   ]
+  },
+  "south stope wall n0": {
+   "type": "box",
+   "width": 3.2,
+   "length": 0.5,
+   "height": 3.2,
+   "at": [
+    [
+     -0.9,
+     -10.0,
+     -19.75,
+     0
+    ]
+   ]
+  },
+  "south stope wall n1": {
+   "type": "box",
+   "width": 1.6,
+   "length": 0.5,
+   "height": 1.1,
+   "at": [
+    [
+     1.5,
+     -7.9,
+     -19.75,
+     0
+    ]
+   ]
+  },
+  "south stope wall n2": {
+   "type": "box",
+   "width": 3.2,
+   "length": 0.5,
+   "height": 3.2,
+   "at": [
+    [
+     3.9,
+     -10.0,
+     -19.75,
+     0
+    ]
+   ]
+  },
+  "south stope wall s0": {
+   "type": "box",
+   "width": 8.0,
+   "length": 0.5,
+   "height": 3.2,
+   "at": [
+    [
+     1.5,
+     -10.0,
+     -26.25,
+     0
+    ]
+   ]
+  },
+  "south stope wall e0": {
+   "type": "box",
+   "width": 0.5,
+   "length": 6.0,
+   "height": 3.2,
+   "at": [
+    [
+     5.25,
+     -10.0,
+     -23.0,
+     0
+    ]
+   ]
+  },
+  "south stope wall w0": {
+   "type": "box",
+   "width": 0.5,
+   "length": 6.0,
+   "height": 3.2,
+   "at": [
+    [
+     -2.25,
+     -10.0,
+     -23.0,
+     0
+    ]
+   ]
+  },
+  "vein north": {
+   "type": "box",
+   "width": 6.6,
+   "length": 0.04,
+   "height": 1.3,
+   "at": [
+    [
+     -1.5,
+     -9.3,
+     35.98,
+     0
+    ]
+   ]
+  },
+  "vein north side": {
+   "type": "box",
+   "width": 0.04,
+   "length": 4.0,
+   "height": 0.9,
+   "at": [
+    [
+     1.98,
+     -8.9,
+     33.5,
+     0
+    ],
+    [
+     -4.98,
+     -9.1,
+     33.0,
+     0
+    ]
+   ]
+  },
+  "vein south": {
+   "type": "box",
+   "width": 6.6,
+   "length": 0.04,
+   "height": 1.1,
+   "at": [
+    [
+     1.5,
+     -9.0,
+     -25.98,
+     0
+    ]
+   ]
+  },
+  "vein south side": {
+   "type": "box",
+   "width": 0.04,
+   "length": 3.5,
+   "height": 0.8,
+   "at": [
+    [
+     4.98,
+     -9.2,
+     -23.5,
+     0
+    ]
+   ]
+  },
+  "broken ore": {
+   "type": "column",
+   "radius": 0.55,
+   "height": 0.35,
+   "sides": 7,
+   "taper": 0.25,
+   "at": [
+    [
+     0.6,
+     -10.0,
+     35.0,
+     0
+    ],
+    [
+     -3.6,
+     -10.0,
+     34.6,
+     0
+    ],
+    [
+     3.4,
+     -10.0,
+     -25.0,
+     0
+    ]
+   ]
+  },
+  "miners north": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     -2.6,
+     -10.0,
+     35.2,
+     0
+    ],
+    [
+     0.0,
+     -10.0,
+     35.25,
+     0
+    ],
+    [
+     1.3,
+     -10.0,
+     33.0,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": [
+     "pick",
+     "hammer",
+     "pick"
+    ],
+    "tool": [
+     "items/tools/pickaxe",
+     "items/tools/hammer",
+     "items/tools/pickaxe"
+    ],
+    "face": [
+     -1.5707963267948966,
+     -1.5707963267948966,
+     0
+    ],
+    "crew": "miner"
+   }
+  },
+  "miners south": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     0.5,
+     -10.0,
+     -25.2,
+     0
+    ],
+    [
+     4.2,
+     -10.0,
+     -23.0,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": [
+     "hammer",
+     "pick"
+    ],
+    "tool": [
+     "items/tools/hammer",
+     "items/tools/pickaxe"
+    ],
+    "face": [
+     1.5707963267948966,
+     0
+    ],
+    "crew": "miner"
+   }
+  },
+  "loader": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     -0.9,
+     -10.0,
+     32.4,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": "dig",
+    "tool": "items/tools/spade",
+    "face": -1.5707963267948966,
+    "crew": "miner"
+   }
+  },
+  "carts": {
+   "type": "component",
+   "use": "components/mine-cart",
+   "at": [
+    [
+     -1.5,
+     -10.0,
+     31.4,
+     0
+    ],
+    [
+     -1.5,
+     -10.0,
+     14.0,
+     0
+    ],
+    [
+     1.5,
+     -10.0,
+     -12.0,
+     0
+    ]
+   ]
+  },
+  "gallery lamps": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     -2.27,
+     -8.25,
+     3.75,
+     0
+    ],
+    [
+     -2.27,
+     -8.25,
+     9.75,
+     0
+    ],
+    [
+     -2.27,
+     -8.25,
+     15.75,
+     0
+    ],
+    [
+     -2.27,
+     -8.25,
+     21.75,
+     0
+    ],
+    [
+     -2.27,
+     -8.25,
+     27.75,
+     0
+    ],
+    [
+     0.77,
+     -8.25,
+     -19.2273,
+     0
+    ],
+    [
+     0.77,
+     -8.25,
+     -13.0455,
+     0
+    ],
+    [
+     0.77,
+     -8.25,
+     -6.8636,
+     0
+    ],
+    [
+     -4.9,
+     -8.0,
+     32.0,
+     0
+    ],
+    [
+     1.9,
+     -8.0,
+     34.5,
+     0
+    ],
+    [
+     -1.9,
+     -8.0,
+     -21.0,
+     0
+    ],
+    [
+     4.9,
+     -8.0,
+     -24.5,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.035,
+    "h": 0.09,
+    "candle": true
+   }
+  },
+  "lanterns": {
+   "type": "item",
+   "item": "items/tools/lantern",
+   "at": [
+    [
+     -4.5,
+     -10.0,
+     31.0,
+     0
+    ],
+    [
+     4.4,
+     -10.0,
+     -21.0,
+     0
+    ]
+   ],
+   "solid": false
+  }
+ },
+ "build": [
+  "hauling shaft lining n",
+  "hauling shaft lining s",
+  "hauling shaft lining e",
+  "hauling shaft lining w",
+  "shaft house",
+  "shaft house roof",
+  "windlass posts",
+  "windlass drum",
+  "windlass cranks",
+  "windlass handles",
+  "ropes",
+  "rope up",
+  "kibbles",
+  "windlass men",
+  "walking shaft lining n",
+  "walking shaft lining s",
+  "walking shaft lining e",
+  "walking shaft lining w",
+  "walking flight 0",
+  "walking flight 1",
+  "walking flight 2",
+  "walking flight 3",
+  "walking landing 0",
+  "walking landing 1",
+  "walking landing 2",
+  "walking landing 3",
+  "walking landing 4",
+  "walking shaft bottom",
+  "walking shaft roof posts",
+  "walking shaft roof",
+  "spoil heap",
+  "dressing bench",
+  "ore pile",
+  "dressers",
+  "baskets",
+  "sacks",
+  "pit timber",
+  "shaft bottom floor",
+  "shaft bottom ceiling 0",
+  "shaft bottom ceiling 1",
+  "shaft bottom ceiling 2",
+  "shaft bottom ceiling 3",
+  "shaft bottom wall n0",
+  "shaft bottom wall n1",
+  "shaft bottom wall n2",
+  "shaft bottom wall s0",
+  "shaft bottom wall s1",
+  "shaft bottom wall s2",
+  "shaft bottom wall e0",
+  "shaft bottom wall e1",
+  "shaft bottom wall e2",
+  "shaft bottom wall w0",
+  "hooker",
+  "shaft bottom lamps",
+  "shaft bottom cart",
+  "main gallery floor",
+  "main gallery rock left",
+  "main gallery rock right",
+  "main gallery rock over",
+  "main gallery set posts",
+  "main gallery set caps",
+  "main gallery track",
+  "main gallery track 2",
+  "side gallery floor",
+  "side gallery rock left",
+  "side gallery rock right",
+  "side gallery rock over",
+  "side gallery set posts",
+  "side gallery set caps",
+  "side gallery track",
+  "side gallery track 2",
+  "north stope floor",
+  "north stope ceiling 0",
+  "north stope wall n0",
+  "north stope wall s0",
+  "north stope wall s1",
+  "north stope wall s2",
+  "north stope wall e0",
+  "north stope wall w0",
+  "south stope floor",
+  "south stope ceiling 0",
+  "south stope wall n0",
+  "south stope wall n1",
+  "south stope wall n2",
+  "south stope wall s0",
+  "south stope wall e0",
+  "south stope wall w0",
+  "vein north",
+  "vein north side",
+  "vein south",
+  "vein south side",
+  "broken ore",
+  "miners north",
+  "miners south",
+  "loader",
+  "carts",
+  "gallery lamps",
+  "lanterns"
+ ],
+ "walked": true
+}

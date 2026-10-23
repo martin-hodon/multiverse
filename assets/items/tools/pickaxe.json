@@ -1,0 +1,116 @@
+{
+ "kind": "item",
+ "name": "Pickaxe",
+ "category": "tool",
+ "era": "-500-1900",
+ "_about": "the miner's and the quarryman's pick: a curved double point on a stout haft",
+ "params": {
+  "L": [
+   0.85,
+   0.95
+  ]
+ },
+ "materials": {
+  "wood": "ash",
+  "head": "iron"
+ },
+ "parts": [
+  {
+   "id": "haft",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "L + 0.03",
+    0
+   ],
+   "r": 0.019,
+   "sides": 7
+  },
+  {
+   "id": "eye",
+   "type": "box",
+   "material": "head",
+   "size": [
+    0.06,
+    0.06,
+    0.05
+   ],
+   "at": [
+    0,
+    "L - 0.02",
+    0
+   ]
+  },
+  {
+   "id": "points",
+   "type": "blade",
+   "material": "head",
+   "at": [
+    0.02,
+    "L - 0.02",
+    0,
+    0,
+    0,
+    -80
+   ],
+   "length": 0.26,
+   "flat": 0.0,
+   "curve": 0.03,
+   "width": [
+    [
+     0,
+     0.022
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.026,
+    0.006
+   ],
+   "mirror": "x"
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.1,
+    -1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "grip2": [
+   0,
+   "L * 0.5",
+   0
+  ]
+ }
+}

@@ -1,0 +1,106 @@
+{
+ "kind": "item",
+ "name": "Dugout canoe",
+ "category": "ship",
+ "era": "-8000-1900",
+ "region": "everywhere",
+ "_about": "a log hollowed out: the first boat, and a river's and a lagoon's boat still -- blunt ends, a round bottom, two thwarts",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   4.2,
+   6
+  ],
+  "B": 0.72,
+  "D": 0.48
+ },
+ "materials": {
+  "planks": "oak-grey",
+  "deck": "deck",
+  "wood": "oak-grey",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.4,
+   "double": true,
+   "stations": 16,
+   "sides": 5,
+   "plan": [
+    [
+     0,
+     0.25
+    ],
+    [
+     0.15,
+     0.8
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.85,
+     0.8
+    ],
+    [
+     1,
+     0.25
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.25"
+    ],
+    [
+     0.15,
+     0
+    ],
+    [
+     0.85,
+     0
+    ],
+    [
+     1,
+     "D * 0.25"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.05"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.05"
+    ]
+   ],
+   "thwarts": {
+    "n": 2,
+    "y": "D * 0.7",
+    "w": 0.18,
+    "from": 0.3,
+    "to": 0.7
+   }
+  }
+ ]
+}

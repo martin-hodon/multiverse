@@ -1,0 +1,791 @@
+{
+ "name": "Heraldry",
+ "_about": "a shield's face: a field, and on it a division or an ordinary, drawn as a panel the size of the shield it is painted on (W, H: the item gives them). Slot 0 the field, 1 the charge, 2 a third tincture.",
+ "patterns": {
+  "plain": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a field of one tincture",
+   "layers": []
+  },
+  "per-pale": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "parted down the middle",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W / 2",
+     "h": "H",
+     "at": [
+      "W / 4",
+      0
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "per-fess": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "parted across",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W",
+     "h": "H / 2",
+     "at": [
+      0,
+      "0 - H / 4"
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "quarterly": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "in four quarters",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W / 2",
+     "h": "H / 2",
+     "at": [
+      [
+       "W / 4",
+       "H / 4"
+      ],
+      [
+       "0 - W / 4",
+       "0 - H / 4"
+      ]
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "per-bend": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "parted on the diagonal",
+   "layers": [
+    {
+     "shape": "points",
+     "points": [
+      [
+       "0 - W",
+       "H"
+      ],
+      [
+       "W",
+       "H"
+      ],
+      [
+       "W",
+       "0 - H"
+      ]
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "cross": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a cross throughout",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W * 0.2",
+     "h": "H",
+     "fill": 1
+    },
+    {
+     "shape": "rect",
+     "w": "W",
+     "h": "H * 0.16",
+     "at": [
+      0,
+      "H * 0.1"
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "saltire": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a saltire, St Andrew's cross",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W * 0.2",
+     "h": "H * 2",
+     "rot": 35,
+     "fill": 1
+    },
+    {
+     "shape": "rect",
+     "w": "W * 0.2",
+     "h": "H * 2",
+     "rot": -35,
+     "fill": 1
+    }
+   ]
+  },
+  "chevron": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a chevron",
+   "layers": [
+    {
+     "shape": "points",
+     "points": [
+      [
+       "0 - W",
+       "0 - H * 0.35"
+      ],
+      [
+       0,
+       "H * 0.3"
+      ],
+      [
+       "W",
+       "0 - H * 0.35"
+      ],
+      [
+       "W",
+       "0 - H * 0.12"
+      ],
+      [
+       0,
+       "H * 0.53"
+      ],
+      [
+       "0 - W",
+       "0 - H * 0.12"
+      ]
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "bend": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a bend, from the upper left",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W * 0.24",
+     "h": "H * 2",
+     "rot": 40,
+     "fill": 1
+    }
+   ]
+  },
+  "pale": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a pale, a band down the middle",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W / 3",
+     "h": "H",
+     "fill": 1
+    }
+   ]
+  },
+  "fess": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a fess, a band across",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W",
+     "h": "H / 3",
+     "at": [
+      0,
+      "H * 0.08"
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "chief": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a chief, the top third",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W",
+     "h": "H / 3",
+     "at": [
+      0,
+      "H / 3"
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "bordure": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a bordure round a plain field",
+   "layers": [
+    {
+     "shape": "frame",
+     "w": "W * 0.96",
+     "h": "H * 0.96",
+     "t": "W * 0.1",
+     "fill": 1
+    }
+   ]
+  },
+  "roundel": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a roundel in the middle",
+   "layers": [
+    {
+     "shape": "circle",
+     "r": "W * 0.22",
+     "fill": 1
+    }
+   ]
+  },
+  "paly": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "paly of six, upright stripes",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W / 6",
+     "h": "H",
+     "at": [
+      [
+       "0 - W * 5 / 12",
+       0
+      ],
+      [
+       "0 - W / 12",
+       0
+      ],
+      [
+       "W * 3 / 12",
+       0
+      ]
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "barry": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "barry, bands across",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W",
+     "h": "H / 8",
+     "at": [
+      [
+       0,
+       "H * 7 / 16"
+      ],
+      [
+       0,
+       "H * 3 / 16"
+      ],
+      [
+       0,
+       "0 - H / 16"
+      ],
+      [
+       0,
+       "0 - H * 5 / 16"
+      ]
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "chequy": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "chequy, a chessboard",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": "W / 6",
+     "h": "H / 8",
+     "grid": [
+      3,
+      4
+     ],
+     "at": [
+      [
+       "0 - W / 12",
+       "H / 16"
+      ],
+      [
+       "W / 12",
+       "0 - H / 16"
+      ]
+     ],
+     "fill": 1
+    }
+   ]
+  },
+  "gyronny": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "gyronny of eight: wedges from the middle, the Northmen's painted boards",
+   "layers": [
+    {
+     "shape": "points",
+     "points": [
+      [
+       0,
+       0
+      ],
+      [
+       "W",
+       0
+      ],
+      [
+       "W",
+       "H"
+      ]
+     ],
+     "sym": 4,
+     "fill": 1
+    }
+   ]
+  },
+  "wings": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "the legion's wings and thunderbolts on a scutum, in the third tincture's rim",
+   "layers": [
+    {
+     "shape": "frame",
+     "w": "W * 0.94",
+     "h": "H * 0.96",
+     "t": "W * 0.05",
+     "fill": 1
+    },
+    {
+     "shape": "lens",
+     "r": "W * 0.3",
+     "w": "W * 0.06",
+     "rot": 0,
+     "at": [
+      [
+       "0 - W * 0.2",
+       "H * 0.18"
+      ],
+      [
+       "W * 0.2",
+       "H * 0.18"
+      ],
+      [
+       "0 - W * 0.2",
+       "0 - H * 0.18"
+      ],
+      [
+       "W * 0.2",
+       "0 - H * 0.18"
+      ]
+     ],
+     "fill": 1
+    },
+    {
+     "shape": "circle",
+     "r": "W * 0.12",
+     "fill": 1
+    }
+   ]
+  },
+  "sun": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a sun in splendour: rays round a disc",
+   "layers": [
+    {
+     "shape": "star",
+     "n": 12,
+     "r": "W * 0.34",
+     "inner": "W * 0.2",
+     "fill": 1
+    },
+    {
+     "shape": "circle",
+     "r": "W * 0.15",
+     "fill": 2
+    }
+   ]
+  },
+  "lion": {
+   "size": [
+    "W",
+    "H"
+   ],
+   "params": {
+    "W": 0.8,
+    "H": 1.0
+   },
+   "repeat": false,
+   "palette": "gules-or",
+   "palettes": [
+    "azure-argent",
+    "sable-or",
+    "vert-argent",
+    "or-gules"
+   ],
+   "ground": 0,
+   "res": 256,
+   "_about": "a lion's head, simplified to a roundel with a mane of points",
+   "layers": [
+    {
+     "shape": "star",
+     "n": 16,
+     "r": "W * 0.3",
+     "inner": "W * 0.22",
+     "fill": 1
+    },
+    {
+     "shape": "circle",
+     "r": "W * 0.17",
+     "fill": 2
+    }
+   ]
+  }
+ }
+}

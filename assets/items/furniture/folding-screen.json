@@ -1,0 +1,135 @@
+{
+ "kind": "item",
+ "name": "Folding screen",
+ "category": "furniture/other",
+ "era": "1400-1800",
+ "region": "China & Japan",
+ "_about": "a folding screen of six leaves, each a lacquered frame round a painted panel, standing in a zigzag",
+ "params": {
+  "n": 6,
+  "w": 0.45,
+  "h": [
+   1.6,
+   1.8
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "lacquer-black",
+    "lacquer-red"
+   ]
+  },
+  "panel": {
+   "pick": [
+    {
+     "pattern": "painted/cloud scroll",
+     "palette": "chinese-red"
+    },
+    "damask-red",
+    {
+     "pattern": "painted/gold mosaic"
+    },
+    "linen"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "frames",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    "h",
+    0.03
+   ],
+   "at": [
+    [
+     "0 - w * 2.25",
+     "h / 2",
+     -0.12,
+     20
+    ],
+    [
+     "0 - w * 1.35",
+     "h / 2",
+     0.03,
+     -20
+    ],
+    [
+     "0 - w * 0.45",
+     "h / 2",
+     -0.12,
+     20
+    ],
+    [
+     "w * 0.45",
+     "h / 2",
+     0.03,
+     -20
+    ],
+    [
+     "w * 1.35",
+     "h / 2",
+     -0.12,
+     20
+    ],
+    [
+     "w * 2.25",
+     "h / 2",
+     0.03,
+     -20
+    ]
+   ]
+  },
+  {
+   "id": "panels",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    "w - 0.08",
+    "h - 0.2",
+    0.034
+   ],
+   "at": [
+    [
+     "0 - w * 2.25",
+     "h / 2",
+     -0.12,
+     20
+    ],
+    [
+     "0 - w * 1.35",
+     "h / 2",
+     0.03,
+     -20
+    ],
+    [
+     "0 - w * 0.45",
+     "h / 2",
+     -0.12,
+     20
+    ],
+    [
+     "w * 0.45",
+     "h / 2",
+     0.03,
+     -20
+    ],
+    [
+     "w * 1.35",
+     "h / 2",
+     -0.12,
+     20
+    ],
+    [
+     "w * 2.25",
+     "h / 2",
+     0.03,
+     -20
+    ]
+   ]
+  }
+ ]
+}

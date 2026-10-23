@@ -1,0 +1,31 @@
+{
+  "name": "Belt",
+  "kind": "component",
+  "_about": "A BELT round the waist (a strap `width` wide) and its BUCKLE at the front: two sheets, the buckle's a narrow arc over the strap.",
+  "params": {
+    "at": "waist",
+    "width": 0.04
+  },
+  "pieces": [
+    {
+      "name": "strap",
+      "on": "torso",
+      "from": "at - width / 2",
+      "to": "at + width / 2",
+      "fabric": "main",
+      "thick": 0.004
+    },
+    {
+      "name": "buckle",
+      "on": "torso",
+      "from": "at - width / 2 - 0.004",
+      "to": "at + width / 2 + 0.004",
+      "wrap": [
+        0,
+        16
+      ],
+      "fabric": "buckle",
+      "thick": 0.005
+    }
+  ]
+}

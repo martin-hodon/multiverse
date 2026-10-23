@@ -1,0 +1,80 @@
+{
+ "name": "Altar",
+ "_about": "the altar on its step, the priest's place before it facing the nave (-x)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "step": {
+   "type": "box",
+   "width": 2.4,
+   "length": 3.2,
+   "height": 0.2,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "altar": {
+   "type": "box",
+   "width": 1.0,
+   "length": 2.0,
+   "height": 1.0,
+   "at": [
+    [
+     0.4,
+     0.2,
+     0,
+     0
+    ]
+   ]
+  },
+  "candles": {
+   "type": "item",
+   "item": "items/tools/candlestick",
+   "at": [
+    [
+     0.55,
+     1.2,
+     -0.7,
+     0
+    ],
+    [
+     0.55,
+     1.2,
+     0.7,
+     0
+    ]
+   ],
+   "solid": false
+  },
+  "priest": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     -0.6,
+     0.2,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "work": 1,
+    "gesture": "bless",
+    "face": 3.14159265,
+    "pose": "stand"
+   }
+  }
+ },
+ "build": [
+  "step",
+  "altar",
+  "candles",
+  "priest"
+ ]
+}

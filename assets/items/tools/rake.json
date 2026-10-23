@@ -1,0 +1,144 @@
+{
+ "kind": "item",
+ "name": "Hay rake",
+ "category": "tool",
+ "era": "800-1900",
+ "_about": "a wooden hay rake: a long handle, a head bar across it with a row of pegs",
+ "params": {
+  "L": [
+   1.5,
+   1.7
+  ],
+  "w": 0.6
+ },
+ "materials": {
+  "wood": "ash",
+  "teeth": "oak"
+ },
+ "parts": [
+  {
+   "id": "shaft",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "L",
+    0
+   ],
+   "r": 0.016,
+   "sides": 7
+  },
+  {
+   "id": "head",
+   "type": "box",
+   "material": "teeth",
+   "size": [
+    0.04,
+    0.035,
+    "w"
+   ],
+   "at": [
+    0,
+    "L",
+    0
+   ]
+  },
+  {
+   "id": "braces",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "L - 0.3",
+    0
+   ],
+   "to": [
+    0,
+    "L",
+    "w * 0.3"
+   ],
+   "r": 0.008,
+   "mirror": "x",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     90,
+     0,
+     0
+    ]
+   ],
+   "sides": 5
+  },
+  {
+   "id": "pegs",
+   "type": "rod",
+   "material": "teeth",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0.09,
+    -0.01,
+    0
+   ],
+   "r": 0.006,
+   "sides": 5,
+   "along": {
+    "n": 12,
+    "from": [
+     0.02,
+     "L",
+     "0 - w / 2 + 0.03"
+    ],
+    "to": [
+     0.02,
+     "L",
+     "w / 2 - 0.03"
+    ]
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.35,
+    -1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "grip2": [
+   0,
+   "L * 0.5",
+   0
+  ]
+ }
+}

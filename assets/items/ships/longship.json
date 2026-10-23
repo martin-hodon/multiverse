@@ -1,0 +1,299 @@
+{
+ "kind": "item",
+ "name": "Longship",
+ "category": "ship",
+ "era": "800-1100",
+ "region": "Scandinavia",
+ "_about": "the Viking longship: a clinker shell on a keel, the stem and stern sweeping up into a dragon's head and a curled tail, shields along the gunwales, a single striped square sail, sixteen oars a side and a side rudder on the starboard quarter",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   20,
+   28
+  ],
+  "B": "L * 0.2",
+  "D": "B * 0.38",
+  "mastH": "L * 0.45",
+  "oarsN": "round(L * 0.65)"
+ },
+ "materials": {
+  "planks": {
+   "pick": [
+    "planks",
+    "planks-tarred"
+   ]
+  },
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": {
+   "pick": [
+    "sail-striped",
+    "canvas"
+   ]
+  },
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.35,
+   "double": true,
+   "stations": 32,
+   "sides": 7,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.1,
+     0.45
+    ],
+    [
+     0.35,
+     0.95
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.65,
+     0.95
+    ],
+    [
+     0.9,
+     0.45
+    ],
+    [
+     1,
+     0.02
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.9"
+    ],
+    [
+     0.08,
+     "D * 0.15"
+    ],
+    [
+     0.2,
+     0
+    ],
+    [
+     0.8,
+     0
+    ],
+    [
+     0.92,
+     "D * 0.15"
+    ],
+    [
+     1,
+     "D * 0.9"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 2.2"
+    ],
+    [
+     0.06,
+     "D * 1.5"
+    ],
+    [
+     0.15,
+     "D * 1.12"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.85,
+     "D * 1.12"
+    ],
+    [
+     0.94,
+     "D * 1.5"
+    ],
+    [
+     1,
+     "D * 2.2"
+    ]
+   ],
+   "rail": 0.06,
+   "keelBeam": [
+    0.18,
+    0.3
+   ],
+   "postRise": "D * 0.2",
+   "thwarts": {
+    "n": "oarsN",
+    "y": "D * 0.55",
+    "w": 0.22,
+    "from": 0.16,
+    "to": 0.84
+   },
+   "ribs": {
+    "n": 14,
+    "w": 0.06
+   }
+  },
+  {
+   "id": "dragon",
+   "use": "items/components/figurehead",
+   "params": {
+    "style": "dragon",
+    "s": "D * 0.7"
+   },
+   "at": [
+    "L * 0.99",
+    "D * 2.3",
+    0
+   ]
+  },
+  {
+   "id": "tail",
+   "use": "items/components/figurehead",
+   "params": {
+    "style": "scroll",
+    "s": "D * 0.6"
+   },
+   "at": [
+    0.1,
+    "D * 2.3",
+    0,
+    180,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "shields",
+   "use": "items/components/shield-row",
+   "params": {
+    "n": "oarsN",
+    "from": "L * 0.16",
+    "to": "L * 0.84",
+    "y": "D * 1.02",
+    "z": "B * 0.5 - 0.02",
+    "w": "B * 0.17"
+   }
+  },
+  {
+   "id": "oars",
+   "use": "items/components/oars",
+   "params": {
+    "n": "oarsN",
+    "from": "L * 0.17",
+    "to": "L * 0.83",
+    "y": "D * 0.82",
+    "z": "B * 0.5",
+    "l": "L * 0.2",
+    "dip": 16,
+    "reach": 0.28
+   }
+  },
+  {
+   "id": "mast L * 0.48",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH + D * 0.15",
+    "r": 0.18,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.48",
+    "D * 0.15",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.48 D * 0.3 + mastH * 0.94",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.42",
+    "h": "mastH * 0.62",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.05"
+   },
+   "at": [
+    "L * 0.48",
+    "D * 0.3 + mastH * 0.94",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "steering",
+   "use": "items/components/steering-oar",
+   "params": {
+    "l": "D * 2.2",
+    "bladeW": 0.5
+   },
+   "at": [
+    "L * 0.1",
+    "D * 1.05",
+    "B * 0.5",
+    0,
+    0,
+    8
+   ]
+  },
+  {
+   "id": "stay L * 0.48-L * 0.96",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.48",
+    "D * 0.3 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.96",
+    "D * 1.6",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.48-L * 0.05",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.48",
+    "D * 0.3 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.05",
+    "D * 1.6",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ]
+}

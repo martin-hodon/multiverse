@@ -1,0 +1,241 @@
+{
+ "kind": "item",
+ "name": "Savonarola chair",
+ "category": "furniture/seat",
+ "era": "1450-1600",
+ "region": "Italy",
+ "_about": "the X-frame chair of the Italian Renaissance: interlaced curved slats crossing under the seat on two runners, a carved back rail, a cushion",
+ "params": {
+  "h": 0.5,
+  "w": 0.6,
+  "d": 0.46,
+  "n": 6
+ },
+ "materials": {
+  "wood": "walnut",
+  "cloth": {
+   "pick": [
+    "velvet-red",
+    "leather-red",
+    "damask-red"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "slats a",
+   "type": "sweep",
+   "material": "wood",
+   "section": [
+    0.022,
+    0.035
+   ],
+   "up": [
+    1,
+    0,
+    0
+   ],
+   "path": [
+    [
+     0,
+     0.04,
+     "d / 2"
+    ],
+    [
+     0,
+     0.18,
+     "d * 0.18"
+    ],
+    [
+     0,
+     "h * 0.62",
+     "0 - d * 0.12"
+    ],
+    [
+     0,
+     "h",
+     "0 - d * 0.36"
+    ]
+   ],
+   "along": {
+    "n": "n",
+    "from": [
+     "0 - w / 2 + 0.04",
+     0,
+     0
+    ],
+    "to": [
+     "w / 2 - 0.04",
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "slats b",
+   "type": "sweep",
+   "material": "wood",
+   "section": [
+    0.022,
+    0.035
+   ],
+   "up": [
+    1,
+    0,
+    0
+   ],
+   "path": [
+    [
+     0,
+     0.04,
+     "0 - d / 2"
+    ],
+    [
+     0,
+     0.18,
+     "0 - d * 0.18"
+    ],
+    [
+     0,
+     "h * 0.62",
+     "d * 0.12"
+    ],
+    [
+     0,
+     "h",
+     "d * 0.36"
+    ]
+   ],
+   "along": {
+    "n": "n",
+    "from": [
+     "0 - w / 2 + 0.06",
+     0,
+     0
+    ],
+    "to": [
+     "w / 2 - 0.02",
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "runners",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.04,
+    0.05
+   ],
+   "at": [
+    [
+     0,
+     0.02,
+     "d / 2"
+    ],
+    [
+     0,
+     0.02,
+     "0 - d / 2"
+    ]
+   ]
+  },
+  {
+   "id": "rails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.04,
+    0.05
+   ],
+   "at": [
+    [
+     0,
+     "h",
+     "d * 0.36"
+    ],
+    [
+     0,
+     "h",
+     "0 - d * 0.36"
+    ]
+   ]
+  },
+  {
+   "id": "back",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w * 1.05",
+    0.14,
+    0.035
+   ],
+   "round": 0.01,
+   "at": [
+    0,
+    "h + 0.3",
+    "0 - d * 0.4"
+   ]
+  },
+  {
+   "id": "back posts",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "h",
+    "0 - d * 0.36"
+   ],
+   "to": [
+    0,
+    "h + 0.24",
+    "0 - d * 0.4"
+   ],
+   "r": 0.016,
+   "at": [
+    [
+     "0 - w * 0.35",
+     0,
+     0
+    ],
+    [
+     "w * 0.35",
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "cushion",
+   "use": "items/components/cushion",
+   "params": {
+    "w": "w - 0.06",
+    "d": "d * 0.8",
+    "h": 0.06
+   },
+   "at": [
+    0,
+    "h + 0.02",
+    0
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "w",
+    "d": "d * 0.8",
+    "top": "h + 0.07"
+   }
+  }
+ ]
+}

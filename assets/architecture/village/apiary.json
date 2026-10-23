@@ -1,0 +1,240 @@
+{
+ "name": "Beekeeper's garden",
+ "_about": "THE BEEKEEPER'S GARDEN: a picket fence with a gap in front, eight skeps (items/tools/skep) in two rows, the bench with the smoker and a comb frame, the beekeeper's place among the hives",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "fence north": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     -5,
+     0,
+     -4,
+     0
+    ]
+   ],
+   "params": {
+    "L": 10,
+    "style": "picket",
+    "h": 0.8
+   }
+  },
+  "fence west": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     -5,
+     0,
+     4,
+     1.5707963
+    ]
+   ],
+   "params": {
+    "L": 8,
+    "style": "picket",
+    "h": 0.8
+   }
+  },
+  "fence east": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     5,
+     0,
+     -4,
+     -1.5707963
+    ]
+   ],
+   "params": {
+    "L": 8,
+    "style": "picket",
+    "h": 0.8
+   }
+  },
+  "fence south west": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     -1,
+     0,
+     4,
+     3.14159265
+    ]
+   ],
+   "params": {
+    "L": 4,
+    "style": "picket",
+    "h": 0.8
+   }
+  },
+  "fence south east": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     5,
+     0,
+     4,
+     3.14159265
+    ]
+   ],
+   "params": {
+    "L": 4,
+    "style": "picket",
+    "h": 0.8
+   }
+  },
+  "skeps": {
+   "type": "item",
+   "item": "items/tools/skep",
+   "at": [
+    [
+     -3.3,
+     0,
+     -2,
+     -1.5707963
+    ],
+    [
+     -1.1,
+     0,
+     -2,
+     -1.5707963
+    ],
+    [
+     1.1,
+     0,
+     -2,
+     -1.5707963
+    ],
+    [
+     3.3,
+     0,
+     -2,
+     -1.5707963
+    ],
+    [
+     -3.3,
+     0,
+     0.8,
+     -1.5707963
+    ],
+    [
+     -1.1,
+     0,
+     0.8,
+     -1.5707963
+    ],
+    [
+     1.1,
+     0,
+     0.8,
+     -1.5707963
+    ],
+    [
+     3.3,
+     0,
+     0.8,
+     -1.5707963
+    ]
+   ]
+  },
+  "bench": {
+   "type": "box",
+   "width": 1.6,
+   "length": 0.4,
+   "height": 0.06,
+   "at": [
+    [
+     3.2,
+     0.43,
+     2.9,
+     0
+    ]
+   ]
+  },
+  "bench legs": {
+   "type": "box",
+   "width": 0.08,
+   "length": 0.34,
+   "height": 0.43,
+   "at": [
+    [
+     2.55,
+     0,
+     2.9,
+     0
+    ],
+    [
+     3.85,
+     0,
+     2.9,
+     0
+    ]
+   ]
+  },
+  "smoker": {
+   "type": "column",
+   "radius": 0.09,
+   "height": 0.22,
+   "sides": 8,
+   "at": [
+    [
+     2.8,
+     0.49,
+     2.9,
+     0
+    ]
+   ]
+  },
+  "comb frame": {
+   "type": "box",
+   "width": 0.4,
+   "length": 0.03,
+   "height": 0.3,
+   "at": [
+    [
+     3.5,
+     0.49,
+     2.9,
+     0
+    ]
+   ]
+  },
+  "beekeeper": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     -2.2,
+     0,
+     -0.6,
+     1.5707963
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": "tend"
+   }
+  }
+ },
+ "build": [
+  "fence north",
+  "fence west",
+  "fence east",
+  "fence south west",
+  "fence south east",
+  "skeps",
+  "bench",
+  "bench legs",
+  "smoker",
+  "comb frame",
+  "beekeeper"
+ ]
+}

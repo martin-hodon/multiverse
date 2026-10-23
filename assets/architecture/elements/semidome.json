@@ -1,0 +1,105 @@
+{
+  "name": "Semidome over an apse",
+  "_about": "A SEMIDOME is a dome of `sweep` .5: half of it, turned about +z, closed along its cut -- the conch over an apse, the half-dome of a Byzantine exedra. It is open toward -z, where the nave it looks into is; here it stands on a half ring of three bays. A skin of `sweep` .5 is the half-cone roof over such an apse, flat against the wall behind it.",
+  "params": {
+    "detail": 8,
+    "r": 5,
+    "t": 0.6,
+    "wallH": 6,
+    "gap": 14
+  },
+  "build": [
+    "apse",
+    "conch",
+    "apse roof wall",
+    "half cone"
+  ],
+  "parts": {
+    "apse": {
+      "type": "ring",
+      "count": 6,
+      "rOuter": "r",
+      "rInner": "r - t",
+      "height": "wallH",
+      "at": [
+        0,
+        1,
+        5
+      ],
+      
+      "opening": {
+        "width": "r * 0.35",
+        "sill": 1,
+        "springing": "1 + r * 0.4",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "conch": {
+      "type": "dome",
+      "sweep": 0.5,
+      "radius": "r",
+      "thickness": "t",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          "wallH",
+          0,
+          0
+        ]
+      ]
+    },
+    "apse roof wall": {
+      "type": "ring",
+      "count": 6,
+      "rOuter": "r",
+      "rInner": "r - t",
+      "height": "wallH",
+      "at": [
+        0,
+        1,
+        5
+      ],
+      
+      "solid": true,
+      "place": [
+        [
+          "gap",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "half cone": {
+      "type": "dome",
+      "sweep": 0.5,
+      "radius": "r + 0.3",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "r * 0.6"
+      },
+      "at": [
+        [
+          "gap",
+          "wallH",
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Paludamentum",
+  "kind": "garment",
+  "layer": 4,
+  "_about": "the Byzantine chlamys (the paludamentum of the Roman generals): a long semicircular cloak of silk or wool pinned at the right shoulder with a fibula, open down the right side, to the calf -- the court's and the officers' cloak",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "tyrian"
+    },
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "gold"
+    }
+  },
+  "params": {
+    "length": "calf",
+    "hem": 0.03
+  },
+  "use": [
+    {
+      "use": "clothes/components/mantle",
+      "params": {
+        "to": "length",
+        "centre": 250,
+        "span": 290,
+        "flare": 0.3,
+        "hem": "hem"
+      }
+    }
+  ]
+}

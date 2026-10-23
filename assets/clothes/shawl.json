@@ -1,0 +1,26 @@
+{
+  "name": "Shawl",
+  "kind": "garment",
+  "layer": 4,
+  "_about": "a shawl of wool, cashmere or tartan round the shoulders, open at the front, its ends falling to the waist",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/tartan",
+      "palette": "tartan-red"
+    }
+  },
+  "params": {
+    "length": "waist + 0.1"
+  },
+  "use": [
+    {
+      "use": "clothes/components/mantle",
+      "params": {
+        "to": "length",
+        "centre": 180,
+        "span": 300,
+        "flare": 0.35
+      }
+    }
+  ]
+}

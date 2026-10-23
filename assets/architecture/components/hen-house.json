@@ -1,0 +1,180 @@
+{
+ "name": "Hen house",
+ "_about": "a hen house on four legs: a hollow boarded box under a little gable with a perch inside, the pop-hole opening toward -z and the hens' cleated ladder plank up to it (air beneath), a water bowl in the yard",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "legs": {
+   "type": "column",
+   "radius": 0.05,
+   "height": 0.55,
+   "sides": 6,
+   "at": [
+    [
+     -0.7999999999999999,
+     0,
+     -0.6,
+     0
+    ],
+    [
+     -0.7999999999999999,
+     0,
+     0.6,
+     0
+    ],
+    [
+     0.7999999999999999,
+     0,
+     -0.6,
+     0
+    ],
+    [
+     0.7999999999999999,
+     0,
+     0.6,
+     0
+    ]
+   ]
+  },
+  "floor": {
+   "type": "box",
+   "width": 1.9,
+   "length": 1.5,
+   "height": 0.05,
+   "at": [
+    [
+     0,
+     0.55,
+     0,
+     0
+    ]
+   ]
+  },
+  "house": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     1.9,
+     1.5
+    ]
+   },
+   "thickness": 0.04,
+   "height": 1.1,
+   "at": [
+    [
+     0,
+     0.55,
+     0,
+     0
+    ]
+   ],
+   "openings": [],
+   "faces": {
+    "2": [
+     {
+      "at": 0.4,
+      "width": 0.36,
+      "sill": 0.05,
+      "springing": 0.47,
+      "head": {
+       "profile": "flat"
+      },
+      "glass": false
+     }
+    ]
+   }
+  },
+  "roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 1.8,
+   "length": 2.1999999999999997,
+   "pitch": 30,
+   "overhang": 0.1,
+   "at": [
+    [
+     0,
+     1.6500000000000001,
+     0,
+     "1.5707963"
+    ]
+   ],
+   "_about": "(a roof's ridge runs along its `length`, its own z: turned so the ridge runs the house's long way, x)"
+  },
+  "perch": {
+   "type": "box",
+   "width": 1.7,
+   "length": 0.04,
+   "height": 0.04,
+   "at": [
+    [
+     0,
+     1.0,
+     0.2,
+     0
+    ]
+   ]
+  },
+  "ladder": {
+   "type": "flight",
+   "use": "ramp",
+   "walk": false,
+   "run": 0.22,
+   "steps": 5,
+   "base": 0,
+   "top": 0.65,
+   "landing": 0,
+   "width": 0.3,
+   "soffit": 0.05,
+   "at": [
+    [
+     -0.55,
+     0,
+     -1.85,
+     "0 - 1.5707963"
+    ]
+   ]
+  },
+  "bowl": {
+   "type": "column",
+   "radius": 0.2,
+   "height": 0.1,
+   "sides": 10,
+   "at": [
+    [
+     1.5,
+     0,
+     1.0,
+     0
+    ]
+   ]
+  },
+  "block": {
+   "type": "marker",
+   "role": "block",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "w": 2.3,
+    "d": 1.9
+   }
+  }
+ },
+ "build": [
+  "legs",
+  "floor",
+  "house",
+  "roof",
+  "perch",
+  "ladder",
+  "bowl",
+  "block"
+ ]
+}

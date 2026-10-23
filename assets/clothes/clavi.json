@@ -1,0 +1,54 @@
+{
+  "name": "Clavi",
+  "kind": "garment",
+  "layer": 3,
+  "_about": "clavi: the two purple stripes down a tunica's front and back from the shoulders to the hem -- narrow for a knight, broad for a senator",
+  "fabrics": {
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "tyrian"
+    }
+  },
+  "params": {
+    "to": "knee - 0.03",
+    "span": 7
+  },
+  "use": [
+    {
+      "use": "clothes/components/strip",
+      "params": {
+        "from": "collar + 0.01",
+        "to": "to",
+        "centre": 24,
+        "span": "span"
+      }
+    },
+    {
+      "use": "clothes/components/strip",
+      "params": {
+        "from": "collar + 0.01",
+        "to": "to",
+        "centre": -24,
+        "span": "span"
+      }
+    },
+    {
+      "use": "clothes/components/strip",
+      "params": {
+        "from": "collar + 0.01",
+        "to": "to",
+        "centre": 156,
+        "span": "span"
+      }
+    },
+    {
+      "use": "clothes/components/strip",
+      "params": {
+        "from": "collar + 0.01",
+        "to": "to",
+        "centre": 204,
+        "span": "span"
+      }
+    }
+  ]
+}

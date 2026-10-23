@@ -1,0 +1,130 @@
+{
+  "name": "Chhatri",
+  "_about": "A CHHATRI: the domed kiosk of Mughal and Rajput building -- a raised platform, a ring of columns, the deep eave (chhajja) they carry, a low drum and an onion on it, a finial. Written once and used wherever one stands: on the Taj Mahal's roof, on top of its minarets. `r` is the circle the columns stand on; everything else is in proportion to it unless given.",
+  "params": {
+    "detail": 4,
+    "n": 8,
+    "r": 2.2,
+    "colH": "r * 1.2",
+    "colR": "r * 0.075",
+    "plat": "r * 0.25",
+    "eave": "r * 0.3",
+    "bulge": 1.18,
+    "neck": 0.85,
+    "finial": "r * 0.6",
+    "floor": 1,
+    "_floor": "1: its platform is a floor, reached; 0: an ornament up on a roof, not climbed to"
+  },
+  "build": [
+    "platform",
+    "columns",
+    "chhajja",
+    "drum",
+    "dome",
+    "finial"
+  ],
+  "parts": {
+    "platform": {
+      "type": "prism",
+      "plan": {
+        "sides": "n",
+        "radius": "r * 1.15"
+      },
+      "height": "plat",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "flatRoof": "1 - floor"
+    },
+    "columns": {
+      "type": "colonnade",
+      "plan": "round",
+      "order": "tuscan",
+      "count": "n",
+      "radius": "r",
+      "columnR": "colR",
+      "height": "colH",
+      "sides": 8,
+      "at": [
+        [
+          0,
+          "plat",
+          0,
+          0
+        ]
+      ]
+    },
+    "chhajja": {
+      "type": "prism",
+      "plan": {
+        "sides": "n",
+        "radius": "r + eave"
+      },
+      "height": "r * 0.1",
+      "at": [
+        [
+          0,
+          "plat + colH",
+          0,
+          0
+        ]
+      ],
+      "_about": "the eave: a thin deep slab standing out all round"
+    },
+    "drum": {
+      "type": "prism",
+      "plan": {
+        "sides": "n",
+        "radius": "r * 1.02"
+      },
+      "height": "r * 0.25",
+      "at": [
+        [
+          0,
+          "plat + colH + r * 0.1",
+          0,
+          0
+        ]
+      ]
+    },
+    "dome": {
+      "type": "dome",
+      "radius": "r * 1.02",
+      "thickness": 0,
+      "head": {
+        "profile": "onion",
+        "bulge": "bulge",
+        "neck": "neck"
+      },
+      "at": [
+        [
+          0,
+          "plat + colH + r * 0.35",
+          0,
+          0
+        ]
+      ]
+    },
+    "finial": {
+      "type": "column",
+      "radius": "r * 0.05",
+      "height": "finial",
+      "sides": 6,
+      "taper": 0.4,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "dome"
+    }
+  }
+}

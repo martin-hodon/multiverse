@@ -1,0 +1,286 @@
+{
+ "name": "Crannog",
+ "_about": "The crannog: a roundhouse on a timber platform out in a loch, on piles driven into the bed, a walkway to the shore (Ireland and Scotland, -800-1600)",
+ "era": "-800-1600",
+ "region": "Ireland and Scotland",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "platform": {
+   "type": "ring",
+   "count": 20,
+   "rOuter": 5.5,
+   "rInner": 0.05,
+   "height": 0.25,
+   "y": 1.5,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "piles": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 1.6,
+   "sides": 6,
+   "at": [
+    [
+     5.0,
+     0,
+     0.0,
+     0
+    ],
+    [
+     4.5048,
+     0,
+     2.1694,
+     0
+    ],
+    [
+     3.1174,
+     0,
+     3.9092,
+     0
+    ],
+    [
+     1.1126,
+     0,
+     4.8746,
+     0
+    ],
+    [
+     -1.1126,
+     0,
+     4.8746,
+     0
+    ],
+    [
+     -3.1174,
+     0,
+     3.9092,
+     0
+    ],
+    [
+     -4.5048,
+     0,
+     2.1694,
+     0
+    ],
+    [
+     -5.0,
+     0,
+     0.0,
+     0
+    ],
+    [
+     -4.5048,
+     0,
+     -2.1694,
+     0
+    ],
+    [
+     -3.1174,
+     0,
+     -3.9092,
+     0
+    ],
+    [
+     -1.1126,
+     0,
+     -4.8746,
+     0
+    ],
+    [
+     1.1126,
+     0,
+     -4.8746,
+     0
+    ],
+    [
+     3.1174,
+     0,
+     -3.9092,
+     0
+    ],
+    [
+     4.5048,
+     0,
+     -2.1694,
+     0
+    ]
+   ]
+  },
+  "walkway": {
+   "type": "box",
+   "width": 10.0,
+   "length": 1.2,
+   "height": 0.15,
+   "at": [
+    [
+     10.5,
+     1.6,
+     0,
+     0
+    ]
+   ]
+  },
+  "walkway piles": {
+   "type": "column",
+   "radius": 0.1,
+   "height": 1.6,
+   "sides": 6,
+   "at": [
+    [
+     7.5,
+     0,
+     -0.5,
+     0
+    ],
+    [
+     7.5,
+     0,
+     0.5,
+     0
+    ],
+    [
+     10.5,
+     0,
+     -0.5,
+     0
+    ],
+    [
+     10.5,
+     0,
+     0.5,
+     0
+    ],
+    [
+     13.5,
+     0,
+     -0.5,
+     0
+    ],
+    [
+     13.5,
+     0,
+     0.5,
+     0
+    ]
+   ]
+  },
+  "wall": {
+   "type": "ring",
+   "count": 14,
+   "rOuter": 3.5,
+   "rInner": 3.3,
+   "height": 1.5,
+   "y": 0,
+   "place": [
+    [
+     0,
+     1.75,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   "solid": true,
+   "glass": false
+  },
+  "door": {
+   "type": "ring",
+   "count": 14,
+   "rOuter": 3.5,
+   "rInner": 3.3,
+   "height": 1.5,
+   "y": 0,
+   "place": [
+    [
+     0,
+     1.75,
+     0,
+     0
+    ]
+   ],
+   "at": [
+    0
+   ],
+   "opening": {
+    "at": 0,
+    "width": 1.0,
+    "sill": 0,
+    "springing": 1.4,
+    "head": {
+     "profile": "flat"
+    }
+   },
+   "glass": false
+  },
+  "roof": {
+   "type": "dome",
+   "sides": 14,
+   "radius": 4.1,
+   "thickness": 0.3,
+   "head": {
+    "profile": "trigonal",
+    "rise": 4.0
+   },
+   "cap": false,
+   "at": [
+    [
+     0,
+     3.1,
+     0,
+     0
+    ]
+   ]
+  },
+  "hearth": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     0,
+     1.75,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.25,
+    "h": 0.5
+   }
+  }
+ },
+ "build": [
+  "platform",
+  "piles",
+  "walkway",
+  "walkway piles",
+  "wall",
+  "door",
+  "roof",
+  "hearth"
+ ]
+}

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terrain lab</title>
+<style>
+  html, body { margin: 0; overflow: hidden; background: #0e1014; font: 12px/1.45 "Avenir Next", "Segoe UI", sans-serif; color: #e8ecf2; }
+  canvas#view { display: block; width: 100vw; height: 100vh; }
+  #hud { position: fixed; left: 10px; top: 10px; background: #0b0b12d0; padding: 8px 11px; border-radius: 7px; white-space: pre;
+         font: 11.5px/1.45 ui-monospace, Menlo, Consolas, monospace; pointer-events: none; max-width: 46em; }
+  #hud b { color: #9fe8ff; font-weight: 600 }
+  #panel { position: fixed; right: 0; top: 0; bottom: 0; width: 300px; overflow-y: auto; background: #10131acc; border-left: 1px solid #ffffff1c; padding: 6px 10px 20px; }
+  #panel h3 { margin: 12px 0 4px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #9fb4c8; }
+  #panel label { display: grid; grid-template-columns: 112px 1fr 52px; gap: 6px; align-items: center; margin: 2px 0; }
+  #panel label span.v { text-align: right; font: 11px ui-monospace, monospace; color: #cfe; }
+  #panel input[type=range] { width: 100%; }
+  #panel button, #panel select { background: #232a36; color: #e8ecf2; border: 1px solid #ffffff26; border-radius: 4px; padding: 3px 7px; margin: 2px 2px 2px 0; font: inherit; cursor: pointer; }
+  #panel button.on { background: #3b6fa8; border-color: #9fd0ff; }
+  #panel .row { display: flex; flex-wrap: wrap; gap: 2px; align-items: center; }
+  #panel .note { color: #97a3b3; font-size: 11px; margin: 2px 0 4px; }
+  #sect { position: fixed; left: 10px; bottom: 10px; width: calc(100vw - 340px); height: 170px; background: #0b0b12d8; border-radius: 7px; }
+  #sect canvas { width: 100%; height: 100%; display: block; }
+  #sectLbl { position: absolute; left: 8px; top: 5px; font: 11px ui-monospace, monospace; color: #cde; pointer-events: none; }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="hud">starting…</div>
+<div id="sect"><canvas id="sc"></canvas><div id="sectLbl"></div></div>
+<div id="panel"></div>
+<script type="module">
+// THE TERRAIN LAB (docs/terrain_lab.md): a region grown by its geology on the GPU -- plates, volcanoes, rain, rivers, the
+// sea -- in a layered crust. Presets start a kind of land; the sliders, the tools and time do the rest.
+//   drag: orbit (or the tool) · right-drag: orbit · shift-drag: pan · wheel: zoom · space: play/pause
+//   ?N=128|256|512 the grid · ?preset= · ?seed= · ?probe (headless: draw offscreen)
+import { createLab, PRESETS, MATS, DEFAULTS } from "./terrain_lab.js";
+
+const qp = new URLSearchParams(location.search);
+const canvas = document.getElementById("view"), hud = document.getElementById("hud");
+const fit = () => { const r = devicePixelRatio > 1.5 ? 1.5 : devicePixelRatio; canvas.width = innerWidth * r | 0; canvas.height = innerHeight * r | 0; };
+fit(); addEventListener("resize", fit);
+let lab;
+try { lab = await createLab(canvas, { N: +(qp.get("N") ?? 256) }); }
+catch (e) { hud.textContent = "WebGPU is needed for the terrain lab: " + e.message; throw e; }
+lab.device.addEventListener("uncapturederror", (e) => console.error(e.error.message));
+window.__lab = lab;
+lab.offscreen = qp.has("probe");   // (headless: never present the canvas -- terrain_lab.js)
+
+// ---- state: running, the camera, the tool
+const S = { play: false, spf: 8, tool: "orbit", brushR: 2500, brushRate: 0.5, hotRate: 2e5, plates: 3, plateSpeed: 12 };
+const cam = { yaw: 0.7, pitch: 0.62, dist: 1, tx: 0, tz: 0 };
+const size = () => lab.N * lab.params.dx;
+function camera() {
+  const d = cam.dist * size() * 1.25, e = [cam.tx + d * Math.cos(cam.pitch) * Math.sin(cam.yaw), d * Math.sin(cam.pitch), cam.tz + d * Math.cos(cam.pitch) * Math.cos(cam.yaw)];
+  const c = { eye: e, target: [cam.tx, (lab.view.hLo ?? 0) * lab.view.exag * 0.5, cam.tz], fov: 0.75 };
+  lab.lastCam = c;
+  return c;
+}
+
+// ---- the panel, from a little description of it
+const panel = document.getElementById("panel");
+const el = (tag, props = {}, ...kids) => { const n = Object.assign(document.createElement(tag), props); n.append(...kids); return n; };
+const sec = (title) => panel.append(el("h3", { textContent: title }));
+const note = (t) => panel.append(el("div", { className: "note", textContent: t }));
+const refresh = [];
+// a slider: `get`/`set` a value; `log`: a log scale between lo and hi
+function slider(name, lo, hi, get, set, { log = false, step, fmt = (v) => (+v.toPrecision(3)).toString() } = {}) {
+  const inp = el("input", { type: "range", min: 0, max: 1000, step: 1 }), out = el("span", { className: "v" });
+  const toV = (t) => log ? lo * Math.pow(hi / lo, t / 1000) : lo + (hi - lo) * t / 1000;
+  const toT = (v) => log ? 1000 * Math.log(v / lo) / Math.log(hi / lo) : 1000 * (v - lo) / (hi - lo);
+  const show = () => { inp.value = toT(get()); out.textContent = fmt(get()); };
+  inp.oninput = () => { let v = toV(+inp.value); if (step) v = Math.round(v / step) * step; set(v); out.textContent = fmt(v); };
+  panel.append(el("label", {}, el("span", { textContent: name }), inp, out));
+  refresh.push(show); show();
+}
+const buttons = (list, cls = "row") => { const r = el("div", { className: cls }); for (const [t, f, id] of list) { const b = el("button", { textContent: t, onclick: () => f(b) }); if (id) b.dataset.id = id; r.append(b); } panel.append(r); return r; };
+const P = lab.params;
+const par = (k) => [() => lab.params[k], (v) => { lab.params[k] = v; }];
+const MM = 1e-3;
+
+sec("Time");
+const playRow = buttons([["▶ play", (b) => setPlay(!S.play)], ["step ×10", () => lab.step(10)], ["×100", () => lab.step(100)]]);
+function setPlay(on) { S.play = on; playRow.firstChild.textContent = on ? "⏸ pause" : "▶ play"; playRow.firstChild.classList.toggle("on", on); }
+slider("steps a frame", 1, 60, () => S.spf, (v) => { S.spf = v; }, { step: 1 });
+slider("years a step", 50, 5000, ...par("dt"), { log: true, step: 50 });
+
+sec("Start from");
+const presetRow = buttons(Object.entries(PRESETS).map(([k, p]) => [p.name, () => start(k), k]));
+const gridRow = el("div", { className: "row" });
+const gridSel = el("select", {}, ...[128, 256, 512].map((n) => el("option", { value: n, textContent: `${n}² cells (${(n * 0.1).toFixed(1)} km)`, selected: n === lab.N })));
+const seedIn = el("input", { type: "number", value: qp.get("seed") ?? 1, style: "width:60px;background:#232a36;color:#eee;border:1px solid #ffffff26;border-radius:4px" });
+gridRow.append(gridSel, el("span", { textContent: " seed " }), seedIn);
+panel.append(gridRow);
+note("A preset lays the rock (its strata), the starting relief, the plates and volcanoes, and the climate.");
+
+sec("Climate");
+slider("rain m/yr", 0.05, 3, ...par("rain"));
+slider("more rain up high", 0, 2, ...par("orog"));
+slider("sea level m", -600, 1200, ...par("sea"), { step: 5 });
+
+sec("Tectonics");
+slider("plate uplift", 0, 0.4, ...par("plateK"));
+slider("belt width km", 1, 12, () => P.plateW / 1000, (v) => { lab.params.plateW = v * 1000; });
+slider("regional uplift mm/yr", -2, 3, () => lab.params.upliftBg / MM, (v) => { lab.params.upliftBg = v * MM; }, { step: 0.05 });
+slider("uneven crust", 0, 1, ...par("upNoise"));
+slider("plates drift", 0, 0.5, ...par("drift"));
+buttons([["new plates", () => randomPlates()], ["no plates", () => { lab.plates = []; }]]);
+slider("plates", 2, 6, () => S.plates, (v) => { S.plates = v; }, { step: 1 });
+slider("plate speed mm/yr", 2, 40, () => S.plateSpeed, (v) => { S.plateSpeed = v; }, { step: 1 });
+function randomPlates() {
+  const L = size(), r = () => Math.random();
+  lab.plates = Array.from({ length: S.plates }, () => { const a = r() * Math.PI * 2; return [L * (0.1 + 0.8 * r()), L * (0.1 + 0.8 * r()), Math.cos(a) * S.plateSpeed * MM, Math.sin(a) * S.plateSpeed * MM]; });
+}
+
+sec("Volcanoes");
+slider("new vent m³/yr", 1e4, 2e6, () => S.hotRate, (v) => { S.hotRate = v; }, { log: true });
+slider("rift basalt", 0, 0.05, ...par("riftBasalt"));
+slider("lava stops at slope", 0.01, 0.2, ...par("lavaYield"));
+buttons([["no volcanoes", () => { lab.hot = []; }]]);
+
+sec("Erosion");
+slider("river cutting K", 2e-6, 5e-4, ...par("K"), { log: true });
+slider("settling V m/yr", 0.1, 10, ...par("V"), { log: true });
+slider("channel from m³/yr", 1e4, 1e7, ...par("Qc"), { log: true });
+slider("hillslope creep m²/yr", 0, 30, ...par("kappa"));
+slider("landslides", 0, 1, ...par("slide"));
+slider("weathering m/yr", 1e-6, 1e-3, ...par("weather"), { log: true });
+slider("reefs m/yr", 0, 2e-3, ...par("carb"));
+slider("burial to rock m", 10, 300, ...par("lith"), { step: 5 });
+slider("rock varies ±", 0, 0.8, ...par("rockVar"));
+slider("a fall from slope", 0.05, 1, ...par("fallS"));
+slider("plunge pools", 0, 3, ...par("plunge"));
+note("A river steeper than a fall's slope leaves its bed: the lip wears slowly and the rest of its power scours a pool at the foot. A hard cap over soft rock (basalt or limestone on sandstone) is undercut and steps back as a fall; side streams hang over a valley their trunk cut faster. White on the river marks a fall.");
+
+sec("Sea and waves");
+slider("wave attack m/yr", 0, 0.1, ...par("waves"));
+slider("wave base m", 2, 40, ...par("waveBase"), { step: 1 });
+slider("shelf slope", 0.001, 0.05, ...par("shelfSlope"), { log: true });
+note("Waves cut the land at the sea's edge (cliffs retreat by their rock and how open they face the sea) and plane the shelf down to wave base, carrying its sediment to deeper water.");
+
+sec("Tools");
+note("Drag with a tool on the land (right-drag still orbits).");
+const toolRow = buttons([["orbit", () => setTool("orbit"), "orbit"], ["raise", () => setTool("raise"), "raise"], ["lower", () => setTool("lower"), "lower"],
+                         ["volcano", () => setTool("volcano"), "volcano"], ["outlet", () => setTool("outlet"), "outlet"], ["probe", () => setTool("probe"), "probe"]]);
+function setTool(t) { S.tool = t; for (const b of toolRow.children) b.classList.toggle("on", b.dataset.id === t); }
+slider("brush km", 0.3, 8, () => S.brushR / 1000, (v) => { S.brushR = v * 1000; });
+slider("brush mm/yr", 0.05, 5, () => S.brushRate, (v) => { S.brushRate = v; }, { log: true });
+buttons([["clear painted uplift", () => lab.clearPaint()], ["no outlets", () => { lab.outlets = []; lab.fullFill = true; }]]);
+note("Outlet: click near the edge to let the land drain out there (again to take it away). With outlets the edge is base level only at them -- elsewhere the land goes on across it -- and canyons grow back from them; with none, the whole edge is.");
+
+sec("View");
+const modeRow = buttons([["height", () => setMode(0, true), "0r"], ["height (absolute)", () => setMode(0, false), "0a"], ["rock", () => setMode(1), "1"], ["discharge", () => setMode(2), "2"]]);
+function setMode(m, rel = lab.view.rel) { lab.view.mode = m; lab.view.rel = rel; for (const b of modeRow.children) b.classList.toggle("on", b.dataset.id === (m === 0 ? (rel ? "0r" : "0a") : String(m))); }
+slider("vertical ×", 1, 6, () => lab.view.exag, (v) => { lab.view.exag = v; });
+slider("detail waves", 0, 3, () => lab.view.detail, (v) => { lab.view.detail = v; });
+slider("mesh ×grid", 1, 4, () => lab.M / lab.N, (v) => { lab.setMesh(lab.N * v); }, { step: 1 });
+slider("section row", 0, 1, () => lab.view.section, (v) => { lab.view.section = v; });
+buttons([["contours", (b) => { lab.view.contour = lab.view.contour ? 0 : 1; b.classList.toggle("on", !!lab.view.contour); }], ["section panel", () => { const s = document.getElementById("sect"); s.style.display = s.style.display === "none" ? "" : "none"; }]]);
+
+sec("Save");
+const save = (blob, name) => { const a = el("a", { href: URL.createObjectURL(blob), download: name }); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); };
+buttons([["height map (16-bit PNG)", async () => { const r = await lab.exportHeight(); save(r.png, `terrain-${lab.preset}-${r.lo.toFixed(0)}_${r.hi.toFixed(0)}m-${(r.size / 1000).toFixed(1)}km.png`); }],
+         ["rock map (PNG)", async () => save(await lab.exportMaterials(), `terrain-${lab.preset}-rock.png`)]]);
+note("The height map spans the lowest to the highest point (its name says the metres); the mesh's resolution is the map's.");
+
+function start(key) {
+  const n = +gridSel.value;
+  lab.reset(key, { n, seed: +seedIn.value || 1 });
+  lab.setMesh(Math.min(1024, 2 * lab.N));
+  for (const b of presetRow.children) b.classList.toggle("on", b.dataset.id === key);
+  refresh.forEach((f) => f());
+  stats = null; sectionAt = -1;
+}
+
+// ---- input: orbit, pan, zoom; tools pick the ground under the pointer
+let drag = null;
+canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+canvas.addEventListener("pointerdown", (e) => {
+  canvas.setPointerCapture(e.pointerId);
+  const toolHere = e.button === 0 && !e.shiftKey && S.tool !== "orbit";
+  drag = { x: e.clientX, y: e.clientY, pan: e.shiftKey || e.button === 1, tool: toolHere };
+  if (toolHere) useTool(e, true);
+});
+canvas.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+  if (drag.tool) { useTool(e, false); return; }
+  if (drag.pan) { const k = size() * cam.dist * 0.0016; cam.tx -= (dx * Math.cos(cam.yaw) - dy * Math.sin(cam.yaw)) * k; cam.tz -= (-dx * Math.sin(cam.yaw) - dy * Math.cos(cam.yaw)) * k; }
+  else { cam.yaw -= dx * 0.005; cam.pitch = Math.min(1.5, Math.max(0.08, cam.pitch + dy * 0.004)); }
+});
+canvas.addEventListener("pointerup", () => { drag = null; });
+canvas.addEventListener("wheel", (e) => { cam.dist = Math.min(3, Math.max(0.12, cam.dist * Math.exp(e.deltaY * 0.001))); e.preventDefault(); }, { passive: false });
+addEventListener("keydown", (e) => { if (e.code === "Space" && e.target === document.body) { setPlay(!S.play); e.preventDefault(); } });
+
+// where the pointer's ray meets the ground (a march over the last read-back heights), in metres on the plan
+function pick(e) {
+  if (!lab.last) return null;
+  const c = camera(), r = canvas.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width * 2 - 1, ny = 1 - (e.clientY - r.top) / r.height * 2;
+  const f = [c.target[0] - c.eye[0], c.target[1] - c.eye[1], c.target[2] - c.eye[2]], fl = Math.hypot(...f); f.forEach((v, i) => f[i] = v / fl);
+  const rt = [-f[2], 0, f[0]], rl = Math.hypot(...rt); rt.forEach((v, i) => rt[i] = v / rl);            // right: forward x up
+  const up = [rt[1] * f[2] - rt[2] * f[1], rt[2] * f[0] - rt[0] * f[2], rt[0] * f[1] - rt[1] * f[0]];   // right x forward
+  const t = Math.tan(c.fov / 2), a = canvas.width / canvas.height;
+  const d = [0, 1, 2].map((i) => f[i] + rt[i] * nx * t * a + up[i] * ny * t);
+  const L = size(), N = lab.N, H = lab.last.H, W = lab.last.W, ex = lab.view.exag;
+  const hAt = (x, z) => { const i = Math.round((x / L + 0.5) * (N - 1)), j = Math.round((z / L + 0.5) * (N - 1)); if (i < 0 || j < 0 || i >= N || j >= N) return null; return Math.max(H[j * N + i], W[j * N + i]) * ex; };
+  const p = c.eye.slice(), st = L / N / 2, dl = Math.hypot(...d);
+  for (let k = 0; k < 20000; k++) {
+    for (let i = 0; i < 3; i++) p[i] += d[i] / dl * st;
+    const h = hAt(p[0], p[2]);
+    if (h !== null && p[1] <= h) return [p[0] + L / 2, p[2] + L / 2];
+  }
+  return null;
+}
+function useTool(e, first) {
+  const at = pick(e); if (!at) return;
+  if (S.tool === "raise" || S.tool === "lower") lab.paint(at[0], at[1], S.brushR, (S.tool === "raise" ? 1 : -1) * S.brushRate * MM * 0.08);
+  else if (S.tool === "volcano" && first) lab.hot.push([at[0], at[1], S.hotRate, Math.max(600, S.brushR * 0.6)]);
+  else if (S.tool === "outlet" && first) lab.toggleOutlet(at[0], at[1]);
+  else if (S.tool === "probe" && first) { lab.view.section = at[1] / size(); probeX = at[0] / size(); sectionAt = -1; }
+}
+
+// ---- the cross-section: the columns along the chosen row, their beds, the water on them
+const sc = document.getElementById("sc"), sx = sc.getContext("2d"), sectLbl = document.getElementById("sectLbl");
+let sectionAt = -1, probeX = null, sectionBusy = false;
+async function drawSection() {
+  const j = Math.round(lab.view.section * (lab.N - 1));
+  if (sectionBusy) return; sectionBusy = true;
+  const row = await lab.readRow(j); sectionBusy = false; sectionAt = j;
+  const W = sc.width = sc.clientWidth * devicePixelRatio, Hh = sc.height = sc.clientHeight * devicePixelRatio;
+  let lo = 1e9, hi = -1e9; for (const c of row) { lo = Math.min(lo, c.base); hi = Math.max(hi, c.W, c.H); }
+  lo = Math.max(lo - 40, hi - Math.max(600, (hi - lo) * 1.1));
+  const Y = (z) => Hh - (z - lo) / (hi - lo + 1) * (Hh - 18) - 2;
+  sx.fillStyle = "#b9cfe0"; sx.fillRect(0, 0, W, Hh);
+  row.forEach((c, i) => {
+    const x0 = i / row.length * W, w = W / row.length + 0.6;
+    let z = c.base;
+    sx.fillStyle = rgb(MATS[0].color); sx.fillRect(x0, Y(z), w, Hh - Y(z));
+    for (const [m, t] of c.layers) { sx.fillStyle = rgb(MATS[m].color); sx.fillRect(x0, Y(z + t), w, Y(z) - Y(z + t)); z += t; }
+    if (c.W > c.H + 0.5) { sx.fillStyle = "#3a78b0"; sx.fillRect(x0, Y(c.W), w, Y(c.H) - Y(c.W)); }
+  });
+  let txt = `section row ${j}: ${lo.toFixed(0)} .. ${hi.toFixed(0)} m    ` + MATS.map((m) => m.name).join(" · ");
+  if (probeX !== null) {
+    const c = row[Math.round(probeX * (lab.N - 1))];
+    if (c) {
+      const x = probeX * W; sx.strokeStyle = "#f33"; sx.beginPath(); sx.moveTo(x, 0); sx.lineTo(x, Hh); sx.stroke();
+      txt += `\nprobe: ground ${c.H.toFixed(1)} m${c.W > c.H + 0.5 ? `, water to ${c.W.toFixed(1)} m` : ""}; beds from the top: ` +
+             c.layers.slice().reverse().map(([m, t]) => `${MATS[m].name} ${t.toFixed(t < 10 ? 1 : 0)} m`).join(", ") + `; granite from ${c.base.toFixed(0)} m`;
+    }
+  }
+  sectLbl.textContent = txt;
+}
+const rgb = (c) => `rgb(${c.map((v) => v * 255 | 0).join(",")})`;
+
+// ---- the loop
+let stats = null, frame = 0, statsBusy = false, fps = 0, tLast = performance.now(), stepMs = 0;
+async function updateStats() {
+  if (statsBusy) return; statsBusy = true;
+  try { stats = await lab.stats(); } finally { statsBusy = false; }
+}
+function drawHud() {
+  const s = stats;
+  hud.innerHTML = `<b>${PRESETS[lab.preset]?.name ?? ""}</b>  ${lab.N}² cells of ${lab.params.dx} m · ${(size() / 1000).toFixed(1)} km\n` +
+    `<b>${(lab.years / 1000).toFixed(1)} kyr</b>  (${lab.steps} steps of ${lab.params.dt} yr) ${S.play ? `· ${S.spf} steps/frame · ${fps.toFixed(0)} fps` : "· paused (space)"}\n` +
+    (s ? `ground ${s.lo.toFixed(0)} .. ${s.hi.toFixed(0)} m (mean ${s.mean.toFixed(0)})  lakes ${(100 * s.lakeShare).toFixed(1)}%  sea ${(100 * s.seaShare).toFixed(1)}%  rivers ${(100 * s.riverShare).toFixed(1)}%\n` +
+         `at the surface: ` + Object.entries(s.surface).filter(([, v]) => v > 0.005).map(([k, v]) => `${k} ${(100 * v).toFixed(0)}%`).join(" · ") +
+         `\nloose sediment ${s.meanSediment.toFixed(1)} m a cell on average · plates ${lab.plates.length} · volcanoes ${lab.hot.length} · ${s.falls.length ? `${s.falls.length} waterfall${s.falls.length > 1 ? "s" : ""} (highest ${s.falls[0].height.toFixed(0)} m)` : "no waterfalls"} · ${lab.outlets.length ? `drains by ${lab.outlets.length} outlet${lab.outlets.length > 1 ? "s" : ""}` : "drains over all its edge"}` : "");
+}
+function loop() {
+  requestAnimationFrame(loop);
+  const now = performance.now(); fps = fps * 0.9 + 100 / Math.max(1, now - tLast); tLast = now;
+  if (S.play) lab.step(S.spf);
+  if (!lab.offscreen || frame % 30 === 0) lab.render(camera());   // (headless: a picture now and then is plenty)
+  frame++;
+  if (frame % 20 === 0) updateStats();
+  if (frame % 15 === 0 || sectionAt !== Math.round(lab.view.section * (lab.N - 1))) drawSection();
+  if (frame % 10 === 0) drawHud();
+}
+setTool("orbit"); setMode(0, true);
+start(qp.get("preset") in PRESETS ? qp.get("preset") : "mountains");
+await updateStats(); drawHud();
+window.__ready = true;
+loop();
+</script>
+</body>
+</html>

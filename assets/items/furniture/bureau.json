@@ -1,0 +1,162 @@
+{
+ "kind": "item",
+ "name": "Bureau",
+ "category": "furniture/table",
+ "era": "1700-1800",
+ "region": "England",
+ "_about": "the slant-front bureau: a writing fall hinged over a case of four drawers on bracket feet, pigeon-holes behind the fall",
+ "params": {
+  "w": [
+   0.9,
+   1.0
+  ],
+  "d": 0.5,
+  "caseH": 0.78,
+  "top": 1.04
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "mahogany"
+   ]
+  },
+  "metal": "brass"
+ },
+ "parts": [
+  {
+   "id": "case",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    "caseH",
+    "d - 0.02"
+   ],
+   "at": [
+    0,
+    "0.1 + caseH / 2",
+    -0.01
+   ]
+  },
+  {
+   "id": "desk",
+   "type": "plate",
+   "material": "wood",
+   "thick": "w - 0.001",
+   "at": [
+    0,
+    0,
+    0,
+    90,
+    0,
+    0
+   ],
+   "outline": [
+    [
+     "0 - d / 2",
+     "0.1 + caseH"
+    ],
+    [
+     "d / 2 - 0.02",
+     "0.1 + caseH"
+    ],
+    [
+     "0 - d / 2 + 0.22",
+     "top"
+    ],
+    [
+     "0 - d / 2",
+     "top"
+    ]
+   ]
+  },
+  {
+   "id": "drawers",
+   "use": "items/components/drawer",
+   "params": {
+    "w": "w - 0.06",
+    "h": 0.16,
+    "pull": "ring"
+   },
+   "at": [
+    [
+     0,
+     0.21,
+     "d / 2 - 0.02"
+    ],
+    [
+     0,
+     0.39,
+     "d / 2 - 0.02"
+    ],
+    [
+     0,
+     0.57,
+     "d / 2 - 0.02"
+    ],
+    [
+     0,
+     0.75,
+     "d / 2 - 0.02"
+    ]
+   ]
+  },
+  {
+   "id": "feet",
+   "use": "items/components/bracket-foot",
+   "params": {
+    "h": 0.1,
+    "w": 0.12
+   },
+   "at": [
+    [
+     "w / 2 - 0.005",
+     0,
+     "d / 2 - 0.02",
+     180
+    ],
+    [
+     "0 - w / 2 + 0.005",
+     0,
+     "d / 2 - 0.02",
+     270
+    ],
+    [
+     "w / 2 - 0.005",
+     0,
+     "0 - d / 2",
+     90
+    ],
+    [
+     "0 - w / 2 + 0.005",
+     0,
+     "0 - d / 2",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "lopers",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.04,
+    0.02
+   ],
+   "at": [
+    [
+     "0 - w / 2 + 0.06",
+     "caseH + 0.06",
+     "d / 2 - 0.01"
+    ],
+    [
+     "w / 2 - 0.06",
+     "caseH + 0.06",
+     "d / 2 - 0.01"
+    ]
+   ]
+  }
+ ]
+}

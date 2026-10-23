@@ -1,0 +1,277 @@
+{
+  "name": "Blue Mosque",
+  "_about": "THE BLUE MOSQUE (Sultan Ahmed Mosque), Istanbul, 1609-16, from components: the prayer hall is a `dome-cascade` -- the dome 23.5m across and 43m high inside on four elephant-foot piers and pendentives, a semidome on every side with two exedrae cut into it, the four corner domes, turrets on the piers, the walls with their rows of windows; the forecourt, as large as the hall, inside a `riwaq` of small domes on pointed arcades, its hall-side row the hall's portico; the hexagonal ablution fountain; the monumental gateway; six `ottoman-minaret`s with pencil caps -- four of three balconies at the hall's corners, two of two at the court's far corners.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.6,
+    "steps": 3,
+    "stepOut": 0.5,
+    "margin": 3
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "hall",
+    "riwaq",
+    "gateway",
+    "gateway crest",
+    "gateway dome",
+    "fountain basin",
+    "fountain columns",
+    "fountain eave",
+    "fountain dome",
+    "minarets",
+    "court minarets"
+  ],
+  "parts": {
+    "hall": {
+      "type": "component",
+      "use": "components/dome-cascade",
+      "params": {
+        "R": 11.75,
+        "P": 5.0,
+        "G": 2.0,
+        "T": 2.5
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the prayer hall (`dome-cascade`): the dome 23.5m across on four elephant-foot piers and pendentives, 43m high inside; four semidomes, each with two exedrae; four corner domes; turrets on the piers; the walls, three doors from the court"
+    },
+    "riwaq": {
+      "type": "component",
+      "use": "components/riwaq",
+      "params": {
+        "nx": 7,
+        "nz": 7,
+        "B": 7.0,
+        "p": 1.3,
+        "bB": 0
+      },
+      "at": [
+        [
+          0,
+          0,
+          -63.85,
+          0
+        ]
+      ],
+      "_about": "the forecourt's portico (`riwaq`): 32 domed bays on pointed arcades round the court, the gates in the middle of three sides; its fourth row the hall's own portico, against its wall"
+    },
+    "gateway": {
+      "type": "wall",
+      "width": 12.0,
+      "height": 15.0,
+      "thickness": 3.0,
+      "at": [
+        [
+          0,
+          0,
+          -96.0,
+          0
+        ]
+      ],
+      "glass": false,
+      "openings": [
+        {
+          "at": 6.0,
+          "width": 5.0,
+          "sill": 0,
+          "springing": 8.5,
+          "head": {
+            "profile": "pointed",
+            "spread": 0.4
+          }
+        }
+      ],
+      "_about": "the monumental gateway: a tall portal block before the court's main gate, its pointed arch the passage"
+    },
+    "gateway crest": {
+      "type": "box",
+      "width": 12.6,
+      "length": 3.6,
+      "height": 0.8,
+      "at": [
+        [
+          0,
+          15.0,
+          -97.5,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "gateway"
+      ]
+    },
+    "gateway dome": {
+      "type": "dome",
+      "radius": 1.5,
+      "thickness": 0,
+      "sides": 12,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          15.8,
+          -97.5,
+          0
+        ]
+      ],
+      "standsOn": [
+        "gateway crest"
+      ],
+      "_about": "the little dome on the gateway"
+    },
+    "fountain basin": {
+      "type": "prism",
+      "plan": {
+        "sides": 6,
+        "radius": 1.9
+      },
+      "height": 0.9,
+      "at": [
+        [
+          0,
+          0,
+          -63.85,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the sadirvan: a hexagonal fountain under a canopy on six columns"
+    },
+    "fountain columns": {
+      "type": "colonnade",
+      "plan": "round",
+      "order": "tuscan",
+      "count": 6,
+      "radius": 3.0,
+      "columnR": 0.22,
+      "height": 3.6,
+      "sides": 8,
+      "at": [
+        [
+          0,
+          0,
+          -63.85,
+          0
+        ]
+      ]
+    },
+    "fountain eave": {
+      "type": "prism",
+      "plan": {
+        "sides": 6,
+        "radius": 3.9
+      },
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          3.6,
+          -63.85,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "fountain columns"
+      ]
+    },
+    "fountain dome": {
+      "type": "dome",
+      "radius": 3.1,
+      "thickness": 0,
+      "sides": 12,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          3.95,
+          -63.85,
+          0
+        ]
+      ],
+      "standsOn": [
+        "fountain eave"
+      ]
+    },
+    "minarets": {
+      "type": "component",
+      "use": "components/ottoman-minaret",
+      "params": {
+        "h": 42.0,
+        "r": 2.0,
+        "foot": 11.0,
+        "balconies": 3,
+        "tier": 12.0
+      },
+      "at": [
+        [
+          -35.6,
+          0,
+          -35.6,
+          0
+        ],
+        [
+          -35.6,
+          0,
+          35.6,
+          0
+        ],
+        [
+          35.6,
+          0,
+          -35.6,
+          0
+        ],
+        [
+          35.6,
+          0,
+          35.6,
+          0
+        ]
+      ],
+      "_about": "the four minarets at the hall's corners, three balconies each"
+    },
+    "court minarets": {
+      "type": "component",
+      "use": "components/ottoman-minaret",
+      "params": {
+        "h": 32.0,
+        "r": 1.8,
+        "foot": 7.0,
+        "balconies": 2,
+        "tier": 12.0
+      },
+      "at": [
+        [
+          -34.75,
+          0,
+          -98.0,
+          0
+        ],
+        [
+          34.75,
+          0,
+          -98.0,
+          0
+        ]
+      ],
+      "_about": "the two at the forecourt's far corners, two balconies each"
+    }
+  }
+}

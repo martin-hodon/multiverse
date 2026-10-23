@@ -1,0 +1,1396 @@
+{
+  "name": "St Paul's Cathedral",
+  "_about": "ST PAUL'S CATHEDRAL, London (Wren, 1675-1710), from components: a Latin cross of nave, transepts and choir with its apse round a square crossing, pendentives in the crossing and the deck round their circle; over the roofs a round base, and on it the `drum-dome` -- a PERISTYLE of 32 columns round the drum, the attic over it, the dome and the stone lantern; the west front's two-storey `portico`, the same component twice; and the two west towers, each a square stage climbed by a `tower-stair` and an open belfry under a bell cap.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.8,
+    "steps": 4,
+    "stepOut": 0.5,
+    "margin": 4
+  },
+  "build": [
+    "crossing",
+    "nave",
+    "north transept",
+    "north portico",
+    "north portico dome",
+    "south transept",
+    "south portico",
+    "south portico dome",
+    "choir",
+    "apse",
+    "nave roof",
+    "choir roof",
+    "transept roofs",
+    "nave balustrade",
+    "choir balustrade",
+    "north transept balustrade",
+    "south transept balustrade",
+    "pendentives",
+    "dome base",
+    "dome",
+    "lower portico",
+    "upper portico",
+    "northwest tower",
+    "northwest tower stair",
+    "northwest belfry",
+    "southwest tower",
+    "southwest tower stair",
+    "southwest belfry",
+    "statue St Paul",
+    "statue St Peter",
+    "statue St James",
+    "statue evangelist 0",
+    "statue evangelist 1",
+    "statue evangelist 2",
+    "statue evangelist 3"
+  ],
+  "parts": {
+    "crossing": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          34.0,
+          34.0
+        ]
+      },
+      "thickness": 2.0,
+      "height": 30.0,
+      "openings": [
+        {
+          "at": 0,
+          "width": 20.0,
+          "sill": 0,
+          "springing": 14.0,
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the crossing: eight piers in the real one, here four walls each opened by a great arch into an arm"
+    },
+    "nave": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          34.0,
+          50.0
+        ]
+      },
+      "thickness": 2.0,
+      "height": 30.0,
+      "tiers": [
+        {
+          "h": 15,
+          "openings": {
+            "pattern": "3",
+            "width": 2.6,
+            "gap": 4.4,
+            "sill": 4.0,
+            "springing": 10.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "3",
+            "width": 2.4,
+            "gap": 4.6,
+            "sill": 3.0,
+            "springing": 9.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "faces": {
+        "2": [
+          {
+            "at": 0,
+            "width": 20.0,
+            "sill": 0,
+            "springing": 14.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "0": [
+          {
+            "h": 15,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.0,
+                "sill": 0,
+                "springing": 7.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.4,
+                "sill": 2.0,
+                "springing": 8.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          42.0,
+          0
+        ]
+      ],
+      "_about": "the nave, in two storeys outside (the upper a screen wall hiding the aisle roofs)"
+    },
+    "north transept": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          22.0,
+          34.0
+        ]
+      },
+      "thickness": 2.0,
+      "height": 30.0,
+      "tiers": [
+        {
+          "h": 15,
+          "openings": {
+            "pattern": "3",
+            "width": 2.6,
+            "gap": 4.4,
+            "sill": 4.0,
+            "springing": 10.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "3",
+            "width": 2.4,
+            "gap": 4.6,
+            "sill": 3.0,
+            "springing": 9.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "faces": {
+        "3": [
+          {
+            "at": 0,
+            "width": 20.0,
+            "sill": 0,
+            "springing": 14.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "1": [
+          {
+            "h": 15,
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.6,
+                "sill": 0,
+                "springing": 7.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.0,
+                "sill": 2.0,
+                "springing": 8.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          28.0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the transepts, a door in each end"
+    },
+    "north portico": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": 180,
+      "count": 6,
+      "radius": 6.0,
+      "order": "corinthian",
+      "columnR": 0.6,
+      "height": 12.0,
+      "taper": 0.86,
+      "entablature": {
+        "h": 1.8,
+        "depth": 1.6
+      },
+      "at": [
+        [
+          39.0,
+          0,
+          0,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the transept porticoes: six columns on a half circle before each door, under a half dome"
+    },
+    "north portico dome": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 6.8,
+      "thickness": 0.6,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          39.0,
+          13.8,
+          0,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "south transept": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          22.0,
+          34.0
+        ]
+      },
+      "thickness": 2.0,
+      "height": 30.0,
+      "tiers": [
+        {
+          "h": 15,
+          "openings": {
+            "pattern": "3",
+            "width": 2.6,
+            "gap": 4.4,
+            "sill": 4.0,
+            "springing": 10.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "3",
+            "width": 2.4,
+            "gap": 4.6,
+            "sill": 3.0,
+            "springing": 9.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "faces": {
+        "1": [
+          {
+            "at": 0,
+            "width": 20.0,
+            "sill": 0,
+            "springing": 14.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "3": [
+          {
+            "h": 15,
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.6,
+                "sill": 0,
+                "springing": 7.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.0,
+                "sill": 2.0,
+                "springing": 8.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          -28.0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "south portico": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": 180,
+      "count": 6,
+      "radius": 6.0,
+      "order": "corinthian",
+      "columnR": 0.6,
+      "height": 12.0,
+      "taper": 0.86,
+      "entablature": {
+        "h": 1.8,
+        "depth": 1.6
+      },
+      "at": [
+        [
+          -39.0,
+          0,
+          0,
+          -1.5707963267948966
+        ]
+      ]
+    },
+    "south portico dome": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": 6.8,
+      "thickness": 0.6,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          -39.0,
+          13.8,
+          0,
+          -1.5707963267948966
+        ]
+      ]
+    },
+    "choir": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          34.0,
+          36.0
+        ]
+      },
+      "thickness": 2.0,
+      "height": 30.0,
+      "tiers": [
+        {
+          "h": 15,
+          "openings": {
+            "pattern": "3",
+            "width": 2.6,
+            "gap": 4.4,
+            "sill": 4.0,
+            "springing": 10.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "3",
+            "width": 2.4,
+            "gap": 4.6,
+            "sill": 3.0,
+            "springing": 9.5,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "at": 0,
+            "width": 20.0,
+            "sill": 0,
+            "springing": 14.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "2": [
+          {
+            "at": 0,
+            "width": 29.0,
+            "sill": 0,
+            "springing": 14.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          -35.0,
+          0
+        ]
+      ],
+      "_about": "the choir, open at its end into the apse"
+    },
+    "apse": {
+      "type": "component",
+      "use": "components/apse",
+      "params": {
+        "R": 15.0,
+        "T": 2.0,
+        "H": 18.0,
+        "n": 16,
+        "winW": 2.4,
+        "winSill": 5.0,
+        "winH": 8.0,
+        "domeT": 2.0
+      },
+      "at": [
+        [
+          0,
+          0,
+          -53.0,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the apse, lower than the choir: its half dome rises into the choir's end wall, not above it"
+    },
+    "nave roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 34.0,
+      "length": 50.0,
+      "pitch": 22,
+      "overhang": 0.3,
+      "at": [
+        [
+          0,
+          30.0,
+          42.0,
+          0
+        ]
+      ],
+      "_about": "low roofs behind the parapets"
+    },
+    "choir roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 34.0,
+      "length": 36.0,
+      "pitch": 22,
+      "overhang": 0.3,
+      "at": [
+        [
+          0,
+          30.0,
+          -35.0,
+          0
+        ]
+      ]
+    },
+    "transept roofs": {
+      "type": "roof",
+      "form": "gable",
+      "width": 34.0,
+      "length": 22.0,
+      "pitch": 22,
+      "overhang": 0.3,
+      "at": [
+        [
+          -28.0,
+          30.0,
+          0,
+          1.5707963267948966
+        ],
+        [
+          28.0,
+          30.0,
+          0,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "nave balustrade": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          34.0,
+          50.0
+        ]
+      },
+      "thickness": 0.4,
+      "height": 1.3,
+      "faces": {
+        "0": {
+          "pattern": "58",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "2": {
+          "pattern": "58",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "1": {
+          "pattern": "87",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "3": {
+          "pattern": "87",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      },
+      "at": [
+        [
+          0,
+          30.0,
+          42.0,
+          0
+        ]
+      ],
+      "_about": "the balustrade round every roof, on the walls' heads"
+    },
+    "choir balustrade": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          34.0,
+          36.0
+        ]
+      },
+      "thickness": 0.4,
+      "height": 1.3,
+      "faces": {
+        "0": {
+          "pattern": "58",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "2": {
+          "pattern": "58",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "1": {
+          "pattern": "62",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "3": {
+          "pattern": "62",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      },
+      "at": [
+        [
+          0,
+          30.0,
+          -35.0,
+          0
+        ]
+      ]
+    },
+    "north transept balustrade": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          22.0,
+          34.0
+        ]
+      },
+      "thickness": 0.4,
+      "height": 1.3,
+      "faces": {
+        "0": {
+          "pattern": "37",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "2": {
+          "pattern": "37",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "1": {
+          "pattern": "58",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "3": {
+          "pattern": "58",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      },
+      "at": [
+        [
+          28.0,
+          30.0,
+          0,
+          0
+        ]
+      ]
+    },
+    "south transept balustrade": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          22.0,
+          34.0
+        ]
+      },
+      "thickness": 0.4,
+      "height": 1.3,
+      "faces": {
+        "0": {
+          "pattern": "37",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "2": {
+          "pattern": "37",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "1": {
+          "pattern": "58",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        "3": {
+          "pattern": "58",
+          "width": 0.28,
+          "gap": 0.28,
+          "sill": 0.25,
+          "springing": 0.95,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      },
+      "at": [
+        [
+          -28.0,
+          30.0,
+          0,
+          0
+        ]
+      ]
+    },
+    "pendentives": {
+      "type": "pendentives",
+      "span": 30.0,
+      "springing": 15.0,
+      "sides": 32,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "deck": {
+        "thickness": 0.6,
+        "out": 2.0
+      },
+      "_about": "the pendentives, and the deck round their circle"
+    },
+    "dome base": {
+      "flatRoof": true,
+      "type": "ring",
+      "count": 32,
+      "rOuter": 21.5,
+      "rInner": 15.0,
+      "height": 7.5,
+      "y": 30.0,
+      "turn": 0.5,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the round base the peristyle stands on, clear of the roofs"
+    },
+    "dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 15.0,
+        "dt": 1.4,
+        "H": 22.0,
+        "n": 32,
+        "every": 2,
+        "winW": 1.8,
+        "winSill": 15.5,
+        "winH": 4.0,
+        "profile": "pointed",
+        "spread": 0.35,
+        "domeT": 1.2,
+        "colN": 32,
+        "colR": 0.75,
+        "colH": 14.0,
+        "pw": 3.4,
+        "lanternR": 3.2,
+        "lanternH": 14.0
+      },
+      "at": [
+        [
+          0,
+          37.5,
+          0,
+          0
+        ]
+      ],
+      "build": [
+        "drum",
+        "drum piers",
+        "peristyle",
+        "peristyle deck",
+        "dome",
+        "lantern"
+      ],
+      "_about": "the drum with its peristyle of 32 columns, the attic over them with its windows, the dome and the lantern"
+    },
+    "lower portico": {
+      "type": "component",
+      "use": "components/portico",
+      "params": {
+        "count": 8,
+        "spacing": 3.6,
+        "colR": 0.7,
+        "colH": 12.0,
+        "entH": 2.0,
+        "depth": 8.0,
+        "order": "corinthian"
+      },
+      "at": [
+        [
+          0,
+          0,
+          67.0,
+          0
+        ]
+      ],
+      "build": [
+        "steps",
+        "columns"
+      ],
+      "_about": "the lower storey of the west portico: paired Corinthian columns, as here in a row"
+    },
+    "upper portico": {
+      "type": "component",
+      "use": "components/portico",
+      "params": {
+        "count": 6,
+        "spacing": 4.2,
+        "colR": 0.6,
+        "colH": 10.0,
+        "entH": 2.0,
+        "depth": 8.0,
+        "order": "corinthian",
+        "steps": 0,
+        "pitch": 24
+      },
+      "at": [
+        [
+          0,
+          14.8,
+          67.0,
+          0
+        ]
+      ],
+      "build": [
+        "columns",
+        "pediment"
+      ],
+      "_about": "...and the upper, under the pediment"
+    },
+    "northwest tower": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          12.0,
+          12.0
+        ]
+      },
+      "thickness": 1.5,
+      "height": 30.0,
+      "tiers": [
+        {
+          "h": 15,
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.4,
+              "sill": 4.0,
+              "springing": 10.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.2,
+              "sill": 3.0,
+              "springing": 9.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 15,
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.6,
+                "sill": 0,
+                "springing": 5.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.2,
+                "sill": 3.0,
+                "springing": 9.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          22.0,
+          0,
+          61.0,
+          0
+        ]
+      ],
+      "_about": "the west towers: a square stage to the roofs' height, a door in its front..."
+    },
+    "northwest tower stair": {
+      "type": "component",
+      "use": "components/tower-stair",
+      "params": {
+        "W": 9.0,
+        "H": 30.0
+      },
+      "at": [
+        [
+          22.0,
+          0,
+          61.0,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "...climbed by its stair to the floor at the top..."
+    },
+    "northwest belfry": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 4,
+        "R": 8.485199999999999,
+        "H": 14.0,
+        "t": 1.2,
+        "drumR": 4.2,
+        "drumH": 7.0,
+        "cap": "bell",
+        "capR": 4.6,
+        "waist": 0.8,
+        "lift": 1.1,
+        "kok": 1.0,
+        "finial": 5.0,
+        "winW": 2.0,
+        "glazed": 0,
+        "doorH": 3.0
+      },
+      "at": [
+        [
+          22.0,
+          30.0,
+          61.0,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "_about": "...and on it the belfry, its open lantern stage and the bell cap"
+    },
+    "southwest tower": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          12.0,
+          12.0
+        ]
+      },
+      "thickness": 1.5,
+      "height": 30.0,
+      "tiers": [
+        {
+          "h": 15,
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.4,
+              "sill": 4.0,
+              "springing": 10.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.2,
+              "sill": 3.0,
+              "springing": 9.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 15,
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.6,
+                "sill": 0,
+                "springing": 5.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.2,
+                "sill": 3.0,
+                "springing": 9.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          -22.0,
+          0,
+          61.0,
+          0
+        ]
+      ]
+    },
+    "southwest tower stair": {
+      "type": "component",
+      "use": "components/tower-stair",
+      "params": {
+        "W": 9.0,
+        "H": 30.0
+      },
+      "at": [
+        [
+          -22.0,
+          0,
+          61.0,
+          0
+        ]
+      ]
+    },
+    "southwest belfry": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 4,
+        "R": 8.485199999999999,
+        "H": 14.0,
+        "t": 1.2,
+        "drumR": 4.2,
+        "drumH": 7.0,
+        "cap": "bell",
+        "capR": 4.6,
+        "waist": 0.8,
+        "lift": 1.1,
+        "kok": 1.0,
+        "finial": 5.0,
+        "winW": 2.0,
+        "glazed": 0,
+        "doorH": 3.0
+      },
+      "at": [
+        [
+          -22.0,
+          30.0,
+          61.0,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "drum",
+        "cap",
+        "finial"
+      ]
+    },
+    "statue St Paul": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0,
+          31.932,
+          74.7,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.9,
+        "seed": 3,
+        "face": -1.5707963,
+        "hold": {
+          "R": "items/weapons/sword"
+        }
+      }
+    },
+    "statue St Peter": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -11.3,
+          26.8,
+          74.8,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.6,
+        "seed": 5,
+        "face": -1.5707963
+      }
+    },
+    "statue St James": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          11.3,
+          26.8,
+          74.8,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.6,
+        "seed": 7,
+        "face": -1.5707963,
+        "hold": {
+          "R": "items/tools/staff"
+        }
+      }
+    },
+    "statue evangelist 0": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -27.0,
+          30.0,
+          66.0,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.6,
+        "seed": 11,
+        "face": -1.5707963,
+        "hold": {
+          "R": "items/tools/book"
+        }
+      }
+    },
+    "statue evangelist 1": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -17.0,
+          30.0,
+          66.0,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.6,
+        "seed": 12,
+        "face": -1.5707963,
+        "hold": {
+          "R": "items/tools/book"
+        }
+      }
+    },
+    "statue evangelist 2": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          17.0,
+          30.0,
+          66.0,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.6,
+        "seed": 13,
+        "face": -1.5707963,
+        "hold": {
+          "R": "items/tools/book"
+        }
+      }
+    },
+    "statue evangelist 3": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          27.0,
+          30.0,
+          66.0,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 1.6,
+        "seed": 14,
+        "face": -1.5707963,
+        "hold": {
+          "R": "items/tools/book"
+        }
+      }
+    }
+  }
+}

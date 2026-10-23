@@ -1,0 +1,111 @@
+{
+  "name": "Iwan",
+  "_about": "THE BACK OF AN IWAN: a deep arched recess in a thick wall is the wall's own opening -- its reveal is the recess's sides and its pointed vault -- and this is what closes it at the back: a half cylinder up to the springing and a pointed SEMIDOME over it, whose section is the arch's own, so it meets the reveal's vault. Back and hood are the same polygon of `sides` (a multiple of four, following the detail). Placed at the opening's inner end, facing out along +z. `w` the opening's width, `s` its springing, `spread` its pointed head's. Build it with \"back door\" instead of \"back blind\" for a door through the middle.",
+  "params": {
+    "detail": 4,
+    "w": 6,
+    "s": 8,
+    "spread": 0.3,
+    "t": 0.5,
+    "door": 1.6,
+    "sides": "4 * max(3, min(detail, floor(3.14159 * (w / 2 + t) / (2 * (door + 0.2)))))",
+    "_sides": "the back's and the hood's polygon, ONE count for both so they meet face to face: finer with the detail level, but never so fine that the middle bay is too narrow for the door"
+  },
+  "build": [
+    "back",
+    "back blind",
+    "hood"
+  ],
+  "parts": {
+    "back": {
+      "type": "ring",
+      "count": "sides",
+      "rOuter": "w / 2 + t",
+      "rInner": "w / 2",
+      "height": "s",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the half cylinder -- a bay centred on the axis (the middle one, sides / 2), the end bays reaching into the wall either side",
+      "range": [
+        "sides / 4",
+        "sides * 3 / 4"
+      ],
+      "skip": [
+        "sides / 2"
+      ]
+    },
+    "hood": {
+      "type": "dome",
+      "sweep": 0.5,
+      "radius": "w / 2 + t",
+      "thickness": "t",
+      "head": {
+        "profile": "pointed",
+        "spread": "spread"
+      },
+      "at": [
+        [
+          0,
+          "s",
+          0,
+          "3.14159265"
+        ]
+      ],
+      "sides": "sides"
+    },
+    "back door": {
+      "type": "ring",
+      "count": "sides",
+      "rOuter": "w / 2 + t",
+      "rInner": "w / 2",
+      "height": "s",
+      "at": [
+        "sides / 2"
+      ],
+      "opening": {
+        "width": "door",
+        "sill": 0,
+        "springing": "s * 0.45",
+        "head": {
+          "profile": "pointed",
+          "spread": "spread"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the middle bay, with the door through to the chamber behind"
+    },
+    "back blind": {
+      "type": "ring",
+      "count": "sides",
+      "rOuter": "w / 2 + t",
+      "rInner": "w / 2",
+      "height": "s",
+      "at": [
+        "sides / 2"
+      ],
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

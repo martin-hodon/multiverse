@@ -1,0 +1,38 @@
+{
+  "name": "Tabard",
+  "kind": "garment",
+  "layer": 4,
+  "_about": "a tabard: front and back panels over a yoke, open at the sides, to mid-thigh -- a guard's colours over his mail",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "scarlet"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/panels",
+      "params": {
+        "to": "hip",
+        "span": 120,
+        "neckline": "round",
+        "neckFront": 0.02,
+        "neckBack": 0.01,
+        "hem": 0.02
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip - 0.005",
+        "to": "thigh + 0.05",
+        "flare": 0.1,
+        "hem": 0.02
+      }
+    }
+  ]
+}

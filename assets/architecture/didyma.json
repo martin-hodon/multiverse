@@ -1,0 +1,279 @@
+{
+  "name": "Temple of Apollo, Didyma",
+  "_about": "THE TEMPLE OF APOLLO AT DIDYMA (begun c. 300 BC, never finished), from the temple components at its real size: a seven-step crepidoma, the stylobate 51.13 x 109.34m; DIPTERAL -- a double ring of Ionic columns, 10 x 21 in the outer and 8 x 19 in the inner, nearly 20m tall -- and HYPAETHRAL: the entablature runs round, but the great adyton inside the naos walls stood open to the sky, so there is no ceiling and no roof. The naos walls as tall as the columns, the great door before them on its porch.",
+  "params": {
+    "detail": 4,
+    "_inset": "stylobate edge to column axis",
+    "_ridge": "the pediment's height: half the roof's width times the pitch's slope",
+    "W": 51.13,
+    "L": 109.34,
+    "steps": 7,
+    "stepH": 0.45,
+    "stepOut": 0.45,
+    "base": 3.15,
+    "front": 10,
+    "side": 21,
+    "D": 1.98,
+    "inset": 1.6,
+    "colH": 19.7,
+    "entH": 3.4,
+    "cornH": 0.9,
+    "cornOut": 0.7,
+    "pitch": 14,
+    "ridge": 0,
+    "cellaW": 29.0,
+    "cellaL": 72.0,
+    "cellaZ": -6.0,
+    "cellaH": 19.7,
+    "wallT": 2.0,
+    "doorW": 5.6,
+    "doorH": 14.0,
+    "porch": 4,
+    "porchD": 5.0
+  },
+  "build": [
+    "crepidoma",
+    "front steps",
+    "peristyle",
+    "inner peristyle",
+    "cella sides",
+    "cella back",
+    "cella front",
+    "pronaos",
+    "opisthodomos",
+    "Apollo base",
+    "Apollo"
+  ],
+  "parts": {
+    "crepidoma": {
+      "type": "crepidoma",
+      "width": "W",
+      "length": "L",
+      "steps": "steps",
+      "stepH": "stepH",
+      "stepOut": "stepOut",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the stepped platform; its top step is the stylobate the columns stand on"
+    },
+    "front steps": {
+      "type": "flight",
+      "width": "D * 1.6",
+      "run": 0.32,
+      "rise": 0.17,
+      "top": "base",
+      "landing": 0,
+      "at": [
+        [
+          "D * 0.8",
+          0,
+          "L / 2 + stepOut * (steps - 1) + base / 0.17 * 0.32",
+          1.5707963
+        ]
+      ],
+      "_about": "the stairway up the middle of the east front, as the temple had it"
+    },
+    "peristyle": {
+      "type": "colonnade",
+      "plan": "peristyle",
+      "order": "ionic",
+      "front": "front",
+      "side": "side",
+      "width": "W - 2 * inset",
+      "length": "L - 2 * inset",
+      "columnR": "D / 2",
+      "height": "colH",
+      "entablature": {
+        "h": "entH",
+        "depth": "D * 1.1",
+        "cornice": {
+          "h": "cornH",
+          "out": "cornOut"
+        }
+      },
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ],
+      "_about": "the ring of Ionic columns, its architrave, frieze and cornice"
+    },
+    "inner peristyle": {
+      "type": "colonnade",
+      "plan": "peristyle",
+      "order": "ionic",
+      "front": "front - 2",
+      "side": "side - 2",
+      "width": "W - 2 * inset - 2 * (W - 2 * inset) / (front - 1)",
+      "length": "L - 2 * inset - 2 * (L - 2 * inset) / (side - 1)",
+      "columnR": "D / 2",
+      "height": "colH",
+      "entablature": {
+        "h": "entH",
+        "depth": "D * 1.1",
+        "cornice": {
+          "h": "cornH * 0.6",
+          "out": 0.1
+        }
+      },
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ],
+      "_about": "the second ring of a DIPTERAL temple, one intercolumniation inside the first: the double colonnade round the naos"
+    },
+    "cella sides": {
+      "type": "box",
+      "width": "wallT",
+      "length": "cellaL",
+      "height": "cellaH",
+      "at": [
+        [
+          "0 - cellaW / 2 + wallT / 2",
+          "base",
+          "cellaZ",
+          0
+        ],
+        [
+          "cellaW / 2 - wallT / 2",
+          "base",
+          "cellaZ",
+          0
+        ]
+      ]
+    },
+    "cella back": {
+      "type": "box",
+      "width": "cellaW - 2 * wallT",
+      "length": "wallT",
+      "height": "cellaH",
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ - cellaL / 2 + wallT / 2",
+          0
+        ]
+      ]
+    },
+    "cella front": {
+      "type": "wall",
+      "width": "cellaW - 2 * wallT",
+      "height": "cellaH",
+      "thickness": "wallT",
+      "openings": [
+        {
+          "at": "(cellaW - 2 * wallT) / 2",
+          "width": "doorW",
+          "sill": 0,
+          "springing": "doorH",
+          "head": {
+            "profile": "flat"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ + cellaL / 2",
+          0
+        ]
+      ],
+      "_about": "the front wall of the naos, with its great door"
+    },
+    "pronaos": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": "porch",
+      "spacing": "(cellaW - D * 1.2) / (porch - 1)",
+      "columnR": "D * 0.45",
+      "height": "colH * 0.97",
+      "entablature": {
+        "h": "entH * 0.8",
+        "depth": "D"
+      },
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ + cellaL / 2 + porchD",
+          0
+        ]
+      ],
+      "_about": "the porch before the door: columns across the front of the cella"
+    },
+    "opisthodomos": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": "porch",
+      "spacing": "(cellaW - D * 1.2) / (porch - 1)",
+      "columnR": "D * 0.45",
+      "height": "colH * 0.97",
+      "entablature": {
+        "h": "entH * 0.8",
+        "depth": "D"
+      },
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ - cellaL / 2 - porchD",
+          0
+        ]
+      ],
+      "_about": "the matching porch at the back"
+    },
+    "Apollo base": {
+      "type": "box",
+      "width": 2.4,
+      "length": 2.4,
+      "height": 1.4,
+      "at": [
+        [
+          0,
+          3.15,
+          -37.0,
+          0
+        ]
+      ],
+      "_about": "the pedestal of Apollo's statue"
+    },
+    "Apollo": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0,
+          4.55,
+          -37.0,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "greek",
+        "stone": "bronze",
+        "scale": 2.4,
+        "hold": {
+          "L": "items/weapons/longbow"
+        },
+        "seed": 11,
+        "face": -1.5707963
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Kaftan",
+  "kind": "garment",
+  "layer": 3,
+  "skirted": true,
+  "_about": "the kaftan: a coat of silk -- a brocade or a velvet for the court, its edges trimmed in braid or fur -- over the entari, its front edge to edge down the middle, short sleeves to the elbow (the entari's long ones show under them), to the floor: the Ottoman kaftan, and the Abbasid qaba (a riding coat of Persian cut, to the calf, its sleeves to the wrist)",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/brocade",
+      "palette": "damask-red"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "params": {
+    "length": "floor - 0.03",
+    "sleeves": "elbow",
+    "hem": 0.03
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "waist",
+        "neckline": "round",
+        "neckFront": 0.025,
+        "neckBack": 0.01,
+        "neckWidth": 50
+      }
+    },
+    {
+      "use": "clothes/components/strip",
+      "params": {
+        "from": "collar + 0.03",
+        "to": "waist",
+        "centre": 0,
+        "span": 10
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "sleeves",
+        "cuff": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "length",
+        "flare": 0.3,
+        "hem": "hem"
+      }
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+ "name": "Pit house",
+ "_about": "The sunken-floored house: a pit half a metre deep lined with planks, a gable of thatch down almost to the ground over it (Anglo-Saxon England, the Slavic lands (Grubenhaus), 400-1100)",
+ "era": "400-1100",
+ "region": "Anglo-Saxon England, the Slavic lands (Grubenhaus)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "pit floor": {
+   "type": "box",
+   "width": 4.0,
+   "length": 3.0,
+   "height": 0.05,
+   "at": [
+    [
+     0,
+     -0.55,
+     0,
+     0
+    ]
+   ]
+  },
+  "pit lining": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     4.4,
+     3.4
+    ]
+   },
+   "thickness": 0.2,
+   "height": 0.75,
+   "openings": [],
+   "at": [
+    [
+     0,
+     -0.55,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 4.8,
+   "length": 5.0,
+   "pitch": 52,
+   "overhang": 0.3,
+   "at": [
+    [
+     0,
+     0.2,
+     0,
+     1.5707963
+    ]
+   ],
+   "open": "front",
+   "shell": 0.25
+  },
+  "steps": {
+   "type": "flight",
+   "run": 0.28,
+   "rise": 0.18,
+   "width": 0.9,
+   "base": 0,
+   "top": 0.55,
+   "landing": 0,
+   "at": [
+    [
+     3.04,
+     -0.55,
+     -0.45,
+     3.14159265
+    ]
+   ],
+   "_about": "down into the pit at the open end"
+  },
+  "ridge posts": {
+   "type": "column",
+   "radius": 0.1,
+   "height": 3.4,
+   "sides": 6,
+   "at": [
+    [
+     -2.0,
+     -0.55,
+     0,
+     0
+    ],
+    [
+     2.0,
+     -0.55,
+     0,
+     0
+    ]
+   ]
+  },
+  "hearth": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     1.0,
+     -0.5,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.2,
+    "h": 0.35
+   }
+  }
+ },
+ "build": [
+  "pit floor",
+  "pit lining",
+  "roof",
+  "steps",
+  "ridge posts",
+  "hearth"
+ ]
+}

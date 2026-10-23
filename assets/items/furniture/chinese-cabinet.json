@@ -1,0 +1,177 @@
+{
+ "kind": "item",
+ "name": "Round-corner cabinet",
+ "category": "furniture/storage",
+ "era": "1400-1700",
+ "region": "China",
+ "_about": "the Ming round-corner cabinet: splayed a little like the legs of a horse, round posts, two doors meeting on a central stile, a brass face plate and lock",
+ "params": {
+  "w": [
+   0.85,
+   1.0
+  ],
+  "d": 0.48,
+  "h": [
+   1.6,
+   1.8
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "cherry",
+    "walnut",
+    "lacquer-black",
+    "lacquer-red"
+   ]
+  },
+  "metal": "brass"
+ },
+ "parts": [
+  {
+   "id": "case",
+   "type": "lathe",
+   "material": "wood",
+   "faceted": true,
+   "sides": 4,
+   "stretch": [
+    "w / d",
+    1,
+    1
+   ],
+   "at": [
+    0,
+    0,
+    0,
+    45,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     "d * 0.74",
+     0.12
+    ],
+    [
+     "d * 0.69",
+     "h - 0.02"
+    ]
+   ]
+  },
+  {
+   "id": "posts",
+   "use": "items/components/square-leg",
+   "params": {
+    "h": "h",
+    "w": 0.05,
+    "taper": 1.08
+   },
+   "at": [
+    [
+     "0 - w / 2 - 0.02",
+     0,
+     "0 - d / 2 - 0.02"
+    ],
+    [
+     "w / 2 - 0.02",
+     0,
+     "0 - d / 2 - 0.02"
+    ],
+    [
+     "0 - w / 2 - 0.02",
+     0,
+     "d / 2 - 0.02"
+    ],
+    [
+     "w / 2 - 0.02",
+     0,
+     "d / 2 - 0.02"
+    ]
+   ]
+  },
+  {
+   "id": "top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.05",
+    0.04,
+    "d + 0.04"
+   ],
+   "round": 0.018,
+   "at": [
+    0,
+    "h",
+    0
+   ]
+  },
+  {
+   "id": "doors",
+   "use": "items/components/panel-door",
+   "params": {
+    "w": "w / 2 - 0.05",
+    "h": "h - 0.45",
+    "s": 0.05
+   },
+   "at": [
+    [
+     "0 - w / 4 + 0.01",
+     "0.3 + (h - 0.45) / 2",
+     "d / 2 + 0.01"
+    ],
+    [
+     "w / 4 - 0.01",
+     "0.3 + (h - 0.45) / 2",
+     "d / 2 + 0.01"
+    ]
+   ]
+  },
+  {
+   "id": "face plate",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.12,
+    0.2,
+    0.004
+   ],
+   "at": [
+    0,
+    "h * 0.5",
+    "d / 2 + 0.035"
+   ]
+  },
+  {
+   "id": "apron",
+   "type": "plate",
+   "material": "wood",
+   "thick": 0.02,
+   "at": [
+    0,
+    0.12,
+    "d / 2",
+    0,
+    0,
+    180
+   ],
+   "outline": [
+    [
+     "0 - w / 2 + 0.05",
+     0
+    ],
+    [
+     "w / 2 - 0.05",
+     0
+    ],
+    [
+     "w / 2 - 0.12",
+     0.06
+    ],
+    [
+     "0 - w / 2 + 0.12",
+     0.06
+    ]
+   ]
+  }
+ ]
+}

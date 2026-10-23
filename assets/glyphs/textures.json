@@ -1,0 +1,12 @@
+{
+  "name": "Hieroglyph texts",
+  "_about": "WALLS OF TEXT (glyphs.js renderTexture): an X x Y grid of quadrats filled by seed from a `pool` of signs (categories or codes, with weights, times each sign's own freq), packed as scribes pack them; `lines` columns or rows, `face` the way the signs look (left, right, alternate lines, random), `mode` a way of painting all of them (colors.json modes; none: each sign in its own colours), `ground` and `divider` / `border` colours, `cartouche` the chance of a name in its ring (one a line at most). A pattern layer { kind: 'hieroglyphs', texture } lays one on a building's wall (patterns.js).",
+  "textures": {
+    "tomb wall": { "cols": 10, "rows": 6, "cell": 64, "lines": "columns", "face": "left", "pool": { "*": 1 }, "ground": "limestone", "divider": { "color": "blue", "width": 0.04 }, "cartouche": 0.03, "seed": 1 },
+    "blue tomb": { "cols": 12, "rows": 5, "cell": 56, "lines": "columns", "face": "right", "mode": "blue", "pool": { "*": 1 }, "ground": "plaster", "divider": { "color": "blue", "width": 0.03 }, "seed": 7 },
+    "temple frieze": { "cols": 14, "rows": 3, "cell": 56, "lines": "rows", "face": "alternate", "pool": { "*": 1, "G": 2, "R": 2, "S": 2 }, "ground": "sandstone", "divider": { "color": "red-dark", "width": 0.04 }, "border": { "color": "blue", "width": 0.06 }, "cartouche": 0.08, "seed": 3 },
+    "sunk relief": { "cols": 8, "rows": 6, "cell": 64, "lines": "columns", "face": "left", "mode": "carved", "pool": { "*": 1 }, "ground": "sandstone", "seed": 11 },
+    "papyrus": { "cols": 16, "rows": 4, "cell": 44, "lines": "rows", "face": "left", "mode": "black", "pool": { "*": 1 }, "ground": "papyrus", "seed": 5 },
+    "gold shrine": { "cols": 8, "rows": 4, "cell": 60, "lines": "columns", "face": "random", "mode": "gold", "pool": { "*": 1 }, "ground": "black", "divider": { "color": "gold", "width": 0.03 }, "cartouche": 0.05, "seed": 9 }
+  }
+}

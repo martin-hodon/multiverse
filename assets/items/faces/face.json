@@ -1,0 +1,216 @@
+{
+ "kind": "item",
+ "name": "Face",
+ "category": "face",
+ "era": "everywhere",
+ "region": "everywhere",
+ "_about": "the canon head on GUIDE LINES (face.js, docs/face.md): Farkas's adult means as attributes -- face height, upper and lower width, the eyes' distance and width, the nose's height, width and projection, the nasolabial and forehead angles, the mouth's width, the lips' heights -- placing the landmarks, the landmarks the lattice of guide lines (brow, lids, lip borders, jawline...), the skin the lattice subdivided with each region's roundness. expression / viseme (or the actions: smile, jawOpen, blink...) move the lines. The origin is the cranium's centre; +x is where it looks",
+ "params": {
+  "scale": 1,
+  "faceW": 1,
+  "forehead": 1,
+  "occiput": 1,
+  "crown": 1,
+  "earS": 1,
+  "hairline": 0.06,
+  "bare": 1,
+  "hair": "hair",
+  "faceHeight": 0.123,
+  "foreheadHeight": 0.062,
+  "foreheadAngle": 12,
+  "upperWidth": 0.136,
+  "foreheadWidth": 0.112,
+  "lowerWidth": 0.098,
+  "chinWidth": 0.042,
+  "jawAngle": 122,
+  "eyeDistance": 0.033,
+  "eyeWidth": 0.03,
+  "eyeHeight": 0.01,
+  "eyeTilt": 4,
+  "eyeDepth": 0.016,
+  "browHeight": 0.016,
+  "browArch": 0.003,
+  "browThickness": 0.006,
+  "browRidge": 0.003,
+  "noseHeight": 0.052,
+  "noseWidth": 0.034,
+  "noseProjection": 0.02,
+  "nasolabialAngle": 102,
+  "noseBridge": 0.003,
+  "noseHump": 0,
+  "mouthWidth": 0.052,
+  "upperLipHeight": 0.021,
+  "upperVermilion": 0.008,
+  "lowerVermilion": 0.009,
+  "lowerLipHeight": 0.019,
+  "chinProjection": 0,
+  "chinHeight": 0.013,
+  "chubby": 1,
+  "expression": "neutral",
+  "viseme": "none",
+  "flower": 0,
+  "hairFlower": "items/flowers/blooms/rose",
+  "flowerScale": 0.75,
+  "headwear": 0,
+  "earrings": 0,
+  "hairCap": null,
+  "fringe": {
+   "pick": [
+    0,
+    0,
+    1
+   ]
+  },
+  "hairstyle": {
+   "pick": [
+    "items/hair/short",
+    "items/hair/long",
+    "items/hair/bob",
+    "items/hair/curly",
+    "items/hair/braid",
+    "items/hair/topknot",
+    "items/hair/two-locks"
+   ]
+  },
+  "seed": 1
+ },
+ "materials": {
+  "skin": {
+   "pick": [
+    "skin-pale",
+    "skin-fair",
+    "skin-fair",
+    "skin-olive",
+    "skin-tan",
+    "skin-brown",
+    "skin-dark"
+   ]
+  },
+  "lip": {
+   "pick": [
+    "lip-rose",
+    "lip-rose",
+    "lip-pink",
+    "lip-brown",
+    "lip-pale",
+    "lip-dark"
+   ]
+  },
+  "mouth": "mouth-dark",
+  "teeth": "teeth-ivory",
+  "eye": "eye-white",
+  "limbus": "iris-limbus",
+  "glint": "eye-glint",
+  "lash": "lash-dark",
+  "iris": {
+   "pick": [
+    "iris-brown",
+    "iris-brown",
+    "iris-hazel",
+    "iris-blue",
+    "iris-blue",
+    "iris-green",
+    "iris-grey",
+    "iris-amber"
+   ]
+  },
+  "pupil": "pupil",
+  "brow": "hairColour",
+  "hair": "hairColour",
+  "hairColour": {
+   "pick": [
+    "hair-black",
+    "hair-black",
+    "hair-brown",
+    "hair-brown",
+    "hair-chestnut",
+    "hair-blond",
+    "hair-red"
+   ]
+  },
+  "tie": "leather-dark"
+ },
+ "parts": [
+  {
+   "id": "head",
+   "type": "face",
+   "headScale": "scale",
+   "faceW": "faceW",
+   "forehead": "forehead",
+   "occiput": "occiput",
+   "crown": "crown",
+   "earS": "earS",
+   "hairline": "hairline",
+   "bare": "bare",
+   "hair": "hair"
+  },
+  {
+   "id": "hair flower",
+   "use": "hairFlower",
+   "when": "flower",
+   "scale": "scale * flowerScale",
+   "at": [
+    "0.006 * scale",
+    "0.016 * scale",
+    "-0.09 * scale",
+    15,
+    -90,
+    0
+   ]
+  },
+  {
+   "id": "headwear",
+   "use": "headwear",
+   "when": "headwear",
+   "params": {
+    "scale": "scale",
+    "faceW": "faceW",
+    "forehead": "forehead",
+    "occiput": "occiput",
+    "crown": "crown",
+    "hairline": "hairline",
+    "earS": "earS",
+    "foreheadHeight": "foreheadHeight",
+    "foreheadAngle": "foreheadAngle",
+    "browRidge": "browRidge",
+    "hairCap": "hairCap",
+    "fringe": "fringe"
+   }
+  },
+  {
+   "id": "earrings",
+   "use": "earrings",
+   "when": "earrings",
+   "params": {
+    "scale": "scale",
+    "faceW": "faceW",
+    "forehead": "forehead",
+    "occiput": "occiput",
+    "crown": "crown",
+    "hairline": "hairline",
+    "earS": "earS",
+    "foreheadHeight": "foreheadHeight",
+    "foreheadAngle": "foreheadAngle",
+    "browRidge": "browRidge"
+   }
+  },
+  {
+   "id": "hair",
+   "use": "hairstyle",
+   "params": {
+    "scale": "scale",
+    "faceW": "faceW",
+    "forehead": "forehead",
+    "occiput": "occiput",
+    "crown": "crown",
+    "hairline": "hairline",
+    "earS": "earS",
+    "fringe": "fringe",
+    "seed": "seed",
+    "foreheadHeight": "foreheadHeight",
+    "foreheadAngle": "foreheadAngle",
+    "browRidge": "browRidge"
+   }
+  }
+ ]
+}

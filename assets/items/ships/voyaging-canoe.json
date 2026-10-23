@@ -1,0 +1,264 @@
+{
+ "kind": "item",
+ "name": "Voyaging canoe",
+ "category": "ship",
+ "era": "800-1800",
+ "region": "Polynesia",
+ "_about": "the double-hulled canoe that settled the Pacific: two hulls under one platform with a shelter on it, two crab-claw sails, steered with a great paddle",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   15,
+   20
+  ],
+  "B": "L * 0.09",
+  "D": "B * 0.9",
+  "gap": "L * 0.22",
+  "mastH": "L * 0.55"
+ },
+ "materials": {
+  "planks": "oak-grey",
+  "deck": "bamboo",
+  "wood": "bamboo",
+  "cloth": "matting",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.45,
+   "stations": 20,
+   "sides": 5,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.15,
+     0.7
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.85,
+     0.7
+    ],
+    [
+     1,
+     0.02
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.5"
+    ],
+    [
+     0.12,
+     0
+    ],
+    [
+     0.88,
+     0
+    ],
+    [
+     1,
+     "D * 0.5"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.6"
+    ],
+    [
+     0.15,
+     "D * 1.05"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.85,
+     "D * 1.05"
+    ],
+    [
+     1,
+     "D * 1.6"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.85",
+     "from": 0.1,
+     "to": 0.9
+    }
+   ],
+   "rail": 0.05,
+   "at": [
+    0,
+    0,
+    "gap / 2"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "platform",
+   "type": "box",
+   "material": "deck",
+   "size": [
+    "L * 0.5",
+    0.08,
+    "gap + B * 0.6"
+   ],
+   "at": [
+    "L * 0.5",
+    "D * 1.0",
+    0
+   ]
+  },
+  {
+   "id": "beam",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    "-gap / 2 - B * 0.3"
+   ],
+   "to": [
+    0,
+    0,
+    "gap / 2 + B * 0.3"
+   ],
+   "r": 0.07,
+   "along": {
+    "n": 4,
+    "from": [
+     "L * 0.28",
+     "D * 0.95",
+     0
+    ],
+    "to": [
+     "L * 0.72",
+     "D * 0.95",
+     0
+    ]
+   }
+  },
+  {
+   "id": "shelter",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "gap * 0.5",
+    "d": "L * 0.16",
+    "h": 1.4,
+    "roof": "pitched",
+    "windows": 0
+   },
+   "materials": {
+    "wood": "matting",
+    "roofm": "matting"
+   },
+   "at": [
+    "L * 0.42",
+    "D * 1.04",
+    0
+   ]
+  },
+  {
+   "id": "mast",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "L * 0.66",
+    "D * 1.04",
+    0
+   ],
+   "to": [
+    "L * 0.7",
+    "D * 1.04 + mastH",
+    0
+   ],
+   "r0": 0.08,
+   "r1": 0.05
+  },
+  {
+   "id": "sail",
+   "use": "items/components/crab-claw-sail",
+   "params": {
+    "l": "mastH * 1.1",
+    "lift": 66,
+    "spread": 40
+   },
+   "at": [
+    "L * 0.7",
+    "D * 1.1",
+    0
+   ]
+  },
+  {
+   "id": "mast aft",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "L * 0.3",
+    "D * 1.04",
+    0
+   ],
+   "to": [
+    "L * 0.34",
+    "D * 1.04 + mastH * 0.8",
+    0
+   ],
+   "r0": 0.07,
+   "r1": 0.045
+  },
+  {
+   "id": "sail aft",
+   "use": "items/components/crab-claw-sail",
+   "params": {
+    "l": "mastH * 0.9",
+    "lift": 66,
+    "spread": 40
+   },
+   "at": [
+    "L * 0.34",
+    "D * 1.1",
+    0
+   ]
+  },
+  {
+   "id": "steering paddle",
+   "use": "items/components/steering-oar",
+   "params": {
+    "l": "D * 2.5",
+    "bladeW": 0.4
+   },
+   "at": [
+    "L * 0.05",
+    "D * 1.1",
+    "gap / 2",
+    0,
+    0,
+    15
+   ]
+  }
+ ]
+}

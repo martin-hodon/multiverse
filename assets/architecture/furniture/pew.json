@@ -1,0 +1,61 @@
+{
+ "name": "Pew",
+ "_about": "a church bench facing +x (the altar): a settle (items/furniture/settle) with a pew's low back, three places on it",
+ "params": {
+  "detail": 4,
+  "L": 3.0
+ },
+ "parts": {
+  "pew": {
+   "type": "item",
+   "item": "items/furniture/settle",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     "1.5707963"
+    ]
+   ],
+   "params": {
+    "L": "L",
+    "backH": 0.95
+   },
+   "markers": [
+    "seat"
+   ]
+  },
+  "places": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     0,
+     0.5,
+     "0 - L / 3",
+     0
+    ],
+    [
+     0,
+     0.5,
+     0,
+     0
+    ],
+    [
+     0,
+     0.5,
+     "L / 3",
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 0
+   }
+  }
+ },
+ "build": [
+  "pew",
+  "places"
+ ]
+}

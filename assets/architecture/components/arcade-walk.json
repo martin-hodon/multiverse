@@ -1,0 +1,195 @@
+{
+  "name": "Arcade walk",
+  "_about": "A COVERED WALK -- a riwaq, a cloister walk, a stoa: `L` long along x and `D` deep, its FRONT (+z) a row of arches on piers (`bay` apart, the piers `pw` wide, `n` of them centred on the length, their head any profile: `arch`, with `spread` for a pointed one), its back a blind wall (\"back wall\"), a wall with a gate in its middle (\"back gate\", `gw` wide) or a second row of arches (\"back arcade\": open on both sides). Over it a flat roof slab `slab` thick on walls `H` tall, and a `crenellation` along each long edge. Its ends are open, to run on into whatever it meets. Placed by the middle of its floor, facing +z.",
+  "params": {
+    "detail": 4,
+    "L": 40,
+    "D": 7,
+    "H": 8,
+    "t": 0.9,
+    "bay": 4.5,
+    "pw": 1.2,
+    "arch": "pointed",
+    "spread": 0.5,
+    "slab": 0.6,
+    "n": "max(1, floor(L / bay))",
+    "w": "bay - pw",
+    "s": "H - 1.0 - w / 2 * sqrt(1 + 2 * spread)",
+    "gw": 3.6,
+    "gs": "H - 1.4 - gw / 2 * sqrt(1 + 2 * spread)",
+    "ph": 0.8,
+    "mstep": 2.4,
+    "pt": 0.5,
+    "_s": "the arches' springing: a metre of wall over the crown of a pointed arch of `spread` (the crown of any other head is lower)",
+    "_gw": "the back gate's width, `gs` its springing",
+    "_ph": "the parapets' height, `mstep` their merlons' spacing, `pt` their thickness"
+  },
+  "build": [
+    "front",
+    "back wall",
+    "roof",
+    "front parapet",
+    "back parapet"
+  ],
+  "parts": {
+    "front": {
+      "type": "wall",
+      "width": "L",
+      "height": "H",
+      "thickness": "t",
+      "glass": false,
+      "openings": {
+        "pattern": "n",
+        "width": "w",
+        "gap": "pw",
+        "pier": "pw",
+        "sill": 0,
+        "springing": "s",
+        "head": {
+          "profile": "arch",
+          "spread": "spread"
+        }
+      },
+      "at": [
+        [
+          0,
+          0,
+          "D / 2",
+          0
+        ]
+      ],
+      "_about": "the row of arches on its piers, open to the court"
+    },
+    "back wall": {
+      "type": "wall",
+      "width": "L",
+      "height": "H",
+      "thickness": "t",
+      "openings": [],
+      "at": [
+        [
+          0,
+          0,
+          "t - D / 2",
+          0
+        ]
+      ],
+      "_about": "the blind back wall (the outer wall of a court)"
+    },
+    "back gate": {
+      "type": "wall",
+      "width": "L",
+      "height": "H",
+      "thickness": "t",
+      "glass": false,
+      "openings": [
+        {
+          "at": "L / 2",
+          "width": "gw",
+          "sill": 0,
+          "springing": "gs",
+          "head": {
+            "profile": "arch",
+            "spread": "spread"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          "t - D / 2",
+          0
+        ]
+      ],
+      "_about": "the back wall with a gate through its middle"
+    },
+    "back arcade": {
+      "type": "wall",
+      "width": "L",
+      "height": "H",
+      "thickness": "t",
+      "glass": false,
+      "openings": {
+        "pattern": "n",
+        "width": "w",
+        "gap": "pw",
+        "pier": "pw",
+        "sill": 0,
+        "springing": "s",
+        "head": {
+          "profile": "arch",
+          "spread": "spread"
+        }
+      },
+      "at": [
+        [
+          0,
+          0,
+          "t - D / 2",
+          0
+        ]
+      ],
+      "_about": "a second row of arches for a walk open on both sides"
+    },
+    "roof": {
+      "type": "box",
+      "width": "L",
+      "length": "D",
+      "height": "slab",
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the flat roof"
+    },
+    "front parapet": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": "L",
+        "t": "pt",
+        "h": "ph",
+        "step": "mstep"
+      },
+      "at": [
+        [
+          0,
+          "H + slab",
+          "D / 2 - pt / 2",
+          0
+        ]
+      ],
+      "standsOn": [
+        "roof"
+      ],
+      "_about": "the crenellated parapet along the front edge"
+    },
+    "back parapet": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": "L",
+        "t": "pt",
+        "h": "ph",
+        "step": "mstep"
+      },
+      "at": [
+        [
+          0,
+          "H + slab",
+          "pt / 2 - D / 2",
+          0
+        ]
+      ],
+      "standsOn": [
+        "roof"
+      ]
+    }
+  }
+}

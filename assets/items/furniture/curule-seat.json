@@ -1,0 +1,205 @@
+{
+ "kind": "item",
+ "name": "Curule seat",
+ "category": "furniture/seat",
+ "era": "-500-400",
+ "region": "Rome",
+ "_about": "the magistrate's folding seat of Rome: two pairs of curved legs crossed like an X, a leather sling under a cushion, no back",
+ "params": {
+  "h": 0.52,
+  "w": 0.6,
+  "d": 0.42
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "ivory",
+    "bronze",
+    "ebony"
+   ]
+  },
+  "cloth": {
+   "pick": [
+    "velvet-red",
+    "leather-red"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "legs a",
+   "type": "sweep",
+   "material": "wood",
+   "r": 0.022,
+   "path": [
+    [
+     "0 - w / 2",
+     0.02,
+     0
+    ],
+    [
+     "0 - w * 0.25",
+     "h * 0.3",
+     0
+    ],
+    [
+     "w * 0.2",
+     "h * 0.8",
+     0
+    ],
+    [
+     "w / 2",
+     "h",
+     0
+    ]
+   ],
+   "at": [
+    [
+     0,
+     0,
+     "d / 2 - 0.02"
+    ],
+    [
+     0,
+     0,
+     "0 - d / 2 + 0.02"
+    ]
+   ]
+  },
+  {
+   "id": "legs b",
+   "type": "sweep",
+   "material": "wood",
+   "r": 0.022,
+   "path": [
+    [
+     "w / 2",
+     0.02,
+     0
+    ],
+    [
+     "w * 0.25",
+     "h * 0.3",
+     0
+    ],
+    [
+     "0 - w * 0.2",
+     "h * 0.8",
+     0
+    ],
+    [
+     "0 - w / 2",
+     "h",
+     0
+    ]
+   ],
+   "at": [
+    [
+     0,
+     0,
+     "d / 2 - 0.02"
+    ],
+    [
+     0,
+     0,
+     "0 - d / 2 + 0.02"
+    ]
+   ]
+  },
+  {
+   "id": "pins",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "h * 0.5",
+    "d / 2"
+   ],
+   "to": [
+    0,
+    "h * 0.5",
+    "0 - d / 2"
+   ],
+   "r": 0.012
+  },
+  {
+   "id": "feet",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.08,
+    0.03,
+    "d"
+   ],
+   "at": [
+    [
+     "0 - w / 2",
+     0.015,
+     0
+    ],
+    [
+     "w / 2",
+     0.015,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "seat rails",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "h",
+    "d / 2"
+   ],
+   "to": [
+    0,
+    "h",
+    "0 - d / 2"
+   ],
+   "r": 0.018,
+   "at": [
+    [
+     "0 - w / 2",
+     0,
+     0
+    ],
+    [
+     "w / 2",
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "cushion",
+   "use": "items/components/cushion",
+   "params": {
+    "w": "w",
+    "d": "d",
+    "h": 0.07
+   },
+   "at": [
+    0,
+    "h + 0.01",
+    0
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "w",
+    "d": "d",
+    "top": "h + 0.08"
+   }
+  }
+ ]
+}

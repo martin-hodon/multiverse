@@ -1,0 +1,48 @@
+{
+ "kind": "item",
+ "name": "Rocker",
+ "category": "component",
+ "_about": "a cradle's or a rocking chair's rocker: a board curved along z, `L` long, standing on its arc",
+ "params": {
+  "L": 0.9,
+  "t": 0.03,
+  "h": 0.06,
+  "rise": 0.05
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "rocker",
+   "type": "sweep",
+   "material": "wood",
+   "section": [
+    "t",
+    "h"
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "path": [
+    [
+     0,
+     "rise + h / 2",
+     "0 - L / 2"
+    ],
+    [
+     0,
+     "h / 2",
+     0
+    ],
+    [
+     0,
+     "rise + h / 2",
+     "L / 2"
+    ]
+   ]
+  }
+ ]
+}

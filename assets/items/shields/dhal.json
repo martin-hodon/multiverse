@@ -1,0 +1,49 @@
+{
+ "kind": "item",
+ "use": "items/shields/shield",
+ "name": "Dhal",
+ "era": "1500-1800",
+ "region": "India",
+ "_about": "the Indian dhal: a small domed shield of hide or steel, four bosses round its middle where the grips are riveted",
+ "params": {
+  "shape": "round",
+  "w": [
+   0.44,
+   0.52
+  ],
+  "dish": 0.09,
+  "rim": 0.012,
+  "boss": 0,
+  "thick": 0.012
+ },
+ "materials": {
+  "face": {
+   "pick": [
+    "leather-dark",
+    "steel",
+    "lacquer-black"
+   ]
+  },
+  "rim": "brass",
+  "boss": "brass"
+ },
+ "parts": [
+  {
+   "id": "bosses",
+   "type": "sphere",
+   "material": "boss",
+   "r": 0.022,
+   "around": {
+    "n": 4,
+    "r": 0.07,
+    "plane": "xy",
+    "start": 45
+   },
+   "at": [
+    0,
+    0,
+    "dish - 0.012"
+   ]
+  }
+ ]
+}

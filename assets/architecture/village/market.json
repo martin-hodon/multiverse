@@ -1,0 +1,335 @@
+{
+ "name": "Market",
+ "_about": "THE MARKET: a paved square open to the street on its +z side, the market cross in its middle, eight stalls (items/furniture/market-stall) round the other three sides -- pottery, vegetables, fish; meat, eggs, bread; fruit and cheese -- each with its vendor, and shoppers' places on the square",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "paving": {
+   "type": "box",
+   "width": 14,
+   "length": 12,
+   "height": 0.1,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "cross step": {
+   "type": "column",
+   "radius": 1.2,
+   "height": 0.25,
+   "sides": 12,
+   "at": [
+    [
+     0,
+     0.1,
+     0,
+     0
+    ]
+   ]
+  },
+  "cross step 2": {
+   "type": "column",
+   "radius": 0.8,
+   "height": 0.25,
+   "sides": 12,
+   "at": [
+    [
+     0,
+     0.35,
+     0,
+     0
+    ]
+   ]
+  },
+  "cross shaft": {
+   "type": "column",
+   "radius": 0.2,
+   "height": 2.6,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0.6,
+     0,
+     0
+    ]
+   ],
+   "taper": 0.8
+  },
+  "cross": {
+   "type": "box",
+   "width": 0.1,
+   "length": 0.1,
+   "height": 0.9,
+   "at": [
+    [
+     0,
+     3.15,
+     0,
+     0
+    ]
+   ]
+  },
+  "cross arms": {
+   "type": "box",
+   "width": 0.5,
+   "length": 0.1,
+   "height": 0.1,
+   "at": [
+    [
+     0,
+     3.7,
+     0,
+     0
+    ]
+   ]
+  },
+  "stall pottery": {
+   "type": "item",
+   "item": "items/furniture/market-stall",
+   "seed": 1,
+   "params": {
+    "wares": "pottery"
+   },
+   "materials": {
+    "awning": {
+     "pattern": "fabrics/stripes",
+     "palette": "stripe-madder"
+    }
+   },
+   "at": [
+    [
+     -5.6,
+     0.1,
+     -3.6,
+     0
+    ]
+   ]
+  },
+  "stall vegetables": {
+   "type": "item",
+   "item": "items/furniture/market-stall",
+   "seed": 2,
+   "params": {
+    "wares": "vegetables"
+   },
+   "materials": {
+    "awning": {
+     "pattern": "fabrics/stripes",
+     "palette": "stripe-green"
+    }
+   },
+   "at": [
+    [
+     -5.6,
+     0.1,
+     0,
+     0
+    ]
+   ]
+  },
+  "stall fish": {
+   "type": "item",
+   "item": "items/furniture/market-stall",
+   "seed": 3,
+   "params": {
+    "wares": "fish"
+   },
+   "materials": {
+    "awning": {
+     "pattern": "fabrics/stripes",
+     "palette": "stripe-woad"
+    }
+   },
+   "at": [
+    [
+     -5.6,
+     0.1,
+     3.6,
+     0
+    ]
+   ]
+  },
+  "stall meat": {
+   "type": "item",
+   "item": "items/furniture/market-stall",
+   "seed": 4,
+   "params": {
+    "wares": "meat"
+   },
+   "materials": {
+    "awning": {
+     "pattern": "fabrics/stripes",
+     "palette": "stripe-madder"
+    }
+   },
+   "at": [
+    [
+     5.6,
+     0.1,
+     -3.6,
+     3.1415927
+    ]
+   ]
+  },
+  "stall eggs": {
+   "type": "item",
+   "item": "items/furniture/market-stall",
+   "seed": 5,
+   "params": {
+    "wares": "eggs"
+   },
+   "materials": {
+    "awning": {
+     "pattern": "fabrics/stripes",
+     "palette": "canvas"
+    }
+   },
+   "at": [
+    [
+     5.6,
+     0.1,
+     0,
+     3.1415927
+    ]
+   ]
+  },
+  "stall bread": {
+   "type": "item",
+   "item": "items/furniture/market-stall",
+   "seed": 6,
+   "params": {
+    "wares": "bread"
+   },
+   "materials": {
+    "awning": {
+     "pattern": "fabrics/stripes",
+     "palette": "stripe-woad"
+    }
+   },
+   "at": [
+    [
+     5.6,
+     0.1,
+     3.6,
+     3.1415927
+    ]
+   ]
+  },
+  "stall fruit": {
+   "type": "item",
+   "item": "items/furniture/market-stall",
+   "seed": 7,
+   "params": {
+    "wares": "fruit"
+   },
+   "materials": {
+    "awning": {
+     "pattern": "fabrics/stripes",
+     "palette": "stripe-madder"
+    }
+   },
+   "at": [
+    [
+     -2.2,
+     0.1,
+     -4.6,
+     -1.5707963
+    ]
+   ]
+  },
+  "stall cheese": {
+   "type": "item",
+   "item": "items/furniture/market-stall",
+   "seed": 8,
+   "params": {
+    "wares": "cheese"
+   },
+   "materials": {
+    "awning": {
+     "pattern": "fabrics/stripes",
+     "palette": "stripe-green"
+    }
+   },
+   "at": [
+    [
+     2.2,
+     0.1,
+     -4.6,
+     -1.5707963
+    ]
+   ]
+  },
+  "shopper 1": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     -2.5,
+     0.1,
+     1.5,
+     0.4
+    ]
+   ],
+   "data": {
+    "pose": "stand"
+   }
+  },
+  "shopper 2": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     2.8,
+     0.1,
+     -1.2,
+     2.6
+    ]
+   ],
+   "data": {
+    "pose": "stand"
+   }
+  },
+  "shopper 3": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     0.5,
+     0.1,
+     3.6,
+     -1.2
+    ]
+   ],
+   "data": {
+    "pose": "stand"
+   }
+  }
+ },
+ "build": [
+  "paving",
+  "cross step",
+  "cross step 2",
+  "cross shaft",
+  "cross",
+  "cross arms",
+  "stall pottery",
+  "stall vegetables",
+  "stall fish",
+  "stall meat",
+  "stall eggs",
+  "stall bread",
+  "stall fruit",
+  "stall cheese",
+  "shopper 1",
+  "shopper 2",
+  "shopper 3"
+ ]
+}

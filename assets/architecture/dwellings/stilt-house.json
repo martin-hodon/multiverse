@@ -1,0 +1,204 @@
+{
+ "name": "Stilt house",
+ "_about": "The house on posts: a floor raised two metres clear of the floods and the damp, plank walls, a steep thatched roof with deep eaves, a veranda and a ladder (Southeast Asia (Malay rumah panggung, Thai, Filipino bahay kubo), 500-1900)",
+ "era": "500-1900",
+ "region": "Southeast Asia (Malay rumah panggung, Thai, Filipino bahay kubo)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "posts": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 2.1,
+   "sides": 6,
+   "at": [
+    [
+     -2.8,
+     0,
+     -1.9,
+     0
+    ],
+    [
+     -2.8,
+     0,
+     0,
+     0
+    ],
+    [
+     -2.8,
+     0,
+     1.9,
+     0
+    ],
+    [
+     -0.9,
+     0,
+     -1.9,
+     0
+    ],
+    [
+     -0.9,
+     0,
+     0,
+     0
+    ],
+    [
+     -0.9,
+     0,
+     1.9,
+     0
+    ],
+    [
+     0.9,
+     0,
+     -1.9,
+     0
+    ],
+    [
+     0.9,
+     0,
+     0,
+     0
+    ],
+    [
+     0.9,
+     0,
+     1.9,
+     0
+    ],
+    [
+     2.8,
+     0,
+     -1.9,
+     0
+    ],
+    [
+     2.8,
+     0,
+     0,
+     0
+    ],
+    [
+     2.8,
+     0,
+     1.9,
+     0
+    ]
+   ]
+  },
+  "floor": {
+   "type": "box",
+   "width": 6.0,
+   "length": 4.0,
+   "height": 0.15,
+   "at": [
+    [
+     0,
+     2.0,
+     0,
+     0
+    ]
+   ]
+  },
+  "veranda": {
+   "type": "box",
+   "width": 6.0,
+   "length": 1.5,
+   "height": 0.12,
+   "at": [
+    [
+     0,
+     2.0,
+     2.75,
+     0
+    ]
+   ]
+  },
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     6.0,
+     4.0
+    ]
+   },
+   "thickness": 0.06,
+   "height": 2.4,
+   "openings": {
+    "pattern": "1",
+    "width": 0.8,
+    "sill": 0.8,
+    "springing": 1.6,
+    "head": {
+     "profile": "flat"
+    }
+   },
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": 0.9,
+      "sill": 0,
+      "springing": 1.9,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     2.15,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 4.2,
+   "length": 6.2,
+   "pitch": 50,
+   "overhang": 0.7,
+   "at": [
+    [
+     0,
+     4.55,
+     0,
+     1.5707963
+    ]
+   ],
+   "shell": 0.2
+  },
+  "ladder": {
+   "type": "flight",
+   "steep": true,
+   "run": 0.22,
+   "rise": 0.27,
+   "width": 0.8,
+   "base": 0,
+   "top": 2.12,
+   "landing": 0,
+   "at": [
+    [
+     0.4,
+     0,
+     5.26,
+     1.5707963
+    ]
+   ]
+  }
+ },
+ "build": [
+  "posts",
+  "floor",
+  "veranda",
+  "walls",
+  "roof",
+  "ladder"
+ ]
+}

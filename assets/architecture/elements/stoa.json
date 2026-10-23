@@ -1,0 +1,152 @@
+{
+  "name": "Stoa",
+  "_about": "A STOA: a long hall open along one side, the Greek market's porch. Three courses of stylobate, a front row of seventeen columns under their entablature, an inner row of nine at twice the spacing carrying the roof's middle, a back wall and two end walls, and a lean-to roof falling to the front (a `shed` turned so its length runs along the hall).",
+  "params": {
+    "detail": 4,
+    "L": 40,
+    "D": 10,
+    "base": 1.05,
+    "colH": 5.5,
+    "entH": 1.2
+  },
+  "build": [
+    "course 1",
+    "course 2",
+    "stylobate",
+    "front row",
+    "inner row",
+    "back wall",
+    "end walls",
+    "roof"
+  ],
+  "parts": {
+    "course 1": {
+      "type": "box",
+      "width": "L + 2",
+      "length": "D + 2",
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "course 2": {
+      "type": "box",
+      "width": "L + 1.3",
+      "length": "D + 1.3",
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          0.35,
+          0,
+          0
+        ]
+      ]
+    },
+    "stylobate": {
+      "type": "box",
+      "width": "L + 0.6",
+      "length": "D + 0.6",
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          0.7,
+          0,
+          0
+        ]
+      ]
+    },
+    "front row": {
+      "type": "colonnade",
+      "count": 17,
+      "spacing": 2.4,
+      "columnR": 0.4,
+      "height": "colH",
+      "entablature": {
+        "h": "entH"
+      },
+      "at": [
+        [
+          0,
+          "base",
+          "D / 2 - 0.4",
+          0
+        ]
+      ]
+    },
+    "inner row": {
+      "type": "colonnade",
+      "count": 9,
+      "spacing": 4.8,
+      "columnR": 0.4,
+      "height": "colH",
+      "entablature": {
+        "h": "entH"
+      },
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ]
+    },
+    "back wall": {
+      "type": "box",
+      "width": "L + 0.6",
+      "length": 0.7,
+      "height": "colH + entH",
+      "at": [
+        [
+          0,
+          "base",
+          "0 - D / 2 - 0.3 + 0.35",
+          0
+        ]
+      ]
+    },
+    "end walls": {
+      "type": "box",
+      "width": 0.7,
+      "length": "D - 0.1",
+      "height": "colH + entH",
+      "at": [
+        [
+          "0 - L / 2 - 0.3 + 0.35",
+          "base",
+          -0.35,
+          0
+        ],
+        [
+          "L / 2 + 0.3 - 0.35",
+          "base",
+          -0.35,
+          0
+        ]
+      ]
+    },
+    "roof": {
+      "type": "roof",
+      "form": "shed",
+      "width": "D + 0.6",
+      "length": "L + 0.6",
+      "pitch": 12,
+      "overhang": 0.6,
+      "at": [
+        [
+          0,
+          "base + colH + entH",
+          0,
+          "1.5707963"
+        ]
+      ]
+    }
+  }
+}

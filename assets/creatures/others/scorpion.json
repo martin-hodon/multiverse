@@ -1,0 +1,580 @@
+{
+  "name": "scorpion",
+  "kind": "parts",
+  "flags": {},
+  "parts": [
+    {
+      "id": "body",
+      "parent": null,
+      "shape": "capsule",
+      "size": {
+        "r": 0.025,
+        "len": 0.07
+      },
+      "geomRot": [
+        0,
+        0,
+        90
+      ],
+      "pos": [
+        0,
+        0.03,
+        0
+      ],
+      "color": "#1e1a1a"
+    },
+    {
+      "id": "head",
+      "parent": "body",
+      "shape": "sphere",
+      "size": {
+        "r": 0.022
+      },
+      "scale": [
+        1.2,
+        0.7,
+        1.1
+      ],
+      "pos": [
+        0.05,
+        0,
+        0
+      ],
+      "color": "#1e1a1a"
+    },
+    {
+      "id": "eyeL",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.012,
+        "r2": 0.012,
+        "len": 0.013647068481167824
+      },
+      "pos": [
+        0.011685500233970518,
+        0.01763562753036437,
+        0.0060360356105749685
+      ],
+      "rot": [
+        90,
+        0,
+        58.57043438516149
+      ],
+      "pivot": [
+        0,
+        0.006823534240583912,
+        0
+      ],
+      "color": "#141111",
+      "edge": 0,
+      "dot": {
+        "iris": "#3a3030",
+        "pupil": "round",
+        "round": true,
+        "role": "eye"
+      }
+    },
+    {
+      "id": "eyeR",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.012,
+        "r2": 0.012,
+        "len": 0.013647068481167824
+      },
+      "pos": [
+        4.070461638578226e-05,
+        0.01763562753036437,
+        -0.013152299599098975
+      ],
+      "rot": [
+        90,
+        0,
+        -58.57043438516149
+      ],
+      "pivot": [
+        0,
+        0.006823534240583912,
+        0
+      ],
+      "color": "#141111",
+      "edge": 0,
+      "dot": {
+        "iris": "#3a3030",
+        "pupil": "round",
+        "round": true,
+        "role": "eye"
+      }
+    },
+    {
+      "id": "armL",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.008,
+        "len": 0.06
+      },
+      "pos": [
+        0.02,
+        -0.005,
+        0.025
+      ],
+      "rot": [
+        0,
+        -35,
+        -70
+      ],
+      "pivot": [
+        0,
+        0.03,
+        0
+      ],
+      "color": "#1e1a1a",
+      "anim": {
+        "axis": "y",
+        "deg": 10,
+        "speed": 0.6,
+        "phase": 1
+      }
+    },
+    {
+      "id": "armR",
+      "parent": "head",
+      "shape": "capsule",
+      "size": {
+        "r": 0.008,
+        "len": 0.06
+      },
+      "pos": [
+        0.02,
+        -0.005,
+        -0.025
+      ],
+      "rot": [
+        0,
+        35,
+        -70
+      ],
+      "pivot": [
+        0,
+        0.03,
+        0
+      ],
+      "color": "#1e1a1a",
+      "anim": {
+        "axis": "y",
+        "deg": 10,
+        "speed": 0.6,
+        "phase": -1
+      }
+    },
+    {
+      "id": "clawL",
+      "parent": "armL",
+      "shape": "sphere",
+      "size": {
+        "r": 0.02
+      },
+      "scale": [
+        1.5,
+        0.6,
+        1
+      ],
+      "pos": [
+        0,
+        0.07,
+        0
+      ],
+      "color": "#2a2222"
+    },
+    {
+      "id": "clawR",
+      "parent": "armR",
+      "shape": "sphere",
+      "size": {
+        "r": 0.02
+      },
+      "scale": [
+        1.5,
+        0.6,
+        1
+      ],
+      "pos": [
+        0,
+        0.07,
+        0
+      ],
+      "color": "#2a2222"
+    },
+    {
+      "id": "tail1",
+      "parent": "body",
+      "shape": "sphere",
+      "size": {
+        "r": 0.015
+      },
+      "pos": [
+        -0.055,
+        0.015,
+        0
+      ],
+      "color": "#1e1a1a",
+      "anim": {
+        "axis": "z",
+        "deg": 4,
+        "speed": 0.5,
+        "phase": 0.6
+      }
+    },
+    {
+      "id": "tail2",
+      "parent": "tail1",
+      "shape": "sphere",
+      "size": {
+        "r": 0.014
+      },
+      "pos": [
+        -0.005999999999999998,
+        0.022,
+        0
+      ],
+      "color": "#1e1a1a",
+      "anim": {
+        "axis": "z",
+        "deg": 4,
+        "speed": 0.5,
+        "phase": 1.2
+      }
+    },
+    {
+      "id": "tail3",
+      "parent": "tail2",
+      "shape": "sphere",
+      "size": {
+        "r": 0.013000000000000001
+      },
+      "pos": [
+        3.469446951953614e-18,
+        0.022,
+        0
+      ],
+      "color": "#1e1a1a",
+      "anim": {
+        "axis": "z",
+        "deg": 4,
+        "speed": 0.5,
+        "phase": 1.7999999999999998
+      }
+    },
+    {
+      "id": "tail4",
+      "parent": "tail3",
+      "shape": "sphere",
+      "size": {
+        "r": 0.012
+      },
+      "pos": [
+        0.006000000000000002,
+        0.022,
+        0
+      ],
+      "color": "#1e1a1a",
+      "anim": {
+        "axis": "z",
+        "deg": 4,
+        "speed": 0.5,
+        "phase": 2.4
+      }
+    },
+    {
+      "id": "tail5",
+      "parent": "tail4",
+      "shape": "sphere",
+      "size": {
+        "r": 0.011
+      },
+      "pos": [
+        0.012,
+        0.022,
+        0
+      ],
+      "color": "#1e1a1a",
+      "anim": {
+        "axis": "z",
+        "deg": 4,
+        "speed": 0.5,
+        "phase": 3
+      }
+    },
+    {
+      "id": "sting",
+      "parent": "tail5",
+      "shape": "cone",
+      "size": {
+        "r": 0.008,
+        "h": 0.03
+      },
+      "pos": [
+        0.015,
+        0.008,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -50
+      ],
+      "color": "#6a2a1a"
+    },
+    {
+      "id": "leg0L",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.005,
+        "len": 0.05
+      },
+      "pos": [
+        0.03,
+        -0.01,
+        0.025
+      ],
+      "rot": [
+        60,
+        0,
+        0
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#2a2222",
+      "anim": {
+        "axis": "z",
+        "deg": 20,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "leg1L",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.005,
+        "len": 0.05
+      },
+      "pos": [
+        0.008,
+        -0.01,
+        0.025
+      ],
+      "rot": [
+        60,
+        0,
+        0
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#2a2222",
+      "anim": {
+        "axis": "z",
+        "deg": 20,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "leg2L",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.005,
+        "len": 0.05
+      },
+      "pos": [
+        -0.013999999999999999,
+        -0.01,
+        0.025
+      ],
+      "rot": [
+        60,
+        0,
+        0
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#2a2222",
+      "anim": {
+        "axis": "z",
+        "deg": 20,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "leg3L",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.005,
+        "len": 0.05
+      },
+      "pos": [
+        -0.036000000000000004,
+        -0.01,
+        0.025
+      ],
+      "rot": [
+        60,
+        0,
+        0
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#2a2222",
+      "anim": {
+        "axis": "z",
+        "deg": 20,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "leg0R",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.005,
+        "len": 0.05
+      },
+      "pos": [
+        0.03,
+        -0.01,
+        -0.025
+      ],
+      "rot": [
+        -60,
+        0,
+        0
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#2a2222",
+      "anim": {
+        "axis": "z",
+        "deg": 20,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "leg1R",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.005,
+        "len": 0.05
+      },
+      "pos": [
+        0.008,
+        -0.01,
+        -0.025
+      ],
+      "rot": [
+        -60,
+        0,
+        0
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#2a2222",
+      "anim": {
+        "axis": "z",
+        "deg": 20,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "leg2R",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.005,
+        "len": 0.05
+      },
+      "pos": [
+        -0.013999999999999999,
+        -0.01,
+        -0.025
+      ],
+      "rot": [
+        -60,
+        0,
+        0
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#2a2222",
+      "anim": {
+        "axis": "z",
+        "deg": 20,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "leg3R",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.005,
+        "len": 0.05
+      },
+      "pos": [
+        -0.036000000000000004,
+        -0.01,
+        -0.025
+      ],
+      "rot": [
+        -60,
+        0,
+        0
+      ],
+      "pivot": [
+        0,
+        -0.025,
+        0
+      ],
+      "color": "#2a2222",
+      "anim": {
+        "axis": "z",
+        "deg": 20,
+        "speed": 0.8,
+        "phase": 0
+      }
+    }
+  ]
+}

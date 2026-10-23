@@ -1,0 +1,25 @@
+{
+  "name": "Strip",
+  "kind": "component",
+  "_about": "A STRIP of the trim fabric down the torso: `centre` where round it (0 the front), `span` how wide (degrees), from `from` to `to` -- a Roman tunic's clavi, the crossed collar's edge of a Chinese robe. Worn as a garment over another (clavi), it runs on over that garment's skirt.",
+  "params": {
+    "from": "collar",
+    "to": "hip",
+    "centre": 0,
+    "span": 8
+  },
+  "pieces": [
+    {
+      "name": "strip",
+      "on": "torso",
+      "from": "from",
+      "to": "to",
+      "wrap": [
+        "centre",
+        "span"
+      ],
+      "fabric": "trim",
+      "thick": 0.001
+    }
+  ]
+}

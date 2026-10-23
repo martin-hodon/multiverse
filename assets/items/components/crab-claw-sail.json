@@ -1,0 +1,82 @@
+{
+ "kind": "item",
+ "name": "Crab-claw sail",
+ "category": "component",
+ "_about": "the Oceanic sail: two spars from one tack spreading `spread` degrees apart, the cloth between them; the tack is the origin, the spars rise aft along +x and up",
+ "params": {
+  "l": 6,
+  "lift": 62,
+  "spread": 42,
+  "belly": "l * 0.06",
+  "r": "l * 0.012"
+ },
+ "materials": {
+  "wood": "bamboo",
+  "cloth": "matting"
+ },
+ "parts": [
+  {
+   "id": "upper",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "l * cos(lift * 0.017453)",
+    "l * sin(lift * 0.017453)",
+    0
+   ],
+   "r0": "r",
+   "r1": "r * 0.6"
+  },
+  {
+   "id": "lower",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "l * cos((lift - spread) * 0.017453)",
+    "l * sin((lift - spread) * 0.017453)",
+    0
+   ],
+   "r0": "r",
+   "r1": "r * 0.6"
+  },
+  {
+   "id": "cloth",
+   "type": "sail",
+   "material": "cloth",
+   "belly": "belly",
+   "at": [
+    0,
+    0,
+    "-r"
+   ],
+   "corners": [
+    [
+     0,
+     0
+    ],
+    [
+     "l * cos(lift * 0.017453)",
+     "l * sin(lift * 0.017453)"
+    ],
+    [
+     "l * 0.82 * cos((lift - spread / 2) * 0.017453)",
+     "l * 0.82 * sin((lift - spread / 2) * 0.017453)"
+    ],
+    [
+     "l * cos((lift - spread) * 0.017453)",
+     "l * sin((lift - spread) * 0.017453)"
+    ]
+   ]
+  }
+ ]
+}

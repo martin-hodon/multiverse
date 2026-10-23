@@ -1,0 +1,627 @@
+{
+ "kind": "item",
+ "name": "Frigate",
+ "category": "ship",
+ "era": "1750-1800",
+ "region": "England, France, America",
+ "_about": "a frigate: one gun deck, fast and weatherly, a full ship rig in three tiers, the eyes of the fleet",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   42,
+   48
+  ],
+  "B": "L * 0.25",
+  "D": "B * 0.55",
+  "mastH": "L * 0.7"
+ },
+ "materials": {
+  "planks": "planks",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron",
+  "band": "#e0c46a",
+  "trim": "gilt"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.5,
+   "tumblehome": 0.22,
+   "plan": [
+    [
+     0,
+     0.3
+    ],
+    [
+     0.1,
+     0.65
+    ],
+    [
+     0.35,
+     1
+    ],
+    [
+     0.65,
+     0.97
+    ],
+    [
+     0.9,
+     0.55
+    ],
+    [
+     1,
+     0.04
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.2"
+    ],
+    [
+     0.08,
+     0
+    ],
+    [
+     0.92,
+     0
+    ],
+    [
+     1,
+     "D * 0.25"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.08"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.05"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.9",
+     "from": 0.03,
+     "to": 0.97
+    }
+   ],
+   "rail": 0.1,
+   "keelBeam": [
+    0.4,
+    0.4
+   ]
+  },
+  {
+   "id": "band",
+   "type": "box",
+   "material": "band",
+   "size": [
+    "L * 0.9",
+    0.22,
+    0.04
+   ],
+   "at": [
+    "L * 0.5",
+    "D * 0.66",
+    "B * 0.49"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "guns",
+   "use": "items/components/gun-row",
+   "params": {
+    "n": 14,
+    "from": "L * 0.1",
+    "to": "L * 0.88",
+    "y": "D * 0.6",
+    "z": "B * 0.49",
+    "bore": 0.11
+   }
+  },
+  {
+   "id": "guns upper",
+   "use": "items/components/gun-row",
+   "params": {
+    "n": 6,
+    "from": "L * 0.12",
+    "to": "L * 0.42",
+    "y": "D * 0.98",
+    "z": "B * 0.44",
+    "bore": 0.08
+   }
+  },
+  {
+   "id": "quarterdeck",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.88",
+    "d": "L * 0.4",
+    "h": "D * 0.28",
+    "rail": 1.0,
+    "crenels": 0,
+    "posts": 0
+   },
+   "at": [
+    "L * 0.02",
+    "D * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "quarterdeck wall",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    "L * 0.4",
+    "D * 0.28",
+    0.1
+   ],
+   "at": [
+    "L * 0.22",
+    "D * 1.04",
+    "B * 0.44"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "forecastle",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.8",
+    "d": "L * 0.15",
+    "h": "D * 0.28",
+    "rail": 1.0,
+    "crenels": 0,
+    "posts": 0
+   },
+   "at": [
+    "L * 0.83",
+    "D * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "stern",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.78",
+    "d": "L * 0.05",
+    "h": "D * 0.45",
+    "windows": 5
+   },
+   "at": [
+    "-L * 0.03",
+    "D * 0.72",
+    0
+   ]
+  },
+  {
+   "id": "figurehead",
+   "use": "items/components/figurehead",
+   "params": {
+    "style": "scroll",
+    "s": "D * 0.3"
+   },
+   "at": [
+    "L * 1.0",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 0.95",
+    "w": "B * 0.06",
+    "tiller": 0
+   },
+   "at": [
+    0,
+    "D * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.5",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.38,
+    "top": "topmast",
+    "topH": 0.55
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.9",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.9 + mastH * 0.86",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.52",
+    "h": "mastH * 0.4",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.05"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.9 + mastH * 0.86",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.9 + mastH * 1.35",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.4",
+    "h": "mastH * 0.34",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.04"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.9 + mastH * 1.35",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.9 + mastH * 1.78",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.26",
+    "h": "mastH * 0.2",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.02"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.9 + mastH * 1.78",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "main royal mast",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "L * 0.5",
+    "D * 0.9 + mastH * 1.5",
+    0
+   ],
+   "to": [
+    "L * 0.5",
+    "D * 0.9 + mastH * 1.85",
+    0
+   ],
+   "r0": 0.12,
+   "r1": 0.07
+  },
+  {
+   "id": "mast L * 0.8",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.88",
+    "r": 0.34,
+    "top": "topmast",
+    "topH": 0.55
+   },
+   "at": [
+    "L * 0.8",
+    "D * 1.18",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.8 D * 1.18 + mastH * 0.75",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.46",
+    "h": "mastH * 0.36",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.05"
+   },
+   "at": [
+    "L * 0.8",
+    "D * 1.18 + mastH * 0.75",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.8 D * 1.18 + mastH * 1.18",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.34",
+    "h": "mastH * 0.3",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.03"
+   },
+   "at": [
+    "L * 0.8",
+    "D * 1.18 + mastH * 1.18",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.8 D * 1.18 + mastH * 1.55",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.22",
+    "h": "mastH * 0.18",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.02"
+   },
+   "at": [
+    "L * 0.8",
+    "D * 1.18 + mastH * 1.55",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "fore royal mast",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "L * 0.8",
+    "D * 1.18 + mastH * 1.32",
+    0
+   ],
+   "to": [
+    "L * 0.8",
+    "D * 1.18 + mastH * 1.62",
+    0
+   ],
+   "r0": 0.1,
+   "r1": 0.06
+  },
+  {
+   "id": "mast L * 0.18",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.66",
+    "r": 0.26,
+    "top": "topmast",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.18",
+    "D * 1.18",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.18 D * 1.18 + mastH * 0.57",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.32",
+    "h": "mastH * 0.26",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.03"
+   },
+   "at": [
+    "L * 0.18",
+    "D * 1.18 + mastH * 0.57",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.18 D * 1.18 + mastH * 0.9",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.2",
+    "h": "mastH * 0.18",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.02"
+   },
+   "at": [
+    "L * 0.18",
+    "D * 1.18 + mastH * 0.9",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "spanker gaff",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "L * 0.18",
+    "D * 1.18 + mastH * 0.5",
+    0
+   ],
+   "to": [
+    "L * 0.02",
+    "D * 1.18 + mastH * 0.62",
+    0
+   ],
+   "r": 0.09
+  },
+  {
+   "id": "spanker",
+   "type": "sail",
+   "material": "cloth",
+   "belly": "L * 0.02",
+   "at": [
+    "L * 0.18",
+    "D * 1.18 + mastH * 0.5",
+    0
+   ],
+   "corners": [
+    [
+     0,
+     0
+    ],
+    [
+     "-L * 0.16",
+     "mastH * 0.12"
+    ],
+    [
+     "-L * 0.21",
+     "-mastH * 0.22"
+    ],
+    [
+     0,
+     "-mastH * 0.3"
+    ]
+   ]
+  },
+  {
+   "id": "bowsprit",
+   "use": "items/components/bowsprit",
+   "params": {
+    "l": "L * 0.4",
+    "r": 0.26,
+    "steeve": 20
+   },
+   "at": [
+    "L * 0.98",
+    "D * 1.05",
+    0
+   ]
+  },
+  {
+   "id": "jib",
+   "type": "sail",
+   "material": "cloth",
+   "belly": "L * 0.02",
+   "at": [
+    "L * 0.8",
+    "D * 1.18 + mastH * 1.15",
+    0
+   ],
+   "corners": [
+    [
+     0,
+     0
+    ],
+    [
+     "L * 0.5",
+     "-mastH * 0.95"
+    ],
+    [
+     "L * 0.12",
+     "-mastH * 1.0"
+    ]
+   ]
+  },
+  {
+   "id": "stay L * 0.5-L * 0.8",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.9 + mastH * 1.85",
+    0
+   ],
+   "to": [
+    "L * 0.8",
+    "D * 1.18 + mastH * 1.3",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.8-L * 1.35",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.8",
+    "D * 1.18 + mastH * 1.62",
+    0
+   ],
+   "to": [
+    "L * 1.35",
+    "D * 1.19",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.5-L * 0.18",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.9 + mastH * 1.5",
+    0
+   ],
+   "to": [
+    "L * 0.18",
+    "D * 1.18 + mastH * 1.0",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "anchor",
+   "use": "items/components/anchor",
+   "params": {
+    "h": "D * 0.5"
+   },
+   "at": [
+    "L * 0.86",
+    "D * 0.95",
+    "B * 0.5"
+   ],
+   "mirror": "z"
+  }
+ ]
+}

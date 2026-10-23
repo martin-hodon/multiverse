@@ -1,0 +1,79 @@
+{
+ "kind": "item",
+ "name": "Three-legged stool",
+ "category": "furniture/seat",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "the stool of every cottage and cowshed: a round slab of a seat on three splayed legs, steady on any floor",
+ "params": {
+  "h": [
+   0.38,
+   0.46
+  ],
+  "r": 0.16
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "ash",
+    "pine"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "seat",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     "r",
+     "h - 0.035"
+    ],
+    [
+     "r",
+     "h"
+    ]
+   ],
+   "sides": 16
+  },
+  {
+   "id": "legs",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "r * 0.55",
+    "h - 0.03",
+    0
+   ],
+   "to": [
+    "r * 1.05",
+    0,
+    0
+   ],
+   "r0": 0.018,
+   "r1": 0.02,
+   "sides": 6,
+   "around": {
+    "n": 3,
+    "r": 0
+   }
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "r * 1.6",
+    "d": "r * 1.6",
+    "top": "h"
+   }
+  }
+ ]
+}

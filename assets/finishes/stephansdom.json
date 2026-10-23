@@ -1,0 +1,19 @@
+{
+  "name": "Stephansdom",
+  "building": "architecture/stephansdom",
+  "_about": "The Stephansdom: weathered sandstone, the great roof in its glazed zigzags of yellow, green, black and white, the north tower's cap in copper; stained glass; inside, grey stone and a chequered floor.",
+  "stone": {
+    "color": "#c9c0aa",
+    "accent": "#b2a893",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:glass", "pattern": "painted/stained glass", "palette": "stained", "_about": "the windows' stained glass"},
+    {"parts": ["roof", "choir roof", "apse"], "surface": "roof", "pattern": "roofs/glazed chevrons", "palette": "stephansdom", "scale": 2.5, "_about": "the zigzags a few metres tall, as the real ones are"},
+    {"parts": "north tower cap/cap", "pattern": "roofs/sheet metal", "palette": "copper"},
+    {"parts": ["kind:dome", "kind:roof"], "surface": "roof", "pattern": "stone/ashlar", "palette": "sandstone-grey"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "granite"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "sandstone-grey"}
+  ]
+}

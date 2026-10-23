@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WebGPU spike: a banner in WGSL</title>
+<style>
+  html, body { margin: 0; background: #cfe0e8; font: 13px "Avenir Next", "Segoe UI", sans-serif; color: #223; }
+  canvas { display: block; }
+  .bar { position: fixed; left: 8px; top: 8px; background: #fffe; padding: 8px 12px; border-radius: 6px; max-width: 48em; line-height: 1.45; }
+  b { font-weight: 600 } code { background: #0001; padding: 0 3px; border-radius: 3px }
+</style>
+</head>
+<body>
+<div class="bar" id="bar">starting…</div>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl": "https://unpkg.com/three@0.185.1/build/three.tsl.js"
+} }
+</script>
+<script type="module">
+// THE SPIKE -- step one of moving this world to WebGPU. It is the BANNER ENGINE in miniature, written in raw
+// WGSL, because that engine exercises every part of the port that could go wrong:
+//   1. raw WGSL through three (wgslFn) rather than TSL nodes
+//   2. a fragment writing its OWN DEPTH (depthNode) -- the banner's whole trick: a flat quad whose pixels carry
+//      the depth of the solid they stand for, so an eye sits on a head and a near leg hides a far one
+//   3. per-instance attributes reaching vertex AND fragment (varyings)
+//   4. discard for the silhouette, so the quad is cut to the shape's true outline
+// If these four hold, the other 2200 lines are work but not risk.
+//
+// What it draws: the same thing instanced.js draws -- camera-facing quads, each carrying one capsule's endpoints
+// and radii; the fragment cuts the silhouette with the 2D uneven-capsule distance, intersects the view ray with
+// the real 3D round cone, writes that depth, and shades by the surface normal.
+import * as THREE from "three";
+import { wgslFn, attribute, varying, positionGeometry, cameraProjectionMatrix, modelViewMatrix, vec4, float } from "three/tsl";
+
+const bar = document.getElementById("bar");
+const say = (html) => bar.innerHTML = html;
+// anything that goes wrong lands on the PAGE, not only in the console: a spike that hangs on "starting..."
+// tells whoever is testing it nothing at all
+// A headless run also POSTS what it finds to the harness -- but only then. In a browser there is no /report to
+// post to, and a rejected fetch is not caught by try/catch: it arrives as an unhandled rejection, which this
+// very handler then shows as "Failed to fetch", burying the real page behind a fault of its own making.
+const HEADLESS = new URLSearchParams(location.search).has("probe");
+const post = HEADLESS ? (t) => { fetch("/report", { method: "POST", body: t }).catch(() => {}); } : () => {};
+const show = (m) => { if (!String(m).includes("probe done")) { say("<b>Error:</b> <code>" + m + "</code>"); post("ERR " + m); } };
+addEventListener("error", (e) => show(e.message || e.error));
+addEventListener("unhandledrejection", (e) => show(e.reason?.message ?? e.reason));
+if (HEADLESS) {   // three reports a shader that will not compile through console.error, which a headless run must not miss
+  const cerr = console.error.bind(console);
+  console.error = (...a) => { post("CONSOLE ERR " + a.map(String).join(" ").slice(0, 3000)); cerr(...a); };
+}
+if (!navigator.gpu) { say("<b>No WebGPU here.</b> <code>navigator.gpu</code> is missing."); throw new Error("no webgpu"); }
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xcfe0e8);
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .1, 200);
+
+// ---- the parts: A (xyz, r1), B (xyz, r2), colour -- the same rows instanced.js uploads
+const PARTS = [
+  [-.6, 1.2, 0, .42,   .5, 1.25, 0, .40, 0xb08040],    // body
+  [.5, 1.3, 0, .22,   1.0, 1.7, 0, .18, 0xb08040],     // neck
+  [1.05, 1.78, 0, .26, 1.32, 1.86, 0, .20, 0xc09050],  // head
+  [1.45, 1.86, 0, .10, 1.62, 1.80, 0, .07, 0xd8b070],  // muzzle
+  [-.75, .78, .22, .10, -.75, .05, .22, .07, 0x8a5f2c],
+  [-.75, .78, -.22, .10, -.75, .05, -.22, .07, 0x8a5f2c],
+  [.35, .82, .22, .10, .35, .05, .22, .07, 0x8a5f2c],
+  [.35, .82, -.22, .10, .35, .05, -.22, .07, 0x8a5f2c],
+  [-1.0, 1.28, 0, .08, -1.65, 1.55, 0, .03, 0x8a5f2c], // tail
+];
+// ?dbg=cross / crossflat -- THE DEPTH TEST. Two capsules that pass through each other in 3D, one red and one
+// blue. With honest per-pixel depth each one wins where it is actually nearer, so the crossing interlocks;
+// with the plain card depth of a quad, whichever card is nearer wins the WHOLE overlap. Read as ASCII, the
+// difference is unmistakable, which is what makes this checkable without a screen.
+if (new URLSearchParams(location.search).get("dbg")?.startsWith("cross")) {
+  PARTS.length = 0;
+  // red: a short bar across the view, its MIDPOINT the nearest thing in the scene
+  PARTS.push([-1.3, 1.1, 0, .30,  1.3, 1.1, 0, .30, 0xff0000]);
+  // blue: a long spear from far away to a point IN FRONT of the red bar. Its midpoint is far behind red, so a
+  // flat card would put the whole spear behind the bar; the true surface pokes through in front of it.
+  PARTS.push([0, 1.55, -3.0, .22,  0, 1.55, 2.2, .22, 0x0000ff]);
+  // The camera looks down, so the spear sweeps from the horizon (far) to the bottom of the frame (near) and
+  // crosses the bar's band at z ~ +1.5 -- a metre and a half IN FRONT of it. Card depth (the whole quad at its
+  // midpoint, z = -0.4) puts the spear behind; the true surface is in front. So: per-pixel depth cuts a blue
+  // notch through the red bar, card depth leaves the bar unbroken. That difference is the whole port risk.
+}
+const n = PARTS.length;
+const aA = new Float32Array(n * 4), aB = new Float32Array(n * 4), aC = new Float32Array(n * 3);
+PARTS.forEach((p, i) => {
+  aA.set(p.slice(0, 4), i * 4); aB.set(p.slice(4, 8), i * 4);
+  const c = new THREE.Color(p[8]); aC.set([c.r, c.g, c.b], i * 3);
+});
+const geo = new THREE.InstancedBufferGeometry();
+geo.setAttribute("position", new THREE.Float32BufferAttribute([-1,-1,0, 1,-1,0, -1,1,0, -1,1,0, 1,-1,0, 1,1,0], 3));
+geo.setAttribute("aA", new THREE.InstancedBufferAttribute(aA, 4));
+geo.setAttribute("aB", new THREE.InstancedBufferAttribute(aB, 4));
+geo.setAttribute("aCol", new THREE.InstancedBufferAttribute(aC, 3));
+geo.instanceCount = n;
+
+const A = attribute("aA", "vec4"), B = attribute("aB", "vec4"), COL = attribute("aCol", "vec3");
+
+// ---- vertex: the quad in the camera-parallel plane through the segment's midpoint depth, endpoints and radii
+// projected into it (perspective-correct, as in banner.js). vP and vZc go to the fragment.
+const quadVert = wgslFn(`
+  fn quadVert(corner: vec3<f32>, a: vec4<f32>, b: vec4<f32>, mv: mat4x4<f32>, proj: mat4x4<f32>) -> vec4<f32> {
+    let av = (mv * vec4<f32>(a.xyz, 1.0)).xyz;
+    let bv = (mv * vec4<f32>(b.xyz, 1.0)).xyz;
+    let zc = min((av.z + bv.z) * 0.5, -0.05);
+    let pa = av.xy * (zc / av.z);
+    let pb = bv.xy * (zc / bv.z);
+    let ra = a.w * (zc / av.z);
+    let rb = b.w * (zc / bv.z);
+    let mid = (pa + pb) * 0.5;
+    let ext = abs(pa - pb) * 0.5 + vec2<f32>(max(ra, rb)) * 1.08;
+    let p = mid + corner.xy * ext;
+    return proj * vec4<f32>(p, zc, 1.0);
+  }
+`);
+
+// the point in that plane, carried to the fragment: the same maths, returning the position instead of clip space
+const planePoint = wgslFn(`
+  fn planePoint(corner: vec3<f32>, a: vec4<f32>, b: vec4<f32>, mv: mat4x4<f32>) -> vec3<f32> {
+    let av = (mv * vec4<f32>(a.xyz, 1.0)).xyz;
+    let bv = (mv * vec4<f32>(b.xyz, 1.0)).xyz;
+    let zc = min((av.z + bv.z) * 0.5, -0.05);
+    let pa = av.xy * (zc / av.z);
+    let pb = bv.xy * (zc / bv.z);
+    let ra = a.w * (zc / av.z);
+    let rb = b.w * (zc / bv.z);
+    let mid = (pa + pb) * 0.5;
+    let ext = abs(pa - pb) * 0.5 + vec2<f32>(max(ra, rb)) * 1.08;
+    return vec3<f32>(mid + corner.xy * ext, zc);
+  }
+`);
+
+// ---- the fragment's work: silhouette, exact hit, normal. Returns (shade, hitZ, inside).
+// These are FAITHFUL ports of banner.js -- the 2D uneven capsule for the silhouette and iq's round cone for
+// the surface. Translating them "roughly" is exactly how the first attempt failed: every ray missed the solid,
+// every pixel fell back to the midpoint depth, and nine solids rendered as nine flat cards.
+// NOTE: a wgslFn exposes only the FIRST function in its source. Helpers are their own wgslFn, handed over as
+// includes -- pack them into one string and three silently swallows everything after the first `fn`.
+const sdUnevenCapsule2 = wgslFn(`
+  fn sdUnevenCapsule2(p: vec2<f32>, pa: vec2<f32>, pb: vec2<f32>, ra: f32, rb: f32) -> f32 {
+    let d = pb - pa;
+    let h = length(d);
+    if (h < 1e-5) { return length(p - pa) - max(ra, rb); }
+    let u = d / h;
+    let q = vec2<f32>(abs(dot(p - pa, vec2<f32>(-u.y, u.x))), dot(p - pa, u));
+    let b = clamp((ra - rb) / h, -0.999, 0.999);
+    let a = sqrt(1.0 - b * b);
+    let k = dot(q, vec2<f32>(-b, a));
+    if (k < 0.0) { return length(q) - ra; }
+    if (k > a * h) { return length(q - vec2<f32>(0.0, h)) - rb; }
+    return dot(q, vec2<f32>(a, b)) - ra;
+  }
+`);
+
+const hitCone = wgslFn(`
+  fn hitCone(rd: vec3<f32>, a: vec3<f32>, b: vec3<f32>, ra: f32, rb: f32) -> f32 {
+    let ba = b - a; let oa = -a; let ob = -b;
+    let m0 = dot(ba, ba);
+    if (m0 < 1e-8) {
+      let bq = dot(oa, rd); let c = dot(oa, oa) - ra * ra; let hs = bq * bq - c;
+      if (hs < 0.0) { return -1.0; }
+      return -bq - sqrt(hs);
+    }
+    let rr = ra - rb;
+    let m1 = dot(ba, oa); let m2 = dot(ba, rd); let m3 = dot(rd, oa);
+    let m5 = dot(oa, oa); let m6 = dot(ob, rd); let m7 = dot(ob, ob);
+    let d2 = m0 - rr * rr;
+    let k2 = d2 - m2 * m2;
+    let k1 = d2 * m3 - m1 * m2 + m2 * rr * ra;
+    let k0 = d2 * m5 - m1 * m1 + m1 * rr * ra * 2.0 - m0 * ra * ra;
+    let h = k1 * k1 - k0 * k2;
+    if (h < 0.0) { return -1.0; }
+    if (abs(k2) > 1e-9) {
+      let t = (-sqrt(h) - k1) / k2;
+      let y = m1 - ra * rr + t * m2;
+      if (y > 0.0 && y < d2) { return t; }          // the barrel
+    }
+    // the end caps
+    let h1 = m3 * m3 - m5 + ra * ra;
+    let h2 = m6 * m6 - m7 + rb * rb;
+    var r = 1e20;
+    if (h1 > 0.0) { r = -m3 - sqrt(h1); }
+    if (h2 > 0.0) { r = min(r, -m6 - sqrt(h2)); }
+    if (r < 1e19) { return r; }
+    return -1.0;
+  }
+`);
+
+// where the flattened silhouette overhangs the solid the ray misses: take the closest approach to the axis,
+// so a part's rim keeps the depth of the pixels beside it
+const approachT = wgslFn(`
+  fn approachT(rd: vec3<f32>, a: vec3<f32>, b: vec3<f32>) -> f32 {
+    let ba = b - a;
+    let m0 = dot(ba, ba); let m2 = dot(ba, rd); let m1 = dot(ba, a); let m3 = dot(rd, a);
+    let den = m2 * m2 - m0;
+    var sv = 0.5;
+    if (abs(den) > 1e-8) { sv = clamp((m1 - m2 * m3) / den, 0.0, 1.0); }
+    return max(m3 + m2 * sv, 0.05);
+  }
+`);
+
+const bannerHit = wgslFn(`
+  fn bannerHit(P: vec3<f32>, a: vec4<f32>, b: vec4<f32>, mv: mat4x4<f32>) -> vec3<f32> {
+    let av = (mv * vec4<f32>(a.xyz, 1.0)).xyz;
+    let bv = (mv * vec4<f32>(b.xyz, 1.0)).xyz;
+    let zc = P.z;
+    let pa = av.xy * (zc / av.z);
+    let pb = bv.xy * (zc / bv.z);
+    let ra = a.w * (zc / av.z);
+    let rb = b.w * (zc / bv.z);
+    if (sdUnevenCapsule2(P.xy, pa, pb, ra, rb) > 0.0) { return vec3<f32>(0.0, 0.0, -1.0); }  // outside
+    let rd = normalize(P);
+    var t = hitCone(rd, av, bv, a.w, b.w);
+    if (t <= 0.0) { t = approachT(rd, av, bv); }
+    let hitP = rd * t;
+    let ba = bv - av;
+    let sv = clamp(dot(hitP - av, ba) / max(dot(ba, ba), 1e-8), 0.0, 1.0);
+    let nrm = normalize(hitP - (av + ba * sv));
+    return vec3<f32>(nrm.y, hitP.z, 1.0);   // (the normal's y shades it), the hit's depth, inside
+  }
+`, [sdUnevenCapsule2, hitCone, approachT]);
+
+const vPlane = varying(planePoint({ corner: positionGeometry, a: A, b: B, mv: modelViewMatrix }), "vPlane");
+const hit = bannerHit({ P: vPlane, a: A, b: B, mv: modelViewMatrix });
+
+// ?dbg= bisects the spike, because one black card tells you nothing about WHICH of the four risks failed:
+//   col  -- the plain quad in attribute colour: instancing and per-instance attributes only
+//   cut  -- plus the silhouette (the fragment's WGSL and the varying)
+//   (none) -- plus the per-pixel depth
+const DBG = new URLSearchParams(location.search).get("dbg") || "";
+
+const mat = new THREE.MeshBasicNodeMaterial();
+mat.vertexNode = quadVert({ corner: positionGeometry, a: A, b: B, mv: modelViewMatrix, proj: cameraProjectionMatrix });
+// outside the silhouette: cut away. A bare Discard() belongs INSIDE an Fn; out here the cut-out is opacity
+// against alphaTest, which keeps the depth write we need.
+if (DBG !== "col") { mat.opacityNode = hit.z; mat.alphaTest = .5; }
+// the world's flat shading: .82 + .2 ny (banner.js shadeOf, trimmed to what this spike needs)
+mat.colorNode = DBG === "col" ? COL : COL.mul(float(0.82).add(hit.x.mul(0.3)));
+// AND THE POINT OF THE EXERCISE: the fragment's own depth, from the exact hit. NOTE the difference from GL --
+// WebGPU's clip space runs z from 0 to 1, so the depth is c.z / c.w with no remapping.
+const hitDepth = wgslFn(`
+  fn hitDepth(P: vec3<f32>, hz: f32, proj: mat4x4<f32>) -> f32 {
+    let pv = vec3<f32>(P.xy * (hz / P.z), hz);
+    let c = proj * vec4<f32>(pv, 1.0);
+    return clamp(c.z / c.w, 0.0, 1.0);
+  }
+`);
+if (DBG === "" || DBG === "cross") mat.depthNode = hitDepth({ P: vPlane, hz: hit.y, proj: cameraProjectionMatrix });
+// a control: depth forced by COLOUR, blue at the near plane and red at the far one. If the blue spear then
+// covers the red bar, the fragment's own depth is reaching the depth test and the fault is in my maths; if the
+// bar still wins, depthNode is not landing at all.
+if (DBG === "crossnear") mat.depthNode = COL.b.oneMinus();
+
+const mesh = new THREE.Mesh(geo, mat);
+mesh.frustumCulled = false;
+scene.add(mesh);
+scene.add(new THREE.Mesh(new THREE.PlaneGeometry(40, 40).rotateX(-Math.PI / 2), new THREE.MeshBasicNodeMaterial({ color: 0x8fae64 })));
+
+// the device LAST: everything above is plain JavaScript, so a mistake in the shader graph is a normal error.
+// ?probe=1 is the headless check -- one frame into a render target, read back and posted as ASCII, because a
+// screen is the one thing a headless browser has not got.
+const PROBE = HEADLESS;
+// the harness module is loaded ONLY for a headless run: opened as a file:// page -- which is how this spike
+// gets tested -- a dynamic import of a local module is blocked outright, and the page dies on it
+const { probe, headlessRenderer, dumpShader } = PROBE ? await import("./wgprobe.js") : {};
+const backendName = (r) => r.backend?.isWebGPUBackend ? "WebGPU" : "WebGL (fallback!)";
+const renderer = PROBE ? await headlessRenderer() : new THREE.WebGPURenderer({ antialias: true });
+say("graph built; starting the device…");
+try { await renderer.init(); } catch (e) { say("<b>WebGPU failed to start:</b> <code>" + e.message + "</code>"); throw e; }
+if (!PROBE) {
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  document.body.appendChild(renderer.domElement);
+}
+const info = renderer.backend?.adapter?.info ?? {};
+const adapter = `${backendName(renderer)} · ${`${info.vendor ?? "?"} ${info.architecture ?? ""}`.trim()}`;
+if (PROBE) {
+  camera.position.set(3.9, 1.9, 3.9); camera.lookAt(0, 1.1, 0);
+  if (new URLSearchParams(location.search).has("src")) { await dumpShader(renderer, scene, camera, mesh); throw new Error("shader dumped"); }
+  const cross = DBG.startsWith("cross");
+  if (cross) { camera.position.set(0, 2.6, 5.2); camera.lookAt(0, 1.1, 0); }
+  await probe(renderer, scene, camera, {
+    w: 76, h: 26,
+    chars: cross ? [{ rgb: [210, 0, 0], ch: "R" }, { rgb: [0, 0, 210], ch: "B" },
+                    { rgb: [143, 174, 100], ch: "." }, { rgb: [207, 224, 232], ch: " " }] : null,
+  });
+  throw new Error("probe done");   // stops here: nothing to present headless
+}
+
+let frames = 0, last = performance.now();
+renderer.setAnimationLoop(() => {
+  const t = performance.now() * .001;
+  camera.position.set(Math.sin(t * .25) * 5.5, 1.9, Math.cos(t * .25) * 5.5);
+  camera.lookAt(0, 1.1, 0);
+  renderer.render(scene, camera);
+  frames++;
+  const now = performance.now();
+  if (now - last > 500) {
+    say(`<b>WebGPU spike</b> · ${((now - last) / frames).toFixed(2)} ms/frame · ${n} banner parts · adapter: <code>${adapter}</code><br>` +
+        `Raw WGSL through <code>wgslFn</code>: the quad fitted to each capsule's projection, the silhouette cut by the ` +
+        `2D uneven-capsule distance, the exact ray-cone hit giving <b>per-pixel depth</b> and the normal.<br>` +
+        `<b>What to look for:</b> parts should overlap correctly — the muzzle in front of the head, the far legs behind the body — ` +
+        `and the outlines should stay crisp at any zoom. If they intersect as flat cards, depthNode is not landing.`);
+    frames = 0; last = now;
+  }
+});
+addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+window.__ready = true;
+</script>
+</body>
+</html>

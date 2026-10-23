@@ -1,0 +1,174 @@
+{
+ "kind": "item",
+ "name": "Lute",
+ "category": "tool",
+ "era": "1300-1700",
+ "_about": "the lute: a pear-shaped body of ribs, flat-fronted, a rose cut in its soundboard, a neck bent back at the pegbox",
+ "params": {},
+ "materials": {
+  "body": {
+   "pick": [
+    "walnut",
+    "cherry"
+   ]
+  },
+  "neck": "ebony",
+  "board": "pine",
+  "string": "gut"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "lathe",
+   "material": "body",
+   "stretch": [
+    1,
+    1,
+    0.55
+   ],
+   "profile": [
+    [
+     0.0,
+     -0.2
+    ],
+    [
+     0.11,
+     -0.14
+    ],
+    [
+     0.15,
+     -0.05
+    ],
+    [
+     0.13,
+     0.05
+    ],
+    [
+     0.07,
+     0.12
+    ],
+    [
+     0.03,
+     0.14
+    ]
+   ],
+   "sides": 14
+  },
+  {
+   "id": "rose",
+   "type": "lathe",
+   "material": "neck",
+   "at": [
+    0,
+    -0.03,
+    0.078,
+    0,
+    90,
+    0
+   ],
+   "profile": [
+    [
+     0.035,
+     0
+    ],
+    [
+     0.035,
+     0.002
+    ]
+   ],
+   "sides": 12
+  },
+  {
+   "id": "neck",
+   "type": "box",
+   "material": "neck",
+   "size": [
+    0.05,
+    0.3,
+    0.025
+   ],
+   "at": [
+    0,
+    0.28,
+    0.035
+   ]
+  },
+  {
+   "id": "pegbox",
+   "type": "box",
+   "material": "neck",
+   "size": [
+    0.045,
+    0.14,
+    0.03
+   ],
+   "at": [
+    0,
+    0.46,
+    -0.01,
+    0,
+    -60,
+    0
+   ]
+  },
+  {
+   "id": "strings",
+   "type": "rod",
+   "material": "string",
+   "from": [
+    0,
+    -0.12,
+    0.08
+   ],
+   "to": [
+    0,
+    0.42,
+    0.05
+   ],
+   "r": 0.0012,
+   "sides": 3,
+   "along": {
+    "n": 5,
+    "from": [
+     -0.016,
+     0,
+     0
+    ],
+    "to": [
+     0.016,
+     0,
+     0
+    ]
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.25,
+   0.035
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    0.1,
+    0.45,
+    1
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

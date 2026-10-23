@@ -1,0 +1,32 @@
+{
+  "name": "Temple of Heaven",
+  "building": "architecture/temple-of-heaven",
+  "_about": "The Temple of Heaven's surfaces: blue glazed tube tiles on every roof (green on the court's wall copings), red lacquer on the columns, the lattice and the drums, the lattice windows over paper, the beams painted in the xuanzi manner (blue and green, gold), the brackets blue and green, the ceilings coffered and painted, the finial gilt; white marble for the altar, its balustrades carved panel by panel, the imperial way carved with clouds; dark 'golden bricks' on the floors inside, the round dragon-and-phoenix stone at the hall's centre, flagstones outside; the court's walls red plaster.",
+  "stone": { "color": "#ece9e1", "accent": "#d6d2c8", "pat": "marble" },
+  "rules": [
+    { "parts": "kind:glass", "pattern": "painted/lattice", "palette": "chinese-red", "_about": "the lattice windows: red lacquer over paper" },
+    { "parts": ["finial base", "finial ball"], "pattern": "roofs/gold leaf" },
+    { "parts": "caisson", "pattern": "painted/caisson", "palette": "caihua", "scale": 0.6 },
+    { "parts": "kind:dome", "surface": "roof", "pattern": "roofs/tube tiles", "palette": "glazed-blue" },
+    { "parts": "kind:dome", "pattern": "painted/caisson", "palette": "caihua", "_about": "the round roofs' undersides, inside the hall" },
+    { "parts": ["upper imperial way", "middle imperial way", "lower imperial way"], "pattern": "painted/cloud scroll", "palette": "carrara", "scale": 2, "_about": "the carved slab up the stairs: clouds in the marble" },
+    { "parts": "coping", "surface": "roof", "pattern": "roofs/tube tiles", "palette": "glazed-green" },
+    { "parts": "kind:roof", "surface": "roof", "pattern": "roofs/tube tiles", "palette": "glazed-blue" },
+    { "parts": "kind:roof", "pattern": "painted/caisson", "palette": "caihua", "scale": 0.5, "_about": "the eaves' soffits and the halls' ceilings, painted" },
+    { "parts": ["ridge", "ridge beasts"], "color": "#24508f", "accent": "#183c70" },
+    { "parts": "architrave", "pattern": "painted/caihua", "palette": "caihua", "align": "part", "_about": "the beams, painted" },
+    { "parts": ["dou", "tongue 1", "tongue 2", "blocks 1", "blocks 2"], "color": "#3a7d68" },
+    { "parts": ["arm 1", "arm 2", "arm 3", "beams"], "color": "#2f5f8f" },
+    { "parts": "dragon columns", "pattern": "painted/cloud scroll", "palette": "chinese-red", "_about": "the four dragon-well columns: gold clouds on red" },
+    { "parts": "kind:column", "color": "#a3261e", "accent": "#861e17" },
+    { "parts": ["hall doors", "hall windows", "drum", "walls"], "surface": "wall", "color": "#a3261e", "accent": "#861e17" },
+    { "parts": "wall", "surface": "wall", "pattern": "stone/plaster", "palette": "plaster-red" },
+    { "parts": ["upper balustrade panels", "middle balustrade panels", "lower balustrade panels"], "surface": "wall", "pattern": "panels/balustrade", "palette": "carrara", "align": "part", "count": 96,
+      "_about": "the balustrades' carved panels, one to a bay" },
+    { "parts": "base", "surface": "wall", "pattern": "stone/ashlar fine", "palette": "carrara" },
+    { "surface": "floor", "at": [0, 0], "pattern": "floors/compass", "palette": "marble-bw", "scale": 0.4, "_about": "the dragon-and-phoenix stone at the hall's centre" },
+    { "surface": "floor", "side": "in", "pattern": "floors/terracotta", "palette": "slate", "_about": "golden bricks: square, dark, polished" },
+    { "surface": "floor", "pattern": "floors/flagstones", "palette": "carrara" },
+    { "surface": "wall", "pattern": "stone/ashlar fine", "palette": "carrara" }
+  ]
+}

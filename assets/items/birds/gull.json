@@ -1,0 +1,374 @@
+{
+ "kind": "item",
+ "name": "Herring gull",
+ "category": "birds",
+ "era": "everywhere",
+ "region": "the coasts",
+ "_about": "a gull: white with a grey mantle, black wingtips, a yellow beak",
+ "params": {
+  "s": [
+   0.92,
+   1.08
+  ],
+  "pose": {
+   "pick": [
+    "spread",
+    "folded"
+   ]
+  }
+ },
+ "materials": {
+  "back": "plumage-gull-grey",
+  "breast": "plumage-white",
+  "head": "plumage-white",
+  "wing": "plumage-gull-grey",
+  "primaries": "plumage-gull-grey",
+  "tips": "plumage-black",
+  "tail": "plumage-white",
+  "beak": "beak-yellow",
+  "legs": "leg-pink",
+  "eye": "#1a1208"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "sweep",
+   "material": "back",
+   "sides": 9,
+   "seg": 1,
+   "radii": [
+    "s * 0.0150",
+    "s * 0.0600",
+    "s * 0.0620",
+    "s * 0.0380",
+    "s * 0.0133"
+   ],
+   "path": [
+    [
+     "s * 0.1500",
+     "s * 0.1758",
+     0
+    ],
+    [
+     "s * 0.0750",
+     "s * 0.1758",
+     0
+    ],
+    [
+     0,
+     "s * 0.1727",
+     0
+    ],
+    [
+     "s * -0.0900",
+     "s * 0.1789",
+     0
+    ],
+    [
+     "s * -0.1500",
+     "s * 0.1851",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "breast",
+   "type": "sphere",
+   "material": "breast",
+   "r": "s * 0.0480",
+   "sides": 8,
+   "at": [
+    "s * 0.0600",
+    "s * 0.1646",
+    0
+   ],
+   "stretch": [
+    1.7,
+    1.02,
+    1.1
+   ]
+  },
+  {
+   "id": "neck",
+   "type": "sweep",
+   "material": "head",
+   "sides": 7,
+   "seg": 2,
+   "radii": [
+    "s * 0.0360",
+    "s * 0.0300",
+    "s * 0.0270"
+   ],
+   "path": [
+    [
+     "s * 0.1200",
+     "s * 0.1758",
+     0
+    ],
+    [
+     "s * 0.1753",
+     "s * 0.1932",
+     0
+    ],
+    [
+     "s * 0.1914",
+     "s * 0.2144",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "head",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.0380",
+   "sides": 8,
+   "at": [
+    "s * 0.1914",
+    "s * 0.2144",
+    0
+   ]
+  },
+  {
+   "id": "eye",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0068",
+   "sides": 5,
+   "at": [
+    "s * 0.2085",
+    "s * 0.2239",
+    "s * 0.0304"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "beak",
+   "type": "rod",
+   "material": "beak",
+   "sides": 4,
+   "r0": "s * 0.0100",
+   "r1": "s * 0.0008",
+   "at": [
+    "s * 0.2199",
+    "s * 0.2125",
+    0
+   ],
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0450",
+    "s * -0.0045",
+    0
+   ]
+  },
+  {
+   "id": "thigh",
+   "type": "rod",
+   "material": "legs",
+   "sides": 4,
+   "r": "s * 0.0052",
+   "from": [
+    "s * -0.0150",
+    "s * 0.1200",
+    "s * 0.0217"
+   ],
+   "to": [
+    "s * 0.0060",
+    "s * 0.0700",
+    "s * 0.0248"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tarsus",
+   "type": "rod",
+   "material": "legs",
+   "sides": 4,
+   "r": "s * 0.0040",
+   "from": [
+    "s * 0.0060",
+    "s * 0.0700",
+    "s * 0.0248"
+   ],
+   "to": [
+    "s * 0.0120",
+    0,
+    "s * 0.0248"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "toes",
+   "type": "rod",
+   "material": "legs",
+   "sides": 3,
+   "r0": "s * 0.0032",
+   "r1": "s * 0.0012",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0315",
+    0,
+    0
+   ],
+   "at": [
+    "s * 0.0120",
+    0,
+    "s * 0.0248"
+   ],
+   "around": {
+    "n": 3,
+    "r": 0,
+    "plane": "xz",
+    "start": -35,
+    "span": 70
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "hind toe",
+   "type": "rod",
+   "material": "legs",
+   "sides": 3,
+   "r0": "s * 0.0028",
+   "r1": "s * 0.0012",
+   "from": [
+    "s * 0.0120",
+    0,
+    "s * 0.0248"
+   ],
+   "to": [
+    "s * -0.0055",
+    0,
+    "s * 0.0248"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tail",
+   "type": "feathers",
+   "material": "tail",
+   "tips": "tips",
+   "n": 10,
+   "shape": "square",
+   "band": 0.2,
+   "lift": 0.0008,
+   "roots": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "dir": [
+    "-18.0",
+    "18.0"
+   ],
+   "length": [
+    "s * 0.1400",
+    "s * 0.1400"
+   ],
+   "width": [
+    "s * 0.0240",
+    "s * 0.0240"
+   ],
+   "droop": 0.2,
+   "lead": 1,
+   "at": [
+    "s * -0.1350",
+    "s * 0.1820",
+    0,
+    -90,
+    -10,
+    0
+   ]
+  },
+  {
+   "id": "wing spread",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "spread"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 0.6800",
+    "chord": "s * 0.1700",
+    "pri": 10,
+    "sec": 8,
+    "spread": 1,
+    "sweep": 12,
+    "band": 0.2
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0450",
+    "s * 0.2068",
+    "s * 0.0496",
+    0,
+    -8,
+    0
+   ]
+  },
+  {
+   "id": "wing folded",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "folded"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 0.6800",
+    "chord": "s * 0.1700",
+    "pri": 10,
+    "sec": 8,
+    "spread": 0,
+    "sweep": 12,
+    "band": 0.2
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0450",
+    "s * 0.2254",
+    "s * 0.0310",
+    0,
+    70,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.1696",
+   0
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   1,
+   0
+  ]
+ }
+}

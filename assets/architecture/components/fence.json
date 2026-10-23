@@ -1,0 +1,323 @@
+{
+ "name": "Fence",
+ "_about": "a straight run of fence along +x, L long: `style` rails (post-and-rail, two rails), picket, wattle (hurdles woven between posts), zigzag (the split-rail worm fence, three rails a bay laid at 25 degrees either way, out to -z and back, the run's ends on its line so runs meet at their corners) or stone (a dry-stone dyke with its coping); `bay` the posts' spacing, `h` the height",
+ "params": {
+  "detail": 4,
+  "L": 10,
+  "style": "rails",
+  "bay": 2.0,
+  "h": 1.15,
+  "p0": 1,
+  "p1": 1,
+  "_p0": "1/0: a post at the start / at the end (p1) -- 0 where the run meets another fence at a corner and shares its post"
+ },
+ "parts": {
+  "posts": {
+   "type": "column",
+   "radius": 0.07,
+   "height": "h",
+   "sides": 6,
+   "at": [
+    [
+     "(1 - p0) * L / round(L / bay)",
+     0,
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "round(L / bay) - 1 + p0 + p1",
+    "step": [
+     "L / round(L / bay)",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "style": [
+     "rails",
+     "picket"
+    ]
+   }
+  },
+  "rail low": {
+   "type": "box",
+   "width": "L / round(L / bay)",
+   "length": 0.07,
+   "height": 0.09,
+   "at": [
+    [
+     "L / round(L / bay) / 2",
+     0.46,
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "round(L / bay)",
+    "step": [
+     "L / round(L / bay)",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "style": "rails"
+   }
+  },
+  "rail high": {
+   "type": "box",
+   "width": "L / round(L / bay)",
+   "length": 0.07,
+   "height": 0.09,
+   "at": [
+    [
+     "L / round(L / bay) / 2",
+     "h - 0.2",
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "round(L / bay)",
+    "step": [
+     "L / round(L / bay)",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "style": "rails"
+   }
+  },
+  "picket rails": {
+   "type": "box",
+   "width": "L / round(L / bay)",
+   "length": 0.05,
+   "height": 0.07,
+   "at": [
+    [
+     "L / round(L / bay) / 2",
+     0.3,
+     0,
+     0
+    ],
+    [
+     "L / round(L / bay) / 2",
+     "h - 0.35",
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "round(L / bay)",
+    "step": [
+     "L / round(L / bay)",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "style": "picket"
+   }
+  },
+  "pickets": {
+   "type": "box",
+   "width": 0.07,
+   "length": 0.025,
+   "height": "h - 0.15",
+   "at": [
+    [
+     "L / round(L / 0.16) / 2",
+     0.1,
+     0.04,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "round(L / 0.16)",
+    "step": [
+     "L / round(L / 0.16)",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "style": "picket"
+   }
+  },
+  "wattle posts": {
+   "type": "column",
+   "radius": 0.06,
+   "height": "h - 0.05",
+   "sides": 6,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "round(L / 1.2) + 1",
+    "step": [
+     "L / round(L / 1.2)",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "style": "wattle"
+   }
+  },
+  "hurdles": {
+   "type": "box",
+   "width": "L",
+   "length": 0.06,
+   "height": "h - 0.25",
+   "at": [
+    [
+     "L / 2",
+     0.08,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "style": "wattle"
+   }
+  },
+  "zig": {
+   "_about": "out from the line (-z) at 25 degrees over one bay of the run's own (an even number of them, so it ends where it began: on the line, at the next run's corner), its rails under the zag's where they cross",
+   "type": "box",
+   "width": "L / (2 * ceil(L / bay / 2)) / 0.9063 + 0.2",
+   "length": 0.1,
+   "height": 0.11,
+   "at": [
+    [
+     "L / (2 * ceil(L / bay / 2)) / 2",
+     0.25,
+     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     0.4363323125
+    ],
+    [
+     "L / (2 * ceil(L / bay / 2)) / 2",
+     0.6,
+     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     0.4363323125
+    ],
+    [
+     "L / (2 * ceil(L / bay / 2)) / 2",
+     0.95,
+     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     0.4363323125
+    ]
+   ],
+   "repeat": {
+    "count": "ceil(L / bay / 2)",
+    "step": [
+     "2 * L / (2 * ceil(L / bay / 2))",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "style": "zigzag"
+   }
+  },
+  "zag": {
+   "_about": "back to the line over the next bay, its rails laid over the zig's where they cross (as a worm fence is stacked)",
+   "type": "box",
+   "width": "L / (2 * ceil(L / bay / 2)) / 0.9063 + 0.2",
+   "length": 0.1,
+   "height": 0.11,
+   "at": [
+    [
+     "L / (2 * ceil(L / bay / 2)) * 1.5",
+     0.37,
+     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     "0 - 0.4363323125"
+    ],
+    [
+     "L / (2 * ceil(L / bay / 2)) * 1.5",
+     0.72,
+     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     "0 - 0.4363323125"
+    ],
+    [
+     "L / (2 * ceil(L / bay / 2)) * 1.5",
+     1.07,
+     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     "0 - 0.4363323125"
+    ]
+   ],
+   "repeat": {
+    "count": "ceil(L / bay / 2)",
+    "step": [
+     "2 * L / (2 * ceil(L / bay / 2))",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "style": "zigzag"
+   }
+  },
+  "dyke": {
+   "type": "box",
+   "width": "L",
+   "length": 0.45,
+   "height": "h - 0.25",
+   "at": [
+    [
+     "L / 2",
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "style": "stone"
+   }
+  },
+  "coping": {
+   "type": "box",
+   "width": "L",
+   "length": 0.55,
+   "height": 0.12,
+   "at": [
+    [
+     "L / 2",
+     "h - 0.25",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "style": "stone"
+   }
+  }
+ },
+ "build": [
+  "posts",
+  "rail low",
+  "rail high",
+  "picket rails",
+  "pickets",
+  "wattle posts",
+  "hurdles",
+  "zig",
+  "zag",
+  "dyke",
+  "coping"
+ ]
+}

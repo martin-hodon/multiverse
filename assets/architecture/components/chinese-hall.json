@@ -1,0 +1,350 @@
+{
+  "name": "Chinese hall",
+  "_about": "A CHINESE HALL (dian): the block a temple, a palace or a gate is made of. A stone platform with a flight up the front (and the back, `backSteps`), a grid of `nx` by `nz` bays of timber columns, walls between the outer columns -- the front and back of lattice doors and windows, the ends blind -- an architrave round the top, a row of dougong bracket sets on it, and over them a curved roof of any form (the hip-and-gable, xieshan, by default) with its corners turned up. The long axis is x; the front faces +z. `backSill` 0 makes the middle bay of the back a door too (a gate hall, walked through).",
+  "params": {
+    "detail": 4,
+    "nx": 5,
+    "bw": 5.4,
+    "nz": 2,
+    "bd": 5.8,
+    "H": 5.6,
+    "colR": 0.32,
+    "t": 0.35,
+    "archH": 0.7,
+    "plat": 1.2,
+    "platOut": 2.4,
+    "backSteps": 1,
+    "sill": 0.9,
+    "doorH": "H - archH - 0.8",
+    "backSill": 0,
+    "s": 0.9,
+    "roofForm": "gablet",
+    "pitch": 38,
+    "hipH": 0.5,
+    "over": 2.4,
+    "lo": 0.35,
+    "hi": 1.4,
+    "upturn": 0.8,
+    "flare": 0.6,
+    "L": "nx * bw",
+    "D": "nz * bd",
+    "_L": "the column grid: L along x (the front), D across",
+    "steps": "ceil(plat / 0.16)",
+    "rad": "pitch * 0.0174533",
+    "drop": "over * sin(rad) / cos(rad)",
+    "roofY": "plat + H + 1.06 * s + drop",
+    "_roofY": "the roof's wall plane: its eave (the soffit, the hall's ceiling) comes down on the brackets' tops",
+    "roofH": "D / 2 * sin(rad) / cos(rad)",
+    "ridgeL": "L - D * hipH + 0.6",
+    "_ridgeL": "the ridge's length for the xieshan (L - D for a hip roof, L + 2 over for a gable)"
+  },
+  "build": [
+    "platform",
+    "front steps",
+    "back steps",
+    "columns",
+    "walls",
+    "architrave",
+    "brackets front",
+    "brackets sides",
+    "roof",
+    "ridge",
+    "ridge beasts"
+  ],
+  "parts": {
+    "platform": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          "L + 2 * platOut",
+          "D + 2 * platOut"
+        ]
+      },
+      "height": "plat",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the stone platform (taiji)"
+    },
+    "front steps": {
+      "type": "flight",
+      "width": "bw - 1.0",
+      "run": 0.32,
+      "steps": "steps",
+      "top": "plat",
+      "landing": 0,
+      "at": [
+        [
+          "(bw - 1.0) / 2",
+          0,
+          "D / 2 + platOut + steps * 0.32",
+          1.5708
+        ]
+      ]
+    },
+    "back steps": {
+      "type": "flight",
+      "width": "bw - 1.0",
+      "run": 0.32,
+      "steps": "steps",
+      "top": "plat",
+      "landing": 0,
+      "at": [
+        [
+          "0 - (bw - 1.0) / 2",
+          0,
+          "0 - (D / 2 + platOut + steps * 0.32)",
+          -1.5708
+        ]
+      ],
+      "repeat": {
+        "count": "backSteps",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "columns": {
+      "type": "column",
+      "radius": "colR",
+      "height": "H",
+      "at": [
+        [
+          "0 - L / 2",
+          "plat",
+          "0 - D / 2",
+          0
+        ]
+      ],
+      "repeat": [
+        {
+          "count": "nx + 1",
+          "step": [
+            "bw",
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "count": "nz + 1",
+          "step": [
+            0,
+            0,
+            "bd",
+            0
+          ]
+        }
+      ],
+      "_about": "the grid of timber columns, every bay's corner"
+    },
+    "walls": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "L + t",
+          "D + t"
+        ]
+      },
+      "thickness": "t",
+      "height": "H - archH",
+      "faces": {
+        "0": {
+          "pattern": "nx",
+          "width": "bw - 1.2",
+          "gap": 1.2,
+          "sill": "sill",
+          "springing": "H - archH - 0.45",
+          "head": {
+            "profile": "flat"
+          },
+          "glass": true,
+          "middle": {
+            "width": "bw - 1.6",
+            "sill": 0,
+            "springing": "doorH",
+            "glass": false
+          }
+        },
+        "2": {
+          "pattern": "nx",
+          "width": "bw - 1.2",
+          "gap": 1.2,
+          "sill": "sill",
+          "springing": "H - archH - 0.45",
+          "head": {
+            "profile": "flat"
+          },
+          "glass": true,
+          "middle": {
+            "width": "bw - 1.6",
+            "sill": "backSill",
+            "springing": "doorH",
+            "glass": "backSill"
+          }
+        },
+        "1": [],
+        "3": []
+      },
+      "at": [
+        [
+          0,
+          "plat",
+          0,
+          0
+        ]
+      ],
+      "_about": "lattice doors and windows front and back, the ends blind (the gable walls)"
+    },
+    "architrave": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "L + t",
+          "D + t"
+        ]
+      },
+      "thickness": "t",
+      "height": "archH",
+      "at": [
+        [
+          0,
+          "plat + H - archH",
+          0,
+          0
+        ]
+      ],
+      "_about": "the painted beam (e'fang) round the top of the columns, over the walls"
+    },
+    "brackets front": {
+      "type": "component",
+      "use": "components/dougong",
+      "params": {
+        "s": "s"
+      },
+      "at": [
+        [
+          "0 - L / 2",
+          "plat + H",
+          "D / 2",
+          0
+        ],
+        [
+          "0 - L / 2",
+          "plat + H",
+          "0 - D / 2",
+          3.14159
+        ]
+      ],
+      "repeat": {
+        "count": "2 * nx + 1",
+        "step": [
+          "bw / 2",
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "brackets sides": {
+      "type": "component",
+      "use": "components/dougong",
+      "params": {
+        "s": "s"
+      },
+      "at": [
+        [
+          "L / 2",
+          "plat + H",
+          "0 - D / 2 + bd / 2",
+          1.5708
+        ],
+        [
+          "0 - L / 2",
+          "plat + H",
+          "0 - D / 2 + bd / 2",
+          -1.5708
+        ]
+      ],
+      "repeat": {
+        "count": "2 * nz - 1",
+        "step": [
+          0,
+          0,
+          "bd / 2",
+          0
+        ]
+      }
+    },
+    "roof": {
+      "type": "roof",
+      "form": "roofForm",
+      "width": "D",
+      "length": "L",
+      "pitch": "pitch",
+      "hipH": "hipH",
+      "overhang": "over",
+      "lo": "lo",
+      "hi": "hi",
+      "upturn": "upturn",
+      "flare": "flare",
+      "at": [
+        [
+          0,
+          "roofY",
+          0,
+          1.5708
+        ]
+      ]
+    },
+    "ridge": {
+      "type": "box",
+      "width": "ridgeL",
+      "length": 0.5,
+      "height": 0.8,
+      "at": [
+        [
+          0,
+          "roofY + roofH - 0.25",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "roof"
+      ]
+    },
+    "ridge beasts": {
+      "type": "box",
+      "width": 0.5,
+      "length": 0.45,
+      "height": 1.3,
+      "at": [
+        [
+          "0 - ridgeL / 2 + 0.25",
+          "roofY + roofH + 0.5",
+          0,
+          0
+        ],
+        [
+          "ridgeL / 2 - 0.25",
+          "roofY + roofH + 0.5",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "ridge"
+      ],
+      "_about": "the chiwen at the ridge's ends"
+    }
+  }
+}

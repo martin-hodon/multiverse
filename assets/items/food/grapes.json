@@ -1,0 +1,235 @@
+{
+ "kind": "item",
+ "name": "Bunch of grapes",
+ "category": "food/fruit",
+ "era": "-3000-1900",
+ "region": "the Mediterranean, the vine lands",
+ "_about": "a bunch of grapes hanging from its stalk, purple or green",
+ "params": {
+  "s": [
+   0.9,
+   1.1
+  ],
+  "n": 4
+ },
+ "materials": {
+  "skin": {
+   "pick": [
+    "grape-purple",
+    "grape-green"
+   ]
+  },
+  "stem": "stem-green",
+  "vine-leaf": "vine-leaf"
+ },
+ "parts": [
+  {
+   "id": "ring 1",
+   "type": "sphere",
+   "material": "skin",
+   "r": "s * 0.0085",
+   "sides": 5,
+   "around": {
+    "n": 7,
+    "r": "s * 0.02",
+    "plane": "xz"
+   },
+   "at": [
+    0,
+    "s * 0.09",
+    0
+   ]
+  },
+  {
+   "id": "ring 2",
+   "type": "sphere",
+   "material": "skin",
+   "r": "s * 0.0085",
+   "sides": 5,
+   "around": {
+    "n": 6,
+    "r": "s * 0.017",
+    "plane": "xz",
+    "start": 25
+   },
+   "at": [
+    0,
+    "s * 0.075",
+    0
+   ]
+  },
+  {
+   "id": "ring 3",
+   "type": "sphere",
+   "material": "skin",
+   "r": "s * 0.0085",
+   "sides": 5,
+   "around": {
+    "n": 5,
+    "r": "s * 0.013",
+    "plane": "xz",
+    "start": 10
+   },
+   "at": [
+    0,
+    "s * 0.06",
+    0
+   ]
+  },
+  {
+   "id": "ring 4",
+   "type": "sphere",
+   "material": "skin",
+   "r": "s * 0.0085",
+   "sides": 5,
+   "around": {
+    "n": 3,
+    "r": "s * 0.008",
+    "plane": "xz",
+    "start": 40
+   },
+   "at": [
+    0,
+    "s * 0.046",
+    0
+   ]
+  },
+  {
+   "id": "tip",
+   "type": "sphere",
+   "material": "skin",
+   "r": "s * 0.0085",
+   "sides": 5,
+   "at": [
+    0,
+    "s * 0.034",
+    0
+   ]
+  },
+  {
+   "id": "core",
+   "type": "sphere",
+   "material": "skin",
+   "r": "s * 0.011",
+   "sides": 5,
+   "at": [
+    [
+     0,
+     "s * 0.085",
+     0
+    ],
+    [
+     0,
+     "s * 0.068",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "stem",
+   "type": "rod",
+   "material": "stem",
+   "from": [
+    0,
+    "s * 0.095",
+    0
+   ],
+   "to": [
+    0.006,
+    "s * 0.13",
+    0
+   ],
+   "r": 0.002,
+   "sides": 4
+  },
+  {
+   "id": "leaf 1",
+   "type": "plate",
+   "material": "vine-leaf",
+   "thick": 0.0008,
+   "at": [
+    0,
+    "s * 0.125",
+    0,
+    0,
+    70,
+    0
+   ],
+   "outline": [
+    [
+     "s * 0.0000",
+     "s * 0.0000"
+    ],
+    [
+     "s * 0.0250",
+     "s * 0.0150"
+    ],
+    [
+     "s * 0.0550",
+     "s * 0.0100"
+    ],
+    [
+     "s * 0.0450",
+     "s * 0.0400"
+    ],
+    [
+     "s * 0.0600",
+     "s * 0.0700"
+    ],
+    [
+     "s * 0.0300",
+     "s * 0.0650"
+    ],
+    [
+     "s * 0.0150",
+     "s * 0.1000"
+    ],
+    [
+     "s * 0.0000",
+     "s * 0.0850"
+    ],
+    [
+     "s * -0.0150",
+     "s * 0.1000"
+    ],
+    [
+     "s * -0.0300",
+     "s * 0.0650"
+    ],
+    [
+     "s * -0.0600",
+     "s * 0.0700"
+    ],
+    [
+     "s * -0.0450",
+     "s * 0.0400"
+    ],
+    [
+     "s * -0.0550",
+     "s * 0.0100"
+    ],
+    [
+     "s * -0.0250",
+     "s * 0.0150"
+    ]
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.03",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

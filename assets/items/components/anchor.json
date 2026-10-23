@@ -1,0 +1,114 @@
+{
+ "kind": "item",
+ "name": "Anchor",
+ "category": "component",
+ "_about": "an anchor h tall hanging by its ring at the origin: a shank, two curved arms with flukes, a wooden stock across the top",
+ "params": {
+  "h": 2.2
+ },
+ "materials": {
+  "metal": "iron",
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "ring",
+   "type": "ring",
+   "material": "metal",
+   "r": "h * 0.07",
+   "tube": "h * 0.012",
+   "at": [
+    0,
+    "-h * 0.07",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "shank",
+   "type": "rod",
+   "material": "metal",
+   "from": [
+    0,
+    "-h * 0.12",
+    0
+   ],
+   "to": [
+    0,
+    "-h",
+    0
+   ],
+   "r": "h * 0.02"
+  },
+  {
+   "id": "arm",
+   "type": "sweep",
+   "material": "metal",
+   "path": [
+    [
+     0,
+     "-h",
+     0
+    ],
+    [
+     "h * 0.18",
+     "-h * 0.96",
+     0
+    ],
+    [
+     "h * 0.34",
+     "-h * 0.8",
+     0
+    ]
+   ],
+   "r": "h * 0.02",
+   "mirror": "x"
+  },
+  {
+   "id": "fluke",
+   "type": "plate",
+   "material": "metal",
+   "thick": "h * 0.012",
+   "at": [
+    "h * 0.34",
+    "-h * 0.8",
+    0
+   ],
+   "outline": [
+    [
+     0,
+     0
+    ],
+    [
+     "-h * 0.12",
+     "-h * 0.1"
+    ],
+    [
+     "h * 0.02",
+     "-h * 0.16"
+    ]
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "stock",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "h * 0.55",
+    "h * 0.045",
+    "h * 0.045"
+   ],
+   "at": [
+    0,
+    "-h * 0.2",
+    0,
+    90,
+    0,
+    0
+   ]
+  }
+ ]
+}

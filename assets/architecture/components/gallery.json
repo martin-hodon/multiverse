@@ -1,0 +1,146 @@
+{
+  "name": "Gallery wing",
+  "_about": "A GALLERY WING: a long one-storey hall of round-arched windows on both long sides, a flat roof walked on as a terrace, a balustrade along both its edges -- the Zwinger's Langgalerie, an orangery, a cloister walk. `n` windows on a side, `L` long, `D` deep, `H` tall; the pattern centres itself on the face. With `sill` 0 its openings are arches to the ground: an arcaded loggia. A door at each end, into whatever stands there (the Zwinger's pavilions).",
+  "params": {
+    "detail": 4,
+    "L": 40,
+    "D": 9,
+    "H": 8,
+    "n": 9,
+    "winW": 2.6,
+    "t": 0.9,
+    "slab": 0.7,
+    "sill": 0.9,
+    "arch": "semicircular",
+    "_sill": "the openings' sill: 0.9 for a gallery's windows, 0 for an open arcade (a loggia)",
+    "terrace": 1,
+    "_terrace": "1: its roof is a terrace, walked (reached from the pavilions at its ends); 0: a roof"
+  },
+  "build": [
+    "walls",
+    "roof",
+    "balustrade"
+  ],
+  "parts": {
+    "walls": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "L",
+          "D"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "faces": {
+        "0": {
+          "pattern": "n",
+          "width": "winW",
+          "gap": "(L - 2 - n * winW) / n",
+          "pier": "(L - 2 - n * winW) / n",
+          "sill": "sill",
+          "springing": "H - winW / 2 - 1.2",
+          "head": {
+            "profile": "arch",
+            "spread": 1.0
+          }
+        },
+        "2": {
+          "pattern": "n",
+          "width": "winW",
+          "gap": "(L - 2 - n * winW) / n",
+          "pier": "(L - 2 - n * winW) / n",
+          "sill": "sill",
+          "springing": "H - winW / 2 - 1.2",
+          "head": {
+            "profile": "arch",
+            "spread": 1.0
+          }
+        },
+        "1": [
+          {
+            "at": 0,
+            "width": "min(2.4, D - 2 * t - 0.6)",
+            "sill": 0,
+            "springing": "min(3.4, H - 1.8)",
+            "head": {
+              "profile": "semicircular"
+            },
+            "glass": false
+          }
+        ],
+        "3": [
+          {
+            "at": 0,
+            "width": "min(2.4, D - 2 * t - 0.6)",
+            "sill": 0,
+            "springing": "min(3.4, H - 1.8)",
+            "head": {
+              "profile": "semicircular"
+            },
+            "glass": false
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "roof": {
+      "type": "box",
+      "width": "L + 0.6",
+      "length": "D + 0.6",
+      "height": "slab",
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "walked": "terrace"
+    },
+    "balustrade": {
+      "type": "colonnade",
+      "order": "tuscan",
+      "count": "L / 0.5",
+      "spacing": 0.5,
+      "columnR": 0.09,
+      "height": 0.8,
+      "taper": 0.6,
+      "base": {
+        "h": 0.06,
+        "r": 0.11
+      },
+      "capital": {
+        "h": 0.08,
+        "r": 0.11
+      },
+      "entablature": {
+        "h": 0.14,
+        "depth": 0.32
+      },
+      "at": [
+        [
+          0,
+          "H + slab",
+          "D / 2 + 0.05",
+          0
+        ],
+        [
+          0,
+          "H + slab",
+          "0 - D / 2 - 0.05",
+          0
+        ]
+      ],
+      "sides": 6
+    }
+  }
+}

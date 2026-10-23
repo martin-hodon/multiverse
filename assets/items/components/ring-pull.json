@@ -1,0 +1,56 @@
+{
+ "kind": "item",
+ "name": "Ring pull",
+ "category": "component",
+ "_about": "a hanging ring pull on its round back plate (brass, iron), on a face looking +z",
+ "params": {
+  "r": 0.02
+ },
+ "materials": {
+  "metal": "brass"
+ },
+ "parts": [
+  {
+   "id": "rose",
+   "type": "lathe",
+   "material": "metal",
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ],
+   "profile": [
+    [
+     "r * 0.7",
+     0
+    ],
+    [
+     "r * 0.6",
+     "r * 0.2"
+    ],
+    [
+     0,
+     "r * 0.3"
+    ]
+   ]
+  },
+  {
+   "id": "ring",
+   "type": "ring",
+   "material": "metal",
+   "r": "r",
+   "tube": "r * 0.12",
+   "at": [
+    0,
+    "0 - r * 0.85",
+    "r * 0.15",
+    0,
+    90,
+    0
+   ]
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Sacre-Coeur",
+  "building": "architecture/sacre-coeur",
+  "_about": "Sacre-Coeur: white Chateau-Landon travertine, domes and all; inside, the apse's gold mosaic, pale stone, the floor in grey and white marble.",
+  "stone": {
+    "color": "#f1eee6",
+    "accent": "#dedad0",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:railing", "color": "#2e2f31", "accent": "#1f2022", "_about": "iron railings"},
+    {"parts": "statues", "color": "#5d6b5a"},
+    {"parts": ["kind:dome", "kind:vault"], "surface": "roof", "pattern": "stone/ashlar fine", "palette": "carrara"},
+    {"parts": "apse", "side": "in", "pattern": "painted/gold mosaic"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "limestone"},
+    {"surface": "wall", "side": "in", "pattern": "stone/ashlar fine", "palette": "limestone"},
+    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "carrara", "_about": "Chateau-Landon stone: it whitens as it weathers"}
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "_about": "THE HUMAN CANON, every measure as a fraction of the STATURE (h). This is where a person's proportions are fine-tuned -- the numbers themselves, not the code that builds from them (people.js). A figure is a stature and a build; everything else is here. The numbers are UNISEX: the means of men and women, each taken against their own stature -- segment lengths after Drillis & Contini (1966, the ratios in Winter's Biomechanics), breadths, depths and girths after the ANSUR II survey (2012); a person's sex moves a few widths by the factors under `build.sex`, a child's age its head, hips and legs.",
+  "kind": "body",
+
+  "stature": {
+    "_about": "how tall each kind comes out: the low end and the span above it, in metres",
+    "man": [1.68, 0.24], "woman": [1.55, 0.18], "child10": [1.32, 0.14], "child5": [1.02, 0.12]
+  },
+  "build": {
+    "_about": "widths: a random spread (every width of the body), a child's own factor, then a beast's; then the sex factors on the widths each one moves",
+    "child": 0.9, "spread": [0.92, 0.16],
+    "sex": {
+      "_about": "against the unisex mean, per stature: biacromial .231 / .225, hip breadth .202 / .226, thigh girth .351 / .387, chest depth .145 / .150 (men / women, ANSUR II)",
+      "male": { "shoulders": 1.02, "waist": 1.02, "hips": 0.95, "thighs": 0.96, "bust": 1.0 },
+      "female": { "shoulders": 0.98, "waist": 0.96, "hips": 1.06, "thighs": 1.05, "bust": 1.05 }
+    }
+  },
+
+  "head": {
+    "_about": "the CRANIUM's radius, which every other measure of the head and its hair is taken in. A head is .131 of the stature from chin to crown but only .089 across and .113 deep; a cross-section here is a circle, so the sphere is cut between the width and the depth (.1 across), and the jaw below it makes up the height: 1 + jawLength + jawRadius cranium radii.",
+    "r": { "adult": 0.053, "child10": 0.0645, "child5": 0.075 },
+    "jawLength": 0.66, "jawRadius": 0.82,
+    "_jaw": "in cranium radii: how far the head runs on below the skull, and how much it has narrowed by",
+    "neckRadius": { "adult": 0.64, "child": 0.52, "beast": 0.8 },
+    "_neckRadius": "in cranium radii: .034 of the stature on an adult (a neck girth of .21)"
+  },
+
+  "torso": {
+    "_about": "ONE shape from the crotch to the collar: a round cone flattened front to back, its top a low, squared cap -- the shoulders -- and its bottom a rounder one. The arms hang BESIDE it, clear of it all the way down, so a bodice and a sleeve are two separate sheets that meet at the shoulder.",
+    "hip": { "adult": 0.52, "child10": 0.49, "child5": 0.45 },
+    "_hip": "the hip JOINT (the femur's head), just under the greater trochanter at .53",
+    "shoulder": { "fromCrown": 0.10, "heads": 1.6 },
+    "_shoulder": "the acromion: h - 1.6 cranium radii - .10 h, which is .815 h for an adult and lower on a child's bigger head",
+    "pelvis": 0.06,
+    "_pelvis": "the root bone, up the torso from the hip joint, as a fraction of the hip-to-shoulder length",
+    "waist": 0.34,
+    "_waist": "the natural waist (.62 of the stature), as that same fraction: the torso's narrowest ring, where a skirt or a belt sits",
+    "armpit": 0.07,
+    "_armpit": "the armpit this far below the acromion: where the shoulders' flare has come in to the chest",
+    "rim": 0.01,
+    "_rim": "the shoulders' edge -- the widest ring of the torso's top -- this far below the acromion",
+    "collar": 0.034,
+    "_collar": "the top of the shoulder cap, where the neck leaves it, this far above the acromion (the cervicale stands at .853)",
+    "base": 0.012,
+    "_base": "the centre of the torso's bottom ring this far above the hip joint",
+    "crotch": 0.042,
+    "_crotch": "the crotch this far below the hip joint (.478 of the stature)",
+    "halfWidth": { "shoulder": 0.098, "chest": 0.089, "waist": 0.082, "hip": 0.104 },
+    "_halfWidth": "the torso without its arms: at the shoulders' rim (over the shoulder joints, as the deltoid is), the chest under the armpits (.18 across), the natural waist (.165) and the hips (.21, the hip breadth)",
+    "depth": 0.74,
+    "_depth": "the torso's depth as a fraction of its width: chest .147 deep against .184 across",
+    "capSquare": 2.4,
+    "_capSquare": "how square the shoulders are: the top cap is a superellipse of this exponent (2 is an ellipse, round shoulders; 4 a box)",
+    "clothThickness": 0.012
+  },
+
+  "arm": { "upper": 0.17, "fore": 0.146, "rUpper": 0.031, "rElbow": 0.026, "rFore": 0.024, "rWrist": 0.016, "rHand": 0.027, "hand": 0.075,
+    "drop": -0.006, "gap": 0.002, "abduction": 2,
+    "_about": "joint to joint: shoulder .80, elbow .63, wrist .485; girths .03 (the deltoid), .026 at the elbow, the forearm .024 to the wrist .016. The shoulder joint stands `drop` under the torso's rim, `gap` clear of the chest below the shoulders' flare (which covers the joint, as the deltoid does); the arm hangs `abduction` degrees out from the vertical, which keeps its shaft off the chest and the hips.",
+    "_hand": "a real hand is .108 of the stature long (the wrist at .485 h, the fingertips at .377): a flattened pill down the forearm, no fingers at this scale" },
+
+  "leg": { "ankle": 0.039, "upperShare": 0.49, "rThigh": 0.05, "rKnee": 0.035, "rAnkle": 0.021, "rFoot": 0.026, "foot": 0.15, "hipZ": 0.05,
+    "_about": "hip joint .52, knee .285, ankle .039 of the stature; the thigh .05 at the top (a girth of .31), the knee .035, the ankle .021; the hip joints .05 either side of the middle, so the thighs meet; the foot .15 long" }
+}

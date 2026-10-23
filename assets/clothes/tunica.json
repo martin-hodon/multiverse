@@ -1,0 +1,42 @@
+{
+  "name": "Tunica",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "the Roman tunica: two widths of wool sewn at the shoulders and sides, short sleeves, girded, to the knee (a woman's to the feet, under her stola)",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "wool-white"
+    }
+  },
+  "params": {
+    "length": "knee - 0.02",
+    "sleeve": "biceps"
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip",
+        "neckline": "round",
+        "neckFront": 0.03,
+        "neckBack": 0.01,
+        "neckWidth": 60
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "sleeve"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip - 0.005",
+        "to": "length",
+        "flare": 0.22
+      }
+    }
+  ]
+}

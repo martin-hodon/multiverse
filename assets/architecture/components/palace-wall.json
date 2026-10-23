@@ -1,0 +1,14 @@
+{
+  "name": "Palace wall",
+  "_about": "A CHINESE COURT WALL: a plastered wall (red, as round a temple or a palace) with a coping of glazed tiles on it -- a little gable roof, curved like a hall's, reaching over both faces. `L` long along z, `T` thick, `H` tall to the coping's eave; turn it a quarter for a wall along x.",
+  "params": { "detail": 4, "L": 40, "T": 1.2, "H": 3.8, "over": 0.45, "pitch": 30 },
+  "build": ["wall", "coping", "ridge"],
+  "parts": {
+    "wall": { "type": "box", "width": "T", "length": "L", "height": "H", "at": [[0, 0, 0, 0]] },
+    "coping": { "type": "roof", "form": "gable", "width": "T", "length": "L", "pitch": "pitch", "overhang": "over", "lo": 0.35, "hi": 1.1,
+                "at": [[0, "H + over * sin(pitch * 0.0174533) / cos(pitch * 0.0174533)", 0, 0]], "standsOn": ["wall"],
+                "_about": "its eave down on the wall's top, carried out over both faces" },
+    "ridge": { "type": "box", "width": 0.3, "length": "L + 2 * over", "height": 0.35,
+               "at": [[0, "H + over * sin(pitch * 0.0174533) / cos(pitch * 0.0174533) + T / 2 * sin(pitch * 0.0174533) / cos(pitch * 0.0174533) - 0.12", 0, 0]], "standsOn": ["coping"] }
+  }
+}

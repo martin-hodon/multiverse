@@ -1,0 +1,240 @@
+{
+ "kind": "item",
+ "name": "Cog",
+ "category": "ship",
+ "era": "1200-1450",
+ "region": "the Hanseatic north",
+ "_about": "the Hansa's cog: a flat bottom, straight raked stem and sternpost, high clinker sides, a stern rudder on the sternpost, one great square sail, a castle raised over the stern and a smaller over the bow",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   20,
+   26
+  ],
+  "B": "L * 0.31",
+  "D": "B * 0.55",
+  "mastH": "L * 0.85"
+ },
+ "materials": {
+  "planks": "planks",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.8,
+   "plan": [
+    [
+     0,
+     0.06
+    ],
+    [
+     0.12,
+     0.6
+    ],
+    [
+     0.4,
+     1
+    ],
+    [
+     0.6,
+     1
+    ],
+    [
+     0.88,
+     0.6
+    ],
+    [
+     1,
+     0.05
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.45"
+    ],
+    [
+     0.12,
+     0
+    ],
+    [
+     0.88,
+     0
+    ],
+    [
+     1,
+     "D * 0.45"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.15"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.2"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.85",
+     "from": 0.04,
+     "to": 0.96
+    }
+   ],
+   "rail": 0.09,
+   "keelBeam": [
+    0.3,
+    0.3
+   ],
+   "postRise": "D * 0.05"
+  },
+  {
+   "id": "aftcastle",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.9",
+    "d": "L * 0.22",
+    "h": "D * 0.5",
+    "rail": 1.1,
+    "posts": 1
+   },
+   "at": [
+    "L * 0.02",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "forecastle",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.6",
+    "d": "L * 0.1",
+    "h": "D * 0.35",
+    "rail": 0.9,
+    "posts": 1
+   },
+   "at": [
+    "L * 0.86",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 1.1",
+    "w": "B * 0.09",
+    "tiller": "L * 0.12"
+   },
+   "at": [
+    0,
+    "D * 1.0",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.5",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.24,
+    "top": "crowsnest",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.85 + mastH * 0.86",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.55",
+    "h": "mastH * 0.58",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.07"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.85 + mastH * 0.86",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "anchor",
+   "use": "items/components/anchor",
+   "params": {
+    "h": "D * 0.5"
+   },
+   "at": [
+    "L * 0.9",
+    "D * 1.05",
+    "B * 0.5"
+   ]
+  },
+  {
+   "id": "stay L * 0.5-L * 0.97",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.85 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.97",
+    "D * 1.35",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.5-L * 0.03",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.85 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.03",
+    "D * 1.7",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ]
+}

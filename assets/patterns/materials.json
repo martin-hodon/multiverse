@@ -1,0 +1,151 @@
+{
+ "name": "Materials",
+ "_about": "the surfaces of things made by hand -- paint, metal, lacquer, horn: what the items (assets/items) are made of, beside the timber, stone and fabric families",
+ "patterns": {
+  "paint": {
+   "size": [
+    0.5,
+    0.5
+   ],
+   "palette": "gules-or",
+   "_about": "a painted surface: its colour, a faint brushing",
+   "layers": [
+    {
+     "field": "cloud",
+     "colors": [
+      0,
+      0
+     ],
+     "freq": 3,
+     "amount": 0.12
+    }
+   ]
+  },
+  "metal": {
+   "size": [
+    0.4,
+    0.2
+   ],
+   "palette": "steel",
+   "palettes": [
+    "iron",
+    "bronze",
+    "brass",
+    "silver",
+    "gold"
+   ],
+   "_about": "worked metal: a polish drawn along u, a light and a dark streak",
+   "layers": [
+    {
+     "field": "grain",
+     "colors": [
+      0,
+      2
+     ],
+     "freq": 6,
+     "turns": 1,
+     "amount": 0.45
+    },
+    {
+     "field": "cloud",
+     "colors": [
+      0,
+      1
+     ],
+     "freq": 3,
+     "amount": 0.3,
+     "alpha": 0.6
+    }
+   ]
+  },
+  "hammered": {
+   "size": [
+    0.25,
+    0.25
+   ],
+   "palette": "iron",
+   "palettes": [
+    "bronze",
+    "copper",
+    "pewter"
+   ],
+   "_about": "forged iron: a mottle, the hammer's pits",
+   "layers": [
+    {
+     "field": "cloud",
+     "colors": [
+      0,
+      1
+     ],
+     "freq": 4,
+     "amount": 0.8
+    },
+    {
+     "field": "speckle",
+     "colors": [
+      0,
+      3
+     ],
+     "grain": 0.004,
+     "amount": 0.3,
+     "alpha": 0.5
+    }
+   ]
+  },
+  "lacquer": {
+   "size": [
+    0.6,
+    0.6
+   ],
+   "palette": "lacquer-red",
+   "palettes": [
+    "lacquer-black"
+   ],
+   "_about": "lacquered wood: deep and even, a faint cloud in the coats",
+   "layers": [
+    {
+     "field": "cloud",
+     "colors": [
+      0,
+      1
+     ],
+     "freq": 2,
+     "amount": 0.25
+    }
+   ]
+  },
+  "horn": {
+   "size": [
+    0.2,
+    0.1
+   ],
+   "palette": "horn",
+   "palettes": [
+    "ivory"
+   ],
+   "_about": "horn and bone: a grain along u, clouded",
+   "layers": [
+    {
+     "field": "grain",
+     "colors": [
+      0,
+      1
+     ],
+     "freq": 5,
+     "turns": 3,
+     "amount": 0.6
+    },
+    {
+     "field": "cloud",
+     "colors": [
+      0,
+      2
+     ],
+     "freq": 3,
+     "amount": 0.4,
+     "alpha": 0.6
+    }
+   ]
+  }
+ }
+}

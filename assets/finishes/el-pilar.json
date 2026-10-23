@@ -1,0 +1,27 @@
+{
+  "name": "El Pilar",
+  "building": "architecture/el-pilar",
+  "_about": "El Pilar: brick with stone trim, the cupolas in glazed tiles of blue, yellow, green and white, the roofs in red tiles; inside, frescoed cupolas and a marble floor.",
+  "stone": {
+    "color": "#a65f45",
+    "accent": "#8e4f39",
+    "pat": "brick"
+  },
+  "rules": [
+    {"parts": "kind:railing", "color": "#2e2f31", "accent": "#1f2022", "_about": "iron railings"},
+    {"parts": ["cornice", "piers", "wall piers", "portal"], "pattern": "stone/ashlar fine", "palette": "limestone"},
+    {"parts": ["kind:barrel", "kind:pendentives"], "color": "#e2d6c0", "accent": "#cdbfa6"},
+    {"parts": "central dome/dome", "surface": "roof", "pattern": "roofs/glazed diamonds", "palette": "el-pilar-green"},
+    {"parts": "nave cupolas/dome", "surface": "roof", "pattern": "roofs/glazed diamonds", "palette": "el-pilar"},
+    {"parts": "aisle cupolas/dome", "surface": "roof", "pattern": "roofs/glazed chevrons", "palette": "el-pilar"},
+    {"parts": ["climbed tower/cap", "towers/cap"], "surface": "roof", "pattern": "roofs/glazed diamonds", "palette": "el-pilar"},
+    {"parts": ["central dome/lantern/cap"], "pattern": "roofs/gold leaf"},
+    {"parts": ["nave cupolas/lantern/cap", "aisle cupolas/lantern/cap", "climbed tower/lantern/cap", "towers/lantern/cap"], "pattern": "roofs/glazed diamonds", "palette": "el-pilar-green"},
+    {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/coppi", "palette": "tile-red"},
+    {"parts": "kind:dome", "side": "in", "pattern": "stone/plaster", "palette": "baroque-rose"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "granite"},
+    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"surface": "wall", "pattern": "stone/brick", "palette": "brick"}
+  ]
+}

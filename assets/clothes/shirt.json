@@ -1,0 +1,28 @@
+{
+  "name": "Shirt",
+  "kind": "garment",
+  "layer": 0,
+  "_about": "a man's linen shirt next to the skin: to the hips, long sleeves, a round neck (it shows at the neck and the cuffs under a tunic)",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/linen",
+      "palette": "linen"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip + 0.04",
+        "neckline": "round",
+        "neckFront": 0.012
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist"
+      }
+    }
+  ]
+}

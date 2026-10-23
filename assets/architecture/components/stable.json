@@ -1,0 +1,387 @@
+{
+ "name": "Stable",
+ "_about": "a stable block: a stone plinth, boarded walls and a tiled gable roof, four 3 m stalls opening -z through half-doors with the hay showing over them; a stone water trough (a `trough` marker: tableware.js fills it), a hitching rail and stacked bales in the yard before it; `block` markers keep the horses out of the walls, the trough and the bales",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "floor": {
+   "type": "box",
+   "width": 12,
+   "length": 5,
+   "height": 0.12,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "plinth": {
+   "type": "box",
+   "width": 12,
+   "length": 0.3,
+   "height": 0.6,
+   "at": [
+    [
+     0,
+     0,
+     2.35,
+     0
+    ]
+   ]
+  },
+  "back wall": {
+   "type": "box",
+   "width": 12,
+   "length": 0.25,
+   "height": 2.0,
+   "at": [
+    [
+     0,
+     0.6,
+     2.375,
+     0
+    ]
+   ]
+  },
+  "end plinths": {
+   "type": "box",
+   "width": 0.3,
+   "length": 5,
+   "height": 0.6,
+   "at": [
+    [
+     -5.85,
+     0,
+     0,
+     0
+    ],
+    [
+     5.85,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "end walls": {
+   "type": "box",
+   "width": 0.25,
+   "length": 5,
+   "height": 2.0,
+   "at": [
+    [
+     -5.875,
+     0.6,
+     0,
+     0
+    ],
+    [
+     5.875,
+     0.6,
+     0,
+     0
+    ]
+   ]
+  },
+  "lintel": {
+   "type": "box",
+   "width": 12,
+   "length": 0.25,
+   "height": 0.25,
+   "at": [
+    [
+     0,
+     2.35,
+     -2.375,
+     0
+    ]
+   ]
+  },
+  "roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 5.9,
+   "length": 12.8,
+   "pitch": 35,
+   "overhang": 0.2,
+   "at": [
+    [
+     0,
+     2.6,
+     0,
+     "1.5707963"
+    ]
+   ],
+   "_about": "(a roof's ridge runs along its `length`, its own z: turned so it runs the block's 12 m, x)"
+  },
+  "stall posts": {
+   "type": "box",
+   "width": 0.22,
+   "length": 0.22,
+   "height": 2.6,
+   "at": [
+    [
+     -6.0,
+     0,
+     -2.39,
+     0
+    ],
+    [
+     -3.0,
+     0,
+     -2.39,
+     0
+    ],
+    [
+     0.0,
+     0,
+     -2.39,
+     0
+    ],
+    [
+     3.0,
+     0,
+     -2.39,
+     0
+    ],
+    [
+     6.0,
+     0,
+     -2.39,
+     0
+    ]
+   ]
+  },
+  "half-doors": {
+   "type": "box",
+   "width": 2.7,
+   "length": 0.08,
+   "height": 1.25,
+   "at": [
+    [
+     -4.5,
+     0,
+     -2.38,
+     0
+    ],
+    [
+     -1.5,
+     0,
+     -2.38,
+     0
+    ],
+    [
+     1.5,
+     0,
+     -2.38,
+     0
+    ],
+    [
+     4.5,
+     0,
+     -2.38,
+     0
+    ]
+   ]
+  },
+  "partitions": {
+   "type": "box",
+   "width": 0.08,
+   "length": 4.5,
+   "height": 2.3000000000000003,
+   "at": [
+    [
+     -3.0,
+     0.15,
+     0.1,
+     0
+    ],
+    [
+     0.0,
+     0.15,
+     0.1,
+     0
+    ],
+    [
+     3.0,
+     0.15,
+     0.1,
+     0
+    ]
+   ]
+  },
+  "hay": {
+   "type": "dome",
+   "sweep": 1,
+   "sides": 8,
+   "radius": 0.5,
+   "thickness": 0,
+   "head": {
+    "profile": "segmental",
+    "rise": 0.35
+   },
+   "at": [
+    [
+     -4.5,
+     0.7,
+     -1.5,
+     0
+    ],
+    [
+     -1.5,
+     0.7,
+     -1.5,
+     0
+    ],
+    [
+     1.5,
+     0.7,
+     -1.5,
+     0
+    ],
+    [
+     4.5,
+     0.7,
+     -1.5,
+     0
+    ]
+   ],
+   "_about": "the hay showing over each half-door: a low dome"
+  },
+  "trough": {
+   "_about": "out in the yard before the west stalls, clear of their doors (the horses pass between) -- it stood 1.8 m beyond the block's end, which in the stable yard is 0.8 m past its fence: the water outside the paddock",
+   "type": "marker",
+   "role": "trough",
+   "at": [
+    [
+     -4.6,
+     0,
+     -6.4,
+     0
+    ]
+   ],
+   "data": {
+    "fill": 0.6,
+    "drink": "water"
+   }
+  },
+  "hitching rail": {
+   "type": "box",
+   "width": 3.6,
+   "length": 0.1,
+   "height": 0.1,
+   "at": [
+    [
+     0,
+     0.95,
+     -4.9,
+     0
+    ]
+   ]
+  },
+  "hitching posts": {
+   "type": "box",
+   "width": 0.12,
+   "length": 0.12,
+   "height": 1.1,
+   "at": [
+    [
+     -1.5,
+     0,
+     -4.9,
+     0
+    ],
+    [
+     1.5,
+     0,
+     -4.9,
+     0
+    ]
+   ]
+  },
+  "bales": {
+   "type": "column",
+   "radius": 0.6,
+   "height": 1.2,
+   "sides": 10,
+   "at": [
+    [
+     4.6,
+     0,
+     -4.1,
+     0
+    ],
+    [
+     5.9,
+     0,
+     -4.1,
+     0
+    ],
+    [
+     5.25,
+     1.2,
+     -4.1,
+     0
+    ]
+   ]
+  },
+  "block": {
+   "type": "marker",
+   "role": "block",
+   "at": [
+    [
+     0,
+     0,
+     0.15,
+     0
+    ],
+    [
+     -4.6,
+     0,
+     -6.4,
+     0
+    ],
+    [
+     5.25,
+     0,
+     -4.1,
+     0
+    ]
+   ],
+   "data": {
+    "w": [
+     12.6,
+     2.8,
+     3.1
+    ],
+    "d": [
+     5.3,
+     1.2,
+     1.6
+    ]
+   }
+  }
+ },
+ "build": [
+  "floor",
+  "plinth",
+  "back wall",
+  "end plinths",
+  "end walls",
+  "lintel",
+  "roof",
+  "stall posts",
+  "half-doors",
+  "partitions",
+  "hay",
+  "trough",
+  "hitching rail",
+  "hitching posts",
+  "bales",
+  "block"
+ ]
+}

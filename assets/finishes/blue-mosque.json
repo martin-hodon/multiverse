@@ -1,0 +1,21 @@
+{
+  "name": "Blue Mosque",
+  "building": "architecture/blue-mosque",
+  "_about": "The Blue Mosque: grey cut stone, lead domes, gilt finials; inside, Iznik tiles to the galleries and stencilled blue arabesques above and in every dome, the floor covered in rows of prayer carpets, the court in marble.",
+  "stone": {
+    "color": "#bcb8ae",
+    "accent": "#a5a197",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["alem", "finial", "finials", "corner finials", "turret finials"], "pattern": "roofs/gold leaf"},
+    {"parts": ["kind:dome", "kind:vault"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"parts": ["minarets", "court minarets"], "surface": "wall", "pattern": "stone/ashlar fine", "palette": "limestone"},
+    {"parts": "hall", "surface": "wall", "side": "in", "below": 12, "pattern": "tiles/iznik carnation", "palette": "iznik"},
+    {"parts": "hall", "side": "in", "pattern": "painted/kalemisi", "palette": "iznik"},
+    {"surface": "floor", "side": "in", "pattern": "carpets/prayer rows", "palette": "carpet-red"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "marble-grey"},
+    {"surface": "wall", "side": "in", "pattern": "painted/kalemisi", "palette": "iznik"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "sandstone-grey"}
+  ]
+}

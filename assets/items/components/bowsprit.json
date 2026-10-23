@@ -1,0 +1,33 @@
+{
+ "kind": "item",
+ "name": "Bowsprit",
+ "category": "component",
+ "_about": "the spar over the stem, l long, `steeve` degrees above the horizontal, from the origin forward",
+ "params": {
+  "l": 12,
+  "r": 0.16,
+  "steeve": 22
+ },
+ "materials": {
+  "wood": "pine"
+ },
+ "parts": [
+  {
+   "id": "spar",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "l * cos(steeve * 0.017453)",
+    "l * sin(steeve * 0.017453)",
+    0
+   ],
+   "r0": "r",
+   "r1": "r * 0.55"
+  }
+ ]
+}

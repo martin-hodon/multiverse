@@ -1,0 +1,38 @@
+{
+  "name": "Mail shirt",
+  "kind": "garment",
+  "layer": 3,
+  "_about": "a hauberk: riveted mail over the gambeson, to mid-thigh, sleeves to the elbow",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/mail",
+      "palette": "steel"
+    }
+  },
+  "thick": 0.004,
+  "wear": 0,
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip",
+        "neckline": "round",
+        "neckFront": 0.012
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "elbow + 0.04"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip - 0.005",
+        "to": "thigh + 0.1",
+        "flare": 0.15
+      }
+    }
+  ]
+}

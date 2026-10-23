@@ -1,0 +1,66 @@
+{
+  "name": "Shenyi",
+  "kind": "garment",
+  "layer": 3,
+  "skirted": true,
+  "_about": "the shenyi, the Han 'deep robe': one long robe of silk, its collar crossed left over right and edged in black, great hanging sleeves, to the ankles",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "silk-red"
+    },
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "silk-black"
+    }
+  },
+  "params": {
+    "length": "ankle - 0.02",
+    "hem": 0.05
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "waist",
+        "neckline": "v",
+        "neckFront": 0.16,
+        "neckBack": 0.01,
+        "neckWidth": 30
+      }
+    },
+    {
+      "use": "clothes/components/strip",
+      "params": {
+        "from": "collar",
+        "to": "waist",
+        "centre": -18,
+        "span": 14
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "biceps + 0.02"
+      }
+    },
+    {
+      "use": "clothes/components/bell-sleeve",
+      "params": {
+        "from": "biceps",
+        "to": "knuckles",
+        "flare": 0.42,
+        "hem": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "length",
+        "flare": 0.22,
+        "hem": "hem"
+      }
+    }
+  ]
+}

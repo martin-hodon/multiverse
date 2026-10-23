@@ -1,0 +1,561 @@
+{
+  "name": "Shapes",
+  "_about": "THE ALPHABET: one pattern for each shape of the language and each way of multiplying one -- a grid, rows set off by half, a symmetry, a mirror, a clip, another pattern used inside a shape, a field. Every other family is written with these. Coordinates are metres on the tile, from its middle, y up; a colour is a palette SLOT.",
+  "patterns": {
+    "dots": {
+      "size": [
+        0.3,
+        0.3
+      ],
+      "palette": "iznik",
+      "palettes": [
+        "azulejo",
+        "gold-mosaic",
+        "carpet-red"
+      ],
+      "layers": [
+        {
+          "shape": "circle",
+          "r": 0.05,
+          "fill": 1,
+          "grid": [
+            2,
+            2
+          ],
+          "_about": "a grid: two by two copies over the tile"
+        }
+      ]
+    },
+    "offset dots": {
+      "size": [
+        0.3,
+        0.3
+      ],
+      "palette": "iznik",
+      "palettes": [
+        "zellige",
+        "russian"
+      ],
+      "layers": [
+        {
+          "shape": "circle",
+          "r": 0.045,
+          "fill": 1,
+          "grid": {
+            "n": [
+              2,
+              2
+            ],
+            "offset": 0.5
+          },
+          "_about": "every other row set off by half a step"
+        },
+        {
+          "shape": "ring",
+          "r": 0.06,
+          "w": 0.012,
+          "fill": 2,
+          "grid": {
+            "n": [
+              2,
+              2
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "polygons": {
+      "size": [
+        0.52,
+        0.3
+      ],
+      "palette": "zellige",
+      "palettes": [
+        "azulejo",
+        "stone"
+      ],
+      "layers": [
+        {
+          "shape": "poly",
+          "n": 6,
+          "r": 0.16,
+          "rot": 30,
+          "fill": 1,
+          "stroke": 4,
+          "line": 0.012,
+          "grid": {
+            "n": [
+              2,
+              2
+            ],
+            "offset": 0.5
+          },
+          "_about": "hexagons: a polygon of six, rows set off"
+        }
+      ]
+    },
+    "stars": {
+      "size": [
+        0.3,
+        0.3
+      ],
+      "palette": "zellige",
+      "palettes": [
+        "iznik",
+        "gold-mosaic"
+      ],
+      "layers": [
+        {
+          "shape": "star",
+          "n": 8,
+          "r": 0.15,
+          "inner": 0.62,
+          "fill": 1
+        },
+        {
+          "shape": "star",
+          "n": 8,
+          "r": 0.09,
+          "inner": 0.6,
+          "rot": 22.5,
+          "fill": 3
+        },
+        {
+          "shape": "rect",
+          "w": 0.07,
+          "rot": 45,
+          "fill": 2,
+          "at": [
+            0.15,
+            0.15
+          ]
+        }
+      ]
+    },
+    "rosette": {
+      "size": [
+        0.3,
+        0.3
+      ],
+      "palette": "iznik",
+      "palettes": [
+        "kashan",
+        "russian",
+        "carpet-blue"
+      ],
+      "layers": [
+        {
+          "shape": "petals",
+          "n": 8,
+          "r": 0.13,
+          "inner": 0.02,
+          "w": 0.035,
+          "fill": 1,
+          "_about": "eight lenses round a centre"
+        },
+        {
+          "shape": "petals",
+          "n": 8,
+          "r": 0.08,
+          "inner": 0.02,
+          "w": 0.022,
+          "rot": 22.5,
+          "fill": 2
+        },
+        {
+          "shape": "circle",
+          "r": 0.03,
+          "fill": 3
+        },
+        {
+          "shape": "ring",
+          "r": 0.145,
+          "w": 0.008,
+          "fill": 5
+        }
+      ]
+    },
+    "quatrefoil": {
+      "size": [
+        0.25,
+        0.25
+      ],
+      "palette": "azulejo",
+      "palettes": [
+        "iznik",
+        "marble-bw"
+      ],
+      "layers": [
+        {
+          "shape": "circle",
+          "r": 0.045,
+          "at": [
+            0.045,
+            0
+          ],
+          "sym": 4,
+          "fill": 1,
+          "_about": "one circle, turned four times about the middle"
+        },
+        {
+          "shape": "circle",
+          "r": 0.03,
+          "fill": 3
+        },
+        {
+          "shape": "rect",
+          "w": 0.03,
+          "rot": 45,
+          "fill": 2,
+          "at": [
+            0.125,
+            0.125
+          ]
+        }
+      ]
+    },
+    "lenses": {
+      "size": [
+        0.24,
+        0.24
+      ],
+      "palette": "russian",
+      "palettes": [
+        "iznik",
+        "carpet-red"
+      ],
+      "layers": [
+        {
+          "shape": "lens",
+          "r": 0.05,
+          "w": 0.028,
+          "at": [
+            0.055,
+            0
+          ],
+          "sym": 4,
+          "fill": 2,
+          "_about": "a lens set out from the middle and turned four times: a cross of leaves"
+        },
+        {
+          "shape": "circle",
+          "r": 0.018,
+          "fill": 3
+        }
+      ]
+    },
+    "crosses": {
+      "size": [
+        0.3,
+        0.3
+      ],
+      "palette": "marble-bw",
+      "palettes": [
+        "florence",
+        "porphyry"
+      ],
+      "layers": [
+        {
+          "shape": "cross",
+          "w": 0.12,
+          "t": 0.035,
+          "fill": 1,
+          "grid": {
+            "n": [
+              2,
+              2
+            ],
+            "offset": 0.5
+          }
+        }
+      ]
+    },
+    "waves": {
+      "size": [
+        0.6,
+        0.2
+      ],
+      "palette": "azulejo",
+      "palettes": [
+        "glazed-blue",
+        "fresco"
+      ],
+      "layers": [
+        {
+          "shape": "wave",
+          "amp": 0.03,
+          "h": 0.03,
+          "n": 2,
+          "fill": 1,
+          "_about": "a band swinging twice across the tile"
+        },
+        {
+          "shape": "wave",
+          "amp": 0.03,
+          "h": 0.01,
+          "n": 2,
+          "fill": 2,
+          "at": [
+            0,
+            0.1
+          ]
+        }
+      ]
+    },
+    "chevrons": {
+      "size": [
+        0.4,
+        0.2
+      ],
+      "palette": "stephansdom",
+      "palettes": [
+        "russian",
+        "kilim",
+        "el-pilar"
+      ],
+      "layers": [
+        {
+          "shape": "zigzag",
+          "amp": 0.05,
+          "h": 0.07,
+          "n": 2,
+          "fill": 1,
+          "at": [
+            0,
+            -0.05
+          ]
+        },
+        {
+          "shape": "zigzag",
+          "amp": 0.05,
+          "h": 0.03,
+          "n": 2,
+          "fill": 2,
+          "at": [
+            0,
+            0.05
+          ]
+        }
+      ]
+    },
+    "scales": {
+      "size": [
+        0.3,
+        0.3
+      ],
+      "palette": "slate",
+      "palettes": [
+        "tile-red",
+        "glazed-green",
+        "lead"
+      ],
+      "layers": [
+        {
+          "shape": "circle",
+          "r": 0.085,
+          "fill": 1,
+          "stroke": 3,
+          "line": 0.008,
+          "vary": 0.08,
+          "grid": {
+            "n": [
+              2,
+              4
+            ],
+            "offset": 0.5
+          },
+          "_about": "fish scales: circles in rows set off by half, each lower row drawn over the one above"
+        }
+      ]
+    },
+    "leaves": {
+      "size": [
+        0.3,
+        0.3
+      ],
+      "palette": "russian",
+      "palettes": [
+        "iznik",
+        "caihua"
+      ],
+      "layers": [
+        {
+          "shape": "path",
+          "d": "M 0 0 C 0.03 0.03 0.07 0.05 0.11 0.02 C 0.07 -0.02 0.03 -0.02 0 0 Z",
+          "fill": 2,
+          "sym": 5,
+          "_about": "a leaf drawn as a path (SVG syntax, metres), turned five times"
+        },
+        {
+          "shape": "circle",
+          "r": 0.018,
+          "fill": 3
+        }
+      ]
+    },
+    "clip": {
+      "size": [
+        0.4,
+        0.4
+      ],
+      "palette": "florence",
+      "palettes": [
+        "marble-bw",
+        "porphyry"
+      ],
+      "layers": [
+        {
+          "clip": {
+            "shape": "circle",
+            "r": 0.16
+          },
+          "layers": [
+            {
+              "shape": "band",
+              "h": 0.025,
+              "fill": 1,
+              "grid": [
+                1,
+                8
+              ],
+              "rot": 45
+            }
+          ],
+          "_about": "a group clipped by a circle: the stripes exist only inside it"
+        },
+        {
+          "shape": "ring",
+          "r": 0.17,
+          "w": 0.015,
+          "fill": 2
+        }
+      ]
+    },
+    "use": {
+      "size": [
+        0.6,
+        0.6
+      ],
+      "palette": "iznik",
+      "palettes": [
+        "kashan",
+        "zellige"
+      ],
+      "layers": [
+        {
+          "shape": "rect",
+          "w": 0.5,
+          "h": 0.5,
+          "use": "shapes/rosette",
+          "useScale": 0.5,
+          "_about": "another pattern (the rosette, at half its size) filling a square"
+        },
+        {
+          "shape": "rect",
+          "w": 0.5,
+          "h": 0.5,
+          "stroke": 1,
+          "line": 0.02
+        }
+      ]
+    },
+    "mirror": {
+      "size": [
+        0.4,
+        0.4
+      ],
+      "palette": "caihua",
+      "palettes": [
+        "chinese-red",
+        "russian"
+      ],
+      "layers": [
+        {
+          "shape": "path",
+          "d": "M 0.02 0.02 C 0.08 0.02 0.12 0.06 0.1 0.12 C 0.08 0.16 0.04 0.14 0.05 0.1",
+          "stroke": 2,
+          "line": 0.014,
+          "cap": "round",
+          "mirror": "xy",
+          "_about": "a curl, mirrored both ways: a scroll with four arms"
+        },
+        {
+          "shape": "circle",
+          "r": 0.025,
+          "fill": 3
+        }
+      ]
+    },
+    "veins": {
+      "size": [
+        1.2,
+        1.2
+      ],
+      "palette": "carrara",
+      "palettes": [
+        "marble-grey",
+        "marble-rose"
+      ],
+      "layers": [
+        {
+          "field": "veins",
+          "colors": [
+            0,
+            2
+          ],
+          "turns": 2,
+          "amount": 0.9,
+          "_about": "a field: marble's veins, a function of the point",
+          "freq": 2
+        }
+      ]
+    },
+    "cloud": {
+      "size": [
+        1.0,
+        1.0
+      ],
+      "palette": "plaster-ochre",
+      "palettes": [
+        "plaster-white",
+        "sandstone"
+      ],
+      "layers": [
+        {
+          "field": "cloud",
+          "colors": [
+            0,
+            2
+          ],
+          "amount": 1.2,
+          "freq": 3
+        }
+      ]
+    },
+    "speckle": {
+      "size": [
+        0.6,
+        0.6
+      ],
+      "palette": "granite",
+      "palettes": [
+        "granite-red",
+        "travertine"
+      ],
+      "layers": [
+        {
+          "field": "speckle",
+          "colors": [
+            0,
+            3,
+            2
+          ],
+          "grain": 0.007,
+          "amount": 1,
+          "_about": "granite: dark and pale grains, 7mm, in a mottled ground"
+        }
+      ]
+    }
+  }
+}

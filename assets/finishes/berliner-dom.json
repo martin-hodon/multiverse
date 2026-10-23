@@ -1,0 +1,22 @@
+{
+  "name": "Berliner Dom",
+  "building": "architecture/berliner-dom",
+  "_about": "The Berliner Dom: Silesian sandstone, the domes in green copper, the crosses gilt; inside, gold mosaic in the dome, faux marble walls, a grey chequered floor.",
+  "stone": {
+    "color": "#c4b89c",
+    "accent": "#aea286",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["finial", "cross"], "pattern": "roofs/gold leaf"},
+    {"parts": "kind:ribs", "color": "#7fb095"},
+    {"parts": "statues", "color": "#8a8272"},
+    {"parts": "pediment", "pattern": "stone/ashlar", "palette": "sandstone-grey"},
+    {"parts": ["kind:dome", "cap"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
+    {"parts": "dome/dome", "side": "in", "pattern": "painted/gold mosaic", "_about": "the dome shell inside"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone-grey"},
+    {"surface": "wall", "side": "in", "pattern": "painted/faux marble", "palette": "baroque"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "sandstone-grey"}
+  ]
+}

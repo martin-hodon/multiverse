@@ -1,0 +1,169 @@
+{
+ "kind": "item",
+ "name": "Armoire",
+ "category": "furniture/storage",
+ "era": "1650-1780",
+ "region": "France & the Low Countries",
+ "_about": "the great Baroque wardrobe: two tall panelled doors between fluted pilasters, a deep moulded cornice, a drawer in its base, on bun feet",
+ "params": {
+  "w": [
+   1.6,
+   1.9
+  ],
+  "d": 0.62,
+  "h": [
+   2.1,
+   2.3
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "oak",
+    "cherry"
+   ]
+  },
+  "metal": "brass"
+ },
+ "parts": [
+  {
+   "id": "case",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    "h - 0.3",
+    "d"
+   ],
+   "at": [
+    0,
+    "0.12 + (h - 0.3) / 2",
+    0
+   ]
+  },
+  {
+   "id": "doors",
+   "use": "items/components/panel-door",
+   "params": {
+    "w": "w / 2 - 0.12",
+    "h": "h - 0.62",
+    "s": 0.08,
+    "side": 1
+   },
+   "at": [
+    [
+     "0 - w / 4 + 0.03",
+     "0.3 + (h - 0.62) / 2 + 0.02",
+     "d / 2 + 0.001"
+    ],
+    [
+     "w / 4 - 0.03",
+     "0.3 + (h - 0.62) / 2 + 0.02",
+     "d / 2 + 0.001",
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "pilasters",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.08,
+    "h - 0.5",
+    0.03
+   ],
+   "at": [
+    [
+     "0 - w / 2 + 0.05",
+     "0.25 + (h - 0.5) / 2",
+     "d / 2 + 0.015"
+    ],
+    [
+     "w / 2 - 0.05",
+     "0.25 + (h - 0.5) / 2",
+     "d / 2 + 0.015"
+    ]
+   ]
+  },
+  {
+   "id": "drawer",
+   "use": "items/components/drawer",
+   "params": {
+    "w": "w - 0.2",
+    "h": 0.14,
+    "pull": "ring"
+   },
+   "at": [
+    0,
+    0.2,
+    "d / 2 + 0.001"
+   ]
+  },
+  {
+   "id": "cornice",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.16",
+    0.1,
+    "d + 0.12"
+   ],
+   "round": 0.015,
+   "at": [
+    0,
+    "h - 0.13",
+    0.03
+   ]
+  },
+  {
+   "id": "cornice top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.22",
+    0.07,
+    "d + 0.16"
+   ],
+   "round": 0.02,
+   "at": [
+    0,
+    "h - 0.04",
+    0.04
+   ]
+  },
+  {
+   "id": "feet",
+   "use": "items/components/bun-foot",
+   "params": {
+    "h": 0.12,
+    "r": 0.07
+   },
+   "at": [
+    [
+     "0 - w / 2 - 0.08",
+     0,
+     "0 - d / 2 - 0.08"
+    ],
+    [
+     "w / 2 - 0.08",
+     0,
+     "0 - d / 2 - 0.08"
+    ],
+    [
+     "0 - w / 2 - 0.08",
+     0,
+     "d / 2 - 0.08"
+    ],
+    [
+     "w / 2 - 0.08",
+     0,
+     "d / 2 - 0.08"
+    ]
+   ]
+  }
+ ]
+}

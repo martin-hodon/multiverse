@@ -1,0 +1,100 @@
+{
+ "kind": "item",
+ "name": "Threshing flail",
+ "category": "tool",
+ "era": "700-1900",
+ "_about": "the thresher's flail: a long handle and a short heavy swipple, bound together with a leather thong",
+ "params": {
+  "L": 1.2
+ },
+ "materials": {
+  "wood": "ash",
+  "swipple": "oak",
+  "thong": "leather"
+ },
+ "parts": [
+  {
+   "id": "handle",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "L",
+    0
+   ],
+   "r": 0.016,
+   "sides": 7
+  },
+  {
+   "id": "thong",
+   "type": "ring",
+   "material": "thong",
+   "r": 0.018,
+   "tube": 0.005,
+   "at": [
+    0,
+    "L + 0.01",
+    0,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "swipple",
+   "type": "rod",
+   "material": "swipple",
+   "from": [
+    0.02,
+    "L + 0.01",
+    0
+   ],
+   "to": [
+    0.08,
+    "L - 0.62",
+    0.02
+   ],
+   "r": 0.024,
+   "sides": 7
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.1,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "grip2": [
+   0,
+   "L * 0.5",
+   0
+  ]
+ }
+}

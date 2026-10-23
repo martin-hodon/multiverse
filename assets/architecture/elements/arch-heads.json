@@ -1,0 +1,284 @@
+{
+  "name": "Arch heads",
+  "_about": "THE LOWEST COMPONENT THERE IS: the curve an opening's head follows (arch/profiles.js). Ten of them side by side over the same 3m span, so the profiles can be compared -- change a `spread`, a `rise` or a `bulge` and watch the head move. The last four are the curves of more than one centre turned against each other: the OGEE (an S of two radii, convex then concave, to a point), the TREFOIL (three lobes meeting in cusps), the INFLEXED (two arcs bowing inward to a point) and the ONION (the ogee swelling out past its jambs first). Every wall, vault and dome in the world is one of these carried somewhere -- a dome is one turned about its axis.",
+  "_view": "front",
+  "params": {
+    "detail": 8,
+    "w": 3,
+    "h": 4,
+    "t": 0.6,
+    "gap": 4.5
+  },
+  "build": [
+    "semicircular",
+    "segmental",
+    "pointed",
+    "quinto acuto",
+    "horseshoe",
+    "trigonal",
+    "ogee",
+    "trefoil",
+    "inflexed",
+    "onion"
+  ],
+  "_build": "which parts to build, and in what order (a caller may ask for a few of them: the village takes a cathedral's arcades from a definition whose walls it builds itself)",
+  "parts": {
+    "semicircular": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - w / 2 - 0.4",
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "segmental": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - 1.2",
+          "head": {
+            "profile": "segmental",
+            "rise": 0.9
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "pointed": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - 2.1",
+          "head": {
+            "profile": "pointed",
+            "spread": 0.35
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 2",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "quinto acuto": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - 2.6",
+          "head": {
+            "profile": "pointed",
+            "spread": 0.6
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 3",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "horseshoe": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - 2.4",
+          "head": {
+            "profile": "horseshoe"
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 4",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "trigonal": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - 1.8",
+          "head": {
+            "profile": "trigonal"
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 5",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "ogee": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - 2.6",
+          "head": {
+            "profile": "ogee"
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 6",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "trefoil": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - 1.9",
+          "head": {
+            "profile": "trefoil",
+            "lobe": 0.45
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 7",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "inflexed": {
+      "type": "wall",
+      "width": "w + 1",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": "h - 2.6",
+          "head": {
+            "profile": "inflexed",
+            "bow": 0.15
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 8",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "onion": {
+      "type": "wall",
+      "width": "w + 1.4",
+      "height": "h",
+      "thickness": "t",
+      "openings": [
+        {
+          "at": "(w + 1.4) / 2",
+          "width": "w",
+          "sill": 0,
+          "springing": 0.2,
+          "head": {
+            "profile": "onion",
+            "bulge": 1.25,
+            "neck": 0.5
+          }
+        }
+      ],
+      "at": [
+        [
+          "gap * 9",
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

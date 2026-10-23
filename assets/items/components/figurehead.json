@@ -1,0 +1,324 @@
+{
+ "kind": "item",
+ "name": "Figurehead",
+ "category": "component",
+ "_about": "what rises at the stem (or the stern): a dragon's head on a curling neck (the longship's), a swan's neck (the Roman merchantman's stern), a scroll, a lion; s scales it (1 = about 2 m)",
+ "params": {
+  "s": 1,
+  "style": "dragon"
+ },
+ "materials": {
+  "wood": "oak",
+  "gilt": "gilt"
+ },
+ "parts": [
+  {
+   "id": "dragon neck",
+   "type": "sweep",
+   "when": {
+    "style": "dragon"
+   },
+   "material": "wood",
+   "path": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     "s * 0.25",
+     "s * 0.7",
+     0
+    ],
+    [
+     "s * 0.35",
+     "s * 1.4",
+     0
+    ],
+    [
+     "s * 0.15",
+     "s * 1.9",
+     0
+    ]
+   ],
+   "radii": [
+    "s * 0.24",
+    "s * 0.2",
+    "s * 0.15",
+    "s * 0.13"
+   ]
+  },
+  {
+   "id": "dragon head",
+   "type": "box",
+   "when": {
+    "style": "dragon"
+   },
+   "material": "wood",
+   "size": [
+    "s * 0.75",
+    "s * 0.32",
+    "s * 0.28"
+   ],
+   "round": "s * 0.06",
+   "at": [
+    "s * 0.45",
+    "s * 2.0",
+    0,
+    0,
+    0,
+    20
+   ]
+  },
+  {
+   "id": "dragon jaw",
+   "type": "box",
+   "when": {
+    "style": "dragon"
+   },
+   "material": "wood",
+   "size": [
+    "s * 0.5",
+    "s * 0.1",
+    "s * 0.22"
+   ],
+   "at": [
+    "s * 0.5",
+    "s * 1.8",
+    0,
+    0,
+    0,
+    35
+   ]
+  },
+  {
+   "id": "dragon eye",
+   "type": "sphere",
+   "when": {
+    "style": "dragon"
+   },
+   "material": "gilt",
+   "r": "s * 0.05",
+   "at": [
+    "s * 0.55",
+    "s * 2.12",
+    "s * 0.15"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "dragon crest",
+   "type": "plate",
+   "when": {
+    "style": "dragon"
+   },
+   "material": "wood",
+   "thick": "s * 0.04",
+   "at": [
+    "s * 0.2",
+    "s * 1.5",
+    0,
+    90,
+    0,
+    0
+   ],
+   "outline": [
+    [
+     0,
+     0
+    ],
+    [
+     "s * 0.3",
+     "s * 0.35"
+    ],
+    [
+     "s * 0.12",
+     "s * 0.3"
+    ],
+    [
+     "s * 0.15",
+     "s * 0.6"
+    ],
+    [
+     "s * 0.0",
+     "s * 0.55"
+    ]
+   ]
+  },
+  {
+   "id": "swan neck",
+   "type": "sweep",
+   "when": {
+    "style": "swan"
+   },
+   "material": "wood",
+   "path": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     "s * 0.15",
+     "s * 0.8",
+     0
+    ],
+    [
+     "s * 0.45",
+     "s * 1.5",
+     0
+    ],
+    [
+     "s * 0.3",
+     "s * 2.0",
+     0
+    ],
+    [
+     "s * -0.1",
+     "s * 2.1",
+     0
+    ]
+   ],
+   "radii": [
+    "s * 0.2",
+    "s * 0.16",
+    "s * 0.13",
+    "s * 0.13",
+    "s * 0.1"
+   ]
+  },
+  {
+   "id": "swan head",
+   "type": "box",
+   "when": {
+    "style": "swan"
+   },
+   "material": "wood",
+   "size": [
+    "s * 0.45",
+    "s * 0.16",
+    "s * 0.16"
+   ],
+   "round": "s * 0.05",
+   "at": [
+    "s * -0.25",
+    "s * 2.05",
+    0
+   ]
+  },
+  {
+   "id": "scroll",
+   "type": "sweep",
+   "when": {
+    "style": "scroll"
+   },
+   "material": "gilt",
+   "path": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     "s * 0.3",
+     "s * 0.5",
+     0
+    ],
+    [
+     "s * 0.5",
+     "s * 0.95",
+     0
+    ],
+    [
+     "s * 0.35",
+     "s * 1.2",
+     0
+    ],
+    [
+     "s * 0.15",
+     "s * 1.05",
+     0
+    ],
+    [
+     "s * 0.28",
+     "s * 0.9",
+     0
+    ]
+   ],
+   "radii": [
+    "s * 0.16",
+    "s * 0.13",
+    "s * 0.1",
+    "s * 0.08",
+    "s * 0.06",
+    "s * 0.05"
+   ]
+  },
+  {
+   "id": "lion body",
+   "type": "box",
+   "when": {
+    "style": "lion"
+   },
+   "material": "gilt",
+   "size": [
+    "s * 0.5",
+    "s * 0.9",
+    "s * 0.4"
+   ],
+   "round": "s * 0.1",
+   "at": [
+    "s * 0.15",
+    "s * 0.55",
+    0,
+    0,
+    0,
+    -20
+   ]
+  },
+  {
+   "id": "lion head",
+   "type": "sphere",
+   "when": {
+    "style": "lion"
+   },
+   "material": "gilt",
+   "r": "s * 0.24",
+   "at": [
+    "s * 0.4",
+    "s * 1.15",
+    0
+   ]
+  },
+  {
+   "id": "lion mane",
+   "type": "lathe",
+   "when": {
+    "style": "lion"
+   },
+   "material": "gilt",
+   "at": [
+    "s * 0.32",
+    "s * 1.05",
+    0,
+    0,
+    0,
+    70
+   ],
+   "profile": [
+    [
+     "s * 0.3",
+     0
+    ],
+    [
+     "s * 0.33",
+     "s * 0.15"
+    ],
+    [
+     "s * 0.2",
+     "s * 0.3"
+    ]
+   ]
+  }
+ ]
+}

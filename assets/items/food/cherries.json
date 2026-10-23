@@ -1,0 +1,131 @@
+{
+ "kind": "item",
+ "name": "Cherries",
+ "category": "food/fruit",
+ "era": "-500-1900",
+ "region": "everywhere temperate",
+ "_about": "a pair of cherries on their stalks",
+ "params": {
+  "s": [
+   0.9,
+   1.1
+  ]
+ },
+ "materials": {
+  "skin": "cherry-red",
+  "stem": "stem-green",
+  "leaf": "leaf"
+ },
+ "parts": [
+  {
+   "id": "cherry",
+   "type": "sphere",
+   "material": "skin",
+   "r": "s * 0.011",
+   "sides": 6,
+   "at": [
+    [
+     "s * 0.012",
+     "s * 0.011",
+     0
+    ],
+    [
+     "-s * 0.012",
+     "s * 0.011",
+     "s * 0.006"
+    ]
+   ]
+  },
+  {
+   "id": "stalk",
+   "type": "rod",
+   "material": "stem",
+   "from": [
+    "s * 0.012",
+    "s * 0.018",
+    0
+   ],
+   "to": [
+    0,
+    "s * 0.055",
+    0
+   ],
+   "r": 0.0012,
+   "sides": 4
+  },
+  {
+   "id": "stalk 2",
+   "type": "rod",
+   "material": "stem",
+   "from": [
+    "-s * 0.012",
+    "s * 0.018",
+    "s * 0.006"
+   ],
+   "to": [
+    0,
+    "s * 0.055",
+    0
+   ],
+   "r": 0.0012,
+   "sides": 4
+  },
+  {
+   "id": "leaf 1",
+   "type": "feathers",
+   "material": "leaf",
+   "n": 1,
+   "shape": "pointed",
+   "lift": 0.0004,
+   "droop": 0.5,
+   "lead": 1,
+   "roots": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "dir": [
+    0.0,
+    0.0
+   ],
+   "length": [
+    "s * 0.045",
+    "s * 0.03825"
+   ],
+   "width": [
+    "s * 0.022",
+    "s * 0.018699999999999998"
+   ],
+   "at": [
+    0,
+    "s * 0.052",
+    0,
+    160,
+    -20,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.03",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

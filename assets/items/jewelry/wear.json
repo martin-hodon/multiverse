@@ -1,0 +1,814 @@
+{
+ "name": "Jewelry wardrobe",
+ "kind": "jewelry-wear",
+ "hidesNeck": [
+  "hood",
+  "headscarf", "maphorion"
+ ],
+ "_about": "who wears what on top of their clothes (no necklace under a garment of `hidesNeck`: a hood's cape covers the neck), by style of dress (people.js: makePerson's `style`, `village` for the world's own) and kind of person (a child's list by sex: child10f, child5m...): looks with weights, each a pick of necklaces, headwear and earrings (jewelry.js items) -- a look without one wears none",
+ "styles": {
+  "village": {
+   "woman": [
+    {
+     "weight": 6
+    },
+    {
+     "weight": 2,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/pearls"
+     ]
+    },
+    {
+     "weight": 0.6,
+     "neck": [
+      "items/jewelry/neck/viking-festoon"
+     ]
+    },
+    {
+     "weight": 1,
+     "head": [
+      "items/jewelry/head/flower-chaplet"
+     ]
+    },
+    {
+     "weight": 0.8,
+     "head": [
+      "items/jewelry/head/headband"
+     ]
+    },
+    {
+     "weight": 0.4,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ],
+     "ears": [
+      "items/jewelry/ears/hoops"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 9
+    },
+    {
+     "weight": 1.2,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    },
+    {
+     "weight": 0.3,
+     "neck": [
+      "items/jewelry/neck/torc"
+     ]
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 5
+    },
+    {
+     "weight": 2,
+     "head": [
+      "items/jewelry/head/flower-chaplet"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 6
+    },
+    {
+     "weight": 2,
+     "head": [
+      "items/jewelry/head/flower-chaplet"
+     ]
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 8
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "gothic": {
+   "woman": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 2,
+     "neck": [
+      "items/jewelry/neck/pearls",
+      "items/jewelry/neck/choker"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "head": [
+      "items/jewelry/head/circlet"
+     ]
+    },
+    {
+     "weight": 0.5,
+     "neck": [
+      "items/jewelry/neck/livery-collar"
+     ],
+     "head": [
+      "items/jewelry/head/coronet"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/choker"
+     ],
+     "ears": [
+      "items/jewelry/ears/pearl-drops"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 5
+    },
+    {
+     "weight": 2,
+     "neck": [
+      "items/jewelry/neck/livery-collar"
+     ]
+    },
+    {
+     "weight": 0.5,
+     "head": [
+      "items/jewelry/head/circlet"
+     ]
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 1,
+     "head": [
+      "items/jewelry/head/flower-chaplet",
+      "items/jewelry/head/headband"
+     ]
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "greek": {
+   "woman": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 2,
+     "neck": [
+      "items/jewelry/neck/greek-fringe"
+     ],
+     "ears": [
+      "items/jewelry/ears/crescents"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "neck": [
+      "items/jewelry/neck/chain-pendant"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "head": [
+      "items/jewelry/head/headband"
+     ],
+     "ears": [
+      "items/jewelry/ears/crescents",
+      "items/jewelry/ears/hoops"
+     ]
+    },
+    {
+     "weight": 0.6,
+     "head": [
+      "items/jewelry/head/laurel-wreath"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 6
+    },
+    {
+     "weight": 1.5,
+     "head": [
+      "items/jewelry/head/laurel-wreath"
+     ]
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 1,
+     "head": [
+      "items/jewelry/head/headband"
+     ]
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "roman": {
+   "woman": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 2,
+     "neck": [
+      "items/jewelry/neck/pearls"
+     ],
+     "ears": [
+      "items/jewelry/ears/pearl-drops"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "neck": [
+      "items/jewelry/neck/chain-pendant"
+     ],
+     "ears": [
+      "items/jewelry/ears/pearl-drops",
+      "items/jewelry/ears/crescents"
+     ]
+    },
+    {
+     "weight": 1,
+     "head": [
+      "items/jewelry/head/headband"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 6
+    },
+    {
+     "weight": 0.8,
+     "head": [
+      "items/jewelry/head/laurel-wreath"
+     ]
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 2
+    },
+    {
+     "weight": 3,
+     "neck": [
+      "items/jewelry/neck/bulla"
+     ]
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    },
+    {
+     "weight": 3,
+     "neck": [
+      "items/jewelry/neck/bulla"
+     ]
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 1,
+     "head": [
+      "items/jewelry/head/headband"
+     ]
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "chinese": {
+   "woman": [
+    {
+     "weight": 2
+    },
+    {
+     "weight": 3,
+     "head": [
+      "items/jewelry/head/hairpins"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "neck": [
+      "items/jewelry/neck/jade-bi"
+     ],
+     "head": [
+      "items/jewelry/head/hairpins"
+     ]
+    },
+    {
+     "weight": 1,
+     "head": [
+      "items/jewelry/head/hairpins"
+     ],
+     "ears": [
+      "items/jewelry/ears/hoops"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 6
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/jade-bi"
+     ]
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 1,
+     "head": [
+      "items/jewelry/head/hairpins"
+     ]
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "egyptian": {
+   "woman": [
+    {
+     "weight": 1
+    },
+    {
+     "weight": 3,
+     "neck": [
+      "items/jewelry/neck/wesekh"
+     ],
+     "ears": [
+      "items/jewelry/ears/disc-studs"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/wesekh"
+     ],
+     "head": [
+      "items/jewelry/head/seshed-circlet"
+     ],
+     "ears": [
+      "items/jewelry/ears/disc-studs"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/pectoral"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 2
+    },
+    {
+     "weight": 3,
+     "neck": [
+      "items/jewelry/neck/wesekh"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/pectoral"
+     ]
+    },
+    {
+     "weight": 0.2,
+     "neck": [
+      "items/jewelry/neck/wesekh"
+     ],
+     "head": [
+      "items/jewelry/head/uraeus-diadem"
+     ]
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 2
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/wesekh"
+     ]
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 2
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/wesekh"
+     ]
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "byzantine": {
+   "woman": [
+    {
+     "weight": 2
+    },
+    {
+     "weight": 2,
+     "neck": [
+      "items/jewelry/neck/pearls"
+     ],
+     "ears": [
+      "items/jewelry/ears/pearl-drops",
+      "items/jewelry/ears/crescents"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "neck": [
+      "items/jewelry/neck/chain-pendant"
+     ],
+     "ears": [
+      "items/jewelry/ears/crescents"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    },
+    {
+     "weight": 0.6,
+     "neck": [
+      "items/jewelry/neck/pearls"
+     ],
+     "head": [
+      "items/jewelry/head/circlet"
+     ],
+     "ears": [
+      "items/jewelry/ears/pearl-drops"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 6
+    },
+    {
+     "weight": 1.5,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    },
+    {
+     "weight": 0.5,
+     "neck": [
+      "items/jewelry/neck/chain-pendant"
+     ]
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    },
+    {
+     "weight": 0.5,
+     "ears": [
+      "items/jewelry/ears/crescents"
+     ]
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "industrial": {
+   "woman": [
+    {
+     "weight": 5
+    },
+    {
+     "weight": 1.5,
+     "neck": [
+      "items/jewelry/neck/chain-pendant"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/pearls"
+     ],
+     "ears": [
+      "items/jewelry/ears/pearl-drops"
+     ]
+    },
+    {
+     "weight": 1,
+     "ears": [
+      "items/jewelry/ears/pearl-drops",
+      "items/jewelry/ears/hoops"
+     ]
+    },
+    {
+     "weight": 0.6,
+     "neck": [
+      "items/jewelry/neck/choker"
+     ]
+    },
+    {
+     "weight": 0.5,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 1
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 4
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/cross-cord"
+     ]
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "ottoman": {
+   "woman": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 2,
+     "ears": [
+      "items/jewelry/ears/pearl-drops",
+      "items/jewelry/ears/hoops"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "neck": [
+      "items/jewelry/neck/pearls",
+      "items/jewelry/neck/choker"
+     ],
+     "ears": [
+      "items/jewelry/ears/pearl-drops"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/pearls"
+     ],
+     "ears": [
+      "items/jewelry/ears/crescents"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 1
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 1,
+     "ears": [
+      "items/jewelry/ears/hoops"
+     ]
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  },
+  "islamic": {
+   "woman": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 2,
+     "ears": [
+      "items/jewelry/ears/hoops",
+      "items/jewelry/ears/crescents"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "neck": [
+      "items/jewelry/neck/pearls"
+     ],
+     "ears": [
+      "items/jewelry/ears/pearl-drops"
+     ]
+    },
+    {
+     "weight": 1,
+     "neck": [
+      "items/jewelry/neck/chain-pendant"
+     ],
+     "ears": [
+      "items/jewelry/ears/hoops"
+     ]
+    }
+   ],
+   "man": [
+    {
+     "weight": 1
+    }
+   ],
+   "child10f": [
+    {
+     "weight": 3
+    },
+    {
+     "weight": 1,
+     "ears": [
+      "items/jewelry/ears/hoops"
+     ]
+    }
+   ],
+   "child10m": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5f": [
+    {
+     "weight": 1
+    }
+   ],
+   "child5m": [
+    {
+     "weight": 1
+    }
+   ]
+  }
+ }
+}

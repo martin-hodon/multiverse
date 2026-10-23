@@ -1,0 +1,144 @@
+{
+ "kind": "item",
+ "name": "Spearhead",
+ "category": "component",
+ "_about": "a spear's iron on its socket (the pole's end at 0, the point up +y): leaf, winged (the lugs that stop it going too deep), awl (a pike's slim square point), broad (the boar spear's)",
+ "params": {
+  "L": 0.28,
+  "w": 0.035,
+  "style": "leaf",
+  "socket": 0.1
+ },
+ "materials": {
+  "head": "iron"
+ },
+ "parts": [
+  {
+   "id": "socket",
+   "type": "lathe",
+   "material": "head",
+   "profile": [
+    [
+     0.019,
+     "0 - socket"
+    ],
+    [
+     0.017,
+     "0 - socket * 0.3"
+    ],
+    [
+     0.012,
+     0
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "leaf",
+   "type": "blade",
+   "when": {
+    "style": [
+     "leaf",
+     "winged",
+     "broad"
+    ]
+   },
+   "material": "head",
+   "length": "L",
+   "flat": 0.3,
+   "width": [
+    [
+     0,
+     "w * 0.45"
+    ],
+    [
+     0.3,
+     "w"
+    ],
+    [
+     0.7,
+     "w * 0.6"
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.009,
+    0.003
+   ]
+  },
+  {
+   "id": "awl",
+   "type": "blade",
+   "when": {
+    "style": "awl"
+   },
+   "material": "head",
+   "length": "L",
+   "flat": 0.0,
+   "width": [
+    [
+     0,
+     0.011
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.012,
+    0.004
+   ]
+  },
+  {
+   "id": "wings",
+   "type": "plate",
+   "when": {
+    "style": "winged"
+   },
+   "material": "head",
+   "outline": [
+    [
+     0.012,
+     -0.03
+    ],
+    [
+     0.075,
+     -0.012
+    ],
+    [
+     0.075,
+     -0.035
+    ],
+    [
+     0.012,
+     -0.07
+    ]
+   ],
+   "thick": 0.008,
+   "mirror": "x"
+  },
+  {
+   "id": "bar",
+   "type": "rod",
+   "when": {
+    "style": "broad"
+   },
+   "material": "head",
+   "from": [
+    -0.07,
+    -0.05,
+    0
+   ],
+   "to": [
+    0.07,
+    -0.05,
+    0
+   ],
+   "r": 0.008
+  }
+ ]
+}

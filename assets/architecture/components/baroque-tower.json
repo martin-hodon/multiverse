@@ -1,0 +1,179 @@
+{
+  "name": "Baroque tower",
+  "_about": "A BAROQUE TOWER of stacked stages, each narrower than the one below: a square SHAFT `W` wide and `H` tall with a door at its foot (face 0, +z) and a window in each face of its upper tiers, a cornice round its head; the BELFRY, stepped in by `s`, a great open arch in each face over a parapet -- the viewing level; its cornice and ceiling; a smaller UPPER STAGE on a chamfered square with a round window in each main face, its cornice; a bulbous CAP of any profile (onion by default) and a LANTERN standing on it where it has narrowed to the lantern's width (`domed-tower`, with its own little cap and finial). Build \"stair\" by name to climb it: a `tower-stair` in the shaft (its turret in the corner `stairYaw` turns it to, the far corner from the door by default) up to the belfry's floor at H; or \"belfry floor\" for a tower that is not climbed. Place it at the shaft's middle. El Pilar's four corner towers.",
+  "params": {
+    "detail": 4,
+    "W": 12.0,
+    "t": 2.0,
+    "H": 30.0,
+    "lowH": "H * 0.5",
+    "doorW": 1.6,
+    "doorH": 3.2,
+    "winW": 1.2,
+    "co": 0.4,
+    "ch": 0.6,
+    "s": 0.6,
+    "BH": 9.0,
+    "archW": "(W - 2 * s) * 0.34",
+    "archSill": 1.0,
+    "W3": "(W - 2 * s) * 0.74",
+    "t3": 0.8,
+    "H3": 6.0,
+    "chamfer": "W3 * 0.2",
+    "ocR": "W3 * 0.1",
+    "profile": "onion",
+    "bulge": 1.25,
+    "neck": 0.85,
+    "waist": 0.8,
+    "lift": 1.0,
+    "spread": 0.6,
+    "rise": 4.0,
+    "capR": "W3 / 2 + co * 0.5",
+    "lanternR": "W3 * 0.16",
+    "lanternH": "W3 * 0.55",
+    "stairYaw": 3.14159265,
+    "tR": 2.2,
+    "_W": "the shaft: W wide outside, walls t thick, H tall -- the floor the stair arrives at, the belfry's; lowH its blind lower tier (the door on face 0 in it), two tiers of windows (winW wide) above",
+    "_s": "the belfry steps in by s all round with walls s thinner, so its inside is the shaft's: BH tall, an arch archW wide in each face over a parapet archSill high, open (the viewing level)",
+    "_W3": "the upper stage: a chamfered square W3 across, walls t3, H3 tall, a round window ocR in radius in each main face",
+    "_profile": "the cap's section (onion + bulge/neck, bell + waist/lift, pointed + spread, segmental + rise), capR its radius",
+    "_lanternR": "the lantern on the cap: it stands where the cap has narrowed to lanternR",
+    "_stairYaw": "turns the stair's turret to a corner of the shaft (pi: the far one from the door); tR its radius"
+  },
+  "build": [
+    "shaft",
+    "cornice",
+    "belfry",
+    "belfry head",
+    "upper stage",
+    "upper head",
+    "cap",
+    "lantern"
+  ],
+  "parts": {
+    "shaft": {
+      "type": "enclosure",
+      "plan": { "rect": ["W", "W"] },
+      "thickness": "t",
+      "height": "H",
+      "tiers": [
+        { "h": "lowH", "openings": [] },
+        { "h": "(H - lowH) / 2", "openings": [{ "at": 0, "width": "winW", "sill": "(H - lowH) * 0.15", "springing": "(H - lowH) * 0.15 + winW * 1.8", "head": { "profile": "semicircular" } }] },
+        { "openings": [{ "at": 0, "width": "winW", "sill": "(H - lowH) * 0.15", "springing": "(H - lowH) * 0.15 + winW * 1.8", "head": { "profile": "semicircular" } }] }
+      ],
+      "faces": {
+        "0": [
+          { "h": "lowH", "openings": [{ "at": 0, "width": "doorW", "sill": 0, "springing": "doorH", "head": { "profile": "semicircular" } }] },
+          { "h": "(H - lowH) / 2", "openings": [{ "at": 0, "width": "winW", "sill": "(H - lowH) * 0.15", "springing": "(H - lowH) * 0.15 + winW * 1.8", "head": { "profile": "semicircular" } }] },
+          { "openings": [{ "at": 0, "width": "winW", "sill": "(H - lowH) * 0.15", "springing": "(H - lowH) * 0.15 + winW * 1.8", "head": { "profile": "semicircular" } }] }
+        ]
+      },
+      "at": [[0, 0, 0, 0]],
+      "_about": "the square shaft: blind below with the door in face 0, a window in each face of the two tiers above"
+    },
+    "stair": {
+      "type": "component",
+      "use": "components/tower-stair",
+      "params": { "W": "W - 2 * t", "H": "H", "tR": "tR" },
+      "at": [[0, 0, 0, "stairYaw"]],
+      "_about": "the stair up the shaft to the belfry's floor (build it by name): a turret in a corner, the floor round its head"
+    },
+    "belfry floor": {
+      "type": "box",
+      "width": "W - 2 * t",
+      "length": "W - 2 * t",
+      "height": 0.4,
+      "at": [[0, "H - 0.4", 0, 0]],
+      "flatRoof": true,
+      "_about": "the belfry's floor where the tower is not climbed (build it by name instead of the stair): the bells' floor, not walked"
+    },
+    "cornice": {
+      "type": "enclosure",
+      "plan": { "rect": ["W + 2 * co", "W + 2 * co"] },
+      "thickness": "co + 0.3",
+      "height": "ch",
+      "at": [[0, "H - ch", 0, 0]],
+      "standsOn": ["shaft"],
+      "_about": "the cornice round the shaft's head, its inside buried in the shaft's walls"
+    },
+    "belfry": {
+      "type": "enclosure",
+      "plan": { "rect": ["W - 2 * s", "W - 2 * s"] },
+      "thickness": "t - s",
+      "height": "BH",
+      "glass": false,
+      "openings": [{ "at": 0, "width": "archW", "sill": "archSill", "springing": "BH - 0.6 - archW / 2", "head": { "profile": "semicircular" } }],
+      "at": [[0, "H", 0, 0]],
+      "standsOn": ["shaft"],
+      "_about": "the belfry: stepped in outside, its inside the shaft's (clear of a stair turret's head), a great open arch in every face over a parapet"
+    },
+    "belfry head": {
+      "type": "prism",
+      "plan": { "rect": ["W - 2 * s + 2 * co", "W - 2 * s + 2 * co"] },
+      "height": "ch",
+      "at": [[0, "H + BH", 0, 0]],
+      "flatRoof": true,
+      "standsOn": ["belfry"],
+      "_about": "the belfry's ceiling and cornice, what the upper stage stands on"
+    },
+    "upper stage": {
+      "type": "enclosure",
+      "plan": { "rect": ["W3", "W3"], "chamfer": "chamfer" },
+      "thickness": "t3",
+      "height": "H3",
+      "faces": {
+        "main": [{ "at": 0, "width": "2 * ocR", "sill": "H3 * 0.5", "springing": "H3 * 0.5", "head": { "profile": "semicircular" }, "foot": { "profile": "semicircular" } }],
+        "chamfer": []
+      },
+      "at": [[0, "H + BH + ch", 0, 0]],
+      "standsOn": ["belfry head"],
+      "_about": "the upper stage, a chamfered square, a round window in each main face"
+    },
+    "upper head": {
+      "type": "prism",
+      "plan": { "rect": ["W3 + 2 * co", "W3 + 2 * co"], "chamfer": "chamfer + co * 0.8" },
+      "height": "ch",
+      "at": [[0, "H + BH + ch + H3", 0, 0]],
+      "flatRoof": true,
+      "standsOn": ["upper stage"],
+      "_about": "its cornice and ceiling, what the cap stands on"
+    },
+    "cap": {
+      "type": "dome",
+      "radius": "capR",
+      "thickness": 0,
+      "head": { "profile": "profile", "bulge": "bulge", "neck": "neck", "waist": "waist", "lift": "lift", "spread": "spread", "rise": "rise" },
+      "at": [[0, "H + BH + 2 * ch + H3", 0, 0]],
+      "standsOn": ["upper head"],
+      "_about": "the bulbous cap -- glazed tiles at El Pilar"
+    },
+    "lantern": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "detail": "max(2, floor(detail / 2))",
+        "sides": 8,
+        "R": "lanternR",
+        "H": "lanternH",
+        "t": "lanternR * 0.15",
+        "drumR": "lanternR * 0.7",
+        "drumH": "lanternH * 0.3",
+        "cap": "onion",
+        "bulge": 1.3,
+        "neck": 0.8,
+        "capR": "lanternR * 0.8",
+        "kok": "lanternR * 0.1",
+        "finial": "lanternH * 0.7",
+        "doorH": "lanternH * 0.3",
+        "winW": "lanternR * 0.35",
+        "glazed": 0
+      },
+      "build": ["tower", "drum", "cap", "finial"],
+      "at": [[0, "0 - lanternR * 0.1", 0, 0]],
+      "atop": "cap",
+      "atopR": "lanternR",
+      "standsOn": ["cap"],
+      "_about": "the lantern on the cap, its own little onion and the finial"
+    }
+  }
+}

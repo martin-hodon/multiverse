@@ -1,0 +1,22 @@
+{
+  "name": "Sultan Qaboos Grand Mosque",
+  "building": "architecture/sultan-qaboos",
+  "_about": "The Sultan Qaboos Grand Mosque: pale sandstone and marble, the dome in gold mosaic and its finials gilt, the dome within in girih; the prayer hall's floor one great medallion carpet, the halls' lower walls in glazed tiles and marble above, the courts white marble.",
+  "stone": {
+    "color": "#e6dac2",
+    "accent": "#d3c4a6",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["dome finial", "dome finial knop", "women's finial", "women's finial knop"], "pattern": "roofs/gold leaf"},
+    {"parts": "dome/ribs", "color": "#eadcb0"},
+    {"parts": ["dome", "women's dome"], "surface": "roof", "pattern": "painted/gold mosaic"},
+    {"parts": ["dome", "women's dome"], "surface": ["wall", "ceiling"], "side": "in", "pattern": "tiles/girih", "palette": "kashan"},
+    {"surface": "floor", "side": "in", "fit": [-30, -80, 30, -20], "pattern": "carpets/medallion", "palette": "carpet-qaboos", "_about": "the prayer hall's carpet, one piece wall to wall"},
+    {"surface": "wall", "side": "in", "below": 4.2, "pattern": "tiles/girih", "palette": "kashan"},
+    {"surface": "floor", "side": "in", "pattern": "floors/star and cross", "palette": "marble-bw"},
+    {"surface": "floor", "pattern": "stone/marble", "palette": "carrara"},
+    {"surface": "wall", "side": "in", "pattern": "stone/marble", "palette": "carrara"},
+    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "sandstone"}
+  ]
+}

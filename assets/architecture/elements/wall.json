@@ -1,0 +1,43 @@
+{
+  "name": "Wall with openings",
+  "_about": "A WALL FACE: a run of masonry with openings cut through it, each opening a sill, a springing line and a head. `pattern` is the rhythm -- \"2-3-2\" is three blocks of two, three and two arches, the piers between blocks wider than the gaps within them -- and the wall's LENGTH follows from it, which is the point: you say the rhythm, the engine says how long the wall is.",
+  "params": {
+    "detail": 6,
+    "storeyH": 8,
+    "t": 0.9,
+    "openW": 2.4,
+    "spread": 0.35
+  },
+  "build": [
+    "wall"
+  ],
+  "_build": "which parts to build, and in what order (a caller may ask for a few of them: the village takes a cathedral's arcades from a definition whose walls it builds itself)",
+  "parts": {
+    "wall": {
+      "type": "wall",
+      "width": 0,
+      "height": "storeyH",
+      "thickness": "t",
+      "openings": {
+        "pattern": "2-3-2",
+        "width": "openW",
+        "gap": 1.2,
+        "pier": 2.2,
+        "sill": 1.0,
+        "springing": 4.4,
+        "head": {
+          "profile": "pointed",
+          "spread": "spread"
+        }
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

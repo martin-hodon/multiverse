@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Bannerfield: cloth clipping</title></head>
+<body style="font: 13px monospace; background: #22262c; color: #cfd6de"><pre id="log"></pre>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl": "https://unpkg.com/three@0.185.1/build/three.tsl.js",
+    "three/addons/": "https://unpkg.com/three@0.185.1/examples/jsm/"
+} }
+</script>
+<script type="module">
+// THE CLIPPING CHECK (clipcheck.js, docs/clothes.md): people of every style of dress, every kind, ?n= seeds each (4),
+// standing, sitting, carrying, on guard and drawing a bow -- each through clipcheck.js CLIP_STATES (walking, running,
+// every gesture) -- and every limb that comes through a hanging garment by more than ?tol= metres (.01); and the hair
+// of everyone with a hood or a hat on, against it (?hairtol=, .005). Prints the
+// worst of each garment piece, limb and motion, with a person to see it on (wardrobe.html?specs=[that]&crowd=0).
+// `python3 build/clipcheck.py` opens it headless and prints the list.
+import { makePerson, KINDS } from "./people.js";
+import { WARDROBE } from "./clothes.js";
+import { poseParts, clothClips, hairClips, CLIP_STATES } from "./clipcheck.js";
+const log = (t) => { document.getElementById("log").textContent += t + "\n"; console.log(t); };
+try {
+  const q = new URLSearchParams(location.search), N = +(q.get("n") ?? 4), tol = +(q.get("tol") ?? .01), t0 = performance.now();
+  const styles = [null, ...Object.keys(WARDROBE.styles ?? {}).filter((k) => !k.startsWith("_"))];
+  const POSES = [[undefined, CLIP_STATES], ["sit", CLIP_STATES.filter((s) => s.name === "stand" || s.an.work)], ["carry", CLIP_STATES.slice(0, 17)],
+                 ["guard", CLIP_STATES.slice(0, 17)], ["draw", CLIP_STATES.slice(0, 17)]];
+  if (q.has("specs")) {   // (?specs=[makePerson options...]: those people's every clip, by the parts' own ids)
+    for (const o of JSON.parse(q.get("specs"))) {
+      const def = makePerson(o);
+      for (const st of CLIP_STATES) for (const c of clothClips(def, poseParts(def, st.an, st.t), { tol }))
+        log(`${JSON.stringify(o)} ${st.name} t=${st.t} animT=${(st.an.animT ?? 0).toFixed(2)}: ${c.piece} / ${c.limb} ${(c.depth * 100).toFixed(1)} cm ${c.side}`);
+      for (const c of hairClips(def, poseParts(def, CLIP_STATES[0].an, 0), { tol: +(q.get("hairtol") ?? .005) }))   // (and the hair under its hat)
+        log(`${JSON.stringify(o)} hair ${def.face.style}: ${c.piece} ${(c.depth * 1000).toFixed(0)} mm, ${(c.share * 100).toFixed(1)}% out -- worst at ${c.at.map((v) => v.toFixed(3))} (piece ${c.lo.toFixed(3)}..${c.hi.toFixed(3)}, r ${c.r.map((v) => v.toFixed(3))}; others: ${c.others.join(", ") || "none"})`);
+    }
+    window.__clipDone = { specs: true };
+    throw null;
+  }
+  const worst = new Map(), base = (id) => id.replace(/_\d+([LR]\d*)?$/, "").replace(/[LR]$/, "");
+  let people = 0, posed = 0, hatted = 0;
+  const hair = new Map(), hairTol = +(q.get("hairtol") ?? .005);
+  for (const style of styles) for (const kind of KINDS) for (let i = 0; i < N; i++) for (const [pose, states] of POSES) {
+    const seed = 1 + i * 7919 + people;
+    const def = makePerson({ seed, kind, style, pose });
+    people++;
+    if (!pose) for (const c of hairClips(def, poseParts(def, CLIP_STATES[0].an, 0), { tol: hairTol })) {   // (the hair: one pose tells, hat and hair both ride the head)
+      const key = `${base(c.piece)} | hair ${def.face.style}${def.face.fringe ? " + fringe" : ""}`, w = hair.get(key);
+      if (!w || c.depth > w.depth) hair.set(key, { key, depth: c.depth, share: c.share, n: (w?.n ?? 0) + 1, who: { style, kind, seed } }); else w.n++;
+    }
+    if (!pose && def.parts.some((p) => p.parent === "head" && p.dress?.standing)) hatted++;
+    for (const st of states) {
+      posed++;
+      for (const c of clothClips(def, poseParts(def, st.an, st.t), { tol })) {
+        const key = `${base(c.piece)} | ${base(c.limb)} | ${pose ?? "stand"}:${st.name} | ${c.side}`;
+        const w = worst.get(key);
+        if (!w || c.depth > w.depth) worst.set(key, { key, depth: c.depth, n: (w?.n ?? 0) + 1, who: { style, kind, seed, pose } });
+        else w.n++;
+      }
+    }
+  }
+  const list = [...worst.values()].sort((a, b) => b.depth - a.depth);
+  log(`${people} people, ${posed} poses checked in ${((performance.now() - t0) / 1000).toFixed(1)}s -- ${list.length} kinds of clip over ${(tol * 100).toFixed(1)} cm`);
+  log("worst cm | times | garment piece | limb | pose:motion | side | e.g.");
+  for (const w of list.slice(0, +(q.get("top") ?? 60)))
+    log(`${(w.depth * 100).toFixed(1).padStart(8)} | ${String(w.n).padStart(5)} | ${w.key} | ${JSON.stringify(w.who)}`);
+  const hl = [...hair.values()].sort((a, b) => b.depth - a.depth);
+  log(`\nTHE HAIR: ${hatted} people with something standing on the head -- ${hl.length} kinds of hair through it over ${(hairTol * 1000).toFixed(0)} mm`);
+  log("worst mm | times | share out | piece | hair | e.g.");
+  for (const w of hl.slice(0, 40)) log(`${(w.depth * 1000).toFixed(0).padStart(8)} | ${String(w.n).padStart(5)} | ${(w.share * 100).toFixed(1).padStart(8)}% | ${w.key} | ${JSON.stringify(w.who)}`);
+  window.__clipDone = { people, posed, kinds: list.length, worst: list.slice(0, 200).map((w) => ({ ...w, depth: +w.depth.toFixed(4) })), hair: hl };
+} catch (e) { if (e !== null) { log("FAILED " + (e.stack ?? e)); window.__clipDone = { error: String(e.stack ?? e) }; } }
+</script></body></html>

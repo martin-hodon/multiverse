@@ -1,0 +1,82 @@
+{
+ "kind": "item",
+ "name": "Junk sail",
+ "category": "component",
+ "_about": "the Chinese lug sail: a cloth stiffened by battens across it, its head narrower and raked aft, hung from a yard with a boom at its foot; set fore and aft, in the ship's frame as it is",
+ "params": {
+  "w": 9,
+  "h": 11,
+  "battens": 5,
+  "belly": "w * 0.05",
+  "r": "w * 0.01"
+ },
+ "materials": {
+  "wood": "pine",
+  "cloth": "sail-tan"
+ },
+ "parts": [
+  {
+   "id": "yard",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "-w * 0.42",
+    0,
+    0
+   ],
+   "to": [
+    "w * 0.3",
+    0,
+    0
+   ],
+   "r": "r"
+  },
+  {
+   "id": "cloth",
+   "type": "sail",
+   "material": "cloth",
+   "belly": "belly",
+   "battens": "battens",
+   "battenR": "r * 0.6",
+   "at": [
+    0,
+    "-r",
+    0
+   ],
+   "corners": [
+    [
+     "-w * 0.4",
+     0
+    ],
+    [
+     "w * 0.28",
+     0
+    ],
+    [
+     "w * 0.5",
+     "-h"
+    ],
+    [
+     "-w * 0.5",
+     "-h"
+    ]
+   ]
+  },
+  {
+   "id": "boom",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "-w * 0.55",
+    "-h - r",
+    0
+   ],
+   "to": [
+    "w * 0.55",
+    "-h - r",
+    0
+   ],
+   "r": "r"
+  }
+ ]
+}

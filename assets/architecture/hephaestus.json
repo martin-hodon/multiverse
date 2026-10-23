@@ -1,0 +1,320 @@
+{
+  "name": "Temple of Hephaestus",
+  "_about": "THE TEMPLE OF HEPHAESTUS, Athens (c. 449 BC), the best preserved Doric temple, built from the engine's components at its real size: a three-step crepidoma with a 13.71 x 31.78m stylobate; a peristyle of 6 x 13 Doric columns 5.71m tall (a `colonnade` of plan `peristyle`) under its architrave, triglyph frieze and cornice; the cella with its great door, a porch of columns before it and a matching one behind; a coffered ceiling inside the ring of the entablature; one gable roof whose two ends are the pediments, with an acroterion on each apex.",
+  "params": {
+    "detail": 4,
+    "_inset": "stylobate edge to column axis",
+    "_ridge": "the pediment's height: half the roof's width times the pitch's slope",
+    "W": 13.71,
+    "L": 31.78,
+    "steps": 3,
+    "stepH": 0.3,
+    "stepOut": 0.33,
+    "base": 0.9,
+    "front": 6,
+    "side": 13,
+    "D": 1.02,
+    "inset": 0.82,
+    "colH": 5.71,
+    "entH": 1.3,
+    "cornH": 0.38,
+    "cornOut": 0.3,
+    "pitch": 14,
+    "ridge": 1.7,
+    "cellaW": 7.6,
+    "cellaL": 17.5,
+    "cellaZ": -0.6,
+    "cellaH": 5.4,
+    "wallT": 0.9,
+    "doorW": 2.6,
+    "doorH": 4.2,
+    "porch": 2,
+    "porchD": 2.4
+  },
+  "build": [
+    "crepidoma",
+    "peristyle",
+    "cella sides",
+    "cella back",
+    "cella front",
+    "pronaos",
+    "opisthodomos",
+    "cult base",
+    "Hephaestus",
+    "Athena",
+    "ceiling",
+    "roof",
+    "acroteria"
+  ],
+  "parts": {
+    "crepidoma": {
+      "type": "crepidoma",
+      "width": "W",
+      "length": "L",
+      "steps": "steps",
+      "stepH": "stepH",
+      "stepOut": "stepOut",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the stepped platform; its top step is the stylobate the columns stand on"
+    },
+    "peristyle": {
+      "type": "colonnade",
+      "plan": "peristyle",
+      "order": "doric",
+      "front": "front",
+      "side": "side",
+      "width": "W - 2 * inset",
+      "length": "L - 2 * inset",
+      "columnR": "D / 2",
+      "height": "colH",
+      "entablature": {
+        "h": "entH",
+        "depth": "D * 1.1",
+        "cornice": {
+          "h": "cornH",
+          "out": "cornOut"
+        },
+        "triglyphs": {
+          "w": "D * 0.55",
+          "d": 0.14
+        }
+      },
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ],
+      "_about": "the ring of Doric columns, its architrave, frieze and cornice"
+    },
+    "cella sides": {
+      "type": "box",
+      "width": "wallT",
+      "length": "cellaL",
+      "height": "cellaH",
+      "at": [
+        [
+          "0 - cellaW / 2 + wallT / 2",
+          "base",
+          "cellaZ",
+          0
+        ],
+        [
+          "cellaW / 2 - wallT / 2",
+          "base",
+          "cellaZ",
+          0
+        ]
+      ]
+    },
+    "cella back": {
+      "type": "box",
+      "width": "cellaW - 2 * wallT",
+      "length": "wallT",
+      "height": "cellaH",
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ - cellaL / 2 + wallT / 2",
+          0
+        ]
+      ]
+    },
+    "cella front": {
+      "type": "wall",
+      "width": "cellaW - 2 * wallT",
+      "height": "cellaH",
+      "thickness": "wallT",
+      "openings": [
+        {
+          "at": "(cellaW - 2 * wallT) / 2",
+          "width": "doorW",
+          "sill": 0,
+          "springing": "doorH",
+          "head": {
+            "profile": "flat"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ + cellaL / 2",
+          0
+        ]
+      ],
+      "_about": "the front wall of the naos, with its great door"
+    },
+    "pronaos": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": "porch",
+      "spacing": "(cellaW - D * 1.2) / (porch - 1)",
+      "columnR": "D * 0.45",
+      "height": "colH * 0.97",
+      "entablature": {
+        "h": "entH * 0.8",
+        "depth": "D"
+      },
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ + cellaL / 2 + porchD",
+          0
+        ]
+      ],
+      "_about": "the porch before the door: columns across the front of the cella"
+    },
+    "opisthodomos": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": "porch",
+      "spacing": "(cellaW - D * 1.2) / (porch - 1)",
+      "columnR": "D * 0.45",
+      "height": "colH * 0.97",
+      "entablature": {
+        "h": "entH * 0.8",
+        "depth": "D"
+      },
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ - cellaL / 2 - porchD",
+          0
+        ]
+      ],
+      "_about": "the matching porch at the back"
+    },
+    "cult base": {
+      "type": "box",
+      "width": 3.2,
+      "length": 1.4,
+      "height": 0.7,
+      "at": [
+        [
+          0,
+          0.9,
+          -7.4,
+          0
+        ]
+      ],
+      "_about": "the base of the cult statues"
+    },
+    "Hephaestus": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -0.75,
+          1.6,
+          -7.4,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "style": "greek",
+        "stone": "bronze",
+        "scale": 1.3,
+        "hold": {
+          "R": "items/tools/hammer"
+        },
+        "seed": 3,
+        "face": -1.5707963
+      }
+    },
+    "Athena": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0.75,
+          1.6,
+          -7.4,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "bronze",
+        "scale": 1.3,
+        "hold": {
+          "R": "items/weapons/dory",
+          "L": "items/shields/aspis"
+        },
+        "seed": 5,
+        "face": -1.5707963
+      }
+    },
+    "ceiling": {
+      "type": "coffered-ceiling",
+      "width": "W - 2 * inset - D * 1.1",
+      "length": "L - 2 * inset - D * 1.1",
+      "thickness": "entH + cornH",
+      "nx": "front * 2",
+      "nz": "side * 2",
+      "depth": 0.3,
+      "steps": 1,
+      "at": [
+        [
+          0,
+          "base + colH",
+          0,
+          0
+        ]
+      ],
+      "_about": "the coffered marble ceiling inside the ring of the entablature, over the colonnade walk and the cella"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "W - 2 * inset + D * 1.1 + 2 * cornOut",
+      "length": "L - 2 * inset + D * 1.1 + 2 * cornOut - 0.0",
+      "pitch": "pitch",
+      "at": [
+        [
+          0,
+          "base + colH + entH + cornH",
+          0,
+          0
+        ]
+      ],
+      "_about": "one gable over the whole: its two ends are the pediments"
+    },
+    "acroteria": {
+      "type": "box",
+      "width": "D * 0.5",
+      "length": "D * 0.5",
+      "height": "D * 0.9",
+      "at": [
+        [
+          0,
+          "base + colH + entH + cornH + ridge",
+          "L / 2 - inset + D * 0.55 + cornOut - D * 0.25 - 0.0",
+          0
+        ],
+        [
+          0,
+          "base + colH + entH + cornH + ridge",
+          "0 - L / 2 + inset - D * 0.55 - cornOut + D * 0.25 + 0.0",
+          0
+        ]
+      ],
+      "_about": "the ornaments on the apex of each pediment"
+    }
+  }
+}

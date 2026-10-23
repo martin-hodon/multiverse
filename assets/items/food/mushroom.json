@@ -1,0 +1,106 @@
+{
+ "kind": "item",
+ "name": "Mushroom",
+ "category": "food/vegetable",
+ "era": "everywhere",
+ "region": "everywhere",
+ "_about": "a field mushroom: a pale cap, its gills brown beneath, on a short stem",
+ "params": {
+  "s": [
+   0.8,
+   1.2
+  ]
+ },
+ "materials": {
+  "cap": "mushroom",
+  "gills": "mushroom-gills",
+  "stem": "mushroom-stem"
+ },
+ "parts": [
+  {
+   "id": "stem",
+   "type": "lathe",
+   "material": "stem",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     "s * 0.012",
+     "s * 0.002"
+    ],
+    [
+     "s * 0.01",
+     "s * 0.04"
+    ],
+    [
+     "s * 0.012",
+     "s * 0.05"
+    ]
+   ],
+   "sides": 7
+  },
+  {
+   "id": "gills",
+   "type": "lathe",
+   "material": "gills",
+   "profile": [
+    [
+     "s * 0.012",
+     "s * 0.048"
+    ],
+    [
+     "s * 0.045",
+     "s * 0.052"
+    ]
+   ],
+   "sides": 10,
+   "caps": false,
+   "double": true
+  },
+  {
+   "id": "cap",
+   "type": "lathe",
+   "material": "cap",
+   "profile": [
+    [
+     "s * 0.045",
+     "s * 0.052"
+    ],
+    [
+     "s * 0.04",
+     "s * 0.066"
+    ],
+    [
+     "s * 0.024",
+     "s * 0.078"
+    ],
+    [
+     0,
+     "s * 0.082"
+    ]
+   ],
+   "sides": 10,
+   "caps": false,
+   "double": true
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "s * 0.025",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ]
+ }
+}

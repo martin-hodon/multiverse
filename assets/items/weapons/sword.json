@@ -1,0 +1,154 @@
+{
+ "kind": "item",
+ "name": "Sword",
+ "category": "weapon/sword",
+ "era": "any",
+ "_about": "THE SWORD every sword stands on: a blade rising from its guard, the grip below it, the pommel at its end. Its params are the smith's: the blade's length and width, where it starts to narrow to its point, its thickness, one edge or two, how much it curves; the guard's style and span; the grip; the pommel's style. A range [lo, hi] makes each one drawn a little its own.",
+ "params": {
+  "bladeL": 0.78,
+  "bladeW": 0.024,
+  "narrow": 0.75,
+  "tipW": 0.8,
+  "thick": 0.0065,
+  "edges": 2,
+  "flat": 0.35,
+  "curve": 0,
+  "guardStyle": "straight",
+  "guardW": 0.2,
+  "guardR": 0.008,
+  "drop": 0.03,
+  "gripL": 0.1,
+  "gripR": 0.014,
+  "ridges": 0,
+  "pommelStyle": "wheel",
+  "pommelR": 0.024
+ },
+ "materials": {
+  "blade": "steel",
+  "guard": {
+   "pick": [
+    "iron",
+    "iron",
+    "brass"
+   ]
+  },
+  "grip": {
+   "pick": [
+    "leather-dark",
+    "leather",
+    "leather-red"
+   ]
+  },
+  "pommel": "guard"
+ },
+ "parts": [
+  {
+   "id": "blade",
+   "type": "blade",
+   "material": "blade",
+   "at": [
+    0,
+    "guardR * 1.2",
+    0
+   ],
+   "length": "bladeL",
+   "edges": "edges",
+   "flat": "flat",
+   "curve": "curve",
+   "width": [
+    [
+     0,
+     "bladeW"
+    ],
+    [
+     "narrow",
+     "bladeW * tipW"
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    "thick",
+    "thick * 0.35"
+   ]
+  },
+  {
+   "id": "guard",
+   "use": "items/components/crossguard",
+   "params": {
+    "w": "guardW",
+    "r": "guardR",
+    "style": "guardStyle",
+    "drop": "drop",
+    "grip": "gripL"
+   }
+  },
+  {
+   "id": "grip",
+   "use": "items/components/grip",
+   "at": [
+    0,
+    "0 - gripL - guardR",
+    0
+   ],
+   "params": {
+    "L": "gripL",
+    "r": "gripR",
+    "ridges": "ridges"
+   }
+  },
+  {
+   "id": "pommel",
+   "use": "items/components/pommel",
+   "at": [
+    0,
+    "0 - gripL - guardR",
+    0,
+    0,
+    0,
+    180
+   ],
+   "params": {
+    "r": "pommelR",
+    "style": "pommelStyle"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "0 - gripL * 0.45 - guardR",
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "grip2": [
+   0,
+   "0 - gripL * 0.9 - guardR",
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.12,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "follow": 0.35
+ }
+}

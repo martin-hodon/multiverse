@@ -1,0 +1,141 @@
+{
+ "name": "Tavern room",
+ "_about": "the inn's ground floor: the bar with its keeper, the casks behind it and a shelf of jugs and mugs, two tables of benches (the fire is the house's own hearth, by its chimney)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "bar": {
+   "type": "box",
+   "width": 2.6,
+   "length": 0.6,
+   "height": 1.0,
+   "at": [
+    [
+     0,
+     0,
+     -1.8,
+     0
+    ]
+   ]
+  },
+  "bar top": {
+   "type": "box",
+   "width": 2.7,
+   "length": 0.7,
+   "height": 0.06,
+   "at": [
+    [
+     0,
+     1.0,
+     -1.8,
+     0
+    ]
+   ]
+  },
+  "casks": {
+   "type": "component",
+   "use": "furniture/barrels",
+   "at": [
+    [
+     0,
+     0,
+     -2.6,
+     0
+    ]
+   ],
+   "params": {
+    "n": 3
+   }
+  },
+  "mugs": {
+   "type": "item",
+   "item": "items/tableware/mug",
+   "at": [
+    [
+     -0.8,
+     1.06,
+     -1.75,
+     0
+    ],
+    [
+     -0.4,
+     1.06,
+     -1.75,
+     0
+    ],
+    [
+     0.0,
+     1.06,
+     -1.75,
+     0
+    ],
+    [
+     0.40000000000000013,
+     1.06,
+     -1.75,
+     0
+    ]
+   ],
+   "solid": false
+  },
+  "jugs": {
+   "type": "item",
+   "item": "items/tableware/jug",
+   "at": [
+    [
+     0.9,
+     1.06,
+     -1.85,
+     0
+    ]
+   ],
+   "solid": false
+  },
+  "keeper": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     0,
+     0,
+     -2.25,
+     0
+    ]
+   ],
+   "data": {
+    "work": 1,
+    "gesture": "sell",
+    "face": -1.5707963,
+    "pose": "stand"
+   }
+  },
+  "tables": {
+   "type": "component",
+   "use": "furniture/table",
+   "at": [
+    [
+     -1.4,
+     0,
+     0.8,
+     0
+    ],
+    [
+     1.6,
+     0,
+     0.8,
+     0
+    ]
+   ]
+  }
+ },
+ "build": [
+  "bar",
+  "bar top",
+  "casks",
+  "mugs",
+  "jugs",
+  "keeper",
+  "tables"
+ ]
+}

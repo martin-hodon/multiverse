@@ -1,0 +1,304 @@
+{
+  "name": "periods",
+  "kind": "periods",
+  "_about": "THE CULTURAL PERIODS a world is set in: one is decided at startup (?period=NAME, else drawn from the seed by weight) and everything that has a time and place follows it -- the monuments (architecture.js LANDMARKS), what people wear (dress: a wardrobe style by weight, \"\" the village's own; assets/clothes/wardrobe.json styles, their hair and jewelry), the houses of the town (town: a town.js style of the medieval town, or houses: the period's dwellings by weight, assets/architecture/dwellings; without: the farm plots it had not, a windmill, a pig yard; walls: the [pattern, palette] of its town wall), the fisherman's boat (assets/items/ships), the ground (grass, dry grass, sand) and the trees (flora.js species).",
+  "periods": {
+    "greek": {
+      "name": "Ancient Greece",
+      "weight": 1,
+      "landmarks": [
+        "parthenon",
+        "hephaestus",
+        "didyma"
+      ],
+      "dress": {
+        "greek": 1
+      },
+      "town": {
+        "houses": {
+          "greek-house": 1
+        },
+        "church": false,
+        "without": [
+          "windmill"
+        ],
+        "walls": [
+          "stone/ashlar",
+          "limestone"
+        ]
+      },
+      "boat": "items/ships/fisher-boat",
+      "ground": "dry",
+      "trees": [
+        "cypress",
+        "pine"
+      ]
+    },
+    "roman": {
+      "name": "Ancient Rome",
+      "weight": 1,
+      "landmarks": [
+        "pantheon",
+        "colosseum"
+      ],
+      "dress": {
+        "roman": 1
+      },
+      "town": {
+        "houses": {
+          "domus": 1
+        },
+        "church": false,
+        "without": [
+          "windmill"
+        ],
+        "walls": [
+          "stone/brick",
+          "brick"
+        ]
+      },
+      "boat": "items/ships/fisher-boat",
+      "ground": "dry",
+      "trees": [
+        "cypress",
+        "pine",
+        "oak"
+      ]
+    },
+    "egyptian": {
+      "name": "Ancient Egypt",
+      "weight": 1,
+      "landmarks": [
+        "giza",
+        "dendera"
+      ],
+      "dress": {
+        "egyptian": 1
+      },
+      "town": {
+        "houses": {
+          "egyptian-house": 1
+        },
+        "church": false,
+        "without": [
+          "windmill"
+        ],
+        "walls": [
+          "stone/brick",
+          "sandstone"
+        ]
+      },
+      "boat": "items/ships/reed-boat",
+      "ground": "sand",
+      "trees": [
+        "palm"
+      ]
+    },
+    "chinese": {
+      "name": "Imperial China",
+      "weight": 1,
+      "landmarks": [
+        "templeofheaven"
+      ],
+      "dress": {
+        "chinese": 1
+      },
+      "town": {
+        "houses": {
+          "siheyuan": 1
+        },
+        "church": false,
+        "without": [
+          "windmill"
+        ],
+        "walls": [
+          "stone/brick",
+          "sandstone-grey"
+        ]
+      },
+      "boat": "items/ships/sampan",
+      "ground": "grass",
+      "trees": [
+        "pine",
+        "willow",
+        "maple"
+      ]
+    },
+    "medieval": {
+      "name": "Medieval Europe",
+      "weight": 2,
+      "landmarks": [
+        "notredame",
+        "cologne",
+        "milan",
+        "ulm",
+        "stephansdom",
+        "mainz",
+        "florence",
+        "caerphilly"
+      ],
+      "dress": {
+        "": 3,
+        "gothic": 1
+      },
+      "town": {
+        "styles": [
+          "timbered",
+          "stone",
+          "brick",
+          "plastered"
+        ],
+        "church": true
+      },
+      "boat": "items/ships/fisher-boat",
+      "ground": "grass",
+      "trees": [
+        "oak",
+        "birch",
+        "pine",
+        "spruce",
+        "willow",
+        "maple"
+      ]
+    },
+    "byzantine": {
+      "name": "Byzantium",
+      "weight": 1,
+      "landmarks": [
+        "hagiasophia"
+      ],
+      "dress": {
+        "byzantine": 1
+      },
+      "town": {
+        "styles": [
+          "plastered"
+        ],
+        "church": true
+      },
+      "boat": "items/ships/fisher-boat",
+      "ground": "dry",
+      "trees": [
+        "cypress",
+        "pine"
+      ]
+    },
+    "ottoman": {
+      "name": "The Ottoman Empire",
+      "weight": 1,
+      "landmarks": [
+        "bluemosque",
+        "hagiasophia"
+      ],
+      "dress": {
+        "ottoman": 1
+      },
+      "town": {
+        "styles": [
+          "plastered",
+          "timbered"
+        ],
+        "church": false,
+        "without": [
+          "pigYard"
+        ]
+      },
+      "boat": "items/ships/fisher-boat",
+      "ground": "dry",
+      "trees": [
+        "cypress",
+        "pine",
+        "willow"
+      ]
+    },
+    "islamic": {
+      "name": "The Islamic Golden Age",
+      "weight": 1,
+      "landmarks": [
+        "sultanqaboos",
+        "tajmahal"
+      ],
+      "dress": {
+        "islamic": 1
+      },
+      "town": {
+        "houses": {
+          "courtyard-house": 1
+        },
+        "church": false,
+        "without": [
+          "windmill",
+          "pigYard"
+        ],
+        "walls": [
+          "stone/plaster",
+          "plaster-ochre"
+        ]
+      },
+      "boat": "items/ships/fisher-boat",
+      "ground": "sand",
+      "trees": [
+        "palm"
+      ]
+    },
+    "industrial": {
+      "name": "Industrial Europe",
+      "weight": 1,
+      "landmarks": [
+        "versailles",
+        "parliament",
+        "berlinerdom",
+        "sacrecoeur",
+        "stisaacs",
+        "zwinger",
+        "frauenkirche",
+        "karlskirche",
+        "stpauls",
+        "schwerin",
+        "moritzburg",
+        "melk"
+      ],
+      "dress": {
+        "industrial": 1
+      },
+      "town": {
+        "styles": [
+          "brick"
+        ],
+        "church": true
+      },
+      "boat": "items/ships/skiff",
+      "ground": "grass",
+      "trees": [
+        "oak",
+        "birch",
+        "maple",
+        "pine"
+      ]
+    }
+  },
+  "grounds": {
+    "_about": "the GROUND a period stands on: its colours by elevation (grass.js GRADE: lo the valleys, mid, hi the crests), whether grass blades grow on it (the baked tiles; false: bare earth or sand, flat colour and mottle), and how many of the meadow's flowers it keeps (0..1)",
+    "grass": {
+      "lo": "#527e43",
+      "mid": "#7fa864",
+      "hi": "#a6b264",
+      "grass": true,
+      "flowers": 1
+    },
+    "dry": {
+      "lo": "#6f7a3f",
+      "mid": "#9a9a58",
+      "hi": "#bdb173",
+      "grass": true,
+      "flowers": 0.5
+    },
+    "sand": {
+      "lo": "#b8955c",
+      "mid": "#d2b47c",
+      "hi": "#e4cc98",
+      "grass": false,
+      "flowers": 0.05
+    }
+  }
+}

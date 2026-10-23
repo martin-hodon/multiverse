@@ -1,0 +1,779 @@
+{
+  "name": "Parthenon",
+  "_about": "THE PARTHENON, Athens (447-432 BC), from the same components as the Temple of Hephaestus and at its real size: a stylobate 30.88 x 69.5m on steps half a metre high, 8 x 17 Doric columns 10.43m tall and 1.91m thick, the entablature 3.29m deep with its triglyphs (ninety-six of them, one geometry drawn ninety-six times), the naos with six-column porches at both ends -- the pronaos before the door and the opisthodomos behind -- the coffered ceiling, and the low gable whose ends are the pediments.",
+  "params": {
+    "detail": 4,
+    "_inset": "stylobate edge to column axis",
+    "_ridge": "the pediment's height: half the roof's width times the pitch's slope",
+    "W": 30.88,
+    "L": 69.5,
+    "steps": 3,
+    "stepH": 0.5,
+    "stepOut": 0.7,
+    "base": 1.5,
+    "front": 8,
+    "side": 17,
+    "D": 1.91,
+    "inset": 1.5,
+    "colH": 10.43,
+    "entH": 2.6,
+    "cornH": 0.69,
+    "cornOut": 0.6,
+    "pitch": 13,
+    "ridge": 3.5,
+    "cellaW": 21.7,
+    "cellaL": 48.3,
+    "cellaZ": 0,
+    "cellaH": 10.0,
+    "wallT": 1.2,
+    "doorW": 4.9,
+    "doorH": 9.0,
+    "porch": 6,
+    "porchD": 3.8
+  },
+  "build": [
+    "crepidoma",
+    "peristyle",
+    "cella sides",
+    "cella back",
+    "cella front",
+    "pronaos",
+    "opisthodomos",
+    "Athena base",
+    "Athena Parthenos",
+    "pediment east 0",
+    "pediment east 1",
+    "pediment east 2",
+    "pediment east 3",
+    "pediment east 4",
+    "pediment east 5",
+    "pediment east 6",
+    "pediment east 7",
+    "pediment east 8",
+    "pediment east 9",
+    "pediment east 10",
+    "pediment west 0",
+    "pediment west 1",
+    "pediment west 2",
+    "pediment west 3",
+    "pediment west 4",
+    "pediment west 5",
+    "pediment west 6",
+    "pediment west 7",
+    "pediment west 8",
+    "pediment west 9",
+    "pediment west 10",
+    "ceiling",
+    "roof",
+    "acroteria"
+  ],
+  "parts": {
+    "crepidoma": {
+      "type": "crepidoma",
+      "width": "W",
+      "length": "L",
+      "steps": "steps",
+      "stepH": "stepH",
+      "stepOut": "stepOut",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the stepped platform; its top step is the stylobate the columns stand on"
+    },
+    "peristyle": {
+      "type": "colonnade",
+      "plan": "peristyle",
+      "order": "doric",
+      "front": "front",
+      "side": "side",
+      "width": "W - 2 * inset",
+      "length": "L - 2 * inset",
+      "columnR": "D / 2",
+      "height": "colH",
+      "entablature": {
+        "h": "entH",
+        "depth": "D * 1.1",
+        "cornice": {
+          "h": "cornH",
+          "out": "cornOut"
+        },
+        "triglyphs": {
+          "w": "D * 0.55",
+          "d": 0.14
+        }
+      },
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ],
+      "_about": "the ring of Doric columns, its architrave, frieze and cornice"
+    },
+    "cella sides": {
+      "type": "box",
+      "width": "wallT",
+      "length": "cellaL",
+      "height": "cellaH",
+      "at": [
+        [
+          "0 - cellaW / 2 + wallT / 2",
+          "base",
+          "cellaZ",
+          0
+        ],
+        [
+          "cellaW / 2 - wallT / 2",
+          "base",
+          "cellaZ",
+          0
+        ]
+      ]
+    },
+    "cella back": {
+      "type": "box",
+      "width": "cellaW - 2 * wallT",
+      "length": "wallT",
+      "height": "cellaH",
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ - cellaL / 2 + wallT / 2",
+          0
+        ]
+      ]
+    },
+    "cella front": {
+      "type": "wall",
+      "width": "cellaW - 2 * wallT",
+      "height": "cellaH",
+      "thickness": "wallT",
+      "openings": [
+        {
+          "at": "(cellaW - 2 * wallT) / 2",
+          "width": "doorW",
+          "sill": 0,
+          "springing": "doorH",
+          "head": {
+            "profile": "flat"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ + cellaL / 2",
+          0
+        ]
+      ],
+      "_about": "the front wall of the naos, with its great door"
+    },
+    "pronaos": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": "porch",
+      "spacing": "(cellaW - D * 1.2) / (porch - 1)",
+      "columnR": "D * 0.45",
+      "height": "colH * 0.97",
+      "entablature": {
+        "h": "entH * 0.8",
+        "depth": "D"
+      },
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ + cellaL / 2 + porchD",
+          0
+        ]
+      ],
+      "_about": "the porch before the door: columns across the front of the cella"
+    },
+    "opisthodomos": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": "porch",
+      "spacing": "(cellaW - D * 1.2) / (porch - 1)",
+      "columnR": "D * 0.45",
+      "height": "colH * 0.97",
+      "entablature": {
+        "h": "entH * 0.8",
+        "depth": "D"
+      },
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ - cellaL / 2 - porchD",
+          0
+        ]
+      ],
+      "_about": "the matching porch at the back"
+    },
+    "Athena base": {
+      "type": "box",
+      "width": 8.06,
+      "length": 4.09,
+      "height": 0.9,
+      "at": [
+        [
+          0,
+          1.5,
+          -6.0,
+          0
+        ]
+      ],
+      "_about": "the base of the Athena Parthenos"
+    },
+    "Athena Parthenos": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0,
+          2.4,
+          -6.0,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "gold",
+        "scale": 5.1,
+        "hold": {
+          "L": "items/shields/aspis"
+        },
+        "seed": 7,
+        "face": -1.5707963
+      }
+    },
+    "pediment east 0": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -13.091,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "lie",
+        "scale": 0.377,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 31,
+        "face": 0.0
+      }
+    },
+    "pediment east 1": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -10.473,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "lie",
+        "scale": 1.116,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 32,
+        "face": 0.0
+      }
+    },
+    "pediment east 2": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -7.855,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "sit",
+        "scale": 0.944,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "woman",
+        "seed": 33,
+        "face": -0.7854
+      }
+    },
+    "pediment east 3": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -5.236,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "sit",
+        "scale": 1.318,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 34,
+        "face": -0.7854
+      }
+    },
+    "pediment east 4": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -2.618,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "stand",
+        "scale": 1.213,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 35,
+        "face": -1.5708
+      }
+    },
+    "pediment east 5": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0.0,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "stand",
+        "scale": 1.557,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "woman",
+        "seed": 36,
+        "face": -1.5708
+      }
+    },
+    "pediment east 6": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          2.618,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "stand",
+        "scale": 1.213,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 37,
+        "face": -1.5708
+      }
+    },
+    "pediment east 7": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          5.236,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "sit",
+        "scale": 1.318,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 38,
+        "face": -2.3562
+      }
+    },
+    "pediment east 8": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          7.855,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "sit",
+        "scale": 0.944,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "woman",
+        "seed": 39,
+        "face": -2.3562
+      }
+    },
+    "pediment east 9": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          10.473,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "lie",
+        "scale": 1.116,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 40,
+        "face": 3.1416
+      }
+    },
+    "pediment east 10": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          13.091,
+          15.22,
+          34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "lie",
+        "scale": 0.377,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 41,
+        "face": 3.1416
+      }
+    },
+    "pediment west 0": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -13.091,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "lie",
+        "scale": 0.377,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 62,
+        "face": 0.0
+      }
+    },
+    "pediment west 1": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -10.473,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "lie",
+        "scale": 1.116,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "woman",
+        "seed": 63,
+        "face": 0.0
+      }
+    },
+    "pediment west 2": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -7.855,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "sit",
+        "scale": 0.944,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 64,
+        "face": 0.7854
+      }
+    },
+    "pediment west 3": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -5.236,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "sit",
+        "scale": 1.318,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 65,
+        "face": 0.7854
+      }
+    },
+    "pediment west 4": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -2.618,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "stand",
+        "scale": 1.213,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "woman",
+        "seed": 66,
+        "face": 1.5708
+      }
+    },
+    "pediment west 5": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0.0,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "stand",
+        "scale": 1.557,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 67,
+        "face": 1.5708
+      }
+    },
+    "pediment west 6": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          2.618,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "stand",
+        "scale": 1.213,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 68,
+        "face": 1.5708
+      }
+    },
+    "pediment west 7": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          5.236,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "sit",
+        "scale": 1.318,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "woman",
+        "seed": 69,
+        "face": 2.3562
+      }
+    },
+    "pediment west 8": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          7.855,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "sit",
+        "scale": 0.944,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 70,
+        "face": 2.3562
+      }
+    },
+    "pediment west 9": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          10.473,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "lie",
+        "scale": 1.116,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "man",
+        "seed": 71,
+        "face": 3.1416
+      }
+    },
+    "pediment west 10": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          13.091,
+          15.22,
+          -34.35,
+          0
+        ]
+      ],
+      "data": {
+        "pose": "lie",
+        "scale": 0.377,
+        "stone": "marble",
+        "style": "greek",
+        "kind": "woman",
+        "seed": 72,
+        "face": 3.1416
+      }
+    },
+    "ceiling": {
+      "type": "coffered-ceiling",
+      "width": "W - 2 * inset - D * 1.1",
+      "length": "L - 2 * inset - D * 1.1",
+      "thickness": "entH + cornH",
+      "nx": "front * 2",
+      "nz": "side * 2",
+      "depth": 0.3,
+      "steps": 1,
+      "at": [
+        [
+          0,
+          "base + colH",
+          0,
+          0
+        ]
+      ],
+      "_about": "the coffered marble ceiling inside the ring of the entablature, over the colonnade walk and the cella"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "W - 2 * inset + D * 1.1 + 2 * cornOut",
+      "length": "L - 2 * inset + D * 1.1 + 2 * cornOut - 2.0",
+      "pitch": "pitch",
+      "at": [
+        [
+          0,
+          "base + colH + entH + cornH",
+          0,
+          0
+        ]
+      ],
+      "_about": "one gable over the whole: its two ends are the pediments"
+    },
+    "acroteria": {
+      "type": "box",
+      "width": "D * 0.5",
+      "length": "D * 0.5",
+      "height": "D * 0.9",
+      "at": [
+        [
+          0,
+          "base + colH + entH + cornH + ridge",
+          "L / 2 - inset + D * 0.55 + cornOut - D * 0.25 - 1.0",
+          0
+        ],
+        [
+          0,
+          "base + colH + entH + cornH + ridge",
+          "0 - L / 2 + inset - D * 0.55 - cornOut + D * 0.25 + 1.0",
+          0
+        ]
+      ],
+      "_about": "the ornaments on the apex of each pediment"
+    }
+  }
+}

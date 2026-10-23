@@ -1,0 +1,160 @@
+{
+ "kind": "item",
+ "name": "Cassone",
+ "category": "furniture/storage",
+ "era": "1400-1600",
+ "region": "Italy",
+ "_about": "the marriage chest of Renaissance Italy: shaped like a sarcophagus on lion's paws, its moulded lid stepped, its front a painted or gilded panel",
+ "params": {
+  "w": [
+   1.5,
+   1.8
+  ],
+  "d": 0.55,
+  "h": 0.68
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "gilt"
+   ]
+  },
+  "panel": {
+   "pick": [
+    {
+     "pattern": "painted/russian floral",
+     "palette": "baroque"
+    },
+    "gilt",
+    "brocade",
+    {
+     "pattern": "heraldry/quarterly",
+     "palette": "gules-or",
+     "fit": true
+    }
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "plinth",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.06",
+    0.08,
+    "d + 0.06"
+   ],
+   "at": [
+    0,
+    0.12,
+    0
+   ]
+  },
+  {
+   "id": "body",
+   "type": "lathe",
+   "material": "wood",
+   "faceted": true,
+   "sides": 4,
+   "stretch": [
+    "w / d",
+    1,
+    1
+   ],
+   "at": [
+    0,
+    0,
+    0,
+    45,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     "d * 0.62",
+     0.16
+    ],
+    [
+     "d * 0.72",
+     "h - 0.12"
+    ]
+   ]
+  },
+  {
+   "id": "panel",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    "w * 0.7",
+    "h * 0.45",
+    0.01
+   ],
+   "at": [
+    0,
+    "h * 0.5",
+    "d / 2 + 0.03"
+   ]
+  },
+  {
+   "id": "lid",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.1",
+    0.05,
+    "d + 0.1"
+   ],
+   "at": [
+    0,
+    "h - 0.08",
+    0
+   ]
+  },
+  {
+   "id": "lid top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.05",
+    0.06,
+    "d - 0.05"
+   ],
+   "round": 0.02,
+   "at": [
+    0,
+    "h - 0.03",
+    0
+   ]
+  },
+  {
+   "id": "paws",
+   "type": "sphere",
+   "material": "wood",
+   "r": 0.05,
+   "at": [
+    [
+     "0 - w / 2 - 0.02",
+     0.05,
+     "0 - d / 2 - 0.02"
+    ],
+    [
+     "w / 2 - 0.02",
+     0.05,
+     "0 - d / 2 - 0.02"
+    ],
+    [
+     "0 - w / 2 - 0.02",
+     0.05,
+     "d / 2 - 0.02"
+    ],
+    [
+     "w / 2 - 0.02",
+     0.05,
+     "d / 2 - 0.02"
+    ]
+   ]
+  }
+ ]
+}

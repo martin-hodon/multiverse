@@ -1,0 +1,46 @@
+{
+ "kind": "item",
+ "name": "Shield row",
+ "category": "component",
+ "_about": "round shields hung overlapping along both gunwales, n a side from x = from to x = to at height y and half-breadth z, faces out",
+ "params": {
+  "n": 10,
+  "from": 3,
+  "to": 20,
+  "y": 1.7,
+  "z": 2.3,
+  "w": 0.85
+ },
+ "materials": {},
+ "parts": [
+  {
+   "id": "shield",
+   "use": "items/shields/round",
+   "params": {
+    "w": "w"
+   },
+   "along": {
+    "n": "n",
+    "from": [
+     "from",
+     "y",
+     "z"
+    ],
+    "to": [
+     "to",
+     "y",
+     "z"
+    ]
+   },
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z"
+  }
+ ]
+}

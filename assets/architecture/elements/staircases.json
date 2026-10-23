@@ -1,0 +1,181 @@
+{
+  "name": "Staircases",
+  "_about": "STAIRS THAT FLY: each flight spans from landing to landing on a sloped soffit parallel to its own pitch (the rampant vault a stone stair is built on), and the landings are slabs of the same depth. A `staircase` is written as a WALK -- a flight, the landing it arrives on, and the flights that leave that landing `ahead`, `left`, `right` or `back` beside the one that came, each with a landing and flights of its own -- so the imperial stair, the dog-leg, the bifurcated T and the grand stairs of a baroque palace are all the same few lines. Where a flight meets a landing the two are one piece of stone, welded, with no face drawn between them. A `spiral-stair` is the same flight wound round a newel, its tread measured on the walking line, left- or right-handed, with or without its post.",
+  "params": {
+    "detail": 8,
+    "rise": 0.16,
+    "run": 0.32,
+    "gap": 16
+  },
+  "build": [
+    "imperial",
+    "dog-leg",
+    "bifurcated",
+    "spiral",
+    "open-well spiral"
+  ],
+  "parts": {
+    "imperial": {
+      "type": "staircase",
+      "rise": "rise",
+      "run": "run",
+      "flight": 12,
+      "width": 4,
+      "landing": {
+        "depth": 3.5,
+        "width": 12,
+        "then": [
+          {
+            "from": "back",
+            "at": -4,
+            "flight": 12,
+            "width": 3,
+            "landing": {
+              "depth": 2.5,
+              "width": 3
+            }
+          },
+          {
+            "from": "back",
+            "at": 4,
+            "flight": 12,
+            "width": 3,
+            "landing": {
+              "depth": 2.5,
+              "width": 3
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "dog-leg": {
+      "type": "staircase",
+      "rise": "rise",
+      "run": "run",
+      "flight": 10,
+      "width": 1.4,
+      "landing": {
+        "depth": 1.4,
+        "width": 2.9,
+        "shift": 0.75,
+        "then": [
+          {
+            "from": "back",
+            "at": 0.75,
+            "flight": 10,
+            "width": 1.4,
+            "landing": {
+              "depth": 1.4,
+              "width": 2.9,
+              "shift": -0.75,
+              "then": [
+                {
+                  "from": "back",
+                  "at": -0.75,
+                  "flight": 10,
+                  "width": 1.4,
+                  "landing": {
+                    "depth": 1.6,
+                    "width": 1.4
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          "gap",
+          0
+        ]
+      ]
+    },
+    "bifurcated": {
+      "type": "staircase",
+      "rise": "rise",
+      "run": "run",
+      "flight": 8,
+      "width": 3,
+      "landing": {
+        "depth": 3,
+        "width": 9,
+        "then": [
+          {
+            "from": "left",
+            "at": 1.5,
+            "flight": 9,
+            "width": 2.4,
+            "landing": {
+              "depth": 2,
+              "width": 2.4
+            }
+          },
+          {
+            "from": "right",
+            "at": 1.5,
+            "flight": 9,
+            "width": 2.4,
+            "landing": {
+              "depth": 2,
+              "width": 2.4
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          "gap",
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "spiral": {
+      "type": "spiral-stair",
+      "radius": 1.4,
+      "newel": 0.2,
+      "turn": 24,
+      "top": 4.4,
+      "rise": 0.19,
+      "soffit": 0.22,
+      "at": [
+        [
+          "gap * 1.8",
+          0,
+          "gap",
+          0
+        ]
+      ]
+    },
+    "open-well spiral": {
+      "type": "spiral-stair",
+      "radius": 2.2,
+      "newel": 0.8,
+      "turn": 15,
+      "top": 5,
+      "rise": 0.18,
+      "hand": "left",
+      "post": false,
+      "at": [
+        [
+          "gap * 2.5",
+          0,
+          "gap * 0.3",
+          0
+        ]
+      ]
+    }
+  }
+}

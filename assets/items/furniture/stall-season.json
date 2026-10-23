@@ -1,0 +1,35 @@
+{
+  "kind": "item",
+  "name": "Stall wares by season",
+  "category": "furniture",
+  "era": "-500-1900",
+  "region": "everywhere temperate",
+  "_about": "WHAT THE MARKET'S GREENGROCER AND FRUITERER HAVE ON THEIR COUNTERS, by the season: `wares` vegetables or fruit, `season` spring, summer, autumn or late (late autumn: what keeps). The stall itself (items/furniture/market-stall) keeps its baskets and the wares that do not change; index.html builds each season's of these once and shows the one the world is in. Old World produce only (no potato, tomato, maize, pumpkin): the market stands in every period.",
+  "params": {
+    "wares": "vegetables",
+    "season": "summer"
+  },
+  "materials": {},
+  "parts": [
+    { "id": "radishes", "use": "items/food/radish", "at": [[0.4, 0.95, -0.85], [0.42, 0.95, -0.7, 40], [0.38, 0.95, -0.55, 80], [0.44, 0.95, -0.4, 120]], "when": { "wares": "vegetables", "season": "spring" } },
+    { "id": "spring leeks", "use": "items/food/leek", "at": [[0.68, 0.97, -0.6, 0, 0, -90], [0.68, 0.97, -0.4, 0, 0, -90], [0.68, 0.97, -0.2, 0, 0, -90]], "when": { "wares": "vegetables", "season": ["spring", "late"] } },
+    { "id": "spring onions", "use": "items/food/onion", "at": [[0.4, 0.95, 0.0], [0.45, 0.95, 0.15], [0.38, 0.95, 0.28]], "when": { "wares": "vegetables", "season": ["spring", "late"] } },
+    { "id": "basket radishes", "use": "items/food/radish", "at": [[0.6, 1.01, 0.6], [0.66, 1.01, 0.7, 120]], "when": { "wares": "vegetables", "season": "spring" } },
+    { "id": "pea pods", "use": "items/food/pea-pods", "at": [[0.4, 0.95, -0.85], [0.42, 0.95, -0.6, 30], [0.4, 0.95, -0.35, 60]], "when": { "wares": "vegetables", "season": "summer" } },
+    { "id": "bean pods", "use": "items/food/bean-pods", "at": [[0.68, 0.95, -0.7, 90], [0.68, 0.95, -0.4, 90]], "when": { "wares": "vegetables", "season": "summer" } },
+    { "id": "cucumbers", "use": "items/food/cucumber", "at": [[0.42, 0.95, 0.05, 90], [0.42, 0.95, 0.25, 80]], "when": { "wares": "vegetables", "season": "summer" } },
+    { "id": "basket peas", "use": "items/food/pea-pods", "at": [[0.6, 1.01, 0.6], [0.66, 1.01, 0.7, 120]], "when": { "wares": "vegetables", "season": "summer" } },
+    { "id": "cabbages", "use": "items/food/cabbage", "at": [[0.4, 0.95, -0.8, 0, 0, 0], [0.4, 0.95, -0.4, 0, 0, 0], [0.4, 0.95, 0.0, 0, 0, 0]], "when": { "wares": "vegetables", "season": ["autumn", "late"] }, "params": { "s": 0.75 } },
+    { "id": "turnips", "use": "items/food/turnip", "at": [[0.6, 1.01, 0.6], [0.66, 1.01, 0.7, 120]], "when": { "wares": "vegetables", "season": ["autumn", "late"] }, "params": { "s": 0.8 } },
+    { "id": "carrots", "use": "items/food/carrot", "at": [[0.7, 0.97, -0.9, 0, 0, -90], [0.7, 0.97, -0.7, 0, 0, -90], [0.7, 0.97, -0.5, 0, 0, -90], [0.7, 0.97, -0.3, 0, 0, -90]], "when": { "wares": "vegetables", "season": "autumn" } },
+    { "id": "parsnips", "use": "items/food/parsnip", "at": [[0.7, 0.97, 0.05, 0, 0, -90], [0.7, 0.97, 0.2, 0, 0, -90]], "when": { "wares": "vegetables", "season": "late" } },
+    { "id": "beetroots", "use": "items/food/beetroot", "at": [[0.4, 0.95, 0.4], [0.45, 0.95, 0.5]], "when": { "wares": "vegetables", "season": ["autumn", "late"] } },
+    { "id": "strawberries", "use": "items/food/strawberries", "at": [[0.5, 1.03, -0.6], [0.5, 0.95, 0.0]], "when": { "wares": "fruit", "season": ["spring", "summer"] } },
+    { "id": "cherries", "use": "items/food/cherries", "at": [[0.47, 1.05, 0.48], [0.54, 1.05, 0.54], [0.6, 0.95, -0.1]], "when": { "wares": "fruit", "season": "summer" } },
+    { "id": "plums", "use": "items/food/plum", "at": [[0.65, 0.95, 0.2], [0.7, 0.95, 0.3], [0.62, 0.95, 0.35]], "when": { "wares": "fruit", "season": ["summer", "autumn"] } },
+    { "id": "apples", "use": "items/food/apple", "at": [[0.47, 1.05, -0.62], [0.54, 1.05, -0.56], [0.5, 1.08, -0.6]], "when": { "wares": "fruit", "season": ["autumn", "late"] } },
+    { "id": "pears", "use": "items/food/pear", "at": [[0.47, 1.05, 0.48], [0.54, 1.05, 0.54]], "when": { "wares": "fruit", "season": ["autumn", "late"] } },
+    { "id": "grapes", "use": "items/food/grapes", "at": [[0.62, 0.95, -0.1], [0.45, 0.95, 0.05]], "when": { "wares": "fruit", "season": "autumn" } }
+  ],
+  "markers": []
+}

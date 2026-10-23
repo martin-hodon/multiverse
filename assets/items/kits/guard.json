@@ -1,0 +1,24 @@
+{
+ "kind": "item-kit",
+ "name": "Town guard",
+ "_about": "WHAT THE TOWN'S WATCH CARRIES (index.html's guards; items.js pickKit): one LOADOUT each, by weight -- `main` in the weapon hand, `off` in the other (a shield), each an item or { pick: [...] } of them, then one of `variants` of it (its drawn sizes, heads and heraldry). A watch as a town might have kept it before 1800: spearmen and swordsmen behind shields, halberdiers and billmen, now and then an axe, a mace, a crossbow or a musket.",
+ "variants": 4,
+ "loadouts": [
+  { "id": "spearman", "weight": 3,
+    "main": { "pick": ["items/weapons/spear", "items/weapons/winged-spear", "items/weapons/partisan"] },
+    "off": { "pick": ["items/shields/heater", "items/shields/kite", "items/shields/round", "items/shields/oval"] } },
+  { "id": "swordsman", "weight": 3,
+    "main": { "pick": ["items/weapons/arming-sword", "items/weapons/falchion", "items/weapons/sabre", "items/weapons/viking-sword"] },
+    "off": { "pick": ["items/shields/heater", "items/shields/round", "items/shields/buckler", "items/shields/targe", "items/shields/kite"] } },
+  { "id": "halberdier", "weight": 3,
+    "main": { "pick": ["items/weapons/halberd", "items/weapons/bill", "items/weapons/glaive", "items/weapons/poleaxe"] } },
+  { "id": "axeman", "weight": 1,
+    "main": { "pick": ["items/weapons/bearded-axe", "items/weapons/battle-axe"] },
+    "off": { "pick": ["items/shields/round", "items/shields/heater"] } },
+  { "id": "maceman", "weight": 1,
+    "main": { "pick": ["items/weapons/flanged-mace", "items/weapons/war-hammer", "items/weapons/morning-star"] },
+    "off": { "pick": ["items/shields/heater", "items/shields/buckler"] } },
+  { "id": "crossbowman", "weight": 1, "main": "items/weapons/crossbow" },
+  { "id": "musketeer", "weight": 1, "main": "items/weapons/musket" }
+ ]
+}

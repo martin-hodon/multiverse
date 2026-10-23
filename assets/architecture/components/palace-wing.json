@@ -1,0 +1,329 @@
+{
+  "name": "Palace wing",
+  "_about": "A PALACE WING, the block every Baroque palace, abbey and castle is built of: `n` storeys of `H` on an `L` x `D` plan, a window every `axis` metres all round (the ground storey's +z face doors, or windows), floors with the stair coming up through them, a dog-leg stair to every storey at the -x end, and a roof of any form. Set wings end to end and round courtyards for a whole palace; everything in it is walked.",
+  "params": {
+    "detail": 4,
+    "L": 40,
+    "D": 14,
+    "n": 3,
+    "H": 5.0,
+    "t": 0.9,
+    "slab": 0.35,
+    "axis": 3.8,
+    "winW": 1.3,
+    "sill": 0.95,
+    "winH": 2.3,
+    "doorSill": 0,
+    "doorW": 1.8,
+    "doorH": 3.2,
+    "head": "segmental",
+    "seg": 0.35,
+    "roofForm": "hip",
+    "pitch": 42,
+    "overhang": 0.45,
+    "SW": 2.7,
+    "run": 0.28,
+    "f": "round(H / 0.34)",
+    "_L": "along x; D across (z). Storeys n of H each, the ground one first",
+    "_axis": "the window rhythm: one window every `axis` metres of a face",
+    "_doorSill": "the ground storey's openings on the +z face: 0 makes them doors (a courtyard front), a sill makes them windows",
+    "_SW": "the stair strip at the -x end, full depth: a dog-leg of two flights of `f` steps per storey",
+    "_roofForm": "any roof form (hip, gable, mansard...)",
+    "nx": "max(1, floor(L / axis - 0.5))",
+    "nz": "max(1, floor(D / axis - 0.5))",
+    "_nx": "windows along a long face, and (nz) along an end",
+    "stairAt": 0,
+    "_stairAt": "how far the stair strip stands in from the -x end's inner face (clear of a neighbouring wing that overlaps this one's end)",
+    "x0": "0 - L / 2 + t + stairAt",
+    "_x0": "where the stair strip begins"
+  },
+  "build": [
+    "ground storey",
+    "upper storeys",
+    "floors",
+    "floors by the stair",
+    "floors before the stair",
+    "attic floor",
+    "stair",
+    "roof"
+  ],
+  "parts": {
+    "ground storey": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "L",
+          "D"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "openings": {
+        "pattern": "nx",
+        "width": "winW",
+        "gap": "axis - winW",
+        "sill": "sill",
+        "springing": "sill + winH",
+        "head": {
+          "profile": "head",
+          "seg": "seg"
+        }
+      },
+      "faces": {
+        "0": {
+          "pattern": "nx",
+          "width": "doorW",
+          "gap": "axis - doorW",
+          "sill": "doorSill",
+          "springing": "doorSill + doorH",
+          "head": {
+            "profile": "head",
+            "seg": "seg"
+          }
+        },
+        "1": {
+          "pattern": "nz",
+          "width": "winW",
+          "gap": "axis - winW",
+          "sill": "sill",
+          "springing": "sill + winH",
+          "head": {
+            "profile": "head",
+            "seg": "seg"
+          }
+        },
+        "3": {
+          "pattern": "nz",
+          "width": "winW",
+          "gap": "axis - winW",
+          "sill": "sill",
+          "springing": "sill + winH",
+          "head": {
+            "profile": "head",
+            "seg": "seg"
+          }
+        }
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the ground storey: windows all round, and on the +z face a row of doors (or windows, by `doorSill`)"
+    },
+    "upper storeys": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "L",
+          "D"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "openings": {
+        "pattern": "nx",
+        "width": "winW",
+        "gap": "axis - winW",
+        "sill": "sill",
+        "springing": "sill + winH",
+        "head": {
+          "profile": "head",
+          "seg": "seg"
+        }
+      },
+      "faces": {
+        "1": {
+          "pattern": "nz",
+          "width": "winW",
+          "gap": "axis - winW",
+          "sill": "sill",
+          "springing": "sill + winH",
+          "head": {
+            "profile": "head",
+            "seg": "seg"
+          }
+        },
+        "3": {
+          "pattern": "nz",
+          "width": "winW",
+          "gap": "axis - winW",
+          "sill": "sill",
+          "springing": "sill + winH",
+          "head": {
+            "profile": "head",
+            "seg": "seg"
+          }
+        }
+      },
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n - 1",
+        "step": [
+          0,
+          "H",
+          0,
+          0
+        ]
+      },
+      "_about": "every storey above: the same walls, the windows over the windows below"
+    },
+    "floors": {
+      "type": "box",
+      "width": "L / 2 - t - x0 - SW",
+      "length": "D - 2 * t",
+      "height": "slab",
+      "at": [
+        [
+          "(x0 + SW + L / 2 - t) / 2",
+          "H - slab",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n - 1",
+        "step": [
+          0,
+          "H",
+          0,
+          0
+        ]
+      },
+      "_about": "the floor of every storey above the ground, all but the stair strip..."
+    },
+    "floors by the stair": {
+      "type": "box",
+      "width": "SW",
+      "length": "D / 2 - t - (0 - D / 2 + t + 1.4 + f * run + 1.4)",
+      "height": "slab",
+      "at": [
+        [
+          "x0 + SW / 2",
+          "H - slab",
+          "(0 - D / 2 + t + 1.4 + f * run + 1.4 + D / 2 - t) / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n - 1",
+        "step": [
+          0,
+          "H",
+          0,
+          0
+        ]
+      },
+      "_about": "...and of the strip, the part beyond the halfway landing: the flights and that landing come up through the rest"
+    },
+    "floors before the stair": {
+      "type": "box",
+      "width": "stairAt",
+      "length": "D - 2 * t",
+      "height": "slab",
+      "at": [
+        [
+          "0 - L / 2 + t + stairAt / 2",
+          "H - slab",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "(n - 1) * min(1, ceil(stairAt))",
+        "step": [
+          0,
+          "H",
+          0,
+          0
+        ]
+      },
+      "_about": "...and the floor between the -x end and the stair strip, when the strip stands in from it"
+    },
+    "attic floor": {
+      "type": "box",
+      "width": "L - 2 * t",
+      "length": "D - 2 * t",
+      "height": "slab",
+      "at": [
+        [
+          0,
+          "n * H - slab",
+          0,
+          0
+        ]
+      ],
+      "_about": "the ceiling of the top storey, under the roof"
+    },
+    "stair": {
+      "type": "staircase",
+      "rise": "H / (2 * f)",
+      "run": "run",
+      "soffit": 0.3,
+      "flight": "f",
+      "width": 1.3,
+      "landing": {
+        "depth": 1.4,
+        "width": "SW",
+        "shift": 0.7,
+        "then": [
+          {
+            "from": "back",
+            "at": 0.7,
+            "flight": "f",
+            "width": 1.3,
+            "landing": {
+              "depth": 1.4,
+              "width": "SW",
+              "shift": 0.7
+            }
+          }
+        ]
+      },
+      "place": [
+        [
+          "x0 + 2.05",
+          0,
+          "0 - D / 2 + t + 1.4",
+          -1.5707963
+        ]
+      ],
+      "repeat": {
+        "count": "n - 1",
+        "step": [
+          0,
+          "H",
+          0,
+          0
+        ]
+      },
+      "_about": "a dog-leg to every storey, stacked in the strip at the -x end: a flight, a landing across the strip, a flight back to the landing the next one leaves from"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "roofForm",
+      "width": "D",
+      "length": "L",
+      "pitch": "pitch",
+      "overhang": "overhang",
+      "at": [
+        [
+          0,
+          "n * H",
+          0,
+          1.5707963
+        ]
+      ]
+    }
+  }
+}

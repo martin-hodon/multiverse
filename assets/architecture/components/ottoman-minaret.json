@@ -1,0 +1,113 @@
+{
+  "name": "Ottoman minaret",
+  "_about": "AN OTTOMAN MINARET: slender, on a tall polygonal pedestal, `balconies` balconies high up the shaft (the `minaret` component on the pedestal, its balconies spaced by `tier` rather than filling the shaft), the shaft running on above the last, and the pencil cap -- a tall lead cone -- with its finial.",
+  "params": {
+    "detail": 4,
+    "foot": 11.0,
+    "h": 42.0,
+    "r": 2.0,
+    "balconies": 3,
+    "tier": 10.0,
+    "bw": 1.0,
+    "capRise": "r * 4",
+    "_foot": "the pedestal; on it the `minaret`'s own plinth (1.2m, its default) and the shaft, h tall",
+    "_tier": "a balcony every `tier` from the plinth's top -- fewer than h / tier, so the shaft runs on over the last; the cap `capRise` tall"
+  },
+  "build": [
+    "pedestal",
+    "minaret",
+    "cap",
+    "finial"
+  ],
+  "parts": {
+    "pedestal": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": "r * 1.55"
+      },
+      "height": "foot",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the tall polygonal base, up to the roofs"
+    },
+    "minaret": {
+      "type": "component",
+      "use": "components/minaret",
+      "params": {
+        "h": "h",
+        "r": "r",
+        "balconies": "balconies",
+        "bw": "bw",
+        "tier": "tier"
+      },
+      "build": [
+        "plinth",
+        "shaft",
+        "corbelling",
+        "balcony",
+        "parapet"
+      ],
+      "at": [
+        [
+          0,
+          "foot",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "pedestal"
+      ],
+      "_about": "the `minaret` on it: its plinth (1.2m), the shaft and its balconies, one every `tier` from the plinth's top"
+    },
+    "cap": {
+      "type": "dome",
+      "radius": "r * 1.08",
+      "thickness": 0,
+      "sides": 16,
+      "head": {
+        "profile": "trigonal",
+        "rise": "capRise"
+      },
+      "at": [
+        [
+          0,
+          "foot + 1.2 + h",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "minaret"
+      ],
+      "_about": "the lead pencil cap on the shaft's head"
+    },
+    "finial": {
+      "type": "column",
+      "radius": "r * 0.07",
+      "height": "r * 1.3",
+      "sides": 6,
+      "taper": 0.3,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "cap",
+      "standsOn": [
+        "cap"
+      ]
+    }
+  }
+}

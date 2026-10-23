@@ -1,0 +1,254 @@
+{
+ "kind": "item",
+ "name": "Mace head",
+ "category": "component",
+ "_about": "the head of a striking weapon, round the haft's end at 0: flanged (a mace's radiating plates), spiked (a morning star's ball of spikes), hammer (a war hammer's face with its beak behind and a spike above), knobbed (a plain iron knob)",
+ "params": {
+  "style": "flanged",
+  "s": 1,
+  "flanges": 7
+ },
+ "materials": {
+  "head": "iron"
+ },
+ "parts": [
+  {
+   "id": "flanges",
+   "type": "plate",
+   "when": {
+    "style": "flanged"
+   },
+   "material": "head",
+   "around": {
+    "n": "flanges",
+    "r": 0
+   },
+   "outline": [
+    [
+     "0.01 * s",
+     "-0.04 * s"
+    ],
+    [
+     "0.045 * s",
+     "-0.02 * s"
+    ],
+    [
+     "0.052 * s",
+     "0.05 * s"
+    ],
+    [
+     "0.035 * s",
+     "0.08 * s"
+    ],
+    [
+     "0.01 * s",
+     "0.085 * s"
+    ]
+   ],
+   "thick": 0.006
+  },
+  {
+   "id": "collar",
+   "type": "lathe",
+   "when": {
+    "style": [
+     "flanged",
+     "hammer",
+     "knobbed"
+    ]
+   },
+   "material": "head",
+   "profile": [
+    [
+     0.02,
+     -0.05
+    ],
+    [
+     0.02,
+     0.09
+    ],
+    [
+     0.012,
+     0.1
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "ball",
+   "type": "sphere",
+   "when": {
+    "style": "spiked"
+   },
+   "material": "head",
+   "r": "0.055 * s",
+   "at": [
+    0,
+    "0.05 * s",
+    0
+   ]
+  },
+  {
+   "id": "spikes",
+   "type": "rod",
+   "when": {
+    "style": "spiked"
+   },
+   "material": "head",
+   "from": [
+    "0.045 * s",
+    0,
+    0
+   ],
+   "to": [
+    "0.1 * s",
+    0,
+    0
+   ],
+   "r0": 0.012,
+   "r1": 0.0005,
+   "sides": 5,
+   "around": {
+    "n": 7,
+    "r": 0
+   },
+   "at": [
+    [
+     0,
+     "0.05 * s",
+     0
+    ],
+    [
+     0,
+     "0.08 * s",
+     0,
+     0,
+     0,
+     45
+    ],
+    [
+     0,
+     "0.02 * s",
+     0,
+     25,
+     0,
+     -45
+    ]
+   ]
+  },
+  {
+   "id": "crown spike",
+   "type": "rod",
+   "when": {
+    "style": "spiked"
+   },
+   "material": "head",
+   "from": [
+    0,
+    "0.09 * s",
+    0
+   ],
+   "to": [
+    0,
+    "0.16 * s",
+    0
+   ],
+   "r0": 0.013,
+   "r1": 0.0005,
+   "sides": 5
+  },
+  {
+   "id": "face",
+   "type": "box",
+   "when": {
+    "style": "hammer"
+   },
+   "material": "head",
+   "size": [
+    0.045,
+    0.04,
+    0.04
+   ],
+   "at": [
+    0.042,
+    0.05,
+    0
+   ]
+  },
+  {
+   "id": "beak",
+   "type": "blade",
+   "when": {
+    "style": "hammer"
+   },
+   "material": "head",
+   "at": [
+    -0.018,
+    0.05,
+    0,
+    0,
+    0,
+    90
+   ],
+   "length": 0.11,
+   "flat": 0.0,
+   "width": [
+    [
+     0,
+     0.013
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.016,
+    0.004
+   ]
+  },
+  {
+   "id": "top",
+   "type": "blade",
+   "when": {
+    "style": "hammer"
+   },
+   "material": "head",
+   "at": [
+    0,
+    0.09,
+    0
+   ],
+   "length": 0.08,
+   "flat": 0.0,
+   "width": [
+    [
+     0,
+     0.012
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "thick": [
+    0.012,
+    0.004
+   ]
+  },
+  {
+   "id": "knob",
+   "type": "sphere",
+   "when": {
+    "style": "knobbed"
+   },
+   "material": "head",
+   "r": 0.045,
+   "at": [
+    0,
+    0.1,
+    0
+   ]
+  }
+ ]
+}

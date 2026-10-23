@@ -1,0 +1,49 @@
+{
+ "kind": "item",
+ "name": "Oar",
+ "category": "component",
+ "_about": "an oar l long along +x from its handle at the origin: a round loom and a flat blade at its end",
+ "params": {
+  "l": 4,
+  "r": 0.03,
+  "bladeL": "l * 0.28",
+  "bladeW": 0.15
+ },
+ "materials": {
+  "wood": "ash"
+ },
+ "parts": [
+  {
+   "id": "loom",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "l - bladeL",
+    0,
+    0
+   ],
+   "r0": "r",
+   "r1": "r * 0.9"
+  },
+  {
+   "id": "blade",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "bladeL",
+    0.02,
+    "bladeW"
+   ],
+   "at": [
+    "l - bladeL / 2",
+    0,
+    0
+   ]
+  }
+ ]
+}

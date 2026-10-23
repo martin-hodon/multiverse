@@ -1,0 +1,385 @@
+{
+  "name": "Stift Melk",
+  "_about": "STIFT MELK, the Benedictine abbey over the Danube (1702-36), from components: the Pr\u00e4latenhof, one `court` -- a ring of rooms round the courtyard, walked all the way round on every storey, entered by its gate; the church at its west side, its nave opening through a great arch into the crossing, where PENDENTIVES carry the drum and the bell-shaped dome with its lantern; its west front between twin square towers (`domed-tower`s, under open lantern stages and bell caps); and in front the terrace between the library wing and the marble-hall wing, closed by the curved gallery (a `curved-gallery`, the Altane).",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.8,
+    "steps": 3,
+    "stepOut": 0.5,
+    "margin": 4
+  },
+  "build": [
+    "prelates court",
+    "nave",
+    "nave roof",
+    "crossing",
+    "crossing pendentives",
+    "dome",
+    "towers",
+    "library wing",
+    "marble hall wing",
+    "altane"
+  ],
+  "parts": {
+    "prelates court": {
+      "type": "court",
+      "plan": {
+        "rect": [
+          100.0,
+          72.0
+        ]
+      },
+      "depth": 14.0,
+      "storeys": 4,
+      "storeyH": 5.0,
+      "axis": 3.8,
+      "gate": {
+        "face": 1,
+        "width": 4.2,
+        "height": 5.5
+      },
+      "roof": {
+        "form": "hip",
+        "pitch": 38
+      },
+      "joins": [
+        {
+          "face": 3,
+          "at": 0,
+          "width": 21.2,
+          "door": {
+            "width": 3.0,
+            "height": 4.2
+          }
+        }
+      ],
+      "at": [
+        [
+          50.0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the Pr\u00e4latenhof: the monastery's four wings round their courtyard, one ring of rooms, entered by the gate in the east wing"
+    },
+    "nave": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          26.0,
+          18.0
+        ]
+      },
+      "thickness": 1.4,
+      "height": 24.0,
+      "tiers": [
+        {
+          "h": 12,
+          "openings": {
+            "pattern": "3",
+            "width": 2.4,
+            "gap": 5.8,
+            "sill": 4,
+            "springing": 9,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "3",
+            "width": 2.2,
+            "gap": 6.0,
+            "sill": 2,
+            "springing": 8,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "faces": {
+        "1": [
+          {
+            "at": 0,
+            "width": 14.0,
+            "sill": 0,
+            "springing": 14,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "3": [
+          {
+            "h": 12,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.0,
+                "sill": 0,
+                "springing": 7.5,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.6,
+                "sill": 2.0,
+                "springing": 8.5,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          -31.0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the nave, two tiers of round-headed windows down each side; its west end the front -- the portal, the great window over it -- and its east end a great arch into the crossing"
+    },
+    "nave roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 18.0,
+      "length": 26.0,
+      "pitch": 42,
+      "overhang": 0.5,
+      "at": [
+        [
+          -31.0,
+          24.0,
+          0,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "crossing": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          18.0,
+          18.0
+        ]
+      },
+      "thickness": 1.6,
+      "height": 24.0,
+      "openings": [
+        {
+          "at": 0,
+          "width": 7.0,
+          "sill": 8,
+          "springing": 13,
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "faces": {
+        "3": [
+          {
+            "at": 0,
+            "width": 14.0,
+            "sill": 0,
+            "springing": 14,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "1": [
+          {
+            "at": 0,
+            "width": 3.0,
+            "sill": 0,
+            "springing": 2.7,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          -9.0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the crossing: the nave opens into it by a great arch, the transept ends lit by tall windows"
+    },
+    "crossing pendentives": {
+      "type": "pendentives",
+      "span": 14.8,
+      "springing": 16.6,
+      "sides": 24,
+      "at": [
+        [
+          -9.0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "deck": {
+        "thickness": 0.5,
+        "out": 1.2
+      },
+      "_about": "the pendentives inside the crossing, turning its square into the drum's circle, and the roof over its corners round the drum"
+    },
+    "dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 7.4,
+        "dt": 0.8,
+        "H": 9.0,
+        "n": 24,
+        "every": 3,
+        "winW": 1.8,
+        "winSill": 2.0,
+        "winH": 4.2,
+        "profile": "bell",
+        "waist": 0.75,
+        "lift": 0.9,
+        "domeT": 0.8,
+        "lanternR": 1.9,
+        "lanternH": 4.0
+      },
+      "at": [
+        [
+          -9.0,
+          24.0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the drum with its eight windows, the dome, a Baroque bell, and the lantern"
+    },
+    "towers": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 4,
+        "R": 6.363899999999999,
+        "H": 44.0,
+        "t": 1.2,
+        "drumR": 3.4,
+        "drumH": 5.0,
+        "cap": "bell",
+        "capR": 4.4,
+        "waist": 0.8,
+        "lift": 1.1,
+        "winW": 1.6,
+        "kok": 0.5,
+        "finial": 3.5,
+        "doorH": 5.5,
+        "glazed": 0
+      },
+      "at": [
+        [
+          -39.8,
+          0,
+          -11.5,
+          3.141592653589793
+        ],
+        [
+          -39.8,
+          0,
+          11.5,
+          3.141592653589793
+        ]
+      ],
+      "build": [
+        "tower",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "_about": "the twin towers, square, each under an open lantern stage and a bell cap"
+    },
+    "library wing": {
+      "type": "component",
+      "use": "components/palace-wing",
+      "params": {
+        "L": 34.0,
+        "D": 14.0,
+        "n": 3,
+        "H": 5.0,
+        "roofForm": "hip",
+        "pitch": 38
+      },
+      "at": [
+        [
+          -61.3,
+          0,
+          -23.0,
+          0
+        ]
+      ],
+      "_about": "the library wing, south of the terrace"
+    },
+    "marble hall wing": {
+      "type": "component",
+      "use": "components/palace-wing",
+      "params": {
+        "L": 34.0,
+        "D": 14.0,
+        "n": 3,
+        "H": 5.0,
+        "roofForm": "hip",
+        "pitch": 38
+      },
+      "at": [
+        [
+          -61.3,
+          0,
+          23.0,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the marble-hall wing, north of it"
+    },
+    "altane": {
+      "type": "component",
+      "use": "components/curved-gallery",
+      "params": {
+        "R": 23.0,
+        "D": 6.0,
+        "H": 7.0,
+        "count": 48,
+        "from": -24,
+        "to": -1,
+        "winW": 2.2,
+        "sill": 0,
+        "terrace": 0
+      },
+      "at": [
+        [
+          -78.3,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the Altane: the curved gallery closing the terrace, an open arcade toward the river and the valley -- the way onto the terrace"
+    }
+  }
+}

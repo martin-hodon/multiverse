@@ -1,0 +1,125 @@
+{
+ "kind": "item",
+ "name": "Skiff",
+ "category": "ship",
+ "era": "1200-1900",
+ "region": "everywhere",
+ "_about": "a rowing boat: a transom stern, three thwarts, a pair of oars",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   3.8,
+   5
+  ],
+  "B": "L * 0.34",
+  "D": "B * 0.4"
+ },
+ "materials": {
+  "planks": "planks",
+  "deck": "deck",
+  "wood": "oak",
+  "cloth": "canvas",
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.5,
+   "double": true,
+   "stations": 16,
+   "sides": 5,
+   "plan": [
+    [
+     0,
+     0.42
+    ],
+    [
+     0.2,
+     0.85
+    ],
+    [
+     0.5,
+     1
+    ],
+    [
+     0.8,
+     0.7
+    ],
+    [
+     1,
+     0.03
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.2"
+    ],
+    [
+     0.15,
+     0
+    ],
+    [
+     0.85,
+     0
+    ],
+    [
+     1,
+     "D * 0.4"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.05"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.25"
+    ]
+   ],
+   "rail": 0.04,
+   "thwarts": {
+    "n": 3,
+    "y": "D * 0.6",
+    "w": 0.2,
+    "from": 0.2,
+    "to": 0.75
+   },
+   "ribs": {
+    "n": 7,
+    "w": 0.04
+   }
+  },
+  {
+   "id": "oars",
+   "use": "items/components/oars",
+   "params": {
+    "n": 1,
+    "from": "L * 0.5",
+    "to": "L * 0.5",
+    "y": "D * 0.98",
+    "z": "B * 0.5",
+    "l": "L * 0.6",
+    "dip": 15,
+    "reach": 0.3
+   }
+  }
+ ]
+}

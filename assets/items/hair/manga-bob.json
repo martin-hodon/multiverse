@@ -1,0 +1,150 @@
+{
+ "kind": "item",
+ "name": "Bob (drawn locks)",
+ "category": "hair",
+ "era": "everywhere",
+ "region": "everywhere",
+ "_about": "a bob as one zig-zag cloth: locks folding round the jaw, pointed tips, pointed bangs with a fringe",
+ "params": {
+  "scale": 1,
+  "faceW": 1,
+  "forehead": 1,
+  "occiput": 1,
+  "crown": 1,
+  "hairline": 0.06,
+  "earS": 1,
+  "fringe": 0,
+  "seed": 1,
+  "foreheadHeight": 0.062,
+  "foreheadAngle": 12,
+  "browRidge": 0.003
+ },
+ "materials": {
+  "hair": "hair-brown",
+  "tie": "leather-dark"
+ },
+ "parts": [
+  {
+   "id": "hair",
+   "type": "hair",
+   "headScale": "scale",
+   "faceW": "faceW",
+   "forehead": "forehead",
+   "occiput": "occiput",
+   "crown": "crown",
+   "hairline": "hairline",
+   "earS": "earS",
+   "fringe": "fringe",
+   "seed": "seed",
+   "foreheadHeight": "foreheadHeight",
+   "foreheadAngle": "foreheadAngle",
+   "browRidge": "browRidge",
+   "strands": [
+    {
+     "region": {
+      "y": [
+       0.05,
+       0.2
+      ],
+      "th": [
+       0,
+       30
+      ]
+     },
+     "length": 0.1,
+     "comb": [
+      -0.7,
+      -0.4,
+      1
+     ],
+     "hang": 0.7,
+     "width": [
+      0.022,
+      0.012
+     ],
+     "extra": 1,
+     "unless": "fringe"
+    }
+   ],
+   "locks": [],
+   "gather": [],
+   "sheets": [
+    {
+     "region": {
+      "th": [
+       55,
+       180
+      ]
+     },
+     "rings": [
+      {
+       "drop": 0.035,
+       "out": 0.018,
+       "zig": 0.008,
+       "zy": 0.0,
+       "phase": 0,
+       "vary": 0.4
+      },
+      {
+       "drop": [
+        0.07,
+        0.06
+       ],
+       "out": 0.024,
+       "zig": 0.014,
+       "zy": 0.0,
+       "phase": 1,
+       "vary": 0.4
+      },
+      {
+       "drop": [
+        0.11,
+        0.09
+       ],
+       "out": 0.02,
+       "zig": 0.01,
+       "zy": 0.03,
+       "phase": 0,
+       "vary": 0.4
+      }
+     ]
+    },
+    {
+     "region": {
+      "th": [
+       0,
+       50
+      ]
+     },
+     "when": "fringe",
+     "rings": [
+      {
+       "drop": 0.02,
+       "out": 0.012,
+       "zig": 0.005,
+       "zy": 0.0,
+       "phase": 1,
+       "vary": 0.4
+      },
+      {
+       "drop": 0.035,
+       "out": 0.012,
+       "zig": 0.007,
+       "zy": 0.01,
+       "phase": 0,
+       "vary": 0.4
+      }
+     ]
+    }
+   ],
+   "cap": {
+    "front": 0.058,
+    "temple": 0.02,
+    "side": -0.012,
+    "nape": -0.072,
+    "thick": 0.012,
+    "crown": 0.016
+   }
+  }
+ ]
+}

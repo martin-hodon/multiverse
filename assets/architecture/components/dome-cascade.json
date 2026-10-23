@@ -1,0 +1,1136 @@
+{
+  "name": "Dome cascade",
+  "_about": "THE CLASSICAL OTTOMAN HALL (the Sehzade, the Blue Mosque, the Yeni Cami): a dome on a drum of windows over four great piers, arches and pendentives; on each side a SEMIDOME on its half ring -- an arcade below the roofs, windows above -- with two EXEDRAE (`apse`) cut into its foot 40 degrees either side; a small dome on pendentives over each corner bay, carried by the side arches from the piers to the walls; flat roofs round the half rings, turrets on the piers, and the walls round it all. Centred on the dome; +z is the qibla (its wall has no door). The whole plan is 2 * (W + T) square.",
+  "params": {
+    "detail": 4,
+    "R": 11.75,
+    "_R": "half the square under the dome (the dome's inside radius); P the piers; G the passage between each half ring's crown and the wall",
+    "P": 5.0,
+    "G": 2.0,
+    "T": 2.5,
+    "SPR": 16.0,
+    "_SPR": "where the great arches, the pendentives and the semidomes spring",
+    "RING": "SPR + R",
+    "dk2": 1.0,
+    "_dk2": "the deck round the drum's foot",
+    "dH": 3.2,
+    "n": 28,
+    "dt": 0.8,
+    "domeT": 0.8,
+    "winW": 1.1,
+    "winSill": 0.4,
+    "winH": 1.8,
+    "_n": "the dome's drum: n windows (a multiple of four: the pendentives meet it corner for corner)",
+    "ROOFt": 12.0,
+    "_ROOFt": "the top of the roofs round the half rings, and of the walls; the corner bays' pendentives reach up to its underside",
+    "dk": 0.6,
+    "ROOF": "ROOFt - dk",
+    "C": "R + G",
+    "W": "2 * R + P + G",
+    "z0": "R + P",
+    "SA": "ROOF - C / 2",
+    "_W": "the walls' inside, from the middle; C the corner bays; z0 where each semidome's half ring stands; SA the side arches' springing",
+    "ringT": 1.0,
+    "aW": 2.6,
+    "aS": 7.0,
+    "wW": 1.4,
+    "wSill": 0.5,
+    "wH": 2.1,
+    "_aW": "the half rings' arcade (aW wide, springing aS) and the windows over the roofs (wW, wSill, wH)",
+    "exR": 3.3,
+    "exT": 0.6,
+    "exH": "SPR - 1.5",
+    "exWinW": 0.9,
+    "exWinSill": "ROOFt + 0.3",
+    "exWinH": 1.3,
+    "_exR": "the exedrae: exR inside, exT walls, exH where their half domes spring; their windows over the roofs. Their outline must cross the half ring's between 60 and 90 degrees off their axis (the roofs are cut round it): (exR + exT) about a third of R",
+    "Ce": "R - ringT",
+    "Ro": "exR + exT",
+    "ia": "0.267949 * Ro * Ro",
+    "ib": "2 * Ro * (0 - 0.133975 * Ro - 0.5 * Ce)",
+    "ic": "0.75 * Ro * Ro + (0.5 * Ro + Ce) * (0.5 * Ro + Ce) - R * R",
+    "it": "(0 - ib - sqrt(ib * ib - 4 * ia * ic)) / (2 * ia)",
+    "qx": "Ro * (0.866025 + 0.133975 * it)",
+    "qy": "Ro * (0.5 - 0.5 * it)",
+    "_qx": "where an exedra's outer face (its last bay, 60 to 90 degrees off its axis) crosses the half ring's outside, in the exedra's frame: the roofs' plan turns there",
+    "cn": 16,
+    "cdH": 1.6,
+    "cdt": 0.5,
+    "cWinW": 0.7,
+    "_cn": "the corner domes: cn sides, a drum cdH high with a window in every bay",
+    "tR": 1.7,
+    "tH": 4.5,
+    "tierH": 6.0,
+    "par": 0.9,
+    "_par": "the walls' parapet over the roofs",
+    "oW": 1.6,
+    "oGap": 2.6,
+    "oPier": 7.6,
+    "doorW": 3.0,
+    "doorS": 3.8,
+    "doorX": 21.0,
+    "_oPier": "the walls' windows: blocks of 3, 5, 3 with the side arches' ends (P wide) between them; doorX the -z face's side doors"
+  },
+  "build": [
+    "piers",
+    "great arches",
+    "pendentives",
+    "dome",
+    "alem",
+    "turrets",
+    "turret caps",
+    "turret finials",
+    "half rings",
+    "half ring windows",
+    "half ring blind",
+    "semidomes",
+    "exedrae",
+    "side arches",
+    "corner pendentives",
+    "corner drums",
+    "corner domes",
+    "corner finials",
+    "roofs",
+    "walls"
+  ],
+  "parts": {
+    "piers": {
+      "type": "box",
+      "width": "P",
+      "length": "P",
+      "height": "RING",
+      "at": [
+        [
+          "-1 * (R + P / 2)",
+          0,
+          "-1 * (R + P / 2)",
+          0
+        ],
+        [
+          "-1 * (R + P / 2)",
+          0,
+          "1 * (R + P / 2)",
+          0
+        ],
+        [
+          "1 * (R + P / 2)",
+          0,
+          "-1 * (R + P / 2)",
+          0
+        ],
+        [
+          "1 * (R + P / 2)",
+          0,
+          "1 * (R + P / 2)",
+          0
+        ]
+      ],
+      "_about": "the four great piers -- the 'elephant feet' -- up to the pendentives' top"
+    },
+    "great arches": {
+      "type": "barrel",
+      "width": "2 * R",
+      "length": "P",
+      "springing": "SPR",
+      "top": "RING + dk2",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "0 - R",
+          0
+        ],
+        [
+          0,
+          0,
+          "R + P",
+          0
+        ],
+        [
+          "0 - R",
+          0,
+          0,
+          1.5707963267948966
+        ],
+        [
+          "R + P",
+          0,
+          0,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the four arches from pier to pier: the dome's ring on their crowns, a semidome under each"
+    },
+    "pendentives": {
+      "type": "pendentives",
+      "span": "2 * R",
+      "springing": "SPR",
+      "sides": "n",
+      "deck": {
+        "thickness": "dk2",
+        "out": "P"
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the pendentives, and the roof over the piers round the drum's foot"
+    },
+    "dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": "R",
+        "dt": "dt",
+        "H": "dH",
+        "n": "n",
+        "every": 1,
+        "winW": "winW",
+        "winSill": "winSill",
+        "winH": "winH",
+        "profile": "semicircular",
+        "domeT": "domeT"
+      },
+      "build": [
+        "drum",
+        "dome"
+      ],
+      "at": [
+        [
+          0,
+          "RING + dk2",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "pendentives"
+      ],
+      "_about": "the drum, a window in every bay, and the dome on it"
+    },
+    "alem": {
+      "type": "column",
+      "radius": 0.35,
+      "height": 4.5,
+      "sides": 8,
+      "taper": 0.2,
+      "at": [
+        [
+          0,
+          "RING + dk2 + dH + R + dt",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "dome"
+      ],
+      "_about": "the gilded finial on the dome's crown"
+    },
+    "turrets": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": "tR"
+      },
+      "height": "tH",
+      "at": [
+        [
+          "-1 * (R + P / 2)",
+          "RING + dk2",
+          "-1 * (R + P / 2)",
+          0
+        ],
+        [
+          "-1 * (R + P / 2)",
+          "RING + dk2",
+          "1 * (R + P / 2)",
+          0
+        ],
+        [
+          "1 * (R + P / 2)",
+          "RING + dk2",
+          "-1 * (R + P / 2)",
+          0
+        ],
+        [
+          "1 * (R + P / 2)",
+          "RING + dk2",
+          "1 * (R + P / 2)",
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "standsOn": [
+        "pendentives"
+      ],
+      "_about": "the octagonal weight turrets over the piers"
+    },
+    "turret caps": {
+      "type": "dome",
+      "radius": "tR * 1.05",
+      "thickness": 0,
+      "head": {
+        "profile": "semicircular"
+      },
+      "sides": 8,
+      "turn": 0.5,
+      "at": [
+        [
+          "-1 * (R + P / 2)",
+          "RING + dk2 + tH",
+          "-1 * (R + P / 2)",
+          0
+        ],
+        [
+          "-1 * (R + P / 2)",
+          "RING + dk2 + tH",
+          "1 * (R + P / 2)",
+          0
+        ],
+        [
+          "1 * (R + P / 2)",
+          "RING + dk2 + tH",
+          "-1 * (R + P / 2)",
+          0
+        ],
+        [
+          "1 * (R + P / 2)",
+          "RING + dk2 + tH",
+          "1 * (R + P / 2)",
+          0
+        ]
+      ],
+      "standsOn": [
+        "turrets"
+      ]
+    },
+    "turret finials": {
+      "type": "column",
+      "radius": 0.12,
+      "height": 1.6,
+      "sides": 6,
+      "taper": 0.3,
+      "at": [
+        [
+          "-1 * (R + P / 2)",
+          "RING + dk2 + tH + tR * 1.05",
+          "-1 * (R + P / 2)",
+          0
+        ],
+        [
+          "-1 * (R + P / 2)",
+          "RING + dk2 + tH + tR * 1.05",
+          "1 * (R + P / 2)",
+          0
+        ],
+        [
+          "1 * (R + P / 2)",
+          "RING + dk2 + tH + tR * 1.05",
+          "-1 * (R + P / 2)",
+          0
+        ],
+        [
+          "1 * (R + P / 2)",
+          "RING + dk2 + tH + tR * 1.05",
+          "1 * (R + P / 2)",
+          0
+        ]
+      ],
+      "standsOn": [
+        "turret caps"
+      ]
+    },
+    "half rings": {
+      "type": "ring",
+      "count": 18,
+      "rOuter": "R",
+      "rInner": "R - ringT",
+      "height": "ROOFt",
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        14,
+        15,
+        16,
+        17
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "z0",
+          0
+        ],
+        [
+          "z0",
+          0,
+          0,
+          1.570796
+        ],
+        [
+          0,
+          0,
+          "0 - (z0)",
+          3.141593
+        ],
+        [
+          "0 - (z0)",
+          0,
+          0,
+          -1.570796
+        ]
+      ],
+      "opening": {
+        "width": "aW",
+        "sill": 0,
+        "springing": "aS",
+        "head": {
+          "profile": "pointed",
+          "spread": 0.4
+        }
+      },
+      "glass": false,
+      "_about": "the ground storey of each half ring: pointed arches out into the space behind -- and, 40 degrees either side of the axis, into the exedrae"
+    },
+    "half ring windows": {
+      "type": "ring",
+      "count": 18,
+      "rOuter": "R",
+      "rInner": "R - ringT",
+      "height": "SPR - ROOFt",
+      "y": "ROOFt",
+      "at": [
+        0,
+        1,
+        3,
+        4,
+        14,
+        15,
+        17
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "z0",
+          0
+        ],
+        [
+          "z0",
+          0,
+          0,
+          1.570796
+        ],
+        [
+          0,
+          0,
+          "0 - (z0)",
+          3.141593
+        ],
+        [
+          "0 - (z0)",
+          0,
+          0,
+          -1.570796
+        ]
+      ],
+      "standsOn": [
+        "half rings"
+      ],
+      "opening": {
+        "width": "wW",
+        "sill": "wSill",
+        "springing": "wSill + wH",
+        "head": {
+          "profile": "pointed",
+          "spread": 0.4
+        }
+      },
+      "_about": "the windows round each semidome's foot, over the roofs"
+    },
+    "half ring blind": {
+      "type": "ring",
+      "count": 18,
+      "rOuter": "R",
+      "rInner": "R - ringT",
+      "height": "SPR - ROOFt",
+      "y": "ROOFt",
+      "at": [
+        2,
+        16
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "z0",
+          0
+        ],
+        [
+          "z0",
+          0,
+          0,
+          1.570796
+        ],
+        [
+          0,
+          0,
+          "0 - (z0)",
+          3.141593
+        ],
+        [
+          "0 - (z0)",
+          0,
+          0,
+          -1.570796
+        ]
+      ],
+      "solid": true,
+      "standsOn": [
+        "half rings"
+      ],
+      "_about": "the bays behind which the exedrae rise: blind, closing their half domes"
+    },
+    "semidomes": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 18,
+      "radius": "R",
+      "thickness": "ringT",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          "SPR",
+          "z0",
+          0
+        ],
+        [
+          "z0",
+          "SPR",
+          0,
+          1.570796
+        ],
+        [
+          0,
+          "SPR",
+          "0 - (z0)",
+          3.141593
+        ],
+        [
+          "0 - (z0)",
+          "SPR",
+          0,
+          -1.570796
+        ]
+      ],
+      "standsOn": [
+        "half ring windows"
+      ],
+      "_about": "the four semidomes, their crowns under the great arches' -- the cascade round the dome"
+    },
+    "exedrae": {
+      "type": "component",
+      "use": "components/apse",
+      "params": {
+        "R": "exR",
+        "T": "exT",
+        "H": "exH",
+        "n": 12,
+        "winW": "exWinW",
+        "winSill": "exWinSill",
+        "winH": "exWinH",
+        "domeT": "exT"
+      },
+      "at": [
+        [
+          "Ce * -0.642788",
+          0,
+          "z0 + Ce * 0.766044",
+          -0.698132
+        ],
+        [
+          "Ce * 0.642788",
+          0,
+          "z0 + Ce * 0.766044",
+          0.698132
+        ],
+        [
+          "z0 + Ce * 0.766044",
+          0,
+          "0 - (Ce * -0.642788)",
+          0.872665
+        ],
+        [
+          "z0 + Ce * 0.766044",
+          0,
+          "0 - (Ce * 0.642788)",
+          2.268928
+        ],
+        [
+          "0 - (Ce * -0.642788)",
+          0,
+          "0 - (z0 + Ce * 0.766044)",
+          2.443461
+        ],
+        [
+          "0 - (Ce * 0.642788)",
+          0,
+          "0 - (z0 + Ce * 0.766044)",
+          3.839724
+        ],
+        [
+          "0 - (z0 + Ce * 0.766044)",
+          0,
+          "Ce * -0.642788",
+          -2.268928
+        ],
+        [
+          "0 - (z0 + Ce * 0.766044)",
+          0,
+          "Ce * 0.642788",
+          -0.872665
+        ]
+      ],
+      "_about": "two exedrae cut into each semidome's foot (`apse`): a half ring of windows over the roofs and a half dome"
+    },
+    "side arches": {
+      "type": "barrel",
+      "width": "C",
+      "length": "P",
+      "springing": "SA",
+      "top": "ROOFt",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          "0 - R",
+          0,
+          "(z0 + W) / 2",
+          1.570796
+        ],
+        [
+          "R + P",
+          0,
+          "(z0 + W) / 2",
+          1.570796
+        ],
+        [
+          "(z0 + W) / 2",
+          0,
+          "0 - (0 - R)",
+          3.141593
+        ],
+        [
+          "(z0 + W) / 2",
+          0,
+          "0 - (R + P)",
+          3.141593
+        ],
+        [
+          "0 - (0 - R)",
+          0,
+          "0 - ((z0 + W) / 2)",
+          4.712389
+        ],
+        [
+          "0 - (R + P)",
+          0,
+          "0 - ((z0 + W) / 2)",
+          4.712389
+        ],
+        [
+          "0 - ((z0 + W) / 2)",
+          0,
+          "0 - R",
+          0.0
+        ],
+        [
+          "0 - ((z0 + W) / 2)",
+          0,
+          "R + P",
+          0.0
+        ]
+      ],
+      "_about": "the arches from each pier out to the wall, between a semidome's bay and the corner bays"
+    },
+    "corner pendentives": {
+      "type": "pendentives",
+      "span": "C",
+      "springing": "SA",
+      "sides": "cn",
+      "deck": {
+        "thickness": "dk",
+        "out": 0.02
+      },
+      "at": [
+        [
+          "-1 * (z0 + W) / 2",
+          0,
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "-1 * (z0 + W) / 2",
+          0,
+          "1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          0,
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          0,
+          "1 * (z0 + W) / 2",
+          0
+        ]
+      ],
+      "_about": "the corner bays' pendentives, on the side arches and the outer walls"
+    },
+    "corner drums": {
+      "type": "ring",
+      "count": "cn",
+      "rOuter": "C / 2 + cdt",
+      "rInner": "C / 2",
+      "height": "cdH",
+      "turn": 0.5,
+      "y": "ROOFt",
+      "opening": {
+        "width": "cWinW",
+        "sill": 0.3,
+        "springing": "cdH - 0.3 - cWinW / 2",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          "-1 * (z0 + W) / 2",
+          0,
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "-1 * (z0 + W) / 2",
+          0,
+          "1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          0,
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          0,
+          "1 * (z0 + W) / 2",
+          0
+        ]
+      ],
+      "standsOn": [
+        "corner pendentives"
+      ]
+    },
+    "corner domes": {
+      "type": "dome",
+      "sides": "cn",
+      "turn": -0.5,
+      "radius": "C / 2 + cdt",
+      "thickness": "cdt",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          "-1 * (z0 + W) / 2",
+          "ROOFt + cdH",
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "-1 * (z0 + W) / 2",
+          "ROOFt + cdH",
+          "1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          "ROOFt + cdH",
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          "ROOFt + cdH",
+          "1 * (z0 + W) / 2",
+          0
+        ]
+      ],
+      "standsOn": [
+        "corner drums"
+      ],
+      "_about": "a small dome over each corner bay"
+    },
+    "corner finials": {
+      "type": "column",
+      "radius": 0.15,
+      "height": 2.0,
+      "sides": 6,
+      "taper": 0.25,
+      "at": [
+        [
+          "-1 * (z0 + W) / 2",
+          "ROOFt + cdH + C / 2 + cdt",
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "-1 * (z0 + W) / 2",
+          "ROOFt + cdH + C / 2 + cdt",
+          "1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          "ROOFt + cdH + C / 2 + cdt",
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          "ROOFt + cdH + C / 2 + cdt",
+          "1 * (z0 + W) / 2",
+          0
+        ]
+      ],
+      "standsOn": [
+        "corner domes"
+      ]
+    },
+    "roofs": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "R",
+            "z0"
+          ],
+          [
+            "R",
+            "W"
+          ],
+          [
+            "0 - R",
+            "W"
+          ],
+          [
+            "0 - R",
+            "z0"
+          ],
+          [
+            "R * -0.939693",
+            "z0 + R * 0.34202"
+          ],
+          [
+            "Ce * -0.642788 + (0 - qx) * 0.766044 + (qy) * -0.642788",
+            "z0 + Ce * 0.766044 - (0 - qx) * -0.642788 + (qy) * 0.766044"
+          ],
+          [
+            "Ce * -0.642788 + (Ro * -0.866025) * 0.766044 + (Ro * 0.5) * -0.642788",
+            "z0 + Ce * 0.766044 - (Ro * -0.866025) * -0.642788 + (Ro * 0.5) * 0.766044"
+          ],
+          [
+            "Ce * -0.642788 + (Ro * -0.5) * 0.766044 + (Ro * 0.866025) * -0.642788",
+            "z0 + Ce * 0.766044 - (Ro * -0.5) * -0.642788 + (Ro * 0.866025) * 0.766044"
+          ],
+          [
+            "Ce * -0.642788 + (Ro * 0) * 0.766044 + (Ro * 1) * -0.642788",
+            "z0 + Ce * 0.766044 - (Ro * 0) * -0.642788 + (Ro * 1) * 0.766044"
+          ],
+          [
+            "Ce * -0.642788 + (Ro * 0.5) * 0.766044 + (Ro * 0.866025) * -0.642788",
+            "z0 + Ce * 0.766044 - (Ro * 0.5) * -0.642788 + (Ro * 0.866025) * 0.766044"
+          ],
+          [
+            "Ce * -0.642788 + (Ro * 0.866025) * 0.766044 + (Ro * 0.5) * -0.642788",
+            "z0 + Ce * 0.766044 - (Ro * 0.866025) * -0.642788 + (Ro * 0.5) * 0.766044"
+          ],
+          [
+            "Ce * -0.642788 + (qx) * 0.766044 + (qy) * -0.642788",
+            "z0 + Ce * 0.766044 - (qx) * -0.642788 + (qy) * 0.766044"
+          ],
+          [
+            "R * -0.173648",
+            "z0 + R * 0.984808"
+          ],
+          [
+            "R * 0.173648",
+            "z0 + R * 0.984808"
+          ],
+          [
+            "Ce * 0.642788 + (0 - qx) * 0.766044 + (qy) * 0.642788",
+            "z0 + Ce * 0.766044 - (0 - qx) * 0.642788 + (qy) * 0.766044"
+          ],
+          [
+            "Ce * 0.642788 + (Ro * -0.866025) * 0.766044 + (Ro * 0.5) * 0.642788",
+            "z0 + Ce * 0.766044 - (Ro * -0.866025) * 0.642788 + (Ro * 0.5) * 0.766044"
+          ],
+          [
+            "Ce * 0.642788 + (Ro * -0.5) * 0.766044 + (Ro * 0.866025) * 0.642788",
+            "z0 + Ce * 0.766044 - (Ro * -0.5) * 0.642788 + (Ro * 0.866025) * 0.766044"
+          ],
+          [
+            "Ce * 0.642788 + (Ro * 0) * 0.766044 + (Ro * 1) * 0.642788",
+            "z0 + Ce * 0.766044 - (Ro * 0) * 0.642788 + (Ro * 1) * 0.766044"
+          ],
+          [
+            "Ce * 0.642788 + (Ro * 0.5) * 0.766044 + (Ro * 0.866025) * 0.642788",
+            "z0 + Ce * 0.766044 - (Ro * 0.5) * 0.642788 + (Ro * 0.866025) * 0.766044"
+          ],
+          [
+            "Ce * 0.642788 + (Ro * 0.866025) * 0.766044 + (Ro * 0.5) * 0.642788",
+            "z0 + Ce * 0.766044 - (Ro * 0.866025) * 0.642788 + (Ro * 0.5) * 0.766044"
+          ],
+          [
+            "Ce * 0.642788 + (qx) * 0.766044 + (qy) * 0.642788",
+            "z0 + Ce * 0.766044 - (qx) * 0.642788 + (qy) * 0.766044"
+          ],
+          [
+            "R * 0.939693",
+            "z0 + R * 0.34202"
+          ]
+        ]
+      },
+      "height": "dk",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "ROOF",
+          0,
+          0
+        ],
+        [
+          0,
+          "ROOF",
+          0,
+          1.570796
+        ],
+        [
+          0,
+          "ROOF",
+          0,
+          3.141593
+        ],
+        [
+          0,
+          "ROOF",
+          0,
+          -1.570796
+        ]
+      ],
+      "_about": "the flat roofs over the spaces behind each half ring, cut round it and round its exedrae"
+    },
+    "walls": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "2 * (W + T)",
+          "2 * (W + T)"
+        ]
+      },
+      "thickness": "T",
+      "height": "ROOFt + par",
+      "tiers": [
+        {
+          "h": "tierH",
+          "openings": {
+            "pattern": "3-5-3",
+            "width": "oW",
+            "gap": "oGap",
+            "pier": "oPier",
+            "sill": 1.5,
+            "springing": 4.2,
+            "head": {
+              "profile": "pointed",
+              "spread": 0.4
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "3-5-3",
+            "width": "oW",
+            "gap": "oGap",
+            "pier": "oPier",
+            "sill": 1.0,
+            "springing": 3.6,
+            "head": {
+              "profile": "pointed",
+              "spread": 0.4
+            }
+          }
+        }
+      ],
+      "faces": {
+        "1": [
+          {
+            "h": "tierH",
+            "openings": {
+              "pattern": "3-5-3",
+              "width": "oW",
+              "gap": "oGap",
+              "pier": "oPier",
+              "sill": 1.5,
+              "springing": 4.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.4
+              },
+              "middle": {
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorS",
+                "glass": false
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "3-5-3",
+              "width": "oW",
+              "gap": "oGap",
+              "pier": "oPier",
+              "sill": 1.0,
+              "springing": 3.6,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.4
+              }
+            }
+          }
+        ],
+        "3": [
+          {
+            "h": "tierH",
+            "openings": {
+              "pattern": "3-5-3",
+              "width": "oW",
+              "gap": "oGap",
+              "pier": "oPier",
+              "sill": 1.5,
+              "springing": 4.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.4
+              },
+              "middle": {
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorS",
+                "glass": false
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "3-5-3",
+              "width": "oW",
+              "gap": "oGap",
+              "pier": "oPier",
+              "sill": 1.0,
+              "springing": 3.6,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.4
+              }
+            }
+          }
+        ],
+        "2": [
+          {
+            "h": "tierH",
+            "openings": [
+              {
+                "at": 0,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.4
+                },
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorS",
+                "glass": false
+              },
+              {
+                "at": "doorX",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.4
+                },
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorS",
+                "glass": false
+              },
+              {
+                "at": "0 - doorX",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.4
+                },
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorS",
+                "glass": false
+              }
+            ]
+          },
+          {
+            "openings": {
+              "pattern": "3-5-3",
+              "width": "oW",
+              "gap": "oGap",
+              "pier": "oPier",
+              "sill": 1.0,
+              "springing": 3.6,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.4
+              }
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the outer walls, two rows of windows clear of the side arches; a door in the middle of +x and -x, three in -z; +z (the qibla) blind below"
+    }
+  }
+}

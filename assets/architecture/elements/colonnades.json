@@ -1,0 +1,90 @@
+{
+  "name": "Colonnades",
+  "_about": "A COLONNADE is columns and what they carry: base, shaft (tapering to `taper` of its foot), capital (the flare and the square abacus on it) and the entablature, set out STRAIGHT at a `spacing` or ROUND on a `radius` -- a whole ring (a tholos, a rotunda's peristyle) or an `arc` of one with a column at each end (Bernini's arms round St Peter's square). A round entablature is a ring with one bay per column, so its joints fall between them.",
+  "params": {
+    "detail": 4,
+    "r": 0.4,
+    "h": 5,
+    "gap": 20
+  },
+  "build": [
+    "stylobate",
+    "straight",
+    "tholos",
+    "exedra"
+  ],
+  "parts": {
+    "stylobate": {
+      "type": "box",
+      "width": 21,
+      "length": 3,
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "straight": {
+      "type": "colonnade",
+      "count": 8,
+      "spacing": 2.6,
+      "columnR": "r",
+      "height": "h",
+      "taper": 0.85,
+      "entablature": {
+        "h": 1.1
+      },
+      "at": [
+        [
+          0,
+          0.4,
+          0,
+          0
+        ]
+      ]
+    },
+    "tholos": {
+      "type": "colonnade",
+      "plan": "round",
+      "count": 12,
+      "radius": 4.5,
+      "columnR": "r",
+      "height": "h",
+      "entablature": {
+        "h": 1.1
+      },
+      "at": [
+        [
+          0,
+          0,
+          "gap",
+          0
+        ]
+      ]
+    },
+    "exedra": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": 180,
+      "count": 11,
+      "radius": 8,
+      "columnR": "r",
+      "height": "h",
+      "entablature": {
+        "h": 1.1
+      },
+      "at": [
+        [
+          "gap",
+          0,
+          "gap * 0.7",
+          "3.14159265"
+        ]
+      ]
+    }
+  }
+}

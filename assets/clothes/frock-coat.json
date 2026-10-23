@@ -1,0 +1,44 @@
+{
+  "name": "Frock coat",
+  "kind": "garment",
+  "layer": 3,
+  "_about": "the frock coat of the nineteenth century: a fitted wool coat buttoned to the waist, its lapels cut back in a deep V over the waistcoat and the shirt, sleeves to the wrist, and full skirts all round to the knee (`length` higher: a short jacket, a workman's coat)",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "black"
+    }
+  },
+  "params": {
+    "length": "knee - 0.03",
+    "cuff": 0
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "waist + 0.02",
+        "neckline": "v",
+        "neckFront": 0.17,
+        "neckBack": 0.004,
+        "neckWidth": 34
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist",
+        "cuff": "cuff"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist + 0.02",
+        "to": "length",
+        "flare": 0.3,
+        "pleats": 4
+      }
+    }
+  ]
+}

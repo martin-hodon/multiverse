@@ -1,0 +1,163 @@
+{
+ "kind": "item",
+ "name": "Trestle table",
+ "category": "furniture/table",
+ "era": "800-1600",
+ "region": "Europe",
+ "_about": "the medieval board on trestles: a long top resting on two trestles with splayed feet, a stretcher wedged through them -- taken down after the feast",
+ "params": {
+  "h": 0.74,
+  "L": [
+   1.8,
+   2.4
+  ],
+  "d": 0.75
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "pine"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L",
+    0.05,
+    "d"
+   ],
+   "at": [
+    0,
+    "h - 0.025",
+    0
+   ]
+  },
+  {
+   "id": "posts",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.08,
+    "h - 0.12",
+    0.1
+   ],
+   "at": [
+    [
+     "0 - L / 2 + 0.3",
+     "(h - 0.05) / 2 + 0.035",
+     0
+    ],
+    [
+     "L / 2 - 0.3",
+     "(h - 0.05) / 2 + 0.035",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "feet",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.09,
+    0.07,
+    "d - 0.1"
+   ],
+   "round": 0.01,
+   "at": [
+    [
+     "0 - L / 2 + 0.3",
+     0.035,
+     0
+    ],
+    [
+     "L / 2 - 0.3",
+     0.035,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "heads",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.09,
+    0.06,
+    "d - 0.15"
+   ],
+   "at": [
+    [
+     "0 - L / 2 + 0.3",
+     "h - 0.08",
+     0
+    ],
+    [
+     "L / 2 - 0.3",
+     "h - 0.08",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "stretcher",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L - 0.4",
+    0.07,
+    0.04
+   ],
+   "at": [
+    0,
+    0.3,
+    0
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     0.46,
+     "d / 2 + 0.25"
+    ],
+    [
+     "L / 4",
+     0.46,
+     "d / 2 + 0.25"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 1.5707963
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     0.46,
+     "0 - d / 2 - 0.25"
+    ],
+    [
+     "L / 4",
+     0.46,
+     "0 - d / 2 - 0.25"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5707963
+   }
+  }
+ ]
+}

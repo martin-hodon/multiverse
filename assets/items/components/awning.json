@@ -1,0 +1,78 @@
+{
+ "kind": "item",
+ "name": "Awning",
+ "category": "component",
+ "_about": "a cloth roof on posts over a deck: d long from the origin forward, w wide, h up",
+ "params": {
+  "w": 4,
+  "d": 6,
+  "h": 2
+ },
+ "materials": {
+  "wood": "pine",
+  "cloth": "canvas"
+ },
+ "parts": [
+  {
+   "id": "post",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.05,
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "h",
+    0
+   ],
+   "at": [
+    [
+     "d * 0.1",
+     0,
+     "w * 0.45"
+    ],
+    [
+     "d * 0.9",
+     0,
+     "w * 0.45"
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "cloth",
+   "type": "sail",
+   "material": "cloth",
+   "belly": "-w * 0.05",
+   "at": [
+    0,
+    "h",
+    "-w / 2",
+    0,
+    -90,
+    0
+   ],
+   "corners": [
+    [
+     0,
+     0
+    ],
+    [
+     "d",
+     0
+    ],
+    [
+     "d",
+     "-w"
+    ],
+    [
+     0,
+     "-w"
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,240 @@
+{
+ "kind": "item",
+ "name": "Baroque armchair",
+ "category": "furniture/seat",
+ "era": "1650-1720",
+ "region": "France & England",
+ "_about": "the armchair of the Louis XIV salon: turned legs joined by an H stretcher, an upholstered seat and tall back in velvet or damask, scrolled arms",
+ "params": {
+  "h": 0.46,
+  "w": 0.66,
+  "d": 0.56,
+  "backH": [
+   1.15,
+   1.25
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "gilt",
+    "oak"
+   ]
+  },
+  "cloth": {
+   "pick": [
+    "velvet-red",
+    "damask-red",
+    "damask-green",
+    "velvet-green",
+    "brocade",
+    "damask-blue"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "legs",
+   "use": "items/components/turned-leg",
+   "params": {
+    "h": "h - 0.06",
+    "r": 0.026,
+    "style": "baluster",
+    "block": 0.2
+   },
+   "at": [
+    [
+     "0 - w / 2 + 0.04",
+     0,
+     "d / 2 - 0.04"
+    ],
+    [
+     "w / 2 - 0.04",
+     0,
+     "d / 2 - 0.04"
+    ],
+    [
+     "0 - w / 2 + 0.04",
+     0,
+     "0 - d / 2 + 0.04"
+    ],
+    [
+     "w / 2 - 0.04",
+     0,
+     "0 - d / 2 + 0.04"
+    ]
+   ]
+  },
+  {
+   "id": "stretchers",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.035,
+    0.035,
+    "d - 0.08"
+   ],
+   "at": [
+    [
+     "0 - w / 2 + 0.04",
+     0.1,
+     0
+    ],
+    [
+     "w / 2 - 0.04",
+     0.1,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "cross",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.08",
+    0.035,
+    0.035
+   ],
+   "at": [
+    0,
+    0.1,
+    0
+   ]
+  },
+  {
+   "id": "seat",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    "w",
+    0.1,
+    "d"
+   ],
+   "round": 0.03,
+   "at": [
+    0,
+    "h - 0.04",
+    0
+   ]
+  },
+  {
+   "id": "back",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    "w - 0.08",
+    "backH - h - 0.02",
+    0.09
+   ],
+   "round": 0.035,
+   "at": [
+    0,
+    "(backH + h) / 2",
+    "0 - d / 2 + 0.05"
+   ]
+  },
+  {
+   "id": "crest",
+   "type": "plate",
+   "material": "wood",
+   "thick": 0.04,
+   "at": [
+    0,
+    "backH - 0.03",
+    "0 - d / 2 + 0.05"
+   ],
+   "outline": [
+    [
+     "0 - w / 2 + 0.04",
+     0
+    ],
+    [
+     "w / 2 - 0.04",
+     0
+    ],
+    [
+     "w * 0.3",
+     0.05
+    ],
+    [
+     "w * 0.12",
+     0.04
+    ],
+    [
+     0,
+     0.1
+    ],
+    [
+     "0 - w * 0.12",
+     0.04
+    ],
+    [
+     "0 - w * 0.3",
+     0.05
+    ]
+   ]
+  },
+  {
+   "id": "arms",
+   "type": "sweep",
+   "material": "wood",
+   "r": 0.022,
+   "path": [
+    [
+     0,
+     "h + 0.26",
+     "0 - d / 2 + 0.08"
+    ],
+    [
+     0,
+     "h + 0.25",
+     "d / 2 - 0.12"
+    ],
+    [
+     0,
+     "h + 0.2",
+     "d / 2 - 0.02"
+    ],
+    [
+     0,
+     "h + 0.12",
+     "d / 2 - 0.05"
+    ],
+    [
+     0,
+     "h",
+     "d / 2 - 0.04"
+    ]
+   ],
+   "at": [
+    [
+     "0 - w / 2 + 0.04",
+     0,
+     0
+    ],
+    [
+     "w / 2 - 0.04",
+     0,
+     0
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "w",
+    "d": "d",
+    "top": "h + 0.02"
+   }
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Skirt",
+  "kind": "component",
+  "_about": "A SKIRT: a cone of cloth HANGING from a ring round the torso -- the waist or the hips -- to its hem, clear of the hips and the stride (it swings behind it; the legs it covers are not drawn). `flare`: how much wider it gets for every metre down (at least what the hips ask); `pleats` fold it in the light; `dags` scallop its hem; `wrap` opens it (a coat's front); a hem band may border it.",
+  "params": {
+    "from": "waist",
+    "to": "ankle",
+    "flare": 0.3,
+    "pleats": 0,
+    "dags": 0,
+    "hem": 0
+  },
+  "pieces": [
+    {
+      "name": "skirt",
+      "kind": "hang",
+      "on": "torso",
+      "skirt": true,
+      "from": "from",
+      "to": "to",
+      "flare": "flare",
+      "pleats": "pleats",
+      "dags": "dags",
+      "fabric": "main",
+      "hem": {
+        "width": "hem",
+        "fabric": "trim"
+      }
+    }
+  ]
+}

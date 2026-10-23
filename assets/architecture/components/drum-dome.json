@@ -1,0 +1,213 @@
+{
+  "name": "Drum and dome",
+  "_about": "A DOME ON A DRUM, the crown of a church: a drum of `n` bays with a window in every `every`th, a dome of any profile on it, a lantern standing on the dome where it has narrowed to the lantern's width (`atopR`), and -- asked for by name -- ribs up the dome and a PERISTYLE of columns round the drum (and, by name, the `peristyle deck` from the drum out to them). Place it at the top of whatever carries it (a crossing's pendentives, a church's roof ring); R is the drum's inside radius.",
+  "params": {
+    "detail": 4,
+    "R": 10.0,
+    "dt": 1.0,
+    "H": 8.0,
+    "n": 24,
+    "every": 2,
+    "winW": 1.6,
+    "winSill": 1.5,
+    "winH": 3.5,
+    "profile": "semicircular",
+    "spread": 0.6,
+    "rise": 8.0,
+    "bulge": 1.2,
+    "neck": 0.9,
+    "waist": 0.8,
+    "lift": 1.0,
+    "domeT": 1.0,
+    "ribsN": "n",
+    "ribW": 0.35,
+    "lanternR": "R * 0.2",
+    "lanternH": "R * 0.45",
+    "colR": "H * 0.045",
+    "colH": "H * 0.82",
+    "pw": "H * 0.35",
+    "colN": "n",
+    "_R": "the drum's inside radius -- a crossing's pendentives' circle; dt its wall, H its height, n its bays (a window every `every`th)",
+    "_profile": "the dome's section, any profile (semicircular, pointed + spread, segmental + rise, onion + bulge/neck, bell + waist/lift)",
+    "_lanternR": "the lantern: it stands on the dome where the dome has narrowed to its radius",
+    "_pw": "the peristyle (build it by name): a ring of columns round the drum, pw out from it, and the deck they carry"
+  },
+  "build": [
+    "drum",
+    "drum piers",
+    "dome",
+    "lantern"
+  ],
+  "parts": {
+    "drum": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R + dt",
+      "rInner": "R",
+      "height": "H",
+      "turn": 0.5,
+      "every": "every",
+      "only": "every",
+      "opening": {
+        "width": "winW",
+        "sill": "winSill",
+        "springing": "winSill + winH",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the drum, a window every `every`th bay..."
+    },
+    "drum piers": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R + dt",
+      "rInner": "R",
+      "height": "H",
+      "turn": 0.5,
+      "every": "every",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "...and the piers between (leave them out when every bay has its window: `every` 1)"
+    },
+    "dome": {
+      "type": "dome",
+      "sides": "n",
+      "turn": -0.5,
+      "radius": "R + dt",
+      "thickness": "domeT",
+      "head": {
+        "profile": "profile",
+        "spread": "spread",
+        "rise": "rise",
+        "bulge": "bulge",
+        "neck": "neck",
+        "waist": "waist",
+        "lift": "lift"
+      },
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "drum"
+      ],
+      "_about": "the dome on it"
+    },
+    "ribs": {
+      "type": "ribs",
+      "on": "dome",
+      "count": "ribsN",
+      "width": "ribW",
+      "depth": "ribW * 0.7",
+      "standsOn": [
+        "dome"
+      ],
+      "_about": "ribs up the dome, one per bay (build it by name)"
+    },
+    "lantern": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": "lanternR",
+        "H": "lanternH",
+        "t": "lanternR * 0.15",
+        "drumR": "lanternR * 0.7",
+        "drumH": "lanternH * 0.25",
+        "cap": "bell",
+        "capR": "lanternR * 0.8",
+        "waist": 0.75,
+        "lift": 1.0,
+        "kok": "lanternR * 0.1",
+        "finial": "lanternH * 0.6",
+        "doorH": "lanternH * 0.3",
+        "winW": "lanternR * 0.35"
+      },
+      "build": [
+        "tower",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "at": [
+        [
+          0,
+          "0 - lanternR * 0.1",
+          0,
+          0
+        ]
+      ],
+      "atop": "dome",
+      "atopR": "lanternR",
+      "standsOn": [
+        "dome"
+      ],
+      "_about": "the lantern, standing on the dome where it has narrowed to the lantern's width"
+    },
+    "peristyle": {
+      "type": "colonnade",
+      "plan": "round",
+      "count": "colN",
+      "radius": "R + dt + pw",
+      "order": "corinthian",
+      "columnR": "colR",
+      "height": "colH",
+      "taper": 0.86,
+      "entablature": {
+        "h": "H - colH",
+        "depth": "colR * 2.6"
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "a ring of columns round the drum, carrying a deck -- St Paul's, the Pantheon in Paris (build it by name)"
+    },
+    "peristyle deck": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R + dt + pw",
+      "rInner": "R + dt",
+      "height": "H - colH",
+      "y": "colH",
+      "turn": 0.5,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "peristyle"
+      ],
+      "_about": "the deck over the colonnade, from the drum out to the columns' line (the entablature caps only the columns: no broad ring overhangs them)"
+    }
+  }
+}

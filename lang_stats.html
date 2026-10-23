@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Spelling → sound statistics</title>
+<style>
+ body { font: 13px system-ui, sans-serif; margin: 18px; background: #f4f1ea; color: #222; }
+ h1 { font-size: 18px; } h2 { margin-top: 26px; border-bottom: 1px solid #cbc6b8; } h3 { margin: 14px 0 4px; }
+ .cols { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; } table { border-collapse: collapse; background: #fbf9f4; }
+ th, td { border: 1px solid #cbc6b8; padding: 2px 8px; text-align: left; } th { background: #e9e4d8; } td.n { text-align: right; color: #6a675f; }
+ td.u { font: 600 14px ui-monospace, monospace; } .bar { display: inline-block; height: 9px; background: #8a3b12; margin-right: 4px; vertical-align: baseline; opacity: .75; }
+ .opt { margin-right: 12px; white-space: nowrap; } nav a { margin-right: 10px; } .rules { max-width: 1100px; } .rules li { margin: 3px 0; } .rules code { font: 600 13px ui-monospace, monospace; background: #e9e4d8; padding: 0 3px; border-radius: 3px; } button { font: inherit; padding: 3px 10px; } #ex { font: 12px ui-monospace, monospace; color: #444; white-space: pre-wrap; }
+</style></head><body>
+<h1>How each language pronounces its letters, and where it stresses its words</h1>
+<p><a href="rule_tester.html">Rule tester →</a> &nbsp; Computed live from <code>lang/</code>. Click a letter to see words it was counted in. <button id="md">Copy as Markdown</button> <span id="st">aligning…</span></p>
+<nav id="nav"></nav><div id="out"></div>
+<script type="module">
+import { run, markdown } from "./lang_stats.js";
+// the two conditional sections are prose: show them as the report words them (a minimal Markdown-to-HTML for bold, code, lists, tables)
+const mdLite = (t) => t.split(/\n\n+/).map((b) => {
+  const inl = (x) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/`([^`]+)`/g, "<code>$1</code>");
+  if (b.startsWith("|")) { const rows = b.trim().split("\n").filter((r) => !/^\|[-:| ]+\|$/.test(r)).map((r) => r.replace(/^\||\|$/g, "").split("|")); return "<table>" + rows.map((r, i) => "<tr>" + r.map((c) => `<${i ? "td" : "th"}>${inl(c.trim())}</${i ? "td" : "th"}>`).join("") + "</tr>").join("") + "</table>"; }
+  if (b.startsWith("- ")) return "<ul>" + b.split("\n").map((l) => "<li>" + inl(l.slice(2)) + "</li>").join("") + "</ul>";
+  return "<p>" + inl(b) + "</p>";
+}).join("");
+const el = (t, p = {}, ...k) => { const e = Object.assign(document.createElement(t), p); e.append(...k); return e; };
+const results = await run(async (p) => (await fetch(p)).text());
+const pct = (v) => (100 * v).toFixed(v < .1 ? 1 : 0) + "%";
+for (const r of results) {
+  document.getElementById("nav").append(el("a", { href: "#" + r.code, textContent: r.name }));
+  const ex = el("div", { id: "ex" });
+  const table = (rows) => el("table", {}, el("tr", {}, el("th", { textContent: "letters" }), el("th", { textContent: "n" }), el("th", { textContent: "pronounced" })), ...rows.map((x) => {
+    const tr = el("tr", {}, el("td", { className: "u", textContent: x.unit }), el("td", { className: "n", textContent: x.n }),
+      el("td", {}, ...x.opts.map(([ch, v]) => el("span", { className: "opt" }, el("span", { className: "bar", style: `width:${Math.round(60 * v)}px` }), `${ch} ${pct(v)}`))));
+    tr.style.cursor = "pointer";
+    tr.onclick = () => { const seen = {}; for (const d of r.data) if (d.a) for (const [u, ch] of d.a) if (u === x.unit) (seen[ch || "silent"] ??= []).length < 10 && seen[ch || "silent"].push(`${d.word} [${d.ipa}]`);
+      ex.textContent = `${x.unit}:\n` + Object.entries(seen).map(([ch, ws]) => `  ${ch.replace(/ /g, "")}: ${ws.join(", ")}`).join("\n"); };
+    return tr; }));
+  const S = r.stress, srows = [...S.bySyl].sort((a, b) => a[0] - b[0]);
+  const sect = markdown([r]), cut = (from, to) => { const i = sect.indexOf(from), j = sect.indexOf(to); return i < 0 ? "" : sect.slice(i + from.length, j < 0 ? undefined : j); };
+  const rules = el("div", { className: "rules" }); rules.innerHTML = "<h3>What decides the mixed ones</h3>" + mdLite(cut("### What decides the mixed ones\n\n", "\n### Length")) + "<h3>Length (ː)</h3>" + mdLite(cut("### Length (ː)\n\n", "\n### Stress"));
+  document.getElementById("out").append(el("h2", { id: r.code, textContent: `${r.name} — ${r.words} words` }), ex, rules,
+    el("div", { className: "cols" }, el("div", {}, el("h3", { textContent: "Letters" }), table(r.sum.single)), el("div", {}, el("h3", { textContent: "Combinations" }), table(r.sum.combo)),
+      el("div", {}, el("h3", { textContent: `Stress (${S.n} words)` }), el("table", {}, el("tr", {}, el("th", { textContent: "syllables" }), el("th", { textContent: "words" }), el("th", { textContent: "stressed syllable, from the start" })),
+        ...srows.map(([k, b]) => el("tr", {}, el("td", { textContent: k + (k === 5 ? "+" : "") }), el("td", { className: "n", textContent: b.n }), el("td", { textContent: [...b.at].sort((x, y) => x[0] - y[0]).map(([at, v]) => `${at}: ${pct(v / b.n)}`).join("   ") })))))));
+}
+document.getElementById("st").textContent = "done";
+document.getElementById("md").onclick = () => navigator.clipboard.writeText(markdown(results));
+if (new URLSearchParams(location.search).get("probe") === "1") { await fetch("/report", { method: "POST", body: markdown(results) }); await fetch("/log", { method: "POST", body: "STATS DONE " + results.map((r) => r.code + ":" + r.words + "/" + r.inserted).join(" ") }); }
+</script></body></html>

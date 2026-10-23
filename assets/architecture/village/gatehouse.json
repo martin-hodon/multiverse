@@ -1,0 +1,296 @@
+{
+ "name": "Gatehouse",
+ "_about": "A GATEHOUSE: a square tower over the gate passage (through its field face +z and its town face -z), the wall-walk passing through its upper storey by doors in its side faces; roofed (hip) or battlemented as the town's style says; guards' places outside the gate.",
+ "params": {
+  "detail": 4,
+  "W": 7.6,
+  "D": 8.4,
+  "t": 0.9,
+  "h": 6.0,
+  "upH": 3.4,
+  "gateW": 3.6,
+  "gateS": 3.0,
+  "slab": 0.35,
+  "pitch": 52,
+  "_W": "along the wall (x), D across it (z, the field at +z); h the walk's height, upH the upper storey's"
+ },
+ "parts": {
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "W",
+     "D"
+    ]
+   },
+   "thickness": "t",
+   "height": "h + upH",
+   "faces": {
+    "0": [
+     {
+      "h": "h",
+      "openings": [
+       {
+        "at": 0,
+        "width": "gateW",
+        "sill": 0,
+        "springing": "gateS",
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     },
+     {
+      "openings": [
+       {
+        "at": -1.5,
+        "width": 0.3,
+        "sill": 0.8,
+        "springing": 2.0,
+        "head": {
+         "profile": "flat"
+        },
+        "glass": false
+       },
+       {
+        "at": 1.5,
+        "width": 0.3,
+        "sill": 0.8,
+        "springing": 2.0,
+        "head": {
+         "profile": "flat"
+        },
+        "glass": false
+       }
+      ]
+     }
+    ],
+    "2": [
+     {
+      "h": "h",
+      "openings": [
+       {
+        "at": 0,
+        "width": "gateW",
+        "sill": 0,
+        "springing": "gateS",
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     },
+     {
+      "openings": [
+       {
+        "at": 0,
+        "width": 0.9,
+        "sill": 0.9,
+        "springing": 2.0,
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     }
+    ],
+    "1": [
+     {
+      "h": "h",
+      "openings": []
+     },
+     {
+      "openings": [
+       {
+        "at": 0,
+        "width": 1.4,
+        "sill": 0,
+        "springing": 2.2,
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     }
+    ],
+    "3": [
+     {
+      "h": "h",
+      "openings": []
+     },
+     {
+      "openings": [
+       {
+        "at": 0,
+        "width": 1.4,
+        "sill": 0,
+        "springing": 2.2,
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "upper floor": {
+   "type": "box",
+   "width": "W - 2 * t",
+   "length": "D - 2 * t",
+   "height": "slab",
+   "at": [
+    [
+     0,
+     "h - slab",
+     0,
+     0
+    ]
+   ]
+  },
+  "passage": {
+   "type": "box",
+   "width": "W - 2 * t",
+   "length": "D - 2 * t",
+   "height": 0.12,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "roof": {
+   "type": "roof",
+   "form": "hip",
+   "width": "W",
+   "length": "D",
+   "pitch": "pitch",
+   "overhang": 0.35,
+   "at": [
+    [
+     0,
+     "h + upH",
+     0,
+     0
+    ]
+   ]
+  },
+  "flat roof": {
+   "type": "box",
+   "width": "W",
+   "length": "D",
+   "height": 0.3,
+   "at": [
+    [
+     0,
+     "h + upH",
+     0,
+     0
+    ]
+   ]
+  },
+  "battlements": {
+   "type": "component",
+   "use": "components/crenellation",
+   "at": [
+    [
+     0,
+     "h + upH + 0.3",
+     "D / 2 - 0.25",
+     0
+    ],
+    [
+     0,
+     "h + upH + 0.3",
+     "0 - D / 2 + 0.25",
+     0
+    ]
+   ],
+   "params": {
+    "L": "W",
+    "t": 0.5,
+    "h": 0.9,
+    "step": 1.8,
+    "mh": 0.7
+   },
+   "build": [
+    "parapet",
+    "merlons"
+   ]
+  },
+  "battlements x": {
+   "type": "component",
+   "use": "components/crenellation",
+   "at": [
+    [
+     "W / 2 - 0.25",
+     "h + upH + 0.3",
+     0,
+     "1.5707963"
+    ],
+    [
+     "0 - W / 2 + 0.25",
+     "h + upH + 0.3",
+     0,
+     "1.5707963"
+    ]
+   ],
+   "params": {
+    "L": "D - 1.0",
+    "t": 0.5,
+    "h": 0.9,
+    "step": 1.8,
+    "mh": 0.7
+   },
+   "build": [
+    "parapet",
+    "merlons"
+   ]
+  },
+  "guards": {
+   "type": "marker",
+   "role": "guard",
+   "at": [
+    [
+     "0 - gateW / 2 - 0.9",
+     0,
+     "D / 2 + 1.4",
+     0
+    ],
+    [
+     "gateW / 2 + 0.9",
+     0,
+     "D / 2 + 1.4",
+     0
+    ]
+   ],
+   "data": {
+    "face": "0 - 1.5707963"
+   }
+  }
+ },
+ "build": [
+  "walls",
+  "upper floor",
+  "passage",
+  "roof"
+ ],
+ "walked": true
+}

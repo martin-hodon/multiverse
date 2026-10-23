@@ -1,0 +1,19 @@
+{
+  "name": "St Paul's Cathedral",
+  "building": "architecture/st-pauls",
+  "_about": "St Paul's: Portland stone, the dome and roofs in lead, the ball and cross gilt; inside, the floor of black and white marble set diagonally with the compass under the dome, the apse's gold mosaic.",
+  "stone": {
+    "color": "#e7e2d6",
+    "accent": "#d3cdbf",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["finial"], "pattern": "roofs/gold leaf"},
+    {"parts": ["kind:dome", "kind:roof"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"parts": "apse", "side": "in", "pattern": "painted/gold mosaic"},
+    {"surface": "floor", "side": "in", "at": [0, 0], "scale": 1.4, "pattern": "floors/compass", "palette": "marble-bw", "_about": "the compass under the dome"},
+    {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-bw"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "limestone"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "limestone"}
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Tunic",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "the T-tunic every man wore: a body to the hips, long sleeves, and a skirt from the hips to the knee, a little flared; a round neck with a keyhole slit",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "madder"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "params": {
+    "length": "knee - 0.04",
+    "hem": 0
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip + 0.01",
+        "neckline": "v",
+        "neckFront": 0.07,
+        "neckBack": 0.004,
+        "neckWidth": 12
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist",
+        "cuff": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip - 0.005",
+        "to": "length",
+        "flare": 0.25,
+        "hem": "hem"
+      }
+    }
+  ]
+}

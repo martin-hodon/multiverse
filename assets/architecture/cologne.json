@@ -1,0 +1,956 @@
+{
+  "name": "Cologne Cathedral",
+  "_about": "COLOGNE CATHEDRAL from the same components as Notre-Dame (the `gothic` generator): the `basilica` nave, 43m to the vault, with wide double aisles, rib-vaulted; flying buttresses down both flanks and round the chevet; the west front under two 16m towers rising to a hundred metres, each crowned by an octagonal stage and an openwork spire to 157m (the `domed-tower`); a spiral stair in each tower up to the terrace the spire stands on.",
+  "params": {
+    "detail": 4,
+    "bays": 11,
+    "bayLen": 7.6,
+    "naveW": 14.0,
+    "aisleW": 12.0,
+    "pierT": 1.6,
+    "aisleT": 1.6,
+    "naveL": "bays * bayLen",
+    "bodyW": "naveW + 2 * pierT + 2 * aisleW + 2 * aisleT",
+    "spring": 9.0,
+    "arcadeH": 21.0,
+    "clearH": 31.0,
+    "aisleRise": 4.0,
+    "clearSill": 2.2,
+    "crown": "spring + (bayLen - pierT) / 2 * 1.7321",
+    "aisleTop": "crown + aisleRise + 0.6",
+    "naveTop": "clearH + naveW / 2 * 1.7321 + 1.2",
+    "aisleWallH": "aisleTop + 1.2",
+    "frontH": 55.0,
+    "towerW": 14.4,
+    "towerH": 45.0,
+    "roofPitch": 55,
+    "ridge": "(naveW / 2 + pierT + 0.3) * 1.4281",
+    "towerBays": 3,
+    "_towerBays": "the aisles' last bays at the west end, which the towers stand over: they have no aisle vault or roof of their own",
+    "flyerX": "bodyW / 2 + 1.2",
+    "flyerSpan": "flyerX - naveW / 2 - pierT",
+    "_crown": "the arcade's crown: a pointed (equilateral) head over the gap between two piers",
+    "_ridge": "the nave roof's height over its eaves: half its width times tan(roofPitch)",
+    "_flyerX": "where a flying buttress's pier stands: 1.2m clear of the aisle wall"
+  },
+  "base": {
+    "height": 0.9,
+    "steps": 3,
+    "stepOut": 0.6,
+    "margin": 4
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "nave",
+    "nave roof",
+    "aisle roofs",
+    "flank buttresses",
+    "west front",
+    "towers",
+    "tower stairs",
+    "tower parapets",
+    "transept ends",
+    "transept sides",
+    "transept roof",
+    "apse arcade",
+    "apse clerestory",
+    "apse vault",
+    "apse roof",
+    "ambulatory wall",
+    "ambulatory roof",
+    "chevet buttresses",
+    "spires",
+    "tower pinnacles",
+    "west gallery",
+    "gallery parapet",
+    "seating",
+    "altar",
+    "organ"
+  ],
+  "parts": {
+    "nave": {
+      "type": "component",
+      "use": "basilica",
+      "params": {
+        "bays": "bays",
+        "bayLen": "bayLen",
+        "naveW": "naveW",
+        "aisleW": "aisleW",
+        "pierT": "pierT",
+        "aisleT": "aisleT",
+        "openW": "bayLen - pierT",
+        "spring": "spring",
+        "crown": "crown",
+        "arcadeH": "arcadeH",
+        "clearH": "clearH",
+        "naveTop": "naveTop",
+        "aisleSpring": "crown",
+        "aisleTop": "aisleTop",
+        "arch": "pointed",
+        "arcSpread": 1,
+        "naveSpread": 1,
+        "clearSpread": 1,
+        "aisleArch": "segmental",
+        "aisleRise": "aisleRise",
+        "aisleAlongArch": "segmental",
+        "aisleAlongRise": "aisleRise",
+        "aisleBays": "bays - towerBays",
+        "naveAlongArch": "pointed",
+        "naveAlongSpread": "((naveW / bayLen) * (naveW / bayLen) * 3 - 1) / 2",
+        "winW": 3.0,
+        "winSill": 4.0,
+        "clearWinW": 2.4,
+        "clearSill": "clearSill",
+        "clearSpring": "clearH - arcadeH - 2.2",
+        "_naveAlongSpread": "the vault's arch ALONG a bay is a lancet: steep enough over the short span to reach the crown of the wide one"
+      },
+      "build": [
+        "arcade",
+        "clerestory",
+        "aisle wall",
+        "nave vault",
+        "nave ribs",
+        "aisle vault",
+        "aisle ribs"
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the nave from the `basilica` definition: arcades, clerestory, aisle walls, and rib vaults over nave and aisles"
+    },
+    "nave roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "naveW + 2 * pierT + 0.6",
+      "length": "naveL",
+      "pitch": "roofPitch",
+      "at": [
+        [
+          0,
+          "naveTop",
+          0,
+          0
+        ]
+      ]
+    },
+    "aisle roofs": {
+      "type": "roof",
+      "form": "shed",
+      "width": "bodyW / 2 - naveW / 2 - pierT",
+      "length": "naveL + 3 - towerW",
+      "pitch": 15,
+      "at": [
+        [
+          "0 - (bodyW / 2 + naveW / 2 + pierT) / 2",
+          "aisleWallH",
+          "(3 - towerW) / 2",
+          0
+        ],
+        [
+          "(bodyW / 2 + naveW / 2 + pierT) / 2",
+          "aisleWallH",
+          "(3 - towerW) / 2",
+          3.14159265
+        ]
+      ],
+      "_about": "a lean-to over each aisle, up to the towers' back faces"
+    },
+    "flank buttresses": {
+      "type": "component",
+      "use": "components/flying-buttress",
+      "params": {
+        "pierH": 24,
+        "span": "flyerSpan",
+        "low": 20.5,
+        "high": "clearH - 1",
+        "top0": 23.5,
+        "top1": "clearH + 2.2"
+      },
+      "at": [
+        [
+          "flyerX",
+          0,
+          "0 - naveL / 2 + bayLen",
+          3.14159265
+        ],
+        [
+          "0 - flyerX",
+          0,
+          "0 - naveL / 2 + bayLen",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "bays - 1 - towerBays",
+        "step": [
+          0,
+          0,
+          "bayLen",
+          0
+        ]
+      },
+      "_about": "a flying buttress at every bay's end, both sides: pier, pinnacle, and the flyer to the clerestory"
+    },
+    "west front": {
+      "type": "wall",
+      "width": "2 * (bodyW / 2 - towerW / 2 - 0.5) - towerW",
+      "height": "frontH",
+      "thickness": 3.0,
+      "at": [
+        [
+          0,
+          0,
+          "naveL / 2 + 3",
+          0
+        ]
+      ],
+      "tiers": [
+        {
+          "h": 15,
+          "openings": [
+            {
+              "at": 0,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 7.5,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            }
+          ]
+        },
+        {
+          "h": 12,
+          "openings": [
+            {
+              "at": 0,
+              "width": 9.6,
+              "sill": 5.9,
+              "springing": 5.9,
+              "head": {
+                "profile": "semicircular"
+              },
+              "foot": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "openings": {
+            "pattern": "4",
+            "width": 1.3,
+            "gap": 1.25,
+            "pier": 1.25,
+            "sill": 3.0,
+            "springing": 10.5,
+            "head": {
+              "profile": "pointed",
+              "spread": 1.4
+            }
+          },
+          "glass": false
+        }
+      ],
+      "_about": "the west front between the towers, in three tiers: the central portal; the great rose; the open gallery"
+    },
+    "towers": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "towerW",
+          "towerW"
+        ]
+      },
+      "thickness": 1.6,
+      "height": "frontH + towerH",
+      "tiers": [
+        {
+          "h": 15,
+          "openings": []
+        },
+        {
+          "h": 12,
+          "openings": []
+        },
+        {
+          "h": "frontH - 27",
+          "openings": []
+        },
+        {
+          "openings": {
+            "pattern": "2",
+            "width": 1.8,
+            "gap": 0.9,
+            "pier": 0.9,
+            "sill": 3.5,
+            "springing": "towerH - 9",
+            "head": {
+              "profile": "pointed",
+              "spread": 1.6
+            }
+          },
+          "glass": false
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 15,
+            "openings": [
+              {
+                "at": 0,
+                "width": 5.0,
+                "sill": 0,
+                "springing": 6.8,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 1
+                }
+              }
+            ]
+          },
+          {
+            "h": 12,
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.6,
+                "sill": 2.5,
+                "springing": 8.0,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 1
+                }
+              }
+            ]
+          },
+          {
+            "h": "frontH - 27",
+            "openings": []
+          },
+          {
+            "openings": {
+              "pattern": "2",
+              "width": 1.8,
+              "gap": 0.9,
+              "pier": 0.9,
+              "sill": 3.5,
+              "springing": "towerH - 9",
+              "head": {
+                "profile": "pointed",
+                "spread": 1.6
+              }
+            },
+            "glass": false
+          }
+        ],
+        "2": [
+          {
+            "h": 15,
+            "openings": [
+              {
+                "at": 0,
+                "width": "towerW - 5.2",
+                "sill": 0,
+                "springing": "15 - 1.1 - (towerW - 5.2) / 2 * 1.7321",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 1
+                }
+              }
+            ]
+          },
+          {
+            "h": 12,
+            "openings": []
+          },
+          {
+            "h": "frontH - 27",
+            "openings": []
+          },
+          {
+            "openings": {
+              "pattern": "2",
+              "width": 1.8,
+              "gap": 0.9,
+              "pier": 0.9,
+              "sill": 3.5,
+              "springing": "towerH - 9",
+              "head": {
+                "profile": "pointed",
+                "spread": 1.6
+              }
+            },
+            "glass": false
+          }
+        ]
+      },
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5)",
+          0,
+          "naveL / 2 + 3 - towerW / 2",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5)",
+          0,
+          "naveL / 2 + 3 - towerW / 2",
+          0
+        ]
+      ],
+      "_about": "the two towers, from the ground: a portal in the front, a window, a blind stage, then the belfry's lancet pairs; the back an arch across the aisle"
+    },
+    "tower stairs": {
+      "type": "component",
+      "use": "components/tower-stair",
+      "params": {
+        "W": "towerW - 3.2",
+        "H": "frontH + towerH",
+        "tR": 2.1,
+        "tx": 2.5,
+        "tz": 0,
+        "hand": "left"
+      },
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5)",
+          0,
+          "naveL / 2 + 3 - towerW / 2",
+          3.14159265
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5)",
+          0,
+          "naveL / 2 + 3 - towerW / 2",
+          0
+        ]
+      ],
+      "_about": "the stair up each tower (`tower-stair`): the spiral turret against the outer flank, from the aisle to the terrace on top, which is the floor round its head"
+    },
+    "tower parapets": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "towerW + 0.4",
+          "towerW + 0.4"
+        ]
+      },
+      "thickness": 0.4,
+      "height": 1.4,
+      "openings": [],
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2",
+          0
+        ]
+      ]
+    },
+    "transept ends": {
+      "type": "wall",
+      "width": "bayLen * 2",
+      "height": "naveTop",
+      "thickness": 2.0,
+      "tiers": [
+        {
+          "h": 14,
+          "openings": [
+            {
+              "at": 0,
+              "width": 4.4,
+              "sill": 0,
+              "springing": 7.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 11.0,
+              "sill": 6.6,
+              "springing": 6.6,
+              "head": {
+                "profile": "semicircular"
+              },
+              "foot": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "bodyW / 2 + 3",
+          0,
+          0,
+          1.5707963
+        ],
+        [
+          "0 - bodyW / 2 - 3",
+          0,
+          0,
+          -1.5707963
+        ]
+      ],
+      "_about": "the transept's two ends, each a portal and over it a rose window 11m across"
+    },
+    "transept sides": {
+      "type": "box",
+      "width": 4.4,
+      "length": 1.6,
+      "height": "naveTop",
+      "at": [
+        [
+          "1 * (bodyW / 2 + 1)",
+          0,
+          "1 * (bayLen - 0.8)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 + 1)",
+          0,
+          "-1 * (bayLen - 0.8)",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 + 1)",
+          0,
+          "1 * (bayLen - 0.8)",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 + 1)",
+          0,
+          "-1 * (bayLen - 0.8)",
+          0
+        ]
+      ]
+    },
+    "transept roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "bayLen * 2 + 0.6",
+      "length": "bodyW + 7",
+      "pitch": "roofPitch",
+      "at": [
+        [
+          0,
+          "naveTop",
+          0,
+          1.5707963
+        ]
+      ],
+      "_about": "the transept's roof, crossing the nave's at the same eaves"
+    },
+    "apse arcade": {
+      "type": "ring",
+      "count": 12,
+      "turn": 0.5,
+      "at": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ],
+      "rOuter": "naveW / 2 + pierT",
+      "rInner": "naveW / 2",
+      "height": "arcadeH",
+      "opening": {
+        "width": 3.0,
+        "sill": 0,
+        "springing": "spring",
+        "head": {
+          "profile": "pointed",
+          "spread": 1
+        }
+      }
+    },
+    "apse clerestory": {
+      "type": "ring",
+      "count": 12,
+      "turn": 0.5,
+      "at": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ],
+      "rOuter": "naveW / 2 + pierT",
+      "rInner": "naveW / 2",
+      "height": "naveTop - arcadeH",
+      "y": "arcadeH",
+      "_about": "the apse's upper wall, up to the roof's eaves: it encloses the half vault as the nave's spandrels do its bays",
+      "opening": {
+        "width": 1.8,
+        "sill": "clearSill",
+        "springing": "clearH - arcadeH - 2.0",
+        "head": {
+          "profile": "pointed",
+          "spread": 1
+        }
+      }
+    },
+    "apse vault": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 24,
+      "radius": "naveW / 2 + pierT",
+      "thickness": "pierT",
+      "head": {
+        "profile": "pointed",
+        "spread": 1
+      },
+      "at": [
+        [
+          0,
+          "clearH",
+          "0 - naveL / 2",
+          3.14159265
+        ]
+      ],
+      "_about": "the apse's half vault: the nave vault's own pointed section turned round"
+    },
+    "apse roof": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 24,
+      "radius": "naveW / 2 + pierT + 0.3",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "ridge"
+      },
+      "at": [
+        [
+          0,
+          "naveTop",
+          "0 - naveL / 2",
+          3.14159265
+        ]
+      ]
+    },
+    "ambulatory wall": {
+      "type": "ring",
+      "count": 12,
+      "turn": 0.5,
+      "at": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ],
+      "rOuter": "bodyW / 2",
+      "rInner": "bodyW / 2 - aisleT",
+      "height": "aisleWallH",
+      "opening": {
+        "width": 3.0,
+        "sill": 4.0,
+        "springing": 6.4,
+        "head": {
+          "profile": "pointed",
+          "spread": 1
+        }
+      }
+    },
+    "ambulatory roof": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 24,
+      "radius": "bodyW / 2 + 0.3",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 6.5
+      },
+      "oculus": "naveW / 2 + pierT",
+      "cap": false,
+      "at": [
+        [
+          0,
+          "aisleWallH",
+          "0 - naveL / 2",
+          3.14159265
+        ]
+      ],
+      "_about": "the lean-to round the apse: a half cone cut off at the apse's wall (`oculus`) and left open there"
+    },
+    "chevet buttresses": {
+      "type": "component",
+      "use": "components/flying-buttress",
+      "params": {
+        "pierH": 24,
+        "span": "flyerSpan",
+        "low": 20.5,
+        "high": "clearH - 1",
+        "top0": 23.5,
+        "top1": "clearH + 2.2"
+      },
+      "at": [
+        [
+          "(flyerX) * 0.923880",
+          0,
+          "0 - naveL / 2 + (flyerX) * -0.382683",
+          3.534292
+        ],
+        [
+          "(flyerX) * 0.555570",
+          0,
+          "0 - naveL / 2 + (flyerX) * -0.831470",
+          4.12334
+        ],
+        [
+          "(flyerX) * 0.000000",
+          0,
+          "0 - naveL / 2 + (flyerX) * -1.000000",
+          4.712389
+        ],
+        [
+          "(flyerX) * -0.555570",
+          0,
+          "0 - naveL / 2 + (flyerX) * -0.831470",
+          5.301438
+        ],
+        [
+          "(flyerX) * -0.923880",
+          0,
+          "0 - naveL / 2 + (flyerX) * -0.382683",
+          5.890486
+        ]
+      ],
+      "_about": "the flying buttresses standing round the chevet, radiating"
+    },
+    "spires": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 6.8,
+        "H": 15,
+        "t": 0.7,
+        "cap": "trigonal",
+        "capRise": 40,
+        "capR": 6.9,
+        "drumR": 6.4,
+        "drumH": 2.4,
+        "kok": 1.8,
+        "finial": 4.0,
+        "winW": 2.6,
+        "doorH": 3.2
+      },
+      "build": [
+        "tower",
+        "kokoshniki",
+        "neck",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2",
+          0
+        ]
+      ],
+      "_about": "the spires: an octagonal lantern stage on each tower and its spire"
+    },
+    "tower pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": 1.8,
+        "h": 5.0,
+        "s": 8.0
+      },
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5) + -1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2 + -1 * (towerW / 2 - 1.1)",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5) + -1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2 + 1 * (towerW / 2 - 1.1)",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5) + 1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2 + -1 * (towerW / 2 - 1.1)",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5) + 1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2 + 1 * (towerW / 2 - 1.1)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5) + -1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2 + -1 * (towerW / 2 - 1.1)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5) + -1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2 + 1 * (towerW / 2 - 1.1)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5) + 1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2 + -1 * (towerW / 2 - 1.1)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5) + 1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerW / 2 + 1 * (towerW / 2 - 1.1)",
+          0
+        ]
+      ],
+      "_about": "a pinnacle on every corner of the towers' heads, where the octagon stage begins"
+    },
+    "west gallery": {
+      "walked": true,
+      "type": "box",
+      "width": "naveW",
+      "length": "bayLen - 0.4",
+      "height": 0.5,
+      "at": [
+        [
+          0,
+          "arcadeH * 0.45 - 0.5",
+          "naveL / 2 - bayLen / 2 + 0.2",
+          0
+        ]
+      ],
+      "_about": "the organ loft: a gallery across the nave's west bay, the doors passing under it"
+    },
+    "gallery parapet": {
+      "type": "box",
+      "width": "naveW",
+      "length": 0.25,
+      "height": 1.0,
+      "at": [
+        [
+          0,
+          "arcadeH * 0.45",
+          "naveL / 2 - bayLen + 0.4",
+          0
+        ]
+      ]
+    },
+    "seating": {
+      "type": "zone",
+      "zone": "seating",
+      "w": "naveW - 1.6",
+      "d": "(naveL / 2 - bayLen - 1.5) - (bayLen + 1.5)",
+      "h": "arcadeH",
+      "at": [
+        [
+          0,
+          0,
+          "((bayLen + 1.5) + (naveL / 2 - bayLen - 1.5)) / 2",
+          1.5707963
+        ]
+      ],
+      "_about": "the nave's seating between the arcades, from under the gallery up to the crossing, on a middle aisle"
+    },
+    "altar": {
+      "type": "zone",
+      "zone": "altar",
+      "w": "naveW - 2",
+      "d": 3.2,
+      "h": "arcadeH",
+      "at": [
+        [
+          0,
+          0,
+          "0 - bayLen - 2.5",
+          1.5707963
+        ]
+      ],
+      "_about": "the high altar just east of the crossing"
+    },
+    "organ": {
+      "type": "zone",
+      "zone": "organ",
+      "w": "min(naveW - 2, 10)",
+      "d": "bayLen * 0.6",
+      "h": "(clearH - arcadeH * 0.45) * 0.6",
+      "at": [
+        [
+          0,
+          "arcadeH * 0.45",
+          "naveL / 2 - bayLen / 2 + 0.6",
+          1.5707963
+        ]
+      ],
+      "_about": "the great organ on the west gallery, its pipes facing east down the nave"
+    }
+  }
+}

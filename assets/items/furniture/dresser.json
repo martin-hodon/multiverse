@@ -1,0 +1,276 @@
+{
+ "kind": "item",
+ "name": "Welsh dresser",
+ "category": "furniture/storage",
+ "era": "1700-1850",
+ "region": "Wales & England",
+ "_about": "the kitchen dresser: a base of drawers and cupboards, open shelves over it with plates stood on edge along them and jugs hung below",
+ "params": {
+  "w": [
+   1.5,
+   1.8
+  ],
+  "d": 0.48,
+  "baseH": 0.84,
+  "H": [
+   1.9,
+   2.1
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "pine"
+   ]
+  },
+  "metal": "brass",
+  "plates": {
+   "pick": [
+    "#e8e4d8",
+    "#d8e0e8",
+    "pewter"
+   ]
+  },
+  "jug": "terracotta"
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    "baseH - 0.04",
+    "d"
+   ],
+   "at": [
+    0,
+    "(baseH - 0.04) / 2",
+    0
+   ]
+  },
+  {
+   "id": "top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.04",
+    0.04,
+    "d + 0.03"
+   ],
+   "at": [
+    0,
+    "baseH - 0.02",
+    0.01
+   ]
+  },
+  {
+   "id": "drawers",
+   "use": "items/components/drawer",
+   "params": {
+    "w": "w / 3 - 0.03",
+    "h": 0.14,
+    "knobs": 1
+   },
+   "along": {
+    "n": 3,
+    "from": [
+     "0 - w / 3",
+     "baseH - 0.13",
+     "d / 2 + 0.001"
+    ],
+    "to": [
+     "w / 3",
+     "baseH - 0.13",
+     "d / 2 + 0.001"
+    ]
+   }
+  },
+  {
+   "id": "doors",
+   "use": "items/components/panel-door",
+   "params": {
+    "w": "w / 2 - 0.08",
+    "h": "baseH - 0.32",
+    "s": 0.05
+   },
+   "at": [
+    [
+     "0 - w / 4",
+     "(baseH - 0.32) / 2 + 0.05",
+     "d / 2 + 0.001"
+    ],
+    [
+     "w / 4",
+     "(baseH - 0.32) / 2 + 0.05",
+     "d / 2 + 0.001"
+    ]
+   ]
+  },
+  {
+   "id": "rack back",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.04",
+    "H - baseH",
+    0.02
+   ],
+   "at": [
+    0,
+    "(H + baseH) / 2",
+    "0 - d / 2 + 0.03"
+   ]
+  },
+  {
+   "id": "rack sides",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.025,
+    "H - baseH",
+    0.24
+   ],
+   "at": [
+    [
+     "0 - w / 2 + 0.03",
+     "(H + baseH) / 2",
+     "0 - d / 2 + 0.14"
+    ],
+    [
+     "w / 2 - 0.03",
+     "(H + baseH) / 2",
+     "0 - d / 2 + 0.14"
+    ]
+   ]
+  },
+  {
+   "id": "shelves",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.06",
+    0.02,
+    0.22
+   ],
+   "at": [
+    [
+     0,
+     "baseH + 0.32",
+     "0 - d / 2 + 0.14"
+    ],
+    [
+     0,
+     "baseH + 0.64",
+     "0 - d / 2 + 0.14"
+    ],
+    [
+     0,
+     "H - 0.05",
+     "0 - d / 2 + 0.14"
+    ]
+   ]
+  },
+  {
+   "id": "cornice",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.02",
+    0.07,
+    0.3
+   ],
+   "at": [
+    0,
+    "H",
+    "0 - d / 2 + 0.15"
+   ]
+  },
+  {
+   "id": "plates",
+   "type": "lathe",
+   "material": "plates",
+   "profile": [
+    [
+     0.11,
+     0.0
+    ],
+    [
+     0.12,
+     0.014
+    ]
+   ],
+   "sides": 16,
+   "caps": true,
+   "along": {
+    "n": 5,
+    "from": [
+     "0 - w * 0.36",
+     "baseH + 0.47",
+     "0 - d / 2 + 0.08"
+    ],
+    "to": [
+     "w * 0.36",
+     "baseH + 0.47",
+     "0 - d / 2 + 0.08"
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0,
+     78,
+     0
+    ],
+    [
+     0,
+     0.32,
+     0,
+     0,
+     78,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "jugs",
+   "type": "lathe",
+   "material": "jug",
+   "profile": [
+    [
+     0.035,
+     0
+    ],
+    [
+     0.05,
+     0.05
+    ],
+    [
+     0.03,
+     0.1
+    ],
+    [
+     0.035,
+     0.12
+    ]
+   ],
+   "sides": 10,
+   "along": {
+    "n": 4,
+    "from": [
+     "0 - w * 0.3",
+     "baseH + 0.18",
+     "0 - d / 2 + 0.14"
+    ],
+    "to": [
+     "w * 0.3",
+     "baseH + 0.18",
+     "0 - d / 2 + 0.14"
+    ]
+   }
+  }
+ ]
+}

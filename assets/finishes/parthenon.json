@@ -1,0 +1,18 @@
+{
+  "name": "Parthenon",
+  "building": "architecture/parthenon",
+  "_about": "The Parthenon: Pentelic marble, the columns fluted (20 flutes), the triglyphs painted dark blue, the coffered ceiling blue with gold stars, the roof in marble tiles.",
+  "stone": {
+    "color": "#ded8c6",
+    "accent": "#c9c0ac",
+    "pat": "marble"
+  },
+  "rules": [
+    {"parts": "peristyle triglyphs", "color": "#2c3a4a", "accent": "#1f2a36"},
+    {"parts": ["peristyle shafts", "pronaos shafts", "opisthodomos shafts"], "count": 20, "pattern": "stone/fluted", "palette": "carrara"},
+    {"parts": "ceiling", "scale": 0.5, "pattern": "painted/starry vault", "palette": "starry"},
+    {"parts": "roof", "surface": "roof", "pattern": "roofs/tube tiles", "palette": "carrara"},
+    {"surface": "floor", "pattern": "stone/marble", "palette": "carrara"},
+    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "carrara"}
+  ]
+}

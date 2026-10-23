@@ -1,0 +1,647 @@
+{
+  "name": "Hungarian Parliament",
+  "_about": "THE HUNGARIAN PARLIAMENT, Budapest (Gothic Revival, 1885-1904), from repeated components: its two halves each a `court` -- a ring of rooms round a courtyard, three storeys under steep roofs, walked all the way round and gated toward the middle -- and between them the square central hall under the great ribbed dome (pendentives with their deck, then the `drum-dome`: a sixteen-sided drum windowed in every bay, the pointed dome, its ribs, the spire of a lantern); Gothic turrets (`domed-tower` under stone spires) on the courts' corners and round the dome; the river front with its arcaded loggias (the `gallery` as an open arcade) under turrets and a row of `pinnacle`s; and the porch on the square before the central hall's door.",
+  "params": {
+    "detail": 4
+  },
+  "base": {
+    "height": 0.8,
+    "steps": 4,
+    "stepOut": 0.5,
+    "margin": 4
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "west court",
+    "east court",
+    "central hall",
+    "pendentives",
+    "dome",
+    "corner turrets",
+    "hall turrets",
+    "river loggias",
+    "river turrets",
+    "entrance porch",
+    "porch gable",
+    "river pinnacles"
+  ],
+  "parts": {
+    "west court": {
+      "type": "court",
+      "plan": {
+        "rect": [
+          80.0,
+          70.0
+        ]
+      },
+      "depth": 13.0,
+      "storeys": 3,
+      "storeyH": 6.0,
+      "axis": 3.6,
+      "winW": 1.4,
+      "winH": 3.0,
+      "head": {
+        "profile": "pointed",
+        "spread": 1.0
+      },
+      "gate": {
+        "face": 1,
+        "width": 4.0,
+        "height": 5.5
+      },
+      "roof": {
+        "form": "hip",
+        "pitch": 55
+      },
+      "at": [
+        [
+          -55.0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the two halves, each a ring of rooms round its courtyard, three storeys under steep roofs, gated toward the central hall"
+    },
+    "east court": {
+      "type": "court",
+      "plan": {
+        "rect": [
+          80.0,
+          70.0
+        ]
+      },
+      "depth": 13.0,
+      "storeys": 3,
+      "storeyH": 6.0,
+      "axis": 3.6,
+      "winW": 1.4,
+      "winH": 3.0,
+      "head": {
+        "profile": "pointed",
+        "spread": 1.0
+      },
+      "gate": {
+        "face": 3,
+        "width": 4.0,
+        "height": 5.5
+      },
+      "roof": {
+        "form": "hip",
+        "pitch": 55
+      },
+      "at": [
+        [
+          55.0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "central hall": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          30.0,
+          30.0
+        ]
+      },
+      "thickness": 1.8,
+      "height": 30.0,
+      "openings": {
+        "pattern": "3",
+        "width": 2.2,
+        "gap": 5.0,
+        "sill": 6.0,
+        "springing": 18.0,
+        "head": {
+          "profile": "pointed",
+          "spread": 1.0
+        }
+      },
+      "faces": {
+        "1": [
+          {
+            "at": 0,
+            "width": 4.0,
+            "sill": 0,
+            "springing": 3.5,
+            "head": {
+              "profile": "pointed",
+              "spread": 1.0
+            }
+          }
+        ],
+        "3": [
+          {
+            "at": 0,
+            "width": 4.0,
+            "sill": 0,
+            "springing": 3.5,
+            "head": {
+              "profile": "pointed",
+              "spread": 1.0
+            }
+          }
+        ],
+        "2": [
+          {
+            "at": 0,
+            "width": 5.0,
+            "sill": 0,
+            "springing": 5.5,
+            "head": {
+              "profile": "pointed",
+              "spread": 1.0
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the domed central hall: the main door from the square, and a door through into each court"
+    },
+    "pendentives": {
+      "type": "pendentives",
+      "span": 26.4,
+      "springing": 16.8,
+      "sides": 16,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "deck": {
+        "thickness": 0.6,
+        "out": 1.8
+      },
+      "_about": "the pendentives, and the roof round the drum's foot"
+    },
+    "dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 13.2,
+        "dt": 1.2,
+        "H": 22.0,
+        "n": 16,
+        "every": 1,
+        "winW": 2.2,
+        "winSill": 4.0,
+        "winH": 12.0,
+        "profile": "pointed",
+        "spread": 0.75,
+        "domeT": 1.0,
+        "ribW": 0.6,
+        "lanternR": 2.6,
+        "lanternH": 16.0
+      },
+      "at": [
+        [
+          0,
+          30.0,
+          0,
+          0
+        ]
+      ],
+      "build": [
+        "drum",
+        "dome",
+        "ribs",
+        "lantern"
+      ],
+      "_about": "the great dome: a sixteen-sided drum, a window in every bay, the pointed dome and its ribs, the spire of a lantern"
+    },
+    "corner turrets": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 3.0,
+        "H": 26.0,
+        "t": 0.6,
+        "drumR": 2.0,
+        "drumH": 2.0,
+        "cap": "trigonal",
+        "capRise": 12.0,
+        "capR": 2.4,
+        "kok": 0.8,
+        "finial": 1.5,
+        "winW": 0.7,
+        "doorH": 2.6
+      },
+      "at": [
+        [
+          -95.0,
+          0,
+          -35.0,
+          0
+        ],
+        [
+          -95.0,
+          0,
+          35.0,
+          0
+        ],
+        [
+          95.0,
+          0,
+          -35.0,
+          0
+        ],
+        [
+          95.0,
+          0,
+          35.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          -35.0,
+          0
+        ],
+        [
+          -15.0,
+          0,
+          35.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          -35.0,
+          0
+        ],
+        [
+          15.0,
+          0,
+          35.0,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "kokoshniki",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "_about": "Gothic turrets under stone spires, on the corners of the courts"
+    },
+    "hall turrets": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 1.8,
+        "H": 6.0,
+        "t": 0.6,
+        "drumR": 1.2,
+        "drumH": 1.4,
+        "cap": "trigonal",
+        "capRise": 9.0,
+        "capR": 1.5,
+        "kok": 0.8,
+        "finial": 1.5,
+        "winW": 0.5,
+        "doorH": 1.8
+      },
+      "at": [
+        [
+          -13.8,
+          30.0,
+          -13.8,
+          0
+        ],
+        [
+          -13.8,
+          30.0,
+          13.8,
+          0
+        ],
+        [
+          13.8,
+          30.0,
+          -13.8,
+          0
+        ],
+        [
+          13.8,
+          30.0,
+          13.8,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "_about": "and four small ones on the central hall's corners, round the dome"
+    },
+    "river loggias": {
+      "type": "component",
+      "use": "components/gallery",
+      "params": {
+        "L": 72.0,
+        "D": 6.0,
+        "H": 7.0,
+        "n": 14,
+        "winW": 3.0,
+        "sill": 0,
+        "arch": "pointed",
+        "slab": 0.6,
+        "terrace": 0
+      },
+      "at": [
+        [
+          -55.0,
+          0,
+          38.0,
+          0
+        ],
+        [
+          55.0,
+          0,
+          38.0,
+          0
+        ]
+      ],
+      "_about": "the arcaded loggias along the river front, their roofs terraces behind a balustrade"
+    },
+    "river turrets": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 2.2,
+        "H": 28.0,
+        "t": 0.6,
+        "drumR": 1.5,
+        "drumH": 1.6,
+        "cap": "trigonal",
+        "capRise": 10.0,
+        "capR": 1.8,
+        "kok": 0.8,
+        "finial": 1.5,
+        "winW": 0.6,
+        "doorH": 2.4
+      },
+      "at": [
+        [
+          -33.0,
+          0,
+          35.8,
+          0
+        ],
+        [
+          -77.0,
+          0,
+          35.8,
+          0
+        ],
+        [
+          33.0,
+          0,
+          35.8,
+          0
+        ],
+        [
+          77.0,
+          0,
+          35.8,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "kokoshniki",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "_about": "turrets rising out of the river front, over its roofs"
+    },
+    "entrance porch": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          14.0,
+          8.0
+        ]
+      },
+      "thickness": 1.2,
+      "height": 12.0,
+      "glass": false,
+      "openings": [
+        {
+          "at": 0,
+          "width": 5.0,
+          "sill": 0,
+          "springing": 7.0,
+          "head": {
+            "profile": "pointed",
+            "spread": 1.0
+          }
+        }
+      ],
+      "faces": {
+        "1": [
+          {
+            "at": 0,
+            "width": 3.0,
+            "sill": 0,
+            "springing": 5.5,
+            "head": {
+              "profile": "pointed",
+              "spread": 1.0
+            }
+          }
+        ],
+        "3": [
+          {
+            "at": 0,
+            "width": 3.0,
+            "sill": 0,
+            "springing": 5.5,
+            "head": {
+              "profile": "pointed",
+              "spread": 1.0
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          -19.0,
+          0
+        ]
+      ],
+      "_about": "the porch on the square: arches on three sides before the central hall's door"
+    },
+    "porch gable": {
+      "type": "roof",
+      "form": "gable",
+      "width": 14.0,
+      "length": 8.0,
+      "pitch": 55,
+      "overhang": 0.3,
+      "at": [
+        [
+          0,
+          12.0,
+          -19.0,
+          0
+        ]
+      ]
+    },
+    "river pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": 0.9,
+        "h": 2.4,
+        "s": 4.0
+      },
+      "at": [
+        [
+          -19.5,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -26.7,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -33.9,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -41.1,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -48.3,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -55.5,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -62.7,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -69.9,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -77.1,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          -84.3,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          19.5,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          26.7,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          33.9,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          41.1,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          48.3,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          55.5,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          62.7,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          69.9,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          77.1,
+          18.0,
+          34.55,
+          0
+        ],
+        [
+          84.3,
+          18.0,
+          34.55,
+          0
+        ]
+      ],
+      "_about": "the pinnacles along the river front's parapet, one over every pier"
+    }
+  }
+}

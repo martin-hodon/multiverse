@@ -1,0 +1,144 @@
+{
+ "name": "Town wall",
+ "_about": "A STRETCH OF TOWN WALL: its top is the wall-walk, behind a crenellated parapet on the field side (+z) and a low one on the town side; the parapets stop short of a tower astride the wall (the river ends), the field one runs into a tower flanking it (between: town.js) and the town-side one runs on behind it, run into a corner tower, and meet a gatehouse's face (pa/pb, ia/ib); built with `stair` (and the town-side parapet in two, `inner parapet by the stair` and `past the stair`) it has a flight up from the town.",
+ "params": {
+  "detail": 4,
+  "len": 30,
+  "h": 6.0,
+  "T": 2.4,
+  "fp": 0.5,
+  "ri": 0.15,
+  "_fp": "the field parapet's thickness (its inner face is the walk's field edge) and ri how far in from the town face the town-side rail stands: the walk's middle is (fp - ri) / 2 in from the wall's line toward the town (town.js frame.walkIn: the watchman and the sentry walk it)",
+  "pa": 2.8,
+  "pb": 2.8,
+  "ia": 2.8,
+  "ib": 2.8,
+  "ka": 1,
+  "kb": 1,
+  "sx": -6.0,
+  "run": 0.28,
+  "Lf": "round(h / 0.19) * run",
+  "_len": "the segment's length (centre of one tower to the next, or to a gatehouse's face), h its walk's height, T its thickness; sx where the flight up starts (it climbs +x along the town face to a 1.3m landing: sx + Lf + 1.3 must stay short of the +x end)",
+  "_pa": "where the field parapet stops short of the -x end (pa) and the +x end (pb): 2.8 at a tower astride the wall, where a flanking tower meets it (town.js flankStop; ia 0 there: the town side runs on), 0.7 at a corner tower (it runs into the tower), 0 at a gatehouse's face; ia/ib the same for the town-side parapet (T/2 - 0.15 at a corner: it runs to the corner, where it meets the other wall's), ka/kb 0 where its end post is the other wall's (one post at the corner, not two side by side)"
+ },
+ "parts": {
+  "body": {
+   "type": "box",
+   "width": "len",
+   "length": "T",
+   "height": "h",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "parapet": {
+   "type": "component",
+   "use": "components/crenellation",
+   "at": [
+    [
+     "(pa - pb) / 2",
+     "h",
+     "T / 2 - fp / 2",
+     0
+    ]
+   ],
+   "params": {
+    "L": "len - pa - pb",
+    "t": "fp",
+    "h": 1.0,
+    "step": 1.8,
+    "mh": 0.75
+   },
+   "build": [
+    "parapet",
+    "merlons"
+   ]
+  },
+  "inner parapet": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     "0 - len / 2 + ia",
+     "h",
+     "0 - T / 2 + ri",
+     0
+    ]
+   ],
+   "params": {
+    "L": "len - ia - ib",
+    "style": "rails",
+    "bay": 1.8,
+    "h": 1.0,
+    "p0": "ka",
+    "p1": "kb"
+   }
+  },
+  "inner parapet by the stair": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     "0 - len / 2 + ia",
+     "h",
+     "0 - T / 2 + ri",
+     0
+    ]
+   ],
+   "params": {
+    "L": "sx + Lf - 0.1 - (0 - len / 2 + ia)",
+    "style": "rails",
+    "bay": 1.8,
+    "h": 1.0,
+    "p0": "ka"
+   }
+  },
+  "inner parapet past the stair": {
+   "type": "component",
+   "use": "components/fence",
+   "at": [
+    [
+     "sx + Lf + 1.4",
+     "h",
+     "0 - T / 2 + ri",
+     0
+    ]
+   ],
+   "params": {
+    "L": "len / 2 - ib - (sx + Lf + 1.4)",
+    "style": "rails",
+    "bay": 1.8,
+    "h": 1.0,
+    "p1": "kb"
+   }
+  },
+  "stair": {
+   "type": "flight",
+   "run": "run",
+   "rise": 0.19,
+   "width": 1.3,
+   "base": 0,
+   "top": "h",
+   "landing": 1.3,
+   "at": [
+    [
+     "sx",
+     0,
+     "0 - T / 2",
+     0
+    ]
+   ]
+  }
+ },
+ "build": [
+  "body",
+  "parapet",
+  "inner parapet"
+ ],
+ "walked": true
+}

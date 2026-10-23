@@ -1,0 +1,49 @@
+{
+ "kind": "item",
+ "name": "Oar",
+ "category": "components",
+ "era": "-500-1900",
+ "region": "everywhere",
+ "_about": "a rowing boat's oar, hinged at its origin (the gunwale): the handle inboard, the loom and blade outboard along +z (`side` -1: along -z)",
+ "params": {
+  "side": 1
+ },
+ "materials": {
+  "loom": "#7a5a36",
+  "blade": "#6a4a2c"
+ },
+ "parts": [
+  {
+   "id": "loom",
+   "type": "rod",
+   "material": "loom",
+   "r": 0.025,
+   "from": [
+    0,
+    0,
+    "side * -0.4"
+   ],
+   "to": [
+    0,
+    0,
+    "side * 2.2"
+   ],
+   "sides": 6
+  },
+  {
+   "id": "blade",
+   "type": "box",
+   "material": "blade",
+   "size": [
+    0.14,
+    0.03,
+    0.5
+   ],
+   "at": [
+    0,
+    0,
+    "side * 2.0"
+   ]
+  }
+ ]
+}

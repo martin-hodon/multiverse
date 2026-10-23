@@ -1,0 +1,441 @@
+{
+ "name": "Fountain",
+ "_about": "THE PUBLIC FOUNTAIN: a paved square opening onto the street, an octagonal basin on a step, the column with its small basin and upper bowl, four spouts whose jets fall into the small basin and spill into the pool (the water: `flow` markers), wooden buckets on the rim (`vessel`s), villagers fetching water, the bard's pitch on the paving.",
+ "site": {
+  "origin": true
+ },
+ "params": {
+  "detail": 4,
+  "footW": 9,
+  "footD": 9,
+  "square": 4
+ },
+ "parts": {
+  "paving": {
+   "type": "box",
+   "width": 8,
+   "length": 8,
+   "height": 0.1,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "walked": true
+  },
+  "step": {
+   "type": "column",
+   "radius": 2.55,
+   "height": 0.18,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0.1,
+     0,
+     0.3926991
+    ]
+   ],
+   "taper": 0.9608,
+   "walked": true
+  },
+  "basin wall": {
+   "type": "ring",
+   "count": 8,
+   "rOuter": 1.9000000000000001,
+   "rInner": 1.6,
+   "height": 0.75,
+   "y": 0.28,
+   "solid": true,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "coping": {
+   "type": "ring",
+   "count": 8,
+   "rOuter": 2.0,
+   "rInner": 1.5,
+   "height": 0.12,
+   "y": 1.03,
+   "solid": true,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "column": {
+   "type": "column",
+   "radius": 0.28,
+   "height": 1.7,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0.28,
+     0,
+     0
+    ]
+   ],
+   "taper": 0.7143
+  },
+  "small basin": {
+   "type": "column",
+   "radius": 0.85,
+   "height": 0.08,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0.88,
+     0,
+     0.3926991
+    ]
+   ],
+   "taper": 1.1176
+  },
+  "small basin wall": {
+   "type": "ring",
+   "count": 8,
+   "rOuter": 0.96,
+   "rInner": 0.84,
+   "height": 0.3,
+   "y": 0.88,
+   "solid": true,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "small coping": {
+   "type": "ring",
+   "count": 8,
+   "rOuter": 1.02,
+   "rInner": 0.78,
+   "height": 0.08,
+   "y": 1.18,
+   "solid": true,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "bowl": {
+   "type": "column",
+   "radius": 0.38,
+   "height": 0.22,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     1.98,
+     0,
+     0.3926991
+    ]
+   ],
+   "taper": 1.5789
+  },
+  "brim": {
+   "type": "ring",
+   "count": 8,
+   "rOuter": 0.6,
+   "rInner": 0.52,
+   "height": 0.16,
+   "y": 2.2,
+   "solid": true,
+   "place": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "stem": {
+   "type": "column",
+   "radius": 0.12,
+   "height": 0.3,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     2.2,
+     0,
+     0
+    ]
+   ],
+   "taper": 0.6667
+  },
+  "finial": {
+   "type": "dome",
+   "radius": 0.16,
+   "sides": 8,
+   "thickness": 0,
+   "cap": false,
+   "head": {
+    "profile": "semicircular",
+    "seg": 4
+   },
+   "at": [
+    [
+     0,
+     2.5,
+     0,
+     0
+    ]
+   ]
+  },
+  "spouts": {
+   "type": "box",
+   "width": 0.45,
+   "length": 0.07,
+   "height": 0.07,
+   "at": [
+    [
+     0.45,
+     1.795,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.795,
+     0.45,
+     -1.5707963
+    ],
+    [
+     -0.45,
+     1.795,
+     0.0,
+     -3.1415927
+    ],
+    [
+     -0.0,
+     1.795,
+     -0.45,
+     -4.712389
+    ]
+   ]
+  },
+  "pools": {
+   "type": "marker",
+   "role": "flow",
+   "at": [
+    [
+     0,
+     0.91,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "kind": "pool",
+    "r": 1.6,
+    "seg": 8
+   }
+  },
+  "small pool": {
+   "type": "marker",
+   "role": "flow",
+   "at": [
+    [
+     0,
+     1.14,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "kind": "pool",
+    "r": 0.8,
+    "seg": 8
+   }
+  },
+  "bowl pool": {
+   "type": "marker",
+   "role": "flow",
+   "at": [
+    [
+     0,
+     2.23,
+     0,
+     0
+    ]
+   ],
+   "data": {
+    "kind": "pool",
+    "r": 0.52,
+    "seg": 8
+   }
+  },
+  "jets": {
+   "type": "marker",
+   "role": "flow",
+   "at": [
+    [
+     0.66,
+     1.12,
+     0.0,
+     0
+    ],
+    [
+     0.0,
+     1.12,
+     0.66,
+     0
+    ],
+    [
+     -0.66,
+     1.12,
+     0.0,
+     0
+    ],
+    [
+     -0.0,
+     1.12,
+     -0.66,
+     0
+    ]
+   ],
+   "data": {
+    "kind": "jet",
+    "r": 0.04,
+    "h": 0.69
+   }
+  },
+  "bucket 1": {
+   "type": "marker",
+   "role": "vessel",
+   "at": [
+    [
+     1.8,
+     1.15,
+     -0.9,
+     0
+    ]
+   ],
+   "data": {
+    "kind": "bucket",
+    "fill": 0.9,
+    "drink": "water"
+   }
+  },
+  "bucket 2": {
+   "type": "marker",
+   "role": "vessel",
+   "at": [
+    [
+     -0.7,
+     1.15,
+     1.85,
+     0
+    ]
+   ],
+   "data": {
+    "kind": "bucket",
+    "fill": 0.6,
+    "drink": "water"
+   }
+  },
+  "fetching": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     2.2,
+     0.28,
+     -0.9,
+     3.14159265
+    ],
+    [
+     -0.7,
+     0.28,
+     2.35,
+     1.5707963
+    ]
+   ],
+   "data": {
+    "pose": "stand"
+   }
+  },
+  "bard": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     -3.9,
+     0.1,
+     -1.3,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "work": 1,
+    "gesture": "strum",
+    "tool": "lute",
+    "bard": true
+   }
+  },
+  "neighbour": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     -2.9,
+     0.1,
+     -2.6,
+     -0.7853982
+    ]
+   ],
+   "data": {
+    "pose": "stand"
+   }
+  }
+ },
+ "build": [
+  "paving",
+  "step",
+  "basin wall",
+  "coping",
+  "column",
+  "small basin",
+  "small basin wall",
+  "small coping",
+  "bowl",
+  "brim",
+  "stem",
+  "finial",
+  "spouts",
+  "pools",
+  "small pool",
+  "bowl pool",
+  "jets",
+  "bucket 1",
+  "bucket 2",
+  "fetching",
+  "bard",
+  "neighbour"
+ ]
+}

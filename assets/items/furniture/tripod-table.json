@@ -1,0 +1,134 @@
+{
+ "kind": "item",
+ "name": "Tripod tea table",
+ "category": "furniture/table",
+ "era": "1740-1800",
+ "region": "England & America",
+ "_about": "the tilt-top tea table: a round top on a turned pillar, three snake feet spreading from its foot",
+ "params": {
+  "h": 0.72,
+  "r": [
+   0.34,
+   0.42
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "mahogany",
+    "walnut",
+    "cherry"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "top",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     "r",
+     "h - 0.025"
+    ],
+    [
+     "r + 0.008",
+     "h - 0.012"
+    ],
+    [
+     "r",
+     "h"
+    ]
+   ],
+   "sides": 28
+  },
+  {
+   "id": "pillar",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0.05,
+     0.16
+    ],
+    [
+     0.06,
+     0.2
+    ],
+    [
+     0.035,
+     0.28
+    ],
+    [
+     0.06,
+     0.38
+    ],
+    [
+     0.03,
+     0.52
+    ],
+    [
+     0.036,
+     "h - 0.08"
+    ],
+    [
+     0.07,
+     "h - 0.05"
+    ]
+   ],
+   "sides": 14
+  },
+  {
+   "id": "block",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.2,
+    0.03,
+    0.2
+   ],
+   "at": [
+    0,
+    "h - 0.04",
+    0
+   ]
+  },
+  {
+   "id": "feet",
+   "type": "sweep",
+   "material": "wood",
+   "radii": [
+    0.035,
+    0.03,
+    0.022,
+    0.03
+   ],
+   "path": [
+    [
+     0.04,
+     0.2,
+     0
+    ],
+    [
+     0.13,
+     0.13,
+     0
+    ],
+    [
+     0.24,
+     0.035,
+     0
+    ],
+    [
+     0.3,
+     0.025,
+     0
+    ]
+   ],
+   "around": {
+    "n": 3,
+    "r": 0
+   }
+  }
+ ]
+}

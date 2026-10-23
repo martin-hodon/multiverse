@@ -1,0 +1,11 @@
+{
+  "name": "Pinnacle",
+  "_about": "A PINNACLE: a square shaft and a steep four-sided spire on it, with a finial -- the weight on top of a buttress that turns the thrust of a vault down into it, and the thing a Gothic skyline is made of. `w` wide, the shaft `h` tall, the spire `s`.",
+  "params": { "detail": 4, "w": 1.2, "h": 3.0, "s": 3.6 },
+  "build": ["shaft", "spire", "finial"],
+  "parts": {
+    "shaft": { "type": "box", "width": "w", "length": "w", "height": "h", "at": [[0, 0, 0, 0]] },
+    "spire": { "type": "dome", "sides": 4, "radius": "w * 0.7071", "thickness": 0, "head": { "profile": "trigonal", "rise": "s" }, "at": [[0, "h", 0, 0]] },
+    "finial": { "type": "column", "radius": "w * 0.06", "height": "s * 0.25", "sides": 6, "at": [[0, "h + s - 0.05", 0, 0]] }
+  }
+}

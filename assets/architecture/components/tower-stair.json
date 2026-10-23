@@ -1,0 +1,202 @@
+{
+  "name": "Tower stair",
+  "_about": "A STAIR UP A SQUARE TOWER: a round turret in the tower -- in its (+x, +z) inner corner unless `tx`, `tz` put it elsewhere -- its door toward the tower's middle, a spiral in it from the ground to the floor at the top, and that floor -- the whole of the tower's inside but the turret's own head, the hatch the stair arrives through, in up to four pieces round it. Place it at the tower's middle; `W` is the tower's inside width. Notre-Dame's, Cologne's and the Stephansdom's towers are climbed by it.",
+  "params": {
+    "detail": 4,
+    "W": 10.0,
+    "H": 30.0,
+    "tR": 1.8,
+    "wall": 0.4,
+    "slab": 0.4,
+    "rise": 0.19,
+    "doorBay": "round(atan2(0 - tx, 0 - tz) / (6.2831853 / n))",
+    "c": "W / 2 - tR - 0.05",
+    "_W": "the tower's inside, a square W across; H the floor the stair arrives at",
+    "_c": "the turret's middle, in the tower's (+x, +z) inner corner, touching both walls; e: its near side",
+    "_doorBay": "the bay of n its door is in: by default the one facing the tower's middle",
+    "tx": "c",
+    "tz": "c",
+    "_tx": "the turret's middle (default c, c: the +x, +z inner corner); anywhere else in the tower -- against the middle of a wall, say -- and the floor goes round it",
+    "n": 8,
+    "_n": "the turret's bays: few enough that each is wider than its door (a metre)",
+    "a": "tR * cos(3.14159265 / n)",
+    "_a": "the turret's faces from its middle (a polygon of n): the floor reaches them",
+    "hand": "right",
+    "_hand": "which way the spiral winds: \"left\" mirrors it (a pair of towers, one each way, arrive on the same side)"
+  },
+  "build": [
+    "turret",
+    "turret door",
+    "stair",
+    "floor west",
+    "floor east",
+    "floor south",
+    "floor north"
+  ],
+  "parts": {
+    "turret": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "tR",
+      "rInner": "tR - wall",
+      "height": "H",
+      "place": [
+        [
+          "tx",
+          0,
+          "tz",
+          0
+        ]
+      ],
+      "skip": [
+        "doorBay"
+      ],
+      "solid": true,
+      "_about": "the stair's round turret, standing in the tower's corner from the floor to the top"
+    },
+    "turret door": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "tR",
+      "rInner": "tR - wall",
+      "height": "H",
+      "place": [
+        [
+          "tx",
+          0,
+          "tz",
+          0
+        ]
+      ],
+      "at": [
+        "doorBay"
+      ],
+      "opening": {
+        "width": 1.3,
+        "sill": 0,
+        "springing": 2.2,
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "stair": {
+      "type": "spiral-stair",
+      "radius": "tR - wall - 0.05",
+      "newel": 0.2,
+      "turn": 24,
+      "top": "H",
+      "rise": "rise",
+      "soffit": 0.2,
+      "at": [
+        [
+          "tx",
+          0,
+          "tz",
+          "doorBay * 6.2831853 / n"
+        ]
+      ],
+      "_about": "the spiral, up to the top floor: its first step at the door",
+      "hand": "hand"
+    },
+    "floor west": {
+      "type": "box",
+      "width": "tx - a + W / 2",
+      "length": "W",
+      "height": "slab",
+      "at": [
+        [
+          "(tx - a - W / 2) / 2",
+          "H - slab",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "ceil(min(1, max(0, tx - a + W / 2 - 0.05)))",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "the floor at the top, round the turret's head -- the hatch the stair arrives through: the part on its -x side...",
+      "walked": true
+    },
+    "floor east": {
+      "type": "box",
+      "width": "W / 2 - tx - a",
+      "length": "W",
+      "height": "slab",
+      "at": [
+        [
+          "(tx + a + W / 2) / 2",
+          "H - slab",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "ceil(min(1, max(0, W / 2 - tx - a - 0.05)))",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "...on its +x side...",
+      "walked": true
+    },
+    "floor south": {
+      "type": "box",
+      "width": "2 * a",
+      "length": "tz - a + W / 2",
+      "height": "slab",
+      "at": [
+        [
+          "tx",
+          "H - slab",
+          "(tz - a - W / 2) / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "ceil(min(1, max(0, tz - a + W / 2 - 0.05)))",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "...and in line with it, before and behind (each left out where there is no room for it)",
+      "walked": true
+    },
+    "floor north": {
+      "type": "box",
+      "width": "2 * a",
+      "length": "W / 2 - tz - a",
+      "height": "slab",
+      "at": [
+        [
+          "tx",
+          "H - slab",
+          "(tz + a + W / 2) / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "ceil(min(1, max(0, W / 2 - tz - a - 0.05)))",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "walked": true
+    }
+  }
+}

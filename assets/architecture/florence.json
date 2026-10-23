@@ -1,0 +1,1851 @@
+{
+  "name": "Santa Maria del Fiore -- Florence",
+  "_about": "The cathedral at its real size: 153m from the facade to the back of the east tribune, a nave of four bays 20.3m each, an octagon 45.5m across the flats, and Brunelleschi's dome springing from the drum at 54.8m to an inner crown at 91m with the lantern over it. The nave arcade's arches are the widest of any Gothic church -- the four bays are as long as eight of Cologne's -- and that is the plan's own doing: Florence vaults a square-ish bay rather than a narrow one.\nTHE DOME is the engine's new `dome` part: a cloister vault over the octagon, eight webs meeting on eight groins, its meridian struck as the QUINTO ACUTO -- an arc at four fifths of the span, which is the pointed profile at spread 0.6, exactly how it was set out. Two shells, inner and outer, with the gap between them that the climbing stair runs in.\nTHE THREE TRIBUNES close the octagon's east, north and south sides: each a ring of five chapels on its own radius, placed and turned onto its own face of the octagon.\nTHE CAMPANILE stands clear of the church, as Giotto's does: 14.45m square, 84.7m tall, five storeys, with a flight of stairs in each.",
+  "params": {
+    "detail": 4,
+    "arch": "pointed",
+    "bays": 4,
+    "bayLen": 20.3,
+    "naveL": "bays * bayLen",
+    "naveW": 19.5,
+    "aisleW": 9.5,
+    "pierT": 3.0,
+    "aisleT": 1.8,
+    "openW": 8.5,
+    "spring": 11.0,
+    "arcSpread": 0.35,
+    "crown": "spring + openW * 0.5 * 1.3038",
+    "_crown": "a pointed head at spread .35 rises (w/2) * sqrt(1 + 2 * .35) = .652 of its half-span",
+    "arcadeH": 25.0,
+    "clearH": 30.0,
+    "clearSill": 0.6,
+    "clearSpring": 1.2,
+    "clearWinW": 2.4,
+    "clearSpread": 0,
+    "naveSpread": 0,
+    "naveTop": "clearH + naveRise + 0.8",
+    "aisleSpring": "crown",
+    "aisleSpread": 0.35,
+    "aisleTop": "crown + aisleW * 0.5 * 1.3038 + 0.8",
+    "winW": 4.0,
+    "winSill": 8.0,
+    "bodyW": "naveW + 2 * pierT + 2 * aisleW + 2 * aisleT",
+    "halfB": "naveW / 2 + pierT / 2",
+    "halfA": "naveW / 2 + pierT + aisleW + aisleT / 2",
+    "quarter": 1.5707963,
+    "zc": "(2 * octR * 0.92388 + tribR * 1.3 + tribT - pierT) / 2",
+    "_zc": "the church is set out from the middle of its NAVE, but its mass runs far further east (the crossing and the three tribunes) than west (the facade): zc slides the whole of it forward so the model stands in the middle of the ground its site takes -- what the world flattens and keeps clear of trees is a box about that middle",
+    "octFlat": 45.5,
+    "_octFlat": "the octagon across its flats: the dome's span",
+    "octR": "octFlat / 2 / 0.92388",
+    "_octR": "...and to its corners, which is the radius everything octagonal is set out on",
+    "octT": 4.2,
+    "octZ": "zc - naveL / 2 - octR * 0.92388",
+    "_octZ": "the crossing sits beyond the last nave bay, its near flat against it",
+    "crossH": 40.0,
+    "drumH": 14.8,
+    "drumTop": "crossH + drumH",
+    "domeT": 2.6,
+    "domeOculus": 3.0,
+    "domeSpread": 0.6,
+    "_domeSpread": "the quinto acuto: the arc struck at four fifths of the span",
+    "domeRise": "octR * 1.4832",
+    "_domeRise": "(w/2) * sqrt(1 + 2 * .6) over the springing -- 91m inside, as built",
+    "lanternR": 4.2,
+    "lanternH": 21.0,
+    "tribR": 19.0,
+    "tribH": 24.0,
+    "tribT": 2.0,
+    "tribOpenW": 6.0,
+    "wingDoorW": 3.6,
+    "wingDoorSpring": 4.2,
+    "campDoorW": 3.4,
+    "campDoorSpring": 3.4,
+    "_doors": "the ways IN, as params: florence.json cuts them and architecture.js has to leave the same holes in its colliders, or an arch is drawn open and walked into as a wall",
+    "campW": 14.45,
+    "campT": 2.2,
+    "campH": 84.7,
+    "campStorey": "campH / 5",
+    "campX": "bodyW / 2 + 20",
+    "campZ": "zc + naveL / 2 - campW / 2",
+    "stepRun": 0.3,
+    "stepRise": 0.18,
+    "_clearH": "Florence's clerestory is a shallow band with round OCULI in it, not a row of lancets -- which is what leaves the nave vault springing this low and crowning at 38m",
+    "_naveTop": "a wide bay is vaulted flat: the crown lands at 38.3m, as built",
+    "flightRise": "campStorey / 4",
+    "_flightRise": "a storey is climbed in FOUR flights round the inside of the tower: eighty-four metres of stair will not go up a fourteen-metre room in straight runs, which is why the real one turns at every wall",
+    "flightW": 2.8,
+    "stairOff": "campW / 2 - campT - flightW / 2",
+    "naveArch": "segmental",
+    "aisleArch": "arch",
+    "naveRise": 7.5,
+    "aisleRise": "aisleW * 0.49",
+    "drumStairR": "octR - 4.0",
+    "domeStairR": "octR - 6.0",
+    "stairFlightRise": 1.85,
+    "domeFlightRise": 2.4,
+    "_openW": "the arcade's arches: wide, but not so wide that their crown pushes the aisle vault up past the clerestory -- the section below is the real one, top to bottom",
+    "_arcadeH": "the arcade wall carries up to the aisles' roof line; the clerestory stands over it",
+    "_clearWinW": "round OCULI, as Florence has, not lancets",
+    "naveAlongArch": "segmental",
+    "naveAlongRise": 7.5,
+    "naveAlongSpread": 0,
+    "aisleAlongArch": "segmental",
+    "aisleAlongRise": "aisleW * 0.5 * 1.3038 + 0.3",
+    "aisleAlongSpread": 0,
+    "galleryFlightRise": "crossH / 8",
+    "frontC": "naveW + 2 * pierT",
+    "frontWing": "(bodyW - frontC) / 2",
+    "roseY": "crown + 4.0",
+    "roseW": 7.5,
+    "_campX": "Giotto's tower stands clear of the church, twenty metres off its south-west corner",
+    "roofZ0": "zc + naveL / 2 + pierT",
+    "roofZ1": "octZ + octR * 0.92388",
+    "roofL": "roofZ0 - roofZ1",
+    "aisleRoofIn": "naveW / 2 + pierT + 0.35",
+    "aisleRoofOut": "bodyW / 2 + 0.3",
+    "_roofZ0": "the nave's roof runs from the facade to the crossing's own wall",
+    "tribD": "(octR + octT) * 0.92388",
+    "_tribD": "a tribune's centre, out from the crossing's: on the octagon's outer face (the game reads it too)",
+    "campIn": "campW - 3 * campT",
+    "campStairW": 1.2,
+    "_campIn": "the campanile's inside, between the inner faces of its walls",
+    "outerT": 0.9,
+    "shellGap": 2.2
+  },
+  "parts": {
+    "nave arcade": {
+      "type": "wall",
+      "width": "naveL",
+      "height": "arcadeH",
+      "thickness": "pierT",
+      "openings": {
+        "pattern": "bays",
+        "width": "openW",
+        "gap": "bayLen - openW",
+        "sill": 0,
+        "springing": "spring",
+        "head": {
+          "profile": "arch",
+          "spread": "arcSpread"
+        }
+      },
+      "at": [
+        [
+          "halfB",
+          0,
+          "zc",
+          "quarter"
+        ],
+        [
+          "0 - halfB",
+          0,
+          "zc",
+          "0 - quarter"
+        ]
+      ]
+    },
+    "clerestory": {
+      "type": "wall",
+      "width": "naveL",
+      "height": "clearH - arcadeH",
+      "thickness": "pierT",
+      "openings": {
+        "pattern": "bays",
+        "width": "clearWinW",
+        "gap": "bayLen - clearWinW",
+        "sill": "clearSill",
+        "springing": "clearSpring",
+        "head": {
+          "profile": "arch",
+          "spread": "clearSpread"
+        }
+      },
+      "at": [
+        [
+          "halfB",
+          "arcadeH",
+          "zc",
+          "quarter"
+        ],
+        [
+          "0 - halfB",
+          "arcadeH",
+          "zc",
+          "0 - quarter"
+        ]
+      ]
+    },
+    "aisle wall": {
+      "type": "wall",
+      "width": "naveL",
+      "height": "aisleTop + 1.5",
+      "thickness": "aisleT",
+      "openings": {
+        "pattern": "bays",
+        "width": "winW",
+        "gap": "bayLen - winW",
+        "sill": "winSill",
+        "springing": "winSill + 3.2",
+        "head": {
+          "profile": "arch",
+          "spread": "arcSpread"
+        }
+      },
+      "at": [
+        [
+          "halfA",
+          0,
+          "zc",
+          "quarter"
+        ],
+        [
+          "0 - halfA",
+          0,
+          "zc",
+          "0 - quarter"
+        ]
+      ]
+    },
+    "nave vault": {
+      "type": "groin",
+      "width": "naveW",
+      "length": "bayLen",
+      "springing": "clearH",
+      "top": "naveTop",
+      "clears": "crown",
+      "_about": "one bay of the nave's vault: two barrels crossing, so it meets the arcade along the arcade's own arch and the wall of the bay along the transverse one",
+      "across": {
+        "profile": "naveArch",
+        "spread": "naveSpread",
+        "rise": "naveRise"
+      },
+      "along": {
+        "profile": "naveAlongArch",
+        "spread": "naveAlongSpread",
+        "rise": "naveAlongRise"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "zc - naveL / 2 + bayLen / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "bays",
+        "step": [
+          0,
+          0,
+          "bayLen",
+          0
+        ]
+      }
+    },
+    "aisle vault": {
+      "type": "groin",
+      "width": "aisleW",
+      "length": "bayLen",
+      "springing": "aisleSpring",
+      "top": "aisleTop",
+      "clears": "crown",
+      "across": {
+        "profile": "aisleArch",
+        "spread": "aisleSpread",
+        "rise": "aisleRise"
+      },
+      "along": {
+        "profile": "aisleAlongArch",
+        "spread": "aisleAlongSpread",
+        "rise": "aisleAlongRise"
+      },
+      "at": [
+        [
+          "naveW / 2 + pierT + aisleW / 2",
+          0,
+          "zc - naveL / 2 + bayLen / 2",
+          0
+        ],
+        [
+          "0 - naveW / 2 - pierT - aisleW / 2",
+          0,
+          "zc - naveL / 2 + bayLen / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "bays",
+        "step": [
+          0,
+          0,
+          "bayLen",
+          0
+        ]
+      },
+      "_about": "Florence's bays are enormous -- 20.3m long against a 9.5m aisle -- so the LONGITUDINAL arch of the aisle vault is a shallow segmental one and the transverse arch the pointed one: which is what a rectangular bay is vaulted with."
+    },
+    "west front": {
+      "type": "wall",
+      "width": "frontC",
+      "height": "roseY",
+      "thickness": "pierT",
+      "_about": "the facade is STEPPED, as the section behind it is: the nave's own front in the middle, the aisles' lower fronts either side, and the rose above the portal as a course of its own (a wall face is cut into vertical strips, so a rose cannot share a span with the portal under it)",
+      "openings": [
+        {
+          "at": "frontC / 2",
+          "width": "openW * 0.85",
+          "sill": 0,
+          "springing": "spring * 0.8",
+          "head": {
+            "profile": "arch",
+            "spread": "arcSpread"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "octagon": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "octR + octT",
+      "rInner": "octR",
+      "height": "crossH",
+      "opening": {
+        "width": "octFlat * 0.42",
+        "springing": "crossH * 0.45",
+        "head": {
+          "profile": "arch",
+          "spread": "arcSpread"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ],
+      "at": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "_about": "the crossing's octagon, on its four OPEN sides: the nave to the front and a tribune on each of the other three. The four between them are solid piers (below) -- eight great arches would leave the dome standing on nothing but air."
+    },
+    "drum": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "octR + octT",
+      "rInner": "octR",
+      "height": "drumH",
+      "y": "crossH",
+      "opening": {
+        "width": 5.8,
+        "sill": 7.4,
+        "springing": 7.4,
+        "head": {
+          "profile": "semicircular"
+        },
+        "foot": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the drum, an eight-sided ring with a great round window -- an oculus -- in every face",
+      "skip": [
+        1
+      ]
+    },
+    "dome": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "octR + octT",
+      "thickness": "outerT",
+      "oculus": "lanternR",
+      "head": {
+        "profile": "pointed",
+        "spread": "domeSpread"
+      },
+      "at": [
+        [
+          0,
+          "drumTop",
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the OUTER shell, carrying the ribs and the tiles"
+    },
+    "dome ribs": {
+      "type": "ribs",
+      "on": "dome",
+      "width": 2.4,
+      "depth": 1.1,
+      "_about": "Brunelleschi's eight white ribs, laid ON the dome at its groins: a part of their own, set out from the dome's own meridian and sides, so that a plain dome is the same dome without this line"
+    },
+    "lantern": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "lanternR + 1.0",
+      "rInner": "lanternR",
+      "height": "lanternH",
+      "y": 0,
+      "opening": {
+        "width": 2.0,
+        "sill": 2.0,
+        "springing": 5.0,
+        "head": {
+          "profile": "arch",
+          "spread": "arcSpread"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the lantern: an octagonal turret of its own, standing on the oculus",
+      "atop": "dome",
+      "atopR": "lanternR"
+    },
+    "tribune": {
+      "type": "ring",
+      "count": 10,
+      "rOuter": "tribR + tribT",
+      "rInner": "tribR",
+      "height": "tribH",
+      "opening": {
+        "width": "tribOpenW",
+        "springing": "tribH * 0.42",
+        "head": {
+          "profile": "arch",
+          "spread": "arcSpread"
+        }
+      },
+      "skip": [
+        0,
+        1,
+        2,
+        8,
+        9
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "octZ - tribD",
+          0
+        ],
+        [
+          "tribD",
+          0,
+          "octZ",
+          "0 - quarter"
+        ],
+        [
+          "0 - tribD",
+          0,
+          "octZ",
+          "quarter"
+        ]
+      ]
+    },
+    "campanile": {
+      "type": "wall",
+      "width": "campW",
+      "height": "campStorey",
+      "thickness": "campT",
+      "_about": "one storey of the bell tower, four walls round a square, for the upper four courses",
+      "openings": [
+        {
+          "at": "campW / 2",
+          "width": 3.2,
+          "sill": 1.4,
+          "springing": "campStorey - 6.2",
+          "head": {
+            "profile": "arch",
+            "spread": "arcSpread"
+          }
+        }
+      ],
+      "at": [
+        [
+          "campX",
+          "campStorey * 1",
+          "campZ + campW / 2 - campT / 2",
+          "0"
+        ],
+        [
+          "campX",
+          "campStorey * 1",
+          "campZ - campW / 2 + campT / 2",
+          "3.1415927"
+        ],
+        [
+          "campX + campW / 2 - campT / 2",
+          "campStorey * 1",
+          "campZ",
+          "quarter"
+        ],
+        [
+          "campX - campW / 2 + campT / 2",
+          "campStorey * 1",
+          "campZ",
+          "0 - quarter"
+        ],
+        [
+          "campX",
+          "campStorey * 2",
+          "campZ + campW / 2 - campT / 2",
+          "0"
+        ],
+        [
+          "campX",
+          "campStorey * 2",
+          "campZ - campW / 2 + campT / 2",
+          "3.1415927"
+        ],
+        [
+          "campX + campW / 2 - campT / 2",
+          "campStorey * 2",
+          "campZ",
+          "quarter"
+        ],
+        [
+          "campX - campW / 2 + campT / 2",
+          "campStorey * 2",
+          "campZ",
+          "0 - quarter"
+        ],
+        [
+          "campX",
+          "campStorey * 3",
+          "campZ + campW / 2 - campT / 2",
+          "0"
+        ],
+        [
+          "campX",
+          "campStorey * 3",
+          "campZ - campW / 2 + campT / 2",
+          "3.1415927"
+        ],
+        [
+          "campX + campW / 2 - campT / 2",
+          "campStorey * 3",
+          "campZ",
+          "quarter"
+        ],
+        [
+          "campX - campW / 2 + campT / 2",
+          "campStorey * 3",
+          "campZ",
+          "0 - quarter"
+        ],
+        [
+          "campX",
+          "campStorey * 4",
+          "campZ + campW / 2 - campT / 2",
+          "0"
+        ],
+        [
+          "campX",
+          "campStorey * 4",
+          "campZ - campW / 2 + campT / 2",
+          "3.1415927"
+        ],
+        [
+          "campX + campW / 2 - campT / 2",
+          "campStorey * 4",
+          "campZ",
+          "quarter"
+        ],
+        [
+          "campX - campW / 2 + campT / 2",
+          "campStorey * 4",
+          "campZ",
+          "0 - quarter"
+        ]
+      ],
+      "glass": false
+    },
+    "campanile base": {
+      "type": "wall",
+      "width": "campW",
+      "height": "campStorey",
+      "thickness": "campT",
+      "_about": "the ground storey: the same wall with a DOOR in the face toward the church, so the stair can be reached from the ground -- a tower whose first opening is a window ten metres up is a tower nobody climbs",
+      "openings": [
+        {
+          "at": "campW / 2",
+          "width": "campDoorW",
+          "sill": 0,
+          "springing": "campDoorSpring",
+          "head": {
+            "profile": "arch",
+            "spread": "arcSpread"
+          }
+        }
+      ],
+      "at": [
+        [
+          "campX",
+          0,
+          "campZ - campW / 2 + campT / 2",
+          "3.1415927"
+        ]
+      ]
+    },
+    "campanile base wall": {
+      "type": "wall",
+      "width": "campW",
+      "height": "campStorey",
+      "thickness": "campT",
+      "openings": [
+        {
+          "at": "campW / 2",
+          "width": 3.2,
+          "sill": 1.4,
+          "springing": "campStorey - 6.2",
+          "head": {
+            "profile": "arch",
+            "spread": "arcSpread"
+          }
+        }
+      ],
+      "at": [
+        [
+          "campX",
+          0,
+          "campZ + campW / 2 - campT / 2",
+          "0"
+        ],
+        [
+          "campX + campW / 2 - campT / 2",
+          0,
+          "campZ",
+          "quarter"
+        ],
+        [
+          "campX - campW / 2 + campT / 2",
+          0,
+          "campZ",
+          "0 - quarter"
+        ]
+      ]
+    },
+    "tribune roof": {
+      "type": "ring",
+      "count": 10,
+      "rOuter": "tribR + tribT + 0.5",
+      "rInner": "tribR - 1.5",
+      "height": 1.6,
+      "y": "tribH",
+      "solid": true,
+      "_about": "a terrace and its parapet over each tribune, built on the tribune's OWN five bays -- a cone or a dome would be a full circle, and half of it would hang inside the crossing",
+      "place": [
+        [
+          0,
+          0,
+          "octZ - tribD",
+          0
+        ],
+        [
+          "tribD",
+          0,
+          "octZ",
+          "0 - quarter"
+        ],
+        [
+          "0 - tribD",
+          0,
+          "octZ",
+          "quarter"
+        ]
+      ],
+      "skip": [
+        0,
+        1,
+        2,
+        8,
+        9
+      ]
+    },
+    "west rose": {
+      "type": "wall",
+      "width": "frontC",
+      "height": "naveTop - roseY",
+      "thickness": "pierT",
+      "openings": [
+        {
+          "at": "frontC / 2",
+          "width": "roseW",
+          "sill": 1.6,
+          "springing": "1.6 + roseW / 2",
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "roseY",
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "west wing": {
+      "type": "wall",
+      "width": "frontWing",
+      "height": "aisleTop + 2.0",
+      "thickness": "pierT",
+      "_about": "the aisles' own fronts, lower than the nave's: two doors and two windows over them",
+      "openings": [
+        {
+          "at": "frontWing / 2",
+          "width": "wingDoorW",
+          "sill": 0,
+          "springing": "wingDoorSpring",
+          "head": {
+            "profile": "arch",
+            "spread": "arcSpread"
+          }
+        }
+      ],
+      "at": [
+        [
+          "(frontC + frontWing) / 2",
+          0,
+          "zc + naveL / 2 + pierT",
+          0
+        ],
+        [
+          "0 - (frontC + frontWing) / 2",
+          0,
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "west wing upper": {
+      "type": "wall",
+      "width": "frontWing",
+      "height": "6.0",
+      "thickness": "pierT",
+      "openings": [
+        {
+          "at": "frontWing / 2",
+          "width": 2.6,
+          "sill": 1.0,
+          "springing": 2.4,
+          "head": {
+            "profile": "arch",
+            "spread": "arcSpread"
+          }
+        }
+      ],
+      "at": [
+        [
+          "(frontC + frontWing) / 2",
+          "aisleTop + 2.0",
+          "zc + naveL / 2 + pierT",
+          0
+        ],
+        [
+          "0 - (frontC + frontWing) / 2",
+          "aisleTop + 2.0",
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "octagon pier": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": "octR + octT",
+      "rInner": "octR",
+      "height": "crossH",
+      "solid": true,
+      "at": [
+        3,
+        5,
+        7
+      ],
+      "_about": "the four solid sides between the arches: this is what carries the dome",
+      "place": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ]
+    },
+    "nave roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "naveW + 2 * pierT + 0.6",
+      "length": "roofL",
+      "pitch": 23.2,
+      "at": [
+        [
+          0,
+          "naveTop",
+          "(roofZ0 + roofZ1) / 2",
+          0
+        ]
+      ],
+      "_about": "the nave's roof, facade to crossing; its west gable closes the nave over the rose"
+    },
+    "aisle roofs": {
+      "type": "roof",
+      "form": "shed",
+      "width": "aisleRoofOut - aisleRoofIn",
+      "length": "roofL",
+      "pitch": 5.5,
+      "at": [
+        [
+          "0 - (aisleRoofIn + aisleRoofOut) / 2",
+          "aisleTop - 0.4",
+          "(roofZ0 + roofZ1) / 2",
+          0
+        ],
+        [
+          "(aisleRoofIn + aisleRoofOut) / 2",
+          "aisleTop - 0.4",
+          "(roofZ0 + roofZ1) / 2",
+          3.14159265
+        ]
+      ],
+      "_about": "a lean-to over each aisle, rising to just under the clerestory's sills"
+    },
+    "tribune roofs": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 20,
+      "radius": "tribR + tribT + 0.4",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 8.5
+      },
+      "at": [
+        [
+          0,
+          "tribH + 1.6",
+          "octZ - tribD",
+          "(0) + 3.14159265"
+        ],
+        [
+          "tribD",
+          "tribH + 1.6",
+          "octZ",
+          "(0 - quarter) + 3.14159265"
+        ],
+        [
+          "0 - tribD",
+          "tribH + 1.6",
+          "octZ",
+          "(quarter) + 3.14159265"
+        ]
+      ],
+      "_about": "a half cone over each tribune: a dome skin of sweep 0.5, its open side against the octagon"
+    },
+    "tribune morte": {
+      "type": "component",
+      "use": "components/iwan",
+      "params": {
+        "w": 9.0,
+        "s": 7.0,
+        "spread": 0,
+        "t": 0.8
+      },
+      "at": [
+        [
+          "(octR + octT) * 0.92388 * 0.707107",
+          "tribH + 1.6",
+          "octZ + (octR + octT) * 0.92388 * 0.707107",
+          3.926991
+        ],
+        [
+          "(octR + octT) * 0.92388 * 0.707107",
+          "tribH + 1.6",
+          "octZ + (octR + octT) * 0.92388 * -0.707107",
+          5.497787
+        ],
+        [
+          "(octR + octT) * 0.92388 * -0.707107",
+          "tribH + 1.6",
+          "octZ + (octR + octT) * 0.92388 * -0.707107",
+          7.068583
+        ],
+        [
+          "(octR + octT) * 0.92388 * -0.707107",
+          "tribH + 1.6",
+          "octZ + (octR + octT) * 0.92388 * 0.707107",
+          8.63938
+        ]
+      ],
+      "_about": "Brunelleschi's four 'dead tribunes': exedrae against the octagon's diagonal faces, a half ring under a half dome -- the `iwan` component with a round hood"
+    },
+    "lantern roof": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "lanternR + 1.6",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 4.5
+      },
+      "atop": "lantern",
+      "at": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ]
+    },
+    "lantern ball": {
+      "type": "dome",
+      "sides": 12,
+      "radius": 0.36,
+      "thickness": 0,
+      "head": {
+        "profile": "onion",
+        "bulge": 3.0,
+        "neck": 0.4
+      },
+      "atop": "lantern roof",
+      "at": [
+        [
+          0,
+          -0.05,
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the gilt ball on the lantern's cone (an onion of a very narrow foot)"
+    },
+    "lantern buttresses": {
+      "type": "flyer",
+      "span": 3.2,
+      "low": -0.1,
+      "high": 9.5,
+      "top0": 2.1,
+      "top1": 13.0,
+      "width": 0.9,
+      "at": [
+        [
+          "(lanternR + 4.2) * 0.382683",
+          0,
+          "octZ + (lanternR + 4.2) * 0.923880",
+          1.963495
+        ],
+        [
+          "(lanternR + 4.2) * 0.923880",
+          0,
+          "octZ + (lanternR + 4.2) * 0.382683",
+          2.748894
+        ],
+        [
+          "(lanternR + 4.2) * 0.923880",
+          0,
+          "octZ + (lanternR + 4.2) * -0.382683",
+          3.534292
+        ],
+        [
+          "(lanternR + 4.2) * 0.382683",
+          0,
+          "octZ + (lanternR + 4.2) * -0.923880",
+          4.31969
+        ],
+        [
+          "(lanternR + 4.2) * -0.382683",
+          0,
+          "octZ + (lanternR + 4.2) * -0.923880",
+          5.105088
+        ],
+        [
+          "(lanternR + 4.2) * -0.923880",
+          0,
+          "octZ + (lanternR + 4.2) * -0.382683",
+          5.890486
+        ],
+        [
+          "(lanternR + 4.2) * -0.923880",
+          0,
+          "octZ + (lanternR + 4.2) * 0.382683",
+          6.675884
+        ],
+        [
+          "(lanternR + 4.2) * -0.382683",
+          0,
+          "octZ + (lanternR + 4.2) * 0.923880",
+          7.461283
+        ]
+      ],
+      "atop": "dome",
+      "atopR": "lanternR + 4.2",
+      "_about": "the lantern's eight buttresses, each a strut on a rampant arch leaning in to one of its corners: its foot on the dome where it stands (`atopR`), its head 2.5m higher up the lantern, which stands on the oculus"
+    },
+    "tribune spandrels right": {
+      "flatRoof": true,
+      "type": "prism",
+      "height": "tribH + 1.6",
+      "plan": {
+        "points": [
+          [
+            "1 * (octR + octT) * 0.38268",
+            0
+          ],
+          [
+            "1 * (tribR + tribT)",
+            0
+          ],
+          [
+            "1 * (tribR + tribT)",
+            "tribR + tribT - (octR + octT) * 0.38268"
+          ]
+        ]
+      },
+      "place": [
+        [
+          0,
+          0,
+          "octZ - tribD",
+          0
+        ],
+        [
+          "tribD",
+          0,
+          "octZ",
+          "0 - quarter"
+        ],
+        [
+          "0 - tribD",
+          0,
+          "octZ",
+          "quarter"
+        ]
+      ],
+      "_about": "the wedge between a tribune's end and the octagon's diagonal face, filled to the terrace"
+    },
+    "tribune spandrels left": {
+      "flatRoof": true,
+      "type": "prism",
+      "height": "tribH + 1.6",
+      "plan": {
+        "points": [
+          [
+            "-1 * (octR + octT) * 0.38268",
+            0
+          ],
+          [
+            "-1 * (tribR + tribT)",
+            0
+          ],
+          [
+            "-1 * (tribR + tribT)",
+            "tribR + tribT - (octR + octT) * 0.38268"
+          ]
+        ]
+      },
+      "place": [
+        [
+          0,
+          0,
+          "octZ - tribD",
+          0
+        ],
+        [
+          "tribD",
+          0,
+          "octZ",
+          "0 - quarter"
+        ],
+        [
+          "0 - tribD",
+          0,
+          "octZ",
+          "quarter"
+        ]
+      ],
+      "_about": "the wedge between a tribune's end and the octagon's diagonal face, filled to the terrace"
+    },
+    "campanile terrace": {
+      "type": "box",
+      "width": "campIn",
+      "length": "campIn - campStairW",
+      "height": 0.3,
+      "at": [
+        [
+          "campX",
+          "campH - 0.3",
+          "campZ + campStairW / 2",
+          0
+        ]
+      ],
+      "_about": "the terrace on top: all of the inside but the band along the south wall the last flight climbs in (its landing, in the corner, is the terrace there)"
+    },
+    "inner dome": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "octR + octT - outerT - shellGap",
+      "thickness": "octT - outerT - shellGap",
+      "oculus": "lanternR",
+      "head": {
+        "profile": "pointed",
+        "spread": "domeSpread"
+      },
+      "at": [
+        [
+          0,
+          "drumTop",
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the INNER shell: its soffit is the drum's inner face carried up; the stair climbs on its back"
+    },
+    "pier shaft inner": {
+      "type": "wall",
+      "width": "2 * octR * 0.92388 * 0.41421",
+      "height": "crossH",
+      "thickness": 0.5,
+      "openings": [
+        {
+          "at": "octR * 0.92388 * 0.41421",
+          "width": 1.1,
+          "sill": 0,
+          "springing": 2.3,
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          "octR * 0.92388 * 0.707107",
+          0,
+          "octZ + octR * 0.92388 * 0.707107",
+          3.926991
+        ]
+      ]
+    },
+    "pier shaft outer": {
+      "type": "wall",
+      "width": "2 * (octR + octT) * 0.92388 * 0.41421",
+      "height": "crossH",
+      "thickness": 0.5,
+      "openings": [],
+      "at": [
+        [
+          "(octR + octT) * 0.92388 * 0.707107",
+          0,
+          "octZ + (octR + octT) * 0.92388 * 0.707107",
+          0.785398
+        ]
+      ]
+    },
+    "drum shaft inner": {
+      "type": "wall",
+      "width": "2 * octR * 0.92388 * 0.41421",
+      "height": "drumH",
+      "thickness": 0.5,
+      "openings": [],
+      "at": [
+        [
+          "octR * 0.92388 * 0.707107",
+          "crossH",
+          "octZ + octR * 0.92388 * 0.707107",
+          3.926991
+        ]
+      ]
+    },
+    "drum shaft outer": {
+      "type": "wall",
+      "width": "2 * (octR + octT) * 0.92388 * 0.41421",
+      "height": "drumH",
+      "thickness": 0.5,
+      "openings": [],
+      "at": [
+        [
+          "(octR + octT) * 0.92388 * 0.707107",
+          "crossH",
+          "octZ + (octR + octT) * 0.92388 * 0.707107",
+          0.785398
+        ]
+      ]
+    },
+    "shaft ends": {
+      "type": "box",
+      "width": 0.5,
+      "length": "octT - 0.5",
+      "height": "drumTop",
+      "at": [
+        [
+          "(octR + octT / 2) * 0.382683",
+          0,
+          "octZ + (octR + octT / 2) * 0.923880",
+          0.392699
+        ],
+        [
+          "(octR + octT / 2) * 0.923880",
+          0,
+          "octZ + (octR + octT / 2) * 0.382683",
+          1.178097
+        ]
+      ],
+      "_about": "the walls closing the hollow pier at its two ends, up through the drum"
+    },
+    "pier stair": {
+      "type": "spiral-stair",
+      "radius": 1.35,
+      "newel": 0.2,
+      "turn": 24,
+      "top": "drumTop - 2.2",
+      "rise": 0.19,
+      "soffit": 0.2,
+      "at": [
+        [
+          "((octR + octT / 2) * 0.92388) * 0.707107 + (0) * 0.707107",
+          0,
+          "octZ + ((octR + octT / 2) * 0.92388) * 0.707107 - (0) * 0.707107",
+          3.926991
+        ]
+      ],
+      "_about": "the spiral inside the hollow pier, from the crossing's floor to the shaft's upper floor"
+    },
+    "shaft floor east": {
+      "type": "box",
+      "width": 8.2,
+      "length": "octT - 1.0",
+      "height": 0.3,
+      "at": [
+        [
+          "((octR + octT / 2) * 0.92388) * 0.707107 + (1 * 5.75) * 0.707107",
+          "drumTop - 2.5",
+          "octZ + ((octR + octT / 2) * 0.92388) * 0.707107 - (1 * 5.75) * 0.707107",
+          0.785398
+        ]
+      ],
+      "_about": "the floor at the top of the shaft, beside the spiral"
+    },
+    "shaft floor west": {
+      "type": "box",
+      "width": 8.2,
+      "length": "octT - 1.0",
+      "height": 0.3,
+      "at": [
+        [
+          "((octR + octT / 2) * 0.92388) * 0.707107 + (-1 * 5.75) * 0.707107",
+          "drumTop - 2.5",
+          "octZ + ((octR + octT / 2) * 0.92388) * 0.707107 - (-1 * 5.75) * 0.707107",
+          0.785398
+        ]
+      ],
+      "_about": "the floor at the top of the shaft, beside the spiral"
+    },
+    "shell flight": {
+      "type": "flight",
+      "width": 0.9,
+      "run": 0.28,
+      "rise": 0.18,
+      "base": "drumTop - 2.2",
+      "top": "drumTop",
+      "landing": 0.8,
+      "at": [
+        [
+          "(((octR + octT - outerT) + (octR + octT - outerT - shellGap)) / 2 * 0.92388 + 0.5) * 0.707107 + (2.3) * 0.707107",
+          0,
+          "octZ + (((octR + octT - outerT) + (octR + octT - outerT - shellGap)) / 2 * 0.92388 + 0.5) * 0.707107 - (2.3) * 0.707107",
+          0.785398
+        ]
+      ],
+      "_about": "up from the shaft's floor into the gap between the two shells"
+    },
+    "dome stair": {
+      "type": "spiral-stair",
+      "follow": {
+        "head": {
+          "profile": "pointed",
+          "spread": "domeSpread"
+        },
+        "radius": "octR + octT",
+        "inset": "outerT + 0.35",
+        "insetTop": "outerT + 1.9",
+        "width": 0.9,
+        "sides": 8
+      },
+      "top": "domeRise * 0.8",
+      "run": 0.3,
+      "rise": 0.19,
+      "soffit": 0.2,
+      "at": [
+        [
+          0,
+          "drumTop",
+          "octZ",
+          1.031798
+        ]
+      ],
+      "_about": "between the shells, on the inner one's back: its outer edge follows the outer shell's inner face a handspan off, so it draws in as the dome does"
+    },
+    "campanile stair": {
+      "type": "staircase",
+      "rise": "campStorey / 84",
+      "run": "(campIn - 2 * campStairW) / 21",
+      "soffit": 0.3,
+      "flight": 21,
+      "width": "campStairW",
+      "landing": {
+        "depth": "campStairW",
+        "width": "campStairW"
+      },
+      "times": 20,
+      "from": "right",
+      "at": "campStairW / 2",
+      "place": [
+        [
+          "campX + campIn / 2 - campStairW / 2",
+          0,
+          "campZ - campIn / 2 + campStairW",
+          -1.5707963
+        ]
+      ],
+      "_about": "four flights a storey round the well on corner landings, five storeys, 420 steps to the terrace"
+    },
+    "campanile cornice": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW + 1.4",
+          "campW + 1.4"
+        ]
+      },
+      "thickness": 2.6,
+      "height": 0.9,
+      "openings": [],
+      "at": [
+        [
+          "campX",
+          "campH",
+          "campZ",
+          0
+        ]
+      ],
+      "_about": "the cornice and parapet round the terrace"
+    },
+    "pavement": {
+      "type": "box",
+      "width": "bodyW - 2 * aisleT - 0.2",
+      "length": "naveL + 2 * pierT - 0.4",
+      "height": 0.3,
+      "at": [
+        [
+          0,
+          0,
+          "zc",
+          0
+        ]
+      ],
+      "walked": true
+    },
+    "pavement crossing": {
+      "type": "column",
+      "radius": "octR - 0.2",
+      "height": 0.3,
+      "sides": 8,
+      "at": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ],
+      "walked": true
+    },
+    "pavement tribunes": {
+      "type": "column",
+      "radius": "tribR - 0.2",
+      "height": 0.3,
+      "sides": 10,
+      "at": [
+        [
+          0,
+          0,
+          "octZ - tribD",
+          0
+        ],
+        [
+          "tribD",
+          0,
+          "octZ",
+          0
+        ],
+        [
+          "0 - tribD",
+          0,
+          "octZ",
+          0
+        ]
+      ],
+      "walked": true
+    },
+    "pavement tower": {
+      "type": "box",
+      "width": "campW - 2 * campT - 0.1",
+      "length": "campW - 2 * campT - 0.1",
+      "height": 0.3,
+      "at": [
+        [
+          "campX",
+          0,
+          "campZ",
+          0
+        ]
+      ],
+      "walked": true
+    },
+    "green band flank 1": {
+      "type": "box",
+      "width": "aisleT + 0.12",
+      "length": "roofL",
+      "height": 0.5,
+      "at": [
+        [
+          "bodyW / 2 + 0.06",
+          "(winSill - 1.2) - 0.25",
+          "(roofZ0 + roofZ1) / 2",
+          0
+        ],
+        [
+          "0 - bodyW / 2 - 0.06",
+          "(winSill - 1.2) - 0.25",
+          "(roofZ0 + roofZ1) / 2",
+          0
+        ]
+      ]
+    },
+    "green band flank 2": {
+      "type": "box",
+      "width": "aisleT + 0.12",
+      "length": "roofL",
+      "height": 0.55,
+      "at": [
+        [
+          "bodyW / 2 + 0.06",
+          "(aisleTop + 0.6) - 0.275",
+          "(roofZ0 + roofZ1) / 2",
+          0
+        ],
+        [
+          "0 - bodyW / 2 - 0.06",
+          "(aisleTop + 0.6) - 0.275",
+          "(roofZ0 + roofZ1) / 2",
+          0
+        ]
+      ]
+    },
+    "red band flank 1": {
+      "type": "box",
+      "width": "aisleT + 0.12",
+      "length": "roofL",
+      "height": 0.22,
+      "at": [
+        [
+          "bodyW / 2 + 0.06",
+          "(winSill - 0.5) - 0.11",
+          "(roofZ0 + roofZ1) / 2",
+          0
+        ],
+        [
+          "0 - bodyW / 2 - 0.06",
+          "(winSill - 0.5) - 0.11",
+          "(roofZ0 + roofZ1) / 2",
+          0
+        ]
+      ]
+    },
+    "green band facade 1": {
+      "type": "box",
+      "width": "bodyW + 0.12",
+      "length": "pierT + 0.12",
+      "height": 0.5,
+      "at": [
+        [
+          0,
+          "(winSill - 1.2) - 0.25",
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "green band facade 2": {
+      "type": "box",
+      "width": "bodyW + 0.12",
+      "length": "pierT + 0.12",
+      "height": 0.5,
+      "at": [
+        [
+          0,
+          "(aisleTop + 1.4) - 0.25",
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "green band front 1": {
+      "type": "box",
+      "width": "frontC + 0.12",
+      "length": "pierT + 0.12",
+      "height": 0.5,
+      "at": [
+        [
+          0,
+          "(roseY - 0.8) - 0.25",
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "red band facade 1": {
+      "type": "box",
+      "width": "bodyW + 0.12",
+      "length": "pierT + 0.12",
+      "height": 0.22,
+      "at": [
+        [
+          0,
+          "(winSill - 0.5) - 0.11",
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "red band front 1": {
+      "type": "box",
+      "width": "frontC + 0.12",
+      "length": "pierT + 0.12",
+      "height": 0.45,
+      "at": [
+        [
+          0,
+          "(roseY + roseW + 2.4) - 0.225",
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ]
+    },
+    "green band tower 1": {
+      "type": "box",
+      "width": "campW + 0.12",
+      "length": "campW + 0.12",
+      "height": 0.45,
+      "at": [
+        [
+          "campX",
+          "1 * campStorey - 0.525",
+          "campZ",
+          0
+        ]
+      ]
+    },
+    "red band tower 2": {
+      "type": "box",
+      "width": "campW + 0.12",
+      "length": "campW + 0.12",
+      "height": 0.45,
+      "at": [
+        [
+          "campX",
+          "2 * campStorey - 0.525",
+          "campZ",
+          0
+        ]
+      ]
+    },
+    "green band tower 3": {
+      "type": "box",
+      "width": "campW + 0.12",
+      "length": "campW + 0.12",
+      "height": 0.45,
+      "at": [
+        [
+          "campX",
+          "3 * campStorey - 0.525",
+          "campZ",
+          0
+        ]
+      ]
+    },
+    "red band tower 4": {
+      "type": "box",
+      "width": "campW + 0.12",
+      "length": "campW + 0.12",
+      "height": 0.45,
+      "at": [
+        [
+          "campX",
+          "4 * campStorey - 0.525",
+          "campZ",
+          0
+        ]
+      ]
+    },
+    "green band octagon 1": {
+      "type": "ring",
+      "count": 24,
+      "rOuter": "octR + octT + 0.14",
+      "rInner": "octR + octT + 0.06",
+      "height": 0.7,
+      "y": "(crossH * 0.55) - 0.35",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ]
+    },
+    "red band octagon 2": {
+      "type": "ring",
+      "count": 24,
+      "rOuter": "octR + octT + 0.14",
+      "rInner": "octR + octT + 0.06",
+      "height": 0.45,
+      "y": "(crossH - 1.6) - 0.225",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ]
+    },
+    "green band octagon 3": {
+      "type": "ring",
+      "count": 24,
+      "rOuter": "octR + octT + 0.14",
+      "rInner": "octR + octT + 0.06",
+      "height": 0.6,
+      "y": "(crossH + 1.0) - 0.3",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ]
+    },
+    "red band octagon 4": {
+      "type": "ring",
+      "count": 24,
+      "rOuter": "octR + octT + 0.14",
+      "rInner": "octR + octT + 0.06",
+      "height": 0.7,
+      "y": "(drumTop - 1.4) - 0.35",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ]
+    },
+    "green band tribunes 1": {
+      "type": "ring",
+      "count": 10,
+      "rOuter": "tribR + tribT + 0.14",
+      "rInner": "tribR + tribT + 0.06",
+      "height": 0.55,
+      "y": "(tribH * 0.5) - 0.275",
+      "solid": true,
+      "skip": [
+        0,
+        1,
+        2,
+        8,
+        9
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "octZ - tribD",
+          0
+        ],
+        [
+          "tribD",
+          0,
+          "octZ",
+          "0 - quarter"
+        ],
+        [
+          "0 - tribD",
+          0,
+          "octZ",
+          "quarter"
+        ]
+      ]
+    },
+    "red band tribunes 2": {
+      "type": "ring",
+      "count": 10,
+      "rOuter": "tribR + tribT + 0.14",
+      "rInner": "tribR + tribT + 0.06",
+      "height": 0.4,
+      "y": "(tribH - 1.2) - 0.2",
+      "solid": true,
+      "skip": [
+        0,
+        1,
+        2,
+        8,
+        9
+      ],
+      "place": [
+        [
+          0,
+          0,
+          "octZ - tribD",
+          0
+        ],
+        [
+          "tribD",
+          0,
+          "octZ",
+          "0 - quarter"
+        ],
+        [
+          "0 - tribD",
+          0,
+          "octZ",
+          "quarter"
+        ]
+      ]
+    },
+    "seating": {
+      "type": "zone",
+      "zone": "seating",
+      "w": "naveW - 2.8",
+      "d": 27,
+      "h": "arcadeH",
+      "at": [
+        [
+          0,
+          0.3,
+          "zc + naveL / 2 - 6 - 13.5",
+          1.5707963
+        ]
+      ],
+      "_about": "the congregation: pews down the nave on a middle aisle, facing the crossing (-z) -- clear of the arcade's piers, which stand 0.6 m into the nave"
+    }
+  },
+  "build": [
+    "nave arcade",
+    "clerestory",
+    "aisle wall",
+    "nave vault",
+    "aisle vault",
+    "nave roof",
+    "aisle roofs",
+    "west front",
+    "west rose",
+    "west wing",
+    "west wing upper",
+    "octagon",
+    "octagon pier",
+    "pier shaft inner",
+    "pier shaft outer",
+    "drum",
+    "drum shaft inner",
+    "drum shaft outer",
+    "shaft ends",
+    "pier stair",
+    "shaft floor west",
+    "shell flight",
+    "dome stair",
+    "shaft floor east",
+    "tribune morte",
+    "dome",
+    "inner dome",
+    "dome ribs",
+    "lantern",
+    "lantern roof",
+    "lantern ball",
+    "lantern buttresses",
+    "tribune",
+    "tribune roof",
+    "tribune spandrels left",
+    "tribune spandrels right",
+    "tribune roofs",
+    "campanile base",
+    "campanile base wall",
+    "campanile",
+    "campanile stair",
+    "campanile terrace",
+    "campanile cornice",
+    "pavement",
+    "pavement crossing",
+    "pavement tribunes",
+    "pavement tower",
+    "green band flank 1",
+    "green band flank 2",
+    "red band flank 1",
+    "green band facade 1",
+    "green band facade 2",
+    "green band front 1",
+    "red band facade 1",
+    "red band front 1",
+    "green band tower 1",
+    "red band tower 2",
+    "green band tower 3",
+    "red band tower 4",
+    "green band octagon 1",
+    "red band octagon 2",
+    "green band octagon 3",
+    "red band octagon 4",
+    "green band tribunes 1",
+    "red band tribunes 2",
+    "seating"
+  ],
+  "base": {
+    "height": 0.6,
+    "steps": 3,
+    "stepOut": 0.6,
+    "margin": 4
+  }
+}

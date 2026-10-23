@@ -1,0 +1,25 @@
+{
+  "_about": "THE DEER FRAME: a light body on long legs, a long neck carried high (1 = a red deer, back ~1.2m). `bulk` thickens body, neck and legs without lengthening anything -- a reindeer is a deer of the same height and half again the mass.",
+  "kind": "mammal",
+  "params": { "s": 1, "bulk": 1 },
+  "pupil": "bar",
+  "headTurn": 18,
+  "headScale": 0.70,
+
+  "rear":  ["-0.5*s", "0.87*s", 0, "0.5*s", "0.36*s*bulk", "0.29*s*bulk"],
+  "front": ["0.22*s", "0.89*s", 0, "0.5*s", "0.38*s*bulk", "0.28*s*bulk"],
+  "neck":   ["0.65*s", "1.05*s", 0, "0.92*s", "1.55*s", 0, "0.15*s*bulk", "0.11*s*bulk"],
+  "head":   ["0.98*s", "1.62*s", 0, "0.17*s"],
+  "muzzle": ["1.2*s", "1.55*s", 0, "0.2*s", "0.1*s", "0.1*s"],
+  "nose":   ["1.4*s", "1.54*s", 0, "0.035*s"],
+  "ears":   ["0.92*s", "1.75*s", "0.09*s", "0.87*s", "1.98*s", "0.24*s", "0.06*s", "0.018*s"],
+  "eyes":   ["1.1*s", "1.68*s", "0.13*s", "0.03*s"],
+
+  "legs": {
+    "front": ["0.35*s", "0.82*s", "0.18*s", "0.45*s"],
+    "hind": ["-0.5*s", "0.85*s", "0.2*s", "0.48*s"],
+    "radii": ["0.07*s*bulk", "0.045*s*bulk", "0.035*s*bulk"],
+    "foot": ["0.06*s", "0.04*s", "0.05*s"]
+  },
+  "tail": { "c": ["-1.23*s", "1.05*s"], "R": "0.25*s", "a0": 0, "a1": -0.7, "r1": "0.045*s", "r2": "0.03*s", "n": 3, "sway": 12, "speed": 0.8 }
+}

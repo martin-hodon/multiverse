@@ -1,0 +1,96 @@
+{
+ "kind": "item",
+ "name": "Bracket foot",
+ "category": "component",
+ "_about": "an ogee bracket foot at a case's corner (the 18th century's): two shaped boards meeting at the corner, one along x, one along z, `w` long, `h` high",
+ "params": {
+  "h": 0.1,
+  "w": 0.1,
+  "t": 0.02
+ },
+ "materials": {
+  "wood": "mahogany"
+ },
+ "parts": [
+  {
+   "id": "front",
+   "type": "plate",
+   "material": "wood",
+   "thick": "t",
+   "outline": [
+    [
+     0,
+     0
+    ],
+    [
+     "w",
+     0
+    ],
+    [
+     "w",
+     "h * 0.25"
+    ],
+    [
+     "w * 0.55",
+     "h * 0.35"
+    ],
+    [
+     "w * 0.2",
+     "h * 0.8"
+    ],
+    [
+     "w * 0.15",
+     "h"
+    ],
+    [
+     0,
+     "h"
+    ]
+   ]
+  },
+  {
+   "id": "side",
+   "type": "plate",
+   "material": "wood",
+   "thick": "t",
+   "at": [
+    0,
+    0,
+    0,
+    90,
+    0,
+    0
+   ],
+   "outline": [
+    [
+     0,
+     0
+    ],
+    [
+     "w",
+     0
+    ],
+    [
+     "w",
+     "h * 0.25"
+    ],
+    [
+     "w * 0.55",
+     "h * 0.35"
+    ],
+    [
+     "w * 0.2",
+     "h * 0.8"
+    ],
+    [
+     "w * 0.15",
+     "h"
+    ],
+    [
+     0,
+     "h"
+    ]
+   ]
+  }
+ ]
+}

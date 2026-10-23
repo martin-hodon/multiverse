@@ -1,0 +1,118 @@
+{
+ "kind": "item",
+ "name": "Cabriole leg",
+ "category": "component",
+ "_about": "the S-curved leg of the Queen Anne and Louis XV: a knee swelling forward (+z), the ankle drawn in, a pad foot (or a ball-and-claw: foot 'ball') -- from 0 to h",
+ "params": {
+  "h": 0.7,
+  "r": 0.022,
+  "foot": "pad"
+ },
+ "materials": {
+  "wood": "walnut"
+ },
+ "parts": [
+  {
+   "id": "leg",
+   "type": "sweep",
+   "material": "wood",
+   "seg": 5,
+   "path": [
+    [
+     0,
+     "h",
+     0
+    ],
+    [
+     0,
+     "h * 0.86",
+     "r * 1.7"
+    ],
+    [
+     0,
+     "h * 0.6",
+     "r * 0.7"
+    ],
+    [
+     0,
+     "h * 0.28",
+     "0 - r * 0.5"
+    ],
+    [
+     0,
+     "h * 0.09",
+     "0 - r * 0.1"
+    ],
+    [
+     0,
+     "r * 0.6",
+     "r * 0.9"
+    ]
+   ],
+   "radii": [
+    "r * 1.25",
+    "r * 1.35",
+    "r * 1.0",
+    "r * 0.62",
+    "r * 0.58",
+    "r * 0.75"
+   ]
+  },
+  {
+   "id": "pad",
+   "type": "lathe",
+   "when": {
+    "foot": "pad"
+   },
+   "material": "wood",
+   "at": [
+    0,
+    0,
+    "r * 0.9"
+   ],
+   "profile": [
+    [
+     "r * 1.2",
+     0
+    ],
+    [
+     "r * 1.25",
+     "r * 0.3"
+    ],
+    [
+     "r * 0.8",
+     "r * 0.6"
+    ]
+   ]
+  },
+  {
+   "id": "ball",
+   "type": "sphere",
+   "when": {
+    "foot": "ball"
+   },
+   "material": "wood",
+   "r": "r * 1.15",
+   "at": [
+    0,
+    "r * 1.1",
+    "r * 0.9"
+   ]
+  },
+  {
+   "id": "block",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "r * 2.6",
+    0.07,
+    "r * 2.6"
+   ],
+   "at": [
+    0,
+    "h - 0.035",
+    0
+   ]
+  }
+ ]
+}

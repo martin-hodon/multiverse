@@ -1,0 +1,245 @@
+{
+  "name": "frog",
+  "kind": "parts",
+  "flags": {
+    "shy": 3,
+    "shore": true,
+    "hop": {
+      "period": 0.9,
+      "h": 0.16
+    }
+  },
+  "parts": [
+    {
+      "id": "body",
+      "parent": null,
+      "shape": "sphere",
+      "size": {
+        "r": 0.05
+      },
+      "scale": [
+        1.35,
+        0.8,
+        1
+      ],
+      "pos": [
+        0,
+        0.045,
+        0
+      ],
+      "color": "#5a9a3a"
+    },
+    {
+      "id": "stripe",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.008,
+        "len": 0.09
+      },
+      "geomRot": [
+        0,
+        0,
+        90
+      ],
+      "pos": [
+        0,
+        0.038,
+        0
+      ],
+      "color": "#a8d060"
+    },
+    {
+      "id": "eyeL",
+      "parent": "body",
+      "shape": "sphere",
+      "size": {
+        "r": 0.014
+      },
+      "pos": [
+        0.045,
+        0.04,
+        0.028
+      ],
+      "color": "#2a1a08"
+    },
+    {
+      "id": "eyeR",
+      "parent": "body",
+      "shape": "sphere",
+      "size": {
+        "r": 0.014
+      },
+      "pos": [
+        0.045,
+        0.04,
+        -0.028
+      ],
+      "color": "#2a1a08"
+    },
+    {
+      "id": "thighL",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.014,
+        "len": 0.06
+      },
+      "pos": [
+        -0.03,
+        -0.02,
+        0.045
+      ],
+      "rot": [
+        0,
+        0,
+        70
+      ],
+      "pivot": [
+        0,
+        -0.03,
+        0
+      ],
+      "color": "#4a8a30",
+      "anim": {
+        "axis": "z",
+        "deg": 30,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "thighR",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.014,
+        "len": 0.06
+      },
+      "pos": [
+        -0.03,
+        -0.02,
+        -0.045
+      ],
+      "rot": [
+        0,
+        0,
+        70
+      ],
+      "pivot": [
+        0,
+        -0.03,
+        0
+      ],
+      "color": "#4a8a30",
+      "anim": {
+        "axis": "z",
+        "deg": 30,
+        "speed": 0.8,
+        "phase": 0
+      }
+    },
+    {
+      "id": "shinL",
+      "parent": "thighL",
+      "shape": "capsule",
+      "size": {
+        "r": 0.01,
+        "len": 0.06
+      },
+      "pos": [
+        0,
+        -0.06,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -120
+      ],
+      "pivot": [
+        0,
+        -0.03,
+        0
+      ],
+      "color": "#4a8a30"
+    },
+    {
+      "id": "shinR",
+      "parent": "thighR",
+      "shape": "capsule",
+      "size": {
+        "r": 0.01,
+        "len": 0.06
+      },
+      "pos": [
+        0,
+        -0.06,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        -120
+      ],
+      "pivot": [
+        0,
+        -0.03,
+        0
+      ],
+      "color": "#4a8a30"
+    },
+    {
+      "id": "legFL",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.008,
+        "len": 0.04
+      },
+      "pos": [
+        0.04,
+        -0.03,
+        0.035
+      ],
+      "pivot": [
+        0,
+        -0.02,
+        0
+      ],
+      "color": "#4a8a30",
+      "anim": {
+        "axis": "z",
+        "deg": 24,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    },
+    {
+      "id": "legFR",
+      "parent": "body",
+      "shape": "capsule",
+      "size": {
+        "r": 0.008,
+        "len": 0.04
+      },
+      "pos": [
+        0.04,
+        -0.03,
+        -0.035
+      ],
+      "pivot": [
+        0,
+        -0.02,
+        0
+      ],
+      "color": "#4a8a30",
+      "anim": {
+        "axis": "z",
+        "deg": 24,
+        "speed": 0.8,
+        "phase": 3.14
+      }
+    }
+  ]
+}

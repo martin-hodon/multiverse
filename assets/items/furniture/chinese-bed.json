@@ -1,0 +1,227 @@
+{
+ "kind": "item",
+ "name": "Canopy bed",
+ "category": "furniture/bed",
+ "era": "1400-1700",
+ "region": "China",
+ "_about": "the Ming canopy bed: six posts carrying a canopy frame, lattice rails round three sides, a mat on a woven platform, low on its legs",
+ "params": {
+  "w": 1.3,
+  "l": 2.1,
+  "H": 2.1
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "cherry",
+    "walnut",
+    "lacquer-red"
+   ]
+  },
+  "mat": "cane",
+  "bedding": "linen"
+ },
+ "parts": [
+  {
+   "id": "posts",
+   "use": "items/components/square-leg",
+   "params": {
+    "h": "H",
+    "w": 0.06,
+    "taper": 1
+   },
+   "at": [
+    [
+     "0 - l / 2",
+     0,
+     "0 - w / 2"
+    ],
+    [
+     "l / 2",
+     0,
+     "0 - w / 2"
+    ],
+    [
+     "0 - l / 2",
+     0,
+     "w / 2"
+    ],
+    [
+     "l / 2",
+     0,
+     "w / 2"
+    ],
+    [
+     "0 - l / 2",
+     0,
+     0
+    ],
+    [
+     "l / 2",
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "platform",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l + 0.08",
+    0.12,
+    "w + 0.08"
+   ],
+   "at": [
+    0,
+    0.46,
+    0
+   ]
+  },
+  {
+   "id": "apron",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l + 0.08",
+    0.1,
+    "w + 0.04"
+   ],
+   "at": [
+    0,
+    0.35,
+    0
+   ]
+  },
+  {
+   "id": "mat",
+   "type": "box",
+   "material": "mat",
+   "size": [
+    "l - 0.04",
+    0.03,
+    "w - 0.04"
+   ],
+   "at": [
+    0,
+    0.535,
+    0
+   ]
+  },
+  {
+   "id": "canopy",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l + 0.1",
+    0.1,
+    "w + 0.1"
+   ],
+   "at": [
+    0,
+    "H",
+    0
+   ]
+  },
+  {
+   "id": "lattice",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l",
+    0.02,
+    0.03
+   ],
+   "along": {
+    "n": 5,
+    "from": [
+     0,
+     0.62,
+     "0 - w / 2"
+    ],
+    "to": [
+     0,
+     0.9,
+     "0 - w / 2"
+    ]
+   }
+  },
+  {
+   "id": "lattice ends",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.03,
+    0.02,
+    "w"
+   ],
+   "along": {
+    "n": 5,
+    "from": [
+     "0 - l / 2",
+     0.62,
+     0
+    ],
+    "to": [
+     "0 - l / 2",
+     0.9,
+     0
+    ]
+   },
+   "mirror": "x"
+  },
+  {
+   "id": "frieze",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "l",
+    0.18,
+    0.025
+   ],
+   "at": [
+    [
+     0,
+     "H - 0.14",
+     "w / 2"
+    ],
+    [
+     0,
+     "H - 0.14",
+     "0 - w / 2"
+    ]
+   ]
+  },
+  {
+   "id": "quilt",
+   "type": "box",
+   "material": "bedding",
+   "size": [
+    "l * 0.6",
+    0.08,
+    "w - 0.15"
+   ],
+   "round": 0.03,
+   "at": [
+    "l * 0.15",
+    0.59,
+    0
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "bed",
+   "at": [
+    0,
+    0,
+    0,
+    90
+   ],
+   "data": {
+    "top": 0.56,
+    "foot": "l / 2 + 0.35"
+   }
+  }
+ ]
+}
