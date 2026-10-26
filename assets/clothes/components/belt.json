@@ -1,10 +1,11 @@
 {
   "name": "Belt",
   "kind": "component",
-  "_about": "A BELT round the waist (a strap `width` wide) and its BUCKLE at the front: two sheets, the buckle's a narrow arc over the strap.",
+  "_about": "A BELT round the waist (a strap `width` wide) and its BUCKLE at the front: two sheets, the buckle's a narrow arc over the strap. A POUCH (`pouch` 1): a leather purse hanging from it at the left hip, a thick patch that stands out from the coat.",
   "params": {
     "at": "waist",
-    "width": 0.04
+    "width": 0.04,
+    "pouch": 0
   },
   "pieces": [
     {
@@ -26,6 +27,20 @@
       ],
       "fabric": "buckle",
       "thick": 0.005
+    },
+    {
+      "name": "pouch",
+      "if": "pouch",
+      "on": "torso",
+      "from": "at + width / 2",
+      "to": "at + width / 2 + 0.13",
+      "wrap": [
+        62,
+        26
+      ],
+      "fabric": "pouch",
+      "thick": 0.016,
+      "dags": 0
     }
   ]
 }

@@ -15,7 +15,8 @@ import { batchPool } from "./batchpool.js";
 import { ASSETS } from "./catalogue.js";
 import { buildItem } from "./items.js";
 import { paintedGeometry } from "./tools.js";
-import { wgslFn, normalWorld, positionWorld, cameraPosition, attribute, uv, texture, vec3, vec4 } from "three/tsl";
+import { wgslFn, normalWorld, positionWorld, cameraPosition, attribute, uv, texture, vec3, vec4, positionLocal, positionGeometry, time, sin } from "three/tsl";
+import { WIND, WIND_DIR, grassWind } from "./grass.js";   // (the hair stirs in the grass's wind)
 import { LIGHT } from "./light.js";   // the world's one static sun
 import { stoneMaterial } from "./shell.js";   // a statue's head: the stone its body is (statues.js)
 import { PREGEN, pregenOn, pregenMiss, recordFor, hasher, fetchFace, packFace } from "./pregen.js";   // (heads built once by build/pregen.py)
@@ -28,7 +29,63 @@ const SEEDS = 5;        // how many of a kind and colouring are told apart (thei
 // lips too: face.js gives every vertex the smooth surface's own normal, so their rolls take the light as the skin does
 // WET: the eyes (all but the catchlight, which is the highlight already) and, less, the lips take a sharp specular
 export const WET = { eye: 1, iris: 1, pupil: 1, limbus: 1, lip: .3 };
-export const faceGeometry = (built, recolor = null) => paintedGeometry(built, { strands: ["hair"], wet: WET, recolor });
+const cavities = new WeakMap();   // built face -> its vertices' darkness (cavityOf: the shape's, kept for every colouring of it)
+export const faceGeometry = (built, recolor = null) => {
+  const geo = paintedGeometry(built, { strands: ["hair"], wet: WET, recolor });
+  let dark = cavities.get(built);
+  if (!dark) cavities.set(built, dark = cavityOf(geo));
+  return cavityShade(geo, CAVITY, dark);
+};
+// THE FACE'S HOLLOWS (2026-10-24): the sun's half-Lambert gives a head its round, not its form -- the eye sockets, the
+// creases beside the nose and under the lower lip, the ear's bowl, the hairline under the hair read as flat paint. So
+// every vertex is darkened by how CONCAVE the surface is round it: the mean of the points within `r` (two radii: the
+// creases and the sockets) lies in front of a hollow and behind a bump -- its height over the vertex along the normal,
+// over r, is the cavity (a bump's is below 0: no change). The darkening is `k` at a cavity of 1, warmer in the skin
+// (`warm`: light through the skin is red in its folds), less on the wet eyes (`wet` its share) -- and none on the hair
+// (its strands are dense and costly to measure, and its own sheen shades them: `hair` would be its share)
+export const CAVITY = { r: [.007, .018], k: [2.6, 1.9], max: .42, warm: [1, .9, .86], hair: 0, wet: .4 };
+export function cavityShade(geo, C = CAVITY, dark = cavityOf(geo, C)) {
+  const col = geo.attributes.color.array, hm = geo.attributes.hairMask?.array, wm = geo.attributes.wetMask?.array;
+  for (let i = 0; i < dark.length; i++) {
+    const skin = !hm?.[i] && !wm?.[i], d = dark[i] * (hm?.[i] ? C.hair : wm?.[i] ? C.wet : 1);
+    for (let q = 0; q < 3; q++) col[i * 3 + q] *= 1 - d * (skin ? 2 - C.warm[q] : 1);
+  }
+  return geo;
+}
+// how dark each vertex of a face's geometry is by its hollow (its shape's alone: kept per built face, whatever colours
+// it is painted in -- createHeads)
+export function cavityOf(geo, C = CAVITY) {
+  const P = geo.attributes.position.array, N = geo.attributes.normal.array, n = P.length / 3, hm = geo.attributes.hairMask?.array;
+  // the surface's own points, once each (the geometry repeats a vertex in every triangle it is in): numeric keys, a
+  // twentieth of a millimetre
+  const uniq = new Map(), of = new Int32Array(n), U = [];
+  for (let i = 0; i < n; i++) {
+    if (hm?.[i]) { of[i] = -1; continue; }   // (not the hair: its strands are dense, and costly, and the sheen shades them)
+    const k = (Math.round(P[i * 3] * 2e4) + 8192) + (Math.round(P[i * 3 + 1] * 2e4) + 8192) * 16384 + (Math.round(P[i * 3 + 2] * 2e4) + 8192) * 268435456;
+    let u = uniq.get(k); if (u === undefined) { uniq.set(k, u = U.length); U.push(i); } of[i] = u;
+  }
+  const R = Math.max(...C.r), cell = new Map(), ck = (a, b, c) => (a + 512) + (b + 512) * 1024 + (c + 512) * 1048576;
+  for (const i of U) { const k = ck(Math.floor(P[i * 3] / R), Math.floor(P[i * 3 + 1] / R), Math.floor(P[i * 3 + 2] / R)); let l = cell.get(k); if (!l) cell.set(k, l = []); l.push(i); }
+  const [r0, r1] = C.r, [k0, k1] = C.k, du = new Float32Array(U.length);
+  for (let u = 0; u < U.length; u++) {
+    const i = U[u], x = P[i * 3], y = P[i * 3 + 1], z = P[i * 3 + 2], cx = Math.floor(x / R), cy = Math.floor(y / R), cz = Math.floor(z / R);
+    let ax = 0, ay = 0, az = 0, aw = 0, bx = 0, by = 0, bz = 0, bw = 0;
+    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let c = -1; c <= 1; c++) {
+      const l = cell.get(ck(cx + a, cy + b, cz + c));
+      if (l) for (const j of l) {
+        const dx = P[j * 3] - x, dy = P[j * 3 + 1] - y, dz = P[j * 3 + 2] - z, d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (d < r0) { const w = 1 - d / r0; ax += dx * w; ay += dy * w; az += dz * w; aw += w; }
+        if (d < r1) { const w = 1 - d / r1; bx += dx * w; by += dy * w; bz += dz * w; bw += w; }
+      }
+    }
+    const nx = N[i * 3], ny = N[i * 3 + 1], nz = N[i * 3 + 2];
+    const v = (aw > 0 ? k0 * Math.max(0, (ax * nx + ay * ny + az * nz) / aw / r0) : 0) + (bw > 0 ? k1 * Math.max(0, (bx * nx + by * ny + bz * nz) / bw / r1) : 0);
+    du[u] = Math.min(C.max, v);
+  }
+  const dark = new Float32Array(n);
+  for (let i = 0; i < n; i++) dark[i] = of[i] < 0 ? 0 : du[of[i]];
+  return dark;
+}
 // HALF-LAMBERT for faces: f = (n . l + 1) / 2 under the world's sun (light.js; `dir` here overrides it -- the viewer's
 // sliders), through a RAMP that is the face's own fall-off: `dark` how dark the far side gets (0 none .. 1 black),
 // `gamma` its shape (1 straight; higher keeps the lit side bright longer), or `curve` points [f, light] joined by a
@@ -116,7 +173,21 @@ export function faceMaterial(shade = SHADE) {
                             k: vec4(K.shift1, K.shift2, K.s1, K.s2), e: vec4(K.exp1, K.exp2, K.jitter, 0), fb: vec4(K.fibre, K.freq, 0, 0) });
   m.colorNode = wetShine({ c: sheen, n: normalWorld, p: positionWorld, l: L, cam: cameraPosition, wet: attribute("wetMask", "float") });
   m.userData.ramp = ramp;
+  m.positionNode = hairSway();
   return m;
+}
+// HAIR IN THE WIND (2026-10-24): what hangs below the head (a long fall, a plait, two locks) is blown the wind's way
+// and flutters back -- by how far below the head's middle it hangs (the geometry's own y: the head's frame), so the
+// crown stays put and the tips move most; the flutter runs down the hair and each head has its own (by where it is:
+// the batch has already placed the vertex -- positionLocal is the world's here). HAIR_SWAY.amp metres a metre of hang
+// in a full wind; with the grass's gusts (grass.js WIND, grassWind)
+export const HAIR_SWAY = { amp: .1, from: .02, speed: 2.1, per: 9 };
+function hairSway() {
+  const H = HAIR_SWAY, hang = positionGeometry.y.negate().sub(H.from).max(0);
+  const ph = time.mul(H.speed).add(positionLocal.x.mul(.9)).add(positionLocal.z.mul(.7)).add(positionGeometry.y.mul(H.per));
+  const gust = grassWind({ p: positionLocal.xz, t: time }).mul(.25).add(.6).mul(WIND.strength);
+  const blow = sin(ph).mul(.45).add(sin(ph.mul(2.3).add(1.7)).mul(.25)).add(.55).mul(gust);
+  return positionLocal.add(vec3(WIND_DIR.x, 0, WIND_DIR.y).mul(blow.mul(hang).mul(H.amp).mul(attribute("hairMask", "float"))));
 }
 // WHAT A HAIRSTYLE ASKS OF THE FACE under it: a tonsure's shaven crown is skin (face.js `bare`: the cap's `top`) --
 // the face paints its scalp in the hair's colour above the hairline, so without it the bare crown would read as hair
@@ -132,7 +203,30 @@ export const DETAIL = { face: 1 };
 // colours (painted on: built in placeholders) -- so pregen/ can keep it, and a village's heads share few builds.
 // Its FAMILY: the kind, the hair, what is worn -- another seed of one family stands in for a face pregen/ has not got
 // (heads.js is told the generator's faces were drawn at random: which seed of a family a person gets is no matter)
-const SKIN0 = "#fe01fd", HAIR0 = "#fd02fe";
+const SKIN0 = "#fe01fd", HAIR0 = "#fd02fe", BROW0 = "#fc03fc", STUB0 = "#fb04fb", LIP0 = "#fa05fa";
+// THE LIPS from the skin (2026-10-24): the skin's own colour, darker and ruddier -- a pink picked at random sat on dark
+// skin like paint. `tint` how far toward red-brown, `dark` how much darker; the pale skin a little rosier
+export const LIPS = { tint: [.62, .3, .3], mix: [.32, .55], dark: .8 };   // (mix: toward the tint on the darkest skin .. the palest)
+// (worked in sRGB, as the colours are written: three's Color mixes in linear light, which washed the lips out)
+const lipOf = (skin) => {
+  const c = new THREE.Color(skin); c.getHSL(_hsl, THREE.SRGBColorSpace);
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(skin.slice(i, i + 2), 16) / 255), tm = .6 + .8 * _hsl.l;
+  const k = LIPS.mix[0] + (LIPS.mix[1] - LIPS.mix[0]) * Math.min(1, Math.max(0, (_hsl.l - .25) / .55));
+  const out = [r, g, b].map((v, q) => Math.round(Math.max(0, Math.min(1, (v + (LIPS.tint[q] * tm - v) * k) * LIPS.dark)) * 255));
+  return "#" + out.map((v) => v.toString(16).padStart(2, "0")).join("");
+};
+// THE BROWS a shade darker than the hair (a fair head's are, and a face is read by its brows and eyes from metres away:
+// fair brows on dark skin, or on pale, all but vanished) -- the hair's colour times this
+export const BROW_TONE = .55;
+// (grey and white hair keeps its brows grey: an elder's are light, often bushier, not dark)
+const _hsl = {};
+// (toward a dark warm brown, not darker by a factor: a blond's brows and beard went olive that way)
+const BROW_DARK = new THREE.Color("#2b1d14");
+const browOf = (hair) => { const c = new THREE.Color(hair); c.getHSL(_hsl, THREE.SRGBColorSpace);   // (as the eye sees it: in linear light a mid grey is .32)
+  return "#" + (_hsl.s < .15 && _hsl.l > .4 ? c.multiplyScalar(.88) : c.lerp(BROW_DARK, 1 - BROW_TONE)).getHexString(); };
+// STUBBLE: the skin, a third of the way to the brows' colour (face.js BEARDS stubble)
+export const STUBBLE = .35;
+const stubbleOf = (skin, hair) => "#" + new THREE.Color(skin).lerp(new THREE.Color(browOf(hair)), STUBBLE).getHexString();
 export const faceShape = (f) => ({ kind: f.kind, seed: f.seed % SEEDS, style: f.style ?? "", fringe: f.fringe ?? 0, stone: f.stone ?? 0, headwear: f.headwear ?? "", ears: f.ears ?? "" });
 export const faceFamily = (s) => `${s.kind}|${s.style}|${s.fringe}|${s.stone ? 1 : 0}|${s.headwear}|${s.ears}`;
 // (the definitions a face is made of: its key carries them, so an edited face, hairstyle or jewel is not found)
@@ -148,7 +242,7 @@ function faceContent(bank) {
 }
 export const faceKey = (s, bank, SH) => hasher().str("face").str(faceContent(bank)).json({ ...s, detail: DETAIL.face, skin: SH.skin ?? null }).hex();
 export function buildFace(s, bank, lib, SH) {
-  return buildItem("items/faces/" + s.kind, bank, lib, { seed: 1 + s.seed, materials: { skin: SH.skin ?? SKIN0, hairColour: HAIR0 },
+  return buildItem("items/faces/" + s.kind, bank, lib, { seed: 1 + s.seed, materials: { skin: SH.skin ?? SKIN0, hairColour: HAIR0, brow: BROW0, stubble: STUB0, lip: LIP0 },
     params: { detail: DETAIL.face, scale: 1, hairline: s.style === "none" ? .2 : HAIRLINE, seed: 1 + s.seed, ...(s.style ? { hairstyle: "items/hair/" + s.style, fringe: s.fringe, ...hairFaceParams(bank, s.style) } : {}),
               ...(s.headwear ? { headwear: s.headwear } : {}), ...(s.ears ? { earrings: s.ears } : {}) } });   // (the person's own hairstyle, else the face's pick; what is worn on the head and the ears: jewelry.js)
 }
@@ -203,7 +297,7 @@ export function createHeads(scene, { cap = 48, bank = ASSETS, lib = bank.get("it
     if (kinds.has(key)) return kinds.get(key);
     // (a STATUE's head -- `stone`, its material: statues.js -- is carved: the stone's own material, not skin and hair)
     const pool = poolOf(f.stone ? stoneMaterial(f.stone) : mat);
-    const k = { pool, shape: pool.add(faceGeometry(sh.built, f.stone ? null : { [SKIN0]: f.skin, [HAIR0]: f.hair })), n: 0 };
+    const k = { pool, shape: pool.add(faceGeometry(sh.built, f.stone ? null : { [SKIN0]: f.skin, [HAIR0]: f.hair, [BROW0]: browOf(f.hair), [STUB0]: stubbleOf(SH.skin ?? f.skin, f.hair), [LIP0]: lipOf(SH.skin ?? f.skin) })), n: 0 };
     kinds.set(key, k);
     return k;
   };

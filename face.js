@@ -160,7 +160,7 @@ export const FACE_ATTRS = {
   upperLipHeight: .021, upperVermilion: .008, lowerVermilion: .009, lowerLipHeight: .019, upperLipAngle: 8, lipProjection: .002,
   mentolabial: .007, chinProjection: 0, chinHeight: .013,
   // the eyes and the brows
-  eyeDistance: .033, eyeWidth: .030, eyeHeight: .010, eyeTilt: 4, eyeLevel: -.010, eyeDepth: .016, irisR: .0058, lashThickness: .0011,
+  eyeDistance: .033, eyeWidth: .030, eyeHeight: .010, eyeTilt: 4, eyeLevel: -.010, eyeDepth: .016, irisR: .0058, lashThickness: .0015,
   // the teeth (behind the lips: the arch's width across its back ends, how far the arch curves back, how far behind
   // the stomion its front stands, the crowns' height)
   teeth: 1, teethWidth: .032, teethDepth: .012, teethSet: .005, teethHeight: .009,
@@ -175,7 +175,37 @@ export const FACE_ATTRS = {
   // AU15 mouthDown, AU18 pucker, AU25 lipsPart, AU26 jawOpen), 0..1; `expression` and `viseme` name mixes of them
   browInnerUp: 0, browOuterUp: 0, browDown: 0, lidUp: 0, blink: 0, cheekUp: 0, smile: 0, mouthDown: 0, pucker: 0, lipsPart: 0, jawOpen: 0,
   expression: "neutral", viseme: "none",
+  // the BEARD's style (BEARDS): none, stubble, moustache, goatee, short, full
+  beard: "none",
 };
+// BEARDS (2026-10-24): a beard is the skin of its regions on the lattice -- the moustache (between the nose and the
+// upper lip), the chin (under the lower lip to the jaw), the cheeks and the jaw's sides with the sideburns, the neck
+// under the jaw -- each a soft band in the domain (u the column, v the row: FACE_COLUMNS, FACE_ROWS), weighted 0..1;
+// a triangle more than half in it is drawn in the beard's colour (the brows': a shade darker than the hair), and every
+// point (skin and beard alike: no step between them) stands out by `thick` times its weight -- a full beard bulges, a
+// short one barely; `point` draws a full beard down below the chin. Stubble has no thickness, its own colour (heads.js:
+// the skin and the brows mixed) -- but its edges are the triangles' (blocky on the cheeks): the kinds do not pick it.
+export const BEARDS = {
+  none: null,
+  stubble: { thick: 0, stub: true, moustache: 1, chin: 1, cheek: 1, neck: .7 },
+  moustache: { thick: .004, moustache: 1 },
+  goatee: { thick: .006, moustache: 1, chin: .9, narrow: true },
+  short: { thick: .005, moustache: 1, chin: 1, cheek: 1, neck: .8 },
+  full: { thick: .011, moustache: 1, chin: 1, cheek: 1, neck: 1, point: .022 },
+};
+const sm01 = (a, b, x) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const band = (x, a, b, e = .35) => sm01(a - e, a + e, x) * (1 - sm01(b - e, b + e, x));
+export function beardWeight(B, u, v) {
+  if (!B) return 0;
+  const R = (n) => FACE_ROWS.indexOf(n);
+  return Math.max(
+    B.moustache ? band(v, R("subnasale") + .25, R("upper lip border") + .3) * band(u, -1, 4.4) * B.moustache : 0,
+    B.chin ? band(v, R("lower lip border") - .2, R("jawline") + .3) * band(u, -1, B.narrow ? 3.2 : 7.8) * B.chin : 0,
+    B.cheek ? band(v, R("pronasale") + .6, R("jawline") + .3) * band(u, 5.0, 7.8) : 0,         // the cheeks and the jaw's sides
+    B.cheek ? band(v, R("upper lid"), R("pronasale") + 1) * band(u, 7.0, 7.9) : 0,              // the sideburns, before the ear
+    B.cheek ? band(v, R("upper lip middle"), R("lower lip border")) * band(u, 4.2, 5.6) : 0,    // round the mouth's corners
+    B.neck ? band(v, R("jawline") - .3, R("neck") + .6) * band(u, -1, 7.0) * B.neck : 0);
+}
 export const ACTIONS = ["browInnerUp", "browOuterUp", "browDown", "lidUp", "blink", "cheekUp", "smile", "mouthDown", "pucker", "lipsPart", "jawOpen"];
 export const EXPRESSIONS = {   // (the emotions, as the actions' mixes: the brows, the lids, the cheeks, the lips, the jaw)
   neutral: {}, smile: { smile: .7, cheekUp: .4 }, laugh: { smile: 1, cheekUp: .9, jawOpen: .35, lipsPart: .8, browOuterUp: .15, blink: .25 },
@@ -590,10 +620,12 @@ export function faceGeometry(p, P, emitFor, prims) {
     }
     return [1, 0, 0];
   };
+  const BD = BEARDS[A.beard] ?? null;
   const point = (u, v) => {
     let q = field(u, v);
-    const nn = nOf(u, v), f = fat(u, v);
+    const nn = nOf(u, v), f = fat(u, v) + (BD ? BD.thick * beardWeight(BD, u, v) : 0);
     q = [q[0] + nn[0] * f, q[1] + nn[1] * f, q[2] + nn[2] * f];
+    if (BD?.point) q[1] -= BD.point * band(u, -1, 2.6) * sm01(ROW["pogonion"], ROW["neck"], v);   // (a full beard falls below the chin)
     if (v > ROW["upper lid"] && v < ROW["lower lid"] && u > 3 && u < 5) q[0] -= .0012;
     return { q, n: nn };
   };
@@ -601,6 +633,7 @@ export function faceGeometry(p, P, emitFor, prims) {
   // ---- the materials: the regions', the hair above the hairline
   const skin = emitFor("skin"), hairE = Q.hair === "none" ? skin : emitFor("hair");
   const EM = { skin, lip: emitFor("lip"), mouth: emitFor("mouth"), eye: emitFor("eye") };
+  const beardE = BD ? emitFor(BD.stub ? "stubble" : "beard") : null;
   const vid = new Map();
   const vert = (em, u, v, side) => {
     if (!vid.has(em)) vid.set(em, new Map());
@@ -635,6 +668,7 @@ export function faceGeometry(p, P, emitFor, prims) {
       const back = Math.min(1, Math.atan2(z, x) / Math.PI);
       if (yMid >= Q.hairline - .12 * Math.pow(back, 2.5) && yMid < Q.bare) em = hairE;
     }
+    if (mat === "skin" && beardE && em === skin && beardWeight(BD, (a[0] + b[0] + c[0]) / 3, (a[1] + b[1] + c[1]) / 3) > .5) em = beardE;
     // (the nape's column is the back's midline: shared by both halves too)
     const V3 = (pt) => vert(em, pt[0], pt[1], pt[0] === RC - 1 ? 1 : side);
     if (side > 0) em.tri(V3(a), V3(b), V3(c)); else em.tri(V3(a), V3(c), V3(b));

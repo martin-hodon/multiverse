@@ -1,6 +1,6 @@
 {
  "name": "Hearth",
- "_about": "a raised stone hearth against a wall (+z its front), the fire on it",
+ "_about": "a raised stone hearth against a wall (+z its front), the fire on it, framed as a fireplace: two jambs up from the hearth to the hood, the hood, and its flue on up to the ceiling (2026-10-24: the hood had hung in the air)",
  "params": {
   "detail": 4
  },
@@ -33,6 +33,54 @@
     ]
    ]
   },
+  "jambs": {
+   "type": "box",
+   "width": 0.2,
+   "length": 0.6,
+   "height": 1.25,
+   "at": [
+    [
+     -0.7,
+     0.45,
+     -0.1,
+     0
+    ],
+    [
+     0.7,
+     0.45,
+     -0.1,
+     0
+    ]
+   ]
+  },
+  "flue": {
+   "type": "box",
+   "width": 0.8,
+   "length": 0.4,
+   "height": 0.7,
+   "at": [
+    [
+     0,
+     2.2,
+     -0.2,
+     0
+    ]
+   ]
+  },
+  "fireback": {
+   "type": "box",
+   "width": 1.2,
+   "length": 0.04,
+   "height": 1.25,
+   "at": [
+    [
+     0,
+     0.45,
+     -0.38,
+     0
+    ]
+   ]
+  },
   "fire": {
    "type": "marker",
    "role": "fire",
@@ -52,7 +100,10 @@
  },
  "build": [
   "hearth",
+  "jambs",
   "hood",
+  "flue",
+  "fireback",
   "fire"
  ]
 }

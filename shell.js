@@ -49,7 +49,8 @@
 //
 // STILL THE FRAGMENT SHADER'S, NOT HERE: patterns, the fabrics a part wears (dressAt), face marks and the outline.
 import * as THREE from "three";
-import { wgslFn, attribute, varying, uniform, vec3, vec4, float, positionGeometry, positionWorld, normalWorld, cameraPosition, cameraProjectionMatrix, cameraViewMatrix, cameraWorldMatrix } from "three/tsl";
+import { wgslFn, attribute, varying, uniform, vec3, vec4, float, positionGeometry, positionWorld, normalWorld, cameraPosition, cameraProjectionMatrix, cameraViewMatrix, cameraWorldMatrix, normalize } from "three/tsl";
+import { sunShade } from "./sunshadow.js";   // (the figures in the buildings' shadows)
 import * as LIB from "./banner_wgsl.js";
 import { sdRoundCone, texelFor, unpackAw, furAt, strandsAt } from "./composite_wgsl.js";
 import { QUADS, onQuads } from "./outline.js";
@@ -79,13 +80,19 @@ export const SHELL = {
   mark: 2,                                   // how far a face mark stands proud of the face it lies on, in mm
   skin: .012,                                // how thick a cut shell's wall is (hair, a hood, a skirt), metres
   chain: 1,                                  // 0: one lathe per part again, to see what the chains are worth
+  seam: 1,                                   // ?shellseam=0: the joints as before -- rings spread by fractions, handed over, not mitred, no limb roots
   debug: 0,                                  // ?shelldebug=1: print how each species was split into chains
 };
+
+// FLEECE: a woolly part's lumps -- how wide (metres: a few of the near band's points across one, or they would alias
+// into a jagged ring) and how far proud of the part at most
+export const FLEECE = { size: .24, amp: .05, lock: .075, crease: .24 };   // (lock, crease: the small lumps in the light, how dark between them)
 
 export function shellFromQuery(qp) {
   if (qp.has("shelllod")) SHELL.lod = qp.get("shelllod").split(";").map((g) => g.split(",").map(Number));
   if (qp.has("shellblend")) SHELL.blend = +qp.get("shellblend") ? 1 : 0;
   if (qp.has("shellchain")) SHELL.chain = +qp.get("shellchain") ? 1 : 0;
+  if (qp.has("shellseam")) SHELL.seam = +qp.get("shellseam") ? 1 : 0;
   if (qp.has("shellthin")) SHELL.thin = +qp.get("shellthin");
   if (qp.has("shellmark")) SHELL.mark = +qp.get("shellmark");
   if (qp.has("shellskin")) SHELL.skin = +qp.get("shellskin");
@@ -330,6 +337,23 @@ const unpackRGB8 = wgslFn(`
 `);
 const dressCache = new Map();
 const dressFns = (W, ST) => dressCache.get(W + "/" + ST) ?? dressCache.set(W + "/" + ST, makeDressFns(W, ST)).get(W + "/" + ST);
+// THE FOLDS' PHASE round a pleated piece (2026-10-24): `pleats` folds round it, not evenly -- warped by a few slow
+// waves, more so lower down (t: 0 at the piece's top, 1 at its hem), where folds fan out -> (phase, its rate round)
+const foldPhase = wgslFn(`
+  fn foldPhase(th: f32, t: f32, pleats: f32) -> vec2<f32> {
+    let wq = min(1.0, pleats / 12.0);
+    let g = pleats * th + wq * (1.1 * sin(th * 3.0 + 1.7) + 0.7 * sin(th * 5.0 - 0.9) + 0.9 * t * sin(th * 2.0 + 0.4));
+    let dg = pleats + wq * (3.3 * cos(th * 3.0 + 1.7) + 3.5 * cos(th * 5.0 - 0.9) + 1.8 * t * cos(th * 2.0 + 0.4));
+    return vec2<f32>(g, dg);
+  }
+`);
+// PATCH: how many of the worn pieces are patched, and a patch's width and height (metres)
+const PATCH = { share: .3, w: .11, h: .13 };
+// SOIL: a long skirt's hem (a pleated piece at least `len` long) darkened up to `h` metres, at most `k`
+const SOIL = { h: .09, k: .7, len: .45 };
+// how far a fold's valley lifts the hem, as a share of a fold's width (the hem waves as the folds do: a standing
+// piece is cut there, so its silhouette waves too)
+const HEM_WAVE = .12;
 const makeDressFns = (W, ST) => {
   const layerIn = wgslFn(`
     fn layerIn(sTex: texture_2d<f32>, ls: i32, s: f32, th: f32, girth: f32, rad: f32) -> f32 {
@@ -344,6 +368,12 @@ const makeDressFns = (W, ST) => {
         let lobe = 6.2831853 * max(girth, 0.01) / dags;
         let ph = fract(th * dags / 6.2831853) - 0.5;
         hem = hem - 0.5 * lobe * (1.0 - sqrt(max(1.0 - 4.0 * ph * ph, 0.0)));
+      }
+      let pleats = fl - 64.0 * floor(fl / 64.0);
+      if (pleats > 0.5) {                        // a pleated piece's hem waves with its folds: up in the valleys
+        let ph = foldPhase(th, 1.0, pleats).x;
+        let v = 0.5 - 0.5 * cos(ph);
+        hem = hem - ${HEM_WAVE} * 6.2831853 * max(girth, 0.01) / pleats * v * v;
       }
       var e = min(s - L0.x, hem - s);
       if (L0.w < 3.14) {
@@ -387,7 +417,7 @@ const makeDressFns = (W, ST) => {
       }
       return min(e, eo);
     }
-  `, [texelFor(W)]);
+  `, [texelFor(W), foldPhase]);
   const dressLift = wgslFn(`
     fn dressLift(sTex: texture_2d<f32>, head: vec4<f32>, s: f32, th: f32, girth: f32, rad: f32) -> f32 {
       let n = i32(head.y + 0.5);
@@ -427,20 +457,61 @@ const makeDressFns = (W, ST) => {
         let pleats = fl - 64.0 * floor(fl / 64.0);
         let wear = floor(fl / 64.0) - 4.0 * floor(fl / 256.0);
         if (pleats > 0.5) {
-          // PLEATS: one field -- its valleys darken the cloth and tilt the normal, so a fold catches the light
-          let ph = pleats * th;
-          c = c * (1.0 - 0.14 * (0.5 - 0.5 * cos(ph)));
+          // FOLDS (2026-10-24; were even pleats, a ribbed cone): "pleats" of them round it, but not evenly -- the
+          // phase is warped by a few slow waves (more so lower down, where they fan out), so they bunch and spread as
+          // cloth falls; shallow gathers at the top of the piece, deepening to the hem. Each is a broad lit ridge and
+          // a narrow dark valley (v squared), and the same profile tilts the normal, so a fold catches the light.
+          let L0 = texel(sTex, ls * ${ST});
+          let t = clamp((s - L0.x) / max(L0.y - L0.x, 0.01), 0.0, 1.0);
+          let gd = foldPhase(th, t, pleats);
+          let g = gd.x;
+          let dg = gd.y;
+          let v = 0.5 - 0.5 * cos(g);
           let fine = 1.0 - smoothstep(0.12, 0.3, px * pleats / (6.2832 * max(girth, 0.01)));
-          *relief = *relief + cross(normalize(radial), axis) * (-0.018 * 0.5 * pleats * sin(ph) * fine / max(girth, 0.01));
+          let amp = (0.35 + 0.65 * t) * fine;
+          c = c * (1.0 - 0.55 * v * v * amp) * (1.0 + 0.14 * (1.0 - v) * amp);
+          *relief = *relief + cross(normalize(radial), axis) * (-1.25 / pleats * amp * v * sin(g) * dg);
         }
         if (wear > 0.5) { c = c * (1.0 - 0.06 * (fract(sin(dot(floor(uv * 3.0), vec2<f32>(12.9898, 78.233))) * 43758.5453) - 0.5)); }
+        // A PATCH (2026-10-24): a worn garment's piece now and then (PATCH.share, by its layer's slot) is darned with a
+        // square of near-matching cloth -- a shade off its own, edged with a dashed stitch -- at a place drawn from the
+        // same hash, round it and down it; gone where it would be finer than a few pixels
+        if (wear > 0.5 && L3.w <= 0.0 && girth > 0.05) {
+          let h1 = fract(sin(f32(ls) * 12.9898 + L2.x * 4.13) * 43758.5453);
+          if (h1 < ${PATCH.share}) {
+            let h2 = fract(h1 * 91.71 + 0.37);
+            let h3 = fract(h1 * 57.13 + 0.71);
+            let L0p = texel(sTex, ls * ${ST});
+            let ps = select(0.12 + 0.25 * h2, mix(L0p.x, L0p.y, 0.3 + 0.4 * h2), L0p.x > -100.0 && L0p.y < 100.0);
+            var pth = th - (h3 - 0.5) * 5.0;
+            pth = pth - 6.2831853 * floor((pth + 3.1415927) / 6.2831853);
+            let q = vec2<f32>(pth * girth, s - ps);
+            let hp = vec2<f32>(${PATCH.w / 2} * (0.8 + 0.4 * h3), ${PATCH.h / 2} * (0.8 + 0.4 * h2));
+            let d = abs(q) - hp;
+            let inP = max(d.x, d.y);
+            if (inP < 0.0 && px < ${PATCH.w / 6}) {
+              c = c * (0.72 + 0.22 * h2) + unpackRGB8(L1.y) * 0.12;
+              let along = select(q.y, q.x, abs(d.y) < abs(d.x));
+              if (inP > -0.007 && fract(along * 55.0) < 0.5) { c = c * 0.62; }
+            }
+          }
+        }
+        if (wear > 0.5 && pleats > 0.5) {
+          // SOILED AT THE HEM (2026-10-24): a skirt that sweeps the street is darker and browner along its lowest hand's
+          // breadth, the line ragged -- the folds' valleys (nearer the ground in a wave) a little higher
+          let L0h = texel(sTex, ls * ${ST});
+          let toHem = L0h.y - s;
+          let rag = 0.025 * sin(th * 23.0 + 1.3 * sin(th * 7.0)) + 0.015 * sin(th * 51.0);
+          let soil = (1.0 - smoothstep(0.0, ${SOIL.h}, toHem + rag)) * ${SOIL.k} * step(${SOIL.len}, L0h.y - L0h.x);
+          c = mix(c, c * vec3<f32>(0.62, 0.55, 0.45), soil);
+        }
         if (e < px * 1.4 + 0.0015) { c = c * 0.7; }              // the stitched edge: a hem, a neckline, a seam
         if (kind > 0.5 && kind < 1.5) { c = c * 0.72; }          // the lining
         return vec4<f32>(c, 1.0);
       }
       return vec4<f32>(skin, 0.0);
     }
-  `, [texelFor(W), layerIn, unpackRGB8]);
+  `, [texelFor(W), layerIn, unpackRGB8, foldPhase]);
   return { layerIn, dressLift, dressAt };
 };
 
@@ -475,6 +546,14 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
     // there; here it is simply drawn -- but its A.w carries the mark's REACH (how far its relief spreads), not
     // a radius, so its girth comes from B.w at both ends, or it is a balloon.
     let mark = part.w > 0.5;
+    // A PLATE'S ROWS BY NUMBER (a membrane, a face mark: 2026-10-24): the centre of its front face, rings out to its rim,
+    // the rim again on the back face, rings in to the back's centre. Laid out by fractions of u (the front to 0.45, the
+    // rim to 0.55), a grid of an odd number of rings had no row in the rim's band at all: every wing membrane was drawn
+    // shrunk to 89% round its middle on the 5-ring grid, and its shared edges opened into wedges (a manticore's wing).
+    let kP = floor(uv.x * nr + 0.5);
+    let mF = max(floor((nr - 1.0) * 0.5), 1.0);
+    let backP = kP > mF;
+    let fP = select(kP / mF, (nr - kP) / max(nr - mF - 1.0, 1.0), backP);   // 0 at a face's centre, 1 on the rim
 
     var P = CA[0].xyz;
     var N = vec3<f32>(0.0, 1.0, 0.0);
@@ -491,6 +570,7 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
     var col = texel(sTex, i32(sl[0] + 0.5) * ${ST}).xyz;
     if (mark) { let ir = texel(sTex, i32(sl[0] + 0.5) * ${ST} + 1).xyz; if (dot(ir, ir) > 1e-6) { col = ir; } }
     var sink = 0.0;
+    var liftK = 1.0;                     // how much further what is worn lifts this point (a joint's mitre: below)
     var ringI: i32 = 0;                  // the part of the chain this vertex's ring lies on (a dressed part wears its own)
     var isCut = false;                   // ...and whether the part is a cut shell (standing cloth: no lift)
 
@@ -519,8 +599,8 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
         break;
       }
       let ang = uv.y * 6.2831853;
-      let rad2 = select(uv.x / 0.5, (1.0 - uv.x) / 0.5, uv.x > 0.5);   // 0 at the centre, 1 at the rim, both halves
-      let face = select(1.0, -1.0, uv.x > 0.5);
+      let rad2 = fP;                       // 0 at the centre, 1 at the rim, both halves
+      let face = select(1.0, -1.0, backP);
       P = c0 + uu * (rad2 * cos(ang)) + vv * (rad2 * sin(ang)) + outw * (0.0006 * face + 0.0012);
       N = outw;
       // an EYE is not one colour: the composite engine paints a dark rim, the iris inside it and a pupil in
@@ -596,16 +676,10 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
       // notch at the top of a frill -- is filled from inside. (Floored at SHELL.thin so a plate with no
       // rounding of its own is still a plate, capped by its own size so nothing becomes a brick.)
       let th = clamp(rIn, thin, 0.06 * per / 3.0);
-      if (uv.x < 0.45) {                   // the front face, flat
-        P = mix(g, rim, uv.x / 0.45) + nrm * th;
-        N = nrm;
-      } else if (uv.x > 0.55) {            // the back face, flat
-        P = mix(g, rim, (1.0 - uv.x) / 0.45) + nrm * (-th);
-        N = -nrm;
-      } else {                             // the rim
-        P = rim + nrm * (th - 2.0 * th * (uv.x - 0.45) / 0.1);
-        N = out;                           // (the rim's own outward direction, already squared to the plate)
-      }
+      // the front face, flat, out to the rim; the back face back from it (the rim between them is the strip from the one
+      // to the other -- A PLATE'S ROWS BY NUMBER, above)
+      P = mix(g, rim, fP) + nrm * select(th, -th, backP);
+      N = select(nrm, -nrm, backP);
       girthHere = max(per / 6.0, 0.004);
       let pq = P - g;
       let pu = normalize(select(vec3<f32>(1.0, 0.0, 0.0), b - a, dot(b - a, b - a) > 1e-12));
@@ -616,9 +690,31 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
       // THE ENDS GET THEIR OWN SHARE OF THE CUTS. Spreading them evenly over (cnt + 1) units gives each cap
       // half a unit, so a four-part body left under one ring per cap and the ends came to a cone. A fifth of
       // the cuts goes to each cap whatever the chain's length; the rest walk its spans.
+      // THE RINGS BY NUMBER (2026-10-24): a JOINT is always a ring of its own, at every detail. Spread by fractions
+      // of u, an arm's elbow fell between two rings on the middle grid (5 rings: past a few metres), and a bent arm
+      // was drawn as one chord from the upper arm to the forearm. Each cap gets its share of the grid's rings, each
+      // span of the chain a whole number of the rest, so its joints fall on ring boundaries. (Too few rings for one
+      // per span -- a long tail far off -- spreads them by fractions as before.)
       let capF = 0.2;
       var x = 0.0;
-      if (uv.x < capF) { x = (uv.x / capF - 1.0) * 0.5; }
+      let kR = floor(uv.x * nr + 0.5);
+      let capR = max(1.0, floor(nr * capF + 0.5));
+      let spanR = nr - 2.0 * capR;
+      if (spanR >= f32(cnt) && ${SHELL.seam ? "true" : "false"}) {
+        if (kR < capR) { x = (kR / capR - 1.0) * 0.5; }
+        else if (kR > nr - capR) { x = f32(cnt) + (kR - (nr - capR)) / capR * 0.5; }
+        else {
+          let m = kR - capR;
+          var j: i32 = 0;
+          loop {
+            if (j + 1 >= cnt || m < floor(f32(j + 1) * spanR / f32(cnt) + 0.5)) { break; }
+            j = j + 1;
+          }
+          let m0 = floor(f32(j) * spanR / f32(cnt) + 0.5);
+          let m1 = floor(f32(j + 1) * spanR / f32(cnt) + 0.5);
+          x = f32(j) + (m - m0) / max(m1 - m0, 1.0);
+        }
+      } else if (uv.x < capF) { x = (uv.x / capF - 1.0) * 0.5; }
       else if (uv.x > 1.0 - capF) { x = f32(cnt) + ((uv.x - (1.0 - capF)) / capF) * 0.5; }
       else { x = (uv.x - capF) / (1.0 - 2.0 * capF) * f32(cnt); }
       let i = clamp(i32(floor(x)), 0, cnt - 1);
@@ -657,28 +753,38 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
       // the two ends that meet there) and leaves again from it, so both spans agree at the hand-over and the
       // shape between them is smooth. It does NOT extrapolate the neighbour's cone into this span -- a head
       // between a neck and a muzzle would be squeezed by both of them and come away from its own muzzle.
+      //   A JOINT BETWEEN TWO LONG SPANS (an elbow, a knee, a hock: each span longer than the joint is thick) is a
+      // MITRE instead -- see "THE JOINT IS A SEAM" below: each span keeps its own axis right up to the joint, and only
+      // the girth hands over. (Turning the rings' direction toward the other span over the last half of each, as
+      // these still do, pinched a bent elbow to cos(half the bend) of its girth and bowed both bones into it.)
       let tubeI = CB[i].w < -1.5;          // THIS span's own curve (a chain may be all tubes: a tail)
+      var mitF = false;                    // the far joint, the near one: mitred
+      var mitN = false;
       if (i + 1 < cnt && !tubeI && CB[i + 1].w >= -1.5) {   // the far joint
+        let a2 = CA[i + 1].xyz;
+        let b2 = CB[i + 1].xyz;
+        let L2 = max(length(b2 - a2), 1e-4);
+        let rJ = mix(CB[i].w, abs(CK[i + 1].x), 0.5);
+        mitF = min(Li, L2) > 2.0 * rJ && ${SHELL.seam ? "true" : "false"};
         let w = smoothstep(0.55, 1.0, t);
         if (w > 0.0) {
-          let a2 = CA[i + 1].xyz;
-          let b2 = CB[i + 1].xyz;
-          let L2 = max(length(b2 - a2), 1e-4);
           cen = mix(cen, mix(bi, a2, 0.5), w);
-          rr = mix(rr, mix(CB[i].w, abs(CK[i + 1].x), 0.5), w);
-          dir = normalize(mix(dir, (b2 - a2) / L2, w * 0.5));
+          rr = mix(rr, rJ, w);
+          if (!mitF) { dir = normalize(mix(dir, (b2 - a2) / L2, w * 0.5)); }
           slope = mix(slope, (CB[i + 1].w - abs(CK[i + 1].x)) / L2, w * 0.5);
         }
       }
       if (i > 0 && !tubeI && CB[i - 1].w >= -1.5) {         // ...and the near one
+        let a0 = CA[i - 1].xyz;
+        let b0 = CB[i - 1].xyz;
+        let L0 = max(length(b0 - a0), 1e-4);
+        let rJ = mix(CB[i - 1].w, abs(CK[i].x), 0.5);
+        mitN = min(Li, L0) > 2.0 * rJ && ${SHELL.seam ? "true" : "false"};
         let w = 1.0 - smoothstep(0.0, 0.45, t);
         if (w > 0.0) {
-          let a0 = CA[i - 1].xyz;
-          let b0 = CB[i - 1].xyz;
-          let L0 = max(length(b0 - a0), 1e-4);
           cen = mix(cen, mix(b0, ai, 0.5), w);
-          rr = mix(rr, mix(CB[i - 1].w, abs(CK[i].x), 0.5), w);
-          dir = normalize(mix(dir, (b0 - a0) / L0, w * 0.5));
+          rr = mix(rr, rJ, w);
+          if (!mitN) { dir = normalize(mix(dir, (b0 - a0) / L0, w * 0.5)); }
           slope = mix(slope, (CB[i - 1].w - abs(CK[i - 1].x)) / L0, w * 0.5);
         }
       }
@@ -791,6 +897,76 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
         let dPdA = vv * rS + rad * dRdA;
         let dPds = ax + rad * dRds;
         N = normalize(cross(dPdA, dPds));
+        // THE JOINT IS A SEAM (2026-10-24), shared by the two spans that meet there: the ring ON the joint is where
+        // both cones cross the plane halfway between their directions (the mitre), and every point of a span is kept
+        // on its own side of that plane, moved along its own axis onto it if it lies past (the inside of a bend,
+        // where the two would pass through each other). One ring of points, the same seen from either side, which
+        // moves with both -- a sleeve bends at the elbow as one sheet. Its normal is the two cones' mean, so the
+        // crease shades soft; and what is worn lifts it further along that normal (liftK: the mitre is wider than
+        // either cone's ring by 1 / cos of half the bend).
+        if (!tubeI && (mitN || mitF)) {
+          let seam = mitN && tl < 1e-4;
+          var other = vec3<f32>(0.0);
+          for (var e: i32 = 0; e < 2; e = e + 1) {
+            let k = select(i + 1, i - 1, e == 0);
+            if ((e == 0 && !mitN) || (e == 1 && !mitF)) { continue; }
+            let dk = normalize(CB[k].xyz - CA[k].xyz);
+            let Jk = select(mix(bi, CA[k].xyz, 0.5), mix(CB[k].xyz, ai, 0.5), e == 0);
+            let nk = normalize(dir + dk);       // (the plane's normal, pointing on along the chain)
+            let sd = dot(P - Jk, nk);
+            let past = select(sd > 0.0, sd < 0.0, e == 0) || (seam && e == 0);
+            if (past) {
+              P = P - dir * (sd / max(dot(dir, nk), 0.2));
+              let q = P - Jk;
+              other = normalize(q - dk * dot(q, dk));
+            }
+          }
+          if (dot(other, other) > 0.5) {
+            let own = N;
+            N = normalize(N + other);
+            liftK = 1.0 / max(dot(N, own), 0.25);
+          }
+        }
+      }
+      // A LIMB'S ROOT (2026-10-24): an arm's top is the shoulder, a leg's the hip -- they belong to the body as much as to
+      // the limb. Swept rigidly with the limb, the arm's round top swung out behind the shoulder as the arm came forward
+      // (a sleeve that is a separate tube stuck on). A part flagged root (its length in its dress header's z, negative;
+      // its rest axis kept by composite.js restAxes, in the figure's frame) keeps its cap at that rest, and its rings turn
+      // from the rest to the limb's own axis over its first root metres, about the joint: a skinned shoulder -- the
+      // sleeve's top stays sewn in where it was, and the arm bends out of it.
+      let RS2 = texel(sTex, i32(sl[0] + 0.5) * ${ST} + 2);
+      let RS1 = texel(sTex, i32(sl[0] + 0.5) * ${ST} + 1);
+      let rootL = -RS2.z;
+      if (rootL > 1e-4 && RS1.w < -0.5 && RS1.w > -1.5 && RS2.w > 0.5 && !tubeI && ${SHELL.seam ? "true" : "false"}) {
+        let a0 = CA[0].xyz;
+        let d0v = CB[0].xyz - a0;
+        let L0r = max(length(d0v), 1e-4);
+        let wR = select(1.0 - smoothstep(0.0, rootL / L0r, x), 1.0, x < 0.0);
+        if (wR > 0.0) {
+          let ur = i32(RS2.w + 0.5);
+          var upR = texel(tex, (ur - 1) * 3 + 1).xyz - texel(tex, (ur - 1) * 3).xyz;
+          upR = select(upB, normalize(upR), dot(upR, upR) > 1e-10);
+          var fwR = fwB - upR * dot(fwB, upR);
+          fwR = select(fwB, normalize(fwR), dot(fwR, fwR) > 1e-8);
+          let lfR = normalize(cross(fwR, upR));
+          let r0 = normalize(fwR * RS1.x + upR * RS1.y + lfR * RS1.z);
+          let d0 = d0v / L0r;
+          var kx = cross(d0, r0);
+          let sn = length(kx);
+          if (sn > 1e-4) {
+            kx = kx / sn;
+            // (held back no further than its length can bend without folding: a ring's inner side passes the next one's once
+            //  the turn per metre times the radius passes 1, and smoothstep turns 1.5 times its mean rate at its steepest -- an
+            //  arm straight up kept its top hanging, and the inside of that turn came out over the shoulder as a spike)
+            let held = min(atan2(sn, dot(d0, r0)), rootL / (1.8 * max(abs(CK[0].x), 0.01)));
+            let phi = held * wR;
+            let cR = cos(phi);
+            let sR = sin(phi);
+            let q = P - a0;
+            P = a0 + q * cR + cross(kx, q) * sR + kx * (dot(kx, q) * (1.0 - cR));
+            N = N * cR + cross(kx, N) * sR + kx * (dot(kx, N) * (1.0 - cR));
+          }
+        }
       }
       girthHere = max(rS, 0.004);
       loc = vec3<f32>(along, rA * cos(ang), rA * sin(ang));
@@ -1072,8 +1248,24 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
           let upD = ${viewSpace ? "(view * vec4<f32>(0.0, 1.0, 0.0, 0.0)).xyz" : "vec3<f32>(0.0, 1.0, 0.0)"};
           let lfD = normalize(cross(fwD, upD));
           let thD = atan2(dot(qd, lfD), dot(qd, fwD));
-          P = P + N * dressLift(sTex, texel(sTex, i32(rs + 0.5) * ${ST} + 2), sL, thD, max(length(qd), 0.004), length(qd));
+          P = P + N * liftK * dressLift(sTex, texel(sTex, i32(rs + 0.5) * ${ST} + 2), sL, thD, max(length(qd), 0.004), length(qd));
         }
+      }
+    }
+    // FLEECE (bit 512): wool heaped in lumps -- the surface pushed out by a field of blobs fixed to the animal (in its
+    // root's frame: forward, up, left from the part's A end), ${FLEECE.size} m across, up to ${FLEECE.amp} m proud
+    if (!mark && !triPart && !isCut) {
+      let fl5 = texel(sTex, i32(CK[ringI].w + 0.5) * ${ST}).w;
+      if (floor(fl5 / 512.0) - 2.0 * floor(fl5 / 1024.0) > 0.5) {
+        let q0f = texel(tex, base * 3).xyz;
+        var fwF = texel(tex, base * 3 + 1).xyz - q0f;
+        fwF = select(vec3<f32>(1.0, 0.0, 0.0), normalize(fwF), dot(fwF, fwF) > 1e-10);
+        let upF = ${viewSpace ? "(view * vec4<f32>(0.0, 1.0, 0.0, 0.0)).xyz" : "vec3<f32>(0.0, 1.0, 0.0)"};
+        let lfF = normalize(cross(fwF, upF));
+        let rel = P - q0f;
+        let l = vec3<f32>(dot(rel, fwF), dot(rel, upF), dot(rel, lfF)) * ${(6.2832 / FLEECE.size).toFixed(3)};
+        let b = sin(l.x + 1.3 * sin(l.z * 0.7)) * sin(l.y + 1.3 * sin(l.x * 0.8)) * sin(l.z + 1.3 * sin(l.y * 0.9));
+        P = P + N * (${FLEECE.amp} * (0.55 + 0.45 * b));
       }
     }
     P = P - N * sink;
@@ -1185,6 +1377,7 @@ const shellShade = (W, ST, viewSpace) => wgslFn(`
     let pat = floor(low / 8.0);
     let bodyFrame = (low - 8.0 * floor(low / 8.0)) >= 4.0;
     let furry = (floor(flags / 256.0) - 2.0 * floor(flags / 512.0)) > 0.5;
+    let fleecy = (floor(flags / 512.0) - 2.0 * floor(flags / 1024.0)) > 0.5;
     let code = floor(max(S1.w, 0.0) + 0.5);
     let ua = unpackAw(A.w);
     let r = max(max(abs(ua.x), B.w), girth);
@@ -1288,6 +1481,12 @@ const shellShade = (W, ST, viewSpace) => wgslFn(`
         c = patternAt(c, pat, pl, r, patPx, patAx);
       }
       if (furry) { c = furAt(c, pl0, patPx); }
+      if (fleecy) {   // (FLEECE's small lumps, in the light: dark crevices between the locks -- finer than the vertices can heap)
+        let lq = pl0 * ${(6.2832 / FLEECE.lock).toFixed(3)};
+        let b = sin(lq.x + 0.9 * sin(lq.z * 0.6)) * sin(lq.y + 0.9 * sin(lq.x * 0.7)) * sin(lq.z + 0.9 * sin(lq.y * 0.8));
+        let fade = 1.0 - smoothstep(${FLEECE.lock / 6}, ${FLEECE.lock / 2.5}, patPx);
+        c = c * (1.0 - ${FLEECE.crease} * fade * (1.0 - smoothstep(-0.6, 0.4, b)));
+      }
     }
     return c * shadeOf(nn);
   }
@@ -1299,6 +1498,7 @@ const shellShade = (W, ST, viewSpace) => wgslFn(`
 //   touch       composite.js's partial upload: only the instances a frame listed go up
 //   ends        the herd's posed world endpoints for a part: what the chains are worked out from
 const SLOTS = ["part", "ch", "ch2", "nb"];
+const SHELL_ROOM = 4096;   // chains a bucket has room for from the start (grow(): growing later is broken)
 const attrName = (n) => "a" + n[0].toUpperCase() + n.slice(1);
 export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends }) {
   const uBlend = uniform(SHELL.blend), uThin = uniform(SHELL.thin), uLift = uniform(SHELL.mark), uSkin = uniform(SHELL.skin);
@@ -1328,7 +1528,7 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
     const wire = () => {
       const on = QUADS.value > .5;
       mat.wireframe = on;
-      mat.colorNode = on ? vec3(0.15, 0.5, 1.0) : shaded;
+      mat.colorNode = on ? vec3(0.15, 0.5, 1.0) : shaded.mul(sunShade(viewSpace ? cameraWorldMatrix.mul(vec4(vP.xyz, 1.0)).xyz : vP.xyz, normalize(vN.xyz)));   // (in a building's shadow too: sunshadow.js)
       mat.needsUpdate = true;
     };
     wire();
@@ -1351,7 +1551,7 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
   for (const [far, rings, divs] of SHELL.lod) for (let c = 0; c < LENGTHS.length; c++) {
     const b = { far, cls: c, rings: Math.max(4, Math.round(rings * LENGTHS[c])), divs, n: 0, want: 0 };
     b.geo = shellGrid(b.rings, divs);
-    setArrays(b, 64);                          // grown as a bucket fills: most of the nine stay small
+    setArrays(b, SHELL_ROOM);                  // (room for a whole town's crowd from the start: see grow())
     b.mesh = new THREE.Mesh(b.geo, material);
     b.mesh.frustumCulled = false;
     b.mesh.userData.sdf = true;   // its triangles are built in the vertex shader: no override material, no CPU wire
@@ -1418,8 +1618,21 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
       }
     },
     // between frames (the herd's update): give any bucket that ran out of room the space it asked for
+    // A BUCKET GROWN AFTER IT HAS BEEN DRAWN STILL DRAWS ONLY ITS OLD ROOM (found 2026-10-24, not solved): a
+    // hedgehog of 137 chains in a near bucket grown 64 -> 256 showed its first 64 -- the stats say all 137 were
+    // listed. Disposing the geometry, giving the bucket a new grid as setDetail does, or setting the shared material's
+    // needsUpdate, or a brand-new Mesh for the bucket (a fresh render object) changed nothing -- so it is not three's
+    // binding or caching. Nor the fill: after the growth the CPU arrays hold every chain and three uploads them (the
+    // versions move, the ranges clear), and full uploads every frame (DynamicDrawUsage) changed nothing either; a bucket
+    // BORN with the room draws them all, and so does one grown before its first draw (the far ones, at startup). So
+    // every bucket starts with SHELL_ROOM (a far bucket held 3224 chains in a
+    // whole town; 4 x 16 bytes a chain, nine buckets: ~2.4 MB, and a frame draws and uploads only what it lists).
+    // Past it the bucket still grows, as before -- and would show the bug
     grow() {
-      for (const b of buckets) if (b.want > b.room) { setArrays(b, b.want); b.want = 0; }
+      for (const b of buckets) if (b.want > b.room) {
+        if (b.room >= SHELL_ROOM) console.warn(`shell: a bucket (${b.rings}x${b.divs}) grew past ${b.room} chains after drawing -- the known bucket bug (docs/engines.md): parts past the old room may go undrawn; raise SHELL_ROOM`);
+        setArrays(b, b.want); b.want = 0;
+      }
     },
     // HOW FINE THE SWEEP IS, live. Each bucket is a GRID -- so many rings up the chain, so many points round a
     // cut -- and `k` multiplies both: 2 is twice the rings and twice the points (four times the triangles), .5
@@ -1455,6 +1668,6 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
     },
     resize() { },                              // (the buckets grow on their own as they fill)
     stats: () => buckets.filter((b) => b.n).map((b) => ({ far: b.far, rings: b.rings, divs: b.divs,
-      chains: b.n, tris: b.n * b.rings * b.divs * 2 })),
+      chains: b.n, room: b.room, want: b.want, tris: b.n * b.rings * b.divs * 2 })),
   };
 }

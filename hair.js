@@ -58,12 +58,12 @@ export function hairGeometry(p, P, emitFor, prims) {
   // OFF THE BODY: below the chin, hair lies over the neck and then the shoulders and the back -- a point inside the
   // body's section there (an ellipse growing from the neck's to the shoulders' over 12cm, in the head's canonical
   // frame) is pushed out onto it, so long hair falls over the back rather than into the dress
-  const offBody = (q) => {
+  const offBody = (q, out = 1.04) => {   // (out: how far over the body's section -- the strands a little over a sheet under them)
     const yN = -.05;   // (from the nape down: the back of the neck and the collar are there before the chin is)
     if (q[1] > yN) return q;
     const t = Math.min(1, (yN - q[1]) / .12), cx = -.015, a = lerp(.06, .145, t), b = lerp(.065, .21, t);
     const k = Math.hypot((q[0] - cx) / a, q[2] / b);
-    return k < 1.04 && k > 1e-6 ? [cx + (q[0] - cx) * 1.04 / k, q[1], q[2] * 1.04 / k] : q;
+    return k < out && k > 1e-6 ? [cx + (q[0] - cx) * out / k, q[1], q[2] * out / k] : q;
   };
   // a ribbon along a polyline: `w` wide at the root tapering to the tip, its face turned out from the head
   const ribbon = (pts, w0, w1, uv0) => {
@@ -108,7 +108,7 @@ export function hairGeometry(p, P, emitFor, prims) {
         const k = rho(next);
         if (k < 1.06 && k > 1e-4) { next = [next[0] * 1.06 / k, next[1], next[2] * 1.06 / k]; dir = norm(sub(next, pos)); }
       }
-      pos = to ? next : offBody(next);
+      pos = to ? next : offBody(next, 1.09);
       let q2 = pos;
       if (wave) { const across = norm(cross(dir, outward(pos))); q2 = add(q2, mul(across, wave.amp * Math.sin(t * len / wave.per * 6.2832 + ph))); }
       if (curl) { const across = norm(cross(dir, outward(pos))), o = outward(pos), a = t * len / curl.per * 6.2832 + ph; q2 = add(q2, add(mul(across, curl.r * Math.cos(a)), mul(o, curl.r * (Math.sin(a) + 1) * .5))); }
@@ -313,7 +313,7 @@ export function hairGeometry(p, P, emitFor, prims) {
       const len = x.length ?? .3, seg = 8, w = x.width ?? .05, pts = [];
       let pos = at.slice(), dir = norm(x.dir ?? [-.3, -1, 0]);
       for (let i = 0; i <= seg; i++) { pts.push(pos.slice()); dir = norm(add(dir, mul([0, -1, 0], (x.hang ?? .6) * len / seg * 3))); pos = add(pos, mul(dir, len / seg)); }
-      if (x.kind === "rope") prims.tube("hair", pts.map((q) => mul(q, S)), [w * .5 * S, w * .45 * S, w * .25 * S]);
+      if (x.kind === "rope") prims.tube("hair", pts.map((q) => mul(q, S)), [w * .45 * S, w * .55 * S, w * .3 * S]);   // (fuller below the tie than at it, then to a point)
       else for (let s3 = 0; s3 < 3; s3++) {   // a plait: three strands winding round the path, a third of a turn apart
         const tw = pts.map((q, i) => { const t = i / seg, a = t * len / (x.per ?? .08) * 6.2832 + s3 * 2.094, d = norm(sub(pts[Math.min(seg, i + 1)], pts[Math.max(0, i - 1)])), o = norm(cross(d, [0, 0, 1]) ), b = norm(cross(d, o));
           return mul(add(q, add(mul(o, Math.cos(a) * w * .3), mul(b, Math.sin(a) * w * .3))), S); });

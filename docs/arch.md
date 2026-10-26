@@ -1097,6 +1097,8 @@ outside the cover). Undersides are left alone in the scan (two bottoms on the gr
 not removed from the definitions: the overlapping solids still stand (the walk's floors and walls are unchanged).
 Also fixed at the source: the centaur's kind (species.js `tauric`) lost its man's mesh head -- makePerson's upper body
 returned before the face was made.
+And (2026-10-24) it no longer carries the animal's `mane`: mammals.js reports a mane by its neck's and head's part
+INDICES, and with the neck and head dropped those indices fell on a leg, which wore the horse's mane of thorns.
 
 ## Mills that grind, and an open longhouse (2026-10-03)
 
@@ -1133,3 +1135,45 @@ and 10 cm; a stair's approach). A set that fails is moved, as one and turned as 
 `assemble()` returns what it did as `fitted`; `check.js furnishing` asks the same test of what stands (none, once
 assembled). The beds now stand beside the chimney, the tables and benches clear of the forge, the oven, the bar and
 the doorway; Florence's seating zone was narrowed to clear the piers itself, so its pews need no moving.
+
+## Joists under the floors (2026-10-24)
+
+The town houses (tools/archgen/village.py) carry `joists 1` / `joists 2`: a 14 x 16 cm beam across the house every
+0.75 m under the upper floors' slabs, the ceiling's timbers seen from the room below -- only beside the stair's two
+columns (the flights' headroom, tuned to the walker, is untouched); they span the house's width within its walls (a
+jetty's joist ends, out through the front, are not drawn). town.js `houseSpec` builds them with their floor; they take the house's woodwork (`WOODWORK`).
+
+## String courses (2026-10-24)
+
+The town houses but the jettied one carry `course 1` / `course 2`: an enclosure band 16 cm high standing 6 cm proud of
+the walls at each upper floor's line, in the town's fine stone (town.js houseFinish: `S.fine`) -- the storeys read on
+a plastered front as on a stone one. The jettied house has its jetty for that.
+**Quoins** (`quoins`, `quoins b`): dressed stones up each corner of a town house, long and short in turn, 2 cm proud of
+both faces, in the fine stone -- town.js builds them only on a plastered or stone house (no timber frame on the ground
+or upper storeys: drawn after the house's look) and not on the jettied one.
+**Plinth** (`plinth`, `plinth shop`): a low wall of the town's rough stone round the foot of every town house but the
+stone one, 55 cm high and 4 cm proud, cut for the door (or the shop's arch) -- what a framed or plastered house stands
+on. (An enclosure's opening may not rise above the wall: the cut is the plinth's own height.)
+
+## A fireplace, not a box (2026-10-24)
+
+`furniture/hearth` (village.py): the raised hearth now has two jambs up to its hood, the hood a flue on up to the
+ceiling (it had hung in the air), and a sooted brick fireback against the wall behind the fire (town.js: the rule
+`hearth/fireback`, iron-black brick, before the hearth's own stone). The furniture check: no change in any house.
+**Jetty joist ends** (`jetty 1`, `jetty 2`): under a jettied house's overhang, front and back, its floor's joists show as
+a row of beam ends every half metre (woodwork) -- the jettied house's mark where the others have string courses.
+**The church tower's courses** (`tower courses`): two bands 12 cm proud round the tower at its stages -- over the door's
+storey and under the belfry. **Arched doorways** get a keystone at the crown (windowframes.js: frameDoors' `arched`;
+the church's, the stone houses'), and their doorstep like any door; woodpiles stand only by plain doors.
+**Planed wood indoors** (town.js houseFinish, churchFinish: `WOODWORK` -- furniture, stairs, joists, pews -- in
+`timber/wood`, the pattern meant for them): the coarse `timber/bark` read as zebra stripes on a bar counter. Bark stays
+on the yards' posts, the longhouse's rustic woodwork and its frame, and the wall-walk's rails. The ITEMS' woods too
+(assets/items/materials.json `oak`, `pine`, `oak-grey`: furniture, stalls, carts, ships, tool handles) are planed wood
+now -- the market's counters were striped bark.
+**Windmill sails with their lattice** (tools/propgen.py `components/windmill-arm`): the cloth now has its bars across
+every ~45 cm and the hemlath along its outer edge in front of it -- it was a plain board. (Regenerating propgen rewrote
+all 44 props; only the arm's content changed.)
+**The fisherman's hut** (tools/archgen/riverside.py finish): its reed roof's gable ends -- vertical faces, a wall to
+`surface` -- took the catch-all floorboards, a big plank triangle under the thatch. The roof is now thatch by its part
+alone (its underside boards), and the walls weatherboard (floorboards stood in for them). (The watermill's gable ends
+are stone, as its walls: right for a stone mill.)

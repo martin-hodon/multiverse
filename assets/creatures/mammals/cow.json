@@ -3,7 +3,13 @@
   "graze": 1.0,
   "rest": 0.75,
   "beg": 10,
-  "young": {"s": 0.55, "n": 1, "side": 1.4, "hop": 0.1, "name": "calf"},
+  "young": {
+    "s": 0.55,
+    "n": 1,
+    "side": 1.4,
+    "hop": 0.1,
+    "name": "calf"
+  },
   "kind": "mammal",
   "headScale": 0.73,
   "headTurn": 12,
@@ -51,12 +57,14 @@
     0.27
   ],
   "muzzle": [
-    1.5,
-    1.18,
+    1.3,
+    1.27,
+    0,
+    1.62,
+    1.14,
     0,
     0.2,
-    0.13,
-    0.15
+    0.14
   ],
   "ears": [
     1.26,
@@ -88,15 +96,16 @@
       0.32
     ],
     "radii": [
-      0.11,
-      0.08,
-      0.06
+      0.13,
+      0.085,
+      0.065
     ],
     "foot": [
       0.09,
       0.05,
       0.08
-    ]
+    ],
+    "thigh": 1.5
   },
   "tail": {
     "c": [
@@ -119,18 +128,52 @@
       "id": "horn",
       "parent": "head",
       "from": [
-        1.3,
-        1.5,
-        0.13
+        1.27,
+        1.48,
+        0.14
       ],
       "to": [
-        1.34,
-        1.72,
-        0.32
+        1.31,
+        1.6,
+        0.36
       ],
       "r1": 0.035,
       "r2": 0.012,
       "color": "#d8cbb0",
+      "mirror": true
+    },
+    {
+      "when": "grown",
+      "id": "udder",
+      "parent": "body",
+      "ell": [
+        -0.52,
+        0.56,
+        0,
+        0.15,
+        0.1,
+        0.13
+      ],
+      "color": "#e3b4a4",
+      "k": 0.05
+    },
+    {
+      "when": "grown",
+      "id": "teat",
+      "parent": "body",
+      "from": [
+        -0.47,
+        0.5,
+        0.05
+      ],
+      "to": [
+        -0.47,
+        0.43,
+        0.055
+      ],
+      "r1": 0.018,
+      "r2": 0.014,
+      "color": "#d9a090",
       "mirror": true
     }
   ],
@@ -142,5 +185,10 @@
     "foot": "#3a2e22",
     "tail": "#cfc6ae",
     "eye": "#2b1b10"
-  }
+  },
+  "params": {
+    "grown": true
+  },
+  "_quality": "2026-10-24: a broad tapered muzzle (mammals.js: a muzzle of two ends is a tapered pill), sturdier legs with a full thigh, horns out to the sides, an udder with teats on the grown (`grown`: false on a calf, species.js makeYoung)",
+  "print": "cloven"
 }

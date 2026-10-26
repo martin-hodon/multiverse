@@ -1097,6 +1097,32 @@ the joints carries a chest's girth all the way down a neck (and a mane lying alo
 it), and extrapolating each neighbour's cone into this span squeezes a short part from both sides (a horse's
 head shrank until its muzzle floated free).
 
+**A joint between two long spans is a SEAM** (2026-10-24; an elbow, a knee, a hock -- each span longer than twice the
+joint's girth). The hand-over above also turned each ring's direction halfway toward the next span over the last half
+of each: a bent elbow was pinched to cos(half the bend) of its girth and both bones bowed into it, and a sleeve read as
+two tubes stuck together. Now each span keeps its own axis up to the joint, and the ring ON the joint is where both
+cones cross the plane halfway between their directions -- the mitre, one ring of vertices the strips on both sides
+share, the same point seen from either side (with the least-rotation frames, reflecting a ring across that plane is
+the same as turning it with the bend). Every other point of a span is kept on its own side of the plane: one past it
+(the inside of the bend) slides back along its own axis onto it. Its normal is the two cones' mean, and what is worn
+lifts it 1/cos further (the mitre is that much wider). Only the girth still hands over.
+  **The rings by number.** The joints must be rings, at every detail: spread by fractions of u, the elbow fell between
+two rings on the 5-ring grid (past a few metres) and a bent arm was one chord. Each cap gets a fifth of the grid's
+rings, each span a whole number of the rest, joints on the boundaries (a chain with more spans than rings -- a tail far
+off -- spreads them as before).
+  **A plate's rows by number too** (a membrane, a face mark). Its front face ran to u = 0.45, the rim to 0.55, the back
+face after: a grid of an odd number of rings (the middle band's 5) had no row in the rim's band, the faces stopped at 89%
+of the way out, and every membrane was drawn shrunk round its middle -- the shared edges of a manticore's wing opened into
+wedges, and a mark was drawn at 80%. Now: the front face's centre, rings out to a row ON the rim, the rim again on the
+back, rings in. A rule for every lathe here: where a row must be, give it a row number, never a fraction of u.
+  **A limb's root** (people.js `root`: arms and legs). Between chains there is no shared ring -- the arm is its own
+shell beside the torso -- and its round top swung out behind the shoulder as the arm came forward. A root part keeps its
+bind-pose axis (composite.js restAxes, now from skeleton.js `bindDir` -- the pose with no motion, not the first frame
+drawn); its cap stays at that rest, and its rings turn from the rest to the limb's own axis over its first `root`
+metres about the joint -- a skinned shoulder, the sleeve's top staying where it is sewn in. Held back at most as far as
+that length can bend without the inside folding (an arm straight up made a spike of it). `?shellseam=0` draws the
+joints as before, to compare.
+
 **The torso is a SPINE, in the data** (mammals.js). It used to be two lobes -- a rump capsule along x and a
 chest ellipsoid crossing it, overlapping in the middle. As an SDF those melt into one body; as geometry they
 are two shapes at right angles, and no sweep can make one lathe of them, so every quadruped read as two balls
@@ -1662,3 +1688,65 @@ objects that differed only in a texture or a shape: 159 materials among 249 obje
 Measured headless at the market, CPU per frame: 7.16 -> 5.21 ms; three's submit 4.09 -> 2.29 ms; objects walked
 249 -> ~130. (three's `drawCalls` still counts each batched copy, so it fell less: 255 -> 152.)
 
+
+## Animals: wedge heads, wool, ears (2026-10-24)
+
+- **A muzzle of two ends** (`mammals.js`): `muzzle: [ax, ay, az, bx, by, bz, rA, rB]` is a TAPERED pill from inside
+  the skull to the nose, where the old ellipsoid became a capsule -- a box on the head. The horse's head is one now
+  (frames/horse.json `_proportions`: the trunk shorter and shallower, the neck deep at the chest, full thighs, round
+  hooves, a tail widening as its hair falls), and the cow's (with an udder and teats `"when": "grown"` -- `species.js
+  makeYoung` builds the young with `grown` false).
+- **FLEECE** (`fleece`: the ids of the pieces it covers -- the sheep frame's trunk, neck and cap; stat bit 512): the
+  shell's vertices heaped out by a field of blobs fixed in the animal's root frame (`shell.js FLEECE.size`, `amp`), and
+  in the fragment the small locks' crevices darkened (`lock`, `crease`; faded where finer than a pixel).
+- **Ears flick** (`anim.flick`: that power of the sine's crest -- a quick twitch now and then), and the idle parts (head,
+  ears, tail) run each animal on its own beat (`an.idx`): a herd no longer looked about in step.
+- **Heads nod with the step** (`walkNod` degrees, a necked mammal 4 by default, the horse frame 7; skeleton.js
+  `stepNod` into the neck's nod): twice a stride, fading as the walker stops, halved at a run.
+- **Soiled hems** (shell.js `SOIL`): a long pleated piece (a skirt sweeping the street) darker and browner along its
+  lowest hand's breadth, the line ragged.
+- **Coats** (a species asset's `coats`: colour tables over its own; `species.js coatDef(species, k)`, built once each):
+  the stables' horses bay, chestnut, black, grey, dun, some with white socks (`sock`: the lower legs' colour,
+  mammals.js) and one with a pale snip -- every other coat from a start the town's seed picks, so the socked ones come
+  up; the shepherd's flock has a black sheep and a cream one, the pigs pink, ginger or black, the dog a black sheepdog.
+- **A horse's mane of locks** (manes.js `arc`: a CREST along the top of the neck instead of a ring round it -- the
+  lattice open at its edges; frames/horse.json mane an ellipsoid with `thorns`): locks from the withers to the poll,
+  swept back and up, a little to the side, varied -- in each coat's mane colour. It was a pill mostly inside the neck
+  (a dark wedge at the poll). The game draws thorn manes; the menagerie bench does not.
+- **The fox's brush** (fox.json tail widening .065 -> .1 and a white tip; mammals.js arcChain `tuftOut`: the tuft set past
+  the tail's end, not buried in a wide one).
+
+### The hen (assets/creatures/birds/chicken.json, 2026-10-24)
+The hen was separate faceted balls (body, head, tail fan) with no blend and the classic border band, and from across
+the yard they read as stones. It is still a `parts` creature, now drawn as one blended figure. Every part has
+`edge: 0` (only the outer outline) and a smooth-union `k`. The body is a `tube`: low and round in front, rising to the
+back, with a breast sphere blended into it. A tube tail rises up and back, and the folded wings are flattened spheres.
+A part with id `neck` (a tube from its root) makes the rig nod the neck and the head together about the neck's root,
+so a peck bends the neck and is no longer a head swinging loose. The comb is four small beads; there are wattles,
+ear lobes, eyes (face marks), legs and a toe forward and back on each. Colours come from its `colors` table (`@body`,
+`@breast`, `@wing`, `@tail`, `@head`, `@comb`, `@lobe`, `@beak`, `@leg`), and `coats` gives brown, white, buff and
+black. Six entries are spread so that both of coatDef's every-other picks mix them.
+The ROOSTER is the chicken's `rooster` variant. The asset declares `variants.rooster` as params plus colours, and
+species.js `variantDef(species, name)` builds it once under that name. The parts written `"when": "rooster"` add a
+tall comb of five beads, long wattles and three sickle feathers (tubes) arching up and over off the tail, in a cock's
+colours: golden hackles, red-brown body, dark breast, green-black tail. One struts among the hens in the hen yard
+(index.html, after the hens), where the crow at dawn already came from.
+
+### Shell buckets start full-sized (2026-10-24)
+A shell bucket (shell.js, one per LOD × length class) that GROWS after its first draw still draws only its old room.
+Found with a hedgehog of 137 chains in a near bucket grown from 64 to 256: `herd.stats().shell` (now with `room` and
+`want`) listed all 137, but only the first 64 were drawn, and reversing the part order flipped which half showed.
+Disposing the geometry did not help, nor did giving the bucket a new grid as setDetail does, nor flagging the shared
+shell material for a rebuild (`needsUpdate`), nor a brand-new Mesh for the bucket -- so it is not three's binding or
+caching. Nor is it the fill: the CPU arrays hold every chain after the growth and three uploads them (versions move,
+ranges clear), and full uploads every frame (`DynamicDrawUsage`) changed nothing. Found on the way: three's compiled material holds
+the attribute OBJECTS it was built with, and a geometry's dispose frees their GPU buffers only the first time (its
+listener is registered once) -- keeping the same attribute objects with bigger arrays on a fresh grid removed the GPU
+validation errors that otherwise follow, yet still only the old room was drawn. More remains; a bucket born with the
+room draws everything. The cause is not found. Every bucket now starts with `SHELL_ROOM` = 4096 chains (16 bytes ×
+4 slots a chain, nine buckets: about 2.4 MB). A frame draws and uploads only the listed prefix, and an A/B of GPU time
+on one world showed no difference. A bucket that grows BEFORE its first draw, as the far ones do at startup, was
+always fine: a market view A/B'd at 64 against 4096 was identical pixel for pixel. What it hit is a bucket overflowing
+later, when many chains come close (the hedgehog's quills; a crowd walking up to you could too). A bucket still grows
+past 4096, and would then show the bug -- it says so in the console (`shell: a bucket ... grew past`); none does in a
+whole town.

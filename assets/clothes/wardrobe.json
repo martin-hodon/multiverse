@@ -1,7 +1,7 @@
 {
  "name": "Wardrobe",
  "kind": "wardrobe",
- "_about": "WHO WEARS WHAT (clothes.js drawOutfit). `people`: for each kind of person a list of OUTFITS by weight, each a list of garments worn from the skin out -- `p` the chance of wearing it at all, a list of garments means one of them, and `fabrics` the choices each fabric slot is dyed from ('pattern:palette', the fabrics family and the dyes of palettes.json). `outfits`: kits by name (a guard's, a beast-man's). `garments`: every garment there is (clothes.js loads them).",
+ "_about": "WHO WEARS WHAT (clothes.js drawOutfit). `people`: for each kind of person a list of OUTFITS by weight, each a list of garments worn from the skin out -- `p` the chance of wearing it at all, a list of garments means one of them, and `fabrics` the choices each fabric slot is dyed from ('pattern:palette', the fabrics family and the dyes of palettes.json). `outfits`: kits by name (a guard's, a beast-man's). `garments`: every garment there is (clothes.js loads them). A param given as a LIST is drawn from it, person by person (a tunic's or kirtle's `hem`: whether it has a band at its hem, and how wide -- 0 none).",
  "garments": {
   "apron": true,
   "belt": true,
@@ -116,6 +116,14 @@
         "braid:gold-braid",
         "braid:blue-braid"
        ]
+      },
+      "params": {
+       "hem": [
+        0,
+        0,
+        0.03,
+        0.04
+       ]
       }
      },
      {
@@ -201,6 +209,22 @@
         "stripes:stripe-madder",
         "checks:check-russet",
         "plain:saffron"
+       ],
+       "trim": [
+        "plain:undyed",
+        "plain:black",
+        "plain:madder",
+        "plain:woad",
+        "braid:blue-braid",
+        "braid:gold-braid",
+        "checks:check-russet"
+       ]
+      },
+      "params": {
+       "hem": [
+        0,
+        0.03,
+        0.04
        ]
       }
      },
@@ -427,6 +451,21 @@
         "stripes:stripe-madder",
         "checks:check-russet",
         "plain:saffron"
+       ],
+       "trim": [
+        "plain:undyed",
+        "plain:black",
+        "plain:madder",
+        "plain:woad",
+        "braid:blue-braid",
+        "braid:gold-braid",
+        "checks:check-russet"
+       ]
+      },
+      "params": {
+       "hem": [
+        0,
+        0.03
        ]
       }
      },
@@ -507,6 +546,23 @@
         "lacing:gold-braid",
         "lacing:leather",
         "lacing:linen"
+       ],
+       "trim": [
+        "plain:undyed",
+        "plain:black",
+        "plain:madder",
+        "plain:woad",
+        "braid:blue-braid",
+        "braid:gold-braid",
+        "checks:check-russet"
+       ]
+      },
+      "params": {
+       "hem": [
+        0,
+        0,
+        0.04,
+        0.06
        ]
       }
      },
@@ -578,6 +634,26 @@
         "stripes:stripe-madder",
         "checks:check-russet",
         "plain:saffron"
+       ],
+       "trim": [
+        "plain:undyed",
+        "plain:black",
+        "plain:madder",
+        "plain:woad",
+        "braid:blue-braid",
+        "braid:gold-braid",
+        "checks:check-russet",
+        "braid:gold-braid",
+        "braid:blue-braid",
+        "vine:gold-braid",
+        "vine:green-braid"
+       ]
+      },
+      "params": {
+       "hem": [
+        0,
+        0.05,
+        0.08
        ]
       }
      },
@@ -639,6 +715,18 @@
         "plain:scarlet",
         "plain:woad",
         "plain:green"
+       ],
+       "trim": [
+        "braid:gold-braid",
+        "braid:blue-braid",
+        "vine:gold-braid",
+        "vine:green-braid"
+       ]
+      },
+      "params": {
+       "hem": [
+        0.06,
+        0.1
        ]
       }
      },
@@ -693,6 +781,21 @@
         "stripes:stripe-madder",
         "checks:check-russet",
         "plain:saffron"
+       ],
+       "trim": [
+        "plain:undyed",
+        "plain:black",
+        "plain:madder",
+        "plain:woad",
+        "braid:blue-braid",
+        "braid:gold-braid",
+        "checks:check-russet"
+       ]
+      },
+      "params": {
+       "hem": [
+        0,
+        0.04
        ]
       }
      },
@@ -779,10 +882,23 @@
         "stripes:stripe-madder",
         "checks:check-russet",
         "plain:saffron"
+       ],
+       "trim": [
+        "plain:undyed",
+        "plain:black",
+        "plain:madder",
+        "plain:woad",
+        "braid:blue-braid",
+        "braid:gold-braid",
+        "checks:check-russet"
        ]
       },
       "params": {
-       "length": "knee - 0.1"
+       "length": "knee - 0.1",
+       "hem": [
+        0,
+        0.03
+       ]
       }
      },
      {
@@ -849,6 +965,21 @@
         "stripes:stripe-madder",
         "checks:check-russet",
         "plain:saffron"
+       ],
+       "trim": [
+        "plain:undyed",
+        "plain:black",
+        "plain:madder",
+        "plain:woad",
+        "braid:blue-braid",
+        "braid:gold-braid",
+        "checks:check-russet"
+       ]
+      },
+      "params": {
+       "hem": [
+        0,
+        0.04
        ]
       }
      },
@@ -1117,9 +1248,123 @@
     }
    ]
   },
-  "bride": {"_about": "a bride at the church door (index.html WEDDING): a white wool gown trimmed with white fur over a white kirtle, a linen coif, shoes", "wear": [{"garment": "chemise"}, {"garment": "kirtle", "fabrics": {"main": ["plain:wool-white"]}}, {"garment": "houppelande", "fabrics": {"main": ["plain:wool-white"], "trim": ["fur:fur-white"]}}, {"garment": "coif", "fabrics": {"main": ["linen:linen"]}}, {"garment": "shoes"}]},
-  "groom": {"_about": "the groom in his best: a woad-blue tunic trimmed with gold braid, black hose, a belt, shoes and a black felt hat", "wear": [{"garment": "shirt"}, {"garment": "hose", "fabrics": {"main": ["plain:black"]}}, {"garment": "tunic", "fabrics": {"main": ["plain:woad"], "trim": ["braid:gold-braid"]}}, {"garment": "belt"}, {"garment": "shoes"}, {"garment": "felt-hat", "fabrics": {"main": ["plain:black"]}}]},
-  "jester": {"_about": "a fool of the fair in motley: red-striped tunic, a saffron hood, green hose, shoes", "wear": [{"garment": "shirt"}, {"garment": "hose", "fabrics": {"main": ["plain:green"]}}, {"garment": "tunic", "fabrics": {"main": ["stripes:stripe-madder"]}}, {"garment": "hood", "fabrics": {"main": ["plain:saffron"]}}, {"garment": "belt"}, {"garment": "shoes"}]},
+  "bride": {
+   "_about": "a bride at the church door (index.html WEDDING): a white wool gown trimmed with white fur over a white kirtle, a linen coif, shoes",
+   "wear": [
+    {
+     "garment": "chemise"
+    },
+    {
+     "garment": "kirtle",
+     "fabrics": {
+      "main": [
+       "plain:wool-white"
+      ]
+     }
+    },
+    {
+     "garment": "houppelande",
+     "fabrics": {
+      "main": [
+       "plain:wool-white"
+      ],
+      "trim": [
+       "fur:fur-white"
+      ]
+     }
+    },
+    {
+     "garment": "coif",
+     "fabrics": {
+      "main": [
+       "linen:linen"
+      ]
+     }
+    },
+    {
+     "garment": "shoes"
+    }
+   ]
+  },
+  "groom": {
+   "_about": "the groom in his best: a woad-blue tunic trimmed with gold braid, black hose, a belt, shoes and a black felt hat",
+   "wear": [
+    {
+     "garment": "shirt"
+    },
+    {
+     "garment": "hose",
+     "fabrics": {
+      "main": [
+       "plain:black"
+      ]
+     }
+    },
+    {
+     "garment": "tunic",
+     "fabrics": {
+      "main": [
+       "plain:woad"
+      ],
+      "trim": [
+       "braid:gold-braid"
+      ]
+     }
+    },
+    {
+     "garment": "belt"
+    },
+    {
+     "garment": "shoes"
+    },
+    {
+     "garment": "felt-hat",
+     "fabrics": {
+      "main": [
+       "plain:black"
+      ]
+     }
+    }
+   ]
+  },
+  "jester": {
+   "_about": "a fool of the fair in motley: red-striped tunic, a saffron hood, green hose, shoes",
+   "wear": [
+    {
+     "garment": "shirt"
+    },
+    {
+     "garment": "hose",
+     "fabrics": {
+      "main": [
+       "plain:green"
+      ]
+     }
+    },
+    {
+     "garment": "tunic",
+     "fabrics": {
+      "main": [
+       "stripes:stripe-madder"
+      ]
+     }
+    },
+    {
+     "garment": "hood",
+     "fabrics": {
+      "main": [
+       "plain:saffron"
+      ]
+     }
+    },
+    {
+     "garment": "belt"
+    },
+    {
+     "garment": "shoes"
+    }
+   ]
+  },
   "angel": {
    "wear": [
     {
@@ -1155,6 +1400,80 @@
     },
     {
      "garment": "belt"
+    }
+   ]
+  },
+  "farmhand": {
+   "_about": "a farmhand at the beasts or in the yard: shirt, russet hose, a tunic of undyed linen or russet, a belt, shoes, a cap",
+   "wear": [
+    {
+     "garment": "shirt"
+    },
+    {
+     "garment": "hose",
+     "fabrics": {
+      "main": [
+       "plain:russet"
+      ]
+     }
+    },
+    {
+     "garment": "tunic",
+     "fabrics": {
+      "main": [
+       "linen:undyed",
+       "plain:russet"
+      ]
+     }
+    },
+    {
+     "garment": "belt"
+    },
+    {
+     "garment": "shoes"
+    },
+    {
+     "garment": "cap"
+    }
+   ]
+  },
+  "farmwife": {
+   "_about": "a farm wife at the hens or the dairy: chemise, a kirtle of russet, undyed or woad-blue wool, a linen apron, a belt, a linen coif, shoes",
+   "wear": [
+    {
+     "garment": "chemise"
+    },
+    {
+     "garment": "kirtle",
+     "fabrics": {
+      "main": [
+       "plain:russet",
+       "linen:undyed",
+       "plain:woad"
+      ]
+     }
+    },
+    {
+     "garment": "apron",
+     "fabrics": {
+      "main": [
+       "linen:linen"
+      ]
+     }
+    },
+    {
+     "garment": "belt"
+    },
+    {
+     "garment": "coif",
+     "fabrics": {
+      "main": [
+       "linen:linen"
+      ]
+     }
+    },
+    {
+     "garment": "shoes"
     }
    ]
   }

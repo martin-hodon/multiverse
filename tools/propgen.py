@@ -72,10 +72,12 @@ PROPS["components/water-wheel"] = item("Water wheel", "components", "an undersho
         box("paddles", "plank", [0.6, 0.05, "w - 0.12"], [0, 0, 0, 0, 0, 90], around={"n": "paddles", "r": "r - 0.32", "plane": "xy"})])
 
 # ---- the windmill's sail cross: about z, the arm upright at its own +y; the game turns it
-PROPS["components/windmill-arm"] = item("Windmill arm", "components", "one arm of a sail cross: the whip (spar) up its +y and the cloth sail laced to its lattice beside it (a component of the sail cross)",
+PROPS["components/windmill-arm"] = item("Windmill arm", "components", "one arm of a sail cross: the whip (spar) up its +y and the cloth sail laced to its lattice beside it -- the LATTICE in front of the cloth: bars across every ~45 cm and the hemlath along its outer edge (a component of the sail cross)",
     {"R": 5.0}, {"wood": "#6a5236", "cloth": "canvas"}, [
         box("whip", "wood", [0.28, "R", 0.16], [0, "R / 2", 0]),
-        box("sail", "cloth", [1.5, "R * 0.78", 0.07], [0.85, "R * 0.56", 0])])
+        box("sail", "cloth", [1.5, "R * 0.78", 0.07], [0.85, "R * 0.56", 0]),
+        box("bars", "wood", [1.62, 0.07, 0.06], [[0.85, f"R * 0.17 + {i} * R * 0.78 / 9", 0.065] for i in range(10)]),
+        box("hemlath", "wood", [0.08, "R * 0.79", 0.08], [1.62, "R * 0.56", 0.03])])
 PROPS["components/windmill-sails"] = item("Windmill sails", "components", "the sail cross of a post or tower mill: four arms on the windshaft, R long, the shaft running back into the cap",
     {"R": 5.0}, {"wood": "#6a5236", "cloth": "canvas"}, [
         {"id": "arms", "use": "items/components/windmill-arm", "params": {"R": "R"}, "around": {"n": 4, "r": 0, "plane": "xy", "start": 90}},
@@ -248,8 +250,10 @@ PROPS["food/cheese-slice"] = item("Cheese (plain)", "food/dairy", "a plain wedge
     [{"id": "wedge", "type": "plate", "material": "cheese", "thick": 0.05, "at": [-0.06, 0.04, 0.05, 0, -90, 0], "outline": [[-0.075, -0.06], [0.075, -0.06], [-0.075, 0.06]]}])
 PROPS["food/sausage"] = item("Sausage", "food/meat", "one sausage, lying on a plate", {}, {"skin": "#8a3a2a"},
     [rod("sausage", "skin", 0.02, [-0.095, 0.035, 0], [0.095, 0.035, 0], 6)])
-PROPS["food/cabbage-head"] = item("Cabbage head (field)", "food/vegetable", "a cabbage head standing in its field row: one low-poly ball, for a field of hundreds", {"r": [0.16, 0.22]},
-    {"leaf": {"pick": ["#86ad62", "#7aa35a"]}}, [{"id": "head", "type": "sphere", "material": "leaf", "r": "r", "sides": 6, "at": [0, "r * 0.85", 0], "stretch": [1, 0.9, 1]}])
+PROPS["food/cabbage-head"] = item("Cabbage head (field)", "food/vegetable", "a cabbage head standing in its field row: a pale round head in a cup of darker outer leaves spread open round it (2026-10-24: was one six-sided ball, which read as a green cube) -- still low-poly, for a field of hundreds", {"r": [0.16, 0.22]},
+    {"head": {"pick": ["#b9d18c", "#aecb82"]}, "leaf": {"pick": ["#6f9a4c", "#628f45"]}},
+    [{"id": "head", "type": "sphere", "material": "head", "r": "r * 0.62", "sides": 8, "at": [0, "r * 0.62", 0], "stretch": [1, 0.92, 1]},
+     {"id": "leaves", "type": "lathe", "material": "leaf", "profile": [["r * 0.3", 0], ["r * 0.85", "r * 0.22"], ["r * 1.05", "r * 0.6"], ["r * 0.9", "r * 0.95"]], "sides": 9, "caps": False, "double": True, "faceted": True}])
 
 PROPS["furniture/barrel-on-side"] = item("Barrel on its side", "furniture/storage", "a stave barrel laid on its side, its axis along z, chocked -- its lowest point at the origin's height (furniture/barrel turned)",
     {"h": 0.95, "belly": 0.35, "head": 0.29}, {}, [{"id": "barrel", "use": "items/furniture/barrel", "params": {"h": "h", "belly": "belly", "head": "head"}, "at": [0, "belly", "0 - h / 2", 0, 90, 0]}])

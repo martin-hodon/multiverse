@@ -148,7 +148,7 @@ export async function readTile(renderer, name) {
 // midrib on the broad ones) on transparent, so a card's colour tints them
 // and the alpha cuts them out. Calculated like the tiles (seeded, nothing
 // loaded); mipmapped; textures.html shows it and build/textures.py saves it.
-export const LEAF_STYLES = ["oval", "round", "lobed", "needles", "willow", "berries", "apples", "cherries"];   // the last three: fruit cards (bushes, orchard trees)
+export const LEAF_STYLES = ["oval", "ovate", "lobed", "needles", "willow", "berries", "apples", "cherries"];   // the last three: fruit cards (bushes, orchard trees)
 export const LEAF_CELL = 256;
 export function leafAtlasCanvas() {
   const S = LEAF_CELL, cv = document.createElement("canvas");
@@ -200,16 +200,19 @@ export function leafAtlasCanvas() {
       }
     } else {
       // packed clusters: a card reads as a full clump of leaves, not a few strays
-      const n = style === "willow" ? 34 : style === "round" ? 30 : style === "lobed" ? 18 : 26, base = S * (style === "round" ? .085 : style === "willow" ? .085 : style === "lobed" ? .12 : .1);
+      const n = style === "willow" ? 34 : style === "ovate" ? 36 : style === "lobed" ? 18 : 26, base = S * (style === "ovate" ? .085 : style === "willow" ? .085 : style === "lobed" ? .12 : .1);
       for (let k = 0; k < n; k++) {
         const x = ox + S * (.12 + .76 * rnd()), y = S * (.12 + .76 * rnd()), s = base * (.7 + .6 * rnd()), a = rnd() * 6.2832;
         g.save(); g.translate(x, y); g.rotate(a); g.fillStyle = grey(); g.beginPath();
         if (style === "oval") g.ellipse(0, 0, s * .45, s, 0, 0, 6.2832);
-        else if (style === "round") g.arc(0, 0, s * .6, 0, 6.2832);
+        else if (style === "ovate") {   // a birch's: pointed at the tip, broad and rounded at the base, on a short stalk
+          g.moveTo(0, -s); g.quadraticCurveTo(s * .62, -s * .05, s * .44, s * .4); g.quadraticCurveTo(s * .22, s * .62, 0, s * .52);
+          g.quadraticCurveTo(-s * .22, s * .62, -s * .44, s * .4); g.quadraticCurveTo(-s * .62, -s * .05, 0, -s); g.closePath();
+        }
         else if (style === "willow") g.ellipse(0, 0, s * .16, s * 1.3, 0, 0, 6.2832);
         else for (let j = 0; j < 5; j++) { const t = (j - 2) * .55; g.ellipse(Math.sin(t) * s * .35, -Math.cos(t) * s * .35 + s * .2, s * .22, s * .7, t, 0, 6.2832); }
         g.fill();
-        if (style !== "round") {   // a midrib, a little darker
+        {   // a midrib, a little darker (an ovate leaf's runs on as its stalk)
           const L = style === "willow" ? 1.2 : .85;
           g.strokeStyle = "rgba(0,0,0,.2)"; g.lineWidth = Math.max(1, s * .06);
           g.beginPath(); g.moveTo(0, s * L); g.lineTo(0, -s * L); g.stroke();

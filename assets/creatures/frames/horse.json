@@ -10,33 +10,33 @@
   "headScale": 0.87,
   "_headScale": "the head cluster -- skull, muzzle, nose, ears, eyes -- shrunk about the neck joint (mammals.js)",
   "rear": [
-    "-0.45*s",
-    "1.2*s",
+    "-0.42*s",
+    "1.24*s",
     0,
-    "0.55*s",
-    "0.42*s",
-    "0.34*s"
+    "0.52*s",
+    "0.38*s",
+    "0.33*s"
   ],
   "front": [
-    "0.35*s",
-    "1.22*s",
+    "0.33*s",
+    "1.26*s",
     0,
-    "0.58*s",
-    "0.44*s",
-    "0.35*s"
+    "0.54*s",
+    "0.4*s",
+    "0.34*s"
   ],
   "_lobes": "rump and chest: [x, y, z, half-length, half-height, half-width]. The torso is swept as one chain between them (mammals.js)",
   "neck": {
     "when": "head",
     "v": [
-      "0.82*s",
-      "1.38*s",
+      "0.8*s",
+      "1.36*s",
       0,
       "1.36*s",
       "1.94*s",
       0,
-      "0.25*s",
-      "0.185*s"
+      "0.3*s",
+      "0.17*s"
     ]
   },
   "head": {
@@ -51,12 +51,14 @@
   "muzzle": {
     "when": "head",
     "v": [
-      "1.75*s",
-      "1.88*s",
+      "1.4*s",
+      "1.97*s",
       0,
-      "0.25*s",
-      "0.115*s",
-      "0.105*s"
+      "1.86*s",
+      "1.82*s",
+      0,
+      "0.155*s",
+      "0.09*s"
     ]
   },
   "ears": {
@@ -95,15 +97,16 @@
       "0.55*s"
     ],
     "radii": [
-      "0.1*s",
-      "0.07*s",
+      "0.12*s",
+      "0.075*s",
       "0.05*s"
     ],
     "foot": [
-      "0.08*s",
-      "0.05*s",
+      "0.07*s",
+      "0.065*s",
       "0.07*s"
-    ]
+    ],
+    "thigh": 1.5
   },
   "tail": {
     "c": [
@@ -113,8 +116,8 @@
     "R": "1.2*s",
     "a0": 0,
     "a1": -0.62,
-    "r1": "0.06*s",
-    "r2": "0.05*s",
+    "r1": "0.085*s",
+    "r2": "0.11*s",
     "n": 4,
     "sway": 10,
     "speed": 0.5
@@ -128,23 +131,44 @@
       "id": "mane",
       "nod": true,
       "parent": "body",
-      "from": [
-        "0.78*s",
-        "1.55*s",
-        0
-      ],
-      "to": [
-        "1.32*s",
-        "2.1*s",
-        0
-      ],
-      "r1": "0.07*s",
-      "r2": "0.06*s",
       "color": [
         "@mane",
         "@tail"
       ],
-      "k": "0.3*s"
+      "k": "0.3*s",
+      "ell": [
+        "1.05*s",
+        "1.78*s",
+        0,
+        "0.3*s",
+        "0.1*s",
+        "0.08*s"
+      ],
+      "thorns": {
+        "arc": [
+          -0.75,
+          0.75
+        ],
+        "rows": 16,
+        "cols": 7,
+        "every": 2,
+        "along": [
+          0.0,
+          1.12
+        ],
+        "length": 0.75,
+        "comb": [
+          -0.6,
+          0.3,
+          0.3
+        ],
+        "blend": 0.6,
+        "vary": 0.6,
+        "inset": 1.06,
+        "_about": "the mane in thorns (manes.js): a CREST of locks along the top of the neck to the poll, falling back and to one side"
+      }
     }
-  ]
+  ],
+  "_proportions": "2026-10-24: the head a WEDGE (the muzzle a tapered pill from inside the skull to the nose, its colour near the body's), the neck deep where it leaves the chest, the hind thigh full (thigh 1.5), round hooves, a full tail (it widens as its hair falls); the trunk shorter and shallower (as long as the horse is tall at the withers, the belly ~.86 s up)",
+  "walkNod": 7
 }

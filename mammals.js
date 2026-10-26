@@ -25,7 +25,8 @@
 // Field reference (all in root space):
 //   rear, front: body lobes [cx, cy, cz, sx, sy, sz] -- ellipsoid semi-axes; drawn as the capsule along the long axis
 //   neck: [ax, ay, az, bx, by, bz, rA, rB] tapered pill from the chest into the head, or null
-//   head: [cx, cy, cz, r]   muzzle: ellipsoid like a lobe   ears: [ax, ay, az, bx, by, bz, rBase, rTip] (the left; mirrored)
+//   head: [cx, cy, cz, r]   muzzle: ellipsoid like a lobe, or [ax, ay, az, bx, by, bz, rA, rB] a TAPERED pill from inside the
+//         skull to the nose (a horse's head is a wedge: deep at the jaw, narrow at the nose -- an ellipsoid is a box on it)   ears: [ax, ay, az, bx, by, bz, rBase, rTip] (the left; mirrored)
 //   eyes: [x, y, z, r] (mirrored)   nose: [x, y, z, r] or null
 //   legs: { front: [hipX, hipY, hipZ, upper], hind: [...], radii: [hip, knee, foot], foot: [sx, sy, sz], kneeF, kneeH, thigh }
 //         thigh (default 1.35) widens the hind hip; kneeF/kneeH (+1 forward, -1 back) say which way each pair folds
@@ -107,7 +108,7 @@ export function eyeMark(id, parent, H, R, E, r, iris, { pupil = "round" } = {}) 
 // everywhere else n is ignored and the curve decides.
 const ARC_SEG = 1.2;                                  // radians of arc per tube (~70 degrees)
 const arcControl = (R, dA) => R / Math.cos(dA / 2);   // where the arc's end tangents cross
-function arcChain(id, parent, origin, { c: [cx, cy], R, a0, a1, r1, r2, n = 5, links = false, tuft = 0, tuftColor, sway = 12, speed = .6, phase = 0, z = 0, zEnd = z, axis = "x", color, pat, k, fold }) {
+function arcChain(id, parent, origin, { c: [cx, cy], R, a0, a1, r1, r2, n = 5, links = false, tuft = 0, tuftOut = 0, tuftColor, sway = 12, speed = .6, phase = 0, z = 0, zEnd = z, axis = "x", color, pat, k, fold }) {
   const pt = (a, rr = R) => [cx + rr * Math.cos(a), cy + rr * Math.sin(a), z + (zEnd - z) * (a - a0) / (a1 - a0)];   // zEnd: the arc drifts sideways (a hydra's necks splay)
   const nSeg = links ? n : Math.max(1, Math.ceil(Math.abs(a1 - a0) / ARC_SEG)), dA = (a1 - a0) / nSeg;
   const out = [];
@@ -125,7 +126,7 @@ function arcChain(id, parent, origin, { c: [cx, cy], R, a0, a1, r1, r2, n = 5, l
     M = mul(M, Mi);
     par = lid; lastLen = len;
   }
-  if (tuft) out.push({ id: `${id}Tuft`, parent: par, shape: "sphere", size: { r: tuft }, pos: [0, lastLen, 0], color: tuftColor ?? color, k, edge: 0 });
+  if (tuft) out.push({ id: `${id}Tuft`, parent: par, shape: "sphere", size: { r: tuft }, pos: [0, lastLen + tuftOut, 0], color: tuftColor ?? color, k, edge: 0 });   // (tuftOut: past the end -- a full brush's white tip, not buried in it)
   return out;
 }
 
@@ -144,7 +145,8 @@ export function mammal(o) {
   const hP = (p) => p.map((v, i) => hJ[i] + (v - hJ[i]) * headScale);           // a point of the cluster
   const hR = (r) => r * headScale;                                             // a radius of it
   const head = head0 && headScale !== 1 ? [...hP(head0.slice(0, 3)), hR(head0[3])] : head0;
-  const muzzle = muzzle0 && headScale !== 1 ? [...hP(muzzle0.slice(0, 3)), ...muzzle0.slice(3).map(hR)] : muzzle0;
+  const taper = muzzle0?.length === 8;   // (the muzzle as a tapered pill: two ends and their radii)
+  const muzzle = muzzle0 && headScale !== 1 ? (taper ? [...hP(muzzle0.slice(0, 3)), ...hP(muzzle0.slice(3, 6)), hR(muzzle0[6]), hR(muzzle0[7])] : [...hP(muzzle0.slice(0, 3)), ...muzzle0.slice(3).map(hR)]) : muzzle0;
   const nose = nose0 && headScale !== 1 ? [...hP(nose0.slice(0, 3)), hR(nose0[3])] : nose0;
   const ears = ears0 && headScale !== 1 ? [...hP(ears0.slice(0, 3)), ...hP(ears0.slice(3, 6)), hR(ears0[6]), hR(ears0[7])] : ears0;
   const eyes = eyes0 && headScale !== 1 ? [...hP(eyes0.slice(0, 3)), hR(eyes0[3])] : eyes0;
@@ -214,10 +216,12 @@ export function mammal(o) {
     // the face, and the only thing that looks like it moved is the horns and ears hung on it.
     parts.push({ id: "head", parent: "body", shape: "sphere", size: { r: head[3] }, pos: P(H, R), color: cHead, k: kB * .5, edge: 0, pat: patFor("head"),
                  anim: { axis: "y", deg: headTurn, speed: .3, phase: 0 } });
-    if (muzzle) parts.push(ellPart("snout", "head", muzzle, H, cols.muzzle, { k: Math.min(.08, kB * .4), pat: patFor("muzzle") }));   // (with the head: it turns too)
+    if (muzzle) parts.push(taper ? pillPart("snout", "head", muzzle.slice(0, 3), muzzle.slice(3, 6), muzzle[6], muzzle[7], H, cols.muzzle, { k: Math.min(.08, kB * .4), pat: patFor("muzzle") })
+                                 : ellPart("snout", "head", muzzle, H, cols.muzzle, { k: Math.min(.08, kB * .4), pat: patFor("muzzle") }));   // (with the head: it turns too)
     if (ears) for (const s of [1, -1]) {
       const a = [ears[0], ears[1], ears[2] * s], b = [ears[3], ears[4], ears[5] * s];
-      parts.push(pillPart(s > 0 ? "earL" : "earR", "head", a, b, ears[6], ears[7], H, cols.ear, { k: kL * .5 }));
+      // (an ear FLICKS back now and then, the two on their own beats -- skeleton.js a.flick)
+      parts.push(pillPart(s > 0 ? "earL" : "earR", "head", a, b, ears[6], ears[7], H, cols.ear, { k: kL * .5, anim: { axis: "z", deg: -28, speed: .21 + .05 * s, phase: 1.1 * s, flick: 14 } }));
     }
     if (eyes) for (const s of [1, -1])   // face marks (painted on the head, no SDF): round, the species' pupil
       parts.push(eyeMark(s > 0 ? "eyeL" : "eyeR", "head", H, head[3], [eyes[0], eyes[1], eyes[2] * s], eyes[3], cols.eye, { pupil }));
@@ -237,7 +241,7 @@ export function mammal(o) {
       { id: `leg${tag}u`, parent: "body", shape: "capsule", size: { r: rHip, r2: rKnee, len: upper }, pos: [hx - R[0], hy - R[1], hz * sz - R[2]],
         pivot: [0, -upper / 2, 0], color: cLeg, pat: patFor("leg"), k: kL, edge: 0, ik: { leg: i, upper, lower, side, foot: footY - R[1], phase: 0 } },
       { id: `leg${tag}l`, parent: `leg${tag}u`, shape: "capsule", size: { r: rKnee, r2: rFoot, len: lower }, pos: [0, -upper, 0],
-        pivot: [0, -lower / 2, 0], color: cLeg, pat: patFor("leg"), k: kL, edge: 0, ik: { leg: i, follow: true } },
+        pivot: [0, -lower / 2, 0], color: col("sock", cLeg), pat: patFor("leg"), k: kL, edge: 0, ik: { leg: i, follow: true } },   // (sock: a white lower leg -- a coat's)
       ellPart(`foot${tag}`, `leg${tag}l`, [L.toe ?? .02, -lower - .02, 0, foot[0], foot[1], foot[2]], [0, 0, 0], cols.foot, { k: kL * .5 }));
     if (L.toes) {   // in the foot's frame: origin at its centre, the sole at -foot[1]
       const { n = 3, len, r: [r0, r1] = [.08, .04], spread = .45, color } = L.toes, x0 = -foot[0] * .4, mid = (n - 1) / 2;
@@ -290,10 +294,13 @@ export function mammal(o) {
   // FUR (composite: a strand texture over whatever colour or pattern): the coat's pieces -- trunk, neck, head, ears,
   // legs, tail, mane -- never horns, hooves, eyes; fur: false for the hairless hides and the reptiles
   if (fur) for (const p of parts) if (FURRY.test(p.id)) p.fur = true;
+  // FLEECE (`fleece`: the ids of the pieces its wool covers -- a sheep's trunk, neck and cap): heaped in lumps, so it
+  // reads as wool and not a smooth pill (shell.js FLEECE)
+  for (const p of parts) if ((flags.fleece ?? []).some((id) => p.id === id || p.id.startsWith(id + "_"))) p.fleece = true;
   const two = !!flags.biped;   // a biped's body dips over each stride, and its run is still left-right
   const walk = { offsets: [Math.PI / 2, 3 * Math.PI / 2, 0, Math.PI], stride: .32 * Lg, lift: .12 * Lg, bob: two ? .03 * Lg : 0, ...(gaits.walk ?? {}) };
   const run = { offsets: two ? [0, 0, 0, Math.PI] : [0, .6, Math.PI + .4, Math.PI + 1.0], stride: .48 * Lg, lift: .3 * Lg, bob: .06 * Lg, ...(gaits.run ?? {}) };
-  const noseX = Math.max(front[0] + front[3], muzzle ? muzzle[0] + muzzle[3] : 0, head ? head[0] + head[3] : 0);
+  const noseX = Math.max(front[0] + front[3], muzzle ? (taper ? Math.max(muzzle[0], muzzle[3]) + muzzle[7] : muzzle[0] + muzzle[3]) : 0, head ? head[0] + head[3] : 0);
   // a MANE OF THORNS (manes.js): an ellipsoid extra with `thorns` -- its part, the body and the head that orient it, its
   // size and colour, and the spikes' numbers -- for the mesh that rides on it
   const tx = extras.find((x) => x.thorns && x.ell), mi = tx ? parts.findIndex((q) => q.id === tx.id) : -1;
@@ -305,7 +312,8 @@ export function mammal(o) {
   // (the thorns ARE the mane: its soft ball is not drawn -- the part stays, a point at the mane's middle that rides with
   //  the body, for the thorns to be placed by; too small to show, and blended into nothing)
   if (mane) parts[mi] = { ...parts[mi], shape: "sphere", size: { r: .002 }, k: 0, geomRot: undefined };
-  return { name, ...flags, rig: true, gaits: { walk, run }, probe: (noseX - (rear[0] - rear[3])) / 2, legLen: Lg, parts, ...(mane ? { mane } : {}) };
+  // (the head nods with each step: walkNod degrees -- a beast with a neck 4 unless it says, skeleton.js)
+  return { name, ...flags, walkNod: flags.walkNod ?? (neck ? 4 : 0), rig: true, gaits: { walk, run }, probe: (noseX - (rear[0] - rear[3])) / 2, legLen: Lg, parts, ...(mane ? { mane } : {}) };
 }
 
 // ============ families ==========================================================

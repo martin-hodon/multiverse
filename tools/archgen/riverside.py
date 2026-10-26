@@ -60,8 +60,12 @@ write("architecture", "village/fisher-hut", {"name": "Fisherman's hut", "_about"
                                              "site": {"origin": True}, "params": {"detail": 4, "water": -2.21, "footW": W + 2, "footD": D + 2}, "parts": hut, "build": list(hut)})
 write("finishes", "fisher-hut", {"name": "Fisherman's hut", "building": "architecture/village/fisher-hut", "_about": "boards and reed: the hut",
       "stone": {"color": "#6b4a2c", "accent": "#5a3e24", "pat": "wood"},
-      "rules": [{"parts": "roof", "surface": "roof", "pattern": "roofs/thatch", "palette": "thatch-grey"}, {"parts": ["nets", "nets 2"], "pattern": "fabrics/lozenge", "palette": "undyed"},
+      # (the roof: all of it thatch but its underside -- its gable ends are walls to `surface`, and the boards' catch-all
+      #  took them; the walls weatherboard, not floorboards, 2026-10-24)
+      "rules": [{"parts": "roof", "side": "in", "pattern": "timber/boards", "palette": "oak-grey"}, {"parts": "roof", "pattern": "roofs/thatch", "palette": "thatch-grey"},
+                {"parts": ["nets", "nets 2"], "pattern": "fabrics/lozenge", "palette": "undyed"},
                 {"parts": ["floor", "jetty"], "surface": "floor", "pattern": "timber/boards", "palette": "oak-grey"}, {"parts": "cot mattress", "pattern": "fabrics/linen", "palette": "linen"},
+                {"parts": "walls", "side": "out", "pattern": "timber/weatherboard", "palette": "oak-grey"},
                 {"pattern": "timber/boards", "palette": "oak"}]})
 
 # ---- THE WATER MILL (2026-10-03: two storeys, the millwork whole): stone walls, a tiled roof; its wheel 6.1 m across on

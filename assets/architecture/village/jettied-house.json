@@ -45,6 +45,7 @@
   "floor 1 beside",
   "floor 1 front",
   "floor 1 back",
+  "joists 1",
   "flight 0",
   "way 1",
   "way 1 top",
@@ -570,6 +571,176 @@
      0
     ]
    ]
+  },
+  "plinth": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "W + 0.08",
+     "D + 0.08"
+    ]
+   },
+   "thickness": 0.1,
+   "height": 0.55,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": "W / 2 - t - 0.95",
+      "width": "doorW",
+      "sill": 0,
+      "springing": 0.55,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "plinth shop": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "W + 0.08",
+     "D + 0.08"
+    ]
+   },
+   "thickness": 0.1,
+   "height": 0.55,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": "0.9",
+      "width": "W - 2.8",
+      "sill": 0,
+      "springing": 0.55,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "jetty 1": {
+   "type": "box",
+   "width": 0.13,
+   "length": "j + 0.1",
+   "height": 0.17,
+   "at": [
+    [
+     "0 - W / 2 + 0.3",
+     "g + 1 * H - 0.09",
+     "-1 * (D / 2 + j / 2 - 0.05)",
+     0
+    ],
+    [
+     "0 - W / 2 + 0.3",
+     "g + 1 * H - 0.09",
+     "1 * (D / 2 + j / 2 - 0.05)",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "floor((W - 0.6) / 0.5) + 1",
+    "step": [
+     0.5,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "jetty 2": {
+   "type": "box",
+   "width": 0.13,
+   "length": "j + 0.1",
+   "height": 0.17,
+   "at": [
+    [
+     "0 - W / 2 + 0.3",
+     "g + 2 * H - 0.09",
+     "-1 * (D / 2 + j / 2 - 0.05)",
+     0
+    ],
+    [
+     "0 - W / 2 + 0.3",
+     "g + 2 * H - 0.09",
+     "1 * (D / 2 + j / 2 - 0.05)",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "floor((W - 0.6) / 0.5) + 1",
+    "step": [
+     0.5,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "joists 1": {
+   "type": "box",
+   "width": "xr - (xl + 2 * sw)",
+   "length": 0.14,
+   "height": 0.16,
+   "at": [
+    [
+     "(xl + 2 * sw + xr) / 2",
+     "g + 1 * H - slab - 0.16",
+     "0 - (D + 2 * j) / 2 + t + 0.35",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "floor(((D + 2 * j) - 2 * t - 0.7) / 0.75) + 1",
+    "step": [
+     0,
+     0,
+     0.75,
+     0
+    ]
+   }
+  },
+  "joists 2": {
+   "type": "box",
+   "width": "xr - (xl + 2 * sw)",
+   "length": 0.14,
+   "height": 0.16,
+   "at": [
+    [
+     "(xl + 2 * sw + xr) / 2",
+     "g + 2 * H - slab - 0.16",
+     "0 - (D + 2 * j) / 2 + t + 0.35",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "floor(((D + 2 * j) - 2 * t - 0.7) / 0.75) + 1",
+    "step": [
+     0,
+     0,
+     0.75,
+     0
+    ]
+   }
   },
   "flight 0": {
    "type": "flight",

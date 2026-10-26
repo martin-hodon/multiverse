@@ -8,7 +8,8 @@
 //   -> { count, update(t) }
 import * as THREE from "three";
 import { boundTo } from "./bounds.js";
-import { attribute, uniform, vec3, vec4, float, uv, sin, fract, floor, smoothstep, mix, positionGeometry, cameraViewMatrix, cameraProjectionMatrix } from "three/tsl";
+import { attribute, uniform, vec3, vec4, float, uv, sin, fract, floor, smoothstep, mix, positionGeometry, cameraViewMatrix, cameraProjectionMatrix, renderGroup } from "three/tsl";
+import { SNOW } from "./foliage.js";
 import { windAt } from "./grass.js";
 import { rng } from "./flora.js";
 
@@ -24,7 +25,7 @@ export function createWindowBoxes(scene, windows, { seed = 1 } = {}) {
     if (!house.has(k)) house.set(k, r() < WINDOWBOX.house ? BLOOMS[Math.floor(r() * BLOOMS.length)] : null);
     return house.get(k) && r() < WINDOWBOX.window;
   });
-  if (!picked.length) return { count: 0, update() {} };
+  if (!picked.length) return { count: 0, windows: picked, update() {} };
   const boxP = [], boxC = [], boxI = [], flP = [], flUV = [], flC = [], flS = [], flI = [];
   const wood = new THREE.Color("#6e4a2c"), wood2 = new THREE.Color("#5a3b22"), c = new THREE.Color();
   for (const w of picked) {
@@ -79,19 +80,23 @@ export function createWindowBoxes(scene, windows, { seed = 1 } = {}) {
   mat.vertexNode = cameraProjectionMatrix.mul(cameraViewMatrix.mul(vec4(P.add(vec3(sway, 0, sway.mul(.6))), 1)));
   // leaves: a scalloped mound, higher in clumps; blooms: round heads in the upper part, in a jittered grid
   const cell = floor(u.mul(1.6)), cu = fract(u.mul(1.6)), h1 = fract(sin(cell.mul(12.9898).add(S)).mul(43758.5));
-  const mound = sin(u.mul(7).add(S)).mul(.1).add(sin(u.mul(19).add(S.mul(2))).mul(.05)).add(.55).add(h1.mul(.1));
+  const mound0 = sin(u.mul(7).add(S)).mul(.1).add(sin(u.mul(19).add(S.mul(2))).mul(.05)).add(.55).add(h1.mul(.1));
+  // IN WINTER (foliage.js SNOW) no blooms: the plants cut back, withered, a cap of snow on them
+  const snow = uniform(0).setGroup(renderGroup).onRenderUpdate(() => SNOW.value).min(1);
+  const mound = mound0.mul(float(1).sub(snow.mul(.3)));
   const leaf = smoothstep(mound.add(.02), mound.sub(.02), v);
   const bx = cu.sub(.5).sub(h1.sub(.5).mul(.4)), by = v.sub(mound.sub(.06).add(h1.mul(.1)));
   const head = smoothstep(.3, .2, vec3(bx, by.mul(1.9), 0).length());
   const head2 = smoothstep(.24, .15, vec3(cu.sub(.12).sub(h1.mul(.1)), v.sub(mound.mul(.85)).mul(2.1), 0).length());
   const head3 = smoothstep(.22, .14, vec3(cu.sub(.85).add(h1.mul(.1)), v.sub(mound.mul(.9).add(.05)).mul(2.1), 0).length());
-  const bloom = head.add(head2).add(head3).min(1);
-  const green = mix(vec3(.18, .36, .14), vec3(.3, .5, .2), fract(u.mul(7.3).add(v.mul(3.1))).mul(.5).add(v.mul(.4)));
-  mat.colorNode = mix(green, B.mul(bloom.mul(.15).add(.88)), bloom);
+  const bloom = head.add(head2).add(head3).min(1).mul(float(1).sub(snow));
+  const green = mix(mix(vec3(.18, .36, .14), vec3(.3, .5, .2), fract(u.mul(7.3).add(v.mul(3.1))).mul(.5).add(v.mul(.4))), vec3(.3, .26, .18), snow.mul(.7));
+  const leafC = mix(green, vec3(.9, .92, .96), snow.mul(smoothstep(mound.sub(.22), mound.sub(.08), v)));
+  mat.colorNode = mix(leafC, B.mul(bloom.mul(.15).add(.88)), bloom);
   mat.opacityNode = leaf.max(bloom);
   mat.alphaTest = .5;
   const flowers = new THREE.Mesh(fg, mat);
   boundTo(flowers, null, .5); flowers.name = "window flowers"; flowers.userData.noMerge = true; flowers.userData.cut = true;
   scene.add(flowers);
-  return { count: picked.length, update(t) { U.t.value = t; } };
+  return { count: picked.length, windows: picked, update(t) { U.t.value = t; } };   // (windows: the ones with a box -- a cat sleeps on a sill without one, index.html)
 }

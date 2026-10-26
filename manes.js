@@ -4,7 +4,7 @@
 // keeps it on the animal). Like the mesh heads (heads.js): built once per kind of mane, drawn as one InstancedMesh each,
 // every copy placed each frame on the posed neck -- from its chest end along it toward the head, sized by how long it is
 // now -- and shaded as hair is (heads.js faceMaterial: half-Lambert with the Kajiya-Kay sheen and the fibres, softer).
-//   thorns: { rows, cols, every, along ([from, to] in neck lengths from its chest end: into the shoulders .. round the
+//   thorns: { rows, cols, every, arc ([from, to] radians round from straight up: a crest; none: a ring), along ([from, to] in neck lengths from its chest end: into the shoulders .. round the
 //             back of the head), length (x the mane's radius), comb ([x, y, z] in the neck's frame: back and down), blend,
 //             vary, inset (x the creature's radius there: the sleeve a little over the fur, never under it) }
 import * as THREE from "three";
@@ -30,8 +30,11 @@ export function maneGeometry(mane, seed = 7) {
   const cl = Math.hypot(...T.comb) || 1, comb = T.comb.map((v) => v / cl);
   const radiusAt = (x) => (x <= 0 ? mane.rA * 1.15 : x <= L ? mane.rA + (mane.rB - mane.rA) * x / L : Math.max(mane.rB, mane.headR * .92)) * T.inset;
   const pos = [], nor = [], col = [], uv = [], mask = [];
-  thornLattice({ NR: T.rows, NC: T.cols, ring: true, every: T.every,
-    at: (i, j) => { const x = L * (T.along[0] + (T.along[1] - T.along[0]) * i / T.rows), f = j / T.cols * 2 * Math.PI, R = radiusAt(x);
+  // (`arc` [from, to]: radians round the neck from straight up, + toward its +z -- a CREST along the top of the neck, a
+  //  horse's, not a ring round it; the lattice then open at its two edges)
+  const arc = T.arc ?? null, fOf = (j) => (arc ? arc[0] + (arc[1] - arc[0]) * j / (T.cols - 1) : j / T.cols * 2 * Math.PI);
+  thornLattice({ NR: T.rows, NC: T.cols, ring: !arc, every: T.every,
+    at: (i, j) => { const x = L * (T.along[0] + (T.along[1] - T.along[0]) * i / T.rows), f = fOf(j), R = radiusAt(x);
                     const n = [0, Math.cos(f), Math.sin(f)];
                     return { q: [x, n[1] * R, n[2] * R], n, u: j * .37, v: i * .05 }; },
     spike: (i, j, n) => { const d = n.map((v, k) => v * (1 - T.blend) + comb[k] * T.blend), l = Math.hypot(...d);

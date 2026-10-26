@@ -86,7 +86,7 @@ export function townStyle(seed, name = null) {
 // ---- THE FINISHES the style gives each kind of building (arch/finish.js rules: the first that matches wins) ---------
 const TRADES = ["smithy", "bakery", "pottery", "weaver", "tailor", "carpenter", "cooper", "butcher", "tavern-room"];
 const SHOP_NAMES = { smithy: "Smithy", bakery: "Bakery", pottery: "Pottery", weaver: "Weaver's", tailor: "Tailor's", carpenter: "Carpenter's", cooper: "Cooper's", butcher: "Butcher's" };
-const WOODWORK = ["table", "bed 1", "bed 2", "flight 0", "flight 1", "cellar flight", "cellar rail", "cellar rail posts", "cellar casks", "seating", "altar",
+const WOODWORK = ["table", "bed 1", "bed 2", "flight 0", "flight 1", "joists 1", "joists 2", "jetty 1", "jetty 2", "cellar flight", "cellar rail", "cellar rail posts", "cellar casks", "seating", "altar",
                   "beds", "chest", "stalls", "partition", ...TRADES.map((t) => "trade " + t)];
 const GROUND_FLOORS = ["floor 0", "floor 0 cellar beside", "floor 0 cellar front", "floor 0 cellar back", "floor 0 cellar col A", "cellar floor"];
 // THE TRADES' MATERIALS: a workshop's parts are named by what they are made of (village.py furniture: "forge brick",
@@ -112,10 +112,13 @@ function houseFinish(S, look) {
   return { name: "town house", building: "town", rules: [
     { parts: "roof", surface: "roof", ...(look.roof ?? S.roof) },
     { parts: "chimney", pattern: "stone/brick", palette: "brick" },
+    { parts: ["plinth", "plinth shop"], ...S.masonry },   // (the plinth: the town's rough stone)
+    { parts: ["course 1", "course 2", "quoins", "quoins b"], ...S.fine },   // (the string courses and the quoins: dressed stone)
+    { parts: "hearth/fireback", pattern: "stone/brick", palette: "iron" },   // (the fireback: sooted black)
     { parts: ["hearth", "cellar walls"], pattern: "stone/rubble", palette: S.stone },
     ...tradeMaterials(),
-    { parts: WOODWORK, pattern: "timber/bark", palette: S.wood },
-    { parts: "kind:railing", pattern: "timber/bark", palette: S.wood },   // (the stairs' stringers, balusters and handrails: the flights' wood)
+    { parts: WOODWORK, pattern: "timber/wood", palette: S.wood },   // (furniture, stairs, joists: planed wood -- bark read as zebra stripes on a counter)
+    { parts: "kind:railing", pattern: "timber/wood", palette: S.wood },   // (the stairs' stringers, balusters and handrails: the flights' wood)
     { parts: GROUND_FLOORS, surface: "floor", pattern: "floors/flagstones", palette: S.stone },
     { parts: "roof", side: "in", pattern: "timber/boards", palette: S.wood },
     ...inside(S),
@@ -152,7 +155,7 @@ function churchFinish(S) {
     { parts: ["spire", "pyramid", "saddleback"], surface: "roof", ...spire },
     { parts: "onion", surface: "roof", pattern: "roofs/sheet metal", palette: "copper" },
     { parts: ["nave roof", "chancel roof"], surface: "roof", ...S.roof },
-    { parts: WOODWORK, pattern: "timber/bark", palette: S.wood },
+    { parts: WOODWORK, pattern: "timber/wood", palette: S.wood },
     { parts: ["nave roof", "chancel roof"], side: "in", pattern: "timber/boards", palette: S.wood },
     { surface: "floor", side: "in", pattern: "floors/flagstones", palette: S.stone },
     { parts: ["nave", "chancel north", "chancel south", "chancel east"], surface: "wall", side: "in", pattern: "stone/plaster", palette: "plaster-white" },   // (the tower's inside stays stone)
@@ -167,7 +170,7 @@ function fortFinish(S) {
   return { name: "town wall", building: "town", rules: [
     { parts: ["cone", "bell", "tent", "roof"], surface: "roof", ...S.roof },
     { parts: ["upper floor", "platform"], surface: "floor", pattern: "timber/boards", palette: S.wood },
-    { parts: ["kind:railing", "inner parapet", "inner parapet by the stair", "inner parapet past the stair"], pattern: "timber/bark", palette: S.wood },   // (the walk's and the stairs' balustrades: timber, on stone walls)
+    { parts: ["kind:railing", "inner parapet", "inner parapet by the stair", "inner parapet past the stair"], pattern: "timber/wood", palette: S.wood },   // (the walk's and the stairs' balustrades: timber, on stone walls)
     { surface: "floor", pattern: "floors/flagstones", palette: S.stone },
     { ...S.masonry },
   ] };
@@ -181,8 +184,11 @@ function yardFinish(S) {
     { parts: "shed", surface: "roof", pattern: "roofs/thatch", palette: "thatch" },
     { parts: ["plinth", "end plinths", "dyke", "coping", "trough", "bowl"], pattern: "stone/rubble", palette: S.stone },
     { parts: ["hay", "bales", "grain"], pattern: "roofs/thatch", palette: "thatch" },
-    { parts: ["wallow", "slop", "floor"], pattern: "stone/sand", palette: "earth" },
-    { parts: YARD_WOOD, pattern: "timber/bark", palette: S.wood },
+    { parts: ["wallow", "wallow rim", "slop", "floor"], pattern: "stone/sand", palette: "earth" },
+    { parts: ["wallow wet"], pattern: "stone/sand", palette: "mud" },   // (the wallow's wet middle)
+    { parts: ["scratched"], pattern: "stone/sand", palette: "dust" },   // (the hen yard's bare ground: dry, paler than the wallow)
+    { parts: "shed", pattern: "timber/boards", palette: S.wood },   // (the sheds' walls: boards, after the hay, the floors and the ground -- the first rule that matches wins, and those are the sheds' own parts too -- the posts and fences below planed wood)
+    { parts: YARD_WOOD, pattern: "timber/wood", palette: S.wood },
     { surface: "floor", pattern: "stone/sand", palette: "earth" },
   ] };
 }
@@ -202,8 +208,8 @@ function longhouseFinish(S) {
     { parts: "roof", side: "in", pattern: "timber/boards", palette: S.wood },
     { parts: "hay", pattern: "roofs/thatch", palette: "thatch" },
     { parts: "hearth", pattern: "stone/rubble", palette: S.stone },
-    { parts: WOODWORK, pattern: "timber/bark", palette: S.wood },
-    { parts: ["aisle posts", "purlins", "tie beams", "wall plates", "king posts"], pattern: "timber/bark", palette: S.wood },
+    { parts: WOODWORK, pattern: "timber/wood", palette: S.wood },
+    { parts: ["aisle posts", "purlins", "tie beams", "wall plates", "king posts"], pattern: "timber/wood", palette: S.wood },
     { parts: "ash bed", pattern: "stone/sand", palette: "gravel" },
     { surface: "floor", pattern: "stone/sand", palette: "earth" },
     { parts: ["walls", "roof"], pattern: "timber/frame", palette: S.frames[0], align: "part" },   // (the roof's: its gables)
@@ -249,8 +255,9 @@ function houseSpec(kind, r, { trade = null, cellar = r() < .35, big = false } = 
   const build = [trade ? "walls 0 shop" : "walls 0", "walls 1", ...(n > 2 ? ["walls 2"] : []),
     ...(trade ? [] : ["windows 0 front"]), "windows 0 back", "windows 1", ...(n > 2 ? ["windows 2"] : []),   // (their shutters, or glass: the house's `glazed`)
     ...(cellar ? ["floor 0 cellar beside", "floor 0 cellar front", "floor 0 cellar back", "cellar walls", "cellar floor", "cellar flight", "cellar rail posts", "cellar rail", "cellar casks", "cellar casks east", "cellar chest", "cellar stool"] : ["floor 0"]),
-    "floor 1 beside", "floor 1 front", "floor 1 back", "flight 0", "way 1", "way 1 top",
-    ...(n > 2 ? ["floor 2 beside", "floor 2 front", "floor 2 back", "floor 2 col A", "flight 1", "way 2", "way 2 top", "bed 2"] : []),
+    "floor 1 beside", "floor 1 front", "floor 1 back", "joists 1", "flight 0", "way 1", "way 1 top",
+    ...(n > 2 ? ["floor 2 beside", "floor 2 front", "floor 2 back", "floor 2 col A", "joists 2", "flight 1", "way 2", "way 2 top", "bed 2"] : []),
+    ...(K.j ? ["jetty 1", ...(n > 2 ? ["jetty 2"] : [])] : ["course 1", ...(n > 2 ? ["course 2"] : [])]),   // (string courses at the floors' lines; a jettied house its jetty's joist ends)
     "roof", "chimney", "hearth", "table", "bed 1", trade ? "door shop" : "door", ...(trade ? ["trade " + trade, "sign " + trade] : [])];
   return { params, build };
 }
@@ -364,8 +371,12 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
     const P = h.spec.params, depth = h.def ? h.depth : P.D / 2 + (P.j ?? 0);   // (the jetty over the street on the upper storeys)
     const set = h.hw + 1.2 + depth;                          // front wall 1.2m back from the street's edge
     const [X, Z] = h.axis === "x" ? [h.along, h.at + h.side * set] : [h.at + h.side * set, h.along];
+    // (QUOINS up the corners of a plastered or stone house -- not a framed one: drawn after its look)
+    const look = h.def ? null : houseLook(S, h.kind, r);
+    const quoins = look && h.kind !== "jettied" && ![look.ground, look.upper].some((l) => l.pattern.startsWith("timber/")) ? ["quoins", "quoins b"] : [];
+    const plinth = h.kind === "stone" || h.def ? [] : [h.trade ? "plinth shop" : "plinth"];   // (a plinth of rough stone at the foot: not under a stone house)
     const def = h.def ?? archBuilding(`village/${h.kind}-house`, { name: h.trade ? SHOP_NAMES[h.trade] : "Town house",
-      params: { ...P, yaw: h.yaw, build: h.spec.build }, finish: houseFinish(S, { ...houseLook(S, h.kind, r), roof: roofAt(S, X, Z) }) });
+      params: { ...P, yaw: h.yaw, build: [...h.spec.build, ...quoins, ...plinth] }, finish: houseFinish(S, { ...look, roof: roofAt(S, X, Z) }) });
     const s = place(key(h.trade ?? "house"), def, X, Z, { home: true, ...(h.trade ? { trade: h.trade } : {}) });   // (a shop's trade: a lamp by its door, nightglow.js)
     const d = def.doors?.[0];
     if (d) {   // its door on the street
@@ -500,11 +511,16 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
   }
   const siteOf = (k, X, Z, extra) => { const [ox, oz] = BUILDINGS[k].arch?.offset ?? [0, 0]; return { key: k, x: X - ox, z: Z - oz, ...extra }; };
   const footN = riverZ(xB) - BR.halfL - BR.ramp, trackZ = footN - 8;
-  let trackW = xB;
+  let trackW = xB, westEdge = Infinity;   // (westEdge: the last western farm's plots' west edge)
   for (const F of FARMS) {
-    const half = Math.max(...F.plots.map((q) => q.length === 2 ? BUILDINGS[q[0]].footprint[0] + BUILDINGS[q[1]].footprint[0] + 3 : BUILDINGS[q[0]].footprint[0])) / 2;
-    if (F.x - half < -groundR + 6) continue;                          // (a small world: no room this far west)
-    const east = F.x > BASIN.x, tz = east ? quayZ(F.x) : trackZ;      // (the east farm fronts the quay road)
+    // how far the plots reach either side of the farm's line: a pair stands 1.5 m out each way from it, each plot its own
+    // width beyond -- not half their sum (the wider one on the east had the side track running inside its fence)
+    const reach = (side) => Math.max(...F.plots.map((q) => q.length === 2 ? 1.5 + BUILDINGS[q[side > 0 ? 1 : 0]].footprint[0] : BUILDINGS[q[0]].footprint[0] / 2));
+    const west = reach(-1), eastR = reach(1), east = F.x > BASIN.x;
+    // (a farm west of another keeps its side track and the plots beyond it clear of that farm's: moved west if need be)
+    if (!east && F.x + eastR + 3 > westEdge) F.x = westEdge - eastR - 3;
+    if (F.x - west < -groundR + 6) continue;                          // (a small world: no room this far west)
+    const tz = east ? quayZ(F.x) : trackZ;                            // (the east farm fronts the quay road)
     const L = between(r, 16, 19, .5), B = between(r, 6.5, 7.5, .5);
     const def = DW ? dwelling(pickW(r, DW), 0) : archBuilding("village/longhouse", { name: "Longhouse", params: { L, B, pitch: Math.round(between(r, 46, 54, 1)) }, finish: lf });   // (the period's farmhouse)
     const s = place(key("longhouse"), def, F.x, tz - 2.5 - B / 2 - .7, { bank: undefined, home: true });
@@ -519,8 +535,8 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
       else q.forEach((k, j) => sites.push(siteOf(k, F.x + (j ? 1 : -1) * (fps[j][0] / 2 + 1.5), z - fps[j][1] / 2, tag(k))));
       z -= deep + 3;
     }
-    routes.push({ w: 1.2, pts: [[F.x + half + 1.5, tz], [F.x + half + 1.5, z + 2]] });   // along the farm's side, past its plots
-    if (!east) trackW = Math.min(trackW, F.x - half);
+    routes.push({ w: 1.2, pts: [[F.x + eastR + 1.5, tz], [F.x + eastR + 1.5, z + 2]] });   // along the farm's side, past its plots
+    if (!east) { trackW = Math.min(trackW, F.x - west); westEdge = F.x - west; }
   }
   if (trackW < xB) routes.push({ w: 2, pts: [[xB, footN + .5], [xB, trackZ], [trackW, trackZ]] });   // the farm track from the bridge's foot
 
@@ -530,7 +546,7 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
 }
 function churchBuild(top) {
   const base = ["nave", "nave floor", "chancel north", "chancel south", "chancel east", "chancel floor", "nave roof", "chancel roof",
-                "tower", "tower floor", "tower stair", "seating", "altar", "door"];
+                "tower", "tower courses", "tower floor", "tower stair", "seating", "altar", "door"];
   return [...base, ...{ spire: ["spire", "cross"], pyramid: ["pyramid", "cross pyramid"], saddleback: ["saddleback"],
                         onion: ["onion base", "onion drum", "onion"], battlements: ["battlement roof", "battlements", "battlements x"] }[top]];
 }

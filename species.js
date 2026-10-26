@@ -205,12 +205,34 @@ const RIG = new Proxy({}, { get: (_, k) => A(String(k)) });   // (RIG.horse, as 
 // a house cat in one of the coats (mammals.js CAT_COATS), picked by seed
 export const makeCat = ({ seed = 1 } = {}) => catRig(CAT_COATS[((seed * 2654435761) >>> 0) % CAT_COATS.length]);
 export const SQUIRREL = RIG.squirrel;   // not a wanderer: it lives in the trees (squirrels.js)
+// A COAT of a species that declares several (its asset's `coats`: colour tables over its own -- a herd of horses bay,
+// chestnut, black, grey, dun, some with white socks; a black sheep in the flock): the k-th, built once
+const coatCache = new Map();
+export const coatDef = (species, k) => {
+  const d = byName.get(species), cs = d?.coats;
+  if (!cs?.length) return A(species);
+  const i = ((k % cs.length) + cs.length) % cs.length, key = species + "|" + i;
+  const table = d.colors ? "colors" : "c";   // (the asset's own colour table, by either name: creatures.js)
+  if (!coatCache.has(key)) coatCache.set(key, Object.keys(cs[i]).length ? buildCreature({ ...d, [table]: { ...(d[table] ?? {}), ...cs[i] }, coats: undefined }, ASSETS) : A(species));
+  return coatCache.get(key);
+};
+// A VARIANT a species declares (its asset's `variants`: { name: { params, colors } } -- the hen yard's rooster is the
+// chicken with `rooster`, its parts that are `"when": "rooster"`, in a cock's colours): built once, named after it
+const variantCache = new Map();
+export const variantDef = (species, name) => {
+  const d = byName.get(species), v = d?.variants?.[name];
+  if (!v) return null;
+  const key = species + "|" + name, table = d.colors ? "colors" : "c";
+  if (!variantCache.has(key)) variantCache.set(key, buildCreature({ ...d, name, params: { ...(d.params ?? {}), ...(v.params ?? {}) }, [table]: { ...(d[table] ?? {}), ...(v.colors ?? {}) }, coats: undefined, variants: undefined }, ASSETS));
+  return variantCache.get(key);
+};
 // THE YOUNG of a species that declares them (its asset's `young`: { s, n, side, hop, name } -- a lamb, a foal, a calf):
 // the species at `s` of its size (geom.js scaleDef), no grazing, resting or coming to you of its own -- it
 // follows its mother (index.html, in spring). null for a species without young.
 export const makeYoung = (species) => {
   const d = byName.get(species), y = d?.young;
-  return y ? scaleDef(buildCreature({ ...d, name: y.name ?? species, graze: undefined, rest: undefined, beg: undefined, young: undefined }, ASSETS), y.s) : null;
+  // (built with its `grown` param false: what only the grown have -- an udder, antlers -- says `"when": "grown"`)
+  return y ? scaleDef(buildCreature({ ...d, params: { ...(d.params ?? {}), grown: false }, name: y.name ?? species, graze: undefined, rest: undefined, beg: undefined, young: undefined }, ASSETS), y.s) : null;
 };
 
 // natural travel speed for a body: one unit of the gait clock per this many
@@ -306,7 +328,9 @@ function tauric(name, base, { scale = 1, at, drop = [], call, ...person }) {
   const parts = base.parts.filter((p) => !gone.has(p.id)).map((p) => scale === 1 ? p : { ...scalePart(p, scale), k: p.k && p.k * scale });
   const root = parts.find((p) => !p.parent), man = makePerson({ upper: true, ...person });
   const human = man.parts.map((p) => p.id === "pelvis" ? { ...p, parent: root.id, bob: false, pos: at.map((v, i) => v - (root.pos?.[i] ?? 0)) } : p);
-  const { mount, draft, climber, ...rest } = base;   // (no saddle, yoke or trees for them)
+  // (no saddle, yoke or trees for them -- and not the animal's MANE: mammals.js reports it by its neck's and head's part
+  //  INDICES, both dropped here, so the old indices fell on whatever moved into their places: a leg wore the horse's mane)
+  const { mount, draft, climber, mane, ...rest } = base;
   // (its HEAD is the person's mesh face, heads.js -- found by part index: the person's indices moved past the animal's,
   //  as a fused rider's are; without it the man had no head at all)
   const face = man.face ? { ...man.face, head: parts.length + man.face.head, gaze: parts.length + man.face.gaze } : null;

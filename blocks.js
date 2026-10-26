@@ -11,7 +11,7 @@ import * as THREE from "three";
 const CORNERS = [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]];
 const FACES = [[0, 1, 2, 3], [5, 4, 7, 6], [4, 0, 3, 7], [1, 5, 6, 2], [3, 2, 6, 7], [4, 5, 1, 0]];
 
-export function blockMesh(blocks, name) {
+export function blockMesh(blocks, name, material = null) {   // (material: a lit one instead of the flat paint -- normals are made for it)
   const pos = [], col = [], idx = [];
   for (const { at: [cx, cy, cz], size: [sx, sy, sz], yaw = 0, tilt = 0, colour, shape, ends = [.72, .6, .42] } of blocks) {
     const o = pos.length / 3, cs = Math.cos(yaw), sn = Math.sin(yaw), ct = Math.cos(tilt), st = Math.sin(tilt);
@@ -43,7 +43,8 @@ export function blockMesh(blocks, name) {
   g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
   g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
   g.setIndex(idx);
-  const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide }));   // (the faces' winding is not checked)
+  if (material) g.computeVertexNormals();
+  const m = new THREE.Mesh(g, material ?? new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide }));   // (the faces' winding is not checked)
   m.name = name; m.userData.noMerge = true;
   return m;
 }

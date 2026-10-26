@@ -4,7 +4,7 @@
  "category": "food/vegetable",
  "era": "-500-1900",
  "region": "everywhere",
- "_about": "a cabbage head standing in its field row: one low-poly ball, for a field of hundreds",
+ "_about": "a cabbage head standing in its field row: a pale round head in a cup of darker outer leaves spread open round it (2026-10-24: was one six-sided ball, which read as a green cube) -- still low-poly, for a field of hundreds",
  "params": {
   "r": [
    0.16,
@@ -12,10 +12,16 @@
   ]
  },
  "materials": {
+  "head": {
+   "pick": [
+    "#b9d18c",
+    "#aecb82"
+   ]
+  },
   "leaf": {
    "pick": [
-    "#86ad62",
-    "#7aa35a"
+    "#6f9a4c",
+    "#628f45"
    ]
   }
  },
@@ -23,19 +29,46 @@
   {
    "id": "head",
    "type": "sphere",
-   "material": "leaf",
-   "r": "r",
-   "sides": 6,
+   "material": "head",
+   "r": "r * 0.62",
+   "sides": 8,
    "at": [
     0,
-    "r * 0.85",
+    "r * 0.62",
     0
    ],
    "stretch": [
     1,
-    0.9,
+    0.92,
     1
    ]
+  },
+  {
+   "id": "leaves",
+   "type": "lathe",
+   "material": "leaf",
+   "profile": [
+    [
+     "r * 0.3",
+     0
+    ],
+    [
+     "r * 0.85",
+     "r * 0.22"
+    ],
+    [
+     "r * 1.05",
+     "r * 0.6"
+    ],
+    [
+     "r * 0.9",
+     "r * 0.95"
+    ]
+   ],
+   "sides": 9,
+   "caps": false,
+   "double": true,
+   "faceted": true
   }
  ]
 }

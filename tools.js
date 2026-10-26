@@ -20,6 +20,7 @@ import { litMaterial } from "./light.js";   // (painted items: the colour in the
 import { PALETTES } from "./patterns.js";   // (a palette named, not written out: "gold", "silver")
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const BODY_REST = .6;   // seconds an item resting against the body takes to settle where the hand holds it (a lute under a strumming hand)
 // (the old pieces helpers -- rod, plate, piecesGeometry -- went with the arrow they built: it is an item now)
 
 // A BUILT ITEM AS ONE PAINTED GEOMETRY: its colours in the vertices (each group's first paint), its normals (`flat`:
@@ -120,12 +121,16 @@ export function createTools(scene, { cap = 64, bank = ASSETS, lib = bank.get("it
       // along it: how far its ends reach below and above the hand, kept to stand it on the feet
       let lo = 0, hi = 0;
       for (const g of groups) for (let i = 1; i < g.pos.length; i += 3) { lo = Math.min(lo, g.pos[i]); hi = Math.max(hi, g.pos[i]); }
-      k = { shapes, follow: built.hold?.follow ?? .7, ground: built.hold?.rest === "ground" ? [lo, hi] : null, n: 0 };
+      // ...and one that RESTS AGAINST THE BODY (a lute: `rest: "body"`) lies where the hand holds it on the whole, in the
+      // figure's own frame, while the hand plays over it -- not bobbing with every stroke (holders' `rest`, in place)
+      k = { shapes, follow: built.hold?.follow ?? .7, ground: built.hold?.rest === "ground" ? [lo, hi] : null, body: built.hold?.rest === "body", n: 0 };
     } else console.warn(`tools: no item "${path}" (for "${tool}")`);
     kinds.set(tool, k);
     return k;
   };
-  const SC = V(1, 1, 1), M = new THREE.Matrix4(), R = new THREE.Matrix4(), X = V(0, 0, 0), Y = V(0, 0, 0), Z = V(0, 0, 0), H = V(0, 0, 0), E = V(0, 0, 0), D = V(0, 0, 0);
+  const SC = V(1, 1, 1), M = new THREE.Matrix4(), H = V(0, 0, 0);
+  let lastPlace = 0;
+  let gripped = new Set(), was = new Set();   // (the figures whose hands hold something this frame, and last frame's)
   return {
     // made now rather than on the first frame it is held (its tiles drawn, its triangles built)
     prepare(tools) { for (const t of tools) if (t) kindOf(t); },
@@ -135,30 +140,39 @@ export function createTools(scene, { cap = 64, bank = ASSETS, lib = bank.get("it
     // a negative one tips it forward, for a thing worked by what reaches up out of the hand: a rod over the water, an
     // axe coming down on the block)
     place(groups) {
+      const now = performance.now(), dt = Math.min(.1, (now - (lastPlace || now)) / 1000); lastPlace = now;
       for (const k of kinds.values()) if (k) k.n = 0;
       for (const p of pools.values()) p.begin();
-      for (const [herd, holders] of groups) for (const { an, tool, hand: [hi, fi], scale = 1, follow } of holders) {   // (scale: a colossus's sword is as big as it is)
+      [was, gripped] = [gripped, was]; gripped.clear();
+      for (const [herd, holders] of groups) for (const { an, tool, hand: [hi], scale = 1, follow } of holders) {   // (scale: a colossus's sword is as big as it is)
         const k = tool && kindOf(tool);
         if (!k || k.n >= cap || an.hidden) continue;
-        const [h] = herd.ends(an, hi), [a, b] = herd.ends(an, fi);
-        H.fromArray(h);
-        E.fromArray(Math.hypot(a[0] - h[0], a[1] - h[1], a[2] - h[2]) > Math.hypot(b[0] - h[0], b[1] - h[1], b[2] - h[2]) ? a : b);   // the elbow: the far end
-        D.subVectors(H, E).normalize();                                                  // down the forearm, through the hand
-        // an upright frame, not the forearm's own (a tool along a raised forearm juts out like a lance): it
-        // faces where the forearm points across the ground (the person's forward while the arm hangs) and
-        // tilts forward by part of the forearm's lift -- so the spade digs, the scythe sweeps, the hammer rises
-        X.set(D.x, 0, D.z);
-        if (X.length() < .25) X.set(Math.cos(an.rotY), 0, -Math.sin(an.rotY));
-        X.normalize(); Y.set(0, 1, 0); Z.crossVectors(X, Y);
-        R.makeRotationZ((follow ?? k.follow) * Math.acos(Math.max(-1, Math.min(1, -D.y))));
-        M.makeBasis(X, Y, Z).multiply(R);
+        // IN THE HAND, as the hand is: the skeleton turns the hand by the item's share of the forearm's turn (an.grip:
+        // skeleton.js "A HAND THAT HOLDS SOMETHING") and keeps its frame; the item is laid in that frame rigidly, its
+        // grip in the fist -- the middle of the hand, not the wrist. (Read from the pose before this one on the first
+        // frame it is held: the share is handed over here.)
+        (an.grip ??= {})[hi] = follow ?? k.follow;
+        gripped.add(an);
+        const G = an.gripM?.[hi];
+        if (!G) continue;
+        const [h, f] = herd.ends(an, hi);
+        H.set((h[0] + f[0]) / 2, (h[1] + f[1]) / 2, (h[2] + f[2]) / 2);
+        M.extractRotation(G);
         if (scale !== 1) M.scale(SC.set(scale, scale, scale));
+        if (k.body) {   // (the hand's place in the figure's frame -- forward, up, across -- eased toward it over BODY_REST seconds)
+          const c = Math.cos(an.rotY), sn = Math.sin(an.rotY), dx = H.x - an.position.x, dz = H.z - an.position.z;
+          const lx = c * dx - sn * dz, ly = H.y - an.position.y, lz = sn * dx + c * dz;
+          const r = (an._restAt ??= {})[hi] ??= [lx, ly, lz], e = 1 - Math.exp(-dt / BODY_REST);
+          r[0] += (lx - r[0]) * e; r[1] += (ly - r[1]) * e; r[2] += (lz - r[2]) * e;
+          H.set(an.position.x + c * r[0] + sn * r[2], an.position.y + r[1], an.position.z - sn * r[0] + c * r[2]);
+        }
         M.setPosition(H);
         if (k.ground) M.elements[13] = Math.max(H.y - k.ground[1] * scale, Math.min(H.y - k.ground[0] * scale, an.position.y - k.ground[0] * scale));   // (the butt on the feet's level; the hand stays on it)
         for (const { pool, shape } of k.shapes) pool.put(shape, M);
         k.n++;
       }
       for (const p of pools.values()) p.end();
+      for (const an of was) if (!gripped.has(an)) an.grip = an.gripM = null;   // (put down: the wrist straight again)
     },
     dispose() {
       for (const p of pools.values()) p.dispose();

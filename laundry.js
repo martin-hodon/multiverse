@@ -5,7 +5,7 @@
 // same height. One mesh for all the wash (its shapes cut in the shader), one for the ropes.
 //
 //   const laundry = createLaundry(scene, windows, { seed })   // windows: [{ x, y, z, w, h, base, cx, cz }] (the glow's list)
-//   laundry.update(t)
+//   laundry.update(t, out)   // out: hung out (false: taken in -- rain, snow, night)
 import * as THREE from "three";
 import { boundTo } from "./bounds.js";
 import { attribute, uniform, vec3, vec4, float, uv, sin, smoothstep, abs, mix, max, step, positionGeometry, cameraViewMatrix, cameraProjectionMatrix } from "three/tsl";
@@ -114,5 +114,6 @@ export function createLaundry(scene, windows, { seed = 1 } = {}) {
   const ropes = new THREE.LineSegments(rg, new THREE.LineBasicMaterial({ color: 0x5b5048 }));
   boundTo(ropes, null, .5); ropes.name = "washing lines"; ropes.userData.noMerge = true;
   scene.add(ropes);
-  return { lines: lines.length, pieces, ends: lines, update(t) { U.t.value = t; } };
+  // out: whether the wash is out -- taken in when it rains or snows and for the night (index.html); the lines stay
+  return { lines: lines.length, pieces, ends: lines, update(t, out = true) { U.t.value = t; wash.visible = out; } };
 }

@@ -483,7 +483,7 @@ function turnAssembly(asm, deg) {
 export function lifeOf(asm, cx, cz) {   // (exported: the asset viewer reads a building's statues by it, as the game does)
   const L = { beds: [], doors: [], windows: [], folkSpots: [], seats: [], fires: [], guards: [], up: [], pen: null, blocks: [], vessels: [], statues: [],
               dishes: [], flows: [], cobwebs: [], plants: [], crops: [], quaySlots: [], way: [], boatDock: null, wheelAt: null, wheel: null, drop: null, bargeZ: null,
-              lifts: [], paintings: [], mirrors: [], spins: [], chimneys: [], ridges: [], peaks: [] };
+              lifts: [], paintings: [], mirrors: [], spins: [], chimneys: [], ridges: [], peaks: [], edges: [], hips: [] };
   for (const p of asm.parts) {
     // a ROOF's RIDGE (a part of kind "roof"): its top line, end to end -- where the pigeons sit (pigeons.js); and the
     // top of a part marked `perch` (a merlon: its own share of the birds, `share`)
@@ -497,8 +497,50 @@ export function lifeOf(asm, cx, cz) {   // (exported: the asset viewer reads a b
         for (const q of ridge) for (const w of ridge) { const d = (q[0] - w[0]) ** 2 + (q[1] - w[1]) ** 2; if (d > best) { best = d; a = q; b = w; } }
         for (const [ang, X, Y, Z] of p.instances) {
           const c = Math.cos(ang), s = Math.sin(ang), at = ([x, z]) => [X + x * c + z * s - cx, Z - x * s + z * c - cz];
-          if (best > 4 || p.perch) L.ridges.push({ a: at(a), b: at(b), y: Y + top, ...(p.perch ? { share: p.perch } : {}) });
+          if (best > 4 || p.perch) L.ridges.push({ a: at(a), b: at(b), y: Y + top, part: p.name, ...(p.perch ? { share: p.perch } : {}) });   // (part: its name -- the finish rule that covers it gives the ridge tiles their colour)
           else { const m = at([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]); L.peaks.push({ x: m[0], y: Y + top, z: m[1] }); }   // (a point: a tower's spire -- where a flag flies, flags.js)
+        }
+      }
+    }
+    // a ROOF's EDGES (2026-10-24): the outline of its upper sheet but the ridge -- its eaves and, on a gable, its verges --
+    // each placement's, as [x0, y0, z0, x1, y1, z1] in the site's frame (index.html: the house's boards along them,
+    // windowframes.js)
+    if (p.kind === "roof" && !p.perch && p.geometry?.index?.length) {
+      const P = p.geometry.position, I = p.geometry.index, key = (i) => `${Math.round(P[i * 3] * 200)},${Math.round(P[i * 3 + 1] * 200)},${Math.round(P[i * 3 + 2] * 200)}`;
+      const wid = new Map(), id = (i) => { const k = key(i); if (!wid.has(k)) wid.set(k, i); return wid.get(k); };
+      const edges = new Map(), normals = new Map();   // (an edge: how many up-facing triangles share it; the normals they have)
+      // (of its UPPER sheet: a shell roof is a closed slab, so the outline of its triangles facing up -- the tiles' side)
+      for (let t = 0; t < I.length; t += 3) {
+        const A = I[t] * 3, B = I[t + 1] * 3, C = I[t + 2] * 3;
+        const ux = P[B] - P[A], uy = P[B + 1] - P[A + 1], uz = P[B + 2] - P[A + 2], vx = P[C] - P[A], vy = P[C + 1] - P[A + 1], vz = P[C + 2] - P[A + 2];
+        const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx, nl = Math.hypot(nx, ny, nz) || 1;
+        if (ny / nl < .15) continue;
+        for (let e = 0; e < 3; e++) {
+          const a = id(I[t + e]), b = id(I[t + (e + 1) % 3]), k = a < b ? a + "|" + b : b + "|" + a;
+          edges.set(k, (edges.get(k) ?? 0) + 1);
+          (normals.get(k) ?? normals.set(k, []).get(k)).push([nx / nl, ny / nl, nz / nl]);
+        }
+      }
+      // ...and its HIPS: an edge two slopes share that meet at a crease (their normals well apart) and climbs -- a hipped
+      // roof's corners up to its ridge (a level crease is the ridge itself, which the ridges above have)
+      for (const [k, ns] of normals) {
+        if (ns.length !== 2 || ns[0][0] * ns[1][0] + ns[0][1] * ns[1][1] + ns[0][2] * ns[1][2] > .8) continue;
+        const [a, b] = k.split("|").map(Number), dy = Math.abs(P[a * 3 + 1] - P[b * 3 + 1]), len = Math.hypot(P[a * 3] - P[b * 3], P[a * 3 + 2] - P[b * 3 + 2]);
+        if (dy < .15 || len < .3) continue;
+        for (const [ang, X, Y, Z] of p.instances) {
+          const c = Math.cos(ang), sn = Math.sin(ang), at = (i) => [X + P[i * 3] * c + P[i * 3 + 2] * sn - cx, Y + P[i * 3 + 1], Z - P[i * 3] * sn + P[i * 3 + 2] * c - cz];
+          L.hips.push({ a: at(a), b: at(b), part: p.name });
+        }
+      }
+      let top = -1e9; for (let i = 1; i < P.length; i += 3) top = Math.max(top, P[i]);
+      for (const [k, n] of edges) {
+        if (n !== 1) continue;
+        const [a, b] = k.split("|").map(Number);
+        if (P[a * 3 + 1] > top - .05 && P[b * 3 + 1] > top - .05) continue;   // (the ridge's own line)
+        if (Math.hypot(P[a * 3] - P[b * 3], P[a * 3 + 1] - P[b * 3 + 1], P[a * 3 + 2] - P[b * 3 + 2]) < .05) continue;
+        for (const [ang, X, Y, Z] of p.instances) {
+          const c = Math.cos(ang), sn = Math.sin(ang), at = (i) => [X + P[i * 3] * c + P[i * 3 + 2] * sn - cx, Y + P[i * 3 + 1], Z - P[i * 3] * sn + P[i * 3 + 2] * c - cz];
+          L.edges.push([...at(a), ...at(b)]);
         }
       }
     }
@@ -1212,7 +1254,7 @@ export function archBuilding(doc, { name, params = {}, color = 0xdcd4c2, accent 
     ...(life.beds.length ? { beds: life.beds, ways: { up: life.up.map((u) => u.at), upStorey: life.up.map((u) => u.storey) } } : {}),
     ...(life.doors.length ? { doors: life.doors } : {}), ...(life.windows.length ? { windows: life.windows } : {}),
     ...(life.folkSpots.length ? { folkSpots: life.folkSpots } : {}), ...(life.seats.length ? { seats: life.seats } : {}),
-    ...(life.fires.length ? { fires: life.fires } : {}), ...(life.chimneys.length ? { chimneys: life.chimneys } : {}), ...(life.ridges.length ? { ridges: life.ridges } : {}), ...(life.peaks.length ? { peaks: life.peaks } : {}), ...(life.guards.length ? { guards: life.guards } : {}),
+    ...(life.fires.length ? { fires: life.fires } : {}), ...(life.chimneys.length ? { chimneys: life.chimneys } : {}), ...(life.ridges.length ? { ridges: life.ridges } : {}), ...(life.edges.length ? { roofEdges: life.edges } : {}), ...(life.hips.length ? { roofHips: life.hips } : {}), ...(life.peaks.length ? { peaks: life.peaks } : {}), ...(life.guards.length ? { guards: life.guards } : {}),
     ...(life.pen ? { pen: { ...life.pen, blocks: life.blocks }, kind: life.pen.kind } : {}), ...(life.vessels.length ? { vessels: life.vessels } : {}),
     ...(life.dishes.length ? { dishes: life.dishes } : {}), ...(life.flows.length ? { flows: life.flows } : {}), ...(life.cobwebs.length ? { cobwebs: life.cobwebs } : {}),
     ...(life.plants.length ? { plants: life.plants } : {}), ...(life.crops.length ? { crop: life.crops[0].crop } : {}),

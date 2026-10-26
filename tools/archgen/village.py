@@ -71,11 +71,14 @@ def furniture():
                   "parts": {"table": item("items/furniture/trestle-table", [0, 0, 0, 0], {"L": "L", "d": 0.8}, seed="look"),
                             "benches": item("items/furniture/bench", [[0, 0, 0.68, 0], [0, 0, -0.68, 3.14159265]], {"L": "L"}, seed="look + 1", markers=["seat"])},
                   "build": ["table", "benches"]}
-    F["hearth"] = {"name": "Hearth", "_about": "a raised stone hearth against a wall (+z its front), the fire on it",
+    F["hearth"] = {"name": "Hearth", "_about": "a raised stone hearth against a wall (+z its front), the fire on it, framed as a fireplace: two jambs up from the hearth to the hood, the hood, and its flue on up to the ceiling (2026-10-24: the hood had hung in the air)",
                    "params": {"detail": 4},
                    "parts": {"hearth": box(1.5, 0.8, 0.45, [0, 0, 0, 0]), "hood": box(1.6, 0.6, 0.5, [0, 1.7, -0.1, 0]),
+                             "jambs": box(0.2, 0.6, 1.25, [[-0.7, 0.45, -0.1, 0], [0.7, 0.45, -0.1, 0]]),
+                             "flue": box(0.8, 0.4, 0.7, [0, 2.2, -0.2, 0]),
+                             "fireback": box(1.2, 0.04, 1.25, [0, 0.45, -0.38, 0]),
                              "fire": marker("fire", [0, 0.46, 0.05, 0], r=0.25, h=0.5)},
-                   "build": ["hearth", "hood", "fire"]}
+                   "build": ["hearth", "jambs", "hood", "flue", "fireback", "fire"]}
     F["chest"] = {"name": "Chest", "_about": "a six-board chest bound with iron (items/furniture/plank-chest)", "params": {"detail": 4, "look": 1},
                   "parts": {"chest": item("items/furniture/plank-chest", [0, 0, 0, 0], {"w": 0.95}, seed="look")}, "build": ["chest"]}
     F["barrels"] = {"name": "Barrels", "_about": "a row of casks on their ends (items/furniture/cask), a cellar's or a cooper's",
@@ -315,6 +318,39 @@ def house(kind):
         hole = "(ceil((1.7 + slab) / 0.19) + 3) * run"
         zh0, zh1 = ("zF - stairL", f"zF - stairL + {hole}") if even else (f"zF - {hole}", "zF")
         parts.update(slab_with_hole(f"floor {k}", f"g + {k} * H", not even, zh0, zh1, "D + 2 * j"))
+    # -- the STRING COURSES (2026-10-24): a band of dressed stone round the house at each upper floor's line, standing
+    #    a little proud of the wall (not on a jettied house: its jetty marks the storey)
+    if not K["j"]:
+        for k in (1, 2):
+            parts[f"course {k}"] = {"type": "enclosure", "plan": {"rect": ["W + 0.12", "D + 0.12"]}, "thickness": 0.12, "height": 0.16, "openings": [],
+                                    "at": [[0, f"g + {k} * H - 0.2", 0, 0]]}
+    # -- the PLINTH (2026-10-24): a low wall of rough stone round the foot, 4 cm proud -- what a framed or plastered house
+    #    stands on (the stone house is stone already); cut for the door, or the shop's arch
+    plinth_door = {"at": "W / 2 - t - 0.95", "width": "doorW", "sill": 0, "springing": 0.55, "head": {"profile": "flat"}}
+    plinth_arch = {"at": "0.9", "width": "W - 2.8", "sill": 0, "springing": 0.55, "head": {"profile": "flat"}}
+    for nm, op in (("plinth", plinth_door), ("plinth shop", plinth_arch)):
+        parts[nm] = {"type": "enclosure", "plan": {"rect": ["W + 0.08", "D + 0.08"]}, "thickness": 0.1, "height": 0.55, "openings": [], "faces": {"0": [op]}, "at": [[0, 0, 0, 0]]}
+    # -- the JETTY's joist ends (2026-10-24): under a jettied storey's overhang, front and back, the floor's joists show
+    #    as a row of beam ends carrying it, every half metre
+    if K["j"]:
+        for k in (1, 2):
+            y = f"g + {k} * H - 0.09"
+            parts[f"jetty {k}"] = box(0.13, "j + 0.1", 0.17, [[ "0 - W / 2 + 0.3", y, f"{sz} * (D / 2 + j / 2 - 0.05)", 0] for sz in (-1, 1)],
+                                     repeat={"count": "floor((W - 0.6) / 0.5) + 1", "step": [0.5, 0, 0, 0]})
+    # -- QUOINS (2026-10-24): dressed stones up each corner, long and short in turn (a long face on the front, then on
+    #    the side), standing 2 cm proud of both faces -- the town builds them on a plastered or stone house, not a framed one
+    if not K["j"]:
+        n_q = "floor((g + n * H) / 0.64)"
+        for nm, (w, l, y0) in {"quoins": ("0.56", "0.3", "0.16"), "quoins b": ("0.3", "0.56", "0.48")}.items():
+            parts[nm] = box(w, l, 0.28, [[f"{sx} * (W / 2 + 0.02 - ({w}) / 2)", y0, f"{sz} * (D / 2 + 0.02 - ({l}) / 2)", 0] for sx in (-1, 1) for sz in (-1, 1)],
+                            repeat={"count": n_q, "step": [0, 0.64, 0, 0]})
+    # -- the JOISTS under the upper floors (2026-10-24): a beam across the house every 0.75 m, the ceiling's timbers seen
+    #    from the room below -- only beside the stair's two columns (clear of the flights' headroom); they span the house's
+    #    width, within its walls
+    for k in (1, 2):
+        dep = "D + 2 * j"
+        parts[f"joists {k}"] = box("xr - (xl + 2 * sw)", 0.14, 0.16, [f"(xl + 2 * sw + xr) / 2", f"g + {k} * H - slab - 0.16", f"0 - ({dep}) / 2 + t + 0.35", 0],
+                                   repeat={"count": f"floor((({dep}) - 2 * t - 0.7) / 0.75) + 1", "step": [0, 0, 0.75, 0]})
     # -- the flights: from storey k to k+1, arriving on the floor (landing 0)
     for k in (0, 1):
         if k % 2 == 0:
@@ -373,7 +409,7 @@ def house(kind):
         parts[f"sign {tr}"] = item("items/components/trade-sign", ["W / 2 - 0.45", "g + H - 0.3", "D / 2", 0], {"kind": "tavern" if tr == "tavern-room" else tr}, solid=False)
     doc = {"name": K["name"], "_about": K["about"] + ". " + LAYOUT_ABOUT, "params": params,
            "_build": "the village plan builds: walls 0 (or walls 0 shop), walls 1..n-1 and their windows k, floor 0 (or floor 0 cellar + the cellar, and flight 0 open for flight 0), floor k + flight k-1 + way k for every upper storey, roof, chimney, beds, door (or door shop), a trade, hearth, table",
-           "build": ["walls 0", "walls 1", "windows 0 front", "windows 0 back", "windows 1", "floor 0", "floor 1 beside", "floor 1 front", "floor 1 back", "flight 0", "way 1", "way 1 top",
+           "build": ["walls 0", "walls 1", "windows 0 front", "windows 0 back", "windows 1", "floor 0", "floor 1 beside", "floor 1 front", "floor 1 back", "joists 1", "flight 0", "way 1", "way 1 top",
                      "roof", "chimney", "hearth", "table", "bed 1", "door"],
            "walked": True, "parts": parts}
     write("village/" + kind + "-house", doc)
@@ -449,7 +485,7 @@ def wall_segment():
     params = {"detail": 4, "len": 30, "h": 6.0, "T": 2.4, "fp": 0.5, "ri": 0.15, "pa": 2.8, "pb": 2.8, "ia": 2.8, "ib": 2.8, "ka": 1, "kb": 1, "sx": -6.0, "run": 0.28, "Lf": "round(h / 0.19) * run",
               "_fp": "the field parapet's thickness (its inner face is the walk's field edge) and ri how far in from the town face the town-side rail stands: the walk's middle is (fp - ri) / 2 in from the wall's line toward the town (town.js frame.walkIn: the watchman and the sentry walk it)",
               "_len": "the segment's length (centre of one tower to the next, or to a gatehouse's face), h its walk's height, T its thickness; sx where the flight up starts (it climbs +x along the town face to a 1.3m landing: sx + Lf + 1.3 must stay short of the +x end)",
-              "_pa": "where the field parapet stops short of the -x end (pa) and the +x end (pb): 2.8 at a tower astride the wall, 0.7 at a corner tower (it runs into the tower), 0 at a gatehouse's face; ia/ib the same for the town-side parapet (T/2 - 0.15 at a corner: it runs to the corner, where it meets the other wall's), ka/kb 0 where its end post is the other wall's (one post at the corner, not two side by side)"}
+              "_pa": "where the field parapet stops short of the -x end (pa) and the +x end (pb): 2.8 at a tower astride the wall, where a flanking tower meets it (town.js flankStop; ia 0 there: the town side runs on), 0.7 at a corner tower (it runs into the tower), 0 at a gatehouse's face; ia/ib the same for the town-side parapet (T/2 - 0.15 at a corner: it runs to the corner, where it meets the other wall's), ka/kb 0 where its end post is the other wall's (one post at the corner, not two side by side)"}
     parts = {
         "body": box("len", "T", "h", [0, 0, 0, 0]),
         "parapet": comp("components/crenellation", ["(pa - pb) / 2", "h", "T / 2 - fp / 2", 0], {"L": "len - pa - pb", "t": "fp", "h": 1.0, "step": 1.8, "mh": 0.75}, build=["parapet", "merlons"]),
@@ -462,7 +498,7 @@ def wall_segment():
         "inner parapet past the stair": comp("components/fence", ["sx + Lf + 1.4", "h", "0 - T / 2 + ri", 0], {"L": "len / 2 - ib - (sx + Lf + 1.4)", "style": "rails", "bay": 1.8, "h": 1.0, "p1": "kb"}),
         "stair": {"type": "flight", "run": "run", "rise": 0.19, "width": 1.3, "base": 0, "top": "h", "landing": 1.3, "at": [["sx", 0, "0 - T / 2", 0]]},
     }
-    write("village/wall", {"name": "Town wall", "_about": "A STRETCH OF TOWN WALL: its top is the wall-walk, behind a crenellated parapet on the field side (+z) and a low one on the town side; the parapets stop short of a tower astride the wall, run into a corner tower, and meet a gatehouse's face (pa/pb, ia/ib); built with `stair` (and the town-side parapet in two, `inner parapet by the stair` and `past the stair`) it has a flight up from the town.",
+    write("village/wall", {"name": "Town wall", "_about": "A STRETCH OF TOWN WALL: its top is the wall-walk, behind a crenellated parapet on the field side (+z) and a low one on the town side; the parapets stop short of a tower astride the wall (the river ends), the field one runs into a tower flanking it (between: town.js) and the town-side one runs on behind it, run into a corner tower, and meet a gatehouse's face (pa/pb, ia/ib); built with `stair` (and the town-side parapet in two, `inner parapet by the stair` and `past the stair`) it has a flight up from the town.",
                            "params": params, "parts": parts, "build": ["body", "parapet", "inner parapet"], "walked": True})
 
 
@@ -472,7 +508,7 @@ def wall_segment():
 def wall_tower():
     params = {"detail": 4, "R": 3.4, "wall": 0.8, "h": 6.0, "top": 10.6, "n": 12, "turn": 24, "rise": 0.19,
               "steps": "round((top - h) / rise)", "slab": 0.3, "roomH": 2.6, "zt": 0, "capRise": 5.0,
-              "_zt": "the tower's centre out from its placement (+z: the field) -- the village plan sets it so the tower stands astride the wall's outer face",
+              "_zt": "the tower's centre out from its placement (+z: the field) -- the village plan sets it so the tower stands astride the wall's outer face (at the corners and river ends), or flanks the wall between, its back on the walk's field edge (town.js FLANK)",
               "_h": "the walk's height (the wall's); top the platform the spiral arrives on"}
     parts = {
         "base": col("R", "h", [0, 0, "zt", 0], sides=12),
@@ -575,6 +611,10 @@ def church():
                                   {"openings": {"pattern": "2", "width": 0.9, "gap": 0.5, "pier": 0.9, "end": "(S - 2.3) / 2", "sill": 0.8, "springing": "belH - 0.9", "head": rnd, "glass": False}}],
                             "2": [{"h": "tH - belH", "openings": []},
                                   {"openings": {"pattern": "2", "width": 0.9, "gap": 0.5, "pier": 0.9, "end": "(S - 2.3) / 2", "sill": 0.8, "springing": "belH - 0.9", "head": rnd, "glass": False}}]}},
+        # (STRING COURSES round the tower at its stages -- over the door's storey and under the belfry -- standing proud:
+        #  the shaft read as one plain block, 2026-10-24)
+        "tower courses": {"type": "enclosure", "plan": {"rect": ["S + 0.24", "S + 0.24"]}, "thickness": 0.16, "height": 0.26, "openings": [],
+                          "at": [[tx, 3.3, 0, 0], [tx, "tH - belH - 0.25", 0, 0]]},
         "tower floor": box("S - t", "S - 0.04", "g", [f"{tx} - t / 2 + 0.02", 0, 0, 0]),   # (to the nave floor's end, under the tower's east wall: one floor in its doorway)
         "tower stair": comp("components/tower-stair", [tx, "g", 0, 0], {"W": "S - 2 * t", "H": "tH - belH - g", "tR": "tR", "n": "tn", "wall": 0.3, "slab": 0.3,
                                                                           "tx": "S / 2 - t - tR - 0.02", "tz": "0 - (S / 2 - t - tR - 0.02)"}),
@@ -723,9 +763,25 @@ def yards():
             "pen": marker("pen", [0, 0, 0, 0], w="W - 1.4", d="D - 1.4", kind=kind),
         }
         if kind == "pigs":
-            parts["wallow"] = box(4.5, 3.2, 0.04, [-1, 0, 0.5, 20 * 3.14159265 / 180])
+            # the wallow: trodden mud in overlapping rounds (no edge straight), and in its lowest middle the wet, darker and
+            # a little proud of it so the two never fight
+            parts["wallow"] = col(1.0, 0.03, [[-1, 0, 0.5, 0], [0.3, 0, 0.9, 0.4], [-2.3, 0, 0.1, 0.9], [-0.6, 0, -0.5, 1.3], [-1.7, 0, 1.4, 0.2], [0.6, 0, -0.2, 2.1]], sides=18)
+            parts["wallow rim"] = col(0.6, 0.03, [[0.05, 0, -0.6, 0], [0.75, 0, 0.45, 0.6], [-0.6, 0, 1.45, 1.2], [-2.3, 0, 0.95, 1.8], [-1.6, 0, -0.5, 2.4]], sides=14)   # (the notches between the rounds filled)
+            # the rest of the yard rooted up: bare earth in rounds (as the hen yard's, under the wallow)
+            parts["scratched"] = col(1.9, 0.022, [[x, 0, z, (i * 0.9) % 3.14] for i, (x, z) in enumerate(
+                [(-6.5, -3.5), (-4.0, -4.2), (-1.0, -3.8), (2.2, -3.2), (5.0, -3.6), (-6.8, 0.2), (3.6, 0.0), (6.4, 1.6), (-5.6, 3.6), (-2.6, 4.2), (1.2, 3.9), (4.2, 3.4),
+                 (-1.0, 0.5), (1.0, 1.6), (-3.2, 0.6), (-1.4, -1.8), (0.8, -1.0), (-2.8, 2.2), (1.8, 0.2)])], sides=16)   # (and under the wallow: no ring of grass round it)
+            parts["wallow wet"] = col(0.55, 0.04, [[-0.9, 0, 0.45, 0], [-0.2, 0, 0.7, 0.7], [-1.5, 0, 0.2, 1.4]], sides=12)
+        if kind == "horses":   # trodden bare before the stable's stalls and on the way in from the gate
+            parts["scratched"] = col(1.6, 0.022, [[x, 0, z, (i * 0.8) % 3.14] for i, (x, z) in enumerate(
+                [(-9.5, 0.6), (-7.2, 0.4), (-4.9, 0.7), (-2.6, 0.5), (-0.3, 0.6), (1.6, 0.3), (-8.4, -1.5), (-5.8, -1.4), (-3.2, -1.6), (-0.8, -1.2),
+                 (-7.4, -3.6), (-7.2, -5.8)])], sides=16)
         if kind == "hens":
-            parts["grain"] = box(1.1, 0.8, 0.04, [-1.5, 0, -1.2, 0])
+            parts["grain"] = col(0.35, 0.03, [[-1.5, 0, -1.2, 0], [-1.1, 0, -1.0, 0.5], [-1.8, 0, -0.9, 1.1]], sides=10)   # (scattered, not a mat)
+            # the ground the hens have scratched bare: earth in overlapping rounds over most of the yard, the grass left
+            # along the fence (a hair under the grain, so the two never fight)
+            parts["scratched"] = col(1.7, 0.022, [[x, 0, z, (i * 0.7) % 3.14] for i, (x, z) in enumerate(
+                [(-4.5, 2.5), (-2.5, 3.8), (-1.5, 1.0), (0.8, 2.2), (2.8, 0.6), (-3.6, -0.4), (-0.8, -1.6), (1.6, -2.2), (3.8, -1.9), (-2.6, -2.9), (4.6, 2.6), (0.0, -3.6)])], sides=16)
         write("village/" + key, {"name": name, "_about": about.upper()[:1] + about[1:] + " -- the fence a `fence` component a side, the gate open to the street, the shed a component; `pen` and `block` markers say where the stock may go, `trough` where it drinks (index.html).",
                                  "params": params, "parts": parts, "build": list(parts)})
 

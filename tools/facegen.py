@@ -42,12 +42,12 @@ CANON = {"scale": 1, "faceW": 1, "forehead": 1, "occiput": 1, "crown": 1, "earS"
          "mouthWidth": 0.052, "upperLipHeight": 0.021, "upperVermilion": 0.008, "lowerVermilion": 0.009, "lowerLipHeight": 0.019,
          "chinProjection": 0, "chinHeight": 0.013, "chubby": 1,
          "expression": "neutral", "viseme": "none", "flower": 0, "hairFlower": "items/flowers/blooms/rose", "flowerScale": 0.75,
-         "headwear": 0, "earrings": 0, "hairCap": None, "fringe": 0}
+         "headwear": 0, "earrings": 0, "hairCap": None, "fringe": 0, "beard": "none"}
 FACES["face"] = {
     "kind": "item", "name": "Face", "category": "face", "era": "everywhere", "region": "everywhere",
     "_about": "the canon head on GUIDE LINES (face.js, docs/face.md): Farkas's adult means as attributes -- face height, upper and lower width, the eyes' distance and width, the nose's height, width and projection, the nasolabial and forehead angles, the mouth's width, the lips' heights -- placing the landmarks, the landmarks the lattice of guide lines (brow, lids, lip borders, jawline...), the skin the lattice subdivided with each region's roundness. expression / viseme (or the actions: smile, jawOpen, blink...) move the lines. The origin is the cranium's centre; +x is where it looks",
     "params": CANON,
-    "materials": {"skin": SKINS, "lip": {"pick": ["lip-rose", "lip-rose", "lip-pink", "lip-brown", "lip-pale", "lip-dark"]}, "mouth": "mouth-dark", "teeth": "teeth-ivory", "eye": "eye-white", "limbus": "iris-limbus", "glint": "eye-glint", "lash": "lash-dark", "iris": IRISES, "pupil": "pupil", "brow": "hairColour", "hair": "hairColour", "hairColour": HAIRS, "tie": "leather-dark"},
+    "materials": {"skin": SKINS, "lip": {"pick": ["lip-rose", "lip-rose", "lip-pink", "lip-brown", "lip-pale", "lip-dark"]}, "mouth": "mouth-dark", "teeth": "teeth-ivory", "eye": "eye-white", "limbus": "iris-limbus", "glint": "eye-glint", "lash": "lash-dark", "iris": IRISES, "pupil": "pupil", "brow": "hairColour", "beard": "brow", "stubble": "brow", "hair": "hairColour", "hairColour": HAIRS, "tie": "leather-dark"},
     "parts": [{"id": "head", "type": "face", "headScale": "scale", "faceW": "faceW", "forehead": "forehead", "occiput": "occiput", "crown": "crown",
                "earS": "earS", "hairline": "hairline", "bare": "bare", "hair": "hair"},
               # A FLOWER IN THE HAIR (`flower` 1): a bloom (items/flowers/blooms) worn over the left ear, its face turned out
@@ -72,7 +72,8 @@ kind("man", "Man", "a man's head: the face longer and the jaw wider and squarer 
       "noseHeight": [0.052, 0.058], "noseWidth": [0.034, 0.039], "noseProjection": [0.019, 0.024], "nasolabialAngle": [90, 102], "noseHump": [0, 0.004], "noseBridge": [0.003, 0.006],
       "mouthWidth": [0.05, 0.056], "upperVermilion": [0.006, 0.008], "lowerVermilion": [0.008, 0.01], "upperLipHeight": [0.02, 0.024], "lowerLipHeight": [0.018, 0.021],
       "eyeDistance": [0.031, 0.035], "eyeWidth": [0.029, 0.032], "eyeHeight": [0.009, 0.011], "eyeTilt": [0, 4], "chinProjection": [0.0, 0.004], "chinHeight": [0.013, 0.017],
-      "chubCheek": [0.7, 1.0], "chubby": [0.8, 1.0], "chubJaw": [0.6, 1.0], "earS": [1.0, 1.12], "hairline": {"pick": [0.055, 0.06, 0.065, 0.085, 0.11]}})
+      "chubCheek": [0.7, 1.0], "chubby": [0.8, 1.0], "chubJaw": [0.6, 1.0], "earS": [1.0, 1.12], "hairline": {"pick": [0.055, 0.06, 0.065, 0.085, 0.11]},
+      "beard": {"pick": ["none", "none", "none", "short", "short", "full", "moustache", "goatee"]}})
 kind("woman", "Woman", "a woman's head: the face shorter, the jaw narrower with a more open angle, the chin small, the forehead upright and smooth, the brows higher and arched over the orbit, the eyes a little larger and lifted at the outer corner, the nose shorter and finer with a more obtuse nasolabial angle, the lips fuller, the cheeks rounder",
      {"faceHeight": [0.108, 0.118], "upperWidth": [0.126, 0.134], "lowerWidth": [0.086, 0.095], "chinWidth": [0.036, 0.042], "jawAngle": [123, 130], "foreheadAngle": [4, 10],
       "browRidge": [0.0, 0.002], "browHeight": [0.016, 0.02], "browArch": [0.003, 0.006], "browThickness": [0.004, 0.0055],
@@ -93,13 +94,21 @@ kind("elder", "Elder", "an old head: the cheeks hollow under prominent cheekbone
      {"faceHeight": [0.118, 0.128], "upperWidth": [0.13, 0.138], "lowerWidth": [0.094, 0.104], "jawAngle": [122, 130], "browRidge": [0.004, 0.007], "browHeight": [0.012, 0.015], "browThickness": [0.006, 0.009],
       "eyeDepth": [0.018, 0.021], "eyeHeight": [0.007, 0.009], "eyeTilt": [-2, 2], "noseHeight": [0.054, 0.06], "noseWidth": [0.036, 0.041], "noseProjection": [0.022, 0.026], "noseHump": [0.002, 0.006],
       "upperVermilion": [0.004, 0.006], "lowerVermilion": [0.005, 0.007], "mouthWidth": [0.05, 0.055], "chubCheek": [-0.6, 0.0], "chubby": [0.8, 1.0], "chubJaw": [1.0, 1.4],
-      "earS": [1.1, 1.25], "hairline": {"pick": [0.085, 0.11, 0.2, 0.2]}},
+      "earS": [1.1, 1.25], "hairline": {"pick": [0.085, 0.11, 0.2, 0.2]}, "beard": {"pick": ["none", "full", "full", "short", "moustache"]}},
      {"hairColour": {"pick": ["hair-grey", "hair-grey", "hair-white", "hair-brown"]}})
+kind("old-woman", "Old woman", "an old woman's head: a woman's face aged -- the cheek pads gone under the cheekbones, the eyes deeper under heavier lids, the lips thinned, the nose and the ears grown, the jaw softened into jowls",
+     {"faceHeight": [0.11, 0.12], "upperWidth": [0.126, 0.134], "lowerWidth": [0.088, 0.097], "chinWidth": [0.036, 0.042], "jawAngle": [124, 131], "foreheadAngle": [4, 10],
+      "browRidge": [0.001, 0.003], "browHeight": [0.014, 0.018], "browArch": [0.002, 0.004], "browThickness": [0.004, 0.0055],
+      "noseHeight": [0.049, 0.054], "noseWidth": [0.031, 0.036], "noseProjection": [0.019, 0.022], "nasolabialAngle": [96, 108], "noseHump": [0.0, 0.003],
+      "mouthWidth": [0.047, 0.052], "upperVermilion": [0.004, 0.006], "lowerVermilion": [0.005, 0.007], "upperLipHeight": [0.019, 0.022], "lowerLipHeight": [0.017, 0.019],
+      "eyeDistance": [0.031, 0.034], "eyeWidth": [0.028, 0.031], "eyeHeight": [0.007, 0.009], "eyeTilt": [0, 3], "eyeDepth": [0.017, 0.02], "chinHeight": [0.011, 0.014],
+      "chubCheek": [-0.4, 0.2], "chubby": [0.85, 1.05], "chubJaw": [1.0, 1.4], "earS": [1.0, 1.12], "hairline": [0.055, 0.07]},
+     {"hairColour": {"pick": ["hair-grey", "hair-white"]}, "lip": {"pick": ["lip-pale", "lip-brown"]}})
 kind("beast-man", "Beast man", "a brute's head for a monster: the face long and wide, the jaw massive (a low, square angle) and the chin thrust out, the brow ridge heavy over a sloping forehead, the nose broad and flat with an acute nasolabial angle, the eyes small and close, the mouth wide, the ears large",
      {"scale": [1.05, 1.15], "faceHeight": [0.13, 0.14], "upperWidth": [0.148, 0.16], "lowerWidth": [0.118, 0.13], "chinWidth": [0.054, 0.06], "jawAngle": [108, 116], "foreheadAngle": [20, 28],
       "browRidge": [0.009, 0.013], "browHeight": [0.011, 0.013], "browThickness": [0.009, 0.012], "noseWidth": [0.045, 0.05], "noseProjection": [0.015, 0.019], "nasolabialAngle": [84, 94],
       "mouthWidth": [0.058, 0.064], "eyeDistance": [0.028, 0.031], "eyeWidth": [0.026, 0.028], "eyeHeight": [0.008, 0.009], "eyeDepth": [0.018, 0.021], "chinProjection": [0.004, 0.008],
-      "chubby": [0.85, 0.95], "earS": [1.2, 1.4], "hairline": [0.04, 0.05], "forehead": [0.9, 0.96]},
+      "chubby": [0.85, 0.95], "earS": [1.2, 1.4], "hairline": [0.04, 0.05], "forehead": [0.9, 0.96], "beard": {"pick": ["full", "full", "short"]}},
      {"skin": {"pick": ["skin-tan", "skin-brown", "skin-olive", "#7a8a5a"]}})
 
 MATERIALS = {

@@ -9,6 +9,7 @@
 // are flowers then).
 
 import { vAdd, vSc, vNorm, vCross, vPerp, vRot, aimRot } from "./geom.js";
+import { LEAF_STYLES } from "./textures.js";
 
 export const rng = (seed) => {
   let a = seed | 0;
@@ -55,7 +56,7 @@ const TREES = {
     cards: { style: "lobed", density: 6, size: 1.5, levels: 3 } },
   birch: { hRange: [14, 22], trunk: 0xd6d3c9, bark: "barkH", leaf: [0x71903f, 0x587a30], autumnC: 0xd7a92f,
     mode: "alternate", depth: 4, branches: 3, angle: 30, jitter: .4, lenRatio: .62, radRatio: .58, curve: .3, trunkR: .03, wobble: .3, tilt: 5,
-    cards: { style: "round", density: 3, size: 1.2, levels: 2 } },
+    cards: { style: "ovate", density: 3, size: 1.2, levels: 2 } },
   pine: { hRange: [22, 33], trunk: 0xa26b42, leaf: [0x3a5230, 0x2c4226], evergreen: true,
     mode: "whorled", depth: 3, branches: 5, angle: 52, jitter: .45, lenRatio: .52, radRatio: .5, curve: .08, trunkR: .025, wobble: .3, tilt: 6,
     cards: { style: "needles", density: 7, size: 1.5, levels: 2, flat: .6 } },
@@ -86,7 +87,7 @@ const TREES = {
 export const TREE_SPECIES = Object.keys(TREES).filter((k) => !TREES[k].orchard && !TREES[k].warm);   // the wild mix
 export const WARM_TREES = Object.keys(TREES).filter((k) => TREES[k].warm);
 export const FRUIT_TREES = Object.keys(TREES).filter((k) => TREES[k].orchard);
-const LEAF_STYLE_IDS = { oval: 0, round: 1, lobed: 2, needles: 3, willow: 4, berries: 5, apples: 6, cherries: 7 };   // the leaf atlas's cells (textures.js LEAF_STYLES)
+const LEAF_STYLE_IDS = Object.fromEntries(LEAF_STYLES.map((k, i) => [k, i]));   // the leaf atlas's cells, by name (textures.js LEAF_STYLES: one list)
 
 
 // one wood segment: a capsule from a (radius ra) to b (rb) in the trunk's bark, never thinner than a hair
@@ -243,7 +244,7 @@ export function makeBush({ seed = 1, autumn = 0, spring = 0, fruit, height } = {
   const r = rng(seed * 331 + 7);
   const h0 = 1.6 + r() * 1.6, h = height ?? h0, wide = h * (.42 + r() * .2), k = h / 2.4;
   let green = lerpC(0x41682f, 0x7d9c48, r());
-  const style = r() < .5 ? LEAF_STYLE_IDS.oval : LEAF_STYLE_IDS.round;
+  const style = r() < .5 ? LEAF_STYLE_IDS.oval : LEAF_STYLE_IDS.ovate;
   const F = fruit === undefined ? (r() < .35 ? BUSH_FRUITS[Math.floor(r() * BUSH_FRUITS.length)] : null) : BUSH_FRUITS.find((f) => f.name === fruit) ?? null;
   const bark = 0x5b4326, parts = [], leaves = [];
   const nStems = 4 + Math.floor(r() * 3);

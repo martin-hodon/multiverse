@@ -1,6 +1,6 @@
 {
  "name": "Fence",
- "_about": "a straight run of fence along +x, L long: `style` rails (post-and-rail, two rails), picket, wattle (hurdles woven between posts), zigzag (the split-rail worm fence, three rails a bay laid at 25 degrees either way, out to -z and back, the run's ends on its line so runs meet at their corners) or stone (a dry-stone dyke with its coping); `bay` the posts' spacing, `h` the height",
+ "_about": "a straight run of fence along +x, L long: `style` rails (post-and-rail, two rails), picket, wattle (hurdles woven between posts), zigzag (the split-rail worm fence, three rails a bay laid at 25 degrees either way) or stone (a dry-stone dyke with its coping); `bay` the posts' spacing, `h` the height",
  "params": {
   "detail": 4,
   "L": 10,
@@ -195,35 +195,34 @@
    }
   },
   "zig": {
-   "_about": "out from the line (-z) at 25 degrees over one bay of the run's own (an even number of them, so it ends where it began: on the line, at the next run's corner), its rails under the zag's where they cross",
    "type": "box",
-   "width": "L / (2 * ceil(L / bay / 2)) / 0.9063 + 0.2",
+   "width": "bay / 0.9063 + 0.3",
    "length": 0.1,
    "height": 0.11,
    "at": [
     [
-     "L / (2 * ceil(L / bay / 2)) / 2",
+     "bay / 2",
      0.25,
-     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     0,
      0.4363323125
     ],
     [
-     "L / (2 * ceil(L / bay / 2)) / 2",
+     "bay / 2",
      0.6,
-     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     0,
      0.4363323125
     ],
     [
-     "L / (2 * ceil(L / bay / 2)) / 2",
+     "bay / 2",
      0.95,
-     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     0,
      0.4363323125
     ]
    ],
    "repeat": {
-    "count": "ceil(L / bay / 2)",
+    "count": "ceil(round(L / bay) / 2)",
     "step": [
-     "2 * L / (2 * ceil(L / bay / 2))",
+     "2 * bay",
      0,
      0,
      0
@@ -234,35 +233,34 @@
    }
   },
   "zag": {
-   "_about": "back to the line over the next bay, its rails laid over the zig's where they cross (as a worm fence is stacked)",
    "type": "box",
-   "width": "L / (2 * ceil(L / bay / 2)) / 0.9063 + 0.2",
+   "width": "bay / 0.9063 + 0.3",
    "length": 0.1,
    "height": 0.11,
    "at": [
     [
-     "L / (2 * ceil(L / bay / 2)) * 1.5",
-     0.37,
-     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     "bay * 1.5",
+     0.25,
+     0,
      "0 - 0.4363323125"
     ],
     [
-     "L / (2 * ceil(L / bay / 2)) * 1.5",
-     0.72,
-     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     "bay * 1.5",
+     0.6,
+     0,
      "0 - 0.4363323125"
     ],
     [
-     "L / (2 * ceil(L / bay / 2)) * 1.5",
-     1.07,
-     "0 - L / (2 * ceil(L / bay / 2)) * 0.2332",
+     "bay * 1.5",
+     0.95,
+     0,
      "0 - 0.4363323125"
     ]
    ],
    "repeat": {
-    "count": "ceil(L / bay / 2)",
+    "count": "floor(round(L / bay) / 2)",
     "step": [
-     "2 * L / (2 * ceil(L / bay / 2))",
+     "2 * bay",
      0,
      0,
      0

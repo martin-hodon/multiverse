@@ -9,9 +9,10 @@
 import * as THREE from "three";
 import { boundTo } from "./bounds.js";
 import { attribute, uniform, vec2, vec3, vec4, float, varying, uv, fract, sin, cos, smoothstep, mix, clamp, pow,
-         cameraViewMatrix, cameraProjectionMatrix } from "three/tsl";
+         cameraViewMatrix, cameraProjectionMatrix, renderGroup } from "three/tsl";
 import { windAt, WIND as GUSTS, WIND_DIR as WIND } from "./grass.js";   // (GUSTS: its strength; WIND: its way)
 import { rng } from "./flora.js";
+import { SNOW } from "./foliage.js";
 
 export const SMOKE = {
   puffs: 14,          // puffs in the air above one chimney at a time
@@ -19,16 +20,18 @@ export const SMOKE = {
   rise: 9,            // metres a puff climbs in its life
   drift: 7,           // metres the wind carries it sideways in its life
   size: [.45, 3.2],   // its width leaving the chimney, and when it has thinned
-  lit: .7,            // the share of chimneys smoking
+  lit: .7,            // the share of chimneys smoking all year (the rest only in winter, while the snow lies)
   color: [.78, .78, .76],
 };
 
 export function createSmoke(scene, chimneys, { seed = 7 } = {}) {
   const r = rng(seed * 31 + 5);
-  const lit = chimneys.filter(() => r() < SMOKE.lit);
+  // every chimney but a nested one (a stork's nest on it: index.html STORK) -- `warm` the share that smokes all year;
+  // the rest are lit IN WINTER only (foliage.js SNOW: every hearth burning while the snow lies)
+  const lit = chimneys.filter((c) => !c.nest).map((c) => ({ ...c, warm: r() < SMOKE.lit }));
   const n = lit.length * SMOKE.puffs;
   if (!n) return { mesh: null, update() {} };
-  const corner = new Float32Array(n * 8), base = new Float32Array(n * 12), seedA = new Float32Array(n * 12), index = new Uint32Array(n * 6);
+  const corner = new Float32Array(n * 8), base = new Float32Array(n * 12), seedA = new Float32Array(n * 12), warmA = new Float32Array(n * 4), index = new Uint32Array(n * 6);
   let q = 0;
   for (const c of lit) {
     for (let k = 0; k < SMOKE.puffs; k++, q++) {
@@ -38,6 +41,7 @@ export function createSmoke(scene, chimneys, { seed = 7 } = {}) {
         corner[i * 2] = v & 1 ? .5 : -.5; corner[i * 2 + 1] = v & 2 ? .5 : -.5;
         base.set([c.x, c.y, c.z], i * 3);
         seedA.set([ph, spin, lump], i * 3);   // its phase in the cycle, its turn, its own lumps and pace
+        warmA[i] = c.warm ? 1 : 0;
       }
       index.set([q * 4, q * 4 + 1, q * 4 + 3, q * 4, q * 4 + 3, q * 4 + 2], q * 6);
     }
@@ -47,10 +51,11 @@ export function createSmoke(scene, chimneys, { seed = 7 } = {}) {
   g.setAttribute("uv", new THREE.BufferAttribute(corner.map((v) => v + .5), 2));   // (the quad's own 0..1, for the shape drawn on it)
   g.setAttribute("base", new THREE.BufferAttribute(base, 3));
   g.setAttribute("seedA", new THREE.BufferAttribute(seedA, 3));
+  g.setAttribute("warm", new THREE.BufferAttribute(warmA, 1));
   g.setAttribute("position", new THREE.BufferAttribute(base.slice(), 3));   // (for the bounds three asks for; the shader places the quads)
   g.setIndex(new THREE.BufferAttribute(index, 1));
 
-  const U = { t: uniform(0), amount: uniform(1), tint: uniform(new THREE.Color(...SMOKE.color)) };
+  const U = { t: uniform(0), amount: uniform(1), tint: uniform(new THREE.Color(...SMOKE.color)), winter: uniform(0).setGroup(renderGroup).onRenderUpdate(() => Math.min(1, SNOW.value)) };
   const cA = attribute("corner", "vec2"), bA = attribute("base", "vec3"), sA = attribute("seedA", "vec3");
   const pace = fract(sA.z.mul(7.31)).mul(.4).add(.8);                        // 0.8 .. 1.2
   const age = fract(U.t.div(SMOKE.life).mul(pace).add(sA.x));                 // 0 at the mouth .. 1 gone
@@ -59,7 +64,8 @@ export function createSmoke(scene, chimneys, { seed = 7 } = {}) {
   const along = pow(age, 1.4).mul(SMOKE.drift).mul(gust).mul(GUSTS.strength);   // (laid flatter downwind in a gale: grass.js WIND)
   const wob = sin(U.t.mul(.7).add(sA.y.mul(3))).mul(age).mul(.6);
   const centre = bA.add(vec3(along.mul(WIND.x).add(wob.mul(WIND.y)), climb, along.mul(WIND.y).sub(wob.mul(WIND.x))));
-  const size = mix(float(SMOKE.size[0]), float(SMOKE.size[1]), pow(age, .8));
+  // (a winter-only chimney's puffs shrink to nothing while no snow lies: no transparent quads drawn for nothing all summer)
+  const size = mix(float(SMOKE.size[0]), float(SMOKE.size[1]), pow(age, .8)).mul(attribute("warm", "float").max(U.winter.mul(1e4).min(1)));
   const turn = sA.y.add(age.mul(1.2));
   const c2 = vec2(cA.x.mul(cos(turn)).sub(cA.y.mul(sin(turn))), cA.x.mul(sin(turn)).add(cA.y.mul(cos(turn))));
   const view = cameraViewMatrix.mul(vec4(centre, 1));
@@ -67,7 +73,7 @@ export function createSmoke(scene, chimneys, { seed = 7 } = {}) {
 
   const mat = new THREE.MeshBasicNodeMaterial({ transparent: true, depthWrite: false, side: THREE.DoubleSide });
   mat.vertexNode = cameraProjectionMatrix.mul(placed);
-  const vFade = varying(smoothstep(0, .08, age).mul(smoothstep(1, .45, age)).mul(U.amount.min(1.5)).mul(.42));
+  const vFade = varying(smoothstep(0, .08, age).mul(smoothstep(1, .45, age)).mul(U.amount.min(1.5)).mul(.42).mul(mix(U.winter, float(1), attribute("warm", "float"))));
   const vLump = varying(sA.z.mul(6.283));
   const vAge = varying(age);
   // the puff: a soft round body, its edge broken by a few slow lobes so no two look alike
@@ -84,7 +90,7 @@ export function createSmoke(scene, chimneys, { seed = 7 } = {}) {
   mesh.userData.noMerge = true;   // (merge.js must leave it alone: its quads are placed by the shader)
   scene.add(mesh);
   return {
-    mesh, count: lit.length,
+    mesh, count: lit.filter((c) => c.warm).length,
     update(t, { amount = 1, light = null } = {}) {   // light: the hour's colour on it (sky.js `cloud`): rose at sunset, slate at night
       U.t.value = t; U.amount.value = amount; mesh.visible = amount > .01;
       U.tint.value.setRGB(...SMOKE.color); if (light) U.tint.value.multiply(light);

@@ -37,7 +37,7 @@ const isPlain = (v) => v && typeof v === "object" && !Array.isArray(v);
 
 const WORDS = new Set(["name", "kind", "use", "id", "parent", "shape", "pat", "patOn", "pupil", "axis", "frame",
                        "active", "geomRot", "ik", "anim", "colors", "gaits", "mount", "fly", "swim", "_about",
-                       "person", "wing"]);   // (a winged person's: makePerson's options and the wing's, as written)
+                       "person", "wing", "fleece"]);   // (a winged person's: makePerson's options and the wing's, as written)
 // (NOT "c": that is the tail's arc CENTRE as often as it is a colour table, and the table is taken out before
 //  anything is resolved)
 const keepKey = (k) => k.startsWith("_") || WORDS.has(k);

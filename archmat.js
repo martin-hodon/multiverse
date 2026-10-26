@@ -11,7 +11,7 @@
 //   woodMaterial(), plainStone()   grained wood (doors, shutters); a light-free stone for the viewers
 import * as THREE from "three";
 import { wgslFn, uniform, attribute, varying, texture, float, positionGeometry, positionWorld,
-         normalWorld, modelWorldMatrix, cameraPosition, vec3, renderGroup } from "three/tsl";
+         normalWorld, modelWorldMatrix, cameraPosition, vec3, renderGroup, uv, vec2 } from "three/tsl";
 import { TEXTURES, TILES, tileTexture, PARALLAX } from "./textures.js";
 import { patternTile } from "./textures_wgsl.js";
 import { FOLIAGE_T, SNOW, HARVEST } from "./foliage.js";   // the one wind clock: leaves and grain sway together
@@ -27,6 +27,35 @@ import { lightWGSL } from "./light.js";
 // world shares one shader.
 export const glassMat = new THREE.MeshBasicNodeMaterial({ transparent: true, opacity: .38, depthWrite: false, side: THREE.DoubleSide });
 glassMat.colorNode = varying(attribute("aC", "vec3"), "vGlassC");
+
+// LEADED GLASS (2026-10-24): a glazed window's pane was a sheet of clear blue. Small panes set in lead -- diamond
+// quarries -- drawn on it: lines where the two diagonal families meet, the lead dark and opaque, the glass between
+// faintly blue and catching the sky a little. `metric`: the pane's geometry is in metres (an arched pane: openingSlab)
+// and a quarry is LEAD.size across; else a unit box stretched to its window (the uv: LEAD.n across, LEAD.m up)
+export const LEAD = { size: .13, n: 4, m: 6, width: .07 };
+const leadedGlassFn = wgslFn(`
+  fn leadedGlass(q: vec2<f32>, n: vec3<f32>, p: vec3<f32>, cam: vec3<f32>) -> vec4<f32> {
+    let a = abs(fract(q.x + q.y) - 0.5);
+    let b = abs(fract(q.x - q.y) - 0.5);
+    let w = fwidth(q.x) + fwidth(q.y);
+    let lead = smoothstep(0.5 - ${LEAD.width} - w, 0.5 - ${LEAD.width}, max(a, b)) * (1.0 - smoothstep(0.25, 0.6, w));
+    // (each quarry a little askew -- old crown glass -- so the sky it catches varies pane to pane; the sky by Fresnel:
+    //  little looked at square on, much at a glance along the wall)
+    let cellq = floor(vec2<f32>(q.x + q.y, q.x - q.y));
+    let tilt = fract(sin(dot(cellq, vec2<f32>(12.9898, 78.233))) * 43758.5453);
+    let fres = pow(1.0 - abs(dot(normalize(n), normalize(cam - p))), 3.0);
+    let sky = mix(vec3<f32>(0.62, 0.72, 0.8), vec3<f32>(0.86, 0.9, 0.93), tilt);
+    let glass = mix(vec3<f32>(0.5, 0.62, 0.68) * (0.9 + 0.1 * sin(q.x * 7.0 + q.y * 3.0)), sky, clamp(0.25 + 0.75 * fres + 0.15 * tilt, 0.0, 1.0));
+    return vec4<f32>(mix(glass, vec3<f32>(0.16, 0.16, 0.17), lead), mix(0.5 + 0.35 * fres, 0.97, lead));
+  }
+`);
+export function leadedGlass(metric) {
+  const m = new THREE.MeshBasicNodeMaterial({ transparent: true });
+  const q = metric ? positionGeometry.xy.div(LEAD.size) : uv().mul(vec2(LEAD.n, LEAD.m));
+  const g = leadedGlassFn({ q, n: normalWorld, p: positionWorld, cam: cameraPosition });
+  m.colorNode = g.xyz; m.opacityNode = g.w;
+  return m;
+}
 
 // deterministic orientation shading: a face's brightness comes purely from
 // which way it points (all six directions distinct), so same-colored walls
@@ -457,15 +486,31 @@ export function finishTilesOf(finish) { for (const r of finish.rules) if (r.patt
 // MOSS on the roofs: in small patches on any sloped face that looks up (a roof: never a ceiling, never a floor), more
 // on the north side where the sun is short -- a dull green over the tiles, the thatch or the slates; only on the older
 // roofs (a slow noise over the town: one quarter mossy, another clean)
+// GRIME at a wall's foot (finishShade foot): how high the splash reaches (metres) and how dark at the ground
+export const GRIME = { h: .8, k: .4, streak: .16 };   // (streak: how dark the rain's runs down a wall get)
 const finishShade = wgslFn(`
-  fn finishShade(c: vec3<f32>, nW: vec3<f32>, pW: vec3<f32>, snow: f32, wet: f32, low: f32, pud: f32, sky: vec3<f32>, t: f32, rain: f32, cam: vec3<f32>) -> vec3<f32> {
+  fn finishShade(c: vec3<f32>, nW: vec3<f32>, pW: vec3<f32>, snow: f32, wet: f32, low: f32, pud: f32, sky: vec3<f32>, t: f32, rain: f32, cam: vec3<f32>, foot: f32) -> vec3<f32> {
     let n = normalize(nW);
     let k = ${SHADE_K};
     var cm = c;
+    // THE FOOT OF AN OUTSIDE WALL (foot: its height over the building's ground, -1 where that is not known): splashed and
+    // damp to knee height, darker and a little green, the line ragged
+    if (foot > -0.5 && abs(n.y) < 0.3) {
+      let ragged = valueNoise2(vec2<f32>(pW.x + pW.z, foot) * vec2<f32>(1.7, 3.0)) * 0.35;
+      let g = (1.0 - smoothstep(${GRIME.h} - 0.3, ${GRIME.h}, foot + ragged - 0.15)) * ${GRIME.k} * (0.65 + 0.35 * (1.0 - clamp(foot / ${GRIME.h}, 0.0, 1.0)));
+      cm = cm * (1.0 - g) + vec3<f32>(0.2, 0.22, 0.14) * cm * g * 0.6;
+    }
+    // RAIN STREAKS on an outside wall: faint darker runs down it, here and there -- narrow across the wall, long down it,
+    // stronger lower (the water gathers as it runs) -- from a noise stretched along the wall's height
+    if (foot > -0.5 && abs(n.y) < 0.3) {
+      let along = pW.x * n.z - pW.z * n.x;
+      let st = valueNoise2(vec2<f32>(along * 7.0, pW.y * 0.35)) * valueNoise2(vec2<f32>(along * 2.3 + 11.0, pW.y * 0.2));
+      cm = cm * (1.0 - smoothstep(0.22, 0.45, st) * ${GRIME.streak} * (0.5 + 0.5 * smoothstep(4.0, 0.5, foot)));
+    }
     if (n.y > 0.25 && n.y < 0.95) {
       let m = valueNoise2(pW.xz * 2.2) * 0.55 + valueNoise2(pW.xz * 7.0 + vec2<f32>(5.0, 2.0)) * 0.45 + 0.14 * n.z;
       let old = smoothstep(0.45, 0.75, valueNoise2(pW.xz * 0.04 + vec2<f32>(3.0, 7.0)));   // (some roofs old and mossy, some clean)
-      cm = mix(c, mix(c, vec3<f32>(0.32, 0.4, 0.18), 0.65), smoothstep(0.68, 0.82, m) * 0.38 * old);
+      cm = mix(cm, mix(cm, vec3<f32>(0.32, 0.4, 0.18), 0.65), smoothstep(0.68, 0.82, m) * 0.38 * old);
     }
     // WET after rain (an outside face only: the material says): darker, the roofs most -- they take the rain full on
     cm = cm * (1.0 - wet * mix(0.1, 0.3, smoothstep(0.2, 0.7, n.y)));
@@ -484,8 +529,9 @@ export function finishMaterial(r, side, open = false, geo = null) {   // open: a
     const slot = finishSlot(r);
     geo.setAttribute("aSlot", new THREE.BufferAttribute(new Float32Array(geo.attributes.position.count).fill(slot), 1));
   }
-  const key = TILE_ARRAY ? `array|${side ?? ""}${outside ? "" : "|dry"}${open ? "|open" : ""}${pud ? "|pud" : ""}`
-                         : finishKey(r) + "|" + (r.scale ?? 1) + "|" + (side ?? "") + (outside ? "" : "|dry") + (open ? "|open" : "") + (pud ? "|pud" : "");
+  const footKnown = outside && !pud && r.align !== "part" && !r.offset && !r.map && !r.turn;   // (finishShade's grime: the pattern's v is the height)
+  const key = TILE_ARRAY ? `array|${side ?? ""}${outside ? "" : "|dry"}${open ? "|open" : ""}${pud ? "|pud" : ""}${footKnown ? "|foot" : ""}`
+                         : finishKey(r) + "|" + (r.scale ?? 1) + "|" + (side ?? "") + (outside ? "" : "|dry") + (open ? "|open" : "") + (pud ? "|pud" : "") + (footKnown ? "|foot" : "");
   let mat = finishMats.get(key);
   if (!mat) {
     let c;
@@ -497,7 +543,10 @@ export function finishMaterial(r, side, open = false, geo = null) {   // open: a
     mat = new THREE.MeshBasicNodeMaterial({ side: side === "double" ? THREE.DoubleSide : THREE.FrontSide });
     mat.colorNode = finishShade({ c, nW: normalWorld, pW: positionWorld, snow: uniform(0).setGroup(renderGroup).onRenderUpdate(() => SNOW.value),
                                   wet: uniform(0).setGroup(renderGroup).onRenderUpdate(() => outside ? WET.value : 0), low: float(open ? 1 : 0),
-                                  pud: float(pud ? 1 : 0), sky: PUDDLE.sky, t: PUDDLE.t, rain: PUDDLE.rain, cam: cameraPosition }).mul(landShade());
+                                  pud: float(pud ? 1 : 0), sky: PUDDLE.sky, t: PUDDLE.t, rain: PUDDLE.rain, cam: cameraPosition,
+                                  // (a wall's height over the building's ground is its pattern's v -- architecture.js face mapping -- unless the
+                                  //  pattern is laid from each part's foot, `align: part`, or moved: then not known)
+                                  foot: footKnown ? attribute("aUV", "vec2").y : float(-1) }).mul(landShade());
     mat.userData.finish = key;
     finishMats.set(key, mat);
   }

@@ -66,6 +66,13 @@ BANGS = {"region": {"th": [0, 50]}, "when": "fringe", "rings": [ring(0.02, 0.012
 LONG_SHEET = {"region": {"th": [SIDE + 2, 180]}, "rings": [ring(0.04, 0.02, 0.008), ring(0.12, 0.03, 0.016, phase=1), ring([0.2, 0.28], 0.034, 0.02),
                                                            ring([0.28, 0.38], 0.03, 0.014, 0.05, phase=1)]}
 BOB_SHEET = {"region": {"th": [55, 180]}, "rings": [ring(0.035, 0.018, 0.008), ring([0.07, 0.06], 0.024, 0.014, phase=1), ring([0.11, 0.09], 0.02, 0.01, 0.03)]}
+# UNDER A FALL OF STRANDS (2026-10-24): strands alone are a fan of ribbons with sky between them -- sticks, not hair.
+# A sheet under them, hanging as far, is the hair's body; the strands lie over it as its clumps. `length` [front, back]
+# as the strands'; the sheet a little shorter and closer in, so their tips and their waves stay in front of it
+def under(th0, length, out=0.008):
+    lo, hi = (length if isinstance(length, (list, tuple)) else (length, length))
+    return {"region": {"th": [th0 + 2, 180]}, "rings": [ring(0.04, out * 0.8, 0.004), ring([lo * 0.5, hi * 0.5], out, 0.008, phase=1),
+                                                         ring([lo * 0.85, hi * 0.85], out, 0.01, 0.02)]}
 SPIKY_SHEET = {"region": {"th": [70, 180]}, "rings": [ring(0.025, 0.014, 0.008), ring(0.05, 0.01, 0.01, 0.022, phase=1)]}
 
 # SPIKES (hair.js): thorns -- a lattice over the cap, a sparse checkerboard of its points pushed far out, each one's
@@ -87,37 +94,37 @@ STYLES = dict([
     style("bowl", "Bowl cut", "the medieval bowl: a straight fringe to the brows, the sides and back cut level at the ears",
           [HANG(0, 0.025, (0.026, 0.022), hang=1)], cap=LOW, era="1100-1500", region="Europe"),
     style("bob", "Bob", "hair to the jaw all round, straight, a fringe when the face has one (else parted)",
-          [HANG(55, [0.12, 0.1]), FRINGE, PARTED], cap={**CAP, "crown": 0.016}),
+          [HANG(55, [0.12, 0.1]), FRINGE, PARTED], sheets=[under(55, [0.12, 0.1], 0.006)], cap={**CAP, "crown": 0.016}),
     style("egyptian", "Egyptian bob", "the blunt black wig of Egypt: a straight fringe and thick straight hair to the shoulders, cut level",
           [HANG(42, 0.2, (0.03, 0.028), hang=1)], cap={**LOW, "front": 0.0, "temple": 0.0, "side": -0.01, "nape": -0.04, "fringe": 0.0, "thick": 0.016, "crown": 0.01}, era="-2500--30", region="Egypt"),
     style("long", "Long", "long straight hair falling to the shoulder blades, the front swept back behind the ears",
-          [HANG(SIDE, [0.3, 0.38]), FRINGE, PARTED], cap={**CAP, "crown": 0.016}),
+          [HANG(SIDE, [0.3, 0.38]), FRINGE, PARTED], sheets=[under(SIDE, [0.3, 0.38])], cap={**CAP, "crown": 0.016}),
     style("long-wavy", "Long wavy", "long hair in waves to the waist",
-          [HANG(SIDE, [0.34, 0.46], wave={"amp": 0.014, "per": 0.12}), {**PARTED, "wave": {"amp": 0.01, "per": 0.11}}, FRINGE], cap={**CAP, "crown": 0.02}),
+          [HANG(SIDE, [0.34, 0.46], wave={"amp": 0.014, "per": 0.12}), {**PARTED, "wave": {"amp": 0.01, "per": 0.11}}, FRINGE], sheets=[under(SIDE, [0.34, 0.46])], cap={**CAP, "crown": 0.02}),
     style("curly", "Curly", "a head of curls: a thick cap, curls coiling from its edge and off the crown",
-          [HANG(0, 0.09, (0.014, 0.008), hang=0.5, extra=2, curl={"r": 0.014, "per": 0.045}, seg=10),
-           {"region": {"y": [0.06, 0.2], "th": [0, 180]}, "length": 0.07, "comb": "down", "hang": 0.4, "off": 0.6, "width": [0.012, 0.008], "extra": 1, "every": 2, "lift": 0.022, "curl": {"r": 0.012, "per": 0.04}, "seg": 8}],
+          [HANG(0, [0.02, 0.1], (0.02, 0.012), hang=0.5, extra=2, curl={"r": 0.012, "per": 0.04}, seg=10),
+           {"region": {"y": [0.06, 0.2], "th": [0, 180]}, "length": [0.035, 0.06], "comb": "back", "hang": 0.4, "off": 0.4, "width": [0.018, 0.012], "extra": 1, "every": 2, "lift": 0.012, "curl": {"r": 0.01, "per": 0.035}, "seg": 8}],
           cap={**CAP, "thick": 0.024, "crown": 0.024}),
     style("ponytail", "Ponytail", "the hair drawn back to a tie at the nape and falling from it in a tail",
-          gather=[{"kind": "rope", "at": [-0.095, -0.01, 0], "dir": [-0.3, -1, 0], "length": 0.3, "width": 0.05, "hang": 0.9, "tie": True}], cap=BACK),
+          gather=[{"kind": "rope", "at": [-0.095, -0.01, 0], "dir": [-0.3, -1, 0], "length": 0.3, "width": 0.075, "hang": 0.9, "tie": True}], cap=BACK),
     style("bun", "Bun", "the hair drawn up and back into a bun behind the crown",
           gather=[{"kind": "bun", "at": [-0.1, 0.045, 0], "r": 0.04}], cap=BACK),
     style("braid", "Braid", "the hair drawn back into one plait hanging down the back",
-          gather=[{"kind": "plait", "at": [-0.095, -0.04, 0], "dir": [-0.35, -1, 0], "length": 0.42, "width": 0.05, "hang": 0.8, "per": 0.07, "tie": True}], cap=BACK),
+          gather=[{"kind": "plait", "at": [-0.095, -0.04, 0], "dir": [-0.35, -1, 0], "length": 0.42, "width": 0.068, "hang": 0.8, "per": 0.075, "tie": True}], cap=BACK),
     style("plaits", "Plaits", "two plaits, one at each side, hanging over the shoulders in front",
-          gather=[{"kind": "plait", "at": [-0.02, -0.04, 0.075], "dir": [0.3, -1, 0.1], "length": 0.36, "width": 0.045, "hang": 0.7, "per": 0.065, "tie": True, "mirror": True}], cap=CAP),
+          gather=[{"kind": "plait", "at": [-0.02, -0.04, 0.075], "dir": [0.3, -1, 0.1], "length": 0.36, "width": 0.058, "hang": 0.7, "per": 0.065, "tie": True, "mirror": True}], cap=CAP),
     style("two-locks", "Long with two locks", "long hair behind, and a lock at each temple hanging down in front of the ear -- the Norse and the Frankish way",
-          [HANG(SIDE, [0.28, 0.36], wave={"amp": 0.008, "per": 0.14})],
+          [HANG(SIDE, [0.28, 0.36], wave={"amp": 0.008, "per": 0.14})], sheets=[under(SIDE, [0.28, 0.36])],
           locks=[{"at": [62, 0.03], "n": 2, "length": 0.34, "comb": "down", "hang": 0.95, "width": [0.026, 0.014], "wave": {"amp": 0.008, "per": 0.1}}], cap=CAP, era="500-1100", region="the North"),
     style("viking", "Long with side plaits", "long hair with a thin plait at each temple",
-          [HANG(95, [0.28, 0.36])],   # (the hanging hair from behind the plaits: none in front of them, at the temples)
+          [HANG(95, [0.28, 0.36])], sheets=[under(95, [0.28, 0.36])],   # (the hanging hair from behind the plaits: none in front of them, at the temples)
           gather=[{"kind": "plait", "at": [0.04, 0.0, 0.078], "dir": [0.1, -1, 0.15], "length": 0.3, "width": 0.028, "hang": 0.9, "per": 0.05, "tie": True, "mirror": True}], cap=CAP, era="700-1100", region="Scandinavia"),
     style("topknot", "Topknot", "the hair drawn up from all round into a knot on top of the head -- the Chinese and the samurai's way",
           gather=[{"kind": "knot", "at": [-0.02, 0.135, 0], "r": 0.028, "tie": True, "dir": [-1, 0, 0]}], cap={**BACK, "crown": 0.0}, era="-200-1900", region="China, Japan"),
     style("tonsure", "Tonsure", "the monk's tonsure: a ring of short hair round a shaven crown",
           cap={**CAP, "top": 0.072, "thick": 0.01, "crown": 0.0}, era="500-1800", region="Christendom"),
     style("shoulder", "Shoulder length", "hair to the shoulders, parted in the middle, straight",
-          [HANG(58, [0.2, 0.26]), PARTED, FRINGE], cap={**CAP, "crown": 0.014}),
+          [HANG(58, [0.2, 0.26]), PARTED, FRINGE], sheets=[under(58, [0.2, 0.26])], cap={**CAP, "crown": 0.014}),
     style("manga-long", "Long (drawn locks)", "long hair as one cloth from the cap's edge, cut in zig-zag rings: pyramid-shaped locks down the back and pointed tips, the face left open; pointed bangs when the face has a fringe",
           [PARTED], sheets=[LONG_SHEET, BANGS], cap={**CAP, "crown": 0.018}),
     style("manga-bob", "Bob (drawn locks)", "a bob as one zig-zag cloth: locks folding round the jaw, pointed tips, pointed bangs with a fringe",
@@ -137,6 +144,7 @@ BY_KIND = {
     "woman": ["long", "long-wavy", "long-wavy", "bob", "braid", "plaits", "bun", "two-locks", "shoulder", "curly", "manga-long", "manga-bob"],
     "child": ["bowl", "crop", "plaits", "bob", "short", "curly"],
     "elder": ["short", "tonsure", "none", "crop", "shoulder"],
+    "old-woman": ["bun", "bun", "braid", "shoulder", "plaits"],
     "beast-man": ["crop", "none", "topknot", "curly"],
     "face": ["short", "long", "bob", "curly", "braid", "topknot", "two-locks"],
 }

@@ -91,11 +91,18 @@ def bird(key, name, era, region, about, *, L, r, head, beak, neck=None, legs, ta
         {"id": "beak", "type": "rod", "material": "beak", "sides": 4 if beak_shape == "cone" else 6, "r0": f"s * {beak[1]:.4f}", "r1": f"s * {beak[1] * (0.35 if beak_shape == 'flat' else 0.08):.4f}",
          "at": [f"s * {hx + hr * 0.75:.4f}", f"s * {hy - hr * 0.05:.4f}", 0], "from": [0, 0, 0], "to": [f"s * {beak[0]:.4f}", f"s * {-beak[0] * beak[2] / 60:.4f}", 0],
          **({"stretch": [1, 0.45, 1.6]} if beak_shape == "flat" else {})},
-        {"id": "thigh", "type": "rod", "material": "legs", "sides": 4, "r": f"s * {legs[2] * 1.3:.4f}", "from": [f"s * {-L * 0.05:.4f}", f"s * {hip_y:.4f}", f"s * {r[1] * 0.35:.4f}"], "to": [f"s * {L * 0.02:.4f}", f"s * {legs[1]:.4f}", f"s * {r[1] * 0.4:.4f}"], "mirror": "z"},
-        {"id": "tarsus", "type": "rod", "material": "legs", "sides": 4, "r": f"s * {legs[2]:.4f}", "from": [f"s * {L * 0.02:.4f}", f"s * {legs[1]:.4f}", f"s * {r[1] * 0.4:.4f}"], "to": [f"s * {L * 0.04:.4f}", 0, f"s * {r[1] * 0.4:.4f}"], "mirror": "z"},
+        {"id": "thigh", "type": "rod", "material": "legs", "sides": 4, "r": f"s * {legs[2] * 1.3:.4f}", "from": [f"s * {-L * 0.05:.4f}", f"s * {hip_y:.4f}", f"s * {r[1] * 0.35:.4f}"], "to": [f"s * {L * 0.02:.4f}", f"s * {legs[1]:.4f}", f"s * {r[1] * 0.4:.4f}"], "mirror": "z", "when": {"pose": "folded"}},
+        {"id": "tarsus", "type": "rod", "material": "legs", "sides": 4, "r": f"s * {legs[2]:.4f}", "from": [f"s * {L * 0.02:.4f}", f"s * {legs[1]:.4f}", f"s * {r[1] * 0.4:.4f}"], "to": [f"s * {L * 0.04:.4f}", 0, f"s * {r[1] * 0.4:.4f}"], "mirror": "z", "when": {"pose": "folded"}},
         {"id": "toes", "type": "rod", "material": "legs", "sides": 3, "r0": f"s * {legs[2] * 0.8:.4f}", "r1": f"s * {legs[2] * 0.3:.4f}", "from": [0, 0, 0], "to": [f"s * {legs[1] * 0.45:.4f}", 0, 0],
-         "at": [f"s * {L * 0.04:.4f}", 0, f"s * {r[1] * 0.4:.4f}"], "around": {"n": 3, "r": 0, "plane": "xz", "start": -35, "span": 70}, "mirror": "z"},
-        {"id": "hind toe", "type": "rod", "material": "legs", "sides": 3, "r0": f"s * {legs[2] * 0.7:.4f}", "r1": f"s * {legs[2] * 0.3:.4f}", "from": [f"s * {L * 0.04:.4f}", 0, f"s * {r[1] * 0.4:.4f}"], "to": [f"s * {L * 0.04 - legs[1] * 0.25:.4f}", 0, f"s * {r[1] * 0.4:.4f}"], "mirror": "z"},
+         "at": [f"s * {L * 0.04:.4f}", 0, f"s * {r[1] * 0.4:.4f}"], "around": {"n": 3, "r": 0, "plane": "xz", "start": -35, "span": 70}, "mirror": "z", "when": {"pose": "folded"}},
+        {"id": "hind toe", "type": "rod", "material": "legs", "sides": 3, "r0": f"s * {legs[2] * 0.7:.4f}", "r1": f"s * {legs[2] * 0.3:.4f}", "from": [f"s * {L * 0.04:.4f}", 0, f"s * {r[1] * 0.4:.4f}"], "to": [f"s * {L * 0.04 - legs[1] * 0.25:.4f}", 0, f"s * {r[1] * 0.4:.4f}"], "mirror": "z", "when": {"pose": "folded"}},
+        # IN FLIGHT (the spread pose) the legs trail back under the tail, the feet together behind -- not hanging as if
+        # it stood on the air
+        *(lambda kx, ky, fx, fy, z: [
+            {"id": "thigh flying", "type": "rod", "material": "legs", "sides": 4, "r": f"s * {legs[2] * 1.3:.4f}", "from": [f"s * {-L * 0.05:.4f}", f"s * {hip_y:.4f}", f"s * {z:.4f}"], "to": [f"s * {kx:.4f}", f"s * {ky:.4f}", f"s * {z:.4f}"], "mirror": "z", "when": {"pose": "spread"}},
+            {"id": "tarsus flying", "type": "rod", "material": "legs", "sides": 4, "r": f"s * {legs[2]:.4f}", "from": [f"s * {kx:.4f}", f"s * {ky:.4f}", f"s * {z:.4f}"], "to": [f"s * {fx:.4f}", f"s * {fy:.4f}", f"s * {z * 0.6:.4f}"], "mirror": "z", "when": {"pose": "spread"}},
+            {"id": "toes flying", "type": "rod", "material": "legs", "sides": 3, "r0": f"s * {legs[2] * 0.8:.4f}", "r1": f"s * {legs[2] * 0.3:.4f}", "from": [f"s * {fx:.4f}", f"s * {fy:.4f}", f"s * {z * 0.6:.4f}"], "to": [f"s * {fx - legs[1] * 0.3:.4f}", f"s * {fy - legs[1] * 0.02:.4f}", f"s * {z * 0.5:.4f}"], "mirror": "z", "when": {"pose": "spread"}},
+        ])(-L * 0.18, hip_y - (hip_y - legs[1]) * 0.35, -L * 0.18 - legs[1] * 0.95, hip_y - (hip_y - legs[1]) * 0.35 - legs[1] * 0.1, r[1] * 0.3),
         # the tail: a fan of feathers from the rump, laid back along -x (its frame yawed so +z points back)
         {"id": "tail", "type": "feathers", "material": "tail", "tips": "tips", "n": tail["n"], "shape": tail.get("shape", "rounded"), "band": tail.get("band", band), "lift": 0.0008,
          "roots": [[0, 0], [0, 0]], "dir": [f"-{tail['spread'] / 2}", f"{tail['spread'] / 2}"], "length": [f"s * {tail['length']:.4f}", f"s * {tail['length']:.4f}"],

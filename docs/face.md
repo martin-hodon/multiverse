@@ -157,3 +157,43 @@ lips take the light as the skin does). The params are the attributes; the form e
   per instance -- visemes timed by speech.js, expressions by mood); an eyeball whose iris turns for the gaze; teeth and
   a tongue behind the lips for the open visemes; wrinkles as creases on the lattice's lines (the forehead's rows under
   `browInnerUp`, the crow's feet beside `ex` under `cheekUp`).
+
+## Form in the paint, and brows that read (2026-10-24)
+
+- **Hollows** (`heads.js` `cavityOf` / `cavityShade`, `CAVITY`): the sun's half-Lambert gives a head its round, not its
+  form. Each vertex is darkened by how concave the surface is round it -- the mean of the points within two radii
+  (`r`: .7 cm for creases, 1.8 cm for sockets) lies in front of a hollow -- and warmer in the skin (`warm`). Sockets,
+  the creases beside the nose and under the lip, the mouth's corners and the ear's bowl take it; the hair does not
+  (its strands are dense and costly to measure, and its sheen shades them). It is the shape's alone, so it is worked
+  out once per built face (a WeakMap) and shared by every colouring of it: ~4 ms a shape once warm.
+- **Brows a shade darker than the hair** (`BROW_TONE` .55): the face is built with its own brow placeholder colour
+  (`BROW0`), recoloured to the hair's times the tone -- fair brows on dark skin all but vanished. `lashThickness` 1.5 mm.
+- **Hair in the wind** (`heads.js HAIR_SWAY`, the face material's positionNode): what hangs below the head's middle (the
+  geometry's own y) is blown the wind's way (grass.js `WIND_DIR`, `WIND.strength`, the grass's gusts) and flutters back,
+  the flutter running down the hair -- the tips most, the crown not at all; each head on its own phase by where the
+  batch placed it (positionLocal is already the world's in a positionNode after batching). ~4 cm at the tips of
+  long hair in a full wind.
+- **Beards** (`face.js BEARDS`, the `beard` attribute; tools/facegen.py picks by kind -- men 5 in 8, elders 4 in 5,
+  beast-men always): soft regions on the lattice's domain (the moustache, the chin, the cheeks and jaw with sideburns,
+  under the jaw), `beardWeight(B, u, v)`; a triangle more than half in is the `beard` role (the brows' colour), and
+  every point stands out by `thick` times its weight -- skin and beard welded, no step; a full beard falls below the
+  chin (`point`). Styles: moustache, goatee, short, full (stubble exists, its own colour -- heads.js STUBBLE -- but its
+  triangle edges were patchy: not picked). Brows and beards darken TOWARD a warm dark brown (heads.js BROW_DARK): by a
+  plain factor a blond's went olive.
+- **Old men wear the elder's face** (people.js `faceOf`: `old` and not a woman or a child -> kind `elder`): hollow
+  cheeks under the cheekbones, deep-set eyes, jowls, and mostly a beard (grey with the hair) -- they had a young man's
+  face under grey hair.
+- **Old women** (tools/facegen.py `old-woman`): a woman's face aged -- the cheek pads gone, deeper eyes under heavier
+  lids, thinner lips, the nose and ears grown, softer jaw -- grey or white hair; people.js gives it to every old woman
+  (a girl keeps the woman's face, as before).
+- **A girl wears the child's face** (people.js `faceOf`): `female` is set for girls too, and she was given the grown
+  woman's face (the kind was tested before the child).
+- **Fuller tails** (tools/hairgen.py, hair.js rope): the ponytail 7.5 cm (was 5), fuller below the tie than at it; the
+  braid 6.8 cm, the two plaits 5.8 cm (were 5 and 4.5) -- they read as strings from behind.
+- (heads.js `browOf` reads the hair's grey in sRGB, as the eye does: in linear light a mid grey's lightness is .32, so
+  grey hair failed the "light grey" test and its beard went dark.) Freckles were tried and dropped: the face's vertices
+  are too far apart for a speck -- they blurred into faint blotches.
+- **Lips in the skin's own tone** (heads.js `lipOf`, `LIPS`; the face's lip built in its own placeholder colour LIP0):
+  the skin's colour drawn toward a red-brown (more on pale skin, less on dark) and darkened -- worked in sRGB, as the
+  colours are written (three's Color mixes in linear light and washed them out). A pink picked at random sat on dark
+  skin like paint.

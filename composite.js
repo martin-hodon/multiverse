@@ -313,7 +313,7 @@ export function createComposite(capacity = 256) {
         const j = an.idx * 4;
         fBound[j] = (x0 + x1) / 2; fBound[j + 1] = (y0 + y1) / 2; fBound[j + 2] = (z0 + z1) / 2; fBound[j + 3] = Math.hypot(x1 - x0, y1 - y0, z1 - z0) / 2 + rm;
         const bo = an._bo ?? (an._bo = [0, 0, 0]); bo[0] = fBound[j] - an.position.x; bo[1] = fBound[j + 1] - an.position.y; bo[2] = fBound[j + 2] - an.position.z; an._br = fBound[j + 3];   // (off-view culling)
-        an._y0 = y0; an._fx = (x1 - x0) / 2; an._fz = (z1 - z0) / 2;   // (its lowest point and its spread over the ground: shadows.js)
+        an._y0 = y0; an._y1 = y1; an._fx = (x1 - x0) / 2; an._fz = (z1 - z0) / 2;   // (its lowest point, its top and its spread over the ground: shadows.js)
       }
       for (let i = 0; i < n; i++) {
         const p = an.parts[i], so = (an.base + i) * 12, tri = p.r2 < 0 || !!p.dot;   // (a face mark: three points too)
@@ -354,7 +354,7 @@ export function createComposite(capacity = 256) {
       if (parts.length > MAXP) console.warn(`composite: ${def.name} has ${parts.length} parts, only ${MAXP} are drawn`);
       const upPart = def.parts.findIndex((q) => q.id === "chest" || q.id === "r_chest"), upRow = upPart >= 0 ? used + upPart + 1 : 0;   // (the def keeps the ids; a rider's is r_chest)
       const animal = { parts, base: used, slots, idx: animals.length, position: new THREE.Vector3(), rotY: 0, dots: parts.flatMap((p, i) => p.dot ? [i] : []), expr: def.expr ?? null,   // expr: the face it shows (faces.js; its def's resting face)
-                       face: def.face ?? null, mane: def.mane ?? null, jewelry: def.jewelry ?? null };   // face: a mesh head to stand on its head part (heads.js), or none; mane: a mane of thorns on its mane (manes.js)
+                       face: def.face ?? null, mane: def.mane ?? null, jewelry: def.jewelry ?? null, print: def.print ?? null };   // (print: the track its feet leave -- footprints.js PRINTS; a species' `print`)   // face: a mesh head to stand on its head part (heads.js), or none; mane: a mane of thorns on its mane (manes.js)
       let nextLayer = parts.length;
       for (let i = 0; i < parts.length; i++) {
         const p = parts[i], t = (used + i) * 3;
@@ -362,7 +362,7 @@ export function createComposite(capacity = 256) {
         // C: a garment's cut -- or a flat part's squash, a painted band's colour and place
         if (p.r2 >= 0) { const c = p.flat ? [p.flat, 0, 0] : p.clip ?? [0, 0, 0]; dyn[(t + 2) * 4] = c[0]; dyn[(t + 2) * 4 + 1] = c[1]; dyn[(t + 2) * 4 + 2] = c[2]; }
         const s = (used + i) * ST * 4, cl = p.cloth;
-        stat[s] = p.color.r; stat[s + 1] = p.color.g; stat[s + 2] = p.color.b; stat[s + 3] = p.pat * 8 + p.body * 4 + p.edge * 2 + p.seam + (p.fur ? 256 : 0) + (p.stone ?? 0) * 2048;   // (stone: a statue's material, statues.js)
+        stat[s] = p.color.r; stat[s + 1] = p.color.g; stat[s + 2] = p.color.b; stat[s + 3] = p.pat * 8 + p.body * 4 + p.edge * 2 + p.seam + (p.fur ? 256 : 0) + (p.fleece ? 512 : 0) + (p.stone ?? 0) * 2048;   // (stone: a statue's material, statues.js)
         stat[s + 4] = p.color2.r; stat[s + 5] = p.color2.g; stat[s + 6] = p.color2.b;
         stat[s + 7] = cl ? Math.min(255, Math.round(cl.scale ?? 0)) : 0;   // (the strands' scale: hair, a braid)
         stat[s + 8] = stat[s + 9] = stat[s + 10] = stat[s + 11] = 0;
@@ -372,6 +372,7 @@ export function createComposite(capacity = 256) {
           stat[s + 11] = upRow;   // (the row of the part whose axis is the figure's UP -- its chest -- so the cloth's frame turns with a figure lying on its side; 0: the world's up)
           for (const L of p.dress.layers) { packDress(stat, s, used + nextLayer, L); nextLayer += 2; }
         }
+        if (p.root && !p.dress?.standing) { stat[s + 10] = -p.root; stat[s + 11] = upRow; }   // (a limb's root, dressed or bare: how far down it the body holds it -- negative, so never read as standing -- and the frame its rest is in)
         if (p.dot) {   // a face mark: flags (iris, pupil, round), the iris as colour 2, its reach (for the cells) as r1
           const c2 = p.dot.iris ?? p.color;
           stat[s + 3] = (p.dot.iris ? 1 : 0) + 2 * p.dot.pupil + 8 * (p.dot.round ? 1 : 0) + 16 * p.dot.relief; stat[s + 4] = c2.r; stat[s + 5] = c2.g; stat[s + 6] = c2.b; stat[s + 7] = stat[s + 11] = 0;
@@ -482,25 +483,27 @@ export function createComposite(capacity = 256) {
     }
     if (!an._restAxes) restAxes(an, n);
   }
-  // THE CLOTH'S OWN FRAME (2026-10-05): a dressed part's REST AXIS -- its axis on the first frame it is posed, in the
+  // THE CLOTH'S OWN FRAME (2026-10-05): a dressed part's REST AXIS -- its axis in the BIND POSE (skeleton.js bindDir:
+  // standing, no motion; it was the first frame posed, which for a figure added mid-gesture was the gesture), in the
   // figure's own frame (forward: the root's axis; up: the chest's; left) -- kept in its second colour's texel (a dressed
   // part has no pattern of its own to colour). The fragment shader turns the figure's forward from that axis to the
   // part's axis now by the least rotation, and measures the angle round the part from it: a sleeve's weave then turns
-  // with the arm as it swings, instead of staying with the figure and sliding round the sleeve
+  // with the arm as it swings, instead of staying with the figure and sliding round the sleeve. A limb's ROOT keeps it
+  // too, dressed or bare: the shell engine holds the limb's top to it (shell.js "A LIMB'S ROOT").
   function restAxes(an, n) {
     an._restAxes = true;
-    const ax = (k) => { const j = k * 3, d = [scratchB[j] - scratchA[j], scratchB[j + 1] - scratchA[j + 1], scratchB[j + 2] - scratchA[j + 2]], l = Math.hypot(...d); return l > 1e-6 ? d.map((v) => v / l) : null; };
+    const ax = (k) => an.parts[k].bindDir;
     const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
     let fw = ax(0) ?? [1, 0, 0], up = [0, 1, 0];
     let chest = -1;
-    for (let i = 0; i < n && chest < 0; i++) { const r = P.stat[(an.base + i) * ST * 4 + 11]; if (an.parts[i].dress?.layers.length && r > 0) chest = r - 1 - an.base; }
+    for (let i = 0; i < n && chest < 0; i++) { const r = P.stat[(an.base + i) * ST * 4 + 11]; if ((an.parts[i].dress?.layers.length || an.parts[i].root) && r > 0) chest = r - 1 - an.base; }
     if (chest >= 0 && chest < n) { const u = ax(chest); if (u) up = u; }
     const fwp = fw.map((v, k) => v - up[k] * dot3(fw, up)), lp = Math.hypot(...fwp);
     if (lp > 1e-4) fw = fwp.map((v) => v / lp);
     const lf = [fw[1] * up[2] - fw[2] * up[1], fw[2] * up[0] - fw[0] * up[2], fw[0] * up[1] - fw[1] * up[0]];
     for (let i = 0; i < n; i++) {
       const p = an.parts[i];
-      if (!p.dress?.layers.length || p.pat) continue;
+      if (!(p.dress?.layers.length || p.root) || p.pat) continue;
       const a = ax(i); if (!a) continue;
       const s = (an.base + i) * ST * 4;
       P.stat[s + 4] = dot3(a, fw); P.stat[s + 5] = dot3(a, up); P.stat[s + 6] = dot3(a, lf);

@@ -82,6 +82,7 @@ export function compileDef(def) {
       // radius of -1 marks it and the composite shaders skip it; dot (-2): no SDF either -- a FACE MARK the
       // composite paints onto its parent's surface (eyes, a mouth): { iris, pupil: round|bar|slit, round }
       fur: !!part.fur,          // composite: a strand texture laid over its colour or pattern (mammals' coats)
+      fleece: !!part.fleece,    // composite: its surface heaped in lumps (a sheep's wool: shell.js FLEECE)
       stone: part.stone ?? 0,   // composite: carved -- a statue's material (1 marble, 2 bronze, 3 gold, 4 limestone): shell.js stoneAt
       flat: part.flat ?? 0,     // composite: a capsule squashed along the figure's forward to this share of its width (a flat torso)
       // ...and its two end caps, as tall as `a` (the A end) and `b` of their radius and as square as the superellipse
@@ -101,6 +102,7 @@ export function compileDef(def) {
       body: part.frame === "body" ? 1 : 0,   // composite engine: pattern in the ANIMAL's frame (torso pieces: stripes run on across seams) instead of the part's
       level: !!part.level,        // keeps the root's orientation whatever its parents do (a foot stays flat on the ground)
       sag: part.sag ?? 0,         // a hanging sleeve's cone: its axis tipped toward the plumb line by up to this (radians), see writeAnimal
+      fall: !!part.fall,          // ...and on an arm raised past level it falls to hang plumb from its top (SLIDE.fall)
       drape: drapes.has(part.id) && i > lastLeg,
       trail: part.trail ?? 0,     // a cloak's hem swept back by this at a run (radians; TRAIL), see writeAnimal   // a skirt: carried forward by the thighs under it (DRAPE; the legs are posed before it)
       // a cloak's front panel lifted by the arm under it (LIFT): that arm's index (posed before it), the share of its swing
@@ -123,10 +125,26 @@ export function compileDef(def) {
       color2: new THREE.Color(part.color2 ?? part.color),
       cloth: part.cloth ?? null,  // { scale }: a strand pattern's (hair, a braid) -- what people wear is `dress`
       seam: part.seam ? 1 : 0,    // composite engine: a dark line where this part meets another colour
+      // shell engine: a limb's ROOT -- its top skinned to the body it hangs from: its cap and its first `root` metres keep
+      // the bind pose's direction (the body's), the rest of it bends away from there (shell.js "A LIMB'S ROOT")
+      root: part.root ?? 0,
     };
   });
+  // THE BIND POSE: every part's axis at rest -- its own rotation and its parents', no motion, no gesture -- in the root's
+  // frame (composite.js restAxes: the cloth's frame and a limb root's rest are measured from it)
+  const bind = [];
+  for (const p of parts) {
+    const m = new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...p.baseRot));
+    if (p.scale) m.scale(new THREE.Vector3(...p.scale));
+    if (p.parentIdx >= 0) m.premultiply(bind[p.parentIdx]);
+    bind.push(m);
+    const d = p.pB.clone().sub(p.pA);
+    p.bindDir = d.lengthSq() > 1e-12 ? d.transformDirection(m).toArray() : null;
+  }
   parts.gaits = def.gaits ?? null;
   parts.crouch = def.crouch ?? null;   // (a gesture done down low: its share of the legs' length -- people.js CROUCH)
+  parts.walkNod = (def.walkNod ?? 0) * Math.PI / 180;   // (the head's nod with each step: mammals.js walkNod, degrees)
+  parts.idleSway = parts.some((p) => p.stone) ? 0 : def.idleSway ?? 0;   // (a figure standing about: its weight shifting -- people.js IDLE_SWAY; never a statue)
   parts.legLen = Math.max(0, ...parts.filter((p) => p.ik?.foot != null).map((p) => p.pos[1] - p.ik.foot));
   parts.trails = parts.some((p) => p.trail);   // (a cloak that trails: writeAnimal keeps its spring -- TRAIL)
   parts.follows = parts.some((p, i) => p.follow >= 0 && p.follow < i);   // (a panel lifted by its arm, posed after it -- LIFT)
@@ -181,6 +199,7 @@ const _root = new THREE.Matrix4();
 const _pitch = new THREE.Matrix4(), _roll = new THREE.Matrix4();
 const _local = new THREE.Matrix4(), _nod = new THREE.Matrix4(), _nodT = new THREE.Matrix4();
 const _e = new THREE.Euler();
+const _gq = new THREE.Quaternion(), _gl = new THREE.Quaternion(), _gs = new THREE.Vector3(), _gp = new THREE.Vector3(), _gm = new THREE.Matrix4();
 const _v = new THREE.Vector3();
 const _lower = [];   // per part: the lower bone's angle computed with its upper bone
 let _swing = new Float32Array(64);   // per part: its swing forward this pose (rz in its parent) -- LIFT
@@ -201,6 +220,10 @@ let _swing = new Float32Array(64);   // per part: its swing forward this pose (r
 // mean swing forward, up to `max` degrees (a crouch, a stoop; a stride's thighs go both ways and leave it hanging).
 // writeAnimal for the gait and the gestures' crouch, joints.js setAngles for a held position.
 export const DRAPE = { k: .55, max: 70 };
+// a hanging sleeve on a raised arm: from how far up (the arm's rise over its length) it no longer stands round the arm
+// but hangs plumb from its top -- see writeAnimal. (It used to be shortened instead, to .35 of itself straight up, so its
+// mouth would not stand as a disc round the hand: a funnel all the same, and now it falls.)
+export const SLIDE = { fall: .35 };
 // A CLOAK'S FRONT LIFTED BY THE ARM: the panel either side of a cloak's opening (clothes.js: a piece's `follow`) swings
 // forward with the arm under it -- its share of the arm's swing forward in the chest, beyond `from` degrees (an arm
 // hanging, a walk's swing, leave it hanging), up to `max` -- so a raised hand lifts the cloth's edge, not comes through it
@@ -232,12 +255,22 @@ export function writeAnimal(an, t, fA, fB, fC) {
   // the head's nod: lowered to graze (an.nod), and -- a pecking bird (an.peck: the dip's angle) -- quick sharp dips to the
   // ground every second or so, each bird on its own beat: the body tipping forward over its feet, the head with it
   const dip = an.peck ? an.peck * Math.pow(Math.max(0, Math.sin(t * 4.3 + (an.idx ?? 0) * 1.7)), 8) : 0;
-  const nodNow = (an.nod ?? 0) - dip * .5, rest = (an.rest ?? 0) + (an.work && parts.crouch?.[an.gesture] ? parts.crouch[an.gesture] * an.work * parts.legLen : 0);
+  let nodNow = (an.nod ?? 0) - dip * .5; const rest = (an.rest ?? 0) + (an.work && parts.crouch?.[an.gesture] ? parts.crouch[an.gesture] * an.work * parts.legLen : 0);
   const phase = tg * CYCLES * Math.PI * 2;
+  // A WALKER'S HEAD NODS with each step (parts.walkNod: a horse's, a cow's -- twice a stride, down as a forefoot lands),
+  // fading with the stride as the walker stops and halving at a run
+  const stepNod = parts.walkNod && g ? parts.walkNod * amp * (1 - .5 * (an.run ?? 0)) * Math.sin(phase * 2 + (g.offsets?.[0] ?? 0) * 2 + .6) : 0;
+  nodNow += stepNod;
   const bob = g ? g.bob * amp * Math.sin(phase * 2 + (g.bobPh ?? .5)) : 0;
   _root.makeRotationY(an.rotY);
   if (an.pitch || dip) _root.multiply(_pitch.makeRotationZ((an.pitch ?? 0) - dip * .5));   // an.pitch: the body tipped about its own left axis (+ nose up) -- a squirrel on a trunk
-  if (an.roll) _root.multiply(_roll.makeRotationX(an.roll));   // an.roll: turned about its own forward axis (+ toward its +z) -- a figure struck down lying on its side (combat.js)
+  if (an.roll) _root.multiply(_roll.makeRotationX(an.roll));
+  // STANDING ABOUT: the weight shifting -- a slow rock to the side and a slower one to and fro, each figure on its own
+  // beat, fading as the stride comes in (a walker's sway is its gait's)
+  if (parts.idleSway && !an.down) {
+    const k = parts.idleSway * Math.max(0, 1 - amp * 1.5), ph = (an.idx ?? 0) * 2.17;
+    if (k > 1e-4) _root.multiply(_roll.makeRotationX(k * Math.sin(t * .55 + ph))).multiply(_pitch.makeRotationZ(k * .45 * Math.sin(t * .37 + ph * 1.3)));
+  }   // an.roll: turned about its own forward axis (+ toward its +z) -- a figure struck down lying on its side (combat.js)
   _root.setPosition(an.position.x, an.position.y - rest, an.position.z);   // (an.rest: lying down, the body this much lower)
   let thighs = 0, nThighs = 0;   // (the legs' swing forward, summed: a skirt over them follows -- DRAPE)
   const swing = parts.follows ? (_swing.length < parts.length ? (_swing = new Float32Array(parts.length * 2)) : _swing) : null;   // (each part's forward swing: a panel follows its arm's -- LIFT)
@@ -266,8 +299,14 @@ export function writeAnimal(an, t, fA, fB, fC) {
     if (p.anim) {
       const a = p.anim;
       // a.amp: the swing belongs to the gait (a person's arms, a skirt) and fades with the stride when standing
-      const d = an.down && a.wing ? 0 : (a.deg * Math.PI / 180) * Math.sin((a.wing ? tw : p.idle ? tm : a.amp ? tg : tt) * a.speed * Math.PI * 2 + (a.phase || 0)) * (a.amp ? amp : 1);
+      // (the idle parts each animal on its own beat -- a herd does not look about in step -- and a.flick: that power of
+      //  the sine's crest only, a quick twitch now and then -- an ear)
+      const ph = (a.wing ? tw : p.idle ? tm : a.amp ? tg : tt) * a.speed * Math.PI * 2 + (a.phase || 0) + (p.idle ? (an.idx ?? 0) * 2.39 : 0);
+      const d = an.down && a.wing ? 0 : (a.deg * Math.PI / 180) * (a.flick ? Math.pow(Math.max(0, Math.sin(ph)), a.flick) : Math.sin(ph)) * (a.amp ? amp : 1);
       if (a.axis === "x") rx += d; else if (a.axis === "y") ry += d; else rz += d;
+      // a.sway: side to side (about x) once a stride, with the legs -- a skirt swinging as the hips carry it from one
+      // foot to the other (degrees; fades with the stride as the swing does)
+      if (a.sway) rx += a.sway * Math.PI / 180 * Math.sin(phase + 1.2) * amp;
       // a.work[an.gesture]: a working swing on the world clock (people.js GESTURES: digging, mowing,
       // hammering...), strength an.work (0 = idle), on its own axis -- bias holds, deg swings about it
       const g = an.work && a.work ? a.work[an.gesture] : null;
@@ -327,15 +366,34 @@ export function writeAnimal(an, t, fA, fB, fC) {
       _v.setFromMatrixPosition(world);
       world.multiplyMatrices(_root, _local).setPosition(_v);
     }
+    // A HAND THAT HOLDS SOMETHING (2026-10-24; tools.js sets an.grip[i] = the item's `follow`): the wrist turns it between
+    // the figure's own upright frame (0: a spear, a shield stay upright however the arm moves) and the forearm's (1: held
+    // rigidly, a hammer swung with the arm) -- slerped by that share (beyond it, a negative one, the head of an axe tipped
+    // forward over a falling forearm). The hand itself is drawn so, and its frame kept (an.gripM[i]) for the item, which
+    // tools.js lays in that hand rigidly: the hand and what it holds are one. (The item used to be placed by its own
+    // frame, rebuilt from the forearm's heading across the ground -- which flips as a forearm passes upright, at the top
+    // of every hammer stroke -- while the hand went on with the arm: it swung separately, out of step.)
+    const gf = an.grip?.[i];
+    if (gf !== undefined && !held) {
+      world.decompose(_gp, _gq, _gs);
+      _gm.multiplyMatrices(_root, _local).decompose(_v, _gl, _v);
+      world.compose(_gp, _gl.slerp(_gq, gf), _gs);
+    }
+    if (gf !== undefined) (an.gripM ??= {})[i] = (an.gripM[i] ?? new THREE.Matrix4()).copy(world);
     const j = (an.base + i) * 3;
     _v.copy(p.pA).applyMatrix4(world);
     fA[j] = _v.x; fA[j + 1] = _v.y; fA[j + 2] = _v.z;
     _v.copy(p.pB).applyMatrix4(world);
-    if (p.sag) {   // the cloth sags off the arm: its top rests along the arm, the rest hangs below -- tipped down toward the
-      // plumb line (slerped) by no more than the cone's own half-angle, so the arm inside never comes through its side
+    if (p.sag || p.fall) {   // the cloth sags off the arm: its top rests along the arm, the rest hangs below -- tipped down toward the
+      // plumb line (slerped) by no more than the cone's own half-angle, so the arm inside never comes through its side.
+      // ...and an arm raised past level lets it FALL (2026-10-24): over the first SLIDE.fall of the rise the limit gives
+      // way, and the sleeve hangs plumb from its top ring, the forearm going up out of that ring -- held to the cone, a
+      // raised forearm carried the whole bell up round the hand like a funnel
       const ax = _v.x - fA[j], ay = _v.y - fA[j + 1], az = _v.z - fA[j + 2], L = Math.hypot(ax, ay, az) || 1;
-      const th = Math.acos(Math.max(-1, Math.min(1, -ay / L))), a = Math.min(th, p.sag), sn = Math.sin(th);
-      if (a > 1e-4 && sn > 1e-3) {
+      const up = Math.max(0, Math.min(1, ay / L / SLIDE.fall)), lim = p.sag + (Math.PI - p.sag) * up * up * (3 - 2 * up);
+      const th = Math.acos(Math.max(-1, Math.min(1, -ay / L))), a = Math.min(th, lim), sn = Math.sin(th);
+      if (a > th - 1e-3 && a > 1e-4) _v.set(fA[j], fA[j + 1] - L, fA[j + 2]);   // (all the way: plumb -- also where the arm points straight up and no plane is left to turn in)
+      else if (a > 1e-4 && sn > 1e-3) {
         const ku = Math.sin(th - a) / sn, kw = Math.sin(a) / sn;
         _v.set(fA[j] + ax * ku, fA[j + 1] + ay * ku - L * kw, fA[j + 2] + az * ku);
       }

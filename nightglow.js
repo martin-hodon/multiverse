@@ -20,6 +20,7 @@ import { blockMesh } from "./blocks.js";
 import { attribute, uniform, vec2, vec3, vec4, float, varying, uv, fract, sin, cos, smoothstep, mix, clamp, abs, max, min, step,
          cameraViewMatrix, cameraProjectionMatrix, positionGeometry } from "three/tsl";
 import { rng } from "./flora.js";
+import { LEAD } from "./archmat.js";   // (the leaded glass by day: its quarries at night too)
 
 const SPILL = .55, PULL = .4;   // metres: the light thrown round a window; how far toward the eye it is drawn (the wall's depth)
 export const NIGHTGLOW = {
@@ -59,7 +60,7 @@ export function createNightGlow({ windows, fireflyAt, seed = 11, fog = null }) {
         pos.set([ox + ax * hw * sx, w.y + hh * sy, oz + az * hw * sx], (i * 4 + v) * 3);
         uvA.set([.5 + sx * hw / w.w, .5 + sy * hh / w.h], (i * 4 + v) * 2);   // (0..1 over the opening itself)
         sizeA.set([w.w, w.h], (i * 4 + v) * 2);
-        info.set([ph, w.glazed ? 1 : 0, w.h / Math.max(.2, w.w)], (i * 4 + v) * 3);   // its phase, glass or shutters, its tallness
+        info.set([ph, w.glazed ? 1 + (w.arched ? 1 : 0) : 0, w.h / Math.max(.2, w.w)], (i * 4 + v) * 3);   // its phase, glass (2: under a round head) or shutters, its tallness
       });
       idx.set([i * 4, i * 4 + 1, i * 4 + 3, i * 4, i * 4 + 3, i * 4 + 2], i * 6);
     });
@@ -85,8 +86,13 @@ export function createNightGlow({ windows, fireflyAt, seed = 11, fog = null }) {
     const seams = smoothstep(.012, .0, abs(fract(W.x.mul(6)).sub(.5)).sub(.48).abs()).mul(.25);
     const leak = max(max(rim, crack), max(heart, seams));
     // an open window or glass: the room's light, warmer low down, the glazing bars across it (glass only)
-    const bars = I.y.mul(max(smoothstep(.03, .015, abs(W.x.sub(.5))), smoothstep(.03, .015, abs(W.y.sub(.5)))));
-    const room = smoothstep(0, .12, min(ex, ey)).mul(mix(float(1), float(.75), W.y)).mul(bars.oneMinus().mul(.9).add(.1));
+    // (glass is LEADED: diamond quarries as by day -- archmat.js LEAD -- the lead dark against the room's light)
+    const qd = W.mul(Z).div(LEAD.size), qa = abs(fract(qd.x.add(qd.y)).sub(.5)), qb = abs(fract(qd.x.sub(qd.y)).sub(.5));
+    const bars = step(.5, I.y).mul(smoothstep(.5 - LEAD.width - .03, .5 - LEAD.width, max(qa, qb)));
+    // (a round-headed window, I.y 2: its light cut to the arch -- a half-disc over its top width)
+    const archR = Z.x.div(2), archY = W.y.mul(Z.y).sub(Z.y.sub(archR)), archOut = vec2(W.x.sub(.5).mul(Z.x), archY.max(0)).length().sub(archR);
+    const arched = step(1.5, I.y).mul(smoothstep(-.01, .01, archOut));
+    const room = smoothstep(0, .12, min(ex, ey)).mul(mix(float(1), float(.75), W.y)).mul(bars.oneMinus().mul(.9).add(.1)).mul(arched.oneMinus());
     // SOMEONE INSIDE: every 25-55 s (each window its own) a figure crosses the room in front of the lamp -- a head and
     // shoulders, a dark shape gliding past the glass (or across the light between the shutters), bobbing as it walks
     const every = I.x.mul(30).add(25), pass = fract(U.t.div(every).add(I.x.mul(7))).mul(every).div(3.2);

@@ -116,7 +116,8 @@ export function tailor(form, outfit, { add, bone }) {
                      wear: w.def.wear ?? 1, dags: val(pc.dags, P, {}, 0), band: val(pc.band, P, {}, 0), garmentLayer: w.def.layer ?? 2 };
       // a HEM: a band of another fabric along the piece's lower edge (an embroidered border, a braid at a cuff)
       const hw = pc.hem ? val(pc.hem.width, P, {}, 0) : 0;
-      const hem = hw > 0 ? (() => { const hf = fabOf(pc.hem.fabric ?? "trim"); return { ...base, fabric: hf.index, period: hf.period, colors: hf.colors, pleats: 0, dags: 0, band: 0, width: hw, thick: base.thick * .5 }; })() : null;
+      // (it keeps the piece's pleats: it folds as the cloth does, and its lower edge waves with the hem -- shell.js foldPhase)
+      const hem = hw > 0 ? (() => { const hf = fabOf(pc.hem.fabric ?? "trim"); return { ...base, fabric: hf.index, period: hf.period, colors: hf.colors, dags: 0, band: 0, width: hw, thick: base.thick * .5 }; })() : null;
       const kind = pc.kind ?? "wear";
       if (kind === "wear") {
         const sides = pc.on === "arm" || pc.on === "leg" ? (pc.side ? [pc.side] : ["L", "R"]) : [null];
@@ -127,8 +128,12 @@ export function tailor(form, outfit, { add, bone }) {
   // STANDING PIECES FROM THE SKIN OUT: each one hung round the torso clears the ones already hung under it (a mail
   // skirt over a gambeson's, a tabard's over both), whatever its own thickness would have made it
   jobs.sort((a, b) => (a.w.def.layer ?? 2) - (b.w.def.layer ?? 2) || a.w.k - b.w.k || a.order - b.order);
+  // (a piece the next one of its garment hangs on from -- a hood's cape ending where its fall begins, a mantle's cape
+  //  above its body -- is no hem: no wave, no dags, no border cut into that seam)
+  const starts = new Set(jobs.map((j) => j.w.k + "|" + j.pc.on + "|" + String(j.pc.from).replace(/\s+/g, "")));
   for (const j of jobs) {
-    const made = standPiece(form, j.pc, j.P, j.base, { add, bone }, j.w, j.hem, standing);
+    const cont = starts.has(j.w.k + "|" + j.pc.on + "|" + String(j.pc.to).replace(/\s+/g, ""));
+    const made = standPiece(form, cont ? { ...j.pc, seam: true } : j.pc, j.P, j.base, { add, bone }, j.w, j.hem, standing);
     if (!made) continue;
     standing.push(...made);
     for (const m of made) if (m.skirt) {
@@ -288,13 +293,20 @@ function openingOf(o, P, marks, form) {
 // A STANDING PIECE: a shell part of its own. `hang` -- a cone from a ring round its host down to its hem (a skirt, a
 // cloak, a capelet from the torso; a bell sleeve from an arm); `cowl` -- a ball round the head cut open for the face
 // (a hood, a coif); `crown`, `brim`, `cone` -- a hat's.
+const LAYER_TOP = -.25;   // (a standing piece's layers begin this far above its own top: its lid and waistband inside them)
 function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
   const kind = pc.kind, id = (pc.id ?? w.def.id ?? w.garment) + (pc.name ? "_" + pc.name : "") + "_" + w.k;
   const wrap = wrapOf(pc.wrap, P, {});
   const layer = { ...base, s0: -1e3, s1: 1e3, wrap, vOffset: 0, repeats: 0 };
   // (its hem band, if it has one, lies over the last `width` of it: `len` is the piece's own length down its axis)
   // (mouth: the piece ends at the garment's edge -- its hem band, its dags; a sleeve's piece ending at a joint has neither)
-  const dress = (len, mouth = true) => ({ standing: true, layers: [...(hem && len && mouth ? [{ ...hem, s0: len - hem.width, s1: 1e3, wrap, vOffset: 0, repeats: 0 }] : []), mouth ? layer : { ...layer, dags: 0 }] });
+  // (a piece ending at the garment's edge -- a skirt's hem, a sleeve's mouth -- has its layers END there, `len` down it:
+  //  so the folds know how far down they are and the hem waves with them and is dagged where it says -- shell.js
+  //  foldPhase, layerIn; with no end of its own, at 1e3, a standing piece's folds were one depth all down it and its
+  //  hem never waved. Its top stays open well above, LAYER_TOP: the waistband and the lid keep their cloth)
+  const end = (len, mouth) => (len && mouth ? len : 1e3);
+  const dress = (len, mouth = true) => ({ standing: true, layers: [...(hem && len && mouth ? [{ ...hem, s0: len - hem.width, s1: end(len, mouth), wrap, vOffset: 0, repeats: 0 }] : []),
+                                                                  mouth ? { ...layer, s0: len ? LAYER_TOP : -1e3, s1: end(len, mouth) } : { ...layer, dags: 0 }] });
   const S = form.S, H = form.head.hr;
   if (kind === "hang" && pc.on === "torso") {
     const t = form.torso, marks = marksOf(form, "torso");
@@ -338,7 +350,7 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
     const host = yT > form.torso.marks.waist + 1e-3 ? form.torso.upperFrom ?? form.torso.hangFrom : form.torso.hangFrom;
     const part = bone(id, host, [0, yT - form.torso.hangY, 0], [0, -1, 0], len, rTop, rHem, {
       color: base.colors[0], clip: { lo: 0, hi: len, lid: pc.lid !== false, squash: sq }, frame: "body",
-      anim: pc.swing === false ? undefined : { axis: "z", deg: 4, speed: .8, phase: -.7, amp: true }, dress: dress(len),
+      anim: pc.swing === false ? undefined : { axis: "z", deg: 4, speed: .8, phase: -.7, amp: true, sway: 3 }, dress: dress(len, !pc.seam),
       trail: pc.trail ? val(pc.trail, P, marks, 0) * Math.PI / 180 : 0,   // (swept back as its wearer goes: skeleton.js TRAIL)
       // (a panel beside a cloak's opening: lifted by the arm on its side as it swings forward -- skeleton.js LIFT; its
       //  side, the wrap's middle: +z, the rig's "L")
@@ -366,7 +378,7 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
             (e - a) + (last ? 0 : rAt(e) * .33);
           const part = bone(id + side + (out.length ? out.length : ""), p.id, [0, -(a - o), 0], [0, -1, 0], L, rAt(a), rAt(a + L),
                             { color: base.colors[0], clip: { lo: 0, hi: L }, dress: dress(L, last),
-                              sag: last ? Math.max(0, Math.atan(fl) - .08) : 0 });   // (the mouth sags with gravity -- skeleton.js; a margin for the arm's own girth)
+                              sag: last ? Math.max(0, Math.atan(fl) - .08) : 0, fall: true });   // (the mouth sags with gravity -- skeleton.js; a margin for the arm's own girth. Every piece of it FALLS off a raised arm: a dalmatica's upper sleeve too)
           out.push({ part, top: 0, bottom: 0, layer: w.def.layer ?? 2 });
         }
         o += p.len;
@@ -378,7 +390,10 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
     const c = (pc.centre ?? [-.12, .05]).map((v) => val(v, P, {}, 0) * H), R = val(pc.radius, P, {}, 1.38) * H;
     const ax = pc.axis ?? [-1, -.3, 0], cut = (pc.cut ?? [.55, 0]).map((v) => val(v, P, {}, 0) * H);
     const n = norm(ax), lo = (cut[0] - c[0]) * n[0] + (cut[1] - c[1]) * n[1];
-    const part = bone(id, form.head.id, [c[0], c[1], 0], n, .01, R, R, { color: base.colors[0], clip: { lo, hi: 1e4 }, dress: dress() });
+    // (`length` head radii and `taper`: drawn out behind the head along the axis, narrowing -- a chaperon's soft point at
+    //  the back instead of a ball round the head)
+    const len = Math.max(.01, val(pc.length, P, {}, 0) * H), r2 = R * val(pc.taper, P, {}, 1);
+    const part = bone(id, form.head.id, [c[0], c[1], 0], n, len, R, r2, { color: base.colors[0], clip: { lo, hi: 1e4 }, dress: dress() });
     return [{ part, top: 0, bottom: 0, layer: w.def.layer ?? 2 }];
   }
   if (kind === "crown") {  // a hat's crown: a round cone from above the head down to the brim's height, its top closed
@@ -421,7 +436,10 @@ export function drawOutfit(kind, r, { female = kind === "woman", style = null } 
     const garment = Array.isArray(g.garment) ? pick(g.garment) : g.garment;
     const choice = (c) => typeof c === "string" ? { pattern: "fabrics/" + c.split(":")[0], palette: c.split(":")[1] } : c;
     const fabrics = Object.fromEntries(Object.entries(g.fabrics ?? {}).map(([slot, cs]) => [slot, choice(pick(cs))]));
-    wear.push({ garment, fabrics, params: g.params ?? {} });
+    // (a param given as a list is drawn from it: a hem band or none, and how wide -- only those draw, so a garment
+    //  without one keeps the stream of choices it had)
+    const params = Object.fromEntries(Object.entries(g.params ?? {}).map(([k, v]) => [k, Array.isArray(v) ? pick(v) : v]));
+    wear.push({ garment, fabrics, params });
   }
   return { name: outfit.name, wear };
 }

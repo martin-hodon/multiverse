@@ -9,6 +9,7 @@
 //   rgb.mul(landShade())   // a node: the shadow where the fragment is (its world position)
 import * as THREE from "three";
 import { uniform, wgslFn, positionWorld } from "three/tsl";
+import { sunShade } from "./sunshadow.js";
 
 export const CLOUD_SHADOW = { dark: .36, drift: 1.5 };
 export const CLOUD = { amount: uniform(0), cover: uniform(.4), t: uniform(0) };
@@ -78,4 +79,5 @@ export const meadowPatches = wgslFn(`
   }
 `, [valueNoise]);
 
-export const landShade = () => cloudShade({ p: positionWorld.xz, t: CLOUD.t, amount: CLOUD.amount, cover: CLOUD.cover });
+// (and the sun's own shadows -- the buildings', baked once: sunshadow.js -- on everything that lies on the land)
+export const landShade = () => cloudShade({ p: positionWorld.xz, t: CLOUD.t, amount: CLOUD.amount, cover: CLOUD.cover }).mul(sunShade());

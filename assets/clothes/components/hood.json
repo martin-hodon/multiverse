@@ -1,7 +1,7 @@
 {
   "name": "Hood",
   "kind": "component",
-  "_about": "A HOOD (the chaperon): a COWL round the head -- a ball of cloth cut open at the face -- and a CAPELET: a shallow cone over the shoulders from the collar out past the arms, and a FALL hanging from its rim over the upper arms, `cape` deep, its edge dagged if `dags` is given; a LIRIPIPE, the long tail of its point, if `tail` is set. Numbers on the head are in cranium radii.",
+  "_about": "A HOOD (the chaperon): a COWL round the head -- a ball of cloth cut open at the face -- and a CAPELET: a shallow cone over the shoulders from the collar out past the arms, and a FALL hanging from its rim over the upper arms, flaring a little and in broad folds (straight it read as a lampshade; flared more, with many folds, as a frill), `cape` deep, its edge dagged if `dags` is given; a LIRIPIPE, the long tail of its point, if `tail` is set. Numbers on the head are in cranium radii.",
   "params": {
     "cape": 0.12,
     "dags": 0,
@@ -25,7 +25,9 @@
         0.55,
         0
       ],
-      "fabric": "main"
+      "fabric": "main",
+      "length": 0.5,
+      "taper": 0.86
     },
     {
       "name": "cape",
@@ -37,7 +39,8 @@
       "arms": true,
       "swing": false,
       "lid": false,
-      "fabric": "main"
+      "fabric": "main",
+      "pleats": 8
     },
     {
       "name": "fall",
@@ -45,13 +48,14 @@
       "on": "torso",
       "from": "armtop",
       "to": "armtop + cape",
-      "flare": 0.15,
+      "flare": 0.25,
       "arms": true,
       "dags": "dags",
       "swing": false,
       "lid": false,
       "fabric": "main",
-      "fit": "ring"
+      "fit": "ring",
+      "pleats": 9
     },
     {
       "name": "tail",

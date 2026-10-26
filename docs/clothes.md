@@ -178,7 +178,8 @@ the figures early depth rejection; if that shows on the iGPU, standing pieces ca
 The cloth does not move with the body, so two cases let a limb come out through it, both now handled by rules, not
 per-garment fixes:
 
-- **A thigh under a skirt is a BONE** (people.js: posed, never drawn). It used to be "hidden" by an empty cut
+- **A thigh under a skirt is a BONE** (people.js: posed, never drawn) -- only under a skirt reaching past the knee
+  (2026-10-24: from 80% of the thigh down, a guard's tabard left the thighs' last hand's breadth missing above the boots). It used to be "hidden" by an empty cut
   (`clip: { lo: 1e3, hi: 1e3 }`), which the shell engine drew whole after all; a standing thigh only looked hidden
   because it lay inside the skirt's cone, and a crouch (skeleton.js `an.rest`, the gestures' `crouch`) brought the
   knee out through the front of the gown.
@@ -249,3 +250,61 @@ were never checked and never counted as cover. Found then: under a headscarf or 
 showed at the nape below it; a garment that covers the hair whole now says so (`"hair": "none"`: headscarf,
 maphorion) and people.js draws none under it. Left: a poke bonnet shows the hair at the nape (as it does), a hood's
 ball by the check's reckoning (its fall hides it: seen from behind).
+
+## A sleeve bends as one sheet (2026-10-24)
+
+A worn piece was always one sheet on one swept arm (its layers run across the elbow), but the arm itself bent like two
+tubes: the ring at the elbow was a circle turned halfway, which pinched a bent elbow to cos(half the bend) of its girth,
+and past a few metres no ring fell on the elbow at all. Now a joint between two long parts is a SEAM shared by both
+(shell.js "THE JOINT IS A SEAM", docs/engines.md): the mitre of the two cones, one ring of points that moves with both,
+always a ring at every detail -- the sleeve, the hose at the knee, the bare arm alike. And a limb's top belongs to the
+body: an arm's and a leg's ROOT (people.js `ROOT`, 1.6 of its top radius) keeps its rest as the limb moves and the limb
+bends out of it, so a sleeve's top stays sewn in at the shoulder instead of its round end swinging out behind it.
+Left: the hand and the foot are shells of their own (a flat hand, a shoe), and the bodice and the sleeve still meet
+where the arm's shell meets the torso's, as before.
+
+## Folds, hems that wave, skirts that sway (2026-10-24)
+
+- **Folds** (`shell.js` `foldPhase`, the `pleats` of a piece): not even pleats (a ribbed cone) but `pleats` folds
+  round it whose phase is warped by a few slow waves -- more so lower down, where folds fan out -- shallow gathers at
+  the top of the piece deepening to the hem; a broad lit ridge and a narrow dark valley, the same profile tilting the
+  normal. The skirt component folds softly by default (`pleats` 9); stiff ones say 0 (the gambeson, mail, the tabard);
+  the kilt 26. The cloak, mantle, overfold, bell sleeve and the hood's cape and fall fold too (the hood's fall flares
+  .4 now: straight, it read as a lampshade).
+- **The hem waves** with them (`HEM_WAVE`: a valley lifts it by that share of a fold's width): `layerIn` lifts the
+  hem, and a standing piece is cut where no layer is, so its silhouette waves; a hem band keeps its piece's pleats and
+  follows.
+- **Sway**: a standing piece's `anim.sway` (3 degrees) swings it side to side once a stride with the legs
+  (`skeleton.js`), as the hips carry it from foot to foot.
+- **Trims drawn person by person** (wardrobe.json, `clothes.js drawOutfit`): a param given as a LIST is drawn from it
+  -- the folk's tunics and kirtles carry `hem: [0, 0, .03, .04]` and a `trim` fabric list (undyed, black, madder, woad,
+  braids, a check), so some wear a contrasting band at the hem and most none; only listed params draw from the seed.
+- **No fringe under a hat** (people.js face `fringe`): the flat hair a hat leaves kept its forelock, which came through
+  a coif, a bonnet, a hood's cowl, a fez (clipcheck: up to 58 mm) -- under any hat the face goes without it. The coif
+  and the bonnet cover the hair (`hair: "none"`, as the headscarf): the flat hair still came 5 cm through them. Left
+  (clipcheck n=4): 4 kinds over 5 mm, the worst a child's hair 20 mm through a fez -- it was 9 kinds, 58 mm.
+- **A cowl drawn out behind** (clothes.js `cowl`: `length` head radii, `taper`): the hood's cowl runs back along its axis
+  and narrows a little (.5, .86) -- a hood, not a ball round the head; other cowls keep the ball (length 0).
+- **A pouch at the belt** (components/belt `pouch`, the belt garment's default 1): a leather purse hanging at the left
+  hip -- a thick worn patch (16 mm proud) under the belt, standing out over a tunic or the top of a skirt.
+- **Standing pieces end at their hem** (clothes.js `standPiece` dress, `LAYER_TOP`; fixed later the same night): a
+  standing piece's layers ran from -1e3 to 1e3, so on a skirt, a cloak or a bell sleeve the fold depth was one value
+  all down it, the hem wave and the soiling sat at 1e3 m (never seen), and dags never cut -- the claims above held only
+  for worn pieces. Now a piece ending at the garment's edge has its layers end at its own length (`len`) and begin
+  LAYER_TOP (.25 m) above it; seated, the layers that ended at the hem move with it (people.js -- an apron keeps its own
+  end). HEM_WAVE .12 (at .22, once real, it read as dags). Clipcheck unchanged.
+- **Brims with a thickness** (components/brimmed-hat `brimT` .1 head radii, ~9 mm): at .05 a straw hat's or a felt
+  hat's brim read as a hairline from the side.
+- **Patches** (shell.js `PATCH`): about three worn pieces in ten (by their layer's slot: it stays where it is) carry a
+  darned square of near-matching cloth -- a shade off its own, a touch of its second colour -- edged with a dashed
+  stitch, at a place round it and down it drawn from the same hash; not on bands or thin pieces, gone where finer than
+  a few pixels.
+- **A seam is no hem** (clothes.js tailor: `seam` on a standing piece the next one of its garment hangs on from -- a
+  hood's cape above its fall, a mantle's cape above its body): no wave, dags or border there -- once the hems waved for
+  real, they cut slivers of holes along those seams. The hood's fall flares .25 in 9 broad folds (at .4 and 14, with
+  the wave, it read as a frill).
+- **Sleeves fall off a raised arm** (skeleton.js `SLIDE.fall`, clothes.js `fall` on every hanging piece of a sleeve):
+  once the arm rises past level, the sag's limit (keep the arm inside the cone) gives way over the first .35 of the
+  rise, and the piece hangs plumb from its top ring, the arm going up out of it -- a dalmatica's upper sleeve from the
+  shoulder, a bell from the elbow. (First it was shortened instead, to .35 of itself with its mouth drawn in -- still a
+  funnel round the raised hand; that is gone.)

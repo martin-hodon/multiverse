@@ -259,7 +259,7 @@ material (a magpie's white primaries with black ends, a pigeon's tail bar, the p
 sail. One wing component (`components/wing`) is the arm and the hand: the secondaries fanned off the forearm,
 the primaries off the hand, one plate of coverts over their roots (the rest of the wing has no single feathers),
 by `span`, `chord`, `pri` / `sec` counts, `sweep` and `spread` (1 flying, 0 folded along the flank with the hand
-folded onto the arm); the bird's `pose` pick puts the spread or the folded pair on the shoulders (`when`). The
+folded onto the arm); the bird's `pose` pick puts the spread or the folded pair on the shoulders (`when`). The legs follow the pose too (2026-10-24): standing legs with the folded wings, and with the spread ones `thigh/tarsus/toes flying`, trailing back under the tail. Before, every bird flew with its legs hanging as if it stood. The
 body is a spindle `sweep` with a breast ellipsoid, the neck a curved sweep for the long-necked (goose, swan,
 heron, stork, flamingo, crane), the head a sphere, the beak a cone rod (`flat` stretched for the ducks), a crest
 or comb another feather fan, a train (peacock, pheasant, the rooster's sickles) a second longer fan in the tail.
@@ -283,7 +283,8 @@ at +x) and `components/ice-hole` (dark water in a round cut, slush and broken ic
 each season's once and shows the world's). The game builds
 them through `architecture.js itemGroup` (one group) and `itemInstanced` (copies: the same root / set / commit API
 as the parts-list helpers), and the arrow as one painted geometry (`tools.js paintedGeometry`, which the faces use
-too).
+too). Each counter placement is a little heap of three and each basket holds one more (2026-10-24: two or three pods on a
+2.4 m counter read as bare; 49 -> 133 pieces).
 
 **Alternatives** (the same day, later): the pieces the code still drew its own way are items too, BESIDE the
 catalogue's finer ones rather than instead of them -- `ships/fisher-boat` (the fisherman's rowing boat; `ships/skiff`
@@ -308,8 +309,8 @@ Every item a hand can hold says where the hand closes on it. **`hold`**:
 | `face` | square to it: which way the edge or the front looks (a sword's edge, a shield's face) |
 | `grip2` | the other hand's place, for a two-handed hold (a halberd, a longsword, a bow's string) |
 | `carry` | `{ axis, face }` in the HAND's frame (+x forward, +y up, +z to the right): how it is carried -- upright by default |
-| `follow` | how much of the forearm's lift it takes (0.7 by default: a hoe swings; a sword 0.35; polearms, shields and bows 0, upright in a raised hand) |
-| `rest` | `"ground"`: at rest it stands on its butt on the ground, and the hand slides along it (a spear, a halberd, an ordered musket) |
+| `follow` | how much of the forearm's turn the HAND takes holding it -- the wrist: 1 rigid with the forearm, 0 upright in the figure's frame (0.7 by default: a hoe swings; a sword 0.35; polearms, shields, bows and the lute 0; a holder may give a negative one, tipping it forward: an axe on the block). The skeleton turns the hand so and the item lies rigidly in it, its grip in the fist (2026-10-24: it used to be placed in a frame of its own built from the forearm's heading, which flipped as the forearm passed upright, the hand going on without it) |
+| `rest` | `"ground"`: at rest it stands on its butt on the ground, and the hand slides along it (a spear, a halberd, an ordered musket); `"body"`: it rests against the body where the hand holds it on the whole, the hand playing over it (a lute: tools.js BODY_REST) |
 
 `holdMatrix(hold)` turns that into the one matrix that puts the item into any hand. `tools.js` moves each kind of item
 into the hand's frame once, at build, as one InstancedMesh per material. Each frame, every copy is one matrix at a

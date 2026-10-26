@@ -312,7 +312,7 @@ you can always walk out of one that has stepped onto you.
   now the one place a tree is recorded in treeCols.
   And the buildings: a soft band 1.5 m wide round the foot of every building's walls, darkest at the wall
   (shadows.js `createWallShade`, from the sites' footprints -- not the fields, yards, market paving, fountain, landing
-  or bridge -- in pieces of 4 m following the ground; ~900 quads, one static mesh, one draw). `?shadows=0`: none of it.
+  or bridge -- in pieces of 4 m following the ground; ~900 quads, one static mesh, one draw). `?shadows=0`: none of it. Not round a ROUND building (the windmill, the wall's towers): its footprint's square showed as a dark square round it (2026-10-24).
 - **Haycocks** (index.html HAY, `?hay=0`): in summer the meadows round the farm fields are mown and the hay stands in
   nine cocks to dry -- a rounded cone each (three balls stacked round a pole, blocks.js, in the straw's shades), 10-34 m
   from a field on open level ground, clear of the lanes, the sites, the hedges, the river and the children's green.
@@ -381,6 +381,8 @@ you can always walk out of one that has stepped onto you.
   and nothing later is laid out over a claim (`clearOfStands`). `python3 build/worldlint.py [SEED ...]` loads worlds one
   at a time (the cached seeds by default) and checks every claim's ground, a metre apart along it and round it at its
   breadth, for walls and yards, water, the land's edge, tree trunks, props not its own, and other claims.
+  A chore placed on a site's own ground by design (`own`: the harvest's cart in its grain field) claims `own`, and the
+  check counts only walls and posts there, not the site itself -- in autumn it was flagged as all in a building or yard (2026-10-24).
 - **Snow on the roads** (paths.js trackFrag `snow`, grass.js GROUND_SNOW): the roads used to stay bare brown in snow
   with a bright green verge along both edges. Now the verge whitens with the meadow, and the track is trodden snow --
   patchy, the wheel ruts left brown; frost rimes the verges too.
@@ -491,9 +493,23 @@ you can always walk out of one that has stepped onto you.
   ramp's foot along their doors) and one east of the landing on the quay road, each with its plots in rows
   behind it: rye and barley (14 x 12m), cabbage, beans on poles and garlic (12 x 10 / 10 x 8m), the plowed
   field, three rows of currant bushes, the orchard (apples and cherries on a 5m grid), the pig yard (a
-  pigsty with lean-to roof, trough and wallow), the hen yard (a hen house on legs), the stable yard (a stable
+  pigsty with lean-to roof, trough and a wallow of trodden mud in overlapping rounds with a wet, darker middle, the rest of the yard rooted bare -- `scratched`, as the hen yard's), the hen yard (a hen house on legs, the ground scratched bare -- `scratched`, dry earth in overlapping rounds over most of the pen, palette `dust`), the stable yard (the ground trodden bare before the stalls and from the gate -- `scratched`; a stable
   block with four stalls, a trough, a hitching rail, hay) and the beekeeper's garden -- five pigs, eight hens
-  and four horses in their yards, penned by their own ranges. The currant bushes and the orchard trees are
+  and four horses in their yards, penned by their own ranges. The hen yard has a rooster too (the chicken's `rooster` variant; the dawn crow -- ROOSTER -- now comes from him,
+  wherever he is in the yard, and he crows now and then through the day too, every three to seven minutes), and the hens and
+  the cock go in at dusk and come out in the morning (index.html roostTick, `hidden` while out of sight). By day a woman
+  feeds them (CHORES `feed`: the basket on her arm, the `scatter` gesture -- people.js -- casting the grain: GRAIN, a few dozen specks arcing from her hand
+  to the ground in time with the swing, one small instanced mesh placed each frame -- only during a bout: inBout,
+  the one clock the lure reads too), and the hens gather round her feet; in the pig yard a farmhand tips out a bucket of slop
+  (CHORES `slop`, the `pour` gesture) and the pigs crowd to it; in the stable yard a stable-hand forks hay (CHORES
+  `hay`, `pitch`, `lureR` 2.6: the horses keep a wider ring). A chore's `lure` names a yard (its fence's `yard`):
+  choreLureTick lures that yard's animals that `beg` to places of their own round the worker (begStep's lure, as the
+  ducks to a splash) -- in bouts (`FEED.bout` seconds in every `FEED.cycle`, each chore its own moment; the worker's
+  swing, `an.work`, eased in for a bout and out after it); between them they wander (the pigs: 5.3 m round the farmhand, 1.8 m in a bout, 7.6 m after it). Chores may name a working kit (`outfit`: wardrobe.json `farmhand` -- the slop, the woodchopping,
+  the harvest -- and `farmwife`, the hens' feeding) -- medieval kits, so only in a period that dresses in the default
+  style (periods.json `dress` with ""): an Egyptian or a Roman farmhand keeps his period's own dress. The chicken now `beg`s too: it comes to its fence when you stand still near. Each farm's side track runs past its plots' real east edge (2026-10-24: a pair of plots
+  reaches 1.5 m plus its own width each way; half their summed widths put the track inside the hen yard's fence), and
+  the second western farm moves west if its track and plots would run into the first's. The currant bushes and the orchard trees are
   PLANTS, not building parts (`plants`: the flora builder grows them with the woods' `makeBush` / `makeTree`);
   fields are tilled slabs whose crops are shader cut-outs, so a field costs a few dozen boxes. Nothing in a
   field obstructs walking.
@@ -568,8 +584,9 @@ you can always walk out of one that has stepped onto you.
   angle, jitter, length/radius ratios, curvature, wobble and lean, grown in
   trunk units and scaled to its real height. The wood is capsule banners
   in the trunk's bark out to the thinnest twig; the outer
-  levels carry leaf cards painted from the leaf atlas (oval, round, lobed,
-  needles, willow; textures.js), cut out by alpha with alpha-to-coverage
+  levels carry leaf cards painted from the leaf atlas (oval, ovate, lobed,
+  needles, willow; textures.js -- ovate, the birch's and some bushes', was "round", discs, until 2026-10-24: now
+  pointed at the tip, broad at the base, on a stalk; flora.js takes the cells' ids from LEAF_STYLES, no copy), cut out by alpha with alpha-to-coverage
   edges, shaded by facing and depth in the crown, swaying in the wind, all
   cards of the forest in one draw (`foliage.js`). By default every card is
   a banner turned to the camera (each by its own angle in the screen
@@ -761,7 +778,14 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   rain (ROAD_WET over .45, no snow) the same prints in the mud, dark wet earth (per print: `printKind`).
   And everyone else's: while snow lies, every figure walking within 35 m of you -- villagers, walkers, children, the
   animals -- leaves its own trail, a print a pace of its legs (`parts.legLen` x .8), left and right by turns, sized by
-  its legs (a boot at least; a horse's larger), not under a roof nor off the ground (every third frame; a pool of 900).
+  its legs, not under a roof nor off the ground (every third frame; a pool of 900). A person's is a boot; an ANIMAL'S
+  is its kind's (2026-10-24 -- every animal had left the same boot print, a hen's as big as a man's): a species
+  declares `print` (assets/creatures; composite.js carries it onto the animal; tauric beasts keep their base's -- the
+  centaur's hooves) -- `hoof` (a horse's rounded U), `cloven` (cattle, deer, sheep, pigs), `paw` (a pad and four toes:
+  dogs, cats, bears, small beasts; also the default), `bird` (three toes and a spur: the birds, the two-legged
+  dinosaurs), `pad` (round, its nails in front: elephants, hippos, camels, the great dinosaurs) or `none` (a snake, a
+  spider). footprints.js PRINTS sizes each from the legs (printOf: k x leg length, within min..max metres; a gauge
+  from the legs too) and draws its shape in the shader (`printShape`).
 - **Rain and snow under a grey sky**: the weather sets the sky's `overcast` (.3/.6/.9 by intensity): the blue and the
   sunset's colours give way to grey, the sun goes behind the cloud (its disc and glitter), the light dims by up to a
   third (the tint pass runs by day then too), the clouds turn grey. In rain every stretch of water is pocked with
@@ -1089,11 +1113,163 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   upper-storey windows of two houses, 4-10 m apart, facing each other, at about the same height; 16 at most), sagging,
   with the wash pegged along them -- sheets, shirts, breeches, stockings, cloths, in linen and the town's dyes -- each
   piece a 4x3 grid blown out of the line's plane by the grass's own gusts, more the lower it hangs; the shapes cut in
-  the shader. One mesh for the wash, one for the ropes.
+  the shader. One mesh for the wash, one for the ropes. The wash is taken in when it rains or snows and for the
+  night (`update(t, out)`, 2026-10-24); the lines stay up.
 - **Flower boxes** (windowbox.js): seven houses in ten keep a box under most of their windows (shutters, not glass;
   not a shop's wide opening): a plank box on the sill's outside (0.33 m out from the window's middle -- the walls are
   0.35-0.65 m thick) and two crossed cards of leaves and round blooms cut in the shader, all one colour a house
   (geranium, pink, daisy, violet, marigold, nasturtium), swaying a little in the grass's wind. Two meshes.
+  In winter (foliage.js `SNOW`, 2026-10-24) the blooms go, the plants are cut back by a third and withered, and snow
+  caps them; they had flowered red through the snow.
+- **Window and door frames** (windowframes.js, 2026-10-24): every window on the glow's list gets jambs and a lintel
+  standing a little proud of the wall's outer face and a sill reaching further out (the flower boxes sit on it), a
+  flat-headed doorway its jambs and lintel -- in one colour a house (oak, weathered, or painted green, blue-grey,
+  oxblood, white), pale stone round glass; an arched window its sill and a keystone at its crown (`FRAME.key`). One lit mesh for the town (`?frames=0` off).
+  The boxes are wound by the wall's side (a left- or right-handed along-up-out frame): culled the wrong way round they
+  hid inside the wall. A house's ROOF EDGES get boards too (`boards`, FRAME.board: 20 cm deep, upright): the outline of
+  the roof's upper sheet but the ridge (architecture.js lifeOf `roofEdges` -- a shell roof is a closed slab, so its
+  open edges are none; the up-facing triangles' outline is the eaves and the verges) -- a bargeboard up each gable, a
+  fascia along the eaves, in the house's paint. The frames, boards, ridge tiles and chimney caps take the snow on their
+  faces looking up (windowframes.js `snowyLit`, foliage.js SNOW): a bare terracotta ridge on a white roof read as a stripe.
+  After rain they darken wet with the walls and roofs (cloudshadow.js WET).
+- **Doorsteps and woodpiles** (2026-10-24): a door whose sill stands 5-50 cm over the street gets a stone step out in
+  front (windowframes.js, `FRAME.step`, given `groundH`); and nearly half the houses keep a woodpile against the wall
+  beside the door (index.html `WOODPILE`: split logs in courses, ends out, blocks.js logs, one lit mesh that takes the snow -- blockMesh may be given a material; propCols keeps you
+  out of it). windowframes.js `wallFrame` -- an opening's along/out frame and a point off its wall -- serves both.
+- **Cottage beds** (index.html buildFlora `BEDS`, 2026-10-24): under three in ten of the houses' ground-floor shuttered
+  windows, two staggered rows of one tall garden flower along the wall -- foxgloves, irises, roses or lilies (the
+  flower items) -- in the flowers' one batched pool, rebuilt with them by the season. The meadow's flowers keep off the
+  sites, so there were none by a house. Never in a road, a wall or a prop; `?beds=0`.
+  ALL the flowers (the meadow's too) and the woods' mushrooms are hidden while the snow lies (`SNOW` > .5, the tick;
+  the mushrooms flipped only as the snow comes or goes) and cannot be picked then -- they had grown through it.
+  The BUTTERFLIES fly only by day, in fair weather and with no snow lying (the gate in index.html, not butterflies.js,
+  which keys the startup cache's wings: they
+  had fluttered at night, in the rain and over the snow), and the bees stay in while snow lies; the swallows are gone
+  south in late autumn and while snow lies, and no moths come to the lamps in the snow.
+  The DUCKLINGS swim behind their mothers in spring and summer only, with no snow lying -- folded into their own
+  near-you cull at the end of the frame (it set `visible` last, so a separate season check before it did nothing).
+  No FALLING LEAVES drift down while snow lies (the crowns are bare): hidden after leaves.update, which shows them by
+  distance.
+  The WASHERWOMAN stays home while snow lies, as in the rain (she knelt at the icy river while the town's wash was in).
+  On a river frozen hard (`iceFirm`: the skaters' ice) the WATER MILL'S WHEEL stands, its millwork with it, and no
+  spray rises off it; the windmill's sails turn on. The fisherman's SKIFF stays at its mooring (one out when the ice
+  firms turns for home -- boatStep); the ducks and swans already stand on the ice (floatY). (The harness pins the animation clock: checked by the ice state the
+  gate reads -- `?ice=1` firm, open water not -- not by watching the wheel.)
+- **Farm wood** (town.js, 2026-10-24): the yards' sheds (the hen house, the pigsty, the stable) are boards
+  (`timber/boards`), their posts, fences and gates planed wood (`timber/wood`), and the longhouse's woodwork and the
+  railings planed wood too -- all were `timber/bark`, which read as zebra stripes (the town houses' woodwork had
+  moved off it earlier the same night). The shed rule sits after the hay, floor and ground rules: the first rule that
+  matches a surface wins, and those are the sheds' own parts too.
+- **Roof boards only in styled towns** (2026-10-24): the painted bargeboards and fascias (windowframes.js `boards`) are
+  given only where the town is built in the styles (a period without its own `houses`, periods.json) -- on a Greek
+  courtyard house's roof they crossed its corners as two broad white bands.
+- **Bank places clear of trees** (index.html bankAt, 2026-10-24): the riverbank spots for the washerwoman and the
+  stone-skipper are checked against the trees too (treeCols, which buildFlora has filled by then), with more places
+  to try for the skimmer -- the placement check had found the skimmer under a tree in two worlds of three.
+- **The drip line** (index.html `DRIP`, 2026-10-24): round every house's foot a .55 m strip of trodden earth where
+  the eaves drip and feet go (the lawn had run right up to the stone). The wall's face is found per side by stepping in
+  from the footprint (which reaches past the wall: eaves, a margin) with hitsBuildings at three places, the middle
+  answer kept (a doorway's hole, a frame proud of the wall), plus CR (hitsBuildings asks round a body's width). In
+  1 m pieces, each left out on a road, in another site or in the water; snowyLit under landShade.
+- **The fields' edges** (index.html `SKIRT`, 2026-10-24): a tilled field's soil slab (village/field-* `soil`, 12 cm
+  proud) had straight sides -- a hard box edge. A skirt of earth now slopes from its top edge out to the grass
+  (`SKIRT.out` .45 m), corners mitred, snowyLit under landShade; laid at runtime, the cached fields untouched.
+- **The landing's gravel** (index.html, 2026-10-24): the river landing's apron (village/landing `apron`) has no finish
+  and showed one flat grey. A thin gravel sheet is laid on it at runtime -- 60 x 36 cells, its tone mottled per vertex
+  (linear colours: the sRGB tone raised to 2.2), snowyLit and under landShade -- at the floor supportAt measures, so
+  the cached building stays as it is (no pregen rerun).
+- **Barrels by the shops** (index.html `SHOP_BARRELS`, 2026-10-24): seven shops in ten stand a barrel or two
+  (items/furniture/barrel) against the wall beside their door, on the side away from the lamp; never in the
+  carriageway; propCols (`by: "barrel"`).
+- **Cats on the sills** (index.html `SILL_CATS`, 2026-10-24): a cat or two asleep on a ground-floor window's sill --
+  shutters, no flower box (windowbox.js now returns its `windows`), lying along it (`an.rest`, in the extras herd),
+  its coat by the seed; `?cats=0`. They go in out of the rain and the snow (roostTick, while out of sight).
+  And one lies on the market's paving by the corner of the fish stall, waiting for scraps (a small propCol: the
+  shoppers step round it).
+- **Wayside shrines** (index.html `SHRINES`, 2026-10-24): two or three a world along the country roads and tracks
+  (`from` 75 m out of the market, `apart` 70 m from each other), `side` metres off the road's edge and turned to it --
+  by turns a stone pillar (a step, the shaft, a niche with its dark hollow to the road, a small roof, an iron cross)
+  and a wooden wayside cross with a pale figure under a little roof -- a few flowers at the foot. Clear of the road,
+  buildings and water; propCols (`by: "shrine"`); `?shrines=0`. A stone pillar's niche holds a candle that glows at night
+  (`LITTLE_LIGHTS`, with the grave lights: after every other lamp; the light a little in front of the niche -- inside
+  the stone the glow's shape cut through it). Only in a period whose town has a church
+  (periods.json `church`): none in a Greek, Roman, Egyptian, Chinese, Ottoman or Islamic town.
+- **Icicles** (icicles.js, 2026-10-24): while the snow lies (`SNOW` > .5) icicles hang along the houses' eaves -- the
+  level roof edges (lifeOf roofEdges, the fascia boards' lines; not the gables' verges), a board's depth down, every
+  ~20 cm with gaps, 7-55 cm long and thicker the longer they are, a little off plumb. One lit mesh (~2500 in a town),
+  hidden the rest of the year.
+  The same module puts SWALLOWS' NESTS under some eaves all year (`ICICLES.nest`: one eave in three, one to three mud
+  cups -- half bowls against the wall's top under the board -- in a mesh of their own).
+- **The churchyard** (index.html `CHURCHYARD`, 2026-10-24): up to 46 graves round the church on the ground it has free,
+  in rows square to it between `near` and `far` metres out of its walls: headstones with rounded tops (a blocks.js
+  log across the slab, its round faces stone), some leaning (`tilt`), crosses of stone or weathered wood, now and then
+  a flat ledger, and a low grassed mound before each, flowers on some. Never on a road (offRoad), in a building (inSites), by the water,
+  under anything (openStand) or in the forecourt at the church door (`door`: the wedding gathers there). One snowyLit
+  mesh; propCols so walkers go round (`by: "grave"`); `?graves=0` leaves it out.
+  About one grave in four has a GRAVE LIGHT (red glass under a cap) that the night glow lights after dark --
+  `LITTLE_LIGHTS`, appended after every other lamp (the glow takes `LAMPS` at most: they never crowd out a carried
+  lantern).
+- **Stork nests** (index.html `STORK`, 2026-10-24): two house chimneys a town (chimneyTops carry `home`), picked by
+  its seed, carry a stork's nest: sticks in four courses round the capstone (`RIDGE.cap`) and a darker bowl, made of
+  blocks.js logs in one snowyLit mesh, with a pair of storks (items/birds/stork, `pose: folded`) standing in it -- the
+  mate turned well away from the other, and keeping the nest while it flies. A nested
+  chimney gets `nest`, and smoke.js passes it over (a cold chimney). The nests are not in the sun-shadow bake.
+  Every `STORK.cycle` seconds (offset per nest) the stork flies for `STORK.flight` s (storkTick): up off the nest
+  along a curve to a circle of `STORK.ring` (radius, height) that passes over the nest, `laps` times round, then
+  down again (by day and dry only: at night and in the rain both keep the nest); in late autumn and in winter (`SNOW`) the nest is empty -- they are away south. The standing item is hidden and a second item in `pose: spread` flies, yawed along its path, pitched
+  with the climb and banked into the turn (eased).
+- **Ivy** (ivy.js, 2026-10-24): nearly half the houses' plain doors (`IVY.share` .45) have ivy planted on the side
+  away from the woodpile (`d.pile`). From the root its stems wander up the wall and branch to the sides (`IVY.branch`).
+  They go round the door and the house's windows on that wall, which are boxes with a margin, and stop where the wall's
+  face ends. That edge is found by probing: frameDoors carry `probe(x, y, z)`, the same wallOuter ray, so a corner, a
+  jetty's overhang or the eaves ends them. The leaves are three-lobed polygons, the older ones bigger and the young
+  ones at the stems' ends a fresher green, tilted off the wall on their stalks. Their tips stir in the wind (a
+  positionNode, `flex`). Leaves and stems are one snowyLit mesh each; ?ivy=0 leaves them out.
+  Arched doors get it more often (`IVY.arched`: the church's, a merchant's), with a taller margin over the arch. A
+  door's wall lamp (frameDoors `lamp`, from index.html `hasLamp` -- the same rule createWallLamps uses) is kept
+  clear, and a stem that reaches the top ends there, under a top that is ragged along the wall.
+- **Board shutters** (index.html `shutterGeometry`, 2026-10-24): the unit box each shutter is stretched from carries two
+  ledges across and a Z-brace between them, a shade darker, proud on both faces (a shutter opens back against the wall:
+  either face is seen) -- it was a plain slab.
+- **Grime at the wall's foot** (archmat.js `GRIME`, 2026-10-24): an outside wall darker and a little green to knee
+  height, its top line ragged -- by the pattern's v, which is the height over the building's ground for a pattern laid
+  from the ground (not for one laid from each part's foot, `align: part`: no grime there). Faint RAIN STREAKS run down
+  those walls too (`GRIME.streak`: a noise narrow across the wall, long down it, stronger low). (And the roofs' moss
+  now mixes into what is already there -- it mixed from the bare colour and would have wiped anything before it.)
+- **The sun's shadows** (sunshadow.js, 2026-10-24): the sun is static, so the buildings are drawn ONCE from it, after
+  they are built, into two depth maps (an orthographic camera along LIGHT.dir, every caster on layer 7 with one plain
+  override material): a FINE one sized by the town's core (the sites within `SUN_SHADOW.reach` 200 m of their middle:
+  3072 texels, ~11 cm) and a COARSE one over every building (2048, ~40 cm: the mill, the farms, the windmill). The fine
+  map draws every building too -- its square reaches past the core's circle, and a mill standing in it undrawn cast
+  nothing (the fine map wins wherever it reaches); the coarse one is read, one filtered tap, only outside it.
+  `landShade()` (cloudshadow.js) multiplies `sunShade()` in -- the ground, the roads, the walls, roofs and paving -- and
+  the figures' shells too (shell.js, with their own world position and normal): four filtered comparison taps (fine), and in
+  shade Lambert's direct share of the light taken off (times `depth` 1.5, at most .55 -- the world's high ambient left
+  a shadow at Lambert's alone a smudge). Faint under a grey sky, none by night (`SUN.k`, set with the clouds'
+  shadow). `?sunshadow=0` off. Trees do not cast (their shade blobs do that). The WATER takes them too, softer (.7 of
+  the land's: what it mirrors is not shaded) -- the bridge's shadow lies across the river under its arches.
+  **Figures cast too** (shadows.js, `SHADOWS.cast`): each figure within 40 m standing in the sun gets, besides the
+  shade under it, its own sun shadow -- an ellipse from its feet away from the sun, as long as its height (composite.js
+  `an._y1`) over the sun's slope, as wide as it is across that way, as strong as `SUN.k`. "In the sun" is read on the
+  CPU (sunshadow.js `sunAt`): the fine map's view drawn once more at 1024 texels with its depth as colour (an RGBA
+  float target -- a one-channel one drew nothing; no scene background for it, or the sky was its clear) and read back,
+  rows as the shader samples them (v down) -- so nobody casts a sun shadow indoors or in a house's shade. Its edge is
+  crisper than the shade under a body (`blobH` 1: the fall-off from .82 of the ellipse out, not from half). The carts
+  cast one too (a body's `high`, 1.6 m by default).
+  **Trees cast too** (index.html buildFlora, shadows.js `createShadeBlobs` `sun` blobs): besides a lighter shade right
+  under the crown, the crown's own shadow -- an ellipse cast away from the sun as far as the crown stands high (`AWAY`,
+  `SLOPE`), firm-edged, fading with the sun on the GPU (`blobSun` times SUN.k: none by night, faint under grey skies).
+- **Ridge tiles** (ridgecaps.js): a row of half-round tiles along each roof ridge in the roof's palette's second
+  colour (lifeOf records the ridge's `part`; index.html roofRuleOf finds the finish rule over it), each tile's lapped
+  end darker; a thatch gets a thick roll. A HIPPED roof's hips are tiled too (lifeOf `roofHips`: an edge two up-facing
+  slopes share at a crease that climbs -- the stone houses', the gatehouses' pyramids, the longhouses' hipped ends;
+  ridgecaps.js follows a line from `ya` to `yb`; the pigeons perch on the level ridges only). Every chimney's top a capstone a little wider than the stack over a darker
+  brick course (`RIDGE.cap`).
+- **Leaded glass** (archmat.js `leadedGlass`, `LEAD`): glazed panes in diamond quarries, the lead opaque and dark, the
+  glass faintly blue; an arched pane by its geometry in metres, a box pane by its uv. At night a lit glazed window shows
+  the same diamond leading against the room's light (nightglow.js reads archmat.js `LEAD`; it drew a plain cross of
+  bars), its light cut to a round head where the window has one (glowWins `arched`). The glass catches the sky by
+  Fresnel (little square on, much at a glance) and each quarry a little askew, so the sky in it varies pane to pane.
 - **A murmuration** (murmuration.js): 800 starlings over the farms' fields, ~34 m up, flying as one cloud that folds,
   stretches and ripples while it wanders over the land -- by day and at dusk (gone to roost once it is dark). Each
   bird is a chevron of two flapping wings turned along its own flight; where it is comes from the time and its three
@@ -1135,7 +1311,11 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   `stones.ring(x, y, z, strength)` for anything else that touches the water.
 - **Chimney smoke** (smoke.js): the chimneys of the lit hearths (a building's `chimney` part: its top, lifeOf
   `chimneys`) smoke all day -- soft puffs placed by the GPU from the time alone, leaning with the grass's wind,
-  growing and thinning as they climb; more on a cold day (snow, autumn). One draw for the town.
+  growing and thinning as they climb; more on a cold day (snow, autumn). One draw for the town. Seven chimneys in ten
+  smoke all year (`SMOKE.lit`, each chimney's `warm`); the rest light up only while the snow lies (2026-10-24: every
+  hearth burning in winter), their puffs shrunk to nothing the rest of the year so they cost no overdraw.
+  The farm LONGHOUSES have no chimney: their hearth smoke rises through the thatch at the middle of the ridge
+  (`smokeHoles`, handed to createSmoke beside the chimneys but not chimneys -- no capstone, no stork's nest).
 - **I** season: summer → half → full autumn → SPRING (flora rebuilds in place; `?season=spring`). In spring the
   deciduous leaves are the first pale yellow-green (flora.js SPRING_GREEN, by each card's own tint) and the orchard
   trees are in blossom -- apple pink-white, cherry white (a species' `blossom`): the fruit's places flower and half

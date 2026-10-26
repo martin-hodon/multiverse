@@ -2,7 +2,7 @@
   "name": "Belt",
   "kind": "garment",
   "layer": 5,
-  "_about": "a leather belt with a brass buckle",
+  "_about": "a leather belt with a brass buckle, and a leather pouch at the left hip",
   "fabrics": {
     "main": {
       "pattern": "fabrics/leather",
@@ -11,16 +11,22 @@
     "buckle": {
       "pattern": "fabrics/buckle",
       "palette": "brass"
+    },
+    "pouch": {
+      "pattern": "fabrics/leather",
+      "palette": "leather-dark"
     }
   },
   "params": {
-    "at": "waist"
+    "at": "waist",
+    "pouch": 1
   },
   "use": [
     {
       "use": "clothes/components/belt",
       "params": {
-        "at": "at"
+        "at": "at",
+        "pouch": "pouch"
       }
     }
   ]

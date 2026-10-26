@@ -38,12 +38,17 @@ murmuration.js    the starlings: hundreds flying as one folding cloud over the f
 geese.js          flocks crossing the sky (createFlyover): geese in a V (autumn south, spring north), rooks home at dusk
 laundry.js        washing lines across the lanes between facing upstairs windows: sheets, shirts, breeches, stockings in the wind
 windowbox.js      flower boxes on the houses' sills: a plank box and a bank of leaves and blooms, one colour a house
+windowframes.js   jambs, lintels and sills round the windows, frames round doors, boards along the house roofs' edges -- in each house's paint; doorsteps; wallFrame (an opening's frame) and snowyLit (a lit material that takes the snow) shared
+ivy.js            ivy climbing some house walls from beside the door, round the windows
+icicles.js        icicles along the houses' eaves while the snow lies, and swallows' nests under some eaves
+ridgecaps.js      ridge tiles along the roofs' ridges (a roll on thatch) and a capstone on every chimney
 fireworks.js      F: a show over the town -- rockets, peonies, rings, golden willows; the bang late by the speed of sound
 lightning.js      a storm's strikes: a forked bolt flickering and the sky lit with it; the thunder (environment.js) late by the distance
 leaves.js         leaves falling from the trees round you -- a few in summer, a shower in autumn -- fluttering down, lying, fading
 reeds.js          reed beds and cattails at the water's edge, swaying with the grass's wind, straw-gold in autumn
 sparks.js         the smith's hammer blows: sparks off the anvil and its ring, in time with the hammer gesture
 cloudshadow.js    the clouds' shadows sliding over the land (ground, roads, buildings, leaves) on a sunny day; shared value noise
+sunshadow.js      the sun's shadows: the buildings drawn once from the static sun into two depth maps (the town fine, everything coarse); sunAt on the CPU
 moths.js          moths fluttering round the lanterns near you at night (glow scene, one draw)
 bees.js           bees round the beekeeper's skeps and off to the flowers and back (GPU, one draw)
 swallows.js       swallows hawking low over the river, afternoon into dusk, their twitter when near (GPU, one draw)
@@ -64,11 +69,11 @@ swing.js          the A-frame swing on the green: pendulum seat and ropes; a chi
 leapfrog.js       two children playing leapfrog along the green's edge (crouch via an.rest, vault arc)
 sled.js           sledding in the snow: down the steadiest slope near the green and back up pulling the sled
 wakes.js          the V wakes behind ducks and swans under way (Kelvin angle), one draw
-shadows.js        soft contact shadows under every figure near you (people, animals, riders), and the shade under each tree's crown
+shadows.js        soft contact shadows under every figure near you (people, animals, riders), and the shade under each tree's crown; a sun shadow cast by each figure standing in the sun
 pasture.js        the shepherd's flock: he walks his round with his crook, the sheep follow and graze, the dog circles them
 tag.js            children playing tag on a green by the town: chase, flee, catch, count -- deterministic on the sim tick; walk onto it and you play too
 pigeons.js        pigeons along the roofs' ridges, bobbing, now and then one wheeling round over the lane and back; startled up (bell, thunder, fireworks, a stone) all at once
-footprints.js     your footprints in the snow: left, right, a pace apart, filling in again over a few minutes
+footprints.js     footprints in the snow and the mud: boots for people, hoof, cloven, paw, bird or pad for animals, sized by their legs
 flags.js          flags on the towers' spires: pennants and swallowtailed banners in the town's two colours, snapping in the wind
 breath.js         breath steaming on a cold day: puffs from the mouths of the people round you, and your own; createPuffs (also the carts' dust)
 geom.js           small vector maths and the aim rotation shared by the generators

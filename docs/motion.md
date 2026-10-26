@@ -202,3 +202,9 @@ picks what is shown and on whom (a bare man, a dressed man, a woman in kirtle an
   framed on everywhere the timeline goes (a push-up lies a body's length ahead of where it stood).
 
 **fix** runs the body's rules on every frame. Edits to any of the four files show at once.
+
+## Standing about (2026-10-24)
+
+A person standing about is never still: `people.js IDLE_SWAY` (.022 rad) on a standing or carrying figure that is not a
+bench's still one, `skeleton.js` rocks its root slowly to the side (.55 rad/s) and less to and fro (.37), each figure on
+its own beat (`an.idx`), fading out as the stride comes in. Statues (any stone part) never sway.

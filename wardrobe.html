@@ -167,7 +167,7 @@ function frame(now) {
 }
 const showPipe = () => { document.getElementById("pipe").textContent = `(view space ${PIPE.viewSpace ? "on" : "off"})`; };
 showPipe();
-window.__dbg = { PIPE, setPipe, THREE, herd, people, crowd, camera, controls, scene, renderer };
+window.__dbg = { PIPE, setPipe, THREE, herd, people, crowd, camera, controls, scene, renderer, tools, held };
 requestAnimationFrame(frame);
 </script>
 </body>
