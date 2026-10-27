@@ -1,0 +1,38 @@
+{
+  "name": "Loincloth",
+  "kind": "garment",
+  "layer": 1,
+  "_about": "the loincloth (the Maya man's ex): a long band of cotton wound round the waist and between the legs, its ends hanging in a flap before and behind, often worked at the end",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "wool-white"
+    },
+    "trim": {
+      "pattern": "fabrics/lozenge",
+      "palette": "russian"
+    }
+  },
+  "params": {
+    "flap": "knee + 0.06",
+    "hem": 0.05
+  },
+  "use": [
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "hip - 0.1",
+        "flare": 0.1,
+        "pleats": 0
+      }
+    },
+    {
+      "use": "clothes/components/apron",
+      "params": {
+        "to": "flap",
+        "span": 40
+      }
+    }
+  ]
+}

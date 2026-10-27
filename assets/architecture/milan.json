@@ -1,6 +1,6 @@
 {
   "name": "Milan Cathedral",
-  "_about": "THE DUOMO OF MILAN, from components: the nave and inner aisles are the `basilica`, and outer aisles of its own step down beside them, every bay rib-vaulted; down both flanks a `flying-buttress` at every bay with its pinnacle and a `pinnacle` on every pier of the inner arcade and the clerestory -- the forest of spires; the facade in three tiers (five portals, five windows, a rose) between six buttresses with their pinnacles; the transept arms; the polygonal chevet round the choir with its half vault; the tiburio over the crossing with its spire and the Madonnina (the `domed-tower`). Spiral turrets inside the facade climb to the aisle roofs, and flights from there to the nave roof: the roofs are walked on.",
+  "_about": "THE DUOMO OF MILAN, from components: the nave, and two aisles either side stepping down beside it, every bay rib-vaulted; down both flanks two tiers of `flying-buttress` at every bay, each pier with its pinnacle, and a `pinnacle` on the clerestory -- the forest of spires; the facade, a portal and a window over it in each of its five bays, under one gable, between six buttresses with their pinnacles; the transept, as high as the nave, crossing the whole body (the aisles run through its walls); the polygonal chevet round the choir with its half vault; the tiburio over the crossing with its spire and the Madonnina (the `domed-tower`), the crossing open up into its dome on four squinches. Spiral turrets in the westernmost bays climb to the outer aisles' flat terraces, a flight from there to the inner ones: the aisle roofs are walked on, under the flyers.",
   "params": {
     "detail": 4,
     "bays": 10,
@@ -41,18 +41,40 @@
     "type": "stone"
   },
   "build": [
-    "nave",
-    "aisle arcade right",
-    "outer wall right",
-    "aisle arcade left",
-    "outer wall left",
+    "nave arcade east right",
+    "nave arcade east left",
+    "nave arcade west right",
+    "nave arcade west left",
+    "clerestory right",
+    "clerestory left",
+    "nave vaults",
+    "nave ribs",
+    "inner vaults",
+    "inner ribs",
+    "aisle arcade east right",
+    "aisle arcade east left",
+    "aisle arcade west right",
+    "aisle arcade west left",
+    "outer wall east right",
+    "outer wall east left",
+    "outer wall west right",
+    "outer wall west left",
     "outer vaults",
     "outer ribs",
     "nave roof",
-    "inner aisle roofs",
-    "outer aisle roofs",
+    "nave roof east",
+    "inner aisle terraces",
+    "inner aisle terraces east",
+    "outer aisle terraces",
+    "outer aisle terraces east",
+    "outer parapets",
+    "outer parapets east",
+    "terrace flight",
+    "arcade parapets 1",
+    "arcade parapets 2",
+    "arcade parapets 3",
     "flank buttresses",
-    "arcade pinnacles",
+    "clerestory flyers",
     "clerestory pinnacles",
     "facade",
     "facade gable",
@@ -64,178 +86,1238 @@
     "facade buttress 5",
     "facade buttress 6",
     "facade pinnacles",
-    "transept",
+    "transept walls right",
+    "transept end right",
+    "transept walls left",
+    "transept end left",
+    "transept vaults",
+    "transept ribs",
+    "transept buttresses",
+    "transept end buttresses",
+    "transept pinnacles",
     "transept roofs",
     "chevet",
+    "chevet buttresses",
+    "chevet pinnacles",
+    "choir arcade",
     "choir",
+    "ambulatory arcade",
+    "inner ambulatory vault",
+    "outer ambulatory vault",
     "choir vault",
+    "choir diaphragm",
     "choir roof",
     "ambulatory roof",
+    "crossing diaphragms",
+    "crossing squinch 1",
+    "crossing squinch 2",
+    "crossing squinch 3",
+    "crossing squinch 4",
+    "crossing dome",
     "tiburio",
     "stair right",
-    "stair terrace right",
-    "stair terrace east right",
+    "stair terrace right 1",
+    "stair terrace right 2",
+    "stair terrace right 3",
+    "stair terrace right 4",
+    "stair terrace right 5",
+    "stair terrace right 6",
+    "stair terrace right 7",
+    "turret head right",
+    "turret head door right",
+    "turret lid right",
+    "turret pinnacle right",
     "stair left",
-    "stair terrace left",
-    "stair terrace east left",
-    "west gallery",
-    "gallery parapet",
+    "stair terrace left 1",
+    "stair terrace left 2",
+    "stair terrace left 3",
+    "stair terrace left 4",
+    "stair terrace left 5",
+    "stair terrace left 6",
+    "stair terrace left 7",
+    "turret head left",
+    "turret head door left",
+    "turret lid left",
+    "turret pinnacle left",
     "seating",
     "altar",
     "organ"
   ],
   "parts": {
-    "nave": {
-      "type": "component",
-      "use": "basilica",
-      "params": {
-        "bays": "bays",
-        "bayLen": "bayLen",
-        "naveW": "naveW",
-        "aisleW": "aisleW",
-        "pierT": "pierT",
-        "aisleT": "aisleT",
-        "openW": "bayLen - pierT",
-        "spring": "spring",
-        "crown": "crown",
-        "arcadeH": "arcadeH",
-        "clearH": "clearH",
-        "naveTop": "naveTop",
-        "aisleSpring": "crown",
-        "aisleTop": "aisleTop",
-        "arch": "pointed",
-        "arcSpread": 1,
-        "naveSpread": 1,
-        "clearSpread": 1,
-        "aisleArch": "segmental",
-        "aisleRise": "aisleRise",
-        "aisleAlongArch": "segmental",
-        "aisleAlongRise": "aisleRise",
-        "naveAlongArch": "pointed",
-        "naveAlongSpread": "((naveW / bayLen) * (naveW / bayLen) * 3 - 1) / 2",
-        "clearWinW": 2.2,
-        "clearSill": 1.2,
-        "clearSpring": "clearH - arcadeH - 2.2"
-      },
-      "build": [
-        "arcade",
-        "clerestory",
-        "nave vault",
-        "nave ribs",
-        "aisle vault",
-        "aisle ribs"
+    "nave arcade east right": {
+      "type": "wall",
+      "width": 10.5,
+      "height": "arcadeH",
+      "thickness": "pierT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 0.5
+            }
+          ]
+        }
       ],
+      "at": [
+        [
+          "1 * (naveW / 2 + pierT)",
+          0,
+          -42.25,
+          "1 * 1.5707963"
+        ]
+      ]
+    },
+    "nave arcade east left": {
+      "type": "wall",
+      "width": 10.5,
+      "height": "arcadeH",
+      "thickness": "pierT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -0.5
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "-1 * (naveW / 2 + pierT)",
+          0,
+          -42.25,
+          "-1 * 1.5707963"
+        ]
+      ]
+    },
+    "nave arcade west right": {
+      "type": "wall",
+      "width": 67.5,
+      "height": "arcadeH",
+      "thickness": "pierT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 28.0
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 18.5
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 9.0
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -0.5
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -10.0
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -19.5
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -29.0
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "1 * (naveW / 2 + pierT)",
+          0,
+          13.75,
+          "1 * 1.5707963"
+        ]
+      ]
+    },
+    "nave arcade west left": {
+      "type": "wall",
+      "width": 67.5,
+      "height": "arcadeH",
+      "thickness": "pierT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -28.0
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -18.5
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -9.0
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 0.5
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 10.0
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 19.5
+            },
+            {
+              "width": "bayLen - pierT",
+              "sill": 0,
+              "springing": "spring",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 29.0
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "-1 * (naveW / 2 + pierT)",
+          0,
+          13.75,
+          "-1 * 1.5707963"
+        ]
+      ]
+    },
+    "clerestory right": {
+      "type": "wall",
+      "width": 95.0,
+      "height": "naveTop - arcadeH",
+      "thickness": "pierT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": 42.75
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": 14.25
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": 4.75
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": -4.75
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": -14.25
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": -23.75
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": -33.25
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": -42.75
+            },
+            {
+              "width": 17.0,
+              "sill": 0,
+              "springing": "clearH - arcadeH",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "glass": false,
+              "at": 28.5
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "1 * (naveW / 2 + pierT)",
+          "arcadeH",
+          0.0,
+          "1 * 1.5707963"
+        ]
+      ]
+    },
+    "clerestory left": {
+      "type": "wall",
+      "width": 95.0,
+      "height": "naveTop - arcadeH",
+      "thickness": "pierT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": -42.75
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": -14.25
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": -4.75
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": 4.75
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": 14.25
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": 23.75
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": 33.25
+            },
+            {
+              "width": 3.0,
+              "sill": 0.5,
+              "springing": 8.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": 2,
+              "at": 42.75
+            },
+            {
+              "width": 17.0,
+              "sill": 0,
+              "springing": "clearH - arcadeH",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "glass": false,
+              "at": -28.5
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "-1 * (naveW / 2 + pierT)",
+          "arcadeH",
+          0.0,
+          "-1 * 1.5707963"
+        ]
+      ]
+    },
+    "nave vaults": {
+      "type": "groin",
+      "width": "naveW",
+      "length": "bayLen",
+      "springing": "clearH",
+      "top": "naveTop",
+      "clears": "crown",
+      "across": {
+        "profile": "pointed",
+        "spread": 1
+      },
+      "along": {
+        "profile": "pointed",
+        "spread": "((naveW / bayLen) * (naveW / bayLen) * 3 - 1) / 2"
+      },
       "at": [
         [
           0,
           0,
+          -42.75,
+          0
+        ],
+        [
           0,
+          0,
+          -14.25,
+          0
+        ],
+        [
+          0,
+          0,
+          -4.75,
+          0
+        ],
+        [
+          0,
+          0,
+          4.75,
+          0
+        ],
+        [
+          0,
+          0,
+          14.25,
+          0
+        ],
+        [
+          0,
+          0,
+          23.75,
+          0
+        ],
+        [
+          0,
+          0,
+          33.25,
+          0
+        ],
+        [
+          0,
+          0,
+          42.75,
           0
         ]
       ],
-      "_about": "the nave and the inner aisles: the `basilica` definition"
+      "_about": "the nave's vault, bay by bay, but for the crossing's two"
     },
-    "aisle arcade right": {
+    "nave ribs": {
+      "type": "ribs",
+      "on": "nave vaults",
+      "width": 0.45,
+      "depth": 0.3,
+      "wall": {
+        "width": 0.6,
+        "depth": 0.35
+      }
+    },
+    "inner vaults": {
+      "type": "groin",
+      "width": "aisleW",
+      "length": "bayLen",
+      "springing": "crown",
+      "top": "aisleTop",
+      "clears": "crown",
+      "across": {
+        "profile": "segmental",
+        "rise": "aisleRise"
+      },
+      "along": {
+        "profile": "segmental",
+        "rise": "aisleRise"
+      },
+      "at": [
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          -42.75,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          -14.25,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          -4.75,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          4.75,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          14.25,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          23.75,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          33.25,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          42.75,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          -42.75,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          -14.25,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          -4.75,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          4.75,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          14.25,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          23.75,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          33.25,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          0,
+          42.75,
+          0
+        ]
+      ]
+    },
+    "inner ribs": {
+      "type": "ribs",
+      "on": "inner vaults",
+      "width": 0.35,
+      "depth": 0.25,
+      "wall": {
+        "width": 0.45,
+        "depth": 0.3
+      }
+    },
+    "aisle arcade east right": {
       "type": "wall",
-      "width": "naveL",
+      "width": 8.5,
       "height": "innerWallH",
       "thickness": "aisleT",
-      "openings": {
-        "pattern": "bays",
-        "width": "bayLen - aisleT",
-        "gap": "aisleT",
-        "sill": 0,
-        "springing": "outerSpring - 1",
-        "head": {
-          "profile": "pointed",
-          "spread": 1
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 6.5,
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -0.0
+            }
+          ]
         }
-      },
+      ],
       "at": [
         [
           "1 * (innerX + aisleT)",
           0,
-          0,
+          -43.25,
           "1 * 1.5707963"
         ]
       ]
     },
-    "outer wall right": {
+    "aisle arcade east left": {
       "type": "wall",
-      "width": "naveL",
-      "height": "outerWallH",
-      "thickness": "aisleT",
-      "openings": {
-        "pattern": "bays",
-        "width": 3.4,
-        "gap": "bayLen - 3.4",
-        "sill": 4.0,
-        "springing": 13.0,
-        "head": {
-          "profile": "pointed",
-          "spread": 1.2
-        }
-      },
-      "at": [
-        [
-          "1 * wallX",
-          0,
-          0,
-          "1 * 1.5707963"
-        ]
-      ],
-      "_about": "(a wall turned a quarter reaches from its line inward: set on wallX, it stands between wallX - aisleT and wallX)"
-    },
-    "aisle arcade left": {
-      "type": "wall",
-      "width": "naveL",
+      "width": 8.5,
       "height": "innerWallH",
       "thickness": "aisleT",
-      "openings": {
-        "pattern": "bays",
-        "width": "bayLen - aisleT",
-        "gap": "aisleT",
-        "sill": 0,
-        "springing": "outerSpring - 1",
-        "head": {
-          "profile": "pointed",
-          "spread": 1
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 6.5,
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 0.0
+            }
+          ]
         }
-      },
+      ],
       "at": [
         [
           "-1 * (innerX + aisleT)",
           0,
-          0,
+          -43.25,
           "-1 * 1.5707963"
         ]
       ]
     },
-    "outer wall left": {
+    "aisle arcade west right": {
       "type": "wall",
-      "width": "naveL",
-      "height": "outerWallH",
+      "width": 65.5,
+      "height": "innerWallH",
       "thickness": "aisleT",
-      "openings": {
-        "pattern": "bays",
-        "width": 3.4,
-        "gap": "bayLen - 3.4",
-        "sill": 4.0,
-        "springing": 13.0,
-        "head": {
-          "profile": "pointed",
-          "spread": 1.2
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 6.5,
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 28.5
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 19.5
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 10.0
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 0.5
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -9.0
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -18.5
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -28.0
+            }
+          ]
         }
-      },
+      ],
       "at": [
         [
-          "-1 * wallX",
+          "1 * (innerX + aisleT)",
           0,
+          14.75,
+          "1 * 1.5707963"
+        ]
+      ]
+    },
+    "aisle arcade west left": {
+      "type": "wall",
+      "width": 65.5,
+      "height": "innerWallH",
+      "thickness": "aisleT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 6.5,
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -28.5
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -19.5
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -10.0
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": -0.5
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 9.0
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 18.5
+            },
+            {
+              "width": "bayLen - aisleT",
+              "sill": 0,
+              "springing": "outerSpring - 1",
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "at": 28.0
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "-1 * (innerX + aisleT)",
           0,
+          14.75,
           "-1 * 1.5707963"
         ]
+      ]
+    },
+    "outer wall east right": {
+      "type": "wall",
+      "width": 8.5,
+      "height": "outerWallH",
+      "thickness": "aisleT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -0.5
+            }
+          ]
+        }
       ],
-      "_about": "(a wall turned a quarter reaches from its line inward: set on wallX, it stands between wallX - aisleT and wallX)"
+      "at": [
+        [
+          "1 * (wallX)",
+          0,
+          -43.25,
+          "1 * 1.5707963"
+        ]
+      ]
+    },
+    "outer wall east left": {
+      "type": "wall",
+      "width": 8.5,
+      "height": "outerWallH",
+      "thickness": "aisleT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 0.5
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "-1 * (wallX)",
+          0,
+          -43.25,
+          "-1 * 1.5707963"
+        ]
+      ]
+    },
+    "outer wall west right": {
+      "type": "wall",
+      "width": 65.5,
+      "height": "outerWallH",
+      "thickness": "aisleT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 29.0
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 19.5
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 10.0
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 0.5
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -9.0
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -18.5
+            },
+            {
+              "width": 2.3,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -30.35
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "1 * (wallX)",
+          0,
+          14.75,
+          "1 * 1.5707963"
+        ]
+      ]
+    },
+    "outer wall west left": {
+      "type": "wall",
+      "width": 65.5,
+      "height": "outerWallH",
+      "thickness": "aisleT",
+      "tiers": [
+        {
+          "openings": [
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -29.0
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -19.5
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -10.0
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -0.5
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 9.0
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 18.5
+            },
+            {
+              "width": 2.3,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 30.35
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "-1 * (wallX)",
+          0,
+          14.75,
+          "-1 * 1.5707963"
+        ]
+      ]
     },
     "outer vaults": {
       "type": "groin",
@@ -253,28 +1335,91 @@
       },
       "at": [
         [
-          "innerX + aisleT + aisleW / 2",
+          "1 * (innerX + aisleT + aisleW / 2)",
           0,
-          "0 - naveL / 2 + bayLen / 2",
+          -42.75,
           0
         ],
         [
-          "0 - innerX - aisleT - aisleW / 2",
+          "1 * (innerX + aisleT + aisleW / 2)",
           0,
-          "0 - naveL / 2 + bayLen / 2",
+          -14.25,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          -4.75,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          4.75,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          14.25,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          23.75,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          33.25,
+          0
+        ],
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          -42.75,
+          0
+        ],
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          -14.25,
+          0
+        ],
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          -4.75,
+          0
+        ],
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          4.75,
+          0
+        ],
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          14.25,
+          0
+        ],
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          23.75,
+          0
+        ],
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          0,
+          33.25,
           0
         ]
       ],
-      "repeat": {
-        "count": "bays - 1",
-        "step": [
-          0,
-          0,
-          "bayLen",
-          0
-        ]
-      },
-      "_about": "the outer aisles' vaults, all but the westernmost bay's: that one is the stair turret's, under a flat terrace"
+      "_about": "the outer aisles' vaults, all but the transept's bays and the westernmost: that one is the stair turret's, under a flat terrace"
     },
     "outer ribs": {
       "type": "ribs",
@@ -290,56 +1435,239 @@
       "type": "roof",
       "form": "gable",
       "width": "naveW + 2 * pierT + 0.4",
-      "length": "naveL",
+      "length": 65.5,
       "pitch": 22,
       "at": [
         [
           0,
           "naveTop",
-          0,
+          14.75,
           0
         ]
       ]
     },
-    "inner aisle roofs": {
+    "nave roof east": {
       "type": "roof",
-      "form": "shed",
-      "width": "aisleW + 0.3",
-      "length": "naveL",
-      "pitch": 8,
+      "form": "gable",
+      "width": "naveW + 2 * pierT + 0.4",
+      "length": 8.5,
+      "pitch": 22,
       "at": [
         [
-          "0 - (naveW / 2 + pierT + aisleW / 2)",
-          "innerWallH",
           0,
+          "naveTop",
+          -43.25,
           0
-        ],
-        [
-          "naveW / 2 + pierT + aisleW / 2",
-          "innerWallH",
-          0,
-          3.14159265
         ]
       ]
     },
-    "outer aisle roofs": {
-      "type": "roof",
-      "form": "shed",
-      "width": "aisleW + aisleT",
-      "length": "naveL - bayLen",
-      "pitch": 8,
+    "inner aisle terraces": {
+      "walked": true,
+      "type": "box",
+      "width": "aisleW",
+      "length": 65.5,
+      "height": 0.4,
       "at": [
         [
-          "0 - (innerX + aisleT / 2 + aisleW / 2 + aisleT / 2)",
-          "outerWallH",
-          "0 - bayLen / 2",
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          "innerWallH - 0.4",
+          14.75,
           0
         ],
         [
-          "innerX + aisleT / 2 + aisleW / 2 + aisleT / 2",
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          "innerWallH - 0.4",
+          14.75,
+          0
+        ]
+      ],
+      "_about": "the inner aisles' roofs: flat, level with the inner arcade's head, against the clerestory"
+    },
+    "inner aisle terraces east": {
+      "type": "box",
+      "width": "aisleW",
+      "length": 8.5,
+      "height": 0.4,
+      "at": [
+        [
+          "-1 * (naveW / 2 + pierT + aisleW / 2)",
+          "innerWallH - 0.4",
+          -43.25,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT + aisleW / 2)",
+          "innerWallH - 0.4",
+          -43.25,
+          0
+        ]
+      ]
+    },
+    "outer aisle terraces": {
+      "walked": true,
+      "type": "box",
+      "width": "aisleW",
+      "length": 56.0,
+      "height": 0.4,
+      "at": [
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          "outerWallH - 0.4",
+          10.0,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT + aisleW / 2)",
+          "outerWallH - 0.4",
+          10.0,
+          0
+        ]
+      ],
+      "_about": "the outer aisles' roofs, level with the outer wall's head (the west bay is the turret's terrace)"
+    },
+    "outer aisle terraces east": {
+      "type": "box",
+      "width": "aisleW",
+      "length": 8.5,
+      "height": 0.4,
+      "at": [
+        [
+          "-1 * (innerX + aisleT + aisleW / 2)",
+          "outerWallH - 0.4",
+          -43.25,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT + aisleW / 2)",
+          "outerWallH - 0.4",
+          -43.25,
+          0
+        ]
+      ]
+    },
+    "outer parapets": {
+      "type": "box",
+      "width": 0.5,
+      "length": 65.5,
+      "height": 1.1,
+      "at": [
+        [
+          "-1 * (wallX - aisleT + 0.25)",
           "outerWallH",
-          "0 - bayLen / 2",
-          3.14159265
+          14.75,
+          0
+        ],
+        [
+          "1 * (wallX - aisleT + 0.25)",
+          "outerWallH",
+          14.75,
+          0
+        ]
+      ],
+      "_about": "along the outer wall's head, the terrace's edge over the street"
+    },
+    "outer parapets east": {
+      "type": "box",
+      "width": 0.5,
+      "length": 8.5,
+      "height": 1.1,
+      "at": [
+        [
+          "-1 * (wallX - aisleT + 0.25)",
+          "outerWallH",
+          -43.25,
+          0
+        ],
+        [
+          "1 * (wallX - aisleT + 0.25)",
+          "outerWallH",
+          -43.25,
+          0
+        ]
+      ]
+    },
+    "terrace flight": {
+      "type": "flight",
+      "width": 1.4,
+      "run": 0.28,
+      "base": "outerWallH",
+      "top": "innerWallH",
+      "steps": 19,
+      "landing": 1.4,
+      "at": [
+        [
+          "-1 * (innerX + aisleT) + 0",
+          0,
+          37.5,
+          1.5707963
+        ],
+        [
+          "1 * (innerX + aisleT) + 1.4",
+          0,
+          37.5,
+          1.5707963
+        ]
+      ],
+      "_about": "up from the outer terrace to the inner, along the inner arcade's outer face"
+    },
+    "arcade parapets 1": {
+      "type": "box",
+      "width": 0.5,
+      "length": 8.5,
+      "height": 1.1,
+      "at": [
+        [
+          "-1 * (innerX + aisleT - 0.25)",
+          "innerWallH",
+          -43.25,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT - 0.25)",
+          "innerWallH",
+          -43.25,
+          0
+        ]
+      ],
+      "_about": "along the inner arcade's head, over the drop to the outer terrace: open where the flight arrives"
+    },
+    "arcade parapets 2": {
+      "type": "box",
+      "width": 0.5,
+      "length": 48.78,
+      "height": 1.1,
+      "at": [
+        [
+          "-1 * (innerX + aisleT - 0.25)",
+          "innerWallH",
+          6.39,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT - 0.25)",
+          "innerWallH",
+          6.39,
+          0
+        ]
+      ]
+    },
+    "arcade parapets 3": {
+      "type": "box",
+      "width": 0.5,
+      "length": 15.32,
+      "height": 1.1,
+      "at": [
+        [
+          "-1 * (innerX + aisleT - 0.25)",
+          "innerWallH",
+          39.84,
+          0
+        ],
+        [
+          "1 * (innerX + aisleT - 0.25)",
+          "innerWallH",
+          39.84,
+          0
         ]
       ]
     },
@@ -347,12 +1675,12 @@
       "type": "component",
       "use": "components/flying-buttress",
       "params": {
-        "pierH": "outerWallH + 3",
+        "pierH": "outerWallH + 3.8",
         "pierD": 2.4,
         "span": "wallX + 1.2 - innerX - aisleT",
-        "low": "outerWallH + 0.5",
-        "high": "innerWallH - 0.8",
-        "top0": "outerWallH + 2.6",
+        "low": "outerWallH + 1.6",
+        "high": "innerWallH - 0.3",
+        "top0": "outerWallH + 3.2",
         "top1": "innerWallH + 1.4",
         "pin": 1.5,
         "pinH": 5.0,
@@ -360,59 +1688,194 @@
       },
       "at": [
         [
-          "wallX + 1.2",
+          "1 * (wallX + 1.2)",
           0,
-          "0 - naveL / 2",
+          -47.5,
           3.14159265
         ],
         [
-          "0 - wallX - 1.2",
+          "1 * (wallX + 1.2)",
           0,
-          "0 - naveL / 2",
-          0
-        ]
-      ],
-      "repeat": {
-        "count": "bays",
-        "step": [
-          0,
-          0,
-          "bayLen",
-          0
-        ]
-      }
-    },
-    "arcade pinnacles": {
-      "type": "component",
-      "use": "components/pinnacle",
-      "params": {
-        "w": 1.2,
-        "h": 4.0,
-        "s": 6.0
-      },
-      "at": [
+          -9.5,
+          3.14159265
+        ],
         [
-          "innerX + aisleT / 2",
-          "innerWallH",
-          "0 - naveL / 2",
+          "1 * (wallX + 1.2)",
+          0,
+          0.0,
+          3.14159265
+        ],
+        [
+          "1 * (wallX + 1.2)",
+          0,
+          9.5,
+          3.14159265
+        ],
+        [
+          "1 * (wallX + 1.2)",
+          0,
+          19.0,
+          3.14159265
+        ],
+        [
+          "1 * (wallX + 1.2)",
+          0,
+          28.5,
+          3.14159265
+        ],
+        [
+          "1 * (wallX + 1.2)",
+          0,
+          38.0,
+          3.14159265
+        ],
+        [
+          "-1 * (wallX + 1.2)",
+          0,
+          -47.5,
           0
         ],
         [
-          "0 - innerX - aisleT / 2",
+          "-1 * (wallX + 1.2)",
+          0,
+          -9.5,
+          0
+        ],
+        [
+          "-1 * (wallX + 1.2)",
+          0,
+          0.0,
+          0
+        ],
+        [
+          "-1 * (wallX + 1.2)",
+          0,
+          9.5,
+          0
+        ],
+        [
+          "-1 * (wallX + 1.2)",
+          0,
+          19.0,
+          0
+        ],
+        [
+          "-1 * (wallX + 1.2)",
+          0,
+          28.5,
+          0
+        ],
+        [
+          "-1 * (wallX + 1.2)",
+          0,
+          38.0,
+          0
+        ]
+      ]
+    },
+    "clerestory flyers": {
+      "type": "component",
+      "use": "components/flying-buttress",
+      "params": {
+        "pierH": 8.0,
+        "pierD": "aisleT",
+        "pierW": 1.6,
+        "span": "innerX - naveW / 2 - pierT",
+        "low": 6.3,
+        "high": 10.3,
+        "top0": 7.4,
+        "top1": 12.5,
+        "pin": 1.2,
+        "pinH": 4.0,
+        "pinS": 6.0
+      },
+      "at": [
+        [
+          "1 * innerX",
           "innerWallH",
-          "0 - naveL / 2",
+          -47.5,
+          3.14159265
+        ],
+        [
+          "1 * innerX",
+          "innerWallH",
+          -9.5,
+          3.14159265
+        ],
+        [
+          "1 * innerX",
+          "innerWallH",
+          0.0,
+          3.14159265
+        ],
+        [
+          "1 * innerX",
+          "innerWallH",
+          9.5,
+          3.14159265
+        ],
+        [
+          "1 * innerX",
+          "innerWallH",
+          19.0,
+          3.14159265
+        ],
+        [
+          "1 * innerX",
+          "innerWallH",
+          28.5,
+          3.14159265
+        ],
+        [
+          "1 * innerX",
+          "innerWallH",
+          38.0,
+          3.14159265
+        ],
+        [
+          "-1 * innerX",
+          "innerWallH",
+          -47.5,
+          0
+        ],
+        [
+          "-1 * innerX",
+          "innerWallH",
+          -9.5,
+          0
+        ],
+        [
+          "-1 * innerX",
+          "innerWallH",
+          0.0,
+          0
+        ],
+        [
+          "-1 * innerX",
+          "innerWallH",
+          9.5,
+          0
+        ],
+        [
+          "-1 * innerX",
+          "innerWallH",
+          19.0,
+          0
+        ],
+        [
+          "-1 * innerX",
+          "innerWallH",
+          28.5,
+          0
+        ],
+        [
+          "-1 * innerX",
+          "innerWallH",
+          38.0,
           0
         ]
       ],
-      "repeat": {
-        "count": "bays",
-        "step": [
-          0,
-          0,
-          "bayLen",
-          0
-        ]
-      }
+      "_about": "the upper flyers: their piers on the inner arcade, over the inner terrace to the clerestory"
     },
     "clerestory pinnacles": {
       "type": "component",
@@ -424,27 +1887,90 @@
       },
       "at": [
         [
-          "naveW / 2 + pierT",
+          "1 * (naveW / 2 + pierT)",
           "naveTop",
-          "0 - naveL / 2",
+          -47.5,
           0
         ],
         [
-          "0 - naveW / 2 - pierT",
+          "1 * (naveW / 2 + pierT)",
           "naveTop",
-          "0 - naveL / 2",
+          -9.5,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT)",
+          "naveTop",
+          0.0,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT)",
+          "naveTop",
+          9.5,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT)",
+          "naveTop",
+          19.0,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT)",
+          "naveTop",
+          28.5,
+          0
+        ],
+        [
+          "1 * (naveW / 2 + pierT)",
+          "naveTop",
+          38.0,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT)",
+          "naveTop",
+          -47.5,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT)",
+          "naveTop",
+          -9.5,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT)",
+          "naveTop",
+          0.0,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT)",
+          "naveTop",
+          9.5,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT)",
+          "naveTop",
+          19.0,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT)",
+          "naveTop",
+          28.5,
+          0
+        ],
+        [
+          "-1 * (naveW / 2 + pierT)",
+          "naveTop",
+          38.0,
           0
         ]
-      ],
-      "repeat": {
-        "count": "bays",
-        "step": [
-          0,
-          0,
-          "bayLen",
-          0
-        ]
-      }
+      ]
     },
     "facade": {
       "type": "wall",
@@ -519,23 +2045,25 @@
           "openings": [
             {
               "at": "0 - (innerX + aisleT + aisleW / 2)",
-              "width": 3.0,
-              "sill": 1.5,
-              "springing": 9.0,
+              "width": 2.4,
+              "sill": 0.5,
+              "springing": 2.0,
               "head": {
                 "profile": "pointed",
                 "spread": 1.4
-              }
+              },
+              "tracery": true
             },
             {
               "at": "0 - (naveW / 2 + pierT + aisleW / 2)",
               "width": 3.0,
-              "sill": 1.5,
-              "springing": 9.0,
+              "sill": 0.5,
+              "springing": 3.5,
               "head": {
                 "profile": "pointed",
                 "spread": 1.4
-              }
+              },
+              "tracery": true
             },
             {
               "at": "0",
@@ -545,27 +2073,30 @@
               "head": {
                 "profile": "pointed",
                 "spread": 1.4
-              }
+              },
+              "tracery": true
             },
             {
               "at": "naveW / 2 + pierT + aisleW / 2",
               "width": 3.0,
-              "sill": 1.5,
-              "springing": 9.0,
+              "sill": 0.5,
+              "springing": 3.5,
               "head": {
                 "profile": "pointed",
                 "spread": 1.4
-              }
+              },
+              "tracery": true
             },
             {
               "at": "innerX + aisleT + aisleW / 2",
-              "width": 3.0,
-              "sill": 1.5,
-              "springing": 9.0,
+              "width": 2.4,
+              "sill": 0.5,
+              "springing": 2.0,
               "head": {
                 "profile": "pointed",
                 "spread": 1.4
-              }
+              },
+              "tracery": true
             }
           ]
         }
@@ -764,43 +2295,559 @@
         ]
       ]
     },
-    "transept": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          14,
-          "2 * bayLen"
-        ]
-      },
+    "transept walls right": {
+      "type": "wall",
+      "width": 37.2,
+      "height": "naveTop",
       "thickness": 2.0,
-      "height": "innerWallH",
-      "openings": [
+      "tiers": [
         {
-          "at": 0,
-          "width": 3.4,
-          "sill": 4.0,
-          "springing": 15.0,
-          "head": {
-            "profile": "pointed",
-            "spread": 1.2
-          }
+          "h": 24.0,
+          "openings": [
+            {
+              "width": 7.0,
+              "sill": 0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "glass": false,
+              "at": -13.8
+            },
+            {
+              "width": 7.0,
+              "sill": 0,
+              "springing": 10.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "glass": false,
+              "at": -2.2
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": 11.6
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "width": 2.6,
+              "sill": 3.0,
+              "springing": 14.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": true,
+              "at": -14.2
+            },
+            {
+              "width": 2.6,
+              "sill": 3.0,
+              "springing": 14.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": true,
+              "at": -5.4
+            },
+            {
+              "width": 2.6,
+              "sill": 3.0,
+              "springing": 14.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": true,
+              "at": 3.4
+            },
+            {
+              "width": 2.6,
+              "sill": 3.0,
+              "springing": 14.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": true,
+              "at": 12.2
+            }
+          ]
         }
       ],
-      "faces": {
-        "3": [],
-        "1": []
-      },
       "at": [
         [
-          "wallX + 7",
+          29.6,
           0,
-          "crossZ",
+          -37.0,
           0
         ],
         [
-          "0 - wallX - 7",
+          29.6,
           0,
-          "crossZ",
+          -18.0,
+          0
+        ]
+      ],
+      "_about": "the arm's two side walls (on the bay lines: a wall's thickness is behind its line), an arch through each for each aisle"
+    },
+    "transept end right": {
+      "type": "wall",
+      "width": 21.0,
+      "height": "naveTop",
+      "thickness": 2.0,
+      "tiers": [
+        {
+          "h": 12.0,
+          "openings": [
+            {
+              "at": 0,
+              "width": 5.0,
+              "sill": 0,
+              "springing": 7.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 5.0,
+              "sill": 3.0,
+              "springing": 22.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          48.2,
+          0,
+          -28.5,
+          1.5707963
+        ]
+      ]
+    },
+    "transept walls left": {
+      "type": "wall",
+      "width": 37.2,
+      "height": "naveTop",
+      "thickness": 2.0,
+      "tiers": [
+        {
+          "h": 24.0,
+          "openings": [
+            {
+              "width": 7.0,
+              "sill": 0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "glass": false,
+              "at": 13.8
+            },
+            {
+              "width": 7.0,
+              "sill": 0,
+              "springing": 10.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "glass": false,
+              "at": 2.2
+            },
+            {
+              "width": 3.4,
+              "sill": 4.0,
+              "springing": 13.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true,
+              "at": -11.6
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "width": 2.6,
+              "sill": 3.0,
+              "springing": 14.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": true,
+              "at": 14.2
+            },
+            {
+              "width": 2.6,
+              "sill": 3.0,
+              "springing": 14.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": true,
+              "at": 5.4
+            },
+            {
+              "width": 2.6,
+              "sill": 3.0,
+              "springing": 14.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": true,
+              "at": -3.4
+            },
+            {
+              "width": 2.6,
+              "sill": 3.0,
+              "springing": 14.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "tracery": true,
+              "at": -12.2
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -29.6,
+          0,
+          -37.0,
+          0
+        ],
+        [
+          -29.6,
+          0,
+          -18.0,
+          0
+        ]
+      ]
+    },
+    "transept end left": {
+      "type": "wall",
+      "width": 21.0,
+      "height": "naveTop",
+      "thickness": 2.0,
+      "tiers": [
+        {
+          "h": 12.0,
+          "openings": [
+            {
+              "at": 0,
+              "width": 5.0,
+              "sill": 0,
+              "springing": 7.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 5.0,
+              "sill": 3.0,
+              "springing": 22.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.2
+              },
+              "tracery": true
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -48.2,
+          0,
+          -28.5,
+          -1.5707963
+        ]
+      ]
+    },
+    "transept vaults": {
+      "type": "groin",
+      "width": 8.8,
+      "length": 17.0,
+      "springing": "clearH",
+      "top": "naveTop",
+      "across": {
+        "profile": "pointed",
+        "spread": 5.0979
+      },
+      "along": {
+        "profile": "pointed",
+        "spread": 1
+      },
+      "at": [
+        [
+          15.4,
+          0,
+          -28.5,
+          0
+        ],
+        [
+          24.2,
+          0,
+          -28.5,
+          0
+        ],
+        [
+          33.0,
+          0,
+          -28.5,
+          0
+        ],
+        [
+          41.8,
+          0,
+          -28.5,
+          0
+        ],
+        [
+          -15.4,
+          0,
+          -28.5,
+          0
+        ],
+        [
+          -24.2,
+          0,
+          -28.5,
+          0
+        ],
+        [
+          -33.0,
+          0,
+          -28.5,
+          0
+        ],
+        [
+          -41.8,
+          0,
+          -28.5,
+          0
+        ]
+      ],
+      "_about": "four bays down each arm, their crowns the nave's"
+    },
+    "transept ribs": {
+      "type": "ribs",
+      "on": "transept vaults",
+      "width": 0.45,
+      "depth": 0.3,
+      "wall": {
+        "width": 0.6,
+        "depth": 0.35
+      }
+    },
+    "transept buttresses": {
+      "type": "box",
+      "width": 2.4,
+      "length": 3.0,
+      "height": "naveTop - 1",
+      "at": [
+        [
+          37.4,
+          0,
+          -40.0,
+          0
+        ],
+        [
+          37.4,
+          0,
+          -17.0,
+          0
+        ],
+        [
+          47.0,
+          0,
+          -40.0,
+          0
+        ],
+        [
+          47.0,
+          0,
+          -17.0,
+          0
+        ],
+        [
+          -37.4,
+          0,
+          -40.0,
+          0
+        ],
+        [
+          -37.4,
+          0,
+          -17.0,
+          0
+        ],
+        [
+          -47.0,
+          0,
+          -40.0,
+          0
+        ],
+        [
+          -47.0,
+          0,
+          -17.0,
+          0
+        ]
+      ],
+      "_about": "the arms' side-wall buttresses, half a metre into the wall"
+    },
+    "transept end buttresses": {
+      "type": "box",
+      "width": 4.0,
+      "length": 2.4,
+      "height": "naveTop - 1",
+      "at": [
+        [
+          49.7,
+          0,
+          -34.5,
+          0
+        ],
+        [
+          49.7,
+          0,
+          -22.5,
+          0
+        ],
+        [
+          -49.7,
+          0,
+          -34.5,
+          0
+        ],
+        [
+          -49.7,
+          0,
+          -22.5,
+          0
+        ]
+      ]
+    },
+    "transept pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": 1.5,
+        "h": 5.0,
+        "s": 7.0
+      },
+      "at": [
+        [
+          37.4,
+          "naveTop - 1",
+          -40.3,
+          0
+        ],
+        [
+          37.4,
+          "naveTop - 1",
+          -16.7,
+          0
+        ],
+        [
+          47.0,
+          "naveTop - 1",
+          -40.3,
+          0
+        ],
+        [
+          47.0,
+          "naveTop - 1",
+          -16.7,
+          0
+        ],
+        [
+          -37.4,
+          "naveTop - 1",
+          -40.3,
+          0
+        ],
+        [
+          -37.4,
+          "naveTop - 1",
+          -16.7,
+          0
+        ],
+        [
+          -47.0,
+          "naveTop - 1",
+          -40.3,
+          0
+        ],
+        [
+          -47.0,
+          "naveTop - 1",
+          -16.7,
+          0
+        ],
+        [
+          50.1,
+          "naveTop - 1",
+          -34.5,
+          0
+        ],
+        [
+          50.1,
+          "naveTop - 1",
+          -22.5,
+          0
+        ],
+        [
+          -50.1,
+          "naveTop - 1",
+          -34.5,
+          0
+        ],
+        [
+          -50.1,
+          "naveTop - 1",
+          -22.5,
           0
         ]
       ]
@@ -808,20 +2855,20 @@
     "transept roofs": {
       "type": "roof",
       "form": "gable",
-      "width": "2 * bayLen",
-      "length": 14.4,
+      "width": 21.4,
+      "length": 37.4,
       "pitch": 22,
       "at": [
         [
-          "wallX + 7",
-          "innerWallH",
-          "crossZ",
+          29.7,
+          "naveTop",
+          -28.5,
           1.5707963
         ],
         [
-          "0 - wallX - 7",
-          "innerWallH",
-          "crossZ",
+          -29.7,
+          "naveTop",
+          -28.5,
           1.5707963
         ]
       ]
@@ -842,10 +2889,99 @@
       "opening": {
         "width": 4.0,
         "sill": 4.0,
-        "springing": 14.0,
+        "springing": 12.0,
         "head": {
           "profile": "pointed",
           "spread": 1.2
+        },
+        "tracery": true
+      },
+      "place": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ],
+      "_about": "(its windows' crowns under the outer ambulatory's vault, which springs at 16m)"
+    },
+    "chevet buttresses": {
+      "type": "box",
+      "width": 2.4,
+      "length": 3.0,
+      "height": "outerWallH + 3.8",
+      "at": [
+        [
+          25.1023,
+          0,
+          -72.6023,
+          2.356194
+        ],
+        [
+          0.0,
+          0,
+          -83.0,
+          3.141593
+        ],
+        [
+          -25.1023,
+          0,
+          -72.6023,
+          3.926991
+        ]
+      ],
+      "_about": "a buttress on each of the chevet's corners, 1.5m into its wall and 1.5m out"
+    },
+    "chevet pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": 1.5,
+        "h": 5.0,
+        "s": 7.0
+      },
+      "at": [
+        [
+          25.1023,
+          "outerWallH + 3.8",
+          -72.6023,
+          2.356194
+        ],
+        [
+          0.0,
+          "outerWallH + 3.8",
+          -83.0,
+          3.141593
+        ],
+        [
+          -25.1023,
+          "outerWallH + 3.8",
+          -72.6023,
+          3.926991
+        ]
+      ]
+    },
+    "choir arcade": {
+      "type": "ring",
+      "count": 8,
+      "turn": 0.5,
+      "at": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "rOuter": "naveW / 2 + pierT",
+      "rInner": "naveW / 2",
+      "height": "arcadeH",
+      "opening": {
+        "width": 6.0,
+        "sill": 0,
+        "springing": "spring",
+        "head": {
+          "profile": "pointed",
+          "spread": 1
         }
       },
       "place": [
@@ -855,7 +2991,8 @@
           "0 - naveL / 2",
           0
         ]
-      ]
+      ],
+      "_about": "the choir's piers and their arches into the inner ambulatory: the nave arcade's springing and pointed head"
     },
     "choir": {
       "type": "ring",
@@ -869,11 +3006,49 @@
       ],
       "rOuter": "naveW / 2 + pierT",
       "rInner": "naveW / 2",
-      "height": "naveTop",
+      "y": "arcadeH",
+      "height": "naveTop - arcadeH",
       "opening": {
         "width": 3.2,
-        "sill": "arcadeH + 1",
-        "springing": "clearH + 5",
+        "sill": 1,
+        "springing": "clearH + 5 - arcadeH",
+        "head": {
+          "profile": "pointed",
+          "spread": 1
+        },
+        "tracery": true
+      },
+      "place": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ],
+      "_about": "the choir's clerestory, over its arcade"
+    },
+    "ambulatory arcade": {
+      "type": "ring",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "rOuter": "innerX + aisleT",
+      "rInner": "innerX",
+      "height": "aisleTop",
+      "opening": {
+        "width": 6.6,
+        "sill": 0,
+        "springing": "outerSpring - 1",
         "head": {
           "profile": "pointed",
           "spread": 1
@@ -886,7 +3061,74 @@
           "0 - naveL / 2",
           0
         ]
-      ]
+      ],
+      "_about": "the arcade between the inner and outer aisles, turned round the apse: half a ring of sixteen"
+    },
+    "inner ambulatory vault": {
+      "type": "vault",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "rInner": "naveW / 2 + pierT",
+      "rOuter": "innerX",
+      "springing": "crown",
+      "top": "aisleTop",
+      "clears": "spring + 3 * 1.7321",
+      "head": {
+        "profile": "segmental",
+        "rise": "aisleRise"
+      },
+      "place": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ],
+      "_about": "the inner aisles' vault carried round: their springing, rise and top"
+    },
+    "outer ambulatory vault": {
+      "type": "vault",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "rInner": "innerX + aisleT",
+      "rOuter": "wallX - aisleT",
+      "springing": 16.0,
+      "top": "outerTop",
+      "clears": "outerSpring - 1 + 3.3 * 1.7321",
+      "head": {
+        "profile": "segmental",
+        "rise": 3.0
+      },
+      "place": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ],
+      "_about": "the outer ambulatory's: springing over the arcade's crowns, to the outer aisles' top"
     },
     "choir vault": {
       "type": "dome",
@@ -895,17 +3137,45 @@
       "radius": "naveW / 2 + pierT",
       "thickness": "pierT",
       "head": {
-        "profile": "pointed",
-        "spread": 1
+        "profile": "segmental",
+        "rise": 5.5
       },
+      "at": [
+        [
+          0,
+          40.5,
+          "0 - naveL / 2",
+          3.14159265
+        ]
+      ]
+    },
+    "choir diaphragm": {
+      "type": "wall",
+      "width": "naveW + 2 * pierT",
+      "height": "naveTop - clearH",
+      "thickness": 2.0,
+      "glass": false,
+      "openings": [
+        {
+          "at": "naveW / 2 + pierT",
+          "width": "naveW",
+          "sill": 0,
+          "springing": 0,
+          "head": {
+            "profile": "pointed",
+            "spread": 1
+          }
+        }
+      ],
       "at": [
         [
           0,
           "clearH",
           "0 - naveL / 2",
-          3.14159265
+          0
         ]
-      ]
+      ],
+      "_about": "the wall over the choir's arch, from the nave vault's springing to the roof: the nave's last cell ends against it"
     },
     "choir roof": {
       "type": "dome",
@@ -948,13 +3218,179 @@
       ],
       "_about": "the lean-to round the choir: a half cone cut off at the choir's wall (`oculus`) and left open there"
     },
+    "crossing diaphragms": {
+      "type": "wall",
+      "width": "naveW + 2 * pierT",
+      "height": "naveTop - clearH",
+      "thickness": 2.0,
+      "glass": false,
+      "openings": [
+        {
+          "at": "naveW / 2 + pierT",
+          "width": "naveW",
+          "sill": 0,
+          "springing": 0,
+          "head": {
+            "profile": "pointed",
+            "spread": 1
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "clearH",
+          -37.0,
+          0
+        ],
+        [
+          0,
+          "clearH",
+          -18.0,
+          0
+        ]
+      ],
+      "_about": "the walls over the crossing's two end arches, on which the tiburio's end faces stand"
+    },
+    "crossing squinch 1": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            8.2,
+            -20.0
+          ],
+          [
+            8.2,
+            -23.6185
+          ],
+          [
+            4.5815,
+            -20.0
+          ]
+        ]
+      },
+      "height": "naveTop - 42",
+      "at": [
+        [
+          0,
+          42.0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the squinches: a triangle across each of the crossing's corners, carrying the tiburio's diagonal faces"
+    },
+    "crossing squinch 2": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -4.5815,
+            -20.0
+          ],
+          [
+            -8.2,
+            -23.6185
+          ],
+          [
+            -8.2,
+            -20.0
+          ]
+        ]
+      },
+      "height": "naveTop - 42",
+      "at": [
+        [
+          0,
+          42.0,
+          0,
+          0
+        ]
+      ]
+    },
+    "crossing squinch 3": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -8.2,
+            -37.0
+          ],
+          [
+            -8.2,
+            -33.3815
+          ],
+          [
+            -4.5815,
+            -37.0
+          ]
+        ]
+      },
+      "height": "naveTop - 42",
+      "at": [
+        [
+          0,
+          42.0,
+          0,
+          0
+        ]
+      ]
+    },
+    "crossing squinch 4": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            4.5815,
+            -37.0
+          ],
+          [
+            8.2,
+            -33.3815
+          ],
+          [
+            8.2,
+            -37.0
+          ]
+        ]
+      },
+      "height": "naveTop - 42",
+      "at": [
+        [
+          0,
+          42.0,
+          0,
+          0
+        ]
+      ]
+    },
+    "crossing dome": {
+      "type": "dome",
+      "sides": 8,
+      "radius": 10.595,
+      "thickness": 0.6,
+      "head": {
+        "profile": "pointed",
+        "spread": 0.6
+      },
+      "at": [
+        [
+          0,
+          "naveTop",
+          -28.5,
+          0
+        ]
+      ],
+      "_about": "the crossing's own dome inside the tiburio, struck from the octagon's foot"
+    },
     "tiburio": {
       "type": "component",
       "use": "components/domed-tower",
       "params": {
         "sides": 8,
-        "R": 7.5,
-        "H": 12,
+        "R": 11.095,
+        "H": 16,
         "t": 1.0,
         "cap": "trigonal",
         "capRise": 28,
@@ -976,7 +3412,7 @@
       "at": [
         [
           0,
-          "naveTop + 2",
+          "naveTop",
           "crossZ",
           0
         ]
@@ -1002,44 +3438,310 @@
       ],
       "at": [
         [
-          "1 * (wallX - aisleT - 2.65)",
+          "1 * (wallX - aisleT - 2.2173)",
           0,
-          "naveL / 2 - 2.6",
+          "naveL / 2 - bayLen + 3.0173",
           0
         ]
       ]
     },
-    "stair terrace right": {
+    "stair terrace right 1": {
       "walked": true,
-      "type": "box",
-      "width": "((wallX - aisleT - 2.65) - 2.2173 - innerX - aisleT)",
-      "length": "bayLen",
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "1 * (innerX + aisleT - (wallX - aisleT - 2.2173))",
+            -3.0173
+          ],
+          [
+            "1 * (-2.2173)",
+            -3.0173
+          ],
+          [
+            "1 * (-2.2173)",
+            "bayLen - 3.0173"
+          ],
+          [
+            "1 * (innerX + aisleT - (wallX - aisleT - 2.2173))",
+            "bayLen - 3.0173"
+          ]
+        ]
+      },
       "height": 0.4,
       "at": [
         [
-          "1 * (innerX + aisleT + ((wallX - aisleT - 2.65) - 2.2173 - innerX - aisleT) / 2)",
+          "1 * (wallX - aisleT - 2.2173)",
           "outerWallH - 0.4",
-          "naveL / 2 - bayLen / 2",
+          "naveL / 2 - bayLen + 3.0173",
           0
         ]
       ],
-      "_about": "the flat roof over the turret's bay, beside the turret"
+      "_about": "the flat roof over the turret's bay, round the turret's head"
     },
-    "stair terrace east right": {
+    "stair terrace right 2": {
       "walked": true,
-      "type": "box",
-      "width": "wallX - aisleT - (wallX - aisleT - 2.65) + 2.2173",
-      "length": "(bayLen - 2.6 - 2.2173)",
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "1 * (-2.2173)",
+            2.2173
+          ],
+          [
+            "1 * (2.2173)",
+            2.2173
+          ],
+          [
+            "1 * (2.2173)",
+            "bayLen - 3.0173"
+          ],
+          [
+            "1 * (-2.2173)",
+            "bayLen - 3.0173"
+          ]
+        ]
+      },
       "height": 0.4,
       "at": [
         [
-          "1 * (((wallX - aisleT - 2.65) - 2.2173 + wallX - aisleT) / 2)",
+          "1 * (wallX - aisleT - 2.2173)",
           "outerWallH - 0.4",
-          "naveL / 2 - bayLen + (bayLen - 2.6 - 2.2173) / 2",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace right 3": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "1 * (-2.2173)",
+            -3.0173
+          ],
+          [
+            "1 * (2.2173)",
+            -3.0173
+          ],
+          [
+            "1 * (2.2173)",
+            -2.2173
+          ],
+          [
+            "1 * (-2.2173)",
+            -2.2173
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace right 4": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            2.2173,
+            2.2173
+          ],
+          [
+            0.9184,
+            2.2173
+          ],
+          [
+            2.2173,
+            0.9184
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace right 5": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            2.2173,
+            -2.2173
+          ],
+          [
+            0.9184,
+            -2.2173
+          ],
+          [
+            2.2173,
+            -0.9184
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace right 6": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -2.2173,
+            2.2173
+          ],
+          [
+            -0.9184,
+            2.2173
+          ],
+          [
+            -2.2173,
+            0.9184
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace right 7": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -2.2173,
+            -2.2173
+          ],
+          [
+            -0.9184,
+            -2.2173
+          ],
+          [
+            -2.2173,
+            -0.9184
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "turret head right": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": 2.4,
+      "rInner": 2.0,
+      "height": 3.0,
+      "y": "outerWallH",
+      "place": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          0,
+          "naveL / 2 - bayLen + 3.0173",
           0
         ]
       ],
-      "_about": "...and east of it"
+      "skip": [
+        0
+      ],
+      "solid": true,
+      "_about": "the stair turret's head over the terrace, the spiral arriving inside it"
+    },
+    "turret head door right": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": 2.4,
+      "rInner": 2.0,
+      "height": 3.0,
+      "y": "outerWallH",
+      "place": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          0,
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ],
+      "at": [
+        0
+      ],
+      "opening": {
+        "width": 1.2,
+        "sill": 0,
+        "springing": 1.8,
+        "head": {
+          "profile": "pointed",
+          "spread": 1
+        }
+      }
+    },
+    "turret lid right": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 2.4499999999999997
+      },
+      "height": 0.35,
+      "at": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          "outerWallH + 3.0",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "turret pinnacle right": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": 1.5,
+        "h": 4.0,
+        "s": 6.0
+      },
+      "at": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          "outerWallH + 3.35",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
     },
     "stair left": {
       "type": "component",
@@ -1060,71 +3762,306 @@
       ],
       "at": [
         [
-          "-1 * (wallX - aisleT - 2.65)",
+          "-1 * (wallX - aisleT - 2.2173)",
           0,
-          "naveL / 2 - 2.6",
+          "naveL / 2 - bayLen + 3.0173",
           0
         ]
       ]
     },
-    "stair terrace left": {
+    "stair terrace left 1": {
       "walked": true,
-      "type": "box",
-      "width": "((wallX - aisleT - 2.65) - 2.2173 - innerX - aisleT)",
-      "length": "bayLen",
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "-1 * (innerX + aisleT - (wallX - aisleT - 2.2173))",
+            -3.0173
+          ],
+          [
+            "-1 * (-2.2173)",
+            -3.0173
+          ],
+          [
+            "-1 * (-2.2173)",
+            "bayLen - 3.0173"
+          ],
+          [
+            "-1 * (innerX + aisleT - (wallX - aisleT - 2.2173))",
+            "bayLen - 3.0173"
+          ]
+        ]
+      },
       "height": 0.4,
       "at": [
         [
-          "-1 * (innerX + aisleT + ((wallX - aisleT - 2.65) - 2.2173 - innerX - aisleT) / 2)",
+          "-1 * (wallX - aisleT - 2.2173)",
           "outerWallH - 0.4",
-          "naveL / 2 - bayLen / 2",
+          "naveL / 2 - bayLen + 3.0173",
           0
         ]
       ],
-      "_about": "the flat roof over the turret's bay, beside the turret"
+      "_about": "the flat roof over the turret's bay, round the turret's head"
     },
-    "stair terrace east left": {
+    "stair terrace left 2": {
       "walked": true,
-      "type": "box",
-      "width": "wallX - aisleT - (wallX - aisleT - 2.65) + 2.2173",
-      "length": "(bayLen - 2.6 - 2.2173)",
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "-1 * (-2.2173)",
+            2.2173
+          ],
+          [
+            "-1 * (2.2173)",
+            2.2173
+          ],
+          [
+            "-1 * (2.2173)",
+            "bayLen - 3.0173"
+          ],
+          [
+            "-1 * (-2.2173)",
+            "bayLen - 3.0173"
+          ]
+        ]
+      },
       "height": 0.4,
       "at": [
         [
-          "-1 * (((wallX - aisleT - 2.65) - 2.2173 + wallX - aisleT) / 2)",
+          "-1 * (wallX - aisleT - 2.2173)",
           "outerWallH - 0.4",
-          "naveL / 2 - bayLen + (bayLen - 2.6 - 2.2173) / 2",
+          "naveL / 2 - bayLen + 3.0173",
           0
         ]
-      ],
-      "_about": "...and east of it"
+      ]
     },
-    "west gallery": {
+    "stair terrace left 3": {
       "walked": true,
-      "type": "box",
-      "width": "naveW",
-      "length": "bayLen - 0.4",
-      "height": 0.5,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "-1 * (-2.2173)",
+            -3.0173
+          ],
+          [
+            "-1 * (2.2173)",
+            -3.0173
+          ],
+          [
+            "-1 * (2.2173)",
+            -2.2173
+          ],
+          [
+            "-1 * (-2.2173)",
+            -2.2173
+          ]
+        ]
+      },
+      "height": 0.4,
       "at": [
         [
+          "-1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace left 4": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -2.2173,
+            2.2173
+          ],
+          [
+            -0.9184,
+            2.2173
+          ],
+          [
+            -2.2173,
+            0.9184
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "-1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace left 5": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -2.2173,
+            -2.2173
+          ],
+          [
+            -0.9184,
+            -2.2173
+          ],
+          [
+            -2.2173,
+            -0.9184
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "-1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace left 6": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            2.2173,
+            2.2173
+          ],
+          [
+            0.9184,
+            2.2173
+          ],
+          [
+            2.2173,
+            0.9184
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "-1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "stair terrace left 7": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            2.2173,
+            -2.2173
+          ],
+          [
+            0.9184,
+            -2.2173
+          ],
+          [
+            2.2173,
+            -0.9184
+          ]
+        ]
+      },
+      "height": 0.4,
+      "at": [
+        [
+          "-1 * (wallX - aisleT - 2.2173)",
+          "outerWallH - 0.4",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "turret head left": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": 2.4,
+      "rInner": 2.0,
+      "height": 3.0,
+      "y": "outerWallH",
+      "place": [
+        [
+          "-1 * (wallX - aisleT - 2.2173)",
           0,
-          "arcadeH * 0.45 - 0.5",
-          "naveL / 2 - bayLen / 2 + 0.2",
+          "naveL / 2 - bayLen + 3.0173",
           0
         ]
       ],
-      "_about": "the organ loft: a gallery across the nave's west bay, the doors passing under it"
+      "skip": [
+        0
+      ],
+      "solid": true
     },
-    "gallery parapet": {
-      "type": "box",
-      "width": "naveW",
-      "length": 0.25,
-      "height": 1.0,
+    "turret head door left": {
+      "type": "ring",
+      "count": 8,
+      "rOuter": 2.4,
+      "rInner": 2.0,
+      "height": 3.0,
+      "y": "outerWallH",
+      "place": [
+        [
+          "-1 * (wallX - aisleT - 2.2173)",
+          0,
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ],
+      "at": [
+        0
+      ],
+      "opening": {
+        "width": 1.2,
+        "sill": 0,
+        "springing": 1.8,
+        "head": {
+          "profile": "pointed",
+          "spread": 1
+        }
+      }
+    },
+    "turret lid left": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": 2.4499999999999997
+      },
+      "height": 0.35,
       "at": [
         [
-          0,
-          "arcadeH * 0.45",
-          "naveL / 2 - bayLen + 0.4",
+          "-1 * (wallX - aisleT - 2.2173)",
+          "outerWallH + 3.0",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "turret pinnacle left": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": 1.5,
+        "h": 4.0,
+        "s": 6.0
+      },
+      "at": [
+        [
+          "-1 * (wallX - aisleT - 2.2173)",
+          "outerWallH + 3.35",
+          "naveL / 2 - bayLen + 3.0173",
           0
         ]
       ]
@@ -1162,17 +4099,24 @@
     "organ": {
       "type": "zone",
       "zone": "organ",
-      "w": "min(naveW - 2, 10)",
-      "d": "bayLen * 0.6",
-      "h": "(clearH - arcadeH * 0.45) * 0.6",
+      "w": 5,
+      "d": 4.0,
+      "h": 12,
       "at": [
         [
+          -44.1,
           0,
-          "arcadeH * 0.45",
-          "naveL / 2 - bayLen / 2 + 0.6",
-          1.5707963
+          "crossZ + -5.5",
+          0
+        ],
+        [
+          -44.1,
+          0,
+          "crossZ + 5.5",
+          0
         ]
-      ]
+      ],
+      "_about": "the organ in two cases, against the north transept arm's end wall either side of its portal (Milan has no west gallery: its organs face each other across the choir)"
     }
   }
 }

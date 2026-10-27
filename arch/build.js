@@ -14,6 +14,10 @@
 // rectangle cut by openings, triangulated) -> extrusion, straight or RADIAL (a bay of a round building, whose
 // side faces lie on the radial planes so its neighbours meet it exactly) -> parts -> a building.
 import { archCurve, archRise } from "./profiles.js";
+import { traceryMesh } from "./tracery.js";
+import { wimpergMesh } from "./wimperg.js";
+import { surroundMesh } from "./surround.js";
+import { lombardMesh } from "./lombard.js";
 
 const Q = 1e6;   // the weld grid: a micrometre. Two points that round to the same micrometre ARE the same point.
 
@@ -347,7 +351,9 @@ export const corridor = (rIn, halfW, y0 = 0, theta = 0) => (x, y, side) => {
 // passage's own wall. `sign` is which side of the passage it sits on.
 export const flank = (rIn, halfBay, halfW, y0 = 0, sign = 1) => (x, y, side) => {
   const r = rIn + x;
-  if (side === (sign > 0 ? 1 : 0)) {                       // the straight side, against the passage wall
+  // (the straight side is the one nearer the passage's middle: side 0 for the piece at +x, 1 for the one at -x -- so
+  //  side 1 is always the side further along +x, as a wedge's is, and the solid is wound outward as a wedge is)
+  if (side === (sign > 0 ? 0 : 1)) {                       // the straight side, against the passage wall
     const s = sign * halfW;
     return [r * Math.sin(0) + s, y0 + y, r * Math.cos(0)];
   }
@@ -417,10 +423,34 @@ export function domeCorners(n, sweep = 1, turn = 0) {
 // roof's cone or an onion over a tower is a shape seen from outside, not two shells of masonry. A part of a dome
 // is closed at its cut: a masonry one by the section through its two shells, a skin by the flat of its profile
 // (a half-cone roof against a wall has a wall there).
-export function domeShell(m, { sides = 8, sweep = 1, turn = 0, oculus = 0, thickness, curve, base = 0, cap = true, coffers = null }) {
+// `door` { width, height, at }: A DOORWAY CUT IN ITS FOOT -- whole faces of its polygon (as many as come nearest to
+// `width` at the springing), centred on the angle `at` (+x unless said), up to `height`: the web and the soffit left
+// out there, the two jambs closed by the section through the shell, a lintel under its head. One dome with a hole in
+// it, as a snow house or a tipi is -- not a band under a cap, whose two meridians (the cut one sampled, the cap's
+// true) never met.
+export function domeShell(m, { sides = 8, sweep = 1, turn = 0, oculus = 0, thickness, curve, base = 0, cap = true, coffers = null, door = null }) {
   const n = Math.max(3, Math.round(sides));
   const C = domeCorners(n, sweep, turn), N = C.count;
-  const rows = domeRows(curve, oculus, base);
+  let rows = domeRows(curve, oculus, base);
+  // (a row spliced in at height y, where the meridian crosses it, so the door's head is a row of its own)
+  const splice = (rs, y) => {
+    const j = rs.findIndex(([, ry]) => Math.abs(ry - y) < 1e-6);
+    if (j >= 0) return [rs, j];
+    const i = rs.findIndex(([, ry], q) => q + 1 < rs.length && ry < y && rs[q + 1][1] > y);
+    if (i < 0) throw new Error(`a door ${(y - base).toFixed(2)} m high does not fit under the dome`);
+    const [r0, y0] = rs[i], [r1, y1] = rs[i + 1], f = (y - y0) / (y1 - y0);
+    return [[...rs.slice(0, i + 1), [r0 + (r1 - r0) * f, y], ...rs.slice(i + 1)], i + 1];
+  };
+  let dO = 0, dK = new Set(), k0 = 0, df = 0;
+  if (door) {
+    if (!C.closed) throw new Error("a door is cut in a whole dome's foot");
+    if (coffers) throw new Error("a dome with a door has no coffers");
+    df = Math.max(1, Math.min(N - 1, Math.round(door.width / (2 * rows[0][0] * Math.sin(Math.PI / N)))));
+    k0 = ((Math.round((door.at ?? Math.PI / 2) * N / (2 * Math.PI) - df / 2 - .5 - turn) % N) + N) % N;
+    dK = new Set(Array.from({ length: df }, (_, j) => (k0 + j) % N));
+    [rows, dO] = splice(rows, base + door.height);
+  }
+  const inDoor = (i, k, below) => i < below && dK.has(k);
   const ring = (r, y) => Array.from({ length: N }, (_, k) => {
     const t = C.at(k);
     return m.vert(r * Math.sin(t), y, r * Math.cos(t));   // (at r = 0 every corner is ONE vertex: the tip)
@@ -428,6 +458,7 @@ export function domeShell(m, { sides = 8, sweep = 1, turn = 0, oculus = 0, thick
   const edges = C.closed ? N : N - 1;
   const outs = rows.map(([r, y]) => ring(r, y));
   for (let i = 0; i + 1 < rows.length; i++) for (let k = 0; k < edges; k++) {
+    if (inDoor(i, k, dO)) continue;
     const k2 = (k + 1) % N;
     m.quad(outs[i][k], outs[i][k2], outs[i + 1][k2], outs[i + 1][k]);        // the web, outside
   }
@@ -466,6 +497,13 @@ export function domeShell(m, { sides = 8, sweep = 1, turn = 0, oculus = 0, thick
   let inner = rows[hi][0] > 1e-9
     ? rows.map(([r, y]) => [Math.max(r - thickness, .02), y])
     : rows.map(([r, y]) => [r * Math.max(.05, 1 - thickness / R0), base + (y - base) * Math.max(.05, 1 - thickness / H0)]);
+  let dI = 0;
+  if (door) {
+    // the soffit gets its own row at the door's head (a closed crown's soffit is the web scaled, rows and all: the
+    // web's door row comes down with it, a little under the head, and is dropped for the one at the head)
+    if (rows[hi][0] <= 1e-9) inner = inner.filter((_, i) => i !== dO);
+    [inner, dI] = splice(inner, base + door.height);
+  }
   // THE COFFERED BAND, if there is one: its rows are spliced into the soffit's own (by arc length up the inner
   // meridian, `from` to `to`), and the strip between them is left to cofferedSurface -- whose cells carry every
   // one of the ring's stations on their edges, so the plain soffit above and below meets it exactly.
@@ -489,6 +527,7 @@ export function domeShell(m, { sides = 8, sweep = 1, turn = 0, oculus = 0, thick
   for (let i = 0; i + 1 < inner.length; i++) {
     if (band && i >= band.start && i < band.end) continue;
     for (let k = 0; k < edges; k++) {
+      if (inDoor(i, k, dI)) continue;
       const k2 = (k + 1) % N;
       m.quad(ins[i + 1][k], ins[i + 1][k2], ins[i][k2], ins[i][k]);          // ...and its soffit, wound the other way
     }
@@ -524,9 +563,20 @@ export function domeShell(m, { sides = 8, sweep = 1, turn = 0, oculus = 0, thick
   if (cap) {
     for (let k = 0; k < edges; k++) {
       const k2 = (k + 1) % N;
-      m.quad(ins[0][k], ins[0][k2], outs[lo][k2], outs[lo][k]);              // the springing ring
+      if (!dK.has(k)) m.quad(ins[0][k], ins[0][k2], outs[lo][k2], outs[lo][k]);   // the springing ring (none across the doorway)
       m.quad(outs[hi][k], outs[hi][k2], ins[his][k2], ins[his][k]);          // ...and the oculus
     }
+  }
+  if (door) {
+    // the doorway's JAMBS -- the section through both shells, from the floor to the head, at its two corners (the
+    // first faces back against the faces before it, the second on against those after) -- and its LINTEL, facing down
+    const jamb = (k, flip) => {
+      const poly = [...rows.slice(0, dO + 1), ...inner.slice(0, dI + 1).reverse()];
+      const vs = [...outs.slice(0, dO + 1).map((o) => o[k]), ...ins.slice(0, dI + 1).reverse().map((o) => o[k])];
+      for (const [p, q, r2] of earClip(poly, vs.map((_, i) => i))) { if (flip) m.tri(vs[r2], vs[q], vs[p]); else m.tri(vs[p], vs[q], vs[r2]); }
+    };
+    jamb(k0, true); jamb((k0 + df) % N, false);
+    for (const k of dK) { const k2 = (k + 1) % N; m.quad(ins[dI][k], ins[dI][k2], outs[dO][k2], outs[dO][k]); }
   }
   if (!C.closed) {                                 // the section through both shells at the cut: one polygon per end
     for (const [k, flip] of [[0, false], [N - 1, true]]) {
@@ -1000,7 +1050,13 @@ export function staircase(m, root, { run, rise, soffit }) {
       if (!ring[i][2]) m.quad(top[i], top[j], bot[j], bot[i]);
     }
   }
-  return { m, flights, landings, path, edges: edgesFree };
+  // THE TOP LANDINGS -- those no flight leaves -- each by its far edge and the way on across it: where the floor the
+  // stair arrives on begins (assemble.js arrivalFloor)
+  const tops = landings.filter((L) => L.attach.length === 1).map((L) => {
+    const [ax, az] = L.frame(L.x1, L.z0), [bx, bz] = L.frame(L.x1, L.z1), [ox, oz] = L.frame(L.x1 + 1, L.z0);
+    return { a: [ax, L.h, az], b: [bx, L.h, bz], out: [ox - ax, oz - az] };
+  });
+  return { m, flights, landings, path, edges: edgesFree, tops };
 }
 
 // ---- coffers ----------------------------------------------------------------------------------------------
@@ -1060,6 +1116,16 @@ export function drum(m, r0, r1, y0, y1, sides) {
   const lo = ring(r0, y0), hi = ring(r1, y1);
   for (let k = 0; k < sides; k++) m.quad(lo[k], hi[k], hi[(k + 1) % sides], lo[(k + 1) % sides]);
   const cLo = m.vert(0, y0, 0), cHi = m.vert(0, y1, 0);
+  for (let k = 0; k < sides; k++) { m.tri(cLo, lo[k], lo[(k + 1) % sides]); m.tri(cHi, hi[(k + 1) % sides], hi[k]); }
+  return m;
+}
+
+// A TURNED SOLID: the profile [[r, y], ...] (bottom to top) revolved round the y axis in `sides`, capped at both ends --
+// a bell capital, a baluster: one closed surface, no rings stacked on rings
+export function lathe(m, prof, sides) {
+  const rings = prof.map(([r, y]) => Array.from({ length: sides }, (_, k) => { const t = k * 2 * Math.PI / sides; return m.vert(r * Math.cos(t), y, r * Math.sin(t)); }));
+  for (let j = 0; j + 1 < rings.length; j++) for (let k = 0; k < sides; k++) m.quad(rings[j][k], rings[j + 1][k], rings[j + 1][(k + 1) % sides], rings[j][(k + 1) % sides]);
+  const lo = rings[0], hi = rings[rings.length - 1], cLo = m.vert(0, prof[0][1], 0), cHi = m.vert(0, prof[prof.length - 1][1], 0);
   for (let k = 0; k < sides; k++) { m.tri(cLo, lo[k], lo[(k + 1) % sides]); m.tri(cHi, hi[(k + 1) % sides], hi[k]); }
   return m;
 }
@@ -1149,26 +1215,83 @@ export function stackMesh(m, levels) {
 
 // A PRISM: the outline carried from y0 up to y1, closed -- a plinth, a platform, a mass, a tower's core.
 // Its top and bottom are fanned from the middle (the outlines are convex).
-export function prismMesh(m, pts, y0, y1) {
-  const lo = pts.map(([x, z]) => m.vert(x, y0, z)), hi = pts.map(([x, z]) => m.vert(x, y1, z)), n = pts.length;
+// `y1` may be a function of (x, z): a top that is not level (a prism's `slope`), its sides cut off under it
+export function prismMesh(m, pts, y0, y1, well = null) {
+  const top = typeof y1 === "function" ? y1 : () => y1;
+  // (with a well, the outline takes a corner where the line its caps are cut on crosses it: the sides meet the caps there)
+  if (well) pts = pts.flatMap((a, i) => { const b = pts[(i + 1) % pts.length], da = a[0] - well.cx, db = b[0] - well.cx;
+    return da * db < -1e-12 ? [a, [well.cx, a[1] + (b[1] - a[1]) * da / (da - db)]] : [a]; });
+  const lo = pts.map(([x, z]) => m.vert(x, y0, z)), hi = pts.map(([x, z]) => m.vert(x, top(x, z), z)), n = pts.length;
   for (let k = 0; k < n; k++) {
     const k2 = (k + 1) % n;
     m.quad(lo[k], lo[k2], hi[k2], hi[k]);             // (planPoints' winding: the outside on the right)
   }
   // the caps ear-clipped, so a plan need not be convex (a floor round a half ring is a U); earClip hands its
   // triangles back counter-clockwise in (x, z), which faces down
-  for (const [a, b, c] of earClip(pts, pts.map((_, i) => i))) { m.tri(lo[a], lo[b], lo[c]); m.tri(hi[a], hi[c], hi[b]); }
+  const caps = (q) => {
+    const l = q.map(([x, z]) => m.vert(x, y0, z)), h = q.map(([x, z]) => m.vert(x, top(x, z), z));
+    for (const [a, b, c] of earClip(q, q.map((_, i) => i))) { m.tri(l[a], l[b], l[c]); m.tri(h[a], h[c], h[b]); }
+  };
+  if (!well) { caps(pts); return m; }
+  // A WELL through it -- the hole a stair comes up through (wellPoints: a ring of points from its top, (cx, cz + r),
+  // round by +x to its foot and back by -x). Its sides face into it; its caps are the plan cut in two down the line
+  // through the well's middle, each half the outline's own side carried round the well's half on that side.
+  const { pts: W, cx } = well, N = W.length, on = (q) => Math.abs(q[0] - cx) < 1e-6;
+  for (let k = 0; k < N; k++) { const k2 = (k + 1) % N, a = W[k], b = W[k2];
+    m.quad(m.vert(b[0], y0, b[1]), m.vert(a[0], y0, a[1]), m.vert(a[0], top(a[0], a[1]), a[1]), m.vert(b[0], top(b[0], b[1]), b[1])); }
+  const half = N / 2;
+  for (const sd of [1, -1]) {
+    // the outline clipped to this side of the line (Sutherland-Hodgman, one plane)
+    const c = [];
+    for (let i = 0; i < n; i++) {
+      const a = pts[i], b = pts[(i + 1) % n], da = sd * (a[0] - cx), db = sd * (b[0] - cx);
+      if (da >= -1e-9) c.push(a);
+      if ((da > 1e-9 && db < -1e-9) || (da < -1e-9 && db > 1e-9)) { const t = da / (da - db); c.push([cx, a[1] + (b[1] - a[1]) * t]); }
+    }
+    const i = c.findIndex((q, j) => on(q) && on(c[(j + 1) % c.length]));
+    if (i < 0) continue;
+    // round the outline from the far end of the cut to its near end, then down the cut into the well and round its
+    // half on this side
+    const chain = [...c.slice(i + 1), ...c.slice(0, i + 1)], end = chain[chain.length - 1];
+    const ring = sd > 0 ? W.slice(0, half + 1) : [...W.slice(half), W[0]];
+    const arc = (end[1] > chain[0][1]) === (ring[0][1] > ring[ring.length - 1][1]) ? ring : ring.slice().reverse();
+    caps([...chain, ...arc]);
+  }
   return m;
+}
+// the WELL's outline for prismMesh: `radius` round (an even `sides`, 16 by default) or `rect` [w, l], about `at`
+export function wellPoints(w) {
+  const [cx, cz] = w.at ?? [0, 0];
+  if (w.rect) { const a = w.rect[0] / 2, b = w.rect[1] / 2; return { cx, pts: [[cx, cz + b], [cx + a, cz + b], [cx + a, cz - b], [cx, cz - b], [cx - a, cz - b], [cx - a, cz + b]] }; }
+  // (`turn`: its corners that many sides round -- .5 sets them as a polygon plan's, a flat face across each axis)
+  const N = 2 * Math.max(2, Math.round((w.sides ?? 16) / 2)), r = w.radius, t = w.turn ?? 0;
+  return { cx, pts: Array.from({ length: N }, (_, k) => [cx + r * Math.sin((k + t) * 2 * Math.PI / N), cz + r * Math.cos((k + t) * 2 * Math.PI / N)]) };
 }
 
 // GLASS IN THE WINDOWS: every GLAZED opening of a face gets a pane of its own exact outline -- its foot or sill,
 // its jambs, its head -- set in the middle of the wall's thickness, halfway between where `map` puts the face's
 // front and its back. An opening is glazed as its definition says (`glass`, assemble.js glassOf); said nowhere,
 // one standing over the floor (a sill over 30cm) is, and a door or an arcade is left open.
-export function glassPanes(face, map, g) {
+//   A window with `tracery` has its stone bars too (tracery.js), built into `g.tracery` -- a mesh of their own, stone
+// beside the glass: the part that takes the glass takes them as a part of their own. An open window -- a belfry's,
+// an openwork stage's -- may have tracery and no glass.
+// (`height`: what the wall it is part of rises to over the face's foot -- a wimperg stands within it)
+export function glassPanes(face, map, g, height = face.h) {
   const mid = (x, y) => { const a = map(x, y, 0), b = map(x, y, 1); return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2]; };
+  // (the dressed openings of the row, counted from its middle: which pediment an alternating row gives each)
+  // (a LOMBARD BAND over the face, its lesenes and arched corbel table: lombard.js)
+  if (face.lombard) lombardMesh(face, face.lombard, map, g.surround ??= mesh(), height);
+  const dressed = (face.openings ?? []).filter((o) => o.surround);
+  // (and the free wall each side of each: to the face's end, or half the pier it shares with the next opening)
+  const ops = [...(face.openings ?? [])].sort((p, q) => p.x0 - q.x0);
+  const room = (o) => { const i = ops.indexOf(o), l = ops[i - 1], r = ops[i + 1];
+                        return [l ? (o.x0 - l.x1) / 2 : o.x0, r ? (r.x0 - o.x1) / 2 : (face.w ?? Infinity) - o.x1]; };
   for (const o of face.openings ?? []) {
-    if (!(o.glass ?? o.sill > .3)) continue;
+    // (a WIMPERG over it, glazed or not -- a portal carries one as well as a window: wimperg.js; or a classical
+    //  SURROUND: surround.js)
+    if (o.wimperg) wimpergMesh(o, o.wimperg, map, g.wimperg ??= mesh(), height);
+    if (o.surround) surroundMesh({ ...o, room: room(o), turn: Math.round(Math.abs(dressed.indexOf(o) - (dressed.length - 1) / 2)) }, o.surround, map, g.surround ??= mesh(), height);
+    if (!(o.glass ?? o.sill > .3)) { if (o.tracery && o.sill > .3) traceryMesh(o, o.tracery, map, g.tracery ??= mesh()); continue; }
     const bottom = o.foot ? o.foot.map(([fx, fy]) => [o.at + fx, o.sill + fy]) : [[o.j0, o.sill], [o.j1, o.sill]];
     const top = o.curve.map(([cx, cy]) => [o.at + cx, o.springing + cy]).reverse();
     const raw = [...bottom, ...top], pts = [];
@@ -1177,6 +1300,7 @@ export function glassPanes(face, map, g) {
     if (pts.length < 3) continue;
     const ids = pts.map(([x, y]) => g.vert(...mid(x, y)));
     for (const [a, b, c] of earClip(pts, pts.map((_, i) => i))) g.tri(ids[a], ids[b], ids[c]);
+    if (o.tracery) traceryMesh(o, o.tracery, map, g.tracery ??= mesh());
   }
   return g;
 }
@@ -1186,8 +1310,10 @@ export function glassPanes(face, map, g) {
 // wallFace cannot put two openings in one column). Each band is its own face, extruded by `mapAt(y0)`; where two
 // meet, the joint is inside the stone and is not drawn, and it is one edge on both sides (a band's top and
 // bottom are cut only at its corners, so long as no opening touches them). `ends` tags the face's two end
-// verticals too, for a wall whose ends are mitres shared with its neighbour.
+// verticals too, for a wall whose ends are mitres shared with its neighbour ([start, end] for one of them).
 export function tieredWall(m, L, tiers, mapAt, { ends = false, endCuts = [], glass = null } = {}) {
+  // (`ends` may be [start, end]: a wall along an open line meets a neighbour at its inner joints only)
+  const [end0, end1] = Array.isArray(ends) ? ends : [ends, ends];
   // where each band's openings stand: a joint carries both bands' jambs, so the two edges are one
   const faces0 = tiers.map((tier) => wallFace(L, tier.h, tier.openings ?? []).openings);
   const jambs = faces0.map((os) => os.flatMap((o) => [o.x0, o.x1]));
@@ -1201,15 +1327,17 @@ export function tieredWall(m, L, tiers, mapAt, { ends = false, endCuts = [], gla
     const face = wallFace(L, tier.h, tier.openings ?? [], { topCuts: joint(k + 1), bottomCuts: joint(k - 1),
                                                            endCuts: endCuts.map((v) => v - y0) });
     face.tag = new Map();
+    if (tier.lombard) face.lombard = tier.lombard;
     const mark = (a, b, v) => face.tag.set(a < b ? `${a},${b}` : `${b},${a}`, v);
     for (const { loop } of face.rings) for (let i = 0; i < loop.length; i++) {
       const a = loop[i], b = loop[(i + 1) % loop.length], [ax, ay] = face.pts[a], [bx, by] = face.pts[b];
-      if (ends && ((Math.abs(ax) < 1e-9 && Math.abs(bx) < 1e-9) || (Math.abs(ax - L) < 1e-9 && Math.abs(bx - L) < 1e-9))) mark(a, b, "joint");
+      if ((end0 && Math.abs(ax) < 1e-9 && Math.abs(bx) < 1e-9) || (end1 && Math.abs(ax - L) < 1e-9 && Math.abs(bx - L) < 1e-9)) mark(a, b, "joint");
       if (k > 0 && Math.abs(ay) < 1e-9 && Math.abs(by) < 1e-9) mark(a, b, "joint");                    // sits on the tier below
       if (k + 1 < tiers.length && Math.abs(ay - tier.h) < 1e-9 && Math.abs(by - tier.h) < 1e-9 && !under(k, ax, bx)) mark(a, b, "joint");
     }
     extrude(face, mapAt(y0), m, { caps: true, walls: ["wall"] });
-    if (glass) glassPanes(face, mapAt(y0), glass);
+    // (what dresses its openings stays under the wall's top -- or the tier's own `top`, an entablature over it)
+    if (glass) glassPanes(face, mapAt(y0), glass, tier.top ?? tiers.reduce((t, b) => t + b.h, 0) - y0);
     y0 += tier.h;
   });
   return m;
@@ -1220,15 +1348,30 @@ export function tieredWall(m, L, tiers, mapAt, { ends = false, endCuts = [], gla
 // them closes as a ring of bays does. The face's x runs along the edge from its first corner; its two ends are
 // the mitre shared with the next face and are not drawn. `faces[i]` is that edge's tiers, openings laid out.
 export function enclosureMesh(m, pts, t, faces, glass = null) {
-  const inner = insetPoints(pts, t), n = pts.length;
+  const inner = insetPoints(pts, t), n = pts.length, along = innerAlong(pts, t, faces);
   // every joint between tiers, on any face: the corners carry them all, so faces with different tiers still meet
   const joints = [...new Set(faces.flatMap((tiers) => { let y = 0; return tiers.slice(0, -1).map((b) => (y += b.h)); }))];
   for (let i = 0; i < n; i++) {
-    const P0 = pts[i], P1 = pts[(i + 1) % n], Q0 = inner[i], Q1 = inner[(i + 1) % n];
+    const P0 = pts[i], P1 = pts[(i + 1) % n], Q0 = inner[i], Q1 = inner[(i + 1) % n], { L, Li, u } = along[i];
+    const mapAt = (y0) => (x, y, side) => {
+      const f = side ? u(x) / Li : x / L, A = side ? Q0 : P0, B = side ? Q1 : P1;
+      return [A[0] + (B[0] - A[0]) * f, y0 + y, A[1] + (B[1] - A[1]) * f];
+    };
+    tieredWall(m, L, faces[i], mapAt, { ends: true, endCuts: joints, glass });
+  }
+  return m;
+}
+
+// WHERE A POINT OF AN ENCLOSURE'S OUTER FACE COMES THROUGH ON ITS INNER ONE: per face { L, Li, u }, u(x) the distance
+// along the inner face (from its first corner) of the point x along the outer.
+// SQUARE REVEALS: the inner face is shorter than the outer by the mitres, and mapping the one onto the other in
+// proportion skews every opening through the wall. So the inner face runs PARALLEL through the middle -- from the
+// first opening to the last -- and takes up the difference only in the stretches at its two ends.
+export function innerAlong(pts, t, faces) {
+  const inner = insetPoints(pts, t), n = pts.length;
+  return pts.map((P0, i) => {
+    const P1 = pts[(i + 1) % n], Q0 = inner[i], Q1 = inner[(i + 1) % n];
     const L = Math.hypot(P1[0] - P0[0], P1[1] - P0[1]), Li = Math.hypot(Q1[0] - Q0[0], Q1[1] - Q0[1]);
-    // SQUARE REVEALS: the inner face is shorter than the outer by the mitres, and mapping the one onto the other
-    // in proportion skews every opening through the wall. So the inner face runs PARALLEL through the middle --
-    // from the first opening to the last -- and takes up the difference only in the stretches at its two ends.
     const ex = [(P1[0] - P0[0]) / L, (P1[1] - P0[1]) / L], d0 = (Q0[0] - P0[0]) * ex[0] + (Q0[1] - P0[1]) * ex[1];
     const xs = faces[i].flatMap((t) => t.openings.flatMap((o) => [o.at - o.width / 2, o.at + o.width / 2]));
     const e1 = Math.min(...xs, L / 2), e2 = Math.max(...xs, L / 2);
@@ -1237,13 +1380,8 @@ export function enclosureMesh(m, pts, t, faces, glass = null) {
       : x <= e1 ? x * (e1 - d0) / e1                              // the stretch at the start, taking up the mitre
       : x >= e2 ? (e2 - d0) + (x - e2) * (Li - e2 + d0) / (L - e2) // ...and at the end
       : x - d0;                                                   // parallel through the middle
-    const mapAt = (y0) => (x, y, side) => {
-      const f = side ? u(x) / Li : x / L, A = side ? Q0 : P0, B = side ? Q1 : P1;
-      return [A[0] + (B[0] - A[0]) * f, y0 + y, A[1] + (B[1] - A[1]) * f];
-    };
-    tieredWall(m, L, faces[i], mapAt, { ends: true, endCuts: joints, glass });
-  }
-  return m;
+    return { L, Li, u };
+  });
 }
 
 // A FLYING BUTTRESS: a strut on a rampant arch, from a buttress pier (x 0) across `span` to the wall it props.
@@ -1285,30 +1423,59 @@ export function box(m, x0, x1, y0, y1, z0, z1) {
 // thickness): its slopes face down into the roof space, and a band all round the eave joins it to the outer stack, so the
 // roof is a closed skin over an open space (an attic, a loft) instead of solid down to a soffit at its eaves.
 // `open`: the GABLE ends left open -- "front" (+z), "back" (-z) or "ends" (both): a ridge tent's doorway, an open shed.
-// Only a vertical side (a gable) is left out; a slope is always drawn. (A shell roof's: its inner face goes with it.)
+// Only a vertical side (a gable) is left out; a slope is always drawn. (A shell roof's: its inner face goes with it,
+// and the covering's thickness shows there instead -- a strip up each verge from the outer slope to the inner, the
+// eave band left off that side -- so the sheet is still closed, cut off square at the doorway.)
 export function roofMesh(m, levels, inner = null, open = null) {
-  const ring = (L) => [[L.x0, L.z0], [L.x1, L.z0], [L.x1, L.z1], [L.x0, L.z1]].map(([x, z]) => m.vert(x, L.y, z));
+  // (a level with a CHAMFER `c` is an octagon -- its corners cut at 45 degrees, `c` along each side: a roof over a
+  //  chamfered plan, its corners hipped down onto the chamfers; then every level is, the chamfer 0 where it has run out,
+  //  so the rings match corner for corner and the sides between them close)
+  const oct = levels.some((L) => L.c > 0) || inner?.some((L) => L.c > 0), N = oct ? 8 : 4, S = N / 4;
+  const ring = (L) => {
+    const c = Math.max(0, Math.min(L.c ?? 0, (L.x1 - L.x0) / 2, (L.z1 - L.z0) / 2));
+    const q = oct ? [[L.x0 + c, L.z0], [L.x1 - c, L.z0], [L.x1, L.z0 + c], [L.x1, L.z1 - c], [L.x1 - c, L.z1], [L.x0 + c, L.z1], [L.x0, L.z1 - c], [L.x0, L.z0 + c]]
+                  : [[L.x0, L.z0], [L.x1, L.z0], [L.x1, L.z1], [L.x0, L.z1]];
+    return q.map(([x, z]) => m.vert(x, L.y, z));
+  };
+  const fan = (r, up) => { for (let k = 1; k + 1 < N; k++) up ? m.tri(r[0], r[k + 1], r[k]) : m.tri(r[0], r[k], r[k + 1]); };
   const rings = levels.map(ring);
-  const ends = open === "ends" ? [0, 2] : open === "front" ? [2] : open === "back" ? [0] : [];   // (side 0 runs along z0, side 2 along z1)
+  const ends = (open === "ends" ? [0, 2] : open === "front" ? [2] : open === "back" ? [0] : []).map((k) => k * S);   // (side 0 runs along z0, side 2 along z1)
   const gableOpen = (Ls, i, k) => ends.includes(k) && Math.abs(k === 0 ? Ls[i].z0 - Ls[i + 1].z0 : Ls[i].z1 - Ls[i + 1].z1) < 1e-9;
-  for (let i = 0; i + 1 < rings.length; i++) for (let k = 0; k < 4; k++) {
-    const a = rings[i], b = rings[i + 1], k2 = (k + 1) % 4;
+  for (let i = 0; i + 1 < rings.length; i++) for (let k = 0; k < N; k++) {
+    const a = rings[i], b = rings[i + 1], k2 = (k + 1) % N;
     if (gableOpen(levels, i, k)) continue;
     m.quad(a[k2], a[k], b[k], b[k2]);                                  // outward: each side's slope, or its gable
   }
   const lo = rings[0], hi = rings[rings.length - 1];
-  m.quad(hi[3], hi[2], hi[1], hi[0]);                                   // (a ridge or an apex welds this away)
-  if (!inner) { m.quad(lo[0], lo[1], lo[2], lo[3]); return m; }          // the soffit, facing down
+  fan(hi, true);                                                        // (a ridge or an apex welds this away)
+  if (!inner) { fan(lo, false); return m; }                             // the soffit, facing down
   const inn = inner.map(ring);
-  for (let i = 0; i + 1 < inn.length; i++) for (let k = 0; k < 4; k++) {
-    const a = inn[i], b = inn[i + 1], k2 = (k + 1) % 4;
+  for (let i = 0; i + 1 < inn.length; i++) for (let k = 0; k < N; k++) {
+    const a = inn[i], b = inn[i + 1], k2 = (k + 1) % N;
     if (gableOpen(inner, i, k)) continue;
     m.quad(b[k2], b[k], a[k], a[k2]);                                  // inward: the underside of each slope, the gable's inner face
   }
   const ilo = inn[0], ihi = inn[inn.length - 1];
-  for (let k = 0; k < 4; k++) { const k2 = (k + 1) % 4; m.quad(ilo[k2], ilo[k], lo[k], lo[k2]); }   // the eave band, outer eave to inner
-  m.quad(ihi[0], ihi[1], ihi[2], ihi[3]);                                // (the roof space's top: welded away at a ridge)
+  for (let i = 0; i + 1 < inn.length; i++) for (const k of ends) {
+    if (!gableOpen(levels, i, k)) continue;
+    const a = rings[i], b = rings[i + 1], ia = inn[i], ib = inn[i + 1], k2 = (k + 1) % N;
+    m.quad(a[k], b[k], ib[k], ia[k]); m.quad(b[k2], a[k2], ia[k2], ib[k2]);   // the verges of an open gable, outer to inner
+  }
+  for (let k = 0; k < N; k++) {
+    if (ends.includes(k) && gableOpen(levels, 0, k)) continue;
+    const k2 = (k + 1) % N; m.quad(ilo[k2], ilo[k], lo[k], lo[k2]);     // the eave band, outer eave to inner
+  }
+  fan(ihi, false);                                                      // (the roof space's top: welded away at a ridge)
   return m;
+}
+
+// A ROOF'S LEVELS OVER A CHAMFERED PLAN: the chamfer `c` (along each side, in the wall plane, level 0 of `levels0` --
+// the levels before any overhang) carried up every level: a level whose sides have come in by dx and dz has its
+// corner face come in as far as the slopes beside it, so its chamfer is c - dx - dz + sqrt 2 max(dx, dz) (out at the
+// eave, in up the roof, gone at a ridge)
+export function chamferLevels(levels, levels0, c) {
+  const a = levels0[0].x1, b = levels0[0].z1;
+  return levels.map((L) => { const dx = a - L.x1, dz = b - L.z1; return { ...L, c: Math.max(0, c - dx - dz + Math.SQRT2 * Math.max(dx, dz)) }; });
 }
 
 // A CHINESE ROOF: any form's levels (roofLevels, then overhang) with its slopes bent into the jujia section and its
@@ -1464,6 +1631,15 @@ export const radial = (rOuter, rInner, w) => (x, y, side) => {
   return [r * Math.sin(th), y, r * Math.cos(th)];
 };
 
+// ...and A BAY OF A POLYGONAL ONE (a ring's `polygon`): the face laid flat on the chord between the bay's two corners,
+// at the polygon's corner radii -- an octagon's eight faces flat, as its dome's webs are, not eight arcs of a drum.
+// The face is as wide as that chord (2 rOuter sin(pi / n)); the inner face spans the same corners at rInner, so
+// neighbouring bays meet on the radial planes through the corners as the round ones do.
+export const chordal = (rOuter, rInner, n, w) => (x, y, side) => {
+  const r = side ? rInner : rOuter, h = Math.PI / n, t = x / w;
+  return [r * Math.sin(h) * (2 * t - 1), y, r * Math.cos(h)];
+};
+
 // ---- steps: seating and stairs ------------------------------------------------------------------------------
 // A flight of steps as a CROSS-SECTION, to be swept like a vault: an arena's seating and the stairs that climb
 // through it are the same shape at different scales -- a tier of rows is a staircase with a metre-deep tread
@@ -1481,7 +1657,12 @@ export const radial = (rOuter, rInner, w) => (x, y, side) => {
 // the fan is clean. (Rounding hid this until the rows were derived exactly; the check found it at once.)
 // `landing` (rising out only) lengthens the last tread by that much: the platform a flight arrives on, as part of
 // the same solid rather than a block set against its end.
-export function stepsFace(cols, run, rise, { base = 0, rising = "out", first = rise, landing = 0 } = {}) {
+// `soffit: [yIn, yOut]`: its underside a straight slope from the inner end to the outer instead of level at `base` (which
+// still sets the treads' heights) -- the seating carried on a raking vault over a stair that climbs under it
+// `strips`: the section cut into one strip a tread, from the base up, instead of a fan across the whole flight -- for a
+// flight carried ALONG a ring (assemble.js `along`), whose sides are cylinders: a fan's triangle reaching across twenty
+// treads is a chord of that curve, cutting a hand's breadth or more into the stair beside it
+export function stepsFace(cols, run, rise, { base = 0, rising = "out", first = rise, landing = 0, soffit = null, strips = false } = {}) {
   const pts = [], seen = new Map(), tris = [];
   const P = (x, y) => {
     const k = `${Math.round(x * Q)},${Math.round(y * Q)}`;
@@ -1491,7 +1672,8 @@ export function stepsFace(cols, run, rise, { base = 0, rising = "out", first = r
   };
   if (first !== rise && rising !== "out") throw new Error("a first-step height is only defined for steps rising outward");
   const top = rising === "out" ? base + first + (cols - 1) * rise : base + cols * rise;
-  const poly = [P(0, base)];                                  // the bottom corner, and the fan's origin
+  const [b0, b1] = soffit ?? [base, base];
+  const poly = [P(0, b0)];                                    // the bottom corner, and the fan's origin
   if (rising === "out") {
     // the first tread stands one riser above the base: put it ON the base and the outline doubles back along
     // its own bottom edge, which is a sliver of zero area and a T-junction at either end of it
@@ -1504,14 +1686,17 @@ export function stepsFace(cols, run, rise, { base = 0, rising = "out", first = r
       const y = base + first + j * rise;
       poly.push(P(j * run, y), P(j + 1 < cols ? (j + 1) * run : end, y));
     }
-    poly.push(P(end, base));                                   // down the outer end to close on the base
+    poly.push(P(end, b1));                                     // down the outer end to close on the base
   } else {
     poly.push(P(0, top));
     for (let j = 0; j < cols; j++) {
       poly.push(P(j * run, top - j * rise), P((j + 1) * run, top - j * rise));
     }
-    poly.push(P(cols * run, base));
+    poly.push(P(cols * run, b1));
   }
+  const endX = rising === "out" ? cols * run + landing : cols * run;
+  const yb = (x) => b0 + (b1 - b0) * x / (endX || 1);
+  if (strips) for (let j = cols - 1; j >= 1; j--) poly.push(P(j * run, yb(j * run)));   // (the base, back, a point under every riser)
   // tag each outline segment, so a part can ask for the treads without the underside it stands on
   const tag = new Map();
   const mark = (a, b, t) => tag.set(a < b ? `${a},${b}` : `${b},${a}`, t);
@@ -1519,12 +1704,34 @@ export function stepsFace(cols, run, rise, { base = 0, rising = "out", first = r
   for (let i = 0; i < uniq.length; i++) {
     const a = uniq[i], b = uniq[(i + 1) % uniq.length];
     const [ax, ay] = pts[a], [bx, by] = pts[b];
-    mark(a, b, Math.abs(ay - base) < 1e-9 && Math.abs(by - base) < 1e-9 ? "base"
+    const onBase = (x, y) => Math.abs(y - (b0 + (b1 - b0) * x / ((rising === "out" ? cols * run + landing : cols * run) || 1))) < 1e-9;
+    mark(a, b, onBase(ax, ay) && onBase(bx, by) && Math.abs(ax - bx) > 1e-9 ? "base"
               : Math.abs(ax - bx) < 1e-9 && Math.abs(ax) < 1e-9 ? "end-in"
               : Math.abs(ax - bx) < 1e-9 && Math.abs(ax - (cols * run + (rising === "out" ? landing : 0))) < 1e-9 ? "end-out"
               : "top");
   }
-  const o = uniq.indexOf(rising === "out" ? P(cols * run + landing, base) : P(0, base));   // the far bottom corner
+  if (strips) {
+    // each tread's strip: its two base corners, then up its right edge and down its left, every outline corner on them
+    // (counter-clockwise); fanned from the base corner on the side with the one corner over it, so no triangle is a sliver
+    for (let j = 0; j < cols; j++) {
+      const xl = j * run, xr = j + 1 < cols ? (j + 1) * run : endX;
+      const on = (x) => pts.map((q, i) => [q, i]).filter(([q]) => Math.abs(q[0] - x) < 1e-9 && Math.abs(q[1] - yb(x)) > 1e-9);
+      const right = on(xr).sort((a, b) => a[0][1] - b[0][1]).map(([, i]) => i);
+      const left = on(xl).sort((a, b) => b[0][1] - a[0][1]).map(([, i]) => i);
+      // (only what bounds this strip: the left edge up to this tread, the right up to it -- a taller corner over the
+      //  edge is the next tread's, rising in, or the last one's, rising out)
+      const yT = rising === "out" ? base + first + j * rise : top - j * rise;
+      const R = right.filter((i) => pts[i][1] <= yT + 1e-9), L = left.filter((i) => pts[i][1] <= yT + 1e-9);
+      const ring = [P(xl, yb(xl)), P(xr, yb(xr)), ...R, ...L];
+      const f = rising === "out" ? 1 : 0;                        // (out: from the bottom right; in: the bottom left)
+      for (let k = 1; k + 1 < ring.length; k++) {
+        const a = ring[f], b = ring[(f + k) % ring.length], c = ring[(f + k + 1) % ring.length];
+        tris.push([a, b, c]);
+      }
+    }
+    return { ...closeFace(pts, tris), tag, cols, run, rise, top };
+  }
+  const o = uniq.indexOf(rising === "out" ? P(cols * run + landing, b1) : P(0, b0));   // the far bottom corner
   // (counter-clockwise, as every other face is: the outline runs clockwise, so the fan is turned round --
   //  it used to be drawn as it came, and every flight and tier of seating was wound inside out)
   let s2 = 0;

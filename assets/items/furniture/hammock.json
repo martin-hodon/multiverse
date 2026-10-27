@@ -1,0 +1,137 @@
+{
+ "kind": "item",
+ "name": "Hammock",
+ "category": "furniture/bed",
+ "era": "-500-1900",
+ "region": "Mesoamerica",
+ "_about": "the Maya bed: a net of cotton cord slung between two posts (in a house, between its posts or the wall's pegs), sagging into a cradle a sleeper lies in; one to a hammock -- got into from beside its head end, inside the posts",
+ "params": {
+  "l": 2.0,
+  "span": 3.0,
+  "w": 0.8,
+  "low": 0.55,
+  "post": 1.55
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "cedar",
+    "oak"
+   ]
+  },
+  "net": {
+   "pick": [
+    "linen",
+    "hemp",
+    "damask-red"
+   ]
+  },
+  "cord": "hemp"
+ },
+ "parts": [
+  {
+   "id": "posts",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "post",
+    0
+   ],
+   "r": 0.06,
+   "sides": 8,
+   "at": [
+    [
+     "0 - span / 2",
+     0,
+     0
+    ],
+    [
+     "span / 2",
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "body",
+   "type": "sweep",
+   "material": "net",
+   "section": [
+    0.02,
+    "w"
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "path": [
+    [
+     "0 - l / 2",
+     "low + 0.22",
+     0
+    ],
+    [
+     "0 - l / 4",
+     "low + 0.06",
+     0
+    ],
+    [
+     0,
+     "low",
+     0
+    ],
+    [
+     "l / 4",
+     "low + 0.06",
+     0
+    ],
+    [
+     "l / 2",
+     "low + 0.22",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "cords",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.012,
+   "sides": 5,
+   "from": [
+    "l / 2",
+    "low + 0.22",
+    0
+   ],
+   "to": [
+    "span / 2 - 0.06",
+    "post - 0.15",
+    0
+   ],
+   "mirror": "x"
+  }
+ ],
+ "markers": [
+  {
+   "role": "bed",
+   "at": [
+    0,
+    0,
+    0,
+    90
+   ],
+   "data": {
+    "top": "low + 0.03",
+    "foot": "0 - l / 2 - 0.15",
+    "one": 1
+   }
+  }
+ ]
+}

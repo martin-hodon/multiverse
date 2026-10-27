@@ -20,7 +20,7 @@
     "seg": 0.35,
     "roofForm": "hip",
     "pitch": 42,
-    "overhang": 0.45,
+    "overhang": "max(0.45, 0.9 * min(1.2, max(0.5, n * H * 0.04)) + 0.1)",
     "SW": 2.7,
     "run": 0.28,
     "f": "round(H / 0.34)",
@@ -35,11 +35,13 @@
     "stairAt": 0,
     "_stairAt": "how far the stair strip stands in from the -x end's inner face (clear of a neighbouring wing that overlaps this one's end)",
     "x0": "0 - L / 2 + t + stairAt",
-    "_x0": "where the stair strip begins"
+    "_x0": "where the stair strip begins",
+    "_overhang": "the eaves reach past the cornice"
   },
   "build": [
     "ground storey",
     "upper storeys",
+    "top storey",
     "floors",
     "floors by the stair",
     "floors before the stair",
@@ -67,6 +69,9 @@
         "head": {
           "profile": "head",
           "seg": "seg"
+        },
+        "surround": {
+          "head": false
         }
       },
       "faces": {
@@ -90,6 +95,9 @@
           "head": {
             "profile": "head",
             "seg": "seg"
+          },
+          "surround": {
+            "head": false
           }
         },
         "3": {
@@ -101,6 +109,9 @@
           "head": {
             "profile": "head",
             "seg": "seg"
+          },
+          "surround": {
+            "head": false
           }
         }
       },
@@ -112,7 +123,20 @@
           0
         ]
       ],
-      "_about": "the ground storey: windows all round, and on the +z face a row of doors (or windows, by `doorSill`)"
+      "_about": "the ground storey: windows all round, and on the +z face a row of doors (or windows, by `doorSill`)",
+      "courses": {
+        "strings": false,
+        "cornice": {
+          "profile": "string",
+          "h": 0.45,
+          "out": 0.28
+        },
+        "_about": "the plinth at its foot, a band under the floor of the storey over it",
+        "plinth": {
+          "h": "min(1, max(0.4, n * H * 0.04))"
+        }
+      },
+      "_surround": "every window dressed (surround.js): an architrave and a sill; the upper floors' with a cornice over, the top floor's plain under the main cornice"
     },
     "upper storeys": {
       "type": "enclosure",
@@ -133,6 +157,9 @@
         "head": {
           "profile": "head",
           "seg": "seg"
+        },
+        "surround": {
+          "head": "cornice"
         }
       },
       "faces": {
@@ -145,6 +172,9 @@
           "head": {
             "profile": "head",
             "seg": "seg"
+          },
+          "surround": {
+            "head": "cornice"
           }
         },
         "3": {
@@ -156,6 +186,9 @@
           "head": {
             "profile": "head",
             "seg": "seg"
+          },
+          "surround": {
+            "head": "cornice"
           }
         }
       },
@@ -168,7 +201,7 @@
         ]
       ],
       "repeat": {
-        "count": "n - 1",
+        "count": "n - 2",
         "step": [
           0,
           "H",
@@ -176,7 +209,98 @@
           0
         ]
       },
-      "_about": "every storey above: the same walls, the windows over the windows below"
+      "_about": "every storey above: the same walls, the windows over the windows below (between the ground and the top storey, each with its band)",
+      "courses": {
+        "plinth": false,
+        "strings": false,
+        "cornice": {
+          "profile": "string",
+          "h": 0.45,
+          "out": 0.28
+        }
+      }
+    },
+    "top storey": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "L",
+          "D"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "openings": {
+        "pattern": "nx",
+        "width": "winW",
+        "gap": "axis - winW",
+        "sill": "sill",
+        "springing": "sill + winH",
+        "head": {
+          "profile": "head",
+          "seg": "seg"
+        },
+        "surround": {
+          "head": false
+        }
+      },
+      "faces": {
+        "1": {
+          "pattern": "nz",
+          "width": "winW",
+          "gap": "axis - winW",
+          "sill": "sill",
+          "springing": "sill + winH",
+          "head": {
+            "profile": "head",
+            "seg": "seg"
+          },
+          "surround": {
+            "head": false
+          }
+        },
+        "3": {
+          "pattern": "nz",
+          "width": "winW",
+          "gap": "axis - winW",
+          "sill": "sill",
+          "springing": "sill + winH",
+          "head": {
+            "profile": "head",
+            "seg": "seg"
+          },
+          "surround": {
+            "head": false
+          }
+        }
+      },
+      "at": [
+        [
+          0,
+          "(n - 1) * H",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "min(1, n - 1)",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "the top storey, crowned by the cornice",
+      "courses": {
+        "plinth": false,
+        "strings": false,
+        "cornice": {
+          "h": "min(1.2, max(0.5, n * H * 0.04))",
+          "out": "0.9 * min(1.2, max(0.5, n * H * 0.04))"
+        },
+        "_about": "the main cornice under the eaves, sized by the whole front, not the storey"
+      }
     },
     "floors": {
       "type": "box",

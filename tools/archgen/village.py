@@ -168,7 +168,7 @@ def furniture():
                          "stool": item("items/furniture/stool", [0.9, 0, 0.6, 0], {"h": 0.5}, markers=False)},
                         (0, 0, 0.9, 1.5707963, "sew", None, "stand"))
     F["carpenter"] = trade("Carpenter", "the joiner's bench on its legs with a vice and the work on it, a sawhorse, planks and boards stacked against the wall, the tools on their rack, shavings on the floor",
-                           {"bench top": box(2.2, 0.6, 0.1, [0, 0.78, -0.3, 0]), "bench legs": box(0.1, 0.1, 0.78, [[x, 0, z, 0] for x in (-0.95, 0.95) for z in (-0.52, -0.08)]),
+                           {"bench legs": box(0.1, 0.1, 0.78, [[x, 0, z, 0] for x in (-0.95, 0.95) for z in (-0.52, -0.08)]), "bench top": box(2.2, 0.6, 0.1, [0, 0.78, -0.3, 0]),
                             "bench rails": box(1.9, 0.06, 0.08, [[0, 0.2, -0.52, 0], [0, 0.2, -0.08, 0]]), "vice": box(0.3, 0.12, 0.25, [-0.95, 0.62, 0.02, 0]),
                             "workpiece": box(0.9, 0.22, 0.04, [0.2, 0.88, -0.3, 0]),
                             "mallet": item("items/tools/mallet", [0.85, 0.88, -0.3, 0], solid=False),
@@ -504,10 +504,13 @@ def wall_segment():
 
 # A ROUND TOWER astride the wall: its centre `zt` out from the wall's line, a solid base up to the walk, and above it a
 # round stage with a door at the walk (bay 6, facing the town and the walk that passes behind it), a spiral from that
-# door up to the platform at `top`; the top by the town's style: open behind merlons, or a room under a roof
+# door up to the platform at `top`; the top by the town's style: open behind merlons, or a room under a roof.
+# The spiral stands free in the middle of the stage (`sr`, round a slender newel) and comes up through a WELL in the
+# platform, which is a whole floor round it -- the walk behind the parapet, the well railed where it drops. (It had
+# filled the stage wall to wall: the platform could only be the few bays not over its last turn, a ledge by a hole.)
 def wall_tower():
     params = {"detail": 4, "R": 3.4, "wall": 0.8, "h": 6.0, "top": 10.6, "n": 12, "turn": 24, "rise": 0.19,
-              "steps": "round((top - h) / rise)", "slab": 0.3, "roomH": 2.6, "zt": 0, "capRise": 5.0,
+              "steps": "round((top - h) / rise)", "slab": 0.3, "roomH": 2.6, "zt": 0, "capRise": 5.0, "sr": 1.3,
               "_zt": "the tower's centre out from its placement (+z: the field) -- the village plan sets it so the tower stands astride the wall's outer face (at the corners and river ends), or flanks the wall between, its back on the walk's field edge (town.js FLANK)",
               "_h": "the walk's height (the wall's); top the platform the spiral arrives on"}
     parts = {
@@ -516,11 +519,11 @@ def wall_tower():
                   "skip": [6], "opening": {"width": 0.4, "sill": 1.2, "springing": 2.0, "head": {"profile": "semicircular"}, "glass": False}},
         "walk door": {"type": "ring", "count": "n", "rOuter": "R", "rInner": "R - wall", "height": "top - h + 1.1", "y": "h", "place": [[0, 0, "zt", 0]],
                       "at": [6], "opening": {"width": 1.1, "sill": 0, "springing": 1.9, "head": {"profile": "semicircular"}}},
-        "stair": {"type": "spiral-stair", "radius": "R - wall - 0.05", "newel": 0.22, "turn": "turn", "top": "top - h", "steps": "steps", "soffit": 0.2,
+        "stair": {"type": "spiral-stair", "radius": "sr", "newel": 0.15, "turn": "turn", "top": "top - h", "steps": "steps", "soffit": 0.2,
                   "at": [[0, "h", "zt", "6 * 6.2831853 / n"]]},
-        # the platform: one bay a step round the newel, those over the last steps left open (the hatch they come up through)
-        "platform": {"type": "ring", "count": 15, "rOuter": "R - wall", "rInner": 0.22, "height": "slab", "y": "top - slab", "solid": True,
-                     "skip": "hatch", "place": [[0, 0, "zt", 0]]},
+        # the platform: a whole floor, its rim buried in the wall's thickness, with the well the spiral comes up through
+        "platform": {"type": "prism", "plan": {"sides": "2 * n", "radius": "R - wall / 2", "well": {"radius": "sr + 0.08"}}, "height": "slab",
+                     "at": [[0, "top - slab", "zt", 0]]},
         "merlons": {"type": "ring", "count": 16, "rOuter": "R", "rInner": "R - wall", "height": 0.9, "y": "top + 1.1", "place": [[0, 0, "zt", 0]],
                     "at": [0, 2, 4, 6, 8, 10, 12, 14], "solid": True},
         "room": {"type": "ring", "count": "n", "rOuter": "R", "rInner": "R - wall", "height": "roomH", "y": "top + 1.1", "place": [[0, 0, "zt", 0]],
@@ -529,14 +532,6 @@ def wall_tower():
         "bell": {"type": "dome", "sides": 12, "radius": "R + 0.35", "thickness": 0, "head": {"profile": "ogee", "neck": 0.9}, "at": [[0, "top + 1.1 + roomH", "zt", 0]]},
         "tent": {"type": "roof", "form": "pyramid", "width": "2 * R + 0.6", "length": "2 * R + 0.6", "pitch": 58, "at": [[0, "top + 1.1 + roomH", "zt", 0]]},
     }
-    # (which platform bays lie over the spiral's last 2.1m: the stair turns `turn` a step from bay 6 (of 12), the
-    #  platform has 15 bays of 24 degrees -- one per step)
-    import math
-    steps = round((10.6 - 6.0) / 0.19)
-    over = math.ceil((2.0 + 0.3) / ((10.6 - 6.0) / steps)) + 1
-    hatch = sorted({round(((6 * 30 + (k + 0.5) * 24) % 360) / 24) % 15 for k in range(steps - over, steps)})
-    params["hatch"] = 0
-    parts["platform"]["skip"] = hatch
     write("village/wall-tower", {"name": "Wall tower", "_about": "A ROUND WALL TOWER astride the town wall: solid up to the wall-walk, then a round stage entered from the walk that passes behind it (bay 6), a spiral up to a platform; its top the town's style -- merlons (open), or a room under a cone, an ogee bell or a pyramid.",
                                  "params": params, "parts": parts, "build": ["base", "stage", "walk door", "stair", "platform", "merlons"], "walked": True})
 
@@ -663,7 +658,8 @@ def fence_component():
         "rail low": {**box("L / round(L / bay)", 0.07, 0.09, ["L / round(L / bay) / 2", 0.46, 0, 0]), "repeat": {"count": "round(L / bay)", "step": ["L / round(L / bay)", 0, 0, 0]}, "when": {"style": "rails"}},
         "rail high": {**box("L / round(L / bay)", 0.07, 0.09, ["L / round(L / bay) / 2", "h - 0.2", 0, 0]), "repeat": {"count": "round(L / bay)", "step": ["L / round(L / bay)", 0, 0, 0]}, "when": {"style": "rails"}},
         "picket rails": {**box("L / round(L / bay)", 0.05, 0.07, [["L / round(L / bay) / 2", 0.3, 0, 0], ["L / round(L / bay) / 2", "h - 0.35", 0, 0]]), "repeat": {"count": "round(L / bay)", "step": ["L / round(L / bay)", 0, 0, 0]}, "when": {"style": "picket"}},
-        "pickets": {**box(0.07, 0.025, "h - 0.15", ["L / round(L / 0.16) / 2", 0.1, 0.04, 0]), "repeat": {"count": "round(L / 0.16)", "step": ["L / round(L / 0.16)", 0, 0, 0]}, "when": {"style": "picket"}},
+        "pickets": {**box(0.07, 0.025, "h - 0.15", ["L / round(L / 0.16) / 2", 0.1, 0.0325, 0]),   # (nailed to the rails: 5mm into their face, not 2.5mm off it)
+        "repeat": {"count": "round(L / 0.16)", "step": ["L / round(L / 0.16)", 0, 0, 0]}, "when": {"style": "picket"}},
         "wattle posts": {**col(0.06, "h - 0.05", [[0, 0, 0, 0]], sides=6), "repeat": {"count": "round(L / 1.2) + 1", "step": ["L / round(L / 1.2)", 0, 0, 0]}, "when": {"style": "wattle"}},
         "hurdles": {**box("L", 0.06, "h - 0.25", ["L / 2", 0.08, 0, 0]), "when": {"style": "wattle"}},
         "zig": {**box("bay / 0.9063 + 0.3", 0.1, 0.11, [["bay / 2", 0.25, 0, deg], ["bay / 2", 0.6, 0, deg], ["bay / 2", 0.95, 0, deg]]), "repeat": {"count": "ceil(round(L / bay) / 2)", "step": ["2 * bay", 0, 0, 0]}, "when": {"style": "zigzag"}},
@@ -710,7 +706,7 @@ def sheds():
         "house": {"type": "enclosure", "plan": {"rect": [hw, hd]}, "thickness": 0.04, "height": bh, "at": [[0, legH, 0, 0]], "openings": [],
                   "faces": {"2": [{"at": 0.4, "width": 0.36, "sill": 0.05, "springing": 0.47, "head": {"profile": "flat"}, "glass": False}]}},
         "roof": {"type": "roof", "form": "gable", "width": hd + 0.3, "length": hw + 0.3, "pitch": 30, "overhang": 0.1, "at": [[0, legH + bh, 0, PI2]], "_about": "(a roof's ridge runs along its `length`, its own z: turned so the ridge runs the house's long way, x)"},
-        "perch": box(hw - 0.2, 0.04, 0.04, [0, legH + 0.45, 0.2, 0]),
+        "perch": box(hw - 0.06, 0.04, 0.04, [0, legH + 0.45, 0.2, 0]),   # (its ends 1 cm into the end boards: it rests in them)
         # the hens' LADDER: a thin plank with cleats (a flight of little steps on a soffit), air under it, from the
         # ground up to the pop-hole's sill (yaw -pi/2: it climbs toward +z, its width toward +x of its placement)
         "ladder": {"type": "flight", "use": "ramp", "walk": False, "run": 0.22, "steps": 5, "base": 0, "top": legH + 0.1, "landing": 0, "width": 0.3, "soffit": 0.05,
@@ -732,11 +728,11 @@ def sheds():
         "stall posts": box(0.22, 0.22, bh, [[-bw / 2 + i * 3, 0, -(bd / 2 - 0.11), 0] for i in range(5)]),
         "half-doors": box(2.7, 0.08, 1.25, [[-bw / 2 + 1.5 + i * 3, 0, -(bd / 2 - 0.12), 0] for i in range(4)]),
         "partitions": box(0.08, bd - 0.5, bh - 0.3, [[-bw / 2 + 3 + i * 3, 0.15, 0.1, 0] for i in range(3)]),
-        "hay": {"type": "dome", "sweep": 1, "sides": 8, "radius": 0.5, "thickness": 0, "head": {"profile": "segmental", "rise": 0.35}, "at": [[-bw / 2 + 1.5 + i * 3, 0.7, -(bd / 2 - 1.0), 0] for i in range(4)],
-                "_about": "the hay showing over each half-door: a low dome"},
+        "hay": {"type": "dome", "sweep": 1, "sides": 8, "radius": 0.9, "thickness": 0, "head": {"profile": "pointed", "spread": 0.8}, "at": [[-bw / 2 + 1.5 + i * 3, 0.12, -(bd / 2 - 1.2), 0] for i in range(4)],
+                "_about": "a heap of hay on the floor of each stall, its top showing over the half-door (it was a cap of it hung in the air at the door's height)"},
         "trough": marker("trough", [-(bw / 2 + 1.8), 0, -(bd / 2 + 1.4), 0], fill=0.6, drink="water"),
-        "hitching rail": box(3.6, 0.1, 0.1, [0, 0.95, -(bd / 2 + 2.4), 0]),
         "hitching posts": box(0.12, 0.12, 1.1, [[-1.5, 0, -(bd / 2 + 2.4), 0], [1.5, 0, -(bd / 2 + 2.4), 0]]),
+        "hitching rail": box(3.6, 0.1, 0.1, [0, 0.95, -(bd / 2 + 2.4), 0]),
         "bales": {**col(0.6, 1.2, [[4.6, 0, -(bd / 2 + 1.6), 0], [5.9, 0, -(bd / 2 + 1.6), 0], [5.25, 1.2, -(bd / 2 + 1.6), 0]], sides=10)},
         "block": marker("block", [[0, 0, 0.15, 0], [-(bw / 2 + 1.8), 0, -(bd / 2 + 1.4), 0], [5.25, 0, -(bd / 2 + 1.6), 0]], w=[bw + 0.6, 2.8, 3.1], d=[bd + 0.3, 1.2, 1.6]),
     }
@@ -815,7 +811,7 @@ def apiary():
     parts = {"fence north": F([-5, 0, -4, 0], 10), "fence west": F([-5, 0, 4, PI2f], 8), "fence east": F([5, 0, -4, -PI2f], 8),
              "fence south west": F([-1, 0, 4, 3.14159265], 4), "fence south east": F([5, 0, 4, 3.14159265], 4),
              "skeps": {"type": "item", "item": "items/tools/skep", "at": [[round(-3.3 + k * 2.2, 2), 0, z, -PI2f] for z in (-2, 0.8) for k in range(4)]},
-             "bench": box(1.6, 0.4, 0.06, [3.2, 0.43, 2.9, 0]), "bench legs": box(0.08, 0.34, 0.43, [[2.55, 0, 2.9, 0], [3.85, 0, 2.9, 0]]),
+             "bench legs": box(0.08, 0.34, 0.43, [[2.55, 0, 2.9, 0], [3.85, 0, 2.9, 0]]), "bench": box(1.6, 0.4, 0.06, [3.2, 0.43, 2.9, 0]),
              "smoker": col(0.09, 0.22, [2.8, 0.49, 2.9, 0], sides=8), "comb frame": box(0.4, 0.03, 0.3, [3.5, 0.49, 2.9, 0]),
              "beekeeper": marker("spot", [-2.2, 0, -0.6, PI2f], pose="stand", work=1, gesture="tend")}
     write("village/apiary", {"name": "Beekeeper's garden", "_about": "THE BEEKEEPER'S GARDEN: a picket fence with a gap in front, eight skeps (items/tools/skep) in two rows, the bench with the smoker and a comb frame, the beekeeper's place among the hives",
@@ -879,7 +875,8 @@ def fountain():
              "small basin wall": ring8(0.96, 0.84, 0.3, y0 + 0.6), "small coping": ring8(1.02, 0.78, 0.08, y0 + 0.9),
              "bowl": col(0.38, 0.22, [0, y0 + 1.7, 0, 0.3926991], sides=8, taper=round(0.6 / 0.38, 4)), "brim": ring8(0.6, 0.52, 0.16, y0 + 1.92),
              "stem": col(0.12, 0.3, [0, y0 + 1.92, 0, 0], sides=8, taper=round(0.08 / 0.12, 4)),
-             "finial": {"type": "dome", "radius": 0.16, "sides": 8, "thickness": 0, "cap": False, "head": {"profile": "semicircular", "seg": 4}, "at": [[0, round(y0 + 2.22, 4), 0, 0]]},
+             # (closed underneath: the disc under it sits on the stem -- an open skin stood on its rim, round the stem, in the air)
+             "finial": {"type": "dome", "radius": 0.16, "sides": 8, "thickness": 0, "head": {"profile": "semicircular", "seg": 4}, "at": [[0, round(y0 + 2.22, 4), 0, 0]]},
              "spouts": box(0.45, 0.07, 0.07, [[round(0.45 * math.cos(k * math.pi / 2), 4), round(sy - 0.035, 4), round(0.45 * math.sin(k * math.pi / 2), 4), round(-k * math.pi / 2, 7)] for k in range(4)]),
              "pools": {"type": "marker", "role": "flow", "at": [[0, round(wy, 4), 0, 0]], "data": {"kind": "pool", "r": R, "seg": 8}},
              "small pool": {"type": "marker", "role": "flow", "at": [[0, round(my, 4), 0, 0]], "data": {"kind": "pool", "r": 0.8, "seg": 8}},

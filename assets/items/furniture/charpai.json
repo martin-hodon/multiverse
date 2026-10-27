@@ -1,0 +1,221 @@
+{
+ "kind": "item",
+ "name": "Charpai",
+ "category": "furniture/bed",
+ "era": "-500-1900",
+ "region": "India",
+ "_about": "the charpai, 'four feet': a frame of four rails on four turned legs, its bed a web of coir or jute rope -- slept on by night, sat on by day, carried out into the yard in the heat; a cotton quilt and a bolster on it",
+ "params": {
+  "l": 1.9,
+  "w": 0.9,
+  "h": 0.45
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "cedar",
+    "lacquer-red",
+    "oak"
+   ]
+  },
+  "rope": {
+   "pick": [
+    "hemp",
+    "rush"
+   ]
+  },
+  "quilt": {
+   "pick": [
+    "damask-red",
+    "linen",
+    "damask-blue"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "legs",
+   "type": "lathe",
+   "material": "wood",
+   "sides": 10,
+   "profile": [
+    [
+     0.001,
+     0
+    ],
+    [
+     0.032,
+     0
+    ],
+    [
+     0.04,
+     0.05
+    ],
+    [
+     0.03,
+     0.1
+    ],
+    [
+     0.045,
+     0.17
+    ],
+    [
+     0.03,
+     0.26
+    ],
+    [
+     0.036,
+     "h - 0.08"
+    ],
+    [
+     0.04,
+     "h"
+    ]
+   ],
+   "at": [
+    [
+     "0 - l / 2 + 0.04",
+     0,
+     "0 - w / 2 + 0.04"
+    ],
+    [
+     "0 - l / 2 + 0.04",
+     0,
+     "w / 2 - 0.04"
+    ],
+    [
+     "l / 2 - 0.04",
+     0,
+     "0 - w / 2 + 0.04"
+    ],
+    [
+     "l / 2 - 0.04",
+     0,
+     "w / 2 - 0.04"
+    ]
+   ]
+  },
+  {
+   "id": "side rails",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    "0 - l / 2 + 0.04",
+    "h - 0.06",
+    0
+   ],
+   "to": [
+    "l / 2 - 0.04",
+    "h - 0.06",
+    0
+   ],
+   "r": 0.03,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0,
+     "0 - w / 2 + 0.04"
+    ],
+    [
+     0,
+     0,
+     "w / 2 - 0.04"
+    ]
+   ]
+  },
+  {
+   "id": "end rails",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    "h - 0.06",
+    "0 - w / 2 + 0.04"
+   ],
+   "to": [
+    0,
+    "h - 0.06",
+    "w / 2 - 0.04"
+   ],
+   "r": 0.028,
+   "sides": 8,
+   "at": [
+    [
+     "0 - l / 2 + 0.04",
+     0,
+     0
+    ],
+    [
+     "l / 2 - 0.04",
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "web",
+   "type": "box",
+   "material": "rope",
+   "size": [
+    "l - 0.1",
+    0.02,
+    "w - 0.08"
+   ],
+   "at": [
+    0,
+    "h - 0.05",
+    0
+   ]
+  },
+  {
+   "id": "quilt",
+   "type": "box",
+   "material": "quilt",
+   "size": [
+    "l * 0.62",
+    0.04,
+    "w - 0.06"
+   ],
+   "round": 0.015,
+   "at": [
+    "l * 0.14",
+    "h - 0.02",
+    0
+   ]
+  },
+  {
+   "id": "bolster",
+   "type": "rod",
+   "material": "quilt",
+   "from": [
+    "0 - l / 2 + 0.18",
+    "h",
+    "0 - w / 2 + 0.1"
+   ],
+   "to": [
+    "0 - l / 2 + 0.18",
+    "h",
+    "w / 2 - 0.1"
+   ],
+   "r": 0.06,
+   "sides": 10
+  }
+ ],
+ "markers": [
+  {
+   "role": "bed",
+   "at": [
+    0,
+    0,
+    0,
+    90
+   ],
+   "data": {
+    "top": "h - 0.02",
+    "foot": "l / 2 + 0.35"
+   }
+  }
+ ]
+}

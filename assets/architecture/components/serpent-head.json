@@ -1,0 +1,29 @@
+{
+  "name": "Serpent head",
+  "_about": "THE FEATHERED SERPENT'S HEAD (Kukulcan, Quetzalcoatl), as the Maya-Toltec masons cut it at the foot of a balustrade or a serpent column: every piece from its width `W`. The SKULL behind, tall, with the plume collar standing up at its back; the two JAWS reaching forward from it, wedge-shaped in plan (narrowing to the snout), the MOUTH open between them, the upper jaw carried out from the skull over it; the fangs hanging from its front corners, the forked tongue lying out over the lower lip; the brow plates over the eyes at its sides and the curl on its nose. It faces +z, its foot at y 0, the back of its collar at z = -0.9 W.",
+  "params": {
+    "detail": 4,
+    "W": 1.2,
+    "jawH": "W * 0.3",
+    "mouth": "W * 0.3",
+    "_mouth": "how wide the jaws gape at the front",
+    "upperH": "W * 0.36",
+    "skullH": "jawH + mouth + upperH + W * 0.16"
+  },
+  "build": ["collar", "skull", "lower jaw", "tongue", "upper jaw", "fangs", "brows", "nose curl"],
+  "parts": {
+    "collar": { "type": "box", "width": "W * 1.4", "length": "W * 0.2", "height": "skullH * 1.25", "at": [[0, 0, "-W * 0.8", 0]],
+                "_about": "the ring of quetzal plumes standing up behind the head" },
+    "skull": { "type": "prism", "plan": { "rect": ["W * 1.05", "W * 0.8"], "chamfer": "W * 0.12" }, "height": "skullH", "at": [[0, 0, "-W * 0.3", 0]] },
+    "lower jaw": { "type": "prism", "plan": { "points": [["-W * 0.5", "-W * 0.05"], ["W * 0.5", "-W * 0.05"], ["W * 0.4", "W * 0.85"], ["-W * 0.4", "W * 0.85"]] },
+                   "height": "jawH", "at": [[0, 0, 0, 0]] },
+    "tongue": { "type": "box", "width": "W * 0.3", "length": "W * 0.55", "height": "W * 0.06", "at": [[0, "jawH", "W * 0.88", 0]],
+                "_about": "lying out over the lower lip, past it" },
+    "upper jaw": { "type": "prism", "plan": { "points": [["-W * 0.52", "-W * 0.05"], ["W * 0.52", "-W * 0.05"], ["W * 0.43", "W * 0.95"], ["-W * 0.43", "W * 0.95"]] },
+                   "height": "upperH", "at": [[0, "jawH + mouth", 0, 0]], "_about": "carried out from the skull over the open mouth" },
+    "fangs": { "type": "box", "width": "W * 0.1", "length": "W * 0.1", "height": "mouth * 0.6", "at": [["-W * 0.3", "jawH + mouth * 0.4", "W * 0.86", 0], ["W * 0.3", "jawH + mouth * 0.4", "W * 0.86", 0]] },
+    "brows": { "type": "box", "width": "W * 0.22", "length": "W * 0.5", "height": "W * 0.2",
+               "at": [["-W * 0.36", "jawH + mouth + upperH", "W * 0.15", 0], ["W * 0.36", "jawH + mouth + upperH", "W * 0.15", 0]], "_about": "the plates over the eyes" },
+    "nose curl": { "type": "box", "width": "W * 0.5", "length": "W * 0.16", "height": "W * 0.24", "at": [[0, "jawH + mouth + upperH", "W * 0.82", 0]] }
+  }
+}

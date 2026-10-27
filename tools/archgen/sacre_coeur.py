@@ -82,8 +82,11 @@ add("porch sides", {"type": "wall", "width": PD - 1.4, "height": PH, "thickness"
                     "openings": [{"at": (PD - 1.4) / 2, "width": 2.4, "sill": 0, "springing": 6.0, "head": {"profile": "semicircular"}}],
                     "at": [[sx * A + (1.4 if sx < 0 else 0), 0, PZ + (PD - 1.4) / 2, Q] for sx in (-1, 1)]})
 add("porch roof", {"type": "box", "width": C, "length": PD, "height": 0.6, "at": [[0, PH, PZ + PD / 2, 0]]})
-add("statues", {"type": "box", "width": 1.6, "length": 3.2, "height": 3.4, "at": [[sx * (A - 1.6), PH + 0.6, PZ + PD - 2.0, 0] for sx in (-1, 1)],
-                "_about": "the two equestrian saints over the porch (Joan of Arc and Saint Louis), as blocks"})
+for sx, saint in ((-1, {"kind": "woman", "seed": 12}), (1, {"kind": "man", "seed": 31})):
+    add("statue " + ("Joan" if sx < 0 else "Louis"), comp("components/pedestal", {"W": 1.6, "L": 2.0, "H": 2.2, "scale": 2.0, "stone": "bronze", "style": "gothic",
+                                                                          "holdR": "items/weapons/sword", **saint},
+                                                    [[sx * (A - 1.6), PH + 0.6, PZ + PD - 2.0, 0]],
+                                                    **({"_about": "the two saints over the porch, Joan of Arc and Saint Louis, in bronze on their pedestals"} if sx < 0 else {})))
 add("campanile", comp("components/domed-tower", {"sides": 4, "R": 5.5 * 1.4142, "H": 54.0, "t": 1.2, "drumR": 3.6, "drumH": 5.0, "cap": "onion",
                                                  "bulge": 1.05, "neck": 0.9, "capR": 4.0, "kok": 0.8, "finial": 4.0, "doorH": 4.0, "winW": 1.4, "glazed": 0},
                       [[0, 0, -A - CL - AR - T - 5.4, Q]], build=["tower", "drum", "cap", "finial"],

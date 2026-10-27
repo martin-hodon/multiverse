@@ -40,8 +40,9 @@
     "paired columns east",
     "attic",
     "pediment",
-    "statue pedestals",
-    "statues",
+    "statues 1",
+    "statues 2",
+    "statues 3",
     "south wing outer wall",
     "south wing end walls",
     "south wing roof",
@@ -259,6 +260,57 @@
           }
         ]
       },
+      "courses": {
+        "clear": {
+          "0": [
+            [
+              0,
+              12.7
+            ],
+            [
+              59.3,
+              72.0
+            ]
+          ],
+          "1": [
+            [
+              0,
+              12.7
+            ],
+            [
+              59.3,
+              72.0
+            ]
+          ],
+          "2": [
+            [
+              0,
+              12.7
+            ],
+            [
+              59.3,
+              72.0
+            ]
+          ],
+          "3": [
+            [
+              0,
+              12.7
+            ],
+            [
+              59.3,
+              72.0
+            ]
+          ]
+        }
+      },
+      "orders": [
+        {
+          "tier": 1,
+          "kind": "corinthian",
+          "ends": false
+        }
+      ],
       "at": [
         [
           0,
@@ -610,6 +662,16 @@
           }
         ]
       },
+      "courses": {
+        "strings": [
+          15,
+          30.4
+        ],
+        "skip": [
+          0,
+          1
+        ]
+      },
       "at": [
         [
           -29.799999999999997,
@@ -801,6 +863,16 @@
               }
             ]
           }
+        ]
+      },
+      "courses": {
+        "strings": [
+          15,
+          30.4
+        ],
+        "skip": [
+          1,
+          2
         ]
       },
       "at": [
@@ -996,6 +1068,16 @@
           }
         ]
       },
+      "courses": {
+        "strings": [
+          15,
+          30.4
+        ],
+        "skip": [
+          0,
+          3
+        ]
+      },
       "at": [
         [
           29.799999999999997,
@@ -1187,6 +1269,16 @@
               }
             ]
           }
+        ]
+      },
+      "courses": {
+        "strings": [
+          15,
+          30.4
+        ],
+        "skip": [
+          2,
+          3
         ]
       },
       "at": [
@@ -1499,11 +1591,18 @@
       ],
       "_about": "the pediment crowning the attic"
     },
-    "statue pedestals": {
-      "type": "box",
-      "width": 1.2,
-      "length": 1.2,
-      "height": 1.0,
+    "statues 1": {
+      "type": "component",
+      "use": "components/pedestal",
+      "params": {
+        "W": 1.0,
+        "L": 1.0,
+        "H": 1.2,
+        "scale": 1.5,
+        "stone": "limestone",
+        "style": "roman",
+        "seed": 21
+      },
       "at": [
         [
           -11.8,
@@ -1516,78 +1615,63 @@
           35.4,
           38.0,
           0
-        ],
-        [
-          -14.0,
-          35.4,
-          38.0,
-          0
-        ],
-        [
-          14.0,
-          35.4,
-          38.0,
-          0
-        ],
-        [
-          -10.4,
-          22.5,
-          41.17,
-          0
-        ],
-        [
-          10.4,
-          22.5,
-          41.17,
-          0
         ]
       ],
-      "_about": "pedestals on the attic and over each pair of columns"
+      "_about": "statues on pedestals, on the attic and over each pair of columns"
     },
-    "statues": {
-      "type": "column",
-      "radius": 0.35,
-      "height": 2.4,
-      "sides": 8,
+    "statues 2": {
+      "type": "component",
+      "use": "components/pedestal",
+      "params": {
+        "W": 1.0,
+        "L": 1.0,
+        "H": 1.2,
+        "scale": 1.5,
+        "stone": "limestone",
+        "style": "roman",
+        "seed": 34
+      },
       "at": [
         [
-          -11.8,
-          36.4,
-          38.0,
-          0
-        ],
-        [
-          11.8,
-          36.4,
-          38.0,
-          0
-        ],
-        [
           -14.0,
-          36.4,
+          35.4,
           38.0,
           0
         ],
         [
           14.0,
-          36.4,
+          35.4,
           38.0,
           0
-        ],
+        ]
+      ]
+    },
+    "statues 3": {
+      "type": "component",
+      "use": "components/pedestal",
+      "params": {
+        "W": 1.0,
+        "L": 1.0,
+        "H": 1.2,
+        "scale": 1.5,
+        "stone": "limestone",
+        "style": "roman",
+        "seed": 55
+      },
+      "at": [
         [
           -10.4,
-          23.5,
+          22.5,
           41.17,
           0
         ],
         [
           10.4,
-          23.5,
+          22.5,
           41.17,
           0
         ]
-      ],
-      "_about": "the statues"
+      ]
     },
     "south wing outer wall": {
       "type": "wall",

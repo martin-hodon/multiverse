@@ -6,8 +6,8 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from notre_dame import gothic, NOTRE_DAME
 P = {**NOTRE_DAME, "bays": 11, "bayLen": 7.6, "naveW": 14.0, "aisleW": 12.0, "pierT": 1.6, "aisleT": 1.6,
-     "spring": 9.0, "arcadeH": 21.0, "clearH": 31.0, "aisleRise": 4.0, "frontH": 55.0, "towerW": 14.4, "towerH": 45.0, "roofPitch": 55,
-     "ridge": "(naveW / 2 + pierT + 0.3) * 1.4281", "towerBays": 3}
+     "spring": 9.0, "arcadeH": 21.0, "clearH": 31.0, "frontH": 55.0, "towerW": 14.4, "towerH": 45.0, "roofPitch": 55,
+     "towerBays": 2, "crossA": 5, "clerSpring": 6.0, "flyerStages": 2, "portalGables": True}
 # the octagon nearly the tower's width (the stair turret stands inside it), its spire as wide: 100m of square
 # tower, 15m of octagon, a 40m spire -- 157m
 spire = {"sides": 8, "R": 6.8, "H": 15, "t": 0.7, "cap": "trigonal", "capRise": 40, "capR": 6.9, "drumR": 6.4, "drumH": 2.4,

@@ -30,8 +30,8 @@
     "winW": 4.0,
     "winSill": 8.0,
     "bodyW": "naveW + 2 * pierT + 2 * aisleW + 2 * aisleT",
-    "halfB": "naveW / 2 + pierT / 2",
-    "halfA": "naveW / 2 + pierT + aisleW + aisleT / 2",
+    "halfB": "naveW / 2 + pierT",
+    "halfA": "naveW / 2 + pierT + aisleW + aisleT",
     "quarter": 1.5707963,
     "zc": "(2 * octR * 0.92388 + tribR * 1.3 + tribT - pierT) / 2",
     "_zc": "the church is set out from the middle of its NAVE, but its mass runs far further east (the crossing and the three tribunes) than west (the facade): zc slides the whole of it forward so the model stands in the middle of the ground its site takes -- what the world flattens and keeps clear of trees is a box about that middle",
@@ -97,13 +97,13 @@
     "frontC": "naveW + 2 * pierT",
     "frontWing": "(bodyW - frontC) / 2",
     "roseY": "crown + 4.0",
-    "roseW": 7.5,
+    "roseW": 8.0,
     "_campX": "Giotto's tower stands clear of the church, twenty metres off its south-west corner",
     "roofZ0": "zc + naveL / 2 + pierT",
     "roofZ1": "octZ + octR * 0.92388",
     "roofL": "roofZ0 - roofZ1",
-    "aisleRoofIn": "naveW / 2 + pierT + 0.35",
-    "aisleRoofOut": "bodyW / 2 + 0.3",
+    "aisleRoofIn": "naveW / 2 + pierT",
+    "aisleRoofOut": "bodyW / 2 - 0.05",
     "_roofZ0": "the nave's roof runs from the facade to the crossing's own wall",
     "tribD": "(octR + octT) * 0.92388",
     "_tribD": "a tribune's centre, out from the crossing's: on the octagon's outer face (the game reads it too)",
@@ -148,7 +148,7 @@
     "clerestory": {
       "type": "wall",
       "width": "naveL",
-      "height": "clearH - arcadeH",
+      "height": "naveTop - arcadeH",
       "thickness": "pierT",
       "openings": {
         "pattern": "bays",
@@ -300,6 +300,11 @@
           "head": {
             "profile": "arch",
             "spread": "arcSpread"
+          },
+          "wimperg": {
+            "pitch": 55,
+            "coping": 0.6,
+            "depth": 0.45
           }
         }
       ],
@@ -320,7 +325,7 @@
       "height": "crossH",
       "opening": {
         "width": "octFlat * 0.42",
-        "springing": "crossH * 0.45",
+        "springing": "crossH * 0.4",
         "head": {
           "profile": "arch",
           "spread": "arcSpread"
@@ -340,7 +345,8 @@
         4,
         6
       ],
-      "_about": "the crossing's octagon, on its four OPEN sides: the nave to the front and a tribune on each of the other three. The four between them are solid piers (below) -- eight great arches would leave the dome standing on nothing but air."
+      "_about": "the crossing's octagon, on its four OPEN sides: the nave to the front and a tribune on each of the other three. The four between them are solid piers (below) -- eight great arches would leave the dome standing on nothing but air.",
+      "polygon": true
     },
     "drum": {
       "type": "ring",
@@ -371,7 +377,8 @@
       "_about": "the drum, an eight-sided ring with a great round window -- an oculus -- in every face",
       "skip": [
         1
-      ]
+      ],
+      "polygon": true
     },
     "dome": {
       "type": "dome",
@@ -435,12 +442,14 @@
       "rInner": "tribR",
       "height": "tribH",
       "opening": {
-        "width": "tribOpenW",
-        "springing": "tribH * 0.42",
+        "width": 2.4,
+        "sill": "tribH * 0.5 + 1.0",
+        "springing": "tribH * 0.77",
         "head": {
-          "profile": "arch",
-          "spread": "arcSpread"
-        }
+          "profile": "pointed",
+          "spread": 1.0
+        },
+        "tracery": true
       },
       "skip": [
         0,
@@ -468,7 +477,9 @@
           "octZ",
           "quarter"
         ]
-      ]
+      ],
+      "polygon": true,
+      "_about": "the three tribunes round the octagon, chapels lit by a tall traceried lancet in each outer face"
     },
     "campanile": {
       "type": "wall",
@@ -485,7 +496,8 @@
           "head": {
             "profile": "arch",
             "spread": "arcSpread"
-          }
+          },
+          "glass": false
         }
       ],
       "at": [
@@ -629,7 +641,8 @@
           "head": {
             "profile": "arch",
             "spread": "arcSpread"
-          }
+          },
+          "glass": false
         }
       ],
       "at": [
@@ -657,7 +670,7 @@
       "type": "ring",
       "count": 10,
       "rOuter": "tribR + tribT + 0.5",
-      "rInner": "tribR - 1.5",
+      "rInner": "tribR",
       "height": 1.6,
       "y": "tribH",
       "solid": true,
@@ -688,7 +701,8 @@
         2,
         8,
         9
-      ]
+      ],
+      "polygon": true
     },
     "west rose": {
       "type": "wall",
@@ -699,11 +713,15 @@
         {
           "at": "frontC / 2",
           "width": "roseW",
-          "sill": 1.6,
-          "springing": "1.6 + roseW / 2",
+          "sill": 8.5,
+          "springing": 8.5,
           "head": {
             "profile": "semicircular"
-          }
+          },
+          "foot": {
+            "profile": "semicircular"
+          },
+          "tracery": true
         }
       ],
       "at": [
@@ -730,6 +748,11 @@
           "head": {
             "profile": "arch",
             "spread": "arcSpread"
+          },
+          "wimperg": {
+            "pitch": 55,
+            "coping": 0.45,
+            "depth": 0.4
           }
         }
       ],
@@ -800,19 +823,20 @@
           "octZ",
           0
         ]
-      ]
+      ],
+      "polygon": true
     },
     "nave roof": {
       "type": "roof",
       "form": "gable",
       "width": "naveW + 2 * pierT + 0.6",
-      "length": "roofL",
+      "length": "roofL - pierT",
       "pitch": 23.2,
       "at": [
         [
           0,
           "naveTop",
-          "(roofZ0 + roofZ1) / 2",
+          "(roofZ0 - pierT + roofZ1) / 2",
           0
         ]
       ],
@@ -843,9 +867,10 @@
     "tribune roofs": {
       "type": "dome",
       "sweep": 0.5,
-      "sides": 20,
+      "sides": 10,
       "radius": "tribR + tribT + 0.4",
       "thickness": 0,
+      "cap": false,
       "head": {
         "profile": "trigonal",
         "rise": 8.5
@@ -870,7 +895,7 @@
           "(quarter) + 3.14159265"
         ]
       ],
-      "_about": "a half cone over each tribune: a dome skin of sweep 0.5, its open side against the octagon"
+      "_about": "a half pyramid over each tribune, on its five faces: a dome skin of sweep 0.5, its cut against the octagon"
     },
     "tribune morte": {
       "type": "component",
@@ -1012,9 +1037,12 @@
       "_about": "the lantern's eight buttresses, each a strut on a rampant arch leaning in to one of its corners: its foot on the dome where it stands (`atopR`), its head 2.5m higher up the lantern, which stands on the oculus"
     },
     "tribune spandrels right": {
-      "flatRoof": true,
       "type": "prism",
-      "height": "tribH + 1.6",
+      "height": "tribH + 1.6 + 8.5",
+      "slope": [
+        "-1 * 8.5 / (tribR + tribT + 0.4)",
+        0
+      ],
       "plan": {
         "points": [
           [
@@ -1051,12 +1079,15 @@
           "quarter"
         ]
       ],
-      "_about": "the wedge between a tribune's end and the octagon's diagonal face, filled to the terrace"
+      "_about": "the wedge between a tribune's end and the octagon's diagonal face, built up to the tribune roof's line: the roof's cut, past the octagon's face, rests against it"
     },
     "tribune spandrels left": {
-      "flatRoof": true,
       "type": "prism",
-      "height": "tribH + 1.6",
+      "height": "tribH + 1.6 + 8.5",
+      "slope": [
+        "1 * 8.5 / (tribR + tribT + 0.4)",
+        0
+      ],
       "plan": {
         "points": [
           [
@@ -1093,9 +1124,10 @@
           "quarter"
         ]
       ],
-      "_about": "the wedge between a tribune's end and the octagon's diagonal face, filled to the terrace"
+      "_about": "the wedge between a tribune's end and the octagon's diagonal face, built up to the tribune roof's line: the roof's cut, past the octagon's face, rests against it"
     },
     "campanile terrace": {
+      "walked": true,
       "type": "box",
       "width": "campIn",
       "length": "campIn - campStairW",
@@ -1239,39 +1271,9 @@
       ],
       "_about": "the spiral inside the hollow pier, from the crossing's floor to the shaft's upper floor"
     },
-    "shaft floor east": {
-      "type": "box",
-      "width": 8.2,
-      "length": "octT - 1.0",
-      "height": 0.3,
-      "at": [
-        [
-          "((octR + octT / 2) * 0.92388) * 0.707107 + (1 * 5.75) * 0.707107",
-          "drumTop - 2.5",
-          "octZ + ((octR + octT / 2) * 0.92388) * 0.707107 - (1 * 5.75) * 0.707107",
-          0.785398
-        ]
-      ],
-      "_about": "the floor at the top of the shaft, beside the spiral"
-    },
-    "shaft floor west": {
-      "type": "box",
-      "width": 8.2,
-      "length": "octT - 1.0",
-      "height": 0.3,
-      "at": [
-        [
-          "((octR + octT / 2) * 0.92388) * 0.707107 + (-1 * 5.75) * 0.707107",
-          "drumTop - 2.5",
-          "octZ + ((octR + octT / 2) * 0.92388) * 0.707107 - (-1 * 5.75) * 0.707107",
-          0.785398
-        ]
-      ],
-      "_about": "the floor at the top of the shaft, beside the spiral"
-    },
     "shell flight": {
       "type": "flight",
-      "width": 0.9,
+      "width": 1.2,
       "run": 0.28,
       "rise": 0.18,
       "base": "drumTop - 2.2",
@@ -1279,9 +1281,9 @@
       "landing": 0.8,
       "at": [
         [
-          "(((octR + octT - outerT) + (octR + octT - outerT - shellGap)) / 2 * 0.92388 + 0.5) * 0.707107 + (2.3) * 0.707107",
+          "(((octR + octT - outerT) + (octR + octT - outerT - shellGap)) / 2 * 0.92388 + 0.5) * 0.707107 + (2.75) * 0.707107",
           0,
-          "octZ + (((octR + octT - outerT) + (octR + octT - outerT - shellGap)) / 2 * 0.92388 + 0.5) * 0.707107 - (2.3) * 0.707107",
+          "octZ + (((octR + octT - outerT) + (octR + octT - outerT - shellGap)) / 2 * 0.92388 + 0.5) * 0.707107 - (2.75) * 0.707107",
           0.785398
         ]
       ],
@@ -1296,68 +1298,24 @@
         },
         "radius": "octR + octT",
         "inset": "outerT + 0.35",
-        "insetTop": "outerT + 1.9",
-        "width": 0.9,
+        "insetTop": "outerT + 1.85",
+        "width": 1.15,
         "sides": 8
       },
       "top": "domeRise * 0.8",
       "run": 0.3,
       "rise": 0.19,
       "soffit": 0.2,
+      "landing": 8.0,
       "at": [
         [
           0,
           "drumTop",
           "octZ",
-          1.031798
+          1.049798
         ]
       ],
-      "_about": "between the shells, on the inner one's back: its outer edge follows the outer shell's inner face a handspan off, so it draws in as the dome does"
-    },
-    "campanile stair": {
-      "type": "staircase",
-      "rise": "campStorey / 84",
-      "run": "(campIn - 2 * campStairW) / 21",
-      "soffit": 0.3,
-      "flight": 21,
-      "width": "campStairW",
-      "landing": {
-        "depth": "campStairW",
-        "width": "campStairW"
-      },
-      "times": 20,
-      "from": "right",
-      "at": "campStairW / 2",
-      "place": [
-        [
-          "campX + campIn / 2 - campStairW / 2",
-          0,
-          "campZ - campIn / 2 + campStairW",
-          -1.5707963
-        ]
-      ],
-      "_about": "four flights a storey round the well on corner landings, five storeys, 420 steps to the terrace"
-    },
-    "campanile cornice": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          "campW + 1.4",
-          "campW + 1.4"
-        ]
-      },
-      "thickness": 2.6,
-      "height": 0.9,
-      "openings": [],
-      "at": [
-        [
-          "campX",
-          "campH",
-          "campZ",
-          0
-        ]
-      ],
-      "_about": "the cornice and parapet round the terrace"
+      "_about": "between the shells, on the inner one's back: its outer edge follows the outer shell's inner face a handspan off, so it draws in as the dome does; it arrives on a landing that runs on to the octagon's corner, where the gallery begins"
     },
     "pavement": {
       "type": "box",
@@ -1384,7 +1342,7 @@
           0,
           0,
           "octZ",
-          0
+          0.392699
         ]
       ],
       "walked": true
@@ -1433,18 +1391,18 @@
     },
     "green band flank 1": {
       "type": "box",
-      "width": "aisleT + 0.12",
+      "width": 0.1,
       "length": "roofL",
       "height": 0.5,
       "at": [
         [
-          "bodyW / 2 + 0.06",
+          "halfA + 0.01",
           "(winSill - 1.2) - 0.25",
           "(roofZ0 + roofZ1) / 2",
           0
         ],
         [
-          "0 - bodyW / 2 - 0.06",
+          "0 - halfA - 0.01",
           "(winSill - 1.2) - 0.25",
           "(roofZ0 + roofZ1) / 2",
           0
@@ -1453,18 +1411,18 @@
     },
     "green band flank 2": {
       "type": "box",
-      "width": "aisleT + 0.12",
+      "width": 0.1,
       "length": "roofL",
       "height": 0.55,
       "at": [
         [
-          "bodyW / 2 + 0.06",
+          "halfA + 0.01",
           "(aisleTop + 0.6) - 0.275",
           "(roofZ0 + roofZ1) / 2",
           0
         ],
         [
-          "0 - bodyW / 2 - 0.06",
+          "0 - halfA - 0.01",
           "(aisleTop + 0.6) - 0.275",
           "(roofZ0 + roofZ1) / 2",
           0
@@ -1473,99 +1431,35 @@
     },
     "red band flank 1": {
       "type": "box",
-      "width": "aisleT + 0.12",
+      "width": 0.1,
       "length": "roofL",
       "height": 0.22,
       "at": [
         [
-          "bodyW / 2 + 0.06",
+          "halfA + 0.01",
           "(winSill - 0.5) - 0.11",
           "(roofZ0 + roofZ1) / 2",
           0
         ],
         [
-          "0 - bodyW / 2 - 0.06",
+          "0 - halfA - 0.01",
           "(winSill - 0.5) - 0.11",
           "(roofZ0 + roofZ1) / 2",
           0
         ]
       ]
     },
-    "green band facade 1": {
-      "type": "box",
-      "width": "bodyW + 0.12",
-      "length": "pierT + 0.12",
-      "height": 0.5,
-      "at": [
-        [
-          0,
-          "(winSill - 1.2) - 0.25",
-          "zc + naveL / 2 + pierT",
-          0
-        ]
-      ]
-    },
-    "green band facade 2": {
-      "type": "box",
-      "width": "bodyW + 0.12",
-      "length": "pierT + 0.12",
-      "height": 0.5,
-      "at": [
-        [
-          0,
-          "(aisleTop + 1.4) - 0.25",
-          "zc + naveL / 2 + pierT",
-          0
-        ]
-      ]
-    },
-    "green band front 1": {
-      "type": "box",
-      "width": "frontC + 0.12",
-      "length": "pierT + 0.12",
-      "height": 0.5,
-      "at": [
-        [
-          0,
-          "(roseY - 0.8) - 0.25",
-          "zc + naveL / 2 + pierT",
-          0
-        ]
-      ]
-    },
-    "red band facade 1": {
-      "type": "box",
-      "width": "bodyW + 0.12",
-      "length": "pierT + 0.12",
-      "height": 0.22,
-      "at": [
-        [
-          0,
-          "(winSill - 0.5) - 0.11",
-          "zc + naveL / 2 + pierT",
-          0
-        ]
-      ]
-    },
-    "red band front 1": {
-      "type": "box",
-      "width": "frontC + 0.12",
-      "length": "pierT + 0.12",
-      "height": 0.45,
-      "at": [
-        [
-          0,
-          "(roseY + roseW + 2.4) - 0.225",
-          "zc + naveL / 2 + pierT",
-          0
-        ]
-      ]
-    },
     "green band tower 1": {
-      "type": "box",
-      "width": "campW + 0.12",
-      "length": "campW + 0.12",
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW - campT + 0.12",
+          "campW - campT + 0.12"
+        ]
+      },
+      "thickness": 0.1,
       "height": 0.45,
+      "openings": [],
       "at": [
         [
           "campX",
@@ -1576,10 +1470,16 @@
       ]
     },
     "red band tower 2": {
-      "type": "box",
-      "width": "campW + 0.12",
-      "length": "campW + 0.12",
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW - campT + 0.12",
+          "campW - campT + 0.12"
+        ]
+      },
+      "thickness": 0.1,
       "height": 0.45,
+      "openings": [],
       "at": [
         [
           "campX",
@@ -1590,10 +1490,16 @@
       ]
     },
     "green band tower 3": {
-      "type": "box",
-      "width": "campW + 0.12",
-      "length": "campW + 0.12",
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW - campT + 0.12",
+          "campW - campT + 0.12"
+        ]
+      },
+      "thickness": 0.1,
       "height": 0.45,
+      "openings": [],
       "at": [
         [
           "campX",
@@ -1604,10 +1510,16 @@
       ]
     },
     "red band tower 4": {
-      "type": "box",
-      "width": "campW + 0.12",
-      "length": "campW + 0.12",
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW - campT + 0.12",
+          "campW - campT + 0.12"
+        ]
+      },
+      "thickness": 0.1,
       "height": 0.45,
+      "openings": [],
       "at": [
         [
           "campX",
@@ -1619,11 +1531,12 @@
     },
     "green band octagon 1": {
       "type": "ring",
-      "count": 24,
-      "rOuter": "octR + octT + 0.14",
-      "rInner": "octR + octT + 0.06",
+      "count": 8,
+      "polygon": true,
+      "rOuter": "octR + octT + 0.0866",
+      "rInner": "octR + octT + -0.0433",
       "height": 0.7,
-      "y": "(crossH * 0.55) - 0.35",
+      "y": "(tribH + 11) - 0.35",
       "solid": true,
       "place": [
         [
@@ -1632,13 +1545,17 @@
           "octZ",
           0
         ]
+      ],
+      "skip": [
+        0
       ]
     },
     "red band octagon 2": {
       "type": "ring",
-      "count": 24,
-      "rOuter": "octR + octT + 0.14",
-      "rInner": "octR + octT + 0.06",
+      "count": 8,
+      "polygon": true,
+      "rOuter": "octR + octT + 0.0866",
+      "rInner": "octR + octT + -0.0433",
       "height": 0.45,
       "y": "(crossH - 1.6) - 0.225",
       "solid": true,
@@ -1649,13 +1566,17 @@
           "octZ",
           0
         ]
+      ],
+      "skip": [
+        0
       ]
     },
     "green band octagon 3": {
       "type": "ring",
-      "count": 24,
-      "rOuter": "octR + octT + 0.14",
-      "rInner": "octR + octT + 0.06",
+      "count": 8,
+      "polygon": true,
+      "rOuter": "octR + octT + 0.0866",
+      "rInner": "octR + octT + -0.0433",
       "height": 0.6,
       "y": "(crossH + 1.0) - 0.3",
       "solid": true,
@@ -1670,9 +1591,10 @@
     },
     "red band octagon 4": {
       "type": "ring",
-      "count": 24,
-      "rOuter": "octR + octT + 0.14",
-      "rInner": "octR + octT + 0.06",
+      "count": 8,
+      "polygon": true,
+      "rOuter": "octR + octT + 0.0866",
+      "rInner": "octR + octT + -0.0433",
       "height": 0.7,
       "y": "(drumTop - 1.4) - 0.35",
       "solid": true,
@@ -1688,8 +1610,9 @@
     "green band tribunes 1": {
       "type": "ring",
       "count": 10,
-      "rOuter": "tribR + tribT + 0.14",
-      "rInner": "tribR + tribT + 0.06",
+      "polygon": true,
+      "rOuter": "tribR + tribT + 0.0841",
+      "rInner": "tribR + tribT + -0.0421",
       "height": 0.55,
       "y": "(tribH * 0.5) - 0.275",
       "solid": true,
@@ -1724,8 +1647,9 @@
     "red band tribunes 2": {
       "type": "ring",
       "count": 10,
-      "rOuter": "tribR + tribT + 0.14",
-      "rInner": "tribR + tribT + 0.06",
+      "polygon": true,
+      "rOuter": "tribR + tribT + 0.0841",
+      "rInner": "tribR + tribT + -0.0421",
       "height": 0.4,
       "y": "(tribH - 1.2) - 0.2",
       "solid": true,
@@ -1772,16 +1696,631 @@
         ]
       ],
       "_about": "the congregation: pews down the nave on a middle aisle, facing the crossing (-z) -- clear of the arcade's piers, which stand 0.6 m into the nave"
+    },
+    "dome gallery": {
+      "walked": true,
+      "type": "ring",
+      "count": 8,
+      "solid": true,
+      "height": 0.3,
+      "y": "domeRise * 0.8 - 0.3",
+      "rOuter": "sqrt(((octR + octT) * (1 + domeSpread) - outerT) * ((octR + octT) * (1 + domeSpread) - outerT) - (domeRise * 0.8) * (domeRise * 0.8)) - (octR + octT) * domeSpread",
+      "rInner": "sqrt(((octR + octT - outerT - shellGap) * (1 + domeSpread)) * ((octR + octT - outerT - shellGap) * (1 + domeSpread)) - (domeRise * 0.8) * (domeRise * 0.8)) - (octR + octT - outerT - shellGap) * domeSpread",
+      "at": [
+        5,
+        6,
+        7,
+        0
+      ],
+      "place": [
+        [
+          0,
+          "drumTop",
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the walk between the shells the dome stair arrives on"
+    },
+    "shaft floor": {
+      "walked": true,
+      "type": "prism",
+      "plan": {
+        "rect": [
+          19.7,
+          "octT - 1.0"
+        ],
+        "well": {
+          "radius": 1.4
+        }
+      },
+      "height": 0.3,
+      "at": [
+        [
+          "((octR + octT / 2) * 0.92388) * 0.707107 + (0) * 0.707107",
+          "drumTop - 2.5",
+          "octZ + ((octR + octT / 2) * 0.92388) * 0.707107 - (0) * 0.707107",
+          0.785398
+        ]
+      ],
+      "_about": "the floor at the top of the shaft, the spiral coming up through its well"
+    },
+    "tribune vaults": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 10,
+      "radius": "tribR + 1.2",
+      "thickness": 1.2,
+      "head": {
+        "profile": "segmental",
+        "rise": 6.5
+      },
+      "at": [
+        [
+          0,
+          "tribH",
+          "octZ - tribD",
+          "(0) + 3.14159265"
+        ],
+        [
+          "tribD",
+          "tribH",
+          "octZ",
+          "(0 - quarter) + 3.14159265"
+        ],
+        [
+          "0 - tribD",
+          "tribH",
+          "octZ",
+          "(quarter) + 3.14159265"
+        ]
+      ],
+      "_about": "the half dome over each tribune, under its roof"
+    },
+    "west gable": {
+      "type": "roof",
+      "form": "gable",
+      "width": "frontC + 1.0",
+      "length": "pierT",
+      "pitch": 32,
+      "at": [
+        [
+          0,
+          "naveTop",
+          "zc + naveL / 2 + pierT / 2",
+          0
+        ]
+      ],
+      "_about": "the nave front's gable, on the facade's own thickness: steeper and higher than the roof behind it, a screen"
+    },
+    "tribune chapels": {
+      "type": "box",
+      "width": 0.9,
+      "length": 4.0,
+      "height": 11.5,
+      "at": [
+        [
+          "0 + (tribR - 1.9) * 0.809017 * 1.000000 + (tribR - 1.9) * -0.587785 * 0.000000",
+          0,
+          "octZ - tribD - (tribR - 1.9) * 0.809017 * 0.000000 + (tribR - 1.9) * -0.587785 * 1.000000",
+          2.199115
+        ],
+        [
+          "0 + (tribR - 1.9) * 0.309017 * 1.000000 + (tribR - 1.9) * -0.951057 * 0.000000",
+          0,
+          "octZ - tribD - (tribR - 1.9) * 0.309017 * 0.000000 + (tribR - 1.9) * -0.951057 * 1.000000",
+          2.827433
+        ],
+        [
+          "0 + (tribR - 1.9) * -0.309017 * 1.000000 + (tribR - 1.9) * -0.951057 * 0.000000",
+          0,
+          "octZ - tribD - (tribR - 1.9) * -0.309017 * 0.000000 + (tribR - 1.9) * -0.951057 * 1.000000",
+          3.455752
+        ],
+        [
+          "0 + (tribR - 1.9) * -0.809017 * 1.000000 + (tribR - 1.9) * -0.587785 * 0.000000",
+          0,
+          "octZ - tribD - (tribR - 1.9) * -0.809017 * 0.000000 + (tribR - 1.9) * -0.587785 * 1.000000",
+          4.08407
+        ],
+        [
+          "tribD + (tribR - 1.9) * 0.809017 * 0.000000 + (tribR - 1.9) * -0.587785 * -1.000000",
+          0,
+          "octZ - (tribR - 1.9) * 0.809017 * -1.000000 + (tribR - 1.9) * -0.587785 * 0.000000",
+          0.628319
+        ],
+        [
+          "tribD + (tribR - 1.9) * 0.309017 * 0.000000 + (tribR - 1.9) * -0.951057 * -1.000000",
+          0,
+          "octZ - (tribR - 1.9) * 0.309017 * -1.000000 + (tribR - 1.9) * -0.951057 * 0.000000",
+          1.256637
+        ],
+        [
+          "tribD + (tribR - 1.9) * -0.309017 * 0.000000 + (tribR - 1.9) * -0.951057 * -1.000000",
+          0,
+          "octZ - (tribR - 1.9) * -0.309017 * -1.000000 + (tribR - 1.9) * -0.951057 * 0.000000",
+          1.884956
+        ],
+        [
+          "tribD + (tribR - 1.9) * -0.809017 * 0.000000 + (tribR - 1.9) * -0.587785 * -1.000000",
+          0,
+          "octZ - (tribR - 1.9) * -0.809017 * -1.000000 + (tribR - 1.9) * -0.587785 * 0.000000",
+          2.513274
+        ],
+        [
+          "0 - tribD + (tribR - 1.9) * 0.809017 * 0.000000 + (tribR - 1.9) * -0.587785 * 1.000000",
+          0,
+          "octZ - (tribR - 1.9) * 0.809017 * 1.000000 + (tribR - 1.9) * -0.587785 * 0.000000",
+          3.769911
+        ],
+        [
+          "0 - tribD + (tribR - 1.9) * 0.309017 * 0.000000 + (tribR - 1.9) * -0.951057 * 1.000000",
+          0,
+          "octZ - (tribR - 1.9) * 0.309017 * 1.000000 + (tribR - 1.9) * -0.951057 * 0.000000",
+          4.39823
+        ],
+        [
+          "0 - tribD + (tribR - 1.9) * -0.309017 * 0.000000 + (tribR - 1.9) * -0.951057 * 1.000000",
+          0,
+          "octZ - (tribR - 1.9) * -0.309017 * 1.000000 + (tribR - 1.9) * -0.951057 * 0.000000",
+          5.026548
+        ],
+        [
+          "0 - tribD + (tribR - 1.9) * -0.809017 * 0.000000 + (tribR - 1.9) * -0.587785 * 1.000000",
+          0,
+          "octZ - (tribR - 1.9) * -0.809017 * 1.000000 + (tribR - 1.9) * -0.587785 * 0.000000",
+          5.654867
+        ]
+      ],
+      "_about": "the spur walls between a tribune's five chapels, from its corners in"
+    },
+    "chapel steps": {
+      "type": "box",
+      "width": 4.0,
+      "length": 2.3,
+      "height": 0.15,
+      "at": [
+        [
+          "0 + (tribR * 0.95106 - 1.15) * 0.587785 * 1.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 0.000000",
+          0.3,
+          "octZ - tribD - (tribR * 0.95106 - 1.15) * 0.587785 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 1.000000",
+          2.513274
+        ],
+        [
+          "0 + (tribR * 0.95106 - 1.15) * 0.000000 * 1.000000 + (tribR * 0.95106 - 1.15) * -1.000000 * 0.000000",
+          0.3,
+          "octZ - tribD - (tribR * 0.95106 - 1.15) * 0.000000 * 0.000000 + (tribR * 0.95106 - 1.15) * -1.000000 * 1.000000",
+          3.141593
+        ],
+        [
+          "0 + (tribR * 0.95106 - 1.15) * -0.587785 * 1.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 0.000000",
+          0.3,
+          "octZ - tribD - (tribR * 0.95106 - 1.15) * -0.587785 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 1.000000",
+          3.769911
+        ],
+        [
+          "0 + (tribR * 0.95106 - 1.15) * -0.951057 * 1.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 0.000000",
+          0.3,
+          "octZ - tribD - (tribR * 0.95106 - 1.15) * -0.951057 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 1.000000",
+          4.39823
+        ],
+        [
+          "0 + (tribR * 0.95106 - 1.15) * 0.951057 * 1.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 0.000000",
+          0.3,
+          "octZ - tribD - (tribR * 0.95106 - 1.15) * 0.951057 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 1.000000",
+          1.884956
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 1.15) * 0.587785 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * -1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * 0.587785 * -1.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 0.000000",
+          0.942478
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 1.15) * 0.000000 * 0.000000 + (tribR * 0.95106 - 1.15) * -1.000000 * -1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * 0.000000 * -1.000000 + (tribR * 0.95106 - 1.15) * -1.000000 * 0.000000",
+          1.570796
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 1.15) * -0.587785 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * -1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * -0.587785 * -1.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 0.000000",
+          2.199115
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 1.15) * -0.951057 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * -1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * -0.951057 * -1.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 0.000000",
+          2.827433
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 1.15) * 0.951057 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * -1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * 0.951057 * -1.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 0.000000",
+          0.314159
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 1.15) * 0.587785 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * 0.587785 * 1.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 0.000000",
+          4.08407
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 1.15) * 0.000000 * 0.000000 + (tribR * 0.95106 - 1.15) * -1.000000 * 1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * 0.000000 * 1.000000 + (tribR * 0.95106 - 1.15) * -1.000000 * 0.000000",
+          4.712389
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 1.15) * -0.587785 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * -0.587785 * 1.000000 + (tribR * 0.95106 - 1.15) * -0.809017 * 0.000000",
+          5.340708
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 1.15) * -0.951057 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * -0.951057 * 1.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 0.000000",
+          5.969026
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 1.15) * 0.951057 * 0.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 1.000000",
+          0.3,
+          "octZ - (tribR * 0.95106 - 1.15) * 0.951057 * 1.000000 + (tribR * 0.95106 - 1.15) * -0.309017 * 0.000000",
+          3.455752
+        ]
+      ],
+      "walked": true
+    },
+    "chapel altars": {
+      "type": "box",
+      "width": 2.4,
+      "length": 1.0,
+      "height": 1.0,
+      "at": [
+        [
+          "0 + (tribR * 0.95106 - 0.6) * 0.587785 * 1.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 0.000000",
+          0.45,
+          "octZ - tribD - (tribR * 0.95106 - 0.6) * 0.587785 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 1.000000",
+          2.513274
+        ],
+        [
+          "0 + (tribR * 0.95106 - 0.6) * 0.000000 * 1.000000 + (tribR * 0.95106 - 0.6) * -1.000000 * 0.000000",
+          0.45,
+          "octZ - tribD - (tribR * 0.95106 - 0.6) * 0.000000 * 0.000000 + (tribR * 0.95106 - 0.6) * -1.000000 * 1.000000",
+          3.141593
+        ],
+        [
+          "0 + (tribR * 0.95106 - 0.6) * -0.587785 * 1.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 0.000000",
+          0.45,
+          "octZ - tribD - (tribR * 0.95106 - 0.6) * -0.587785 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 1.000000",
+          3.769911
+        ],
+        [
+          "0 + (tribR * 0.95106 - 0.6) * -0.951057 * 1.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 0.000000",
+          0.45,
+          "octZ - tribD - (tribR * 0.95106 - 0.6) * -0.951057 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 1.000000",
+          4.39823
+        ],
+        [
+          "0 + (tribR * 0.95106 - 0.6) * 0.951057 * 1.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 0.000000",
+          0.45,
+          "octZ - tribD - (tribR * 0.95106 - 0.6) * 0.951057 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 1.000000",
+          1.884956
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 0.6) * 0.587785 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * -1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * 0.587785 * -1.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 0.000000",
+          0.942478
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 0.6) * 0.000000 * 0.000000 + (tribR * 0.95106 - 0.6) * -1.000000 * -1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * 0.000000 * -1.000000 + (tribR * 0.95106 - 0.6) * -1.000000 * 0.000000",
+          1.570796
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 0.6) * -0.587785 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * -1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * -0.587785 * -1.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 0.000000",
+          2.199115
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 0.6) * -0.951057 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * -1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * -0.951057 * -1.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 0.000000",
+          2.827433
+        ],
+        [
+          "tribD + (tribR * 0.95106 - 0.6) * 0.951057 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * -1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * 0.951057 * -1.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 0.000000",
+          0.314159
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 0.6) * 0.587785 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * 0.587785 * 1.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 0.000000",
+          4.08407
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 0.6) * 0.000000 * 0.000000 + (tribR * 0.95106 - 0.6) * -1.000000 * 1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * 0.000000 * 1.000000 + (tribR * 0.95106 - 0.6) * -1.000000 * 0.000000",
+          4.712389
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 0.6) * -0.587785 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * -0.587785 * 1.000000 + (tribR * 0.95106 - 0.6) * -0.809017 * 0.000000",
+          5.340708
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 0.6) * -0.951057 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * -0.951057 * 1.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 0.000000",
+          5.969026
+        ],
+        [
+          "0 - tribD + (tribR * 0.95106 - 0.6) * 0.951057 * 0.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 1.000000",
+          0.45,
+          "octZ - (tribR * 0.95106 - 0.6) * 0.951057 * 1.000000 + (tribR * 0.95106 - 0.6) * -0.309017 * 0.000000",
+          3.455752
+        ]
+      ],
+      "_about": "an altar in each chapel, against the face under its window"
+    },
+    "aisle wall east": {
+      "type": "wall",
+      "width": 9.1,
+      "height": "aisleTop + 1.5",
+      "thickness": "aisleT",
+      "openings": [],
+      "at": [
+        [
+          "halfA",
+          0,
+          "zc - naveL / 2 - 4.55",
+          "quarter"
+        ],
+        [
+          "0 - halfA",
+          0,
+          "zc - naveL / 2 - 4.55",
+          "0 - quarter"
+        ]
+      ],
+      "_about": "the flank walls' last stretch, from the nave's end to the octagon's diagonal face (buried in it at their inner corner)"
+    },
+    "aisle end roofs": {
+      "type": "roof",
+      "form": "shed",
+      "width": "aisleRoofOut - aisleRoofIn",
+      "length": 1.85,
+      "pitch": 5.5,
+      "at": [
+        [
+          "0 - (aisleRoofIn + aisleRoofOut) / 2",
+          "aisleTop - 0.4",
+          "zc - naveL / 2 - 0.9",
+          0
+        ],
+        [
+          "(aisleRoofIn + aisleRoofOut) / 2",
+          "aisleTop - 0.4",
+          "zc - naveL / 2 - 0.9",
+          3.14159265
+        ]
+      ],
+      "_about": "each aisle's lean-to carried on past the nave's end to the aisle's east wall, closing the slot between them"
+    },
+    "campanile stair": {
+      "type": "staircase",
+      "rise": "(campH - 0.3) / 420",
+      "run": "(campIn - 2 * campStairW) / 21",
+      "soffit": 0.3,
+      "flight": 21,
+      "width": "campStairW",
+      "landing": {
+        "depth": "campStairW",
+        "width": "campStairW"
+      },
+      "times": 20,
+      "from": "right",
+      "at": "campStairW / 2",
+      "place": [
+        [
+          "campX + campIn / 2 - campStairW / 2",
+          0.3,
+          "campZ - campIn / 2 + campStairW",
+          -1.5707963
+        ]
+      ],
+      "_about": "four flights a storey round the well on corner landings, five storeys, 420 steps to the terrace"
+    },
+    "campanile cornice": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW + 1.4",
+          "campW + 1.4"
+        ]
+      },
+      "thickness": 2.6,
+      "height": 0.9,
+      "openings": [],
+      "at": [
+        [
+          "campX",
+          "campH",
+          "campZ",
+          0
+        ]
+      ],
+      "_about": "the cornice and parapet round the terrace"
+    },
+    "inner dome back": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "octR + octT - outerT - shellGap + 0.02",
+      "thickness": 0.02,
+      "oculus": "lanternR",
+      "head": {
+        "profile": "pointed",
+        "spread": "domeSpread"
+      },
+      "at": [
+        [
+          0,
+          "drumTop",
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the inner shell's BACK, a skin over it: bare brick and plaster where the stair climbs, not the fresco of its soffit"
+    },
+    "green band facade 1 1": {
+      "type": "box",
+      "width": 2.91,
+      "length": 0.1,
+      "height": 0.5,
+      "at": [
+        [
+          -22.655,
+          "(winSill - 1.2) - 0.25",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ],
+        [
+          22.655,
+          "(winSill - 1.2) - 0.25",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ]
+      ]
+    },
+    "green band facade 1 2": {
+      "type": "box",
+      "width": 10.2,
+      "length": 0.1,
+      "height": 0.5,
+      "at": [
+        [
+          -10.5,
+          "(winSill - 1.2) - 0.25",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ],
+        [
+          10.5,
+          "(winSill - 1.2) - 0.25",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ]
+      ]
+    },
+    "red band facade 1 1": {
+      "type": "box",
+      "width": 2.91,
+      "length": 0.1,
+      "height": 0.22,
+      "at": [
+        [
+          -22.655,
+          "(winSill - 0.5) - 0.11",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ],
+        [
+          22.655,
+          "(winSill - 0.5) - 0.11",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ]
+      ]
+    },
+    "red band facade 1 2": {
+      "type": "box",
+      "width": 10.2,
+      "length": 0.1,
+      "height": 0.22,
+      "at": [
+        [
+          -10.5,
+          "(winSill - 0.5) - 0.11",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ],
+        [
+          10.5,
+          "(winSill - 0.5) - 0.11",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ]
+      ]
+    },
+    "green band facade 2": {
+      "type": "box",
+      "width": 11.36,
+      "length": 0.1,
+      "height": 0.5,
+      "at": [
+        [
+          -18.43,
+          "(aisleTop + 1.4) - 0.25",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ],
+        [
+          18.43,
+          "(aisleTop + 1.4) - 0.25",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ]
+      ]
+    },
+    "green band front 1": {
+      "type": "box",
+      "width": 25.62,
+      "length": 0.1,
+      "height": 0.5,
+      "at": [
+        [
+          0.0,
+          "(roseY - 0.8) - 0.25",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ]
+      ]
+    },
+    "red band front 1": {
+      "type": "box",
+      "width": 25.62,
+      "length": 0.1,
+      "height": 0.45,
+      "at": [
+        [
+          0.0,
+          "(naveTop - 1.2) - 0.225",
+          "zc + naveL / 2 + pierT + 0.01",
+          0
+        ]
+      ]
     }
   },
   "build": [
     "nave arcade",
     "clerestory",
     "aisle wall",
+    "aisle wall east",
     "nave vault",
     "aisle vault",
     "nave roof",
+    "west gable",
     "aisle roofs",
+    "aisle end roofs",
     "west front",
     "west rose",
     "west wing",
@@ -1795,22 +2334,27 @@
     "drum shaft outer",
     "shaft ends",
     "pier stair",
-    "shaft floor west",
+    "shaft floor",
     "shell flight",
     "dome stair",
-    "shaft floor east",
     "tribune morte",
     "dome",
     "inner dome",
+    "dome gallery",
+    "inner dome back",
     "dome ribs",
     "lantern",
     "lantern roof",
     "lantern ball",
     "lantern buttresses",
     "tribune",
+    "tribune chapels",
+    "chapel steps",
+    "chapel altars",
     "tribune roof",
     "tribune spandrels left",
     "tribune spandrels right",
+    "tribune vaults",
     "tribune roofs",
     "campanile base",
     "campanile base wall",
@@ -1825,11 +2369,6 @@
     "green band flank 1",
     "green band flank 2",
     "red band flank 1",
-    "green band facade 1",
-    "green band facade 2",
-    "green band front 1",
-    "red band facade 1",
-    "red band front 1",
     "green band tower 1",
     "red band tower 2",
     "green band tower 3",
@@ -1840,7 +2379,14 @@
     "red band octagon 4",
     "green band tribunes 1",
     "red band tribunes 2",
-    "seating"
+    "seating",
+    "green band facade 1 1",
+    "green band facade 1 2",
+    "red band facade 1 1",
+    "red band facade 1 2",
+    "green band facade 2",
+    "green band front 1",
+    "red band front 1"
   ],
   "base": {
     "height": 0.6,

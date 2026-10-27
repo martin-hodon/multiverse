@@ -87,6 +87,19 @@ export const PROFILES = {
   // two straight chamfers to a point: the trigonal head. `rise` is the apex height.
   trigonal: (a, p) => pin([[-a, 0], [0, p.rise ?? a], [a, 0]], a),
 
+  // THE CORBEL VAULT (the Maya "false arch"): no voussoirs, each course laid a little further in than the one under it
+  // until the two sides come near enough for a CAPSTONE (`cap`, its half-width; a quarter metre or so) to close the
+  // gap -- straight soffits leaning in at `slope` degrees from the horizontal (70: Chichen Itza's), and `steps` courses
+  // if the stair of the corbelling is left showing (0: the soffit dressed smooth, as plaster finished it). The span it can
+  // close is what limits a Maya room's width.
+  corbel: (a, p) => {
+    const cap = Math.min(p.cap ?? .15, a * .5), rise = (a - cap) * Math.tan((p.slope ?? 70) * Math.PI / 180), n = Math.round(p.steps ?? 0);
+    if (!n) return pin([[-a, 0], [-cap, rise], [cap, rise], [a, 0]], a);
+    const left = [[-a, 0]];
+    for (let k = 1; k <= n; k++) { const x = -a + (a - cap) * k / n, y = rise * k / n; left.push([left[left.length - 1][0], y], [x, y]); }
+    return pin([...left, ...left.slice().reverse().map(([x, y]) => [-x, y])], a);
+  },
+
   // a square head, so a window needs no special case elsewhere
   flat: (a) => pin([[-a, 0], [a, 0]], a),
 

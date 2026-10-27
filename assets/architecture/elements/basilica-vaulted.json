@@ -1,0 +1,24 @@
+{
+  "name": "Vaulted basilica",
+  "_about": "A GOTHIC CHURCH AS ITS SKELETON (arch/gothic.js): the plan is two lines -- the arcade and the aisle wall -- running down the bays and on round a half polygon apse, and everything else follows from them: a compound pier at every arcade node with a shaft for each arch and rib that lands on it, arches with level crowns (the hemicycle's narrow bays steeper), a rib vault over every bay of the nave, the apse, the aisles and the ambulatory, a buttress at every node of the aisle wall with a flyer over the aisle roof to where the high vault's thrust comes out, and the roofs on the same lines.",
+  "params": {
+    "detail": 4,
+    "bays": 7,
+    "bayLen": 6.5,
+    "naveW": 12,
+    "aisleW": 8,
+    "apse": 5,
+    "spring": 8,
+    "transept": 3,
+    "arm": 4
+  },
+  "build": ["church"],
+  "parts": {
+    "church": {
+      "type": "basilica",
+      "bays": "bays", "bayLen": "bayLen", "naveW": "naveW", "aisleW": "aisleW", "apse": "apse", "spring": "spring",
+      "transept": ["transept", "transept + 1"], "arm": "arm",
+      "place": [[0, 0, 0, 0]]
+    }
+  }
+}

@@ -31,7 +31,8 @@
     "porch front",
     "porch sides",
     "porch roof",
-    "statues",
+    "statue Joan",
+    "statue Louis",
     "campanile"
   ],
   "parts": {
@@ -632,26 +633,52 @@
         ]
       ]
     },
-    "statues": {
-      "type": "box",
-      "width": 1.6,
-      "length": 3.2,
-      "height": 3.4,
+    "statue Joan": {
+      "type": "component",
+      "use": "components/pedestal",
+      "params": {
+        "W": 1.6,
+        "L": 2.0,
+        "H": 2.2,
+        "scale": 2.0,
+        "stone": "bronze",
+        "style": "gothic",
+        "holdR": "items/weapons/sword",
+        "kind": "woman",
+        "seed": 12
+      },
       "at": [
         [
           -9.4,
           13.6,
           42.0,
           0
-        ],
+        ]
+      ],
+      "_about": "the two saints over the porch, Joan of Arc and Saint Louis, in bronze on their pedestals"
+    },
+    "statue Louis": {
+      "type": "component",
+      "use": "components/pedestal",
+      "params": {
+        "W": 1.6,
+        "L": 2.0,
+        "H": 2.2,
+        "scale": 2.0,
+        "stone": "bronze",
+        "style": "gothic",
+        "holdR": "items/weapons/sword",
+        "kind": "man",
+        "seed": 31
+      },
+      "at": [
         [
           9.4,
           13.6,
           42.0,
           0
         ]
-      ],
-      "_about": "the two equestrian saints over the porch (Joan of Arc and Saint Louis), as blocks"
+      ]
     },
     "campanile": {
       "type": "component",

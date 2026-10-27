@@ -1,0 +1,147 @@
+{
+ "kind": "item",
+ "name": "Divan",
+ "category": "furniture/seat",
+ "era": "800-1900",
+ "region": "Middle East",
+ "_about": "the divan of a Muslim house: a low platform along the wall, a long cushion on it, bolsters against the wall behind -- the room's seat by day, and a bed by night; sat on cross-legged or with the feet down, the back to the wall (+z its front)",
+ "params": {
+  "L": [
+   1.8,
+   2.4
+  ],
+  "d": 0.8,
+  "h": 0.36
+ },
+ "materials": {
+  "base": {
+   "pick": [
+    "walnut",
+    "cedar",
+    "planks"
+   ]
+  },
+  "cushion": {
+   "pick": [
+    "damask-red",
+    "brocade",
+    "damask-blue",
+    "velvet-red",
+    "wool"
+   ]
+  },
+  "bolster": {
+   "pick": [
+    "brocade",
+    "damask-green",
+    "velvet-green",
+    "damask-red"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "box",
+   "material": "base",
+   "size": [
+    "L",
+    "h - 0.12",
+    "d"
+   ],
+   "round": 0.01,
+   "at": [
+    0,
+    "(h - 0.12) / 2",
+    0
+   ]
+  },
+  {
+   "id": "cushion",
+   "type": "box",
+   "material": "cushion",
+   "size": [
+    "L - 0.02",
+    0.12,
+    "d - 0.02"
+   ],
+   "round": 0.04,
+   "at": [
+    0,
+    "h - 0.06",
+    0
+   ]
+  },
+  {
+   "id": "bolsters",
+   "type": "box",
+   "material": "bolster",
+   "size": [
+    "L / 3 - 0.04",
+    0.4,
+    0.18
+   ],
+   "round": 0.07,
+   "at": [
+    [
+     "0 - L / 3",
+     "h + 0.18",
+     "0 - d / 2 + 0.1",
+     0,
+     -12,
+     0
+    ],
+    [
+     0,
+     "h + 0.18",
+     "0 - d / 2 + 0.1",
+     0,
+     -12,
+     0
+    ],
+    [
+     "L / 3",
+     "h + 0.18",
+     "0 - d / 2 + 0.1",
+     0,
+     -12,
+     0
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": "L",
+    "d": "d",
+    "top": "h"
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     "0 - L / 4",
+     "h",
+     "d / 2 - 0.2"
+    ],
+    [
+     "L / 4",
+     "h",
+     "d / 2 - 0.2"
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5707963
+   }
+  }
+ ]
+}

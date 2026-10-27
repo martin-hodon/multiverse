@@ -55,11 +55,14 @@ def parapet(name, a, b, c, y, along="x", about=None, inner=None):
                             "standsOn": [name]})
 
 # ---- the lower hall and its arcade
+# (every opening dressed the Romanesque way -- surround.js: recessed orders, nook shafts, cushion capitals, imposts --
+#  the arcades in one order or two, sharing their piers; the end doors as portals in three)
+PORTAL = {"surround": {"style": "romanesque", "orders": 3}}
 NL, WL = 36, 2.8
 add("lower hall", {"type": "enclosure", "glass": False, "plan": {"rect": [LL, DL]}, "thickness": TLW, "height": HL,
                    "faces": {"0": {"pattern": str(NL), "width": WL, "gap": r4((LL - 2 - NL * WL) / NL), "pier": r4((LL - 2 - NL * WL) / NL),
-                                   "sill": 0, "springing": r4(HL - WL / 2 - 0.9), "head": {"profile": "semicircular"}},
-                             "1": [{"at": 0, **arch(3.0, 0), "springing": 3.2}], "3": [{"at": 0, **arch(3.0, 0), "springing": 3.2}],
+                                   "sill": 0, "springing": r4(HL - WL / 2 - 0.9), "head": {"profile": "semicircular"}, "surround": {"style": "romanesque", "orders": 1}},
+                             "1": [{"at": 0, **arch(3.0, 0), "springing": 3.2, **PORTAL}], "3": [{"at": 0, **arch(3.0, 0), "springing": 3.2, **PORTAL}],
                              "2": []},
                    "at": [[0, 0, ZL, 0]],
                    "_about": "the lower hall: a long open arcade of round arches on slender piers toward the river, a door at each end, the back closed against the hill"})
@@ -77,8 +80,8 @@ NU, WU = 34, 2.4
 gapU = r4((LU - 2 - NU * WU) / NU)
 spU = r4(HU - WU / 2 - 0.8)
 add("upper gallery", {"type": "enclosure", "glass": False, "plan": {"rect": [LU, DU]}, "thickness": TUW, "height": HU,
-                      "faces": {"0": {"pattern": str(NU), "width": WU, "gap": gapU, "pier": gapU, "sill": 0, "springing": spU, "head": {"profile": "semicircular"}},
-                                "2": {"pattern": str(NU), "width": WU, "gap": gapU, "pier": gapU, "sill": 1.0, "springing": spU, "head": {"profile": "semicircular"}},
+                      "faces": {"0": {"pattern": str(NU), "width": WU, "gap": gapU, "pier": gapU, "sill": 0, "springing": spU, "head": {"profile": "semicircular"}, "surround": {"style": "romanesque", "orders": 1}},
+                                "2": {"pattern": str(NU), "width": WU, "gap": gapU, "pier": gapU, "sill": 1.0, "springing": spU, "head": {"profile": "semicircular"}, "surround": {"style": "romanesque", "orders": 1}},
                                 "1": [], "3": []},
                       "at": [[0, TL, ZU, 0]], "standsOn": ["lower terrace"],
                       "_about": "the upper gallery on the terrace: the arcaded walk, open to the view, windows over the drop behind"})

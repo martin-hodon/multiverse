@@ -271,16 +271,19 @@ PROPS["furniture/plain-chair"] = item("Chair (plain)", "furniture/seat", "a plai
     {}, {**W_, **CL_}, [box("seat", "cloth", [0.46, 0.07, 0.46], [0, 0.46, 0]), box("back", "wood", [0.46, 0.55, 0.07], [0, 0.77, -0.2]),
                         box("legs", "wood", [0.05, 0.44, 0.05], [[a * 0.19, 0.22, b * 0.19] for a in (-1, 1) for b in (-1, 1)])],
     markers=[{"role": "seat", "at": [0, 0, 0], "data": {"w": 0.46, "d": 0.46, "top": 0.495}}])
-PROPS["furniture/plain-wardrobe"] = item("Wardrobe (plain)", "furniture/storage", "a tall plain wardrobe with a crown moulding and a gilt line where its doors meet (+z)",
+PROPS["furniture/plain-wardrobe"] = item("Wardrobe (plain)", "furniture/storage", "a tall plain wardrobe on four block feet, with a crown moulding and a gilt line where its doors meet (+z)",
     {}, {**W_, **GD_}, [box("body", "wood", [1.6, 2.3, 0.65], [0, 1.25, 0]), box("crown", "wood", [1.72, 0.14, 0.74], [0, 2.46, 0]),
-                        box("doors", "gold", [0.04, 1.9, 0.06], [0, 1.2, 0.34])])
+                        box("doors", "gold", [0.04, 1.9, 0.06], [0, 1.2, 0.34]),
+                        box("feet", "wood", [0.12, 0.11, 0.12], [[a * 0.72, 0.055, b * 0.24] for a in (-1, 1) for b in (-1, 1)])])
 PROPS["furniture/plain-bed"] = item("Bed (plain)", "furniture/bed", "a plain bed: frame, mattress, a headboard at -z and a bolster",
     {}, {**W_, "bedding": "linen"}, [box("frame", "wood", [1.7, 0.35, 2.15], [0, 0.3, 0]), box("mattress", "bedding", [1.6, 0.22, 2.05], [0, 0.58, 0]),
-                                     box("headboard", "wood", [1.7, 1.0, 0.09], [0, 0.8, -1.05]), box("bolster", "bedding", [1.2, 0.16, 0.5], [0, 0.74, -0.7])],
+                                     box("headboard", "wood", [1.7, 1.0, 0.09], [0, 0.8, -1.05]), box("bolster", "bedding", [1.2, 0.16, 0.5], [0, 0.74, -0.7]),
+                                     box("legs", "wood", [0.09, 0.135, 0.09], [[a * 0.79, 0.0675, b * 1.0] for a in (-1, 1) for b in (-1, 1)])],
     markers=[{"role": "lie", "at": [0, 0, 0], "data": {"w": 1.6, "d": 2.05, "top": 0.69}}])
-PROPS["furniture/sofa"] = item("Sofa", "furniture/seat", "an upholstered sofa (a canape) with its back toward -z and two arms",
-    {}, dict(CL_), [box("seat", "cloth", [2.1, 0.42, 0.85], [0, 0.35, 0]), box("back", "cloth", [2.1, 0.55, 0.18], [0, 0.82, -0.33]),
-                    box("arms", "cloth", [0.18, 0.38, 0.85], [[-0.96, 0.73, 0], [0.96, 0.73, 0]])],
+PROPS["furniture/sofa"] = item("Sofa", "furniture/seat", "an upholstered sofa (a canape) on four gilt legs, with its back toward -z and two arms",
+    {}, {**CL_, **GD_}, [box("seat", "cloth", [2.1, 0.42, 0.85], [0, 0.35, 0]), box("back", "cloth", [2.1, 0.55, 0.18], [0, 0.82, -0.33]),
+                    box("arms", "cloth", [0.18, 0.38, 0.85], [[-0.96, 0.73, 0], [0.96, 0.73, 0]]),
+                    box("legs", "gold", [0.06, 0.15, 0.06], [[a * 0.98, 0.075, b * 0.36] for a in (-1, 1) for b in (-1, 1)])],
     markers=[{"role": "seat", "at": [0, 0, 0], "data": {"w": 2.1, "d": 0.85, "top": 0.56}}], era="1650-1900")
 PROPS["furniture/chandelier"] = item("Chandelier", "furniture/light", "a gilt chandelier hanging 1.5 m below its origin (the ceiling): the rod, the bowl, its ring, the drop",
     {}, dict(GD_), [rod("rod", "gold", 0.035, [0, 0, 0], [0, -1.0, 0], 6),

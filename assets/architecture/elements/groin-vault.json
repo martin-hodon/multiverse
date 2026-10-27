@@ -9,8 +9,8 @@
     "top": 10.6
   },
   "build": [
-    "vault",
-    "pier"
+    "pier",
+    "vault"
   ],
   "_build": "which parts to build, and in what order (a caller may ask for a few of them: the village takes a cathedral's arcades from a definition whose walls it builds itself)",
   "parts": {
@@ -34,10 +34,10 @@
       ]
     },
     "pier": {
-      "type": "column",
-      "radius": 0.55,
+      "type": "box",
+      "width": 1.8,
+      "length": 1.8,
       "height": "springing",
-      "sides": 8,
       "at": [
         [
           "0 - width / 2",
@@ -63,7 +63,8 @@
           "length / 2",
           0
         ]
-      ]
+      ],
+      "_about": "square piers, one under each corner: a groin vault gathers its push to its corners, and the pier's half beyond the corner (0.9m, more than a tenth of the span) takes it"
     }
   }
 }

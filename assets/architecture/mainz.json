@@ -30,9 +30,6 @@
     "east tower roof",
     "east tower finial",
     "east apse",
-    "east apse gallery",
-    "east apse conch",
-    "east apse roof",
     "south stair tower",
     "north stair tower",
     "aisle east walls",
@@ -45,17 +42,8 @@
     "west choir vault",
     "west choir roofs",
     "west apse",
-    "west apse gallery",
-    "west apse conch",
-    "west apse roof",
     "north apse",
-    "north apse gallery",
-    "north apse conch",
-    "north apse roof",
     "south apse",
-    "south apse gallery",
-    "south apse conch",
-    "south apse roof",
     "west crossing floor",
     "west tower 1",
     "west tower 1 head",
@@ -99,7 +87,8 @@
         "winSill": 5.0,
         "clearWinW": 2.0,
         "clearSill": 2.2,
-        "clearSpring": 5.0
+        "clearSpring": 5.0,
+        "lombard": 1
       },
       "at": [
         [
@@ -404,7 +393,16 @@
             "springing": 3.6,
             "head": {
               "profile": "semicircular"
+            },
+            "surround": {
+              "style": "romanesque",
+              "orders": 1
             }
+          },
+          "lombard": {
+            "arch": 0.8,
+            "bay": 6.0,
+            "lesene": 0.7
           }
         }
       ],
@@ -496,22 +494,24 @@
       ]
     },
     "east apse": {
-      "type": "ring",
-      "count": 16,
-      "turn": 0.5,
+      "type": "component",
+      "use": "components/gallery-apse",
+      "params": {
+        "R": 8.6,
+        "T": 1.8,
+        "spring": 20.0,
+        "conchT": 1.0,
+        "arcT": 0.5,
+        "pass": 0.8,
+        "galH": 3.6,
+        "roofRise": 4.4,
+        "winW": 2.0,
+        "winSill": 5.0,
+        "winSpring": 11.0,
+        "galW": 0.9,
+        "galSill": 1.2
+      },
       "at": [
-        0,
-        1,
-        2,
-        3,
-        12,
-        13,
-        14,
-        15
-      ],
-      "rOuter": 8.6,
-      "rInner": 6.8,
-      "place": [
         [
           0,
           0,
@@ -519,97 +519,7 @@
           3.141592653589793
         ]
       ],
-      "height": 20.0,
-      "opening": {
-        "width": 2.0,
-        "sill": 5.0,
-        "springing": 11.0,
-        "head": {
-          "profile": "semicircular"
-        }
-      },
       "_about": "the east apse: round-arched windows, a dwarf gallery under the eaves, the stone conch inside and a half cone over it"
-    },
-    "east apse gallery": {
-      "type": "ring",
-      "count": 32,
-      "turn": 0.5,
-      "at": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31
-      ],
-      "rOuter": 8.6,
-      "rInner": 6.8,
-      "place": [
-        [
-          0,
-          0,
-          -44.2,
-          3.141592653589793
-        ]
-      ],
-      "y": 20.0,
-      "height": 5.5,
-      "glass": false,
-      "opening": {
-        "width": 0.9,
-        "sill": 1.2,
-        "springing": 3.4,
-        "head": {
-          "profile": "semicircular"
-        }
-      }
-    },
-    "east apse conch": {
-      "type": "dome",
-      "sweep": 0.5,
-      "sides": 16,
-      "radius": 8.6,
-      "thickness": 1.8,
-      "head": {
-        "profile": "semicircular"
-      },
-      "at": [
-        [
-          0,
-          20.0,
-          -44.2,
-          3.141592653589793
-        ]
-      ]
-    },
-    "east apse roof": {
-      "type": "dome",
-      "sweep": 0.5,
-      "sides": 16,
-      "radius": 8.9,
-      "thickness": 0,
-      "head": {
-        "profile": "trigonal",
-        "rise": 5.5
-      },
-      "at": [
-        [
-          0,
-          25.5,
-          -44.2,
-          3.141592653589793
-        ]
-      ]
     },
     "south stair tower": {
       "type": "component",
@@ -849,9 +759,18 @@
                 "springing": 5.2,
                 "head": {
                   "profile": "semicircular"
+                },
+                "surround": {
+                  "style": "romanesque",
+                  "orders": 3
                 }
               }
-            ]
+            ],
+            "lombard": {
+              "arch": 0.8,
+              "bay": 6.0,
+              "lesene": 0.7
+            }
           },
           {
             "openings": [
@@ -867,7 +786,12 @@
                   "profile": "semicircular"
                 }
               }
-            ]
+            ],
+            "lombard": {
+              "arch": 0.8,
+              "bay": 6.0,
+              "lesene": 0.7
+            }
           }
         ]
       },
@@ -906,6 +830,9 @@
       "width": 17.8,
       "length": 15.0,
       "pitch": 45,
+      "frieze": {
+        "arch": 0.8
+      },
       "at": [
         [
           16.1,
@@ -1009,22 +936,24 @@
       "_about": "two gables crossing over the choir bay, one over each pair of its apses"
     },
     "west apse": {
-      "type": "ring",
-      "count": 16,
-      "turn": 0.5,
+      "type": "component",
+      "use": "components/gallery-apse",
+      "params": {
+        "R": 8.6,
+        "T": 1.8,
+        "spring": 20.0,
+        "conchT": 1.0,
+        "arcT": 0.5,
+        "pass": 0.8,
+        "galH": 3.6,
+        "roofRise": 4.4,
+        "winW": 2.0,
+        "winSill": 5.0,
+        "winSpring": 11.0,
+        "galW": 0.9,
+        "galSill": 1.2
+      },
       "at": [
-        0,
-        1,
-        2,
-        3,
-        12,
-        13,
-        14,
-        15
-      ],
-      "rOuter": 8.6,
-      "rInner": 6.8,
-      "place": [
         [
           0,
           0,
@@ -1032,115 +961,27 @@
           0.0
         ]
       ],
-      "height": 20.0,
-      "opening": {
-        "width": 2.0,
-        "sill": 5.0,
-        "springing": 11.0,
-        "head": {
-          "profile": "semicircular"
-        }
-      },
       "_about": "the trefoil's three apses: the west one..."
     },
-    "west apse gallery": {
-      "type": "ring",
-      "count": 32,
-      "turn": 0.5,
-      "at": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31
-      ],
-      "rOuter": 8.6,
-      "rInner": 6.8,
-      "place": [
-        [
-          0,
-          0,
-          61.4,
-          0.0
-        ]
-      ],
-      "y": 20.0,
-      "height": 5.5,
-      "glass": false,
-      "opening": {
-        "width": 0.9,
-        "sill": 1.2,
-        "springing": 3.4,
-        "head": {
-          "profile": "semicircular"
-        }
-      }
-    },
-    "west apse conch": {
-      "type": "dome",
-      "sweep": 0.5,
-      "sides": 16,
-      "radius": 8.6,
-      "thickness": 1.8,
-      "head": {
-        "profile": "semicircular"
-      },
-      "at": [
-        [
-          0,
-          20.0,
-          61.4,
-          0.0
-        ]
-      ]
-    },
-    "west apse roof": {
-      "type": "dome",
-      "sweep": 0.5,
-      "sides": 16,
-      "radius": 8.9,
-      "thickness": 0,
-      "head": {
-        "profile": "trigonal",
-        "rise": 5.5
-      },
-      "at": [
-        [
-          0,
-          25.5,
-          61.4,
-          0.0
-        ]
-      ]
-    },
     "north apse": {
-      "type": "ring",
-      "count": 16,
-      "turn": 0.5,
+      "type": "component",
+      "use": "components/gallery-apse",
+      "params": {
+        "R": 8.6,
+        "T": 1.8,
+        "spring": 20.0,
+        "conchT": 1.0,
+        "arcT": 0.5,
+        "pass": 0.8,
+        "galH": 3.6,
+        "roofRise": 4.4,
+        "winW": 2.0,
+        "winSill": 5.0,
+        "winSpring": 11.0,
+        "galW": 0.9,
+        "galSill": 1.2
+      },
       "at": [
-        0,
-        1,
-        2,
-        3,
-        12,
-        13,
-        14,
-        15
-      ],
-      "rOuter": 8.6,
-      "rInner": 6.8,
-      "place": [
         [
           -8.6,
           0,
@@ -1148,208 +989,30 @@
           -1.5707963267948966
         ]
       ],
-      "height": 20.0,
-      "opening": {
-        "width": 2.0,
-        "sill": 5.0,
-        "springing": 11.0,
-        "head": {
-          "profile": "semicircular"
-        }
-      },
       "_about": "...and the two at its sides"
     },
-    "north apse gallery": {
-      "type": "ring",
-      "count": 32,
-      "turn": 0.5,
-      "at": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31
-      ],
-      "rOuter": 8.6,
-      "rInner": 6.8,
-      "place": [
-        [
-          -8.6,
-          0,
-          52.8,
-          -1.5707963267948966
-        ]
-      ],
-      "y": 20.0,
-      "height": 5.5,
-      "glass": false,
-      "opening": {
-        "width": 0.9,
-        "sill": 1.2,
-        "springing": 3.4,
-        "head": {
-          "profile": "semicircular"
-        }
-      }
-    },
-    "north apse conch": {
-      "type": "dome",
-      "sweep": 0.5,
-      "sides": 16,
-      "radius": 8.6,
-      "thickness": 1.8,
-      "head": {
-        "profile": "semicircular"
-      },
-      "at": [
-        [
-          -8.6,
-          20.0,
-          52.8,
-          -1.5707963267948966
-        ]
-      ]
-    },
-    "north apse roof": {
-      "type": "dome",
-      "sweep": 0.5,
-      "sides": 16,
-      "radius": 8.9,
-      "thickness": 0,
-      "head": {
-        "profile": "trigonal",
-        "rise": 5.5
-      },
-      "at": [
-        [
-          -8.6,
-          25.5,
-          52.8,
-          -1.5707963267948966
-        ]
-      ]
-    },
     "south apse": {
-      "type": "ring",
-      "count": 16,
-      "turn": 0.5,
-      "at": [
-        0,
-        1,
-        2,
-        3,
-        12,
-        13,
-        14,
-        15
-      ],
-      "rOuter": 8.6,
-      "rInner": 6.8,
-      "place": [
-        [
-          8.6,
-          0,
-          52.8,
-          1.5707963267948966
-        ]
-      ],
-      "height": 20.0,
-      "opening": {
-        "width": 2.0,
-        "sill": 5.0,
-        "springing": 11.0,
-        "head": {
-          "profile": "semicircular"
-        }
-      }
-    },
-    "south apse gallery": {
-      "type": "ring",
-      "count": 32,
-      "turn": 0.5,
-      "at": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31
-      ],
-      "rOuter": 8.6,
-      "rInner": 6.8,
-      "place": [
-        [
-          8.6,
-          0,
-          52.8,
-          1.5707963267948966
-        ]
-      ],
-      "y": 20.0,
-      "height": 5.5,
-      "glass": false,
-      "opening": {
-        "width": 0.9,
-        "sill": 1.2,
-        "springing": 3.4,
-        "head": {
-          "profile": "semicircular"
-        }
-      }
-    },
-    "south apse conch": {
-      "type": "dome",
-      "sweep": 0.5,
-      "sides": 16,
-      "radius": 8.6,
-      "thickness": 1.8,
-      "head": {
-        "profile": "semicircular"
+      "type": "component",
+      "use": "components/gallery-apse",
+      "params": {
+        "R": 8.6,
+        "T": 1.8,
+        "spring": 20.0,
+        "conchT": 1.0,
+        "arcT": 0.5,
+        "pass": 0.8,
+        "galH": 3.6,
+        "roofRise": 4.4,
+        "winW": 2.0,
+        "winSill": 5.0,
+        "winSpring": 11.0,
+        "galW": 0.9,
+        "galSill": 1.2
       },
       "at": [
         [
           8.6,
-          20.0,
-          52.8,
-          1.5707963267948966
-        ]
-      ]
-    },
-    "south apse roof": {
-      "type": "dome",
-      "sweep": 0.5,
-      "sides": 16,
-      "radius": 8.9,
-      "thickness": 0,
-      "head": {
-        "profile": "trigonal",
-        "rise": 5.5
-      },
-      "at": [
-        [
-          8.6,
-          25.5,
+          0,
           52.8,
           1.5707963267948966
         ]
@@ -1395,7 +1058,16 @@
             "springing": 3.8,
             "head": {
               "profile": "semicircular"
+            },
+            "surround": {
+              "style": "romanesque",
+              "orders": 1
             }
+          },
+          "lombard": {
+            "arch": 0.8,
+            "bay": 6.0,
+            "lesene": 0.7
           }
         }
       ],

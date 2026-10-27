@@ -51,10 +51,181 @@
      0
     ]
    ]
+  },
+  "door": {
+   "type": "marker",
+   "role": "door",
+   "at": [
+    [
+     0,
+     0,
+     6.55,
+     0
+    ]
+   ],
+   "data": {
+    "w": 1.4,
+    "h": 2.4,
+    "spring": 1.7,
+    "head": {
+     "profile": "semicircular"
+    }
+   }
+  },
+  "bed 1": {
+   "type": "item",
+   "item": "items/furniture/roman-couch",
+   "at": [
+    [
+     -4.05,
+     0,
+     5.6,
+     0
+    ]
+   ],
+   "seed": 1
+  },
+  "bed 2": {
+   "type": "item",
+   "item": "items/furniture/pallet",
+   "at": [
+    [
+     -4.1,
+     0,
+     4.4,
+     0
+    ]
+   ],
+   "seed": 2
+  },
+  "table": {
+   "type": "item",
+   "item": "items/furniture/roman-table",
+   "at": [
+    [
+     3.4,
+     0,
+     5.0,
+     0
+    ]
+   ],
+   "seed": 3,
+   "params": {
+    "r": 0.36
+   }
+  },
+  "chair 1": {
+   "type": "item",
+   "item": "items/furniture/klismos",
+   "at": [
+    [
+     2.65,
+     0,
+     5.0,
+     1.5707963
+    ]
+   ],
+   "seed": 1,
+   "markers": [
+    "seat"
+   ]
+  },
+  "chair 1 place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     2.65,
+     0.5,
+     5.0,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 0
+   }
+  },
+  "chair 2": {
+   "type": "item",
+   "item": "items/furniture/klismos",
+   "at": [
+    [
+     4.15,
+     0,
+     5.0,
+     -1.5707963
+    ]
+   ],
+   "seed": 2,
+   "markers": [
+    "seat"
+   ]
+  },
+  "chair 2 place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     4.15,
+     0.5,
+     5.0,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 3.1415927
+   }
+  },
+  "stool": {
+   "type": "item",
+   "item": "items/furniture/stool",
+   "at": [
+    [
+     3.4,
+     0,
+     4.3,
+     0
+    ]
+   ],
+   "seed": 3,
+   "params": {
+    "h": 0.44
+   },
+   "markers": [
+    "seat"
+   ]
+  },
+  "stool place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     3.4,
+     0.44,
+     4.3,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5707963
+   }
   }
  },
  "build": [
   "house",
-  "altar"
+  "altar",
+  "door",
+  "bed 1",
+  "bed 2",
+  "table",
+  "chair 1",
+  "chair 1 place",
+  "chair 2",
+  "chair 2 place",
+  "stool",
+  "stool place"
  ]
 }

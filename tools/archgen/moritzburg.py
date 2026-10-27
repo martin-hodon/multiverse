@@ -55,7 +55,8 @@ add("terrace flight", {"type": "flight", "width": FW, "run": 0.32, "rise": 0.15,
 
 # ---- the main block: ONE ring of rooms round the courtyard, the gate through its south front (face 0, +z)
 add("castle", {"type": "court", "plan": {"rect": [CW, CL]}, "depth": D, "storeys": N, "storeyH": H, "axis": 3.4,
-               "gate": {"face": 0, "width": 4.0, "height": 4.8}, "roof": {"form": "hip", "pitch": PITCH, "overhang": 0.5},
+               "gate": {"face": 0, "width": 4.0, "height": 4.8}, "roof": {"form": "hip", "pitch": PITCH, "overhang": 0.5}, "courses": True, "surround": {"head": False},
+               "tracery": {"style": "bars"},
                "at": [[0, TH, 0, 0]],
                "_about": "the lodge's four wings round the small courtyard, one ring of rooms walked all the way round on every storey, entered by the gate in the south front"})
 

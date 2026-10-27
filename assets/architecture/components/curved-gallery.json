@@ -16,7 +16,12 @@
     "sill": 0.9,
     "_sill": "the openings' sill: 0.9 for windows, 0 for an open arcade",
     "terrace": 1,
-    "_terrace": "1: its roof is a terrace, walked (reached from the pavilions at its ends); 0: a roof"
+    "_terrace": "1: its roof is a terrace, walked (reached from the pavilions at its ends); 0: a roof",
+    "head": 1.2,
+    "_head": "the wall over the arches' crowns, as the straight gallery's",
+    "order": "none",
+    "_order": "the applied order on both its faces, out to the moat and in to the court, or none",
+    "dressed": 0
   },
   "build": [
     "outer wall",
@@ -40,7 +45,7 @@
       "opening": {
         "width": "winW",
         "sill": "sill",
-        "springing": "H - winW / 2 - 1.2",
+        "springing": "H - winW / 2 - head",
         "head": {
           "profile": "semicircular"
         }
@@ -52,6 +57,12 @@
           0,
           0
         ]
+      ],
+      "courses": "dressed",
+      "orders": [
+        {
+          "kind": "order"
+        }
       ]
     },
     "inner wall": {
@@ -68,7 +79,7 @@
       "opening": {
         "width": "winW * 0.9",
         "sill": "sill",
-        "springing": "H - winW / 2 - 1.2",
+        "springing": "H - winW / 2 - head",
         "head": {
           "profile": "semicircular"
         }
@@ -80,7 +91,15 @@
           0,
           0
         ]
-      ]
+      ],
+      "courses": "dressed",
+      "orders": [
+        {
+          "kind": "order"
+        }
+      ],
+      "dress": "in",
+      "_dress": "its courses and its order on its inner face, the one to the court"
     },
     "roof": {
       "type": "ring",

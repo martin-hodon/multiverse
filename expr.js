@@ -41,7 +41,10 @@ export const evalNum = (v, params) => (typeof v === "number" ? v : evalExpr(Stri
 // A PARAMETER MAY BE A WORD, not only a number: "pointed" for the arch profile a whole building is drawn
 // with, "slit" for a cat's pupil. Anything that does not read as an expression is kept as it stands, and only
 // the places that expect a word ever look at it.
-export const evalValue = (v, params) => { try { return evalNum(v, params); } catch (e) { return typeof v === "string" ? v : (() => { throw e; })(); } };
+// A NAME may stand for a word as it does for a number: a component's `stone` given "bronze" by the building using it.
+export const evalValue = (v, params) => { try { return evalNum(v, params); } catch (e) {
+  if (typeof v !== "string") throw e;
+  return /^[A-Za-z_]\w*$/.test(v) && v in params && params[v] !== v ? evalValue(params[v], params) : v; } };
 // ...and a whole structure of them: arrays and objects of expressions, resolved in place. `keep` names the
 // keys whose values are NOT numbers to be resolved (an id, a pattern, a colour): they are copied as they are.
 export function evalDeep(v, params, keep = () => false) {

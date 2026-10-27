@@ -126,17 +126,23 @@ parts["shaft house roof"] = {"type": "roof", "form": "gable", "width": 5.6, "len
 # the windlass: two posts beyond the collar, the drum over the shaft, a crank at each end
 parts["windlass posts"] = box(0.18, 0.18, 1.25, (0, 0, -1.25), (0, 0, 1.25))
 parts["windlass drum"] = box(0.28, 2.7, 0.28, (0, 0.92, 0))
-parts["windlass cranks"] = box(0.06, 0.06, 0.42, (0, 0.85, -1.42), (0, 0.85, 1.42))
-parts["windlass handles"] = box(0.36, 0.05, 0.05, (0.18, 0.62, -1.48), (-0.18, 1.2, 1.48))
-TIMBER += ["windlass posts", "windlass drum", "windlass cranks", "windlass handles"]
+# ...its AXLE through the posts and out past them, the crank ARMS fixed on its ends (one hanging, one standing: the two
+# men's strokes half a turn apart) and the GRIPS out from the arms' far ends, along the axle -- each piece held by the
+# one before (they hung beside the drum's ends, short of them)
+parts["windlass axle"] = box(0.08, 2.9, 0.08, (0, 1.02, 0))
+parts["windlass cranks"] = box(0.06, 0.06, 0.4, (0, 0.7, -1.42), (0, 1.02, 1.42))
+parts["windlass handles"] = box(0.05, 0.24, 0.05, (0, 0.7, -1.55), (0, 1.37, 1.55))
+TIMBER += ["windlass posts", "windlass drum", "windlass axle", "windlass cranks", "windlass handles"]
 parts["ropes"] = {"type": "column", "radius": 0.014, "height": R(0.92 - (Y + 0.6)), "sides": 5, "at": [[0.3, R(Y + 0.6), 0, 0]]}
 parts["rope up"] = {"type": "column", "radius": 0.014, "height": 2.4, "sides": 5, "at": [[-0.3, -1.5, 0, 0]]}
 parts["kibbles"] = item("items/tools/bucket", (0.3, Y, 0), (-0.3, -1.9, 0), solid=False)
 parts["windlass men"] = {"type": "marker", "role": "spot", "at": [[0.2, 0, -1.75, 0], [-0.2, 0, 1.75, 0]], "data": {"pose": "stand", "work": 1, "gesture": "lift", "face": [PI2, -PI2], "crew": "miner"}}
-# the walking shaft: inside x 6 .. 10.5, z -1.2 .. 1.2; flights 10 steps of 25 cm on 25 cm, turning on landings at each end
-X0, Z0, LS, LD = 6.0, -1.2, 2.5, 1.0
+# the walking shaft: inside x 6 .. 10.7, z -1.2 .. 1.2; flights 10 steps of 25 cm on 25 cm, turning on landings at each end
+# (each landing as deep as a flight is wide: room to stand at the foot of the next before climbing it)
 FW_, SW = 1.1, 2.4      # a flight's width, the shaft's inside across (two flights and a hand's gap: the walker's room by its lining)
-for nm, (a, b, c, d, y0) in {"n": (X0 - 0.2, X0 + 4.7, Z0 + SW, Z0 + SW + 0.2, Y), "s": (X0 - 0.2, X0 + 4.7, Z0 - 0.2, Z0, Y), "e": (X0 + 4.5, X0 + 4.7, Z0, Z0 + SW, Y),
+X0, Z0, LS, LD = 6.0, -1.2, 2.5, FW_
+XL = X0 + 2 * LD + LS   # the shaft's east inside face
+for nm, (a, b, c, d, y0) in {"n": (X0 - 0.2, XL + 0.2, Z0 + SW, Z0 + SW + 0.2, Y), "s": (X0 - 0.2, XL + 0.2, Z0 - 0.2, Z0, Y), "e": (XL, XL + 0.2, Z0, Z0 + SW, Y),
                              "w": (X0 - 0.2, X0, Z0, Z0 + SW, Y + 2.3)}.items():
     rect(f"walking shaft lining {nm}", a, b, c, d, y0, -y0 + (0 if nm == "w" else 0.9)); TIMBER.append(f"walking shaft lining {nm}")
 for k in range(4):
@@ -151,8 +157,8 @@ for k in range(5):   # the landings: west at 0, -5, -10; east at -2.5, -7.5
     x0b = X0 - 0.2 - T if k == 4 else x0   # (the bottom one through the gap in the chamber's wall: one floor from the chamber in)
     rect(f"walking landing {k}", x0b, x0 + LD, Z0, Z0 + SW, y - 0.2, 0.2, walked=True); TIMBER.append(f"walking landing {k}")
 rect("walking shaft bottom", X0 + LD, X0 + LD + LS, Z0, Z0 + SW, Y - 0.3, 0.3, walked=True); FLOORS.append("walking shaft bottom")
-parts["walking shaft roof posts"] = box(0.14, 0.14, 2.3, (X0 - 0.3, 0, Z0 - 0.35), (X0 + 4.8, 0, Z0 - 0.35), (X0 - 0.3, 0, Z0 + SW + 0.35), (X0 + 4.8, 0, Z0 + SW + 0.35))
-parts["walking shaft roof"] = {"type": "roof", "form": "gable", "width": 3.8, "length": 5.8, "pitch": 32, "overhang": 0.1, "at": [[R(X0 + 2.25), 2.3, 0, PI2]]}
+parts["walking shaft roof posts"] = box(0.14, 0.14, 2.3, (X0 - 0.3, 0, Z0 - 0.35), (XL + 0.3, 0, Z0 - 0.35), (X0 - 0.3, 0, Z0 + SW + 0.35), (XL + 0.3, 0, Z0 + SW + 0.35))
+parts["walking shaft roof"] = {"type": "roof", "form": "gable", "width": 3.8, "length": R(XL - X0 + 1.3), "pitch": 32, "overhang": 0.1, "at": [[R((X0 + XL) / 2), 2.3, 0, PI2]]}
 TIMBER += ["walking shaft roof posts"]
 # the spoil heap, the dressing bench, the pit timber
 parts["spoil heap"] = {"type": "column", "radius": 4.2, "height": 2.0, "sides": 12, "taper": 0.12, "at": [[-8.0, 0, 4.5, 0]]}
@@ -197,7 +203,7 @@ parts["lanterns"] = item("items/tools/lantern", (-4.5, Y, 31.0), (4.4, Y, -21.0)
 
 doc = {"name": "Mine",
        "_about": "A MINE of the Middle Ages (silver, copper or salt: `ore`): on the surface the shaft house over the hauling shaft with its windlass and kibbles, the walking shaft with its steep flights under a little roof, the spoil heap, the dressing bench, pit timber; ten metres down the shaft bottom, timbered galleries with a plank track and wooden carts, and the stopes where miners work the vein with pick and hammer by the light of their lamps. The ground is open only over the shafts.",
-       "site": {"origin": True, "dig": [[-HX, -HZ, HX, HZ], [X0, Z0, X0 + 4.5, Z0 + SW]]},   # (the shafts' mouths: the ground open over them)
+       "site": {"origin": True, "dig": [[-HX, -HZ, HX, HZ], [X0, Z0, XL, Z0 + SW]]},   # (the shafts' mouths: the ground open over them)
        "params": {"detail": 4, "ore": "silver", "footW": 24, "footD": 18,
                   "_ore": "silver | copper | salt: the rock and the vein (the finishes mine-<ore>), and whether the galleries are timbered (salt stands without)"},
        "parts": parts, "build": list(parts), "walked": True}

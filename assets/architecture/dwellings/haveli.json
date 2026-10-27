@@ -1,0 +1,377 @@
+{
+ "name": "Haveli",
+ "_about": "The haveli: a merchant's house of two storeys round an open court, blind and plain to the lane but for its carved oriels (jharokhas) over the gate, flat roofs walked on in the evening, the tulsi altar in the court (North India (Rajasthan, Gujarat, Delhi), 1400-1900)",
+ "era": "1400-1900",
+ "region": "North India (Rajasthan, Gujarat, Delhi)",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "house": {
+   "type": "court",
+   "glass": false,
+   "plan": {
+    "rect": [
+     15.0,
+     15.0
+    ]
+   },
+   "depth": 4.2,
+   "storeys": 2,
+   "storeyH": 3.4,
+   "slab": 0.2,
+   "gate": {
+    "face": 0,
+    "width": 1.6,
+    "height": 2.8
+   },
+   "roof": {
+    "form": "flat",
+    "pitch": 0
+   },
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "jharokhas": {
+   "type": "box",
+   "width": 1.8,
+   "length": 0.7,
+   "height": 2.2,
+   "at": [
+    [
+     -3.6,
+     4.2,
+     7.85,
+     0
+    ],
+    [
+     3.6,
+     4.2,
+     7.85,
+     0
+    ]
+   ]
+  },
+  "jharokha brackets": {
+   "type": "box",
+   "width": 0.25,
+   "length": 0.6,
+   "height": 0.5,
+   "at": [
+    [
+     -4.3,
+     3.7,
+     7.8,
+     0
+    ],
+    [
+     -2.9,
+     3.7,
+     7.8,
+     0
+    ],
+    [
+     2.9,
+     3.7,
+     7.8,
+     0
+    ],
+    [
+     4.3,
+     3.7,
+     7.8,
+     0
+    ]
+   ]
+  },
+  "jharokha roofs": {
+   "type": "roof",
+   "form": "hip",
+   "width": 2.2,
+   "length": 1.0,
+   "pitch": 30,
+   "overhang": 0.05,
+   "at": [
+    [
+     -3.6,
+     6.4,
+     7.9,
+     0
+    ]
+   ]
+  },
+  "jharokha roofs b": {
+   "type": "roof",
+   "form": "hip",
+   "width": 2.2,
+   "length": 1.0,
+   "pitch": 30,
+   "overhang": 0.05,
+   "at": [
+    [
+     3.6,
+     6.4,
+     7.9,
+     0
+    ]
+   ]
+  },
+  "tulsi altar": {
+   "type": "box",
+   "width": 0.9,
+   "length": 0.9,
+   "height": 0.9,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "door": {
+   "type": "marker",
+   "role": "door",
+   "at": [
+    [
+     0,
+     0,
+     7.05,
+     0
+    ]
+   ],
+   "data": {
+    "w": 1.6,
+    "h": 2.8,
+    "spring": 2.0,
+    "head": {
+     "profile": "semicircular"
+    }
+   }
+  },
+  "bed 1": {
+   "type": "item",
+   "item": "items/furniture/charpai",
+   "at": [
+    [
+     -5.6,
+     0,
+     4.75,
+     0
+    ]
+   ],
+   "seed": 1
+  },
+  "bed 2": {
+   "type": "item",
+   "item": "items/furniture/charpai",
+   "at": [
+    [
+     -5.6,
+     0,
+     6.05,
+     0
+    ]
+   ],
+   "seed": 2
+  },
+  "tray": {
+   "type": "item",
+   "item": "items/furniture/low-table",
+   "at": [
+    [
+     4.5,
+     0,
+     5.4,
+     0
+    ]
+   ],
+   "seed": 3,
+   "params": {
+    "r": 0.42
+   }
+  },
+  "stool 1": {
+   "type": "item",
+   "item": "items/furniture/stool",
+   "at": [
+    [
+     3.7,
+     0,
+     5.4,
+     1.5707963
+    ]
+   ],
+   "seed": 1,
+   "params": {
+    "h": 0.4
+   },
+   "markers": [
+    "seat"
+   ]
+  },
+  "stool 1 place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     3.7,
+     0.4,
+     5.4,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 0
+   }
+  },
+  "stool 2": {
+   "type": "item",
+   "item": "items/furniture/stool",
+   "at": [
+    [
+     5.3,
+     0,
+     5.4,
+     -1.5707963
+    ]
+   ],
+   "seed": 2,
+   "params": {
+    "h": 0.4
+   },
+   "markers": [
+    "seat"
+   ]
+  },
+  "stool 2 place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     5.3,
+     0.4,
+     5.4,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 3.1415927
+   }
+  },
+  "stool 3": {
+   "type": "item",
+   "item": "items/furniture/stool",
+   "at": [
+    [
+     4.5,
+     0,
+     4.6,
+     0
+    ]
+   ],
+   "seed": 3,
+   "params": {
+    "h": 0.4
+   },
+   "markers": [
+    "seat"
+   ]
+  },
+  "stool 3 place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     4.5,
+     0.4,
+     4.6,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5707963
+   }
+  },
+  "stool 4": {
+   "type": "item",
+   "item": "items/furniture/stool",
+   "at": [
+    [
+     4.5,
+     0,
+     6.2,
+     3.1415927
+    ]
+   ],
+   "seed": 4,
+   "params": {
+    "h": 0.4
+   },
+   "markers": [
+    "seat"
+   ]
+  },
+  "stool 4 place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     4.5,
+     0.4,
+     6.2,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 1.5707963
+   }
+  },
+  "upper charpai": {
+   "type": "item",
+   "item": "items/furniture/charpai",
+   "at": [
+    [
+     3.6,
+     3.4,
+     -5.45,
+     0
+    ]
+   ],
+   "seed": 5,
+   "markers": false
+  }
+ },
+ "build": [
+  "house",
+  "jharokhas",
+  "jharokha brackets",
+  "jharokha roofs",
+  "jharokha roofs b",
+  "tulsi altar",
+  "door",
+  "bed 1",
+  "bed 2",
+  "tray",
+  "stool 1",
+  "stool 1 place",
+  "stool 2",
+  "stool 2 place",
+  "stool 3",
+  "stool 3 place",
+  "stool 4",
+  "stool 4 place",
+  "upper charpai"
+ ]
+}

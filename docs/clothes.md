@@ -118,6 +118,9 @@ and `makePerson({ style })` draws from them:
 | `roman` | the `tunica` (short sleeves, to the knee; a matron's to the feet), `clavi` (the purple stripes: a garment of four `strip`s over it, running on over its skirt), the `toga` (a `mantle` to the ankles, open at the right front, the praetexta's purple hem), the `stola` (girded under the breast), the `palla` |
 | `chinese` | the `shenyi` (one deep robe, its crossed collar edged in black -- a `strip` -- great hanging sleeves), the `ruqun` (a short jacket with the `qun`, its skirt, tied high at the breast), the `sash`, the `guan` (a tall black cap: `tall-hat`), cloth shoes |
 | `gothic` | the `doublet` (padded, a short pleated skirt) with parti-coloured hose, the `hennin` (a steeple headdress), with the cote-hardie, the houppelande, the sideless surcoat and the hood with its liripipe |
+| `indian` | the `sari` (a pleated skirt to the feet and its pallu over the shoulder: `skirt` and `mantle`, a zari border) over the `choli`, the `dhoti`, a kurta (the tunic), the turban and the kaftan of a merchant (2026-10-27) |
+| `maya` | the `huipil` (a loose tunic brocaded round the neck) over the `wrap-skirt`, the `loincloth` (a short wrap and its hanging flap: `apron`), a cloak for a noble; ear spools (2026-10-27) |
+| `russian` | the `sarafan` (a pinafore dress high on the breast, braid down its front) over the white shirt, the `kokoshnik` and the kerchief; the belted shirt over trousers, the kaftan, the `fur-hat`, boots (2026-10-27) |
 
 New components: `mantle` (a great cloth wrapped round the body over the arms, open where its `wrap` is not: `centre` the
 middle of the cloth round the body, `span` how far round), `overfold`, `strip`, `qun`, `hennin`, `tall-hat`. New fabrics:

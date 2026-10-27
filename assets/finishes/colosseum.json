@@ -1,0 +1,25 @@
+{
+  "name": "Colosseum",
+  "building": "architecture/colosseum",
+  "_about": "The Flavian Amphitheatre: travertine for the facade, the piers of the rings and the podium; inside, brick-faced concrete and tuff, the vaults plastered; the seats of the lower maeniana marble, the upper travertine; the floors travertine paving, the arena boards under sand, the hypogeum's corridors brick on a gravel floor.",
+  "stone": {
+    "color": "#e2d6bd",
+    "accent": "#cbbb98",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["arena floor"], "surface": "floor", "pattern": "stone/sand", "palette": "sandstone", "_about": "the sand the games were fought on"},
+    {"parts": "hypogeum floor", "surface": "floor", "pattern": "floors/flagstones", "palette": "gravel"},
+    {"parts": "hypogeum wall", "surface": "wall", "pattern": "stone/brick", "palette": "brick"},
+    {"parts": ["first maenianum", "first maenianum beside the stair", "first maenianum below the stair's mouth", "first maenianum over the stair", "first maenianum beside the entrance", "first maenianum over the entrance", "first maenianum over the long axis", "podium", "podium beside the entrance", "podium over the entrance", "podium over the long axis"], "surface": "floor", "pattern": "stone/ashlar fine", "palette": "carrara", "_about": "the senators' and the knights' rows: marble"},
+    {"parts": "kind:steps", "surface": "floor", "pattern": "stone/ashlar", "palette": "travertine"},
+    {"parts": "kind:steps", "surface": "wall", "side": "out", "pattern": "stone/ashlar", "palette": "pennant-sandstone", "_about": "the risers of the rows, weathered darker than the seats: the tiers read from across the arena"},
+    {"parts": "portico columns", "pattern": "stone/granite", "palette": "granite"},
+    {"parts": "kind:moulding", "pattern": "stone/ashlar fine", "palette": "travertine"},
+    {"parts": ["arcade I", "arcade II", "arcade III", "attic", "attic blind", "podium wall", "podium gates"], "pattern": "stone/ashlar", "palette": "travertine", "_about": "the facade and the podium: travertine blocks, laid dry and clamped"},
+    {"surface": "ceiling", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "travertine"},
+    {"surface": "wall", "side": "in", "pattern": "stone/brick", "palette": "brick"},
+    {"surface": "wall", "pattern": "stone/ashlar", "palette": "travertine"}
+  ]
+}

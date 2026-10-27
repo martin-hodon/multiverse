@@ -33,6 +33,12 @@ add("body", {"type": "enclosure", "plan": {"rect": [BW, BL]}, "thickness": T, "h
                                                      + [{"at": s * x, **win1} for x in fx for s in (-1, 1)]},
                              {"openings": [{"at": 0, "width": 3.2, "sill": 2.0, "springing": 6.5, "head": {"profile": "semicircular"}}] + [{"at": s * x, **win2} for x in fx for s in (-1, 1)]}],
                        "1": side(True), "3": side(True), "2": side(False)},
+             # (its COURSES -- arch/courses.js: the plinth, the floor line between the storeys, the cornice under the parapet --
+             #  stopping at the corner towers' sides, which carry their own)
+             "courses": {"clear": {str(f): [[0, TW - TP], [L - (TW - TP), L]] for f, L in ((0, BW), (1, BL), (2, BW), (3, BL))}},
+             # (and over the floor line a Corinthian order -- arch/order.js: pilasters on the piers between the upper
+             #  windows, sized from the storey, its entablature the crowning cornice)
+             "orders": [{"tier": 1, "kind": "corinthian", "ends": False}],
              "at": [[0, 0, 0, 0]], "_about": "the preaching church: two storeys of round-headed windows, the great door behind the portal niche, a door into either wing"})
 
 # ---- inside: the crossing -- four piers, four great arches, the pendentives and their deck
@@ -72,6 +78,7 @@ for sx in (-1, 1):
                           {"openings": twin}] for f in range(4)}
         name = "corner tower " + ("front" if sz > 0 else "back") + (" east" if sx > 0 else " west")
         add(name, {"type": "enclosure", "plan": {"rect": [TW, TW]}, "thickness": T, "height": RT + TH, "faces": faces,
+                   "courses": {"strings": [15, RT], "skip": sorted(int(f) for f in inner)},
                    "at": [[sx * TX, 0, sz * TZ, 0]], "_about": "a corner tower from the ground: arches into the church, a door onto the roof walk, windows over"})
         towers.append([sx * TX, sz * TZ])
         if not (sx > 0 and sz > 0):
@@ -120,8 +127,10 @@ add("attic", {"type": "box", "width": FW, "length": FD, "height": AH, "flatRoof"
 add("pediment", {"type": "roof", "form": "gable", "width": 18.0, "length": FD, "pitch": 20, "overhang": 0.3, "at": [[0, RT + AH, BL / 2 + FD / 2, 0]],
                  "_about": "the pediment crowning the attic"})
 ped = [[s * x, RT + AH, BL / 2 + FD / 2, 0] for x in (11.8, 14.0) for s in (-1, 1)] + [[s * 10.4, CH + EH, FZ + CR * 1.3, 0] for s in (-1, 1)]
-add("statue pedestals", {"type": "box", "width": 1.2, "length": 1.2, "height": 1.0, "at": ped, "_about": "pedestals on the attic and over each pair of columns"})
-add("statues", {"type": "column", "radius": 0.35, "height": 2.4, "sides": 8, "at": [[x, y + 1.0, z, 0] for x, y, z, _ in ped], "_about": "the statues"})
+# the statues, each on its pedestal (components/pedestal): the evangelists along the attic, a figure over each pair of columns
+for i, (group, seed) in enumerate(((ped[0:2], 21), (ped[2:4], 34), (ped[4:6], 55))):
+    add(f"statues {i + 1}", comp("components/pedestal", {"W": 1.0, "L": 1.0, "H": 1.2, "scale": 1.5, "stone": "limestone", "style": "roman", "seed": seed},
+                                 group, **({"_about": "statues on pedestals, on the attic and over each pair of columns"} if i == 0 else {})))
 
 # ---- the side wings, lower, against the church's flanks: a door from the church and one from outside
 WW, WL, WH, WT = 16.0, 40.0, 14.0, 1.5

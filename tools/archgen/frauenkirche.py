@@ -1,6 +1,6 @@
 # THE FRAUENKIRCHE (Dresden, 1726-43, George Baehr; rebuilt 1994-2005): a chamfered square church, the choir
 # apse to the east, the stone BELL of a dome on its drum (the `bell` profile), a lantern, four corner stair towers.
-import os, json, sys
+import os, json, sys, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 parts = {}; build = []
@@ -12,7 +12,13 @@ tiers = lambda low, up: [{"h": "lowH", "openings": low}, {"openings": up}]
 add("church", {"type": "enclosure", "plan": {"rect": ["W", "W"], "chamfer": "C", "split": {"main": [1, 1.1, 1]}}, "thickness": 1.6, "height": "wallH",
                "faces": {"main:0": tiers(lower, upper), "main:2": tiers(lower, upper),
                          "main:1": tiers([arched(3.6, 0, 5.0)], [arched(3.4, 1.4, 11.5)]),
-                         "chamfer": tiers([arched(2.2, 3.2, 6.6)], [arched(2.4, 2.4, 10.6)])},
+                         "chamfer": tiers([arched(2.2, 3.2, 6.6)], [arched(2.4, 2.4, 10.6)]),
+                         # THE EAST FRONT, where the choir stands against it: the portal bay is the CHOIR ARCH, the
+                         # church opening into the apse at its full width; the flanks' windows move out past the apse's
+                         # wall, onto what of them is still outside (faces 8 and 10 run from the corners in)
+                         "9": [{"openings": [{"at": 0, "width": 7.6, "sill": 0, "springing": 14.0, "head": {"profile": "semicircular"}, "glass": False}]}],
+                         "8": tiers([{**arched(2.0, 2.8, 6.8), "at": -2.45}], [{**arched(2.0, 2.2, 11.0), "at": -2.45}]),
+                         "10": tiers([{**arched(2.0, 2.8, 6.8), "at": 2.45}], [{**arched(2.0, 2.2, 11.0), "at": 2.45}])},
                "at": [[0, 0, 0, 0]],
                "_about": "the church's walls on its chamfered square, each face flank, portal bay and flank, in two tiers: arched windows below, the tall arched windows of the galleries above, a portal in the middle of each side"})
 # THE GALLERIES (Emporen) round the inside, at the top of the lower tier, and the flight up to them: a ring of floor
@@ -28,8 +34,21 @@ add("choir", {"type": "ring", "count": 12, "turn": 0.5, "rOuter": 9.5, "rInner":
               "place": [["W / 2 - 1.6", 0, 0, 0]], "_about": "the choir's apse to the east, a half ring of tall windows"})
 add("choir roof", {"type": "dome", "sweep": 0.5, "radius": 9.9, "thickness": 0, "head": {"profile": "segmental", "rise": 4.5},
                    "at": [["W / 2 - 1.6", "wallH - 3", 0, "1.5707963"]]})
-add("roof", {"type": "roof", "form": "mansard", "width": "W - 0.4", "length": "W - 0.4", "pitch": 18, "lowerPitch": 62, "breakH": 4.5,
-             "overhang": 0.5, "at": [[0, "wallH", 0, 0]], "_about": "the attic roof, steep at its foot, from which the drum rises"})
+# THE PIERS that carry the drum and the bell: a ring of them round the middle under the drum's wall, arches between
+# -- the drum's own sixteen faces carried down to the floor (its corners, its thickness, `turn` 0 setting a pier under
+# each of its corners), up to the drum's foot: the drum stands on them, through the roof, not on the roof
+DRUM_T = 1.4
+R_IN = round(12.2 - DRUM_T / math.cos(math.pi / 16), 3)      # (the drum's inner corners: its faces DRUM_T in from its outer ones)
+add("dome piers", {"type": "ring", "count": 16, "polygon": True, "turn": 0, "rOuter": "domeR", "rInner": R_IN,
+                   "height": "wallH + 2", "opening": {"width": 3.2, "sill": 0, "springing": 17.0, "head": {"profile": "semicircular"}}, "glass": False,
+                   "place": [[0, 0, 0, 0]], "_about": "the ring of piers and arches under the drum: what carries the dome, down to the floor"})
+# THE VAULTS over the church between its walls and the piers: a slab on the walls' inside, its well the piers' inside
+# -- the ceiling of the galleries, under the attic; through the well the church looks up past the piers into the drum
+add("vaults", {"type": "prism", "plan": {"rect": ["W - 3.2", "W - 3.2"], "chamfer": "C - 1.3", "well": {"radius": R_IN, "sides": 16, "turn": 0.5}},
+               "height": 0.8, "at": [[0, "wallH - 0.8", 0, 0]], "railing": False,     # (its top is the attic's floor, walked by no one: no rail round the well)
+               "_about": "the vaults over the galleries, from the walls in to the piers, open in the middle under the drum"})
+add("roof", {"type": "roof", "form": "mansard", "width": "W - 0.4", "length": "W - 0.4", "chamfer": round(8.5 - (2 - math.sqrt(2)) * 0.2, 3), "pitch": 18, "lowerPitch": 62, "breakH": 4.5,
+             "overhang": 0.5, "shell": 0.5, "at": [[0, "wallH", 0, 0]], "_about": "the attic roof on the chamfered square, steep at its foot, its corners hipped down onto the chamfers between the stair towers; the drum rises from it"})
 add("drum", {"type": "enclosure", "plan": {"sides": 16, "radius": "domeR"}, "thickness": 1.4, "height": "drumH",
              "openings": [{"at": 0, "width": 2.0, "sill": 2.8, "springing": 6.4, "head": {"profile": "semicircular"}}],
              "at": [[0, "wallH + 2", 0, 0]], "_about": "the drum, windowed all round"})

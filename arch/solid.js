@@ -134,3 +134,24 @@ export function rayHits({ cubes, bounds: b }, o, d, maxT = 200) {
   return false;
 }
 
+// how far along d the ray first meets stone (Infinity: not within maxT) -- the same walk, but a cube's nearest hit is
+// the first only once it lies before the cube's far side
+export function rayDist({ cubes, bounds: b }, o, d, maxT = 200) {
+  const stamp = ++rayStamp;
+  const c = [0, 1, 2].map((q) => Math.floor(o[q] / CUBE)), st = [0, 1, 2].map((q) => Math.sign(d[q]));
+  const delta = [0, 1, 2].map((q) => (st[q] ? CUBE / Math.abs(d[q]) : Infinity));
+  const next = [0, 1, 2].map((q) => (st[q] ? ((st[q] > 0 ? (c[q] + 1) * CUBE : c[q] * CUBE) - o[q]) / d[q] : Infinity));
+  const lo = [b.x0, b.y0, b.z0], hi = [b.x1, b.y1, b.z1];
+  let best = Infinity;
+  for (let steps = 0; steps < 1000; steps++) {
+    const l = cubes.get(K(c[0], c[1], c[2]));
+    if (l) for (const t of l) { if (t.ray === stamp) continue; t.ray = stamp; best = Math.min(best, hitTri(o, d, t)); }
+    const q = next[0] < next[1] ? (next[0] < next[2] ? 0 : 2) : (next[1] < next[2] ? 1 : 2), t1 = next[q];
+    if (best <= t1) return best < maxT ? best : Infinity;
+    if (t1 >= maxT) return Infinity;
+    c[q] += st[q]; next[q] += delta[q];
+    const edge = c[q] * CUBE;
+    if ((st[q] > 0 && edge > hi[q]) || (st[q] < 0 && edge + CUBE < lo[q])) return Infinity;
+  }
+  return Infinity;
+}

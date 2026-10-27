@@ -229,6 +229,7 @@ TW, TL = (PX1 - PX0) / NX, (PZ1 - PZ0) / NZ
 add("platform", {"type": "box", "width": TW, "length": TL, "height": PH, "walked": True,
                  "at": [[round(PX0 + TW * (i + 0.5), 4), 0, round(PZ0 + TL * (j + 0.5), 4), 0] for i in range(NX) for j in range(NZ)],
                  "_about": "the raised platform of the whole complex, its top the sahn's white marble"})
+build.remove("platform"); build.insert(0, "platform")   # (laid first: everything stands on it)
 RISE, RUN = 0.15, 0.35
 FL = round(PH / RISE) * RUN
 add("main flight", {"type": "flight", "width": 16.0, "run": RUN, "rise": RISE, "top": PH, "landing": 0, "at": [[8.0, 0, PZ1 + FL, Q]],

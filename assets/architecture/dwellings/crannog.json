@@ -7,24 +7,6 @@
   "detail": 4
  },
  "parts": {
-  "platform": {
-   "type": "ring",
-   "count": 20,
-   "rOuter": 5.5,
-   "rInner": 0.05,
-   "height": 0.25,
-   "y": 1.5,
-   "place": [
-    [
-     0,
-     0,
-     0,
-     0
-    ]
-   ],
-   "solid": true,
-   "glass": false
-  },
   "piles": {
    "type": "column",
    "radius": 0.12,
@@ -117,19 +99,23 @@
     ]
    ]
   },
-  "walkway": {
-   "type": "box",
-   "width": 10.0,
-   "length": 1.2,
-   "height": 0.15,
-   "at": [
+  "platform": {
+   "type": "ring",
+   "count": 20,
+   "rOuter": 5.5,
+   "rInner": 0.05,
+   "height": 0.25,
+   "y": 1.5,
+   "place": [
     [
-     10.5,
-     1.6,
+     0,
+     0,
      0,
      0
     ]
-   ]
+   ],
+   "solid": true,
+   "glass": false
   },
   "walkway piles": {
    "type": "column",
@@ -171,6 +157,20 @@
      13.5,
      0,
      0.5,
+     0
+    ]
+   ]
+  },
+  "walkway": {
+   "type": "box",
+   "width": 10.0,
+   "length": 1.2,
+   "height": 0.15,
+   "at": [
+    [
+     10.5,
+     1.6,
+     0,
      0
     ]
    ]
@@ -250,11 +250,12 @@
    "at": [
     [
      0,
-     3.1,
+     0,
      0,
      0
     ]
-   ]
+   ],
+   "seat": "wall"
   },
   "hearth": {
    "type": "marker",
@@ -274,10 +275,10 @@
   }
  },
  "build": [
-  "platform",
   "piles",
-  "walkway",
+  "platform",
   "walkway piles",
+  "walkway",
   "wall",
   "door",
   "roof",

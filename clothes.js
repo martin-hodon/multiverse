@@ -424,12 +424,15 @@ const wrapOf = (w, P, marks) => w ? [val(w[0], P, marks, 0) * Math.PI / 180, val
 // -- a choice is "pattern:palette" or { pattern, palette }; `garment` may be a list (one of them). Drawn from the
 // person's own seeded stream `r`, so an outfit never moves the body's draws.
 // `style`: another time and place's dress (the wardrobe's `styles`: greek, roman, chinese, gothic) instead of the village's
-export function drawOutfit(kind, r, { female = kind === "woman", style = null } = {}) {
+export function drawOutfit(kind, r, { female = kind === "woman", style = null, work = false } = {}) {
   const pick = (a) => a[Math.floor(r() * a.length)];
   const byWeight = (list) => { const tot = list.reduce((t, o) => t + (o.weight ?? 1), 0); let e = r() * tot; for (const o of list) if ((e -= o.weight ?? 1) <= 0) return o; return list[list.length - 1]; };
   const key = kind.startsWith("child") ? (female ? "girl" : "boy") : kind;
   const lists = (style && WARDROBE.styles?.[style]) || WARDROBE.people;
-  const outfit = byWeight(lists[key] ?? lists.man ?? WARDROBE.people.man);
+  const all = lists[key] ?? lists.man ?? WARDROBE.people.man;
+  // (one at work wears what works: the list's outfits marked `work`, if it has any -- never a lady's gown in a field)
+  const working = work ? all.filter((o) => o.work) : [];
+  const outfit = byWeight(working.length ? working : all);
   const wear = [];
   for (const g of outfit.wear) {
     if (r() > (g.p ?? 1)) continue;

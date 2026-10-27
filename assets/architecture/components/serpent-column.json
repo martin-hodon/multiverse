@@ -1,0 +1,13 @@
+{
+  "name": "Serpent column",
+  "_about": "THE SERPENT COLUMN of a Maya-Toltec temple door (Chichen Itza, Tula): the feathered serpent standing on its head -- the HEAD on the floor, jaws open toward the approach (+z), the BODY rising out of its skull as the square shaft, and the TAIL bent forward at the top as the capital, its rattle carrying the lintel. `W` the head's width (the shaft is four fifths of it), `H` the column's whole height, floor to the lintel's soffit.",
+  "params": { "detail": 4, "W": 1.0, "H": 4.0, "skullH": "W * 1.12", "capH": "H * 0.16" },
+  "build": ["head", "body", "tail"],
+  "parts": {
+    "head": { "type": "component", "use": "components/serpent-head", "params": { "W": "W" }, "at": [[0, 0, 0, 0]] },
+    "body": { "type": "box", "width": "W * 0.8", "length": "W * 0.7", "height": "H - capH - skullH", "at": [[0, "skullH", "-W * 0.3", 0]],
+              "_about": "the serpent's body, the shaft, rising out of its skull" },
+    "tail": { "type": "box", "width": "W * 0.8", "length": "W * 1.4", "height": "capH", "at": [[0, "H - capH", "W * 0.05", 0]],
+              "_about": "the tail bent forward over the door, its rattle the capital under the lintel" }
+  }
+}

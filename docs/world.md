@@ -1,9 +1,31 @@
 # The world
 
+## The start menu (2026-10-27)
+
+Before anything is built, the game asks for the world's PERIOD and then for its MONUMENT, chosen from that period's
+`landmarks`.
+- "Any of them" draws the monument at random.
+- "Surprise me" draws both from the seed, as before.
+- A period with a single monument goes straight in.
+
+The choice is written into the address as `?period=` and `?monument=`, next to the seed, so a reload or a shared
+link keeps it. Everything else is drawn at random as always: the land, the town, its people and the weather. A
+`?monument=` that is not among the period's landmarks is still built first.
+
+The menu is not shown:
+- when the address already says (`?period=` or `?building=`);
+- to the build tools: pregen's recording, `?probe=`, or any page driven headless (`navigator.webdriver`).
+
+`?menu=1` asks again, and `?menu=0` never asks. To choose again, open the game without `period` and `monument` in
+the address, or add `menu=1`.
+
+Every monument is in at least one period (2026-10-27: Kandariya Mahadeva came in with medieval India, Chichen Itza with
+the Maya, St Basil's with old Russia -- before, they could not be chosen).
+
 ## Cultural periods (2026-10-09)
 
 A world is set in one PERIOD, decided at startup (`?period=NAME`, else drawn from the seed by weight):
-greek, roman, egyptian, chinese, medieval, byzantine, ottoman, islamic, industrial. Everything with a time and
+greek, roman, egyptian, chinese, indian, maya, medieval, byzantine, ottoman, islamic, russian, industrial. Everything with a time and
 place follows it, all declared in `assets/world/periods.json`: the monuments (`landmarks`, from architecture.js
 LANDMARKS), what people wear (`dress`: wardrobe styles by weight, `""` the village's own -- each style brings its
 hair and jewelry), the town (`town.styles`: a medieval town style; or `town.houses`: the period's dwellings in the
@@ -11,6 +33,15 @@ street rows, at the inn and on the farms; `church`, `walls` [pattern, palette], 
 windmill), the fisherman's boat, the trees (flora.js species; the palm is a warm one, never in the wild mix) and the
 `ground` -- `grounds` gives its colours into grass.js GRADE, whether blades grow on it (sand: none, no fringe) and how
 many flowers it keeps. `?townstyle=` still forces a town style.
+
+The three periods of 2026-10-27, each with its own dress (wardrobe style, hair, jewelry) and dwellings:
+- `indian` (Medieval India: the Kandariya Mahadeva temple, the Taj Mahal): saris over cholis, dhotis, turbans; the
+  town of havelis (two storeys round a court, carved jharokhas over the lane) and thatched village huts, red
+  sandstone walls; no windmill or pigs; palms on dry ground.
+- `maya` (the Maya: Chichen Itza): huipils over wrap skirts, loincloths, ear spools; long thatched houses (na) with
+  rounded ends on stone platforms; no windmill, pigs, horses or northern crops; dugouts; palms and oaks.
+- `russian` (old Russia: St Basil's, St Isaac's): sarafans and kokoshniks, belted shirts, kaftans, fur hats, the
+  cross on a cord; log izbas with carved window frames and a stove's chimney, a brick town wall; birch, spruce, pine.
 
 ## The grown map (2026-09-28)
 
@@ -1193,7 +1224,7 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   buildings and water; propCols (`by: "shrine"`); `?shrines=0`. A stone pillar's niche holds a candle that glows at night
   (`LITTLE_LIGHTS`, with the grave lights: after every other lamp; the light a little in front of the niche -- inside
   the stone the glow's shape cut through it). Only in a period whose town has a church
-  (periods.json `church`): none in a Greek, Roman, Egyptian, Chinese, Ottoman or Islamic town.
+  (periods.json `church`): none in a Greek, Roman, Egyptian, Chinese, Indian, Maya, Russian, Ottoman or Islamic town.
 - **Icicles** (icicles.js, 2026-10-24): while the snow lies (`SNOW` > .5) icicles hang along the houses' eaves -- the
   level roof edges (lifeOf roofEdges, the fascia boards' lines; not the gables' verges), a board's depth down, every
   ~20 cm with gaps, 7-55 cm long and thicker the longer they are, a little off plumb. One lit mesh (~2500 in a town),

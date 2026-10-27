@@ -8,9 +8,16 @@
     "pat": "ashlar"
   },
   "rules": [
+    {"parts": "belfry bells", "color": "#8c6b3c", "accent": "#6e532c", "_about": "bronze"},
+    {"parts": ["belfry frames", "belfry beams"], "color": "#6b4a2e", "accent": "#563a23", "pat": "wood", "_about": "the bell frames' timber"},
+    {"parts": "kind:moulding", "pattern": "stone/ashlar fine", "palette": "limestone", "_about": "the walls' trim -- plinths, pilasters, entablatures, window surrounds -- dressed stone against the render"},
     {"parts": ["finial"], "pattern": "roofs/gold leaf"},
     {"parts": ["kind:dome", "kind:roof", "cap"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
     {"parts": "dome/dome", "surface": ["wall", "ceiling"], "side": "in", "pattern": "stone/plaster", "palette": "baroque-rose", "_about": "the dome shell inside"},
+    {"parts": ["west pavilion", "east pavilion", "west pavilion floor", "east pavilion floor", "west pavilion ceiling", "east pavilion ceiling"], "side": "in", "above": 8.5, "color": "#cfc6b4", "accent": "#b9af9a", "pat": "ashlar", "_about": "the belfries inside: bare stone, not the church's marbling"},
+    {"parts": "high altar retable", "pattern": "roofs/gold leaf", "_about": "the high altar's gilt glory"},
+    {"parts": ["side altars", "side altar retables"], "color": "#d8cbb8", "accent": "#a8927a", "pat": "marble"},
+    {"parts": ["interior cornice", "interior pilasters"], "color": "#efe7d8", "accent": "#d9cdb8", "pat": "marble", "_about": "the order inside: white marble pilasters and cornices against the rose faux marble"},
     {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-grey"},
     {"surface": "floor", "pattern": "floors/flagstones", "palette": "limestone"},
     {"surface": "wall", "side": "in", "pattern": "painted/faux marble", "palette": "baroque-rose"},

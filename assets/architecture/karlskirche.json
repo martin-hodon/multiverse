@@ -15,6 +15,8 @@
     "roof ring",
     "dome",
     "portico steps",
+    "portico floor",
+    "portico entry",
     "portico columns",
     "portico side columns",
     "pediment",
@@ -29,17 +31,32 @@
     "east column capital",
     "east column lantern",
     "west hall",
+    "west hall ceiling",
     "west hall roof",
     "west pavilion",
     "west pavilion floor",
+    "west belfry stair",
     "west pavilion ceiling",
     "west pavilion roof",
     "east hall",
+    "east hall ceiling",
     "east hall roof",
     "east pavilion",
     "east pavilion floor",
+    "east belfry stair",
     "east pavilion ceiling",
     "east pavilion roof",
+    "interior cornice",
+    "interior pilasters",
+    "side altar steps",
+    "side altars",
+    "side altar retables",
+    "high altar retable",
+    "belfry frames",
+    "belfry beams",
+    "belfry bells",
+    "altar",
+    "seating",
     "statue pediment apex",
     "statue pediment left",
     "statue pediment right",
@@ -68,6 +85,9 @@
               "springing": 9.0,
               "head": {
                 "profile": "semicircular"
+              },
+              "surround": {
+                "head": "pediment"
               }
             }
           ]
@@ -82,13 +102,16 @@
               "head": {
                 "profile": "segmental",
                 "seg": 0.4
+              },
+              "surround": {
+                "head": false
               }
             }
           ]
         }
       ],
       "faces": {
-        "0": [
+        "15": [
           {
             "h": 13,
             "openings": [
@@ -118,13 +141,13 @@
             ]
           }
         ],
-        "2": [
+        "1": [
           {
             "h": 13,
             "openings": [
               {
-                "at": 0,
-                "width": 2.4,
+                "at": -0.356,
+                "width": 1.4,
                 "sill": 0,
                 "springing": 3.6,
                 "head": {
@@ -148,13 +171,13 @@
             ]
           }
         ],
-        "14": [
+        "13": [
           {
             "h": 13,
             "openings": [
               {
-                "at": 0,
-                "width": 2.4,
+                "at": 0.356,
+                "width": 1.4,
                 "sill": 0,
                 "springing": 3.6,
                 "head": {
@@ -177,8 +200,52 @@
               }
             ]
           }
+        ],
+        "7": [
+          {
+            "h": 13,
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.2,
+                "sill": 2.0,
+                "springing": 7.5,
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.4
+                }
+              }
+            ]
+          }
         ]
       },
+      "courses": {
+        "plinth": true,
+        "clear": {
+          "1": [
+            [
+              1.52,
+              4.01
+            ]
+          ],
+          "13": [
+            [
+              2.232890304516104,
+              4.7228903045161035
+            ]
+          ]
+        }
+      },
+      "orders": [
+        {
+          "tier": 0,
+          "span": 2,
+          "kind": "corinthian"
+        }
+      ],
       "at": [
         [
           0,
@@ -187,7 +254,7 @@
           0
         ]
       ],
-      "_about": "the church, round (the real one is an oval): two tiers of windows, the door behind the portico, and doors into the side halls"
+      "_about": "the church, round (the real one is an oval): a giant Corinthian order of pilasters folded round its corners, two tiers of dressed windows between them, the door on the axis behind the portico, and doors into the side halls"
     },
     "roof ring": {
       "type": "ring",
@@ -239,7 +306,7 @@
     "portico steps": {
       "type": "crepidoma",
       "width": 22.0,
-      "length": 10.0,
+      "length": 5.899999999999999,
       "steps": 4,
       "stepH": 0.2,
       "stepOut": 0.5,
@@ -247,11 +314,79 @@
         [
           0,
           0,
-          20.0,
+          22.05,
           0
         ]
       ],
-      "_about": "the portico's steps"
+      "_about": "the portico's steps, before the halls"
+    },
+    "portico floor": {
+      "type": "prism",
+      "walked": true,
+      "height": 0.8,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "plan": {
+        "points": [
+          [
+            10.0,
+            19.1
+          ],
+          [
+            -10.0,
+            19.1
+          ],
+          [
+            -10.0,
+            12.1926
+          ],
+          [
+            -8.8891,
+            13.3035
+          ],
+          [
+            -3.1214,
+            15.6926
+          ],
+          [
+            3.1214,
+            15.6926
+          ],
+          [
+            8.8891,
+            13.3035
+          ],
+          [
+            10.0,
+            12.1926
+          ]
+        ]
+      },
+      "_about": "the portico's floor behind its steps, between the halls, up to the church's front faces"
+    },
+    "portico entry": {
+      "type": "flight",
+      "width": 3.6,
+      "run": 0.3,
+      "base": 0,
+      "top": 0.8,
+      "steps": 4,
+      "landing": 0.5,
+      "at": [
+        [
+          -1.8,
+          0,
+          14.1126,
+          -1.5707963267948966
+        ]
+      ],
+      "_about": "four steps down from the portico through the door to the church's floor"
     },
     "portico columns": {
       "type": "colonnade",
@@ -289,31 +424,32 @@
       },
       "at": [
         [
-          -10.0,
+          -9.0,
           0.8,
           18.8,
           1.5707963267948966
         ],
         [
-          10.0,
+          9.0,
           0.8,
           18.8,
           1.5707963267948966
         ]
-      ]
+      ],
+      "_about": "the portico's sides, inside its floor (at +-10 they stood in the halls' end walls)"
     },
     "pediment": {
       "type": "roof",
       "form": "gable",
       "width": 22.0,
-      "length": 11.0,
+      "length": 9.3074,
       "pitch": 20,
       "overhang": 0.4,
       "at": [
         [
           0,
           16.0,
-          19.5,
+          20.3463,
           0
         ]
       ],
@@ -351,18 +487,18 @@
     },
     "west column band": {
       "type": "box",
-      "width": 0.5,
-      "length": 0.9,
-      "height": 0.35,
+      "width": 0.4,
+      "length": 0.75,
+      "height": 1.2,
       "spiral": {
-        "count": 160,
-        "turns": 6,
+        "count": 504,
+        "turns": 9,
         "radius": 2.0,
         "x": -20.0,
         "z": 23.0,
-        "y": 7.0,
-        "dy": 0.17,
-        "dr": -0.001
+        "y": 7.2,
+        "dy": 0.05357142857142857,
+        "dr": -0.0002976190476190476
       },
       "_about": "the relief band wound round the shaft"
     },
@@ -443,18 +579,18 @@
     },
     "east column band": {
       "type": "box",
-      "width": 0.5,
-      "length": 0.9,
-      "height": 0.35,
+      "width": 0.4,
+      "length": 0.75,
+      "height": 1.2,
       "spiral": {
-        "count": 160,
-        "turns": 6,
+        "count": 504,
+        "turns": 9,
         "radius": 2.0,
         "x": 20.0,
         "z": 23.0,
-        "y": 7.0,
-        "dy": 0.17,
-        "dr": -0.001
+        "y": 7.2,
+        "dy": 0.05357142857142857,
+        "dr": -0.0002976190476190476
       },
       "_about": "the relief band wound round the shaft"
     },
@@ -507,46 +643,208 @@
     "west hall": {
       "type": "enclosure",
       "plan": {
-        "rect": [
-          23.5,
-          7.100000000000001
+        "points": [
+          [
+            -11.6926,
+            10.5
+          ],
+          [
+            -33.5,
+            10.5
+          ],
+          [
+            -33.5,
+            17.6
+          ],
+          [
+            -10.0,
+            17.6
+          ],
+          [
+            -10.0,
+            12.1926
+          ]
         ]
       },
-      "thickness": 0.9,
-      "height": 12.0,
-      "openings": {
-        "pattern": "4",
-        "width": 2.0,
-        "gap": 3.2,
-        "sill": 1.2,
-        "springing": 6.0,
-        "head": {
-          "profile": "semicircular"
-        }
-      },
+      "thickness": 0.6,
+      "height": 16.0,
       "faces": {
-        "3": [
+        "0": [
           {
-            "at": 0,
-            "width": 4.2,
-            "sill": 0,
-            "springing": 6.0,
-            "head": {
-              "profile": "semicircular"
+            "h": 8.4,
+            "openings": []
+          },
+          {
+            "openings": {
+              "pattern": "4",
+              "width": 2.0,
+              "gap": 3.2,
+              "sill": 1.6,
+              "springing": 4.4,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.4
+              },
+              "surround": {
+                "head": false
+              }
             }
           }
         ],
-        "1": []
+        "2": [
+          {
+            "h": 8.4,
+            "openings": {
+              "pattern": "4",
+              "width": 2.0,
+              "gap": 3.2,
+              "sill": 1.2,
+              "springing": 5.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "4",
+              "width": 2.0,
+              "gap": 3.2,
+              "sill": 1.6,
+              "springing": 4.4,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.4
+              },
+              "surround": {
+                "head": false
+              }
+            }
+          }
+        ],
+        "1": [
+          {
+            "h": 8.4,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.2,
+                "sill": 0,
+                "springing": 6.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": -2.35,
+                "width": 1.2,
+                "springing": 2.3,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false,
+                "sill": 0.5999999999999996
+              }
+            ]
+          }
+        ],
+        "3": [
+          {
+            "h": 8.4,
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "4": [
+          {
+            "h": 8.4,
+            "openings": [
+              {
+                "at": 0,
+                "width": 1.4,
+                "sill": 0,
+                "springing": 3.6,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ]
       },
+      "courses": {
+        "plinth": true,
+        "skip": [
+          "4",
+          "1"
+        ]
+      },
+      "orders": [
+        {
+          "tier": 0,
+          "span": 2,
+          "kind": "corinthian"
+        }
+      ],
       "at": [
         [
-          -21.75,
           0,
-          14.05,
+          0,
+          0,
           0
         ]
       ],
-      "_about": "the side wings: halls from the church to the gate pavilions, windows front and back, a door from the church at one end and an arch into the pavilion at the other"
+      "_about": "the side wings: halls from the church to the gate pavilions -- their inner end following the church's diagonal face, a door through both walls there, an arch into the pavilion at the outer end -- a giant Corinthian order carrying the portico's entablature on out to the pavilions"
+    },
+    "west hall ceiling": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -11.9411,
+            11.1
+          ],
+          [
+            -32.9,
+            11.1
+          ],
+          [
+            -32.9,
+            17.0
+          ],
+          [
+            -10.6,
+            17.0
+          ],
+          [
+            -10.6,
+            12.4411
+          ]
+        ]
+      },
+      "height": 0.4,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          15.6,
+          0,
+          0
+        ]
+      ],
+      "_about": "the halls' flat ceilings under their roofs, wall to wall"
     },
     "west hall roof": {
       "type": "roof",
@@ -558,7 +856,7 @@
       "at": [
         [
           -21.75,
-          12.0,
+          16.0,
           14.05,
           1.5707963267948966
         ]
@@ -599,9 +897,77 @@
               "springing": 7.5,
               "head": {
                 "profile": "semicircular"
+              },
+              "surround": {
+                "head": "pediment"
               }
             }
           ]
+        }
+      ],
+      "faces": {
+        "1": [
+          {
+            "h": 9.0,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.2,
+                "sill": 0,
+                "springing": 6.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.0,
+                "sill": 3.0,
+                "springing": 7.5,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "surround": {
+                  "head": "pediment"
+                }
+              },
+              {
+                "at": 2.35,
+                "width": 1.2,
+                "springing": 2.3,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false,
+                "sill": 0
+              }
+            ]
+          }
+        ]
+      },
+      "courses": {
+        "plinth": true,
+        "clear": {
+          "1": [
+            [
+              0.9,
+              8.1
+            ]
+          ]
+        }
+      },
+      "orders": [
+        {
+          "tier": 0,
+          "kind": "doric"
+        },
+        {
+          "tier": 1,
+          "kind": "ionic"
         }
       ],
       "at": [
@@ -612,10 +978,9 @@
           0
         ]
       ],
-      "_about": "a gate pavilion at each end of the front, an arch through it every way, its belfry over"
+      "_about": "a gate pavilion at each end of the front, an arch through it every way, its belfry over: a Doric order round the arches, an Ionic one over it"
     },
     "west pavilion floor": {
-      "flatRoof": true,
       "type": "box",
       "width": 6.2,
       "length": 6.2,
@@ -628,7 +993,25 @@
           0
         ]
       ],
-      "_about": "the belfry floor over the passage, and under the roof"
+      "_about": "the belfry floor over the passage, reached by the hall's stair"
+    },
+    "west belfry stair": {
+      "type": "flight",
+      "width": 1.2,
+      "run": 0.28,
+      "base": 0,
+      "top": 9.0,
+      "steps": 50,
+      "landing": 1.2,
+      "at": [
+        [
+          -17.7,
+          0,
+          11.1,
+          3.141592653589793
+        ]
+      ],
+      "_about": "up the hall's back wall to the pavilion's belfry floor, its landing at the door"
     },
     "west pavilion ceiling": {
       "type": "box",
@@ -666,42 +1049,203 @@
     "east hall": {
       "type": "enclosure",
       "plan": {
-        "rect": [
-          23.5,
-          7.100000000000001
+        "points": [
+          [
+            11.6926,
+            10.5
+          ],
+          [
+            10.0,
+            12.1926
+          ],
+          [
+            10.0,
+            17.6
+          ],
+          [
+            33.5,
+            17.6
+          ],
+          [
+            33.5,
+            10.5
+          ]
         ]
       },
-      "thickness": 0.9,
-      "height": 12.0,
-      "openings": {
-        "pattern": "4",
-        "width": 2.0,
-        "gap": 3.2,
-        "sill": 1.2,
-        "springing": 6.0,
-        "head": {
-          "profile": "semicircular"
-        }
-      },
+      "thickness": 0.6,
+      "height": 16.0,
       "faces": {
-        "1": [
+        "4": [
           {
-            "at": 0,
-            "width": 4.2,
-            "sill": 0,
-            "springing": 6.0,
-            "head": {
-              "profile": "semicircular"
+            "h": 8.4,
+            "openings": []
+          },
+          {
+            "openings": {
+              "pattern": "4",
+              "width": 2.0,
+              "gap": 3.2,
+              "sill": 1.6,
+              "springing": 4.4,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.4
+              },
+              "surround": {
+                "head": false
+              }
             }
           }
         ],
-        "3": []
+        "2": [
+          {
+            "h": 8.4,
+            "openings": {
+              "pattern": "4",
+              "width": 2.0,
+              "gap": 3.2,
+              "sill": 1.2,
+              "springing": 5.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "4",
+              "width": 2.0,
+              "gap": 3.2,
+              "sill": 1.6,
+              "springing": 4.4,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.4
+              },
+              "surround": {
+                "head": false
+              }
+            }
+          }
+        ],
+        "3": [
+          {
+            "h": 8.4,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.2,
+                "sill": 0,
+                "springing": 6.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 2.35,
+                "width": 1.2,
+                "springing": 2.3,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false,
+                "sill": 0.5999999999999996
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "h": 8.4,
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "0": [
+          {
+            "h": 8.4,
+            "openings": [
+              {
+                "at": 0,
+                "width": 1.4,
+                "sill": 0,
+                "springing": 3.6,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ]
       },
+      "courses": {
+        "plinth": true,
+        "skip": [
+          "0",
+          "3"
+        ]
+      },
+      "orders": [
+        {
+          "tier": 0,
+          "span": 2,
+          "kind": "corinthian"
+        }
+      ],
       "at": [
         [
-          21.75,
           0,
-          14.05,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "east hall ceiling": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            11.9411,
+            11.1
+          ],
+          [
+            10.6,
+            12.4411
+          ],
+          [
+            10.6,
+            17.0
+          ],
+          [
+            32.9,
+            17.0
+          ],
+          [
+            32.9,
+            11.1
+          ]
+        ]
+      },
+      "height": 0.4,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          15.6,
+          0,
           0
         ]
       ]
@@ -716,7 +1260,7 @@
       "at": [
         [
           21.75,
-          12.0,
+          16.0,
           14.05,
           1.5707963267948966
         ]
@@ -757,9 +1301,77 @@
               "springing": 7.5,
               "head": {
                 "profile": "semicircular"
+              },
+              "surround": {
+                "head": "pediment"
               }
             }
           ]
+        }
+      ],
+      "faces": {
+        "3": [
+          {
+            "h": 9.0,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.2,
+                "sill": 0,
+                "springing": 6.0,
+                "head": {
+                  "profile": "semicircular"
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.0,
+                "sill": 3.0,
+                "springing": 7.5,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "surround": {
+                  "head": "pediment"
+                }
+              },
+              {
+                "at": -2.35,
+                "width": 1.2,
+                "springing": 2.3,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false,
+                "sill": 0
+              }
+            ]
+          }
+        ]
+      },
+      "courses": {
+        "plinth": true,
+        "clear": {
+          "3": [
+            [
+              0.9,
+              8.1
+            ]
+          ]
+        }
+      },
+      "orders": [
+        {
+          "tier": 0,
+          "kind": "doric"
+        },
+        {
+          "tier": 1,
+          "kind": "ionic"
         }
       ],
       "at": [
@@ -772,7 +1384,6 @@
       ]
     },
     "east pavilion floor": {
-      "flatRoof": true,
       "type": "box",
       "width": 6.2,
       "length": 6.2,
@@ -782,6 +1393,23 @@
           38.0,
           8.6,
           14.05,
+          0
+        ]
+      ]
+    },
+    "east belfry stair": {
+      "type": "flight",
+      "width": 1.2,
+      "run": 0.28,
+      "base": 0,
+      "top": 9.0,
+      "steps": 50,
+      "landing": 1.2,
+      "at": [
+        [
+          17.7,
+          0,
+          12.3,
           0
         ]
       ]
@@ -818,6 +1446,458 @@
           0
         ]
       ]
+    },
+    "interior cornice": {
+      "type": "ring",
+      "count": 16,
+      "polygon": true,
+      "rOuter": 14.4187,
+      "rInner": 13.8187,
+      "height": 0.5,
+      "y": 12.7,
+      "turn": 0.5,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          11.8,
+          0,
+          0
+        ]
+      ],
+      "_about": "the cornices round the inside, over the lower windows and under the roof ring"
+    },
+    "interior pilasters": {
+      "type": "box",
+      "width": 1.1,
+      "length": 0.5,
+      "height": 11.3,
+      "at": [
+        [
+          2.7642,
+          0,
+          13.8965,
+          0.19635
+        ],
+        [
+          2.7642,
+          13.2,
+          13.8965,
+          0.19635
+        ],
+        [
+          7.8717,
+          0,
+          11.7808,
+          0.589049
+        ],
+        [
+          7.8717,
+          13.2,
+          11.7808,
+          0.589049
+        ],
+        [
+          11.7808,
+          0,
+          7.8717,
+          0.981748
+        ],
+        [
+          11.7808,
+          13.2,
+          7.8717,
+          0.981748
+        ],
+        [
+          13.8965,
+          0,
+          2.7642,
+          1.374447
+        ],
+        [
+          13.8965,
+          13.2,
+          2.7642,
+          1.374447
+        ],
+        [
+          13.8965,
+          0,
+          -2.7642,
+          1.767146
+        ],
+        [
+          13.8965,
+          13.2,
+          -2.7642,
+          1.767146
+        ],
+        [
+          11.7808,
+          0,
+          -7.8717,
+          2.159845
+        ],
+        [
+          11.7808,
+          13.2,
+          -7.8717,
+          2.159845
+        ],
+        [
+          7.8717,
+          0,
+          -11.7808,
+          2.552544
+        ],
+        [
+          7.8717,
+          13.2,
+          -11.7808,
+          2.552544
+        ],
+        [
+          2.7642,
+          0,
+          -13.8965,
+          2.945243
+        ],
+        [
+          2.7642,
+          13.2,
+          -13.8965,
+          2.945243
+        ],
+        [
+          -2.7642,
+          0,
+          -13.8965,
+          3.337942
+        ],
+        [
+          -2.7642,
+          13.2,
+          -13.8965,
+          3.337942
+        ],
+        [
+          -7.8717,
+          0,
+          -11.7808,
+          3.730641
+        ],
+        [
+          -7.8717,
+          13.2,
+          -11.7808,
+          3.730641
+        ],
+        [
+          -11.7808,
+          0,
+          -7.8717,
+          4.12334
+        ],
+        [
+          -11.7808,
+          13.2,
+          -7.8717,
+          4.12334
+        ],
+        [
+          -13.8965,
+          0,
+          -2.7642,
+          4.516039
+        ],
+        [
+          -13.8965,
+          13.2,
+          -2.7642,
+          4.516039
+        ],
+        [
+          -13.8965,
+          0,
+          2.7642,
+          4.908739
+        ],
+        [
+          -13.8965,
+          13.2,
+          2.7642,
+          4.908739
+        ],
+        [
+          -11.7808,
+          0,
+          7.8717,
+          5.301438
+        ],
+        [
+          -11.7808,
+          13.2,
+          7.8717,
+          5.301438
+        ],
+        [
+          -7.8717,
+          0,
+          11.7808,
+          5.694137
+        ],
+        [
+          -7.8717,
+          13.2,
+          11.7808,
+          5.694137
+        ],
+        [
+          -2.7642,
+          0,
+          13.8965,
+          6.086836
+        ],
+        [
+          -2.7642,
+          13.2,
+          13.8965,
+          6.086836
+        ]
+      ],
+      "_about": "a pilaster in each corner inside, under each cornice"
+    },
+    "side altar steps": {
+      "type": "box",
+      "width": 3.6,
+      "length": 2.2,
+      "height": 0.15,
+      "at": [
+        [
+          12.9926,
+          0,
+          0.0,
+          1.570796
+        ],
+        [
+          9.1871,
+          0,
+          -9.1871,
+          2.356194
+        ],
+        [
+          -9.1871,
+          0,
+          -9.1871,
+          3.926991
+        ],
+        [
+          -12.9926,
+          0,
+          -0.0,
+          4.712389
+        ]
+      ],
+      "walked": true
+    },
+    "side altars": {
+      "type": "box",
+      "width": 2.4,
+      "length": 1.0,
+      "height": 1.05,
+      "at": [
+        [
+          13.2426,
+          0.15,
+          0.0,
+          1.570796
+        ],
+        [
+          9.3639,
+          0.15,
+          -9.3639,
+          2.356194
+        ],
+        [
+          -9.3639,
+          0.15,
+          -9.3639,
+          3.926991
+        ],
+        [
+          -13.2426,
+          0.15,
+          -0.0,
+          4.712389
+        ]
+      ]
+    },
+    "side altar retables": {
+      "type": "box",
+      "width": 3.0,
+      "length": 0.4,
+      "height": 3.7,
+      "at": [
+        [
+          13.8926,
+          0.15,
+          0.0,
+          1.570796
+        ],
+        [
+          9.8235,
+          0.15,
+          -9.8235,
+          2.356194
+        ],
+        [
+          -9.8235,
+          0.15,
+          -9.8235,
+          3.926991
+        ],
+        [
+          -13.8926,
+          0.15,
+          -0.0,
+          4.712389
+        ]
+      ],
+      "_about": "four side altars, each on a step before a marble retable under its window"
+    },
+    "high altar retable": {
+      "type": "box",
+      "width": 4.5,
+      "length": 0.4,
+      "height": 12.7,
+      "at": [
+        [
+          0,
+          0,
+          -13.892564486451688,
+          0
+        ]
+      ],
+      "_about": "the high altar's retable, a gilt glory up the blind back face to the cornice"
+    },
+    "belfry frames": {
+      "type": "box",
+      "width": 0.3,
+      "length": 0.3,
+      "height": 7.0,
+      "at": [
+        [
+          -38.0,
+          9.0,
+          12.450000000000001,
+          0
+        ],
+        [
+          -38.0,
+          9.0,
+          15.65,
+          0
+        ],
+        [
+          38.0,
+          9.0,
+          12.450000000000001,
+          0
+        ],
+        [
+          38.0,
+          9.0,
+          15.65,
+          0
+        ]
+      ],
+      "_about": "the bell frames' posts, standing on the belfry floors"
+    },
+    "belfry beams": {
+      "type": "box",
+      "width": 0.4,
+      "length": 3.6,
+      "height": 0.4,
+      "at": [
+        [
+          -38.0,
+          16.0,
+          14.05,
+          0
+        ],
+        [
+          38.0,
+          16.0,
+          14.05,
+          0
+        ]
+      ]
+    },
+    "belfry bells": {
+      "type": "dome",
+      "sides": 16,
+      "radius": 0.85,
+      "thickness": 0.08,
+      "cap": false,
+      "head": {
+        "profile": "bell",
+        "waist": 0.6,
+        "lift": 0.5
+      },
+      "at": [
+        [
+          -38.0,
+          15.06,
+          14.05,
+          0
+        ],
+        [
+          38.0,
+          15.06,
+          14.05,
+          0
+        ]
+      ],
+      "_about": "a bell under each beam, its crown (0.94m up its profile) on it"
+    },
+    "altar": {
+      "type": "zone",
+      "zone": "altar",
+      "w": 6.0,
+      "d": 3.0,
+      "h": 8.0,
+      "at": [
+        [
+          0,
+          0,
+          -12.092564486451687,
+          -1.5707963267948966
+        ]
+      ],
+      "_about": "the high altar at the back of the church, opposite the door"
+    },
+    "seating": {
+      "type": "zone",
+      "zone": "seating",
+      "w": 12.0,
+      "d": 11.0,
+      "h": 8.0,
+      "at": [
+        [
+          0,
+          0,
+          2.5,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the pews down the middle of the round, facing the altar"
     },
     "statue pediment apex": {
       "type": "marker",

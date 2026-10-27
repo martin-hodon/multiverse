@@ -11,51 +11,39 @@ def add(n, d): parts[n] = d; build.append(n)
 comp = lambda use, params, at, **kw: {"type": "component", "use": use, "params": params, "at": at, **kw}
 Q = math.pi / 2
 
-W, L, T, WH = 36.0, 76.0, 1.8, 28.0        # the hall: width, length, walls, their height
-BAYS = 8
-IN = L - 2 * T
-BAY = IN / BAYS
-NW = 11.0                                  # the nave, between the pier rows
-AW = (W - 2 * T - NW) / 2                  # each aisle
-SPR, TOP = 17.0, 25.5                      # the vaults' springing and crown
-lancets = {"pattern": "7", "width": 2.4, "gap": BAY - 2.4, "sill": 5.0, "springing": 16.0, "head": {"profile": "pointed", "spread": 1.0}}
-add("hall", {"type": "enclosure", "plan": {"rect": [W, L]}, "thickness": T, "height": WH, "openings": lancets,
-             "faces": {"0": [{"h": 17, "openings": [{"at": 0, "width": 6.0, "sill": 0, "springing": 9.0, "head": {"profile": "semicircular"}}]},
-                             {"openings": [{"at": 0, "width": 6.0, "sill": 1.0, "springing": 4.6, "head": {"profile": "pointed", "spread": 1.0}}]}],
-                       "2": [{"at": 0, "width": 18.0, "sill": 0, "springing": 12.0, "head": {"profile": "pointed", "spread": 0.6}}]},
-             "at": [[0, 0, 0, 0]],
-             "_about": "the hall: tall lancets down both flanks, the Giant's Door and the great window over it in the west front, and the east end open by a great arch into the choir"})
-add("piers", {"type": "column", "radius": 0.9, "height": SPR, "sides": 12,
-              "at": [[sx * NW / 2, 0, L / 2 - T - BAY * k, 0] for sx in (-1, 1) for k in range(1, BAYS)],
-              "_about": "two rows of piers down the hall"})
-for nm, cx, w in (("nave vaults", 0.0, NW), ("aisle vaults", NW / 2 + AW / 2, AW)):
-    add(nm, {"type": "groin", "width": w, "length": BAY, "springing": SPR, "top": TOP, "head": {"profile": "pointed", "spread": 0.6},
-             "at": [[sx * cx, 0, L / 2 - T - BAY / 2 - BAY * k, 0] for sx in ((1,) if cx == 0 else (-1, 1)) for k in range(BAYS)],
-             **({"_about": "groin vaults over nave and aisles, all at one height: a hall church"} if cx == 0 else {})})
-add("hall ceiling", {"type": "box", "width": W - 2 * T, "length": IN, "height": 0.4, "at": [[0, WH - 0.4, 0, 0]],
-                     "_about": "the floor of the roof space, over the vaults"})
-add("roof", {"type": "roof", "form": "gable", "width": W + 1.0, "length": L, "pitch": 58, "overhang": 0.6, "at": [[0, WH, 0, 0]],
-             "_about": "the great roof, 38m of steep patterned tiles"})
-
-# ---- the choir and its apse
-CW, CL = 30.0, 22.0
-add("choir", {"type": "enclosure", "plan": {"rect": [CW, CL]}, "thickness": T, "height": WH - 2.0,
-              "openings": {"pattern": "3", "width": 2.4, "gap": 4.0, "sill": 5.0, "springing": 15.0, "head": {"profile": "pointed", "spread": 1.0}},
-              "faces": {"0": [{"at": 0, "width": 18.0, "sill": 0, "springing": 12.0, "head": {"profile": "pointed", "spread": 0.6}}],
-                        "2": [{"at": 0, "width": CW - 2 * T - 1.0, "sill": 0, "springing": 8.0, "head": {"profile": "pointed", "spread": 0.3}}]},
-              "at": [[0, 0, -L / 2 - CL / 2, 0]], "_about": "the Albertine choir, a hall of its own, open to the nave and to its apse"})
-AR = CW / 2 - T
-add("apse", {"type": "component", "use": "components/apse",
-             "params": {"R": AR, "T": T, "H": WH - 2.0, "n": 16, "winW": 2.2, "winSill": 5.0, "winH": 10.0, "winHead": "pointed",
-                        "profile": "trigonal", "rise": 24.0, "domeT": 0, "over": 0.5},
-             "at": [[0, 0, -L / 2 - CL, math.pi]], "_about": "the apse, a tall lancet in each bay, under the half cone of its roof (`apse`)"})
-add("choir roof", {"type": "roof", "form": "gable", "width": CW + 1.0, "length": CL, "pitch": 58, "overhang": 0.5, "at": [[0, WH - 2.0, -L / 2 - CL / 2, 0]]})
+# ---- THE CHURCH AS ITS STRUCTURE: the `basilica` part as a HALL (arch/gothic.js): nave and aisles vaulted from the
+# same capitals -- the aisles' keystones 3m under the nave's (a stepped hall) -- one line of piers a side running on
+# round the choir's polygon into an ambulatory, tall windows in the outer wall under the aisle vaults, a deep stepped
+# buttress with its pinnacle at every bay and every corner of the apse, and ONE roof over all three vessels
+BAYS, BAY = 10, 9.2                        # nave and Albertine choir, west front to the apse
+NW, AW, T, TA = 12.0, 10.0, 1.4, 1.6       # the arcade's centre lines apart, pier line to wall line, the walls
+SPR, PITCH, OV = 20.0, 62, 0.6
+L = BAYS * BAY                             # the straight bays: z from +L/2 (west) to -L/2, the apse beyond
+OUT = NW / 2 + AW + TA / 2                 # the outer wall's face
+CROWN = SPR + (NW / 2 - T / 2) * 1.7321 * 0.9
+WALLTOP = CROWN + 0.5 + 0.3
+RIDGE = WALLTOP + (OUT + OV) * math.tan(math.radians(PITCH))
+add("church", {"type": "basilica", "hall": True, "bays": BAYS, "bayLen": BAY, "naveW": NW, "aisleW": AW, "t": T, "aisleT": TA,
+               "apse": 5, "spring": SPR, "aisleDrop": 3.0, "pierR": 0.95, "shaft": 0.3, "pitch": PITCH, "overhang": OV,
+               "aisleSill": 6.0, "aisleWin": 3.2, "buttressW": 1.8, "buttressD": 3.4, "skipButtress": [[6, 6]], "wimpergs": True, "at": [[0, 0, 0, 0]],
+               "_about": "nave and choir as one HALL: piers, arcades, rib vaults over nave, aisles and ambulatory at nearly one height, the outer walls with their tall windows, a stepped buttress and pinnacle at every bay and round the apse, one steep roof over all"})
+# THE WEST FRONT across the hall's open west end, its back on it: the Giant's Door, the great window over it, and the
+# GABLE over the eave, cut to the roof's own pitch (two halves, each a mass whose top falls with the roof)
+FW = 2 * OUT
+add("west front", {"type": "wall", "width": FW, "height": round(WALLTOP, 4), "thickness": 3.0, "at": [[0, 0, L / 2 + 3.0, 0]],
+                   "tiers": [{"h": 17, "openings": [{"at": 0, "width": 6.0, "sill": 0, "springing": 9.0, "head": {"profile": "semicircular"}}]},
+                             {"openings": [{"at": 0, "width": 6.0, "sill": 1.0, "springing": round(WALLTOP - 17 - 4.5 - 3 * 1.7321, 4), "head": {"profile": "pointed", "spread": 1.0}, "tracery": True}]}],
+                   "_about": "the west front: the Romanesque Giant's Door, and the great window over it"})
+GH = RIDGE - WALLTOP                       # the gable's height over the eave, at its middle
+add("west gable", {"type": "prism", "plan": {"rect": [OUT, 3.0]}, "height": round(GH - OUT / 2 * math.tan(math.radians(PITCH)), 4),
+                   "slope": [round(-math.tan(math.radians(PITCH)), 5), 0], "at": [[OUT / 2, round(WALLTOP, 4), L / 2 + 1.5, 0], [-OUT / 2, round(WALLTOP, 4), L / 2 + 1.5, round(math.pi, 6)]],
+                   "_about": "the west gable over the front, its two halves falling with the roof"})
 
 # ---- the towers beside the hall, where the transept would be: the south one (+x) and the north one (-x)
 TW, TT = 14.0, 2.0
-tz = -L / 2 + 20.0
+tz = L / 2 - 6 * BAY                       # on the sixth node from the west, where the choir begins (no buttress there)
 stage = lambda w, h, y, x, **kw: {"type": "enclosure", "plan": {"rect": [w, w]}, "thickness": TT, "height": h, "at": [[x, y, tz, 0]], **kw}
-SX = W / 2 + TW / 2
+SX = OUT + TW / 2
 add("south tower", stage(TW, 40.0, 0, SX, tiers=[{"h": 16, "openings": []}, {"openings": {"pattern": "1", "width": 2.4, "sill": 8.0, "springing": 17.0,
                                                                                        "head": {"profile": "pointed", "spread": 1.0}}}],
                           faces={"2": [{"h": 16, "openings": [{"at": 0, "width": 3.0, "sill": 0, "springing": 5.0, "head": {"profile": "pointed", "spread": 1.0}}]},
@@ -85,7 +73,7 @@ add("north tower cap", comp("components/domed-tower", {"sides": 4, "R": TW / 2 *
 # ---- the west front's two Heathen Towers
 add("heathen towers", comp("components/domed-tower", {"sides": 8, "R": 3.4, "H": 40.0, "t": 0.8, "drumR": 2.6, "drumH": 3.0, "cap": "trigonal",
                                                       "capRise": 16.0, "capR": 3.0, "kok": 0.8, "finial": 2.0, "winW": 1.0, "glazed": 0, "doorH": 3.0},
-                           [[sx * (W / 2 - 2.6), 0, L / 2 - 1.6, 0] for sx in (-1, 1)], build=["tower", "kokoshniki", "drum", "cap", "finial"],
+                           [[sx * 6.6, 0, L / 2 + 3.0 + 3.2, 0] for sx in (-1, 1)], build=["tower", "kokoshniki", "drum", "cap", "finial"],
                            _about="the two Heathen Towers either side of the Giant's Door, octagons under stone spires"))
 
 doc = {"name": "Stephansdom",

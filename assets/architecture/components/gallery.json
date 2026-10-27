@@ -14,7 +14,13 @@
     "arch": "semicircular",
     "_sill": "the openings' sill: 0.9 for a gallery's windows, 0 for an open arcade (a loggia)",
     "terrace": 1,
-    "_terrace": "1: its roof is a terrace, walked (reached from the pavilions at its ends); 0: a roof"
+    "_terrace": "1: its roof is a terrace, walked (reached from the pavilions at its ends); 0: a roof",
+    "head": 1.2,
+    "_head": "the wall over the arches' crowns: 1.2, or a fifth of H and more where an order's entablature runs over them",
+    "order": "none",
+    "_order": "the applied order along both long faces (tuscan, doric, ionic, corinthian, composite) or none",
+    "dressed": 0,
+    "_dressed": "1: a plinth under it"
   },
   "build": [
     "walls",
@@ -39,7 +45,7 @@
           "gap": "(L - 2 - n * winW) / n",
           "pier": "(L - 2 - n * winW) / n",
           "sill": "sill",
-          "springing": "H - winW / 2 - 1.2",
+          "springing": "H - winW / 2 - head",
           "head": {
             "profile": "arch",
             "spread": 1.0
@@ -51,7 +57,7 @@
           "gap": "(L - 2 - n * winW) / n",
           "pier": "(L - 2 - n * winW) / n",
           "sill": "sill",
-          "springing": "H - winW / 2 - 1.2",
+          "springing": "H - winW / 2 - head",
           "head": {
             "profile": "arch",
             "spread": 1.0
@@ -89,6 +95,12 @@
           0,
           0
         ]
+      ],
+      "courses": "dressed",
+      "orders": [
+        {
+          "kind": "order"
+        }
       ]
     },
     "roof": {

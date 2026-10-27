@@ -26,7 +26,9 @@ def along(a, b, t):
 # through the town front (edge 0: the points are given clockwise from the town front's east end)
 add("court", {"type": "court", "plan": {"points": [list(V[1]), list(V[0]), list(V[4]), list(V[3]), list(V[2])]},
               "depth": WD, "storeys": N, "storeyH": H, "axis": 3.4, "gate": {"face": 0, "width": 4.0, "height": 5.5},
-              "roof": {"form": "hip", "pitch": 52},
+              "roof": {"form": "hip", "pitch": 52}, "courses": True,
+              # (Renaissance dress -- surround.js: pediments over the first floor's windows, triangular and segmental in turn)
+              "surround": [{"head": False}, {"pediment": "alternate"}, {"head": "cornice"}, {"head": False}],
               "_about": "the castle's five wings round its court, one ring of rooms walked all the way round, entered through the gate tower"})
 
 gold = {"cap": "bell", "waist": 0.78, "lift": 1.05}
@@ -68,7 +70,7 @@ gate_z = gz - GT                           # the gate storey's front face
 BL = (gate_z - (-HZ - MOAT_W - 1.5))
 add("bridge", comp("components/bridge", {"L": round(BL, 4), "W": 7, "depth": 5.0, "n": 4}, [[round(gx, 4), 0, round(gate_z, 4), math.pi]],
                    _about="the bridge over the lake to the gate"))
-add("bridge steps", {"type": "flight", "width": 6, "run": 0.32, "rise": 0.15, "top": 0.6, "base": -0.6, "landing": 0,
+add("bridge steps", {"type": "flight", "width": 6, "run": 0.32, "rise": 0.15, "top": 0, "base": -0.6, "landing": 0,
                      "at": [[round(gx - 3, 4), 0, round(gate_z - BL - 4 * 0.32, 4), -1.5707963]], "_about": "down from the deck to the shore"})
 
 doc = {"name": "Schloss Schwerin",

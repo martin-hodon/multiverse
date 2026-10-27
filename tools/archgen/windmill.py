@@ -73,11 +73,16 @@ NF = 24
 def hatch(y_floor, y0, dy, da, a_start, n):   # the outer ring's bays over the steps that a head would meet under the floor
     k0 = math.ceil((y_floor - 2.0 - y0) / dy)
     return bays_in(a_start + k0 * da - 0.13, a_start + n * da + 0.13, NF)
-parts["stone floor"] = {"type": "column", "radius": 1.9, "height": 0.2, "sides": NW, "at": [[0, ST[1][0], 0, 0]]}
+# (each floor's outer ring, laid on the wall's offset, first: the inner disc is held at its edge by the ring)
 ring("stone floor ring", ST[0][2] - T, 1.9, 0.2, ST[1][0], skip=hatch(ST[1][0], 0.15, dy0, da0, math.pi, n0), n=NF)
-ring("bin floor", 1.7, 0.25, 0.2, ST[2][0], n=NF)
+parts["stone floor"] = {"type": "column", "radius": 1.9, "height": 0.2, "sides": NW, "at": [[0, ST[1][0], 0, 0]]}
 ring("bin floor ring", ST[1][2] - T, 1.7, 0.2, ST[2][0], skip=hatch(ST[2][0], F1, dy1, da1, a1, n1), n=NF)
-parts["cap"] = {"type": "dome", "radius": ST[-1][2] + 0.45, "sides": NW, "thickness": 0.12, "cap": False, "head": {"profile": "trigonal", "rise": 3.6}, "oculus": 0.25, "at": [[0, H, 0, 0]]}
+ring("bin floor", 1.7, 0.25, 0.2, ST[2][0], n=NF)
+# THE CURB the cap turns on: a timber ring laid on the wall head and reaching out under the cap's eaves -- the cap
+# overhangs the tower by 45 cm, and its skin used to stand on nothing out there
+CURB = 0.3
+ring("curb", ST[-1][2] + 0.45, ST[-1][2] - T, CURB, H, n=NW)
+parts["cap"] = {"type": "dome", "radius": ST[-1][2] + 0.45, "sides": NW, "thickness": 0.12, "cap": False, "head": {"profile": "trigonal", "rise": 3.6}, "oculus": 0.25, "at": [[0, H + CURB, 0, 0]]}
 # the static millwork: the bedstone in its tun, the hopper on its horse, the chutes, the bins
 item = lambda path, at, params=None, **k: {"type": "item", "item": path, "at": [at], **({"params": params} if params else {}), **k}
 parts["bedstone"] = item("items/components/millstone", [0, F1, 0, 0], {"h": 0.24})
@@ -115,7 +120,7 @@ fin = {"name": "Windmill", "building": "architecture/windmill", "_about": "the w
        "stone": {"color": "#cfc4ae", "accent": "#b8ab92", "pat": "ashlar"},
        "rules": [{"parts": "cap", "side": "out", "pattern": "roofs/fish scale", "palette": "tile-brown"},
                  {"parts": "cap", "pattern": "timber/boards", "palette": "oak-grey"},
-                 {"parts": ["stone floor", "stone floor ring", "bin floor", "bin floor ring", "grain chute", "grain bin", "meal chute", "meal bin", "kind:flight"], "pattern": "timber/boards", "palette": "oak-grey"},
+                 {"parts": ["curb", "stone floor", "stone floor ring", "bin floor", "bin floor ring", "grain chute", "grain bin", "meal chute", "meal bin", "kind:flight"], "pattern": "timber/boards", "palette": "oak-grey"},
                  {"parts": "ground floor", "surface": "floor", "pattern": "floors/flagstones", "palette": "stone"},
                  {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
                  {"pattern": "stone/rubble", "palette": "limestone"}]}

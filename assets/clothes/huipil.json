@@ -1,0 +1,48 @@
+{
+  "name": "Huipil",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "the huipil: a loose tunic of cotton woven on the backstrap loom, two or three panels sewn up the sides with holes left for the arms and the head, to the hip or the knee, brocaded in bands of colour round the neck (the Maya woman's dress, then and now)",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/linen",
+      "palette": "wool-white"
+    },
+    "trim": {
+      "pattern": "fabrics/lozenge",
+      "palette": "russian"
+    }
+  },
+  "params": {
+    "length": "hip - 0.12",
+    "hem": 0.06
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip",
+        "neckline": "square",
+        "neckFront": 0.06,
+        "neckBack": 0.02,
+        "neckWidth": 58
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "biceps - 0.04"
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "hip",
+        "to": "length",
+        "flare": 0.1,
+        "pleats": 4,
+        "hem": "hem"
+      }
+    }
+  ]
+}

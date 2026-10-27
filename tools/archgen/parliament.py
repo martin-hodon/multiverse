@@ -19,12 +19,12 @@ WALL = ST * SH
 for sx, nm, face in ((-1, "west", 1), (1, "east", 3)):
     add(f"{nm} court", {"type": "court", "plan": {"rect": [CW, CD]}, "depth": 13.0, "storeys": ST, "storeyH": SH, "axis": 3.6,
                         "winW": 1.4, "winH": 3.0, "head": {"profile": "pointed", "spread": 1.0},
-                        "gate": {"face": face, "width": 4.0, "height": 5.5}, "roof": {"form": "hip", "pitch": 55},
+                        "gate": {"face": face, "width": 4.0, "height": 5.5}, "roof": {"form": "hip", "pitch": 55}, "courses": True,
                         "at": [[sx * (A + CW / 2), 0, 0, 0]],
                         **({"_about": "the two halves, each a ring of rooms round its courtyard, three storeys under steep roofs, gated toward the central hall"} if sx < 0 else {})})
 # ---- the central hall and its dome
 door = lambda w, h: [{"at": 0, "width": w, "sill": 0, "springing": h - w / 2, "head": {"profile": "pointed", "spread": 1.0}}]
-tall = {"pattern": "3", "width": 2.2, "gap": 5.0, "sill": 6.0, "springing": 18.0, "head": {"profile": "pointed", "spread": 1.0}}
+tall = {"pattern": "3", "width": 2.2, "gap": 5.0, "sill": 6.0, "springing": 18.0, "head": {"profile": "pointed", "spread": 1.0}, "tracery": {"style": "perpendicular"}}
 add("central hall", {"type": "enclosure", "plan": {"rect": [CS, CS]}, "thickness": T, "height": CH, "openings": tall,
                      "faces": {"1": door(4.0, 5.5), "3": door(4.0, 5.5), "2": door(5.0, 8.0)},
                      "at": [[0, 0, 0, 0]], "_about": "the domed central hall: the main door from the square, and a door through into each court"})

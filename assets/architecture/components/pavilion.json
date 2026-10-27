@@ -11,7 +11,12 @@
     "m": 3,
     "t": 1.0,
     "archW": 3.2,
-    "_H1": "the ground storey: its floor above is level with the galleries' terraces (8m + a 0.7m slab)"
+    "_H1": "the ground storey: its floor above is level with the galleries' terraces (8m + a 0.7m slab)",
+    "order1": "none",
+    "order2": "none",
+    "dressed": 0,
+    "_order1": "the ground storey's applied order (tuscan, doric, ionic, corinthian, composite) or none; order2 the upper storey's. The arches crown a fifth of the storey under its top, where an order's entablature runs over them",
+    "_dressed": "1: a plinth and the courses, the upper windows framed (an architrave, a cornice over)"
   },
   "build": [
     "walls",
@@ -41,7 +46,7 @@
             "gap": "(W - n * archW) / (n + 1)",
             "pier": 0,
             "sill": 0,
-            "springing": "H1 - archW / 2 - 1.0",
+            "springing": "H1 * 0.8 - 0.3 - archW / 2",
             "head": {
               "profile": "semicircular"
             }
@@ -54,10 +59,11 @@
             "gap": "(W - n * archW * 0.7) / (n + 1)",
             "pier": 0,
             "sill": 0,
-            "springing": "H2 - archW * 0.35 - 1.6",
+            "springing": "H2 * 0.8 - 0.3 - archW * 0.35",
             "head": {
               "profile": "semicircular"
-            }
+            },
+            "surround": "dressed"
           }
         }
       ],
@@ -71,7 +77,7 @@
               "gap": "(D - m * archW) / (m + 1)",
               "pier": 0,
               "sill": 0,
-              "springing": "H1 - archW / 2 - 1.0",
+              "springing": "H1 * 0.8 - 0.3 - archW / 2",
               "head": {
                 "profile": "semicircular"
               }
@@ -84,10 +90,11 @@
               "gap": "(D - m * archW * 0.7) / (m + 1)",
               "pier": 0,
               "sill": 0,
-              "springing": "H2 - archW * 0.35 - 1.6",
+              "springing": "H2 * 0.8 - 0.3 - archW * 0.35",
               "head": {
                 "profile": "semicircular"
-              }
+              },
+              "surround": "dressed"
             }
           }
         ],
@@ -100,7 +107,7 @@
               "gap": "(D - m * archW) / (m + 1)",
               "pier": 0,
               "sill": 0,
-              "springing": "H1 - archW / 2 - 1.0",
+              "springing": "H1 * 0.8 - 0.3 - archW / 2",
               "head": {
                 "profile": "semicircular"
               }
@@ -113,10 +120,11 @@
               "gap": "(D - m * archW * 0.7) / (m + 1)",
               "pier": 0,
               "sill": 0,
-              "springing": "H2 - archW * 0.35 - 1.6",
+              "springing": "H2 * 0.8 - 0.3 - archW * 0.35",
               "head": {
                 "profile": "semicircular"
-              }
+              },
+              "surround": "dressed"
             }
           }
         ]
@@ -128,6 +136,17 @@
           0,
           0
         ]
+      ],
+      "courses": "dressed",
+      "orders": [
+        {
+          "tier": 0,
+          "kind": "order1"
+        },
+        {
+          "tier": 1,
+          "kind": "order2"
+        }
       ]
     },
     "floor": {

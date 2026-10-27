@@ -4,8 +4,10 @@ and the court as an arch-engine definition (assets/architecture/versailles.json)
 the same rules the code laid it by, written out once as parts.
 
 A plan of rectangular BLOCKS, each a hollow three-storey shell (ground, piano nobile, attic) with the endlessly repeated
-baroque bay -- a ground window, a tall piano-nobile window between pilasters, a square attic window -- cornice lines, a
-flat roof behind a balustrade. Where two blocks stand face to face the shared plane is a PARTY WALL: no windows, no
+baroque bay -- a ground window, a tall piano-nobile window between pilasters, a square attic window -- and its orders:
+each block ONE enclosure, its courses mitred round its corners, Ionic pilasters through the piano nobile and a Tuscan
+attic order over them (arch/order.js: each sized from its storey, its entablature the cornice), a flat roof behind a
+balustrade. Where two blocks stand face to face the shared plane is a PARTY WALL: no windows, no
 trim, and a passage through it is ONE doorway (the later block's snaps onto the earlier one's and leaves the door panel
 to it). The ramp blocks have a real stair to each storey through a stairwell in the slab, railed round its drop. Rooms
 along each block's long axis open into each other through an enfilade of aligned doorways; the corps central's piano
@@ -96,9 +98,12 @@ def fbox(name, b, f, u, out, along, h, y, thick):
 
 doors, wins, mirrors, paintings, cobwebs = [], {0: [], 1: [], 2: []}, [], [], []
 WIN = [(1.15, 1.7, 3.6), (LV[1] + 1, 1.9, 4.8), (LV[2] + 0.9, 1.4, 2.1)]   # sill, width, height, storey by storey
-walls = []
+FACE_NO = {"s": 0, "e": 1, "n": 2, "w": 3}   # (a rect enclosure's faces: +z, +x, -z, -x; each runs from its first corner, `at` from its middle)
+BAL_H, BAL_T = 1.0, 0.3                      # the balustrade on the wall heads, round the roof's 0.4m slab (its top BAL_H over the slab)
+walls, balustrades = [], []
 for bi, b in enumerate(BLOCKS):
     door_list, plain = b.get("door", []), b.get("plain", [])
+    faces, clear = {}, {}
     for f in "nsew":
         L, along, cts = face_len(b, f), f in "ns", contacts(b, f)
         in_contact = lambda u, half: next((c for c in cts if u + half > c[0] - 0.3 and u - half < c[1] + 0.3), None)
@@ -120,34 +125,54 @@ for bi, b in enumerate(BLOCKS):
             for k, (wy, ww, wh) in enumerate(WIN):
                 if wy < LV[1] and any(abs(u - du) < DOOR_W / 2 + 1.2 for du, _ in fdoors): continue
                 fw.append((u, k, wy, ww, wh))
-        # the wall in three bands, a storey each (a window may stand over a door), its openings from the wall's middle
-        # and each band's foot
+        # the face in three tiers, a storey each (a window may stand over a door), its openings from the face's middle
         mid = lambda u: R(u if f in ("s", "w") else -u)
         tiers = [{"h": STOREYS[0], "openings": [{"at": mid(du), "width": DOOR_W, "sill": 0, "springing": DOOR_H, "head": {"profile": "flat"}} for du, _ in fdoors]},
                  {"h": STOREYS[1], "openings": []}, {"openings": []}]
+        # (the ground storey's and the piano nobile's windows round-headed, the attic's square; each DRESSED -- surround.js:
+        #  an architrave round it and a sill, a keystone in an arch, and on the brick wings' piano nobile a cornice over)
         for u, k, wy, ww, wh in fw:
-            tiers[k]["openings"].append({"at": mid(u), "width": ww, "sill": R(wy - LV[k]), "springing": R(wy + wh - LV[k]), "head": {"profile": "flat"}})
-        walls.append((("brick wall" if b.get("brick") else "wall"), {"type": "wall", "width": wall_len(b, f), "height": H, "thickness": T, "glass": False, "tiers": tiers, "at": [wall_at(b, f)]}))
+            arched = k < 2
+            dress = {"head": "cornice" if (k == 1 and b.get("brick")) else False, **({"keystone": True} if arched else {})}
+            tiers[k]["openings"].append({"at": mid(u), "width": ww, "sill": R(wy - LV[k]), "springing": R(wy + wh - LV[k] - (ww / 2 if arched else 0)),
+                                         "head": {"profile": "semicircular" if arched else "flat"}, "surround": dress})
+        faces[str(FACE_NO[f])] = tiers
+        # where another block stands against it: no moulding, no pilaster (a party wall), and no balustrade over it
+        spans = sorted((R(L / 2 + min(mid(c[0]), mid(c[1]))), R(L / 2 + max(mid(c[0]), mid(c[1])))) for c in cts)
+        if spans: clear[str(FACE_NO[f])] = [list(sp) for sp in spans]
         for du, panel in fdoors:
             if panel: x, z = at_(b, f, du, 0); doors.append([R(x), 0.2, R(z), PANE_YAW[f]])
         for u, k, wy, ww, wh in fw:   # every window an openable glass pane
             x, z = at_(b, f, u, 0); wins[k].append([R(x), R(wy - 0.075), R(z), PANE_YAW[f]])
+        # THE BALUSTRADE along the face's head, less what stands against another block: a parapet pierced between its
+        # balusters (the long faces full length, the ends between them)
+        lo, hi = (-L / 2, L / 2) if along else (-L / 2 + BAL_T, L / 2 - BAL_T)
+        free, at0 = [], lo
+        for c0, c1, _ in sorted(cts, key=lambda c: c[0]):
+            if c0 - at0 > 1.0: free.append((at0, c0))
+            at0 = max(at0, c1)
+        if hi - at0 > 1.0: free.append((at0, hi))
+        for a0, a1 in free:
+            w = a1 - a0
+            nx, nz, uc = *FACES[f], (a0 + a1) / 2
+            x, z = (b["x"] + uc, b["z"] + nz * b["d"] / 2) if along else (b["x"] + nx * b["w"] / 2, b["z"] + uc)   # (its outer face on the block's edge)
+            balustrades.append({"type": "wall", "width": R(w), "height": 0.4 + BAL_H, "thickness": BAL_T, "glass": False,
+                                "openings": {"pattern": str(max(1, int((w - 0.6) // 0.5))), "width": 0.32, "gap": 0.18, "sill": 0.62, "springing": 1.2, "head": {"profile": "flat"}, "glass": False},
+                                "at": [[R(x), R(H), R(z), YAW[f]]]})
         if is_plain: continue
         for i, u in enumerate(us):
-            if b.get("gilt"):   # gilded lintel and sill on the piano nobile's windows
-                fbox("gilt trim", b, f, u, T / 2 + 0.18, 2.3, 0.18, LV[1] + 6.05, 0.14)
-                fbox("gilt trim", b, f, u, T / 2 + 0.18, 2.3, 0.14, LV[1] + 0.85, 0.14)
-            if i < len(us) - 1:
-                fbox("pilasters", b, f, u + BAY / 2, T / 2 + 0.12, 0.55, STOREYS[1] - 0.6, LV[1] + STOREYS[1] / 2, 0.3)
-                fbox("balusters", b, f, u + BAY / 2, 0.1, 0.16, 0.85, H + 0.5, 0.16)
-                if b["name"] == "corps" and f in "sn" and i % 2 == 0: ROOF_STATUES.append((b, f, u + BAY / 2))   # (a statue over every other pier)
-        for y in (LV[1], LV[2]):
-            fbox("gilt trim" if (bi == 0 and y == LV[2]) else "cornices", b, f, 0, 0.25, L + 0.4, 0.5, y, T + 0.5)
-        fbox("cornices", b, f, 0, 0.25, L + 0.4, 0.6, H, T + 0.5)                                       # the crowning cornice
-        fbox("gilt trim" if b.get("gilt") else "balusters", b, f, 0, 0.1, L + 0.3, 0.18, H + 0.95, 0.2)  # the balustrade's rail
+            if i < len(us) - 1 and b["name"] == "corps" and f in "sn" and i % 2 == 0: ROOF_STATUES.append((b, f, u + BAY / 2))   # (a statue over every other pier)
+    # ONE ENCLOSURE a block: its courses mitred round its corners -- the plinth, the string course over the ground storey
+    # -- and the stone blocks' two ORDERS (order.js): Ionic pilasters through the piano nobile, a Tuscan attic order over
+    # them, each sized from its storey, their entablatures the floor line and the crowning cornice; the old chateau's
+    # brick wings only their courses
+    walls.append((b["name"], {"type": "enclosure", "plan": {"rect": [b["w"], b["d"]]}, "thickness": T, "height": H, "glass": False, "faces": faces,
+                              "courses": {**({"clear": clear} if clear else {})},
+                              **({} if b.get("brick") else {"orders": [{"tier": 1, "kind": "ionic"}, {"tier": 2, "kind": "tuscan"}]}),
+                              "at": [[b["x"], 0, b["z"], 0]]}))
 
     # the roof and the floors: the attic's boarded ceiling, marble flags downstairs, parquet above (a stairwell through it)
-    box("roof", b["w"], b["d"], 0.4, b["x"], H, b["z"])
+    box("roof", b["w"] - 2 * BAL_T, b["d"] - 2 * BAL_T, 0.4, b["x"], H, b["z"])   # (within the balustrade, on the wall heads)
     box("attic ceiling", b["w"] - 2 * T, b["d"] - 2 * T, 0.12, b["x"], H - 0.13, b["z"])
     box("ground floor", b["w"] - 0.02, b["d"] - 0.02, 0.2, b["x"], 0, b["z"])   # (under the walls too: a doorway has its floor; 1cm in from the faces)
     zR0, zR1 = b["z"] + b["d"] / 2 - 2.6, b["z"] - b["d"] / 2 + 2.6
@@ -258,9 +283,8 @@ for bw in BLOCKS[3:]:
     cobwebs += [([R(bw["x"] - bw["w"] / 2 + T), LV[1], R(bw["z"] - bw["d"] / 2 + T), 0], 1, 1, 0.8), ([R(bw["x"] + bw["w"] / 2 - T), LV[1], R(bw["z"] + bw["d"] / 2 - T), 0], -1, -1, 0.7)]
 
 # ---- the definition
-counts = {}
-for i, (name, w) in enumerate(walls):
-    counts[name] = counts.get(name, 0) + 1; parts[f"{name} {counts[name]}"] = w
+for name, w in walls: parts[name] = w
+for i, w in enumerate(balustrades): parts[f"balustrade {i + 1}"] = w
 counts = {}
 for (name, w, l, h), places in BOXES.items():
     counts[name] = counts.get(name, 0) + 1
@@ -282,8 +306,8 @@ from statuary import statue, capped, FACE_PZ, FACE_NZ
 OUTWARD = {"s": FACE_NZ, "n": FACE_PZ}
 stat = {}
 for i, (b, f, u) in enumerate(sorted(ROOF_STATUES, key=lambda q: q[1] != "s")):
-    x, z = at_(b, f, u, 0.1)
-    stat[f"roof statue {f} {i}"] = statue((x, H + 1.04, z), kind="woman" if i % 3 == 1 else "man", style="roman", stone="limestone", scale=1.35, seed=40 + i, face=OUTWARD[f],
+    x, z = at_(b, f, u, T / 2 - BAL_T / 2)   # (on the balustrade's rail, over a pier)
+    stat[f"roof statue {f} {i}"] = statue((x, H + 0.4 + BAL_H, z), kind="woman" if i % 3 == 1 else "man", style="roman", stone="limestone", scale=1.35, seed=40 + i, face=OUTWARD[f],
                                           **({"hold": {"R": "items/weapons/spear"}} if i % 4 == 0 else {"hold": {"L": "items/shields/round"}} if i % 4 == 2 else {}))
 parts.update(capped(stat))
 xs = [v for b in BLOCKS for v in (b["x"] - b["w"] / 2, b["x"] + b["w"] / 2)]
@@ -291,7 +315,8 @@ zs = [v for b in BLOCKS for v in (b["z"] - b["d"] / 2, b["z"] + b["d"] / 2)]
 write("architecture", "versailles", {"name": "Palace of Versailles",
       "_about": "THE PALACE OF VERSAILLES, garden front and court (a simplified plan at its real scale): the 100 m corps central between 115 m wings on a ~330 m garden front, the court wings in the old chateau's brick embracing the Cour Royale, three storeys (ground, piano nobile, attic) to a balustraded flat roofline at 18.5 m; stairs to every storey in the corps and the wings; rooms in enfilade; the Hall of Mirrors with its mirrors and the canvases behind them; chandeliers, salons, bedrooms. The court opens toward +z. (tools/archgen/versailles.py: the plan's rules, party walls and all.)",
       "site": {"origin": True, "glazed": True},
-      "params": {"detail": 4, "footW": max(xs) - min(xs) + 2, "footD": max(zs) - min(zs) + 2}, "parts": parts, "build": list(parts)})
+      "params": {"detail": 4, "footW": max(xs) - min(xs) + 2, "footD": max(zs) - min(zs) + 2}, "parts": parts,
+      "build": [k for k in parts if " stair " not in k] + [k for k in parts if " stair " in k]})   # (the stairs once the floors they start on and reach are laid)
 write("finishes", "versailles", {"name": "Palace of Versailles", "building": "architecture/versailles",
       "_about": "cream limestone and the old chateau's red brick, gilt trim, a leaded roof, marble flags below and parquet above, marble-lined and gilt-panelled rooms",
       "stone": {"color": "#dfcda4", "accent": "#c3b28c", "pat": "ashlar"},
@@ -304,8 +329,9 @@ write("finishes", "versailles", {"name": "Palace of Versailles", "building": "ar
                 {"parts": "well rails", "pattern": "timber/bark", "palette": "walnut"},
                 {"parts": "partition ground", "pattern": "stone/marble", "palette": "carrara"},
                 {"parts": ["partition piano", "gallery wall"], "pattern": "panels/wainscot", "palette": "baroque"},
-                {"parts": "brick wall", "side": "out", "pattern": "stone/brick", "palette": "brick"},
-                {"parts": "cornices", "pattern": "stone/ashlar fine", "palette": "sandstone"},
+                {"parts": "kind:moulding", "pattern": "stone/ashlar fine", "palette": "limestone"},
+                {"parts": ["north court wing", "south court wing"], "side": "out", "pattern": "stone/brick", "palette": "brick"},
+                {"parts": ["corps", "north wing", "south wing"], "surface": "wall", "side": "out", "below": 5.2, "pattern": "stone/rusticated", "palette": "limestone"},
                 {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
                 {"pattern": "stone/ashlar fine", "palette": "limestone"}]})
 print("versailles:", len(parts), "parts;", len(doors), "doors,", sum(len(v) for v in wins.values()), "windows,", len(mirrors), "mirrors")

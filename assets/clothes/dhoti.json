@@ -1,0 +1,33 @@
+{
+  "name": "Dhoti",
+  "kind": "garment",
+  "layer": 1,
+  "skirted": true,
+  "_about": "the dhoti: a length of white cotton wrapped round the waist and drawn up between the legs, falling in loose folds to the calf or the ankle (India: the man's lower garment)",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/linen",
+      "palette": "wool-white"
+    },
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "madder"
+    }
+  },
+  "params": {
+    "length": "calf",
+    "hem": 0
+  },
+  "use": [
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "length",
+        "flare": 0.22,
+        "pleats": 12,
+        "hem": "hem"
+      }
+    }
+  ]
+}

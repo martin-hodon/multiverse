@@ -103,7 +103,13 @@
         "head": {
           "profile": "semicircular"
         }
-      }
+      },
+      "orders": [
+        {
+          "kind": "tuscan"
+        }
+      ],
+      "_orders": "the outer ring's Tuscan order: a pilaster on every pier between the arches, an entablature round the storey over their crowns"
     },
     "inner arcade": {
       "type": "ring",
@@ -148,7 +154,13 @@
         "head": {
           "profile": "semicircular"
         }
-      }
+      },
+      "orders": [
+        {
+          "kind": "tuscan"
+        }
+      ],
+      "_orders": "the outer ring's Tuscan order: a pilaster on every pier between the arches, an entablature round the storey over their crowns"
     },
     "inner arcade II": {
       "type": "ring",
@@ -783,12 +795,12 @@
       "type": "steps",
       "count": "bays",
       "run": "landingArc",
-      "rise": "soffitA - landingY + stairRise",
+      "rise": "soffitA",
       "rising": "out",
       "rInner": "rLandIn",
       "rOuter": "rStairIn",
       "rArc": "rLandArc",
-      "base": "landingY - stairRise",
+      "base": 0,
       "steps": 1,
       "plan": "along",
       "faces": [
@@ -804,18 +816,18 @@
         53
       ],
       "turn": 0.5,
-      "_about": "the landing's back and its two ends. Its front is left open: that is where the flights arrive."
+      "_about": "the landing's back and its two ends, from the ground up to its ceiling -- the mass of the cavea under it, which the landing stands on (it had stopped at the landing, which then stood on air). Its front is left open: that is where the flights arrive."
     },
     "stair landing front": {
       "type": "steps",
       "count": "bays",
       "run": "backWallArc",
-      "rise": "soffitA - landingY + stairRise",
+      "rise": "soffitA",
       "rising": "out",
       "rInner": "rStairIn - 0.2",
       "rOuter": "rStairIn",
       "rArc": "rStairIn - 0.1",
-      "base": "landingY - stairRise",
+      "base": 0,
       "steps": 1,
       "plan": "along",
       "faces": [
@@ -830,7 +842,7 @@
         53
       ],
       "turn": 0.5,
-      "_about": "the strip of front wall BETWEEN the two flights -- a bay's arc less a flight's width, which is exactly what they do not cover."
+      "_about": "the strip of front wall BETWEEN the two flights -- a bay's arc less a flight's width, which is exactly what they do not cover -- from the ground up, as the walls are."
     },
     "vomitorium tunnel": {
       "type": "tunnel",
@@ -1104,6 +1116,12 @@
       "part": "stair to the upper floor"
     },
     {
+      "part": "stair landing walls"
+    },
+    {
+      "part": "stair landing front"
+    },
+    {
       "part": "stair landing"
     },
     {
@@ -1126,12 +1144,6 @@
     },
     {
       "part": "cavea over the level path"
-    },
-    {
-      "part": "stair landing walls"
-    },
-    {
-      "part": "stair landing front"
     },
     {
       "part": "vomitorium tunnel"

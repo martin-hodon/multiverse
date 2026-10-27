@@ -1,0 +1,12 @@
+{
+  "name": "Shikhara",
+  "_about": "THE NAGARA TOWER (shikhara.js), on a plain sanctum: a pancharatha plan, seven storeys bending in along the rekha to the shoulder, the amalaka and the kalasha on it; urushringas in two tiers on every face, copies on the copies, and spires on the corners -- the tower made of towers.",
+  "params": { "detail": 4 },
+  "build": ["sanctum", "tower"],
+  "parts": {
+    "sanctum": { "type": "box", "width": 9, "length": 9, "height": 6, "at": [[0, 0, 0, 0]] },
+    "tower": { "type": "shikhara", "width": 8, "height": 16, "rathas": 5, "bhumis": 9, "nest": 2,
+               "tiers": [{ "scale": 0.62, "lift": 0, "out": 0.45 }, { "scale": 0.42, "lift": 0.3, "out": 0.4 }],
+               "corners": { "scale": 0.3, "at": [0] }, "at": [[0, 6, 0, 0]] }
+  }
+}

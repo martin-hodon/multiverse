@@ -7,25 +7,6 @@
   "detail": 4
  },
  "parts": {
-  "vault": {
-   "type": "barrel",
-   "width": 6.0,
-   "length": 18.0,
-   "springing": 1.6,
-   "top": 4.6,
-   "head": {
-    "profile": "semicircular",
-    "seg": 8
-   },
-   "at": [
-    [
-     9.0,
-     0,
-     0,
-     1.5707963
-    ]
-   ]
-  },
   "side walls": {
    "type": "box",
    "width": 18.0,
@@ -47,55 +28,55 @@
    ]
   },
   "ends": {
-   "type": "enclosure",
-   "plan": {
-    "rect": [
-     0.12,
-     6.0
-    ]
-   },
-   "thickness": 0.12,
+   "type": "wall",
+   "width": 6.0,
    "height": 1.6,
-   "openings": [],
-   "faces": {
-    "1": [
-     {
-      "at": 0,
-      "width": 1.0,
-      "sill": 0,
-      "springing": 1.5,
-      "head": {
-       "profile": "flat"
-      }
+   "thickness": 0.12,
+   "openings": [
+    {
+     "at": 3.0,
+     "width": 1.0,
+     "sill": 0,
+     "springing": 1.5,
+     "head": {
+      "profile": "flat"
      }
-    ],
-    "3": [
-     {
-      "at": 0,
-      "width": 1.0,
-      "sill": 0,
-      "springing": 1.5,
-      "head": {
-       "profile": "flat"
-      }
-     }
-    ]
-   },
+    }
+   ],
    "at": [
     [
      -9.0,
      0,
      0,
-     0
+     -1.5707963
     ],
     [
      9.0,
      0,
      0,
-     0
+     1.5707963
     ]
-   ],
-   "glass": false
+   ]
+  },
+  "vault": {
+   "type": "barrel",
+   "light": true,
+   "width": 6.0,
+   "length": 18.0,
+   "springing": 1.6,
+   "top": 4.6,
+   "head": {
+    "profile": "semicircular",
+    "seg": 8
+   },
+   "at": [
+    [
+     9.0,
+     0,
+     0,
+     1.5707963
+    ]
+   ]
   },
   "fires": {
    "type": "marker",
@@ -153,9 +134,9 @@
   }
  },
  "build": [
-  "vault",
   "side walls",
   "ends",
+  "vault",
   "fires",
   "bunks"
  ]

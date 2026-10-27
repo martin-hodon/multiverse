@@ -17,7 +17,9 @@ wing = lambda L, n=N, **kw: {"L": L, "D": D, "n": n, "H": H, "roofForm": "hip", 
 # ---- the Prälatenhof: ONE `court` -- a ring of rooms round the courtyard, its floors and stairs continuous all the
 # way round, a gate through its east side into the court, doors from the court into the rooms
 add("prelates court", {"type": "court", "plan": {"rect": [CX1 - CX0, 2 * CZ]}, "depth": D, "storeys": N, "storeyH": H, "axis": 3.8,
-                       "gate": {"face": 1, "width": 4.2, "height": 5.5}, "roof": {"form": "hip", "pitch": 38},
+                       "gate": {"face": 1, "width": 4.2, "height": 5.5}, "roof": {"form": "hip", "pitch": 38}, "courses": True,
+                       # (its windows DRESSED -- surround.js: an architrave and a sill each, a cornice over those of the two main floors)
+                       "surround": [{"head": False}, {"head": "cornice"}, {"head": "cornice"}, {"head": False}],
                        # (the church's crossing stands against the west wing: no windows into its wall there, and a
                        #  door through from the wing's rooms into the crossing -- the church and the abbey one plan)
                        "joins": [{"face": 3, "at": 0, "width": 18.0 + 2 * 1.6, "door": {"width": 3.0, "height": 4.2}}],

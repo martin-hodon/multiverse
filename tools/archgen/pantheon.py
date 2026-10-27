@@ -11,6 +11,10 @@ P.update({"floor": 0.6, "intColH": 10.2, "intEntH": 2.2, "atticH": "springH - fl
 parts = {}; build = []
 def add(n, dd): parts[n] = dd; build.append(n)
 ring = lambda **kw: {"type": "ring", "place": [[0, 0, 0, 0]], **kw}
+# ---- the floor, laid first: the niches stand on it
+add("rotunda floor", ring(count=24, rOuter="R + nicheT", rInner=0.5, height="floor", solid=True,
+                          _about="the rotunda's floor on its podium (a ring round a drain at the middle, where the rain through the oculus goes)"))
+add("drain", {"type": "column", "radius": 0.5, "height": "floor - 0.05", "sides": 12, "at": [[0, 0, 0, 0]]})
 # ---- the rotunda, lower zone: niches cut in the inner layer, to the top of the interior entablature
 lowH = "floor + intColH + intEntH"
 # (the niche layer STANDS ON the floor: a floor edge against a wall face is two faces in one place)
@@ -24,13 +28,12 @@ add("attic inner", ring(count=16, glass=False, rOuter="R + atticT", rInner="R", 
                         opening={"width": 2.2, "sill": 2.2, "springing": 5.2, "head": {"profile": "flat"}},
                         _about="the attic zone: a blind window in every bay (their backs are the wall behind)"))
 add("attic back", ring(count=16, rOuter="R + nicheT", rInner="R + atticT", height="atticH", y=lowH, solid=True))
-add("outer wall", old["outer wall"])
-ent = old["entrance"]; ent["opening"] = {**ent["opening"], "sill": "floor", "springing": "floor + 7.5"}; ent["glass"] = False; add("entrance", ent)
-add("drum", old["drum"])
-# ---- the floor
-add("rotunda floor", ring(count=24, rOuter="R + nicheT", rInner=0.5, height="floor", solid=True,
-                          _about="the rotunda's floor on its podium (a ring round a drain at the middle, where the rain through the oculus goes)"))
-add("drain", {"type": "column", "radius": 0.5, "height": "floor - 0.05", "sides": 12, "at": [[0, 0, 0, 0]]})
+# THE DRUM'S THREE ZONES OUTSIDE are its COURSES (arch/courses.js), the ring's own: a cornice at the attic's level and
+# one crowning the wall at the springing, round the wall and its entrance bay alike; a third crowning the drum
+wallC = {"plinth": False, "strings": {"at": [12.4], "h": 0.6, "out": 0.5, "profile": "cornice"}, "cornice": {"h": 0.9, "out": 0.75}}
+add("outer wall", {**old["outer wall"], "courses": wallC})
+ent = old["entrance"]; ent["opening"] = {**ent["opening"], "sill": "floor", "springing": "floor + 7.5"}; ent["glass"] = False; add("entrance", {**ent, "courses": wallC})
+add("drum", {**old["drum"], "courses": {"plinth": False, "strings": False, "cornice": {"h": 0.8, "out": 0.6}}})
 # ---- interior order
 bayA = 2 * math.pi / 8
 colAt = []
@@ -61,9 +64,6 @@ for i, k in enumerate(("step 1", "step 2", "step 3")):
     part = dict(old[k]); h0 = 7.8 + 1.5 * i
     part["rInner"] = round(_m.sqrt(23.0 ** 2 - h0 ** 2) / _m.cos(_m.pi / 24), 3)
     add(k, part)
-add("cornice bands", ring(count=24, rOuter="R + wallT + 0.4", rInner="R + wallT - 0.2", height=0.6, solid=True, at=list(range(24)),
-                          place=[[0, 12.4, 0, 0], [0, "springH - 0.6", 0, 0]],
-                          _about="the two cornices that band the drum outside, one at the level of the attic, one at the springing"))
 # ---- portico on its podium
 add("portico steps", {"type": "crepidoma", "width": "portW", "length": "portD", "steps": 3, "stepH": 0.2, "stepOut": 0.6,
                       "at": [[0, 0, "portZ0 + portD / 2", 0]], "_about": "the portico's podium: three steps up from the square"})

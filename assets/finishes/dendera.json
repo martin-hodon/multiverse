@@ -1,7 +1,7 @@
 {
  "name": "Temple of Hathor, Dendera",
  "building": "architecture/dendera",
- "_about": "Dendera: Nubian sandstone throughout, the Hathor capitals and the cornice a shade darker, the naos's doorway dark; the walls of the hall and the inner rooms carved with columns of hieroglyphs in sunk relief, the columns' shafts painted with them (patterns/hieroglyphs).",
+ "_about": "Dendera: Nubian sandstone throughout; the walls carved with columns of hieroglyphs in sunk relief inside and out, the columns' shafts painted with them; the mouldings plain ashlar; the naos dark inside.",
  "stone": {
   "color": "#c9b283",
   "accent": "#b09a6d",
@@ -9,41 +9,46 @@
  },
  "rules": [
   {
-   "parts": "naos door",
+   "parts": "naos",
+   "side": "in",
    "color": "#2e2a22",
    "accent": "#2e2a22"
   },
   {
-   "parts": [
-    "hall walls",
-    "inner walls",
-    "inner back",
-    "inner front",
-    "screen walls"
-   ],
-   "pattern": "hieroglyphs/sunk relief",
-   "palette": "sandstone"
-  },
-  {
-   "parts": "columns",
-   "pattern": "hieroglyphs/painted columns",
-   "palette": "sandstone"
-  },
-  {
-   "parts": [
-    "capitals",
-    "abaci",
-    "cornice",
-    "hall roof",
-    "inner roof",
-    "platform"
-   ],
+   "parts": "kind:moulding",
    "pattern": "stone/ashlar",
+   "palette": "sandstone"
+  },
+  {
+   "parts": [
+    "pronaos columns shafts",
+    "appearance columns shafts"
+   ],
+   "pattern": "hieroglyphs/painted columns",
    "palette": "sandstone"
   },
   {
    "surface": "floor",
    "pattern": "floors/flagstones",
+   "palette": "sandstone"
+  },
+  {
+   "parts": [
+    "pronaos",
+    "temple",
+    "screen",
+    "west stair room",
+    "west store partition",
+    "east store partition",
+    "west store wall",
+    "east store wall",
+    "sanctuary",
+    "hall of appearances back wall",
+    "hall of offerings back wall",
+    "hall of the ennead back wall"
+   ],
+   "surface": "wall",
+   "pattern": "hieroglyphs/sunk relief",
    "palette": "sandstone"
   },
   {

@@ -54,6 +54,8 @@ scripts write those JSON files under `assets/architecture/`:
     blue_mosque.py blue-mosque.json         `dome-cascade` hall, `riwaq` of `domed-arcade`s, `ottoman-minaret`s (writes those)
     temple_of_heaven.py temple-of-heaven.json   the Hall of Prayer on its three-tiered altar, the court, gate and annex halls
                                             (`chinese-hall`, `palace-wall`, `dougong` components)
+    colosseum.py  colosseum.json            the Flavian amphitheatre on its four-centred `oval`: facade, three
+                                            ambulatories, stairs, vomitoria, three maeniana on their walkways, hypogeum
 
 Run with `python3 tools/archgen/<name>.py`. Edit the script rather than the JSON when the change is to the
 arithmetic; a JSON file's own `params` can still be changed directly for everything that is an expression.

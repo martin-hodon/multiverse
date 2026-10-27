@@ -6,5 +6,10 @@
   "organ": {"kind": "one", "item": "items/furniture/organ", "yaw": 3.14159265, "params": {"W": "min(w, h * 0.7)", "H": "h * 0.8", "D": "min(1.4, d)"}, "markers": ["spot"]},
   "lectern": {"kind": "one", "item": "items/furniture/lectern", "yaw": 3.14159265},
   "choir": {"kind": "rows", "use": "furniture/pew", "params": {"L": "L"}, "pitch": 1.4, "margin": 0.2}
+ },
+ "_swaps": "A PERIOD'S OWN FURNITURE (arch/assemble.js `item`): a town of a period built of the village's houses gives them a `furnish` word (assets/world/periods.json town.furnish; a component passes it on to its own), and under it an item placed is the one `swaps` names instead -- with `params` of its own over the placement's, `markers` its own (else the placement's), turned `turn` about its foot (radians: a seat to face the table its bench stood back to). The Ottoman house sleeps on mattresses and eats from a tray between divans; the Victorian sits on settles at a deal table.",
+ "swaps": {
+  "ottoman": {"items/furniture/bedstead": {"item": "items/furniture/pallet"}, "items/furniture/trestle-table": {"item": "items/furniture/low-table", "params": {"r": 0.36}, "markers": false}, "items/furniture/bench": {"item": "items/furniture/divan", "params": {"d": 0.6}, "markers": true, "turn": 3.14159265}},
+  "industrial": {"items/furniture/trestle-table": {"item": "items/furniture/kitchen-table"}, "items/furniture/bench": {"item": "items/furniture/settle", "turn": 3.14159265}, "items/furniture/plank-chest": {"item": "items/furniture/chest-of-drawers"}}
  }
 }

@@ -1,0 +1,33 @@
+{
+  "name": "Wrap skirt",
+  "kind": "garment",
+  "layer": 1,
+  "skirted": true,
+  "_about": "the wrap skirt (the Maya woman's pik, the corte): a tube of striped or dyed cotton wrapped round the hips and tucked or sashed at the waist, to the shin or the ankle",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/stripes",
+      "palette": "stripe-woad"
+    },
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "madder"
+    }
+  },
+  "params": {
+    "length": "ankle",
+    "hem": 0
+  },
+  "use": [
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "length",
+        "flare": 0.12,
+        "pleats": 6,
+        "hem": "hem"
+      }
+    }
+  ]
+}

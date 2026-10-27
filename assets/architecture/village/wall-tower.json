@@ -15,9 +15,9 @@
   "roomH": 2.6,
   "zt": 0,
   "capRise": 5.0,
+  "sr": 1.3,
   "_zt": "the tower's centre out from its placement (+z: the field) -- the village plan sets it so the tower stands astride the wall's outer face (at the corners and river ends), or flanks the wall between, its back on the walk's field edge (town.js FLANK)",
-  "_h": "the walk's height (the wall's); top the platform the spiral arrives on",
-  "hatch": 0
+  "_h": "the walk's height (the wall's); top the platform the spiral arrives on"
  },
  "parts": {
   "base": {
@@ -91,8 +91,8 @@
   },
   "stair": {
    "type": "spiral-stair",
-   "radius": "R - wall - 0.05",
-   "newel": 0.22,
+   "radius": "sr",
+   "newel": 0.15,
    "turn": "turn",
    "top": "top - h",
    "steps": "steps",
@@ -107,32 +107,19 @@
    ]
   },
   "platform": {
-   "type": "ring",
-   "count": 15,
-   "rOuter": "R - wall",
-   "rInner": 0.22,
+   "type": "prism",
+   "plan": {
+    "sides": "2 * n",
+    "radius": "R - wall / 2",
+    "well": {
+     "radius": "sr + 0.08"
+    }
+   },
    "height": "slab",
-   "y": "top - slab",
-   "solid": true,
-   "skip": [
-    0,
-    1,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14
-   ],
-   "place": [
+   "at": [
     [
      0,
-     0,
+     "top - slab",
      "zt",
      0
     ]

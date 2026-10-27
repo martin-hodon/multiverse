@@ -29,6 +29,8 @@
     "_atticH": "the attic zone between that entablature and the dome's springing, with its blind windows"
   },
   "build": [
+    "rotunda floor",
+    "drain",
     "niches",
     "entrance and apse",
     "attic inner",
@@ -36,8 +38,6 @@
     "outer wall",
     "entrance",
     "drum",
-    "rotunda floor",
-    "drain",
     "niche columns",
     "interior entablature",
     "aediculae",
@@ -47,7 +47,6 @@
     "step 1",
     "step 2",
     "step 3",
-    "cornice bands",
     "portico steps",
     "intermediate block",
     "passage floor",
@@ -80,6 +79,37 @@
     "statue aedicula 7"
   ],
   "parts": {
+    "rotunda floor": {
+      "type": "ring",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "count": 24,
+      "rOuter": "R + nicheT",
+      "rInner": 0.5,
+      "height": "floor",
+      "solid": true,
+      "_about": "the rotunda's floor on its podium (a ring round a drain at the middle, where the rain through the oculus goes)"
+    },
+    "drain": {
+      "type": "column",
+      "radius": 0.5,
+      "height": "floor - 0.05",
+      "sides": 12,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
     "niches": {
       "type": "ring",
       "place": [
@@ -202,7 +232,22 @@
           0,
           0
         ]
-      ]
+      ],
+      "courses": {
+        "plinth": false,
+        "strings": {
+          "at": [
+            12.4
+          ],
+          "h": 0.6,
+          "out": 0.5,
+          "profile": "cornice"
+        },
+        "cornice": {
+          "h": 0.9,
+          "out": 0.75
+        }
+      }
     },
     "entrance": {
       "type": "ring",
@@ -229,7 +274,22 @@
           0
         ]
       ],
-      "glass": false
+      "glass": false,
+      "courses": {
+        "plinth": false,
+        "strings": {
+          "at": [
+            12.4
+          ],
+          "h": 0.6,
+          "out": 0.5,
+          "profile": "cornice"
+        },
+        "cornice": {
+          "h": 0.9,
+          "out": 0.75
+        }
+      }
     },
     "drum": {
       "type": "ring",
@@ -246,38 +306,15 @@
           0,
           0
         ]
-      ]
-    },
-    "rotunda floor": {
-      "type": "ring",
-      "place": [
-        [
-          0,
-          0,
-          0,
-          0
-        ]
       ],
-      "count": 24,
-      "rOuter": "R + nicheT",
-      "rInner": 0.5,
-      "height": "floor",
-      "solid": true,
-      "_about": "the rotunda's floor on its podium (a ring round a drain at the middle, where the rain through the oculus goes)"
-    },
-    "drain": {
-      "type": "column",
-      "radius": 0.5,
-      "height": "floor - 0.05",
-      "sides": 12,
-      "at": [
-        [
-          0,
-          0,
-          0,
-          0
-        ]
-      ]
+      "courses": {
+        "plinth": false,
+        "strings": false,
+        "cornice": {
+          "h": 0.8,
+          "out": 0.6
+        }
+      }
     },
     "niche columns": {
       "type": "colonnade",
@@ -512,55 +549,6 @@
           0
         ]
       ]
-    },
-    "cornice bands": {
-      "type": "ring",
-      "place": [
-        [
-          0,
-          12.4,
-          0,
-          0
-        ],
-        [
-          0,
-          "springH - 0.6",
-          0,
-          0
-        ]
-      ],
-      "count": 24,
-      "rOuter": "R + wallT + 0.4",
-      "rInner": "R + wallT - 0.2",
-      "height": 0.6,
-      "solid": true,
-      "at": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23
-      ],
-      "_about": "the two cornices that band the drum outside, one at the level of the attic, one at the springing"
     },
     "portico steps": {
       "type": "crepidoma",

@@ -1,6 +1,6 @@
 {
   "name": "Domes on pendentives and vaults over squares",
-  "_about": "WHAT HAGIA SOPHIA IS MADE OF, at a third of its size. A square between four great PIERS, spanned by four great ARCHES; between the arches four PENDENTIVES, the spherical triangles that turn the square into a circle; on that circle a ring of forty WINDOWS; on the windows a shallow DOME of forty RIBS. Opening off one side, a SEMIDOME on its own half ring of windows, and a smaller EXEDRA off that. Beside them the vaults a square bay is roofed with: the SAIL VAULT (the pendentives' sphere left whole: the Byzantine aisle), the CLOISTER VAULT (four webs) and the RIB VAULT (the Gothic groin vault with its ribs).",
+  "_about": "WHAT HAGIA SOPHIA IS MADE OF, at a third of its size. A square between four great PIERS, spanned by four great ARCHES; between the arches four PENDENTIVES, the spherical triangles that turn the square into a circle; on that circle a ring of forty WINDOWS; on the windows a shallow DOME of forty RIBS. Opening off one side, a SEMIDOME on its own half ring of windows. Beside them the vaults a square bay is roofed with: the SAIL VAULT (the pendentives' sphere left whole: the Byzantine aisle), the CLOISTER VAULT (four webs) and the RIB VAULT (the Gothic groin vault with its ribs).",
   "params": {
     "detail": 8,
     "S": 10.4,
@@ -22,10 +22,11 @@
     "dome ribs",
     "semidome windows",
     "semidome",
-    "exedra",
-    "sail vault",
     "sail piers",
+    "sail vault",
+    "cloister walls",
     "cloister vault",
+    "rib piers",
     "rib vault",
     "rib vault ribs"
   ],
@@ -226,40 +227,6 @@
       ],
       "_about": "the semidome that opens the square into the long nave -- Hagia Sophia has one to the east and one to the west"
     },
-    "exedra": {
-      "type": "dome",
-      "sweep": 0.5,
-      "radius": "S / 4",
-      "thickness": "domeT",
-      "head": {
-        "profile": "semicircular"
-      },
-      "at": [
-        [
-          "S / 2 + pier + S / 4",
-          "spring * 0.55",
-          "S / 2 + pier + S * 0.2",
-          "1.5707963"
-        ]
-      ],
-      "_about": "a smaller half-dome opening off the big one: the exedrae at the corners of the nave"
-    },
-    "sail vault": {
-      "type": "pendentives",
-      "sail": true,
-      "span": "bay",
-      "springing": "bay * 0.6",
-      "sides": 16,
-      "at": [
-        [
-          "S * 2.2",
-          0,
-          0,
-          0
-        ]
-      ],
-      "_about": "the SAIL VAULT: the pendentives' sphere left whole, the domical vault over a Byzantine aisle bay"
-    },
     "sail piers": {
       "type": "column",
       "radius": 0.35,
@@ -292,6 +259,54 @@
         ]
       ]
     },
+    "sail vault": {
+      "type": "pendentives",
+      "sail": true,
+      "span": "bay",
+      "springing": "bay * 0.6",
+      "sides": 16,
+      "at": [
+        [
+          "S * 2.2",
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the SAIL VAULT: the pendentives' sphere left whole, the domical vault over a Byzantine aisle bay"
+    },
+    "cloister walls": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "bay + 1",
+          "bay + 1"
+        ]
+      },
+      "thickness": 0.7,
+      "height": "bay * 0.6",
+      "glass": false,
+      "openings": [
+        {
+          "at": 0,
+          "width": 1.6,
+          "sill": 0,
+          "springing": 1.9,
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          "S * 2.2",
+          0,
+          "bay * 1.6",
+          0
+        ]
+      ],
+      "_about": "the square room the cloister vault covers: it springs from all four of its walls"
+    },
     "cloister vault": {
       "type": "dome",
       "sides": 4,
@@ -303,12 +318,45 @@
       "at": [
         [
           "S * 2.2",
-          0,
+          "bay * 0.6",
           "bay * 1.6",
           0
         ]
       ],
-      "_about": "the CLOISTER VAULT: a dome of four webs over a square, its groins in the corners"
+      "_about": "the CLOISTER VAULT: a dome of four webs over a square, its groins in the corners, springing all round from the walls"
+    },
+    "rib piers": {
+      "type": "box",
+      "width": 1.1,
+      "length": 1.1,
+      "height": "bay * 0.6",
+      "at": [
+        [
+          "S * 2.2 - bay / 2",
+          0,
+          "bay * 3.2 - bay / 2",
+          0
+        ],
+        [
+          "S * 2.2 + bay / 2",
+          0,
+          "bay * 3.2 - bay / 2",
+          0
+        ],
+        [
+          "S * 2.2 - bay / 2",
+          0,
+          "bay * 3.2 + bay / 2",
+          0
+        ],
+        [
+          "S * 2.2 + bay / 2",
+          0,
+          "bay * 3.2 + bay / 2",
+          0
+        ]
+      ],
+      "_about": "a pier under each of the rib vault's corners: its push is gathered to them, and each pier's half past the corner takes it"
     },
     "rib vault": {
       "type": "groin",

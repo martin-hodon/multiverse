@@ -1,6 +1,6 @@
 {
   "name": "Staircases",
-  "_about": "STAIRS THAT FLY: each flight spans from landing to landing on a sloped soffit parallel to its own pitch (the rampant vault a stone stair is built on), and the landings are slabs of the same depth. A `staircase` is written as a WALK -- a flight, the landing it arrives on, and the flights that leave that landing `ahead`, `left`, `right` or `back` beside the one that came, each with a landing and flights of its own -- so the imperial stair, the dog-leg, the bifurcated T and the grand stairs of a baroque palace are all the same few lines. Where a flight meets a landing the two are one piece of stone, welded, with no face drawn between them. A `spiral-stair` is the same flight wound round a newel, its tread measured on the walking line, left- or right-handed, with or without its post.",
+  "_about": "STAIRS THAT FLY: each flight spans from landing to landing on a sloped soffit parallel to its own pitch (the rampant vault a stone stair is built on), and the landings are slabs of the same depth. A `staircase` is written as a WALK -- a flight, the landing it arrives on, and the flights that leave that landing `ahead`, `left`, `right` or `back` beside the one that came, each with a landing and flights of its own -- so the imperial stair, the dog-leg, the bifurcated T and the grand stairs of a baroque palace are all the same few lines. Where a flight meets a landing the two are one piece of stone, welded, with no face drawn between them. A `spiral-stair` is the same flight wound round a newel, its tread measured on the walking line, left- or right-handed, with or without its post. Each ARRIVES somewhere (`arrive`): standing alone, it is given the floor at its top it would reach in a house -- a slab on posts beyond its top landings, or round a spiral's top with the well it comes up through -- built from the ground up, railed where it drops.",
   "params": {
     "detail": 8,
     "rise": 0.16,
@@ -17,6 +17,9 @@
   "parts": {
     "imperial": {
       "type": "staircase",
+      "arrive": {
+        "depth": 3
+      },
       "rise": "rise",
       "run": "run",
       "flight": 12,
@@ -58,6 +61,7 @@
     },
     "dog-leg": {
       "type": "staircase",
+      "arrive": true,
       "rise": "rise",
       "run": "run",
       "flight": 10,
@@ -103,6 +107,7 @@
     },
     "bifurcated": {
       "type": "staircase",
+      "arrive": true,
       "rise": "rise",
       "run": "run",
       "flight": 8,
@@ -144,6 +149,7 @@
     },
     "spiral": {
       "type": "spiral-stair",
+      "arrive": true,
       "radius": 1.4,
       "newel": 0.2,
       "turn": 24,
@@ -161,6 +167,9 @@
     },
     "open-well spiral": {
       "type": "spiral-stair",
+      "arrive": {
+        "depth": 2
+      },
       "radius": 2.2,
       "newel": 0.8,
       "turn": 15,

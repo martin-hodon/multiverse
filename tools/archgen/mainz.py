@@ -15,6 +15,11 @@ comp = lambda use, params, at, **kw: {"type": "component", "use": use, "params":
 Q = math.pi / 2
 C8 = math.cos(math.pi / 8)                 # an octagon's in-radius over its circumradius
 semi = {"profile": "semicircular"}
+# (openings dressed the Romanesque way -- surround.js: recessed in orders, a nook shaft in each, cushion capitals, imposts)
+ROM1 = {"style": "romanesque", "orders": 1}
+# (and the walls the Romanesque way -- lombard.js: lesenes at the corners and between the bays, an arched corbel table
+#  under every storey's top: the transept fronts in two storeys, the towers' belfry stages)
+LOMBARD = {"arch": 0.8, "bay": 6.0, "lesene": 0.7}
 arch = lambda w, spring, at=0, sill=0, **kw: {"at": at, "width": w, "sill": sill, "springing": spring, "head": semi, **kw}
 
 # ---------------------------------------------------------------- the nave: `basilica`, with its own double-bay vaults
@@ -31,7 +36,7 @@ AISLE_WALL = AISLE_TOP + 1.2               # 14.5
 add("nave", comp("basilica", {"bays": BAYS, "bayLen": BAY, "naveW": NW, "aisleW": AW, "pierT": PT, "aisleT": AT, "openW": OPEN,
                               "spring": SPRING, "crown": CROWN, "arcadeH": ARC_H, "clearH": CLEAR_H, "naveTop": TOP,
                               "aisleSpring": CROWN, "aisleTop": AISLE_TOP, "arch": "semicircular",
-                              "winW": 2.0, "winSill": 5.0, "clearWinW": 2.0, "clearSill": 2.2, "clearSpring": 5.0,},
+                              "winW": 2.0, "winSill": 5.0, "clearWinW": 2.0, "clearSill": 2.2, "clearSpring": 5.0, "lombard": 1},
                  [[0, 0, 0, 0]], build=["arcade", "clerestory", "aisle wall", "aisle vault", "aisle ribs"],
                  _about="the nave from the `basilica` definition: ten round arches a side on square piers, the clerestory, the aisle walls, and the aisles' rib vaults, one to an arch"))
 VB = 2 * BAY                               # a nave vault bay: two arches (the bound system)
@@ -56,7 +61,7 @@ S = 2 * HB                                 # 17.2: a square bay (choirs, crossin
 EZ = -NL / 2 - HB                          # the east choir's middle
 SLAB = 0.4
 choir_arch = arch(NW - 0.6, CLEAR_H)       # the great arch from a bay into the next (crown 29.5)
-APH, APW, AP_ROOF = 20.0, 25.5, TOP - 25.5 # the apse's conch springs at 20 (closed by the choir wall over it), its wall runs on to 25.5
+APH = 20.0                                 # the apse's conch springs at 20 (its gallery and half cone follow: gallery-apse, under the choir wall's top)
 apse_arch = arch(NW - 0.6, APH)            # the arch into an apse: as high as its conch
 TWR_R = 3.6                                # the round stair towers
 TWR_OVER = 0.8                             # how far a tower stands into the choir's wall (its inside meets the wall's face)
@@ -87,7 +92,7 @@ ER = 7.0 / C8                              # the east octagon
 EH = 13.0
 add("east tower", {"type": "enclosure", "plan": {"sides": 8, "radius": round(ER, 4)}, "thickness": 1.2, "height": EH, "glass": False,
                    "tiers": [{"h": 6.0, "openings": []},
-                             {"openings": {"pattern": "2", "width": 1.1, "gap": 0.9, "pier": 0.9, "sill": 0.6, "springing": 3.6, "head": semi}}],
+                             {"openings": {"pattern": "2", "width": 1.1, "gap": 0.9, "pier": 0.9, "sill": 0.6, "springing": 3.6, "head": semi, "surround": ROM1}, "lombard": LOMBARD}],
                    "at": [[0, y, EZ, 0]], "_about": "the east crossing tower, an octagon on the choir, two round-arched belfry openings in every face"})
 add("east tower head", {"type": "prism", "plan": {"sides": 8, "radius": round(ER - 0.7, 4)}, "height": 0.3, "at": [[0, y + EH - 0.3, EZ, 0]], "flatRoof": True,
                         "standsOn": ["east tower"]})
@@ -100,15 +105,10 @@ add("east tower roof", {"type": "dome", "sides": 8, "radius": round(ER + 0.3, 4)
 add("east tower finial", {"type": "column", "radius": 0.2, "height": 2.5, "sides": 6, "at": [[0, 0, EZ, 0]], "atop": "east tower roof", "standsOn": ["east tower roof"]})
 
 def apse(name, place, yaw, about):
-    """an apse: a half ring off a bay's face, its stone conch, a dwarf-gallery band above the conch's springing, and a half cone"""
-    ring = {"type": "ring", "count": 16, "turn": 0.5, "at": [0, 1, 2, 3, 12, 13, 14, 15], "rOuter": HB, "rInner": NW / 2,
-            "place": [[place[0], 0, place[1], yaw]]}
-    add(name, {**ring, "height": APH, "opening": {"width": 2.0, "sill": 5.0, "springing": 11.0, "head": semi}, "_about": about})
-    add(f"{name} gallery", {**ring, "count": 32, "at": [0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31], "y": APH, "height": APW - APH,
-                            "glass": False, "opening": {"width": 0.9, "sill": 1.2, "springing": 3.4, "head": semi}})
-    add(f"{name} conch", {"type": "dome", "sweep": 0.5, "sides": 16, "radius": HB, "thickness": PT, "head": semi, "at": [[place[0], APH, place[1], yaw]]})
-    add(f"{name} roof", {"type": "dome", "sweep": 0.5, "sides": 16, "radius": HB + 0.3, "thickness": 0, "head": {"profile": "trigonal", "rise": AP_ROOF},
-                         "at": [[place[0], APW, place[1], yaw]]})
+    """an apse (`gallery-apse`): a half ring off a bay's face, its stone conch, the dwarf gallery on the conch's back, a half cone"""
+    add(name, comp("components/gallery-apse", {"R": HB, "T": PT, "spring": APH, "conchT": 1.0, "arcT": 0.5, "pass": 0.8, "galH": 3.6, "roofRise": 4.4,
+                                                "winW": 2.0, "winSill": 5.0, "winSpring": 11.0, "galW": 0.9, "galSill": 1.2},
+                   [[place[0], 0, place[1], yaw]], **({"_about": about} if about else {})))
 apse("east apse", (0, EZ - HB), math.pi, "the east apse: round-arched windows, a dwarf gallery under the eaves, the stone conch inside and a half cone over it")
 
 # ---- the round stair towers
@@ -141,12 +141,12 @@ add("transept arms", {"type": "enclosure", "plan": {"rect": [TL, S]}, "thickness
                       "faces": {"3": [choir_arch],
                                 "2": [{"h": 14, "openings": [arch(5.0, 9.0, at=round(-aisle_at, 4))]}, {"openings": []}],
                                 "0": [{"h": 14, "openings": [arch(5.0, 9.0, at=round(aisle_at, 4))]}, {"openings": []}],
-                                "1": [{"h": 14, "openings": [arch(3.6, 5.2)]},
-                                      {"openings": [{"at": 0, "width": 5.0, "sill": 3.0, "springing": 3.0, "head": semi, "foot": semi}]}]},
+                                "1": [{"h": 14, "openings": [arch(3.6, 5.2, surround={"style": "romanesque", "orders": 3})], "lombard": LOMBARD},
+                                      {"openings": [{"at": 0, "width": 5.0, "sill": 3.0, "springing": 3.0, "head": semi, "foot": semi}], "lombard": LOMBARD}]},
                       "_about": "the west transept's arms (the south one turned round, so its -z face is the north one's +z): an arch from the crossing, an arch from the aisle and a door opposite it, a portal and a round window in the end"})
 add("transept vaults", {"type": "groin", "width": TL - 2 * PT, "length": NW, "springing": CLEAR_H, "top": TOP, "across": semi, "along": semi,
                         "at": [[TX, 0, WZ, 0], [-TX, 0, WZ, 0]]})
-add("transept roofs", {"type": "roof", "form": "gable", "width": S + 0.6, "length": TL, "pitch": PITCH, "at": [[TX, TOP, WZ, Q], [-TX, TOP, WZ, Q]]})
+add("transept roofs", {"type": "roof", "form": "gable", "width": S + 0.6, "length": TL, "pitch": PITCH, "frieze": {"arch": 0.8}, "at": [[TX, TOP, WZ, Q], [-TX, TOP, WZ, Q]]})
 
 CZ = WZ + S                                # the west choir's middle
 add("west choir", {"type": "enclosure", "plan": {"rect": [S, S]}, "thickness": PT, "height": TOP, "openings": [apse_arch],
@@ -158,13 +158,12 @@ add("west choir roofs", {"type": "roof", "form": "gable", "width": S + 0.6, "len
 apse("west apse", (0, CZ + HB), 0.0, "the trefoil's three apses: the west one...")
 apse("north apse", (-HB, CZ), -Q, "...and the two at its sides")
 apse("south apse", (HB, CZ), Q, "")
-del parts["south apse"]["_about"]
 
 # ---------------------------------------------------------------- the WEST crossing tower, in stages to 83m
 add("west crossing floor", {"type": "box", "width": S, "length": S, "height": SLAB, "at": [[0, TOP, WZ, 0]], "flatRoof": True,
                             "_about": "the slab over the crossing's vault that the tower stands on"})
 stages = [  # in-radius, height, wall, openings tier, glass
-    (7.4, 13.0, 1.4, {"pattern": "2", "width": 1.2, "gap": 1.0, "pier": 1.0, "sill": 0.8, "springing": 3.8, "head": semi}, "Romanesque stage: paired round-arched openings"),
+    (7.4, 13.0, 1.4, {"pattern": "2", "width": 1.2, "gap": 1.0, "pier": 1.0, "sill": 0.8, "springing": 3.8, "head": semi, "surround": ROM1}, "Romanesque stage: paired round-arched openings"),
     (6.4, 10.5, 1.0, {"pattern": "1", "width": 2.0, "sill": 1.5, "springing": 6.5, "head": {"profile": "pointed", "spread": 1.0}}, "the Gothic belfry, a tall lancet in every face"),
     (5.1, 7.0, 0.8, {"pattern": "1", "width": 1.6, "sill": 1.2, "springing": 4.6, "head": semi}, "Neumann's baroque stages..."),
     (3.9, 5.0, 0.6, {"pattern": "1", "width": 1.2, "sill": 1.0, "springing": 3.2, "head": semi}, None),
@@ -176,7 +175,7 @@ for i, (rin, h, t, op, about) in enumerate(stages):
     nm = f"west tower {i + 1}"
     lower = 3.0 if i == 0 else 1.0
     add(nm, {"type": "enclosure", "plan": {"sides": 8, "radius": round(R, 4)}, "thickness": t, "height": h, "glass": False,
-             "tiers": [{"h": lower, "openings": []}, {"openings": op}], "at": [[0, round(y, 4), WZ, 0]], "standsOn": [prev],
+             "tiers": [{"h": lower, "openings": []}, {"openings": op, **({"lombard": LOMBARD} if i == 0 else {})}], "at": [[0, round(y, 4), WZ, 0]], "standsOn": [prev],
              **({"_about": about} if about else {})})
     add(f"{nm} head", {"type": "prism", "plan": {"sides": 8, "radius": round(R - t * 0.6, 4)}, "height": 0.3, "at": [[0, round(y + h - 0.3, 4), WZ, 0]],
                        "flatRoof": True, "standsOn": [nm]})
@@ -211,7 +210,8 @@ TOWER = {
   "_about": "A ROUND STAIR TOWER standing on its own (against a wall, in the angle of a choir): a ring of `n` bays, a door at its foot in bay `doorBay`, a spiral inside from the ground up to `H`, where it arrives on its landing at a door out (bay `exitBay`, worked out from where the spiral ends) -- onto a terrace or a gallery the caller builds there; above that an open belvedere of arches over a parapet, a cornice and a cone. Place it at its middle. `steps` may be chosen (12-22cm each) so the stair arrives facing the way the caller wants. Mainz's east towers.",
   "params": {
     "detail": 4, "R": 3.6, "wall": 0.8, "H": 20.0, "n": 12, "newel": 0.2, "turn": 24,
-    "steps": "round(H / 0.19)", "doorBay": 0, "stageH": 4.0, "capRise": 6.0, "finial": 1.6,
+    "steps": "round(H / 0.19)", "doorBay": 0, "stageH": 4.0, "capRise": 6.0, "finial": 1.6, "doorW": 1.2, "archW": 1.1,
+    "_doorW": "its doors' width (and `archW` the belvedere's arches'): a narrower tower has narrower bays",
     "_R": "the tower's outside radius; `wall` its thickness; H the level the stair arrives at (the terrace's)",
     "_steps": "the spiral's steps: the landing's bearing follows from their number, so a caller picks it to arrive facing the door it wants",
     "sr": "R - wall - 0.05", "rA": "(sr + newel) / 2", "land": "max(1.2, sr - newel)",
@@ -223,16 +223,16 @@ TOWER = {
     "shaft": {"type": "ring", "count": "n", "rOuter": "R", "rInner": "R - wall", "height": "H", "place": [[0, 0, 0, 0]], "skip": ["doorBay"], "solid": True,
               "_about": "the round shaft, from the ground to the stair's head"},
     "shaft door": {"type": "ring", "count": "n", "rOuter": "R", "rInner": "R - wall", "height": "H", "place": [[0, 0, 0, 0]], "at": ["doorBay"],
-                   "opening": {"width": 1.2, "sill": 0, "springing": 2.0, "head": {"profile": "semicircular"}}},
+                   "opening": {"width": "doorW", "sill": 0, "springing": 2.0, "head": {"profile": "semicircular"}}},
     "stair": {"type": "spiral-stair", "radius": "sr", "newel": "newel", "turn": "turn", "top": "H", "steps": "steps", "soffit": 0.2,
               "at": [[0, 0, 0, "doorBay * 6.2831853 / n"]], "_about": "the spiral, its first step at the door, its landing at the door out"},
     "belvedere": {"type": "ring", "count": "n", "rOuter": "R", "rInner": "R - wall", "height": "stageH", "y": "H", "place": [[0, 0, 0, 0]],
                   "skip": ["exitBay"], "glass": False,
-                  "opening": {"width": 1.1, "sill": 1.0, "springing": "stageH - 0.6 - 0.55", "head": {"profile": "semicircular"}},
+                  "opening": {"width": "archW", "sill": 1.0, "springing": "stageH - 0.6 - archW / 2", "head": {"profile": "semicircular"}},
                   "_about": "the belvedere at the stair's head: an arch in every bay over a parapet..."},
     "belvedere door": {"type": "ring", "count": "n", "rOuter": "R", "rInner": "R - wall", "height": "stageH", "y": "H", "place": [[0, 0, 0, 0]],
                        "at": ["exitBay"], "glass": False,
-                       "opening": {"width": 1.2, "sill": 0, "springing": "stageH - 0.6 - 0.6", "head": {"profile": "semicircular"}},
+                       "opening": {"width": "doorW", "sill": 0, "springing": "stageH - 0.6 - doorW / 2", "head": {"profile": "semicircular"}},
                        "_about": "...and the door out, where the landing arrives"},
     "cornice": {"type": "prism", "plan": {"sides": "n", "radius": "R + 0.2"}, "height": 0.35, "at": [[0, "H + stageH", 0, 0]], "flatRoof": True,
                 "standsOn": ["belvedere"], "_about": "the ceiling over the belvedere and the cornice the cone stands on"},

@@ -1,0 +1,44 @@
+{
+  "name": "Sari",
+  "kind": "garment",
+  "layer": 3,
+  "skirted": true,
+  "_about": "the sari: six yards of cotton or silk wrapped round the waist into a skirt to the feet, pleated at the front, its loose end (the pallu) carried up across the body and over the left shoulder to hang down the back; a woven border (zari) along its edge (India)",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "saffron"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "params": {
+    "length": "floor - 0.03",
+    "hem": 0.05
+  },
+  "use": [
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "length",
+        "flare": 0.18,
+        "pleats": 16,
+        "hem": "hem"
+      }
+    },
+    {
+      "use": "clothes/components/mantle",
+      "params": {
+        "from": "collar - 0.02",
+        "to": "hip",
+        "centre": 150,
+        "span": 170,
+        "flare": 0.3,
+        "hem": "hem"
+      }
+    }
+  ]
+}

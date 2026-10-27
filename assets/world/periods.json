@@ -1,7 +1,7 @@
 {
   "name": "periods",
   "kind": "periods",
-  "_about": "THE CULTURAL PERIODS a world is set in: one is decided at startup (?period=NAME, else drawn from the seed by weight) and everything that has a time and place follows it -- the monuments (architecture.js LANDMARKS), what people wear (dress: a wardrobe style by weight, \"\" the village's own; assets/clothes/wardrobe.json styles, their hair and jewelry), the houses of the town (town: a town.js style of the medieval town, or houses: the period's dwellings by weight, assets/architecture/dwellings; without: the farm plots it had not, a windmill, a pig yard; walls: the [pattern, palette] of its town wall), the fisherman's boat (assets/items/ships), the ground (grass, dry grass, sand) and the trees (flora.js species).",
+  "_about": "THE CULTURAL PERIODS a world is set in: one is decided at startup (?period=NAME, else drawn from the seed by weight) and everything that has a time and place follows it -- the monuments (architecture.js LANDMARKS), what people wear (dress: a wardrobe style by weight, \"\" the village's own; assets/clothes/wardrobe.json styles, their hair and jewelry), the houses of the town (town: a town.js style of the medieval town, or houses: the period's dwellings by weight, assets/architecture/dwellings; without: the farm plots it had not, a windmill, a pig yard; walls: the [pattern, palette] of its town wall; furnish: the word its village houses are furnished under, assets/architecture/furnishing.json swaps), the fisherman's boat (assets/items/ships), the ground (grass, dry grass, sand) and the trees (flora.js species).",
   "periods": {
     "greek": {
       "name": "Ancient Greece",
@@ -124,6 +124,75 @@
         "maple"
       ]
     },
+    "indian": {
+      "name": "Medieval India",
+      "weight": 1,
+      "landmarks": [
+        "kandariya",
+        "tajmahal"
+      ],
+      "dress": {
+        "indian": 1
+      },
+      "town": {
+        "houses": {
+          "haveli": 2,
+          "indian-hut": 3
+        },
+        "church": false,
+        "without": [
+          "windmill",
+          "pigYard"
+        ],
+        "walls": [
+          "stone/ashlar",
+          "red-sandstone"
+        ]
+      },
+      "boat": "items/ships/fisher-boat",
+      "ground": "dry",
+      "trees": [
+        "palm",
+        "willow",
+        "maple"
+      ]
+    },
+    "maya": {
+      "name": "The Maya",
+      "weight": 1,
+      "landmarks": [
+        "chichenitza"
+      ],
+      "dress": {
+        "maya": 1
+      },
+      "town": {
+        "houses": {
+          "maya-house": 1
+        },
+        "church": false,
+        "without": [
+          "windmill",
+          "pigYard",
+          "stableYard",
+          "ryeField",
+          "barleyField",
+          "cabbageField",
+          "garlicField"
+        ],
+        "walls": [
+          "stone/rubble",
+          "maya"
+        ]
+      },
+      "boat": "items/ships/dugout",
+      "ground": "grass",
+      "trees": [
+        "palm",
+        "oak",
+        "willow"
+      ]
+    },
     "medieval": {
       "name": "Medieval Europe",
       "weight": 2,
@@ -135,7 +204,8 @@
         "stephansdom",
         "mainz",
         "florence",
-        "caerphilly"
+        "caerphilly",
+        "marialaach"
       ],
       "dress": {
         "": 3,
@@ -201,7 +271,8 @@
         "church": false,
         "without": [
           "pigYard"
-        ]
+        ],
+        "furnish": "ottoman"
       },
       "boat": "items/ships/fisher-boat",
       "ground": "dry",
@@ -241,6 +312,34 @@
         "palm"
       ]
     },
+    "russian": {
+      "name": "Old Russia",
+      "weight": 1,
+      "landmarks": [
+        "stbasil",
+        "stisaacs"
+      ],
+      "dress": {
+        "russian": 1
+      },
+      "town": {
+        "houses": {
+          "izba": 1
+        },
+        "church": false,
+        "walls": [
+          "stone/brick",
+          "brick"
+        ]
+      },
+      "boat": "items/ships/fishing-boat",
+      "ground": "grass",
+      "trees": [
+        "birch",
+        "spruce",
+        "pine"
+      ]
+    },
     "industrial": {
       "name": "Industrial Europe",
       "weight": 1,
@@ -256,7 +355,9 @@
         "stpauls",
         "schwerin",
         "moritzburg",
-        "melk"
+        "melk",
+        "fishermansbastion",
+        "elpilar"
       ],
       "dress": {
         "industrial": 1
@@ -265,7 +366,8 @@
         "styles": [
           "brick"
         ],
-        "church": true
+        "church": true,
+        "furnish": "industrial"
       },
       "boat": "items/ships/skiff",
       "ground": "grass",

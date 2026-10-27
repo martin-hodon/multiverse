@@ -9,8 +9,8 @@
     "top": 8.5
   },
   "build": [
-    "vault",
-    "wall"
+    "wall",
+    "vault"
   ],
   "_build": "which parts to build, and in what order (a caller may ask for a few of them: the village takes a cathedral's arcades from a definition whose walls it builds itself)",
   "parts": {
@@ -39,18 +39,19 @@
       "thickness": 0.8,
       "at": [
         [
-          "0 - span / 2 - 0.4",
+          "0 - span / 2",
           0,
-          0,
+          "0 - length / 2",
           "1.5707963"
         ],
         [
-          "span / 2 + 0.4",
+          "span / 2 + 0.8",
           0,
-          0,
+          "0 - length / 2",
           "1.5707963"
         ]
-      ]
+      ],
+      "_about": "a wall under each springing, flush with the vault's edge (a wall turned a quarter reaches from its line toward -x) and along its length (a barrel runs from its placement toward -z)"
     }
   }
 }

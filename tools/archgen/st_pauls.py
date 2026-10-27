@@ -14,17 +14,20 @@ Q = math.pi / 2
 C, T, AH = 34.0, 2.0, 30.0                 # the crossing square, the walls, the arms' height
 A = C / 2
 NL, TL, CL = 50.0, 22.0, 36.0
+ORD = [{"tier": 0, "kind": "corinthian"}, {"tier": 1, "kind": "corinthian"}]   # (two storeys of pilasters: order.js sizes each from its storey)
 tiers = [{"h": 15, "openings": {"pattern": "3", "width": 2.6, "gap": 4.4, "sill": 4.0, "springing": 10.5, "head": {"profile": "semicircular"}}},
          {"openings": {"pattern": "3", "width": 2.4, "gap": 4.6, "sill": 3.0, "springing": 9.5, "head": {"profile": "semicircular"}}}]
 arch = {"at": 0, "width": 20.0, "sill": 0, "springing": 14.0, "head": {"profile": "semicircular"}}
 add("crossing", {"type": "enclosure", "plan": {"rect": [C, C]}, "thickness": T, "height": AH, "openings": [arch], "at": [[0, 0, 0, 0]],
                  "_about": "the crossing: eight piers in the real one, here four walls each opened by a great arch into an arm"})
-add("nave", {"type": "enclosure", "plan": {"rect": [C, NL]}, "thickness": T, "height": AH, "tiers": tiers,
+# (the arms' COURSES -- arch/courses.js: a plinth, the string course at the floor line between the two storeys, the
+#  cornice under the balustrade -- run round every face but the one against the crossing)
+add("nave", {"type": "enclosure", "plan": {"rect": [C, NL]}, "thickness": T, "height": AH, "tiers": tiers, "courses": {"skip": [2]}, "orders": ORD,
              "faces": {"2": [arch], "0": [{"h": 15, "openings": [{"at": 0, "width": 4.0, "sill": 0, "springing": 7.0, "head": {"profile": "semicircular"}}]},
                                           {"openings": [{"at": 0, "width": 3.4, "sill": 2.0, "springing": 8.0, "head": {"profile": "semicircular"}}]}]},
              "at": [[0, 0, A + NL / 2, 0]], "_about": "the nave, in two storeys outside (the upper a screen wall hiding the aisle roofs)"})
 for sx, nm, inner, outer in ((1, "north", "3", "1"), (-1, "south", "1", "3")):
-    add(f"{nm} transept", {"type": "enclosure", "plan": {"rect": [TL, C]}, "thickness": T, "height": AH, "tiers": tiers,
+    add(f"{nm} transept", {"type": "enclosure", "plan": {"rect": [TL, C]}, "thickness": T, "height": AH, "tiers": tiers, "courses": {"skip": [int(inner)]}, "orders": ORD,
                            "faces": {inner: [arch], outer: [{"h": 15, "openings": [{"at": 0, "width": 3.6, "sill": 0, "springing": 7.0, "head": {"profile": "semicircular"}}]},
                                                             {"openings": [{"at": 0, "width": 3.0, "sill": 2.0, "springing": 8.0, "head": {"profile": "semicircular"}}]}]},
                            "at": [[sx * (A + TL / 2), 0, 0, 0]], **({"_about": "the transepts, a door in each end"} if sx > 0 else {})})
@@ -34,7 +37,7 @@ for sx, nm, inner, outer in ((1, "north", "3", "1"), (-1, "south", "1", "3")):
                           **({"_about": "the transept porticoes: six columns on a half circle before each door, under a half dome"} if sx > 0 else {})})
     add(f"{nm} portico dome", {"type": "dome", "sweep": 0.5, "sides": 16, "radius": 6.8, "thickness": 0.6, "head": {"profile": "semicircular"},
                                "at": [[sx * (A + TL), 13.8, 0, sx * Q]]})
-add("choir", {"type": "enclosure", "plan": {"rect": [C, CL]}, "thickness": T, "height": AH, "tiers": tiers,
+add("choir", {"type": "enclosure", "plan": {"rect": [C, CL]}, "thickness": T, "height": AH, "tiers": tiers, "courses": {"skip": [0]}, "orders": ORD,
               "faces": {"0": [arch], "2": [{"at": 0, "width": C - 2 * T - 1.0, "sill": 0, "springing": 14.0, "head": {"profile": "semicircular"}}]},
               "at": [[0, 0, -A - CL / 2, 0]], "_about": "the choir, open at its end into the apse"})
 AR = A - T
@@ -80,7 +83,8 @@ add("upper portico", comp("components/portico", {"count": 6, "spacing": 4.2, "co
 TWR = 12.0
 for sx, nm in ((1, "north"), (-1, "south")):
     x, z = sx * (A + TWR / 2 - 1.0), FZ - TWR / 2
-    add(f"{nm}west tower", {"type": "enclosure", "plan": {"rect": [TWR, TWR]}, "thickness": 1.5, "height": AH,
+    # (its courses the arms' own -- the floor line at 15m runs on round it -- but for the face against the nave)
+    add(f"{nm}west tower", {"type": "enclosure", "plan": {"rect": [TWR, TWR]}, "thickness": 1.5, "height": AH, "courses": {"skip": [3 if sx > 0 else 1]},
                             "tiers": [{"h": 15, "openings": [{"at": 0, "width": 2.4, "sill": 4.0, "springing": 10.0, "head": {"profile": "semicircular"}}]},
                                       {"openings": [{"at": 0, "width": 2.2, "sill": 3.0, "springing": 9.0, "head": {"profile": "semicircular"}}]}],
                             "faces": {"0": [{"h": 15, "openings": [{"at": 0, "width": 2.6, "sill": 0, "springing": 5.0, "head": {"profile": "semicircular"}}]},

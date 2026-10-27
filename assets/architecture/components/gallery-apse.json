@@ -1,0 +1,192 @@
+{
+  "name": "Gallery apse",
+  "_about": "THE RHENISH APSE WITH ITS DWARF GALLERY (Zwerggalerie): a half ring of wall with a round-arched window in every bay, the stone CONCH inside springing from the wall's inner face, and above it, under the eaves, a PASSAGE round the apse within the wall's thickness -- an open arcade on the outer face, a solid wall behind -- on whose floor one can walk round. Its floor is not chosen: the conch's back rises inward from the springing, and the passage's floor is where the back has fallen below the passage's inner edge (a hand's breadth over it), so the walk never cuts into the vault. Over all a half cone. It bulges toward +z; place it at the middle of the end it stands against (that wall must stand higher than the cone's point), yawed outward.",
+  "params": {
+    "detail": 4,
+    "R": 5.9,
+    "T": 1.4,
+    "spring": 9.5,
+    "conchT": 0.9,
+    "arcT": 0.45,
+    "pass": 0.7,
+    "galH": 3.2,
+    "roofRise": 5.0,
+    "over": 0.3,
+    "winW": 1.4,
+    "winSill": 3.5,
+    "winSpring": 7.5,
+    "galW": 0.7,
+    "galSill": 0.9,
+    "_R": "the apse's outside radius; T its walls; spring where the conch springs; galH the gallery's height; roofRise the half cone's",
+    "_pass": "the passage's width, between the arcade (arcT thick, on the outer face) and the wall behind it",
+    "ri": "R - T",
+    "cr": "ri + conchT",
+    "rp": "R - arcT - pass",
+    "_cr": "the conch's outer radius: it springs from the wall's inner face, conchT thick",
+    "floor": "spring + sqrt(max(0, cr * cr - rp * rp)) + 0.1",
+    "_floor": "the passage's floor: where the conch's back has fallen below the passage's inner edge",
+    "top": "floor + galH"
+  },
+  "build": [
+    "walls",
+    "conch",
+    "gallery",
+    "gallery wall",
+    "roof"
+  ],
+  "parts": {
+    "walls": {
+      "type": "ring",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        12,
+        13,
+        14,
+        15
+      ],
+      "rOuter": "R",
+      "rInner": "ri",
+      "height": "floor",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "opening": {
+        "width": "winW",
+        "sill": "winSill",
+        "springing": "winSpring",
+        "head": {
+          "profile": "semicircular"
+        },
+        "surround": {
+          "style": "romanesque",
+          "orders": 1
+        }
+      },
+      "_about": "the apse's wall up to the passage's floor, a window in every bay"
+    },
+    "conch": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": "cr",
+      "thickness": "conchT",
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          "spring",
+          0,
+          0
+        ]
+      ],
+      "_about": "the conch, from the wall's inner face"
+    },
+    "gallery": {
+      "type": "ring",
+      "count": 32,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "rOuter": "R",
+      "rInner": "R - arcT",
+      "y": "floor",
+      "height": "galH",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "glass": false,
+      "outside": true,
+      "opening": {
+        "width": "galW",
+        "sill": "galSill",
+        "springing": "galH - 0.5 - galW / 2",
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "the dwarf gallery's arcade on the outer face, over a low parapet"
+    },
+    "gallery wall": {
+      "type": "ring",
+      "count": 16,
+      "turn": 0.5,
+      "at": [
+        0,
+        1,
+        2,
+        3,
+        12,
+        13,
+        14,
+        15
+      ],
+      "rOuter": "rp",
+      "rInner": "ri",
+      "y": "floor",
+      "height": "galH",
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "outside": true,
+      "_about": "the wall behind the passage, over the conch's back: the passage is the open air's, though too narrow for the finishes' rays to see out of it"
+    },
+    "roof": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 16,
+      "radius": "R + over",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "roofRise"
+      },
+      "at": [
+        [
+          0,
+          "top",
+          0,
+          0
+        ]
+      ],
+      "_about": "the half cone over all"
+    }
+  }
+}

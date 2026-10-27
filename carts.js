@@ -87,7 +87,7 @@ export function makeCart({ size = "medium", kind = "ox", animals = 2, seed = 1, 
   let off = S.bedL / 2;   // arc-length ahead of the cart's center
   if (animals === 1) { const t = teamDef(kind); off += t.back; team.push({ def: t, off }); }
   else for (let i = 0; i < animals / 2; i++) { const t = teamDef(kind, { pair: true, index: i }); off += t.back; team.push({ def: t, off }); }
-  const driver = makePerson({ seed: seed * 17 + 5, pose: "sit", still: true, adult: true });
+  const driver = makePerson({ seed: seed * 17 + 5, pose: "sit", still: true, adult: true, work: true });
   const D = SPECIES.find((s) => s.name === kind).draft;
   return {
     size, kind, body, team, driver,

@@ -269,9 +269,11 @@ function houseSpec(kind, r, { trade = null, cellar = r() < .35, big = false } = 
 // period: the world's period's town (assets/world/periods.json `town`): `houses` -- its dwellings by weight
 // (assets/architecture/dwellings) stand in the rows instead of the village's houses, also for the inn and the farms;
 // `church: false` -- none, and no cross on the market; `walls`: [pattern, palette] its stone buildings are laid in
+// `furnish`: the word its village houses are furnished under (assets/architecture/furnishing.json `swaps`)
 export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridgeX, groundR, style = null, period = null }) {
   const S = townStyle(seed, style), r = rng(seed * 13 + 5);
   const DW = period?.houses ?? null;
+  const FURN = period?.furnish ? { furnish: period.furnish } : {};   // (the period's own furniture in the village's houses: furnishing.json `swaps`)
   if (DW) { S.tower = "merlons"; S.gate = "battlements"; }   // (the walls of an older town: battlements, no spires)
   if (period?.walls) S.masonry = { pattern: period.walls[0], palette: period.walls[1] };   // (its own masonry: mud brick, ashlar)
   // a dwelling of the period, turned to face its street (`yaw`), its footprint along and across it
@@ -376,7 +378,7 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
     const quoins = look && h.kind !== "jettied" && ![look.ground, look.upper].some((l) => l.pattern.startsWith("timber/")) ? ["quoins", "quoins b"] : [];
     const plinth = h.kind === "stone" || h.def ? [] : [h.trade ? "plinth shop" : "plinth"];   // (a plinth of rough stone at the foot: not under a stone house)
     const def = h.def ?? archBuilding(`village/${h.kind}-house`, { name: h.trade ? SHOP_NAMES[h.trade] : "Town house",
-      params: { ...P, yaw: h.yaw, build: [...h.spec.build, ...quoins, ...plinth] }, finish: houseFinish(S, { ...look, roof: roofAt(S, X, Z) }) });
+      params: { ...P, ...FURN, yaw: h.yaw, build: [...h.spec.build, ...quoins, ...plinth] }, finish: houseFinish(S, { ...look, roof: roofAt(S, X, Z) }) });
     const s = place(key(h.trade ?? "house"), def, X, Z, { home: true, ...(h.trade ? { trade: h.trade } : {}) });   // (a shop's trade: a lamp by its door, nightglow.js)
     const d = def.doors?.[0];
     if (d) {   // its door on the street
@@ -388,7 +390,7 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
     const spec = houseSpec("eaves", r, { trade: "tavern-room", cellar: true, big: true });
     Object.assign(spec.params, { W: INN.W, D: INN.D });
     // (a town of the period's dwellings: its inn one of them -- the guests still eat there)
-    const def = DW ? dwelling(pickW(r, DW), -90) : archBuilding("village/eaves-house", { name: "The Bridge Inn", params: { ...spec.params, yaw: -90, build: spec.build },
+    const def = DW ? dwelling(pickW(r, DW), -90) : archBuilding("village/eaves-house", { name: "The Bridge Inn", params: { ...spec.params, ...FURN, yaw: -90, build: spec.build },
       finish: houseFinish(S, houseLook(S, "eaves", r)) });
     const X = SQ.x1 + 1.2 + (DW ? def.footprint[0] : INN.D) / 2, Z = (SQ.z0 + SQ.z1) / 2;
     const s = place("tavern", def, X, Z, { home: true, role: "inn" });
@@ -522,7 +524,7 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
     if (F.x - west < -groundR + 6) continue;                          // (a small world: no room this far west)
     const tz = east ? quayZ(F.x) : trackZ;                            // (the east farm fronts the quay road)
     const L = between(r, 16, 19, .5), B = between(r, 6.5, 7.5, .5);
-    const def = DW ? dwelling(pickW(r, DW), 0) : archBuilding("village/longhouse", { name: "Longhouse", params: { L, B, pitch: Math.round(between(r, 46, 54, 1)) }, finish: lf });   // (the period's farmhouse)
+    const def = DW ? dwelling(pickW(r, DW), 0) : archBuilding("village/longhouse", { name: "Longhouse", params: { L, B, ...FURN, pitch: Math.round(between(r, 46, 54, 1)) }, finish: lf });   // (the period's farmhouse)
     const s = place(key("longhouse"), def, F.x, tz - 2.5 - B / 2 - .7, { bank: undefined, home: true });
     const d = def.doors?.find((q) => q.z > 0) ?? def.doors?.[0];
     if (d) { const o = doorOut(s, d, 1.3); routes.push({ w: 1.2, pts: [[o[0], tz], o] }); }

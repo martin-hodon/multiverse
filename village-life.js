@@ -46,7 +46,7 @@ const RAIN = { hurry: 1.35, stagger: 6, wait: [20, 40] };   // walking faster in
 // world: { sites (the village's and hamlet's), BUILDINGS, siteZ, supportAt, router (routeGraph), makePerson,
 //          gaitBase, herd (a composite), track, talkers, isNight(), bellHour(), doors, count }
 export function createVillageLife(world) {
-  const { sites, BUILDINGS, siteZ, supportAt, router, makePerson, gaitBase, herd, track, talkers, isNight, bellHour, doors = [], count = 32,
+  const { sites, BUILDINGS, siteZ, supportAt, router, makePerson, personKind = null, gaitBase, herd, track, talkers, isNight, bellHour, doors = [], count = 32,
           isWet = () => false, roofed = () => true } = world;
   const sky = (sp) => (sp.sky ??= !roofed(sp.x, sp.z, (sp.y ?? 0) + .1));   // (a place under the open sky: the rain sends them in from it)
   const toW = (s, x, z) => [s.x + x, siteZ(s) + z];
@@ -83,13 +83,13 @@ export function createVillageLife(world) {
         FIELDS.push(spot(s, x, supportAt(s.x + x, siteZ(s) + z, 1e9), z, { h: r() * Math.PI * 2, door: null, gesture, tool }));
       }
     }
-    if (s.home && def.beds) {   // (a home: the town plan says which sites are lived in)
+    if (s.home && def.beds && doorOf.get(s)) {   // (a home: the town plan says which sites are lived in -- and its beds are reached through its door)
       const up = (def.ways?.up ?? []).map(([x, z]) => toW(s, x, z)), upStorey = def.ways?.upStorey ?? [];
       // the way up to a storey: every point up to the first that reaches it (not on to the foot of the next flight)
       const upTo = (st) => { const out = []; for (let i = 0; i < up.length; i++) { out.push(up[i]); if ((upStorey[i] ?? st) >= st) break; } return out; };
       def.beds.forEach((b, i) => {
         const a = b.yaw ?? 0, ax = Math.cos(a), az = -Math.sin(a);   // the bed's own x, turned: the sleepers lie side by side along it
-        for (const o of [-.38, .38]) {   // two sleepers to a bed, side by side
+        for (const o of b.one ? [0] : [-.38, .38]) {   // two sleepers to a bed, side by side (one to a hammock)
           const q = spot(s, b.x + o * ax, b.y + .05, b.z + o * az, { pose: "lie", h: Math.PI / 2 + a, yaw: a, via: b.storey ? upTo(b.storey) : [],
                                                                     goal: toW(s, b.foot[0] + o * ax, b.foot[1] + o * az) });
           q.slot = i * 2 + (o > 0); BEDS.push(q);
@@ -117,17 +117,27 @@ export function createVillageLife(world) {
   const vs = [];
   const keeperSpot = WORKS.find((q) => q.s.role === "inn");
   const jobs = [...WORKS, ...(MILL ? ["carry", "carry"] : [])];
+  // WHO DOES WHAT: the jobs in order, each to the first villager left who may do it -- the priest's place and the
+  // forge a man's -- and everyone else farms. One at work dresses for it (people.js `work`: the wardrobe's working
+  // outfits, never a lady's gown in a field): all but the priest, the keeper and the vendors, the tailor, the musicians
+  const MENS = new Set(["bless", "hammer"]), FINE = new Set(["sell", "bless", "sew", "play", "strum"]);
+  const jobOf = new Array(n).fill("farm"), left = [...Array(n).keys()];
+  for (const job of jobs) {
+    const k = left.findIndex((i) => typeof job === "string" || !MENS.has(job.gesture) || personKind?.(500 + i * 13, true) !== "woman");
+    if (k >= 0) jobOf[left.splice(k, 1)[0]] = job;
+  }
+  let farmers = 0;
   for (let i = 0; i < n; i++) {
-    const seed = 500 + i * 13, r = rng(seed * 31 + 7);
-    const walkDef = makePerson({ seed, adult: true }), sitDef = makePerson({ seed, adult: true, pose: "sit" });
-    const lieDef = makePerson({ seed, adult: true, pose: "lie" }), carryDef = makePerson({ seed, adult: true, pose: "carry" });
+    const seed = 500 + i * 13, r = rng(seed * 31 + 7), job = jobOf[i];
+    const work = typeof job === "string" || !(job.bard || FINE.has(job.gesture));
+    const walkDef = makePerson({ seed, adult: true, work }), sitDef = makePerson({ seed, adult: true, pose: "sit", work });
+    const lieDef = makePerson({ seed, adult: true, pose: "lie", work }), carryDef = makePerson({ seed, adult: true, pose: "carry", work });
     const S = walkDef.hipY / .919, tall = walkDef.hipY / .525;   // the body's scale and height (people.js: hips at .525 of the height)
     carryDef.parts.push({ id: "load", parent: "pelvis", shape: "capsule", size: { r: .16 * S, len: .22 * S }, geomRot: [90, 0, 0], pos: [.3 * S, .3 * S, 0], color: 0xcbb68c, edge: 0 });   // the sack in the arms
-    const job = jobs[i] ?? "farm";
-    const workSpot = job === "farm" ? FIELDS[(i - jobs.length) % Math.max(1, FIELDS.length)] : typeof job === "string" ? null : job;
+    const workSpot = job === "farm" ? FIELDS[farmers++ % Math.max(1, FIELDS.length)] : typeof job === "string" ? null : job;
     const vr = { walk: herd.add(walkDef), sit: herd.add(sitDef), lie: herd.add(lieDef), carry: herd.add(carryDef) };
     const bed = BEDS[i], house = bed.s, hd = doorOf.get(house);
-    const v = { id: i, r, vr, sitAt: sitDef.sitAt, tall, hand: handIndex(walkDef), handL: handIndex(walkDef, "L"), lamp: i % 3 !== 2, base: gaitBase(walkDef), speed: 1.1 + r() * .4, bed, house, job, trip: 0, load: false,
+    const v = { id: i, kind: walkDef.kind, dress: walkDef.outfit.style, r, vr, sitAt: sitDef.sitAt, tall, hand: handIndex(walkDef), handL: handIndex(walkDef, "L"), lamp: i % 3 !== 2, base: gaitBase(walkDef), speed: 1.1 + r() * .4, bed, house, job, trip: 0, load: false,
                 work: workSpot,
                 keeper: job === keeperSpot, homeStand: { s: house, x: hd.inn[0], y: .16, z: hd.inn[1], h: 0, pose: "stand", via: [], goal: hd.inn, door: hd, by: null, shared: true },
                 pos: [0, 0, 0], h: 0, animT: r() * 10, at: null, lane: null, s: 0, goal: null, until: 0, night: null };
@@ -346,6 +356,8 @@ export function createVillageLife(world) {
       if (v.work?.by === v) v.work.by = null;
       return true;
     },
+    // who does what, and in what (the checks: a worker in a working outfit, the priest a man)
+    jobs: () => vs.map((v) => ({ id: v.id, kind: v.kind, dress: v.dress, job: typeof v.job === "string" ? v.job : v.job.gesture ?? "work" })),
     places: { works: WORKS.length, eats: EATS.length, shops: SHOPS.length, pews: PEWS.length, fields: FIELDS.length, beds: BEDS.length, mill: !!MILL },
   };
 }

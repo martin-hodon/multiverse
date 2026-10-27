@@ -1,7 +1,8 @@
 # ST ISAAC'S CATHEDRAL, St Petersburg (Montferrand, 1818-58), from components: a great rectangular body under a flat
 # roof, walked on; inside, four piers and great arches carry pendentives and their deck; over the roof a round
 # stylobate, and on it the `drum-dome` -- a PERISTYLE of 24 columns round the drum, the gilded dome, the lantern; on
-# each of the four fronts an octastyle `portico`; four small gilded domes (`drum-dome` again, with a peristyle of eight)
+# each of the four fronts an octastyle `portico`, the body's walls a giant order of pilasters carrying the porticoes'
+# entablature round the building; four small gilded domes (`drum-dome` again, with a peristyle of eight)
 # on square bases at the roof's corners. A `tower-stair` climbs to the roof in one corner, and a flight from the roof
 # to the colonnade round the drum, which visitors walk.
 #   The main front faces +z. Numbers are worked here and written as numbers.
@@ -14,13 +15,20 @@ Q = math.pi / 2
 
 BW, BL, T, BH = 60.0, 76.0, 2.5, 30.0      # the body: across (x), along (z), walls, height
 IX, IZ = BW / 2 - T, BL / 2 - T            # its inside, half
-door = {"at": 0, "width": 5.0, "sill": 0, "springing": 8.0, "head": {"profile": "semicircular"}}
-front = lambda n: [{"h": 15, "openings": {"pattern": str(n), "width": 2.6, "gap": 6.4, "sill": 4.5, "springing": 10.5, "head": {"profile": "semicircular"},
-                                          "middle": {"width": 5.0, "sill": 0, "springing": 8.0}}},
-                   {"openings": {"pattern": str(n), "width": 2.2, "gap": 6.8, "sill": 3.0, "springing": 9.0, "head": {"profile": "semicircular"}}}]
+# THE WALLS' GRAMMAR: a GIANT CORINTHIAN ORDER of pilasters through the two storeys of windows, its entablature at the
+# porticoes' (their columns' foot over four steps, 17 m of column, 3 m of entablature), and an ATTIC over it to the roof
+# -- the pilasters on the piers between the window axes (order.js), the windows dressed: the lower row under triangular
+# pediments, the upper under cornices, the attic's plain (surround.js), a granite plinth (courses)
+OT = 0.8 + 17.0 + 3.0                      # the order's top: the porticoes' entablature's
+front = lambda n: [{"h": OT / 2, "openings": {"pattern": str(n), "width": 2.6, "gap": 6.4, "sill": 3.0, "springing": 7.4, "head": {"profile": "semicircular"},
+                                              "surround": {"head": "pediment"}, "middle": {"width": 5.0, "sill": 0, "springing": 7.4}}},
+                   {"h": OT / 2, "openings": {"pattern": str(n), "width": 2.2, "gap": 6.8, "sill": 2.0, "springing": 6.6, "head": {"profile": "semicircular"},
+                                              "surround": {"head": "cornice"}}},
+                   {"openings": {"pattern": str(n), "width": 2.2, "gap": 6.8, "sill": 2.4, "springing": 5.2, "surround": {"head": False}}}]
 add("body", {"type": "enclosure", "plan": {"rect": [BW, BL]}, "thickness": T, "height": BH,
              "faces": {"0": front(5), "2": front(5), "1": front(7), "3": front(7)},
-             "at": [[0, 0, 0, 0]], "_about": "the body: two storeys of windows, a great door in the middle of every front, behind its portico"})
+             "courses": {"plinth": {"h": 1.4, "out": 0.35}}, "orders": [{"tier": 0, "span": 2, "kind": "corinthian"}],
+             "at": [[0, 0, 0, 0]], "_about": "the body: a giant Corinthian order of pilasters through two storeys of dressed windows, its entablature at the porticoes', an attic over it; a great door in the middle of every front, behind its portico"})
 
 # ---- inside: the crossing -- four piers, four great arches, the pendentives and their deck
 S = 26.0                                   # the square under the dome

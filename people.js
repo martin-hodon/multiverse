@@ -161,19 +161,19 @@ const mixC = (a, b, t) => {
 // A person's looks and what they wear, drawn from their own seeded stream (so outfits never shift the body's
 // draws): sex (a child's), hair, fringe, nose -- and an outfit from the wardrobe (clothes.js drawOutfit).
 // Everything can be overridden: makePerson({ outfit }).
-function outfitFor(kind, r, style, seed = 1) {
+function outfitFor(kind, r, style, seed = 1, work = false) {
   const pick = (a) => a[Math.floor(r() * a.length)];
   const child = kind.startsWith("child"), female = kind === "woman" || (child && r() < .5);
   const o = { female };
   o.hair = female ? pick(child ? ["long", "braid", "ponytail", "bob"] : ["long", "long", "bun", "bun", "braid", "braid", "ponytail", "bob"])
-                  : pick(child ? ["short", "short", "bob"] : ["shaved", "short", "short", "short", "bob", "long", "ponytail"]);
+                  : pick(child ? ["short", "short", "crop"] : ["shaved", "short", "short", "short", "short", "crop", "curly"]);   // (a man's: no long locks or bob over a beard)
   // (a style's own hair -- wardrobe.json styles.<style>.hair: { man, woman, child } lists of assets/items/hair: the
   //  Egyptian's, the Chinese topknot -- drawn from its own stream, so the rest of the looks stay as they were)
   const hs = style && WARDROBE.styles?.[style]?.hair, hl = hs && (child ? hs.child ?? (female ? hs.woman : hs.man) : female ? hs.woman : hs.man);
   if (hl?.length) { const hr = rng(seed * 523 + 29); o.hair = hl[Math.floor(hr() * hl.length)]; o.styled = true; }
   o.fringe = r() < .3;
   o.nose = [.75 + r() * .6, .7 + r() * .7];   // width, length
-  const worn = drawOutfit(kind, r, { female, style });
+  const worn = drawOutfit(kind, r, { female, style, work });
   o.wear = worn.wear; o.style = worn.name;
   o.jewelry = drawJewelry(kind, female, style, seed);
   return o;
@@ -217,16 +217,21 @@ const wornOnHead = (w) => !!garmentDef(w.garment)?.head, wornOnFeet = (w) => !!g
 // outfit: overrides for the drawn looks and wardrobe -- hair, fringe; `wear`: the garments ([{ garment, fabrics:
 // { slot: { pattern, palette | colors } }, params }], clothes.js); `named`: a kit of the wardrobe's (a guard's, a
 // beast-man's); `bare`: nothing at all (the canon); `hat: "none"`: nothing on the head.
+// work: one at work -- in a field, at a forge, under a sack -- dresses from the wardrobe's working outfits (`work`).
 // beast: an animal-headed man (species.js beastman: the minotaur, the wolfman...) -- the same frame, heavier,
 // in the animal's hide: its own head parts scaled to a human-sized head, its tail, hooves or paws; no clothes,
 // hair or hat. { hide, foot, hoof, build, headScale, eye, head: { r, color, pat, parts (head-local) }, tail: [parts] }
 // upper: the upper body alone -- the torso pill and all above it on the pelvis bone, no legs, skirts or
 // gait (a centaur's: mammals.js hangs it on the horse's chest); pelvisY reports where the bone sits.
-export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit, beast = null, upper = false, body = null, style = null, skin: skinAs = null, old = false } = {}) {
+// the KIND a seed is drawn as (its stream's first draw: makePerson's own) -- who someone will be before they are made:
+// the villagers' jobs are handed out by it (village-life.js)
+const kindFrom = (kr, adult) => adult ? (kr < .5 ? "man" : "woman") : kr < .4 ? "man" : kr < .8 ? "woman" : kr < .9 ? "child10" : "child5";
+export const personKind = (seed, adult = false) => kindFrom(rng(seed * 771 + 13)(), adult);
+export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit, beast = null, upper = false, body = null, style = null, skin: skinAs = null, old = false, work = false } = {}) {
   const B = body ?? BODY;   // `body`: another canon than the world's (the asset viewer, editing it live)
   const r = rng(seed * 771 + 13);
   const kr = r();
-  if (!kind) kind = adult ? (kr < .5 ? "man" : "woman") : kr < .4 ? "man" : kr < .8 ? "woman" : kr < .9 ? "child10" : "child5";
+  if (!kind) kind = kindFrom(kr, adult);
   const isChild = kind.startsWith("child");
   const st = B.stature[kind] ?? B.stature.man;
   const h = height ?? st[0] + r() * st[1];
@@ -237,7 +242,7 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   const build = (isChild ? bs.child : 1) * (bs.spread[0] + r() * bs.spread[1]) * (beast?.build ?? 1);   // widths
   const headPh = r() * 3;
   style ??= outfit?.named || outfit?.bare || beast ? null : periodDress(seed);   // (one given no style of its own: the period's)
-  const drawn = outfitFor(kind, rng(seed * 313 + 7), style, seed);
+  const drawn = outfitFor(kind, rng(seed * 313 + 7), style, seed, work);
   const o = { ...drawn, ...(outfit ?? {}) };
   if (outfit?.named) o.wear = namedOutfit(outfit.named).wear;
   if (outfit?.bare || (beast && !outfit?.named && !outfit?.wear)) o.wear = [];

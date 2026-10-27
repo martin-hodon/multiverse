@@ -7,6 +7,8 @@
 //                  name) or "kind:<kind>", one or a list
 //           surface: floor | wall | ceiling | roof     side: in | out
 //           below / above: a height (the building's frame, 0 at the ground)     within: [x0, z0, x1, z1] on the plan
+//           reveal: true -- only an opening's REVEAL (its jambs, its sill, its soffit: a face of a wall or a ring's bay
+//                  turned square to the wall's own face), false -- never one (a drum's deep oculi, plain in a panelled face)
 //   gives   pattern: "family/name", palette, scale (of its tile), turn (degrees), map, align, offset, params, res
 //           at: [x, z] (a panel, centred there)  fit: [x0, z0, x1, z1] (a panel made to that size: its params W, H)
 //           count: how many tiles round a revolved surface (else as many as fit)
@@ -26,26 +28,32 @@
 // v up), `revolve` (a dome, a drum, a column, a round roof: u round the part's own axis -- a whole number of tiles round,
 // so the rows meet -- and v up the meridian's length on a dome), `slope` (a roof: u along the eave, v up the slope).
 // By kind unless the rule says. `align: "part"` sets the tile's foot on the part's foot (a painted beam, a band).
-import { rayIndex, rayHits, insideOf } from "./solid.js";
+import { rayIndex, rayHits, rayDist, insideOf } from "./solid.js";
 
 // a part's names, most particular first: its name, its name less a trailing number ("aisle roof 3"), its own name inside
 // a component, the component's name, its kind (architecture.js reads a building's colours by the same list)
 export const partNames = (p) => [p.name, p.name.replace(/ \d+$/, ""), p.name.split("/").pop(), p.name.split("/")[0], "kind:" + p.kind];
-const FLOORLESS = new Set(["roof", "dome", "vault", "ribs", "pendentives"]);     // (their tops are roofs, not floors)
+const FLOORLESS = new Set(["roof", "dome", "vault", "groin", "ribs", "pendentives"]);     // (their tops are roofs, not floors)
 const ROOFY = new Set(["roof", "dome"]);
+// TRIM: a moulding run along a face (a course, a wimperg) is ONE material over all its faces -- its weathered top, its
+// drip, its corona's front -- the outside wall's, or what a rule gives it: never a floor's pattern on its top and the
+// wall's on its front. Every face of it is a wall, outside.
+const TRIM = new Set(["moulding", "wimperg"]);
 const STAIRS = new Set(["flight", "staircase", "steps", "spiral-stair", "crepidoma", "base"]);
 
 // ---- inside or out -------------------------------------------------------------------------------------------------
 const TAU = Math.PI * 2, UP = [0, 1, 0];
 const dirAt = (az, el) => [Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)];
 const RING = (el, n) => Array.from({ length: n }, (_, k) => dirAt(k * TAU / n, el));
-const STEEP = RING(.9, 3);
+const STEEP = RING(.9, 3), SKYWARD = RING(.8, 8);
 // sixteen directions spread evenly over a half of space (Fibonacci), about +z
 const HALF = Array.from({ length: 16 }, (_, i) => {
   const z = 1 - (i + .5) / 16, r = Math.sqrt(1 - z * z), a = i * 2.399963;
   return [r * Math.cos(a), r * Math.sin(a), z];
 });
 const LEVEL = RING(.03, 12);
+// sixteen level directions round, at three turns a third of a step apart (one set per height a floor is asked at)
+const ROUNDS = [0, 1, 2].map((i) => Array.from({ length: 16 }, (_, k) => dirAt((k + i / 3) * TAU / 16, 0)));
 // twenty-four directions spread evenly over the band from level to 30 degrees up: what one standing on a floor sees
 // round them -- out under a colonnade's deck, a portico's roof; in a room, only its doors (a floor is outside when a
 // fifth of them escape)
@@ -55,7 +63,7 @@ const LOW = Array.from({ length: 24 }, (_, i) => { const el = Math.asin((i + .5)
 // middle); a portico's back wall, an arch's soffit, a drum behind its peristyle -- covered, but open sideways -- see open
 // air over a sixth or more.
 const OPEN = .15;
-function sideTeller(asm) {
+export function sideTeller(asm) {
   const tI = performance.now(), idx = rayIndex(asm), cache = new Map(), indexMs = performance.now() - tI;
   let rays = 0, rayMs = 0;
   const bySurf = {};
@@ -73,6 +81,7 @@ function sideTeller(asm) {
     if (known) for (const k of known) {
       const d = [k.o[0] - o[0], k.o[1] - o[1], k.o[2] - o[2]], l = Math.hypot(...d);
       if (l < 1e-6) return k.side;
+      if (surf === "floor" && l > 1) continue;   // (a floor's air runs on through a doorway: a threshold sees the nave)
       rays++;
       if (!rayHits(idx, o, d.map((v) => v / l), l)) return k.side;
     }
@@ -81,17 +90,45 @@ function sideTeller(asm) {
     const done = (side) => { rayMs += performance.now() - tr; (cache.get(key) ?? cache.set(key, []).get(key)).push({ o, side }); return side; };
     // THE SHORT WAY: sky straight over the air before it -- outside at once (a wall even in a narrow gap: a tower's face
     // toward the church it stands against); a floor must also see it steeply to the side (not only through an oculus);
-    // a roof is outside if it sees the sky steeply any way at all (a taller block may stand over its straight-up ray)
+    // a roof is outside if it sees the sky steeply any way at all (a taller block may stand over its straight-up ray);
+    // and a floor that sees it steeply most ways round is outside though something is straight over it -- the
+    // pavement at a wall's foot, under a cornice reaching out over it: three ways of eight round at 46 degrees (a
+    // room's floor sees none, or one through a window or an oculus)
     if (surf !== "ceiling") {
       rays++;
       let out = !rayHits(idx, o, [0, 1, 0], 250);
       if (out && surf === "floor" && !roofy) out = STEEP.some((d) => (rays++, !rayHits(idx, o, d, 250)));
+      if (!out && surf === "floor" && !roofy) out = SKYWARD.filter((d) => (rays++, !rayHits(idx, o, d, 250))).length >= 3;
       if (!out && roofy) out = STEEP.some((d) => (rays++, !rayHits(idx, o, d, 250)));
       if (out) return done("out");
     }
     // THE LONG WAY: how open the air it faces is. A floor: all round, from level to 30 degrees up; a wall: the half of
     // space before it, what of that is level or rising (below lies the ground, the building's own platform); a soffit:
     // level all round
+    // A FLOOR under cover is inside when it is ENCLOSED: between it and what covers it, walls (or their glass) close
+    // round it. Asked at three heights from it up to the cover (a third, a half, four fifths): inside if they close all the way round at two of them -- a
+    // room's or a nave's, broken only by their doors low down (a room's door, a nave's portals; a tower's foot, its
+    // belfry's open arches high over it) -- or if, taken together, under a tenth of the ways out are open. A walk
+    // between buttresses, under an eave, a portico's floor, a colonnade's, a LOGGIA's -- open through its arches over
+    // most of its height, closed only in the band of spandrels under its deck -- outside.
+    // (Under a table, or a cover too close to look under: how open its low horizon is, below.)
+    if (surf === "floor") {
+      rays++;
+      const up = rayDist(idx, o, [0, 1, 0], 250);
+      if (up > 1 && up < Infinity) {
+        const levels = [.3, .55, .8];
+        // (each height turned a third of a step from the last: forty-eight ways round, not sixteen thrice -- a point
+        //  lined up behind a pier of an arcade would otherwise find all three of its rows blocked by the same piers)
+        let open = 0, closed = 0;
+        for (const [i, f] of levels.entries()) {
+          const q = [o[0], p[1] + (up + off) * f, o[2]];   // (shares of the height from the floor to its cover: a low gallery's too)
+          let here = 0;
+          for (const d of ROUNDS[i]) { rays++; if (!rayHits(idx, q, d, 250)) here++; }
+          open += here; if (!here) closed++;
+        }
+        return done(closed >= 2 || open < .1 * levels.length * 16 ? "in" : "out");
+      }
+    }
     let dirs;
     if (surf === "ceiling") dirs = LEVEL;
     else if (surf === "floor") dirs = LOW;
@@ -109,7 +146,17 @@ function sideTeller(asm) {
       rays++;
       if (rayHits(idx, o, d, 250)) shut++; else open++;
       if (open >= need) return done("out");
-      if (shut > dirs.length - need) return done("in");
+      if (shut > dirs.length - need) break;
+    }
+    // A WALL FOUND CLOSED IN GOES AS THE FLOOR BEFORE IT, A SOFFIT AS THE FLOOR UNDER IT: the air they face is the air
+    // one standing on that floor is in. A loggia's back wall and its ceiling face a cover and the piers carrying it, and
+    // little sky -- but the floor of the loggia is open sideways, outside; a room's wall stands on a room's floor. So
+    // a wall, its ceiling and the floor it rises from are finished as one place. (Nothing under them within reach -- a
+    // wall over a void -- stays inside.)
+    if (surf === "wall" || surf === "ceiling") {
+      rays++;
+      const dn = rayDist(idx, o, [0, -1, 0], 40);
+      if (dn < Infinity) return done(tell([o[0], o[1] - dn, o[2]], UP, "floor"));
     }
     return done("in");
   };
@@ -120,8 +167,9 @@ function sideTeller(asm) {
     rays++;
     const o = [q[0] + n[0] * .02, q[1] + n[1] * .02, q[2] + n[2] * .02];
     if (rayHits(idx, o, n, reach)) return true;
-    // (buried: stone ahead of it, and an odd count of crossings over it -- a point with open air ahead is in nothing)
-    return rayHits(idx, o, n, 8) && insideOf(idx.cells, o[0], o[1], o[2], own).length > 0;
+    // (buried: stone ahead of it, and an odd count of crossings over it -- a point with open air ahead is in nothing;
+    //  ahead as far as the stone goes: the foot of a column 30m tall is inside it all the way up)
+    return rayHits(idx, o, n, 250) && insideOf(idx.cells, o[0], o[1], o[2], own).length > 0;
   };
   tell.stats = () => ({ rays, samples: cache.size, indexMs: Math.round(indexMs), rayMs: Math.round(rayMs), bySurf });
   return tell;
@@ -187,6 +235,11 @@ function compile(rule, sizeOf) {
       if (rule.below !== undefined && c[1] >= rule.below) return false;
       if (rule.above !== undefined && c[1] < rule.above) return false;
       if (within && (c[0] < within[0] || c[0] > within[2] || c[2] < within[1] || c[2] > within[3])) return false;
+      if (rule.reveal !== undefined) {
+        // (a wall's face, and a ring bay's, is its own z turned by the copy's yaw: a reveal's normal lies across that)
+        const n = at.n, rev = (at.p.kind === "wall" || at.p.kind === "ring") && Math.abs(n[0] * Math.sin(at.yaw) + n[2] * Math.cos(at.yaw)) < .5;
+        if (rev !== !!rule.reveal) return false;
+      }
       if (surf && !surf.includes(at.surface())) return false;
       if (side && at.side() !== side) return false;
       return true;
@@ -222,6 +275,34 @@ function facesOf(p) {
     if (nrm[t * 3] * nrm[o * 3] + nrm[t * 3 + 1] * nrm[o * 3 + 1] + nrm[t * 3 + 2] * nrm[o * 3 + 2] > COS) { const r1 = find(t), r2 = find(o); if (r1 !== r2) up[r1] = r2; }
     else creases.push(t, o);                             // (two faces meet here)
   }
+  // ONE FACE IN ONE PLANE: pieces of a flat face that share no edge -- a wall's courses either side of an opening, a
+  // tier's seam, the bars of a tracery, met at points that are not each other's corners -- are one face all the same
+  // where they lie in one plane and touch: so they are asked once, and are inside or out together
+  {
+    const flat = new Map();   // (root: [normal, plane distance, box] of a face all of whose triangles face one way)
+    for (let t = 0; t < T; t++) {
+      const r = find(t), n = [nrm[t * 3], nrm[t * 3 + 1], nrm[t * 3 + 2]];
+      let f = flat.get(r);
+      if (f === undefined) flat.set(r, f = { n, ok: true, lo: [Infinity, Infinity, Infinity], hi: [-Infinity, -Infinity, -Infinity] });
+      if (!f.ok) continue;
+      if (n[0] * f.n[0] + n[1] * f.n[1] + n[2] * f.n[2] < .9995) { f.ok = false; continue; }
+      for (let e = 0; e < 3; e++) { const i = I[t * 3 + e] * 3; for (let q = 0; q < 3; q++) { f.lo[q] = Math.min(f.lo[q], P[i + q]); f.hi[q] = Math.max(f.hi[q], P[i + q]); } }
+    }
+    const byPlane = new Map();
+    for (const [r, f] of flat) {
+      if (!f.ok) continue;
+      const i = I[r * 3] * 3, d = f.n[0] * P[i] + f.n[1] * P[i + 1] + f.n[2] * P[i + 2];
+      const key = f.n.map((q) => Math.round(q * 40)).join(",") + "," + Math.round(d * 20);
+      (byPlane.get(key) ?? byPlane.set(key, []).get(key)).push([r, f, d]);
+    }
+    const E = .02;
+    for (const list of byPlane.values()) for (let a = 0; a < list.length; a++) for (let b = a + 1; b < list.length; b++) {
+      const [ra, fa, da] = list[a], [rb, fb, db] = list[b];
+      if (Math.abs(da - db) > E || fa.n[0] * fb.n[0] + fa.n[1] * fb.n[1] + fa.n[2] * fb.n[2] < .9995) continue;
+      if ([0, 1, 2].some((q) => fa.lo[q] > fb.hi[q] + E || fb.lo[q] > fa.hi[q] + E)) continue;
+      const r1 = find(ra), r2 = find(rb); if (r1 !== r2) up[r1] = r2;
+    }
+  }
   const comp = new Int32Array(T), ids = new Map(), members = [], ylo = new Float32Array(T), yhi = new Float32Array(T);
   for (let t = 0; t < T; t++) {
     const r = find(t);
@@ -236,7 +317,18 @@ function facesOf(p) {
   const faceArea = new Float64Array(members.length), next = members.map(() => new Set());
   for (let t = 0; t < T; t++) faceArea[comp[t]] += area[t];
   for (let q = 0; q < creases.length; q += 2) { const a = comp[creases[q]], b = comp[creases[q + 1]]; if (a !== b) { next[a].add(b); next[b].add(a); } }
-  F = { comp, members, nrm, cen, area, ylo, yhi, P, I, faceArea, next: next.map((x) => [...x]) };
+  // ...and its PERIMETER, every edge where it ends (a crease to another face, or the mesh's own edge): with the area, how
+  // WIDE it is (2 area / perimeter -- a long strip's width, a square's half side) -- a ledge, or a floor one can stand on
+  const facePerim = new Float64Array(members.length), seen = new Map();
+  for (let t = 0; t < T; t++) for (let e = 0; e < 3; e++) {
+    const i = I[t * 3 + e], j = I[t * 3 + (e + 1) % 3], key = i < j ? i * nv + j : j * nv + i, o = seen.get(key);
+    if (o === undefined) { seen.set(key, t); continue; }
+    seen.set(key, -1);
+    if (o >= 0 && comp[o] !== comp[t]) { const l = Math.hypot(P[i * 3] - P[j * 3], P[i * 3 + 1] - P[j * 3 + 1], P[i * 3 + 2] - P[j * 3 + 2]); facePerim[comp[o]] += l; facePerim[comp[t]] += l; }
+  }
+  for (const [key, t] of seen) if (t >= 0) { const i = Math.floor(key / nv), j = key % nv; facePerim[comp[t]] += Math.hypot(P[i * 3] - P[j * 3], P[i * 3 + 1] - P[j * 3 + 1], P[i * 3 + 2] - P[j * 3 + 2]); }
+  const faceWidth = faceArea.map((A, c) => 2 * A / (facePerim[c] || 1));
+  F = { comp, members, nrm, cen, area, ylo, yhi, P, I, faceArea, faceWidth, next: next.map((x) => [...x]) };
   faceCache.set(p, F);
   return F;
 }
@@ -263,14 +355,16 @@ function infoOf(p) {
     for (let i = 1; i < mer.length; i++) if (y <= mer[i][0]) return S[i - 1] + (S[i] - S[i - 1]) * (y - mer[i - 1][0]) / (mer[i][0] - mer[i - 1][0]);
     return S[S.length - 1] + y - mer[mer.length - 1][0];
   };
-  // a roof's slope: the mean sine of its upward faces' pitch (v up a roof is its height over that)
+  // a roof's slope: the mean sine of its upward faces' pitch (v up a roof is its height over that) -- of the faces
+  // mapped up the slope, that is: a flat top is mapped on the plan, and a stepped roof's (a samvarana's courses) would
+  // drag the mean down and squeeze its courses
   let sw = 0, ss = 0;
   const I = p.geometry.index;
   for (let k = 0; k < I.length; k += 3) {
     const a = I[k] * 3, b = I[k + 1] * 3, c = I[k + 2] * 3;
     const ux = P[b] - P[a], uy = P[b + 1] - P[a + 1], uz = P[b + 2] - P[a + 2], vx = P[c] - P[a], vy = P[c + 1] - P[a + 1], vz = P[c + 2] - P[a + 2];
     const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx, l = Math.hypot(nx, ny, nz);
-    if (l > 1e-12 && ny / l > .2) { sw += l; ss += l * Math.sqrt(Math.max(0, 1 - (ny / l) ** 2)); }
+    if (l > 1e-12 && ny / l > .2 && ny / l <= .95) { sw += l; ss += l * Math.sqrt(Math.max(0, 1 - (ny / l) ** 2)); }
   }
   f = { R, y0, along, sinSlope: sw > 0 ? Math.max(.2, ss / sw) : 1 };
   partInfo.set(p, f);
@@ -331,8 +425,11 @@ function coverIndex(asm) {
       while (i1 < list.length && list[i1].d - list[i1 - 1].d < .002) i1++;
       const cl = list.slice(i0, i1); i0 = i1;
       if (cl.length < 2 || new Set(cl.map((t) => t.o)).size < 2) continue;
+      // (one axis to draw the whole cluster on: a face at 45 degrees is as much x as z, and two of its triangles drawn on
+      //  different axes would be compared in coordinates that are not the same -- two towers' faces on one diagonal met)
+      const ax0 = axisOf(cl[0].n);
       for (const t of cl) {
-        const ax = t.ax = axisOf(t.n), f = (v) => (ax === 0 ? [v[1], v[2]] : ax === 1 ? [v[0], v[2]] : [v[0], v[1]]);
+        const ax = t.ax = ax0, f = (v) => (ax === 0 ? [v[1], v[2]] : ax === 1 ? [v[0], v[2]] : [v[0], v[1]]);
         t.q2 = ccw(t.q.map(f));
         const xs = t.q2.map((v) => v[0]), ys = t.q2.map((v) => v[1]);
         t.b = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
@@ -405,6 +502,9 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
   const regions = rules.filter((r) => r.within).flatMap((r) => [[0, r.within[0]], [0, r.within[2]], [2, r.within[1]], [2, r.within[3]]]);
   const lines0 = [...bands, ...regions];
   const groups = new Map();
+  // (what each wall FACE was given, by area: a face that comes out in two finishes is either cut on purpose -- a level
+  //  line where it passes from inside to out -- or patchy, a stray piece of another finish in it: `mix`, for the checks)
+  const mix = new Map();
   const groupOf = (key, rule, glass) => { let g = groups.get(key); if (!g) groups.set(key, g = { rule, glass, pos: [], nor: [], uv: rule?.pattern ? [] : null, parts: new Map() }); return g; };
   // THE PIECE BEING MATCHED, one record for all of them (no object per piece: a building is a hundred thousand of them):
   // its part and copy, normal and centre, and -- asked for only when a rule needs it -- its side and its surface
@@ -429,7 +529,9 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
     // anything else is inside or out by its FACE (facesOf: a wall's face, a dome's skin, a vault's soffit) and the band
     // of it this piece is in (bandsOf)
     const fb = cur.fb ?? bandsOf(p, inst, facesOf(p).comp[cur.tri]);
-    return fb.sides[Math.max(0, Math.min(fb.sides.length - 1, Math.floor((cen[1] - fb.y0) / fb.h)))];
+    // (the side of the stretch between the cuts it lies within)
+    let i = 0; while (i < fb.cuts.length && cen[1] > fb.cuts[i]) i++;
+    return fb.runs[i];
   };
   // A FACE IN BANDS. A face is inside or out as a whole unless part of it stands inside another part and part of it
   // outside -- a tower's face toward the church, inside below the church's roof and outside above it. So a face is asked
@@ -470,6 +572,20 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
     floorSides.set(key, v);
     return v;
   };
+  // (a piece of a split floor whose points with open air over them disagree is HALVED, and its halves asked again, down
+  //  to half a metre: the finish follows a wall's foot and a portal's jambs, not the 2m grid it was cut on)
+  const refine = (p, poly) => {
+    let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity, cx = 0, cy = 0, cz = 0;
+    for (const v of poly) { x0 = Math.min(x0, v[0]); x1 = Math.max(x1, v[0]); z0 = Math.min(z0, v[2]); z1 = Math.max(z1, v[2]); cx += v[0]; cy += v[1]; cz += v[2]; }
+    if (Math.max(x1 - x0, z1 - z0) <= .6) return [poly];
+    const cen = [cx / poly.length, cy / poly.length, cz / poly.length];
+    const pts = [cen, ...poly.map((v) => [v[0] + (cen[0] - v[0]) * .15, v[1], v[2] + (cen[2] - v[2]) * .15])];
+    const open = pts.filter((q) => !tell.hidden(q, UP, p.name, .5)), said = new Set(open.map((q) => tell(q, UP, "floor")));
+    // (and one a wall's foot crosses -- some of its points under stone, some open -- is halved too, even if the open
+    //  ones agree: the sliver of it past the wall's other face, between its points, may be the other side's)
+    if (said.size < 2 && (open.length === pts.length || !open.length)) return [poly];
+    return cutAll(poly, [x1 - x0 >= z1 - z0 ? [0, (x0 + x1) / 2] : [2, (z0 + z1) / 2]]).flatMap((q) => refine(p, q));
+  };
   const faceBands = new Map();
   const bandsOf = (p, inst, comp) => {
     const key = p.name + "#" + inst + "#" + comp;
@@ -480,62 +596,57 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
     let y0 = Infinity, y1 = -Infinity;
     for (const t of tris) { if (F.ylo[t] < y0) y0 = F.ylo[t]; if (F.yhi[t] > y1) y1 = F.yhi[t]; }
     const nb = Math.max(1, Math.round((y1 - y0) / 3)), h = Math.max(1e-6, (y1 - y0) / nb), sides = [];
-    // (the point at height ym on a triangle: the middle of where the level cuts it; a level triangle's centre)
-    const at = (t, ym) => {
-      const q = [0, 1, 2].map((e) => { const i = F.I[t * 3 + e] * 3; return [F.P[i], F.P[i + 1], F.P[i + 2]]; }), hit = [];
-      for (let e = 0; e < 3; e++) {
-        const a = q[e], d = q[(e + 1) % 3];
-        if ((a[1] - ym) * (d[1] - ym) <= 0 && a[1] !== d[1]) { const f = (ym - a[1]) / (d[1] - a[1]); hit.push([a[0] + (d[0] - a[0]) * f, ym, a[2] + (d[2] - a[2]) * f]); }
-      }
-      if (hit.length < 2) return [F.cen[t * 3], F.cen[t * 3 + 1], F.cen[t * 3 + 2]];
-      return [(hit[0][0] + hit[1][0]) / 2, ym, (hit[0][2] + hit[1][2]) / 2];
-    };
-    for (let k = 0; k < nb; k++) {
-      const ym = y0 + (k + .5) * h;
+    // (the face asked at one height: in, out, or null where nothing of it crosses that level)
+    const ask = (ym) => {
       let wIn = 0, wOut = 0, used = 0;
-      // (where it is asked: its largest triangle at this height, then those turned most unlike the ones already asked --
-      //  round a column's shaft or a drum, not two facets side by side facing the same way; a tie is outside)
+      // (where it is asked: at points spread EVENLY ALONG the face at this height -- the line the level cuts through it --
+      //  each counting alike: so a drum or a column's shaft is asked all round, and a facade along its length, not at
+      //  its largest triangles, which may be its two ends buried in the hollow towers flanking it; a tie is outside)
       // (and only where the face is open in front: a point behind a column or a pier standing against it, or buried in
-      //  one standing half into it, is hidden, and would call a facade inside -- asked of a triangle when it is picked)
-      const cand = [], where = new Map(), hid = new Set();
+      //  one standing half into it, is hidden, and would call a facade inside -- passed over for the next point along)
+      const segs = [];
+      let L = 0;
       for (const t of tris) {
         if (F.ylo[t] > ym + 1e-6 || F.yhi[t] < ym - 1e-6) continue;
-        cand.push(t);
-        if (cand.length >= 24) break;
-      }
-      const open = (t) => {
-        const q = W(...at(t, ym)), n = Wn(F.nrm[t * 3], F.nrm[t * 3 + 1], F.nrm[t * 3 + 2]);
-        if (tell.hidden(q, n, p.name, .6)) { hid.add(t); return false; }
-        where.set(t, [q, n]); return true;
-      };
-      const picks = [];
-      while (picks.length < 4) {
-        let best = -1, bestDot = Infinity;
-        for (const t of cand) {
-          if (hid.has(t) || picks.includes(t)) continue;
-          if (!picks.length) { best = t; break; }
-          let m = -Infinity;
-          for (const q of picks) m = Math.max(m, F.nrm[t * 3] * F.nrm[q * 3] + F.nrm[t * 3 + 1] * F.nrm[q * 3 + 1] + F.nrm[t * 3 + 2] * F.nrm[q * 3 + 2]);
-          if (m < bestDot - 1e-6) { bestDot = m; best = t; }
+        const q = [0, 1, 2].map((e) => { const i = F.I[t * 3 + e] * 3; return [F.P[i], F.P[i + 1], F.P[i + 2]]; }), hit = [];
+        for (let e = 0; e < 3; e++) {
+          const u = q[e], d = q[(e + 1) % 3];
+          if ((u[1] - ym) * (d[1] - ym) <= 0 && u[1] !== d[1]) { const f = (ym - u[1]) / (d[1] - u[1]); hit.push([u[0] + (d[0] - u[0]) * f, ym, u[2] + (d[2] - u[2]) * f]); }
         }
-        if (best < 0) break;
-        if (open(best)) picks.push(best);
+        // (a level triangle -- a face lying at this very height -- is a point at its centre, as long as it is wide)
+        const c = [F.cen[t * 3], F.cen[t * 3 + 1], F.cen[t * 3 + 2]];
+        const [u, d, len] = hit.length < 2 ? [c, c, Math.sqrt(F.area[t])] : [hit[0], hit[1], Math.hypot(hit[1][0] - hit[0][0], hit[1][2] - hit[0][2])];
+        if (len < 1e-6) continue;
+        segs.push([t, u, d, L, len]); L += len;
       }
-      for (const t of picks) {
-        const [cen, n] = where.get(t);
+      const SAMPLES = 5, TRIES = SAMPLES * 2, picks = [];
+      // (ten places along it, the even ones first: if some are hidden the odd ones between stand in)
+      for (const i of [...Array(TRIES).keys()].sort((x, y) => (x & 1) - (y & 1) || x - y)) {
+        if (picks.length >= SAMPLES || !segs.length) break;
+        const at = (i + .5) / TRIES * L;
+        let lo = 0, hi = segs.length - 1;
+        while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (segs[mid][3] <= at) lo = mid; else hi = mid - 1; }
+        const [t, u, d, s0, len] = segs[lo], f = Math.min(1, Math.max(0, (at - s0) / len));
+        const q = W(u[0] + (d[0] - u[0]) * f, ym, u[2] + (d[2] - u[2]) * f), n = Wn(F.nrm[t * 3], F.nrm[t * 3 + 1], F.nrm[t * 3 + 2]);
+        if (tell.hidden(q, n, p.name, .6)) continue;
+        picks.push([t, q, n]);
+      }
+      for (const [t, cen, n] of picks) {
         // (a dome's or a round roof's face turned toward its own axis is its underside: inside, without a ray)
         const inward = (p.kind === "dome" || p.kind === "vault") && n[1] < .3 && n[0] * (cen[0] - X) + n[2] * (cen[2] - Z) < 0;
         const sf = n[1] >= .7 ? "floor" : n[1] <= -.7 ? "ceiling" : "wall";
-        if (inward || tell(cen, n, sf, ROOFY.has(p.kind)) === "in") wIn += F.area[t]; else wOut += F.area[t];
+        if (inward || tell(cen, n, sf, ROOFY.has(p.kind)) === "in") wIn++; else wOut++;
         used++;
       }
       // (a face that wraps round -- samples facing opposite ways: a column, a drum -- is outside if a quarter of it looks
       //  out onto open air: a colonnade's column, whose inner side faces its drum a metre away; a column in a hall sees
       //  nothing anywhere. A flat face goes the way most of it goes.)
       let wraps = false;
-      for (const a of picks) for (const b of picks) if (F.nrm[a * 3] * F.nrm[b * 3] + F.nrm[a * 3 + 1] * F.nrm[b * 3 + 1] + F.nrm[a * 3 + 2] * F.nrm[b * 3 + 2] < 0) wraps = true;
-      sides.push(used ? ((wraps ? wOut >= .25 * (wIn + wOut) : wOut >= wIn) ? "out" : "in") : null);
-    }
+      for (const [, , a] of picks) for (const [, , b] of picks) if (a[0] * b[0] + a[1] * b[1] + a[2] * b[2] < 0) wraps = true;
+      return used ? ((wraps ? wOut >= .25 * (wIn + wOut) : wOut >= wIn) ? "out" : "in") : null;
+    };
+    for (let k = 0; k < nb; k++) sides.push(ask(y0 + (k + .5) * h));
+    const asked = sides.slice();
     // (a band no triangle crosses at its middle -- a gap in the face -- goes as its neighbour does)
     for (let k = 0; k < nb; k++) if (!sides[k]) sides[k] = sides.slice(0, k).reverse().find(Boolean) ?? sides.slice(k).find(Boolean) ?? "out";
     // A REVEAL IS ITS WALL'S: the jamb, sill or soffit of an opening looks across the opening into the other jamb and up
@@ -551,13 +662,26 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
         if (ob.sides[Math.max(0, Math.min(ob.sides.length - 1, Math.floor((ym - ob.y0) / ob.h)))] === "out") { sides[k] = "out"; break; }
       }
     }
+    // WHERE IT CHANGES: between two bands that disagree the face is asked again, halving the gap down to 20cm -- so the
+    // finish changes where the roof that closes it in meets it, not on the 3m grid it was asked on (two bands as asked;
+    // one a reveal took over goes on the grid line)
     const cuts = [];
-    for (let k = 1; k < nb; k++) if (sides[k] !== sides[k - 1]) cuts.push(y0 + Y + k * h);
-    faceBands.set(key, b = { y0: y0 + Y, h, sides, cuts });
+    for (let k = 1; k < nb; k++) {
+      if (sides[k] === sides[k - 1]) continue;
+      let lo = y0 + (k - .5) * h, hi = y0 + (k + .5) * h;
+      if (asked[k - 1] === sides[k - 1] && asked[k] === sides[k]) {
+        while (hi - lo > .2) { const mid = (lo + hi) / 2, a = ask(mid); if (a === sides[k - 1]) lo = mid; else if (a === sides[k]) hi = mid; else break; }
+        if (hi - lo > .2) { lo = hi = y0 + k * h; }
+      } else lo = hi = y0 + k * h;
+      cuts.push(Y + (lo + hi) / 2);
+    }
+    const runs = [sides[0]];
+    for (let k = 1; k < nb; k++) if (sides[k] !== sides[k - 1]) runs.push(sides[k]);
+    faceBands.set(key, b = { y0: y0 + Y, h, sides, cuts, runs });
     return b;
   };
   const cur = {
-    p: null, names: null, glass: false, inst: 0, X: 0, Z: 0, n: null, cen: null, poly: null, tri: 0, fb: null, surf0: "", sideV: null, surfV: null,
+    p: null, names: null, glass: false, inst: 0, yaw: 0, X: 0, Z: 0, n: null, cen: null, poly: null, tri: 0, fb: null, surf0: "", sideV: null, surfV: null,
     side: () => cur.sideV ??= sideOf(),
     // (a roof's GABLE -- the vertical end of a gable roof, a verge -- is a wall: it takes the finish of the walls under it)
     surface: () => cur.surfV ??= (ROOFY.has(cur.p.kind) && cur.n[1] > -.2 && !(cur.p.kind === "roof" && Math.abs(cur.n[1]) < .05) ? (cur.side() === "out" ? "roof" : "wall")
@@ -571,7 +695,7 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
     const info = infoOf(p);
     cur.p = p; cur.names = names; cur.glass = glass;
     for (const [inst, [yaw, X, Y, Z]] of p.instances.entries()) {
-      cur.inst = inst; cur.X = X; cur.Z = Z;
+      cur.inst = inst; cur.yaw = yaw; cur.X = X; cur.Z = Z;
       const c = Math.cos(yaw), s = Math.sin(yaw);
       const W = (j) => [P[j * 3] * c + P[j * 3 + 2] * s + X, P[j * 3 + 1] + Y, -P[j * 3] * s + P[j * 3 + 2] * c + Z];
       for (let k = 0; k < I.length; k += 3) {
@@ -581,11 +705,15 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
         if (area2 < 1e-12) continue;
         const n = [nx0 / area2, ny0 / area2, nz0 / area2];
         cur.n = n; cur.tri = k / 3;
-        let surf0 = n[1] >= .7 ? (FLOORLESS.has(p.kind) ? "top" : "floor") : n[1] <= -.7 ? "ceiling" : "wall";
-        // (a LEDGE -- a sill, a cornice's top, a column base's ring round its shaft, a merlon's top -- faces up but is no
-        //  floor: a column's, or anything under 2 square metres that is not a stair's tread, is the masonry of its
-        //  element, like its walls)
-        if (surf0 === "floor" && !STAIRS.has(p.kind) && (p.kind === "column" || facesOf(p).faceArea[facesOf(p).comp[k / 3]] < 2)) surf0 = "wall";
+        let surf0 = TRIM.has(p.kind) ? "wall" : n[1] >= .7 ? (FLOORLESS.has(p.kind) ? "top" : "floor") : n[1] <= -.7 ? "ceiling" : "wall";
+        // (a LEDGE -- a sill, a cornice's top, a column base's ring round its shaft, a merlon's top, a buttress's set-off
+        //  or its head -- faces up but is no floor: a column's, or anything under 2 square metres or too narrow to stand
+        //  on (under 90cm wide) that is not a stair's tread, is the masonry of its element, like its walls; and so is
+        //  every up-facing face of a wall -- its sills, its set-backs, its top -- unless the wall is walked)
+        if (surf0 === "floor" && !STAIRS.has(p.kind) && !p.walked) {
+          const F = facesOf(p), c = F.comp[k / 3];
+          if (p.kind === "column" || p.kind === "wall" || F.faceArea[c] < 2 || F.faceWidth[c] < .9) surf0 = "wall";
+        }
         cur.surf0 = surf0;
         // (large floors are cut on a 2m grid, so a platform under a church and before its door is inside and out)
         let lines = lines0;
@@ -596,7 +724,7 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
           for (let z = Math.ceil(Math.min(...zs) / 2) * 2; z < Math.max(...zs); z += 2) lines.push([2, z]);
         }
         cur.fb = null;
-        if (sideRules && !glass && surf0 !== "floor") {
+        if (sideRules && !glass && surf0 !== "floor" && !TRIM.has(p.kind) && !p.side) {
           const fb = cur.fb = bandsOf(p, inst, facesOf(p).comp[k / 3]);
           if (fb.cuts.length) {
             const lo = Math.min(a[1], b[1], d[1]), hi = Math.max(a[1], b[1], d[1]);
@@ -608,16 +736,35 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
         const cov = covered.get(pi + "#" + inst + "#" + k / 3);
         if (cov) for (const { ax, w } of cov) polys = polys.flatMap((q) => minusCover(q, ax, w));   // (one face where two parts meet in a plane)
         if (!polys.length) continue;
+        if (surf0 === "floor" && tell && floorSideOf(p, inst, facesOf(p).comp[k / 3]) === "mixed") polys = polys.flatMap((q) => refine(p, q));
         for (const poly of polys) {
           let cx = 0, cy = 0, cz = 0;
           for (const v of poly) { cx += v[0]; cy += v[1]; cz += v[2]; }
           const cen = [cx / poly.length, cy / poly.length, cz / poly.length];
-          cur.cen = cen; cur.poly = poly; cur.sideV = null; cur.surfV = null;
+          cur.cen = cen; cur.poly = poly; cur.sideV = p.side ?? (TRIM.has(p.kind) ? "out" : null); cur.surfV = null;
           let hit = mine.find((r) => r.test(cur));
           // (a soffit -- under an arch, a window's head -- that no rule takes is the masonry of its wall)
           if (!hit && cur.surface() === "ceiling") { cur.surfV = "wall"; hit = mine.find((r) => r.test(cur)); }
           const g = hit ? groupOf(rules.indexOf(hit), hit.rule, glass) : groupOf(glass ? "glass" : "stone", null, glass);
           g.parts.set(p.name, (g.parts.get(p.name) ?? 0) + 1);             // (what each rule took, for the viewer and the checks)
+          if (!glass && !TRIM.has(p.kind) && p.kind !== "dome" && p.kind !== "vault" && cur.surface() === "wall") {
+            let ar = 0;
+            for (let i = 1; i + 1 < poly.length; i++) {
+              const A = poly[0], B = poly[i], C = poly[i + 1], u = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], v = [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
+              ar += Math.hypot(u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]) / 2;
+            }
+            // (keyed by its FACE -- facesOf: all of a plane that touches, the pieces an opening or a tier's seam cut
+            //  apart one face)
+            const fk = pi + "#" + inst + "#" + facesOf(p).comp[k / 3], gk = hit ? rules.indexOf(hit) : "stone";
+            // (and in which CELL of it: between which of the rules' lines and the face's own level cuts its centre lies --
+            //  one cell, one finish; two in one cell are a patch, not a band)
+            const cell = lines0.map(([ax, c]) => +(cen[ax] > c)).join("") + "/" + Math.max(-1, ...(cur.fb?.cuts ?? []).filter((y) => cen[1] > y)).toFixed(2);
+            let fm = mix.get(fk); if (!fm) mix.set(fk, fm = { by: new Map(), cells: new Map(), at: new Map() });
+            fm.by.set(gk, (fm.by.get(gk) ?? 0) + ar);
+            if (!fm.at.has(gk)) fm.at.set(gk, cen.map((q) => +q.toFixed(2)));   // (where each finish was first met: for the checks' report)
+            let cm = fm.cells.get(cell); if (!cm) fm.cells.set(cell, cm = new Map());
+            cm.set(gk, (cm.get(gk) ?? 0) + ar);
+          }
           // the pattern's coordinates, in metres
           let uvs = null;
           if (g.uv) {
@@ -653,7 +800,17 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
     }
   }
   const out = [...groups.values()].map((g) => ({ ...g, pos: new Float32Array(g.pos), nor: new Float32Array(g.nor), uv: g.uv ? new Float32Array(g.uv) : null }));
-  return { groups: out, stats: { ms: performance.now() - t0, ...(tell ? tell.stats() : {}) } };
+  // (the faces in more than one finish, each with its finishes' areas and how much of it is a PATCH: in a cell of it --
+  //  between the rules' bands and regions and its own level cuts -- that another finish holds most of)
+  const mixed = [...mix.entries()].filter(([, f]) => f.by.size > 1).map(([key, f]) => {
+    const [pi, inst] = key.split("#").map(Number), total = [...f.by.values()].reduce((a, b) => a + b, 0);
+    let patch = 0;
+    for (const cm of f.cells.values()) { const v = [...cm.values()]; patch += v.reduce((a, b) => a + b, 0) - Math.max(...v); }
+    return { part: asm.parts[pi].name, inst, total: +total.toFixed(2), minor: +(patch / total).toFixed(3), cuts: patch / total < 1e-3,
+             by: Object.fromEntries([...f.by.entries()].map(([k, a]) => [k === "stone" ? "stone" : (rules[k].rule.pattern ?? rules[k].rule.color ?? k), +a.toFixed(2)])),
+             at: Object.fromEntries([...f.at.entries()].map(([k, c]) => [k === "stone" ? "stone" : (rules[k].rule.pattern ?? rules[k].rule.color ?? k), c])) };
+  });
+  return { groups: out, mixed, stats: { ms: performance.now() - t0, ...(tell ? tell.stats() : {}) } };
 }
 
 // the params a rule's pattern is drawn with: its own, and a fitted panel's size (W, H) -- the one place both the tile's

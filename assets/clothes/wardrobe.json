@@ -1,7 +1,7 @@
 {
  "name": "Wardrobe",
  "kind": "wardrobe",
- "_about": "WHO WEARS WHAT (clothes.js drawOutfit). `people`: for each kind of person a list of OUTFITS by weight, each a list of garments worn from the skin out -- `p` the chance of wearing it at all, a list of garments means one of them, and `fabrics` the choices each fabric slot is dyed from ('pattern:palette', the fabrics family and the dyes of palettes.json). `outfits`: kits by name (a guard's, a beast-man's). `garments`: every garment there is (clothes.js loads them). A param given as a LIST is drawn from it, person by person (a tunic's or kirtle's `hem`: whether it has a band at its hem, and how wide -- 0 none).",
+ "_about": "WHO WEARS WHAT (clothes.js drawOutfit). `people`: for each kind of person a list of OUTFITS by weight, each a list of garments worn from the skin out -- `p` the chance of wearing it at all, a list of garments means one of them, and `fabrics` the choices each fabric slot is dyed from ('pattern:palette', the fabrics family and the dyes of palettes.json). `outfits`: kits by name (a guard's, a beast-man's). `garments`: every garment there is (clothes.js loads them). A param given as a LIST is drawn from it, person by person (a tunic's or kirtle's `hem`: whether it has a band at its hem, and how wide -- 0 none). An outfit marked `work` is what one AT WORK wears -- in the fields, at a forge, under a sack (makePerson({ work })): a worker draws only from those of the list, never a lady's gown or a gentleman's frock coat.",
  "garments": {
   "apron": true,
   "belt": true,
@@ -61,7 +61,16 @@
   "headscarf": true,
   "kaftan": true,
   "salwar": true,
-  "turban": true
+  "turban": true,
+  "choli": true,
+  "sari": true,
+  "dhoti": true,
+  "huipil": true,
+  "wrap-skirt": true,
+  "loincloth": true,
+  "sarafan": true,
+  "kokoshnik": true,
+  "fur-hat": true
  },
  "people": {
   "man": [
@@ -161,7 +170,8 @@
        ]
       }
      }
-    ]
+    ],
+    "work": true
    },
    {
     "name": "craftsman",
@@ -261,7 +271,8 @@
        ]
       }
      }
-    ]
+    ],
+    "work": true
    },
    {
     "name": "burgher",
@@ -602,7 +613,8 @@
        ]
       }
      }
-    ]
+    ],
+    "work": true
    },
    {
     "name": "townswoman",
@@ -1479,7 +1491,7 @@
   }
  },
  "styles": {
-  "_about": "OTHER TIMES AND PLACES (makePerson({ style }), drawOutfit): the same lists as `people`, by kind, for a style of dress -- the Greeks of the classical age, the Romans, the Han and Tang Chinese, the Egyptians of the New Kingdom (linen kilts and sheaths: their jewelry -- items/jewelry/wear.json -- is the broad collar), the Gothic fashion of the fourteenth and fifteenth centuries. A landmark's people wear its own (architecture.js DRESS); a share of the wanderers every one of them.",
+  "_about": "OTHER TIMES AND PLACES (makePerson({ style }), drawOutfit): the same lists as `people`, by kind, for a style of dress -- the Greeks of the classical age, the Romans, the Han and Tang Chinese, the Egyptians of the New Kingdom (linen kilts and sheaths: their jewelry -- items/jewelry/wear.json -- is the broad collar), the Gothic fashion of the fourteenth and fifteenth centuries, medieval India (the sari and the choli, the dhoti and the turban), the Maya (the huipil over the wrap skirt, the loincloth) and old Russia (the sarafan over the white shirt, the belted shirt, the kaftan and the fur hat). A landmark's people wear its own (architecture.js DRESS); a share of the wanderers every one of them.",
   "greek": {
    "man": [
     {
@@ -1613,6 +1625,41 @@
        }
       }
      ]
+    },
+    {
+     "name": "labourer",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "chiton",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:undyed",
+         "linen:linen",
+         "plain:wool-grey",
+         "plain:russet"
+        ]
+       },
+       "params": {
+        "length": "knee - 0.06"
+       }
+      },
+      {
+       "garment": "belt",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:leather"
+        ]
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 0.5
+      }
+     ],
+     "work": true
     }
    ],
    "woman": [
@@ -1744,7 +1791,8 @@
        "garment": "sandals",
        "p": 0.9
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "boy": [
@@ -1899,20 +1947,11 @@
        "p": 0.7
       },
       {
-       "garment": "palla",
-       "p": 0.25,
-       "fabrics": {
-        "main": [
-         "plain:wool-grey",
-         "plain:russet"
-        ]
-       }
-      },
-      {
        "garment": "sandals",
        "p": 0.8
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "woman": [
@@ -1981,6 +2020,56 @@
        "p": 0.9
       }
      ]
+    },
+    {
+     "name": "working woman",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "tunica",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:undyed",
+         "linen:linen",
+         "plain:wool-grey",
+         "plain:russet"
+        ]
+       },
+       "params": {
+        "length": "floor - 0.04",
+        "sleeve": "elbow"
+       }
+      },
+      {
+       "garment": "belt",
+       "p": 0.8,
+       "fabrics": {
+        "main": [
+         "leather:leather"
+        ]
+       },
+       "params": {
+        "at": "chest + 0.03"
+       }
+      },
+      {
+       "garment": "palla",
+       "p": 0.3,
+       "fabrics": {
+        "main": [
+         "plain:undyed",
+         "plain:wool-grey",
+         "plain:russet"
+        ]
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 0.6
+      }
+     ],
+     "work": true
     }
    ],
    "boy": [
@@ -2160,7 +2249,8 @@
         ]
        }
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "woman": [
@@ -2213,7 +2303,8 @@
         ]
        }
       }
-     ]
+     ],
+     "work": true
     },
     {
      "name": "shenyi",
@@ -2532,6 +2623,105 @@
        }
       }
      ]
+    },
+    {
+     "name": "labourer",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "shirt",
+       "p": 1
+      },
+      {
+       "garment": "hose",
+       "p": 0.9,
+       "fabrics": {
+        "main": [
+         "plain:russet",
+         "plain:wool-grey",
+         "plain:madder",
+         "plain:woad",
+         "plain:green",
+         "plain:black",
+         "hoops:stripe-green",
+         "twill:russet"
+        ]
+       }
+      },
+      {
+       "garment": "tunic",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:madder",
+         "plain:woad",
+         "plain:weld",
+         "plain:green",
+         "plain:russet",
+         "plain:murrey",
+         "plain:wool-grey",
+         "plain:undyed",
+         "twill:woad",
+         "twill:russet",
+         "twill:wool-grey",
+         "lozenge:russet",
+         "herringbone:wool-grey",
+         "stripes:stripe-woad",
+         "stripes:stripe-madder",
+         "checks:check-russet",
+         "plain:saffron"
+        ],
+        "trim": [
+         "braid:gold-braid",
+         "braid:blue-braid"
+        ]
+       },
+       "params": {
+        "hem": [
+         0,
+         0,
+         0.03,
+         0.04
+        ]
+       }
+      },
+      {
+       "garment": "belt",
+       "p": 0.6
+      },
+      {
+       "garment": [
+        "shoes",
+        "shoes",
+        "boots"
+       ],
+       "p": 0.7
+      },
+      {
+       "garment": [
+        "hood",
+        "cap",
+        "straw-hat",
+        "felt-hat"
+       ],
+       "p": 0.5,
+       "fabrics": {
+        "main": [
+         "plain:madder",
+         "plain:woad",
+         "plain:weld",
+         "plain:green",
+         "plain:russet",
+         "plain:murrey",
+         "plain:undyed",
+         "plain:saffron",
+         "twill:woad",
+         "twill:russet"
+        ]
+       }
+      }
+     ],
+     "work": true
     }
    ],
    "woman": [
@@ -2647,6 +2837,100 @@
        "p": 0.6
       }
      ]
+    },
+    {
+     "name": "working woman",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "chemise",
+       "p": 1
+      },
+      {
+       "garment": "kirtle",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:madder",
+         "plain:woad",
+         "plain:weld",
+         "plain:green",
+         "plain:russet",
+         "plain:murrey",
+         "plain:wool-grey",
+         "plain:undyed",
+         "twill:woad",
+         "twill:russet",
+         "twill:wool-grey",
+         "lozenge:russet",
+         "herringbone:wool-grey",
+         "stripes:stripe-woad",
+         "stripes:stripe-madder",
+         "checks:check-russet",
+         "plain:saffron"
+        ],
+        "lacing": [
+         "lacing:gold-braid",
+         "lacing:leather",
+         "lacing:linen"
+        ],
+        "trim": [
+         "plain:undyed",
+         "plain:black",
+         "plain:madder",
+         "plain:woad",
+         "braid:blue-braid",
+         "braid:gold-braid",
+         "checks:check-russet"
+        ]
+       },
+       "params": {
+        "hem": [
+         0,
+         0,
+         0.04,
+         0.06
+        ]
+       }
+      },
+      {
+       "garment": "apron",
+       "p": 0.5,
+       "fabrics": {
+        "main": [
+         "linen:undyed",
+         "linen:linen",
+         "plain:undyed"
+        ]
+       }
+      },
+      {
+       "garment": "belt",
+       "p": 0.4
+      },
+      {
+       "garment": "shoes",
+       "p": 0.7
+      },
+      {
+       "garment": [
+        "coif",
+        "coif",
+        "hood",
+        "straw-hat"
+       ],
+       "p": 0.6,
+       "fabrics": {
+        "main": [
+         "linen:linen",
+         "linen:undyed",
+         "plain:green",
+         "plain:woad"
+        ]
+       }
+      }
+     ],
+     "work": true
     }
    ],
    "boy": [
@@ -2715,8 +2999,8 @@
     "man": [
      "bowl",
      "bowl",
-     "bob",
-     "short"
+     "short",
+     "crop"
     ],
     "woman": [
      "braid",
@@ -2747,7 +3031,8 @@
        "garment": "sandals",
        "p": 0.6
       }
-     ]
+     ],
+     "work": true
     },
     {
      "name": "robed",
@@ -2820,7 +3105,8 @@
        "garment": "sandals",
        "p": 0.5
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "boy": [
@@ -3139,7 +3425,8 @@
         ]
        }
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "woman": [
@@ -3341,7 +3628,8 @@
         ]
        }
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "boy": [
@@ -3446,7 +3734,7 @@
     "man": [
      "short",
      "short",
-     "bob",
+     "crop",
      "curly",
      "crop"
     ],
@@ -3725,7 +4013,8 @@
         ]
        }
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "woman": [
@@ -3876,7 +4165,8 @@
         ]
        }
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "boy": [
@@ -4202,7 +4492,8 @@
         ]
        }
       }
-     ]
+     ],
+     "work": true
     },
     {
      "name": "porter",
@@ -4265,7 +4556,8 @@
         ]
        }
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "woman": [
@@ -4365,7 +4657,8 @@
         "rBottom": 1.02
        }
       }
-     ]
+     ],
+     "work": true
     },
     {
      "name": "ferace",
@@ -4850,7 +5143,8 @@
        "garment": "sandals",
        "p": 0.9
       }
-     ]
+     ],
+     "work": true
     }
    ],
    "woman": [
@@ -4927,7 +5221,8 @@
        ],
        "p": 1
       }
-     ]
+     ],
+     "work": true
     },
     {
      "name": "veiled",
@@ -5101,13 +5396,1018 @@
      "short",
      "crop",
      "curly",
-     "shoulder"
+     "crop"
     ],
     "woman": [
      "long",
      "braid",
      "plaits",
      "long-wavy"
+    ]
+   }
+  },
+  "indian": {
+   "man": [
+    {
+     "name": "villager",
+     "weight": 3,
+     "wear": [
+      {
+       "garment": "dhoti",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "linen:linen",
+         "plain:undyed"
+        ],
+        "trim": [
+         "plain:madder",
+         "plain:indigo",
+         "plain:wool-white"
+        ]
+       },
+       "params": {
+        "length": [
+         "calf",
+         "ankle - 0.04"
+        ],
+        "hem": [
+         0,
+         0.03
+        ]
+       }
+      },
+      {
+       "garment": "tunic",
+       "p": 0.5,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "linen:linen",
+         "plain:undyed"
+        ]
+       },
+       "params": {
+        "length": "knee + 0.1"
+       }
+      },
+      {
+       "garment": "shawl",
+       "p": 0.3,
+       "fabrics": {
+        "main": [
+         "plain:undyed",
+         "linen:linen",
+         "plain:saffron"
+        ]
+       }
+      },
+      {
+       "garment": "turban",
+       "p": 0.7,
+       "fabrics": {
+        "main": [
+         "hoops:wool-white",
+         "hoops:saffron",
+         "hoops:madder",
+         "hoops:scarlet",
+         "hoops:weld"
+        ]
+       },
+       "params": {
+        "size": 1.34
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 0.5
+      }
+     ],
+     "work": true
+    },
+    {
+     "name": "merchant",
+     "weight": 2,
+     "wear": [
+      {
+       "garment": "salwar",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "plain:silk-white",
+         "linen:linen"
+        ]
+       }
+      },
+      {
+       "garment": "kaftan",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:wool-white",
+         "plain:silk-white",
+         "plain:saffron",
+         "damask:damask-green",
+         "plain:silk-jade",
+         "brocade:mughal"
+        ],
+        "trim": [
+         "braid:gold-braid",
+         "plain:silk-white"
+        ]
+       },
+       "params": {
+        "length": [
+         "knee",
+         "calf"
+        ],
+        "sleeves": "wrist",
+        "hem": 0.02
+       }
+      },
+      {
+       "garment": "sash",
+       "p": 0.8,
+       "fabrics": {
+        "main": [
+         "plain:scarlet",
+         "plain:saffron",
+         "plain:silk-jade",
+         "stripes:stripe-madder"
+        ]
+       }
+      },
+      {
+       "garment": "turban",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "hoops:saffron",
+         "hoops:madder",
+         "hoops:scarlet",
+         "hoops:silk-white",
+         "hoops:weld",
+         "hoops:indigo"
+        ]
+       },
+       "params": {
+        "size": 1.4
+       }
+      },
+      {
+       "garment": "shoes",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:leather-red",
+         "leather:weld"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "woman": [
+    {
+     "name": "sari",
+     "weight": 4,
+     "wear": [
+      {
+       "garment": "choli",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:silk-red",
+         "plain:indigo",
+         "plain:weld",
+         "plain:silk-jade",
+         "plain:madder",
+         "plain:silk-plum"
+        ]
+       }
+      },
+      {
+       "garment": "sari",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:saffron",
+         "plain:madder",
+         "plain:silk-red",
+         "plain:silk-jade",
+         "plain:silk-plum",
+         "plain:silk-azure",
+         "plain:weld",
+         "plain:indigo",
+         "plain:scarlet",
+         "damask:damask-red",
+         "damask:damask-green",
+         "brocade:mughal",
+         "plain:saffron",
+         "plain:madder",
+         "plain:indigo",
+         "plain:weld"
+        ],
+        "trim": [
+         "braid:gold-braid",
+         "braid:gold-braid",
+         "braid:green-braid",
+         "braid:blue-braid",
+         "plain:madder"
+        ]
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 0.4
+      }
+     ],
+     "work": true
+    },
+    {
+     "name": "lehenga",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "choli",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:silk-red",
+         "plain:weld",
+         "plain:silk-jade",
+         "plain:indigo"
+        ]
+       }
+      },
+      {
+       "garment": "wrap-skirt",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:madder",
+         "plain:scarlet",
+         "damask:damask-red",
+         "brocade:mughal",
+         "plain:saffron"
+        ],
+        "trim": [
+         "braid:gold-braid"
+        ]
+       },
+       "params": {
+        "length": "floor - 0.04",
+        "hem": 0.05
+       }
+      },
+      {
+       "garment": "headscarf",
+       "p": 0.6,
+       "fabrics": {
+        "main": [
+         "plain:saffron",
+         "plain:weld",
+         "plain:madder",
+         "plain:silk-red"
+        ]
+       }
+      }
+     ],
+     "work": true
+    }
+   ],
+   "boy": [
+    {
+     "name": "child",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "dhoti",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "linen:linen",
+         "plain:undyed"
+        ]
+       },
+       "params": {
+        "length": "knee"
+       }
+      },
+      {
+       "garment": "tunic",
+       "p": 0.5,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "plain:saffron",
+         "plain:weld"
+        ]
+       },
+       "params": {
+        "length": "hip - 0.12"
+       }
+      }
+     ]
+    }
+   ],
+   "girl": [
+    {
+     "name": "child",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "choli",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:silk-red",
+         "plain:weld",
+         "plain:silk-jade"
+        ]
+       }
+      },
+      {
+       "garment": "wrap-skirt",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:madder",
+         "plain:saffron",
+         "plain:indigo",
+         "stripes:stripe-madder"
+        ],
+        "trim": [
+         "braid:gold-braid",
+         "plain:weld"
+        ]
+       },
+       "params": {
+        "length": "ankle",
+        "hem": 0.04
+       }
+      }
+     ]
+    }
+   ],
+   "hair": {
+    "man": [
+     "short",
+     "topknot",
+     "crop",
+     "short"
+    ],
+    "woman": [
+     "braid",
+     "bun",
+     "braid",
+     "plaits"
+    ]
+   }
+  },
+  "maya": {
+   "man": [
+    {
+     "name": "farmer",
+     "weight": 3,
+     "wear": [
+      {
+       "garment": "loincloth",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:wool-white",
+         "plain:undyed",
+         "linen:linen"
+        ],
+        "trim": [
+         "lozenge:russian",
+         "plain:madder",
+         "plain:indigo"
+        ]
+       }
+      },
+      {
+       "garment": "himation",
+       "p": 0.35,
+       "fabrics": {
+        "main": [
+         "plain:wool-white",
+         "plain:undyed",
+         "stripes:stripe-madder"
+        ],
+        "trim": [
+         "plain:madder"
+        ]
+       },
+       "params": {
+        "hem": 0
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 0.6
+      }
+     ],
+     "work": true
+    },
+    {
+     "name": "noble",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "loincloth",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:wool-white",
+         "plain:madder",
+         "plain:indigo"
+        ],
+        "trim": [
+         "lozenge:russian",
+         "braid:gold-braid"
+        ]
+       }
+      },
+      {
+       "garment": "cloak",
+       "p": 0.8,
+       "fabrics": {
+        "main": [
+         "lozenge:russian",
+         "plain:madder",
+         "plain:indigo",
+         "dots:maya",
+         "fur:fur-brown"
+        ]
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 1
+      }
+     ]
+    }
+   ],
+   "woman": [
+    {
+     "name": "huipil",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "wrap-skirt",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "stripes:stripe-woad",
+         "stripes:stripe-madder",
+         "plain:indigo",
+         "plain:woad",
+         "checks:check-russet",
+         "plain:madder"
+        ],
+        "trim": [
+         "plain:madder",
+         "plain:indigo"
+        ]
+       },
+       "params": {
+        "length": [
+         "ankle",
+         "calf"
+        ],
+        "hem": [
+         0,
+         0.04
+        ]
+       }
+      },
+      {
+       "garment": "huipil",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "linen:wool-white",
+         "linen:linen",
+         "plain:undyed"
+        ],
+        "trim": [
+         "lozenge:russian",
+         "lozenge:russian",
+         "vine:russian",
+         "stripes:stripe-madder"
+        ]
+       },
+       "params": {
+        "length": [
+         "hip - 0.12",
+         "knee + 0.15",
+         "knee"
+        ]
+       }
+      },
+      {
+       "garment": "sash",
+       "p": 0.4,
+       "fabrics": {
+        "main": [
+         "plain:madder",
+         "stripes:stripe-madder"
+        ]
+       }
+      }
+     ],
+     "work": true
+    }
+   ],
+   "boy": [
+    {
+     "name": "child",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "loincloth",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:wool-white",
+         "plain:undyed"
+        ],
+        "trim": [
+         "plain:madder"
+        ]
+       },
+       "params": {
+        "flap": "knee + 0.1"
+       }
+      }
+     ]
+    }
+   ],
+   "girl": [
+    {
+     "name": "child",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "wrap-skirt",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "stripes:stripe-woad",
+         "plain:indigo",
+         "stripes:stripe-madder"
+        ]
+       },
+       "params": {
+        "length": "calf"
+       }
+      },
+      {
+       "garment": "huipil",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white"
+        ],
+        "trim": [
+         "lozenge:russian",
+         "plain:madder"
+        ]
+       },
+       "params": {
+        "length": "hip - 0.12"
+       }
+      }
+     ]
+    }
+   ],
+   "hair": {
+    "man": [
+     "topknot",
+     "topknot",
+     "crop",
+     "short"
+    ],
+    "woman": [
+     "braid",
+     "plaits",
+     "bun",
+     "braid"
+    ]
+   }
+  },
+  "russian": {
+   "man": [
+    {
+     "name": "peasant",
+     "weight": 3,
+     "wear": [
+      {
+       "garment": "trousers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:undyed",
+         "linen:linen",
+         "stripes:stripe-woad",
+         "plain:wool-grey"
+        ]
+       }
+      },
+      {
+       "garment": "tunic",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "linen:linen",
+         "plain:madder",
+         "plain:scarlet",
+         "plain:woad"
+        ],
+        "trim": [
+         "plain:madder",
+         "vine:russian"
+        ]
+       },
+       "params": {
+        "length": "knee + 0.2"
+       }
+      },
+      {
+       "garment": "belt",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "braid:green-braid",
+         "plain:madder",
+         "braid:blue-braid"
+        ]
+       }
+      },
+      {
+       "garment": "kaftan",
+       "p": 0.3,
+       "fabrics": {
+        "main": [
+         "plain:russet",
+         "plain:wool-grey",
+         "plain:undyed"
+        ],
+        "trim": [
+         "plain:russet"
+        ]
+       },
+       "params": {
+        "length": "knee",
+        "sleeves": "wrist",
+        "hem": 0
+       }
+      },
+      {
+       "garment": [
+        "fur-hat",
+        "felt-hat",
+        "cap"
+       ],
+       "p": 0.6,
+       "fabrics": {
+        "main": [
+         "fur:fur-brown",
+         "fur:fur-grey",
+         "plain:wool-grey",
+         "plain:russet"
+        ]
+       }
+      },
+      {
+       "garment": "boots",
+       "p": 0.8,
+       "fabrics": {
+        "main": [
+         "leather:leather-dark",
+         "leather:leather"
+        ]
+       }
+      }
+     ],
+     "work": true
+    },
+    {
+     "name": "merchant",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "trousers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:silk-azure",
+         "plain:woad",
+         "plain:scarlet"
+        ]
+       }
+      },
+      {
+       "garment": "kaftan",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "damask:damask-red",
+         "damask:damask-blue",
+         "damask:damask-green",
+         "brocade:russian",
+         "plain:scarlet",
+         "plain:silk-plum"
+        ],
+        "trim": [
+         "fur:fur-brown",
+         "braid:gold-braid",
+         "fur:fur-white"
+        ]
+       },
+       "params": {
+        "length": "floor - 0.06",
+        "sleeves": "wrist",
+        "hem": 0.04
+       }
+      },
+      {
+       "garment": "fur-hat",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "fur:fur-brown",
+         "fur:fur-grey",
+         "fur:fur-white"
+        ]
+       }
+      },
+      {
+       "garment": "boots",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:leather-red",
+         "leather:weld",
+         "leather:leather-dark"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "woman": [
+    {
+     "name": "sarafan",
+     "weight": 3,
+     "wear": [
+      {
+       "garment": "chemise",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "linen:linen"
+        ]
+       }
+      },
+      {
+       "garment": "sarafan",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:scarlet",
+         "plain:madder",
+         "plain:woad",
+         "plain:indigo",
+         "damask:damask-red",
+         "damask:damask-blue",
+         "plain:silk-azure"
+        ],
+        "trim": [
+         "braid:gold-braid",
+         "braid:gold-braid",
+         "vine:russian",
+         "braid:green-braid"
+        ]
+       }
+      },
+      {
+       "garment": "apron",
+       "p": 0.25,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "vine:russian"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "headscarf",
+        "kokoshnik"
+       ],
+       "p": 0.85,
+       "fabrics": {
+        "main": [
+         "plain:scarlet",
+         "dots:russian",
+         "vine:russian",
+         "plain:wool-white",
+         "plain:weld",
+         "brocade:russian"
+        ]
+       }
+      },
+      {
+       "garment": "boots",
+       "p": 0.5,
+       "fabrics": {
+        "main": [
+         "leather:leather-red",
+         "leather:leather-dark"
+        ]
+       }
+      }
+     ],
+     "work": true
+    },
+    {
+     "name": "winter",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "chemise",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white"
+        ]
+       }
+      },
+      {
+       "garment": "sarafan",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:woad",
+         "plain:madder",
+         "plain:scarlet"
+        ],
+        "trim": [
+         "braid:gold-braid"
+        ]
+       }
+      },
+      {
+       "garment": "cloak",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "fur:fur-brown",
+         "plain:russet",
+         "plain:wool-grey"
+        ]
+       }
+      },
+      {
+       "garment": "headscarf",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "dots:russian",
+         "vine:russian",
+         "plain:scarlet",
+         "plain:wool-white"
+        ]
+       }
+      },
+      {
+       "garment": "boots",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:leather-dark",
+         "leather:leather-red"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "boy": [
+    {
+     "name": "child",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "trousers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:undyed",
+         "linen:linen"
+        ]
+       }
+      },
+      {
+       "garment": "tunic",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white",
+         "plain:madder",
+         "plain:woad"
+        ],
+        "trim": [
+         "plain:madder"
+        ]
+       },
+       "params": {
+        "length": "knee + 0.2"
+       }
+      },
+      {
+       "garment": "belt",
+       "p": 0.8,
+       "fabrics": {
+        "main": [
+         "plain:madder",
+         "braid:green-braid"
+        ]
+       }
+      },
+      {
+       "garment": "boots",
+       "p": 0.4
+      }
+     ]
+    }
+   ],
+   "girl": [
+    {
+     "name": "child",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "chemise",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:wool-white"
+        ]
+       }
+      },
+      {
+       "garment": "sarafan",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:scarlet",
+         "plain:woad",
+         "plain:madder"
+        ],
+        "trim": [
+         "braid:gold-braid",
+         "vine:russian"
+        ]
+       },
+       "params": {
+        "length": "ankle"
+       }
+      },
+      {
+       "garment": "headscarf",
+       "p": 0.5,
+       "fabrics": {
+        "main": [
+         "dots:russian",
+         "plain:scarlet",
+         "plain:wool-white"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "hair": {
+    "man": [
+     "bowl",
+     "short",
+     "crop",
+     "bowl"
+    ],
+    "woman": [
+     "braid",
+     "braid",
+     "plaits"
     ]
    }
   }

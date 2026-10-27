@@ -1,0 +1,92 @@
+{
+ "kind": "item",
+ "name": "Tray table",
+ "category": "furniture/table",
+ "era": "800-1900",
+ "region": "the Islamic world, India",
+ "_about": "the sini: a round tray of brass, the meal on it, set on a low stand (the kursi) in the middle of a room of divans and floor cushions -- lifted off and carried out when the meal is done",
+ "params": {
+  "r": [
+   0.4,
+   0.5
+  ],
+  "h": 0.38
+ },
+ "materials": {
+  "tray": "brass",
+  "stand": {
+   "pick": [
+    "walnut",
+    "cedar",
+    "ebony"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "stand",
+   "type": "lathe",
+   "material": "stand",
+   "sides": 8,
+   "faceted": true,
+   "profile": [
+    [
+     "r * 0.62",
+     0
+    ],
+    [
+     "r * 0.62",
+     0.03
+    ],
+    [
+     "r * 0.4",
+     0.08
+    ],
+    [
+     "r * 0.36",
+     "h - 0.08"
+    ],
+    [
+     "r * 0.5",
+     "h - 0.03"
+    ],
+    [
+     "r * 0.5",
+     "h - 0.025"
+    ]
+   ]
+  },
+  {
+   "id": "tray",
+   "type": "lathe",
+   "material": "tray",
+   "sides": 24,
+   "profile": [
+    [
+     0.001,
+     "h - 0.025"
+    ],
+    [
+     "r - 0.02",
+     "h - 0.025"
+    ],
+    [
+     "r",
+     "h + 0.01"
+    ],
+    [
+     "r - 0.008",
+     "h + 0.012"
+    ],
+    [
+     "r - 0.02",
+     "h - 0.012"
+    ],
+    [
+     0.001,
+     "h - 0.012"
+    ]
+   ]
+  }
+ ]
+}

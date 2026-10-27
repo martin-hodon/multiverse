@@ -1,6 +1,6 @@
 {
   "name": "Chichen Itza",
-  "_about": "EL CASTILLO, CHICHEN ITZA (the Temple of Kukulcan): a stepped pyramid of nine battered terraces (a `crepidoma` whose steps lean in), 55m square and 24m to its top; up the middle of each face a staircase of 91 steep steps, projecting from the pyramid's foot, its stone balustrades (the stairs' railings, `railing` stone) and the serpent heads at their foot; and on top the temple, three doors to the north, one to each other side, under its flat roof and crest.",
+  "_about": "EL CASTILLO, CHICHEN ITZA (the Temple of Kukulcan), counted out by the calendar: nine talud-and-tablero terraces (55m square, 24m to the top), 52 recessed panels on every face (the Calendar Round), four stairs of 91 steep steps (with the temple's step, the 365 days), the feathered serpent's heads at the foot of the north stair; on top the temple, its rooms as narrow as a corbel vault closes -- the gallery round three sides, the portico behind the serpent columns of the north door, the sanctuary with its two pillars -- its height worked from the springing and the widest corbel, the crest of merlons on its roof (tools/archgen/chichen_itza.py).",
   "params": {
     "detail": 4
   },
@@ -18,19 +18,43 @@
   "build": [
     "pyramid",
     "north stair",
-    "north serpent head left",
-    "north serpent head right",
     "west stair",
-    "west serpent head left",
-    "west serpent head right",
     "south stair",
-    "south serpent head left",
-    "south serpent head right",
     "east stair",
-    "east serpent head left",
-    "east serpent head right",
+    "tablero long 1",
+    "tablero short 1",
+    "tablero long 2",
+    "tablero short 2",
+    "tablero long 3",
+    "tablero short 3",
+    "tablero long 4",
+    "tablero short 4",
+    "tablero long 5",
+    "tablero short 5",
+    "tablero long 6",
+    "tablero short 6",
+    "tablero long 7",
+    "tablero short 7",
+    "tablero long 8",
+    "tablero short 8",
+    "tablero long 9",
+    "tablero short 9",
+    "serpent heads",
     "temple",
-    "temple roof",
+    "serpent columns",
+    "east inner wall",
+    "west inner wall",
+    "south inner wall",
+    "cross wall",
+    "sanctuary pillars",
+    "east gallery vault",
+    "west gallery vault",
+    "south gallery vault",
+    "portico vault",
+    "sanctuary west vault",
+    "sanctuary middle vault",
+    "sanctuary east vault",
+    "roof",
     "roof crest"
   ],
   "parts": {
@@ -42,6 +66,7 @@
       "stepH": 2.6667,
       "stepOut": 1.9889,
       "batter": 0.8,
+      "tablero": 0.55,
       "at": [
         [
           0,
@@ -50,14 +75,14 @@
           0
         ]
       ],
-      "_about": "nine terraces, each face leaning in (the talud) and each set back from the one below"
+      "_about": "nine terraces, each a leaning talud and a vertical tablero over it, each set back from the one below"
     },
     "north stair": {
       "type": "flight",
       "steep": true,
       "width": 8.9,
-      "run": 0.26374,
-      "rise": 0.26374,
+      "run": 0.2637,
+      "rise": 0.2637,
       "base": 0,
       "top": 24.0,
       "landing": 0,
@@ -71,41 +96,12 @@
       ],
       "_about": "a staircase up each face: 91 steps of 26cm on 26cm -- steep, as the real ones are -- arriving on the top platform"
     },
-    "north serpent head left": {
-      "type": "box",
-      "width": 1.2,
-      "length": 2.2,
-      "height": 1.3,
-      "at": [
-        [
-          -4.8,
-          0,
-          34.95,
-          0.0
-        ]
-      ],
-      "_about": "the serpent heads at the foot of each balustrade (Kukulcan's shadow runs down to them at the equinox)"
-    },
-    "north serpent head right": {
-      "type": "box",
-      "width": 1.2,
-      "length": 2.2,
-      "height": 1.3,
-      "at": [
-        [
-          4.8,
-          0,
-          34.95,
-          0.0
-        ]
-      ]
-    },
     "west stair": {
       "type": "flight",
       "steep": true,
       "width": 8.9,
-      "run": 0.26374,
-      "rise": 0.26374,
+      "run": 0.2637,
+      "rise": 0.2637,
       "base": 0,
       "top": 24.0,
       "landing": 0,
@@ -118,40 +114,12 @@
         ]
       ]
     },
-    "west serpent head left": {
-      "type": "box",
-      "width": 1.2,
-      "length": 2.2,
-      "height": 1.3,
-      "at": [
-        [
-          34.95,
-          0,
-          4.8,
-          1.570796
-        ]
-      ]
-    },
-    "west serpent head right": {
-      "type": "box",
-      "width": 1.2,
-      "length": 2.2,
-      "height": 1.3,
-      "at": [
-        [
-          34.95,
-          0,
-          -4.8,
-          1.570796
-        ]
-      ]
-    },
     "south stair": {
       "type": "flight",
       "steep": true,
       "width": 8.9,
-      "run": 0.26374,
-      "rise": 0.26374,
+      "run": 0.2637,
+      "rise": 0.2637,
       "base": 0,
       "top": 24.0,
       "landing": 0,
@@ -164,40 +132,12 @@
         ]
       ]
     },
-    "south serpent head left": {
-      "type": "box",
-      "width": 1.2,
-      "length": 2.2,
-      "height": 1.3,
-      "at": [
-        [
-          4.8,
-          0,
-          -34.95,
-          3.141593
-        ]
-      ]
-    },
-    "south serpent head right": {
-      "type": "box",
-      "width": 1.2,
-      "length": 2.2,
-      "height": 1.3,
-      "at": [
-        [
-          -4.8,
-          0,
-          -34.95,
-          3.141593
-        ]
-      ]
-    },
     "east stair": {
       "type": "flight",
       "steep": true,
       "width": 8.9,
-      "run": 0.26374,
-      "rise": 0.26374,
+      "run": 0.2637,
+      "rise": 0.2637,
       "base": 0,
       "top": 24.0,
       "landing": 0,
@@ -210,86 +150,1236 @@
         ]
       ]
     },
-    "east serpent head left": {
-      "type": "box",
-      "width": 1.2,
-      "length": 2.2,
-      "height": 1.3,
+    "tablero long 1": {
+      "type": "wall",
+      "width": 21.4311,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.1211,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 6.3633,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 10.6056,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 14.8478,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 19.09,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
       "at": [
         [
-          -34.95,
-          0,
-          -4.8,
-          4.712389
+          15.1656,
+          1.2,
+          25.8811,
+          0.0
+        ],
+        [
+          25.8811,
+          1.2,
+          -15.1656,
+          1.5708
+        ],
+        [
+          -15.1656,
+          1.2,
+          -25.8811,
+          3.1416
+        ],
+        [
+          -25.8811,
+          1.2,
+          15.1656,
+          4.7124
+        ]
+      ],
+      "_about": "the panel band of a terrace: a skin on the tablero with its panels cut through it, the core behind them"
+    },
+    "tablero short 1": {
+      "type": "wall",
+      "width": 21.2111,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 19.09,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 14.8478,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 10.6056,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 6.3633,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 2.1211,
+          "width": 2.6302,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -15.0556,
+          1.2,
+          25.8811,
+          0.0
+        ],
+        [
+          25.8811,
+          1.2,
+          15.0556,
+          1.5708
+        ],
+        [
+          15.0556,
+          1.2,
+          -25.8811,
+          3.1416
+        ],
+        [
+          -25.8811,
+          1.2,
+          -15.0556,
+          4.7124
         ]
       ]
     },
-    "east serpent head right": {
-      "type": "box",
-      "width": 1.2,
-      "length": 2.2,
-      "height": 1.3,
+    "tablero long 2": {
+      "type": "wall",
+      "width": 19.4422,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.4028,
+          "width": 2.9794,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 7.2083,
+          "width": 2.9794,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 12.0139,
+          "width": 2.9794,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 16.8194,
+          "width": 2.9794,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
       "at": [
         [
-          -34.95,
-          0,
-          4.8,
-          4.712389
+          14.1711,
+          3.8667,
+          23.8922,
+          0.0
+        ],
+        [
+          23.8922,
+          3.8667,
+          -14.1711,
+          1.5708
+        ],
+        [
+          -14.1711,
+          3.8667,
+          -23.8922,
+          3.1416
+        ],
+        [
+          -23.8922,
+          3.8667,
+          14.1711,
+          4.7124
         ]
       ]
+    },
+    "tablero short 2": {
+      "type": "wall",
+      "width": 19.2222,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 16.8194,
+          "width": 2.9794,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 12.0139,
+          "width": 2.9794,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 7.2083,
+          "width": 2.9794,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 2.4028,
+          "width": 2.9794,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -14.0611,
+          3.8667,
+          23.8922,
+          0.0
+        ],
+        [
+          23.8922,
+          3.8667,
+          14.0611,
+          1.5708
+        ],
+        [
+          14.0611,
+          3.8667,
+          -23.8922,
+          3.1416
+        ],
+        [
+          -23.8922,
+          3.8667,
+          -14.0611,
+          4.7124
+        ]
+      ]
+    },
+    "tablero long 3": {
+      "type": "wall",
+      "width": 17.4533,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.1542,
+          "width": 2.6712,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 6.4625,
+          "width": 2.6712,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 10.7708,
+          "width": 2.6712,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 15.0792,
+          "width": 2.6712,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          13.1767,
+          6.5333,
+          21.9033,
+          0.0
+        ],
+        [
+          21.9033,
+          6.5333,
+          -13.1767,
+          1.5708
+        ],
+        [
+          -13.1767,
+          6.5333,
+          -21.9033,
+          3.1416
+        ],
+        [
+          -21.9033,
+          6.5333,
+          13.1767,
+          4.7124
+        ]
+      ]
+    },
+    "tablero short 3": {
+      "type": "wall",
+      "width": 17.2333,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 15.0792,
+          "width": 2.6712,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 10.7708,
+          "width": 2.6712,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 6.4625,
+          "width": 2.6712,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 2.1542,
+          "width": 2.6712,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -13.0667,
+          6.5333,
+          21.9033,
+          0.0
+        ],
+        [
+          21.9033,
+          6.5333,
+          13.0667,
+          1.5708
+        ],
+        [
+          13.0667,
+          6.5333,
+          -21.9033,
+          3.1416
+        ],
+        [
+          -21.9033,
+          6.5333,
+          -13.0667,
+          4.7124
+        ]
+      ]
+    },
+    "tablero long 4": {
+      "type": "wall",
+      "width": 15.4644,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.5407,
+          "width": 3.1505,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 7.6222,
+          "width": 3.1505,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 12.7037,
+          "width": 3.1505,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          12.1822,
+          9.2,
+          19.9144,
+          0.0
+        ],
+        [
+          19.9144,
+          9.2,
+          -12.1822,
+          1.5708
+        ],
+        [
+          -12.1822,
+          9.2,
+          -19.9144,
+          3.1416
+        ],
+        [
+          -19.9144,
+          9.2,
+          12.1822,
+          4.7124
+        ]
+      ]
+    },
+    "tablero short 4": {
+      "type": "wall",
+      "width": 15.2444,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 12.7037,
+          "width": 3.1505,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 7.6222,
+          "width": 3.1505,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 2.5407,
+          "width": 3.1505,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -12.0722,
+          9.2,
+          19.9144,
+          0.0
+        ],
+        [
+          19.9144,
+          9.2,
+          12.0722,
+          1.5708
+        ],
+        [
+          12.0722,
+          9.2,
+          -19.9144,
+          3.1416
+        ],
+        [
+          -19.9144,
+          9.2,
+          -12.0722,
+          4.7124
+        ]
+      ]
+    },
+    "tablero long 5": {
+      "type": "wall",
+      "width": 13.4756,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.2093,
+          "width": 2.7395,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 6.6278,
+          "width": 2.7395,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 11.0463,
+          "width": 2.7395,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          11.1878,
+          11.8667,
+          17.9256,
+          0.0
+        ],
+        [
+          17.9256,
+          11.8667,
+          -11.1878,
+          1.5708
+        ],
+        [
+          -11.1878,
+          11.8667,
+          -17.9256,
+          3.1416
+        ],
+        [
+          -17.9256,
+          11.8667,
+          11.1878,
+          4.7124
+        ]
+      ]
+    },
+    "tablero short 5": {
+      "type": "wall",
+      "width": 13.2556,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 11.0463,
+          "width": 2.7395,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 6.6278,
+          "width": 2.7395,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 2.2093,
+          "width": 2.7395,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -11.0778,
+          11.8667,
+          17.9256,
+          0.0
+        ],
+        [
+          17.9256,
+          11.8667,
+          11.0778,
+          1.5708
+        ],
+        [
+          11.0778,
+          11.8667,
+          -17.9256,
+          3.1416
+        ],
+        [
+          -17.9256,
+          11.8667,
+          -11.0778,
+          4.7124
+        ]
+      ]
+    },
+    "tablero long 6": {
+      "type": "wall",
+      "width": 11.4867,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.8167,
+          "width": 3.4927,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 8.45,
+          "width": 3.4927,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          10.1933,
+          14.5333,
+          15.9367,
+          0.0
+        ],
+        [
+          15.9367,
+          14.5333,
+          -10.1933,
+          1.5708
+        ],
+        [
+          -10.1933,
+          14.5333,
+          -15.9367,
+          3.1416
+        ],
+        [
+          -15.9367,
+          14.5333,
+          10.1933,
+          4.7124
+        ]
+      ]
+    },
+    "tablero short 6": {
+      "type": "wall",
+      "width": 11.2667,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 8.45,
+          "width": 3.4927,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 2.8167,
+          "width": 3.4927,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -10.0833,
+          14.5333,
+          15.9367,
+          0.0
+        ],
+        [
+          15.9367,
+          14.5333,
+          10.0833,
+          1.5708
+        ],
+        [
+          10.0833,
+          14.5333,
+          -15.9367,
+          3.1416
+        ],
+        [
+          -15.9367,
+          14.5333,
+          -10.0833,
+          4.7124
+        ]
+      ]
+    },
+    "tablero long 7": {
+      "type": "wall",
+      "width": 9.4978,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.3194,
+          "width": 2.8761,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 6.9583,
+          "width": 2.8761,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          9.1989,
+          17.2,
+          13.9478,
+          0.0
+        ],
+        [
+          13.9478,
+          17.2,
+          -9.1989,
+          1.5708
+        ],
+        [
+          -9.1989,
+          17.2,
+          -13.9478,
+          3.1416
+        ],
+        [
+          -13.9478,
+          17.2,
+          9.1989,
+          4.7124
+        ]
+      ]
+    },
+    "tablero short 7": {
+      "type": "wall",
+      "width": 9.2778,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 6.9583,
+          "width": 2.8761,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 2.3194,
+          "width": 2.8761,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -9.0889,
+          17.2,
+          13.9478,
+          0.0
+        ],
+        [
+          13.9478,
+          17.2,
+          9.0889,
+          1.5708
+        ],
+        [
+          9.0889,
+          17.2,
+          -13.9478,
+          3.1416
+        ],
+        [
+          -13.9478,
+          17.2,
+          -9.0889,
+          4.7124
+        ]
+      ]
+    },
+    "tablero long 8": {
+      "type": "wall",
+      "width": 7.5089,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 1.8222,
+          "width": 2.2596,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 5.4667,
+          "width": 2.2596,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          8.2044,
+          19.8667,
+          11.9589,
+          0.0
+        ],
+        [
+          11.9589,
+          19.8667,
+          -8.2044,
+          1.5708
+        ],
+        [
+          -8.2044,
+          19.8667,
+          -11.9589,
+          3.1416
+        ],
+        [
+          -11.9589,
+          19.8667,
+          8.2044,
+          4.7124
+        ]
+      ]
+    },
+    "tablero short 8": {
+      "type": "wall",
+      "width": 7.2889,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 5.4667,
+          "width": 2.2596,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 1.8222,
+          "width": 2.2596,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -8.0944,
+          19.8667,
+          11.9589,
+          0.0
+        ],
+        [
+          11.9589,
+          19.8667,
+          8.0944,
+          1.5708
+        ],
+        [
+          8.0944,
+          19.8667,
+          -11.9589,
+          3.1416
+        ],
+        [
+          -11.9589,
+          19.8667,
+          -8.0944,
+          4.7124
+        ]
+      ]
+    },
+    "tablero long 9": {
+      "type": "wall",
+      "width": 5.52,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.65,
+          "width": 3.286,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          7.21,
+          22.5333,
+          9.97,
+          0.0
+        ],
+        [
+          9.97,
+          22.5333,
+          -7.21,
+          1.5708
+        ],
+        [
+          -7.21,
+          22.5333,
+          -9.97,
+          3.1416
+        ],
+        [
+          -9.97,
+          22.5333,
+          7.21,
+          4.7124
+        ]
+      ]
+    },
+    "tablero short 9": {
+      "type": "wall",
+      "width": 5.3,
+      "height": 1.4667,
+      "thickness": 0.22,
+      "glass": false,
+      "openings": [
+        {
+          "at": 2.65,
+          "width": 3.286,
+          "sill": 0.264,
+          "springing": 1.1733,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -7.1,
+          22.5333,
+          9.97,
+          0.0
+        ],
+        [
+          9.97,
+          22.5333,
+          7.1,
+          1.5708
+        ],
+        [
+          7.1,
+          22.5333,
+          -9.97,
+          3.1416
+        ],
+        [
+          -9.97,
+          22.5333,
+          -7.1,
+          4.7124
+        ]
+      ]
+    },
+    "serpent heads": {
+      "type": "component",
+      "use": "components/serpent-head",
+      "params": {
+        "W": 1.4
+      },
+      "at": [
+        [
+          -5.43,
+          0,
+          35.01,
+          0
+        ],
+        [
+          5.43,
+          0,
+          35.01,
+          0
+        ]
+      ],
+      "_about": "Kukulcan's heads at the foot of the north stair's balustrades (the equinox shadow runs down to them)"
     },
     "temple": {
       "type": "enclosure",
       "plan": {
         "rect": [
-          12.5,
-          12.5
+          14.0,
+          14.0
         ]
       },
-      "thickness": 1.3,
-      "height": 6.5,
+      "thickness": 1.0,
+      "height": 6.8349,
+      "glass": false,
       "openings": [
         {
           "at": 0,
-          "width": 1.9,
+          "width": 1.6,
           "sill": 0,
           "springing": 2.6,
           "head": {
             "profile": "flat"
-          }
+          },
+          "glass": false
         }
       ],
       "faces": {
         "0": [
           {
-            "at": -3.2,
-            "width": 1.9,
-            "sill": 0,
-            "springing": 2.6,
-            "head": {
-              "profile": "flat"
-            }
-          },
-          {
             "at": 0,
-            "width": 1.9,
+            "width": 6.2,
             "sill": 0,
-            "springing": 2.6,
+            "springing": 3.0,
             "head": {
               "profile": "flat"
-            }
-          },
-          {
-            "at": 3.2,
-            "width": 1.9,
-            "sill": 0,
-            "springing": 2.6,
-            "head": {
-              "profile": "flat"
-            }
+            },
+            "glass": false
           }
         ]
       },
+      "courses": [
+        {
+          "y": 0,
+          "h": 0.3,
+          "out": 0.1,
+          "profile": "band"
+        },
+        {
+          "y": 3.4,
+          "h": 0.55,
+          "out": 0.22,
+          "profile": "string"
+        },
+        {
+          "y": 6.3349,
+          "h": 0.5,
+          "out": 0.3,
+          "profile": "band"
+        }
+      ],
       "at": [
         [
           0,
@@ -298,33 +1388,341 @@
           0
         ]
       ],
-      "_about": "the temple: three doors to the north between its serpent columns, one on each other side"
+      "_about": "the temple's walls: the north front open between serpent columns into the portico, a door on each other side into the gallery; the medial moulding at the vaults' springing, the cornice at the roof"
     },
-    "temple roof": {
-      "type": "box",
-      "width": 13.1,
-      "length": 13.1,
-      "height": 0.7,
+    "serpent columns": {
+      "type": "component",
+      "use": "components/serpent-column",
+      "params": {
+        "W": 0.9,
+        "H": 3.0
+      },
+      "at": [
+        [
+          -1.1533,
+          24.0,
+          6.77,
+          0
+        ],
+        [
+          1.1533,
+          24.0,
+          6.77,
+          0
+        ]
+      ],
+      "_about": "the feathered serpent standing on its head either side of the middle bay, its tail carrying the lintel"
+    },
+    "east inner wall": {
+      "type": "wall",
+      "width": 9.1,
+      "height": 6.8349,
+      "thickness": 0.9,
+      "glass": false,
+      "at": [
+        [
+          4.0,
+          24.0,
+          1.45,
+          1.5708
+        ]
+      ]
+    },
+    "west inner wall": {
+      "type": "wall",
+      "width": 9.1,
+      "height": 6.8349,
+      "thickness": 0.9,
+      "glass": false,
+      "at": [
+        [
+          -4.0,
+          24.0,
+          1.45,
+          -1.5708
+        ]
+      ]
+    },
+    "south inner wall": {
+      "type": "wall",
+      "width": 8.0,
+      "height": 6.8349,
+      "thickness": 0.9,
+      "glass": false,
       "at": [
         [
           0,
-          30.5,
+          24.0,
+          -4.0,
+          3.1416
+        ]
+      ]
+    },
+    "cross wall": {
+      "type": "wall",
+      "width": 6.2,
+      "height": 6.8349,
+      "thickness": 0.9,
+      "glass": false,
+      "openings": [
+        {
+          "at": 3.1,
+          "width": 1.6,
+          "sill": 0,
+          "springing": 2.6,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          0,
+          24.0,
+          3.6,
+          0
+        ]
+      ],
+      "_about": "between the portico and the sanctuary, its door on the axis"
+    },
+    "sanctuary pillars": {
+      "type": "wall",
+      "width": 5.8,
+      "height": 6.8349,
+      "thickness": 0.7,
+      "glass": false,
+      "openings": [
+        {
+          "at": 1.275,
+          "width": 2.55,
+          "sill": 0,
+          "springing": 3.0,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 4.525,
+          "width": 2.55,
+          "sill": 0,
+          "springing": 3.0,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          -1.4,
+          24.0,
+          -0.2,
+          -1.5708
+        ],
+        [
+          1.4,
+          24.0,
+          -0.2,
+          1.5708
+        ]
+      ],
+      "_about": "two pillars down the sanctuary, the lintels over them, the wall over those up to the roof between the vaults"
+    },
+    "east gallery vault": {
+      "type": "barrel",
+      "width": 2.0,
+      "length": 12.0,
+      "springing": 3.5,
+      "top": 6.8349,
+      "head": {
+        "profile": "corbel",
+        "cap": 0.15,
+        "slope": 70
+      },
+      "at": [
+        [
+          5.0,
+          24.0,
+          6.0,
+          0
+        ]
+      ]
+    },
+    "west gallery vault": {
+      "type": "barrel",
+      "width": 2.0,
+      "length": 12.0,
+      "springing": 3.5,
+      "top": 6.8349,
+      "head": {
+        "profile": "corbel",
+        "cap": 0.15,
+        "slope": 70
+      },
+      "at": [
+        [
+          -5.0,
+          24.0,
+          6.0,
+          0
+        ]
+      ]
+    },
+    "south gallery vault": {
+      "type": "barrel",
+      "width": 2.0,
+      "length": 8.0,
+      "springing": 3.5,
+      "top": 6.8349,
+      "head": {
+        "profile": "corbel",
+        "cap": 0.15,
+        "slope": 70
+      },
+      "at": [
+        [
+          4.0,
+          24.0,
+          -5.0,
+          1.5708
+        ]
+      ]
+    },
+    "portico vault": {
+      "type": "barrel",
+      "width": 2.4,
+      "length": 6.2,
+      "springing": 3.5,
+      "top": 6.8349,
+      "head": {
+        "profile": "corbel",
+        "cap": 0.15,
+        "slope": 70
+      },
+      "at": [
+        [
+          3.1,
+          24.0,
+          4.8,
+          1.5708
+        ]
+      ]
+    },
+    "sanctuary west vault": {
+      "type": "barrel",
+      "width": 1.7,
+      "length": 5.8,
+      "springing": 3.5,
+      "top": 6.8349,
+      "head": {
+        "profile": "corbel",
+        "cap": 0.15,
+        "slope": 70
+      },
+      "at": [
+        [
+          -2.25,
+          24.0,
+          2.7,
+          0
+        ]
+      ]
+    },
+    "sanctuary middle vault": {
+      "type": "barrel",
+      "width": 1.4,
+      "length": 5.8,
+      "springing": 3.5,
+      "top": 6.8349,
+      "head": {
+        "profile": "corbel",
+        "cap": 0.15,
+        "slope": 70
+      },
+      "at": [
+        [
+          0.0,
+          24.0,
+          2.7,
+          0
+        ]
+      ]
+    },
+    "sanctuary east vault": {
+      "type": "barrel",
+      "width": 1.7,
+      "length": 5.8,
+      "springing": 3.5,
+      "top": 6.8349,
+      "head": {
+        "profile": "corbel",
+        "cap": 0.15,
+        "slope": 70
+      },
+      "at": [
+        [
+          2.25,
+          24.0,
+          2.7,
+          0
+        ]
+      ]
+    },
+    "roof": {
+      "type": "box",
+      "width": 14.0,
+      "length": 14.0,
+      "height": 0.35,
+      "walked": true,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          30.8349,
           0,
           0
         ]
       ]
     },
     "roof crest": {
-      "type": "box",
-      "width": 0.8,
-      "length": 0.8,
-      "height": 0.8,
-      "spiral": {
-        "count": 24,
-        "radius": 6.05,
-        "y": 31.2
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": 13.2,
+        "t": 0.4,
+        "h": 0.3,
+        "step": 1.1,
+        "mh": 0.75
       },
-      "_about": "the merlons along the roof's edge"
+      "at": [
+        [
+          0.0,
+          31.1849,
+          6.8,
+          0.0
+        ],
+        [
+          6.8,
+          31.1849,
+          0.0,
+          1.5708
+        ],
+        [
+          0.0,
+          31.1849,
+          -6.8,
+          3.1416
+        ],
+        [
+          -6.8,
+          31.1849,
+          -0.0,
+          4.7124
+        ]
+      ],
+      "_about": "the crest of stepped merlons along the roof's edge"
     }
   }
 }

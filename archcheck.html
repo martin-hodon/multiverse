@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>architecture check</title>
+<style>
+  body { margin: 0; padding: 12px 16px; background: #1b1d21; color: #d8d4cc; font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace; }
+  h1 { font-size: 14px; color: #d9a441; margin: 0 0 8px; }
+  table { border-collapse: collapse; }
+  td, th { padding: 2px 10px 2px 0; text-align: left; vertical-align: top; }
+  th { color: #8d8a84; font-weight: 400; }
+  .bad { color: #e27a6a; } .ok { color: #8fbf7a; } .dim { color: #8d8a84; }
+</style>
+</head>
+<body>
+<h1>architecture check</h1>
+<div id="out" class="dim">building…</div>
+<script type="module">
+// EVERY BUILDING, ASSEMBLED AND ASKED: does every stair lead from a floor to a floor with its headroom (check.js
+// stairClearance -- foot, approach, headroom, inside, arrival), does every part stand on something carried to the ground
+// (floating), whether every vault is roofed -- no lunette left open over a wall stopped at its springing
+// (vaultsRoofed, abutment and lintels, listed with the support findings), and what it costs (triangles and vertices drawn: every copy of every part). `?only=a,b` (substrings of the
+// paths), `?cat=Architecture,Village` (the catalogue's categories; those two and Dwellings by default), `?detail=4`.
+// `?mesh=1` also asks every part that is not a shell whether it is a closed solid wound outward: its open edges (an
+// edge with no twin running the other way), edges walked twice the same way (a face turned against its neighbours),
+// and its volume (negative: turned inside out).
+// Headless: build/archcheck.py prints window.__archcheck.
+import { assemble, loadUses } from "./arch/assemble.js";
+import { stairClearance, floating, vaultsRoofed, abutment, lintels } from "./arch/check.js";
+import { finishPieces } from "./arch/finish.js";
+const qp = new URLSearchParams(location.search);
+const fetchAsset = async (p) => (await fetch(`assets/${p}.json`, { cache: "no-store" })).json();
+const index = await fetchAsset("index");
+const cats = (qp.get("cat") ?? "Architecture,Village,Dwellings").split(",");
+const only = qp.get("only")?.split(",") ?? null;
+const paths = index.categories.filter((c) => cats.includes(c.name)).flatMap((c) => c.paths)
+  .filter((p) => !only || only.some((o) => p.includes(o)));
+// a part's mesh as a solid: every directed edge must have its twin, none may be walked twice, and it must enclose
+// a positive volume
+const solidity = (p) => {
+  const { position: P, index: I } = p.geometry, E = new Map();
+  let vol = 0;
+  for (let i = 0; i < I.length; i += 3) {
+    for (let k = 0; k < 3; k++) { const key = I[i + k] * 1048576 + I[i + (k + 1) % 3]; E.set(key, (E.get(key) ?? 0) + 1); }
+    const [a, b, c] = [I[i] * 3, I[i + 1] * 3, I[i + 2] * 3];
+    vol += (P[a] * (P[b + 1] * P[c + 2] - P[b + 2] * P[c + 1]) - P[a + 1] * (P[b] * P[c + 2] - P[b + 2] * P[c]) + P[a + 2] * (P[b] * P[c + 1] - P[b + 1] * P[c])) / 6;
+  }
+  let open = 0, twice = 0, at = null;
+  for (const [key, n] of E) {
+    if (n > 1) twice++;
+    const a = Math.floor(key / 1048576), b = key % 1048576;
+    if (!E.has(b * 1048576 + a)) { open++; at ??= [P[a * 3], P[a * 3 + 1], P[a * 3 + 2]].map((v) => +v.toFixed(2)); }
+  }
+  return { part: p.name, open, twice, vol: +vol.toFixed(1), at };
+};
+// `?finish=1`: each building's finish laid on it, and every wall face that comes out in more than one finish listed (a
+// face cut on a level line between inside and out says `cuts`; one that does not is patchy -- a stray piece of another
+// finish in it), slivers under 2% of the face left out
+const finishes = new Map();
+if (qp.get("finish")) for (const fp of index.categories.find((c) => c.name === "Finishes")?.paths ?? []) {
+  const f = await fetchAsset(fp);
+  if (f.building) finishes.set(f.building, f);
+}
+const rows = [];
+for (const path of paths) {
+  const t0 = performance.now();
+  try {
+    const doc = await fetchAsset(path);
+    await loadUses(doc, (p) => fetchAsset("architecture/" + p));
+    const asm = assemble(doc, { detail: +(qp.get("detail") ?? 4) });
+    let tris = 0, verts = 0;
+    for (const p of asm.parts) if (p.geometry?.index) { tris += p.geometry.index.length / 3 * p.instances.length; verts += p.geometry.position.length / 3 * p.instances.length; }
+    const stairs = stairClearance(asm), floats = [...floating(asm), ...vaultsRoofed(asm), ...abutment(asm), ...lintels(asm)];
+    const mesh = qp.get("mesh") ? asm.parts.filter((p) => p.geometry?.index && !p.shell && p.kind !== "glass").map(solidity).filter((r) => r.open || r.twice || r.vol < 0) : [];
+    const mixed = finishes.has(path) ? finishPieces(asm, finishes.get(path)).mixed.filter((m) => m.minor > +(qp.get("minor") ?? .02)) : [];
+    rows.push({ path, parts: asm.parts.length, tris, verts, stairs, floats, mesh, mixed, ms: Math.round(performance.now() - t0) });
+  } catch (e) {
+    rows.push({ path, error: String(e.message ?? e) });
+  }
+}
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+document.getElementById("out").innerHTML = `<table><tr><th>building</th><th>parts</th><th>triangles</th><th>vertices</th><th>stairs</th><th>support</th><th>mesh</th></tr>` +
+  rows.map((r) => r.error ? `<tr><td>${r.path}</td><td colspan=6 class=bad>${esc(r.error)}</td></tr>`
+    : `<tr><td>${r.path}</td><td>${r.parts}</td><td>${r.tris}</td><td>${r.verts}</td>` +
+      `<td class=${r.stairs.length ? "bad" : "ok"}>${r.stairs.length ? r.stairs.map((f) => esc(`${f.kind} ${f.stair} @${f.at} ${f.by}`)).join("<br>") : "ok"}</td>` +
+      `<td class=${r.floats.length ? "bad" : "ok"}>${r.floats.length ? r.floats.map((f) => esc(`${f.kind} ${f.part}#${f.inst} @${f.at}`)).join("<br>") : "ok"}</td>` +
+      `<td class=${r.mesh.length ? "bad" : "ok"}>${r.mesh.length ? r.mesh.map((f) => esc(`${f.part}: open ${f.open} twice ${f.twice} vol ${f.vol} @${f.at}`)).join("<br>") : "ok"}</td></tr>`).join("") + "</table>";
+window.__archcheck = rows;
+</script>
+</body>
+</html>

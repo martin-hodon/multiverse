@@ -38,10 +38,13 @@ add("balcony corbelling", {"type": "column", "radius": 1.43, "height": 0.9, "sid
                            "_about": "the flare that carries the balcony (the serefe) -- muqarnas, on a real one"})
 add("balcony", {"type": "ring", "count": 16, "rOuter": 2.4, "rInner": 1.4, "height": 0.3, "y": 27.0, "solid": True, "place": [[mx, 0, 2 * g, 0]]})
 add("balcony parapet", {"type": "ring", "count": 16, "rOuter": 2.4, "rInner": 2.25, "height": 1.0, "y": 27.3, "solid": True, "place": [[mx, 0, 2 * g, 0]]})
-add("upper shaft", {"type": "column", "radius": 1.2, "height": 6, "sides": 16, "at": [[mx, 27.3, 2 * g, 0]]})
-add("minaret cap", {"type": "dome", "sides": 16, "radius": 1.35, "thickness": 0, "head": {"profile": "trigonal", "rise": 6}, "at": [[mx, 33.3, 2 * g, 0]],
+add("upper shaft", {"type": "column", "radius": 1.2, "height": 6.3, "sides": 16, "at": [[mx, 27.0, 2 * g, 0]],
+                    "_about": "standing on the shaft's head, up through the balcony's ring"})
+add("cap cornice", {"type": "ring", "count": 16, "rOuter": 1.42, "rInner": 0.9, "height": 0.25, "y": 33.3, "solid": True, "place": [[mx, 0, 2 * g, 0]],
+                    "_about": "the cornice round the shaft's head the cap's eave rests on"})
+add("minaret cap", {"type": "dome", "sides": 16, "radius": 1.35, "thickness": 0, "head": {"profile": "trigonal", "rise": 6}, "at": [[mx, 33.55, 2 * g, 0]],
                     "_about": "a MINARET, Ottoman: a slender fluted shaft, a balcony on its corbelling, and the pencil-point cap"})
-add("finial", {"type": "column", "radius": 0.08, "height": 1.6, "sides": 6, "at": [[mx, 39.2, 2 * g, 0]]})
+add("finial", {"type": "column", "radius": 0.08, "height": 1.6, "sides": 6, "at": [[mx, 39.25, 2 * g, 0]]})
 # ---- window aedicula
 add("facade", {"type": "wall", "width": 6, "height": 5, "thickness": 0.6,
                "openings": [{"at": 3, "width": 1.4, "sill": 1.0, "springing": 3.2, "head": {"profile": "flat"}}], "at": [[0, 0, 3 * g, 0]]})

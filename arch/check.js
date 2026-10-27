@@ -1,4 +1,4 @@
-import { cellOf, index, heightOver, upFacing, pointTri } from "./solid.js";
+import { cellOf, index, heightOver, upFacing, pointTri, rayIndex, rayHits, rayDist, insideOf } from "./solid.js";
 // STAIRS THAT MAKE SENSE: a check over an assembled building (assemble.js) that every stair can be walked.
 //
 // A stair part carries its WALKING PATH -- every tread's middle and every landing's, with the stair's width -- and
@@ -60,6 +60,36 @@ export function stairClearance(asm, { head = 2.0 } = {}) {
       // (a copy that begins where another copy of the same stair ends -- one tread of a stair wound round a wall, a
       //  flight repeated end to end -- is mid-climb: its foot is that copy's top)
       const midClimb = s.topOf !== undefined && s.instances.some(([, X2, Y2, Z2], j) => j !== inst && Math.abs(Y2 + s.topOf - (Y + s.foot[1])) < .05 && Math.hypot(X2 - X, Z2 - Z) < 1.5);
+      // ARRIVAL: a stair leads somewhere. Past the end of its walk -- its last tread, or the landing it ends on -- the walker
+      // steps off onto a floor (another part's up-facing surface within 15cm of the top, or the ground), straight on or to
+      // either side; a stair whose top is in the air, or whose landing is a ledge with nothing round it, is found. (A copy
+      // that another copy of the same stair carries on from -- a stair wound tread by tread, a flight repeated storey over
+      // storey -- arrives on that one.)
+      if (pts.length >= 2) {
+        const e = pts[pts.length - 1], b = pts[pts.length - 2];
+        let ux = e.p[0] - b.p[0], uz = e.p[2] - b.p[2]; const ul = Math.hypot(ux, uz) || 1; ux /= ul; uz /= ul;
+        const yTop = e.p[1], reach = (e.landing ? (e.len ?? .9) / 2 : .25) + .35, half = e.w / 2 + .35;
+        const goesOn = s.instances.some(([, X2, Y2, Z2], j) => j !== inst && s.foot && Math.abs(Y2 + s.foot[1] - yTop) < .3 && Math.hypot(X2 - X, Z2 - Z) < 1.5 + e.w);
+        const floorAt = (x, z, yTop = e.p[1]) => {
+          if (Math.abs(yTop) < .05) return true;
+          for (const t of near(x, z)) {
+            if (mine(t) || !upFacing(t)) continue;
+            const h = heightOver(t, x, z);
+            if (h !== null && Math.abs(h - yTop) < .15) return true;
+          }
+          return false;
+        };
+        const offs = [[ux * reach, uz * reach], [-uz * half, ux * half], [uz * half, -ux * half]];
+        // (a staircase's top LANDING is stepped off across any of its free edges -- the floor may begin at its far side,
+        //  a landing's width from the middle: probed 35cm past each free edge at the top, along its length)
+        const yMax = Math.max(...pts.map((q) => q.p[1]));
+        const across = (s.edges ?? []).filter((g) => Math.abs(g.a[1] + Y - yMax) < .05).some((g) => {
+          const A = W(g.a), B = W(g.b), nl = Math.hypot(g.n[0], g.n[1]) || 1, nx = g.n[0] / nl, nz = g.n[1] / nl;
+          const wx = nx * c + nz * sn, wz = -nx * sn + nz * c;
+          return [.1, .3, .5, .7, .9].some((f) => floorAt(A[0] + (B[0] - A[0]) * f + wx * .35, A[2] + (B[2] - A[2]) * f + wz * .35, yMax));
+        });
+        if (!goesOn && !across && !offs.some(([dx, dz]) => floorAt(e.p[0] + dx, e.p[2] + dz))) report("arrival", e.p, "(nothing to step off onto at the top)");
+      }
       if (s.foot && !midClimb) {
         const [x, y, z] = W(s.foot);
         let floor = Math.abs(y) < .05;
@@ -104,7 +134,7 @@ export function stairClearance(asm, { head = 2.0 } = {}) {
 // bridge's piers in the water) or rests on, or hangs from, a part that is carried. So a drum set on a neck that was
 // left out, with its cap sitting on it, is found -- the two hold each other up, and nothing holds them.
 // Findings: { part, inst, kind: "floating", at, gap } -- `gap` how far below its underside the nearest surface of
-// another part is (null: none at all).
+// another part is (null: none at all) -- and "isolated", "open", "on roof" (below).
 export function floating(asm, { tol = .03 } = {}) {
   const { cells } = index(asm);
   const near = (x, z) => cells.get(cellOf(x, z)) ?? [];
@@ -141,7 +171,7 @@ export function floating(asm, { tol = .03 } = {}) {
       // (a sample of its corners, strewn by the golden ratio: an even stride falls in step with a mesh built of
       //  repeated sections -- every eighth corner of a rib is on its outer face -- and misses all that touch)
       const every = V.length <= 600 ? V : Array.from({ length: 600 }, (_, i) => V[Math.floor(((i * .6180339887) % 1) * V.length)]);
-      nodes.push({ key: p.name + "#" + inst, part: p.name, inst, kind: p.kind, ground: lo <= tol, span: hi - lo, every,
+      nodes.push({ key: p.name + "#" + inst, part: p.name, inst, kind: p.kind, ground: lo <= tol, lo, span: hi - lo, every,
                    bottom: face((y) => y < lo + .05), top: face((y) => y > hi - .05) });
     });
   }
@@ -163,10 +193,23 @@ export function floating(asm, { tol = .03 } = {}) {
     for (const [k, n] of count) if (n % 2) out.add(k + "#*");
     return out;
   };
+  const kindOf = new Map(asm.parts.map((p) => [p.name, p.kind])), roofy = (k) => kindOf.get(k.slice(0, k.lastIndexOf("#"))) === "roof";
   for (const n of nodes) {
-    n.by = new Set();
+    n.by = new Set(); n.soft = 0; n.hard = 0;
     if (n.ground) continue;
-    for (const [x, y, z] of n.bottom) for (const k of [...holders(x, y, z, n.key, n.span), ...holders(x, y - tol / 2, z, n.key)]) n.by.add(k);
+    for (const [x, y, z] of n.bottom) {
+      const hs = [...holders(x, y, z, n.key, n.span), ...holders(x, y - tol / 2, z, n.key)];
+      for (const k of hs) n.by.add(k);
+      // (what this point of its foot bears on: masonry, or only a roof -- unless masonry stands right under the roof
+      //  there, a flat roof's slab laid on its walls, which carries the parapet over them down onto them)
+      if (hs.length) {
+        const through = hs.every(roofy) && near(x, z).some((t) => {
+          if (t.part.kind === "roof" || t.part.name + "#" + t.inst === n.key) return false;
+          const h = heightOver(t, x, z); return h !== null && h < y - tol && h > y - 1.5;
+        });
+        if (hs.every(roofy) && !through) n.soft++; else n.hard++;
+      }
+    }
     for (const [x, y, z] of n.top) for (const k of [...holders(x, y, z, n.key), ...holders(x, y + tol / 2, z, n.key)]) n.by.add(k);
     // ...or it is fixed to one at the side: a flyer against its pier and its wall, a landing against the walls round
     // it, a rib on its vault -- some corner of it lies on another part's surface
@@ -193,12 +236,40 @@ export function floating(asm, { tol = .03 } = {}) {
     }
   }
   const out = [];
+  // BUILT FROM THE GROUND UP: the parts are raised in their build order, and each must be carried by what stands
+  // already -- the ground, or a part built before it -- as a mason cannot set a lantern before the dome it stands on.
+  // A part carried in the end, but only by one built after it, is reported "before support", with the part it
+  // waits for; then it counts as built, so what stands on it is not reported again. Parts named alike but for a number
+  // ("upper floor 3", "upper floor 7": one floor cut in pieces round its stairwells) are one element: a piece may lean
+  // on another piece of it, wherever that one is listed.
+  const famOf = (name) => name.replace(/ \d+$/, ""), partOf = (k) => k.slice(0, k.lastIndexOf("#"));
+  const rank = new Map(asm.parts.map((p, i) => [p.name, i]));
+  const up = new Set(), upAny = new Set(), turns = new Map();
+  for (const n of nodes) { if (!turns.has(n.part)) turns.set(n.part, []); turns.get(n.part).push(n); }
+  for (const group of turns.values()) {
+    const raise = (n) => { up.add(n.key); upAny.add(n.part + "#*"); };
+    const kin = (n, k) => famOf(partOf(k)) === famOf(n.part) && (carried.has(k) || any.has(k));
+    for (let changed = true; changed;) {
+      changed = false;
+      for (const n of group) if (!up.has(n.key) && (n.ground || [...n.by].some((k) => up.has(k) || upAny.has(k) || kin(n, k)))) { raise(n); changed = true; }
+    }
+    const late = group.find((n) => !up.has(n.key) && carried.has(n.key));
+    if (late) {
+      const after = [...late.by].map(partOf).filter((k) => (rank.get(k) ?? -1) > rank.get(late.part)
+        && nodes.some((m) => m.part === k && carried.has(m.key)));
+      out.push({ part: late.part, inst: late.inst, kind: "before support", at: late.bottom[0].map((v) => +v.toFixed(2)), gap: null, by: [...new Set(after)].join(", ") });
+    }
+    for (const n of group) if (carried.has(n.key)) raise(n);
+  }
   // A WALL STANDING ALONE: a wall or a ring of walls that touches nothing of the building but the platform under it
   // (it stands, but apart -- a front a metre and a half off the walls it should close)
   for (const n of nodes) {
     if (!["wall", "enclosure"].includes(n.kind)) continue;
     let joined = false;
-    for (const v of n.every) {
+    // (its corners, and points along its foot: a band round a tower has its corners where two walls of one part
+    //  overlap -- inside both copies, an even count, "outside" -- and lies in one wall all along between)
+    const foot = n.bottom.length <= 200 ? n.bottom : Array.from({ length: 200 }, (_, i) => n.bottom[Math.floor(i * n.bottom.length / 200)]);
+    for (const v of [...n.every, ...foot]) {
       for (const t of near(v[0], v[2])) {
         const k = t.part.name + "#" + t.inst;
         if (k === n.key || t.part.name === "base") continue;
@@ -208,6 +279,22 @@ export function floating(asm, { tol = .03 } = {}) {
       if (joined) break;
     }
     if (!joined) out.push({ part: n.part, inst: n.inst, kind: "isolated", at: n.every[0].map((v) => +v.toFixed(2)), gap: null });
+  }
+  // MASONRY ON A ROOF: a wall, a ring of walls, a drum, a dome is carried down to the ground through walls and piers -- a
+  // roof is a covering, spanning the space under it on its rafters, and bears nothing heavier than a dormer's cheek. A
+  // masonry part standing (most of its foot) on roofs alone stands on air with a roof drawn over it: the drum of a dome
+  // set on the attic roof with no piers under it inside. (Not a band of marble fixed to a wall's face, its foot on the
+  // roof against it: it is fixed to the wall.)
+  for (const n of nodes) {
+    if (!["wall", "enclosure", "ring", "dome"].includes(n.kind) || n.soft < 3 || n.soft <= n.hard) continue;
+    // (fixed to masonry up its side -- on its surface or set into it, halfway between its foot and its top, where
+    //  what it carries stands: cladding, a band on a wall)
+    const ym = n.lo + n.span / 2;
+    const clad = n.every.some(([x, , z]) =>
+      near(x, z).some((t) => t.part.kind !== "roof" && t.part.name + "#" + t.inst !== n.key && pointTri([x, ym, z], t) <= tol) ||
+      [...holders(x, ym, z, n.key)].some((k) => !roofy(k)));
+    if (clad) continue;
+    out.push({ part: n.part, inst: n.inst, kind: "on roof", at: n.bottom[0].map((v) => +v.toFixed(2)), gap: null });
   }
   // A HALF DOME OPEN TO THE SKY: a semidome's cut face must look into the building (something over it: the roof of
   // the choir it opens into) or be closed by another part (the choir's end wall) -- not stand open above the roofs
@@ -243,7 +330,162 @@ export function floating(asm, { tol = .03 } = {}) {
   return out;
 }
 
+// A VAULT IS ABUTTED: an arch pushes out at its feet as well as down, and what it springs from must take that push --
+// the mason's rule, from Vitruvius' counterforts to Blondel's construction, that the wall or pier behind a vault's
+// springing be some share of its span deep (a quarter for a round barrel on a plain wall; less where the push is
+// gathered to piers and buttresses, as a groin vault's is). So from every springing -- a barrel's along both its sides,
+// a groin vault's at its four corners, out along each of its two spans, a ring vault's at its bay's middle, out and in
+// -- the push is followed out: level, a little above the springing, and from the springing joint falling as the weight
+// above turns it down, at two slopes. What lies along it is counted: masonry (inside some part's solid), or air under cover (the next bay,
+// whose vault pushes back, or an aisle under its roof), until it reaches the open sky. The deepest of the three is the
+// abutment, and it must be a tenth of the span at least (`ratio`): a nave's vault on a 1.4m wall over 9m takes 0.16;
+// a vault left leaning on a wall's skin, or springing at a wall's end with nothing past it, takes nothing.
+// (Not a Gothic system's vaults -- its flyers are set out from their thrust (gothic.js) -- nor a part built `light`, of
+// poles and bark, that pushes nothing.)
+// Findings: { part, inst, kind: "thrust", at, gap: the abutment found, need }.
+export function abutment(asm, { ratio = .1 } = {}) {
+  const idx = rayIndex(asm), out = [];
+  for (const p of asm.parts) {
+    if (!(p.kind === "groin" || p.kind === "barrel" || (p.kind === "vault" && p.count && p.face)) || p.light || p.abutted) continue;
+    const P = p.geometry.position;
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+    for (let j = 0; j < P.length; j += 3) {
+      x0 = Math.min(x0, P[j]); x1 = Math.max(x1, P[j]); y0 = Math.min(y0, P[j + 1]); y1 = Math.max(y1, P[j + 1]);
+      z0 = Math.min(z0, P[j + 2]); z1 = Math.max(z1, P[j + 2]);
+    }
+    const cx = (x0 + x1) / 2, cz = (z0 + z1) / 2;
+    // the springings, in the part's frame: [x, z, push x, push z, span, side shifts] -- a corner's push followed a hand
+    // to either side of it, into the pier it stands on (along a wall's face, or past a wall's end, it would run in no
+    // stone at all), the better of the two its abutment
+    const at = [];
+    if (p.kind === "groin") {
+      for (const x of [x0, x1]) for (const z of [z0, z1]) {
+        const sx = Math.sign(x - cx), sz = Math.sign(z - cz);
+        at.push([x, z, sx, 0, x1 - x0, [[0, .1 * sz], [0, -.1 * sz]]], [x, z, 0, sz, z1 - z0, [[.1 * sx, 0], [-.1 * sx, 0]]]);
+      }
+    } else if (p.kind === "barrel") {
+      for (const z of [z0 + .2, cz, z1 - .2]) for (const x of [x0, x1]) at.push([x, z, Math.sign(x - cx), 0, x1 - x0, [[0, 0]]]);
+    } else {
+      let rI = Infinity, rO = 0, ax = 0, az = 0;
+      for (let j = 0; j < P.length; j += 3) {
+        ax += P[j]; az += P[j + 2];
+        if (P[j + 1] < y0 + .01) { const r = Math.hypot(P[j], P[j + 2]); rI = Math.min(rI, r); rO = Math.max(rO, r); }
+      }
+      const a = Math.atan2(az, ax), ux = Math.cos(a), uz = Math.sin(a);
+      at.push([ux * rO, uz * rO, ux, uz, rO - rI, [[0, 0]]]);
+      if (rI > .5) at.push([ux * rI, uz * rI, -ux, -uz, rO - rI, [[0, 0]]]);   // (and in, onto the ring of piers it springs from inside)
+    }
+    const rise = Math.min(y1 - y0, p.crown ? p.crown - y0 : Infinity);
+    p.instances.forEach(([yaw, X, Y, Z], inst) => {
+      const c = Math.cos(yaw), s = Math.sin(yaw);
+      for (const [lx, lz, dx, dz, span, shifts] of at) {
+        const wx = lx * c + lz * s + X, wz = -lx * s + lz * c + Z, d = [dx * c + dz * s, -dx * s + dz * c];
+        let best = 0;
+        for (const [ox, oz] of shifts) for (const fall of [0, .6, 1.2]) {
+          if (best >= span * ratio) break;
+          const sx = lx + ox, sz = lz + oz, px = sx * c + sz * s + X, pz = -sx * s + sz * c + Z;
+          const o = [px - d[0] * .08, y0 + Y + (fall ? -.05 : Math.min(Math.max(.15, span / 8), rise * .3)), pz - d[1] * .08];
+          const T = Math.max(3, Math.min(12, span)), st = .05;
+          let depth = 0, free = false;
+          for (let t = st; t <= T; t += st) {
+            const q = [o[0] + d[0] * t, o[1] - t * fall, o[2] + d[1] * t];
+            if (q[1] <= .05) break;                                                   // (down to the ground: carried)
+            if (insideOf(idx.cells, q[0], q[1], q[2]).length) { depth += st; continue; }
+            // (out under the sky -- the ray nudged off the point as insideOf's is: straight up a bay's middle it can run
+            //  exactly along the edges the meshes are split on, and slip between the triangles either side)
+            if (rayDist(idx, [q[0] + 1.37e-4, q[1], q[2] + 2.71e-4], [0, 1, 0], 300) === Infinity) { free = true; break; }
+          }
+          best = Math.max(best, free ? depth : Infinity);
+        }
+        if (best < span * ratio) {
+          out.push({ part: p.name, inst, kind: "thrust", at: [wx, y0 + Y, wz].map((v) => +v.toFixed(2)), gap: +best.toFixed(2), need: +(span * ratio).toFixed(2) });
+          return;
+        }
+      }
+    });
+  }
+  return out;
+}
+
 // FURNITURE WITH ROOM ROUND IT: every set of furniture on a floor, in nothing solid and out of the doorways and a stair's
 // approach -- the test the assembly fits the furniture by (room.js), asked of what stands now. Findings: { part, inst,
 // kind ("floor", "inside", "way"), at, by }; an assembled building has none (what could not stand was moved or left out).
 export { furnitureFindings as furnishing } from "./room.js";
+
+// A LINTEL HAS A LENGTH: a flat head is one beam -- a stone, a timber -- laid across its opening, and no quarry or
+// forest gives one past a few metres; the Parthenon's architraves span 4.3m from column to column, and wider than
+// that a builder turns an arch, or sets pillars in the opening, or corbels brackets out to shorten it. So what counts
+// is the FREE span: the longest stretch of the beam's underside with nothing under it -- along the opening, a hand
+// under the springing, through the wall's thickness and as much again either side (a pillar standing in the opening,
+// a column of a portico before it, a bracket out of a jamb). Over `max` (4.5m) is found: `gap` the free span --
+// unless its part is built `light` (poles and laths: no stone), or says what its builders could set (`beam`: the
+// Egyptians quarried sandstone architraves of six metres and more for a processional way).
+export function lintels(asm, { max = 4.5 } = {}) {
+  const out = [];
+  let cells = null;
+  for (const p of asm.parts) {
+    if (!p.lintels?.length || p.light) continue;
+    p.instances.forEach(([yaw, X, Y, Z], inst) => {
+      const c = Math.cos(yaw), s = Math.sin(yaw), W = ([x, z]) => [x * c + z * s, -x * s + z * c];
+      const lim = p.beam ?? max;
+      for (const { at: [x, y, z], span, e, t } of p.lintels) {
+        if (span <= lim + 1e-6) continue;
+        cells ??= index(asm).cells;
+        const [cx, cz] = W([x, z]), [ex, ez] = W(e), yU = y + Y - .1;
+        // (along it every 10cm, jamb to jamb, at five depths from a wall's thickness outside the face to two inside)
+        const n = Math.ceil(span / .1), held = [];
+        for (let k = 0; k <= n; k++) {
+          const u = -span / 2 + span * k / n;
+          held.push([-1, -.5, 0, .5, 1, 1.5, 2].some((d) => {
+            const px = cx + X + ex * u + ez * d * t, pz = cz + Z + ez * u - ex * d * t;
+            return insideOf(cells, px, yU, pz, p.name).length > 0;
+          }));
+        }
+        // (the jambs hold its ends; the free span is the widest stretch between held points)
+        let free = 0, last = 0;
+        held[0] = held[n] = true;
+        for (let k = 1; k <= n; k++) if (held[k]) { free = Math.max(free, (k - last - 1) * span / n); last = k; }
+        if (free > lim + 1e-6) out.push({ part: p.name, inst, kind: "lintel", at: [cx + X, y + Y, cz + Z].map((v) => +v.toFixed(2)), gap: +free.toFixed(2), need: lim });
+      }
+    });
+  }
+  return out;
+}
+
+// THE VAULT IS ROOFED: a groin vault's cells open on each side in an arch -- its lunette -- and a wall must stand in
+// that arch, or an arcade under it, up to where the roof takes over. A wall stopped at the vault's springing, under a
+// roof set on the vault's crown, leaves every lunette open to the sky the length of the nave. So from the middle of
+// every bay, level rays are cast out through its four mouths at two fifths of its rise and four fifths: one that leaves the building
+// is a hole IF something stands just under its path where it passes the mouth -- the top of a wall stopped short. (A
+// loggia's arch under a vault is open as it should be: under it the air runs down to the floor.)
+// Findings: { part, inst, kind: "open vault", at } -- `at` where the ray leaves the vault.
+export function vaultsRoofed(asm) {
+  const idx = rayIndex(asm), out = [];
+  for (const p of asm.parts) {
+    if (p.kind !== "groin") continue;
+    const P = p.geometry.position;
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+    for (let j = 0; j < P.length; j += 3) {
+      x0 = Math.min(x0, P[j]); x1 = Math.max(x1, P[j]); y0 = Math.min(y0, P[j + 1]); y1 = Math.max(y1, P[j + 1]);
+      z0 = Math.min(z0, P[j + 2]); z1 = Math.max(z1, P[j + 2]);
+    }
+    const crown = p.crown ?? y1, cx = (x0 + x1) / 2, cz = (z0 + z1) / 2;
+    p.instances.forEach(([yaw, X, Y, Z], inst) => {
+      const c = Math.cos(yaw), s = Math.sin(yaw), W = (x, z) => [x * c + z * s + X, -x * s + z * c + Z];
+      const [ox, oz] = W(cx, cz);
+      // (the four mouths: the ray's way out, and how far from the middle the mouth is; low in the lunette and high)
+      for (const f of [.4, .8]) for (const [lx, lz, reach] of [[1, 0, x1 - cx], [-1, 0, cx - x0], [0, 1, z1 - cz], [0, -1, cz - z0]]) {
+        const ym = y0 + f * (crown - y0), o = [ox, ym + Y, oz];
+        const d = [lx * c + lz * s, 0, -lx * s + lz * c];
+        if (rayHits(idx, o, d, 400)) continue;
+        // (what stands under the path just past the mouth: a wall's top within the lunette's own height)
+        const under = [.1, .3, .6, 1, 1.5].some((k) => {
+          const q = [o[0] + d[0] * (reach + k), o[1], o[2] + d[2] * (reach + k)];
+          return rayDist(idx, q, [0, -1, 0], ym - y0 + .3) < Infinity;
+        });
+        if (under) { out.push({ part: p.name, inst, kind: "open vault", at: [o[0] + d[0] * reach, o[1], o[2] + d[2] * reach].map((v) => +v.toFixed(2)) }); return; }
+      }
+    });
+  }
+  return out;
+}

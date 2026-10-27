@@ -75,7 +75,7 @@ along an arch must be told the same number or they cannot share its points.
 |---|---|
 | `wall` | straight, with openings given one by one or as a **pattern**: `"pattern": "2-3-2"` is three blocks of two, three and two openings, `gap` apart within a block and `pier` apart between them, and the wall's length follows from the rhythm |
 | `ring` | a round storey: one bay built in its own wedge and turned, so the copies meet exactly |
-| `vault` | a ring of barrel vaults over the corridor between two walls. Its cross-section *is* a wall face whose single opening spans the full width, swept between the bay's radial planes rather than extruded straight; `clears` is the height it must spring above (the crown of the arches below), and the engine refuses rather than quietly roofing across them |
+| `vault` | a ring of barrel vaults over the corridor between two walls. Its cross-section *is* a wall face whose single opening spans the full width, swept between the bay's radial planes rather than extruded straight; `clears` is the height it must spring above (the crown of the arches below), and the engine refuses rather than quietly roofing across them; `place` sets it round a centre of its own, as a ring's does (Milan's ambulatories, round the apse) |
 | `steps` | seating or stairs -- the same part at two scales. A stepped cross-section swept through a bay's wedge, standing on `base` and rising `out` or `in`. `every`/`offset` say which bays get it: leave every fifth bay out and those gaps are the **vomitoria**, with a narrower, finer-stepped flight (`span`, `only: "every"`) climbing in them |
 | `tunnel` | the void a passage runs in, as its surfaces: `floor` and `ceiling` are each `[height at rInner, height at rOuter]`, so a stair's tunnel has its ceiling straight on the flight's slope a head's height over it, and a landing's or a level passage's is flat. `faces`: `top` the ceiling, `sides` the two walls between floor line and ceiling line, `base`, `end-in`/`end-out`. Laid out like a parallel passage (`width`), same bay selection as `steps` |
 | `column` | a drum of `sides` faces (from the detail level and its radius unless named: `detailFor`) |
@@ -161,7 +161,8 @@ straight runs, so it climbs in four flights a storey, turning at every wall -- t
 
 Two buildings are built by this engine now, through `architecture.js`:
 
-- **The amphitheatre** (`arena.json`) is the whole building: `BUILDINGS.colosseum`.
+- **The Colosseum** (`colosseum.json`, tools/archgen/colosseum.py) is the whole building: `BUILDINGS.colosseum`, on
+  its four-centred oval at its real size (`arena.json`, the earlier circular amphitheatre, is kept as an example).
 - **Santa Maria del Fiore** (`florence.json`) is the whole church: `BUILDINGS.florence`. Real dimensions --
   four 20.3m nave bays, an octagon 45.5m across the flats, the dome springing at 54.8m to a crown at 91m --
   with the three tribunes, the campanile and its stairs. What the engine has no part for is a timber roof, so
@@ -259,6 +260,30 @@ A stepped cross-section's own sides stop at the treads, so they are not the wall
 above a stair is a separate piece, floor to soffit. The landing's back and ends are walls too, but its front is
 where the flights arrive, which is why a part can emit one side of its sweep (`side-in`, `side-out`) and not
 both -- only the strip between the two flights is walled.
+
+## An oval of four centres: `oval`
+
+A Roman amphitheatre is not a circle and not an ellipse: it is set out from FOUR CENTRES, two end arcs about
+(±c, 0) and two flatter side arcs about (0, ±d), meeting where the radii through the centres cross -- so every ring
+of the building is an offset of the same four arcs, and a radial plane is straight through each. A `ring`, `vault`,
+`steps` or `tunnel` part takes `oval: { c, d, ends, sides }` (bays in an end arc, in a side arc; odd, so a bay sits
+on each axis) and its radii as the END arcs' (a side arc's are K = hypot(c, d) more). The part is built twice, as a
+ring of the end arcs' bay angle and one of the side arcs', each copy turned and moved onto its arc's centre; the
+side arcs' parts are named `"<name> 2"` (a finish rule for the name matches both). Bays are numbered as in a ring:
+bay 0 on the +x axis, then on toward -z, `every`/`only`/`skip`/`at` choosing among all of them (assemble.js
+ovalOf). The Colosseum's 15 + 25 bays a quarter are solved for equal bays on the facade (6.75m), which puts the
+arena's end arcs at 15m radius -- an oval, not a lemon.
+
+## Seating that ends on a walkway, a mass with a sloping underside, a stair cut as steps
+
+`steps` takes `landing`: the last tread carried on that far past `rOuter` -- the walkway (praecinctio) behind a
+maenianum's top row, and the mass under it, in one piece with the rows. `soffit: [yIn, yOut]` gives it a sloping
+underside instead of a flat `base` (heights absolute, as `base` is): the seating over a stair that climbs under
+it, the stair's headroom kept under the whole of it. And `use: "stair"` -- besides holding the rise and the tread
+to what feet can climb -- gives the part a walking line, every tread's middle and width and the foot it is
+stepped onto, as a `flight` has: the walk ramps it (its risers are not walls: three of them within a stride are
+a wall's height, and the climb stopped there), the stair check asks its headroom and arrival, and its open sides
+are railed.
 
 ## Two lessons from the arena's mouths and floors
 
@@ -595,7 +620,9 @@ tents' tips are set where the tent has narrowed to their width (tools/archgen/sh
   up to them.
 - Notre-Dame and Cologne (one generator, `tools/archgen/notre_dame.py gothic`): a spiral turret in each tower from
   the aisle to the tower's terrace, which is a floor round the turret's hatch; Cologne's spires stand on it.
-- Milan: spiral turrets inside the facade to the aisle roofs, flights on to the nave roof -- its roofs are walked.
+- Milan: spiral turrets inside the facade to the outer aisles' flat terraces, a flight on up to the inner ones -- its aisle roofs are walked, under the flyers.
+- Karlskirche: a flight up the back wall of each side hall to its gate pavilion's belfry floor, a door through both
+  walls at its head.
 - The temples: a flight up the east front (the Parthenon's steps are half a metre, the climb limit).
 
 **Fixes on the way.** Florence's tribunes stood 1.85m short of the octagon and the sky showed past their ends: a
@@ -943,16 +970,29 @@ railing"), so they meet the flights' railings end to end rather than welding int
   (a part of `type: "item"`: a bedstead, a trestle table and benches, casks, a settle for a pew -- docs/items.md):
   the building keeps the item's box and takes its markers, `architecture.js` draws the item in its own materials.
 - **Dwellings** (`assets/architecture/dwellings/*`, `tools/archgen/dwellings.py`, the "Dwellings" category, each with
-  its finish in `assets/finishes/<name>.json`): 27 tents and houses beyond the medieval town -- pavilion, bell tent,
+  its finish in `assets/finishes/<name>.json`): 31 tents and houses beyond the medieval town -- pavilion, bell tent,
   marquee, wedge tent, Roman papilio, ger, tipi, Bedouin black tent, wigwam; igloo, Iron Age roundhouse, crannog,
   rondavel, beehive hut, hogan; pit house, Norse and Iroquois longhouses, stilt house, minka; domus, Greek house,
-  Arab courtyard house, siheyuan (the `court` part); Egyptian house, pueblo, blackhouse. Round ones have their door at
+  Arab courtyard house, siheyuan (the `court` part); Egyptian house, pueblo, blackhouse; the Russian izba (round
+  logs, carved window frames, the stove's chimney), the Maya house, the Indian village hut and the haveli. Round ones have their door at
   +x (ring bay 0), straight ones on face 0 (+z; on a CHAMFERED rect face 2 is +z). Every one can be entered, and its
   inside follows its outside: domes and cones have no cap (`cap: false`), a cone or a dome down to the ground gets its
   doorway as a band cut off at the door's head (`oculus`) with a gap round it (`sweep`) and the rest above it (a
   sphere's top is a segmental dome), ridge tents and the pit house leave their front gable open (roof `open`). Their
   windows are unglazed (`glass: false`, which `court` now passes to its walls). Curved meridians carry `seg`, so a
   small dome stays a dome at a low detail.
+  The nine the period towns are built of (domus, Greek house, courtyard house, siheyuan, haveli, Egyptian house,
+  izba, Maya house, Indian hut) are FURNISHED (2026-10-27): a `door` marker in the doorway (its panel, and the way
+  the villagers go in and out: village-life.js), beds of the time and place (lectus, kline, pallet, Ming canopy bed,
+  charpai, Egyptian bed, hammock -- a bed marker `one: 1` sleeps one), a table or a tray with seats and a sitting
+  `spot` at each (the town's inn is one of these houses: its guests eat there), and for the look the rest (the
+  triclinium, the main hall's altar table and cabinets, the upper rooms). What the villagers use stands in the room
+  the door opens into, in a straight line from a step inside it -- a court house's front wing, beside the gate.
+- **Period furniture in the village's houses** (`assets/architecture/furnishing.json` `swaps`): a town of a period
+  built of the village's houses gives them a `furnish` word (periods.json `town.furnish`: ottoman, industrial),
+  which a `component` passes on like `detail`; under it an `item` part is the one the swap names -- its own
+  `params` over the placement's, its own `markers`, turned `turn` about its foot. The Ottoman house sleeps on a
+  mattress and eats from a brass tray between divans; the Victorian sits on settles at a deal table.
 - **Roof `open`**: "front" (+z), "back" (-z) or "ends" -- the gable ends left out (a shell roof's inner face too).
 - (Two engine fixes found on the way: a face's TIERS are known by `openings` as well as `h` -- a one-storey court's
   single tier was read as a list of openings; and a finish rule naming a component paints its walls, not its window
@@ -1177,3 +1217,758 @@ all 44 props; only the arm's content changed.)
 `surface` -- took the catch-all floorboards, a big plank triangle under the thatch. The roof is now thatch by its part
 alone (its underside boards), and the walls weatherboard (floorboards stood in for them). (The watermill's gable ends
 are stone, as its walls: right for a stone mill.)
+
+## Structure first: double aisles, wells, and stairs that arrive (2026-10-27)
+
+**Double aisles** (gothic.js `basilica`, `aisles: 2`): two rings of aisle round the nave and the apse, a row of
+free-standing piers on the line between them (placed wherever a bay beside them has its aisle), each ring its own rib
+vaults (the cells on the mid line share their side, and a transverse rib is hung there once). The transept carries the
+same rings across it, its side walls one lower arch and one upper window per ring. Over two aisles the flyers are
+`flyerStages`: **2** (Cologne) -- an intermediate pier rises from the mid-line pier through the inner aisle's lean-to,
+with its own pinnacle, one flight from the clerestory to it and one on down to the outer buttress; **1** (Notre-Dame's
+single leap) -- one flight over both. `roofAt(x)` gives the lean-to's height wherever a flight or a pier meets it.
+Notre-Dame's aisles are now its real double ones, and Cologne's too (53k and 68k triangles).
+
+**A well through a prism** (`plan.well`: `radius`/`sides` or `rect`, `at`; build.js `wellPoints`, `prismMesh`): the hole
+a stair comes up through. The outline takes a corner where the cut line x = cx crosses it, the well's sides face into
+it, and each cap is the plan halved on that line with the well's half ring carried round -- ear-clipped, closed (the
+mesh check finds no open edge). Florence's two shaft floors over the octagon became one slab with the dome stair's
+well; the dome stair arrives on a 6.4 m landing, and the gallery between the shells is a ring of eight floor slabs.
+
+**Finishes by what a surface is, not where it happens to be**: a wall's top, sill or set-back is masonry unless walked
+(the ledge rule takes `kind: "wall"`); a floor is indoors when a ray straight up meets a ceiling and, from a point
+under it, every one of 16 rays round meets stone -- a platform outside a door, under the sky beyond its edge, is
+paving; probes more than a metre apart no longer share a cached answer; and a floor piece that is part in, part out is
+halved along its longer side (down to 60 cm) until each piece's probes agree -- no checker mixed into paving.
+
+**The arrival check across an edge** (check.js): a staircase's top landing is stepped off across any free edge -- the
+floor may begin past its far side, a landing's width from its middle -- so 35 cm past each free edge at the top is
+probed along its length; a spiral's landing reaches as far as its own length (`len`).
+
+**`arrive`: the floor a stair arrives on** (assemble.js `arrivalFloor`; on a `staircase`, a `flight`, a `spiral-stair`):
+a stair leads somewhere, and one standing alone is given the floor it would reach in a house -- built from the ground
+up: square posts (`post`, 35 cm) at its corners and every `span` (3.5 m) along its sides, standing where the stair
+stands, and on them a slab `thick` deep (the stair's soffit). A straight stair's floor begins at the far edge of each
+top landing (build.js `staircase` hands back `tops`; landings ending on one line share one floor: the imperial stair's
+two arrive on one gallery), `depth` deep (2.5 m) and `width` wide (their span and a metre either side). A spiral's is a
+square `depth` past its treads every way, with a polygonal well whose sides stand 5 cm clear of the treads' outer edge.
+The floor's outline and the well's are its `edges`, so railingsFor rails them as a landing's -- wherever the drop is:
+round the well but over the treads just below the arrival, along the outer sides but where the landing meets them.
+All the staircase specimens and the plain flight arrive now (elements/staircases, elements/stairs: no finding).
+
+**Two railing faults**: a rail's two end caps were wound against its sides (every rail failed the mesh check: an edge
+walked twice); and the railing round a staircase's landings, turned to begin at a closed point, joined the list's end
+to its start even where the landings' edges did not close -- a rail flew from one landing's corner to another's. It
+is turned without a break only round a closed loop now.
+
+## Things bear on what is under them: seated roofs, cut doorways, flat octagons (2026-10-27)
+
+**The wall's front face** is the line a wall stands on: `straightAt` runs its thickness BACK from z 0 to -t, and only
+along x is it centred. A veneer -- a band of coloured marble on a facade, a course round a tower -- stands on the
+wall's outer face line, a few centimetres into it, not on a centre line it does not have (Florence's bands floated
+half a wall off the stone).
+
+**Polygonal rings** (`ring.polygon`; build.js `chordal`): a bay laid flat on the chord between its two corners at the
+ring's corner radii, as wide as the chord -- an octagon's faces flat, as its dome's webs are. A round ring's bay is
+an arc (`radial`). Florence's octagon, drum, piers, tribunes and their cornices are polygonal now; the drum no longer
+bulges past the dome's corners and the face walls, and its marble courses are eight-sided rings 4 cm into the faces.
+(A ring's radii are corner radii: a face set d out is d / cos(pi / n) out at the corner.)
+
+**A sloped prism** (`prism.slope` [sx, sz]): its top a plane, `height` at the plan's origin and rising sx a metre along
+x. The wedge beside a tribune, between its end and the octagon's diagonal face, is built up to the tribune roof's line
+along the cut, so the half pyramid's cut -- wider than the octagon's face -- rests against masonry all along, not sky.
+The tribune roofs are half pyramids on the tribunes' five faces (`sides` 10, corner for corner with the polygonal ring).
+
+**A seated roof** (`dome.seat`: the name of a ring or of an enclosure on a `sides` plan; assemble.js `seatLift`): the dome
+is lifted until its soffit meets the wall's outer edge 2 cm under the wall head, where the soffit is lowest over it
+(mid-face). A cone guessed at a height stood a hand's breadth over its wall (the rondavel), or with its foot ring out
+past the wall in the air (the crannog). The roundhouse, crannog, rondavel and hogan roofs are seated now; the hogan's
+roof was widened until its soffit reaches out over the walls (`seat` refuses one that does not).
+
+**A doorway cut in a dome** (`dome.door` { width, height, at }; build.js `domeShell`): whole faces of its polygon (the
+count nearest `width` at the springing), centred on `at` (+x), up to `height` -- a row spliced into the web and the
+soffit there, the web and soffit left out below it, the jambs closed by the section through the shell, a lintel facing
+down, no springing ring across the threshold. The igloo and the tipi were a band with a gap under a separate cap,
+whose meridians never met: the band's cut was taken on its sampled meridian (0.58 m up), the cap's on the true sphere
+(0.75 m) -- a ledge round the house with sky in it. The igloo's tunnel now runs from 3.2 m out back into the dome's
+wall, its side walls under the barrel along the same stretch.
+
+**A semidome's cut** (the `open` support finding) is asked only of a dome of sweep 0.5 or less -- whose open side is one
+plane. A doorway's jambs are not a cut.
+
+**Shell roofs open at a gable** (build.js `roofMesh`, `open` with an `inner` stack): the covering's thickness shows at the
+doorway -- a strip up each verge from the outer slope to the inner, the eave band left off that side -- so the sheet is
+closed (the tents' and the pit house's roofs had six open edges).
+
+**Railings**: an open stretch of ONE tread gets none (a lone post beside the top tread of a short flight, holding no rail,
+on 5 cm of tread). **Pyramids** are shells by design -- each band one mass's faces cut where the stone changes, the
+rooms its hollows -- and say so (`shell`), so the mesh check takes their edges for what they are.
+
+**Fixes found by the check, made in the definitions**: the Zwinger's and Schwerin's bridge steps climbed 60 cm past the
+deck (`top` is the deck's 0 now, four steps from the shore); Didyma's front stair stopped on the crepidoma's lowest
+step -- it climbs over the steps to the stylobate's edge; the windmill's cap overhung the tower on nothing -- it turns
+on a timber CURB laid on the wall head and reaching out under its eaves; the hen house's perch ends 1 cm into its end
+boards (it stopped 6 cm short of both); the stable's hay is a heap on each stall's floor showing over the half-door (a
+cap of it hung at the door's height); the fountain's finial is closed underneath and sits on its stem; the landing's
+stair comes down onto the stage, through a break in the deck's rail (it came down past the stage's end); the mine's
+windlass has an axle through its posts, the crank arms on its ends and the grips on the arms, and its walking shaft's
+landings are as deep as a flight is wide (room to stand at the next flight's foot); the marquee's roof is planned on
+its walls' outline and takes their heads into its sheet, its poles under the ridge's ends; the longhouse's ends are
+walls with doors (they were 12 cm enclosures, inside out); the pueblo's second ladder climbs level 1's west face from
+the terrace (it climbed inside the rooms); the pit house's steps come up from its floor through a gap in the lining,
+beside the ridge post.
+
+## The hall church, and tracery drawn with compasses (2026-10-27)
+
+**A HALL (`basilica` with `hall: true`, gothic.js `hallLevels`).** Stephansdom was assembled from old parts: an
+enclosure, a row of columns, groin vaults, a flat ceiling box and a roof, its long walls flat, with nothing to take
+the vaults' thrust. A Gothic hall church is a structural type of its own: nave and aisles vaulted from the SAME
+capitals (the aisles' keystones as high as the nave's, or `aisleDrop` under them: Vienna's stepped hall), so there
+is no clerestory, no triforium and no aisle roof, and nothing for a flyer to stand on. The light comes in through
+the outer walls, which stand to the vaults' extrados with tall windows under the aisle vaults. One roof covers all
+three vessels, its eave on the outer wall (the high roof's eave line is the outer line, hipped over the apse). The
+thrust is taken in the wall's own plane by deep stepped buttresses at every node, round the apse's polygon as down
+the flanks. Each buttress's head stops under the eave and its pinnacle stands out past the overhang, in front of
+the roof. The arcade wall is only the strip from the arch up to the vaults, and the arch rises as high as the lower
+of the two wall arches over it allows. The vaulting shafts are gone, since the vaults spring from the piers'
+capitals. `skipButtress: [[from, to]]` leaves a node bare where a tower stands against the wall. A hall has no
+transept here (it says so). Stephansdom is now one `basilica` hall: ten bays, a five-sided apse with its
+ambulatory, the two towers against the wall on the sixth node, the west front across the open west end, and a
+west gable cut to the roof's pitch: two prisms whose `slope` falls with the roof.
+
+**TRACERY (tracery.js), an opening's `tracery`.** `true` takes as many lights as the span allows; a number gives
+the lights; `{ lights, foils, bar, depth }` sets each. The tracery is drawn from the window's own arch by the rules
+masons used:
+- mullions split the span into equal lights;
+- the lights are gathered under sub-arches of the window's own profile at their smaller span: in pairs when even
+  (a 4-light window is two 2-light windows under one arch, so the rule recurses), one each when odd;
+- in the head, the largest circle that fits on the axis between the sub-arches and the arch over them. In an
+  equilateral 2-light window that is the classical quarter-span oculus √5/4 of the span up; it is found, not
+  placed, so it holds for any profile;
+- foils are cusped inside the window's top circle: four over a pair, three over an odd row, each touching its
+  neighbours and the ring.
+
+A ROUND window (a head and a foot) is a ROSE: a hub, an even number of spokes, a pointed arch over each light, and
+between each two arches and the rim the largest circle on the spoke's line. Every line is a bar of one width and
+depth, centred on it, in the middle of the wall round the glass. `glassPanes` builds the bars into `g.tracery`;
+the part with the glass gets a `<name> tracery` part (kind `tracery`, stone, a shell). `basilica` tracers all its
+windows and roses unless `tracery: false`. Cost: the sub-arches use a step coarser segmentation than the head, the
+circles 8 to 12 sides, the foils 6 to 8, and the small circles over the sub-arches are left plain. Notre-Dame,
+Cologne and Stephansdom together went from 89k to 124k vertices.
+
+**Other tracery styles.** `style: "perpendicular"` fills the head with panels: mullions run up into the arch,
+transoms cut the tall lights about every 1.6 widths, and a small pointed head stands under each transom
+(Parliament's tall windows). `style: "bars"` draws a sash: 50 cm panes in 5 cm bars, rows 1.35 panes tall, and a
+fanlight with radial bars where the head rises past 0.6 of the half span (Moritzburg). Moritzburg finishes its bars
+white, like its dormers (`"parts": "kind:tracery"`). Milan, Ulm (stages and octagon included, by a `lights` param)
+and the basilica's clerestory (`clearLights`) use the geometric rule.
+
+## Envelopes that close, and one place one finish (2026-10-27)
+
+**A VAULT IS ROOFED (check.js `vaultsRoofed`, in archcheck's support column).** A groin vault's cells open on
+every side in their wall arches, the lunettes. A wall must stand in each lunette, or an arcade under it, up to
+the wall plate the roof sits on. Two buildings had walls stopped at the vault's springing under a roof set at
+its crown, leaving the lunettes open to the sky: Florence along the whole nave, and the basilica example at both
+end walls. The check casts level rays from the middle of every bay out through its four mouths, at 0.4 and 0.8
+of its rise. A ray that escapes the building is a hole if something stands just under its path past the mouth:
+the top of a wall stopped short. Under a loggia's open arch the air runs down to the floor, so it is not flagged.
+
+**Florence, set right.** Florence's arcade and flank walls had been set on centre lines, but a wall stands on its
+line with its thickness behind it. So the arcade ran 1.5 m into the nave vault and left a slot from the floor to
+the roof beside the aisle vaults, and the flanks stood 90 cm inside the facade's ends. `halfB` and `halfA` are
+now outer faces. The clerestory rises to `naveTop`. The tribunes were rings of 6 m arches open from the
+pavement, with the green course crossing each one in mid air. They are now chapels lit by a traceried lancet in
+each face. The basilica example is roofed too: a gable roof over the nave and lean-tos over the aisles. Its end
+walls step in at the aisles' wall plate (`eaveA`) and rise to the nave's (`east gable wall`; `west rose` with
+`west aisle ends` beside it).
+
+**ONE PLACE, ONE FINISH (finish.js).**
+- A face's bands are asked at five points spread evenly along the line the band's level cuts through the face,
+  each counting alike. Before, a band was asked at its largest triangles, weighted by area. Moritzburg's
+  courtyard facades went white (inside) because their largest triangles were their two ends, buried in the
+  hollow corner towers.
+- A FLOOR under cover is inside if rays close all round at two of its three heights (a room or a nave, broken
+  only by doors low down), or if under a tenth of all 48 level rays escape. Each height is turned a third of a
+  step from the last, so a point lined up behind an arcade's pier doesn't find its rows blocked by the same
+  piers. Before, one closed height was enough, and a loggia, closed only in the spandrel band under its deck,
+  came out as a room.
+- A WALL OR SOFFIT FOUND CLOSED IN GOES AS THE FLOOR UNDER IT. A loggia's back wall and ceiling face a cover and
+  little sky, but the loggia's floor is open sideways, so it is outside. Parliament's river loggias now read as
+  one outdoor space: limestone wall, ceiling and pavement, where the walls and ceiling had been painted faux marble.
+  The same rule moves portico back walls, and the Frauenkirche's corner towers above the cornice, to their outside
+  finishes.
+- Stephansdom's west gable prisms had their `at` in the wrong order. A part's `at` is `[x, y, z, yaw]`, so the
+  two halves had been standing in the nave. They now close the roof's west end.
+
+## The wimperg: a gable drawn from the arch under it (2026-10-27)
+
+`arch/wimperg.js`. Any opening may say `wimperg: true` (or `{ pitch, coping, depth, crockets, finial, field, shafts,
+side, top }`); a `basilica` says `wimpergs: true` for its aisle windows and transept portals, and the `gothic`
+generator's `portalGables` puts one over each west portal (Cologne: yes; Notre-Dame, whose portals stand under the
+gallery of kings: no). Nothing in it is placed by eye -- every line follows from the opening laid out by `wallFace`:
+
+- the ARCHIVOLT: a band a coping wide round the arch's extrados (the curve offset along its own outward normals), run
+  on down both jambs to the sill, so it frames the opening from the ground (or sill) up -- it stands where the opening
+  stands;
+- the ARMS at the pitch asked (62 degrees), spread as wide as they must be for their inner edges to clear the archivolt
+  by a quarter coping everywhere. (Steepening the pitch cannot do it: at a pointed arch's foot the archivolt rises
+  straight, so the arms' feet must stand out past it -- as the masons set them);
+- the SHAFTS the arms' feet stand on, from the sill to the springing: the gable is carried, not stuck on the wall;
+- the WALL'S TOP bounds it: `glassPanes` is told how high the wall it is part of rises (a tiered wall: all its tiers),
+  and a gable whose apex would stand over it is tried flatter, down to 40 degrees, and left off if none fits -- it never
+  pierces the roof over the eave. The finial takes what room is left, or is left off;
+- CROCKETS every three copings up the outer edges, a FINIAL on the apex, and in the FIELD the largest circle on the
+  axis touching both arms and clear of the archivolt's crown, a trefoil cusped in it when there is room -- blind
+  tracery drawn with tracery.js's `barsMesh`, a bar's depth proud of the wall.
+
+`side: true` sets it on the face's back, for a wall whose outside is `map`'s far side (a basilica's aisle wall).
+All of Stephansdom's aisle windows cost 2,775 vertices.
+
+## Courses: plinth, string course, cornice as the wall's own (2026-10-27)
+
+`arch/courses.js`. A `wall` or an `enclosure` may say `courses: true` (or `{ plinth, strings, cornice, skip }`): the
+mouldings run along its outer face, each a PROFILE (`PROFILES`: plinth -- a water table; string -- a band with a drip
+and a weathered top; cornice -- corbelled out to a corona with a cyma; band) carried along the face's line at a height
+the wall gives:
+
+- the PLINTH at its foot, the CORNICE crowning its top, a STRING COURSE at every TIER JOINT -- the floor line where one
+  storey of the facade stands on the next (or `strings: [heights]`). Sizes follow the wall's height, the projection each
+  moulding's own height; any may be `{ h, out, profile }` or `false`;
+- round a corner of an enclosure every line of the profile runs on to where it meets the neighbouring face's offset
+  line -- a true MITRE, out on a convex corner, in on a concave one -- so a cornice turns a tower's corner as one moulding;
+- an opening whose height it crosses STOPS it at the jambs, its end closed with the profile (a door breaks the plinth, a
+  window the string course it would cut); so does a wall's free end;
+- `skip`: faces (number, label or family) it does not run along -- one against a neighbouring block, or inside one; a
+  moulding coming to that corner ends flush there, so the neighbour's own course takes up from it.
+
+They are a part of their own, "<name> courses", kind `moulding` (open at the back: a shell). St Paul's arms and west
+towers carry them: the plinth, the floor line at 15m and the cornice under the balustrade run round the whole
+cross and its towers, and turn every corner.
+
+A RING bay (a rotunda's drum, the Pantheon's 24-gon) is built once and turned round the ring, so its courses could
+not see their neighbours: the bay's line is laid with the neighbouring bays' first and last segments as GHOSTS --
+mitred into, not drawn -- so each bay's cornice ends on the very plane its neighbour's starts on, and the turned copies
+meet in true mitres. `clear`: spans of a face (keyed by number, label or family, `[[x0, x1], ...]` along it) the
+courses leave free over their whole height -- the Berliner Dom's body runs its mouldings only between the corner
+towers, which carry their own. `strings: { at: [heights], h, out, profile }` gives a string course its own heights and
+section: the Pantheon's drum is banded by a cornice-profile course at 12.4m between plinthless brick and its crowning
+cornice (all marble, kind `moulding` in its finish).
+
+`courses.inner` runs them along an enclosure's INSIDE face (its inner outline walked backwards, so the inside is on
+the left; an opening at x on the outer face comes through at the face's own square-reveal mapping, `innerAlong` in
+build.js). A `court` with `courses` gives them to both its rings of wall: the outer walls on their outside -- stopped
+where a joined building stands against a face -- and the courtyard walls on the face the court sees; its eaves reach
+past the crowning cornice. The `palace-wing` component carries them too: a plinth and a band under each floor, and a
+top storey of its own whose cornice is sized by the whole front, not by the storey.
+
+TRIM in the finishes (finish.js): a part of kind `moulding` or `wimperg` is one material over all its faces -- every
+face of it a wall, outside -- so a cornice's top does not take the terrace's flagstones and its underside the
+ceiling's plaster, nor a court's string course the rooms' faux marble. What no rule names takes the facade's own
+finish (relief, not colour); `{"parts": "kind:moulding", ...}` gives the trim its own -- Melk's and Moritzburg's white
+on the render, Schwerin's dressed sandstone.
+
+## The applied order: pilasters and entablature from the storey's height (2026-10-27)
+
+`arch/order.js`. A `wall` or an `enclosure` may say `orders: [{ tier, kind, span, ends, proj }]`: an order of
+pilasters standing in storey `tier` (and rising through `span` of them: a giant order), set out the way Vignola set
+out every order -- from the height it has to fill:
+
+- the height from the pilasters' foot (the top of whatever course runs under it: the plinth, a string course) to the
+  storey's top is divided into MODULES (the column's radius): the column takes 14 (tuscan), 16 (doric), 18 (ionic) or
+  20 (corinthian), the entablature a quarter of that (`VIGNOLA`); so the storey gives the module and the module gives
+  everything else -- the pilaster two modules wide and half a module proud (`proj`), its base and capital by
+  `ORDERS` (the same table the free-standing columns use), architrave, frieze and cornice by Vignola's shares, the
+  cornice reaching out as far as it is tall;
+- the PILASTERS stand on the piers between the storey's openings, in the middle of every pier wide enough for a
+  capital clear of both windows, and at each face's ends (`ends: false` leaves those off): in from the corner by their
+  own half and by what the next face's pilaster reaches out, so a convex corner has one on each face side by side and
+  a concave one keeps them clear of each other;
+- the ENTABLATURE is a course with its own section (`pts`, in metres) -- run round the whole building by courses.js,
+  mitred at every corner, stopped where something cuts through it -- its architrave flush with the pilasters' faces,
+  so they carry it. It takes the place of the string course at the order's top and of the cornice when the order
+  crowns the wall; a giant order has no string course across it.
+
+Pilasters and entablature are drawn into the wall's "<name> courses" part (kind `moulding`: one trim material).
+St Paul's arms carry two storeys of Corinthian pilasters; Versailles was rebuilt on it: each block of the plan ONE
+enclosure (its courses mitred round its corners, `clear` where another block stands against a face), Ionic pilasters
+through the piano nobile and a Tuscan attic order over them on the stone blocks, the brick court wings only their
+courses, the ground storey rusticated (a finish band), a pierced balustrade on the wall heads round the roof slab --
+where the old port had cornice boxes overlapping each other at every corner and pilasters as loose boxes.
+
+## The window surround: architrave, sill, cornice, pediment from the opening (2026-10-27)
+
+`arch/surround.js`, the classical counterpart of the wimperg. An opening (in a pattern or a list) may say
+`surround: true | { band, depth, sill, keystone, head, pediment, pitch, side }`, and every size comes from the
+opening's own width:
+
+- the ARCHITRAVE is a band a seventh of the opening wide (`band`, held between 12 and 40 cm), half that proud. It
+  frames the jambs from the sill up (from the ground for a door) and then the head: a lintel over a flat head, or a
+  band carried along an arched head with a KEYSTONE at its crown (`keystone: false` leaves it off);
+- a window's SILL is a slab reaching past the architrave and standing out twice as far, so it sheds the rain
+  (`sill: false` leaves it off);
+- the HEAD over the architrave is a frieze and a cornice (`head: "cornice"`), and on the cornice a PEDIMENT
+  (`head: "pediment"`, the default). It can be triangular at the classical 22.5° (`pitch`), segmental (an arc rising a
+  quarter of its half-width), or `alternate`, the two taking turns along the row with the middle one triangular, as
+  on Roman palace fronts (the row numbers each surround by how far it stands from the middle). `head: false` gives
+  the architrave alone. A head that would rise past the wall's top falls back to its cornice, or to the architrave;
+- `side: 1` sets it on the face's back, as with a wimperg: the court type uses this on its courtyard walls, whose
+  face towards the court is their back.
+
+It is drawn into the wall's "<name> surrounds" part, kind `moulding`, so it takes the trim material. Its slabs leave
+off their backs, which lie flush on the wall. The court type takes `surround` as one spec for every storey or as a
+list storey by storey. It puts the ground storey's on the outer windows, the gate and the court doors, and the upper
+storeys' on both rings of windows. Melk is plain on the ground floor, has cornice heads on the two main floors and is
+plain under the main cornice. Schwerin has alternating pediments on its piano nobile. Versailles has architraves and
+keystones round the arched windows and cornice heads on the brick wings. Melk's palace wing has its own surrounds,
+storey by storey.
+
+## Folded pilasters, plinths that break forward, and two buildings dressed (2026-10-27)
+
+- A shallow OUTER CORNER (a polygon's, turning less than about 46°: an octagon's, a rotunda's sixteen faces) no
+  longer gets two pilasters side by side, one in from each face. It gets ONE pilaster FOLDED over the arris: each
+  face draws its half, its end mitred by the tangent of half the corner's turn, so the two halves meet in one block
+  (`pilasterSpots` returns `folds` beside `spots`; `pilasterMesh(..., fold, k)`). A square corner still has one
+  pilaster on each face.
+- A pilaster's base reaches out further than the plinth or string course it stands on, so it stood on air. The
+  course now BREAKS FORWARD under every pilaster: a block from the course's foot to the pilaster's foot, as wide and
+  as deep as the base (`yb`, the foot of the course under the order).
+- Finishes:
+  - A point inside a tall solid (the foot of a 30 m column) counts as buried all the way up, not only within 8 m.
+  - A floor piece that a wall's foot crosses (some sample points under stone, some open) is halved down to 0.6 m
+    even when its open points agree.
+  - The pavement at a wall's foot, under a cornice reaching out over it, counts as outside when three of eight ways
+    round at 46° see the sky. Before, the ground between pilasters there took the inside floor's checker.
+- St Isaac's has a giant Corinthian order through its two storeys of windows. Its entablature sits at the porticoes'
+  height and runs round the building, with an attic over it. The lower windows have triangular pediments, the upper
+  ones cornices, and the plinth is red granite like the porticoes' columns.
+- Karlskirche:
+  - The church's door was on face 0, which on a sixteen-sided plan sits 22.5° off the axis, with a window on the
+    axis behind the portico. It is now on the axis (face 15).
+  - The side halls' doors were on faces 2 and 14, one on each side of the portico, so neither led into a hall. Their
+    rectangular plans never met the church's wall either. Each hall is now a pentagon whose inner end lies on the
+    church's diagonal face (faces 1 and 13, the two wall faces in one plane), with a door through both walls.
+  - The church has a giant Corinthian order folded round its sixteen corners. The halls are as tall as the
+    portico's entablature and continue its order out to the pavilions. Each pavilion has a Doric order round its
+    arches and an Ionic one above.
+
+## The Frauenkirche carried down to the ground (2026-10-27)
+
+- The drum and the stone bell stood on the attic roof, a solid filling the whole square from the cornice to the
+  ridge, with nothing under it inside. The drum now stands on a RING OF PIERS (`dome piers`): the drum's own sixteen
+  faces carried down to the floor, with the same corners (`turn` 0 sets a pier under each corner of the drum) and
+  the same thickness, arched between, up to the drum's foot.
+- The attic roof is a `shell` over an open attic. Between the walls and the piers, a slab over the galleries
+  (`vaults`, a `prism` on the church's inner plan) forms the attic floor. Its `well` is the piers' inner polygon,
+  so from the floor the church looks up past the arches into the drum and the bell.
+  - Wells take `turn` (build.js `wellPoints`), so a well can follow a polygon plan.
+  - A prism passes `railing: false` through to its well's edges, so an attic floor nobody walks gets no rail round its hole.
+- ROOFS ON CHAMFERED PLANS: a roof takes `chamfer`, the corners cut that far along each side in the wall plane.
+  Every level of the roof becomes an octagon whose corner face comes in as far as the slopes beside it
+  (build.js `chamferLevels`, with `roofMesh` drawing eight-sided rings and fans). The Frauenkirche's mansard is now
+  hipped down onto its chamfers between the stair towers, where it used to overhang them as a square.
+- The east front, where the choir stands against it: the middle bay is the CHOIR ARCH, the church's full-height
+  opening into the apse. The flanks' windows have moved out past the apse wall, which used to cut through them.
+- Finish: the piers and vaults are plain plaster, the structure, and the painted panels stay on the walls between them.
+
+## Masonry does not stand on roofs; orders round rings; the Zwinger dressed (2026-10-27)
+
+- A NEW CHECK, "on roof" (check.js `floating`). A wall, a ring of walls, a drum or a dome is carried down to the ground
+  through walls and piers; a roof is a covering on rafters. A masonry part with most of its foot on roofs alone is
+  reported. Two cases are excused:
+  - a point where masonry stands within 1.5 m under the roof surface, as with a flat roof slab laid on walls,
+    carrying the parapet above them;
+  - a part fixed to masonry halfway up its side, as cladding is (a marble band on an octagon's wall, its foot on
+    the roof against it).
+  It finds the old Frauenkirche's drum. On the full set it found:
+  - Milan's tiburio, standing on the nave roof. Milan now has a crossing that carries it: a DIAPHRAGM wall at each
+    end of the two crossing bays, over the transverse arch and pierced by it, from the vault's springing to the
+    roof's foot. The tiburio's octagon is widened so that its sides stand on the clerestory walls and its ends on
+    the diaphragms, its foot at the clerestory's top (inside the roof, as a crossing tower rises through it).
+- ORDERS ON RINGS (assemble.js, ring): `orders: [{ kind }]` over the ring's height. A pilaster on every pier is folded
+  over the corner between two bays: each bay draws a half at either end of its face, and the neighbouring bay, the
+  same bay turned, draws the other half. The entablature runs round as a course mitred into the next bays.
+  `dress: "in"` puts the ring's courses and order on its INNER face, walked backwards so that what it faces is on
+  its left, with the corners turning in: the court side of a curved gallery's inner wall.
+- OPENINGS KNOW THE ORDER OVER THEM. The courses and orders of a wall are planned before its openings are drawn
+  (`orderPlan`). Every tier an order spans gets a `top` at the entablature's foot (`withOrderTops`), and a window's
+  surround or wimperg stays under it: a pediment that would rise into the architrave is left at its architrave.
+- COMPONENTS DRESSED ON REQUEST:
+  - An order of kind "none" is none, so a component can name its orders by parameter (`"kind": "order1"`) and stay
+    plain by default.
+  - `courses` and `surround` may be flags over the parameters (`"courses": "dressed"`).
+  - The pavilion, gallery and curved-gallery components take `order` / `order1`, `order2` and `dressed`. The
+    galleries take `head`, the wall left over their arches (1.2 by default, room for an entablature when ordered).
+  - The pavilion's arches crown a fifth of each storey below its top.
+- THE ZWINGER, one decision for the whole court: the galleries' arches between Doric pilasters, with an entablature
+  under the terrace balustrade, the curved galleries dressed on both faces. The pavilions have Doric pilasters round
+  their arcades, Corinthian above, and framed windows. This cost about 50k triangles (balusters remain the largest item).
+- THE ARENA's two outer arcades take a Tuscan order (`orders: [{ kind: "tuscan" }]` on the rings), as the Colosseum's
+  lowest storey does: a pilaster folded over every pier between two arches, the entablature running round over them,
+  and the plinth breaking forward under each pilaster's base. 0 findings, 57.6k vertices.
+
+## Built in order; the pedestal (2026-10-27)
+
+- BUILT FROM THE GROUND UP (check.js `floating`, finding "before support"): the parts are raised in their build order,
+  as a mason raises them, and each must be carried by what stands already, the ground or a part built before it. A
+  part carried in the end, but only by a part built after it, is reported along with the part it waits for. It then
+  counts as built, so nothing standing on it is reported again. On the first five buildings it found one: Florence's
+  gallery between the shells, which was built before the inner dome it rests on. archcheck prints "waits for <part>".
+- A NAME STANDS FOR A WORD as it does for a number (expr.js `evalValue`): a component's `"stone": "stone"` takes the
+  word the building gave it ("bronze"). A marker's data is read over the parameters inside its tables too (a
+  statue's `hold: { R, L }`).
+- THE PEDESTAL (components/pedestal), proportioned as the classical writers have it: the BASE (a plinth and a
+  moulding over it, a quarter of the height), the DIE (three fifths) and the CORNICE (a bed moulding and the slab,
+  the rest). The base and the cornice stand out round the die, the cornice further. On it stands a `statue` marker:
+  the carved figure (statues.js), given its kind, style, stone, scale and what it holds by parameter. Sacre-Coeur's
+  saints over the porch (bronze, gothic) and the Berliner Dom's six figures (limestone) were green and grey blocks
+  and columns; they stand on pedestals now.
+- The full set with the new rule: 13 buildings had parts listed before what carries them. All are reordered at their
+  source:
+  - piles before the crannog's platform and the jetty;
+  - legs before tables and benches, posts before the hitching rail;
+  - floor rings before the windmill's floor discs;
+  - Sultan Qaboos's platform laid first (it was added last);
+  - the Pantheon's floor before its niches;
+  - Versailles' stairs after the floors they start on;
+  - the arena's landing walls before the landing;
+  - the tents' poles before their roofs and the pavilion's valance after its roof;
+  - the longhouse's walls before its vault.
+- Parts named alike but for a trailing number ("upper floor 3" and "upper floor 7": one floor cut into pieces round
+  its stairwells) are one element. A piece may lean on another piece of the same element wherever that piece is
+  listed.
+
+## The fortified ward: Caerphilly from the rules of defence (2026-10-27)
+
+A `ward` part (arch/castle.js `wardDefs`; assemble.js builds what it writes, as for `court`) is a curtain round a
+convex `plan`, its outer face line, `height` to the wall walk and `thickness` thick. Everything else follows from the
+rules a thirteenth-century mason worked by:
+- FLANKING: a tower on every corner, centred on the corner of the outer face, projects its whole radius past both
+  curtains it joins, so its loops see the foot of each. A face longer than `towers.flank` (40 m, bowshot between two
+  towers) gets towers between, evenly spaced.
+- GATES (`gate` or `gates`: face, width, height, radius, at): a passage through the curtain between two towers that
+  stand clear of it on either side. The curtain and the walk carry on over it.
+- THE WALL WALK is the curtain's head behind a CRENELLATED PARAPET on its outer edge. The parapet is one wall with
+  crenels cut down from its top as notches, `step` apart and `crenel` wide, the merlons wider than the crenels.
+- THE TOWERS rise `over` above the walk, with a floor at the walk and every `storeyH` below it, and a deck with its own
+  crenellated parapet on top. Every level is a whole number of treads (the rise is worked from the walk's height),
+  so ONE NEWEL STAIR climbs from the ward to the deck past every floor, through a well in each. It stands against the
+  wall a quarter turn from the door and arrives on the deck through a railed well.
+- THE WALK RUNS THROUGH THE TOWERS: a doorway at its level on the face where each curtain's walk line meets the tower.
+  The faces a curtain (or, above the walk, its parapet) stands against are blind.
+- LOOPS look onto the field, staggered storey by storey so that no vertical line of the wall is cut all the way up.
+  Every storey also has a loop on the first face clear of each curtain, the one that rakes its foot. The face onto the
+  ward has the door below and windows above. A storey too low for a loop gets none.
+- Curtains and parapets end inside the tower walls, square, clear of the room.
+- THE TALUS: the foot of the curtain and the towers spreads in a batter (the courses' new `batter` profile, a plinth
+  of one slope), at one level all round. It is a quarter of the walk's height, sloping one in three and a half. It
+  throws stones dropped from the parapet out at attackers and thickens the wall where it would be mined.
+- MACHICOLATIONS over every gate: the parapet over the gate is carried forward on corbels a metre apart, with holes
+  between them over the passage's mouth. The build-order check caught the first draft, which built the parapet before
+  its corbels.
+
+CAERPHILLY is two wards now, CONCENTRIC: the inner ward is higher (9 m to the walk), so both lines can shoot over the
+outer one at once. The inner ward has four drum towers and the twin-towered gatehouse to the front; the outer ward
+(5.5 m) has a turret on every corner and gates front and back between pairs. It replaces solid columns, boxes for
+parapets, and lifts onto the tower decks. 0 findings (the stairs walked foot to arrival), 24.1k vertices.
+
+## The Egyptian temple: Dendera from the rules of the axis (2026-10-27)
+
+Dendera was fourteen parts, thirteen of them boxes: a temple modelled as blocks with nothing to say why any block was
+where it was. It is now set out by the rules the Egyptian temple is built by (tools/archgen/dendera.py), and the
+engine has learnt the pieces those rules need:
+- TWO NEW PROFILES (courses.js): the `torus`, a half round, and the `gorge`, the cavetto cornice, a hollow rising out of
+  the face and sweeping forward under a fillet.
+- COURSES AS A LIST: `courses: [{ y, h, out, profile }, ...]` (or `{ list, skip, clear }`) when a wall's mouldings are not
+  plinth, string courses and cornice. The Egyptian wall is `crown(H)`: a BATTER from the ground leaning back 1 in 12, the
+  torus over it, the gorge (a ninth of the height) on top, all sized from the wall's height. A `clear` stretch may now
+  give `[x0, x1, y0, y1]` and stop only the courses in that height band. The pronaos's back face keeps its torus and gorge
+  above the lower temple it stands against and loses only the batter there.
+- EGYPTIAN ORDERS (assemble.js ORDERS): `hathoric` (a flat disc base, a barely tapering shaft, the goddess's four-faced
+  block, the sistrum's shrine with its lip, and an abacus narrower than the shaft) and `campaniform` (a bell turned as one
+  `lathe` surface, swelling slowly and then fast, with a small abacus on its broad top).
+- THE HYPOSTYLE (`colonnade` with `plan: "grid"`): `count` files at `spacing`, the middle intercolumniation `nave`, `rows` at
+  `rowSpacing`. Its entablature is ARCHITRAVES over the files, front to back, with `reach` [a, b] how far each runs past
+  the first and last rows (to the facade's and the back wall's faces), so the roof slabs span across from beam to beam.
+The temple itself:
+- ONE AXIS: the pronaos (6 × 4 Hathor columns, the middle aisle 1.3 times the rest; the front row standing in the open
+  facade and joined by half-height screen walls with their own gorges, the middle bay a door with a broken lintel), the
+  Hall of Appearances (six campaniform columns, three store rooms either side behind partitions, each with a door), the
+  Hall of Offerings, the Hall of the Ennead, and the sanctuary standing free in its corridor with the naos in it.
+- FLOORS RISE AND ROOFS FALL: each hall is a list entry {depth, floor, soffit, wall}. At every door the floor steps up (a
+  short flight on the lower side, a threshold through the wall at the higher level), and each roof is lower than the one
+  before. Each cross wall is built up to the soffit of the hall in front of it, so that hall's slabs bear on it and the
+  lower roof behind abuts it: the roof falls in steps exactly where the walls are.
+- THE ROOF IS USED: a newel stair in its own walled room off the Hall of Offerings climbs through a well in that hall's
+  roof and arrives on the slab. Short flights on the axis join each terrace to the next one up, and the twelve-column
+  kiosk with its screens stands on the lowest terrace's south-west corner. LION SPOUTS drain every terrace through the
+  side walls, at its own surface under the torus, one either side for each 12 m of its length.
+0 findings, 61 parts, 6.8k vertices (it was 14 parts of boxes).
+
+## El Castillo counted by the calendar; the corbel vault (2026-10-27)
+
+Chichen Itza's pyramid was right in outline, but its serpent heads and roof crest were boxes and its temple was a hollow
+cube. Now (tools/archgen/chichen_itza.py):
+- THE CALENDAR decides the details. 91 steps × 4 + 1 = 365. The nine terraces, cut by the stairs, give the 18 Haab months
+  on each face. Each face carries 52 recessed PANELS (the Calendar Round): 26 on each side of the stair, shared among the
+  terraces in proportion to their length by largest remainder (5, 4, 4, 3, 3, 2, 2, 2, 1 from the foot), the same on
+  both sides, so every face is symmetrical.
+- TALUD AND TABLERO: the crepidoma's new `tablero` share makes each step a leaning talud with a vertical band over it.
+  The panels are a skin laid on that band with the panels cut through it, so the core shows behind them. Each terrace
+  has one skin that runs on to the corner and one that stops at it; turned round the pyramid, the four faces close the
+  corners without overlapping. The skins are dressed stone and the taluds rubble, so the recesses read.
+- THE FEATHERED SERPENT as two components: `serpent-head` (the skull with its plume collar, wedge-shaped jaws gaping
+  over the tongue, fangs, brow plates and nose curl, all from its width) and `serpent-column` (the head on the floor,
+  the body rising out of its skull as the shaft, the tail bent forward as the capital under the lintel). Only the north
+  stair has heads, as at the real one, and the check moved them clear of the treads' approach. Two serpent columns
+  divide the temple's north door into three.
+- THE CORBEL VAULT (profiles.js `corbel`: straight soffits leaning in at `slope`, closed by a capstone `cap`, optionally
+  with `steps` showing) limits a Maya room's width, so the temple is narrow rooms: a gallery round three sides with a
+  door in each, the portico, and the sanctuary, whose two pillars (the middle piers of walls along the axis, the
+  lintels over them) cut its vault in three. The temple's HEIGHT is worked out, not given: the springing, the widest
+  span's corbel rise, the capstone. The medial moulding runs at the springing, the cornice at the roof, and the
+  crest of stepped merlons along the roof's edge.
+0 findings, 9.8k vertices.
+
+## Finishes checked for patches; the Romanesque opening (2026-10-27)
+
+**A face in one finish per cell.** `finishPieces` now reports, for every wall face (not domes or vaults, whose
+inside and outside are one skin), the area each finish takes in each CELL of it: the cells are cut by the rules'
+own band and region lines (`below`, `above`, `within`) and by the face's level cuts between inside and outside.
+A face may change finish at those lines -- the Iznik tiles stop at 12 m and kalemisi paint goes on above -- but two
+finishes in one cell are a patch. `archcheck.py finish=1 minor=0.01` lists faces whose patched share is over
+`minor`. All 93 buildings pass.
+
+**The Romanesque opening** (`surround: { style: "romanesque", orders, band, depth, shafts }`, surround.js). The
+opening is not framed but recessed in ORDERS, the outer ones standing furthest out. Each order has:
+- a strip of jamb;
+- a NOOK SHAFT in the angle of its step: a half-round on a base, under a cushion capital;
+- a band of archivolt round the head, with the shaft carried on round it as a roll.
+
+An IMPOST runs across every order under the springing. Measures come from the opening: the step is about a ninth
+of the span. The step is limited by `o.room`, the free wall each side of the opening, which `glassPanes` now
+works out from the face (half the pier when a neighbour shares it). So an arcade of dressed arches shares its
+piers without overlaps. Orders are dropped until the archivolt fits under the wall's top.
+
+Used on Fisherman's Bastion (the arcades in one order, the end doors in three) and Mainz Cathedral (its
+transept portals in three orders, the tower openings in one).
+
+**Covered faces on a diagonal.** Where two parts' faces lie in one plane, `coverIndex` drops the smaller one's
+share. It compares them in 2D, projected along the plane's main axis. A face at 45° is as much x as z, and
+rounding sent its triangles to different axes, so St Basil's chapels, whose diagonal faces share planes
+across the gaps, had triangles compared in mismatched coordinates. The wrong pieces were dropped, and holes
+showed the painted inside through the brick. Each plane cluster now uses one axis.
+
+**The Lombard band** (lombard.js), the articulation of a Romanesque wall:
+- LESENES, flat pilaster strips at the face's ends and every `bay`;
+- under the top, an ARCHED CORBEL TABLE: a band with small round arches hanging from it, field by field between
+  the lesenes, a whole number about `arch` wide in each, every foot on a corbel.
+
+A lesene that would cross an opening is left out, and so is an arch over an opening's head. `lombard` goes on a
+tier (`{ h, openings, lombard }`: one band per storey, as Romanesque fronts have it), or on a wall or an
+enclosure, where it applies to the top tier of every face. It is drawn into the openings' dressing mesh, so a
+finish rule for `kind:moulding` can set it off. Mainz's articulation is now in lighter dressed sandstone.
+
+**The rising frieze** (`frieze` on a gable roof, `gableFriezeMesh`). The same corbel table runs up both rakes
+of the gable under a band that follows the slope. Each arch's crown sits under the band and its springing at
+the lower of its two feet, so the row climbs in steps. It starts where the first arch clears the gable's foot
+(the wall's own band lies below it), and the two rows meet at the apex. Used on Mainz's transept fronts and
+towers.
+
+`lombard` may also be a flag, or carry `on` (a flag over the params). The `basilica` component uses this: its
+clerestory and aisle walls take the band when `lombard: 1`, with lesenes a bay apart, and Mainz's nave sets
+it. The vaulted basilica (gothic.js) takes `lombard`/`aisleLombard` and a `surround` for its windows the same
+way.
+
+## Maria Laach: the helm, the dwarf gallery, and finishes by face (2026-10-27)
+
+**The Rhenish helm** (`type: "helm"`, helm.js). This is the Romanesque tower roof of the Rhineland: a GABLE over
+every side of the tower, and between the gables the roof's faces, each a RHOMBUS from a corner up past the two
+neighbouring apexes to the point. Only the gables' `pitch` is chosen. A rhombus is flat only if the point
+stands where the lines from the corners through the apexes meet, which is `g / sin²(π/n)` over the eaves for
+gables `g` high on an `n`-sided tower: twice the gable on a square tower, about seven times on an octagon. The
+helm takes `sides` (4), `radius` or a square's `width`, `pitch` (60) and `turn`. `frieze` adds a rising arched
+frieze up every gable, as a moulding part of its own.
+
+**Maria Laach Abbey** (tools/archgen/maria_laach.py) is the building that tries all of this: six towers, every
+one with a helm. Its parts:
+- the nave is the `basilica` component under groin vaults over oblong bays, with the Lombard band on its walls;
+- the transept fronts carry rising friezes, and the arms have apsidioles;
+- the westwork is a square tower over the west bay;
+- two ROUND STAIR TOWERS (`round-stair-tower`, which now takes `doorW`/`archW` for narrow bays) climb from the
+  aisles to the tower's floor. The number of steps is chosen so each landing faces the door into the tower;
+- the PARADISE is an atrium of arcades in Romanesque orders, with lean-to roofs and a gabled west portal.
+
+**The gallery apse** (`components/gallery-apse`) is the Rhenish apse with its DWARF GALLERY. It has:
+- the half-ring wall with its windows;
+- the conch, springing from the wall's inner face;
+- under the eaves, a PASSAGE inside the wall's thickness, with an open arcade on the outer face and a solid
+  wall behind;
+- a half cone over all.
+
+The passage's floor is not chosen. The conch's back rises inward from the springing, and the floor goes where
+that back has dropped below the passage's inner edge (`spring + sqrt(cr² − rp²)`), so the walk never cuts into
+the vault. The old Mainz apses opened the gallery straight through the wall into the void over the conch;
+Mainz's four apses now use the component.
+
+**`outside: true`** on a part says its faces belong to the open air, whatever the finishes' rays make of them.
+The dwarf gallery's passage is open through its arcade but too narrow to see out of, and the rays called it
+a room.
+
+**Finishes by face, not by plane.** facesOf now joins flat pieces of one face that share no edge, as long as
+they lie in one plane and touch. Examples are a wall's courses on either side of an opening, a tier's seam,
+and the bars of a tracery. Such a face is asked once and is inside or out as a whole. The patch check (`mixed`)
+is keyed by that face, and reports where each finish was first met (`at`). The plane-keyed check flagged 12
+buildings, all of them coplanar faces far apart: the two ends of a vault, a stair's risers a flight apart.
+With the face key, 0 are flagged.
+
+**Bands cut where the cover is.** Where two of a face's 3m bands disagree (a wall inside under a roof and
+outside above it), the face is asked again between them, halving the gap down to 20cm. The finish changes
+where the roof meets the wall, not on the 3m grid. A covered FLOOR is asked at shares of its whole height up
+to its cover (0.3, 0.55, 0.8 from the floor), not from 1.2m up, so a low gallery is asked through its arches.
+
+**Hidden sides.** proudOf's `slab` takes `hide`, a list of side edges that stand against something just as
+proud. The Lombard band's spandrels skip their tops (under the band) and their uprights (against the next arch
+or a lesene); the lesenes skip their heads and feet; the corbels skip their tops. This cuts about 45% of a
+frieze's triangles. A Romanesque head's curve is also thinned to about 12cm a segment.
+
+**The Lombard band stops at what stands against the wall.** `lombard.clear` lists stretches of a face, each
+`[from, to]` in face metres, where something stands against it, such as a stair tower or a buttress. The band
+and its lesenes stop at either side, and each remaining stretch is laid out as a face of its own, with whole
+fields and whole arches. Maria Laach's west bay uses this where its round stair towers meet it, so the corbel
+table does not run through a stair's headroom.
+
+**Lombard bands on rings.** A ring passes its `lombard` to each bay's face, so an apse or a round tower gets
+lesenes and an arched corbel table bay by bay, as at Maria Laach's west apse.
+
+**A crossing stage roof.** At Maria Laach the square crossing stage carries a low pyramid (pitch 30) from its
+eaves to the foot of the octagonal tower. The stage's top is not left as a flat terrace that rain would stand on.
+
+## Abutment: every vault's push is taken (2026-10-27)
+
+An arch pushes out at its feet as well as down, so a vault needs masonry behind its springing. The new check
+`abutment` (check.js, run by archcheck with the support findings) follows that push from every springing:
+- a barrel's along both sides;
+- a groin vault's from its four corners, out along each of its two spans, a hand to either side of the corner
+  (into whatever pier is there);
+- a ring vault's at the middle of its bay, out and in.
+
+It walks the push level, a little above the springing, and also down from the springing joint at two slopes, as
+the weight above turns it. Masonry (inside some part's solid) counts. Covered air is passed through: the next bay
+pushes back, or it is an aisle under its roof. The walk stops at open sky. The best of the three walks must be at
+least a tenth of the span. A finding is `thrust`, with the abutment found (`gap`) and what was needed (`need`).
+
+Measured across the buildings, Romanesque and Gothic nave vaults have 0.13–0.17 of their span. The vaults a Gothic
+system lays out are skipped, because gothic.js sets their flyers out from the thrust. A part built `light: true`
+(poles, laths and bark: the longhouse's barrel) is skipped too, since it pushes nothing.
+
+The check and the support check found faults in the element demos (assets/architecture/elements), which archcheck
+does not cover:
+- The barrel vault's walls stood off to one side and along the wrong half of its length, so one side sprang from
+  air.
+- The groin and rib vaults had their corners on slender columns, or on nothing. They now stand on square piers
+  under their corners, each reaching past its corner.
+- The cloister vault stood on the ground. It now covers a square room.
+- The Byzantine exedra stood on nothing, its mouth open to the sky, so it was removed.
+- The semidomes stood alone. They now open from an end wall over their arch.
+- The rotunda's lantern hovered over its dome, and the minaret's upper shaft hovered over the balcony. The
+  minaret's cap now sits on a cornice.
+
+Also, a stair's arrival floor now lists its posts before its slab, the order they are raised in.
+
+## Shikhara and samvarana: a tower made of copies of itself (2026-10-27)
+
+A Nagara temple tower can't be modelled well from its outline. Its form comes from rules, and shikhara.js builds
+it from those rules.
+
+**The ratha plan** (`rathaPlan`): a square divided along each side into offsets.
+- `rathas` 5 makes it pancharatha: karna, pratiratha, bhadra, pratiratha, karna.
+- The bhadra is `bhadra` of the side wide.
+- Each offset stands `step` further out toward the middle.
+
+Every ring of the tower and of the hall roofs is this plan, scaled.
+
+**The shikhara** (type `shikhara`: width, height, rathas, step, bhadra, top, bend, bhumis, nest, tiers, corners):
+- **The body** is a stack of bhumis (storeys). Each is closed by a projecting band.
+- **The rekha:** the sides bend in along a curve, 1 − (1 − top)(y/H)^bend.
+- **The crown** sits on the shoulder: neck, ribbed amalaka, chandrika, amalasaraka and kalasha (crownMesh). A small
+  crown is simplified.
+- **The urushringas** are COPIES of the tower: smaller, with fewer rathas, set into the middle of each face, tier
+  by tier. Each tier gives `{ scale, lift, out }`, where `out` is how far the copy stands out of the face (0.45
+  shows a little under half of it). Copies of copies follow, as deep as `nest` allows.
+- **Karna shringas** (`corners`) stand on the karnas at the heights given.
+
+The copies are parts by tier, "shringas 1", "shringas 2" and so on, because insideOf counts crossings part by part
+and would be fooled by overlapping solids inside one part.
+
+**The samvarana** (type `samvarana`: width, length, rise, tiers, top, bells, rathas): a hall roof.
+- It is a stepped pyramid of slab courses on the ratha plan, each course set back from the one below.
+- A bell stands on every course, at the corners and over the bhadras (`bells: false` makes the plain phamsana of
+  a porch).
+- A bell-crowned finial sits on top. `length` stretches the plan for an oblong hall.
+
+**Kandariya Mahadeva** (kandariya.py) builds its parts in the order they are raised:
+- the terrace and its stairs;
+- each unit's moulded plinth;
+- the sanctum: a square core on the karna line, with the pratirathas and the back bhadra set against it (a wall
+  0.3 m deep can't be 1.2 m thick: the inset outline would cross itself), and the cell inside;
+- the balconies on the bhadras;
+- the halls' parapets, pillars and beams, and the roofs on the beams;
+- the tower on the sanctum's cornice.
+
+That comes to 40k triangles, with no findings.
+
+**Fix:** rathaPlan used to return the outline wound with the outside on the right, so every shikhara and
+samvarana came out inside-out (negative volume in archcheck's mesh check). It now returns it in planPoints'
+winding.
+
+**Courses on solids.** A `box` or a `prism` now takes `courses`, as a wall or an enclosure does:
+- the mouldings run round its own outline, closed and mitred at every corner, in and out;
+- `clear` stops them where something stands against a face, such as a stair;
+- the faces are numbered as an enclosure's are.
+
+The Nagara plinth's mouldings are profiles in courses.js, beside the Egyptian torus and gorge:
+- **khura**, the hoof: its top sloping steeply back;
+- **kumbha**, the pot: a fillet, a swelling belly, a neck;
+- **kalasha**, a smaller roll;
+- **kapota**, the dovecote eave: its underside curling out to a drooping beak.
+
+Kandariya's adhishthana is now ONE prism on the union of the units' outlines. Its half-width is a function of z,
+because every unit is centred on the axis. The five mouldings run round all of its projections and stop at the
+stair. The terrace's foot and eave are courses too. This replaced stacked boxes, whose tops counted as one big
+floor (most of it buried) and so painted a strip of flagstones along each visible ledge.
+
+**Rect face numbering.** planPoints reverses `rect` into its winding, so rect face 0 is the +z side, 1 is +x, 2 is
+−z and 3 is −x.
+
+**Roof slope mapping (finish.js).** v up a roof is the height divided by the mean sine of the roof's pitch. That
+mean now covers only the faces mapped up the slope. Before, it also counted flat tops, which are mapped on the
+plan. A stepped roof's course tops dragged it to its floor of 0.2, and the sloped faces' stone courses came out
+squeezed by up to 3.5×.
+
+## Lintels: a beam has a length (2026-10-27)
+
+A flat head is one beam laid across its opening, of stone or timber, and no quarry or forest gives one longer than
+a few metres. The Parthenon's architraves span 4.3 m from column to column. Wider than that, a builder turns an
+arch, sets pillars in the opening, or corbels brackets out to shorten it.
+
+**Walls and enclosures record their lintels.** Every wall and enclosure records the lintel of each flat-headed
+opening as `lintels: [{ at, span, e, t }]`, in the part's frame (assemble.js lintelsOf).
+
+**The check** (`lintels` in check.js, run by archcheck with the support findings) measures the FREE span: the
+widest stretch of the beam's underside, jamb to jamb, with nothing standing under it. The underside is probed
+every 10 cm, a hand under the springing, at depths from a wall's thickness outside the face to two inside. That
+finds a pillar standing in the opening, a portico's column before it, or a bracket out of a jamb.
+
+**The limit:**
+- A free span over 4.5 m is a finding: `lintel`, with `gap` the free span.
+- A part may say what its builders could set with `beam` (metres). Dendera's pronaos says 6.5, for the sandstone
+  architraves over its processional way.
+- A part built `light` (poles and laths) is skipped.
+
+**What it found:**
+- Kandariya's great hall had bare openings of 6 m and 5.6 m. Each now has two pillars standing under its lintel.
+- Dendera's middle intercolumniation has 5.8 m free.
+- The Greek temples' great doors are single marble lintels: the Parthenon's spans 4.8 m and Didyma's 5.5 m (on
+  site 5.6 m, about seventy tonnes). temples.py gives the cella front `beam: 6`.
+
+Over all 95 buildings, the full archcheck with the lintel check now reports 0 findings.

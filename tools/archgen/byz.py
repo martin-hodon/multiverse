@@ -25,30 +25,34 @@ add("dome", {"type": "dome", "sides": "ribs", "turn": -0.5, "radius": "S / 2 + d
              "at": [[0, "spring + S / 2 + winH", 0, 0]], "_about": "the dome: a shallow one (Hagia Sophia's rises less than a hemisphere), its corners on the axes like the pendentives' stations"})
 add("dome ribs", {"type": "ribs", "on": "dome", "count": "ribs", "width": 0.25, "depth": 0.2,
                   "_about": "forty ribs on Hagia Sophia's, one over each pier between two windows"})
-# ---- the semidome to the east, over its own window ring, and an exedra off it
+# ---- the semidome to the east, over its own window ring
 add("semidome windows", {"type": "ring", "count": 20, "rOuter": "S / 2 + domeT", "rInner": "S / 2", "height": "winH", "y": "spring - winH", "at": [0, 1, 2, 3, 4, 15, 16, 17, 18, 19],
                          "turn": 0.5, "opening": {"width": 0.9, "sill": 0.25, "springing": "winH - 0.6", "head": {"profile": "semicircular"}},
                          "place": [[0, 0, "S / 2 + pier", 0]], "_about": "a half ring of windows for the semidome to stand on"})
 add("semidome", {"type": "dome", "sweep": 0.5, "sides": 20, "radius": "S / 2 + domeT", "thickness": "domeT", "head": {"profile": "semicircular"},
                  "at": [[0, "spring", "S / 2 + pier", 0]],
                  "_about": "the semidome that opens the square into the long nave -- Hagia Sophia has one to the east and one to the west"})
-add("exedra", {"type": "dome", "sweep": 0.5, "radius": "S / 4", "thickness": "domeT", "head": {"profile": "semicircular"},
-               "at": [["S / 2 + pier + S / 4", "spring * 0.55", "S / 2 + pier + S * 0.2", "1.5707963"]],
-               "_about": "a smaller half-dome opening off the big one: the exedrae at the corners of the nave"})
 # ---- vault types over square bays
 off = "S * 2.2"
-add("sail vault", {"type": "pendentives", "sail": True, "span": "bay", "springing": "bay * 0.6", "sides": 16, "at": [[off, 0, 0, 0]],
-                   "_about": "the SAIL VAULT: the pendentives' sphere left whole, the domical vault over a Byzantine aisle bay"})
 add("sail piers", {"type": "column", "radius": 0.35, "height": "bay * 0.6", "sides": 8,
                    "at": [[f"{off} - bay / 2", 0, "0 - bay / 2", 0], [f"{off} + bay / 2", 0, "0 - bay / 2", 0], [f"{off} - bay / 2", 0, "bay / 2", 0], [f"{off} + bay / 2", 0, "bay / 2", 0]]})
+add("sail vault", {"type": "pendentives", "sail": True, "span": "bay", "springing": "bay * 0.6", "sides": 16, "at": [[off, 0, 0, 0]],
+                   "_about": "the SAIL VAULT: the pendentives' sphere left whole, the domical vault over a Byzantine aisle bay"})
+add("cloister walls", {"type": "enclosure", "plan": {"rect": ["bay + 1", "bay + 1"]}, "thickness": 0.7, "height": "bay * 0.6", "glass": False,
+                       "openings": [{"at": 0, "width": 1.6, "sill": 0, "springing": 1.9, "head": {"profile": "semicircular"}}],
+                       "at": [[off, 0, "bay * 1.6", 0]], "_about": "the square room the cloister vault covers: it springs from all four of its walls"})
 add("cloister vault", {"type": "dome", "sides": 4, "radius": "bay * 0.7071", "thickness": 0.35, "head": {"profile": "semicircular"},
-                       "at": [[off, 0, "bay * 1.6", 0]], "_about": "the CLOISTER VAULT: a dome of four webs over a square, its groins in the corners"})
+                       "at": [[off, "bay * 0.6", "bay * 1.6", 0]], "_about": "the CLOISTER VAULT: a dome of four webs over a square, its groins in the corners, springing all round from the walls"})
+add("rib piers", {"type": "box", "width": 1.1, "length": 1.1, "height": "bay * 0.6",
+                  "at": [[f"{off} - bay / 2", 0, "bay * 3.2 - bay / 2", 0], [f"{off} + bay / 2", 0, "bay * 3.2 - bay / 2", 0],
+                         [f"{off} - bay / 2", 0, "bay * 3.2 + bay / 2", 0], [f"{off} + bay / 2", 0, "bay * 3.2 + bay / 2", 0]],
+                  "_about": "a pier under each of the rib vault's corners: its push is gathered to them, and each pier's half past the corner takes it"})
 add("rib vault", {"type": "groin", "width": "bay", "length": "bay", "springing": "bay * 0.6", "top": "bay * 1.4", "head": {"profile": "pointed", "spread": 0.4},
                   "at": [[off, 0, "bay * 3.2", 0]]})
 add("rib vault ribs", {"type": "ribs", "on": "rib vault", "width": 0.22, "depth": 0.18, "wall": {"width": 0.3, "depth": 0.2},
                        "_about": "the RIB VAULT: the groin vault with ribs laid along its groins and round its arches -- the Gothic bay"})
 save('byzantine.json', {"name": "Domes on pendentives and vaults over squares",
- "_about": "WHAT HAGIA SOPHIA IS MADE OF, at a third of its size. A square between four great PIERS, spanned by four great ARCHES; between the arches four PENDENTIVES, the spherical triangles that turn the square into a circle; on that circle a ring of forty WINDOWS; on the windows a shallow DOME of forty RIBS. Opening off one side, a SEMIDOME on its own half ring of windows, and a smaller EXEDRA off that. Beside them the vaults a square bay is roofed with: the SAIL VAULT (the pendentives' sphere left whole: the Byzantine aisle), the CLOISTER VAULT (four webs) and the RIB VAULT (the Gothic groin vault with its ribs).",
+ "_about": "WHAT HAGIA SOPHIA IS MADE OF, at a third of its size. A square between four great PIERS, spanned by four great ARCHES; between the arches four PENDENTIVES, the spherical triangles that turn the square into a circle; on that circle a ring of forty WINDOWS; on the windows a shallow DOME of forty RIBS. Opening off one side, a SEMIDOME on its own half ring of windows. Beside them the vaults a square bay is roofed with: the SAIL VAULT (the pendentives' sphere left whole: the Byzantine aisle), the CLOISTER VAULT (four webs) and the RIB VAULT (the Gothic groin vault with its ribs).",
  "params": {"detail": 8, "S": 10.4, "pier": 2.4, "spring": 7.0, "archT": 0.8, "ribs": 40, "domeT": 0.5, "winH": 1.6, "bay": 5.0,
             "_S": "Hagia Sophia's square is 31m; this is a third of it"},
  "build": build, "parts": parts})

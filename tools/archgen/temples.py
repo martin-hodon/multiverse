@@ -59,8 +59,10 @@ def temple(name, about, P, order="doric", dipteral=False, roofed=True, front_sta
     add("crepidoma", {"type": "crepidoma", "width": "W", "length": "L", "steps": "steps", "stepH": "stepH", "stepOut": "stepOut", "at": [[0, 0, 0, 0]],
                       "_about": "the stepped platform; its top step is the stylobate the columns stand on"})
     if front_stair: add("front steps", {"type": "flight", "width": "D * 1.6", "run": 0.32, "rise": 0.17, "top": "base", "landing": 0,
-                        "at": [["D * 0.8", 0, "L / 2 + stepOut * (steps - 1) + base / 0.17 * 0.32", 1.5707963]],
-                        "_about": "the stairway up the middle of the east front, as the temple had it"})
+                        # (its top tread on the stylobate's edge, L / 2: it climbs OVER the crepidoma's steps, which it
+                        #  hides, to the floor the columns stand on -- it used to stop on the lowest step, in the air)
+                        "at": [["D * 0.8", 0, "L / 2 + base / 0.17 * 0.32", 1.5707963]],
+                        "_about": "the stairway up the middle of the east front, as the temple had it, over the crepidoma's steps to the stylobate"})
     ent = {"h": "entH", "depth": "D * 1.1", "cornice": {"h": "cornH", "out": "cornOut"}, **({"triglyphs": {"w": "D * 0.55", "d": 0.14}} if order == "doric" else {})}
     add("peristyle", {"type": "colonnade", "plan": "peristyle", "order": order, "front": "front", "side": "side",
                       "width": "W - 2 * inset", "length": "L - 2 * inset", "columnR": "D / 2", "height": "colH",
@@ -77,6 +79,9 @@ def temple(name, about, P, order="doric", dipteral=False, roofed=True, front_sta
                        "at": [[0, "base", "cellaZ - cellaL / 2 + wallT / 2", 0]]})
     add("cella front", {"type": "wall", "width": "cellaW - 2 * wallT", "height": "cellaH", "thickness": "wallT",
                         "openings": [{"at": "(cellaW - 2 * wallT) / 2", "width": "doorW", "sill": 0, "springing": "doorH", "head": {"profile": "flat"}}],
+                        # (its lintel one block of marble: the Parthenon's over a door near 5m wide, Didyma's -- some
+                        #  seventy tonnes -- over 5.6m; check.js lintels)
+                        "beam": 6.0,
                         "at": [[0, "base", "cellaZ + cellaL / 2", 0]], "_about": "the front wall of the naos, with its great door"})
     add("pronaos", {"type": "colonnade", "order": "doric", "count": "porch", "spacing": "(cellaW - D * 1.2) / (porch - 1)", "columnR": "D * 0.45",
                     "height": "colH * 0.97", "entablature": {"h": "entH * 0.8", "depth": "D"}, "at": [[0, "base", "cellaZ + cellaL / 2 + porchD", 0]],

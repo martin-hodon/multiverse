@@ -1,0 +1,43 @@
+{
+  "name": "Sarafan",
+  "kind": "garment",
+  "layer": 3,
+  "skirted": true,
+  "_about": "the sarafan: the Russian woman's long pinafore dress, high on the breast on two broad straps over the white shirt (rubakha), falling straight and full to the feet, a band of braid along its hem",
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "scarlet"
+    },
+    "trim": {
+      "pattern": "fabrics/braid",
+      "palette": "gold-braid"
+    }
+  },
+  "params": {
+    "length": "floor - 0.03",
+    "hem": 0.05
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "chest",
+        "neckline": "square",
+        "neckFront": 0.12,
+        "neckBack": 0.06,
+        "neckWidth": 70
+      }
+    },
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "chest",
+        "to": "length",
+        "flare": 0.26,
+        "pleats": 10,
+        "hem": "hem"
+      }
+    }
+  ]
+}

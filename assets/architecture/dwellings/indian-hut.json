@@ -1,0 +1,267 @@
+{
+ "name": "Village hut",
+ "_about": "The Indian village house: mud walls on a raised plinth, plastered and limewashed, a low door and small windows, a hipped thatch, the veranda posts in front, the clay hearth (chulha) inside (India, -500-1900)",
+ "era": "-500-1900",
+ "region": "India",
+ "params": {
+  "detail": 4
+ },
+ "parts": {
+  "plinth": {
+   "type": "box",
+   "width": 6.4,
+   "length": 5.8,
+   "height": 0.4,
+   "at": [
+    [
+     0,
+     0,
+     0.3,
+     0
+    ]
+   ]
+  },
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     5.6,
+     4.2
+    ]
+   },
+   "thickness": 0.35,
+   "height": 2.3,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": -0.8,
+      "width": 0.9,
+      "sill": 0,
+      "springing": 1.75,
+      "head": {
+       "profile": "flat"
+      }
+     },
+     {
+      "at": 1.4,
+      "width": 0.5,
+      "sill": 1.0,
+      "springing": 1.6,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ],
+    "1": [
+     {
+      "at": 0,
+      "width": 0.5,
+      "sill": 1.1,
+      "springing": 1.6,
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0.4,
+     0,
+     0
+    ]
+   ],
+   "glass": false
+  },
+  "roof": {
+   "type": "roof",
+   "form": "hip",
+   "width": 5.6,
+   "length": 4.2,
+   "pitch": 32,
+   "overhang": 1.0,
+   "at": [
+    [
+     0,
+     2.7,
+     0,
+     0
+    ]
+   ],
+   "shell": 0.25
+  },
+  "posts": {
+   "type": "column",
+   "radius": 0.07,
+   "height": 1.6,
+   "sides": 6,
+   "at": [
+    [
+     -2.6,
+     0.4,
+     2.9,
+     0
+    ],
+    [
+     0,
+     0.4,
+     2.9,
+     0
+    ],
+    [
+     2.6,
+     0.4,
+     2.9,
+     0
+    ]
+   ]
+  },
+  "chulha": {
+   "type": "marker",
+   "role": "fire",
+   "at": [
+    [
+     1.6,
+     0.4,
+     -1.0,
+     0
+    ]
+   ],
+   "data": {
+    "r": 0.2,
+    "h": 0.25
+   }
+  },
+  "door": {
+   "type": "marker",
+   "role": "door",
+   "at": [
+    [
+     -0.8,
+     0.4,
+     1.925,
+     0
+    ]
+   ],
+   "data": {
+    "w": 0.9,
+    "h": 1.75
+   }
+  },
+  "bed": {
+   "type": "item",
+   "item": "items/furniture/charpai",
+   "at": [
+    [
+     -1.95,
+     0.4,
+     -0.75,
+     -1.5707963
+    ]
+   ],
+   "seed": 1
+  },
+  "tray": {
+   "type": "item",
+   "item": "items/furniture/low-table",
+   "at": [
+    [
+     1.4,
+     0.4,
+     0.8,
+     0
+    ]
+   ],
+   "seed": 2,
+   "params": {
+    "r": 0.4
+   }
+  },
+  "stool 1": {
+   "type": "item",
+   "item": "items/furniture/stool",
+   "at": [
+    [
+     0.65,
+     0.4,
+     0.8,
+     1.5707963
+    ]
+   ],
+   "seed": 1,
+   "params": {
+    "h": 0.4
+   },
+   "markers": [
+    "seat"
+   ]
+  },
+  "stool 1 place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     0.65,
+     0.8,
+     0.8,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 0
+   }
+  },
+  "stool 2": {
+   "type": "item",
+   "item": "items/furniture/stool",
+   "at": [
+    [
+     2.15,
+     0.4,
+     0.8,
+     -1.5707963
+    ]
+   ],
+   "seed": 2,
+   "params": {
+    "h": 0.4
+   },
+   "markers": [
+    "seat"
+   ]
+  },
+  "stool 2 place": {
+   "type": "marker",
+   "role": "spot",
+   "at": [
+    [
+     2.15,
+     0.8,
+     0.8,
+     0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 3.1415927
+   }
+  }
+ },
+ "build": [
+  "plinth",
+  "walls",
+  "roof",
+  "posts",
+  "chulha",
+  "door",
+  "bed",
+  "tray",
+  "stool 1",
+  "stool 1 place",
+  "stool 2",
+  "stool 2 place"
+ ]
+}

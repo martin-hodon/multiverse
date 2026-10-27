@@ -1,6 +1,6 @@
 {
  "name": "Timber",
- "_about": "Timber: the framed wall of a town house (its storey one tile tall, laid with align: part on the storey's foot), close studding, floor boards and plain wood for furniture and stairs; rough planks, weatherboarding, knotty softwood, herringbone and basket-weave parquet, wainscot panelling, a log's end grain, bark.",
+ "_about": "Timber: the framed wall of a town house (its storey one tile tall, laid with align: part on the storey's foot), close studding, floor boards and plain wood for furniture and stairs; rough planks, weatherboarding, round logs, knotty softwood, herringbone and basket-weave parquet, wainscot panelling, a log's end grain, bark.",
  "patterns": {
   "frame": {
    "size": [
@@ -399,6 +399,143 @@
       [
        0,
        0.385
+      ]
+     ]
+    }
+   ]
+  },
+  "logs": {
+   "size": [
+    2.0,
+    1.0
+   ],
+   "palette": "oak-grey",
+   "palettes": [
+    "pine",
+    "larch",
+    "tarred"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "a wall of round LOGS laid one on another (the Russian izba, the Scandinavian stue, the log cabin): four logs to the metre, each rounded -- the light on its upper flank, the shade under its belly -- the moss or oakum caulking the joint between them",
+   "layers": [
+    {
+     "shape": "rect",
+     "w": 2.0,
+     "h": 0.24,
+     "fill": 1,
+     "vary": 0.1,
+     "grid": {
+      "n": [
+       1,
+       4
+      ]
+     }
+    },
+    {
+     "field": "grain",
+     "colors": [
+      1,
+      2
+     ],
+     "freq": 3,
+     "turns": 10,
+     "amount": 0.8,
+     "alpha": 0.45
+    },
+    {
+     "shape": "band",
+     "h": 0.05,
+     "fill": 3,
+     "alpha": 0.35,
+     "at": [
+      [
+       0,
+       -0.305
+      ],
+      [
+       0,
+       -0.055
+      ],
+      [
+       0,
+       0.195
+      ],
+      [
+       0,
+       0.445
+      ]
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.07,
+     "fill": 2,
+     "alpha": 0.6,
+     "at": [
+      [
+       0,
+       -0.445
+      ],
+      [
+       0,
+       -0.195
+      ],
+      [
+       0,
+       0.055
+      ],
+      [
+       0,
+       0.305
+      ]
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.03,
+     "fill": 0,
+     "alpha": 0.7,
+     "at": [
+      [
+       0,
+       -0.48
+      ],
+      [
+       0,
+       -0.23
+      ],
+      [
+       0,
+       0.02
+      ],
+      [
+       0,
+       0.27
+      ]
+     ]
+    },
+    {
+     "shape": "band",
+     "h": 0.012,
+     "fill": 0,
+     "alpha": 0.9,
+     "at": [
+      [
+       0,
+       -0.25
+      ],
+      [
+       0,
+       0.0
+      ],
+      [
+       0,
+       0.25
+      ],
+      [
+       0,
+       0.5
       ]
      ]
     }

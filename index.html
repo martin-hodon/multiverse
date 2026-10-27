@@ -23,6 +23,18 @@
   #chat div { text-shadow: 0 1px 3px #000c; margin: 2px; }
   #toast { position: fixed; left: 50%; top: 18%; transform: translateX(-50%); color: #fff; font: 600 20px sans-serif;
            text-shadow: 0 1px 4px #000c; pointer-events: none; opacity: 0; transition: opacity .6s; }
+  #setup { position: fixed; inset: 0; z-index: 20; overflow-y: auto; color: #efe9dd; font: 14px/1.45 Georgia, serif;
+           background: radial-gradient(ellipse at 50% 30%, #3a2c20, #17110c 75%); padding: 6vh 16px; box-sizing: border-box; }
+  #setup h1 { font: 400 30px/1.2 Georgia, serif; text-align: center; margin: 0 0 6px; letter-spacing: .04em; }
+  #setup .sub { text-align: center; color: #b9ab94; margin: 0 0 26px; }
+  #setup .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; max-width: 980px; margin: 0 auto; }
+  #setup button.card { all: unset; box-sizing: border-box; cursor: pointer; padding: 14px 16px; border-radius: 8px;
+                       background: #ffffff10; border: 1px solid #ffffff22; transition: background .15s, border-color .15s; }
+  #setup button.card:hover, #setup button.card:focus-visible { background: #ffffff22; border-color: #e6c88c; }
+  #setup .card b { display: block; font: 400 18px Georgia, serif; color: #f6eedd; margin-bottom: 4px; }
+  #setup .card span { color: #b9ab94; font-size: 12.5px; }
+  #setup .card.any { border-style: dashed; }
+  #setup .back { all: unset; cursor: pointer; display: block; margin: 22px auto 0; color: #b9ab94; text-decoration: underline; }
   #chatIn { position: fixed; left: 50%; bottom: 11.5%; transform: translateX(-50%); width: 340px;
             padding: 6px 10px; border-radius: 6px; border: none; background: #ffffffdd; display: none; font: 14px sans-serif; }
 </style>
@@ -71,11 +83,11 @@ import { buildTerrainData } from "./terrain_data.js";
 import { makeGround, WLEVEL } from "./ground.js";
 import { growMap } from "./mapgen.js";
 import { animateSpecies } from "./anim.js";
-import { BUILDINGS, LANDMARKS, LAND, DRESS, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
+import { BUILDINGS, LANDMARKS, LANDMARK_NAMES, LAND, DRESS, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
 import { planTown, townStyle, doorNormal } from "./town.js";
 import { makeCart, wheelParams, FLEET, LOAD_VARIANTS, CART_SIZES } from "./carts.js";
 import { makeTree, TREE_SPECIES, WARM_TREES, makeMushroom, MUSHROOMS, makeBush, makeCloud, CLOUD_PARTS, rng } from "./flora.js";
-import { makePerson, PEOPLE, SOLDIER, setPeriodDress } from "./people.js";
+import { makePerson, personKind, PEOPLE, SOLDIER, setPeriodDress } from "./people.js";
 import { laneFrom, buildPathNetwork, planRoads, routeGraph, wanderLoop, ROAD_WET } from "./paths.js";
 import { createVillageLife } from "./village-life.js";
 import { createTools, handIndex, paintedItemGeometry } from "./tools.js";
@@ -200,6 +212,49 @@ const townRng = (() => { let a = townSeed; return () => { a = (a + 0x6D2B79F5) >
 // own stream: the rest of the world's draws stay as they were). The monuments, what people wear, the town's houses, the
 // fisherman's boat, the ground and the trees follow it.
 const PERIODS = ASSETS.get("world/periods")?.periods ?? {};
+// THE START MENU: the world's period, then its monument, chosen before anything is built -- everything else (the
+// seed: the land, the town, its people, the weather) drawn at random as always. The choice is written into the
+// address (?period=, ?monument=), so a reload or a shared link keeps it; ?menu=1 asks again, ?menu=0 never asks. Not
+// shown where the address already says (?period=, ?building=), nor to the build tools (pregen's recording, a
+// probe, any page driven headless).
+await chooseSetup();
+async function chooseSetup() {
+  const ask = qp.get("menu") === "1" || (qp.get("menu") !== "0" && !qp.has("period") && !qp.has("building") && !qp.has("probe") && !RECORD_WORLD && !navigator.webdriver);
+  if (!ask) return;
+  const monumentsOf = (k) => LANDMARKS.filter((m) => PERIODS[k].landmarks?.includes(m));
+  const ages = Object.keys(PERIODS).filter((k) => monumentsOf(k).length);
+  const box = document.createElement("div"); box.id = "setup"; document.body.append(box);
+  const el = (tag, attrs, ...kids) => { const e = Object.assign(document.createElement(tag), attrs); e.append(...kids); return e; };
+  const card = (title, note, onclick, any = false) => el("button", { className: "card" + (any ? " any" : ""), onclick }, el("b", { textContent: title }), el("span", { textContent: note }));
+  return new Promise((done) => {
+    const finish = (period, monument) => {
+      let u = null;
+      try { u = new URL(location.href); } catch { /* (a sandbox without an address) */ }
+      for (const q of [qp, u?.searchParams]) if (q) {   // (the address as it is now: the seed is in it)
+        for (const [k, v] of [["period", period], ["monument", monument]]) v ? q.set(k, v) : q.delete(k);
+        q.delete("menu");
+      }
+      try { if (u) history.replaceState(null, "", u); } catch { /* (a sandbox without history) */ }
+      box.remove(); done();
+    };
+    const show = (title, sub, cards, back) => {
+      box.replaceChildren(el("h1", { textContent: title }), el("p", { className: "sub", textContent: sub }), el("div", { className: "grid" }, ...cards),
+                          ...(back ? [el("button", { className: "back", textContent: "\u2190 another age", onclick: back })] : []));
+      box.querySelector("button")?.focus();
+    };
+    const ages_ = () => show("Choose an age", "its monument, its people's dress, its town, its fields and its trees -- the rest of the world is drawn at random", [
+      ...ages.map((k) => card(PERIODS[k].name ?? k, monumentsOf(k).map((m) => LANDMARK_NAMES[m]).join(" \u00b7 "), () => monuments(k))),
+      card("Surprise me", "any age, any monument", () => finish(null, null), true)]);
+    const monuments = (k) => {
+      const ms = monumentsOf(k);
+      if (ms.length === 1) return finish(k, ms[0]);
+      show(PERIODS[k].name ?? k, "and the monument the town grows round", [
+        ...ms.map((m) => card(LANDMARK_NAMES[m], "", () => finish(k, m))),
+        card("Any of them", "drawn at random", () => finish(k, null), true)], ages_);
+    };
+    ages_();
+  });
+}
 const PERIOD_NAME = (() => {
   const q = qp.get("period"), ks = Object.keys(PERIODS);
   if (q && PERIODS[q]) return q;
@@ -222,7 +277,12 @@ bootMark("THE GROWN MAP (mapgen.js, docs/world.md):");
 // (the sines, the lake, three landmarks); a stripped scene (?trees=0) has no room for one and keeps the old ground.
 const MAPGEN = qp.get("map") !== "0" && qp.get("trees") !== "0";
 const townKeys = bParam === "none" ? [] : bParam ? bParam.split(",").filter((k) => k in BUILDINGS)   // (`in`: naming one must not build it yet)
-  : (() => { const own = LANDMARKS.filter((k) => PERIOD.landmarks?.includes(k)), pool = own.length ? own : [...LANDMARKS]; const out = []; while (out.length < (MAPGEN ? 1 : 3) && pool.length) out.push(pool.splice(Math.floor(townRng() * pool.length), 1)[0]); return out; })();   // (the period's monuments)
+  : (() => {   // (the period's monuments -- ?monument= the one the start menu chose, first)
+    const own = LANDMARKS.filter((k) => PERIOD.landmarks?.includes(k)), pool = own.length ? own : [...LANDMARKS], out = [];
+    const m = qp.get("monument");
+    if (LANDMARKS.includes(m)) { out.push(m); if (pool.includes(m)) pool.splice(pool.indexOf(m), 1); }
+    while (out.length < (MAPGEN ? 1 : 3) && pool.length) out.push(pool.splice(Math.floor(townRng() * pool.length), 1)[0]);
+    return out; })();
 bootMark("WHAT WAS WORKED OUT ONCE (pregen.js, build");
 // WHAT WAS WORKED OUT ONCE (pregen.js, build/pregen.py): these landmarks' finished geometry, wall fields and tiles, and
 // every fabric, fetched before anything is built -- whatever pregen/ lacks (or holds for other code) is made as always
@@ -3221,7 +3281,7 @@ if (TOWN?.frame) {
     wallStep(W, 0);   // (where it starts: its place for outToPlay)
     return W;
   };
-  { const seed = 1601, pd = makePerson({ seed, kind: "man", adult: true });
+  { const seed = 1601, pd = makePerson({ seed, kind: "man", adult: true, work: true });
     watchman = walker(seed, pd, (an) => [{ an, tool: "lantern", hand: handIndex(pd, "L"), lamp: true }, { an, tool: "spear", hand: handIndex(pd) }], 0); }
   { const seed = 1611, pd = makePerson({ seed, kind: "man", adult: true, outfit: SOLDIER }), kit = pickKit(ASSETS.get("items/kits/guard"), seed);
     sentry = walker(seed, pd, (an) => [{ an, tool: kit.main, hand: handIndex(pd, "L") }], L.at(-1) / 2);   // (the rig's "L": the figure's right)
@@ -3281,7 +3341,7 @@ const bankAt = (offs, name) => {
 if (hasRiver && VILLAGE_X !== null) {
   const spot = bankAt([-24, -34, 22, 32], "washer");   // (below the bridge or above it)
   if (spot) {
-    const [x, z] = spot, seed = 1661, pd = makePerson({ seed, kind: "woman", adult: true }), an = extrasHerd.add(pd);
+    const [x, z] = spot, seed = 1661, pd = makePerson({ seed, kind: "woman", adult: true, work: true }), an = extrasHerd.add(pd);
     an.position.set(x, groundH(x, z), z); an.rotY = Math.PI / 2; an.animT = 0; an.ampT = 0; an.gesture = "scrub"; an.work = 1; an.hidden = true;   // (facing the water: -z)
     talkers.push({ p: an, seed, kind: pd.kind });
     const gy = groundH(x + .8, z + .3), basket = blockMesh([{ at: [x + .8, gy + .17, z + .3], size: [.55, .34, .4], colour: [.55, .4, .22] }, { at: [x + .8, gy + .37, z + .3], size: [.48, .1, .34], colour: [.93, .92, .86] }], "wash basket");
@@ -3488,7 +3548,7 @@ const choreMiss = (C, c) => {   // why a chore's place c will not do (null: it w
       const g = itemGroup(path, { params }); g.position.set(lx, ly, lz); g.rotation.y = deg * Math.PI / 180; group.add(g);
     }
     group.visible = false; scene.add(group);
-    const pd = makePerson({ seed: C.seed, kind: C.kind, adult: true, ...(C.sit ? { pose: "sit" } : {}), ...(C.outfit && (!PERIOD.dress || "" in PERIOD.dress) ? { outfit: { named: C.outfit } } : {}) }), an = extrasHerd.add(pd);   // (outfit: a working kit the chore names -- wardrobe.json `outfits`; medieval kits, so only where the period dresses in the default style -- an Egyptian farmhand keeps his own)   // (not `still`: that strips the work's swing)
+    const pd = makePerson({ seed: C.seed, kind: C.kind, adult: true, ...(C.sit ? { pose: "sit" } : {}), ...(C.outfit && (!PERIOD.dress || "" in PERIOD.dress) ? { outfit: { named: C.outfit } } : { work: true }) }), an = extrasHerd.add(pd);   // (outfit: a working kit the chore names -- wardrobe.json `outfits`; medieval kits, so only where the period dresses in the default style -- an Egyptian farmhand wears his own style's working clothes: `work`)   // (not `still`: that strips the work's swing)
     const [fx, fz] = turn(place, C.stand), [lx, lz] = C.look, wx = lx * Math.cos(place.face) + lz * Math.sin(place.face), wz = -lx * Math.sin(place.face) + lz * Math.cos(place.face);
     an.position.set(fx, C.sit ? pd.sitAt(y + C.sit) : y, fz); an.rotY = Math.atan2(-wz, wx);
     an.animT = 0; an.ampT = 0; an.gesture = C.gesture; an.work = 1; an.hidden = true; an.kind = pd.kind;
@@ -3520,7 +3580,7 @@ if (tagGreen && qp.get("flock") !== "0") {
   if (route) {
     claim("pasture", [...route, route[0]], 3);
     const fig = (def, seed) => { const an = extrasHerd.add(def); an.hidden = true; const f = { an, gait: gaitBase(def), graze: def.graze, rest: def.rest ? def.rest * legLength(an) : 0 }; pastureFolk.push(an); return f; };
-    const sd = makePerson({ seed: 1701, kind: "man", adult: true }), shepherd = fig(sd);
+    const sd = makePerson({ seed: 1701, kind: "man", adult: true, work: true }), shepherd = fig(sd);
     talkers.push({ p: shepherd.an, seed: 1701, kind: sd.kind });
     shepherdHold = [{ an: shepherd.an, tool: "items/tools/crook", hand: handIndex(sd) }];
     const sheepDef = speciesDef("sheep"), dogDef = speciesDef("dog");
@@ -4202,7 +4262,7 @@ let life = null, lifeHerd = null;
     lifeHerd = createComposite(nV * 4 * 48);   // four poses a villager, one shown
     scene.add(lifeHerd.mesh);
     life = createVillageLife({ sites: RIVERSIDE.filter((s) => s.bank !== "wall" && s.key !== "bridge"), BUILDINGS, siteZ, supportAt, router: routeGraph(pathRoutes, pathLinks),
-      makePerson, gaitBase, herd: lifeHerd, track, talkers, isNight: () => night, bellHour, doors, count: nV, TICK,
+      makePerson, personKind, gaitBase, herd: lifeHerd, track, talkers, isNight: () => night, bellHour, doors, count: nV, TICK,
       isWet: () => weather === 1, roofed: (x, z, y) => roofedAt(x, z, y) });
   }
 }
@@ -4566,7 +4626,7 @@ const _boatLamp = new THREE.Vector3();
     const fish = new THREE.Group(), fishItem = itemGroup("items/food/fish", { params: { s: 1.1 } }); fishItem.rotation.z = Math.PI / 2; fishItem.position.y = -.1; fish.add(fishItem);   // (hooked by the mouth: hanging head up)
     fish.visible = false; grp.add(fish);
     const fh = createComposite(40); scene.add(fh.mesh); fisherHerd = fh;
-    const pd = makePerson({ seed: 905, pose: "sit", still: true, adult: true });
+    const pd = makePerson({ seed: 905, pose: "sit", still: true, adult: true, work: true });
     for (const p of pd.parts) if (p.id.startsWith("arm")) p.rot = [(p.id.endsWith("L") ? 1 : -1) * 10, 0, 60];   // hands held forward: on the oar handles, on the rod
     for (const p of pd.parts) if (p.id.startsWith("fore")) p.rot = [0, 0, 25];
     const fm = fh.add(pd);

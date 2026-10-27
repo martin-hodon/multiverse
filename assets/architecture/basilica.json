@@ -25,6 +25,8 @@
     "winW": 3.0,
     "winSill": 5.0,
     "clearWinW": 2.6,
+    "clearLights": 0,
+    "_clearLights": "tracery in the clerestory windows: how many lights (tracery.js) -- 0 for none, a Romanesque church's",
     "towerW": 12.0,
     "towerT": 1.6,
     "towerH": 48.0,
@@ -62,7 +64,16 @@
     "_along": "a bay is rarely square, and a groin vault's crown is set by its LONGER arch: the arch along the nave is fitted to the height the vault has, flattening to a segmental one where a pointed head would not fit",
     "aisleBays": "bays",
     "_aisleBays": "how many bays of aisle vault, from the east: a cathedral whose west towers stand over its aisles' last bays leaves those to the towers",
-    "_halfB": "where the arcade and aisle walls are placed: a wall's thickness lies behind its line (toward the nave, turned a quarter), so the arcade's line is its OUTER face, and the aisle wall's is halfA + aisleT / 2"
+    "_halfB": "where the arcade and aisle walls are placed: a wall's thickness lies behind its line (toward the nave, turned a quarter), so the arcade's line is its OUTER face, and the aisle wall's is halfA + aisleT / 2",
+    "aisleRoofIn": "naveW / 2 + pierT + 0.35",
+    "aisleRoofOut": "bodyW / 2 + 0.3",
+    "eaveA": "aisleTop + 1.2",
+    "_eaveA": "the aisles' wall plate: their walls' top, where their lean-tos sit and the end walls step in to the nave's width",
+    "naveB": "naveW + 2 * pierT",
+    "sideB": "(bodyW - naveB) / 2",
+    "lombard": 0,
+    "_lombard": "1: the clerestory and the aisle walls articulated the Romanesque way -- lesenes a bay apart, an arched corbel table under the eaves (lombard.js)",
+    "lombardArch": 0.8
   },
   "parts": {
     "arcade": {
@@ -110,7 +121,8 @@
         "head": {
           "profile": "arch",
           "spread": "clearSpread"
-        }
+        },
+        "tracery": "clearLights"
       },
       "at": [
         [
@@ -126,12 +138,18 @@
           "0 - quarter"
         ]
       ],
-      "_about": "the clerestory wall, up to the vault's top: it closes the lunette under every wall arch, which would otherwise stand open to the sky"
+      "_about": "the clerestory wall, up to the vault's top: it closes the lunette under every wall arch, which would otherwise stand open to the sky",
+      "lombard": {
+        "on": "lombard",
+        "arch": "lombardArch",
+        "bay": "bayLen",
+        "lesene": 0.6
+      }
     },
     "aisle wall": {
       "type": "wall",
       "width": "naveL",
-      "height": "aisleTop + 1.2",
+      "height": "eaveA",
       "thickness": "aisleT",
       "openings": {
         "pattern": "bays",
@@ -156,7 +174,13 @@
           "zc",
           "0 - quarter"
         ]
-      ]
+      ],
+      "lombard": {
+        "on": "lombard",
+        "arch": "lombardArch",
+        "bay": "bayLen",
+        "lesene": 0.6
+      }
     },
     "nave vault": {
       "type": "groin",
@@ -282,7 +306,7 @@
     "east wall": {
       "type": "wall",
       "width": "bodyW",
-      "height": "clearH",
+      "height": "eaveA",
       "thickness": "pierT",
       "openings": [
         {
@@ -320,7 +344,8 @@
           "zc + (0 - naveL / 2)",
           0
         ]
-      ]
+      ],
+      "_about": "the east end across nave and aisles, up to the aisles' wall plate, with its three lancets; over it the nave's own end steps in"
     },
     "tower wall": {
       "type": "wall",
@@ -341,12 +366,12 @@
     },
     "west rose": {
       "type": "wall",
-      "width": "bodyW",
-      "height": "clearH + 3 - roseY",
+      "width": "naveB",
+      "height": "naveTop - roseY",
       "thickness": "pierT",
       "openings": [
         {
-          "at": "bodyW / 2",
+          "at": "naveB / 2",
           "width": "roseW",
           "sill": 1.2,
           "springing": "1.2 + roseW / 2",
@@ -362,7 +387,8 @@
           "zc + (frontZ + pierT)",
           0
         ]
-      ]
+      ],
+      "_about": "the rose in the nave's end over the portal, up to the nave's wall plate"
     },
     "nave ribs": {
       "type": "ribs",
@@ -384,6 +410,80 @@
         "width": 0.45,
         "depth": 0.3
       }
+    },
+    "nave roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "naveW + 2 * pierT + 0.6",
+      "length": "naveL + 2 * pierT",
+      "pitch": 35,
+      "at": [
+        [
+          0,
+          "naveTop",
+          "zc",
+          0
+        ]
+      ],
+      "_about": "the nave's roof on the clerestory's wall plate, over the vault's extrados: its gables close the ends over the east wall and the rose"
+    },
+    "aisle roofs": {
+      "type": "roof",
+      "form": "shed",
+      "width": "aisleRoofOut - aisleRoofIn",
+      "length": "naveL + 2 * pierT",
+      "pitch": 5.5,
+      "at": [
+        [
+          "0 - (aisleRoofIn + aisleRoofOut) / 2",
+          "aisleTop + 1.2",
+          "zc",
+          0
+        ],
+        [
+          "(aisleRoofIn + aisleRoofOut) / 2",
+          "aisleTop + 1.2",
+          "zc",
+          3.14159265
+        ]
+      ],
+      "_about": "a lean-to over each aisle, on the aisle wall, rising to just under the clerestory's sills"
+    },
+    "east gable wall": {
+      "type": "wall",
+      "width": "naveB",
+      "height": "naveTop - eaveA",
+      "thickness": "pierT",
+      "at": [
+        [
+          0,
+          "eaveA",
+          "zc + (0 - naveL / 2)",
+          0
+        ]
+      ],
+      "_about": "the nave's end over the aisle roofs, as wide as the nave and its walls, up to the wall plate the roof sits on -- closing the vault's last lunette (a wall stopped where the vault springs leaves the arch of its end cell open to the sky); the roof's gable stands on it"
+    },
+    "west aisle ends": {
+      "type": "wall",
+      "width": "sideB",
+      "height": "eaveA - roseY",
+      "thickness": "pierT",
+      "at": [
+        [
+          "0 - (naveB + sideB) / 2",
+          "roseY",
+          "zc + (frontZ + pierT)",
+          0
+        ],
+        [
+          "(naveB + sideB) / 2",
+          "roseY",
+          "zc + (frontZ + pierT)",
+          0
+        ]
+      ],
+      "_about": "the front of each aisle beside the rose, up to the aisles' wall plate"
     }
   },
   "build": [
@@ -396,6 +496,10 @@
     "aisle ribs",
     "west front",
     "west rose",
-    "east wall"
+    "west aisle ends",
+    "east wall",
+    "east gable wall",
+    "nave roof",
+    "aisle roofs"
   ]
 }

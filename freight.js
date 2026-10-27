@@ -101,7 +101,7 @@ export function createFreight(world) {
     // two dock hands, banner people in the folk herd's way: their own little herd
     const handHerd = createComposite(5 * 40); scene.add(handHerd.mesh);   // two hands x two rigs, and the boatman
     for (let i = 0; i < 2; i++) {   // each hand is two rigs: walking free, and walking with a load held out in front
-      const pd = makePerson({ seed: 900 + i * 3, adult: true }), pc = makePerson({ seed: 900 + i * 3, pose: "carry", adult: true });
+      const pd = makePerson({ seed: 900 + i * 3, adult: true, work: true }), pc = makePerson({ seed: 900 + i * 3, pose: "carry", adult: true, work: true });
       const an = handHerd.add(pd), anC = handHerd.add(pc);
       const start = LANDER.way[3];
       const post = [start[0] + 1.5 + i * 1.6, .05, start[2] - 2.2];   // each hand's own waiting post on the quay

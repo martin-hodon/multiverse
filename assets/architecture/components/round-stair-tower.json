@@ -14,6 +14,9 @@
     "stageH": 4.0,
     "capRise": 6.0,
     "finial": 1.6,
+    "doorW": 1.2,
+    "archW": 1.1,
+    "_doorW": "its doors' width (and `archW` the belvedere's arches'): a narrower tower has narrower bays",
     "_R": "the tower's outside radius; `wall` its thickness; H the level the stair arrives at (the terrace's)",
     "_steps": "the spiral's steps: the landing's bearing follows from their number, so a caller picks it to arrive facing the door it wants",
     "sr": "R - wall - 0.05",
@@ -71,7 +74,7 @@
         "doorBay"
       ],
       "opening": {
-        "width": 1.2,
+        "width": "doorW",
         "sill": 0,
         "springing": 2.0,
         "head": {
@@ -117,9 +120,9 @@
       ],
       "glass": false,
       "opening": {
-        "width": 1.1,
+        "width": "archW",
         "sill": 1.0,
-        "springing": "stageH - 0.6 - 0.55",
+        "springing": "stageH - 0.6 - archW / 2",
         "head": {
           "profile": "semicircular"
         }
@@ -146,9 +149,9 @@
       ],
       "glass": false,
       "opening": {
-        "width": 1.2,
+        "width": "doorW",
         "sill": 0,
-        "springing": "stageH - 0.6 - 0.6",
+        "springing": "stageH - 0.6 - doorW / 2",
         "head": {
           "profile": "semicircular"
         }

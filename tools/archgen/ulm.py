@@ -24,7 +24,7 @@ def stage_walls(door_faces):
     """the storey's walls: a blind lower band (`low`) and tall pointed windows over it; `door_faces` get openings
     in the lower band -- face 0 (+z) the arcade of `doorN` arches, face 2 (-z) one door `backW` wide"""
     upper = {"openings": {"pattern": "wins", "width": "winW", "gap": "winGap", "sill": "winSill", "springing": "winSpring",
-                          "head": pointed()}, "glass": "glazed"}
+                          "head": pointed(), "tracery": {"lights": "lights"}}, "glass": "glazed"}
     d = {"type": "enclosure", "plan": {"rect": ["W", "W"]}, "thickness": "t", "height": "H",
          "tiers": [{"h": "low", "openings": []}, upper], "at": [[0, 0, 0, 0]]}
     faces = {}
@@ -76,18 +76,19 @@ sparts["slab"] = {"type": "box", "width": "W - 2 * t + 0.2", "length": "W - 2 * 
 STAGE = {"name": "Gothic tower stage",
          "_about": "ONE SQUARE STOREY OF A GOTHIC TOWER, stacked to build one: walls `W` square and `H` high, a blind band (`low`) and over it tall pointed windows, `wins` to a face (open with `glazed` 0: a belfry); the walls may instead have an arcade of `doorN` arches in the band on the +z face (`walls door`) and a portal through the back as well (`walls portal`: the porch hall); two buttresses at every corner (`buttresses`, or only at the +z corners, `front buttresses`), pinnacles on them (`pinnacles` / `front pinnacles`) or on the walls' corners (`corner pinnacles`), a `parapet`; and the storey's STAIR -- a `tower-stair` turret at (`tx`, `tz`) from this storey's floor to the floor at its head, cut round the turret -- or a plain `slab`. Place it at its middle, at its floor. Ulm's west tower is four of these, each turret in another corner.",
          "params": {"detail": 4, "W": 20.0, "H": 18.0, "t": 1.6, "low": "H * 0.25",
-                    "wins": 2, "winW": 2.4, "winGap": 2.4, "winSill": 1.0, "winSpring": "H - low - 1.4 - winW * 0.8661", "glazed": 1,
+                    "wins": 2, "winW": 2.4, "winGap": 2.4, "winSill": 1.0, "winSpring": "H - low - 1.4 - winW * 0.8661", "glazed": 1, "lights": 0,
                     "doorN": 1, "doorW": 3.0, "doorGap": 1.6, "doorSpring": "low - 1.0 - doorW * 0.8661",
                     "backW": 4.0, "backSpring": "low - 1.0 - backW * 0.8661",
                     "bw": 2.0, "bd": 1.8, "pinW": "min(bw, bd) * 0.8", "pinH": 3.0, "pinS": 5.0, "parapetH": 1.2,
                     "tR": 2.1, "c": "W / 2 - t - tR - 0.05", "tx": "c", "tz": "c", "hand": "right", "n": 8,
                     "_winSpring": "the windows' springing over the band: their heads (equilateral) end 1.4m under the storey's top",
-                    "_c": "a turret touching two walls in the (+x, +z) inner corner; tx, tz place it"},
+                    "_c": "a turret touching two walls in the (+x, +z) inner corner; tx, tz place it",
+                    "_lights": "the windows' tracery (tracery.js): how many lights, 0 for none -- glazed or open"},
          "build": ["walls", "buttresses", "buttresses side", "stair"], "parts": sparts}
 
 # ---- GOTHIC OCTAGON STAGE: the octagonal storey over a square tower
 def oct_walls(door):
-    upper = {"openings": [{"at": 0, "width": "winW", "sill": "winSill", "springing": "winSpring", "head": pointed()}], "glass": "glazed"}
+    upper = {"openings": [{"at": 0, "width": "winW", "sill": "winSill", "springing": "winSpring", "head": pointed(), "tracery": {"lights": "lights"}}], "glass": "glazed"}
     d = {"type": "enclosure", "plan": {"sides": 8, "radius": "R"}, "thickness": "t", "height": "H",
          "tiers": [{"h": "low", "openings": []}, upper], "at": [[0, 0, 0, 0]]}
     if door:
@@ -97,7 +98,8 @@ def oct_walls(door):
 OCT = {"name": "Gothic octagon stage",
        "_about": "THE OCTAGONAL STOREY OF A GOTHIC TOWER, over its square stages and under its spire: eight walls (`R` to the corners, `t` thick, `H` high), a band below and a tall lancet in every face -- open tracery with `glazed` 0; `walls door` has a door in the band of face 0; `slab` closes its head (not walked). Place it at its middle on the square tower's head; the spire (`gothic-spire`) stands on its walls.",
        "params": {"detail": 4, "R": 7.0, "H": 30.0, "t": 1.0, "low": 4.0, "winW": "R * 0.36", "winSill": 1.0,
-                  "winSpring": "H - low - 1.5 - winW * 0.8661", "glazed": 0, "doorW": 1.6, "doorSpring": 2.4},
+                  "winSpring": "H - low - 1.5 - winW * 0.8661", "glazed": 0, "lights": 0, "doorW": 1.6, "doorSpring": 2.4,
+                  "_lights": "the lancets' tracery (tracery.js): how many lights, 0 for none -- open, an openwork stage's"},
        "build": ["walls"],
        "parts": {"walls": {**oct_walls(False), "_about": "eight walls, a tall lancet in each over a blind band"},
                  "walls door": {**oct_walls(True), "_about": "...or with a door in the band of face 0"},
@@ -162,13 +164,13 @@ add("nave", comp("basilica", {"bays": BAYS, "bayLen": BAY, "naveW": NW, "aisleW"
                               "aisleSpring": round(CROWN, 4), "aisleTop": round(AISLE_TOP, 4),
                               "arch": "pointed", "arcSpread": 1, "naveSpread": NAVE_SPREAD, "clearSpread": 1,
                               "naveAlongArch": "pointed", "naveAlongSpread": round(along(NW / 2, NAVE_SPREAD), 4),
-                              "clearWinW": 2.8, "clearSill": 2.4, "clearSpring": 5.6},
+                              "clearWinW": 2.8, "clearLights": 2, "clearSill": 2.4, "clearSpring": 5.6},
                  [[0, 0, 0, 0]], build=["arcade", "clerestory", "nave vault", "nave ribs"],
                  _about="the high nave from the `basilica` definition: pointed arcades, clerestory, and the rib vault 42m up"))
 # ---- the DOUBLE aisles: tall windows in the outer walls, a row of slender columns down each, and rib vaults over both
 HA = HB + AW                               # the aisle wall's inner face
 add("aisle walls", {"type": "wall", "width": NL, "height": round(AISLE_WALL, 4), "thickness": AT,
-                    "openings": {"pattern": str(BAYS), "width": 4.0, "gap": BAY - 4.0, "sill": 3.5, "springing": 13.0, "head": pointed()},
+                    "openings": {"pattern": str(BAYS), "width": 4.0, "gap": BAY - 4.0, "sill": 3.5, "springing": 13.0, "head": pointed(), "tracery": True},
                     "at": [[HA + AT, 0, 0, Q], [-HA - AT, 0, 0, -Q]],
                     "_about": "the outer walls of the double aisles, a tall traceried window in every bay"})
 add("aisle columns", {"type": "column", "radius": 0.55, "height": round(CROWN, 4), "sides": 12,
@@ -246,14 +248,14 @@ TZ = Z0 + TW / 2
 C = TW / 2 - TT - 2.1 - 0.05               # a turret's middle in an inner corner
 ws = lambda **kw: {"W": TW, "t": TT, "bw": 2.6, "bd": 2.4, **kw}
 STAGES = [  # (y, H, what, turret corner, parts)
-    (0.0, 20.0, dict(low=15.0, wins=2, winW=2.2, winGap=4.0, doorN=3, doorW=4.2, doorGap=1.4, backW=6.0),
+    (0.0, 20.0, dict(low=15.0, wins=2, winW=2.2, winGap=4.0, lights=2, doorN=3, doorW=4.2, doorGap=1.4, backW=6.0),
      (1, -1), ["walls portal", "front buttresses", "front buttresses side", "stair"],
      "the PORCH HALL at the tower's foot: the triple portal open to the west, the minster's portal through its back into the nave, its stair turret in a back corner..."),
-    (20.0, 18.0, dict(low=3.0, wins=2, winW=3.6, winGap=1.6), (-1, -1), ["walls", "front buttresses", "front buttresses side", "stair"],
+    (20.0, 18.0, dict(low=3.0, wins=2, winW=3.6, winGap=1.6, lights=3), (-1, -1), ["walls", "front buttresses", "front buttresses side", "stair"],
      "...the storey of the great west windows..."),
-    (38.0, 18.0, dict(low=3.0, wins=2, winW=3.4, winGap=1.8), (-1, 1), ["walls", "front buttresses", "front buttresses side", "stair"],
+    (38.0, 18.0, dict(low=3.0, wins=2, winW=3.4, winGap=1.8, lights=3), (-1, 1), ["walls", "front buttresses", "front buttresses side", "stair"],
      "...a third, each climbed by its own turret, in another corner..."),
-    (56.0, 14.0, dict(low=2.0, wins=2, winW=3.2, winGap=2.0, glazed=0, pinW=1.8, pinH=4.0, pinS=6.0),
+    (56.0, 14.0, dict(low=2.0, wins=2, winW=3.2, winGap=2.0, lights=3, glazed=0, pinW=1.8, pinH=4.0, pinS=6.0),
      (1, 1), ["walls", "front buttresses", "front buttresses side", "front pinnacles", "corner pinnacles", "parapet", "stair"],
      "...and the open belfry, its head the FIRST GALLERY at 70m behind a parapet and pinnacles, round the octagon's foot"),
 ]
@@ -261,7 +263,7 @@ for i, (y, h, kw, (cx, cz), bl, about) in enumerate(STAGES):
     add(f"west tower stage {i + 1}", comp("components/gothic-tower-stage", ws(H=h, tx=round(cx * C, 4), tz=round(cz * C, 4), **kw),
                                           [[0, y, TZ, 0]], build=bl, _about=about))
 OCT_R, OCT_Y, OCT_H = 7.0, 70.0, 30.0
-add("west tower octagon", comp("components/gothic-octagon-stage", {"R": OCT_R, "H": OCT_H, "t": 1.0, "low": 4.0},
+add("west tower octagon", comp("components/gothic-octagon-stage", {"R": OCT_R, "H": OCT_H, "t": 1.0, "low": 4.0, "lights": 2},
                                [[0, OCT_Y, TZ, 0]], build=["walls door"],
                                _about="the openwork OCTAGON from the gallery to 100m, a tall lancet in every face and a door from the gallery"))
 # the spire: a lancet turned, so its sides stay nearly straight to the tip at 161.5m, cut off at the viewing gallery

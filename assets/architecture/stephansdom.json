@@ -14,15 +14,9 @@
     "type": "stone"
   },
   "build": [
-    "hall",
-    "piers",
-    "nave vaults",
-    "aisle vaults",
-    "hall ceiling",
-    "roof",
-    "choir",
-    "apse",
-    "choir roof",
+    "church",
+    "west front",
+    "west gable",
     "south tower",
     "south tower stair",
     "south tower stage",
@@ -33,476 +27,117 @@
     "heathen towers"
   ],
   "parts": {
-    "hall": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          36.0,
-          76.0
-        ]
-      },
-      "thickness": 1.8,
-      "height": 28.0,
-      "openings": {
-        "pattern": "7",
-        "width": 2.4,
-        "gap": 6.65,
-        "sill": 5.0,
-        "springing": 16.0,
-        "head": {
-          "profile": "pointed",
-          "spread": 1.0
-        }
-      },
-      "faces": {
-        "0": [
-          {
-            "h": 17,
-            "openings": [
-              {
-                "at": 0,
-                "width": 6.0,
-                "sill": 0,
-                "springing": 9.0,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
-          {
-            "openings": [
-              {
-                "at": 0,
-                "width": 6.0,
-                "sill": 1.0,
-                "springing": 4.6,
-                "head": {
-                  "profile": "pointed",
-                  "spread": 1.0
-                }
-              }
-            ]
-          }
-        ],
-        "2": [
-          {
-            "at": 0,
-            "width": 18.0,
-            "sill": 0,
-            "springing": 12.0,
-            "head": {
-              "profile": "pointed",
-              "spread": 0.6
-            }
-          }
-        ]
-      },
-      "at": [
-        [
-          0,
-          0,
-          0,
-          0
-        ]
-      ],
-      "_about": "the hall: tall lancets down both flanks, the Giant's Door and the great window over it in the west front, and the east end open by a great arch into the choir"
-    },
-    "piers": {
-      "type": "column",
-      "radius": 0.9,
-      "height": 17.0,
-      "sides": 12,
-      "at": [
-        [
-          -5.5,
-          0,
-          27.150000000000002,
-          0
-        ],
-        [
-          -5.5,
-          0,
-          18.1,
-          0
-        ],
-        [
-          -5.5,
-          0,
-          9.05,
-          0
-        ],
-        [
-          -5.5,
-          0,
-          0.0,
-          0
-        ],
-        [
-          -5.5,
-          0,
-          -9.049999999999997,
-          0
-        ],
-        [
-          -5.5,
-          0,
-          -18.1,
-          0
-        ],
-        [
-          -5.5,
-          0,
-          -27.150000000000006,
-          0
-        ],
-        [
-          5.5,
-          0,
-          27.150000000000002,
-          0
-        ],
-        [
-          5.5,
-          0,
-          18.1,
-          0
-        ],
-        [
-          5.5,
-          0,
-          9.05,
-          0
-        ],
-        [
-          5.5,
-          0,
-          0.0,
-          0
-        ],
-        [
-          5.5,
-          0,
-          -9.049999999999997,
-          0
-        ],
-        [
-          5.5,
-          0,
-          -18.1,
-          0
-        ],
-        [
-          5.5,
-          0,
-          -27.150000000000006,
-          0
-        ]
-      ],
-      "_about": "two rows of piers down the hall"
-    },
-    "nave vaults": {
-      "type": "groin",
-      "width": 11.0,
-      "length": 9.05,
-      "springing": 17.0,
-      "top": 25.5,
-      "head": {
-        "profile": "pointed",
-        "spread": 0.6
-      },
-      "at": [
-        [
-          0.0,
-          0,
-          31.675000000000004,
-          0
-        ],
-        [
-          0.0,
-          0,
-          22.625000000000004,
-          0
-        ],
-        [
-          0.0,
-          0,
-          13.575000000000003,
-          0
-        ],
-        [
-          0.0,
-          0,
-          4.525000000000002,
-          0
-        ],
-        [
-          0.0,
-          0,
-          -4.524999999999999,
-          0
-        ],
-        [
-          0.0,
-          0,
-          -13.574999999999996,
-          0
-        ],
-        [
-          0.0,
-          0,
-          -22.625,
-          0
-        ],
-        [
-          0.0,
-          0,
-          -31.675000000000004,
-          0
-        ]
-      ],
-      "_about": "groin vaults over nave and aisles, all at one height: a hall church"
-    },
-    "aisle vaults": {
-      "type": "groin",
-      "width": 10.7,
-      "length": 9.05,
-      "springing": 17.0,
-      "top": 25.5,
-      "head": {
-        "profile": "pointed",
-        "spread": 0.6
-      },
-      "at": [
-        [
-          -10.85,
-          0,
-          31.675000000000004,
-          0
-        ],
-        [
-          -10.85,
-          0,
-          22.625000000000004,
-          0
-        ],
-        [
-          -10.85,
-          0,
-          13.575000000000003,
-          0
-        ],
-        [
-          -10.85,
-          0,
-          4.525000000000002,
-          0
-        ],
-        [
-          -10.85,
-          0,
-          -4.524999999999999,
-          0
-        ],
-        [
-          -10.85,
-          0,
-          -13.574999999999996,
-          0
-        ],
-        [
-          -10.85,
-          0,
-          -22.625,
-          0
-        ],
-        [
-          -10.85,
-          0,
-          -31.675000000000004,
-          0
-        ],
-        [
-          10.85,
-          0,
-          31.675000000000004,
-          0
-        ],
-        [
-          10.85,
-          0,
-          22.625000000000004,
-          0
-        ],
-        [
-          10.85,
-          0,
-          13.575000000000003,
-          0
-        ],
-        [
-          10.85,
-          0,
-          4.525000000000002,
-          0
-        ],
-        [
-          10.85,
-          0,
-          -4.524999999999999,
-          0
-        ],
-        [
-          10.85,
-          0,
-          -13.574999999999996,
-          0
-        ],
-        [
-          10.85,
-          0,
-          -22.625,
-          0
-        ],
-        [
-          10.85,
-          0,
-          -31.675000000000004,
-          0
-        ]
-      ]
-    },
-    "hall ceiling": {
-      "type": "box",
-      "width": 32.4,
-      "length": 72.4,
-      "height": 0.4,
-      "at": [
-        [
-          0,
-          27.6,
-          0,
-          0
-        ]
-      ],
-      "_about": "the floor of the roof space, over the vaults"
-    },
-    "roof": {
-      "type": "roof",
-      "form": "gable",
-      "width": 37.0,
-      "length": 76.0,
-      "pitch": 58,
+    "church": {
+      "type": "basilica",
+      "hall": true,
+      "bays": 10,
+      "bayLen": 9.2,
+      "naveW": 12.0,
+      "aisleW": 10.0,
+      "t": 1.4,
+      "aisleT": 1.6,
+      "apse": 5,
+      "spring": 20.0,
+      "aisleDrop": 3.0,
+      "pierR": 0.95,
+      "shaft": 0.3,
+      "pitch": 62,
       "overhang": 0.6,
+      "aisleSill": 6.0,
+      "aisleWin": 3.2,
+      "buttressW": 1.8,
+      "buttressD": 3.4,
+      "skipButtress": [
+        [
+          6,
+          6
+        ]
+      ],
+      "wimpergs": true,
       "at": [
         [
           0,
-          28.0,
+          0,
           0,
           0
         ]
       ],
-      "_about": "the great roof, 38m of steep patterned tiles"
+      "_about": "nave and choir as one HALL: piers, arcades, rib vaults over nave, aisles and ambulatory at nearly one height, the outer walls with their tall windows, a stepped buttress and pinnacle at every bay and round the apse, one steep roof over all"
     },
-    "choir": {
-      "type": "enclosure",
+    "west front": {
+      "type": "wall",
+      "width": 33.6,
+      "height": 29.0621,
+      "thickness": 3.0,
+      "at": [
+        [
+          0,
+          0,
+          49.0,
+          0
+        ]
+      ],
+      "tiers": [
+        {
+          "h": 17,
+          "openings": [
+            {
+              "at": 0,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 9.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 6.0,
+              "sill": 1.0,
+              "springing": 2.3658,
+              "head": {
+                "profile": "pointed",
+                "spread": 1.0
+              },
+              "tracery": true
+            }
+          ]
+        }
+      ],
+      "_about": "the west front: the Romanesque Giant's Door, and the great window over it"
+    },
+    "west gable": {
+      "type": "prism",
       "plan": {
         "rect": [
-          30.0,
-          22.0
+          16.8,
+          3.0
         ]
       },
-      "thickness": 1.8,
-      "height": 26.0,
-      "openings": {
-        "pattern": "3",
-        "width": 2.4,
-        "gap": 4.0,
-        "sill": 5.0,
-        "springing": 15.0,
-        "head": {
-          "profile": "pointed",
-          "spread": 1.0
-        }
-      },
-      "faces": {
-        "0": [
-          {
-            "at": 0,
-            "width": 18.0,
-            "sill": 0,
-            "springing": 12.0,
-            "head": {
-              "profile": "pointed",
-              "spread": 0.6
-            }
-          }
+      "height": 16.9265,
+      "slope": [
+        -1.88073,
+        0
+      ],
+      "at": [
+        [
+          8.4,
+          29.0621,
+          47.5,
+          0
         ],
-        "2": [
-          {
-            "at": 0,
-            "width": 25.4,
-            "sill": 0,
-            "springing": 8.0,
-            "head": {
-              "profile": "pointed",
-              "spread": 0.3
-            }
-          }
-        ]
-      },
-      "at": [
         [
-          0,
-          0,
-          -49.0,
-          0
+          -8.4,
+          29.0621,
+          47.5,
+          3.141593
         ]
       ],
-      "_about": "the Albertine choir, a hall of its own, open to the nave and to its apse"
-    },
-    "apse": {
-      "type": "component",
-      "use": "components/apse",
-      "params": {
-        "R": 13.2,
-        "T": 1.8,
-        "H": 26.0,
-        "n": 16,
-        "winW": 2.2,
-        "winSill": 5.0,
-        "winH": 10.0,
-        "winHead": "pointed",
-        "profile": "trigonal",
-        "rise": 24.0,
-        "domeT": 0,
-        "over": 0.5
-      },
-      "at": [
-        [
-          0,
-          0,
-          -60.0,
-          3.141592653589793
-        ]
-      ],
-      "_about": "the apse, a tall lancet in each bay, under the half cone of its roof (`apse`)"
-    },
-    "choir roof": {
-      "type": "roof",
-      "form": "gable",
-      "width": 31.0,
-      "length": 22.0,
-      "pitch": 58,
-      "overhang": 0.5,
-      "at": [
-        [
-          0,
-          26.0,
-          -49.0,
-          0
-        ]
-      ]
+      "_about": "the west gable over the front, its two halves falling with the roof"
     },
     "south tower": {
       "type": "enclosure",
@@ -516,9 +151,9 @@
       "height": 40.0,
       "at": [
         [
-          25.0,
+          23.8,
           0,
-          -18.0,
+          -9.199999999999996,
           0
         ]
       ],
@@ -582,9 +217,9 @@
       },
       "at": [
         [
-          25.0,
+          23.8,
           0,
-          -18.0,
+          -9.199999999999996,
           0
         ]
       ],
@@ -602,9 +237,9 @@
       "height": 22.0,
       "at": [
         [
-          25.0,
+          23.8,
           40.0,
-          -18.0,
+          -9.199999999999996,
           0
         ]
       ],
@@ -641,9 +276,9 @@
       },
       "at": [
         [
-          25.0,
+          23.8,
           62.0,
-          -18.0,
+          -9.199999999999996,
           0
         ]
       ],
@@ -669,9 +304,9 @@
       "height": 50.0,
       "at": [
         [
-          -25.0,
+          -23.8,
           0,
-          -18.0,
+          -9.199999999999996,
           0
         ]
       ],
@@ -735,9 +370,9 @@
       },
       "at": [
         [
-          -25.0,
+          -23.8,
           0,
-          -18.0,
+          -9.199999999999996,
           1.5707963267948966
         ]
       ],
@@ -764,9 +399,9 @@
       },
       "at": [
         [
-          -25.0,
+          -23.8,
           50.0,
-          -18.0,
+          -9.199999999999996,
           0
         ]
       ],
@@ -799,15 +434,15 @@
       },
       "at": [
         [
-          -15.4,
+          -6.6,
           0,
-          36.4,
+          52.2,
           0
         ],
         [
-          15.4,
+          6.6,
           0,
-          36.4,
+          52.2,
           0
         ]
       ],

@@ -67,23 +67,19 @@
    },
    "glass": false
   },
-  "valance": {
-   "type": "ring",
-   "count": 12,
-   "rOuter": 2.66,
-   "rInner": 2.63,
-   "height": 0.35,
-   "y": 1.85,
-   "place": [
+  "pole": {
+   "type": "column",
+   "radius": 0.06,
+   "height": 4.9,
+   "sides": 6,
+   "at": [
     [
      0,
      0,
      0,
      0
     ]
-   ],
-   "solid": true,
-   "glass": false
+   ]
   },
   "roof": {
    "type": "dome",
@@ -104,19 +100,23 @@
     ]
    ]
   },
-  "pole": {
-   "type": "column",
-   "radius": 0.06,
-   "height": 4.9,
-   "sides": 6,
-   "at": [
+  "valance": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 2.66,
+   "rInner": 2.63,
+   "height": 0.35,
+   "y": 1.85,
+   "place": [
     [
      0,
      0,
      0,
      0
     ]
-   ]
+   ],
+   "solid": true,
+   "glass": false
   },
   "pennant": {
    "type": "box",
@@ -136,9 +136,9 @@
  "build": [
   "wall",
   "door",
-  "valance",
-  "roof",
   "pole",
+  "roof",
+  "valance",
   "pennant"
  ]
 }
