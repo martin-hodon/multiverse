@@ -2116,6 +2116,243 @@
       ],
       "_about": "each aisle's lean-to carried on past the nave's end to the aisle's east wall, closing the slot between them"
     },
+    "inner dome back": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "octR + octT - outerT - shellGap + 0.02",
+      "thickness": 0.02,
+      "oculus": "lanternR",
+      "head": {
+        "profile": "pointed",
+        "spread": "domeSpread"
+      },
+      "at": [
+        [
+          0,
+          "drumTop",
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the inner shell's BACK, a skin over it: bare brick and plaster where the stair climbs, not the fresco of its soffit"
+    },
+    "body": {
+      "type": "interior",
+      "height": "aisleTop - 0.4",
+      "plan": {
+        "points": [
+          [
+            "halfA - aisleT / 2",
+            "roofZ0 - pierT / 2"
+          ],
+          [
+            "halfA - aisleT / 2",
+            "octZ + (octR + octT / 2) * 0.92388 * 1.41421 - (halfA - aisleT / 2)"
+          ],
+          [
+            "(octR + octT / 2) * 0.92388 * 0.41421",
+            "octZ + (octR + octT / 2) * 0.92388"
+          ],
+          [
+            "0 - (octR + octT / 2) * 0.92388 * 0.41421",
+            "octZ + (octR + octT / 2) * 0.92388"
+          ],
+          [
+            "0 - (halfA - aisleT / 2)",
+            "octZ + (octR + octT / 2) * 0.92388 * 1.41421 - (halfA - aisleT / 2)"
+          ],
+          [
+            "0 - (halfA - aisleT / 2)",
+            "roofZ0 - pierT / 2"
+          ]
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the nave and both aisles up to the aisles' roofs (no higher: the clerestory's outer face stands over them), from the facade to the octagon's west face and its diagonal faces the aisles end on"
+    },
+    "nave": {
+      "type": "interior",
+      "height": "naveTop",
+      "plan": {
+        "rect": [
+          "2 * halfB - pierT",
+          "roofZ0 - pierT / 2 - octZ - (octR + octT / 2) * 0.92388"
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          "(roofZ0 - pierT / 2 + octZ + (octR + octT / 2) * 0.92388) / 2",
+          0
+        ]
+      ],
+      "_about": "the nave between the arcades' middles, up to its vault's back under the roof"
+    },
+    "crossing": {
+      "type": "interior",
+      "height": "drumTop",
+      "plan": {
+        "sides": 8,
+        "radius": "octR + octT / 2"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the octagon and its drum, on their walls' middle, up to the dome's springing (the shells inside by their own shape)"
+    },
+    "tribunes": {
+      "type": "interior",
+      "height": "tribH",
+      "plan": {
+        "points": [
+          [
+            20.0,
+            0.0
+          ],
+          [
+            16.1803,
+            -11.7557
+          ],
+          [
+            6.1803,
+            -19.0211
+          ],
+          [
+            -6.1803,
+            -19.0211
+          ],
+          [
+            -16.1803,
+            -11.7557
+          ],
+          [
+            -20.0,
+            -0.0
+          ],
+          [
+            "0 - (octR + octT) * 0.38268",
+            0
+          ],
+          [
+            "0 - (octR + octT) * 0.38268",
+            "octT / 2 * 0.92388"
+          ],
+          [
+            "(octR + octT) * 0.38268",
+            "octT / 2 * 0.92388"
+          ],
+          [
+            "(octR + octT) * 0.38268",
+            0
+          ]
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          "octZ - tribD",
+          0
+        ],
+        [
+          "tribD",
+          0,
+          "octZ",
+          "0 - quarter"
+        ],
+        [
+          "0 - tribD",
+          0,
+          "octZ",
+          "quarter"
+        ]
+      ],
+      "_about": "the three tribunes, each up to its half dome, and across its chord into the octagon's arch"
+    },
+    "pier shaft": {
+      "type": "interior",
+      "height": "drumTop",
+      "plan": {
+        "points": [
+          [
+            "0 - (octR * 0.92388 + 0.25) * 0.41421",
+            "octR * 0.92388 + 0.25"
+          ],
+          [
+            "(octR * 0.92388 + 0.25) * 0.41421",
+            "octR * 0.92388 + 0.25"
+          ],
+          [
+            "((octR + octT) * 0.92388 - 0.25) * 0.41421",
+            "(octR + octT) * 0.92388 - 0.25"
+          ],
+          [
+            "0 - ((octR + octT) * 0.92388 - 0.25) * 0.41421",
+            "(octR + octT) * 0.92388 - 0.25"
+          ]
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          "octZ",
+          0.785398
+        ]
+      ],
+      "_about": "the hollow pier's shaft, its stair's space, from the floor up to the shells: on its own walls' middle"
+    },
+    "lantern space": {
+      "type": "interior",
+      "height": "lanternH",
+      "plan": {
+        "sides": 32,
+        "radius": "lanternR + 0.5"
+      },
+      "at": [
+        [
+          0,
+          0,
+          "octZ",
+          0
+        ]
+      ],
+      "atop": "dome",
+      "atopR": "lanternR",
+      "_about": "the lantern, inside its ring"
+    },
+    "campanile space": {
+      "type": "interior",
+      "height": "campH - 0.3",
+      "plan": {
+        "rect": [
+          "campW - 3 * campT + campT",
+          "campW - 3 * campT + campT"
+        ]
+      },
+      "at": [
+        [
+          "campX",
+          0,
+          "campZ",
+          0
+        ]
+      ],
+      "_about": "the campanile's shaft round its stair, on its walls' middle, up to the terrace"
+    },
     "campanile stair": {
       "type": "staircase",
       "rise": "(campH - 0.3) / 420",
@@ -2160,26 +2397,6 @@
         ]
       ],
       "_about": "the cornice and parapet round the terrace"
-    },
-    "inner dome back": {
-      "type": "dome",
-      "sides": 8,
-      "radius": "octR + octT - outerT - shellGap + 0.02",
-      "thickness": 0.02,
-      "oculus": "lanternR",
-      "head": {
-        "profile": "pointed",
-        "spread": "domeSpread"
-      },
-      "at": [
-        [
-          0,
-          "drumTop",
-          "octZ",
-          0
-        ]
-      ],
-      "_about": "the inner shell's BACK, a skin over it: bare brick and plaster where the stair climbs, not the fresco of its soffit"
     },
     "green band facade 1 1": {
       "type": "box",
@@ -2380,6 +2597,13 @@
     "green band tribunes 1",
     "red band tribunes 2",
     "seating",
+    "body",
+    "nave",
+    "crossing",
+    "tribunes",
+    "pier shaft",
+    "lantern space",
+    "campanile space",
     "green band facade 1 1",
     "green band facade 1 2",
     "red band facade 1 1",

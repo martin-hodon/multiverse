@@ -58,18 +58,21 @@ S = 2 * HB                                 # 11.8
 SLAB = 0.4
 choir_arch = arch(NW - 0.6, CLEAR_H)
 EZ = -NL / 2 - HB                          # the crossing's middle
-add("crossing", {"type": "enclosure", "plan": {"rect": [S, S]}, "thickness": PT, "height": TOP, "openings": [choir_arch],
+add("crossing", {"type": "enclosure", "plan": {"rect": [S, S]}, "thickness": PT, "height": TOP, "openings": [choir_arch], "interior": True,
                  "at": [[0, 0, EZ, 0]], "_about": "the east crossing: a great arch in each face, to the nave, the choir and the transept arms"})
 sq_vault = lambda at, L=NW: {"type": "groin", "width": NW, "length": L, "springing": CLEAR_H, "top": TOP, "across": semi, "along": semi, "at": at}
 add("crossing vault", sq_vault([[0, 0, EZ, 0]]))
 add("crossing floor", {"type": "box", "width": S, "length": S, "height": SLAB, "at": [[0, TOP, EZ, 0]], "flatRoof": True,
                        "_about": "the slab over the crossing's vault that its tower stands on"})
+# (every enclosure of the church -- the crossing, the arms, the choir, the westwork's bay, and the towers' stages over
+#  them -- is a space of it: `interior`, on its walls' middles up to its vault's top or its floor; the paradise's walks
+#  are open arcades, the open air's)
 # the crossing tower: a square stage up past the roofs' ridges (they run into it), then the octagon and its helm
 CS_H = round(RIDGE - TOP - SLAB + 0.8, 2)
 y = TOP + SLAB
 add("crossing stage", {"type": "enclosure", "plan": {"rect": [S, S]}, "thickness": 1.2, "height": CS_H, "glass": False,
                        "tiers": [{"openings": [], "lombard": LOMBARD}],
-                       "at": [[0, y, EZ, 0]], "standsOn": ["crossing floor"],
+                       "at": [[0, y, EZ, 0]], "standsOn": ["crossing floor"], "interior": True,
                        "_about": "the crossing tower's square stage, as high as the four roofs that run into it"})
 y += CS_H
 add("crossing stage top", {"type": "box", "width": S, "length": S, "height": SLAB, "at": [[0, y, EZ, 0]], "flatRoof": True, "standsOn": ["crossing stage"]})
@@ -82,7 +85,7 @@ OH = 8.0
 add("crossing tower", {"type": "enclosure", "plan": {"sides": 8, "radius": r4(OR)}, "thickness": 1.0, "height": OH, "glass": False,
                        "tiers": [{"h": 3.0, "openings": []},
                                  {"openings": {"pattern": "2", "width": 0.9, "gap": 0.7, "pier": 0.7, "sill": 0.5, "springing": 2.9, "head": semi, "surround": ROM1}, "lombard": {**LOMBARD, "arch": 0.6}}],
-                       "at": [[0, r4(y), EZ, 0]], "standsOn": ["crossing stage top"],
+                       "at": [[0, r4(y), EZ, 0]], "standsOn": ["crossing stage top"], "interior": True,
                        "_about": "the octagon over the crossing: a pair of round-arched openings in every face under the arched corbel table"})
 y += OH
 add("crossing helm", {"type": "helm", "sides": 8, "radius": r4(OR), "pitch": 40, "frieze": {"arch": 0.55},
@@ -104,7 +107,7 @@ for sx, nm in ((1, "south"), (-1, "north")):
                                      "0": [{"h": 11.0, "openings": [arch(OPEN, SPRING, at=r4(sx * aisle_at))]}, {"openings": [arch(1.6, 5.5, sill=2.5)], "lombard": LOMBARD}],
                                      "2": [{"h": 11.0, "openings": [arch(2 * (APS_R - 0.7), APS_H)]}, {"openings": [arch(1.6, 5.5, sill=2.5)], "lombard": LOMBARD}],
                                      ("1" if sx > 0 else "3"): [front, {"openings": [{"at": 0, "width": 3.0, "sill": 2.0, "springing": 2.0, "head": semi, "foot": semi}], "lombard": LOMBARD}]},
-                           "at": [[sx * TX, 0, EZ, 0]],
+                           "at": [[sx * TX, 0, EZ, 0]], "interior": True,
                            **({"_about": "the transept's arms: an arch from the crossing, an arch from the aisle, an arch into the apsidiole on the east; the south front with a portal in three orders, the north with a window, a round window over each, the Lombard band on both storeys"} if sx > 0 else {})})
     add(f"{nm} transept vault", {"type": "groin", "width": TL - 2 * PT, "length": NW, "springing": CLEAR_H, "top": TOP, "across": semi, "along": semi,
                                  "at": [[sx * (TX - PT / 2), 0, EZ, 0]]})
@@ -115,6 +118,8 @@ for sx, nm in ((1, "south"), (-1, "north")):
     add(f"{nm} apsidiole", {**ring, "height": APS_W, "opening": {"width": 0.8, "sill": 2.2, "springing": 4.2, "head": semi},
                             **({"_about": "the apsidioles, a small half-round chapel off each arm's east face, a stone conch, a half cone"} if sx > 0 else {})})
     add(f"{nm} apsidiole conch", {"type": "dome", "sweep": 0.5, "sides": 12, "radius": APS_R, "thickness": 0.7, "head": semi, "at": [[sx * TX, APS_H, EZ - HB, math.pi]]})
+    parts[f"{nm} apsidiole interior"] = {"type": "interior", "plan": {"sides": 12, "radius": APS_R - 0.35}, "arc": [-90, 90], "height": APS_H, "at": ring["place"],
+                                         **({"_about": "the apsidiole's space, on its wall's middle, up to its conch (whose inside is the conch's own)"} if sx > 0 else {})}
     add(f"{nm} apsidiole roof", {"type": "dome", "sweep": 0.5, "sides": 12, "radius": APS_R + 0.25, "thickness": 0, "head": {"profile": "trigonal", "rise": 2.2},
                                  "at": [[sx * TX, APS_W, EZ - HB, math.pi]]})
 
@@ -127,7 +132,7 @@ add("choir", {"type": "enclosure", "plan": {"rect": [S, CHL]}, "thickness": PT, 
               "faces": {"0": [choir_arch], "2": [apse_arch],
                         "1": [{"h": 11.0, "openings": []}, {"openings": [arch(1.6, 5.5, sill=2.0)], "lombard": LOMBARD}],
                         "3": [{"h": 11.0, "openings": []}, {"openings": [arch(1.6, 5.5, sill=2.0)], "lombard": LOMBARD}]},
-              "at": [[0, 0, CZ, 0]], "_about": "the choir, a short bay between the crossing and the apse, a window high in each flank"})
+              "at": [[0, 0, CZ, 0]], "interior": True, "_about": "the choir, a short bay between the crossing and the apse, a window high in each flank"})
 add("choir vault", sq_vault([[0, 0, CZ, 0]], CHL - 2 * PT))
 add("choir roof", {"type": "roof", "form": "gable", "width": S + 0.6, "length": CHL, "pitch": PITCH, "frieze": {"arch": 0.7, "ends": [0]}, "at": [[0, TOP, CZ, 0]],
                    "_about": "the choir's roof, its east gable over the apse with a rising frieze"})
@@ -143,7 +148,7 @@ add("east towers", {"type": "enclosure", "plan": {"rect": [ET_W, ET_W]}, "thickn
                               {"h": 7.0, "openings": [arch(0.7, 4.6, sill=2.8)], "lombard": {**LOMBARD, "arch": 0.55, "bay": 9}},
                               {"openings": {"pattern": "2", "width": 0.8, "gap": 0.6, "pier": 0.6, "sill": 2.2, "springing": 5.0, "head": semi, "surround": ROM1},
                                "lombard": {**LOMBARD, "arch": 0.55, "bay": 9}}],
-                    "at": [[ET_X, 0, ET_Z, 0], [-ET_X, 0, ET_Z, 0]],
+                    "at": [[ET_X, 0, ET_Z, 0], [-ET_X, 0, ET_Z, 0]], "interior": True,
                     "_about": "the two slender east towers flanking the apse, in four storeys each closed by its arched corbel table, a pair of belfry openings in every face of the top one"})
 add("east tower helms", {"type": "helm", "sides": 4, "width": ET_W, "pitch": 62, "frieze": {"arch": 0.5},
                          "at": [[ET_X, ET_H, ET_Z, 0], [-ET_X, ET_H, ET_Z, 0]], "standsOn": ["east towers"],
@@ -161,7 +166,7 @@ add("west bay", {"type": "enclosure", "plan": {"rect": [S, S]}, "thickness": PT,
                            # (the flanks: the band stops at the stair tower standing against each -- faces run -z along +x, +z along -x)
                            "1": [{"h": 11.0, "openings": [arch(1.6, 2.6, at=r4(WZ - COURT_DOOR), surround=ROM1)]}, {"openings": [arch(1.4, 5.0, sill=2.5)], "lombard": {**LOMBARD, "clear": [[r4(WZ + HB - ST_Z - ST_R - 0.2), S]]}}],
                            "3": [{"h": 11.0, "openings": [arch(1.6, 2.6, at=r4(COURT_DOOR - WZ), surround=ROM1)]}, {"openings": [arch(1.4, 5.0, sill=2.5)], "lombard": {**LOMBARD, "clear": [[0, r4(ST_Z + ST_R + 0.2 - (WZ - HB))]]}}]},
-                 "at": [[0, 0, WZ, 0]],
+                 "at": [[0, 0, WZ, 0]], "interior": True,
                  "_about": "the westwork's bay under the great tower, open to the nave and to the west apse, a door in each flank from the paradise's court"})
 add("west bay vault", sq_vault([[0, 0, WZ, 0]]))
 add("west tower floor", {"type": "box", "width": S, "length": S, "height": SLAB, "at": [[0, TOP, WZ, 0]], "walked": True,
@@ -178,7 +183,7 @@ add("west tower", {"type": "enclosure", "plan": {"rect": [S, S]}, "thickness": 1
                                    {"openings": {"pattern": "2", "width": 1.1, "gap": 0.9, "pier": 0.9, "sill": 1.0, "springing": 3.6, "head": semi, "surround": ROM1}, "lombard": LOMBARD}],
                              "3": [{"h": 4.0, "openings": [arch(1.2, 2.2, at=r4(door_at))]}, {"h": 4.5, "openings": [arch(0.9, 3.0, sill=1.2)], "lombard": LOMBARD},
                                    {"openings": {"pattern": "2", "width": 1.1, "gap": 0.9, "pier": 0.9, "sill": 1.0, "springing": 3.6, "head": semi, "surround": ROM1}, "lombard": LOMBARD}]},
-                   "at": [[0, H_UP, WZ, 0]], "standsOn": ["west tower floor"],
+                   "at": [[0, H_UP, WZ, 0]], "standsOn": ["west tower floor"], "interior": True,
                    "_about": "the great west tower over the bay: a door at its foot in each flank from a stair tower, then two storeys under arched corbel tables, paired openings in the belfry"})
 add("west tower helm", {"type": "helm", "sides": 4, "width": S, "pitch": 52, "frieze": {"arch": 0.7},
                         "at": [[0, H_UP + WT_H, WZ, 0]], "standsOn": ["west tower"], "_about": "the west tower's helm"})
@@ -190,6 +195,8 @@ ring = {"type": "ring", "count": 16, "turn": 0.5, "at": [0, 1, 2, 3, 12, 13, 14,
 add("west apse", {**ring, "height": WAW, "opening": {"width": 1.2, "sill": 3.0, "springing": 5.8, "head": semi, "surround": ROM1}, "lombard": {**LOMBARD, "arch": 0.5, "lesene": 0.25, "bay": 9},
                   "_about": "the west apse, lower than the east: round-arched windows, the Lombard band under its eaves"})
 add("west apse conch", {"type": "dome", "sweep": 0.5, "sides": 16, "radius": HB, "thickness": PT, "head": semi, "at": [[0, WAH, WZ + HB, 0]]})
+parts["west apse interior"] = {"type": "interior", "plan": {"sides": 16, "radius": (HB + NW / 2) / 2}, "arc": [-90, 90], "height": WAH, "at": ring["place"],
+                               "_about": "the west apse's space up to its conch"}
 add("west apse roof", {"type": "dome", "sweep": 0.5, "sides": 16, "radius": HB + 0.3, "thickness": 0, "head": {"profile": "trigonal", "rise": 4.0},
                        "at": [[0, WAW, WZ + HB, 0]]})
 
@@ -304,7 +311,9 @@ GALLERY_APSE = {
     "gallery wall": {"type": "ring", "count": 16, "turn": 0.5, "at": HALF16, "rOuter": "rp", "rInner": "ri", "y": "floor", "height": "galH", "place": [[0, 0, 0, 0]], "outside": True,
                      "_about": "the wall behind the passage, over the conch's back: the passage is the open air's, though too narrow for the finishes' rays to see out of it"},
     "roof": {"type": "dome", "sweep": 0.5, "sides": 16, "radius": "R + over", "thickness": 0, "head": {"profile": "trigonal", "rise": "roofRise"}, "at": [[0, "top", 0, 0]],
-             "_about": "the half cone over all"}
+             "_about": "the half cone over all"},
+    "interior": {"type": "interior", "of": ["walls"], "plan": {"sides": 32, "radius": "(R + ri) / 2"}, "arc": [-90, 90], "height": "floor",
+                 "_about": "the apse's space up to the dwarf gallery's floor (the gallery is the open air's)"}
   }
 }
 open(os.path.join(ROOT, "assets/architecture/components/gallery-apse.json"), "w").write(json.dumps(GALLERY_APSE, indent=2) + "\n")

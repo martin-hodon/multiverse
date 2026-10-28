@@ -48,6 +48,7 @@
   "build": [
     "church",
     "west front",
+    "west interior",
     "towers",
     "tower stairs",
     "tower parapets",
@@ -195,6 +196,24 @@
       ],
       "_about": "the west front between the towers, in three tiers: the central portal; the great rose; the open gallery"
     },
+    "west interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          "2 * (bodyW / 2 - towerW / 2 - 0.5) - towerW",
+          3
+        ]
+      },
+      "height": 27,
+      "at": [
+        [
+          0,
+          0,
+          "naveL / 2",
+          0
+        ]
+      ]
+    },
     "towers": {
       "type": "enclosure",
       "plan": {
@@ -341,6 +360,7 @@
           0
         ]
       ],
+      "interior": "frontH + towerH - 1",
       "_about": "the two towers, from the ground: a portal in the front, a window, a blind stage, then the belfry's lancet pairs; the back an arch across the aisle"
     },
     "tower stairs": {

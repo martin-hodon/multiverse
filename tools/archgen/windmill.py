@@ -83,6 +83,10 @@ ring("bin floor", 1.7, 0.25, 0.2, ST[2][0], n=NF)
 CURB = 0.3
 ring("curb", ST[-1][2] + 0.45, ST[-1][2] - T, CURB, H, n=NW)
 parts["cap"] = {"type": "dome", "radius": ST[-1][2] + 0.45, "sides": NW, "thickness": 0.12, "cap": False, "head": {"profile": "trigonal", "rise": 3.6}, "oculus": 0.25, "at": [[0, H + CURB, 0, 0]]}
+# THE INSIDE: each storey an interior, on its wall's middle line from its floor to the next -- the top one up to the
+# curb's head, where the cap stands (its faces turned to the axis are the inside's of themselves)
+for i, (y0, h, R) in enumerate(ST):
+    parts[f"storey {i} interior"] = {"type": "interior", "plan": {"sides": NW, "radius": R3(R - T / 2)}, "height": R3(h + (CURB if i == len(ST) - 1 else 0)), "at": [[0, y0, 0, 0]]}
 # the static millwork: the bedstone in its tun, the hopper on its horse, the chutes, the bins
 item = lambda path, at, params=None, **k: {"type": "item", "item": path, "at": [at], **({"params": params} if params else {}), **k}
 parts["bedstone"] = item("items/components/millstone", [0, F1, 0, 0], {"h": 0.24})
@@ -114,7 +118,7 @@ parts["door marker"] = {"type": "marker", "role": "door", "at": [[R3(ST[0][2] - 
 parts["windows"] = {"type": "marker", "role": "window", "at": windows, "data": {"w": 0.6, "h": 0.8, "spring": 0.5, "head": {"profile": "semicircular"}}}
 
 doc = {"name": "Windmill", "_about": "A TOWER WINDMILL of the Middle Ages, walkable: three storeys of round stone tower under the cap -- the meal floor (the meal chute into its bin, the flour sacked), the stone floor (bedstone and runner in the tun, the hopper on its horse fed from the bin above), the bin floor under the cap (the grain bin; overhead the windshaft and its brake wheel driving the wallower on the main shaft) -- steps winding up the wall through a hatch in each floor; the sail cross (items/components/windmill-sails) and the millwork turn with the wind.",
-       "params": P, "parts": parts, "build": list(parts), "walked": True}
+       "params": P, "parts": parts, "build": [n for n, d in parts.items() if d["type"] != "interior"], "walked": True}
 open(os.path.join(ROOT, "assets/architecture/windmill.json"), "w").write(json.dumps(doc, indent=1) + "\n")
 fin = {"name": "Windmill", "building": "architecture/windmill", "_about": "the windmill: limewashed rubble, a tiled cap, boarded floors, oak bins and chutes",
        "stone": {"color": "#cfc4ae", "accent": "#b8ab92", "pat": "ashlar"},

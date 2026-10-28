@@ -7,6 +7,7 @@
 //   archMaterial(side, pat)        a part's pattern material (colour and accent in the vertices: paintGeometry)
 //   placedMaterial(mat)            its twin for geometry with the building's translation baked in (merge.js)
 //   finishTile(r), finishTilesOf   a finish rule's pattern tile (patterns.js draws it, pregen/ may have it)
+//   drawTilesAhead(finishes, lib)  their tiles drawn in workers while the map grows (tile_worker.js); tilesAheadDone()
 //   finishMaterial(r, side, open, geo)  a finish rule's material: the tile at the vertex's `aUV` (geo: given its slot)
 //   woodMaterial(), plainStone()   grained wood (doors, shutters); a light-free stone for the viewers
 import * as THREE from "three";
@@ -395,6 +396,11 @@ export function finishTile(r) {
   // (pregenerated, if pregen/ has it: the same tile, drawn once by build/pregen.py -- else drawn here, as always)
   const pk = pregenOn() ? tileKey(r.pattern, r.palette, ruleParams(r), r.res) : null;
   if (pk && t) recordFor("tiles", pk, t.canvas);   // (the generator notes which buildings use a tile made for another)
+  if (!t && AHEAD.has(key)) {   // (drawn in a worker while the map grew: its layer's pixels, ready for the array)
+    const a = AHEAD.get(key); AHEAD.delete(key);
+    if (pk) pregenMiss("tile", r.pattern, pk);
+    finishTiles.set(key, t = { size: a.size, canvas: null, px: a.px, repeat: a.repeat });
+  }
   if (!t) {
     const cached = pk && PREGEN.tiles.get(pk), def = patternOf(r.pattern);
     const tile = cached ? { canvas: cached, size: patternSize(def, ruleParams(r)), repeat: def.repeat !== false }
@@ -404,6 +410,51 @@ export function finishTile(r) {
     finishTiles.set(key, t = { size: tile.size, canvas: tile.canvas, repeat: tile.repeat });
   }
   return t;
+}
+// TILES DRAWN AHEAD (tile_worker.js). The map grows on the GPU before anything is built, the main thread only waiting
+// on it; so the tiles of every finish the world will be built with (index.html: its landmark's, the land's, the town
+// style's) are drawn meanwhile in workers -- one per core, the page being idle then -- each posting back the tile's
+// layer as tileLayer would make it. They wait here by key; the first finish that asks takes one as it would a cached
+// tile, and a tile not back yet is drawn here as always. Not when the generator records (it writes the canvases out),
+// with ?tilearray=0 (a texture of its own wants the canvas), or for a tile pregen/ has. `library`: the pattern
+// library's documents as registered -- families, glyphs, murals (the workers register the same).
+const AHEAD = new Map(), aheadWorkers = [], aheadQueue = [];
+export function drawTilesAhead(finishes, library) {
+  if (!TILE_ARRAY || PREGEN.record || typeof Worker === "undefined") return;
+  const jobs = new Map();
+  for (const f of finishes) for (const r of f?.rules ?? []) {
+    if (typeof r.pattern !== "string" || !patternOf(r.pattern)) continue;
+    const key = finishKey(r);
+    if (jobs.has(key) || finishTiles.has(key)) continue;
+    if (pregenOn() && PREGEN.tiles.get(tileKey(r.pattern, r.palette, ruleParams(r), r.res))) continue;
+    jobs.set(key, { key, pattern: r.pattern, palette: r.palette, params: ruleParams(r), res: r.res });
+  }
+  const queue = aheadQueue, t0 = performance.now();
+  queue.push(...jobs.values());
+  let n = Math.min(queue.length, 4, navigator.hardwareConcurrency ?? 2), got = 0, failed = 0;
+  const done = () => { if (!--n) console.log(`tiles ahead: ${got} of ${jobs.size} drawn in workers in ${((performance.now() - t0) / 1000).toFixed(1)}s` + (failed ? ` (${failed} left to the page)` : "")); };
+  const drop = (w) => { w.terminate(); const i = aheadWorkers.indexOf(w); if (i >= 0) { aheadWorkers.splice(i, 1); done(); } };
+  for (let i = 0; i < n; i++) {
+    const w = new Worker(new URL("./tile_worker.js", import.meta.url), { type: "module" });
+    const next = () => { const j = queue.shift(); if (j) w.postMessage(j); else drop(w); };
+    w.onmessage = (e) => {
+      const m = e.data;
+      if (m.err) failed++;
+      else if (!finishTiles.has(m.key)) { AHEAD.set(m.key, { size: m.size, repeat: m.repeat, px: m.px }); got++; }
+      next();
+    };
+    w.onerror = (e) => { e.preventDefault(); console.warn("tiles ahead: a worker failed (" + (e.message || "?") + ")"); drop(w); };
+    aheadWorkers.push(w);
+    w.postMessage({ library, res: TILE_RES });
+    next();
+  }
+}
+// (the world built: whatever was drawn for it and not asked for is let go, and any worker still drawing stopped)
+export function tilesAheadDone() {
+  if (AHEAD.size) console.log(`tiles ahead: ${AHEAD.size} drawn and not asked for`);
+  if (aheadWorkers.length) console.log(`tiles ahead: ${aheadWorkers.length} workers still drawing, ${aheadQueue.length} tiles not begun -- stopped`);
+  AHEAD.clear(); aheadQueue.length = 0;
+  for (const w of aheadWorkers.splice(0)) w.terminate();
 }
 // (the tile as a texture of its own: ?tilearray=0 only)
 function tileTex(t) {
@@ -441,10 +492,14 @@ function tileArray(cap) {   // (grown: a new texture, the same node -- a materia
 function tileLayer(t) {   // the tile's layer, drawn into the array the first time a finish asks for it
   if (t.layer !== undefined) return t.layer;
   if (TA.n === TA.cap) tileArray(TA.cap ? TA.cap + 16 : 64);   // (16 layers more at a time: a spare layer is a megabyte and a third)
-  const R = TILE_RES, cv = TA.scratch ??= new OffscreenCanvas(R, R), cx = cv.getContext("2d", { willReadFrequently: true });
-  cx.clearRect(0, 0, R, R); cx.drawImage(t.canvas, 0, 0, R, R);
-  const px = cx.getImageData(0, 0, R, R).data, row = R * 4, L = t.layer = TA.n++, base = L * R * row;
-  for (let y = 0; y < R; y++) TA.data.set(px.subarray(y * row, (y + 1) * row), base + (R - 1 - y) * row);   // (bottom row first: as a canvas texture reads)
+  const R = TILE_RES, row = R * 4, L = t.layer = TA.n++, base = L * R * row;
+  if (t.px) { TA.data.set(t.px, base); t.px = null; }   // (drawn ahead: the layer as it is made below, made in a worker)
+  else {
+    const cv = TA.scratch ??= new OffscreenCanvas(R, R), cx = cv.getContext("2d", { willReadFrequently: true });
+    cx.clearRect(0, 0, R, R); cx.drawImage(t.canvas, 0, 0, R, R);
+    const px = cx.getImageData(0, 0, R, R).data;
+    for (let y = 0; y < R; y++) TA.data.set(px.subarray(y * row, (y + 1) * row), base + (R - 1 - y) * row);   // (bottom row first: as a canvas texture reads)
+  }
   const tex = TA.node.value;
   if (TA.up) tex.addLayerUpdate(L);   // (once it is up, only the new layer goes up)
   tex.needsUpdate = true;

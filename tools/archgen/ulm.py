@@ -25,7 +25,7 @@ def stage_walls(door_faces):
     in the lower band -- face 0 (+z) the arcade of `doorN` arches, face 2 (-z) one door `backW` wide"""
     upper = {"openings": {"pattern": "wins", "width": "winW", "gap": "winGap", "sill": "winSill", "springing": "winSpring",
                           "head": pointed(), "tracery": {"lights": "lights"}}, "glass": "glazed"}
-    d = {"type": "enclosure", "plan": {"rect": ["W", "W"]}, "thickness": "t", "height": "H",
+    d = {"type": "enclosure", "plan": {"rect": ["W", "W"]}, "thickness": "t", "height": "H", "interior": True,
          "tiers": [{"h": "low", "openings": []}, upper], "at": [[0, 0, 0, 0]]}
     faces = {}
     if 0 in door_faces:
@@ -89,7 +89,7 @@ STAGE = {"name": "Gothic tower stage",
 # ---- GOTHIC OCTAGON STAGE: the octagonal storey over a square tower
 def oct_walls(door):
     upper = {"openings": [{"at": 0, "width": "winW", "sill": "winSill", "springing": "winSpring", "head": pointed(), "tracery": {"lights": "lights"}}], "glass": "glazed"}
-    d = {"type": "enclosure", "plan": {"sides": 8, "radius": "R"}, "thickness": "t", "height": "H",
+    d = {"type": "enclosure", "plan": {"sides": 8, "radius": "R"}, "thickness": "t", "height": "H", "interior": True,
          "tiers": [{"h": "low", "openings": []}, upper], "at": [[0, 0, 0, 0]]}
     if door:
         d["faces"] = {"0": [{"h": "low", "openings": [{"at": 0, "width": "doorW", "sill": 0, "springing": "doorSpring", "head": pointed()}],

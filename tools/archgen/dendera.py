@@ -205,7 +205,7 @@ add("sanctuary court floor", {"type": "box", "width": r4(2 * xIn), "length": r4(
 sW, sD, sT, corridor = 6.0, 10.0, 1.2, 2.4
 sz1 = sanct["z1"] - corridor                  # the sanctuary's front face
 naosFloor = sanct["floor"] + 3 * RISE
-add("sanctuary", {"type": "enclosure", "plan": {"rect": [sW + 2 * sT, sD + 2 * sT]}, "thickness": sT, "height": r4(sanct["soffit"] - sanct["floor"]), "glass": False,
+add("sanctuary", {"type": "enclosure", "plan": {"rect": [sW + 2 * sT, sD + 2 * sT]}, "thickness": sT, "height": r4(sanct["soffit"] - sanct["floor"]), "glass": False, "interior": True,
                   "faces": {"0": [door(2.0, 4.4)], "1": [], "2": [], "3": []},
                   "at": [[0, r4(B + sanct["floor"]), r4(sz1 - (sD + 2 * sT) / 2), 0]],
                   "_about": "the Per-wer, the great seat: a room standing free, the corridor of the mysteries round it, its roof the lowest of all"})
@@ -255,7 +255,7 @@ for side, (cx, cz, yaw) in {"n": (0, kA / 2, 0), "s": (0, -kA / 2, math.pi), "w"
                                             "at": [[r4(xK + cx + ux * u + nx * 0.15), r4(yK), r4(zK + cz + uz * u + nz * 0.15), r4(yaw)]]})
 
 nH, zN = 3.6, sz1 - sT - sD + 2.2
-add("naos", {"type": "enclosure", "plan": {"rect": [2.2, 3.0]}, "thickness": 0.35, "height": nH, "glass": False,
+add("naos", {"type": "enclosure", "plan": {"rect": [2.2, 3.0]}, "thickness": 0.35, "height": nH, "glass": False, "interior": True,
              "faces": {"0": [door(1.0, 2.3)], "1": [], "2": [], "3": []}, "courses": {"list": crown(nH, 0.45)},
              "at": [[0, r4(B + naosFloor), r4(zN), 0]],
              "_about": "the shrine of the goddess's image: one block of stone hollowed, its door at the front, its own torus and gorge"})

@@ -1,0 +1,149 @@
+{
+ "name": "Torii",
+ "_about": "A TORII, the gate of a Shinto shrine, in the myojin manner: two round pillars (hashira) on stone footings (kamebara), the tie beam (nuki) through them below the top, the plaque (gaku) on its strut over the middle, and the two lintels across the tops -- the shimaki, and on it the kasagi, longer, its ends swept up (sori) and cut on the slant; both `beam`s of one curve. Built across x, the way through it along z, y 0 on the ground; `span` between the pillars' centres, `height` to the shimaki's soffit at the middle, `r` the pillars' radius, `over` how far the kasagi reaches past each pillar, `sori` how far its soffit rises at the tips; `plaque` \"no\" leaves the plaque out (the small torii given by worshippers have none).",
+ "params": {
+  "detail": 4,
+  "span": 3.0,
+  "height": 3.6,
+  "r": 0.17,
+  "over": 1.0,
+  "sori": 0.32,
+  "plaque": "yes"
+ },
+ "build": [
+  "footings",
+  "pillars",
+  "nuki",
+  "gaku",
+  "shimaki",
+  "kasagi"
+ ],
+ "parts": {
+  "footings": {
+   "type": "prism",
+   "plan": {
+    "sides": 12,
+    "radius": "r * 1.45"
+   },
+   "height": "r * 1.2",
+   "at": [
+    [
+     "-span / 2",
+     0,
+     0,
+     0
+    ],
+    [
+     "span / 2",
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the stone footings (kamebara)"
+  },
+  "pillars": {
+   "type": "prism",
+   "plan": {
+    "sides": 12,
+    "radius": "r"
+   },
+   "height": "height - r * 1.2 + sori * (span / 2) * (span / 2) / ((span / 2 + over) * (span / 2 + over)) + r * 0.5",
+   "at": [
+    [
+     "-span / 2",
+     "r * 1.2",
+     0,
+     0
+    ],
+    [
+     "span / 2",
+     "r * 1.2",
+     0,
+     0
+    ]
+   ],
+   "standsOn": [
+    "footings"
+   ],
+   "_about": "the pillars (hashira), up into the shimaki where its soffit rises over them"
+  },
+  "nuki": {
+   "type": "box",
+   "width": "span + r * 7",
+   "length": "r * 0.9",
+   "height": "r * 1.5",
+   "at": [
+    [
+     0,
+     "height * 0.72",
+     0,
+     0
+    ]
+   ],
+   "_about": "the tie beam (nuki), through the pillars and out past them"
+  },
+  "gaku": {
+   "type": "box",
+   "width": "r * 2.8",
+   "length": "r * 0.5",
+   "height": "height * 0.28 - r * 1.5",
+   "at": [
+    [
+     0,
+     "height * 0.72 + r * 1.5",
+     0,
+     0
+    ]
+   ],
+   "standsOn": [
+    "nuki"
+   ],
+   "_about": "the plaque (gaku) on its strut between the nuki and the shimaki",
+   "when": {
+    "plaque": "yes"
+   }
+  },
+  "shimaki": {
+   "type": "beam",
+   "length": "span + over * 1.5",
+   "height": "r * 1.2",
+   "depth": "r * 2.1",
+   "sori": "sori",
+   "reach": "span / 2 + over",
+   "at": [
+    [
+     0,
+     "height",
+     0,
+     0
+    ]
+   ],
+   "standsOn": [
+    "pillars"
+   ],
+   "_about": "the lower lintel (shimaki), on the pillars"
+  },
+  "kasagi": {
+   "type": "beam",
+   "length": "span + over * 2",
+   "height": "r * 1.5",
+   "depth": "r * 2.5",
+   "sori": "sori",
+   "reach": "span / 2 + over",
+   "taper": "r * 0.8",
+   "at": [
+    [
+     0,
+     "height + r * 1.2",
+     0,
+     0
+    ]
+   ],
+   "standsOn": [
+    "shimaki"
+   ],
+   "_about": "the upper lintel (kasagi), on the shimaki and following its curve, its tips swept up and cut on the slant"
+  }
+ }
+}

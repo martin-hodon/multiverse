@@ -1,0 +1,22 @@
+{
+  "name": "Sheikh Zayed Grand Mosque",
+  "building": "architecture/sheikh-zayed",
+  "_about": "The Sheikh Zayed Grand Mosque's surfaces: white marble everywhere, the domes too; gold leaf on every finial; the sahn's floor a floral inlay of coloured marble in the white; the prayer hall's floor one great carpet, wall to wall; marble inlaid with flowers on the hall's lower walls and the portico's piers; the pools' water.",
+  "stone": { "color": "#f3f1ec", "accent": "#e2ded5", "pat": "marble" },
+  "rules": [
+    { "parts": ["finial", "finial ball", "roof dome finials", "main dome finial", "main dome finial ball", "north dome finial", "north dome finial ball",
+                "south dome finial", "south dome finial ball", "entrance dome finial", "entrance dome finial ball", "entrance hall dome finial", "entrance hall dome finial ball"],
+      "pattern": "roofs/gold leaf" },
+    { "parts": ["pools", "east pools"], "color": "#4f9fb5", "accent": "#3f8ca1", "_about": "the reflecting pools' water" },
+    { "parts": "kind:dome", "surface": "roof", "pattern": "stone/marble", "palette": "carrara" },
+    { "parts": "kind:dome", "side": "in", "pattern": "painted/gold mosaic", "_about": "the domes within" },
+    { "surface": "floor", "side": "in", "fit": [-147, -28, -77.9, 28], "pattern": "carpets/medallion", "palette": "carpet-green", "_about": "the prayer hall's carpet, wall to wall: here in three, one under each dome" },
+    { "surface": "floor", "side": "in", "fit": [-147, -83.9, -77.9, -28], "pattern": "carpets/medallion", "palette": "carpet-green" },
+    { "surface": "floor", "side": "in", "fit": [-147, 28, -77.9, 83.9], "pattern": "carpets/medallion", "palette": "carpet-green" },
+    { "surface": "floor", "within": [-55, -75, 55, 75], "pattern": "panels/pietra dura", "palette": "carrara", "scale": 3, "_about": "the sahn: flowers inlaid in white marble" },
+    { "parts": ["prayer hall", "portico", "hall columns"], "surface": "wall", "below": 3.5, "pattern": "panels/pietra dura", "palette": "carrara", "_about": "flowers inlaid in the marble at the foot of the walls and piers" },
+    { "surface": "floor", "side": "in", "pattern": "floors/star and cross", "palette": "marble-bw" },
+    { "surface": "floor", "pattern": "stone/marble", "palette": "carrara" },
+    { "surface": "wall", "pattern": "stone/marble", "palette": "carrara" }
+  ]
+}

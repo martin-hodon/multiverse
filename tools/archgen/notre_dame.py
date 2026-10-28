@@ -47,12 +47,15 @@ def _gothic(file, name, about, P, spire, fleche, parts, build, add, kings=False)
                                {"h": 12, "openings": [{"at": 0, "width": 9.6, "sill": 5.9, "springing": 5.9, "head": {"profile": "semicircular"}, "foot": {"profile": "semicircular"}, "tracery": True}]},
                                {"openings": {"pattern": "4", "width": 1.3, "gap": 1.25, "pier": 1.25, "sill": 3.0, "springing": 10.5, "head": {"profile": "pointed", "spread": 1.4}}, "glass": False}],
                      "_about": "the west front between the towers, in three tiers: the central portal; the great rose; the open gallery"})
+  # (inside behind it, up to the rose's tier: the nave's last stretch, from the west bay's piers to the middle of the
+  #  front -- a wall stands back from its placement, its face there)
+  add("west interior", {"type": "interior", "plan": {"rect": [f"2 * ({side}) - towerW", 3]}, "height": 27, "at": [[0, 0, "naveL / 2", 0]]})
   twr = lambda sx: [f"{sx} * ({side})", 0, "naveL / 2 + 3 - towerD / 2", 0]
   add("towers", {"type": "enclosure", "plan": {"rect": ["towerW", "towerD"]}, "thickness": 1.6, "height": "frontH + towerH",
                  "tiers": [{"h": 15, "openings": []}, {"h": 12, "openings": []}, {"h": "frontH - 27", "openings": []}, belfry],
                  "faces": {"0": [{"h": 15, "openings": [pa(5.0, 0, 6.8, g=True)]}, {"h": 12, "openings": [pa(2.6, 2.5, 8.0)]}, {"h": "frontH - 27", "openings": []}, belfry],
                            "2": [{"h": 15, "openings": [pa("towerW - 5.2", 0, "15 - 1.1 - (towerW - 5.2) / 2 * 1.7321")]}, {"h": 12, "openings": []}, {"h": "frontH - 27", "openings": []}, belfry]},
-                 "at": [twr(-1), twr(1)],
+                 "at": [twr(-1), twr(1)], "interior": "frontH + towerH - 1",
                  "_about": "the two towers, from the ground: a portal in the front, a window, a blind stage, then the belfry's lancet pairs; the back an arch across the aisle"})
   # the towers' TOPS: a terrace slab in each, round the hatch the stair turret comes up through, and a spiral turret
   # from the aisle floor all the way up (387 steps on the real ones). It stands against the middle of the tower's

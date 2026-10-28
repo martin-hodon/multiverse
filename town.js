@@ -15,7 +15,7 @@
 // every building), the STREETS (paths.js draws them; the villagers walk them), the level ground, and the guards.
 //
 // Coordinates are the world's: +x east, +z south; the river runs east along z = riverZ(x).
-import { archBuilding, archAssembly } from "./architecture.js";
+import { archBuilding, archAssembly, FINISHES } from "./architecture.js";
 import { rng } from "./flora.js";
 import { ASSETS } from "./catalogue.js";
 
@@ -237,6 +237,27 @@ export function styleFinishes(kind) {
   return out;
 }
 
+// the style a town is planned in: the seed's, as its period changes it
+function periodStyle(seed, style, period) {
+  const S = townStyle(seed, style);
+  if (period?.houses) { S.tower = "merlons"; S.gate = "battlements"; }   // (the walls of an older town: battlements, no spires)
+  if (period?.walls) S.masonry = { pattern: period.walls[0], palette: period.walls[1] };   // (its own masonry: mud brick, ashlar)
+  return S;
+}
+// EVERY finish THIS town may use -- the same arguments as planTown's, before it is planned (archmat.js drawTilesAhead
+// draws their tiles while the map grows; the town is planned after it): its wall, market, yards, church, longhouse,
+// and its houses in every look and roof its style can give them -- or the period's dwellings
+export function townFinishes(seed, style = null, period = null) {
+  const S = periodStyle(seed, style, period), out = [fortFinish(S), marketFinish(S), yardFinish(S), ...(period?.church === false ? [] : [churchFinish(S)])];
+  if (period?.houses) return [...out, ...Object.keys(period.houses).map((name) => FINISHES[`dwellings/${name}`])];
+  out.push(longhouseFinish(S));
+  for (const roof of S.roofs) for (const plaster of S.plasters) for (const frame of S.frames) for (const how of HOWS) {
+    const look = lookOf(S, how, plaster, frame);
+    out.push(houseFinish(S, { ground: look, upper: look, roof }));
+  }
+  return out;
+}
+
 // ---- THE HOUSES ---------------------------------------------------------------------------------------------------
 // each kind's range of frontage W, depth D, storeys and pitch (the stair needs D >= 7.5: a flight is 3.9m long)
 const KINDS = {
@@ -271,11 +292,9 @@ function houseSpec(kind, r, { trade = null, cellar = r() < .35, big = false } = 
 // `church: false` -- none, and no cross on the market; `walls`: [pattern, palette] its stone buildings are laid in
 // `furnish`: the word its village houses are furnished under (assets/architecture/furnishing.json `swaps`)
 export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridgeX, groundR, style = null, period = null }) {
-  const S = townStyle(seed, style), r = rng(seed * 13 + 5);
+  const S = periodStyle(seed, style, period), r = rng(seed * 13 + 5);
   const DW = period?.houses ?? null;
   const FURN = period?.furnish ? { furnish: period.furnish } : {};   // (the period's own furniture in the village's houses: furnishing.json `swaps`)
-  if (DW) { S.tower = "merlons"; S.gate = "battlements"; }   // (the walls of an older town: battlements, no spires)
-  if (period?.walls) S.masonry = { pattern: period.walls[0], palette: period.walls[1] };   // (its own masonry: mud brick, ashlar)
   // a dwelling of the period, turned to face its street (`yaw`), its footprint along and across it
   const dwellings = new Map();
   const dwelling = (name, yaw) => {

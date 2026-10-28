@@ -1,0 +1,25 @@
+{
+  "name": "Imam Mosque",
+  "building": "architecture/imam-mosque",
+  "_about": "The Imam Mosque's surfaces: the court's every face in haft-rangi tiles -- the rumi arabesque in cream and turquoise on cobalt -- and so the iwans, their half domes and the entrance portal; the great dome's onion turquoise with yellow arabesques, its drum and the minarets in girih on cobalt; inside, girih in the domes and the rumi on the walls, the halls' floors in prayer carpets; the court paved in stone, the roofs and the madrasas in brick, the winter halls' low domes and every outer wall in buff brick; the pool's water; gilt finials.",
+  "stone": { "color": "#c9b48e", "accent": "#b39d78", "pat": "brick" },
+  "rules": [
+    { "parts": ["great dome finial", "great dome finial ball", "vestibule dome finial", "vestibule dome finial ball"], "pattern": "roofs/gold leaf" },
+    { "parts": "pool", "color": "#3f8fa6", "accent": "#347c91", "_about": "the pool's water" },
+    { "parts": ["north winter hall dome", "south winter hall dome"], "side": "out", "pattern": "stone/brick", "palette": "brick", "_about": "the winter halls' low domes, bare brick" },
+    { "parts": ["great dome", "vestibule dome"], "surface": "roof", "pattern": "tiles/iznik rumi", "palette": "isfahan-dome", "_about": "the onions: yellow arabesques on turquoise" },
+    { "parts": ["great dome", "vestibule dome"], "side": "out", "pattern": "tiles/girih", "palette": "isfahan-girih", "_about": "their drums" },
+    { "parts": "kind:dome", "side": "in", "pattern": "tiles/girih", "palette": "isfahan-girih", "_about": "the domes within" },
+    { "parts": ["qibla minarets", "entrance minarets"], "side": "out", "pattern": "tiles/girih", "palette": "isfahan-girih" },
+    { "surface": "floor", "side": "in", "within": [-19, -45.5, 19, 45.5], "pattern": "carpets/prayer rows", "palette": "carpet-red", "_about": "the sanctuary's floor under its carpets" },
+    { "surface": "floor", "side": "in", "within": [41, -76, 69, -45.5], "pattern": "carpets/prayer rows", "palette": "carpet-red", "_about": "and the winter halls'" },
+    { "surface": "floor", "side": "in", "within": [41, 45.5, 69, 76], "pattern": "carpets/prayer rows", "palette": "carpet-red" },
+    { "surface": "floor", "within": [27, -37.5, 83, 37.5], "pattern": "floors/flagstones", "palette": "limestone", "_about": "the court's paving" },
+    { "surface": "floor", "pattern": "floors/terracotta", "palette": "brick", "_about": "every other floor, the roofs walked on: brick paving" },
+    { "within": [19.5, -45, 90.5, 45], "side": "out", "pattern": "tiles/iznik rumi", "palette": "isfahan", "_about": "the court: its niches, its iwans, their half domes" },
+    { "parts": "entrance portal", "side": "out", "pattern": "tiles/iznik rumi", "palette": "isfahan", "_about": "the portal on the square" },
+    { "side": "in", "surface": "wall", "pattern": "tiles/iznik rumi", "palette": "isfahan", "_about": "the walls within" },
+    { "side": "in", "pattern": "tiles/girih", "palette": "isfahan-girih", "_about": "vaults, arches and ceilings within" },
+    { "pattern": "stone/brick", "palette": "brick", "_about": "every outer wall in buff brick" }
+  ]
+}

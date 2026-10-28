@@ -1,0 +1,346 @@
+{
+  "name": "Kremlin tower",
+  "_about": "A TOWER OF THE MOSCOW KREMLIN (Aloisio da Milano, Pietro Antonio Solari and Marco Ruffo, 1485-1495; the tents 1680-86): a square BODY `W` wide and `H` high, its walls `t` thick with a loop high in each face (`gate` \"yes\": an arched passage through faces 0 and 2 instead), carried out at its head on a CORBEL BAND `bo` and crowned with forked merlons (`crenellation`, \"forked\") round a deck; on the deck the square TIER (chetverik) `cw` wide and `ch` high with an arched window in each face, on it the open OCTAGON (vosmerik) `oR` to its corners and `oH` high -- the watch-tower -- and over all the TENT (shatyor), an eight-sided spire `rise` high (`gothic-spire`, built plain). Build without the tier or the octagon for a lower tower (set `ch` or `oH` to 0 so what is above comes down).",
+  "params": {
+    "detail": 4,
+    "W": 10.0,
+    "H": 18.0,
+    "t": 1.6,
+    "_W": "the body's width (square) and H its height to the head of the corbel band",
+    "loopW": 1.0,
+    "loopSill": "H * 0.62",
+    "loopSpring": "loopSill + 1.6",
+    "doorW": 4.0,
+    "doorSpring": 4.5,
+    "gate": "no",
+    "_gate": "\"yes\": a gate tower, the passage straight through its body (faces 0 and 2), `doorW` wide, springing at `doorSpring`",
+    "bo": 0.6,
+    "band": 1.0,
+    "_bo": "how far the corbel band stands out from the body's faces, and `band` its height",
+    "pt": 0.7,
+    "ph": 1.0,
+    "step": 2.6,
+    "mw": 1.5,
+    "mh": 1.9,
+    "merlon": "forked",
+    "fork": 0.6,
+    "_pt": "the battlements: the parapet's thickness and breast (ph), the merlons every `step`, `mw` wide and `mh` tall, forked `fork` deep",
+    "cw": "W * 0.62",
+    "ch": 5.0,
+    "ct": 0.7,
+    "cwin": "cw * 0.28",
+    "csill": "ch * 0.3",
+    "_cwin": "the tier's windows: their width and sill (sill 0 and wide: an open arcade, a pavilion on the wall)",
+    "tierIn": "ch",
+    "_tierIn": "the tier's interior, up to this height: 0 for the open pavilion (its arches the open air's)",
+    "oR": "cw * 0.46",
+    "oH": 4.0,
+    "ot": 0.5,
+    "owin": "oR * 0.5",
+    "tR": "oR * 0.98",
+    "rise": 10.0,
+    "finial": 1.2
+  },
+  "build": [
+    "body",
+    "body gate",
+    "corbel band",
+    "battlements",
+    "deck",
+    "tier",
+    "tier slab",
+    "octagon",
+    "octagon slab",
+    "tent"
+  ],
+  "parts": {
+    "body": { "interior": true,
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "W"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": false,
+      "tiers": [
+        {
+          "h": "loopSill",
+          "openings": []
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": "loopW",
+              "sill": 0,
+              "springing": "loopSpring - loopSill",
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the body: four walls, a loop high in each face",
+      "when": {
+        "gate": "no"
+      }
+    },
+    "body gate": { "interior": true,
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "W"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": false,
+      "openings": [],
+      "faces": {
+        "0": [
+          {
+            "at": 0,
+            "width": "doorW",
+            "sill": 0,
+            "springing": "doorSpring",
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ],
+        "2": [
+          {
+            "at": 0,
+            "width": "doorW",
+            "sill": 0,
+            "springing": "doorSpring",
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "...or the body of a gate tower: an arched passage straight through it, faces 0 and 2",
+      "when": {
+        "gate": "yes"
+      }
+    },
+    "corbel band": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "(W + 2 * bo)",
+          "(W + 2 * bo)"
+        ]
+      },
+      "thickness": "bo",
+      "height": "band",
+      "openings": [],
+      "glass": false,
+      "at": [
+        [
+          0,
+          "H - band",
+          0,
+          0
+        ]
+      ],
+      "_about": "the band of corbels carrying the battlements out over the body's faces (the machicolations)"
+    },
+    "battlements": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": "(W + 2 * bo) - pt",
+        "t": "pt",
+        "h": "ph",
+        "step": "step",
+        "mw": "mw",
+        "mh": "mh",
+        "merlon": "merlon",
+        "fork": "fork"
+      },
+      "at": [
+        [
+          "0 - pt / 2",
+          "H",
+          "(W + 2 * bo) / 2 - pt / 2",
+          0
+        ],
+        [
+          "(W + 2 * bo) / 2 - pt / 2",
+          "H",
+          "pt / 2",
+          1.5707963
+        ],
+        [
+          "pt / 2",
+          "H",
+          "0 - ((W + 2 * bo) / 2 - pt / 2)",
+          3.14159265
+        ],
+        [
+          "0 - ((W + 2 * bo) / 2 - pt / 2)",
+          "H",
+          "0 - pt / 2",
+          -1.5707963
+        ]
+      ],
+      "_about": "the battlements round the head, one run to a face, each from its corner to the next (a pinwheel: the corners not doubled)"
+    },
+    "deck": {
+      "type": "box",
+      "width": "W - 2 * t + 0.2",
+      "length": "W - 2 * t + 0.2",
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          "H - 0.4",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the deck inside the battlements, closing the body's head"
+    },
+    "tier": { "interior": "tierIn",
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "cw",
+          "cw"
+        ]
+      },
+      "thickness": "ct",
+      "height": "ch",
+      "glass": false,
+      "openings": [
+        {
+          "at": 0,
+          "width": "cwin",
+          "sill": "csill",
+          "springing": "ch - cwin / 2 - 0.6",
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "_about": "the square tier on the deck, an arched window in each face"
+    },
+    "tier slab": {
+      "type": "box",
+      "width": "cw - 2 * ct + 0.2",
+      "length": "cw - 2 * ct + 0.2",
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          "H + ch - 0.4",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "octagon": { "interior": true,
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": "oR"
+      },
+      "thickness": "ot",
+      "height": "oH",
+      "glass": false,
+      "openings": [
+        {
+          "at": 0,
+          "width": "owin",
+          "sill": 0.9,
+          "springing": "oH - owin / 2 - 0.5",
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "at": [
+        [
+          0,
+          "H + ch",
+          0,
+          0
+        ]
+      ],
+      "_about": "the open octagon, the watch-tower: an arch in every face"
+    },
+    "octagon slab": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": "oR - ot * 0.6"
+      },
+      "height": 0.4,
+      "at": [
+        [
+          0,
+          "H + ch + oH - 0.4",
+          0,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "tent": {
+      "type": "component",
+      "use": "components/gothic-spire",
+      "params": {
+        "sides": 8,
+        "R": "tR",
+        "rise": "rise",
+        "finial": "finial"
+      },
+      "build": [
+        "spire",
+        "finial"
+      ],
+      "at": [
+        [
+          0,
+          "H + ch + oH",
+          0,
+          0
+        ]
+      ],
+      "_about": "the tent: eight plain faces to a point, its finial on top"
+    }
+  }
+}

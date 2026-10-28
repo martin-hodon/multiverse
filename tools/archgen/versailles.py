@@ -166,7 +166,8 @@ for bi, b in enumerate(BLOCKS):
     # -- and the stone blocks' two ORDERS (order.js): Ionic pilasters through the piano nobile, a Tuscan attic order over
     # them, each sized from its storey, their entablatures the floor line and the crowning cornice; the old chateau's
     # brick wings only their courses
-    walls.append((b["name"], {"type": "enclosure", "plan": {"rect": [b["w"], b["d"]]}, "thickness": T, "height": H, "glass": False, "faces": faces,
+    # (`interior`: its rooms, every storey, are the building's -- the space on the middle of its walls up to the roof)
+    walls.append((b["name"], {"type": "enclosure", "plan": {"rect": [b["w"], b["d"]]}, "thickness": T, "height": H, "glass": False, "faces": faces, "interior": True,
                               "courses": {**({"clear": clear} if clear else {})},
                               **({} if b.get("brick") else {"orders": [{"tier": 1, "kind": "ionic"}, {"tier": 2, "kind": "tuscan"}]}),
                               "at": [[b["x"], 0, b["z"], 0]]}))
@@ -282,8 +283,22 @@ for bw in BLOCKS[3:]:
         items["wardrobes"].append([R(rc + 3), 0.2, R(bw["z"] - bw["d"] / 2 + T + 0.45), 0])
     cobwebs += [([R(bw["x"] - bw["w"] / 2 + T), LV[1], R(bw["z"] - bw["d"] / 2 + T), 0], 1, 1, 0.8), ([R(bw["x"] + bw["w"] / 2 - T), LV[1], R(bw["z"] + bw["d"] / 2 - T), 0], -1, -1, 0.7)]
 
+# THE PARTY WALLS' SPACE: where two blocks stand face to face each block's rooms reach its own wall's middle, and the
+# doorway through the pair would be the open air's between -- the strip from one wall's middle to the other's is the
+# rooms' too (finish.js: the passage's reveals inside, through and through)
+party = []
+for bi, b in enumerate(BLOCKS):
+    for f in "nsew":
+        for u0, u1, o in contacts(b, f):
+            if BLOCKS.index(o) < bi: continue
+            nx, nz = FACES[f]
+            if f in "ns": cx, cz, w, l = b["x"] + (u0 + u1) / 2, b["z"] + nz * b["d"] / 2, u1 - u0 - T, T
+            else: cx, cz, w, l = b["x"] + nx * b["w"] / 2, b["z"] + (u0 + u1) / 2, T, u1 - u0 - T
+            party.append({"type": "interior", "plan": {"rect": [R(w), R(l)]}, "height": H, "at": [[R(cx), 0, R(cz), 0]],
+                          "_about": f"the party wall between the {b['name']} and the {o['name']}, from one's middle to the other's"})
 # ---- the definition
 for name, w in walls: parts[name] = w
+for i, v in enumerate(party): parts[f"party wall interior {i + 1}"] = v
 for i, w in enumerate(balustrades): parts[f"balustrade {i + 1}"] = w
 counts = {}
 for (name, w, l, h), places in BOXES.items():

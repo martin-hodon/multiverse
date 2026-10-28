@@ -61,6 +61,19 @@ add("entrance porch", {"type": "enclosure", "plan": {"rect": [14.0, 8.0]}, "thic
                        "faces": {"1": [{"at": 0, "width": 3.0, "sill": 0, "springing": 5.5, "head": {"profile": "pointed", "spread": 1.0}}],
                                  "3": [{"at": 0, "width": 3.0, "sill": 0, "springing": 5.5, "head": {"profile": "pointed", "spread": 1.0}}]},
                        "at": [[0, 0, -A - 4.0, 0]], "_about": "the porch on the square: arches on three sides before the central hall's door"})
+# THE SPACES of the middle (finish.js reads which side of every surface is in from them; the courts' rings of rooms, the
+# drum's and the turrets' come with their parts): the central hall on the middle of its walls up to the deck the drum
+# stands on -- and, under the courts' eaves, on through its side walls to the middle of the courts' where its doors go
+# through both into them -- and the porch, a room closed but for its arches, from its front wall's middle to the hall's,
+# up to its eaves. The river loggias are open arcades: the air's.
+CI = A - T / 2
+add("central hall interior", {"type": "interior", "plan": {"rect": [2 * CI, 2 * CI]}, "height": CH, "at": [[0, 0, 0, 0]],
+                              "_about": "the central hall's space, under the pendentives' deck"})
+add("hall doors interior", {"type": "interior", "plan": {"rect": [A + 0.45 - CI, 2 * CI]}, "height": WALL,
+                            "at": [[sx * (A + 0.45 + CI) / 2, 0, 0, 0] for sx in (-1, 1)],
+                            "_about": "the double walls between the hall and the courts' rooms, from one's middle to the other's: the doors' reveals inside"})
+add("porch interior", {"type": "interior", "plan": {"points": [[-6.4, -A - 8.0 + 0.6], [6.4, -A - 8.0 + 0.6], [6.4, -CI], [-6.4, -CI]]},
+                       "height": 12.0, "at": [[0, 0, 0, 0]], "_about": "the porch's space, through to the hall's"})
 add("porch gable", {"type": "roof", "form": "gable", "width": 14.0, "length": 8.0, "pitch": 55, "overhang": 0.3, "at": [[0, 12.0, -A - 4.0, 0]]})
 
 # ---- the river front's pinnacles

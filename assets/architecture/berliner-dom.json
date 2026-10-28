@@ -33,6 +33,7 @@
     "tower heads",
     "tower domes",
     "stylobate",
+    "dome well",
     "gallery stair",
     "dome",
     "frontispiece",
@@ -46,10 +47,12 @@
     "south wing outer wall",
     "south wing end walls",
     "south wing roof",
+    "south wing interior",
     "south wing parapet",
     "north wing outer wall",
     "north wing end walls",
     "north wing roof",
+    "north wing interior",
     "north wing parapet"
   ],
   "parts": {
@@ -311,6 +314,7 @@
           "ends": false
         }
       ],
+      "interior": 30.0,
       "at": [
         [
           0,
@@ -672,6 +676,7 @@
           1
         ]
       },
+      "interior": true,
       "at": [
         [
           -29.799999999999997,
@@ -875,6 +880,7 @@
           2
         ]
       },
+      "interior": true,
       "at": [
         [
           -29.799999999999997,
@@ -1078,6 +1084,7 @@
           3
         ]
       },
+      "interior": true,
       "at": [
         [
           29.799999999999997,
@@ -1281,6 +1288,7 @@
           3
         ]
       },
+      "interior": true,
       "at": [
         [
           29.799999999999997,
@@ -1422,6 +1430,23 @@
         ]
       ],
       "_about": "the round base the colonnade stands on: its top is the gallery walked round the drum"
+    },
+    "dome well": {
+      "type": "interior",
+      "plan": {
+        "sides": 32,
+        "radius": 17.75
+      },
+      "height": 6.0,
+      "at": [
+        [
+          0,
+          30.0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the church's space on up through the stylobate, from the pendentives' ring to the drum's (whose space is `drum-dome`'s)"
     },
     "gallery stair": {
       "type": "flight",
@@ -1751,6 +1776,25 @@
       ],
       "_about": "the wing's flat roof"
     },
+    "south wing interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          16.5,
+          38.5
+        ]
+      },
+      "height": 14.0,
+      "at": [
+        [
+          43.0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the wing's space: from the church wall's middle to its own walls', up to its roof"
+    },
     "south wing parapet": {
       "type": "enclosure",
       "plan": {
@@ -1848,6 +1892,24 @@
         ]
       ],
       "_about": "the wing's flat roof"
+    },
+    "north wing interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          16.5,
+          38.5
+        ]
+      },
+      "height": 14.0,
+      "at": [
+        [
+          -43.0,
+          0,
+          0,
+          0
+        ]
+      ]
     },
     "north wing parapet": {
       "type": "enclosure",

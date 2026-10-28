@@ -1,0 +1,79 @@
+{
+  "name": "Curtain wall",
+  "_about": "A STRETCH OF FORTRESS WALL between two towers: a mass `L` long along x, `T` thick and `H` high to its walk, the walk's outer edge (+z) behind battlements -- a breastwork `ph` high and merlons on it (`crenellation`, any of its kinds: \"forked\" for the Kremlin's swallowtails) -- and a low parapet `ih` high along its inner edge. Set one between each pair of towers along the wall's line, `L` the gap between their faces.",
+  "params": {
+    "detail": 4,
+    "L": 30.0,
+    "T": 4.5,
+    "H": 11.0,
+    "pt": 0.8,
+    "ph": 1.1,
+    "step": 3.0,
+    "mw": 1.9,
+    "mh": 1.9,
+    "merlon": "forked",
+    "fork": 0.6,
+    "ih": 1.0,
+    "it": 0.5
+  },
+  "build": [
+    "body",
+    "battlements",
+    "inner parapet"
+  ],
+  "parts": {
+    "body": {
+      "type": "box",
+      "width": "L",
+      "length": "T",
+      "height": "H",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the wall's mass, its head the walk"
+    },
+    "battlements": {
+      "type": "component",
+      "use": "components/crenellation",
+      "params": {
+        "L": "L",
+        "t": "pt",
+        "h": "ph",
+        "step": "step",
+        "mw": "mw",
+        "mh": "mh",
+        "merlon": "merlon",
+        "fork": "fork"
+      },
+      "at": [
+        [
+          0,
+          "H",
+          "T / 2 - pt / 2",
+          0
+        ]
+      ],
+      "_about": "the battlements along the walk's outer edge"
+    },
+    "inner parapet": {
+      "type": "box",
+      "width": "L",
+      "length": "it",
+      "height": "ih",
+      "at": [
+        [
+          0,
+          "H",
+          "0 - (T / 2 - it / 2)",
+          0
+        ]
+      ],
+      "_about": "the low parapet along the walk's inner edge"
+    }
+  }
+}

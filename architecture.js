@@ -71,6 +71,15 @@ import FIN_STEPHANSDOM from "./assets/finishes/stephansdom.json" with { type: "j
 import FIN_SULTAN_QABOOS from "./assets/finishes/sultan-qaboos.json" with { type: "json" };
 import FIN_TAJ_MAHAL from "./assets/finishes/taj-mahal.json" with { type: "json" };
 import FIN_TEMPLE_OF_HEAVEN from "./assets/finishes/temple-of-heaven.json" with { type: "json" };
+import FIN_SHEIKH_ZAYED from "./assets/finishes/sheikh-zayed.json" with { type: "json" };
+import FIN_IMAM_MOSQUE from "./assets/finishes/imam-mosque.json" with { type: "json" };
+import FIN_SUMMER_PALACE from "./assets/finishes/summer-palace.json" with { type: "json" };
+import FIN_ANGKOR_WAT from "./assets/finishes/angkor-wat.json" with { type: "json" };
+import FIN_BOROBUDUR from "./assets/finishes/borobudur.json" with { type: "json" };
+import FIN_HIMEJI from "./assets/finishes/himeji.json" with { type: "json" };
+import FIN_HORYUJI from "./assets/finishes/horyuji.json" with { type: "json" };
+import FIN_KINKAKUJI from "./assets/finishes/kinkakuji.json" with { type: "json" };
+import FIN_FUSHIMI_INARI from "./assets/finishes/fushimi-inari.json" with { type: "json" };
 import FIN_ULM from "./assets/finishes/ulm.json" with { type: "json" };
 import FIN_ZWINGER from "./assets/finishes/zwinger.json" with { type: "json" };
 import { assemble, registerDocs, docOf, itemOf, ovalOf } from "./arch/assemble.js";   // the COMPONENT engine (arch/): buildings composed from real parts
@@ -147,6 +156,15 @@ import C_DOMED_ARCADE from "./assets/architecture/components/domed-arcade.json" 
 import C_RIWAQ from "./assets/architecture/components/riwaq.json" with { type: "json" };
 import C_OTTOMAN_MINARET from "./assets/architecture/components/ottoman-minaret.json" with { type: "json" };
 import TEMPLE_OF_HEAVEN_DOC from "./assets/architecture/temple-of-heaven.json" with { type: "json" };
+import SHEIKH_ZAYED_DOC from "./assets/architecture/sheikh-zayed.json" with { type: "json" };
+import IMAM_MOSQUE_DOC from "./assets/architecture/imam-mosque.json" with { type: "json" };
+import SUMMER_PALACE_DOC from "./assets/architecture/summer-palace.json" with { type: "json" };
+import ANGKOR_WAT_DOC from "./assets/architecture/angkor-wat.json" with { type: "json" };
+import BOROBUDUR_DOC from "./assets/architecture/borobudur.json" with { type: "json" };
+import HIMEJI_DOC from "./assets/architecture/himeji.json" with { type: "json" };
+import HORYUJI_DOC from "./assets/architecture/horyuji.json" with { type: "json" };
+import KINKAKUJI_DOC from "./assets/architecture/kinkakuji.json" with { type: "json" };
+import FUSHIMI_INARI_DOC from "./assets/architecture/fushimi-inari.json" with { type: "json" };
 import C_DOUGONG from "./assets/architecture/components/dougong.json" with { type: "json" };
 import C_CHINESE_HALL from "./assets/architecture/components/chinese-hall.json" with { type: "json" };
 import C_PALACE_WALL from "./assets/architecture/components/palace-wall.json" with { type: "json" };
@@ -200,14 +218,29 @@ export { SNOW };   // (snow lying -- one flag, kept in foliage.js, which the lea
 // ---- FINISHES: patterned surfaces (arch/finish.js says which surface is what; patterns.js draws the tiles) ------------
 // The pattern library: every family, and the palettes. A building's finish (assets/finishes/<building>.json) names
 // patterns from it; the asset viewer shows it.
-registerPatterns({ palettes: PAT_PALETTES, shapes: PAT_SHAPES, stone: PAT_STONE, floors: PAT_FLOORS, carpets: PAT_CARPETS,
+export const PATTERN_FAMILIES = { palettes: PAT_PALETTES, shapes: PAT_SHAPES, stone: PAT_STONE, floors: PAT_FLOORS, carpets: PAT_CARPETS,
                    tiles: PAT_TILES, painted: PAT_PAINTED, roofs: PAT_ROOFS, panels: PAT_PANELS, timber: PAT_TIMBER,
                    materials: PAT_MATERIALS, heraldry: PAT_HERALDRY, hieroglyphs: PAT_HIEROGLYPHS, murals: PAT_MURALS,
-                   fabrics: ASSETS.get("patterns/fabrics") });   // (the cloth a room's cushions, hangings and bedding are of: the tailor's own, clothes.js)
-registerGlyphs(Object.fromEntries([...ASSETS].filter(([p]) => p.startsWith("glyphs/"))));
-registerMurals(Object.fromEntries([...ASSETS].filter(([p]) => p.startsWith("murals/"))));
+                   fabrics: ASSETS.get("patterns/fabrics") };   // (the cloth a room's cushions, hangings and bedding are of: the tailor's own, clothes.js)
+registerPatterns(PATTERN_FAMILIES);
+// (the whole library, exported: archmat.js drawTilesAhead's workers register the same)
+export const PATTERN_LIBRARY = { families: PATTERN_FAMILIES, glyphs: Object.fromEntries([...ASSETS].filter(([p]) => p.startsWith("glyphs/"))),
+                                 murals: Object.fromEntries([...ASSETS].filter(([p]) => p.startsWith("murals/"))) };
+registerGlyphs(PATTERN_LIBRARY.glyphs);
+registerMurals(PATTERN_LIBRARY.murals);
 // every building's finish, by its document (archBuilding finds its own; Florence and the arena are built by code and ask)
-export const FINISHES = { "arena": FIN_ARENA, "colosseum": FIN_COLOSSEUM, "berliner-dom": FIN_BERLINER_DOM, "blue-mosque": FIN_BLUE_MOSQUE, "chichen-itza": FIN_CHICHEN_ITZA, "cologne": FIN_COLOGNE, "dendera": FIN_DENDERA, "giza": FIN_GIZA, "didyma": FIN_DIDYMA, "windmill": FIN_WINDMILL, "el-pilar": FIN_EL_PILAR, "fishermans-bastion": FIN_FISHERMANS_BASTION, "florence": FIN_FLORENCE, "frauenkirche": FIN_FRAUENKIRCHE, "hagia-sophia": FIN_HAGIA_SOPHIA, "hephaestus": FIN_HEPHAESTUS, "kandariya": FIN_KANDARIYA, "karlskirche": FIN_KARLSKIRCHE, "mainz": FIN_MAINZ, "maria-laach": FIN_MARIA_LAACH, "melk": FIN_MELK, "milan": FIN_MILAN, "moritzburg": FIN_MORITZBURG, "notre-dame": FIN_NOTRE_DAME, "pantheon": FIN_PANTHEON, "parliament": FIN_PARLIAMENT, "parthenon": FIN_PARTHENON, "sacre-coeur": FIN_SACRE_COEUR, "schwerin": FIN_SCHWERIN, "st-basil": FIN_ST_BASIL, "st-isaacs": FIN_ST_ISAACS, "st-pauls": FIN_ST_PAULS, "stephansdom": FIN_STEPHANSDOM, "sultan-qaboos": FIN_SULTAN_QABOOS, "taj-mahal": FIN_TAJ_MAHAL, "temple-of-heaven": FIN_TEMPLE_OF_HEAVEN, "ulm": FIN_ULM, "zwinger": FIN_ZWINGER };
+export const FINISHES = { "arena": FIN_ARENA, "colosseum": FIN_COLOSSEUM, "berliner-dom": FIN_BERLINER_DOM, "blue-mosque": FIN_BLUE_MOSQUE, "chichen-itza": FIN_CHICHEN_ITZA, "cologne": FIN_COLOGNE, "dendera": FIN_DENDERA, "giza": FIN_GIZA, "didyma": FIN_DIDYMA, "windmill": FIN_WINDMILL, "el-pilar": FIN_EL_PILAR, "fishermans-bastion": FIN_FISHERMANS_BASTION, "florence": FIN_FLORENCE, "frauenkirche": FIN_FRAUENKIRCHE, "hagia-sophia": FIN_HAGIA_SOPHIA, "hephaestus": FIN_HEPHAESTUS, "kandariya": FIN_KANDARIYA, "karlskirche": FIN_KARLSKIRCHE, "mainz": FIN_MAINZ, "maria-laach": FIN_MARIA_LAACH, "melk": FIN_MELK, "milan": FIN_MILAN, "moritzburg": FIN_MORITZBURG, "notre-dame": FIN_NOTRE_DAME, "pantheon": FIN_PANTHEON, "parliament": FIN_PARLIAMENT, "parthenon": FIN_PARTHENON, "sacre-coeur": FIN_SACRE_COEUR, "schwerin": FIN_SCHWERIN, "st-basil": FIN_ST_BASIL, "st-isaacs": FIN_ST_ISAACS, "st-pauls": FIN_ST_PAULS, "stephansdom": FIN_STEPHANSDOM, "sultan-qaboos": FIN_SULTAN_QABOOS, "taj-mahal": FIN_TAJ_MAHAL, "temple-of-heaven": FIN_TEMPLE_OF_HEAVEN, "sheikh-zayed": FIN_SHEIKH_ZAYED, "imam-mosque": FIN_IMAM_MOSQUE, "summer-palace": FIN_SUMMER_PALACE, "angkor-wat": FIN_ANGKOR_WAT, "borobudur": FIN_BOROBUDUR, "himeji": FIN_HIMEJI, "horyuji": FIN_HORYUJI, "kinkakuji": FIN_KINKAKUJI, "fushimi-inari": FIN_FUSHIMI_INARI, "ulm": FIN_ULM, "zwinger": FIN_ZWINGER };
+// the finishes these landmarks (built already: index.html placed them by their footprints) and the village's land will
+// be built with -- every village/ finish (the fields, the riverside, the three mines) and the windmill's -- and, as a
+// finish of their own, the materials of the items a landmark is furnished with (index.html: their tiles drawn while the
+// map grows, archmat.js drawTilesAhead)
+export const finishesAhead = (keys) => [...keys.flatMap((k) => {
+  const a = BUILDINGS[k].arch;
+  if (!a) return [];
+  const asm = archAssembly(a.def, a.params), items = new Map();
+  for (const p of asm.parts) if (p.kind === "item") for (const g of itemOf(p.item).groups) items.set(g.material.key, g.material);
+  return [a.finish, { rules: [...items.values()].map((m) => ({ pattern: m.pattern, palette: m.palette, scale: m.scale, params: m.params })) }];
+}), FINISHES.windmill, ...[...ASSETS].filter(([p, v]) => p.startsWith("finishes/") && v.building?.startsWith("architecture/village/")).map(([, v]) => v)];
 export const finishRuleSize = (r) => patternSize(patternOf(r.pattern), ruleParams(r));
 // the finished building: its pieces (arch/finish.js), one mesh per rule -- a pattern's in the finish material, a plain
 // stone's (and whatever no rule took: the building's `stone`) in the building material, coloured in its vertices;
@@ -450,7 +483,7 @@ function geoFor(shape, size, inflate = 0) {
 // the village draws a static building as a single mesh and merges it with its neighbours. Flat normals come
 // from the triangles themselves (the engine welds its vertices, which is what makes the pieces MEET, so there
 // are no per-corner normals to average and none are wanted: architecture is flat faces and sharp arrises).
-const ARCH_DOCS = { arena: ARENA_DOC, colosseum: COLOSSEUM_DOC, basilica: BASILICA_DOC, florence: FLORENCE_DOC, "pantheon": PANTHEON_DOC, "parthenon": PARTHENON_DOC, "hephaestus": HEPHAESTUS_DOC, "taj-mahal": TAJ_DOC, "st-basil": STBASIL_DOC, "frauenkirche": FRAUENKIRCHE_DOC, "zwinger": ZWINGER_DOC, "notre-dame": NOTREDAME_DOC, "milan": MILAN_DOC, "cologne": COLOGNE_DOC, "dendera": DENDERA_DOC, "giza": GIZA_DOC, "didyma": DIDYMA_DOC, "windmill": WINDMILL_DOC, "hagia-sophia": HAGIA_DOC, "melk": MELK_DOC, "schwerin": SCHWERIN_DOC, "karlskirche": KARLSKIRCHE_DOC, "chichen-itza": CHICHEN_DOC, "sacre-coeur": SACRE_DOC, "stephansdom": STEPHAN_DOC, "st-pauls": STPAULS_DOC, "parliament": PARLIAMENT_DOC, "st-isaacs": STISAACS_DOC, "berliner-dom": BERLINERDOM_DOC, "moritzburg": MORITZBURG_DOC, "fishermans-bastion": FISHERMANS_DOC, "mainz": MAINZ_DOC, "maria-laach": MARIA_LAACH_DOC, "kandariya": KANDARIYA_DOC, "el-pilar": EL_PILAR_DOC, "sultan-qaboos": SULTAN_QABOOS_DOC, "ulm": ULM_DOC, "blue-mosque": BLUE_MOSQUE_DOC, "temple-of-heaven": TEMPLE_OF_HEAVEN_DOC,
+const ARCH_DOCS = { arena: ARENA_DOC, colosseum: COLOSSEUM_DOC, basilica: BASILICA_DOC, florence: FLORENCE_DOC, "pantheon": PANTHEON_DOC, "parthenon": PARTHENON_DOC, "hephaestus": HEPHAESTUS_DOC, "taj-mahal": TAJ_DOC, "st-basil": STBASIL_DOC, "frauenkirche": FRAUENKIRCHE_DOC, "zwinger": ZWINGER_DOC, "notre-dame": NOTREDAME_DOC, "milan": MILAN_DOC, "cologne": COLOGNE_DOC, "dendera": DENDERA_DOC, "giza": GIZA_DOC, "didyma": DIDYMA_DOC, "windmill": WINDMILL_DOC, "hagia-sophia": HAGIA_DOC, "melk": MELK_DOC, "schwerin": SCHWERIN_DOC, "karlskirche": KARLSKIRCHE_DOC, "chichen-itza": CHICHEN_DOC, "sacre-coeur": SACRE_DOC, "stephansdom": STEPHAN_DOC, "st-pauls": STPAULS_DOC, "parliament": PARLIAMENT_DOC, "st-isaacs": STISAACS_DOC, "berliner-dom": BERLINERDOM_DOC, "moritzburg": MORITZBURG_DOC, "fishermans-bastion": FISHERMANS_DOC, "mainz": MAINZ_DOC, "maria-laach": MARIA_LAACH_DOC, "kandariya": KANDARIYA_DOC, "el-pilar": EL_PILAR_DOC, "sultan-qaboos": SULTAN_QABOOS_DOC, "ulm": ULM_DOC, "blue-mosque": BLUE_MOSQUE_DOC, "temple-of-heaven": TEMPLE_OF_HEAVEN_DOC, "sheikh-zayed": SHEIKH_ZAYED_DOC, "imam-mosque": IMAM_MOSQUE_DOC, "summer-palace": SUMMER_PALACE_DOC, "angkor-wat": ANGKOR_WAT_DOC, "borobudur": BOROBUDUR_DOC, "himeji": HIMEJI_DOC, "horyuji": HORYUJI_DOC, "kinkakuji": KINKAKUJI_DOC, "fushimi-inari": FUSHIMI_INARI_DOC,
                     "village/church": V_CHURCH, "village/eaves-house": V_EAVES_HOUSE, "village/gable-house": V_GABLE_HOUSE, "village/gatehouse": V_GATEHOUSE, "village/jettied-house": V_JETTIED_HOUSE, "village/longhouse": V_LONGHOUSE, "village/stone-house": V_STONE_HOUSE, "village/wall": V_WALL, "village/wall-tower": V_WALL_TOWER };
 // the COMPONENTS those buildings use (a definition `use`d by another: Florence's tribune morte are `iwan`s, the
 // Taj Mahal's minarets carry `chhatri`s, Notre-Dame's nave is the `basilica`)
@@ -2051,6 +2084,16 @@ const BUILD_FACTORIES = {
   // the Temple of Heaven: white marble altar and balustrades, red lacquered columns and lattice, painted beams and brackets,
   // blue glazed tiles, the finial gilt; the court's walls red under green copings
   templeofheaven: () => archBuilding("temple-of-heaven", { name: "Temple of Heaven" }),
+  sheikhzayed: () => archBuilding("sheikh-zayed", { name: "Sheikh Zayed Grand Mosque" }),
+  // the Imam Mosque: haft-rangi tiles, cobalt and turquoise, on every face of the court and the domes; buff brick outside
+  imammosque: () => archBuilding("imam-mosque", { name: "Imam Mosque" }),
+  summerpalace: () => archBuilding("summer-palace", { name: "Summer Palace" }),
+  angkorwat: () => archBuilding("angkor-wat", { name: "Angkor Wat" }),
+  borobudur: () => archBuilding("borobudur", { name: "Borobudur" }),
+  himeji: () => archBuilding("himeji", { name: "Himeji Castle" }),
+  horyuji: () => archBuilding("horyuji", { name: "Horyu-ji" }),
+  kinkakuji: () => archBuilding("kinkakuji", { name: "Kinkaku-ji" }),
+  fushimiinari: () => archBuilding("fushimi-inari", { name: "Fushimi Inari Taisha" }),
   // the Fisherman's Bastion: white limestone, dark tent caps
   fishermansbastion: () => archBuilding("fishermans-bastion", { name: "Fisherman's Bastion" }),
   moritzburg: () => archBuilding("moritzburg", { name: "Moritzburg Castle", moat: { hw: MORITZBURG_DOC._moat.hw, hd: MORITZBURG_DOC._moat.hd, w: MORITZBURG_DOC._moat.w, depth: 4.4 } }),
@@ -2073,7 +2116,7 @@ for (const [k, make] of Object.entries(BUILD_FACTORIES)) {
 }
 // the DRESS of a landmark's people (clothes: the wardrobe's `styles`): its congregation wears it, and so does a share of
 // the world's wanderers when the landmark stands (index.html)
-export const DRESS = { hephaestus: "greek", parthenon: "greek", didyma: "greek", colosseum: "roman", pantheon: "roman", templeofheaven: "chinese",
+export const DRESS = { hephaestus: "greek", parthenon: "greek", didyma: "greek", colosseum: "roman", pantheon: "roman", templeofheaven: "chinese", sheikhzayed: "islamic", imammosque: "islamic", summerpalace: "chinese", angkorwat: "indian", borobudur: "indian", himeji: "japanese", horyuji: "japanese", kinkakuji: "japanese", fushimiinari: "japanese",
                        giza: "egyptian", notredame: "gothic", cologne: "gothic", milan: "gothic", ulm: "gothic", stephansdom: "gothic", florence: "gothic", mainz: "gothic", marialaach: "gothic", caerphilly: "gothic",
                        kandariya: "indian", chichenitza: "maya", stbasil: "russian" };
 // THE VILLAGE'S LAND AND ITS RIVERSIDE: definitions in their own finishes, the same in every world -- pregen caches them
@@ -2081,7 +2124,7 @@ export const DRESS = { hephaestus: "greek", parthenon: "greek", didyma: "greek",
 export const LAND = ["watermill", "windmill", "landing", "fisherHut", "fountain", "ryeField", "barleyField", "cabbageField", "beanField", "garlicField", "soilField", "berries", "orchard",
                      "mineSilver", "mineCopper", "mineSalt"];
 export const LANDMARKS = ["florence", "dendera", "giza", "didyma", "milan", "notredame", "cologne", "hephaestus", "parthenon", "colosseum",
-                          "versailles", "caerphilly", "pantheon", "tajmahal", "stbasil", "frauenkirche", "zwinger", "hagiasophia", "melk", "schwerin", "karlskirche", "chichenitza", "sacrecoeur", "stephansdom", "stpauls", "parliament", "stisaacs", "berlinerdom", "moritzburg", "fishermansbastion", "mainz", "elpilar", "sultanqaboos", "ulm", "bluemosque", "templeofheaven", "marialaach", "kandariya"];
+                          "versailles", "caerphilly", "pantheon", "tajmahal", "stbasil", "frauenkirche", "zwinger", "hagiasophia", "melk", "schwerin", "karlskirche", "chichenitza", "sacrecoeur", "stephansdom", "stpauls", "parliament", "stisaacs", "berlinerdom", "moritzburg", "fishermansbastion", "mainz", "elpilar", "sultanqaboos", "ulm", "bluemosque", "templeofheaven", "sheikhzayed", "imammosque", "summerpalace", "borobudur", "angkorwat", "himeji", "horyuji", "kinkakuji", "fushimiinari", "marialaach", "kandariya"];
 // what each landmark is called, for the start menu (index.html chooseSetup) -- read from its factory's own `name`, so
 // the name is written once, without building it (but the amphitheatre, which calls itself the Arena)
 export const LANDMARK_NAMES = { ...Object.fromEntries(LANDMARKS.map((k) => [k, String(BUILD_FACTORIES[k]).match(/name:\s*"([^"]+)"/)?.[1] ?? k])), colosseum: "Colosseum" };

@@ -663,7 +663,8 @@ export function basilica(d, per90) {
       if (d.pinnacles) pinnacle(mx, mz, tg, o, Math.min(bw, 2 * md) * .8, midTop);
     }
   }
-  add("buttresses", bm, "buttress"); add("flyers", fm, "flyer"); add("pinnacles", pm, "pinnacle");
+  // (all the open air's: over the aisle roof, inside the box of the aisles' interior)
+  add("buttresses", bm, "buttress", { side: "out" }); add("flyers", fm, "flyer", { side: "out" }); add("pinnacles", pm, "pinnacle", { side: "out" });
 
   // ---- ROOFS. The high roof: its eave round the arcade line's outside, a gable down the nave ending in a hip of as many
   // faces as the apse has sides; the ridge from the west end to over the apse's centre
@@ -696,7 +697,16 @@ export function basilica(d, per90) {
   if (glass.tracery?.counts.tris) parts.push({ name: "tracery", geometry: glass.tracery, kind: "tracery", shell: true });
   if (glass.wimperg?.counts.tris) parts.push({ name: "wimpergs", geometry: glass.wimperg, kind: "wimperg", shell: true });
   if (glass.surround?.counts.tris) parts.push({ name: "surrounds", geometry: glass.surround, kind: "moulding", shell: true });
-  return { parts, plan: { arc, out, mids, inner, wallTop, ridgeY, crown, vSpring, clerSill, aisleRidge, aisleEave, arcadeCrown, aisleCrown, spring } };
+  // ITS INTERIORS (finish.js): the body on the outer wall's middle line, up to the aisle roof's eave (a box cannot follow
+  // the lean-to's slope: over the eave it is the open air's -- a tower's flank over the roof -- and what is under the
+  // roof there is not seen); a hall's, to its one roof's ridge. The nave on the arcade's line, the transept across the
+  // crossing to the middle of its end walls -- both up into the high roof
+  const interiors = [{ name: "interior", pts: out, y1: d.hall ? ridgeY : aisleEave }, { name: "nave interior", pts: arc, y1: ridgeY }];
+  if (X !== null) {
+    const zA = zs[X[0]], zB = zs[X[1] + 1], xE = outerR + tA / 2 + (d.arm ?? 0) - (d.transeptT ?? t * 1.4) / 2;
+    interiors.push({ name: "transept interior", pts: [[-xE, zA], [xE, zA], [xE, zB], [-xE, zB]], y1: ridgeY });
+  }
+  return { parts, interiors, plan: { arc, out, mids, inner, wallTop, ridgeY, crown, vSpring, clerSill, aisleRidge, aisleEave, arcadeCrown, aisleCrown, spring } };
 }
 
 // where two segments' lines cross (a bay's diagonals: its keystone)

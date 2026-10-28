@@ -1,0 +1,15 @@
+{
+  "name": "Angkor Wat",
+  "building": "architecture/angkor-wat",
+  "_about": "Angkor Wat's surfaces: grey-buff sandstone laid dry in fine courses on the galleries, the pavilions and the towers, the roofs' stone tiles, the platforms' battered sides coarser, the courts and the causeway flagged; the ponds' water.",
+  "stone": { "color": "#a49c88", "accent": "#8c8573", "pat": "ashlar" },
+  "rules": [
+    { "parts": ["north pond", "south pond"], "color": "#4f6f62", "accent": "#425e53", "_about": "the reflecting ponds' water" },
+    { "parts": ["kind:roof", "kind:range"], "surface": "roof", "pattern": "roofs/tube tiles", "palette": "sandstone-grey", "_about": "the stone roofs, cut as tiles" },
+    { "parts": "kind:shikhara", "pattern": "stone/ashlar fine", "palette": "sandstone-grey" },
+    { "parts": ["third terrace", "second platform", "bakan", "causeway", "terrace of honour"], "surface": "wall", "pattern": "stone/ashlar", "palette": "pennant-sandstone", "_about": "the platforms' sides" },
+    { "surface": "floor", "pattern": "floors/flagstones", "palette": "pennant-sandstone" },
+    { "surface": "wall", "pattern": "stone/ashlar fine", "palette": "sandstone-grey" },
+    { "pattern": "stone/ashlar", "palette": "sandstone-grey" }
+  ]
+}

@@ -313,4 +313,40 @@ add("aisle end roofs", {"type": "roof", "form": "shed", "width": "aisleRoofOut -
                         "_about": "each aisle's lean-to carried on past the nave's end to the aisle's east wall, closing the slot between them"}, after="aisle roofs")
 add("seating", {"type": "zone", "zone": "seating", "w": "naveW - 2.8", "d": 27, "h": "arcadeH", "at": [[0, FLOOR, "zc + naveL / 2 - 6 - 13.5", 1.5707963]],
                 "_about": "the congregation: pews down the nave on a middle aisle, facing the crossing (-z) -- clear of the arcade's piers, which stand 0.6 m into the nave"})
+# ---- THE INTERIORS: the church's spaces, each on the middle of the walls round it (finish.js reads inside and out
+# from them). The octagon's walls' middle (`dm`, on its flats) is where the crossing ends and the nave, the aisles'
+# last stretch and the tribunes begin; the hollow pier's shaft is a space of its own in the middle of its wall.
+dm = "(octR + octT / 2) * 0.92388"
+mA = "halfA - aisleT / 2"                         # (the aisle walls' middle, and the facade's)
+zW = "roofZ0 - pierT / 2"
+add("body", {"type": "interior", "height": "aisleTop - 0.4",
+             "plan": {"points": [[mA, zW], [mA, f"octZ + {dm} * 1.41421 - ({mA})"], [f"{dm} * 0.41421", f"octZ + {dm}"],
+                                 [f"0 - {dm} * 0.41421", f"octZ + {dm}"], [f"0 - ({mA})", f"octZ + {dm} * 1.41421 - ({mA})"], [f"0 - ({mA})", zW]]},
+             "at": [[0, 0, 0, 0]],
+             "_about": "the nave and both aisles up to the aisles' roofs (no higher: the clerestory's outer face stands over them), from the facade to the octagon's west face and its diagonal faces the aisles end on"})
+add("nave", {"type": "interior", "height": "naveTop", "plan": {"rect": ["2 * halfB - pierT", f"{zW} - octZ - {dm}"]},
+             "at": [[0, 0, f"({zW} + octZ + {dm}) / 2", 0]],
+             "_about": "the nave between the arcades' middles, up to its vault's back under the roof"})
+add("crossing", {"type": "interior", "height": "drumTop", "plan": {"sides": 8, "radius": "octR + octT / 2"}, "at": [[0, 0, "octZ", 0]],
+                 "_about": "the octagon and its drum, on their walls' middle, up to the dome's springing (the shells inside by their own shape)"})
+# (a tribune: its half ring of five faces on their middle, its chord on the octagon's outer face -- the spandrels
+#  stand beyond it either side -- and, the octagon's face wide, on across it to the octagon's middle, through the arch
+#  it opens by)
+trib = [[round(20.0 * math.sin(math.radians(a)), 4), round(20.0 * math.cos(math.radians(a)), 4)] for a in range(90, 271, 36)]
+assert (P["tribR"], P["tribT"]) == (19.0, 2.0)
+fl = "(octR + octT) * 0.38268"                     # (the octagon's outer face, half its width)
+add("tribunes", {"type": "interior", "height": "tribH",
+                 "plan": {"points": trib + [[f"0 - {fl}", 0], [f"0 - {fl}", "octT / 2 * 0.92388"], [fl, "octT / 2 * 0.92388"], [fl, 0]]},
+                 "at": [list(q) for q in parts["tribune"]["place"]],
+                 "_about": "the three tribunes, each up to its half dome, and across its chord into the octagon's arch"})
+add("pier shaft", {"type": "interior", "height": "drumTop",
+                   "plan": {"points": [[f"0 - (octR * 0.92388 + 0.25) * 0.41421", "octR * 0.92388 + 0.25"], [f"(octR * 0.92388 + 0.25) * 0.41421", "octR * 0.92388 + 0.25"],
+                                       [f"((octR + octT) * 0.92388 - 0.25) * 0.41421", "(octR + octT) * 0.92388 - 0.25"], [f"0 - ((octR + octT) * 0.92388 - 0.25) * 0.41421", "(octR + octT) * 0.92388 - 0.25"]]},
+                   "at": [[0, 0, "octZ", 0.785398]],
+                   "_about": "the hollow pier's shaft, its stair's space, from the floor up to the shells: on its own walls' middle"})
+add("lantern space", {"type": "interior", "height": "lanternH", "plan": {"sides": 32, "radius": "lanternR + 0.5"}, "at": [[0, 0, "octZ", 0]],
+                      "atop": "dome", "atopR": "lanternR", "_about": "the lantern, inside its ring"})
+add("campanile space", {"type": "interior", "height": "campH - 0.3", "plan": {"rect": ["campW - 3 * campT + campT", "campW - 3 * campT + campT"]},
+                        "at": [["campX", 0, "campZ", 0]],
+                        "_about": "the campanile's shaft round its stair, on its walls' middle, up to the terrace"})
 open(p, "w").write(json.dumps(d, indent=2) + "\n")

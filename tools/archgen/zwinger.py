@@ -44,6 +44,7 @@ add("kronentor", {"type": "enclosure", "glass": False, "plan": {"rect": [KG, KG]
                                   {"openings": [{"at": 0, "width": 3.0, "sill": 1.0, "springing": 5.2, "head": {"profile": "semicircular"}}]}],
                             "2": [{"h": 9, "openings": [{"at": 0, "width": 5.0, "sill": 0, "springing": 5.0, "head": {"profile": "semicircular"}}]},
                                   {"openings": [{"at": 0, "width": 3.0, "sill": 1.0, "springing": 5.2, "head": {"profile": "semicircular"}}]}]},
+                  "interior": True,   # (its hall, the passage up to the crown: a space closed but for its two arches, not the open air's)
                   "at": [[0, 0, Z, 0]], "_about": "the crown gate: a passage through it on the axis, arched windows above"})
 add("kronentor crown", {"type": "dome", "sides": 4, "radius": KG / 2 * 1.414, "thickness": 0, "head": {"profile": "onion", "bulge": 1.08, "neck": 0.8},
                         "at": [[0, 17, Z, 0]], "_about": "its roof: an onion on a SQUARE plan -- a dome of four sides"})

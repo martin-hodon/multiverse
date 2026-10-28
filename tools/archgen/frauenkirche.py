@@ -19,7 +19,7 @@ add("church", {"type": "enclosure", "plan": {"rect": ["W", "W"], "chamfer": "C",
                          "9": [{"openings": [{"at": 0, "width": 7.6, "sill": 0, "springing": 14.0, "head": {"profile": "semicircular"}, "glass": False}]}],
                          "8": tiers([{**arched(2.0, 2.8, 6.8), "at": -2.45}], [{**arched(2.0, 2.2, 11.0), "at": -2.45}]),
                          "10": tiers([{**arched(2.0, 2.8, 6.8), "at": 2.45}], [{**arched(2.0, 2.2, 11.0), "at": 2.45}])},
-               "at": [[0, 0, 0, 0]],
+               "at": [[0, 0, 0, 0]], "interior": True,
                "_about": "the church's walls on its chamfered square, each face flank, portal bay and flank, in two tiers: arched windows below, the tall arched windows of the galleries above, a portal in the middle of each side"})
 # THE GALLERIES (Emporen) round the inside, at the top of the lower tier, and the flight up to them: a ring of floor
 # hugging the walls -- the enclosure part again, deep and thin -- and a straight flight along its inner edge
@@ -32,6 +32,8 @@ add("gallery stair", {"type": "flight", "width": 1.6, "run": 0.28, "rise": 0.18,
 add("choir", {"type": "ring", "count": 12, "turn": 0.5, "rOuter": 9.5, "rInner": 8.0, "height": "wallH - 3", "at": [0, 1, 2, 3, 4, 5],
               "opening": {"width": 2.2, "sill": 3.0, "springing": 11.5, "head": {"profile": "semicircular"}},
               "place": [["W / 2 - 1.6", 0, 0, 0]], "_about": "the choir's apse to the east, a half ring of tall windows"})
+add("choir space", {"type": "interior", "plan": {"sides": 24, "radius": 8.8}, "arc": [0, 180], "height": "wallH - 3",
+                    "at": [["W / 2 - 1.6", 0, 0, 0]], "_about": "the choir's space, the half round east of its arch on the middle of the ring, up to its half dome"})
 add("choir roof", {"type": "dome", "sweep": 0.5, "radius": 9.9, "thickness": 0, "head": {"profile": "segmental", "rise": 4.5},
                    "at": [["W / 2 - 1.6", "wallH - 3", 0, "1.5707963"]]})
 # THE PIERS that carry the drum and the bell: a ring of them round the middle under the drum's wall, arches between
@@ -42,6 +44,10 @@ R_IN = round(12.2 - DRUM_T / math.cos(math.pi / 16), 3)      # (the drum's inner
 add("dome piers", {"type": "ring", "count": 16, "polygon": True, "turn": 0, "rOuter": "domeR", "rInner": R_IN,
                    "height": "wallH + 2", "opening": {"width": 3.2, "sill": 0, "springing": 17.0, "head": {"profile": "semicircular"}}, "glass": False,
                    "place": [[0, 0, 0, 0]], "_about": "the ring of piers and arches under the drum: what carries the dome, down to the floor"})
+# THE SPACE UNDER THE DOME: the church's middle, on the middle of the piers and the drum's wall, from the floor up
+# through the vaults' well and the piers' heads to the drum's top (the church's own space stops under the vaults)
+add("crossing", {"type": "interior", "plan": {"sides": 16, "radius": round(12.2 - DRUM_T / 2 / math.cos(math.pi / 16), 3)}, "height": "wallH + 2 + drumH",
+                 "at": [[0, 0, 0, 0]], "_about": "the space under the drum and the bell, up through the vaults' well to the drum's top"})
 # THE VAULTS over the church between its walls and the piers: a slab on the walls' inside, its well the piers' inside
 # -- the ceiling of the galleries, under the attic; through the well the church looks up past the piers into the drum
 add("vaults", {"type": "prism", "plan": {"rect": ["W - 3.2", "W - 3.2"], "chamfer": "C - 1.3", "well": {"radius": R_IN, "sides": 16, "turn": 0.5}},

@@ -961,6 +961,7 @@
       },
       "thickness": "T",
       "height": "ROOFt + par",
+      "interior": "ROOFt",
       "tiers": [
         {
           "h": "tierH",
@@ -1131,6 +1132,154 @@
         ]
       ],
       "_about": "the outer walls, two rows of windows clear of the side arches; a door in the middle of +x and -x, three in -z; +z (the qibla) blind below"
+    },
+    "crossing": {
+      "type": "interior",
+      "of": [
+        "piers"
+      ],
+      "height": "RING + dk2 - ROOFt",
+      "at": [
+        [
+          0,
+          "ROOFt",
+          0,
+          0
+        ]
+      ],
+      "plan": {
+        "points": [
+          [
+            "R",
+            "R"
+          ],
+          [
+            "R",
+            "z0"
+          ],
+          [
+            "0 - R",
+            "z0"
+          ],
+          [
+            "0 - R",
+            "R"
+          ],
+          [
+            "0 - z0",
+            "R"
+          ],
+          [
+            "0 - z0",
+            "0 - R"
+          ],
+          [
+            "0 - R",
+            "0 - R"
+          ],
+          [
+            "0 - R",
+            "0 - z0"
+          ],
+          [
+            "R",
+            "0 - z0"
+          ],
+          [
+            "R",
+            "0 - R"
+          ],
+          [
+            "z0",
+            "0 - R"
+          ],
+          [
+            "z0",
+            "R"
+          ]
+        ]
+      },
+      "_about": "the crossing over the roofs: the square between the piers and the great arches' spans, up to the drum's foot"
+    },
+    "semidome bays": {
+      "type": "interior",
+      "of": [
+        "half rings"
+      ],
+      "plan": {
+        "sides": 18,
+        "radius": "R - ringT / 2"
+      },
+      "arc": [
+        -90,
+        90
+      ],
+      "height": "SPR - ROOFt",
+      "at": [
+        [
+          0,
+          "ROOFt",
+          "z0",
+          0
+        ],
+        [
+          "z0",
+          "ROOFt",
+          0,
+          1.570796
+        ],
+        [
+          0,
+          "ROOFt",
+          "0 - (z0)",
+          3.141593
+        ],
+        [
+          "0 - (z0)",
+          "ROOFt",
+          0,
+          -1.570796
+        ]
+      ],
+      "_about": "inside each half ring's windows, over the roofs, up to its semidome"
+    },
+    "corner drum spaces": {
+      "type": "interior",
+      "of": [
+        "corner drums"
+      ],
+      "plan": {
+        "sides": "cn",
+        "radius": "C / 2 + cdt / 2"
+      },
+      "height": "cdH",
+      "at": [
+        [
+          "-1 * (z0 + W) / 2",
+          "ROOFt",
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "-1 * (z0 + W) / 2",
+          "ROOFt",
+          "1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          "ROOFt",
+          "-1 * (z0 + W) / 2",
+          0
+        ],
+        [
+          "1 * (z0 + W) / 2",
+          "ROOFt",
+          "1 * (z0 + W) / 2",
+          0
+        ]
+      ],
+      "_about": "inside the corner domes' drums"
     }
   }
 }

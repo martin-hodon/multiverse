@@ -38,6 +38,7 @@
     "outer wall",
     "entrance",
     "drum",
+    "rotunda",
     "niche columns",
     "interior entablature",
     "aediculae",
@@ -50,6 +51,7 @@
     "portico steps",
     "intermediate block",
     "passage floor",
+    "entrance passage",
     "front columns",
     "inner columns",
     "portico ceiling",
@@ -315,6 +317,23 @@
           "out": 0.6
         }
       }
+    },
+    "rotunda": {
+      "type": "interior",
+      "plan": {
+        "sides": 48,
+        "radius": "R + wallT / 2"
+      },
+      "height": "springH",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the rotunda's space, on the middle of its wall, up to the dome's springing"
     },
     "niche columns": {
       "type": "colonnade",
@@ -607,6 +626,25 @@
         ]
       ],
       "_about": "the floor through the door, level with the portico's and the rotunda's"
+    },
+    "entrance passage": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          4.4,
+          "portZ0 - 4.5 - R - wallT / 2"
+        ]
+      },
+      "height": "floor + 7.5",
+      "at": [
+        [
+          0,
+          0,
+          "(portZ0 - 4.5 + R + wallT / 2) / 2",
+          0
+        ]
+      ],
+      "_about": "the passage through the door into the rotunda, its doorway from the block's middle in"
     },
     "front columns": {
       "type": "colonnade",

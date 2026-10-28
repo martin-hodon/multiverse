@@ -13,6 +13,8 @@
     "sill": 0.9,
     "arch": "semicircular",
     "_sill": "the openings' sill: 0.9 for a gallery's windows, 0 for an open arcade (a loggia)",
+    "hall": "min(1, ceil(sill))",
+    "_hall": "1: a closed hall, an interior of the building (its windows on a sill); 0: an open arcade, the air's (a loggia) -- by default as its sill says",
     "terrace": 1,
     "_terrace": "1: its roof is a terrace, walked (reached from the pavilions at its ends); 0: a roof",
     "head": 1.2,
@@ -28,7 +30,7 @@
     "balustrade"
   ],
   "parts": {
-    "walls": {
+    "walls": { "interior": "hall * H",
       "type": "enclosure",
       "plan": {
         "rect": [

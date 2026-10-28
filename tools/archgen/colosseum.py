@@ -316,6 +316,39 @@ oring("portico architrave", "ring", S_AMB1, S_AMB1 - 1.2, height=1.2, y=COLS, so
 oring("portico roof", "ring", S_AMB1, S_A, height=0.5, y=r4(COLS + 1.2), solid=True, flatRoof=True,
       _about="the portico's roof, against the attic: its flat top the place the velarium's sailors worked from")
 
+# ---------------------------------------------------------------- the interiors
+# THE SPACES UNDER THE CAVEA, for the finishes (inside: brick-faced, plastered; outside: travertine): drawn on the middle
+# of the walls round them (the facade's at 1.2, ring C's, ring E's), a vertex on every bay's radial plane as the rings
+# are; the masses between the passages are solid, so a band takes them in with the passages through them. The cavea, its
+# walkways and the arena are the open air, the portico in summa cavea an open colonnade: outside.
+def band(s):                          # the oval s in from the facade, chord to chord across the bays
+    return [[r4(x), r4(z)] for x, z in (at_angle(k, s, -.5) for k in BAYS)]
+def interior(name, s_out, s_in, y0, y1, about):
+    d = {"type": "interior", "plan": {"points": band(s_out)}}
+    if s_in is not None: d["hole"] = {"points": band(s_in)}
+    d.update({"height": r4(y1 - y0), "at": [[0, r4(y0), 0, 0]], "_about": about}); parts[name] = d
+def strip(k, s_out, s_in, y0):        # a passage down the middle of bay k: its rect's length, its placement
+    b = bay(k); sm = (s_out + s_in) / 2; R = rad(sm, b["side"])
+    return r4(s_in - s_out), [r4(b["C"][0] + R * math.sin(b["yaw"])), r4(y0), r4(b["C"][1] + R * math.cos(b["yaw"])), r4(b["yaw"])]
+MID_C, MID_E, MID_PW = (S_AMB2 + S_C) / 2, (S_RZ2 + S_E) / 2, (S_AR + S_PW) / 2
+interior("ground storey", S_A / 2, MID_E, 0, L1, "ambulatories I-III, the radial passages between them and the solid masses round those, from the facade's middle to ring E's")
+interior("first storey", S_A / 2, MID_C, L1, L2, "ambulatories I and II on the first floor, to ring C's middle")
+interior("first storey passages", MID_C, S_P1o, L1, L1 + PASS_H, "the level vomitoria out through the upper radial zone onto the first walkway (the mass between them solid)")
+interior("second storey", S_A / 2, S_AMB1 + .35, L2, L3, "ambulatory I on the second floor, to just inside the third maenianum's back (its top rows over it stand clear)")
+interior("second storey passages", S_AMB1 + .35, S_P2o, L2, L2 + PASS_H, "the level vomitoria out through the third maenianum onto the second walkway")
+interior("hypogeum", MID_PW, None, HY, L0, "the corridors under the arena floor, to the middle of their outer wall")
+L_, at_ = zip(*(strip(k, MID_E, s1, L0) for k in V))
+parts["stair passage"] = {"type": "interior", "plan": {"rect": [FLIGHT, L_[0]]}, "height": r4(soff(s1) - L0), "at": list(at_),
+                          "_about": "the stair up under the first maenianum, from ring E's middle to where its soffit stops over the open mouth (the treads among the rows are the cavea's)"}
+L_, at_ = zip(*(strip(k, MID_E, MID_PW, 0) for k in EMIN))
+parts["minor entrance"] = {"type": "interior", "plan": {"rect": [EW, L_[0]]}, "height": EH, "at": list(at_),
+                           "_about": "the passages of the short axis, under the seating and the podium from ring E to the podium gate"}
+parts["major entrance"] = {"type": "interior", "plan": {"points": [[r4(x), r4(z)] for x, z in
+                               [at_angle(k, MID_E, f) for k, f in ((79, -.5), (0, -.5), (0, .5), (1, .5))] +
+                               [at_angle(k, S_PW, f) for k, f in ((1, .5), (0, .5), (0, -.5), (79, -.5))]]},
+                           "height": EH, "at": [[0, 0, 0, 0], [0, 0, 0, r4(math.pi)]],
+                           "_about": "the long axis's passages, three bays wide under the seating from ring E out onto the sand"}
+
 doc = {"name": "Colosseum",
        "_about": "THE FLAVIAN AMPHITHEATRE at its real size on its four-centred oval (188 x 156m, the arena 86 x 54, 80 bays): the four-storey facade, three ambulatories, the three maeniana each ending on a floor, the level vomitoria out onto their walkways, the stairs along ambulatory I, the main entrances on the axes, the podium, the arena floor and the hypogeum under it. tools/archgen/colosseum.py",
        "params": {"detail": 4}, "railing": {"type": "stone"},

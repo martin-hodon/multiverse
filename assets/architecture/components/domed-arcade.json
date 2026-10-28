@@ -294,6 +294,50 @@
       "standsOn": [
         "domes"
       ]
+    },
+    "bays space": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          "L",
+          "B + (1 - back) * p"
+        ]
+      },
+      "height": "crown",
+      "at": [
+        [
+          0,
+          0,
+          "0 - (B + (1 - back) * p) / 2",
+          0
+        ]
+      ],
+      "_about": "the walk under the domes, closed but for its arcade: finished as a room, its floor and its back wall's inside"
+    },
+    "drum spaces": {
+      "type": "interior",
+      "plan": {
+        "sides": "cn",
+        "radius": "s / 2 + dt / 2"
+      },
+      "height": "dk + dh",
+      "at": [
+        [
+          "B / 2 - L / 2",
+          "crown",
+          "0 - B / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "B",
+          0,
+          0,
+          0
+        ]
+      }
     }
   }
 }

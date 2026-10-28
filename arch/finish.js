@@ -3,8 +3,8 @@
 // surface is patterned by. The patterns themselves are patterns.js; the game's material is architecture.js.
 //
 // A rule is what it matches and what it gives, and the FIRST rule that matches a piece of surface wins:
-//   match   parts: a part's name (its name less a trailing number, its own name inside a component, the component's
-//                  name) or "kind:<kind>", one or a list
+//   match   parts: a part's name (its name less a trailing number, a tail of a nested name -- "tent/spire" --, its own
+//                  name inside a component, the component's name) or "kind:<kind>", one or a list
 //           surface: floor | wall | ceiling | roof     side: in | out
 //           below / above: a height (the building's frame, 0 at the ground)     within: [x0, z0, x1, z1] on the plan
 //           reveal: true -- only an opening's REVEAL (its jambs, its sill, its soffit: a face of a wall or a ring's bay
@@ -16,23 +16,26 @@
 // What no rule matches is the building's `stone`.
 //
 // SURFACE is read from the triangle: up-facing (n.y >= .7) a floor, down-facing a ceiling, else a wall; on a roof or a
-// dome, its outside is its roof. SIDE is read from the stone around it, FACE by face (facesOf, bandsOf): how open the
-// air the surface faces is -- sky straight over it, or a sixth of evenly spread directions escaping the building -- in
-// level bands up each face, a reveal following the wall it pierces. (docs/patterns.md: the whole of it.)
-//   A floor that runs from inside to outside (a platform under a church and before its door) is one plane of a few
-// large triangles, so large floors are cut on a 2m grid before they are classified; bands (below/above) and regions
-// (within, panels) cut what crosses their lines. The cuts are made from the edge's own ends in one order, so two
-// triangles sharing an edge cut it at the same point.
+// dome, its outside is its roof. SIDE is what the building SAYS: its INTERIORS (parts of type "interior": a nave, an
+// aisle up to its roof, a room), a surface being inside when the air just before it is in one -- and a part's own
+// `inside`/`outside`. Nothing is guessed from the stone. (docs/patterns.md: the whole of it.)
+//   A surface that runs from inside to outside (a platform under a church and out before its door, a tower's face
+// inside the aisle's roof and over it) is cut on the interior's outline and at its floor and top; bands (below/above)
+// and regions (within, panels) cut what crosses their lines. The cuts are made from the edge's own ends in one order,
+// so two triangles sharing an edge cut it at the same point.
 //
 // MAPPING -- the pattern's (u, v), in metres: `plan` (a floor, a ceiling: u east, v north), `face` (a wall: u along it,
 // v up), `revolve` (a dome, a drum, a column, a round roof: u round the part's own axis -- a whole number of tiles round,
 // so the rows meet -- and v up the meridian's length on a dome), `slope` (a roof: u along the eave, v up the slope).
 // By kind unless the rule says. `align: "part"` sets the tile's foot on the part's foot (a painted beam, a band).
-import { rayIndex, rayHits, rayDist, insideOf } from "./solid.js";
 
-// a part's names, most particular first: its name, its name less a trailing number ("aisle roof 3"), its own name inside
-// a component, the component's name, its kind (architecture.js reads a building's colours by the same list)
-export const partNames = (p) => [p.name, p.name.replace(/ \d+$/, ""), p.name.split("/").pop(), p.name.split("/")[0], "kind:" + p.kind];
+// a part's names, most particular first: its name, its name less a trailing number ("aisle roof 3"), every tail of a name
+// nested in components, longest first ("tent/spire": the spire of every tower's tent, whatever the tower), its own name
+// inside a component, the component's name, its kind (architecture.js reads a building's colours by the same list)
+export const partNames = (p) => {
+  const segs = p.name.split("/"), tails = segs.slice(1, -1).map((_, i) => segs.slice(i + 1).join("/"));
+  return [p.name, p.name.replace(/ \d+$/, ""), ...tails, segs[segs.length - 1], segs[0], "kind:" + p.kind];
+};
 const FLOORLESS = new Set(["roof", "dome", "vault", "groin", "ribs", "pendentives"]);     // (their tops are roofs, not floors)
 const ROOFY = new Set(["roof", "dome"]);
 // TRIM: a moulding run along a face (a course, a wimperg) is ONE material over all its faces -- its weathered top, its
@@ -41,138 +44,61 @@ const ROOFY = new Set(["roof", "dome"]);
 const TRIM = new Set(["moulding", "wimperg"]);
 const STAIRS = new Set(["flight", "staircase", "steps", "spiral-stair", "crepidoma", "base"]);
 
-// ---- inside or out -------------------------------------------------------------------------------------------------
-const TAU = Math.PI * 2, UP = [0, 1, 0];
-const dirAt = (az, el) => [Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)];
-const RING = (el, n) => Array.from({ length: n }, (_, k) => dirAt(k * TAU / n, el));
-const STEEP = RING(.9, 3), SKYWARD = RING(.8, 8);
-// sixteen directions spread evenly over a half of space (Fibonacci), about +z
-const HALF = Array.from({ length: 16 }, (_, i) => {
-  const z = 1 - (i + .5) / 16, r = Math.sqrt(1 - z * z), a = i * 2.399963;
-  return [r * Math.cos(a), r * Math.sin(a), z];
-});
-const LEVEL = RING(.03, 12);
-// sixteen level directions round, at three turns a third of a step apart (one set per height a floor is asked at)
-const ROUNDS = [0, 1, 2].map((i) => Array.from({ length: 16 }, (_, k) => dirAt((k + i / 3) * TAU / 16, 0)));
-// twenty-four directions spread evenly over the band from level to 30 degrees up: what one standing on a floor sees
-// round them -- out under a colonnade's deck, a portico's roof; in a room, only its doors (a floor is outside when a
-// fifth of them escape)
-const LOW = Array.from({ length: 24 }, (_, i) => { const el = Math.asin((i + .5) / 24 * .5), a = i * 2.399963; return dirAt(a, el); });
-// HOW OPEN is the air a surface faces: the share of evenly spread directions in which it escapes the building. A room
-// or a nave is closed but for the little its doors subtend (the Hall of Prayer's four doors: a tenth, seen from its
-// middle); a portico's back wall, an arch's soffit, a drum behind its peristyle -- covered, but open sideways -- see open
-// air over a sixth or more.
-const OPEN = .15;
-export function sideTeller(asm) {
-  const tI = performance.now(), idx = rayIndex(asm), cache = new Map(), indexMs = performance.now() - tI;
-  let rays = 0, rayMs = 0;
-  const bySurf = {};
-  // `roofy`: a roof's or a dome's face -- open to the sky above it is enough to call it outside
-  const tell = (p, n, surf, roofy = false) => {
-    const oct = surf === "wall" ? Math.round(Math.atan2(n[0], n[2]) / (Math.PI / 4)) & 7 : 0;
-    // a wall is asked from 40cm off its face, clear of its own mouldings; a soffit from 1.5m under it, clear of the
-    // capitals of the columns carrying it; a floor from where one standing on
-    // it sees -- over a balcony's parapet, a terrace's balustrade (a room is closed at that height as at any)
-    const off = surf === "floor" ? 1.2 : surf === "ceiling" ? 1.5 : .4, o = [p[0] + n[0] * off, p[1] + n[1] * off, p[2] + n[2] * off];
-    // (an answer is shared by faces near each other facing the same way -- but only where their probes see each other:
-    //  the same air. A bin's face inside a tower and the tower's own face outside, 2m apart, facing alike, are not.)
-    const key = `${Math.floor(p[0] / 3)},${Math.floor(p[1] / 3)},${Math.floor(p[2] / 3)},${surf},${oct}`;
-    const known = cache.get(key);
-    if (known) for (const k of known) {
-      const d = [k.o[0] - o[0], k.o[1] - o[1], k.o[2] - o[2]], l = Math.hypot(...d);
-      if (l < 1e-6) return k.side;
-      if (surf === "floor" && l > 1) continue;   // (a floor's air runs on through a doorway: a threshold sees the nave)
-      rays++;
-      if (!rayHits(idx, o, d.map((v) => v / l), l)) return k.side;
+// ---- inside or out: the building's INTERIORS -------------------------------------------------------------------------
+// Which side of a surface is in is not read from the stone: it is SAID, where the building is designed. An interior is
+// a space of it -- a nave, an aisle up to its roof, a room, a tower's hall, a gallery -- as a plan and a height (a part
+// of type "interior", assemble.js: a marker, carried by every placement as any part is -- a component's copies, the
+// base's lift). A surface is inside when the air just before it (30cm off it, along its normal) is in one: so a wall's
+// two faces part by themselves, a window's reveals look out with the facade, a platform turns from the nave's floor to
+// the pavement before the door on the nave's outline, and a tower's face toward the church is inside up to the aisle's
+// roof and out over it. What a part says of itself wins (`inside` / `outside`); a roof's upper face and a dome's outer
+// skin are the open air's (a space's box cannot follow a slope).
+const TAU = Math.PI * 2, PROBE = .3;
+// every interior, placed: its plan's points in the building's frame (and its holes': a court's yard), its floor and its
+// top, its box on the plan
+export function interiorsOf(asm) {
+  const vols = [];
+  for (const p of asm.parts) {
+    if (p.kind !== "marker" || p.role !== "interior") continue;
+    const { pts, holes = [], y0, y1 } = p.data;
+    for (const [yaw, X, Y, Z] of p.instances) {
+      const c = Math.cos(yaw), s = Math.sin(yaw), at = (q) => q.map(([x, z]) => [x * c + z * s + X, -x * s + z * c + Z]), w = at(pts);
+      const xs = w.map((q) => q[0]), zs = w.map((q) => q[1]);
+      vols.push({ name: p.name, pts: w, holes: holes.map(at), y0: y0 + Y, y1: y1 + Y, box: [Math.min(...xs), Math.min(...zs), Math.max(...xs), Math.max(...zs)] });
     }
-    bySurf[surf] = (bySurf[surf] ?? 0) + 1;
-    const tr = performance.now();
-    const done = (side) => { rayMs += performance.now() - tr; (cache.get(key) ?? cache.set(key, []).get(key)).push({ o, side }); return side; };
-    // THE SHORT WAY: sky straight over the air before it -- outside at once (a wall even in a narrow gap: a tower's face
-    // toward the church it stands against); a floor must also see it steeply to the side (not only through an oculus);
-    // a roof is outside if it sees the sky steeply any way at all (a taller block may stand over its straight-up ray);
-    // and a floor that sees it steeply most ways round is outside though something is straight over it -- the
-    // pavement at a wall's foot, under a cornice reaching out over it: three ways of eight round at 46 degrees (a
-    // room's floor sees none, or one through a window or an oculus)
-    if (surf !== "ceiling") {
-      rays++;
-      let out = !rayHits(idx, o, [0, 1, 0], 250);
-      if (out && surf === "floor" && !roofy) out = STEEP.some((d) => (rays++, !rayHits(idx, o, d, 250)));
-      if (!out && surf === "floor" && !roofy) out = SKYWARD.filter((d) => (rays++, !rayHits(idx, o, d, 250))).length >= 3;
-      if (!out && roofy) out = STEEP.some((d) => (rays++, !rayHits(idx, o, d, 250)));
-      if (out) return done("out");
-    }
-    // THE LONG WAY: how open the air it faces is. A floor: all round, from level to 30 degrees up; a wall: the half of
-    // space before it, what of that is level or rising (below lies the ground, the building's own platform); a soffit:
-    // level all round
-    // A FLOOR under cover is inside when it is ENCLOSED: between it and what covers it, walls (or their glass) close
-    // round it. Asked at three heights from it up to the cover (a third, a half, four fifths): inside if they close all the way round at two of them -- a
-    // room's or a nave's, broken only by their doors low down (a room's door, a nave's portals; a tower's foot, its
-    // belfry's open arches high over it) -- or if, taken together, under a tenth of the ways out are open. A walk
-    // between buttresses, under an eave, a portico's floor, a colonnade's, a LOGGIA's -- open through its arches over
-    // most of its height, closed only in the band of spandrels under its deck -- outside.
-    // (Under a table, or a cover too close to look under: how open its low horizon is, below.)
-    if (surf === "floor") {
-      rays++;
-      const up = rayDist(idx, o, [0, 1, 0], 250);
-      if (up > 1 && up < Infinity) {
-        const levels = [.3, .55, .8];
-        // (each height turned a third of a step from the last: forty-eight ways round, not sixteen thrice -- a point
-        //  lined up behind a pier of an arcade would otherwise find all three of its rows blocked by the same piers)
-        let open = 0, closed = 0;
-        for (const [i, f] of levels.entries()) {
-          const q = [o[0], p[1] + (up + off) * f, o[2]];   // (shares of the height from the floor to its cover: a low gallery's too)
-          let here = 0;
-          for (const d of ROUNDS[i]) { rays++; if (!rayHits(idx, q, d, 250)) here++; }
-          open += here; if (!here) closed++;
-        }
-        return done(closed >= 2 || open < .1 * levels.length * 16 ? "in" : "out");
-      }
-    }
-    let dirs;
-    if (surf === "ceiling") dirs = LEVEL;
-    else if (surf === "floor") dirs = LOW;
-    else {
-      // (a frame about the normal -- for a floor, about up)
-      const nn = n, h = Math.abs(nn[1]) < .9 ? [0, 1, 0] : [1, 0, 0];
-      const t1 = [h[1] * nn[2] - h[2] * nn[1], h[2] * nn[0] - h[0] * nn[2], h[0] * nn[1] - h[1] * nn[0]], l1 = Math.hypot(...t1);
-      const u = t1.map((q) => q / l1), v = [nn[1] * u[2] - nn[2] * u[1], nn[2] * u[0] - nn[0] * u[2], nn[0] * u[1] - nn[1] * u[0]];
-      dirs = HALF.map(([x, y, z]) => [u[0] * x + v[0] * y + nn[0] * z, u[1] * x + v[1] * y + nn[1] * z, u[2] * x + v[2] * y + nn[2] * z])
-                 .filter((d) => d[1] > -.05);
-    }
-    const need = Math.max(1, Math.ceil((surf === "floor" ? .2 : OPEN) * dirs.length));
-    let open = 0, shut = 0;
-    for (const d of dirs) {
-      rays++;
-      if (rayHits(idx, o, d, 250)) shut++; else open++;
-      if (open >= need) return done("out");
-      if (shut > dirs.length - need) break;
-    }
-    // A WALL FOUND CLOSED IN GOES AS THE FLOOR BEFORE IT, A SOFFIT AS THE FLOOR UNDER IT: the air they face is the air
-    // one standing on that floor is in. A loggia's back wall and its ceiling face a cover and the piers carrying it, and
-    // little sky -- but the floor of the loggia is open sideways, outside; a room's wall stands on a room's floor. So
-    // a wall, its ceiling and the floor it rises from are finished as one place. (Nothing under them within reach -- a
-    // wall over a void -- stays inside.)
-    if (surf === "wall" || surf === "ceiling") {
-      rays++;
-      const dn = rayDist(idx, o, [0, -1, 0], 40);
-      if (dn < Infinity) return done(tell([o[0], o[1] - dn, o[2]], UP, "floor"));
-    }
-    return done("in");
-  };
-  // is a point of a face HIDDEN: stone standing before it within `reach` (a wall or a shaft standing on a floor, a
-  // column or a pier standing against a wall), or the point inside another part's solid (a shaft standing half into a
-  // portal's face, an abacus's top under the deck it carries) -- a ray from inside would first meet stone far off
-  tell.hidden = (q, n, own, reach) => {
-    rays++;
-    const o = [q[0] + n[0] * .02, q[1] + n[1] * .02, q[2] + n[2] * .02];
-    if (rayHits(idx, o, n, reach)) return true;
-    // (buried: stone ahead of it, and an odd count of crossings over it -- a point with open air ahead is in nothing;
-    //  ahead as far as the stone goes: the foot of a column 30m tall is inside it all the way up)
-    return rayHits(idx, o, n, 250) && insideOf(idx.cells, o[0], o[1], o[2], own).length > 0;
-  };
-  tell.stats = () => ({ rays, samples: cache.size, indexMs: Math.round(indexMs), rayMs: Math.round(rayMs), bySurf });
-  return tell;
+  }
+  return vols;
+}
+const inPoly = (pts, x, z) => {   // (even-odd)
+  let inside = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, zi] = pts[i], [xj, zj] = pts[j];
+    if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) inside = !inside;
+  }
+  return inside;
+};
+// is a point in an interior: in its plan and none of its holes, between its floor and its top
+export function inInterior(vols, x, y, z) {
+  for (const v of vols) {
+    if (y < v.y0 || y > v.y1 || x < v.box[0] || x > v.box[2] || z < v.box[1] || z > v.box[3]) continue;
+    if (inPoly(v.pts, x, z) && !v.holes.some((h) => inPoly(h, x, z))) return true;
+  }
+  return false;
+}
+// the planes a surface may pass from one side to the other on: every interior's floor and top (level: axis 1) and the
+// walls of its plan (upright, through each edge), each with the stretch of the plan and the heights it bounds
+function interiorPlanes(vols) {
+  const out = [];
+  for (const v of vols) {
+    for (const y of [v.y0, v.y1]) out.push({ axis: 1, c: y, box: v.box, y0: y, y1: y });
+    for (const ring of [v.pts, ...v.holes]) ring.forEach(([x0, z0], i) => {
+      const [x1, z1] = ring[(i + 1) % ring.length], l = Math.hypot(x1 - x0, z1 - z0);
+      if (l < 1e-9) return;
+      const n = [(z1 - z0) / l, 0, -(x1 - x0) / l];
+      out.push({ n, d: n[0] * x0 + n[2] * z0, box: [Math.min(x0, x1), Math.min(z0, z1), Math.max(x0, x1), Math.max(z0, z1)], y0: v.y0, y1: v.y1 });
+    });
+  }
+  return out;
 }
 
 // ---- cutting ----------------------------------------------------------------------------------------------------------
@@ -207,6 +133,23 @@ function cutAll(poly, lines) {
   return polys;
 }
 
+// ...and by any plane n.p = d (an interior's upright walls): the same two sides, the cut edge's point found from its
+// ends in the same fixed order
+function cutBy(poly, n, d) {
+  const lo = [], hi = [], at = (v) => v[0] * n[0] + v[1] * n[1] + v[2] * n[2] - d;
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length], da = at(a), db = at(b);
+    if (da <= 0) lo.push(a); if (da >= 0) hi.push(a);
+    if ((da < 0 && db > 0) || (da > 0 && db < 0)) {
+      const first = a[0] < b[0] || (a[0] === b[0] && (a[1] < b[1] || (a[1] === b[1] && a[2] < b[2])));
+      const [p, q, dp, dq] = first ? [a, b, da, db] : [b, a, db, da], t = dp / (dp - dq);
+      const m = [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t, p[2] + (q[2] - p[2]) * t];
+      lo.push(m); hi.push(m);
+    }
+  }
+  return [lo, hi].filter((q) => q.length >= 3);
+}
+
 // ---- rules ------------------------------------------------------------------------------------------------------------
 const listOf = (v) => v === undefined ? null : Array.isArray(v) ? v : [v];
 function compile(rule, sizeOf) {
@@ -228,8 +171,9 @@ function compile(rule, sizeOf) {
     // needs it: casting rays is the one dear thing here) and its centre
     test(at) {
       // (a pane is finished only by a rule that names IT -- its own part, or kind:glass -- else it is glass: naming the
-      //  component it belongs to (partNames' 4th, the name before the first "/") paints the walls, not their windows)
-      if (parts && !at.names.some((n, i) => parts.includes(n) && !(at.glass && i === 3 && at.names[0].includes("/")))) return false;
+      //  component it belongs to (the name before the first "/") paints the walls, not their windows)
+      const comp = at.glass && at.names[0].includes("/") ? at.names[0].split("/")[0] : null;
+      if (parts && !at.names.some((n) => parts.includes(n) && n !== comp)) return false;
       if (!parts && at.glass) return false;
       const c = at.cen;
       if (rule.below !== undefined && c[1] >= rule.below) return false;
@@ -496,7 +440,7 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
   const covered = coverIndex(asm);   // (where another part's face takes this one's place in a plane)
   const rules = (finish?.rules ?? []).map((r) => compile(r, sizeOf));
   const needSide = rules.some((r) => r.needsSide);
-  const tell = needSide ? sideTeller(asm) : null;
+  const vols = needSide ? interiorsOf(asm) : null, planes = vols ? interiorPlanes(vols) : [];
   // the lines every piece is cut on: bands, regions
   const bands = [...new Set(rules.flatMap((r) => [r.rule.below, r.rule.above]).filter((v) => v !== undefined))].map((c) => [1, c]);
   const regions = rules.filter((r) => r.within).flatMap((r) => [[0, r.within[0]], [0, r.within[2]], [2, r.within[1]], [2, r.within[3]]]);
@@ -509,189 +453,67 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
   // THE PIECE BEING MATCHED, one record for all of them (no object per piece: a building is a hundred thousand of them):
   // its part and copy, normal and centre, and -- asked for only when a rule needs it -- its side and its surface
   const sideOf = () => {
-    const { p, n, cen, X, Z, surf0, inst } = cur;
-    if (!tell || cur.glass) return "out";
-    // (a dome's or a round roof's face turned toward its own axis is its underside: inside)
-    if ((p.kind === "dome" || p.kind === "vault") && n[1] < .3 && n[0] * (cen[0] - X) + n[2] * (cen[2] - Z) < 0) return "in";
-    const sf = surf0 === "top" ? "floor" : surf0, roofy = ROOFY.has(p.kind);
-    // a FLOOR is its face's too, asked at points spread over it -- unless they disagree on a floor that runs from a room
-    // out onto a terrace (a building's platform, through its doorways): that is asked where it is, every 3m (it is cut
-    // on a grid for this)
-    if (surf0 === "floor") {
-      const fs = floorSideOf(p, inst, facesOf(p).comp[cur.tri]);
-      if (fs !== "mixed") return fs;
-      // (a piece of a floor that is split -- inside and out -- is asked at a point of it with open air over it: the part
-      //  of it that can be seen decides, not the part under a wall or a shell, which would paint teeth beside them)
-      const poly = cur.poly, pts = [cen, ...poly.map((v) => [v[0] + (cen[0] - v[0]) * .15, v[1], v[2] + (cen[2] - v[2]) * .15])];
-      for (const q of pts) if (!tell.hidden(q, UP, p.name, .5)) return tell(q, n, sf, roofy);
-      return tell(cen, n, sf, roofy);
+    const { p, n, cen, X, Z } = cur;
+    if (!vols || cur.glass) return "out";
+    // (a dome's or a round roof's face turned toward its own axis is its underside: inside -- a dome's even rising, a
+    //  coffer's step; a vault's only steep, its axis not its placement's; the rest of a dome's skin, and a roof's upper
+    //  face, the open air's)
+    if (p.kind === "dome" || p.kind === "vault") {
+      const toward = n[0] * (cen[0] - X) + n[2] * (cen[2] - Z);
+      if (n[1] < (p.kind === "dome" ? .9 : .3) && (toward < 0 || n[1] < -.9)) return "in";
+      if (p.kind === "dome") return "out";
     }
-    // anything else is inside or out by its FACE (facesOf: a wall's face, a dome's skin, a vault's soffit) and the band
-    // of it this piece is in (bandsOf)
-    const fb = cur.fb ?? bandsOf(p, inst, facesOf(p).comp[cur.tri]);
-    // (the side of the stretch between the cuts it lies within)
-    let i = 0; while (i < fb.cuts.length && cen[1] > fb.cuts[i]) i++;
-    return fb.runs[i];
+    if (p.kind === "roof" && n[1] > .2) return "out";
+    // (a vault's face turned down is its ceiling -- a groin's crown may rise past the interior's top, its back never faces down)
+    if ((p.kind === "groin" || p.kind === "ribs" || p.kind === "vault") && n[1] < -.5) return "in";
+    return inInterior(vols, cen[0] + n[0] * PROBE, cen[1] + n[1] * PROBE, cen[2] + n[2] * PROBE) ? "in" : "out";
   };
-  // A FACE IN BANDS. A face is inside or out as a whole unless part of it stands inside another part and part of it
-  // outside -- a tower's face toward the church, inside below the church's roof and outside above it. So a face is asked
-  // in level BANDS about 3m tall, each at points at its own mid-height on the face's largest triangles (the way most of
-  // that area goes), and it is cut where two bands disagree: the finish changes on a level line across the element,
-  // never along a triangle's edge.
-  const floorSides = new Map();
-  const floorSideOf = (p, inst, comp) => {
-    const key = p.name + "#" + inst + "#" + comp;
-    let v = floorSides.get(key);
-    if (v) return v;
-    const F = facesOf(p), [yaw, X, Y, Z] = p.instances[inst], c = Math.cos(yaw), s2 = Math.sin(yaw);
-    const W = (x, y, z) => [x * c + z * s2 + X, y + Y, -x * s2 + z * c + Z];
-    // (points: its largest triangles' centres, and halfway to the corners of the large ones; eight of them, each as far
-    //  as it can be from those already taken)
-    const pts = [];
-    for (const t of F.members[comp].slice(0, 16)) {
-      const cx = F.cen[t * 3], cy = F.cen[t * 3 + 1], cz = F.cen[t * 3 + 2];
-      pts.push(W(cx, cy, cz));
-      if (F.area[t] > 20) for (let e = 0; e < 3; e++) { const i = F.I[t * 3 + e] * 3; pts.push(W((cx + F.P[i]) / 2, cy, (cz + F.P[i + 2]) / 2)); }
+  // a triangle's pieces cut where it passes from one side to the other: on the floors, tops and walls of the
+  // interiors whose stretch it reaches
+  const cutByInteriors = (polys, a, b, d) => {
+    const x0 = Math.min(a[0], b[0], d[0]), x1 = Math.max(a[0], b[0], d[0]), z0 = Math.min(a[2], b[2], d[2]), z1 = Math.max(a[2], b[2], d[2]);
+    const y0 = Math.min(a[1], b[1], d[1]), y1 = Math.max(a[1], b[1], d[1]), E = 1e-6;
+    for (const q of planes) {
+      if (x1 < q.box[0] - E || x0 > q.box[2] + E || z1 < q.box[1] - E || z0 > q.box[3] + E || y1 < q.y0 - E || y0 > q.y1 + E) continue;
+      polys = polys.flatMap((poly) => {
+        let mn = Infinity, mx = -Infinity;
+        for (const v of poly) { const t = q.axis === 1 ? v[1] - q.c : v[0] * q.n[0] + v[2] * q.n[2] - q.d; if (t < mn) mn = t; if (t > mx) mx = t; }
+        if (!(mn < -E && mx > E)) return [poly];
+        return q.axis === 1 ? cutPoly(poly, 1, q.c) : cutBy(poly, q.n, q.d);
+      });
     }
-    const pick = [pts[0]];
-    while (pick.length < Math.min(8, pts.length)) {
-      let best = null, bd = -1;
-      for (const q of pts) { const d = Math.min(...pick.map((r) => Math.hypot(q[0] - r[0], q[2] - r[2]))); if (d > bd) { bd = d; best = q; } }
-      if (bd < .5) break;
-      pick.push(best);
-    }
-    // (only where there is open air over it: a point under a wall or a column's shaft sees nothing -- and a floor with
-    //  no such point is hidden, and may as well be outside)
-    const open = pick.filter((q) => !tell.hidden(q, UP, p.name, .5));
-    if (!open.length) { floorSides.set(key, "out"); return "out"; }
-    const n = [0, 1, 0], said = open.map((q) => tell(q, n, "floor", ROOFY.has(p.kind))), outs = said.filter((x) => x === "out").length;
-    // (unanimous: that. Split: only a building's platform or a floor too large to be one room is cut and asked where it
-    //  is -- it runs from the nave out before the door; any other floor -- a drum's top, a colonnade's walk, a terrace, a
-    //  landing -- is one element, and goes the way most of it goes)
-    v = outs === said.length ? "out" : outs === 0 ? "in" : p.kind === "base" || F.faceArea[comp] > 400 ? "mixed" : outs * 2 >= said.length ? "out" : "in";
-    floorSides.set(key, v);
-    return v;
-  };
-  // (a piece of a split floor whose points with open air over them disagree is HALVED, and its halves asked again, down
-  //  to half a metre: the finish follows a wall's foot and a portal's jambs, not the 2m grid it was cut on)
-  const refine = (p, poly) => {
-    let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity, cx = 0, cy = 0, cz = 0;
-    for (const v of poly) { x0 = Math.min(x0, v[0]); x1 = Math.max(x1, v[0]); z0 = Math.min(z0, v[2]); z1 = Math.max(z1, v[2]); cx += v[0]; cy += v[1]; cz += v[2]; }
-    if (Math.max(x1 - x0, z1 - z0) <= .6) return [poly];
-    const cen = [cx / poly.length, cy / poly.length, cz / poly.length];
-    const pts = [cen, ...poly.map((v) => [v[0] + (cen[0] - v[0]) * .15, v[1], v[2] + (cen[2] - v[2]) * .15])];
-    const open = pts.filter((q) => !tell.hidden(q, UP, p.name, .5)), said = new Set(open.map((q) => tell(q, UP, "floor")));
-    // (and one a wall's foot crosses -- some of its points under stone, some open -- is halved too, even if the open
-    //  ones agree: the sliver of it past the wall's other face, between its points, may be the other side's)
-    if (said.size < 2 && (open.length === pts.length || !open.length)) return [poly];
-    return cutAll(poly, [x1 - x0 >= z1 - z0 ? [0, (x0 + x1) / 2] : [2, (z0 + z1) / 2]]).flatMap((q) => refine(p, q));
-  };
-  const faceBands = new Map();
-  const bandsOf = (p, inst, comp) => {
-    const key = p.name + "#" + inst + "#" + comp;
-    let b = faceBands.get(key);
-    if (b) return b;
-    const F = facesOf(p), tris = F.members[comp], [yaw, X, Y, Z] = p.instances[inst], c = Math.cos(yaw), s2 = Math.sin(yaw);
-    const W = (x, y, z) => [x * c + z * s2 + X, y + Y, -x * s2 + z * c + Z], Wn = (x, y, z) => [x * c + z * s2, y, -x * s2 + z * c];
-    let y0 = Infinity, y1 = -Infinity;
-    for (const t of tris) { if (F.ylo[t] < y0) y0 = F.ylo[t]; if (F.yhi[t] > y1) y1 = F.yhi[t]; }
-    const nb = Math.max(1, Math.round((y1 - y0) / 3)), h = Math.max(1e-6, (y1 - y0) / nb), sides = [];
-    // (the face asked at one height: in, out, or null where nothing of it crosses that level)
-    const ask = (ym) => {
-      let wIn = 0, wOut = 0, used = 0;
-      // (where it is asked: at points spread EVENLY ALONG the face at this height -- the line the level cuts through it --
-      //  each counting alike: so a drum or a column's shaft is asked all round, and a facade along its length, not at
-      //  its largest triangles, which may be its two ends buried in the hollow towers flanking it; a tie is outside)
-      // (and only where the face is open in front: a point behind a column or a pier standing against it, or buried in
-      //  one standing half into it, is hidden, and would call a facade inside -- passed over for the next point along)
-      const segs = [];
-      let L = 0;
-      for (const t of tris) {
-        if (F.ylo[t] > ym + 1e-6 || F.yhi[t] < ym - 1e-6) continue;
-        const q = [0, 1, 2].map((e) => { const i = F.I[t * 3 + e] * 3; return [F.P[i], F.P[i + 1], F.P[i + 2]]; }), hit = [];
-        for (let e = 0; e < 3; e++) {
-          const u = q[e], d = q[(e + 1) % 3];
-          if ((u[1] - ym) * (d[1] - ym) <= 0 && u[1] !== d[1]) { const f = (ym - u[1]) / (d[1] - u[1]); hit.push([u[0] + (d[0] - u[0]) * f, ym, u[2] + (d[2] - u[2]) * f]); }
-        }
-        // (a level triangle -- a face lying at this very height -- is a point at its centre, as long as it is wide)
-        const c = [F.cen[t * 3], F.cen[t * 3 + 1], F.cen[t * 3 + 2]];
-        const [u, d, len] = hit.length < 2 ? [c, c, Math.sqrt(F.area[t])] : [hit[0], hit[1], Math.hypot(hit[1][0] - hit[0][0], hit[1][2] - hit[0][2])];
-        if (len < 1e-6) continue;
-        segs.push([t, u, d, L, len]); L += len;
-      }
-      const SAMPLES = 5, TRIES = SAMPLES * 2, picks = [];
-      // (ten places along it, the even ones first: if some are hidden the odd ones between stand in)
-      for (const i of [...Array(TRIES).keys()].sort((x, y) => (x & 1) - (y & 1) || x - y)) {
-        if (picks.length >= SAMPLES || !segs.length) break;
-        const at = (i + .5) / TRIES * L;
-        let lo = 0, hi = segs.length - 1;
-        while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (segs[mid][3] <= at) lo = mid; else hi = mid - 1; }
-        const [t, u, d, s0, len] = segs[lo], f = Math.min(1, Math.max(0, (at - s0) / len));
-        const q = W(u[0] + (d[0] - u[0]) * f, ym, u[2] + (d[2] - u[2]) * f), n = Wn(F.nrm[t * 3], F.nrm[t * 3 + 1], F.nrm[t * 3 + 2]);
-        if (tell.hidden(q, n, p.name, .6)) continue;
-        picks.push([t, q, n]);
-      }
-      for (const [t, cen, n] of picks) {
-        // (a dome's or a round roof's face turned toward its own axis is its underside: inside, without a ray)
-        const inward = (p.kind === "dome" || p.kind === "vault") && n[1] < .3 && n[0] * (cen[0] - X) + n[2] * (cen[2] - Z) < 0;
-        const sf = n[1] >= .7 ? "floor" : n[1] <= -.7 ? "ceiling" : "wall";
-        if (inward || tell(cen, n, sf, ROOFY.has(p.kind)) === "in") wIn++; else wOut++;
-        used++;
-      }
-      // (a face that wraps round -- samples facing opposite ways: a column, a drum -- is outside if a quarter of it looks
-      //  out onto open air: a colonnade's column, whose inner side faces its drum a metre away; a column in a hall sees
-      //  nothing anywhere. A flat face goes the way most of it goes.)
-      let wraps = false;
-      for (const [, , a] of picks) for (const [, , b] of picks) if (a[0] * b[0] + a[1] * b[1] + a[2] * b[2] < 0) wraps = true;
-      return used ? ((wraps ? wOut >= .25 * (wIn + wOut) : wOut >= wIn) ? "out" : "in") : null;
-    };
-    for (let k = 0; k < nb; k++) sides.push(ask(y0 + (k + .5) * h));
-    const asked = sides.slice();
-    // (a band no triangle crosses at its middle -- a gap in the face -- goes as its neighbour does)
-    for (let k = 0; k < nb; k++) if (!sides[k]) sides[k] = sides.slice(0, k).reverse().find(Boolean) ?? sides.slice(k).find(Boolean) ?? "out";
-    // A REVEAL IS ITS WALL'S: the jamb, sill or soffit of an opening looks across the opening into the other jamb and up
-    // into the lintel, and measures as closed in -- but it is the masonry of the wall it pierces. So a face found inside
-    // takes the side of any larger face it meets along a crease, at its own height, if that one is outside: an outside
-    // window's reveals follow the facade, and an opening between two rooms stays inside. (Larger only: it cannot go round.)
-    for (let k = 0; k < nb; k++) {
-      if (sides[k] !== "in") continue;
-      const ym = y0 + (k + .5) * h + Y;
-      for (const o of F.next[comp]) {
-        if (F.faceArea[o] <= F.faceArea[comp] * 1.2) continue;
-        const ob = bandsOf(p, inst, o);
-        if (ob.sides[Math.max(0, Math.min(ob.sides.length - 1, Math.floor((ym - ob.y0) / ob.h)))] === "out") { sides[k] = "out"; break; }
-      }
-    }
-    // WHERE IT CHANGES: between two bands that disagree the face is asked again, halving the gap down to 20cm -- so the
-    // finish changes where the roof that closes it in meets it, not on the 3m grid it was asked on (two bands as asked;
-    // one a reveal took over goes on the grid line)
-    const cuts = [];
-    for (let k = 1; k < nb; k++) {
-      if (sides[k] === sides[k - 1]) continue;
-      let lo = y0 + (k - .5) * h, hi = y0 + (k + .5) * h;
-      if (asked[k - 1] === sides[k - 1] && asked[k] === sides[k]) {
-        while (hi - lo > .2) { const mid = (lo + hi) / 2, a = ask(mid); if (a === sides[k - 1]) lo = mid; else if (a === sides[k]) hi = mid; else break; }
-        if (hi - lo > .2) { lo = hi = y0 + k * h; }
-      } else lo = hi = y0 + k * h;
-      cuts.push(Y + (lo + hi) / 2);
-    }
-    const runs = [sides[0]];
-    for (let k = 1; k < nb; k++) if (sides[k] !== sides[k - 1]) runs.push(sides[k]);
-    faceBands.set(key, b = { y0: y0 + Y, h, sides, cuts, runs });
-    return b;
+    return polys;
   };
   const cur = {
-    p: null, names: null, glass: false, inst: 0, yaw: 0, X: 0, Z: 0, n: null, cen: null, poly: null, tri: 0, fb: null, surf0: "", sideV: null, surfV: null,
+    p: null, names: null, glass: false, inst: 0, yaw: 0, X: 0, Z: 0, n: null, cen: null, poly: null, tri: 0, surf0: "", sideV: null, surfV: null,
     side: () => cur.sideV ??= sideOf(),
     // (a roof's GABLE -- the vertical end of a gable roof, a verge -- is a wall: it takes the finish of the walls under it)
     surface: () => cur.surfV ??= (ROOFY.has(cur.p.kind) && cur.n[1] > -.2 && !(cur.p.kind === "roof" && Math.abs(cur.n[1]) < .05) ? (cur.side() === "out" ? "roof" : "wall")
                                   : cur.surf0 === "top" ? (cur.side() === "out" ? "roof" : "wall") : cur.surf0),
   };
+  const centre = (poly) => {
+    let cx = 0, cy = 0, cz = 0;
+    for (const v of poly) { cx += v[0]; cy += v[1]; cz += v[2]; }
+    return [cx / poly.length, cy / poly.length, cz / poly.length];
+  };
+  // (the rule a piece takes -- and the surface it is -- if it is inside, and if it is out: the same both ways, its side
+  //  need not be asked)
+  const matchAs = (side) => {
+    cur.sideV = side; cur.surfV = null;
+    let hit = mine.find((r) => r.test(cur)), sf = cur.surface();
+    if (!hit && sf === "ceiling") { cur.surfV = sf = "wall"; hit = mine.find((r) => r.test(cur)); }
+    return [hit, sf];
+  };
+  let mine = [];
+  const sideFree = (poly) => {
+    cur.cen = centre(poly); cur.poly = poly;
+    const [h1, s1] = matchAs("in"), [h2, s2] = matchAs("out");
+    return h1 === h2 && s1 === s2;
+  };
   for (const [pi, p] of asm.parts.entries()) {
     if (p.kind === "item") continue;   // (a piece of furniture: its box is the walk's, the item draws itself -- architecture.js itemMeshes)
     const P = p.geometry.position, I = p.geometry.index, names = partNames(p), glass = p.kind === "glass";
-    const mine = rules.filter((r) => r.mayMatch(names));            // (the rules this part can meet at all)
-    const sideRules = !!tell && mine.some((r) => r.needsSide);
+    mine = rules.filter((r) => r.mayMatch(names));                  // (the rules this part can meet at all)
     const info = infoOf(p);
     cur.p = p; cur.names = names; cur.glass = glass;
     for (const [inst, [yaw, X, Y, Z]] of p.instances.entries()) {
@@ -715,33 +537,17 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
           if (p.kind === "column" || p.kind === "wall" || F.faceArea[c] < 2 || F.faceWidth[c] < .9) surf0 = "wall";
         }
         cur.surf0 = surf0;
-        // (large floors are cut on a 2m grid, so a platform under a church and before its door is inside and out)
-        let lines = lines0;
-        if (surf0 === "floor" && area2 > 8) {
-          lines = lines0.slice();
-          const xs = [a[0], b[0], d[0]], zs = [a[2], b[2], d[2]];
-          for (let x = Math.ceil(Math.min(...xs) / 2) * 2; x < Math.max(...xs); x += 2) lines.push([0, x]);
-          for (let z = Math.ceil(Math.min(...zs) / 2) * 2; z < Math.max(...zs); z += 2) lines.push([2, z]);
-        }
-        cur.fb = null;
-        if (sideRules && !glass && surf0 !== "floor" && !TRIM.has(p.kind) && !p.side) {
-          const fb = cur.fb = bandsOf(p, inst, facesOf(p).comp[k / 3]);
-          if (fb.cuts.length) {
-            const lo = Math.min(a[1], b[1], d[1]), hi = Math.max(a[1], b[1], d[1]);
-            const own = fb.cuts.filter((y) => y > lo + 1e-6 && y < hi - 1e-6);
-            if (own.length) lines = [...lines, ...own.map((y) => [1, y])];
-          }
-        }
-        let polys = lines.length ? cutAll([a, b, d], lines) : [[a, b, d]];
+        let polys = lines0.length ? cutAll([a, b, d], lines0) : [[a, b, d]];
+        // (WHERE THE SIDE DECIDES NOTHING -- the same rule and the same surface whether the piece is inside or out: a
+        //  floor no rule asks the side of, a wall under rules that name only its surface -- it is not cut for its side)
+        const free = !vols || glass || !!p.side || TRIM.has(p.kind) || polys.every((poly) => sideFree(poly));
+        if (!free && planes.length) polys = cutByInteriors(polys, a, b, d);
         const cov = covered.get(pi + "#" + inst + "#" + k / 3);
         if (cov) for (const { ax, w } of cov) polys = polys.flatMap((q) => minusCover(q, ax, w));   // (one face where two parts meet in a plane)
         if (!polys.length) continue;
-        if (surf0 === "floor" && tell && floorSideOf(p, inst, facesOf(p).comp[k / 3]) === "mixed") polys = polys.flatMap((q) => refine(p, q));
         for (const poly of polys) {
-          let cx = 0, cy = 0, cz = 0;
-          for (const v of poly) { cx += v[0]; cy += v[1]; cz += v[2]; }
-          const cen = [cx / poly.length, cy / poly.length, cz / poly.length];
-          cur.cen = cen; cur.poly = poly; cur.sideV = p.side ?? (TRIM.has(p.kind) ? "out" : null); cur.surfV = null;
+          const cen = centre(poly);
+          cur.cen = cen; cur.poly = poly; cur.sideV = p.side ?? (TRIM.has(p.kind) || (free && vols) ? "out" : null); cur.surfV = null;
           let hit = mine.find((r) => r.test(cur));
           // (a soffit -- under an arch, a window's head -- that no rule takes is the masonry of its wall)
           if (!hit && cur.surface() === "ceiling") { cur.surfV = "wall"; hit = mine.find((r) => r.test(cur)); }
@@ -756,9 +562,9 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
             // (keyed by its FACE -- facesOf: all of a plane that touches, the pieces an opening or a tier's seam cut
             //  apart one face)
             const fk = pi + "#" + inst + "#" + facesOf(p).comp[k / 3], gk = hit ? rules.indexOf(hit) : "stone";
-            // (and in which CELL of it: between which of the rules' lines and the face's own level cuts its centre lies --
-            //  one cell, one finish; two in one cell are a patch, not a band)
-            const cell = lines0.map(([ax, c]) => +(cen[ax] > c)).join("") + "/" + Math.max(-1, ...(cur.fb?.cuts ?? []).filter((y) => cen[1] > y)).toFixed(2);
+            // (and in which CELL of it: between which of the rules' lines its centre lies, and on which side -- one cell,
+            //  one finish; two in one cell are a patch, not a band)
+            const cell = lines0.map(([ax, c]) => +(cen[ax] > c)).join("") + "/" + (vols ? cur.side() : "");
             let fm = mix.get(fk); if (!fm) mix.set(fk, fm = { by: new Map(), cells: new Map(), at: new Map() });
             fm.by.set(gk, (fm.by.get(gk) ?? 0) + ar);
             if (!fm.at.has(gk)) fm.at.set(gk, cen.map((q) => +q.toFixed(2)));   // (where each finish was first met: for the checks' report)
@@ -810,7 +616,7 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
              by: Object.fromEntries([...f.by.entries()].map(([k, a]) => [k === "stone" ? "stone" : (rules[k].rule.pattern ?? rules[k].rule.color ?? k), +a.toFixed(2)])),
              at: Object.fromEntries([...f.at.entries()].map(([k, c]) => [k === "stone" ? "stone" : (rules[k].rule.pattern ?? rules[k].rule.color ?? k), c])) };
   });
-  return { groups: out, mixed, stats: { ms: performance.now() - t0, ...(tell ? tell.stats() : {}) } };
+  return { groups: out, mixed, stats: { ms: performance.now() - t0, interiors: vols?.length ?? 0 } };
 }
 
 // the params a rule's pattern is drawn with: its own, and a fitted panel's size (W, H) -- the one place both the tile's

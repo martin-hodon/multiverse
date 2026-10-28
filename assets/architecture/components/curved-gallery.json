@@ -15,6 +15,8 @@
     "_from": "the bays it runs through, `from` to `to` of `count` round the circle, bay 0 starting at +z and counting toward +x: two ranges with a gap between them leave room for a pavilion at the apex",
     "sill": 0.9,
     "_sill": "the openings' sill: 0.9 for windows, 0 for an open arcade",
+    "hall": "min(1, ceil(sill))",
+    "_hall": "1: a closed hall, an interior of the building (its windows on a sill); 0: an open arcade, the air's -- by default as its sill says",
     "terrace": 1,
     "_terrace": "1: its roof is a terrace, walked (reached from the pavilions at its ends); 0: a roof",
     "head": 1.2,
@@ -189,6 +191,27 @@
       ],
       "sides": 6,
       "_about": "...and along the inner edge, as the straight gallery has along both of its"
+    },
+    "interior": {
+      "type": "interior",
+      "of": [
+        "outer wall",
+        "inner wall"
+      ],
+      "plan": {
+        "sides": "2 * count",
+        "radius": "R + D / 2 - t / 2"
+      },
+      "arc": [
+        "from * 360 / count",
+        "(to + 1) * 360 / count"
+      ],
+      "hole": {
+        "sides": "4 * count",
+        "radius": "R - D / 2 + t / 2"
+      },
+      "height": "hall * H",
+      "_about": "the hall between its two rings' middles, its bays from `from` to `to`, up to the roof (an open arcade's is none: the air's)"
     }
   }
 }

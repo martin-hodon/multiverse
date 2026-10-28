@@ -9,7 +9,10 @@ scripts write those JSON files under `assets/architecture/`:
     pantheon.py   pantheon.json             (reads the current file and rebuilds its parts: safe to run twice)
     byz.py        elements/byzantine.json   the pieces Hagia Sophia is made of
     details.py    elements/details.json     battlements, balustrade, obelisk, buttresses, minaret, aedicula, portal
-    st_basil.py   st-basil.json             nine domed-tower components on a platform
+    st_basil.py   st-basil.json             nine domed-tower components on a platform; round it Red Square on its OSM plan:
+                                            the Kremlin wall (`curtain-wall`, forked merlons) and its towers (`kremlin-tower`;
+                                            the Spasskaya with Gothic tiers and its tent), the mausoleum, the Lobnoye Mesto
+                                            (writes those)
     taj_mahal.py  taj-mahal.json            the tomb's iwans, chhatris and minarets
     frauenkirche.py frauenkirche.json       the stone bell on its drum, corner towers
     zwinger.py    zwinger.json              galleries, curved galleries, pavilions, the Kronentor
@@ -43,7 +46,9 @@ scripts write those JSON files under `assets/architecture/`:
     parliament.py parliament.json           two `court`s, the ribbed dome, loggias, turrets, pinnacles
     st_isaacs.py  st-isaacs.json            body, pendentives, `drum-dome` with peristyle, four `portico`s, corner domes
     berliner_dom.py berliner-dom.json       square church, `drum-dome` with peristyle, corner domes, portal front, roof walk
-    fishermans_bastion.py fishermans-bastion.json  arcaded hall, terraces, galleries, seven towers, the double stair
+    fishermans_bastion.py fishermans-bastion.json  on its OSM plan: folded arcaded `range`s walked behind battlements,
+                                            the Schulek stair, seven towers on their feet, St Stephen's court; the Matthias
+                                            Church on the hill (hall `basilica`, its two towers), the Holy Trinity Column
     mainz.py      mainz.json                double-choir basilica, stepped west crossing tower, `round-stair-tower`s
     moritzburg.py moritzburg.json           a `court` on its island, round corner towers, terrace, bridge (moat in `_moat`)
     el_pilar.py   el-pilar.json             hall church under a central dome and cupolas, four `baroque-tower`s (writes it)
@@ -54,6 +59,33 @@ scripts write those JSON files under `assets/architecture/`:
     blue_mosque.py blue-mosque.json         `dome-cascade` hall, `riwaq` of `domed-arcade`s, `ottoman-minaret`s (writes those)
     temple_of_heaven.py temple-of-heaven.json   the Hall of Prayer on its three-tiered altar, the court, gate and annex halls
                                             (`chinese-hall`, `palace-wall`, `dougong` components)
+    himeji.py     himeji.json               the great keep and three small keeps (`tiered`), watari-yagura, the fan-sloped
+                                            stone base (`batter`), the approach stair
+    horyuji.py    horyuji.json              the five-storeyed pagoda with its sorin, the Golden Hall, the Middle Gate (`tiered`),
+                                            the kairo round the court (a roofed `range`)
+    kinkakuji.py  kinkakuji.json            the Golden Pavilion (`tiered`, the first storey under no roof of its own, the
+                                            phoenix a `finial`) on its island in the pond (`site.moat`), the stone bridge
+    fushimi_inari.py fushimi-inari.json     the great torii, the tower gate and halls (`tiered`), the senbon torii: two
+                                            tunnels of `components/torii` climbing their paths
+    summer_palace.py summer-palace.json     the axis of Longevity Hill on its OSM plan: the Foxiang Ge (an octagonal `tiered`,
+                                            jujia skirts seated on its walls) on its stone terrace, the Paiyun Dian and its
+                                            court, gates, the Dehui Hall, the Sea of Wisdom (`chinese-hall`s), the hill's
+                                            terraces and flights, two pailous, the Long Corridor (a roofed `range`), the lake
+    sheikh_zayed.py sheikh-zayed.json       on its OSM plan: the sahn, a `riwaq` of small domes on three sides, the prayer hall
+                                            behind its `arcade-walk` portico, three crossings under onion `drum-dome`s, roof
+                                            domes, the entrance hall and `portal`, four `omani-minaret`s, pools, platform
+    borobudur.py  borobudur.json            on its OSM plan, made symmetric: the foot and five redented square terraces (prisms
+                                            notched for the axial stairs cut into them), niched balustrades (`enclosure`s, a
+                                            seated Buddha in the first's, a small stupa over every niche), three round terraces,
+                                            72 bell stupas in rings of 32/24/16, the great stupa
+    angkor_wat.py angkor-wat.json           on its OSM plan, facing west: causeway, ponds, Terrace of Honour; the outer gallery,
+                                            the cruciform cloister and the second gallery (roofed `range`s through their
+                                            gopuras and corner pavilions), libraries, the battered bakan with its steep stairs,
+                                            cross galleries and the quincunx of `shikhara` prangs with lotus-bud finials
+    imam_mosque.py imam-mosque.json         on its OSM plan, its qibla axis turned west: the four-iwan court (`range`s of two-storey
+                                            niches broken by the iwans' `portal`s), the dome chamber (a crossing) under the
+                                            `drum-dome` onion, the qibla `minaret`s, the winter halls, the madrasas, and the
+                                            entrance portal and vestibule turned to the square
     colosseum.py  colosseum.json            the Flavian amphitheatre on its four-centred `oval`: facade, three
                                             ambulatories, stairs, vomitoria, three maeniana on their walkways, hypogeum
 

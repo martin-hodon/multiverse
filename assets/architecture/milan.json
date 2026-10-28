@@ -3743,6 +3743,23 @@
         ]
       ]
     },
+    "turret head right interior": {
+      "type": "interior",
+      "plan": {
+        "sides": 8,
+        "radius": 2.1999999999999997
+      },
+      "height": 3.0,
+      "at": [
+        [
+          "1 * (wallX - aisleT - 2.2173)",
+          "outerWallH",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ],
+      "_about": "inside the turret's head, where the spiral arrives"
+    },
     "stair left": {
       "type": "component",
       "use": "components/tower-stair",
@@ -4062,6 +4079,156 @@
           "-1 * (wallX - aisleT - 2.2173)",
           "outerWallH + 3.35",
           "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "turret head left interior": {
+      "type": "interior",
+      "plan": {
+        "sides": 8,
+        "radius": 2.1999999999999997
+      },
+      "height": 3.0,
+      "at": [
+        [
+          "-1 * (wallX - aisleT - 2.2173)",
+          "outerWallH",
+          "naveL / 2 - bayLen + 3.0173",
+          0
+        ]
+      ]
+    },
+    "body interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          "2 * (wallX - aisleT / 2)",
+          "naveL + 1.2"
+        ]
+      },
+      "height": "outerWallH - 0.4",
+      "at": [
+        [
+          0,
+          0,
+          0.6,
+          0
+        ]
+      ],
+      "_about": "the nave and its four aisles from the facade's middle to the apse, up to the outer aisles' terraces; over the nave and the inner aisles, two more boxes stepping up as their roofs do"
+    },
+    "inner aisles interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          "2 * (innerX + aisleT / 2)",
+          "naveL + 1.2"
+        ]
+      },
+      "height": "innerWallH - 0.4",
+      "at": [
+        [
+          0,
+          0,
+          0.6,
+          0
+        ]
+      ]
+    },
+    "nave interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          "2 * (naveW / 2 + pierT / 2)",
+          "naveL + 1.2"
+        ]
+      },
+      "height": "naveTop",
+      "at": [
+        [
+          0,
+          0,
+          0.6,
+          0
+        ]
+      ]
+    },
+    "transept interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          94.4,
+          19.0
+        ]
+      },
+      "height": "naveTop",
+      "at": [
+        [
+          0,
+          0,
+          -28.5,
+          0
+        ]
+      ]
+    },
+    "ambulatory interior": {
+      "type": "interior",
+      "plan": {
+        "sides": 8,
+        "radius": "wallX - aisleT / 2"
+      },
+      "arc": [
+        90,
+        270
+      ],
+      "height": "outerWallH - 0.4",
+      "at": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ],
+      "_about": "round the apse: the chevet's half ring up to the roof's foot, the inner ambulatory's to its vault's top, the choir's to the nave's"
+    },
+    "inner ambulatory interior": {
+      "type": "interior",
+      "plan": {
+        "sides": 16,
+        "radius": "innerX + aisleT / 2"
+      },
+      "arc": [
+        90,
+        270
+      ],
+      "height": "aisleTop",
+      "at": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
+          0
+        ]
+      ]
+    },
+    "choir interior": {
+      "type": "interior",
+      "plan": {
+        "sides": 8,
+        "radius": "naveW / 2 + pierT / 2"
+      },
+      "arc": [
+        90,
+        270
+      ],
+      "height": "naveTop",
+      "at": [
+        [
+          0,
+          0,
+          "0 - naveL / 2",
           0
         ]
       ]

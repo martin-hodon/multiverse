@@ -1,0 +1,15 @@
+{
+  "name": "Borobudur",
+  "building": "architecture/borobudur",
+  "_about": "Borobudur's surfaces: grey andesite everywhere, laid without mortar in fine courses on the terraces' walls and the balustrades, coarser on the foot, flagged on the galleries' and terraces' floors; the perforated stupas latticed, their spires and the great stupa's the same stone.",
+  "stone": { "color": "#77736a", "accent": "#5f5b53", "pat": "ashlar" },
+  "rules": [
+    { "parts": ["stupas 1", "stupas 2", "stupas 3"], "pattern": "panels/jali", "palette": "trachyte", "_about": "the perforated stupas' lattice" },
+    { "parts": "kind:dome", "pattern": "stone/ashlar fine", "palette": "trachyte" },
+    { "parts": ["balustrade 1", "balustrade 2", "balustrade 3", "balustrade 4"], "pattern": "stone/ashlar fine", "palette": "trachyte", "_about": "the balustrades, their niches" },
+    { "parts": "foot", "surface": "wall", "pattern": "stone/ashlar", "palette": "trachyte" },
+    { "surface": "floor", "pattern": "floors/flagstones", "palette": "trachyte" },
+    { "surface": "wall", "pattern": "stone/ashlar fine", "palette": "trachyte", "_about": "the terraces' walls, where the reliefs run" },
+    { "pattern": "stone/ashlar", "palette": "trachyte" }
+  ]
+}

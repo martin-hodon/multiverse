@@ -21,7 +21,7 @@ export function index(asm) {
         own.tris.push(t);
         const x0 = Math.floor(Math.min(a[0], b[0], d[0]) / 2), x1 = Math.floor(Math.max(a[0], b[0], d[0]) / 2);
         const z0 = Math.floor(Math.min(a[2], b[2], d[2]) / 2), z1 = Math.floor(Math.max(a[2], b[2], d[2]) / 2);
-        if ((x1 - x0 + 1) * (z1 - z0 + 1) > 4000) { vast.push(t); continue; }   // (a vast slab: its cells are many; kept apart, for a ray to test)
+        if ((x1 - x0 + 1) * (z1 - z0 + 1) > 4000) { vast.push({ t, x0, x1, z0, z1 }); continue; }   // (a vast slab: its cells are many; kept apart)
         for (let i = x0; i <= x1; i++) for (let j = z0; j <= z1; j++) {
           const key = `${i},${j}`;
           let l = cells.get(key); if (!l) cells.set(key, l = []);
@@ -30,7 +30,17 @@ export function index(asm) {
       }
     });
   }
-  return { cells, parts, vast };
+  // (and handed back with every cell it covers: a hill's top ear-clipped into a few great triangles is the ground under
+  //  everything on it -- a cell that missed it saw a statue standing on air)
+  if (vast.length) {
+    const own = cells.get.bind(cells);
+    cells.get = (key) => {
+      const [i, j] = key.split(",").map(Number), more = vast.filter((v) => i >= v.x0 && i <= v.x1 && j >= v.z0 && j <= v.z1).map((v) => v.t);
+      const l = own(key);
+      return more.length ? (l ?? []).concat(more) : l;
+    };
+  }
+  return { cells, parts, vast: vast.map((v) => v.t) };
 }
 
 // the heights at which a triangle stands over (x, z), if it does (null for a wall seen edge-on)
@@ -88,24 +98,59 @@ export function insideOf(cells, x, y, z, skip = null) {
 // the height of a door need not test the bracket sets twenty metres over it, as a column of the ground index would make
 // it), the cube a ray is in is walked to the next (Amanatides and Woo), each triangle is tested once (`stamp`), and the
 // ray is given up as soon as it leaves the building's bounds -- so one that escapes to the sky costs a few cubes.
-const CUBE = 2, K = (i, j, k) => ((i + 2048) * 4096 + (j + 2048)) * 4096 + (k + 2048);
+// (FLAT: a triangle is nine numbers in one array -- its corners a, b, d -- and a cube's triangles a run of one list
+//  (`start`/`list`, filed by the cube's number within the bounds, or through `slot` where the bounds hold too many cubes
+//  to number them all): a ray walks typed arrays, not objects, and makes nothing as it goes)
+const CUBE = 2, DENSE = 1 << 22;
 export function rayIndex(asm) {
-  const { parts, cells } = index(asm), cubes = new Map();
+  const { parts, cells } = index(asm);
+  const T = parts.reduce((n, part) => n + part.tris.length, 0), tri = new Float64Array(T * 9);
   const b = { x0: 1e9, x1: -1e9, y0: 1e9, y1: -1e9, z0: 1e9, z1: -1e9 };
-  for (const part of parts) for (const t of part.tris) {
-    const lo = [0, 1, 2].map((q) => Math.min(t.a[q], t.b[q], t.d[q])), hi = [0, 1, 2].map((q) => Math.max(t.a[q], t.b[q], t.d[q]));
-    if (lo[0] < b.x0) b.x0 = lo[0]; if (hi[0] > b.x1) b.x1 = hi[0]; if (lo[1] < b.y0) b.y0 = lo[1]; if (hi[1] > b.y1) b.y1 = hi[1];
-    if (lo[2] < b.z0) b.z0 = lo[2]; if (hi[2] > b.z1) b.z1 = hi[2];
-    const [i0, j0, k0] = lo.map((v) => Math.floor(v / CUBE)), [i1, j1, k1] = hi.map((v) => Math.floor(v / CUBE));
-    for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) for (let k = k0; k <= k1; k++) {
-      const key = K(i, j, k); let l = cubes.get(key); if (!l) cubes.set(key, l = []); l.push(t);
+  let n = 0;
+  parts.forEach((part) => {
+    for (const t of part.tris) {
+      tri.set(t.a, n * 9); tri.set(t.b, n * 9 + 3); tri.set(t.d, n * 9 + 6); n++;
+      for (const v of [t.a, t.b, t.d]) {
+        if (v[0] < b.x0) b.x0 = v[0]; if (v[0] > b.x1) b.x1 = v[0]; if (v[1] < b.y0) b.y0 = v[1]; if (v[1] > b.y1) b.y1 = v[1];
+        if (v[2] < b.z0) b.z0 = v[2]; if (v[2] > b.z1) b.z1 = v[2];
+      }
     }
-  }
-  return { cubes, bounds: b, cells };
+  });
+  const o = [b.x0, b.y0, b.z0].map((v) => Math.floor(v / CUBE)), dim = [b.x1, b.y1, b.z1].map((v, q) => Math.floor(v / CUBE) - o[q] + 1);
+  if (!T) dim.fill(0);
+  const total = dim[0] * dim[1] * dim[2], dense = total <= DENSE, slot = dense ? null : new Map();
+  // (each triangle's cubes, walked twice: counted, then filed)
+  const walk = (fn) => {
+    for (let t = 0; t < T; t++) {
+      const lo = [0, 1, 2].map((q) => Math.floor(Math.min(tri[t * 9 + q], tri[t * 9 + 3 + q], tri[t * 9 + 6 + q]) / CUBE) - o[q]);
+      const hi = [0, 1, 2].map((q) => Math.floor(Math.max(tri[t * 9 + q], tri[t * 9 + 3 + q], tri[t * 9 + 6 + q]) / CUBE) - o[q]);
+      for (let i = lo[0]; i <= hi[0]; i++) for (let j = lo[1]; j <= hi[1]; j++) for (let k = lo[2]; k <= hi[2]; k++) fn((i * dim[1] + j) * dim[2] + k, t);
+    }
+  };
+  const count = dense ? new Int32Array(total) : [];
+  walk((key) => {
+    if (dense) { count[key]++; return; }
+    let s = slot.get(key);
+    if (s === undefined) { slot.set(key, s = count.length); count.push(0); }
+    count[s]++;
+  });
+  const nc = count.length, start = new Int32Array(nc + 1);
+  for (let s = 0; s < nc; s++) start[s + 1] = start[s] + count[s];
+  const list = new Int32Array(start[nc]), fill = start.slice(0, nc);
+  walk((key, t) => { list[fill[dense ? key : slot.get(key)]++] = t; });
+  return { bounds: b, cells, tri, o, dim, slot, start, list, stamp: new Int32Array(T), mark: 0 };
 }
-let rayStamp = 1;
-const hitTri = (o, d, t) => {                    // Moller-Trumbore: the distance along d, or Infinity
-  const [ax, ay, az] = t.a, e1x = t.b[0] - ax, e1y = t.b[1] - ay, e1z = t.b[2] - az, e2x = t.d[0] - ax, e2y = t.d[1] - ay, e2z = t.d[2] - az;
+// (where a cube's triangles run in `list`, by the cube's place: -1 none)
+const cubeAt = (ix, i, j, k) => {
+  i -= ix.o[0]; j -= ix.o[1]; k -= ix.o[2];
+  if (i < 0 || j < 0 || k < 0 || i >= ix.dim[0] || j >= ix.dim[1] || k >= ix.dim[2]) return -1;
+  const key = (i * ix.dim[1] + j) * ix.dim[2] + k;
+  return ix.slot ? ix.slot.get(key) ?? -1 : key;
+};
+const nextMark = (ix) => { if (++ix.mark > 2e9) { ix.stamp.fill(0); ix.mark = 1; } return ix.mark; };
+const hitTri = (o, d, tri, t) => {                    // Moller-Trumbore: the distance along d, or Infinity
+  const at = t * 9, ax = tri[at], ay = tri[at + 1], az = tri[at + 2];
+  const e1x = tri[at + 3] - ax, e1y = tri[at + 4] - ay, e1z = tri[at + 5] - az, e2x = tri[at + 6] - ax, e2y = tri[at + 7] - ay, e2z = tri[at + 8] - az;
   const px = d[1] * e2z - d[2] * e2y, py = d[2] * e2x - d[0] * e2z, pz = d[0] * e2y - d[1] * e2x, det = e1x * px + e1y * py + e1z * pz;
   if (Math.abs(det) < 1e-12) return Infinity;
   const inv = 1 / det, sx = o[0] - ax, sy = o[1] - ay, sz = o[2] - az, u = (sx * px + sy * py + sz * pz) * inv;
@@ -115,43 +160,43 @@ const hitTri = (o, d, t) => {                    // Moller-Trumbore: the distanc
   const tt = (e2x * qx + e2y * qy + e2z * qz) * inv;
   return tt > 1e-4 ? tt : Infinity;
 };
-export function rayHits({ cubes, bounds: b }, o, d, maxT = 200) {
-  const stamp = ++rayStamp;
-  const c = [0, 1, 2].map((q) => Math.floor(o[q] / CUBE)), st = [0, 1, 2].map((q) => Math.sign(d[q]));
-  const delta = [0, 1, 2].map((q) => (st[q] ? CUBE / Math.abs(d[q]) : Infinity));
-  const next = [0, 1, 2].map((q) => (st[q] ? ((st[q] > 0 ? (c[q] + 1) * CUBE : c[q] * CUBE) - o[q]) / d[q] : Infinity));
-  const lo = [b.x0, b.y0, b.z0], hi = [b.x1, b.y1, b.z1];
-  for (let steps = 0; steps < 1000; steps++) {
-    const l = cubes.get(K(c[0], c[1], c[2]));
-    if (l) for (const t of l) { if (t.ray === stamp) continue; t.ray = stamp; if (hitTri(o, d, t) < maxT) return true; }
-    const q = next[0] < next[1] ? (next[0] < next[2] ? 0 : 2) : (next[1] < next[2] ? 1 : 2), t1 = next[q];
-    if (t1 >= maxT) return false;
-    c[q] += st[q]; next[q] += delta[q];
-    // (out of the bounds and still going out: nothing more to meet)
-    const edge = c[q] * CUBE;
-    if ((st[q] > 0 && edge > hi[q]) || (st[q] < 0 && edge + CUBE < lo[q])) return false;
-  }
-  return false;
-}
-
-// how far along d the ray first meets stone (Infinity: not within maxT) -- the same walk, but a cube's nearest hit is
-// the first only once it lies before the cube's far side
-export function rayDist({ cubes, bounds: b }, o, d, maxT = 200) {
-  const stamp = ++rayStamp;
-  const c = [0, 1, 2].map((q) => Math.floor(o[q] / CUBE)), st = [0, 1, 2].map((q) => Math.sign(d[q]));
-  const delta = [0, 1, 2].map((q) => (st[q] ? CUBE / Math.abs(d[q]) : Infinity));
-  const next = [0, 1, 2].map((q) => (st[q] ? ((st[q] > 0 ? (c[q] + 1) * CUBE : c[q] * CUBE) - o[q]) / d[q] : Infinity));
-  const lo = [b.x0, b.y0, b.z0], hi = [b.x1, b.y1, b.z1];
+// the walk from cube to cube both rays share: `first` -- done at the first hit within maxT (rayHits), else the nearest
+// (rayDist: a cube's nearest hit is the first only once it lies before the cube's far side)
+function walkRay(ix, o, d, maxT, first) {
+  const mark = nextMark(ix), { tri, stamp, start, list, bounds: b } = ix;
+  let cx = Math.floor(o[0] / CUBE), cy = Math.floor(o[1] / CUBE), cz = Math.floor(o[2] / CUBE);
+  const sx = Math.sign(d[0]), sy = Math.sign(d[1]), sz = Math.sign(d[2]);
+  const dx = sx ? CUBE / Math.abs(d[0]) : Infinity, dy = sy ? CUBE / Math.abs(d[1]) : Infinity, dz = sz ? CUBE / Math.abs(d[2]) : Infinity;
+  let nx = sx ? ((sx > 0 ? (cx + 1) * CUBE : cx * CUBE) - o[0]) / d[0] : Infinity;
+  let ny = sy ? ((sy > 0 ? (cy + 1) * CUBE : cy * CUBE) - o[1]) / d[1] : Infinity;
+  let nz = sz ? ((sz > 0 ? (cz + 1) * CUBE : cz * CUBE) - o[2]) / d[2] : Infinity;
   let best = Infinity;
   for (let steps = 0; steps < 1000; steps++) {
-    const l = cubes.get(K(c[0], c[1], c[2]));
-    if (l) for (const t of l) { if (t.ray === stamp) continue; t.ray = stamp; best = Math.min(best, hitTri(o, d, t)); }
-    const q = next[0] < next[1] ? (next[0] < next[2] ? 0 : 2) : (next[1] < next[2] ? 1 : 2), t1 = next[q];
-    if (best <= t1) return best < maxT ? best : Infinity;
+    const s = cubeAt(ix, cx, cy, cz);
+    if (s >= 0) for (let m = start[s], e = start[s + 1]; m < e; m++) {
+      const t = list[m];
+      if (stamp[t] === mark) continue;
+      stamp[t] = mark;
+      const h = hitTri(o, d, tri, t);
+      if (first) { if (h < maxT) return h; } else if (h < best) best = h;
+    }
+    const t1 = nx < ny ? (nx < nz ? nx : nz) : (ny < nz ? ny : nz);
+    if (!first && best <= t1) return best < maxT ? best : Infinity;
     if (t1 >= maxT) return Infinity;
-    c[q] += st[q]; next[q] += delta[q];
-    const edge = c[q] * CUBE;
-    if ((st[q] > 0 && edge > hi[q]) || (st[q] < 0 && edge + CUBE < lo[q])) return Infinity;
+    // (out of the bounds and still going out: nothing more to meet)
+    if (nx < ny && nx < nz) {
+      cx += sx; nx += dx;
+      if ((sx > 0 && cx * CUBE > b.x1) || (sx < 0 && cx * CUBE + CUBE < b.x0)) return Infinity;
+    } else if (ny < nz) {
+      cy += sy; ny += dy;
+      if ((sy > 0 && cy * CUBE > b.y1) || (sy < 0 && cy * CUBE + CUBE < b.y0)) return Infinity;
+    } else {
+      cz += sz; nz += dz;
+      if ((sz > 0 && cz * CUBE > b.z1) || (sz < 0 && cz * CUBE + CUBE < b.z0)) return Infinity;
+    }
   }
   return Infinity;
 }
+export const rayHits = (ix, o, d, maxT = 200) => walkRay(ix, o, d, maxT, true) < Infinity;
+// how far along d the ray first meets stone (Infinity: not within maxT)
+export const rayDist = (ix, o, d, maxT = 200) => walkRay(ix, o, d, maxT, false);

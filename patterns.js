@@ -126,48 +126,79 @@ function shapePath(L, P, tile) {
 
 // ---- fields: periodic functions of the point, per texel ----------------------------------------------------------------
 // gradient (Perlin) noise on a lattice that wraps with the tile -- so the field repeats with it -- in [0, 1]
+// (a lattice point's gradient is worked out once, when first wanted, and kept: hashing it and its cos and sin at every
+// corner of every texel's every octave was most of a world's startup -- 59 of 85 s cold, 2026-10-28)
 function noise2(gx, gy, seed) {
-  const grad = (i, j) => { const a = TAU * hash(((i % gx) + gx) % gx, ((j % gy) + gy) % gy, seed); return [Math.cos(a), Math.sin(a)]; };
+  const C = new Float64Array(gx * gy).fill(NaN), S = new Float64Array(gx * gy);
+  const dot = (i, j, dx, dy) => {
+    i = ((i % gx) + gx) % gx; j = ((j % gy) + gy) % gy;
+    const k = j * gx + i;
+    if (C[k] !== C[k]) { const a = TAU * hash(i, j, seed); C[k] = Math.cos(a); S[k] = Math.sin(a); }
+    return C[k] * dx + S[k] * dy;
+  };
   const fade = (t) => t * t * t * (t * (t * 6 - 15) + 10);
   return (x, y) => {
     const i = Math.floor(x), j = Math.floor(y), fx = x - i, fy = y - j;
-    const dot = (di, dj) => { const [gxv, gyv] = grad(i + di, j + dj); return gxv * (fx - di) + gyv * (fy - dj); };
+    const d00 = dot(i, j, fx, fy), d10 = dot(i + 1, j, fx - 1, fy), d01 = dot(i, j + 1, fx, fy - 1), d11 = dot(i + 1, j + 1, fx - 1, fy - 1);
     const u = fade(fx), v = fade(fy);
-    const a = dot(0, 0) + (dot(1, 0) - dot(0, 0)) * u, b = dot(0, 1) + (dot(1, 1) - dot(0, 1)) * u;
+    const a = d00 + (d10 - d00) * u, b = d01 + (d11 - d01) * u;
     return .5 + .7 * (a + (b - a) * v);
   };
 }
+// A FIELD'S VALUES, texel by texel, are the same in any colours: the last few are kept, and the next tile with the same
+// field in other colours only colours them (the items' paints are one brushing in sixty colours -- 4.8 of a world's
+// 6.6 s of item tiles, 2026-10-28; the woods one grain in their several)
+const FIELDS = new Map(), FIELDS_KEPT = 8;
 export function fieldImage(L, P, tile, W, H, pal) {
   const kind = L.field, sc = numOf(L.freq, P, 3), amount = numOf(L.amount, P, 1), seed = numOf(L.seed, P, 7);
+  if (!["veins", "speckle", "cloud", "grain"].includes(kind)) throw new Error(`pattern field "${kind}" is not one of veins speckle cloud grain`);
   const [c0, c1] = [colorOf(L.colors?.[0] ?? 0, pal), colorOf(L.colors?.[1] ?? 1, pal)];
   const gx = Math.max(1, Math.round(tile[0] * sc)), gy = Math.max(1, Math.round(tile[1] * sc));
-  const oct = [0, 1, 2, 3].map((o) => noise2(gx << o, gy << o, seed + o));
-  const fbm = (u, v) => oct.reduce((s, f, o) => s + f(u * (gx << o), v * (gy << o)) / (2 << o), 0) / .9375;
-  const img = new ImageData(W, H), d = img.data;
   const turns = Math.max(1, Math.round(numOf(L.turns, P, 2)));   // (veins: how many times a vein crosses the tile)
   // (speckle: grains `grain` metres across, on a lattice that wraps with the tile)
   const ggx = Math.max(1, Math.round(tile[0] / numOf(L.grain, P, .008))), ggy = Math.max(1, Math.round(tile[1] / numOf(L.grain, P, .008)));
-  const grains = kind === "speckle" ? noise2(ggx, ggy, seed + 11) : null, c2 = colorOf(L.colors?.[2] ?? 3, pal);
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    const u = (x + .5) / W, v = 1 - (y + .5) / H;               // (tile coordinates, 0..1, y up)
-    let t;
-    if (kind === "veins") {                                     // marble: thin wandering veins, a soft cloud between
-      const s = Math.sin(TAU * (turns * (u + v) + 1.6 * fbm(u, v)));
-      t = Math.pow(1 - Math.abs(s), numOf(L.sharp, P, 18)) * .9 + .12 * fbm(u * 2 % 1, v * 2 % 1);
-    } else if (kind === "speckle") {                            // granite: dark grains and pale ones in a mottled ground
-      const n = grains(u * ggx, v * ggy), i = (y * W + x) * 4, k = Math.max(0, Math.min(1, (n - .66) * 9)) * amount;
-      const q = Math.max(0, Math.min(1, (.3 - n) * 9)) * amount, m = 1 + .12 * (fbm(u, v) - .5);
+  const c2 = colorOf(L.colors?.[2] ?? 3, pal);
+  const sharp = numOf(L.sharp, P, 18), alpha = 255 * numOf(L.alpha, P, 1);
+  const key = [kind, gx, gy, seed, turns, sharp, ggx, ggy, W, H].join();
+  let F = FIELDS.get(key);
+  if (F) { FIELDS.delete(key); FIELDS.set(key, F); }   // (the most recent last: the first is the next let go)
+  else {
+    // the field: per texel t -- or, speckled, the grain's n and the mottle's fbm, side by side
+    F = new Float64Array(W * H * (kind === "speckle" ? 2 : 1));
+    const oct = [0, 1, 2, 3].map((o) => noise2(gx << o, gy << o, seed + o));
+    const [f0, f1, f2, f3] = oct;
+    const fbm = (u, v) => (((0 + f0(u * gx, v * gy) / 2) + f1(u * (gx << 1), v * (gy << 1)) / 4) + f2(u * (gx << 2), v * (gy << 2)) / 8
+      + f3(u * (gx << 3), v * (gy << 3)) / 16) / .9375;
+    const grains = kind === "speckle" ? noise2(ggx, ggy, seed + 11) : null;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const u = (x + .5) / W, v = 1 - (y + .5) / H, i = y * W + x;   // (tile coordinates, 0..1, y up)
+      if (kind === "veins") {                                     // marble: thin wandering veins, a soft cloud between
+        const s = Math.sin(TAU * (turns * (u + v) + 1.6 * fbm(u, v)));
+        F[i] = Math.pow(1 - Math.abs(s), sharp) * .9 + .12 * fbm(u * 2 % 1, v * 2 % 1);
+      } else if (kind === "speckle") { F[i * 2] = grains(u * ggx, v * ggy); F[i * 2 + 1] = fbm(u, v); }   // granite: grains in a mottled ground
+      else if (kind === "cloud") F[i] = fbm(u, v) - .5;           // plaster, weathering: a soft mottle
+      else {                                                      // wood: rings stretched along u
+        const s = Math.sin(TAU * (turns * v + 1.2 * fbm(u, v) + .3 * fbm(u * 4 % 1, v)));
+        F[i] = .5 + .5 * s;
+      }
+    }
+    FIELDS.set(key, F);
+    if (FIELDS.size > FIELDS_KEPT) FIELDS.delete(FIELDS.keys().next().value);
+  }
+  // ...coloured
+  const img = new ImageData(W, H), d = img.data;
+  for (let j = 0, n = W * H; j < n; j++) {
+    const i = j * 4;
+    if (kind === "speckle") {                                   // dark grains and pale ones
+      const g = F[j * 2], k = Math.max(0, Math.min(1, (g - .66) * 9)) * amount;
+      const q = Math.max(0, Math.min(1, (.3 - g) * 9)) * amount, m = 1 + .12 * (F[j * 2 + 1] - .5);
       for (let c = 0; c < 3; c++) d[i + c] = (c0[c] * (1 - k - q) + c1[c] * k + c2[c] * q) * m;
-      d[i + 3] = 255 * numOf(L.alpha, P, 1);
+      d[i + 3] = alpha;
       continue;
-    } else if (kind === "cloud") t = fbm(u, v) - .5;             // plaster, weathering: a soft mottle
-    else if (kind === "grain") {                                // wood: rings stretched along u
-      const s = Math.sin(TAU * (turns * v + 1.2 * fbm(u, v) + .3 * fbm(u * 4 % 1, v)));
-      t = .5 + .5 * s;
-    } else throw new Error(`pattern field "${kind}" is not one of veins speckle cloud grain`);
-    const k = Math.max(0, Math.min(1, t * amount)), i = (y * W + x) * 4;
+    }
+    const k = Math.max(0, Math.min(1, F[j] * amount));
     d[i] = c0[0] + (c1[0] - c0[0]) * k; d[i + 1] = c0[1] + (c1[1] - c0[1]) * k; d[i + 2] = c0[2] + (c1[2] - c0[2]) * k;
-    d[i + 3] = 255 * numOf(L.alpha, P, 1);
+    d[i + 3] = alpha;
   }
   const cv = mkCanvas(W, H);
   cv.getContext("2d").putImageData(img, 0, 0);

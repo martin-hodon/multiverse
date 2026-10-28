@@ -52,6 +52,18 @@ DR = (XS - 3.2) / 2
 add("dome", comp("components/drum-dome", {"R": DR, "dt": 0.8, "H": 9.0, "n": 24, "every": 3, "winW": 1.8, "winSill": 2.0, "winH": 4.2,
                                           "profile": "bell", "waist": 0.75, "lift": 0.9, "domeT": 0.8, "lanternR": 1.9, "lanternH": 4.0},
                  [[xc, NH, 0, 0]], _about="the drum with its eight windows, the dome, a Baroque bell, and the lantern"))
+# THE CHURCH'S SPACE (finish.js reads which side of every surface is in from it): the nave and the crossing one room,
+# on the middle of their walls up to the nave's eaves (the towers stand up beside the roof: the box stops under it; the
+# drum's space is `drum-dome`'s) -- the nave's through the double wall to the crossing's face, so the great arch's
+# reveals are the church's; and under the abbey's eaves the crossing's on into the middle of the west wing's wall, so
+# the door's are too
+ni, xi = NW / 2 - 0.7, XS / 2 - 0.8
+xj = xc - XS / 2
+add("church interior", {"type": "interior", "plan": {"points": [[xn - NL / 2 + 0.7, -ni], [xj, -ni], [xj, -xi], [CX0 - 0.8, -xi],
+                                                                [CX0 - 0.8, xi], [xj, xi], [xj, ni], [xn - NL / 2 + 0.7, ni]]},
+                        "height": NH, "at": [[0, 0, 0, 0]], "_about": "the church's space: the nave and the crossing, up to the eaves"})
+add("crossing door interior", {"type": "interior", "plan": {"rect": [1.25, 2 * xi]}, "height": N * H, "at": [[CX0 - 0.8 + 1.25 / 2, 0, 0, 0]],
+                               "_about": "the double wall between the crossing and the west wing, from one's middle to the other's"})
 # the towers, either side of the front, a little proud of it
 TW, TX = 9.0, xn - NL / 2 + 4.5 - 0.3
 add("towers", comp("components/domed-tower", {"sides": 4, "R": TW / 2 * 1.4142, "H": 44.0, "t": 1.2, "drumR": 3.4, "drumH": 5.0, "cap": "bell",

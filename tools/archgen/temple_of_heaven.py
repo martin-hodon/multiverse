@@ -134,6 +134,15 @@ add("dragon columns", {"type": "column", "radius": .55, "height": r4(y_d3 + H3 +
 add("caisson", {"type": "dome", "radius": 4.95, "thickness": .3, "head": {"profile": "segmental", "rise": 1.1}, "atop": "drum 3", "at": [[0, 0, 0, 0]],
                 "coffers": {"count": 16, "rows": 2, "from": .12, "to": .8, "depth": .12}, "_about": "the caisson ceiling (zaojing) under the top roof: a coffered saucer"})
 
+# the hall within, one space to the caisson: the ground storey on the walls' middle line up to the second drum's foot
+# (the first roof's soffit, over the brackets, is its ceiling), then each drum's on its own middle line, up to the drum
+# above or the caisson (the roofs between are domes: their faces turned to the axis are in, whatever the volume)
+parts["hall interior"] = {"type": "interior", "plan": {"sides": 12, "radius": R1 - WT / 2}, "height": r4(y_d2), "at": [[0, 0, 0, 0]],
+                          "_about": "the hall: inside its lattice, up under the first roof (whose soffit is the dome's, turned to the axis)"}
+parts["drum 2 interior"] = {"type": "interior", "plan": {"sides": 24, "radius": r4(RD2 - .175)}, "height": r4(y_d3 - y_d2),
+                            "at": [[0, r4(y_d2), 0, 0]]}
+parts["drum 3 interior"] = {"type": "interior", "plan": {"sides": 16, "radius": r4(RD3 - .175)}, "height": H3, "at": [[0, r4(y_d3), 0, 0]]}
+
 # ---- the court --------------------------------------------------------------------------------------------------
 G = -HB                                  # the ground, under the altar's lift
 CX, CN, CS = 70.0, -80.0, 95.0           # the court: its half width, its north and south walls

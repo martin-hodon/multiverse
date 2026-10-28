@@ -28,6 +28,7 @@ front = lambda n: [{"h": OT / 2, "openings": {"pattern": str(n), "width": 2.6, "
 add("body", {"type": "enclosure", "plan": {"rect": [BW, BL]}, "thickness": T, "height": BH,
              "faces": {"0": front(5), "2": front(5), "1": front(7), "3": front(7)},
              "courses": {"plinth": {"h": 1.4, "out": 0.35}}, "orders": [{"tier": 0, "span": 2, "kind": "corinthian"}],
+             "interior": True,   # (its space, to the roof: finish.js reads which side of every surface is in from the interiors)
              "at": [[0, 0, 0, 0]], "_about": "the body: a giant Corinthian order of pilasters through two storeys of dressed windows, its entablature at the porticoes', an attic over it; a great door in the middle of every front, behind its portico"})
 
 # ---- inside: the crossing -- four piers, four great arches, the pendentives and their deck
@@ -57,6 +58,8 @@ add("roof stair", comp("components/tower-stair", {"W": SW, "H": BH + 0.4}, [[IX 
 SB, BR = 5.0, 21.0
 add("stylobate", {"walked": True, "type": "ring", "count": 24, "rOuter": BR, "rInner": S / 2, "height": SB, "y": BH, "turn": 0.5, "solid": True, "place": [[0, 0, 0, 0]],
                   "_about": "the round base the colonnade stands on: its top is the gallery walked round the drum"})
+add("dome well", {"type": "interior", "plan": {"sides": 24, "radius": S / 2 + 0.75}, "height": SB, "at": [[0, BH, 0, 0]],
+                  "_about": "the church's space on up through the stylobate, from the pendentives' ring to the drum's (whose space is `drum-dome`'s)"})
 add("colonnade stair", {"type": "flight", "width": 3.0, "run": 0.3, "rise": 0.16, "base": BH + 0.4, "top": BH + SB, "landing": 0,
                         "at": [[1.5, 0, BR + round((SB - 0.4) / 0.16) * 0.3, Q]], "_about": "the flight from the roof up onto the colonnade's gallery"})
 add("dome", comp("components/drum-dome", {"R": S / 2, "dt": 1.5, "H": 22.0, "n": 24, "every": 2, "winW": 2.0, "winSill": 4.0, "winH": 8.0,

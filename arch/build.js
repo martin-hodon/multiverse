@@ -1213,6 +1213,98 @@ export function stackMesh(m, levels) {
   return m;
 }
 
+// A BATTERED MASS: the outline `pts` is its TOP, and its foot spreads `out` beyond it -- the talus of a castle wall, a
+// pylon's sloping face, the stone base of a Japanese keep. `power` shapes the face's fall: 1 a straight batter; more, a
+// FAN SLOPE (ougi-no-kôbai) -- the offset at height y is out (1 - y/H)^power, gentle at the foot and rising vertical at
+// the top, the curve a Japanese mason struck on an ishigaki. In `steps` rings, ear-clipped caps (a plan need not be convex)
+export function batterMesh(m, pts, H, { out, power = 1, steps } = {}) {
+  const N = Math.max(1, Math.round(steps ?? (power === 1 ? 1 : 8))), n = pts.length;
+  const rings = Array.from({ length: N + 1 }, (_, j) => {
+    const y = H * j / N, d = out * (1 - y / H) ** power;
+    return (d > 1e-9 ? insetPoints(pts, -d) : pts).map(([x, z]) => m.vert(x, y, z));
+  });
+  for (let j = 0; j < N; j++) for (let k = 0; k < n; k++) { const k2 = (k + 1) % n; m.quad(rings[j][k], rings[j][k2], rings[j + 1][k2], rings[j + 1][k]); }
+  const lo = insetPoints(pts, -out);
+  for (const [a, b, c] of earClip(lo, lo.map((_, i) => i))) m.tri(rings[0][a], rings[0][b], rings[0][c]);
+  for (const [a, b, c] of earClip(pts, pts.map((_, i) => i))) m.tri(rings[N][a], rings[N][c], rings[N][b]);
+  return m;
+}
+
+// the band either side of an open polyline, mitred at every fold: the right side's points along it, then the left's
+// back -- walking it, the outside is on the right of every edge, as planPoints wants. Edge k (k < n - 1) is the right
+// side of segment k; edge n - 1 is the far end; edge n + j the left side of segment n - 2 - j; the last, the near end.
+export function bandPoints(path, widths) {
+  const n = path.length, segs = path.slice(0, -1).map((p, i) => {
+    const q = path[i + 1], L = Math.hypot(q[0] - p[0], q[1] - p[1]);
+    if (L < 1e-6) throw new Error(`a range's path has two points at the same place (${i}, ${i + 1})`);
+    const e = [(q[0] - p[0]) / L, (q[1] - p[1]) / L];
+    return { p, q, L, e, r: [-e[1], e[0]], w: widths[i] };
+  });
+  // a side's point at vertex i: where the two segments' offset lines cross (each its own half-width out)
+  const side = (s) => path.map((v, i) => {
+    const a = segs[i - 1], b = segs[i];
+    if (!a || !b) { const g = a ?? b; return [v[0] + s * g.r[0] * g.w / 2, v[1] + s * g.r[1] * g.w / 2]; }
+    const pa = [v[0] + s * a.r[0] * a.w / 2, v[1] + s * a.r[1] * a.w / 2], pb = [v[0] + s * b.r[0] * b.w / 2, v[1] + s * b.r[1] * b.w / 2];
+    const cr = a.e[0] * b.e[1] - a.e[1] * b.e[0];
+    if (Math.abs(cr) < 1e-6) return [(pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2];      // (straight on: no fold)
+    if (a.e[0] * b.e[0] + a.e[1] * b.e[1] < -.5) throw new Error(`a range's path folds back on itself at point ${i}`);
+    const t = ((pb[0] - pa[0]) * b.e[1] - (pb[1] - pa[1]) * b.e[0]) / cr;
+    return [pa[0] + a.e[0] * t, pa[1] + a.e[1] * t];
+  });
+  const R = side(1), Lf = side(-1);
+  return { pts: [...R, ...Lf.reverse()], segs };
+}
+
+// A ROOF ALONG A LINE: two slopes either side of a ridge that follows an open `path` (its middle line), mitred at
+// every fold -- a hip on the outside of a bend, a valley on the inside -- over a band `width` wide in the wall plane
+// (y 0), the eaves `overhang` out past it on both sides and both ends; a gable or a hip at each end (`ends`). The
+// covered corridor round a temple court (a kairo), a gallery that turns. Solid to a flat underside at the eaves -- or,
+// with `shell` (a thickness), a covering that thick, its underside following the slopes: the open roof of a corridor
+// whose rafters show, its gable ends open.
+export function bandRoofMesh(m, path, width, { pitch, overhang = 0, ends = ["gable", "gable"], shell = 0 } = {}) {
+  const T = Math.tan(pitch * Math.PI / 180), half = width / 2 + overhang, yE = -overhang * T, yR = width / 2 * T;
+  const n = path.length, dir = (a, b) => { const L = Math.hypot(b[0] - a[0], b[1] - a[1]); return [(b[0] - a[0]) / L, (b[1] - a[1]) / L]; };
+  // (the ends carried out by the overhang, along their own segments)
+  const e0 = dir(path[0], path[1]), e1 = dir(path[n - 2], path[n - 1]);
+  const p2 = path.map((p) => [...p]);
+  p2[0] = [p2[0][0] - e0[0] * overhang, p2[0][1] - e0[1] * overhang];
+  p2[n - 1] = [p2[n - 1][0] + e1[0] * overhang, p2[n - 1][1] + e1[1] * overhang];
+  const { pts } = bandPoints(p2, p2.slice(1).map(() => 2 * half));
+  // the ridge over the path; a hipped end draws it in by the slope's own run, so the end slopes at the sides' pitch
+  const E2 = [].concat(ends), hip0 = E2[0] === "hip", hip1 = E2[E2.length - 1] === "hip";
+  if ((hip0 || hip1) && n === 2 && Math.hypot(p2[1][0] - p2[0][0], p2[1][1] - p2[0][1]) < (hip0 + hip1) * half) throw new Error("a roof along a line is too short for its hipped ends");
+  const ridge = p2.map((p, i) => i === 0 && hip0 ? [p[0] + e0[0] * half, p[1] + e0[1] * half] : i === n - 1 && hip1 ? [p[0] - e1[0] * half, p[1] - e1[1] * half] : p);
+  // (a shell's underside: the same surface, lowered so that it lies `shell` under it measured square to the slopes)
+  const sets = [0, shell > 0 ? -shell / Math.cos(Math.atan(T)) : null].filter((d) => d !== null)
+    .map((d) => ({ E: pts.map(([x, z]) => m.vert(x, yE + d, z)), G: ridge.map(([x, z]) => m.vert(x, yR + d, z)) }));
+  // the covering's faces over one set of points (bandPoints' edges: k < n - 1 the right side of segment k, n - 1 the
+  // far end, n + j the left side of segment n - 2 - j, the last the near end -- each slope a side carried up to the
+  // ridge, as a prism's side to its top)
+  const faces = ({ E, G }) => {
+    const f = [];
+    for (let k = 0; k < n - 1; k++) f.push([E[k], E[k + 1], G[k + 1]], [E[k], G[k + 1], G[k]]);
+    for (let j = 0; j < n - 1; j++) f.push([E[n + j], E[n + j + 1], G[n - 2 - j]], [E[n + j], G[n - 2 - j], G[n - 1 - j]]);
+    if (!shell || hip1) f.push([E[n - 1], E[n], G[n - 1]]);
+    if (!shell || hip0) f.push([E[2 * n - 1], E[0], G[0]]);
+    return f;
+  };
+  const top = faces(sets[0]);
+  for (const [a, b, c] of top) m.tri(a, b, c);
+  if (!shell) {
+    for (const [a, b, c] of earClip(pts, pts.map((_, i) => i))) m.tri(sets[0].E[a], sets[0].E[b], sets[0].E[c]);
+    return { m, ridge: yR };
+  }
+  // the underside, turned to face down, and the covering's edges -- the eaves, and the rakes of an open gable --
+  // closed between the two: every edge of the top that no other face of it shares
+  for (const [a, b, c] of faces(sets[1])) m.tri(a, c, b);
+  const below = new Map([...sets[0].E.map((v, i) => [v, sets[1].E[i]]), ...sets[0].G.map((v, i) => [v, sets[1].G[i]])]);
+  const edges = new Set(top.flatMap(([a, b, c]) => [`${a},${b}`, `${b},${c}`, `${c},${a}`]));
+  for (const [a, b, c] of top) for (const [u, v] of [[a, b], [b, c], [c, a]]) {
+    if (!edges.has(`${v},${u}`)) m.quad(v, u, below.get(u), below.get(v));
+  }
+  return { m, ridge: yR };
+}
+
 // A PRISM: the outline carried from y0 up to y1, closed -- a plinth, a platform, a mass, a tower's core.
 // Its top and bottom are fanned from the middle (the outlines are convex).
 // `y1` may be a function of (x, z): a top that is not level (a prism's `slope`), its sides cut off under it
@@ -1400,6 +1492,26 @@ export function flyerMesh(m, { span, low, high, top0, top1, width, per90 = 4 }) 
   return extrude(face, (x, y, side) => [x, y, width / 2 - side * width], m);
 }
 
+// A BEAM swept up at its ends: `length` along x, centred, `height` deep, `depth` across z -- a torii's kasagi, a ridge
+// beam with its ends turned up. Its soffit rises from 0 at the middle by `sori` at `reach` from it (the tips, unless
+// said) as |x / reach| to the `power`; its back follows `height` above. Two beams of one `sori` and `reach` lie one on
+// the other however long each is: the torii's shimaki under its kasagi. `taper`: the soffit is that much shorter at
+// each end than the back, the tips cut on the slant. Drawn as its ELEVATION (one face in x-y, ear-clipped) carried
+// across its depth.
+export function beamMesh(m, { length, height, depth, sori = 0, power = 2, reach = length / 2, taper = 0, n = 8 }) {
+  const h = length / 2, k = sori ? Math.max(2, n) : 1;
+  const lift = (x) => sori * Math.pow(Math.abs(x) / reach, power);
+  const lo = [], hi = [];
+  for (let i = 0; i <= 2 * k; i++) {
+    const u = i / k - 1;                           // -1 .. 1 along the beam
+    lo.push([u * (h - taper), lift(u * h)]);
+    hi.push([u * h, lift(u * h) + height]);
+  }
+  const pts = [...lo, ...hi.reverse()];
+  const face = closeFace(pts, earClip(pts, pts.map((_, i) => i)));
+  return extrude(face, (x, y, side) => [x, y, depth / 2 - side * depth], m);
+}
+
 // A BOX, closed: plinths, podiums, the courses of a stylobate, an entablature's straight run.
 export function box(m, x0, x1, y0, y1, z0, z1) {
   const c = [[x0, z0], [x1, z0], [x1, z1], [x0, z1]];
@@ -1489,10 +1601,25 @@ export function chamferLevels(levels, levels0, c) {
 // side (a corner, on two sides, goes out diagonally). The hips then curve up at their feet, the way a Chinese roof's
 // do. Every level has the same number of points, so the stack still closes exactly; the soffit is fanned from the
 // middle of the eave and a last level with an area gets a lid.
-export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 0, flare = 0, reach, perSide = 6 } = {}) {
-  const y0 = levels[0].y, H = levels[levels.length - 1].y - y0;
+// `ring`: a SKIRT (the pent form): no soffit across the whole plan and no cap on top, but the soffit from the eave in to the
+// footprint of the storey above at the eave's own level and a face up that footprint to the top -- hollow where the storey
+// stands, so its rooms are not filled with roof
+// THE CURVE'S RISE: how far up a slope bent from `lo` (at the eave) to `hi` (at the ridge) has come at `t` of its way
+// across, as a share of its whole rise (0 at the eave, 1 at the ridge): the jujia profile, sagging under the straight line.
+export const curveRise = (lo, hi, t) => (lo * t + (hi - lo) * t * t / 2) / ((lo + hi) / 2);
+// HOW FAR A CURVED ROOF MUST BE LIFTED TO REST ON ITS WALL: its slope sags under the straight line from eave to ridge,
+// so where it passes over the wall's line -- `rest`, the height of the wall top in the levels' frame, which the eave
+// hangs below by the overhang -- it is that much lower than the straight one, and the wall's top edge would come up
+// through it. Lifted by the sag there, the curve passes over the wall top and the roof sits on it.
+export function restLift(levels, rest, lo, hi) {
+  const y0 = levels[0].y, H = levels[levels.length - 1].y - y0, t = (rest - y0) / H;
+  return H > 0 && t > 0 && t < 1 ? H * (t - curveRise(lo, hi, t)) : 0;
+}
+// `lift`: the whole roof raised that far (restLift).
+export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 0, flare = 0, reach, perSide = 6, ring = false, lift = 0 } = {}) {
+  const y0 = levels[0].y + lift, H = levels[levels.length - 1].y - levels[0].y;
   if (!(H > 0)) throw new Error("a curved roof needs a form that rises");
-  const F = (t) => (lo * t + (hi - lo) * t * t / 2) / ((lo + hi) / 2);
+  const F = (t) => curveRise(lo, hi, t);
   const lv = [levels[0]];
   for (let i = 0; i + 1 < levels.length; i++) {
     const A = levels[i], B = levels[i + 1], k = Math.max(1, Math.round(steps * (B.y - A.y) / H));
@@ -1504,8 +1631,10 @@ export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 
   const E = levels[0], S = Math.max(1, Math.round(perSide));
   const R = reach ?? .35 * Math.min(E.x1 - E.x0, E.z1 - E.z0);
   const outN = [[0, -1], [1, 0], [0, 1], [-1, 0]];               // each side's outward normal, in the ring's order
+  let last = [];                                                   // (the top ring's points, x and z)
   const rings = lv.map((L) => {
-    const t = (L.y - y0) / H, w = (1 - t) ** 2, y = y0 + H * F(t);
+    const t = (L.y - levels[0].y) / H, w = (1 - t) ** 2, y = y0 + H * F(t);
+    last = [];
     const C = [[L.x0, L.z0], [L.x1, L.z0], [L.x1, L.z1], [L.x0, L.z1]];
     const pts = [];
     for (let s = 0; s < 4; s++) {
@@ -1516,7 +1645,7 @@ export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 
         const push = flare * w * e;
         x += outN[s][0] * push; z += outN[s][1] * push;
         if (q === 0) { const p = outN[(s + 3) % 4]; x += p[0] * flare * w; z += p[1] * flare * w; }   // (a corner is on the side before, too)
-        pts.push(m.vert(x, y + upturn * w * e, z));
+        pts.push(m.vert(x, y + upturn * w * e, z)); last.push([x, z]);
       }
     }
     return pts;
@@ -1527,10 +1656,20 @@ export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 
     m.quad(a[k2], a[k], b[k], b[k2]);                                  // outward, as roofMesh winds them
   }
   const lo0 = rings[0], top = rings[rings.length - 1], T = lv[lv.length - 1];
+  if (ring) {
+    // (the footprint's ring at the eave's level, point for point under the top ring -- the flare is nothing up there)
+    const foot = last.map(([x, z]) => m.vert(x, y0, z));
+    for (let k = 0; k < N; k++) {
+      const k2 = (k + 1) % N;
+      m.quad(lo0[k], lo0[k2], foot[k2], foot[k]);                     // the soffit, facing down
+      m.quad(foot[k], foot[k2], top[k2], top[k]);                      // the face up the footprint, facing in
+    }
+    return m;
+  }
   const c0 = m.vert((E.x0 + E.x1) / 2, y0, (E.z0 + E.z1) / 2);
   for (let k = 0; k < N; k++) m.tri(c0, lo0[k], lo0[(k + 1) % N]);   // the soffit, facing down
   if ((T.x1 - T.x0) * (T.z1 - T.z0) > 1e-9) {
-    const c1 = m.vert((T.x0 + T.x1) / 2, T.y, (T.z0 + T.z1) / 2);
+    const c1 = m.vert((T.x0 + T.x1) / 2, T.y + lift, (T.z0 + T.z1) / 2);
     for (let k = 0; k < N; k++) m.tri(c1, top[(k + 1) % N], top[k]);
   }
   return m;
@@ -1548,7 +1687,12 @@ export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 
 //   jerkinhead  a gable whose top `clip` of the height is hipped back (the clipped gable, the Krueppelwalm)
 //   gablet      a hip to `hipH` of the height with a small gable over it (the Dutch gable)
 //   saltbox     a gable with its ridge `ridge` of the way across: a short slope and a long one
-export function roofLevels(form, { a, b, pitch = 35, thickness = .3, lowerPitch = 70, breakH, clip = .3, hipH = .6, ridge = .35 }) {
+//   pent        a SKIRT: four slopes from the eave up to the wall of the storey above, `top` [w, l] its footprint (a Japanese
+//               keep's hisashi, a pagoda's eaves, the lean-to round a tower) -- rising at `pitch` across x, the ends as
+//               they must; curvedRoof builds it as a ring, hollow where that storey stands
+//   kara        the CUSPED GABLE (kara-hafu): a bow over the middle that flows out level at the eaves -- the section a
+//               smoothstep, `pitch` its steepest; the ends vertical, as a gable's
+export function roofLevels(form, { a, b, pitch = 35, thickness = .3, lowerPitch = 70, breakH, clip = .3, hipH = .6, ridge = .35, top, steps = 8 }) {
   const T = Math.tan(pitch * Math.PI / 180), R = (x0, x1, z0, z1, y) => ({ x0, x1, z0, z1, y });
   const full = R(-a, a, -b, b, 0);
   const hipTo = (L, y0) => {                            // a hip over a level: all four sides at the main pitch
@@ -1577,13 +1721,22 @@ export function roofLevels(form, { a, b, pitch = 35, thickness = .3, lowerPitch 
       if (rest >= b) throw new Error("the jerkinhead's clip is longer than the roof");
       return [full, R(-rest, rest, -b, b, yc), R(0, 0, -b + rest, b - rest, H)];
     }
+    case "pent": {
+      const [ia, ib] = (top ?? []).map((v) => v / 2);
+      if (!(ia > 0 && ib > 0 && ia < a && ib < b)) throw new Error("a pent roof's `top` [w, l] is the storey above: inside its own plan");
+      return [full, R(-ia, ia, -ib, ib, (a - ia) * T)];
+    }
+    case "kara": {
+      const H = a * T / 1.5, n = Math.max(3, Math.round(steps));     // (a smoothstep's steepest is 1.5 times its mean)
+      return Array.from({ length: n + 1 }, (_, j) => { const u = 1 - j / n; return R(-a * u, a * u, -b, b, H * (1 - u * u * (3 - 2 * u))); });
+    }
     case "gablet": {
       const H = a * T, y1 = H * Math.max(.02, Math.min(.98, hipH)), i = y1 / T;
       if (i >= b) throw new Error("the gablet's hip is longer than the roof");
       return [full, R(-a + i, a - i, -b + i, b - i, y1), R(0, 0, -b + i, b - i, H)];
     }
   }
-  throw new Error(`roof form "${form}" is not one of flat, shed, gable, hip, pyramid, mansard, gambrel, jerkinhead, gablet, saltbox`);
+  throw new Error(`roof form "${form}" is not one of flat, shed, gable, hip, pyramid, mansard, gambrel, jerkinhead, gablet, saltbox, pent, kara`);
 }
 
 // THE OVERHANG: the eave carried out past the wall, down its own slope. `y` 0 is where the roof meets the wall

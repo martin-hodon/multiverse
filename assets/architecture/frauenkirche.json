@@ -24,8 +24,10 @@
     "galleries",
     "gallery stair",
     "choir",
+    "choir space",
     "choir roof",
     "dome piers",
+    "crossing",
     "vaults",
     "roof",
     "drum",
@@ -252,6 +254,7 @@
           0
         ]
       ],
+      "interior": true,
       "_about": "the church's walls on its chamfered square, each face flank, portal bay and flank, in two tiers: arched windows below, the tall arched windows of the galleries above, a portal in the middle of each side"
     },
     "galleries": {
@@ -327,6 +330,27 @@
       ],
       "_about": "the choir's apse to the east, a half ring of tall windows"
     },
+    "choir space": {
+      "type": "interior",
+      "plan": {
+        "sides": 24,
+        "radius": 8.8
+      },
+      "arc": [
+        0,
+        180
+      ],
+      "height": "wallH - 3",
+      "at": [
+        [
+          "W / 2 - 1.6",
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the choir's space, the half round east of its arch on the middle of the ring, up to its half dome"
+    },
     "choir roof": {
       "type": "dome",
       "sweep": 0.5,
@@ -371,6 +395,23 @@
         ]
       ],
       "_about": "the ring of piers and arches under the drum: what carries the dome, down to the floor"
+    },
+    "crossing": {
+      "type": "interior",
+      "plan": {
+        "sides": 16,
+        "radius": 11.486
+      },
+      "height": "wallH + 2 + drumH",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the space under the drum and the bell, up through the vaults' well to the drum's top"
     },
     "vaults": {
       "type": "prism",

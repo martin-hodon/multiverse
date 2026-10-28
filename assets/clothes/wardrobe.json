@@ -1491,7 +1491,7 @@
   }
  },
  "styles": {
-  "_about": "OTHER TIMES AND PLACES (makePerson({ style }), drawOutfit): the same lists as `people`, by kind, for a style of dress -- the Greeks of the classical age, the Romans, the Han and Tang Chinese, the Egyptians of the New Kingdom (linen kilts and sheaths: their jewelry -- items/jewelry/wear.json -- is the broad collar), the Gothic fashion of the fourteenth and fifteenth centuries, medieval India (the sari and the choli, the dhoti and the turban), the Maya (the huipil over the wrap skirt, the loincloth) and old Russia (the sarafan over the white shirt, the belted shirt, the kaftan and the fur hat). A landmark's people wear its own (architecture.js DRESS); a share of the wanderers every one of them.",
+  "_about": "OTHER TIMES AND PLACES (makePerson({ style }), drawOutfit): the same lists as `people`, by kind, for a style of dress -- the Greeks of the classical age, the Romans, the Han and Tang Chinese, the Egyptians of the New Kingdom (linen kilts and sheaths: their jewelry -- items/jewelry/wear.json -- is the broad collar), the Gothic fashion of the fourteenth and fifteenth centuries, medieval India (the sari and the choli, the dhoti and the turban), the Maya (the huipil over the wrap skirt, the loincloth) old Russia (the sarafan over the white shirt, the belted shirt, the kaftan and the fur hat) and Edo Japan (the kosode with its white collar, belted with the obi; the samurai's hakama; the commoner's kasa). A landmark's people wear its own (architecture.js DRESS); a share of the wanderers every one of them.",
   "greek": {
    "man": [
     {
@@ -6410,6 +6410,233 @@
      "plaits"
     ]
    }
+  },
+  "japanese": {
+   "man": [
+    {
+     "name": "samurai",
+     "weight": 2,
+     "wear": [
+      {
+       "garment": "shenyi",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:indigo",
+         "plain:silk-black",
+         "plain:wool-grey",
+         "damask:silk-azure",
+         "plain:silk-plum"
+        ],
+        "trim": [
+         "plain:silk-white",
+         "plain:silk-black"
+        ]
+       },
+       "params": {
+        "length": "knee - 0.02",
+        "hem": 0.03
+       },
+       "_about": "the kosode, its collar white"
+      },
+      {
+       "garment": "trousers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "stripes:stripe-woad",
+         "plain:wool-grey",
+         "plain:silk-black",
+         "twill:wool-grey"
+        ]
+       },
+       "_about": "the hakama"
+      },
+      {
+       "garment": "sash",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:silk-black",
+         "plain:silk-white",
+         "plain:indigo"
+        ]
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 1
+      }
+     ]
+    },
+    {
+     "name": "commoner",
+     "weight": 3,
+     "wear": [
+      {
+       "garment": "shenyi",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:indigo",
+         "plain:woad",
+         "plain:undyed",
+         "plain:wool-grey",
+         "plain:russet",
+         "linen:linen",
+         "twill:woad"
+        ],
+        "trim": [
+         "plain:indigo",
+         "plain:undyed"
+        ]
+       },
+       "params": {
+        "length": "knee - 0.06",
+        "hem": 0.03
+       }
+      },
+      {
+       "garment": "hose",
+       "p": 0.7,
+       "fabrics": {
+        "main": [
+         "plain:indigo",
+         "plain:undyed",
+         "plain:woad"
+        ]
+       }
+      },
+      {
+       "garment": "sash",
+       "p": 0.9,
+       "fabrics": {
+        "main": [
+         "plain:indigo",
+         "plain:russet",
+         "plain:undyed"
+        ]
+       }
+      },
+      {
+       "garment": "straw-hat",
+       "p": 0.5,
+       "_about": "the kasa"
+      },
+      {
+       "garment": "sandals",
+       "p": 1
+      }
+     ],
+     "work": true
+    }
+   ],
+   "woman": [
+    {
+     "name": "kosode",
+     "weight": 3,
+     "wear": [
+      {
+       "garment": "shenyi",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:silk-azure",
+         "plain:silk-plum",
+         "plain:silk-red",
+         "plain:silk-jade",
+         "plain:silk-white",
+         "damask:silk-plum",
+         "damask:silk-azure",
+         "clouds:silk-azure"
+        ],
+        "trim": [
+         "plain:silk-white",
+         "plain:silk-red",
+         "plain:silk-black"
+        ]
+       },
+       "params": {
+        "length": "floor - 0.03"
+       },
+       "_about": "the kosode to the floor"
+      },
+      {
+       "garment": "sash",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "damask:silk-red",
+         "plain:silk-white",
+         "plain:gold",
+         "damask:silk-azure",
+         "plain:silk-black"
+        ]
+       },
+       "_about": "the obi"
+      },
+      {
+       "garment": "sandals",
+       "p": 1
+      }
+     ]
+    },
+    {
+     "name": "commoner",
+     "weight": 2,
+     "wear": [
+      {
+       "garment": "shenyi",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:indigo",
+         "plain:woad",
+         "plain:undyed",
+         "plain:wool-grey",
+         "plain:russet",
+         "linen:linen",
+         "twill:woad"
+        ],
+        "trim": [
+         "plain:indigo",
+         "plain:undyed",
+         "plain:russet"
+        ]
+       },
+       "params": {
+        "length": "ankle - 0.02"
+       }
+      },
+      {
+       "garment": "sash",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:indigo",
+         "plain:russet",
+         "plain:madder"
+        ]
+       }
+      },
+      {
+       "garment": "apron",
+       "p": 0.3,
+       "fabrics": {
+        "main": [
+         "plain:indigo",
+         "plain:undyed"
+        ]
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 1
+      }
+     ],
+     "work": true
+    }
+   ]
   }
  }
 }

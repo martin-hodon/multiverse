@@ -275,3 +275,49 @@ export function createHangingLamps(scene, points) {
   if (out.length) scene.add(blockMesh(blocks, "hanging lamps"));
   return out;
 }
+
+// FIRELIGHT: a hearth's or a candle's flame lights what is round it -- a halo about the flame, facing the eye, and a pool
+// of warm light on the floor before it -- both breathing with the flame, in the glow scene (drawn after the darkening,
+// so they shine as the lamps do). The pool is laid where the fire's light can fall: its middle and its size are given
+// (index.html measures the room round the hearth -- the pool must not reach through the wall behind a fireplace and
+// glow on the ground outside); a candle has its halo only.
+//   const fl = createFireGlow(scene, [{ x, y, z, h, halo, pool: [x, y, z, r] | null }])   // h: the flame's height
+//   fl.update(t, level)   level: the hour's darkness 0..1
+export const FIRELIGHT = { colour: [1.0, .55, .2], halo: .7, pool: .5 };
+export function createFireGlow(scene, fires) {
+  if (!fires.length) return { update() {} };
+  const quads = fires.flatMap((f, i) => [[f, i, 0], ...(f.pool ? [[f, i, 1]] : [])]), N = quads.length;
+  const at = new Float32Array(N * 16), cr = new Float32Array(N * 8), kd = new Float32Array(N * 4), idx = new Uint32Array(N * 6);
+  quads.forEach(([f, i, k], q) => {
+    // (the halo: its middle a little up the flame, its radius; the pool: its middle on the floor, its radius)
+    const a = k ? f.pool : [f.x, f.y + f.h * .4, f.z, f.halo];
+    for (let v = 0; v < 4; v++) { at.set(a, (q * 4 + v) * 4); cr.set([v & 1 ? .5 : -.5, v & 2 ? .5 : -.5], (q * 4 + v) * 2); kd[q * 4 + v] = k + (i * .618 % 1) * .5; }
+    idx.set([q * 4, q * 4 + 1, q * 4 + 3, q * 4, q * 4 + 3, q * 4 + 2], q * 6);
+  });
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(N * 12), 3));
+  g.setAttribute("fireAt", new THREE.BufferAttribute(at, 4));
+  g.setAttribute("corner", new THREE.BufferAttribute(cr, 2));
+  g.setAttribute("uv", new THREE.BufferAttribute(cr.map((v) => v + .5), 2));
+  g.setAttribute("kind", new THREE.BufferAttribute(kd, 1));   // (0 a halo, 1 a pool; its fraction the fire's phase)
+  g.setIndex(new THREE.BufferAttribute(idx, 1));
+  const U = { t: uniform(0), level: uniform(1), fire: uniform(new THREE.Color(...FIRELIGHT.colour)) };
+  const A = attribute("fireAt", "vec4"), C = attribute("corner", "vec2"), K = attribute("kind", "float");
+  const isPool = K.greaterThanEqual(1), ph = fract(K).mul(80);
+  const halo = cameraProjectionMatrix.mul(cameraViewMatrix.mul(vec4(A.xyz, 1)).add(vec4(C.mul(A.w.mul(2)), 0, 0)));
+  const pool = cameraProjectionMatrix.mul(cameraViewMatrix.mul(vec4(A.x.add(C.x.mul(A.w.mul(2))), A.y.add(.03), A.z.add(C.y.mul(A.w.mul(2))), 1)));
+  const mat = new THREE.MeshBasicNodeMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, side: THREE.DoubleSide });
+  mat.vertexNode = isPool.select(pool, halo);
+  // (a fire flickers faster and deeper than a lamp)
+  const vF = varying(sin(U.t.mul(11.3).add(ph)).mul(sin(U.t.mul(7.1).add(ph.mul(1.3)))).mul(.14).add(sin(U.t.mul(3.3).add(ph)).mul(.07)).add(.9));
+  const vP = varying(isPool.select(float(1), float(0)));
+  const d = uv().sub(.5).mul(2).length();
+  const h = smoothstep(.2, .0, d).mul(.5).add(smoothstep(1, .0, d).pow(2.2).mul(FIRELIGHT.halo));
+  const pl = smoothstep(1, .0, d).pow(1.6).mul(FIRELIGHT.pool);
+  mat.colorNode = U.fire.mul(mix(h, pl, vP)).mul(vF).mul(U.level.sub(.25).mul(2.5).clamp(0, 1));
+  mat.opacityNode = float(1);
+  const mesh = new THREE.Mesh(g, mat);
+  mesh.frustumCulled = false; mesh.name = "firelight"; mesh.renderOrder = 4;
+  scene.add(mesh);
+  return { update(t, level) { U.t.value = t; U.level.value = level; } };
+}

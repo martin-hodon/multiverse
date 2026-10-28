@@ -137,6 +137,23 @@ add("buttresses", {"type": "box", "width": XO + T + 2.5 - XA, "length": PIER, "h
 add("buttress feet", {"type": "box", "width": 2.5, "length": PIER, "height": ROOF + SLAB,
                       "at": [[sx * (XO + T + 1.25), 0, sz * PC, 0] for sx in (-1, 1) for sz in (-1, 1)]})
 
+# ---- the interiors (finish.js reads which side of every surface is in from these): the church within the outer walls'
+# middle, the narthex with it, to the aisle roofs -- the east wall's middle stepped out to its face where the apse's arch
+# goes through it, so the arch's jambs are the church's to the apse's own (`apse` brings it); and over the roofs the
+# nave alone: the square between the tympana and under the great arches up to the dome's ring, the semidomes' half
+# rings of windows up to their springing -- a box over a half ring would take in the semidome's back (the drum's space
+# is `drum-dome`'s, the vaults' undersides their own)
+X1, Z1, ZW = XO + T / 2, ZO + T / 2, -(ZO + T + ND + T / 2)
+add("church interior", {"type": "interior", "plan": {"points": [[-X1, ZW], [X1, ZW], [X1, Z1], [AR + AT / 2, Z1], [AR + AT / 2, ZO + T],
+                                                                [-(AR + AT / 2), ZO + T], [-(AR + AT / 2), Z1], [-X1, Z1]]},
+                        "height": ROOF, "at": [[0, 0, 0, 0]],
+                        "_about": "the church's space: aisles and galleries, the nave under them, the narthex, up to the aisle roofs"})
+add("nave interior", {"type": "interior", "plan": {"points": [[PC, -R], [PC, R], [R, R], [R, XA], [-R, XA], [-R, R], [-PC, R], [-PC, -R], [-R, -R], [-R, -XA], [R, -XA], [R, -R]]},
+                      "height": RING, "at": [[0, 0, 0, 0]],
+                      "_about": "the nave's space over the aisle roofs: the square between the tympana and under the great arches, up to the dome's ring"})
+add("exedra interior", {"type": "interior", "plan": {"sides": 20, "radius": R + DOME_T / 2}, "arc": [-90, 90], "height": SPRING, "at": ENDS,
+                        "_about": "...and each semidome's half ring of windows, up to the semidome's springing"})
+
 # ---- the Ottoman minarets
 add("minarets", {"type": "component", "use": "components/minaret", "params": {"h": 48, "r": 2.1, "balconies": 2},
                  "build": ["plinth", "shaft", "corbelling", "balcony", "parapet", "pencil cap"],

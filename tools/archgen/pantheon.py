@@ -34,6 +34,10 @@ wallC = {"plinth": False, "strings": {"at": [12.4], "h": 0.6, "out": 0.5, "profi
 add("outer wall", {**old["outer wall"], "courses": wallC})
 ent = old["entrance"]; ent["opening"] = {**ent["opening"], "sill": "floor", "springing": "floor + 7.5"}; ent["glass"] = False; add("entrance", {**ent, "courses": wallC})
 add("drum", {**old["drum"], "courses": {"plinth": False, "strings": False, "cornice": {"h": 0.8, "out": 0.6}}})
+# THE ROOM: the rotunda's space, on the middle of its wall (the exedrae sunk in the wall's inner half) from the ground
+# up to the springing -- the dome over it is inside by its own shape
+add("rotunda", {"type": "interior", "plan": {"sides": 48, "radius": "R + wallT / 2"}, "height": "springH", "at": [[0, 0, 0, 0]],
+                "_about": "the rotunda's space, on the middle of its wall, up to the dome's springing"})
 # ---- interior order
 bayA = 2 * math.pi / 8
 colAt = []
@@ -70,6 +74,10 @@ add("portico steps", {"type": "crepidoma", "width": "portW", "length": "portD", 
 blk = old["intermediate block"]; blk["openings"][0]["sill"] = "floor"; blk["openings"][0]["springing"] = "floor + 7.5"; blk["openings"][0]["glass"] = False; add("intermediate block", blk)
 add("passage floor", {"type": "box", "width": 4.4, "length": "portZ0 - R - wallT + 9.2", "height": "floor",
                       "at": [[0, 0, "(portZ0 + R + wallT - 9.2) / 2 + 0.2", 0]], "_about": "the floor through the door, level with the portico's and the rotunda's"})
+# (the passage from the bronze doors, in the intermediate block's front half, through the rotunda's wall: the
+#  doorway is the room's, its reveals parting from the portico's at the block's middle)
+add("entrance passage", {"type": "interior", "plan": {"rect": [4.4, "portZ0 - 4.5 - R - wallT / 2"]}, "height": "floor + 7.5",
+                         "at": [[0, 0, "(portZ0 - 4.5 + R + wallT / 2) / 2", 0]], "_about": "the passage through the door into the rotunda, its doorway from the block's middle in"})
 add("front columns", {**old["front columns"], "order": "corinthian", "at": [[0, "floor", "portZ0 + portD - 1.3", 0]]})
 ic = old["inner columns"]; add("inner columns", {**ic, "order": "corinthian", "at": [[a[0], "floor", a[2], a[3]] for a in ic["at"]]})
 add("portico ceiling", {**old["portico ceiling"], "at": [[0, "floor + colH", "portZ0 + portD / 2", 0]],

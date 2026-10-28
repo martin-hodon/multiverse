@@ -1,6 +1,6 @@
 {
   "name": "Crenellation",
-  "_about": "A CRENELLATED PARAPET: a low wall `L` long, `t` thick and `h` tall, centred on its placement along x, and on it a row of MERLONS every `step` metres, each stepped (a smaller block on a larger -- the Omani and Persian kind); build it without \"merlon tops\" for plain square merlons, or without \"parapet\" to set the merlons straight on a wall's head.",
+  "_about": "A CRENELLATED PARAPET: a low wall `L` long, `t` thick and `h` tall, centred on its placement along x, and on it a row of MERLONS every `step` metres. `merlon` says their heads: \"stepped\" (a smaller block on a larger -- the Omani and Persian kind), \"forked\" (the swallowtail: a V cut down into each head `fork` deep, its two horns rising to the merlon's full height -- the Ghibelline merlon of Verona and Milan, and the Moscow Kremlin's), or \"square\"; build it without \"parapet\" to set the merlons straight on a wall's head.",
   "params": {
     "detail": 4,
     "L": 20,
@@ -9,13 +9,19 @@
     "step": 2.0,
     "mw": "step * 0.45",
     "mh": 0.8,
+    "merlon": "stepped",
+    "_merlon": "the merlons' heads: stepped, forked or square",
+    "fork": "mh * 0.3",
+    "_fork": "a forked merlon's V: how deep it is cut, from the horns' tips",
     "n": "max(1, floor(L / step))",
     "_n": "how many merlons: as many whole steps as the parapet holds, the row centred on it"
   },
   "build": [
     "parapet",
     "merlons",
-    "merlon tops"
+    "merlon bodies",
+    "merlon tops",
+    "merlon forks"
   ],
   "parts": {
     "parapet": {
@@ -54,7 +60,40 @@
           0
         ]
       },
-      "_about": "the merlons, centred on the parapet"
+      "_about": "the merlons, centred on the parapet",
+      "when": {
+        "merlon": [
+          "stepped",
+          "square"
+        ]
+      }
+    },
+    "merlon bodies": {
+      "type": "box",
+      "width": "mw",
+      "length": "t",
+      "height": "mh - fork",
+      "at": [
+        [
+          "0 - (n - 1) * step / 2",
+          "h",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "step",
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "a forked merlon's body, up to the bottom of its V",
+      "when": {
+        "merlon": "forked"
+      }
     },
     "merlon tops": {
       "type": "box",
@@ -81,7 +120,54 @@
       "standsOn": [
         "merlons"
       ],
-      "_about": "the step on each merlon"
+      "_about": "the step on each merlon",
+      "when": {
+        "merlon": "stepped"
+      }
+    },
+    "merlon forks": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          "mw * 0.5",
+          "t"
+        ]
+      },
+      "height": "fork * 0.55",
+      "slope": [
+        "fork * 0.9 / (mw * 0.5)",
+        0
+      ],
+      "at": [
+        [
+          "0 - (n - 1) * step / 2 + mw * 0.25",
+          "h + mh - fork",
+          0,
+          0
+        ],
+        [
+          "0 - (n - 1) * step / 2 - mw * 0.25",
+          "h + mh - fork",
+          0,
+          3.14159265
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "step",
+          0,
+          0,
+          0
+        ]
+      },
+      "standsOn": [
+        "merlon bodies"
+      ],
+      "when": {
+        "merlon": "forked"
+      },
+      "_about": "a forked merlon's two horns: each half the merlon, its top sloping up from the V's bottom at the middle to the merlon's full height at its edge"
     }
   }
 }

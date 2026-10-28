@@ -238,7 +238,9 @@ TOWER = {
                 "standsOn": ["belvedere"], "_about": "the ceiling over the belvedere and the cornice the cone stands on"},
     "cap": {"type": "dome", "sides": "n", "radius": "R + 0.2", "thickness": 0, "head": {"profile": "trigonal", "rise": "capRise"},
             "at": [[0, "H + stageH + 0.35", 0, 0]], "standsOn": ["cornice"]},
-    "finial": {"type": "column", "radius": 0.12, "height": "finial", "sides": 6, "at": [[0, 0, 0, 0]], "atop": "cap", "standsOn": ["cap"]}
+    "finial": {"type": "column", "radius": 0.12, "height": "finial", "sides": 6, "at": [[0, 0, 0, 0]], "atop": "cap", "standsOn": ["cap"]},
+    "interior": {"type": "interior", "of": ["shaft", "shaft door"], "plan": {"sides": "n", "radius": "R - wall / 2"}, "height": "H",
+                 "_about": "the shaft's well, up to the belvedere (open: the air's)"}
   }
 }
 open(os.path.join(ROOT, "assets/architecture/components/round-stair-tower.json"), "w").write(json.dumps(TOWER, indent=2) + "\n")

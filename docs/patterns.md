@@ -8,6 +8,7 @@ glazed tube tiles -- is written as MATHEMATICS and drawn into a texture when it 
     arch/finish.js              which surface of a building is what: rules, inside and out, texture coordinates
     assets/finishes/*.json      one building's finish: its rules
     architecture.js             the finish material (the tile, lit and snowed on like every building material)
+    tile_worker.js              tiles drawn in workers while the map grows (archmat.js drawTilesAhead)
     assets.html                 a family shown as a sheet of swatches in its palettes; a building in its finish
 
 ## Why this way
@@ -100,39 +101,36 @@ to a rectangle (`fit`: its W and H); or a plain stone (`color`, `accent`, `pat`)
 **Surface** is read from the triangle -- up-facing a floor, down-facing a ceiling, else a wall; a roof's or a dome's
 outside its roof. A ceiling no rule takes (a soffit under an arch, a window's head) is tried again as its wall.
 
-**Side is decided by the FACE, not the triangle** (2026-09-27, after triangles of one wall came out in two finishes).
-A part's triangles are joined into faces across every edge where the surface bends by less than 25 degrees
-(`facesOf`: a wall's face with its holes, a dome's skin, a column's shaft, a roof's slope), and each face -- in each copy
-of the part -- is decided in level BANDS about 3m tall (`bandsOf`), at points at the band's mid-height on its largest
-triangles and on those turned most unlike them (round a column, not two facets side by side). A face is cut only where
-two bands disagree -- a tower's face toward the church it stands against, inside below the church's roof and outside
-above it -- so a finish changes on a level line across an element, never along a triangle's edge. A point that is
-HIDDEN is not asked (`tell.hidden`): stone standing before it within 60cm (a column or a pier against a wall), or the
-point buried in another part's solid (a portal's corner shaft standing half into its face -- solid.js `insideOf`, an
-odd count of crossings over it, asked only when stone lies ahead of it within 8m). Asked there, the air would be
-the inside of the column, and a facade would come out inside.
-  At each point: **sky straight over the air before it** (a wall asked from 40cm off, clear of its mouldings; a floor from
-where one standing on it would see, 1.2m up, over a parapet) is outside at once -- a floor must also see it steeply to
-the side (not only through an oculus), a roof any steep way. Otherwise the **openness** of the air it faces: sixteen
-directions spread evenly over the half of space in front (level and rising for a wall, level all round for a soffit,
-asked 1.5m under it), outside if a sixth or more escape the building. A room or a nave is closed but for its doors (the
-Hall of Prayer's four: a tenth, from its middle); a portico's back wall, an arch's soffit, a drum behind its peristyle
-are covered but open sideways. A flat face goes the way most of its area goes; a face that wraps round (a column) is
-outside if a quarter of it looks out. **A reveal is its wall's**: the jamb or soffit of an opening measures as closed
-in, so a face found inside takes the side of a larger face it meets along a crease, at its own height, if that one is
-outside -- an outside window's reveals follow the facade, an opening between two rooms stays inside.
-  The rays walk 2m cubes (solid.js `rayIndex`); points are cached every 3m (by facing too) and an answer is reused only where the two probes see each other -- the same air (2026-10-03: a windmill bay outside took the answer of the grain bin inside, 2m off, facing alike); a face is asked only when a rule needs its
-side (a finish whose inside and outside walls look alike never asks).
+**Side is what the building SAYS** (2026-10-28; before, it was measured by rays -- sky over a face, the openness of the
+air before it -- slow, and wrong wherever a ray slipped through a crack or a column hid a wall). A building says where
+its INSIDE is: its INTERIORS, volumes of air on the plan -- a polygon (with holes) standing from `y0` to `y1` -- carried
+as markers (`kind: "marker"`, `role: "interior"`) through every placement, so a component that has one has it in every
+copy. A face is in when the air just before it (30cm off along its normal) is in an interior; nothing is stored per face.
+  WHERE INTERIORS COME FROM:
+- the `interior` flag on a plan part (`walls`, a tower's storeys, an `enclosure`): `true` is the part's own plan and
+  height, a number or expression a height of its own (to the vault's springing, into the roof). Given a `thickness`,
+  the plan is inset by half of it -- the interior runs on the walls' MIDDLE line, so an opening's reveal is split at
+  mid-wall, the outer half the facade's and the inner the room's. `range` and `tiered` storeys have it by default.
+- the `interior` part type: `plan` (or `radius` + `sides`, `arc` [from, to] for a sector -- an apse's half disc, its
+  centre included), `hole` (a court in the middle), `height`, `at`, and `of`: the parts it belongs to (built only
+  with one of them, when a single part is asked for).
+- the engines: `basilica` and `gothic` say their aisles' and nave's air (the nave up to its ridge, the aisles to their
+  eaves), `court` its ring of wings round the court.
+- the flags `inside` / `outside` on any part (or an element within a component): every face of it is that side, the
+  innermost flag winning -- buttresses, flyers and pinnacles are outside whatever air they stand in.
+  HOW A FACE IS TOLD, in order: a building with no interiors (or a pane of glass) is all out; a part's own `side`;
+trim (mouldings, cornices) out; a dome's or a vault's skin in where it faces down or toward its axis, out where it faces
+up and away; a roof's upward slopes out; else the probe. Pieces that would cross an interior's boundary are cut first
+on its planes -- its floor and top, and the upright plane of every edge of its plan and holes -- so a tower's face is
+in below the church roof and out above it, along a level line, never along a triangle's edge. A face is asked only when
+a rule needs its side (a finish whose inside and outside walls look alike never asks).
+  AUTHORING: the plan on the walls' middle line; the height to the vault's or the roof's springing (or into an
+enclosed roof space); where something stands beside a sloped roof (a tower over an aisle), cap the interior at the
+eave, so the tower's face above it is out. A portico, an open hall or a loggia under its roof is IN if it has an
+interior -- give it one when its plaster and plank floors are meant, leave it out when it is street.
+  Rays survive only in the checks (check.js: is a stair walkable, is something held) through solid.js `rayIndex`.
 
-A FLOOR is asked at up to eight points spread over its face, those with open air over them (not hidden under a wall,
-a column's foot, or the deck an abacus carries); a face with none is out of sight, and outside. Points that agree
-decide it; a floor that runs from a room out onto a terrace (a building's platform, or a floor too large to be one
-room) is asked piece by piece. A small up-facing face that is not a stair's (under 2 square metres, or a column's) is a
-LEDGE, finished as its wall.
-
-Large floors are cut on a 2m grid first -- a platform under a church and before its door is one plane, inside and out
--- and bands and regions cut what crosses their lines; a cut is made from the edge's own ends in one order, so the
-triangle on the other side of the edge is cut at the same point.
+A small up-facing face that is not a stair's (under 2 square metres, or a column's) is a LEDGE, finished as its wall.
 
 **Mapping**, in metres: `plan` (floors and ceilings: u east, v north), `face` (walls: along, up), `revolve` (domes,
 vaults, drums, columns: round the part's own axis, a whole number of tiles round so the rows meet, and up a dome's
@@ -146,6 +144,23 @@ Florence and the arena ask for theirs. `archMesh(name, { finish })` builds one m
 MATERIAL (the tile read at the vertex's `aUV`, lit and snowed on by the same WGSL as every building material --
 `SHADE_K`, `SNOW_ON`), a plain stone's in the building material with its colour in the vertices, the glass no rule took
 in the glass. Tiles are shared across rules and buildings (keyed by pattern, palette and params).
+
+Tiles are drawn while the map grows. The map is grown on the GPU before any building is built, and the page only waits
+on it then. So `archmat.js drawTilesAhead` gives the tiles of every finish the world will ask for to workers
+(`tile_worker.js`), one per core. That covers the landmark's finish and its furniture's materials, every `village/`
+finish and the windmill's (`architecture.js finishesAhead`), and every finish the town's style may use (`town.js
+townFinishes`, the style as its period changes it). The workers register the same library: families, glyphs and murals
+(`architecture.js PATTERN_LIBRARY`). Each posts back the tile's layer of the tile array, stretched and flipped as
+`tileLayer` makes it, byte for byte the same. The first finish that asks takes it like a cached tile; one not back yet
+is drawn on the page as before. At "buildings done" the ones not asked for are let go. On this machine (4 cores, Vulkan,
+2026-10-28) the workers drew 41-55 tiles in 4.5-6 s while the map grew for 6.5 s, which did not slow it. The buildings
+phase fell from 4.6 s to 2.0-2.9 s. Compare with `?tilesahead=0`. Pregen's tiles are not drawn again, and nothing is
+drawn ahead while the generator records or with `?tilearray=0`.
+
+A field's values (`cloud`, `grain`, `veins`, `speckle`) are the same in any colours. So `fieldImage` keeps the last eight,
+and the next tile with the same field in other colours only colours them. The items' paints are one brushing in some
+sixty colours. They were 4.8 s of a world's 6.6 s of item tiles; with the cache they take 0.4 s, and the pixels are
+identical.
 
 Cost, measured on this machine (the headless check): 0.1 s (a Greek temple) to 2-4 s (the Zwinger, 220k triangles,
 and the Berliner Dom); about 32 s for all thirty-one buildings (it varies by a third from run to run). A world builds

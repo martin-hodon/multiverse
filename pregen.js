@@ -3,7 +3,7 @@
 // Most of a world's startup is three things, every one of them a pure function of data that rarely changes
 // (measured, docs/pregen.md): the pattern TILES of the buildings' finishes and of the people's fabrics (a marble's
 // veins and a plaster's clouds are noise per texel), the finished building GEOMETRY (every surface cut and told
-// inside from outside by rays), and the walk's WALL FIELDS. `python3 build/pregen.py` builds them all once, in a
+// inside from outside by the building's interiors), and the walk's WALL FIELDS. `python3 build/pregen.py` builds them all once, in a
 // headless browser through the very same code, and writes them into pregen/; the game fetches the ones its world
 // needs and uses them instead of computing them.
 //

@@ -45,6 +45,14 @@ APH = 18.0                                 # the apse lower than the choir: its 
 add("apse", {"type": "component", "use": "components/apse",
              "params": {"R": AR, "T": T, "H": APH, "n": 16, "winW": 2.4, "winSill": 5.0, "winH": 8.0, "domeT": T},
              "at": [[0, 0, -A - CL, math.pi]], "_about": "the apse, lower than the choir: its half dome rises into the choir's end wall, not above it"})
+# the church's space (finish.js reads which side of every surface is in from it): the Latin cross on its outer walls'
+# middle, the crossing's walls and the arms' back to back inside it -- the great arches' jambs the church's on both
+# hands --, and at the choir's end out to its face, where the apse's own space begins (`apse`); up to the walls' heads,
+# where the low roofs stand on them (their roof spaces hidden behind the balustrades)
+I, NE, TE = A - T / 2, A + NL - T / 2, A + TL - T / 2
+add("church interior", {"type": "interior", "plan": {"points": [[I, NE], [-I, NE], [-I, I], [-TE, I], [-TE, -I], [-I, -I], [-I, -A - CL], [I, -A - CL],
+                                                                [I, -I], [TE, -I], [TE, I], [I, I]]},
+                        "height": AH, "at": [[0, 0, 0, 0]], "_about": "the church's space: the Latin cross of nave, transepts and choir round the crossing, up to the roofs"})
 add("nave roof", {"type": "roof", "form": "gable", "width": C, "length": NL, "pitch": 22, "overhang": 0.3, "at": [[0, AH, A + NL / 2, 0]],
                   "_about": "low roofs behind the parapets"})
 add("choir roof", {"type": "roof", "form": "gable", "width": C, "length": CL, "pitch": 22, "overhang": 0.3, "at": [[0, AH, -A - CL / 2, 0]]})
@@ -67,6 +75,8 @@ add("pendentives", {"type": "pendentives", "span": C - 2 * T, "springing": AH - 
 BASE = 7.5
 add("dome base", {"flatRoof": True, "type": "ring", "count": 32, "rOuter": 21.5, "rInner": A - T, "height": BASE, "y": AH, "turn": 0.5, "solid": True,
                   "place": [[0, 0, 0, 0]], "_about": "the round base the peristyle stands on, clear of the roofs"})
+add("dome well", {"type": "interior", "plan": {"sides": 32, "radius": A - T + 0.7}, "height": BASE, "at": [[0, AH, 0, 0]],
+                  "_about": "the church's space on up through the round base, from the pendentives' ring to the drum's (whose space is `drum-dome`'s)"})
 add("dome", comp("components/drum-dome", {"R": A - T, "dt": 1.4, "H": 22.0, "n": 32, "every": 2, "winW": 1.8, "winSill": 15.5, "winH": 4.0,
                                           "profile": "pointed", "spread": 0.35, "domeT": 1.2, "colN": 32, "colR": 0.75, "colH": 14.0, "pw": 3.4,
                                           "lanternR": 3.2, "lanternH": 14.0},
@@ -89,7 +99,7 @@ for sx, nm in ((1, "north"), (-1, "south")):
                                       {"openings": [{"at": 0, "width": 2.2, "sill": 3.0, "springing": 9.0, "head": {"profile": "semicircular"}}]}],
                             "faces": {"0": [{"h": 15, "openings": [{"at": 0, "width": 2.6, "sill": 0, "springing": 5.0, "head": {"profile": "semicircular"}}]},
                                             {"openings": [{"at": 0, "width": 2.2, "sill": 3.0, "springing": 9.0, "head": {"profile": "semicircular"}}]}]},
-                            "at": [[x, 0, z, 0]], **({"_about": "the west towers: a square stage to the roofs' height, a door in its front..."} if sx > 0 else {})})
+                            "interior": True, "at": [[x, 0, z, 0]], **({"_about": "the west towers: a square stage to the roofs' height, a door in its front..."} if sx > 0 else {})})
     add(f"{nm}west tower stair", comp("components/tower-stair", {"W": TWR - 3.0, "H": AH}, [[x, 0, z, 0 if sx < 0 else Q]],
                                       **({"_about": "...climbed by its stair to the floor at the top..."} if sx > 0 else {})))
     add(f"{nm}west belfry", comp("components/domed-tower", {"sides": 4, "R": TWR / 2 * 1.4142, "H": 14.0, "t": 1.2, "drumR": 4.2, "drumH": 7.0, "cap": "bell",

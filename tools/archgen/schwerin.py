@@ -50,6 +50,7 @@ add("gate storey", {"type": "enclosure", "plan": {"rect": [GS, GS]}, "thickness"
                               **{k: [{"h": H, "openings": [{"at": sgn * (WD / 2 - 0.9), "width": 1.6, "sill": 0, "springing": 2.4,
                                                             "head": {"profile": "semicircular"}}]} for _ in range(N)] + [{"openings": []}]
                                  for k, sgn in (("1", -1), ("3", 1))}},
+                    "interior": True,   # (its hall, the gateway through it up to the octagon: a space closed but for its arches)
                     "at": [[round(gx, 4), 0, round(gz, 4), 0]],
                     "_about": "the gate tower's square storey on the town front: the gateway straight through it, from the bridge to the court's gate"})
 add("gate storey floor", {"flatRoof": True, "type": "box", "width": GS - 2.8, "length": GS - 2.8, "height": 0.5, "at": [[round(gx, 4), N * H + 1.9, round(gz, 4), 0]],

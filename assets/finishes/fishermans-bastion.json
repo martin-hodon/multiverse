@@ -1,13 +1,16 @@
 {
   "name": "Fisherman's Bastion",
   "building": "architecture/fishermans-bastion",
-  "_about": "The Fisherman's Bastion: white limestone throughout, its seven tent caps in dark tiles, the finials gilt.",
+  "_about": "The Fisherman's Bastion: white limestone throughout, its seven tent caps in dark tiles, the finials gilt; the Matthias Church behind it under its roof of glazed Zsolnay tiles, its windows stained glass.",
   "stone": {
     "color": "#eae5d8",
     "accent": "#d3cdbd",
     "pat": "ashlar"
   },
   "rules": [
+    {"parts": "kind:glass", "pattern": "painted/stained glass", "palette": "stained", "_about": "the church's stained glass"},
+    {"parts": ["church/high roof", "church north chapel roofs", "church south chapel roofs"], "surface": "roof", "pattern": "roofs/glazed diamonds", "palette": "zsolnay", "scale": 2.0,
+     "_about": "the Matthias Church's roofs in Zsolnay's glazed tiles, diamonds of yellow, green, red and white"},
     {"parts": ["finial"], "pattern": "roofs/gold leaf"},
     {"parts": "cap", "pattern": "roofs/fish scale", "palette": "slate"},
     {"parts": "kind:roof", "color": "#d3cdbd", "accent": "#bdb7a8"},

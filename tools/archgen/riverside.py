@@ -35,7 +35,8 @@ jx, jz0, jz1, jy = 1.2, -3.4, -9.0, 0.25
 hut = {
     "floor": box(W, D, F, (0, 0, 0), walked=True),
     "walls": {"type": "enclosure", "plan": {"rect": [W, D]}, "thickness": T, "height": H, "openings": [], "at": [[0, 0, 0, 0]],
-              "faces": {"0": [opening(0, 1.1, 0, 2.0), opening(1.6, 0.8, 1.1, 1.9)], "2": [opening(1.2, 0.8, 1.1, 1.9)]}},   # (face 2 runs -x: x -1.2 is at 1.2)
+              "faces": {"0": [opening(0, 1.1, 0, 2.0), opening(1.6, 0.8, 1.1, 1.9)], "2": [opening(1.2, 0.8, 1.1, 1.9)]},   # (face 2 runs -x: x -1.2 is at 1.2)
+              "interior": True},   # (the hut's room: an interior, up to the ceiling; the loft over it the thatch's)
     "ceiling": box(W - 2 * T, D - 2 * T, 0.12, (0, H, 0)),
     "roof": {"type": "roof", "form": "gable", "width": D + 0.8, "length": W + 0.8, "pitch": 38.4, "overhang": 0, "at": [[0, H + 0.12, 0, PI2]], "_about": "reed thatch"},
     "table legs": box(0.08, 0.08, 0.7, (-1.8, F, 0.58), (-0.8, F, 1.02)), "table": box(1.2, 0.6, 0.06, (-1.3, F + 0.69, 0.8)),
@@ -100,7 +101,9 @@ mill = {
                         "2": tiers([opening(2.5, 0.9, 1.3, 2.3)], [opening(-2.2, 0.8, 0.7, 1.7)]),
                         "1": tiers([opening(0, 1.3, 0, 2.3)], [opening(0, 0.8, 0.7, 1.7)]),
                         "3": tiers([opening(0, 0.9, 1.3, 2.3)], [opening(0, 0.8, 0.7, 1.7)])},
-              "_about": "two storeys: the river wall (+z) with the axle's hole and windows, the north (face 2 runs -x), the door onto the street (east), the west"},
+              "interior": True, "_about": "two storeys: the river wall (+z) with the axle's hole and windows, the north (face 2 runs -x), the door onto the street (east), the west; inside them the mill, an interior up to the eaves plate that closes it"},
+    # (the wheel pit, under the floor: the mill's inside too)
+    "pit interior": {"type": "interior", "plan": {"rect": [1.54, round(pitZ1 - pitZ0 + 0.07, 4)]}, "height": 1.55, "at": [[0, -1.55, round((pitZ0 - 0.07 + pitZ1) / 2, 4), 0]]},
     "roof": {"type": "roof", "form": "gable", "width": D + 0.8, "length": W + 0.8, "pitch": 37.5, "overhang": 0, "at": [[0, H, 0, PI2]]},
     "eaves plate": box(W + 1.0, D + 1.0, 0.25, (0, H - 0.225, 0)),
     # the stone floor: boards on joists over the meal floor, the stair's hole at the north-west
@@ -144,7 +147,7 @@ mill = {
     "windows upstairs": {"type": "marker", "role": "window", "at": [[-2.2, G + 0.7, D / 2 - T / 2, 0], [2.2, G + 0.7, -(D / 2 - T / 2), 0], [W / 2 - T / 2, G + 0.7, 0, -PI2], [-(W / 2 - T / 2), G + 0.7, 0, -PI2]], "data": {"w": 0.8, "h": 1.0}},
 }
 write("architecture", "village/watermill", {"name": "Water mill", "_about": "THE WATER MILL in two storeys: stone walls under a tiled roof; the wheel (items/components/water-wheel, its axle and pit wheel, turned by the game at the `rotor`) 6.1 m across on an axle only .5 m above the floor; the pit wheel in its fenced pit drives the wallower and the upright shaft up through the floor to the runner stone (`spin` markers, turned with the wheel); upstairs the stone floor -- bedstone and runner in the tun, the hopper on its horse, the grain -- reached by a stair up the north wall; below, the meal chute into the meal bin, the flour sacked; barrels and kegs; the miller by the door and at the stones, the sacks' `drop` outside.",
-                                            "site": {"origin": True}, "params": {"detail": 4, "footW": W + 2, "footD": D + 2}, "parts": mill, "build": list(mill)})
+                                            "site": {"origin": True}, "params": {"detail": 4, "footW": W + 2, "footD": D + 2}, "parts": mill, "build": [n for n, d in mill.items() if d["type"] != "interior"]})
 write("finishes", "watermill", {"name": "Water mill", "building": "architecture/village/watermill", "_about": "the mill: rubble stone, a tiled roof, oak works, millstones",
       "stone": {"color": "#b8ad98", "accent": "#a89c86", "pat": "ashlar"},
       "rules": [{"parts": "roof", "surface": "roof", "pattern": "roofs/fish scale", "palette": "tile-brown"},

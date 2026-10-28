@@ -64,6 +64,31 @@ add("plinth stair", {"type": "flight", "width": 4.0, "run": 0.3, "rise": 0.18, "
 add("roof", {"flatRoof": True, "type": "prism", "plan": {"rect": [W - 2 * T + 0.2, W - 2 * T + 0.2], "chamfer": C - T * 0.4}, "height": 1.5, "at": [[0, PH + H - 1.5, 0, 0]],
              "_about": "the roof over the chambers"})
 add("parapet", {"type": "enclosure", "plan": {"rect": [W, W], "chamfer": C}, "thickness": 0.7, "height": 1.6, "openings": [], "at": [[0, PH + H, 0, 0]]})
+# the chamber: the tomb's space, on the walls' INNER face (every opening of them is an iwan's recess, out in the air to
+# its back), less the half round of each iwan's back standing into it, up to the roof
+L = a - c - T * math.sqrt(2) + T                    # half a main face's inner length
+def notched(p0, u, m, half, iwans):
+    """a face of the inner octagon from its middle p0 along u (half each way), notched inward (m) by the iwans' backs
+    (along, radius), each on its back's middle"""
+    pt = lambda al, d: [round(p0[0] + u[0] * al + m[0] * d, 4), round(p0[1] + u[1] * al + m[1] * d, 4)]
+    out = [pt(-half, 0)]
+    for c0, r in sorted(iwans):
+        out += [pt(max(-half, min(half, c0 - r * math.cos(math.pi * i / 8))), r * math.sin(math.pi * i / 8)) for i in range(9)]
+    return out
+chamber = []
+for k in range(4):
+    ang = k * math.pi / 2
+    n = (math.sin(ang), math.cos(ang)); tdir = (math.cos(ang), -math.sin(ang))
+    off = MAIN[1] / 2 + MAIN[0] / 2
+    chamber += notched((n[0] * (a - T), n[1] * (a - T)), tdir, (-n[0], -n[1]), L,
+                       [(0, big["w"] / 2 + 0.25), (-off, small["w"] / 2 + 0.25), (off, small["w"] / 2 + 0.25)])
+    n2 = (math.sin(ang + math.pi / 4), math.cos(ang + math.pi / 4))
+    om = ((a - c / 2) * (math.sin(ang) + math.cos(ang)), (a - c / 2) * (math.cos(ang) - math.sin(ang)))
+    u2 = (n2[1], -n2[0])
+    chamber += notched((om[0] - n2[0] * T, om[1] - n2[1] * T), u2, (-n2[0], -n2[1]), (a - T - L) / math.sqrt(2),
+                       [(0, cham["w"] / 2 + 0.25)])
+parts["chamber"] = {"type": "interior", "plan": {"points": chamber}, "height": H - 1.5, "at": [[0, PH, 0, 0]],
+                    "_about": "the tomb chamber, up to the roof: on the walls' inner face, where the iwans' recesses end, and round the backs that close them"}
 add("pishtaq crowns", {"type": "box", "width": MAIN[1], "length": 1.6, "height": 4.2,
                        "spiral": {"count": 4, "radius": a - 0.8, "turn": 0, "y": PH + H},
                        "_about": "each great iwan's frame, the pishtaq, rising above the parapet"})

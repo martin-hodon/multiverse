@@ -39,6 +39,8 @@ add("body", {"type": "enclosure", "plan": {"rect": [BW, BL]}, "thickness": T, "h
              # (and over the floor line a Corinthian order -- arch/order.js: pilasters on the piers between the upper
              #  windows, sized from the storey, its entablature the crowning cornice)
              "orders": [{"tier": 1, "kind": "corinthian", "ends": False}],
+             # (its space, up to the roof's underside: finish.js reads which side of every surface is in from the interiors)
+             "interior": BH,
              "at": [[0, 0, 0, 0]], "_about": "the preaching church: two storeys of round-headed windows, the great door behind the portal niche, a door into either wing"})
 
 # ---- inside: the crossing -- four piers, four great arches, the pendentives and their deck
@@ -78,7 +80,7 @@ for sx in (-1, 1):
                           {"openings": twin}] for f in range(4)}
         name = "corner tower " + ("front" if sz > 0 else "back") + (" east" if sx > 0 else " west")
         add(name, {"type": "enclosure", "plan": {"rect": [TW, TW]}, "thickness": T, "height": RT + TH, "faces": faces,
-                   "courses": {"strings": [15, RT], "skip": sorted(int(f) for f in inner)},
+                   "courses": {"strings": [15, RT], "skip": sorted(int(f) for f in inner)}, "interior": True,
                    "at": [[sx * TX, 0, sz * TZ, 0]], "_about": "a corner tower from the ground: arches into the church, a door onto the roof walk, windows over"})
         towers.append([sx * TX, sz * TZ])
         if not (sx > 0 and sz > 0):
@@ -104,6 +106,8 @@ BR = DR + DT + PW + 2.8                     # (a 2m walk round the outside of th
 add("stylobate", {"walked": True, "type": "ring", "count": N, "rOuter": BR, "rInner": S / 2, "height": SB, "y": BH, "turn": 0.5, "solid": True, "place": [[0, 0, 0, 0]],
                   "_about": "the round base the colonnade stands on: its top is the gallery walked round the drum"})
 steps = round((BH + SB - RT) / 0.16)
+add("dome well", {"type": "interior", "plan": {"sides": N, "radius": DR + DT / 2}, "height": SB, "at": [[0, BH, 0, 0]],
+                  "_about": "the church's space on up through the stylobate, from the pendentives' ring to the drum's (whose space is `drum-dome`'s)"})
 add("gallery stair", {"type": "flight", "width": 3.0, "run": 0.3, "rise": 0.16, "base": RT, "top": BH + SB, "landing": 0,
                       "at": [[1.5, 0, BR + steps * 0.3, Q]], "_about": "the flight from the roof walk up onto the gallery round the drum"})
 add("dome", comp("components/drum-dome", {"R": DR, "dt": DT, "H": DH, "n": N, "every": 2, "winW": 2.2, "winSill": 4.0, "winH": 9.0,
@@ -145,6 +149,9 @@ for s, n in ((1, "south"), (-1, "north")):
                                 "at": [[x0 + s * ew / 2, 0, WL / 2, 0], [x0 + s * ew / 2, 0, -WL / 2, math.pi]], "_about": "its front and back walls"})
     add(n + " wing roof", {"type": "box", "width": WW, "length": WL, "height": 0.6, "flatRoof": True, "at": [[x0 + s * WW / 2, WH, 0, 0]],
                            "_about": "the wing's flat roof"})
+    add(n + " wing interior", {"type": "interior", "plan": {"rect": [WW + T / 2 - WT / 2, WL - WT]}, "height": WH,
+                               "at": [[s * (BW / 2 - T / 2 + (WW + T / 2 - WT / 2) / 2), 0, 0, 0]],
+                               **({"_about": "the wing's space: from the church wall's middle to its own walls', up to its roof"} if s > 0 else {})})
     add(n + " wing parapet", {"type": "enclosure", "plan": {"rect": [WW, WL]}, "thickness": 0.5, "height": 1.0, "at": [[x0 + s * WW / 2, WH + 0.6, 0, 0]],
                               "_about": "its parapet"})
 

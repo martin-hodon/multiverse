@@ -31,7 +31,7 @@ add("church", {"type": "enclosure", "plan": {"sides": 16, "radius": R}, "thickne
                          "7": [{"h": 13, "openings": []}, {"openings": [{"at": 0, "width": 2.2, "sill": 2.0, "springing": 7.5, "head": {"profile": "segmental", "seg": 0.4}}]}]},
                "courses": {"plinth": True, "clear": {"1": [[U_HALL[0] - 0.05, U_HALL[1] + 0.05]], "13": [[2 * R * math.sin(math.pi / 16) - U_HALL[1] - 0.05, 2 * R * math.sin(math.pi / 16) - U_HALL[0] + 0.05]]}},
                "orders": [{"tier": 0, "span": 2, "kind": "corinthian"}],
-               "at": [[0, 0, 0, 0]], "_about": "the church, round (the real one is an oval): a giant Corinthian order of pilasters folded round its corners, two tiers of dressed windows between them, the door on the axis behind the portico, and doors into the side halls"})
+               "at": [[0, 0, 0, 0]], "interior": True, "_about": "the church, round (the real one is an oval): a giant Corinthian order of pilasters folded round its corners, two tiers of dressed windows between them, the door on the axis behind the portico, and doors into the side halls"})
 apo = R * math.cos(math.pi / 16) - T        # its walls' inner face
 add("roof ring", {"type": "ring", "count": 16, "rOuter": round(apo / math.cos(math.pi / 16), 4), "rInner": DR, "height": 0.6, "y": BH - 0.6, "turn": 0.5,
                   "solid": True, "place": [[0, 0, 0, 0]], "_about": "the flat roof round the drum, from the church's walls in to it"})
@@ -118,14 +118,15 @@ STAIR_DOOR = hz - STAIR_Z                     # the door, from the end face's mi
 BELFRY_DOOR = {"width": 1.2, "springing": 2.3, "head": {"profile": "semicircular"}, "glass": False}
 def inset(pts, d):
     # (a convex plan drawn in by `d` on every side: each edge moved in toward the middle, and the corners where the
-    #  moved edges meet)
+    #  moved edges meet; `d` a list: each edge by its own, out where it is less than 0)
     n, cx, cz = len(pts), sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
     lines = []
     for i in range(n):
+        d_ = d[i] if isinstance(d, list) else d
         (x0, z0), (x1, z1) = pts[i], pts[(i + 1) % n]
         L = math.hypot(x1 - x0, z1 - z0); nx, nz = -(z1 - z0) / L, (x1 - x0) / L
         if nx * (cx - x0) + nz * (cz - z0) < 0: nx, nz = -nx, -nz
-        lines.append(((x0 + nx * d, z0 + nz * d), (x1 - x0, z1 - z0)))
+        lines.append(((x0 + nx * d_, z0 + nz * d_), (x1 - x0, z1 - z0)))
     out = []
     for i in range(n):
         (p, u), (q, v) = lines[i - 1], lines[i]
@@ -146,6 +147,11 @@ for sx, nm in ((-1, "west"), (1, "east")):
                        "courses": {"plinth": True, "skip": [F["church"], F["outer"]]}, "orders": [{"tier": 0, "span": 2, "kind": "corinthian"}],
                        "at": [[0, 0, 0, 0]],
                        **({"_about": "the side wings: halls from the church to the gate pavilions -- their inner end following the church's diagonal face, a door through both walls there, an arch into the pavilion at the outer end -- a giant Corinthian order carrying the portico's entablature on out to the pavilions"} if sx < 0 else {})})
+    # (THE HALL'S SPACE: on its walls' middle, but at the church's end on the church's wall's middle -- the two walls
+    #  stand back to back there, the door through both a passage from the one space into the other)
+    add(f"{nm} hall space", {"type": "interior", "plan": {"points": inset(pts, [-T / 2 if F["church"] == str(i) else HT / 2 for i in range(5)])},
+                             "height": HH, "at": [[0, 0, 0, 0]],
+                             **({"_about": "the halls inside, up to their roofs"} if sx < 0 else {})})
     add(f"{nm} hall ceiling", {"type": "prism", "plan": {"points": inset(pts, HT)}, "height": 0.4, "flatRoof": True, "at": [[0, HH - 0.4, 0, 0]],
                                **({"_about": "the halls' flat ceilings under their roofs, wall to wall"} if sx < 0 else {})})
     add(f"{nm} hall roof", {"type": "roof", "form": "hip", "width": HZ1 - HZ0, "length": HX1 - HX0, "pitch": 24, "overhang": 0.3,
@@ -167,6 +173,9 @@ for sx, nm in ((-1, "west"), (1, "east")):
     add(f"{nm} belfry stair", {"type": "flight", "width": ST_W, "run": ST_RUN, "base": 0, "top": BELFRY, "steps": ST_N, "landing": ST_W,
                                "at": [[round(sx * ST_X0, 4), 0, round(STAIR_Z + ST_W / 2 if sx > 0 else STAIR_Z - ST_W / 2, 4), 0 if sx > 0 else math.pi]],
                                **({"_about": "up the hall's back wall to the pavilion's belfry floor, its landing at the door"} if sx < 0 else {})})
+    add(f"{nm} pavilion belfry", {"type": "interior", "plan": {"rect": [PV - 1.4, PV - 1.4]}, "height": 20.0 - (9.0 - 0.4),
+                                  "at": [[sx * PX, 9.0 - 0.4, hz, 0]],
+                                  **({"_about": "the belfry over the passage, from under its floor to its ceiling's top (the passage under it, open every way, is the street's)"} if sx < 0 else {})})
     add(f"{nm} pavilion ceiling", {"type": "box", "width": PV - 2.8, "length": PV - 2.8, "height": 0.4, "at": [[sx * PX, 20.0 - 0.4, hz, 0]]})
     add(f"{nm} pavilion roof", {"type": "dome", "sides": 4, "radius": PV / 2 * 1.4142, "thickness": 0, "head": {"profile": "bell", "waist": 0.7, "lift": 0.6},
                                 "at": [[sx * PX, 20.0, hz, 0]]})

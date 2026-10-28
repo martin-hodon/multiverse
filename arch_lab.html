@@ -40,7 +40,7 @@
 // itself exactly when it comes round.
 import * as THREE from "three";
 import { wgslFn, uniform, vec3, positionWorld, cameraPosition } from "three/tsl";
-import { plainStone } from "./architecture.js";
+import { plainStone, archMesh } from "./architecture.js";
 // THE ENGINE IS RE-READ ON EVERY LOAD. A plain static server sends no cache headers, so a browser keeps serving
 // yesterday's build.js to a page that was reloaded -- and a fixed triangulation looks unfixed. Fetching each module
 // with cache:"reload" first refreshes the browser's copy, and the import that follows gets the new one.
@@ -50,6 +50,8 @@ const { assemble, loadUses } = await import("./arch/assemble.js");
 const hud = document.getElementById("hud");
 const qp = new URLSearchParams(location.search);
 const DEF = qp.get("def") ?? "arena";
+// `?finish=1`: the building in its finish (assets/finishes/<def>.json), as the game draws it -- else plain stone
+let FIN = null;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x10141a);
@@ -83,12 +85,14 @@ const instanceMatrix = (inst, out) => out.compose(_v.set(inst[1], inst[2], inst[
 // one InstancedMesh per part: a ring's forty bays are one geometry drawn forty times, which is what the
 // engine's exactness is FOR -- the rotation that places a copy is exact, so the copies meet exactly.
 function show(doc) {
-  if (built) for (const o of built.objects) { scene.remove(o); o.geometry.dispose(); }
+  if (built) for (const o of built.objects) { scene.remove(o); o.traverse((c) => c.geometry?.dispose()); }
   if (edgeLines) { scene.remove(edgeLines); edgeLines.geometry.dispose(); edgeLines = null; }
   const asm = assemble(doc, { detail });
   const objects = [];
   let tris = 0, verts = 0, instances = 0;
+  if (FIN) { const g = archMesh(doc, { params: { detail }, side: "double", finish: FIN }); scene.add(g); objects.push(g); }
   for (const part of asm.parts) {
+    if (FIN) { tris += (part.geometry.index.length / 3) * part.instances.length; verts += part.geometry.position.length / 3; instances += part.instances.length; continue; }
     const geo = geometryOf(part);
     const im = new THREE.InstancedMesh(geo, flat ? flatMat : stoneMat, part.instances.length);
     part.instances.forEach((inst, i) => im.setMatrixAt(i, instanceMatrix(inst, _m)));
@@ -135,6 +139,13 @@ async function load() {
   const r = await fetch(`./assets/architecture/${DEF}.json`, { cache: "no-store" });
   if (!r.ok) throw new Error(`no definition ./assets/architecture/${DEF}.json`);
   const doc = await r.json();
+  if (qp.get("finish")) {
+    // (a village building's finish is filed under its own name: finishes/watermill.json for village/watermill)
+    let f = await fetch(`./assets/finishes/${DEF}.json`, { cache: "no-store" });
+    if (!f.ok && DEF.includes("/")) f = await fetch(`./assets/finishes/${DEF.split("/").pop()}.json`, { cache: "no-store" });
+    if (!f.ok) throw new Error(`no finish ./assets/finishes/${DEF}.json`);
+    FIN = await f.json();
+  }
   // a building's components (the definitions it `use`s), fetched before it is built
   await loadUses(doc, async (path) => (await fetch(`./assets/architecture/${path}.json`, { cache: "no-store" })).json());
   const b = show(doc);
@@ -168,6 +179,7 @@ if (HEADLESS) {
   console.error = (...a) => { post("CONSOLE " + a.map(String).join(" ")); ce(...a); };
 }
 await renderer.init();
+if (qp.get("finish")) (await import("./textures.js")).bakeTiles(renderer);   // (the older tiles a finish may name as `pat`)
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
 document.body.appendChild(renderer.domElement);

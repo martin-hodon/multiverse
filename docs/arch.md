@@ -1972,3 +1972,400 @@ finds a pillar standing in the opening, a portico's column before it, or a brack
   site 5.6 m, about seventy tonnes). temples.py gives the cella front `beam: 6`.
 
 Over all 95 buildings, the full archcheck with the lintel check now reports 0 findings.
+
+## Ranges along a line, tiered towers, and the first Japanese castle (2026-10-27)
+
+Two new composite parts. Like `ward`, each writes the engine's own parts and builds them under its name
+(`<part>/<sub>`), placed together.
+
+**The range** (`range`, arch/range.js) is a building one bay deep carried along a folding line. Examples are a
+covered walk on a city wall, the arcaded corridors of a bastion, a palace's long gallery, and the watari-yagura
+of a Japanese castle.
+- `path` is its middle line. `width` is one number, or one per segment. `height` is the height of the walk, and
+  `side` says which side looks out.
+- `bandPoints` mitres the band at every fold and refuses a path that folds back on itself.
+- `faces` give the openings of the `out`, `in` and `end` faces, or of one face: `"out:2"`, `"end:1"`.
+- `walk` lays a slab on top, just over the faces. `parapet` crenellates its edge from the corners in, with `gaps`
+  where a stair or a tower arrives. A gap is given from its path segment's middle and carried across onto the
+  parapet's face.
+- `solid: true` builds one mass on the band instead of walls round a hollow: a breastwork or a dyke.
+
+**A row that fits its face.** An openings spec with `every` holds as many openings as the face has room for, at
+that pitch, centred, with the outermost `end` clear of the corners. One spec then serves faces of every length:
+a range's folds, an irregular plan, a tower's storeys. `with` adds other openings (a door in the row) and `clear`
+keeps stretches blind. A fitted opening that overlaps either is left out.
+
+**Batter.** A prism's `batter` { out, power, steps } carries its plan out toward the foot by `out` × (depth/H)^power.
+Power 1 is a straight talus. Power 2 is the Japanese fan slope (ōgi-kōbai): upright at the top, flaring at the
+ground.
+
+**Flights carried to the ground.** A flight's `ground` builds its masonry down to that height, not as a solid only
+one riser deep. It is for an outside stair standing off a sloping wall.
+
+**Lintels open to the sky.** An opening that runs to the top of a wall's topmost tier has no beam over it (a gap
+in a parapet), so lintelsOf no longer records one.
+
+**Roofs.** There are two new forms and a ring:
+- `pent` is a skirt from its eave up to the wall of a smaller storey standing on it (`top: [w, l]`).
+- `kara` is the cusped kara-hafu: a bell section that breaks the eave.
+- curvedRoof's `ring` closes a pent round its hole, with a soffit and an inner face against the wall above.
+- A pent is always curved (lo = hi = 1 by default), so `upturn` and `flare` lift its corners.
+
+**The tiered tower** (`tiered`, arch/tiered.js) stacks storeys `{ w, l, h }`, each set in from the one below. It
+is a Japanese keep, a yagura, a pagoda.
+- Each storey gets plastered walls with its windows, laid out by `every` and kept above the skirt below.
+- A pent skirt runs round the foot of every storey but the first. `roof: false` hides a storey's floor behind the
+  roof below, as the great keep's fourth floor is hidden.
+- The crowning roof is a hip-and-gable (irimoya) with its ridge along the longer side.
+- Gables sit on the slopes (`gables: [{ side, kind, width, at }]`): `chidori` (a small triangular gable on the
+  slope), `irimoya` (a larger one, lower down) and `kara`.
+- Doors are given by side, with `at` a plain x or z. A list makes a passage through.
+- Inside there is a floor on every storey. A steep flight runs up the longer side to each floor, against
+  alternate walls, with the floor above open over its whole run.
+
+**The Fisherman's Bastion** (fishermans_bastion.py) is rebuilt on its OpenStreetMap plan:
+- the folded corridors as `range`s: arcaded toward the Danube, open toward the square, walked on top behind
+  battlements;
+- the middle parapet as `solid` ranges;
+- the three-stage Schulek stair on the hill's battered wall;
+- the seven towers, each on its foot;
+- St Stephen's court.
+
+**Himeji Castle** (himeji.py, himeji.json) is the great keep and the East, Inui and West small keeps. Two-storey
+watari-yagura join them round their court, and all of it stands on one fan-sloped stone base 14.85 m high. The
+great keep follows the Japanese Wikipedia's floors in ken, with its gables placed storey by storey: kara on the
+first roof's east, kara south and great irimoya gables east and west on the second, twin gables on the third,
+chidori and kara on the fourth, and kara under the crowning roof. A stone stair climbs the west face to the gate
+through the western watari. Its finish (finishes/himeji.json) has white plaster, grey hongawara tiles (a new
+`kawara` palette) and rough granite.
+
+**arch_lab** takes `&finish=1` to draw a definition in its finish (finishes/<def>.json), as the game does.
+
+**A roof along a line** (build.js bandRoofMesh; a roof part given a `path` instead of a length) puts two slopes
+either side of a ridge that follows the path.
+- They are mitred at every fold: a hip outside the bend, a valley inside.
+- Each end is a gable or a hip (`ends`), and the eaves overhang at the sides and the ends.
+- It is solid down to a flat underside. With `shell` it is a covering that thick, with its underside following
+  the slopes and open gables: a corridor's roof with its rafters showing.
+- A `range` takes it as `roof` { pitch, overhang, ends, shell } in place of the walk. It is one width all along.
+
+**The finial.** A `tiered` tower's `finial` { height, radius, rings, base } sets a pagoda's sōrin on the apex of
+its pyramid: a square base, the mast, the nine rings and the jewel.
+
+**Bracket sets.** A `tiered` tower's `brackets` { use, s, every } sets a row of bracket sets under every eave,
+along each side from corner to corner. The default is components/dougong, now shared with the Temple of Heaven.
+They hang twice the straight slope's drop below the wall top, because a curved slope sags under its pitch line
+toward the eave. usesOf now also loads the components a tiered part uses.
+
+**The Japanese wall.** A new `timber/shinkabe` pattern draws posts standing proud of white plaster, one to a
+bay, with the low nuki, the head nageshi and the plate across them. With the new `ni-red` palette the timber is a
+temple's faded red ochre.
+
+**Hōryū-ji** (horyuji.py, horyuji.json), the Western Precinct:
+- the five-storeyed pagoda, `tiered`: square storeys, the fifth half the first, every eave deep, not climbed;
+- the Golden Hall, two `tiered` storeys under a hip-and-gable roof;
+- the Middle Gate, its passage through the two middle bays;
+- each on its stone platform with a stair;
+- the kairō, a roofed `range` round the court from the gate back to the gate: lattice windows outward, open to the
+  court between its posts.
+
+**Kinkaku-ji** (kinkakuji.py, kinkakuji.json), the Golden Pavilion on its island in the Mirror Pond:
+- one `tiered` part of three storeys in three manners. The first (the palace manner, dark timber and white plaster)
+  has no roof of its own. The second has the same plan, with the skirt roof round it. The third is the small square
+  Zen hall with bell-headed windows (katōmado), under the pyramid. The phoenix is a short `finial` with no rings.
+- The upper two storeys are gilt by the finish (gold leaf on their outer walls), and so are the bracket sets.
+- The pond is the site's `moat`, which the game carves round the island. Its footprint (`footW` x `footD`) takes in
+  the water, as Caerphilly's does. A stone bridge of five arches crosses it behind.
+- A tiered storey must be tall enough for what the skirt below covers. The skirt rises up the wall above it by the
+  set-in times the slope, here (13.6 - 6.5)/2 x tan 24° = 1.6 m, and tiered lifts the windows' sills over it. So the
+  third storey is 4.5 m, not the 3 m of the room inside.
+- The bridge component's arches are semicircles over their span. Their crown must stay under the body's `depth`,
+  so a long, shallow bridge needs more arches (`n`), not fewer.
+
+**Curved roofs rest on their walls.** A curved (jujia) slope sags below the straight line from eave to ridge. A roof
+placed by that line passed over the wall line lower than the wall top, so the wall's top edge came up through it.
+This was 0.38 m on a one-storey hall and 0.13 m under Himeji's skirts. Archcheck found it only on a one-storey hall,
+whose walls then touched nothing ("support isolated"); on towers the skirts and floors hid it.
+- A roof part now takes `rest: true`. build.js `restLift` measures the curve's sag where it crosses the wall top, and
+  the roof is lifted by that much.
+- `tiered` sets it on every skirt and on its top, and its windows' sills clear the lifted skirt.
+- It is the curved roof's counterpart of a dome's `seat`. A straight roof needs neither: its slope is the line.
+
+**Bracket sets and openings.** Lowered under the sag, a tiered storey's bracket sets could hang in front of its
+windows. Kinkaku-ji's second storey had one bracket hanging in front of a window head. Hōryū-ji's Kondō doors were
+3.6 m, under bracket seats at 3.2 m. Now:
+- the windows' heads are kept under the seat (a head that is not flat, by its width more);
+- a storey with no room for windows between the skirt below and the brackets is an error;
+- so is a door that runs into the brackets.
+Hōryū-ji's Kondō and pagoda doors and the Chūmon's were lowered to fit. Kinkaku-ji's second roof is flatter (21°, as
+the real one), with smaller bracket sets.
+
+**The beam.** A new part, `beam`, is a member swept up at its ends (build.js beamMesh):
+- `length` along x, `height` deep, `depth` across;
+- its soffit rises by `sori` at `reach` from the middle, as the `power` of the distance (2 by default);
+- `taper` cuts the tips back underneath.
+It is drawn as an elevation and carried across its depth, as the flyer is. Two beams of one `sori` and `reach` lie
+exactly one on the other, whatever their lengths: a torii's shimaki and the longer kasagi on it.
+
+**The torii** (components/torii) is a myōjin torii:
+- two round pillars on stone footings, running up into the shimaki where its soffit rises over them;
+- the nuki through them;
+- the plaque (gaku) on its strut, which `plaque: "no"` leaves out (a part's `when`);
+- the shimaki and the kasagi, `beam`s on one curve.
+Its params are `span`, `height`, `r`, `over` and `sori`.
+
+**Fushimi Inari Taisha** (fushimi_inari.py, fushimi-inari.json):
+- the great torii on the approach;
+- the tower gate (rōmon), two `tiered` storeys under one roof with the passage through;
+- the worship hall and the main hall, one `tiered` storey each, the main hall under a long gable;
+- the senbon torii, two tunnels side by side. Each is one torii part placed a gate every 0.62 m along a path that
+  climbs in flights between level stretches, on every other tread on the flights: a few hundred gates in two parts.
+  They are 3 m tall, so that their nuki clear a climber's head on the steps.
+Its finish uses a new `shu-vermilion` palette: the torii and the halls' timber in shu, the kasagi capped in black.
+
+**The site lint and moats.** worldlint's check of a building's own ground (index.html lintPlaces) skips the ring of
+the site's own moat, which is water by design. Before this, Kinkaku-ji reported "ground fallen away" over 44% of
+its ground: the pond inside its footprint. The check now covers only the island and the ground beyond the water.
+
+**In the game** a new period, "Edo Japan" (assets/world/periods.json `japanese`), has Himeji, Hōryū-ji,
+Kinkaku-ji and Fushimi Inari as its landmarks and minka for its town. Its people wear a new `japanese` dress style (wardrobe.json):
+- men: a samurai's kosode with hakama and obi, or a commoner's short kosode and kasa;
+- women: a kosode to the floor with a broad obi.
+
+Over all 104 buildings the full archcheck reports 0 findings. The arena's upper vomitoria had a finding from
+before this work: their stair feet stood on nothing, because the level passage had a ceiling and no floor. The
+passage now has its own floor.
+
+## The Matthias Church at the bastion, the Kremlin at St Basil's (2026-10-28)
+
+Two landmarks stood alone where the real ones stand in an ensemble. The Fisherman's Bastion is a lookout in front of
+the Matthias Church; St Basil's is one end of Red Square, with the Kremlin wall along its west side. Each now has its
+neighbours, on the real plan (OpenStreetMap).
+
+**The Matthias Church** (fishermans_bastion.py) stands on the hill behind the bastion, along its own axis (21.3°
+north of east):
+- a Gothic hall church (`basilica` with `hall`) of seven bays, its five-sided apse toward the bastion;
+- side chapels between the buttresses, under lean-to roofs;
+- the west front with its portal and traceried window, its gable;
+- the Matthias tower at the south-west: two `gothic-tower-stage`s, a `gothic-octagon-stage` and a ribbed
+  `gothic-spire`, 80 m over the square;
+- the lower Béla tower at the north-west.
+The roofs are in Zsolnay's glazed diamonds (`roofs/glazed diamonds`, palette `zsolnay`) and the windows in stained
+glass. The **Holy Trinity Column** stands in the square west of the church: its steps, pedestal, shaft and clouds,
+the gilt Trinity on top and three saints round the pedestal (statue markers). The hill's outline was carried west
+to hold both.
+
+**Long triangles in the solid index (solid.js).** The index skips a triangle that covers more than 4000 cells,
+because filing it in every cell is too slow. Those vast triangles were then left out of every cell lookup, so a
+height query over the hill's broad top found nothing: the Trinity Column "floated" and a stair had "no floor". The
+index now keeps each vast triangle with its cell box, and a lookup adds those whose box holds the cell.
+
+**Forked merlons** (components/crenellation). `merlon` names the merlons' heads:
+- "stepped" (the default: the Omani and Persian kind);
+- "square";
+- "forked": the swallowtail. A V `fork` deep is cut into each head, and the two horns are half-width prisms whose
+  tops slope (a prism's `slope`) from the V's bottom up to the merlon's full height. This is the Ghibelline merlon
+  of Verona and Milan, and the Kremlin's.
+The body of a forked merlon is its own part, so that each kind is chosen by `when`. Every existing caller keeps its
+merlons.
+
+**Two new components** for a fortress:
+- **curtain-wall**: a stretch of wall `L` long, `T` thick and `H` high to its walk. The battlements (any
+  `crenellation`) run along its outer edge (+z) and a low parapet along its inner edge. One is set between each pair
+  of towers, from the face of one to the face of the next.
+- **kremlin-tower**: a tower of the Moscow Kremlin. It has a square body with a loop high in each face (`gate`
+  "yes": an arched passage through faces 0 and 2 instead), the corbel band, the forked battlements round a deck, the
+  square tier (chetverik) with an arched window in each face, the open octagon (vosmerik) and the tent. Leave out
+  the tier or the octagon for a lower tower, with `ch` or `oH` set to 0 so that what is above comes down.
+
+**Red Square** (st_basil.py), on its OSM plan in metres from the cathedral's middle:
+- The Kremlin wall runs from the Konstantino-Eleninskaya tower, past the Nabatnaya, to the Spasskaya and on
+  north-west to the Senate tower. It is 11 m to the walk and 4.5 m thick, behind forked merlons.
+- The Tsarskaya is the `kremlin-tower`'s tier and tent alone: a pavilion of four arches on the wall's walk.
+- The Spasskaya is two gate bodies, the tower and its barbican, the passage straight through both. On the tower
+  stand Galloway's tiers of 1625 (two `gothic-tower-stage`s with white-stone corner pinnacles), the open octagon and
+  the tent, its ruby star at 71 m.
+- Lenin's mausoleum is red granite in steps up to a colonnade, with tribunes either side, square to the wall before
+  the Senate tower.
+- The Lobnoye Mesto is the round stone tribune before the cathedral, with its stair.
+The cathedral itself was turned to its real orientation: its stair up from the square on the north, its belfry
+against the gallery on the east (it was on the south-west).
+
+**Rules name a tail of a nested part** (finish.js partNames). A part inside a component inside a component is called
+"nabatnaya tower/tent/spire". A rule could name only all of that, its last name ("spire") or its first ("nabatnaya
+tower"). Now every tail is a name too, longest first: "tent/spire" is the spire of every Kremlin tower's tent. The
+check that keeps a component's name from painting its windows now compares that name instead of a list position.
+
+Over all 104 buildings the full archcheck (meshes and finishes) reports 0 findings. worldlint finds nothing on the
+bastion's or St Basil's own ground; the few problems on some seeds are village buildings by the river, and the old
+St Basil's had them too.
+
+## Polygonal tiered towers, the Summer Palace and the Sheikh Zayed Grand Mosque (2026-10-28)
+
+**A tiered tower on an n-gon** (tiered.js `sides`). With `sides` n, a storey is `{ r, h }`: a regular n-gon `r` to
+its outer corners, with a face on each axis's side (planPoints' `sides` plan). A tower is built as before (storeys
+set in one above another, bracket sets, floors with steep stairs inside, a finial), but its roofs are different:
+- every skirt and the top is a `dome` of n faces on the jujia section. `roof` { lo, hi, overhang, t } gives the
+  slopes at the eave and at the crown, the eave's reach square to the faces and the thickness; `top` overrides any
+  of them;
+- each roof is `seat`ed on the wall it covers, with its soffit on the wall head (assemble.js seatLift). A skirt is
+  cut by an `oculus` where the storey above rises through it;
+- the windows' sills clear the skirt below. The bracket sets run along every face, set low enough that their outer
+  tips stay under the slope;
+- a door's `side` is the face toward it, found from the plan's own edges;
+- there are no gables.
+
+A seated dome is placed at 0. seatLift measures the wall's head from the wall's own placement and lifts the dome
+from its own, so a dome placed at the wall's foot would be lifted by the wall's height twice. The first skirt, on
+a wall standing at 0, looked right; the second floated 7.5 m in the air.
+
+**The Summer Palace** (summer_palace.py) is the axis of Longevity Hill. The plan is OpenStreetMap's, its axis (four
+degrees off north) turned to north, with the Foxiang Ge at the origin:
+- On the lakeshore: the Yunhui Yuyu pailou (four columns, the beams, three roofs, the middle one raised), a stretch
+  of the Long Corridor (a roofed `range`, open between its posts on both sides), the embankment and the lake.
+- Up the hill: the Paiyun Gate and the Second Gate, then the Paiyun Dian between its ear halls and side halls, then
+  the Dehui Hall. All are `chinese-hall`s.
+- The hill is its terraces, at 3, 7, 12, 31 and 50 m, with flights between them: on the axis, either side past the
+  Paiyun Dian, and up the sides of the tower's terrace and on along the summit's.
+- The Foxiang Ge stands on its octagonal plinth: four storeys, three skirts and the top (the real tower's four
+  eaves), bracket sets on every face, floors and stairs inside, the gilt jewel 36 m over its terrace.
+- On the summit: the Sea of Wisdom behind its glazed pailou.
+
+**The Sheikh Zayed Grand Mosque** (sheikh_zayed.py) is on its OSM plan too, the axis (twelve degrees off west)
+turned to east-west, with the prayer hall toward the qibla in the west:
+- The sahn is 110 × 150 m between the riwaq's piers. A `riwaq` of small domes closes it on three sides. Its rows'
+  bay counts are odd, since `domed-arcade` puts its gate in the middle bay.
+- The prayer hall stands behind a portico (an `arcade-walk`). It has walls, flat roofs on a grid of columns, and
+  three crossings cut through the roofs: piers, round arches, pendentives, and tympana closing the arches over the
+  roofs. Each crossing carries a `drum-dome` on the onion section with bulge 1.08, the slight swell of the real
+  domes: the main dome, 32.8 m across and 85 m to its finial, and the two 65 m domes.
+- Small onion domes stand over the hall's entrance and in rows on its roofs. Counted with the riwaq's, the main
+  entrance's and the great three, there are 79, close to the real 82.
+- On the east: the entrance hall, its dome, and a `portal` deep enough for its iwan.
+- Four `omani-minaret`s, 107 m, stand on the court's corners. Reflecting pools run outside the riwaq. A platform
+  carries it all, with flights on three sides.
+- The finish is white marble, a floral inlay in the sahn and at the walls' feet, gold leaf on every finial, and the
+  hall's carpet in three pieces (one under each great dome). The lab's headless render draws carpets black, the
+  Sultan Qaboos's included.
+
+Over all 106 buildings the full archcheck (meshes and finishes) reports 0 findings: the square tiered towers
+(Himeji, Horyu-ji, Kinkaku-ji, Fushimi Inari) are unchanged by the polygonal mode. worldlint finds nothing on either
+new landmark's ground. The only problems it reports are village buildings by the river, the same as on other seeds.
+
+## Borobudur and Angkor Wat (2026-10-28)
+
+Both are new buildings made only from existing parts. Both are on their OSM plans, made symmetric, and both join
+the Medieval India period's landmarks, the Indianized temples of Java and Cambodia beside Kandariya Mahadeva.
+
+**Borobudur** (borobudur.py) is the foot, five square terraces, three round ones and the great stupa:
+- Each square terrace is a `prism` from the ground up, its outline written as a profile from the axis to the corner:
+  the stair projection, the redents, the corner. The survey's outlines give the steps. The overlaps are one stone.
+- The stairs climb straight up the four axes, each flight cut into the terrace it climbs: a notch in that
+  terrace's outline as deep as the flight is long, the flight standing in it. They are `steep` (28 cm on 22 cm), as
+  on site. archcheck's approach rule wants a strip as deep as the flight is wide before each flight's foot. Between
+  one flight's head and the next one's foot there must be a gallery's width, so the stair projections stand a
+  metre or two further out than the survey's.
+- The four galleries are walled in by balustrades: `enclosure`s on the terrace's own edge (their walls inward from
+  it), the outline without its notch, broken over the stair. Each has a niche every 2.6 m, its openings written per
+  face from the outline's own edges. A small stupa (cushion, bell, spire) stands over every niche, 392 in all. A
+  seated Buddha (a `statue`, limestone) sits in each of the first balustrade's 32 niches on the stair projections.
+- On the round terraces stand 72 perforated stupas in rings of 32, 24 and 16, set so that the stairs come up between
+  two. Each is a lotus cushion, a `dome` on the bell section (the skirt flaring to the cushion, a level crown) with
+  the jali lattice on it, the harmika (square on the first two rings, octagonal on the last) and the spire, each one
+  `atop` the last. The great stupa is the same on its own cushion, 8.4 m in radius, the spire's tip 41 m up.
+- The finish is grey andesite (the trachyte palette) throughout.
+
+**Angkor Wat** (angkor_wat.py) faces west, the central tower at the origin:
+- Before it: a stretch of the causeway with its naga balustrades, the stairs down to the two reflecting ponds, and
+  the cruciform Terrace of Honour with the naga on its edges (an `enclosure` on the cross's outline, broken where the
+  causeway and the stairs come in).
+- The three enclosures stand at 3, 9.5 and 22.5 m: the outer terrace, the second platform and the bakan, the
+  last two with battered sides.
+- The galleries are roofed `range`s, each an open path from its west gopura round to it again. Their faces open as
+  each side does: a colonnade out and windows in on the outer gallery, windows both sides on the second, balustered
+  windows on the bakan's. Each has a door wherever another gallery meets or crosses it, an `every` row `with` the
+  door.
+- The pavilions are `enclosure`s with their doors where a gallery passes through: the gopuras on every axis and the
+  pavilions on every corner. Those under a tower carry a flat slab or a cornice, the rest a hip roof.
+- The cruciform cloister is three galleries along the axis and one across, pillared on both sides. The kerbs of
+  basins stand in its four courts. Its two libraries, and the two in the second court, are each a plinth with a
+  stair at each end, a hall and a steep gable.
+- The stairs: ordinary flights up to the outer terrace, `steep` ones up to the second platform, and on the bakan,
+  44 risers on four axes. The bakan's square gallery and the cross of galleries meet under the sanctuary.
+- The five towers are `shikhara`s without the Nagara crown: five rathas, five banded storeys, bending in on the
+  rekha to a fifth of their width. Small spires on the corners at four heights stand for the antefixes. Each tower
+  has an onion `dome` `atop` it as the lotus bud. The central tower is 15 m across and its bud's tip 65 m up; the
+  corner towers reach about 52 m, the second gallery's 28 m. The west gopura's three towers are truncated, with no bud.
+- The finish is grey sandstone, the roofs cut as tiles, the platforms' sides and the paving in a darker stone, and
+  the ponds' water.
+- Checked: archcheck finds nothing on either; over all 108 buildings the full archcheck (meshes and finishes)
+  reports 0 findings, and worldlint none on either landmark's ground.
+
+**The Imam Mosque** (imam_mosque.py), Isfahan, on its OSM plan with the qibla axis turned to run west, the dome's
+axis at the origin:
+- The court (56 x 75m, its pool in the middle) is closed by four `range`s, 8m deep and 13m high, their court faces
+  two tiers of pointed niches (fitted rows). Each range is an L round a corner, broken where an iwan stands: the
+  iwans are `portal`s set flush with the court's face, their depth the range's, so the court is one plane of niches
+  and pishtaqs. `side_away` picks each range's `side` so that `in` is the court's face whichever way its path runs.
+- The qibla iwan's pishtaq (30m) stands before the sanctuary, a hall 38 x 91m under flat roofs. The dome chamber in
+  it is a crossing as Sheikh Zayed's are -- four piers, semicircular arches (a pointed one would rise past the
+  pendentives' top), pendentives, tympana closing the arches over the roofs -- under a `drum-dome` on the onion section
+  (bulge 1.06, neck .32): 52m to its crown. The two qibla minarets (`minaret`, one balcony and its kiosk) stand on
+  the sanctuary's roof beside the pishtaq.
+- Behind the side iwans the winter halls, under low pointed domes of bare brick; either side of the sanctuary a
+  madrasa, a `range` round its court with a gap on the east, through to the winter hall's door.
+- The entrance is turned to the square (the portal faces north in the world, 33 degrees off the court's axis): the
+  portal, the square vestibule behind it and its dome, all at that yaw, the vestibule's back door looking at the
+  east iwan's across a few metres of open ground; the two entrance minarets behind the portal's corners.
+- Everything stands on a platform one riser high (15cm): the main block in tiles, and a quad under the entrance
+  band, cut to meet it at x 91, so the two never overlap.
+- The finish: the rumi arabesque in cream and turquoise on cobalt (palette `isfahan`) on every face of the court,
+  the iwans' half domes and the entrance portal (one `within` box over the court and the iwans' depth); the onions
+  turquoise with yellow arabesques (`isfahan-dome`); girih on cobalt (`isfahan-girih`) on the drums, the minarets and
+  in the domes; prayer carpets in the sanctuary and winter halls, the court flagged, the roofs and every outer wall in
+  buff brick.
+- Checked: archcheck (meshes and finishes) finds nothing.
+
+## Interiors: inside and out without rays (2026-10-28)
+
+The finish used to MEASURE each face's side: rays to the sky and into the air before it, bands of 3m, a 2m
+grid on the floors. That took most of the finishing time and failed wherever a ray slipped through a crack or a
+column hid a wall. Now the building SAYS where its inside is. docs/patterns.md has the rules; in short:
+
+- An INTERIOR is a volume of air on the plan, a polygon with holes from `y0` to `y1`. It is a marker part
+  (`role: "interior"`), so a component that has one has it in every copy, and nothing is stored per face.
+- Interiors come from three places:
+  - the `interior` flag on plan parts (`true`, or a height), on by default for `range` and `tiered` storeys;
+  - the `interior` part type (`plan` or `radius`/`sides`, `arc`, `hole`, `of`);
+  - the engines: `basilica` and `gothic` give their aisles, nave and transept, `court` the ring of wings round
+    the court.
+- `inside` / `outside` on a part still overrides; buttresses, flyers and pinnacles are always outside.
+- A face is in when the point 30cm before it lies in an interior. A dome's skin turned toward its axis is
+  inside, a vault's down-turned face too, a roof's upper slopes outside. Pieces are cut first on the
+  interiors' planes, so a tower's face changes along a level line at the church roof.
+- An interior runs on the walls' MIDDLE line, so a window's reveal is split at mid-wall: outer half the facade's,
+  inner half the room's. It stops at the vault's springing or under the roof. Where a tower rises beside a sloped
+  roof, it stops at the eave.
+- Open porticoes, loggias and colonnades get none:
+  - Horyuji's kairo and the Long Corridor (`interior: false`);
+  - an `arcade-walk` without its own back wall;
+  - a `gallery` or `curved-gallery` with sill 0 (the `hall` param);
+  - the Tsarskaya (`tierIn` 0).
+
+Every landmark and the village buildings were given their interiors. Compared with the rays, 8.2% of the surface area
+across the 92 finished buildings now takes another rule. The largest changes, read cell by cell, are mostly the
+rays' mistakes put right:
+- Cologne's tower halls and crossing vault are in;
+- the Hagia Sophia's ground storey is revetment;
+- the Blue Mosque's crossing piers are tiled;
+- a pier's or an opening's two halves no longer differ by chance.
+
+The rest is hidden: roof undersides, vault backs, a platform's underside. Finishing all 92 buildings took
+154s and now takes 27.5s. Rays survive only in check.js, for stairs and support (solid.js `rayIndex`). The full
+archcheck (meshes and finishes) reports 0 findings over 108 buildings.
+
+Left open:
+- Himeji: a skirt roof runs on inside the storey above (tiered.js).
+- The Frauenkirche: the mansard roof crosses the drum, because roofs have no `well`.
+- El Pilar: the finish rule `portal` does not reach the names `portal 1/...`.
+- The Temple of Heaven and St Paul's: their compass panels at `at: [0, 0]` cover nothing.

@@ -22,16 +22,177 @@ def write(path, doc):
 # ================================================================= components
 write(os.path.join(COMP, "crenellation.json"), {
   "name": "Crenellation",
-  "_about": "A CRENELLATED PARAPET: a low wall `L` long, `t` thick and `h` tall, centred on its placement along x, and on it a row of MERLONS every `step` metres, each stepped (a smaller block on a larger -- the Omani and Persian kind); build it without \"merlon tops\" for plain square merlons, or without \"parapet\" to set the merlons straight on a wall's head.",
-  "params": {"detail": 4, "L": 20, "t": 0.5, "h": 0.9, "step": 2.0, "mw": "step * 0.45", "mh": 0.8, "n": "max(1, floor(L / step))",
-             "_n": "how many merlons: as many whole steps as the parapet holds, the row centred on it"},
-  "build": ["parapet", "merlons", "merlon tops"],
+  "_about": "A CRENELLATED PARAPET: a low wall `L` long, `t` thick and `h` tall, centred on its placement along x, and on it a row of MERLONS every `step` metres. `merlon` says their heads: \"stepped\" (a smaller block on a larger -- the Omani and Persian kind), \"forked\" (the swallowtail: a V cut down into each head `fork` deep, its two horns rising to the merlon's full height -- the Ghibelline merlon of Verona and Milan, and the Moscow Kremlin's), or \"square\"; build it without \"parapet\" to set the merlons straight on a wall's head.",
+  "params": {
+    "detail": 4,
+    "L": 20,
+    "t": 0.5,
+    "h": 0.9,
+    "step": 2.0,
+    "mw": "step * 0.45",
+    "mh": 0.8,
+    "merlon": "stepped",
+    "_merlon": "the merlons' heads: stepped, forked or square",
+    "fork": "mh * 0.3",
+    "_fork": "a forked merlon's V: how deep it is cut, from the horns' tips",
+    "n": "max(1, floor(L / step))",
+    "_n": "how many merlons: as many whole steps as the parapet holds, the row centred on it"
+  },
+  "build": [
+    "parapet",
+    "merlons",
+    "merlon bodies",
+    "merlon tops",
+    "merlon forks"
+  ],
   "parts": {
-    "parapet": {"type": "box", "width": "L", "length": "t", "height": "h", "at": [[0, 0, 0, 0]]},
-    "merlons": {"type": "box", "width": "mw", "length": "t", "height": "mh", "at": [["0 - (n - 1) * step / 2", "h", 0, 0]],
-                "repeat": {"count": "n", "step": ["step", 0, 0, 0]}, "_about": "the merlons, centred on the parapet"},
-    "merlon tops": {"type": "box", "width": "mw * 0.5", "length": "t", "height": "mh * 0.6", "at": [["0 - (n - 1) * step / 2", "h + mh", 0, 0]],
-                    "repeat": {"count": "n", "step": ["step", 0, 0, 0]}, "standsOn": ["merlons"], "_about": "the step on each merlon"}}})
+    "parapet": {
+      "type": "box",
+      "width": "L",
+      "length": "t",
+      "height": "h",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "merlons": {
+      "type": "box",
+      "width": "mw",
+      "length": "t",
+      "height": "mh",
+      "at": [
+        [
+          "0 - (n - 1) * step / 2",
+          "h",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "step",
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "the merlons, centred on the parapet",
+      "when": {
+        "merlon": [
+          "stepped",
+          "square"
+        ]
+      }
+    },
+    "merlon bodies": {
+      "type": "box",
+      "width": "mw",
+      "length": "t",
+      "height": "mh - fork",
+      "at": [
+        [
+          "0 - (n - 1) * step / 2",
+          "h",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "step",
+          0,
+          0,
+          0
+        ]
+      },
+      "_about": "a forked merlon's body, up to the bottom of its V",
+      "when": {
+        "merlon": "forked"
+      }
+    },
+    "merlon tops": {
+      "type": "box",
+      "width": "mw * 0.5",
+      "length": "t",
+      "height": "mh * 0.6",
+      "at": [
+        [
+          "0 - (n - 1) * step / 2",
+          "h + mh",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "step",
+          0,
+          0,
+          0
+        ]
+      },
+      "standsOn": [
+        "merlons"
+      ],
+      "_about": "the step on each merlon",
+      "when": {
+        "merlon": "stepped"
+      }
+    },
+    "merlon forks": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          "mw * 0.5",
+          "t"
+        ]
+      },
+      "height": "fork * 0.55",
+      "slope": [
+        "fork * 0.9 / (mw * 0.5)",
+        0
+      ],
+      "at": [
+        [
+          "0 - (n - 1) * step / 2 + mw * 0.25",
+          "h + mh - fork",
+          0,
+          0
+        ],
+        [
+          "0 - (n - 1) * step / 2 - mw * 0.25",
+          "h + mh - fork",
+          0,
+          3.14159265
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "step",
+          0,
+          0,
+          0
+        ]
+      },
+      "standsOn": [
+        "merlon bodies"
+      ],
+      "when": {
+        "merlon": "forked"
+      },
+      "_about": "a forked merlon's two horns: each half the merlon, its top sloping up from the V's bottom at the middle to the merlon's full height at its edge"
+    }
+  }
+})
 
 write(os.path.join(COMP, "arcade-walk.json"), {
   "name": "Arcade walk",
@@ -55,6 +216,8 @@ write(os.path.join(COMP, "arcade-walk.json"), {
                     "openings": {"pattern": "n", "width": "w", "gap": "pw", "pier": "pw", "sill": 0, "springing": "s", "head": {"profile": "arch", "spread": "spread"}},
                     "at": [[0, 0, "t - D / 2", 0]], "_about": "a second row of arches for a walk open on both sides"},
     "roof": {"type": "box", "width": "L", "length": "D", "height": "slab", "at": [[0, "H", 0, 0]], "flatRoof": True, "_about": "the flat roof"},
+    "space": {"type": "interior", "of": ["back wall", "back gate"], "plan": {"rect": ["L", "D - t"]}, "height": "H",
+              "_about": "the walk's space, from the arcade's middle to the back wall's, up to the roof: a riwaq with a back of its own is finished as a room (its floor, its back wall's inside); a walk against another's wall, or open both sides, is a portico, outside"},
     "front parapet": comp("components/crenellation", {"L": "L", "t": "pt", "h": "ph", "step": "mstep"}, [[0, "H + slab", "D / 2 - pt / 2", 0]],
                           standsOn=["roof"], _about="the crenellated parapet along the front edge"),
     "back parapet": comp("components/crenellation", {"L": "L", "t": "pt", "h": "ph", "step": "mstep"}, [[0, "H + slab", "pt / 2 - D / 2", 0]],
@@ -133,11 +296,12 @@ add("side gates", comp("components/portal", {**gate, "W": 14.0, "Hh": 14.0, "D":
 
 # ---- the prayer hall: a square of flat-roofed bays round the crossing
 HW, HH, HT = 64.0, 14.0, 2.0                # square, walls' height, thickness
+RS = 0.8                                    # the roof slab on them: the hall's space is up to its top (its edge shows under the great arches)
 HZ = -CZ / 2 + AD + 10.0 + HW / 2           # its middle (10m behind it to the north riwaq)
 A = HW / 2
 win = lambda n, g, sp=8.0, ww=2.4: {"pattern": str(n), "width": ww, "gap": g, "sill": 2.5, "springing": sp, "head": {"profile": "pointed", "spread": 0.5}}
 withdoor = lambda n, g, dw, ds: {**win(n, g), "middle": {"width": dw, "sill": 0, "springing": ds}}
-add("prayer hall", {"type": "enclosure", "plan": {"rect": [HW, HW]}, "thickness": HT, "height": HH,
+add("prayer hall", {"type": "enclosure", "plan": {"rect": [HW, HW]}, "thickness": HT, "height": HH, "interior": HH + RS,
                     "faces": {"0": withdoor(3, 14.3, 5.0, 6.0), "1": withdoor(3, 14.3, 3.2, 4.4), "3": withdoor(3, 14.3, 3.2, 4.4), "2": win(5, 9.0)},
                     "at": [[0, 0, HZ, 0]], "_about": "the prayer hall's walls: the great door toward the court, a door on each side, pointed windows"})
 S, PR = 28.0, 3.0                           # the crossing under the dome, and its piers
@@ -152,7 +316,6 @@ add("great arches", {"type": "barrel", "width": S, "length": PR, "springing": SP
 add("pendentives", {"type": "pendentives", "span": S, "springing": SPR, "sides": 16, "at": [[0, 0, HZ, 0]], "deck": {"thickness": 0.5, "out": PR},
                     "_about": "the pendentives, and the roof round the drum's foot"})
 RO = S / 2 + PR                             # the crossing reaches this far from the middle
-RS = 0.8
 add("hall roof", {"flatRoof": True, "type": "box", "width": HW, "length": A - RO, "height": RS,
                   "at": [[0, HH, HZ + sz * (A + RO) / 2, 0] for sz in (-1, 1)], "_about": "the flat roofs of the bays round the crossing"})
 add("hall roof sides", {"flatRoof": True, "type": "box", "width": A - RO, "length": 2 * RO, "height": RS,
@@ -162,6 +325,8 @@ add("tympana", {"type": "wall", "width": S, "height": CT + 0.5 - TY, "thickness"
                 "openings": {"pattern": "3", "width": 2.4, "gap": 5.0, "sill": 1.5, "springing": 5.0, "head": {"profile": "pointed", "spread": 0.5}},
                 "at": [[0, TY, HZ - RO + 1.0, 0], [0, TY, HZ + RO - 1.0, math.pi], [-RO, TY, HZ, -Q], [RO, TY, HZ, Q]],
                 "_about": "the tympana closing the great arches over the roofs, each with three pointed windows: the crossing's clerestory"})
+parts["crossing"] = {"type": "interior", "plan": {"rect": [2 * RO - 1.0, 2 * RO - 1.0]}, "height": CT, "at": [[0, 0, HZ, 0]],
+                     "_about": "the crossing's space, on the tympana's middle, up over the roofs to the drum's foot (the hall's own stops at its roofs)"}
 add("hall parapet", comp("components/crenellation", {"L": HW, "t": 0.6, "h": 0.9, "step": 2.4},
                          [[0, HH + RS, HZ + A - 0.3, 0], [0, HH + RS, HZ - A + 0.3, 0], [A - 0.3, HH + RS, HZ, Q], [-A + 0.3, HH + RS, HZ, Q]],
                          standsOn=["hall roof", "hall roof sides"], _about="the crenellated parapet round the hall's roofs"))
@@ -197,7 +362,7 @@ add("hall side arcades", comp("components/arcade-walk", {**ha, "L": 25.5},
 
 # ---- the women's prayer hall, east of the main one
 WX, WZ, WW, WL, WH = 54.0, HZ - 6.0, 18.0, 22.0, 9.0
-add("women's hall", {"type": "enclosure", "plan": {"rect": [WW, WL]}, "thickness": 1.2, "height": WH,
+add("women's hall", {"type": "enclosure", "plan": {"rect": [WW, WL]}, "thickness": 1.2, "height": WH, "interior": True,
                      "faces": {"0": [{"at": 0, "width": 3.2, "sill": 0, "springing": 3.8, "head": {"profile": "pointed", "spread": 0.5}}], "1": win(3, 3.6, 5.5, 1.8), "2": win(3, 3.6, 5.5, 1.8), "3": win(3, 3.6, 5.5, 1.8)},
                      "at": [[WX, 0, WZ, 0]], "_about": "the women's prayer hall: its door toward the court, pointed windows"})
 add("women's roof", {"flatRoof": True, "type": "box", "width": WW, "length": WL, "height": 0.6, "at": [[WX, WH, WZ, 0]]})

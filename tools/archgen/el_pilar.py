@@ -48,8 +48,8 @@ back = [{"h": LOW, "openings": [door(0, 4.0) if i == 0 else win_low(bx(i)) for i
         {"openings": [win_high(a) for a in long_bays]}]
 end = [{"h": LOW, "openings": [door(0, 4.0)]}, {"openings": [win_high(0)]}]
 add("body", {"type": "enclosure", "plan": {"rect": [r2(L), r2(W)]}, "thickness": T, "height": r2(WH),
-             "faces": {"0": front, "1": end, "2": back, "3": end}, "at": [[0, 0, 0, 0]],
-             "_about": "the body: red-brown brick walls round the long rectangle, three doors on the square (+z), one toward the river and one at each end, two tiers of arched windows"})
+             "faces": {"0": front, "1": end, "2": back, "3": end}, "at": [[0, 0, 0, 0]], "interior": r2(RH + TH),
+             "_about": "the body: red-brown brick walls round the long rectangle, three doors on the square (+z), one toward the river and one at each end, two tiers of arched windows; the hall inside it up to the ceilings' tops (over them the roof, open between the parapets; the domes' drums their own spaces)"})
 add("cornice", {"type": "enclosure", "plan": {"rect": [r2(L + 0.8), r2(W + 0.8)]}, "thickness": 0.7, "height": 0.6, "at": [[0, r2(WH - 0.6), 0, 0]],
                 "standsOn": ["body"], "_about": "the stone cornice crowning the walls (its ends buried in the towers)"})
 

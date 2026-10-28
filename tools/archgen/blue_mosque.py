@@ -134,7 +134,7 @@ def dome_cascade():
     win = lambda sill, spr: {"pattern": "3-5-3", "width": "oW", "gap": "oGap", "pier": "oPier", "sill": sill, "springing": spr, "head": POINTED}
     low, up = win(1.5, 4.2), win(1.0, 3.6)
     door = {"width": "doorW", "sill": 0, "springing": "doorS", "glass": False}
-    add("walls", {"type": "enclosure", "plan": {"rect": ["2 * (W + T)", "2 * (W + T)"]}, "thickness": "T", "height": "ROOFt + par",
+    add("walls", {"type": "enclosure", "plan": {"rect": ["2 * (W + T)", "2 * (W + T)"]}, "thickness": "T", "height": "ROOFt + par", "interior": "ROOFt",
                   "tiers": [{"h": "tierH", "openings": low}, {"openings": up}],
                   "faces": {"1": [{"h": "tierH", "openings": {**low, "middle": door}}, {"openings": up}],
                             "3": [{"h": "tierH", "openings": {**low, "middle": door}}, {"openings": up}],
@@ -142,6 +142,18 @@ def dome_cascade():
                                                               {"at": "0 - doorX", "head": POINTED, **door}]}, {"openings": up}]},
                   "at": [[0, 0, 0, 0]],
                   "_about": "the outer walls, two rows of windows clear of the side arches; a door in the middle of +x and -x, three in -z; +z (the qibla) blind below"})
+
+    # ---- the spaces over the roofs (the walls' interior stops at their top): the crossing between the piers and under
+    # the great arches up to the drum's foot, each half ring's up to its semidome, the corner drums -- the domes' and the
+    # semidomes' insides are their own (not in `build`: interiors come with the whole)
+    parts["crossing"] = {"type": "interior", "of": ["piers"], "height": "RING + dk2 - ROOFt", "at": [[0, "ROOFt", 0, 0]],
+                         "plan": {"points": [["R", "R"], ["R", "z0"], ["0 - R", "z0"], ["0 - R", "R"], ["0 - z0", "R"], ["0 - z0", "0 - R"],
+                                             ["0 - R", "0 - R"], ["0 - R", "0 - z0"], ["R", "0 - z0"], ["R", "0 - R"], ["z0", "0 - R"], ["z0", "R"]]},
+                         "_about": "the crossing over the roofs: the square between the piers and the great arches' spans, up to the drum's foot"}
+    parts["semidome bays"] = {"type": "interior", "of": ["half rings"], "plan": {"sides": RN, "radius": "R - ringT / 2"}, "arc": [-90, 90],
+                              "height": "SPR - ROOFt", "at": side("ROOFt"), "_about": "inside each half ring's windows, over the roofs, up to its semidome"}
+    parts["corner drum spaces"] = {"type": "interior", "of": ["corner drums"], "plan": {"sides": "cn", "radius": "C / 2 + cdt / 2"}, "height": "cdH",
+                                   "at": [[x, "ROOFt", z, 0] for x, _, z, _ in corners], "_about": "inside the corner domes' drums"}
 
     params = {
         "detail": 4,
@@ -203,6 +215,13 @@ def domed_arcade():
                   "at": bay("crown + dk + dh"), "repeat": rep("n"), "standsOn": ["drums"], "_about": "a small lead dome over every bay"})
     add("finials", {"type": "column", "radius": 0.08, "height": 1.0, "sides": 6, "taper": 0.3,
                     "at": bay("crown + dk + dh + s / 2 + dt"), "repeat": rep("n"), "standsOn": ["domes"]})
+    # the row's space, from the arcade's middle to the back wall's -- a row with no back of its own (`back` 0) reaching
+    # past the middle of the wall it stands against -- up to the pendentives' top; and each drum's, up to its dome
+    parts["bays space"] = {"type": "interior", "plan": {"rect": ["L", "B + (1 - back) * p"]}, "height": "crown",
+                           "at": [[0, 0, "0 - (B + (1 - back) * p) / 2", 0]],
+                           "_about": "the walk under the domes, closed but for its arcade: finished as a room, its floor and its back wall's inside"}
+    parts["drum spaces"] = {"type": "interior", "plan": {"sides": "cn", "radius": "s / 2 + dt / 2"}, "height": "dk + dh",
+                            "at": bay("crown"), "repeat": rep("n")}
     params = {"detail": 4, "n": 5, "B": 7.0, "p": 1.3, "_B": "the bays' pitch, pier axis to pier axis; p the piers and every wall; n the bays",
               "L": "n * B", "s": "B - p", "arcL": "L + p", "_arcL": "the arcade's length: L + p from the outer faces of its end piers, L - p between two other rows' arcades",
               "SP": 4.2, "crown": "SP + s / 2", "_SP": "where the pendentives spring; crown their top, the walls' height",

@@ -45,6 +45,13 @@ add("nave roof", {"walked": True, "type": "box", "width": C, "length": NL, "heig
                   "_about": "the flat roofs over the arms: a walk round the drum"})
 add("transept roofs", {"walked": True, "type": "box", "width": TL, "length": C, "height": S, "at": [[sx * (A + TL / 2), AH, 0, 0] for sx in (-1, 1)]})
 add("choir roof", {"walked": True, "type": "box", "width": C, "length": CL, "height": S, "at": [[0, AH, -A - CL / 2, 0]]})
+# the church's space (finish.js reads which side of every surface is in from it): the cross on its outer walls' middle,
+# the crossing's walls and the arms' back to back inside it -- the great arches' jambs the church's on both hands --, and
+# at the choir's end out to its face, where the apse's own space begins (`apse`); up to the roofs
+I = A - T / 2
+add("church interior", {"type": "interior", "plan": {"points": [[I, A + NL - T / 2], [-I, A + NL - T / 2], [-I, I], [-(A + TL - T / 2), I], [-(A + TL - T / 2), -I],
+                                                                [-I, -I], [-I, -A - CL], [I, -A - CL], [I, -I], [A + TL - T / 2, -I], [A + TL - T / 2, I], [I, I]]},
+                        "height": AH, "at": [[0, 0, 0, 0]], "_about": "the church's space: the Greek cross of the crossing and its four arms, up to the flat roofs"})
 
 # ---- the dome: pendentives, the roof round the drum, the colonnaded drum, the dome and its lantern
 DR = C / 2 - T                             # the pendentives' circle: the drum's inside

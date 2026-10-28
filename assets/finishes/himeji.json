@@ -1,0 +1,77 @@
+{
+  "name": "Himeji Castle",
+  "building": "architecture/himeji",
+  "_about": "Himeji's surfaces: the walls white plaster to the eaves (shirasagi, the white heron), the roofs grey fired clay tiles laid as round tiles over pan tiles (hongawara) with their joints plastered white, the stone base granite laid rough (uchikomi-hagi), the court gravel, the floors inside wide pine boards, the stairs inside steep timber.",
+  "stone": {
+    "color": "#9a9a96",
+    "accent": "#7c7c78",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {
+      "parts": "kind:roof",
+      "surface": "roof",
+      "pattern": "roofs/tube tiles",
+      "palette": "kawara"
+    },
+    {
+      "parts": "kind:roof",
+      "color": "#efebe2",
+      "accent": "#d9d3c6",
+      "_about": "the eaves' undersides and the gables' faces, plastered white"
+    },
+    {
+      "parts": [
+        "stair upper",
+        "stair lower",
+        "stair landing"
+      ],
+      "surface": "wall",
+      "pattern": "stone/rubble",
+      "palette": "granite"
+    },
+    {
+      "parts": [
+        "stair upper",
+        "stair lower",
+        "stair landing"
+      ],
+      "pattern": "floors/flagstones",
+      "palette": "granite"
+    },
+    {
+      "parts": "kind:flight",
+      "pattern": "timber/planks",
+      "palette": "pine"
+    },
+    {
+      "parts": "ishigaki",
+      "surface": "wall",
+      "pattern": "stone/rubble",
+      "palette": "granite",
+      "scale": 1.6,
+      "_about": "the stone base: rough-dressed granite, its corners in long and short stones"
+    },
+    {
+      "parts": "ishigaki",
+      "pattern": "stone/sand",
+      "palette": "gravel"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "timber/planks",
+      "palette": "pine"
+    },
+    {
+      "surface": "floor",
+      "pattern": "stone/sand",
+      "palette": "gravel"
+    },
+    {
+      "surface": "wall",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white"
+    }
+  ]
+}

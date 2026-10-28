@@ -1,0 +1,24 @@
+{
+  "name": "Kinkaku-ji",
+  "building": "architecture/kinkakuji",
+  "_about": "Kinkaku-ji's surfaces: the upper two storeys covered in gold leaf over black lacquer, the first plain timber and white plaster; the roofs of cypress-bark shingles (hiwadabuki), dark brown; the bracket sets and the phoenix gilt; the island's edge and the bridge granite, the island raked gravel.",
+  "stone": {
+    "color": "#a39e94",
+    "accent": "#857f75",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/slate", "palette": "walnut", "_about": "cypress-bark shingles, dark brown"},
+    {"parts": "kind:roof", "pattern": "timber/planks", "palette": "walnut", "_about": "the undersides: the rafters and boards"},
+    {"parts": ["finial base", "finial mast", "finial jewel"], "pattern": "roofs/gold leaf", "_about": "the phoenix on the apex, gilt bronze"},
+    {"parts": ["dou", "arm 1", "tongue 1", "blocks 1", "arm 2", "tongue 2", "blocks 2", "arm 3", "beams"], "pattern": "roofs/gold leaf", "_about": "the bracket sets under the upper eaves, gilt"},
+    {"parts": ["storey 2", "storey 3"], "surface": "wall", "side": "out", "pattern": "roofs/gold leaf", "_about": "the Tower of Sound Waves and the Cupola of the Ultimate, gold leaf over lacquer"},
+    {"parts": ["bridge", "bridge steps"], "pattern": "stone/ashlar fine", "palette": "granite"},
+    {"parts": "kind:flight", "pattern": "timber/planks", "palette": "pine"},
+    {"surface": "floor", "side": "in", "pattern": "timber/planks", "palette": "pine"},
+    {"surface": "floor", "pattern": "stone/sand", "palette": "gravel"},
+    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"parts": "kind:railing", "pattern": "timber/planks", "palette": "walnut"},
+    {"surface": "wall", "pattern": "timber/shinkabe", "palette": "frame-dark", "_about": "the first storey: dark timber, white plaster between"}
+  ]
+}

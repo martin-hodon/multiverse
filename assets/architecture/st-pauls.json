@@ -21,6 +21,7 @@
     "south portico dome",
     "choir",
     "apse",
+    "church interior",
     "nave roof",
     "choir roof",
     "transept roofs",
@@ -30,6 +31,7 @@
     "south transept balustrade",
     "pendentives",
     "dome base",
+    "dome well",
     "dome",
     "lower portico",
     "upper portico",
@@ -582,6 +584,71 @@
       ],
       "_about": "the apse, lower than the choir: its half dome rises into the choir's end wall, not above it"
     },
+    "church interior": {
+      "type": "interior",
+      "plan": {
+        "points": [
+          [
+            16.0,
+            66.0
+          ],
+          [
+            -16.0,
+            66.0
+          ],
+          [
+            -16.0,
+            16.0
+          ],
+          [
+            -38.0,
+            16.0
+          ],
+          [
+            -38.0,
+            -16.0
+          ],
+          [
+            -16.0,
+            -16.0
+          ],
+          [
+            -16.0,
+            -53.0
+          ],
+          [
+            16.0,
+            -53.0
+          ],
+          [
+            16.0,
+            -16.0
+          ],
+          [
+            38.0,
+            -16.0
+          ],
+          [
+            38.0,
+            16.0
+          ],
+          [
+            16.0,
+            16.0
+          ]
+        ]
+      },
+      "height": 30.0,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the church's space: the Latin cross of nave, transepts and choir round the crossing, up to the roofs"
+    },
     "nave roof": {
       "type": "roof",
       "form": "gable",
@@ -937,6 +1004,23 @@
       ],
       "_about": "the round base the peristyle stands on, clear of the roofs"
     },
+    "dome well": {
+      "type": "interior",
+      "plan": {
+        "sides": 32,
+        "radius": 15.7
+      },
+      "height": 7.5,
+      "at": [
+        [
+          0,
+          30.0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the church's space on up through the round base, from the pendentives' ring to the drum's (whose space is `drum-dome`'s)"
+    },
     "dome": {
       "type": "component",
       "use": "components/drum-dome",
@@ -1106,6 +1190,7 @@
           }
         ]
       },
+      "interior": true,
       "at": [
         [
           22.0,
@@ -1244,6 +1329,7 @@
           }
         ]
       },
+      "interior": true,
       "at": [
         [
           -22.0,

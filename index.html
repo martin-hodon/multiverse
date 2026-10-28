@@ -83,8 +83,8 @@ import { buildTerrainData } from "./terrain_data.js";
 import { makeGround, WLEVEL } from "./ground.js";
 import { growMap } from "./mapgen.js";
 import { animateSpecies } from "./anim.js";
-import { BUILDINGS, LANDMARKS, LANDMARK_NAMES, LAND, DRESS, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
-import { planTown, townStyle, doorNormal } from "./town.js";
+import { BUILDINGS, LANDMARKS, LANDMARK_NAMES, LAND, DRESS, PATTERN_LIBRARY, finishesAhead, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
+import { planTown, townStyle, townFinishes, doorNormal } from "./town.js";
 import { makeCart, wheelParams, FLEET, LOAD_VARIANTS, CART_SIZES } from "./carts.js";
 import { makeTree, TREE_SPECIES, WARM_TREES, makeMushroom, MUSHROOMS, makeBush, makeCloud, CLOUD_PARTS, rng } from "./flora.js";
 import { makePerson, personKind, PEOPLE, SOLDIER, setPeriodDress } from "./people.js";
@@ -109,7 +109,7 @@ import { updateFarHide, FARHIDE } from "./farhide.js";
 import { createPaintings, PAINTINGS } from "./paintings.js";
 import { createWeather } from "./weather.js";
 import { createSmoke } from "./smoke.js";
-import { createNightGlow, createWallLamps, createHangingLamps } from "./nightglow.js";
+import { createNightGlow, createWallLamps, createHangingLamps, createFireGlow } from "./nightglow.js";
 import { createSky } from "./sky.js";
 import { createStones } from "./stones.js";
 import { createMurmuration } from "./murmuration.js";
@@ -120,7 +120,7 @@ import { createIcicles } from "./icicles.js";
 import { createWindowBoxes } from "./windowbox.js";
 import { createWindowFrames, wallFrame, snowyLit, FRAME as WIN_FRAME } from "./windowframes.js";
 import { createRidgeCaps, RIDGE } from "./ridgecaps.js";
-import { leadedGlass } from "./archmat.js";
+import { leadedGlass, drawTilesAhead, tilesAheadDone } from "./archmat.js";
 import { bakeSunShadow, SUN, sunShade } from "./sunshadow.js";
 import { createFireworks } from "./fireworks.js";
 import { createLightning } from "./lightning.js";
@@ -287,6 +287,10 @@ bootMark("WHAT WAS WORKED OUT ONCE (pregen.js, build");
 // WHAT WAS WORKED OUT ONCE (pregen.js, build/pregen.py): these landmarks' finished geometry, wall fields and tiles, and
 // every fabric, fetched before anything is built -- whatever pregen/ lacks (or holds for other code) is made as always
 await loadPregen([...townKeys, ...LAND, "town/" + townStyle(townSeed, TOWN_STYLE).kind, "items", "world", "world/" + townSeed]);   // ("items": the loose items' tiles -- tools, carts, the boat; "world": what the generator's recorded worlds drew)   // (the town's tiles: its style's; the village's land)
+// THE TILES DRAWN WHILE THE MAP GROWS (archmat.js drawTilesAhead): the map is grown on the GPU next, the page waiting on
+// it, so the finish tiles this world's buildings will ask for -- the landmark's, the land's, every one the town's style
+// may use -- are drawn meanwhile in workers; whatever pregen/ had is not drawn again (?tilesahead=0: all on the page, to compare)
+if (qp.get("tilesahead") !== "0") drawTilesAhead([...finishesAhead(townKeys), ...townFinishes(townSeed, TOWN_STYLE, PERIOD.town ?? null)], PATTERN_LIBRARY);
 let town = [];
 {
   const widths = townKeys.map((k) => BUILDINGS[k].footprint[0]);
@@ -1148,7 +1152,7 @@ const poolMat = new THREE.MeshBasicNodeMaterial({   // a fountain pool: rings sp
   poolMat.colorNode = out.xyz;
   poolMat.opacityNode = out.w;
 }
-const fireGeos = [];   // every fire's cones, merged into one mesh once the sites are placed
+const fireGeos = [], fireSpots = [];   // every fire's cones, merged into one mesh once the sites are placed; where each burns (its light)
 const addFire = ({ r, h, candle, flicker = candle ? .3 : 1 }, x, y, z) => {
   // (a hearth: five cones leaning about each other; a candle: one small one, its phase from where it stands so a row of them flickers
   //  apart, and calm -- `flicker` how wild, from the fire marker: a hearth's 1)
@@ -1163,6 +1167,7 @@ const addFire = ({ r, h, candle, flicker = candle ? .3 : 1 }, x, y, z) => {
     cg.setAttribute("aScale", new THREE.BufferAttribute(sc, 3));
     fireGeos.push(cg);
   });
+  fireSpots.push({ x, y, z, r, h, candle: !!candle });
   return { position: new THREE.Vector3(x, y, z) };   // (what the sound asks of a fire: where it is)
 };
 bootMark("buildings");
@@ -1266,6 +1271,7 @@ for (const site of sites) {
   }
   scene.add(b);
 }
+tilesAheadDone();   // (the tiles drawn ahead and not asked for, let go)
 bootMark("buildings done");
 // THE SUN'S SHADOWS: the buildings drawn once from the sun into a depth map that the land and the buildings read
 // (sunshadow.js; ?sunshadow=0 off)
@@ -1722,7 +1728,36 @@ if (fireGeos.length) {   // the fires: one mesh, never culled (its cones stand a
   const fm = new THREE.Mesh(mergeGeometries(fireGeos), fireMat);
   fm.frustumCulled = false; fm.userData.noMerge = true;
   scene.add(fm);
+  // (and again in the glow scene, drawn after the night has darkened the frame: a flame is a light, it does not darken)
+  const fg = new THREE.Mesh(fm.geometry, fireMat);
+  fg.frustumCulled = false; fg.name = "fires"; glow.scene.add(fg);
 }
+// FIRELIGHT round every fire at night (nightglow.js createFireGlow): a halo about the flame, and a pool on the floor
+// where its light can fall -- the open ground round the hearth measured in sixteen ways out from it to the first WALL
+// (hitsBuildings both low and at head height: a table stands under it, the chimney breast over the fire hangs over it,
+// a wall is both -- and a wall is what the light must not pass), the pool set out before the fire toward its open side (a fireplace's mouth) and no larger than reaches the nearest wall from there, so the light of a
+// hearth stays in its room and never shows through the wall on the ground outside
+const fireLight = createFireGlow(glow.scene, fireSpots.map((f) => {
+  const halo = f.candle ? Math.max(.25, f.h * 4) : Math.max(.9, f.h * 2.4);
+  if (f.candle) return { x: f.x, y: f.y, z: f.z, h: f.h, halo, pool: null };
+  const R = Math.max(2.4, f.r * 6), hit = [];
+  const wall = (x, z) => hitsBuildings(x, z, f.y, f.y + .15, f.y + 1.2) && hitsBuildings(x, z, f.y, f.y + 1.4, f.y + 2.1);
+  let ox = 0, oz = 0;
+  for (let k = 0; k < 16; k++) {
+    const a = k / 16 * Math.PI * 2, dx = Math.cos(a), dz = Math.sin(a);
+    let c = .3;
+    while (c < R && !wall(f.x + dx * c, f.z + dz * c)) c += .15;
+    if (c < R) hit.push([f.x + dx * (c + CR - .05), f.z + dz * (c + CR - .05)]);   // (the wall's face: hitsBuildings keeps a walker's radius off it)
+    ox += dx * c; oz += dz * c;
+  }
+  // (out of a fireplace's mouth, halfway to what stands before it; in the open, the fire's own place)
+  const on = Math.hypot(ox, oz), ux = on > 1e-3 ? ox / on : 0, uz = on > 1e-3 ? oz / on : 0;
+  let ahead = .3;
+  if (on > 1e-3) while (ahead < R && !wall(f.x + ux * ahead, f.z + uz * ahead)) ahead += .15;
+  const out = on > 1e-3 && hit.length ? Math.min(1.2, ahead / 2) : 0, px = f.x + ux * out, pz = f.z + uz * out;
+  const pr = Math.min(R * .8, ...hit.map(([x, z]) => Math.hypot(x - px, z - pz)));
+  return { x: f.x, y: f.y, z: f.z, h: f.h, halo, pool: pr > .4 ? [px, supportAt(px, pz, f.y + .05), pz, pr] : null };
+}));
 { // cobwebs: inclined triangles spanning ceiling corners -- vertices a
   // little way along each of the three edges meeting there -- all in one
   // mesh, with spokes and rings drawn in the shader around each web's center
@@ -3872,12 +3907,15 @@ function lintPlaces() {
   }
   // THE BUILDINGS' OWN GROUND: every site laid out on 0 (the land settled flat under it) -- not water over its floor, nor
   // the ground fallen away under its walls (a grown river meanders: the town is planned on z = riverZ(x)). The bridge,
-  // the landing and the fisherman's jetty stand in the water by design.
+  // the landing and the fisherman's jetty stand in the water by design; so does a site's OWN MOAT (Caerphilly's,
+  // Kinkaku-ji's pond), the ring its footprint takes in -- only its island is checked, and the ground beyond.
   for (const s of sites) {
     if (/^(bridge|landing|fisherHut)/.test(s.key)) continue;
     const hit = new Map(), note = (what) => hit.set(what, (hit.get(what) ?? 0) + 1);
+    const m = BUILDINGS[s.key].moat, mx = m ? s.x + (m.ox ?? 0) : 0, mz = m ? siteZ(s) + (m.oz ?? 0) : 0;
     let n = 0;
     for (const r of siteRects(s, -.5)) for (let x = r.x0; x <= r.x1; x += 1.5) for (let z = r.z0; z <= r.z1; z += 1.5) {
+      if (m) { const dr = Math.max(Math.abs(x - mx) - m.hw, Math.abs(z - mz) - m.hd); if (dr > -1 && dr < m.w + 1) continue; }
       n++;
       const g = groundH(x, z);
       if (waterY(x, z) > -.3) note("water over its floor");
@@ -6476,6 +6514,7 @@ function frameBody() {
   fishing.update(t);
   if (!AMBIENT) for (const o of ambientMeshes()) o.visible = false;   // (?ambient=0: the world without them, to compare)
   glow.update(t, { night: dark > .25, level: dark, fireflies: weather === 0 && autumnLvl !== 2 });
+  fireLight.update(t, dark);   // (the firelight round the hearths and candles)
   mark("water+precip");
   // the paintings: ONE view a frame from the third frame on, so ten extra world renders never land in one
   if (paintingsMayStart && ++paintingsIn >= 3 && !paintingsDone) {

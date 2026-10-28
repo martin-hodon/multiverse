@@ -299,6 +299,20 @@ for sx, nm in ((1, "right"), (-1, "left")):
     add(f"turret lid {nm}", {"type": "prism", "plan": {"sides": 8, "radius": tR + 0.05}, "height": 0.35, "at": [[tx, "outerWallH + 3.0", tz, 0]]})
     add(f"turret pinnacle {nm}", {"type": "component", "use": "components/pinnacle", "params": {"w": 1.5, "h": 4.0, "s": 6.0},
                                   "at": [[tx, "outerWallH + 3.35", tz, 0]]})
+    parts[f"turret head {nm} interior"] = {"type": "interior", "plan": {"sides": 8, "radius": tR - 0.2}, "height": 3.0, "at": [[tx, "outerWallH", tz, 0]],
+                                           **({"_about": "inside the turret's head, where the spiral arrives"} if sx > 0 else {})}
+# ---- THE INTERIORS (for the finishes: the inlaid floor is the church's, the pavement outside and the terraces are not):
+# the church in three stepped boxes on the middle lines of its walls, from the facade's middle -- the whole width up to
+# the outer terraces, the nave and inner aisles up to the inner ones, the nave up to its roof's foot (the crossing goes on
+# up into the tiburio, its own) -- the transept across them as high as the nave, and round the apse the same three on
+# the chevet's, the ambulatory arcade's and the choir's half rings
+for nm, x, h in (("body", "wallX - aisleT / 2", "outerWallH - 0.4"), ("inner aisles", "innerX + aisleT / 2", "innerWallH - 0.4"), ("nave", "naveW / 2 + pierT / 2", "naveTop")):
+    parts[f"{nm} interior"] = {"type": "interior", "plan": {"rect": [f"2 * ({x})", "naveL + 1.2"]}, "height": h, "at": [[0, 0, 0.6, 0]]}
+parts["body interior"]["_about"] = "the nave and its four aisles from the facade's middle to the apse, up to the outer aisles' terraces; over the nave and the inner aisles, two more boxes stepping up as their roofs do"
+parts["transept interior"] = {"type": "interior", "plan": {"rect": [round(2 * (ARM_X - 1), 4), round(TZ1 - TZ0 - 2, 4)]}, "height": "naveTop", "at": [[0, 0, CROSS_Z, 0]]}
+for nm, n, r, h in (("ambulatory", 8, "wallX - aisleT / 2", "outerWallH - 0.4"), ("inner ambulatory", 16, "innerX + aisleT / 2", "aisleTop"), ("choir", 8, "naveW / 2 + pierT / 2", "naveTop")):
+    parts[f"{nm} interior"] = {"type": "interior", "plan": {"sides": n, "radius": r}, "arc": [90, 270], "height": h, "at": [[0, 0, "0 - naveL / 2", 0]]}
+parts["ambulatory interior"]["_about"] = "round the apse: the chevet's half ring up to the roof's foot, the inner ambulatory's to its vault's top, the choir's to the nave's"
 # ---- INSIDE (as notre_dame.py gothic): seating up to the crossing (crossZ), the altar east of it, the organ in the north transept
 add("seating", {"type": "zone", "zone": "seating", "w": "naveW - 1.6", "d": "(naveL / 2 - bayLen - 1.5) - (crossZ + bayLen + 1.5)", "h": "arcadeH",
                 "at": [[0, 0, "((crossZ + bayLen + 1.5) + (naveL / 2 - bayLen - 1.5)) / 2", 1.5707963]]})
