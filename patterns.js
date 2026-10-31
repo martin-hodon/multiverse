@@ -315,7 +315,7 @@ function drawTile(def, { pal, px, params = {}, depth = 0 }) {
   if (depth > 6) throw new Error("patterns use each other too deep (a pattern using itself?)");
   const P0 = { ...(def.params ?? {}), ...params }, tile = pairOf(def.size, P0, [1, 1]);
   const P = new Proxy(P0, { get: (o, k) => (k === "W" ? tile[0] : k === "H" ? tile[1] : o[k]), has: (o, k) => k === "W" || k === "H" || k in o });
-  const [W, H] = px, cv = mkCanvas(W, H), g = cv.getContext("2d");
+  const [W, H] = px, cv = mkCanvas(W, H), g = cv.getContext("2d", { willReadFrequently: true });   // (a software canvas: a GPU one can be lost, and blanked, while WebGPU starts)
   g.fillStyle = css(colorOf(def.ground ?? 0, pal)); g.fillRect(0, 0, W, H);
   g.setTransform(W / tile[0], 0, 0, -H / tile[1], W / 2, H / 2);            // metres, centred, y up
   const ctx = { P, pal, tile, px, ppm: W / tile[0], depth };
@@ -332,7 +332,7 @@ export function renderPattern(ref, { palette, params = {}, res } = {}) {
   const size = sizeOf(def, params), R = res ?? def.res ?? 512, long = Math.max(size[0], size[1]);
   const px = [Math.max(8, Math.round(R * size[0] / long)), Math.max(8, Math.round(R * size[1] / long))];
   const canvas = drawTile(def, { pal: paletteOf(def, palette), px, params });
-  return { canvas, size, px, repeat: def.repeat !== false };
+  return { canvas, size, px, repeat: def.repeat !== false, across: def.across ?? 1 };
 }
 
 // a sampler for a rendered tile (the headless check renders with it): (u, v) metres -> [r, g, b]

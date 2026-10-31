@@ -1,0 +1,163 @@
+{
+ "name": "Erechtheion",
+ "building": "architecture/erechtheion",
+ "_about": "The Erechtheion as it was painted: its frieze of dark Eleusinian limestone (white marble figures were pinned to it) running round the walls and over both porches, the Ionic capitals' volutes' channels gilt and their echinus of eggs and darts painted red and blue (with glass beads in the necks, too small to see here), a meander on every abacus, the maidens' capitals so and the architrave over them with its band, the tympana blue, the coffers blue with gold stars, the roofs in marble tiles, the columns fluted (24 flutes). (The maidens themselves are painted statues: statues.js.)",
+ "stone": {
+  "color": "#e4d8bf",
+  "accent": "#cfc0a2",
+  "pat": "marble"
+ },
+ "rules": [
+  {
+   "parts": [
+    "cella",
+    "east porch entablature",
+    "east porch returns"
+   ],
+   "above": 7.92,
+   "below": 8.73,
+   "pattern": "greek/erechtheion-frieze",
+   "surface": "wall",
+   "params": {
+    "W": 5.67,
+    "H": 0.81
+   },
+   "align": "above"
+  },
+  {
+   "parts": [
+    "north porch entablature",
+    "north porch sides"
+   ],
+   "above": 6.42,
+   "below": 7.35,
+   "pattern": "greek/erechtheion-frieze",
+   "surface": "wall",
+   "params": {
+    "W": 6.51,
+    "H": 0.93
+   },
+   "align": "above"
+  },
+  {
+   "parts": [
+    "cella",
+    "east porch entablature",
+    "east porch returns"
+   ],
+   "above": 7.92,
+   "below": 8.73,
+   "color": "#34363b",
+   "accent": "#2a2c30",
+   "pat": "marble"
+  },
+  {
+   "parts": [
+    "north porch entablature",
+    "north porch sides"
+   ],
+   "above": 6.42,
+   "below": 7.35,
+   "color": "#34363b",
+   "accent": "#2a2c30",
+   "pat": "marble"
+  },
+  {
+   "parts": [
+    "east porch cornice",
+    "north porch cornice"
+   ],
+   "surface": "ceiling",
+   "color": "#2b4479",
+   "accent": "#9a3826",
+   "pat": "grooves"
+  },
+  {
+   "parts": [
+    "east porch volutes",
+    "north porch volutes",
+    "north porch flanks volutes",
+    "west columns volutes"
+   ],
+   "color": "#ddcfae",
+   "accent": "#b8923a",
+   "pat": "grooves"
+  },
+  {
+   "parts": [
+    "east porch capitals",
+    "north porch capitals",
+    "north porch flanks capitals",
+    "west columns capitals",
+    "maidens' capitals"
+   ],
+   "color": "#9a3826",
+   "accent": "#2b4479",
+   "pat": "grooves"
+  },
+  {
+   "parts": [
+    "east porch abaci",
+    "north porch abaci",
+    "north porch flanks abaci",
+    "west columns abaci",
+    "maidens' abaci"
+   ],
+   "surface": "wall",
+   "pattern": "fabrics/meander",
+   "palette": "meander-red",
+   "scale": 2.5,
+   "align": "part"
+  },
+  {
+   "parts": "maidens' entablature",
+   "surface": "wall",
+   "above": 5.08,
+   "pattern": "fabrics/meander",
+   "palette": "meander-red",
+   "scale": 6.46,
+   "align": "part"
+  },
+  {
+   "parts": [
+    "roof",
+    "north porch roof"
+   ],
+   "surface": "wall",
+   "color": "#2b5592",
+   "accent": "#24497e"
+  },
+  {
+   "parts": [
+    "east porch shafts",
+    "north porch shafts",
+    "north porch flanks shafts",
+    "west columns shafts"
+   ],
+   "count": 24,
+   "pattern": "stone/fluted",
+   "palette": "carrara"
+  },
+  {
+   "parts": "kind:ceiling",
+   "scale": 0.5,
+   "pattern": "painted/starry vault",
+   "palette": "starry"
+  },
+  {
+   "surface": "roof",
+   "pattern": "roofs/tube tiles",
+   "palette": "carrara"
+  },
+  {
+   "surface": "floor",
+   "pattern": "stone/marble",
+   "palette": "carrara"
+  },
+  {
+   "surface": "wall",
+   "pattern": "stone/ashlar fine",
+   "palette": "carrara"
+  }
+ ]
+}

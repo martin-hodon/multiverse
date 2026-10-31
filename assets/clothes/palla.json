@@ -1,8 +1,8 @@
 {
   "name": "Palla",
   "kind": "garment",
-  "layer": 4,
-  "_about": "the palla: a Roman woman's mantle, wrapped over the shoulders and round the body to the knee",
+  "layer": 5,
+  "_about": "the palla: a Roman woman's mantle, wrapped over the shoulders and round the body to the knee from the left, its edge falling across the body from the left shoulder to under the right arm",
   "fabrics": {
     "main": {
       "pattern": "fabrics/plain",
@@ -14,9 +14,13 @@
       "use": "clothes/components/mantle",
       "params": {
         "to": "knee",
-        "centre": 190,
-        "span": 310,
-        "flare": 0.25
+        "centre": 175,
+        "span": 330,
+        "flare": 0.25,
+        "drop": "(waist - armtop) * 0.8",
+        "edgeHigh": "left",
+        "capeCentre": 100,
+        "capeSpan": 130
       }
     }
   ]

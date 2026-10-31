@@ -1,0 +1,764 @@
+{
+  "name": "Erechtheion",
+  "era": "-421--406",
+  "region": "Greece",
+  "_about": "THE ERECHTHEION (421-406 BC): the main block 11.63 x 22.76m, its east front a porch of six Ionic columns, its\nwest wall with four engaged columns and windows between them, the NORTH PORCH at its west end (six columns, its own\ngable and the great door under it) and on the south the PORCH OF THE MAIDENS -- six caryatids on a high podium\ncarrying its flat roof on their heads, PAINTED (statues.js \"painted\"); inside, the olivewood Athena Polias. One\nfloor throughout (the north porch stood three metres lower on the falling rock: here its columns are shorter, so\nits roof stays under the main one's eaves).",
+  "params": {
+    "detail": 4,
+    "W": 11.63,
+    "L": 22.76,
+    "base": 0.6,
+    "D": 0.69,
+    "colH": 6.58,
+    "entH": 1.55,
+    "cornH": 0.45,
+    "cornOut": 0.35,
+    "wallT": 0.6,
+    "porchZ": 13.4,
+    "npD": 0.76,
+    "npH": 5.2,
+    "npX": 12.2,
+    "npZ": -7.2,
+    "npSpan": 3.1,
+    "cpX": -7.45,
+    "cpZ": -7.7,
+    "cpH": 1.8,
+    "kore": 1.15,
+    "_kore": "a maiden's scale (statues.js: 1.78m a unit)"
+  },
+  "build": [
+    "crepidoma",
+    "cella",
+    "cross wall",
+    "east porch",
+    "east porch returns",
+    "east porch ceiling",
+    "west columns",
+    "roof",
+    "acroteria",
+    "north porch",
+    "north porch flanks",
+    "north porch sides",
+    "north porch ceiling",
+    "north porch roof",
+    "north porch acroterion",
+    "maidens' podium",
+    "maidens' capitals",
+    "maidens' abaci",
+    "maidens' entablature",
+    "maidens' roof",
+    "kore 0",
+    "kore 1",
+    "kore 2",
+    "kore 3",
+    "kore 4",
+    "kore 5",
+    "Polias base",
+    "Athena Polias"
+  ],
+  "parts": {
+    "crepidoma": {
+      "type": "crepidoma",
+      "width": 12.63,
+      "length": "porchZ + D + 13.0",
+      "steps": 3,
+      "stepH": 0.2,
+      "stepOut": 0.3,
+      "at": [
+        [
+          0,
+          0,
+          "(porchZ + D - 13.0) / 2 + 0.5",
+          0
+        ]
+      ],
+      "_about": "the stepped platform under the main block and its east porch"
+    },
+    "cella": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "L"
+        ]
+      },
+      "thickness": "wallT",
+      "height": 8.58,
+      "glass": false,
+      "faces": {
+        "0": [
+          {
+            "at": 0,
+            "width": 2.0,
+            "sill": 0,
+            "springing": 4.6,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          }
+        ],
+        "1": [
+          {
+            "at": "0 - npZ",
+            "width": 2.4,
+            "sill": 0,
+            "springing": 4.9,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          }
+        ],
+        "2": [
+          {
+            "at": -2.6,
+            "width": 0.9,
+            "sill": 4.0,
+            "springing": 5.7,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          },
+          {
+            "at": 0,
+            "width": 0.9,
+            "sill": 4.0,
+            "springing": 5.7,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          },
+          {
+            "at": 2.6,
+            "width": 0.9,
+            "sill": 4.0,
+            "springing": 5.7,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          }
+        ],
+        "3": [
+          {
+            "at": "cpZ + 1.3",
+            "width": 0.9,
+            "sill": 0,
+            "springing": 2.0,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          }
+        ]
+      },
+      "courses": [
+        {
+          "y": 0,
+          "h": 0.35,
+          "out": 0.08,
+          "profile": "band"
+        },
+        {
+          "y": 7.2,
+          "h": 0.12,
+          "out": 0.06,
+          "profile": "band"
+        },
+        {
+          "y": 8.13,
+          "h": 0.45,
+          "out": 0.35,
+          "profile": "cornice"
+        }
+      ],
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ],
+      "_about": "the main block's walls, the entablature run round them as mouldings"
+    },
+    "cross wall": {
+      "type": "wall",
+      "width": "W - 2 * wallT",
+      "height": 6.58,
+      "thickness": 0.5,
+      "openings": [
+        {
+          "at": "(W - 2 * wallT) / 2",
+          "width": 1.6,
+          "sill": 0,
+          "springing": 3.6,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          0,
+          "base",
+          1.2,
+          0
+        ]
+      ],
+      "_about": "the wall between Athena's cella in the east and the rooms of Erechtheus and Poseidon in the west"
+    },
+    "east porch": {
+      "type": "colonnade",
+      "order": "ionic",
+      "count": 6,
+      "spacing": "(W - D * 1.2) / 5",
+      "columnR": "D / 2",
+      "height": 6.58,
+      "entablature": {
+        "h": 1.55,
+        "depth": "D * 1.1",
+        "cornice": {
+          "h": 0.45,
+          "out": 0.35
+        }
+      },
+      "at": [
+        [
+          0,
+          "base",
+          "porchZ",
+          0
+        ]
+      ],
+      "_about": "the six Ionic columns of the east porch"
+    },
+    "east porch returns": {
+      "type": "box",
+      "width": "D * 1.1",
+      "length": "porchZ - L / 2",
+      "height": 2.0,
+      "at": [
+        [
+          "W / 2 - D * 0.55",
+          "base + 6.58",
+          "(porchZ + L / 2) / 2",
+          0
+        ],
+        [
+          "0 - W / 2 + D * 0.55",
+          "base + 6.58",
+          "(porchZ + L / 2) / 2",
+          0
+        ]
+      ],
+      "_about": "the entablature's returns from the porch to the walls"
+    },
+    "east porch ceiling": {
+      "type": "coffered-ceiling",
+      "width": "W - D * 2.2",
+      "length": "porchZ - L / 2",
+      "thickness": 2.0,
+      "nx": 5,
+      "nz": 1,
+      "depth": 0.15,
+      "steps": 1,
+      "at": [
+        [
+          0,
+          "base + 6.58",
+          "(porchZ + L / 2) / 2",
+          0
+        ]
+      ],
+      "_about": "the porch's coffered ceiling"
+    },
+    "west columns": {
+      "type": "colonnade",
+      "order": "ionic",
+      "count": 4,
+      "spacing": "(W - 1.6) / 3",
+      "columnR": 0.3,
+      "height": 6.58,
+      "at": [
+        [
+          0,
+          "base",
+          "0 - L / 2",
+          0
+        ]
+      ],
+      "_about": "the four engaged Ionic columns of the west wall"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 12.33,
+      "length": 25.86,
+      "pitch": 13,
+      "rake": {
+        "h": 0.45,
+        "out": 0.15
+      },
+      "at": [
+        [
+          0,
+          "base + 8.58",
+          1.2,
+          0
+        ]
+      ],
+      "_about": "the main gable, its pediments east and west"
+    },
+    "acroteria": {
+      "type": "item",
+      "item": "items/ornaments/acroterion",
+      "params": {
+        "h": "D * 1.6"
+      },
+      "solid": false,
+      "at": [
+        [
+          0,
+          "base + 10.003",
+          13.93,
+          0
+        ],
+        [
+          0,
+          "base + 10.003",
+          -11.53,
+          0
+        ]
+      ],
+      "_about": "the floral acroteria on the apexes of the main gable"
+    },
+    "north porch": {
+      "type": "colonnade",
+      "order": "ionic",
+      "count": 4,
+      "spacing": "npSpan",
+      "columnR": "npD / 2",
+      "height": "npH",
+      "entablature": {
+        "h": 1.55,
+        "depth": "npD * 1.1",
+        "cornice": {
+          "h": 0.45,
+          "out": 0.35
+        }
+      },
+      "at": [
+        [
+          "npX",
+          "base",
+          "npZ",
+          1.5707963
+        ]
+      ],
+      "_about": "the north porch's front: four Ionic columns"
+    },
+    "north porch flanks": {
+      "type": "colonnade",
+      "order": "ionic",
+      "count": 2,
+      "spacing": "npSpan * 3",
+      "columnR": "npD / 2",
+      "height": "npH",
+      "at": [
+        [
+          "npX - npSpan",
+          "base",
+          "npZ",
+          1.5707963
+        ]
+      ],
+      "_about": "a column behind each front corner"
+    },
+    "north porch sides": {
+      "type": "box",
+      "width": 6.803,
+      "length": "npD * 1.1",
+      "height": 2.0,
+      "at": [
+        [
+          9.216,
+          "base + 5.2",
+          "npZ + 4.65",
+          0
+        ],
+        [
+          9.216,
+          "base + 5.2",
+          "npZ - 4.65",
+          0
+        ]
+      ],
+      "_about": "the porch's side entablatures back to the wall"
+    },
+    "north porch ceiling": {
+      "type": "coffered-ceiling",
+      "width": 5.967,
+      "length": "npSpan * 3 - npD * 1.1",
+      "thickness": 2.0,
+      "nx": 4,
+      "nz": 5,
+      "depth": 0.2,
+      "steps": 1,
+      "at": [
+        [
+          8.799,
+          "base + 5.2",
+          "npZ",
+          0
+        ]
+      ],
+      "_about": "its coffered ceiling"
+    },
+    "north porch roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 10.836,
+      "length": 7.453,
+      "pitch": 13,
+      "rake": {
+        "h": 0.45,
+        "out": 0.15
+      },
+      "at": [
+        [
+          9.241,
+          "base + 7.2",
+          "npZ",
+          1.5707963
+        ]
+      ],
+      "_about": "the north porch's gable, its pediment to the north"
+    },
+    "north porch acroterion": {
+      "type": "item",
+      "item": "items/ornaments/acroterion",
+      "params": {
+        "h": "npD * 1.4"
+      },
+      "solid": false,
+      "at": [
+        [
+          12.768,
+          "base + 8.451",
+          "npZ",
+          1.5707963
+        ]
+      ],
+      "_about": "the floral acroterion on its apex"
+    },
+    "maidens' podium": {
+      "type": "box",
+      "width": 3.6,
+      "length": 5.2,
+      "height": "cpH",
+      "at": [
+        [
+          "cpX",
+          "base",
+          "cpZ",
+          0
+        ]
+      ],
+      "_about": "the high podium the maidens stand on"
+    },
+    "maidens' capitals": {
+      "type": "column",
+      "radius": 0.21,
+      "height": 0.16,
+      "taper": 1.5,
+      "sides": 12,
+      "at": [
+        [
+          -8.75,
+          "base + 3.807",
+          -9.65,
+          0
+        ],
+        [
+          -8.75,
+          "base + 3.807",
+          -8.35,
+          0
+        ],
+        [
+          -8.75,
+          "base + 3.807",
+          -7.05,
+          0
+        ],
+        [
+          -8.75,
+          "base + 3.807",
+          -5.75,
+          0
+        ],
+        [
+          -6.9,
+          "base + 3.807",
+          -9.65,
+          0
+        ],
+        [
+          -6.9,
+          "base + 3.807",
+          -5.75,
+          0
+        ]
+      ],
+      "_about": "the echinus on each maiden's head"
+    },
+    "maidens' abaci": {
+      "type": "box",
+      "width": 0.62,
+      "length": 0.62,
+      "height": 0.1,
+      "at": [
+        [
+          -8.75,
+          "base + 3.967",
+          -9.65,
+          0
+        ],
+        [
+          -8.75,
+          "base + 3.967",
+          -8.35,
+          0
+        ],
+        [
+          -8.75,
+          "base + 3.967",
+          -7.05,
+          0
+        ],
+        [
+          -8.75,
+          "base + 3.967",
+          -5.75,
+          0
+        ],
+        [
+          -6.9,
+          "base + 3.967",
+          -9.65,
+          0
+        ],
+        [
+          -6.9,
+          "base + 3.967",
+          -5.75,
+          0
+        ]
+      ],
+      "_about": "the abacus over it"
+    },
+    "maidens' entablature": {
+      "type": "box",
+      "width": 3.3,
+      "length": 4.9,
+      "height": 0.62,
+      "at": [
+        [
+          "cpX - 0.2",
+          "base + 4.067",
+          "cpZ",
+          0
+        ]
+      ],
+      "_about": "the architrave with its rosettes and the dentils over the maidens"
+    },
+    "maidens' roof": {
+      "type": "box",
+      "width": 3.7,
+      "length": 5.3,
+      "height": 0.3,
+      "at": [
+        [
+          "cpX - 0.25",
+          "base + 4.687",
+          "cpZ",
+          0
+        ]
+      ],
+      "_about": "the porch's flat marble roof"
+    },
+    "kore 0": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -8.75,
+          2.4,
+          -9.65,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "painted",
+        "scale": 1.15,
+        "pose": "contrapposto",
+        "seed": 40,
+        "face": 3.1415927
+      }
+    },
+    "kore 1": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -8.75,
+          2.4,
+          -8.35,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "painted",
+        "scale": 1.15,
+        "pose": "contrapposto",
+        "seed": 41,
+        "face": 3.1415927
+      }
+    },
+    "kore 2": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -8.75,
+          2.4,
+          -7.05,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "painted",
+        "scale": 1.15,
+        "pose": "contrapposto left",
+        "seed": 42,
+        "face": 3.1415927
+      }
+    },
+    "kore 3": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -8.75,
+          2.4,
+          -5.75,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "painted",
+        "scale": 1.15,
+        "pose": "contrapposto left",
+        "seed": 43,
+        "face": 3.1415927
+      }
+    },
+    "kore 4": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -6.9,
+          2.4,
+          -9.65,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "painted",
+        "scale": 1.15,
+        "pose": "contrapposto",
+        "seed": 44,
+        "face": 3.1415927
+      }
+    },
+    "kore 5": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          -6.9,
+          2.4,
+          -5.75,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "painted",
+        "scale": 1.15,
+        "pose": "contrapposto left",
+        "seed": 45,
+        "face": 3.1415927
+      }
+    },
+    "Polias base": {
+      "type": "box",
+      "width": 1.4,
+      "length": 1.2,
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          0.6,
+          7.5,
+          0
+        ]
+      ],
+      "_about": "the base of the Athena Polias"
+    },
+    "Athena Polias": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0,
+          1.2,
+          7.5,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "painted",
+        "scale": 1.2,
+        "pose": "offering",
+        "hold": {
+          "R": "items/food/pomegranate"
+        },
+        "wear": [
+          "clothes/crested-helmet"
+        ],
+        "seed": 21,
+        "face": -1.5707963
+      }
+    }
+  }
+}

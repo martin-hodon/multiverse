@@ -91,6 +91,27 @@ export const waterHere = wgslFn(`
     return textureLoad(lv, vec2<i32>(u * dim), 0).r;
   }
 `);
+// THE BARE GROUND, where no grass grows: a landscape world's rock, scree, sand, snow (landmap.js `surface.bare`, 0..1),
+// an r32f texture over `box` (x0, z0, x1, z1), set by the world (index.html); outside it, and in any other world, none.
+// The ground's lawn thins by it and the fringe grows nothing where it is over half
+let _noBare = null;
+function noBare() {
+  if (!_noBare) { _noBare = new THREE.DataTexture(new Float32Array([0]), 1, 1, THREE.RedFormat, THREE.FloatType); _noBare.needsUpdate = true; }
+  return _noBare;
+}
+export const GROUND_BARE = { tex: texture(noBare()), box: uniform(new THREE.Vector4(0, 0, 0, 0)) };
+export const bareHere = wgslFn(`
+  fn bareHere(wp: vec3<f32>, bt: texture_2d<f32>, box: vec4<f32>) -> f32 {
+    let dim = vec2<f32>(textureDimensions(bt));
+    let f = (wp.xz - box.xy) / max(box.zw - box.xy, vec2<f32>(1e-6)) * (dim - 1.0);
+    if (f.x < 0.0 || f.y < 0.0 || f.x > dim.x - 1.0 || f.y > dim.y - 1.0) { return 0.0; }
+    let i = vec2<i32>(min(floor(f), dim - 2.0));
+    let t = f - vec2<f32>(i);
+    let a = mix(textureLoad(bt, i, 0).r, textureLoad(bt, i + vec2<i32>(1, 0), 0).r, t.x);
+    let b = mix(textureLoad(bt, i + vec2<i32>(0, 1), 0).r, textureLoad(bt, i + vec2<i32>(1, 1), 0).r, t.x);
+    return mix(a, b, t.y);
+  }
+`);
 export const groundHole = wgslFn(`
   fn groundHole(wp: vec3<f32>, holes: texture_2d<f32>, box: vec4<f32>, rects: texture_2d<f32>) -> f32 {
     for (var i: i32 = 0; i < 16; i = i + 1) {
@@ -184,8 +205,8 @@ const gHash = wgslFn(`
 
 // what the mask stores: is this grass, and how far away is it. -1 in alpha: discarded (no stalks out of water).
 const maskFrag = wgslFn(`
-  fn maskFrag(wp: vec3<f32>, dist: f32, far: f32, water: f32, hole: f32) -> vec4<f32> {
-    if (wp.y < water + 0.02 || hole > 0.5) { discard; }
+  fn maskFrag(wp: vec3<f32>, dist: f32, far: f32, water: f32, hole: f32, bare: f32) -> vec4<f32> {
+    if (wp.y < water + 0.02 || hole > 0.5 || bare > 0.5) { discard; }
     let d = clamp(dist / far, 0.0, 1.0);
     return vec4<f32>(grassGrade(wp.y), floor(d * 255.0) / 255.0, fract(d * 255.0), 1.0);
   }
@@ -317,7 +338,8 @@ export function createGrassFringe() {
   {
     const out = maskFrag({ wp: positionWorld, dist: positionView.z.negate(), far: uFar,
                            water: waterHere({ wp: positionWorld, lv: WATER_LEVEL.tex, box: WATER_LEVEL.box, flat: uWater }),
-                           hole: groundHole({ wp: positionWorld, holes: GROUND_HOLES.tex, box: GROUND_HOLES.box, rects: GROUND_HOLES.rects }) });
+                           hole: groundHole({ wp: positionWorld, holes: GROUND_HOLES.tex, box: GROUND_HOLES.box, rects: GROUND_HOLES.rects }),
+                           bare: bareHere({ wp: positionWorld, bt: GROUND_BARE.tex, box: GROUND_BARE.box }) });
     maskMat.colorNode = out.xyz;
     maskMat.opacityNode = out.w;
     maskMat.transparent = true;

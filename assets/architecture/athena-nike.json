@@ -1,0 +1,258 @@
+{
+  "name": "Temple of Athena Nike",
+  "_about": "THE TEMPLE OF ATHENA NIKE (c. 420 BC, Kallikrates), on the bastion before the Propylaia: AMPHIPROSTYLE -- four monolithic Ionic columns before each end and none down the sides -- on a three-step crepidoma 5.38 x 8.16m, its cella nearly square, its continuous frieze and its pediments painted, the wooden image of Athena Nike inside with a pomegranate in her hand.",
+  "params": {
+    "detail": 4,
+    "_inset": "stylobate edge to column axis",
+    "_ridge": "the pediment's height: half the roof's width times the pitch's slope",
+    "W": 5.38,
+    "L": 8.16,
+    "steps": 3,
+    "stepH": 0.26,
+    "stepOut": 0.3,
+    "base": 0.78,
+    "front": 4,
+    "side": 2,
+    "D": 0.53,
+    "inset": 0.545,
+    "colH": 4.07,
+    "entH": 0.95,
+    "cornH": 0.3,
+    "cornOut": 0.25,
+    "pitch": 14,
+    "ridge": 0.68,
+    "cellaW": 4.6,
+    "cellaL": 3.9,
+    "cellaZ": -0.45,
+    "cellaH": 4.0,
+    "wallT": 0.45,
+    "doorW": 2.0,
+    "doorH": 3.2,
+    "porch": 0,
+    "porchD": 0
+  },
+  "build": [
+    "crepidoma",
+    "peristyle",
+    "cella sides",
+    "cella back",
+    "cella front",
+    "cult base",
+    "Athena Nike",
+    "ceiling",
+    "roof",
+    "acroteria"
+  ],
+  "parts": {
+    "crepidoma": {
+      "type": "crepidoma",
+      "width": "W",
+      "length": "L",
+      "steps": "steps",
+      "stepH": "stepH",
+      "stepOut": "stepOut",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the stepped platform; its top step is the stylobate the columns stand on"
+    },
+    "peristyle": {
+      "type": "colonnade",
+      "plan": "peristyle",
+      "order": "ionic",
+      "front": "front",
+      "side": "side",
+      "width": "W - 2 * inset",
+      "length": "L - 2 * inset",
+      "columnR": "D / 2",
+      "height": "colH",
+      "entablature": {
+        "h": "entH",
+        "depth": "D * 1.1",
+        "cornice": {
+          "h": "cornH",
+          "out": "cornOut"
+        }
+      },
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ],
+      "_about": "the ring of Ionic columns, its architrave, frieze and cornice"
+    },
+    "cella sides": {
+      "type": "box",
+      "width": "wallT",
+      "length": "cellaL",
+      "height": "cellaH",
+      "at": [
+        [
+          "0 - cellaW / 2 + wallT / 2",
+          "base",
+          "cellaZ",
+          0
+        ],
+        [
+          "cellaW / 2 - wallT / 2",
+          "base",
+          "cellaZ",
+          0
+        ]
+      ]
+    },
+    "cella back": {
+      "type": "box",
+      "width": "cellaW - 2 * wallT",
+      "length": "wallT",
+      "height": "cellaH",
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ - cellaL / 2 + wallT / 2",
+          0
+        ]
+      ]
+    },
+    "cella front": {
+      "type": "wall",
+      "width": "cellaW - 2 * wallT",
+      "height": "cellaH",
+      "thickness": "wallT",
+      "openings": [
+        {
+          "at": "(cellaW - 2 * wallT) / 2",
+          "width": "doorW",
+          "sill": 0,
+          "springing": "doorH",
+          "head": {
+            "profile": "flat"
+          }
+        }
+      ],
+      "beam": 6.0,
+      "at": [
+        [
+          0,
+          "base",
+          "cellaZ + cellaL / 2",
+          0
+        ]
+      ],
+      "_about": "the front wall of the naos, with its great door"
+    },
+    "cult base": {
+      "type": "box",
+      "width": 1.0,
+      "length": 0.9,
+      "height": 0.5,
+      "at": [
+        [
+          0,
+          0.78,
+          -1.2,
+          0
+        ]
+      ],
+      "_about": "the base of the cult image"
+    },
+    "Athena Nike": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0,
+          1.28,
+          -1.2,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "woman",
+        "style": "greek",
+        "stone": "painted",
+        "scale": 1.0,
+        "pose": "offering",
+        "hold": {
+          "R": "items/food/pomegranate"
+        },
+        "wear": [
+          "clothes/crested-helmet"
+        ],
+        "seed": 13,
+        "face": -1.5707963
+      }
+    },
+    "ceiling": {
+      "type": "coffered-ceiling",
+      "width": "W - 2 * inset - D * 1.1",
+      "length": "L - 2 * inset - D * 1.1",
+      "thickness": "entH + cornH",
+      "nx": "front * 2",
+      "nz": "side * 2",
+      "depth": 0.3,
+      "steps": 1,
+      "at": [
+        [
+          0,
+          "base + colH",
+          0,
+          0
+        ]
+      ],
+      "_about": "the coffered marble ceiling inside the ring of the entablature, over the colonnade walk and the cella"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "W - 2 * inset + D * 1.1 + 2 * cornOut",
+      "length": "L - 2 * inset + D * 1.1 + 2 * cornOut - 0.4",
+      "pitch": "pitch",
+      "rake": {
+        "h": "cornH",
+        "out": 0.2
+      },
+      "at": [
+        [
+          0,
+          "base + colH + entH + cornH",
+          0,
+          0
+        ]
+      ],
+      "_about": "one gable over the whole: its two ends are the pediments"
+    },
+    "acroteria": {
+      "type": "item",
+      "item": "items/ornaments/acroterion",
+      "params": {
+        "h": "D * 1.6"
+      },
+      "solid": false,
+      "at": [
+        [
+          0,
+          "base + colH + entH + cornH + ridge",
+          "L / 2 - inset + D * 0.55 + cornOut - D * 0.25 - 0.2",
+          0
+        ],
+        [
+          0,
+          "base + colH + entH + cornH + ridge",
+          "0 - L / 2 + inset - D * 0.55 - cornOut + D * 0.25 + 0.2",
+          0
+        ]
+      ],
+      "_about": "the floral ornaments on the apex of each pediment"
+    }
+  }
+}

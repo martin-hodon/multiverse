@@ -3,7 +3,7 @@
   "kind": "garment",
   "layer": 2,
   "skirted": true,
-  "_about": "the Ionic chiton: a wide linen tunic pinned along the arms into loose sleeves, girded at the waist, falling in fine pleats to the feet (a man's to the knee); a key border at the hem",
+  "_about": "the Ionic chiton: a wide linen tunic pinned along the arms into loose sleeves, girded at the waist, falling in fine pleats straight to the feet (`fit` ring: its ring widened over the hips, its own small flare kept) -- a man's to the knee, flared for the stride; a key border at the hem",
   "fabrics": {
     "main": {
       "pattern": "fabrics/linen",
@@ -17,7 +17,9 @@
   "params": {
     "length": "floor - 0.05",
     "sleeves": "elbow",
-    "hem": 0.03
+    "hem": 0.03,
+    "flare": 0.1,
+    "fit": "ring"
   },
   "use": [
     {
@@ -27,7 +29,8 @@
         "neckline": "boat",
         "neckFront": 0.03,
         "neckBack": 0.02,
-        "neckWidth": 85
+        "neckWidth": 85,
+        "pleats": 20
       }
     },
     {
@@ -35,7 +38,7 @@
       "params": {
         "from": "shoulder",
         "to": "sleeves",
-        "flare": 0.3
+        "flare": 0.15
       }
     },
     {
@@ -43,9 +46,11 @@
       "params": {
         "from": "waist",
         "to": "length",
-        "flare": 0.28,
+        "flare": "flare",
+        "fit": "fit",
         "pleats": 28,
-        "hem": "hem"
+        "hem": "hem",
+        "cling": 0.75
       }
     }
   ]

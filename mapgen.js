@@ -107,16 +107,33 @@ export async function growMap({ seed = 1, radius = 300, device = null, N = 128, 
     lab.destroy();
     if (mk) { pregenMiss("map", String(seed), mk); if (PREGEN.record) recordFor("maps", mk, { buf: packMap(grown), seed }); }
   }
-  const { stats, H, W, Q, dx, inlet } = grown, Qin = inlet[2];
+  const { dx } = grown, outlets = PRESETS.river.outlets.map(([x, y, w]) => [x * (N - 1) * dx, y * (N - 1) * dx, w]);   // (where the river leaves the lab, m)
+  return shapeMap({ ...grown, N, outlets, falls: grown.stats.falls }, { seed, radius, riverZ, res, meadow, facade });
+}
+
+// SHAPE: the world cut out of a grown land and made ready for it -- CUT, UPSCALE, SITES, SETTLE, CARVE, WATER above.
+// grown: { H, W, Q (m3/yr), N, dx } -- the land's grids, N x N cells dx apart -- the big river's inlet [u, v, Q] and the
+// outlets it may leave by ([u, v, w], m), and the falls ([{ height }], highest first). (The terrain lab's, or any land
+// grown another way: landmap.js scales a landscape scene up into one)
+// opts: as growMap's; `score(win, at, river, wet)`: what else makes a window good (added to its gentleness; `at(x, z)`
+// the land's height there in that window, `wet(x, z)` whether a lake drowns it, `river` its course across it,
+// [{ x, z, level }] west to east); `siteCost(xb, townH, groundAt, wet, zb)`: what else makes a bridge site bad (added
+// to its roughness; townH the town's height there, zb the river's z);
+// `detail`: how much finer detail the upscaling adds where the land is steep; `round`: only the world's circle need lie
+// inside the grown land, not the square round it (its corners are never seen: the land there is the edge's, drawn out);
+// `main`: the big river's cells, inlet to outlet, where the land knows them (else traced down its water from the inlet)
+export function shapeMap({ H, W, Q, N, dx, inlet, outlets, falls }, { seed = 1, radius = 300, riverZ = 150, res = 2,
+                          meadow = { x0: -30, x1: 30, z0: -30, z1: 12 }, facade = { z: -80, w: 60, d: 50, road: 20 },
+                          score = null, siteCost = null, detail = 1, round = false, main: mainCells = null } = {}) {
+  const Qin = inlet[2];
   const sH = sampler(H, N, dx), sW = sampler(W, N, dx), sD = sampler(W.map((w, i) => w - H[i]), N, dx);
   const slopeAt = (u, v) => Math.hypot(sH.lin(u + 5, v) - sH.lin(u - 5, v), sH.lin(u, v + 5) - sH.lin(u, v - 5)) / 10;
 
   // ---- the big river, from where it comes in, smoothed
   // (to where it leaves the lab: the cells along the edge by the preset's outlet)
   const border = (k) => { const i = k % N, j = (k / N) | 0; return i === 1 || j === 1 || i === N - 2 || j === N - 2; };
-  const outlets = PRESETS.river.outlets.map(([x, y, w]) => [x * (N - 1) * dx, y * (N - 1) * dx, w]);
   const atOutlet = (k) => border(k) && outlets.some(([u, v, w]) => Math.hypot((k % N) * dx - u, ((k / N) | 0) * dx - v) <= w + 1.5 * dx);
-  const main = course(clamp(Math.round(inlet[1] / dx), 1, N - 2) * N + clamp(Math.round(inlet[0] / dx), 1, N - 2), N, W, atOutlet);
+  const main = mainCells ?? course(clamp(Math.round(inlet[1] / dx), 1, N - 2) * N + clamp(Math.round(inlet[0] / dx), 1, N - 2), N, W, atOutlet);
   const mu = blur(main.map((c) => (c % N) * dx), 3), mv = blur(main.map((c) => ((c / N) | 0) * dx), 3);
   const arc = [0]; for (let k = 1; k < mu.length; k++) arc.push(arc[k - 1] + Math.hypot(mu[k] - mu[k - 1], mv[k] - mv[k - 1]));
   const along = (s) => {
@@ -134,17 +151,20 @@ export async function growMap({ seed = 1, radius = 300, device = null, N = 128, 
   for (let x = meadow.x0; x <= meadow.x1; x += 10) for (let z = meadow.z0; z <= meadow.z1; z += 10) open.push([x, z]);
   for (let x = -R + 60; x <= R - 60; x += 15) open.push([x, facade.z]);
   let best = null; const why = { tried: 0, outside: 0, back: 0, far: 0 };
+  const RIM = Array.from({ length: 24 }, (_, k) => [R * Math.cos(k * Math.PI / 12), R * Math.sin(k * Math.PI / 12)]);   // (round: the world's own circle)
   for (const flip of [1, -1]) for (let s = R; s < arc[arc.length - 1] - R; s += 30) {
     why.tried++;
     const a = along(s - R), b = along(s + R), P = along(s), el = Math.hypot(b[0] - a[0], b[1] - a[1]);
     if (el < 1) continue;
     const e = [(b[0] - a[0]) / el, (b[1] - a[1]) / el], f = [-e[1] * flip, e[0] * flip];   // (either bank may be the south)
     const w = { e, f, O: [P[0] - riverZ * f[0], P[1] - riverZ * f[1]] };
-    if ([[-R, -R], [R, -R], [-R, R], [R, R]].some(([x, z]) => { const [u, v] = toLab(w, x, z); return u < 2 * dx || v < 2 * dx || u > L - 2 * dx || v > L - 2 * dx; })) { why.outside++; continue; }
+    if ((round ? RIM : [[-R, -R], [R, -R], [-R, R], [R, R]]).some(([x, z]) => { const [u, v] = toLab(w, x, z); return u < 2 * dx || v < 2 * dx || u > L - 2 * dx || v > L - 2 * dx; })) { why.outside++; continue; }
     let ok = true, lastX = -1e9;   // the river across it always onward (east), within reach of riverZ
+    const across = [];
     for (let k = 0; k < mu.length && ok; k++) {
       const [x, z] = toGame(w, mu[k], mv[k]);
       if (Math.abs(x) > R + 30 || Math.abs(z) > R + 30) continue;
+      across.push({ x, z, level: W[main[k]] });
       if (x < lastX - 1) { ok = false; why.back++; }
       else if (Math.abs(x) < R * .85 && (z < riverZ - 70 || z > riverZ + 40)) { ok = false; why.far++; }
       lastX = Math.max(lastX, x);
@@ -152,8 +172,8 @@ export async function growMap({ seed = 1, radius = 300, device = null, N = 128, 
     if (!ok) continue;
     const banks = [];
     for (let x = -R + 60; x <= R - 60; x += 12) for (const dz of [-70, -45, -20, 20, 45, 70, 95, 120]) banks.push([x, riverZ + dz]);
-    const score = gentleShare(w, banks) + 0.5 * gentleShare(w, open);
-    if (!best || score > best.score) best = { ...w, score };
+    const sc = gentleShare(w, banks) + 0.5 * gentleShare(w, open) + (score ? score(w, (x, z) => { const [u, v] = toLab(w, x, z); return sH.lin(u, v); }, across, (x, z) => { const [u, v] = toLab(w, x, z); return sD.lin(u, v) > 0.5; }) : 0);
+    if (!best || sc > best.score) best = { ...w, score: sc };
   }
   if (!best) throw new Error(`mapgen: no window along the river fits the world (${JSON.stringify(why)}; river ${main.length} cells, ${arc[arc.length - 1].toFixed(0)} m)`);
   const WIN = best;
@@ -165,7 +185,7 @@ export async function growMap({ seed = 1, radius = 300, device = null, N = 128, 
   const fbm = (x, z) => 0.55 * nz(x / 23, z / 23) + 0.3 * nz(x / 9 + 17, z / 9 + 5) + 0.15 * nz(x / 4 + 3, z / 4 + 11);
   for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
     const x = x0 + i * res, z = z0 + j * res, [u, v] = toLab(WIN, x, z);
-    base[j * n + i] = sH.cubic(u, v) + fbm(x, z) * (0.25 + Math.min(1.2, slopeAt(u, v) * 4));
+    base[j * n + i] = sH.cubic(u, v) + fbm(x, z) * (0.25 + Math.min(1.2, slopeAt(u, v) * 4)) * detail;
   }
   const gAt = (i, j) => base[clamp(j, 0, n - 1) * n + clamp(i, 0, n - 1)];
   const groundAt = (x, z) => { const fi = (x - x0) / res, fj = (z - z0) / res, i = Math.floor(fi), j = Math.floor(fj), a = fi - i, b = fj - j;
@@ -219,7 +239,8 @@ export async function growMap({ seed = 1, radius = 300, device = null, N = 128, 
       const t = rough(xb - 65, xb + 75, zc + hw0 + 8, zc + hw0 + 118), f = rough(xb - 60, xb + 60, zc - hw0 - 78, zc - hw0 - 8);
       // (and banks about as high over the water as a town's quay wants, 2.2 m: less to settle)
       const r = t.r + 0.7 * f.r + fallAcross
-              + 0.6 * (Math.abs(t.mean - rAt(lvl, xb) - 2.2) + Math.abs(f.mean - rAt(lvl, xb) - 2.2));   // (a terrace over a gorge: all of it cut down to the water)
+              + 0.6 * (Math.abs(t.mean - rAt(lvl, xb) - 2.2) + Math.abs(f.mean - rAt(lvl, xb) - 2.2))   // (a terrace over a gorge: all of it cut down to the water)
+              + (siteCost ? siteCost(xb, rAt(lvl, xb) + 2.2, groundAt, (x, z) => { const [u, v] = toLab(WIN, x, z); return sD.lin(u, v) > 0.5; }, zc) : 0);
       if (r < bestR) { bestR = r; bridgeX = xb; }
     }
     if (bestR < Infinity) break;
@@ -341,6 +362,7 @@ export async function growMap({ seed = 1, radius = 300, device = null, N = 128, 
     seed, res, n, x0, z0, size: 2 * R, base, carve, water, wet, riverness, sd,
     river: { x0: rx0, n: nrx, z: rz, level: lvl, hw: rhw, basin, Q: Qin },
     bridgeX, monumentX, streams: nStreams, steepest: drop,
-    falls: stats.falls.length, fallMax: stats.falls[0]?.height ?? 0, score: WIN.score, lift,
+    falls: falls.length, fallMax: falls[0]?.height ?? 0, score: WIN.score, lift, shift, areas,   // (areas: the places built on, the rectangles settled to 0)
+    window: { O: WIN.O, e: WIN.e, f: WIN.f },   // (game (x, z) = the grown land's O + x e + z f, before it was shifted and settled)
   };
 }

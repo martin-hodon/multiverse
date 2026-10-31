@@ -109,6 +109,9 @@ NICHE = {"width": 1.1, "sill": 0.45, "springing": 1.2, "head": {"profile": "semi
 PITCH, END = 2.6, BT + 0.5                 # a niche every PITCH along a face, none nearer its ends than END
 small = []; buddhas = []
 FACES = {0: FACE_PZ, 1: FACE_PX, 2: FACE_NZ, 3: FACE_NX}
+# (each side's Buddhas seated cross-legged in its own gesture, as on site -- statuary.json's lotus poses: the east
+#  calling the earth to witness, the south granting a boon, the west in meditation, the north fearless)
+MUDRAS = {0: "lotus boon", 1: "lotus earth", 2: "lotus fearless", 3: "lotus"}
 for i, (name, top, prof) in enumerate(TERRACES[1:5], start=1):
     pts = square_outline(prof)
     faces = {}
@@ -135,7 +138,7 @@ for i, (name, top, prof) in enumerate(TERRACES[1:5], start=1):
             small.append([r4(cx), r4(top + BH), r4(cz), 0])
             if i == 1 and axis:
                 side = 0 if oz > .5 else 1 if ox > .5 else 2 if oz < -.5 else 3
-                buddhas.append(((cx, top + NICHE["sill"], cz), FACES[side]))
+                buddhas.append(((cx, top + NICHE["sill"], cz), FACES[side], MUDRAS[side]))
         ops.sort(key=lambda o: o["at"])
         if ops: faces[str(e)] = ops
     add(f"balustrade {i}", {"type": "enclosure", "plan": {"points": pts}, "thickness": BT, "height": BH, "glass": False,
@@ -182,8 +185,8 @@ add("great stupa spire", {"type": "column", "radius": 0.75, "taper": 0.25, "heig
                           "_about": "the spire (yasti), its parasols worn to an octagonal shaft"})
 
 # ---- the Buddhas in the first balustrade's niches ---------------------------------------------------------------
-for j, (p, face) in enumerate(buddhas):
-    parts[f"buddha {j + 1}"] = statue(p, kind="man", pose="sit", style="chinese", stone="limestone", scale=0.75, seed=j + 1, face=face)
+for j, (p, face, mudra) in enumerate(buddhas):
+    parts[f"buddha {j + 1}"] = statue(p, kind="man", pose=mudra, style="indian", stone="limestone", scale=0.75, seed=j + 1, face=face)
     build.append(f"buddha {j + 1}")
 
 doc = {

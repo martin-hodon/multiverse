@@ -35,11 +35,12 @@ def write(path, doc):
         f.write("\n")
 
 
-def style(key, name, about, strands=(), locks=(), gather=(), era="everywhere", region="everywhere", cap=None, sheets=(), spikes=()):
+def style(key, name, about, strands=(), locks=(), gather=(), era="everywhere", region="everywhere", cap=None, sheets=(), spikes=(), carved=None):
     part = {"id": "hair", "type": "hair", **PART, "strands": list(strands), "locks": list(locks), "gather": list(gather)}
     if sheets: part["sheets"] = list(sheets)
     if spikes: part["spikes"] = list(spikes)
     if cap is not None: part["cap"] = cap
+    if carved is not None: part["carved"] = carved      # (what a sculptor makes of it: hair.js hairGeometry, heads.js -- over the part, carved)
     return key, {"kind": "item", "name": name, "category": "hair", "era": era, "region": region, "_about": about,
                  "params": dict(HEAD), "materials": {"hair": "hair-brown", "tie": "leather-dark"}, "parts": [part]}
 
@@ -48,7 +49,7 @@ def style(key, name, about, strands=(), locks=(), gather=(), era="everywhere", r
 # and the back (the nape) than the skin's hairline; the strands hang from its edge (`edge` groups)
 CAP = {"front": 0.058, "temple": 0.02, "side": -0.012, "nape": -0.072, "thick": 0.012, "crown": 0.012}
 LOW = {**CAP, "front": -0.002, "temple": -0.006, "side": -0.018, "nape": -0.05, "fringe": -0.002}      # the bowl: cut level at the brows and the ears
-BACK = {**CAP, "front": 0.062, "thick": 0.01, "crown": 0.006}                                          # drawn back tight
+BACK = {**CAP, "front": 0.062, "thick": 0.01, "crown": 0.006, "sweep": 80}                                          # drawn back tight
 HANG = lambda th0, length, width=(0.036, 0.02), **kw: {"edge": True, "region": {"th": [th0, 180]}, "length": length, "comb": "down", "hang": 0.95, "width": list(width), "extra": 2, **kw}
 
 
@@ -88,7 +89,7 @@ STYLES = dict([
     style("none", "No hair", "a bare skull (the face's own hairline says how bald)"),
     style("crop", "Crop", "hair cropped close all over: a thin cap, nothing hanging", cap={**CAP, "thick": 0.006, "crown": 0.004}),
     style("short", "Short", "short hair combed back from the forehead, a fringe forward when the face has one",
-          [FRINGE], cap={**CAP, "thick": 0.012, "crown": 0.014}),
+          [FRINGE], cap={**CAP, "thick": 0.012, "crown": 0.014}, carved={"strands": []}),
     style("flat", "Flat (under a hat)", "hair lying flat under a hat: a thin cap and a little hanging at the nape",
           [HANG(100, 0.03, (0.02, 0.012))], cap={**CAP, "thick": 0.006, "crown": 0.0}),
     style("bowl", "Bowl cut", "the medieval bowl: a straight fringe to the brows, the sides and back cut level at the ears",
@@ -104,7 +105,7 @@ STYLES = dict([
     style("curly", "Curly", "a head of curls: a thick cap, curls coiling from its edge and off the crown",
           [HANG(0, [0.02, 0.1], (0.02, 0.012), hang=0.5, extra=2, curl={"r": 0.012, "per": 0.04}, seg=10),
            {"region": {"y": [0.06, 0.2], "th": [0, 180]}, "length": [0.035, 0.06], "comb": "back", "hang": 0.4, "off": 0.4, "width": [0.018, 0.012], "extra": 1, "every": 2, "lift": 0.012, "curl": {"r": 0.01, "per": 0.035}, "seg": 8}],
-          cap={**CAP, "thick": 0.024, "crown": 0.024}),
+          cap={**CAP, "thick": 0.024, "crown": 0.024}, carved={"strands": [], "carve": "curls"}),
     style("ponytail", "Ponytail", "the hair drawn back to a tie at the nape and falling from it in a tail",
           gather=[{"kind": "rope", "at": [-0.095, -0.01, 0], "dir": [-0.3, -1, 0], "length": 0.3, "width": 0.075, "hang": 0.9, "tie": True}], cap=BACK),
     style("bun", "Bun", "the hair drawn up and back into a bun behind the crown",
@@ -120,7 +121,7 @@ STYLES = dict([
           [HANG(95, [0.28, 0.36])], sheets=[under(95, [0.28, 0.36])],   # (the hanging hair from behind the plaits: none in front of them, at the temples)
           gather=[{"kind": "plait", "at": [0.04, 0.0, 0.078], "dir": [0.1, -1, 0.15], "length": 0.3, "width": 0.028, "hang": 0.9, "per": 0.05, "tie": True, "mirror": True}], cap=CAP, era="700-1100", region="Scandinavia"),
     style("topknot", "Topknot", "the hair drawn up from all round into a knot on top of the head -- the Chinese and the samurai's way",
-          gather=[{"kind": "knot", "at": [-0.02, 0.135, 0], "r": 0.028, "tie": True, "dir": [-1, 0, 0]}], cap={**BACK, "crown": 0.0}, era="-200-1900", region="China, Japan"),
+          gather=[{"kind": "knot", "at": [-0.02, 0.135, 0], "r": 0.028, "tie": True, "dir": [-1, 0, 0]}], cap={**BACK, "crown": 0.0, "sweep": 0}, era="-200-1900", region="China, Japan"),
     style("tonsure", "Tonsure", "the monk's tonsure: a ring of short hair round a shaven crown",
           cap={**CAP, "top": 0.072, "thick": 0.01, "crown": 0.0}, era="500-1800", region="Christendom"),
     style("shoulder", "Shoulder length", "hair to the shoulders, parted in the middle, straight",
@@ -161,8 +162,9 @@ def main():
         doc["params"]["fringe"] = {"pick": [0, 0, 1]}
         if kind == "face":
             doc["parts"] = [p for p in doc["parts"] if p.get("id") != "hair"] + [
-                {"id": "hair", "use": "hairstyle", "params": {**PASS, "seed": "seed"}}]
+                {"id": "hair", "use": "hairstyle", "params": {**PASS, "seed": "seed", "carved": "carved"}}]
             doc["params"]["seed"] = 1
+            doc["params"]["carved"] = 0   # (a statue's head: hair.js CARVE -- heads.js sets it for a carved one)
         json.dump(doc, open(path, "w"), indent=1, ensure_ascii=False)
     ipath = os.path.join(ROOT, "assets", "index.json")
     index = json.load(open(ipath))

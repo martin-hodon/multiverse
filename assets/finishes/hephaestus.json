@@ -1,14 +1,23 @@
 {
   "name": "Temple of Hephaestus",
   "building": "architecture/hephaestus",
-  "_about": "The Temple of Hephaestus: Pentelic marble, the columns fluted (20 flutes), the triglyphs painted dark blue, the coffered ceiling blue with gold stars, the roof in marble tiles.",
+  "_about": "The Temple of Hephaestus as it was painted, as the Parthenon was (assets/finishes/parthenon.json): Pentelic marble, the columns fluted (20 flutes) and left the stone's own; the triglyphs blue-black, the metopes' grounds red, a blue taenia over the architrave, a red-and-cream meander along the cornice's face over its blue soffit and on every abacus, the raking cornice plain marble, the porches' friezes and the cella's blue, the tympana blue, the coffered ceiling blue with gold stars, the roof in marble tiles. (The heights are the building's: stylobate 0.9, column tops 6.61, frieze from 7.26, cornice 7.91 to 8.29; the porches' frieze from 6.96, the cella's top 6.3.)",
   "stone": {
     "color": "#ded8c6",
     "accent": "#c9c0ac",
     "pat": "marble"
   },
   "rules": [
-    {"parts": "peristyle triglyphs", "color": "#2c3a4a", "accent": "#1f2a36"},
+    {"parts": "peristyle triglyphs", "color": "#1c2538", "accent": "#2f4166", "pat": "grooves"},
+    {"parts": "peristyle entablature", "above": 7.26, "color": "#9a3826", "accent": "#86301f"},
+    {"parts": "peristyle entablature", "above": 7.17, "color": "#2b4479", "accent": "#233866"},
+    {"parts": "peristyle cornice", "surface": "ceiling", "color": "#2b4479", "accent": "#8e2e1c", "pat": "grooves"},
+    {"parts": "peristyle cornice", "surface": "wall", "above": 8.163, "pattern": "fabrics/meander", "palette": "meander-red", "scale": 3.96, "align": "part"},
+    {"parts": ["peristyle cornice", "roof rake"], "color": "#ded8c6", "accent": "#c9c0ac", "pat": "marble"},
+    {"parts": ["peristyle abaci", "pronaos abaci", "opisthodomos abaci"], "surface": "wall", "pattern": "fabrics/meander", "palette": "meander-red", "scale": 7.2, "align": "part"},
+    {"parts": ["pronaos entablature", "opisthodomos entablature"], "above": 6.96, "color": "#2b5592", "accent": "#24497e"},
+    {"parts": ["cella sides", "cella back", "cella front"], "above": 5.8, "color": "#2b5592", "accent": "#24497e"},
+    {"parts": "roof", "surface": "wall", "color": "#2b5592", "accent": "#24497e"},
     {"parts": ["peristyle shafts", "pronaos shafts", "opisthodomos shafts"], "count": 20, "pattern": "stone/fluted", "palette": "carrara"},
     {"parts": "ceiling", "scale": 0.5, "pattern": "painted/starry vault", "palette": "starry"},
     {"parts": "roof", "surface": "roof", "pattern": "roofs/tube tiles", "palette": "carrara"},

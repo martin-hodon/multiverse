@@ -1,0 +1,43 @@
+{
+  "name": "Circlet",
+  "kind": "component",
+  "_about": "A CIRCLET: a band round the head over the brow (a hat's `crown` open to the hair above it, cranium radii: `low` and `high` its edges, `radius` its size, `x` its middle forward of the head's), and `points` (0: none -- a fillet, a diadem) standing up off its top edge in a ring, leaning `out`, `length` long -- a king's crown, a queen's.",
+  "params": {
+    "low": 0.28,
+    "high": 0.6,
+    "radius": 1.06,
+    "x": -0.06,
+    "points": 8,
+    "length": 0.38,
+    "base": 0.16,
+    "out": 0.18
+  },
+  "pieces": [
+    {
+      "name": "band",
+      "kind": "crown",
+      "top": "high",
+      "bottom": "low",
+      "x": "x",
+      "rTop": "radius + 0.04",
+      "rBottom": "radius",
+      "fabric": "main"
+    },
+    {
+      "name": "points",
+      "if": "points",
+      "kind": "cone",
+      "at": [
+        "x",
+        "high - 0.06"
+      ],
+      "around": "points",
+      "ring": "radius",
+      "out": "out",
+      "length": "length",
+      "radius": "base",
+      "tip": "base * 0.25",
+      "fabric": "main"
+    }
+  ]
+}

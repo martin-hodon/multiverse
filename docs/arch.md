@@ -680,6 +680,9 @@ open belfry). Open belfries, galleries, loggias, iwans, the Pantheon's niches sa
 **`palace-wing`** (components/): the block every palace, abbey and castle is made of -- `n` storeys of `H` on
 `L` x `D`, a window every `axis` metres, the ground storey's +z face doors or windows, floors, a dog-leg stair to
 every storey (`stairAt` sets it in from the end, clear of a neighbouring wing), a roof of any form. Walked through.
+`doorPlusX` / `doorMinusX` (2026-10-30): the top storey's middle window on that end a door, where a terrace comes up
+to it -- Melk's Altane, its roof a walked terrace level with the wings' top floor (H 9.3 + slab .7 = 2 x 5 m; at 7.7 m
+it met the wing ends halfway up a window, no way between them).
 
 **New buildings:** Hagia Sophia (the Byzantine kit at full size: dome on pendentives and forty windows, semidomes
 over two-storey half-ring arcades, tympana, galleries over the aisles reached by stairs along the outer walls,
@@ -712,16 +715,144 @@ and a cornice round the drum's top carries a cap wider than its drum.
 **`atopR`**: a part set `atop` a dome stands where the dome has narrowed to that radius -- a lantern on a pointed or
 onion dome sits on its surface, not on its tip (the Python generators no longer work this out themselves).
 
-**Statues** (2026-10-04, `statues.js`, `tools/archgen/statuary.py`): a `statue` marker -- { kind, pose (stand | guard |
-sit), style (greek | roman | gothic | chinese) or outfit, hold { R, L } (items, carved too), stone (marble | bronze | gold
-| limestone), scale (x a person), seed, face } -- is a carved FIGURE: the people engine's own, every part, its cloth, its
+**Statues** (2026-10-04, `statues.js`, `tools/archgen/statuary.py`): a `statue` marker -- { kind, pose, style (greek |
+roman | gothic | chinese) or outfit, hold { R, L } (items, carved too), grip { R, L } (a grip for that hand over its pose's), wings, stone (marble | bronze | gold | limestone), scale
+(x a person), seed, face, head (a lying one's) } -- is a carved FIGURE. Its POSE (2026-10-29, `assets/people/statuary.json`) is a body position
+of `assets/people/positions.json` held by the figure's joints (joints.js: a rig attached once, the angles set, the body
+set on its feet; reach.js where a position says where a hand goes -- the pensive chin on its hand, hands joined at the
+breast): contrapposto, the orator, the spear bearer, hand on hip, offering, aloft, blessing, prayer, mourning, victor,
+striding, seated -- seated, enthroned, reading, pensive -- and RECLINING (2026-10-30: on its side, propped on the
+elbow, the roll found that rests the forearm and the hip on the floor together -- joints.js `support` with `tilt:
+"roll"`; built by people.js `recline`, its long cloth falling in round the legs) and KNEELING (2026-10-30: a warrior
+down on one knee, the other foot planted, spear up and shield before it -- positions.json `kneeling`, anchored on the
+knees; its pose's `dress: "active"` girds it short, statuary.json `dress.active`: in a himation it was a stone tube to
+the floor) and SEATED CROSS-LEGGED (2026-10-30: a Buddha -- positions.json `lotus`, limber: the shins flat on the floor,
+crossed, the hands in the `lap`; its mudras `lotus earth` (calling the earth to witness), `lotus boon`, `lotus fearless`,
+`lotus teaching`; statuary.json poses of the family `lotus`, `floor`: built by people.js pose "floor", every hanging
+piece cut at the seat along the thighs' tops and draping the arms and chest only, the legs out from under it in their
+own cloth, set down by its joints with its lowest point on the pedestal; dress `monastic`, the wardrobe's statue outfit
+`buddha` -- the robe over the left shoulder, an under-robe on the legs, the outfit's own hair a topknot -- and anatomy
+`soft`: Borobudur's niches seat one in each, its side's gesture -- a style a pose's table does not name dressed from
+the general one: a Greek Buddha drew from all the Greek outfits, a traveller's petasos over the lotus), each with its mirror image (`orator
+left`). The marker names one, or a FAMILY (`stand`, `guard`, `sit`, `lie`, `kneel`, `lotus`) and its seed draws one of it whose hands are
+not `free` where it puts an item -- and, lying, whose `head` lies the way the marker's `head` (left | right, from the
+figure's front) says. Each hand says how it holds (a GRIP: upright, hanging, held forward, a shield at the
+side...: tools.js holders' `follow` and `turn`). `statuary.html` is the bench: rows of every pose, stone, item and style
+on pedestals (`?specs=[marker data...]` those alone, `?row=`, `?cam=`). The figure is the people engine's own, every part, its cloth, its
 mesh head and what it holds marked stone (skeleton.js `stone`, composite flags 2048 x the material; shell.js `stoneAt`
 paints it in a world-space grain under the world's Lambert, the metals with the sun's highlight; `stoneMaterial` for
-the head and the items, tools.js `@stone<m>`, held items scaled with the figure). Carved cloth is FULL: every
-garment cut closed (its clip `solid`: the hem, a sleeve's mouth) and a standing piece filled where no layer lies -- real
-cloth is a shell open at its edges. A pediment's figures FIT ITS TRIANGLE (temples.py pediment_figures): each sized by
-the clear height at its outer edge, standing in the middle third facing out, seated further out turned toward the middle
-and the front, reclining along the floor in the corners. Pedestals are the definition's own
+the head and the items, tools.js `@stone<m>`, held items scaled with the figure). The stone's own LIGHT (shell.js `STONE`,
+2026-10-29): a lower ambient than the world's so the folds and the face model, a darker rim where the surface turns
+away, marble's soft drifting veins (integer-hashed value noise: a sin hash tears far from the origin) and its warm
+translucence in shade; the cloth's pattern CUT IN -- its lines, where its colour changes, incised (a meander at the hem,
+the clavi), the weave's faint grain not; a carved head (heads.js `stoneFaceGeometry`, `stoneMaterial(m, { head })`) its
+hair in wavy locks in relief, lit across them (docs/items.md: carved), and its hollows (eyes, nostrils, lips) darkened by the mesh's cavity,
+its EARS thick and laid closer (face.js `CARVED_EAR`, 2026-10-30: a painted ear's thin plate, seen from the front, was a
+rod beside each cheek), its eyes BLANK and its brows the edge of their ridge (face.js `CARVED_OMIT`, 2026-10-30: the
+iris, pupil, catchlight, lash line and brow strip a living face is painted with are not carved -- discs standing off the
+eye stared, a strip over the ridge arched it in alarm), its face the IDEAL of its own (face.js `CARVED_IDEAL`,
+2026-10-30: each attribute in `to` taken `k` .7 of the way toward it, `times` scaled -- the nose straight on from its
+root, no hump, a small mouth with no shelf of upper lip over a deep fold and a full chin, the eyes less sunk, the
+flesh fuller: its own was a portrait, hollow-cheeked under hard light; nothing of the forehead, which the hair's scalp
+follows), its normals SMOOTHED (heads.js `smoothNormals`, `CARVED_SMOOTH`, 2026-10-30: each the mean of those within 2 cm facing
+its way, not across a lip or a lid -- the face's field is creased along its guide lines, unseen under paint, in
+hard-lit stone a low-poly mask of planes over the cheeks and the jaw; `DETAIL.stone` its own subdivision, 1.5 (twice:
+some twenty thousand triangles a head where the game's are five; at once, with the smoothing, the mouth was a smudge
+and a ledge from cheek to cheek, twice its lips have their shape -- statues are few, and a face family shares one shape;
+a recorded world's pregen holds them at the old detail until it is recorded again, build/pregen.py);
+a beard carved in CURLS, and a Buddha's hair (`ushnisha`) in snail curls, each with its spiral (docs/items.md: carved); its strands
+grown as solid LOCKS, shorter and tighter, the face kept clear of them (hair.js `CARVE`, docs/items.md: a curly fringe
+had hung over the eyes in shards). Carved cloth is FULL: every
+garment cut closed (its clip `solid`: the hem, a sleeve's mouth) -- real cloth is a shell open at its edges; but a
+standing piece's OPENING stays open, as painted (2026-10-30: it was filled, a smooth slab of stone over the side a
+mantle's wrap leaves bare, where the chiton and its belt now show). The pattern's lines are cut only as far as the eye
+can make them out (`STONE.inciseLine`: a meander seen from across a square was a scatter of broken dashes), while a
+layer's own edge -- a band's border, a mantle's, a neckline -- is a GROOVE a pixel or more wide at any distance. Its
+FOLDS are CUT IN (2026-10-30): near (the finest LOD grid), a carved cut shell of cloth gets `STONE.divs` (4) times the
+grid's points round it, and each point is pushed in by the valley of the fold the shading draws there (shell.js
+dressFold: the same phase and depth, a fold's width x its depth), so the silhouette waves with the folds -- painted,
+they are shading alone. A
+sleeve that SLIDES down a raised arm (skeleton.js SLIDE, `fall`) stays open too: closed, its gathered mouth was a flat
+disc of stone round the arm like a shield; open, its INSIDE -- any standing piece's lining: a mantle's inner side, a
+hem seen from below -- is a hollow in shade (`STONE.hollow`), deepening from its lip over `hollowIn` (shell.js dressEdge:
+how far round the wrap from its edge, or up from an open end): one flat shade all over made a mantle's turned edge a
+dark wedge cut through the cloth (2026-10-30). On a bone the POSE holds out of the plumb by more than statuary.json
+`sleeves.raised` (35 degrees: the orator's raised arm, a forearm held out, an arm along a reclining body -- measured
+on the figure posed once off the herd, statues.js fitToPose) a hanging sleeve is carved CLOSE round it instead: not
+`fall`, no `sag`, no flare -- a bell tips toward the plumb by no more than its half-angle, and held out it stood off
+the arm like a mace or a trumpet -- and no wider than the bone's own girth and `sleeves.ease` (3.5 cm): a great sleeve
+closed at the width it had reached at the elbow was a cannon's barrel off a forearm held forward, its mouth a ring. (The def's parts as compiled are kept by the def, skeleton.js compileDef: the herd
+adds those same ones, so they are changed too.) A MANTLE over an upper arm held out past `drape.raised` (50 degrees:
+a Victory's arms up, a kneeling figure's held forward) is WRAPPED UNDER it, as a sculptor frees a raised arm: that arm
+taken out of what the piece is draped over, the cloth drawn close (its cling at least `drape.cling`, 1) -- cut for the
+arms hanging, its cone stood a wall of stone off the shoulder, the arm up out of it, or a curtain off the forward hand. What
+holds it out is drawn as close and laid on its host, and the cloth lies on the trunk in the arms' freed slots (docs/clothes.md). A
+mantle over the arms clings at least `drape.carved` (.9) in stone, and a sleeve on an arm it lies over is carved close.
+A FOREARM held out past it over an arm left hanging in the mantle (an orator's, holding his staff) is not carried in
+it (skeleton.js `fore` off): the cloth falls from the elbow, the forearm out of it -- carried, the mantle hung a
+hollow box from the forearm to the knees, its lining showing down the open side.
+HANDS (2026-10-30, people's too): a hand is a flat part
+turned PALM IN (people.js `palm`: squashed across its own axis and the figure's forward, so a hanging hand lies flat
+against the thigh -- it faced forward, a paddle), its fingers GROOVES cut along its far half (shell.js `FINGERS`: four
+across, their walls catching the light, darker carved than painted, fading under a pixel). ITS ANATOMY (shell.js
+`ANATOMY`, 2026-10-30): a bare torso -- a god's or hero's in his mantle alone, a nude (wardrobe outfits `hero`, `nude`,
+marked `statue`: carved only; statuary.json `dress` greek, and `active` for the kneeling warriors, helmeted as
+Aegina's) -- is a relief cut into the flattened cone, the sculptor's: the pectorals overhanging the ribs, the linea
+alba, the rectus crossed by its intersections, the ribs' arch, the iliac furrow round the hips, the navel; the spine's
+groove and the shoulder blades behind. Each torso piece carries where it is on the trunk (people.js `anat`: its ends'
+heights from the crotch to the shoulders' rim, and the sex -- a woman's only the navel and a soft middle line), packed
+in its third texel's z, a flat part's spare; the height field's slope tilts the normal, its grooves in shade, fading to
+`far` under the pixel. Without it a nude was a mannequin. Over the top (2026-10-30): the COLLARBONES and the notch between them on the shoulders' cap -- the chest's top was a
+bare dome the neck stood out of. ITS OUTLINE (shell.js `TRUNK`, 2026-10-30): the vertex swells a bare carved torso (not a dressed one) by masses over its cone -- the lats' flare under the arms, the flanks over the iliac line, the hips, a woman's fuller hip, the buttocks, the chest's arch, the lumbar hollow -- each a Gaussian in t up the trunk round its sides, front or back, plus `swell` of the anatomy's relief (the pectorals in profile): it had been a cone from armpit to hip and a slab from the side. A woman's BUST (`bust`; people.js anat's bit 32768, apart from the soft 16384 a Buddha shares) swells hers dressed too: the bodice is lifted off the swelled surface, a chiton clinging over it, and cloth clinging on the torso lies on it as well (shell.js trunkBust in drapeReach, carved only: a painted bodice is not lifted). ITS LIMBS (shell.js `LIMBS`, 2026-10-30): a bare arm or leg
+was a tube; now each carries its kind and side (people.js `LIMB`, in its third texel's x, a round part's spare -- not
+flagged as read by the vertex's cut code) and its MUSCLES are a height field round it, each an oval in (down the limb,
+round it from its front toward its outer side) -- the thigh's rectus, the vastus medialis' teardrop over the knee, the
+sartorius' diagonal groove, the kneecap; the calf's two heads, the tibialis; the deltoid's cap and the V of its edge,
+biceps, triceps; the brachioradialis' swell -- a table of numbers, not code. The fragment tilts the light by its slope
+and shades its grooves; the vertex raises `swell` of it as real geometry, so a calf or a shoulder shows against the sky
+(eased off toward the joints, where the next part meets it). A woman's limbs, and a Buddha's (`soft`), only hint them.
+Its front is the figure's forward (or up, where the limb points forward: a seated thigh's top); a carved ring hands the
+fragment its own part (a bare limb's chain otherwise shades as its first part: the shin as the thigh), and a carved
+chain is drawn a ring class finer than a person's (shell.js push: its swell and its joints want the rings). The FOOT
+(kind 5) is the same: the toes parted by four grooves over its cap, the arch hollowed under it -- the foot itself (a
+person's too, people.js, 2026-10-30) round at the heel and narrowing to the toes (body.json leg `toe`, .6 of the heel),
+tipped toes down by the difference so its sole lies on the ground and its instep falls to them: a ball as tall as the
+heel had stood at the toes under every hem. Its angle round the limb
+is taken by how far to the side a point is of its round's radius (on a cap, the ball's), so a groove at an angle runs
+along the limb to its end -- by the bare angle every one of them met at the cap's pole, a claw's fan. The figure's up
+is the chest's A end less its B (the chest is laid DOWN from its top: its own axis points to the feet). AT A JOINT
+the two parts' shades meet on one ring, each part's own: a feature there SITS ON the joint (the kneecap at the thigh's
+t 1 and again at the shin's t 0 -- a peak has no slope, so neither side tilts the light) or keeps its tail off it (the
+forearm's swells narrow enough to be gone at the elbow); a slope left at the ring is a seam drawn round the limb. Easing
+the shade off toward the joint is no cure -- the fall-off is a slope too, a dark band above the knee -- so only the
+OUTLINE is eased (shell.js limbEase, LIMBS.ease of the length; `loose` the ends no part follows in the chain: the
+shin's ankle, the foot). And the elbow is one girth (people.js rElbowJ, between the joint's and the forearm's): a
+physique's fuller forearm stood out of it a step. ITS IDEAL (2026-10-30, statuary.json `physique` by kind, a
+pose's or the marker's over it; body.json `build.physiques`): a man carved `heroic` (the chest broad over a narrow
+waist, lean hips, full thighs and arms), a woman `classical`, a Buddha `lion` -- at the survey's mean a nude's trunk was
+a box as wide at the hips as at the shoulders. ITS OWN SHADE (shell.js
+`SELF`, 2026-10-30): every pixel of a carving asks the figure's parts (composite flags from 16384 up: how many) what
+they hide -- the sky a limb's ball hides near it (the armpit, between the legs) and the sun a limb stands in the way of
+(an arm's soft shadow on the flank, its edge widening away from it); a standing piece casts from its HEM only (the
+thighs under a tunic, the chiton under a himation's edge: as a whole cone it threw boxes over what its wrap leaves
+bare), and never on a standing piece laid over it (a longer himation round a chiton's hem, a hard wedge of shade across
+it). `?selfshade=0` leaves it out. A mantle's falling edge is closed carved, a lit top at the hip, where it stood off the
+chiton as a dark slot (docs/clothes.md: a standing piece begins where its cloth does). A mantle's cape lies on the
+shoulder it covers, laid on from its top over the chest it hangs from, where it was a flat plate round the neck
+(docs/clothes.md: a mantle is laid on, from its top). WINGS (2026-10-30: a marker's `wings`, statuary.json `wings` -- `raised`,
+`spread`, `folded`, or { of, ...numbers }): a bird's pair from the back of the chest (winged.js `wingsFor`, the angel's
+own; mammals.js birdWing `lift`, `spread` and `bend` -- the hand folded back at the wrist, the primaries hanging: a wing
+closed at rest), carved with the rest -- the Karlskirche's angels. ATTRIBUTES (2026-10-30, docs/items.md): the palm, the horn of plenty, the scroll, the victor's wreath, and the gods' patera, lyre, trident and caduceus -- an item `upright` in its hold takes the `upright` grip in any hand, held up to be seen. A marker's own GRIP for a hand (2026-10-30) overrides its pose's: `shield rest` stands the shield on its rim on the ground by the figure's side, face out, the hand on it (statuary.json `ground`; tools.js stands any held item on the feet's level for it, as an item that rests on the ground stands) -- the Athena Parthenos's, her right hand held out with a wreath; her shield had hung in front of her like a tray. WHAT A STATUE IS CARVED IN (2026-10-30, statuary.json `dress`): of its style's outfits only those a figure is set up in -- a citizen's, a matron's, a dignitary's, never a labourer's belted tunic -- and the whole of it (people.js outfit `dress`, `full`; clothes.js drawOutfit `only`, `full`): the orator had stood in a plain work tunic, his toga a 70% chance. A Gothic portal's are its kings and queens, crowned and in the mantle, its saints and the veiled Virgin (docs/clothes.md). A marker's `wear` (2026-10-30: garments put on over its dress, architecture.js lifeOf passes it) crowns both Athenas with a crested helmet pushed up off the face (docs/clothes.md). A gown falls onto the legs as a column, a bent knee
+showing through it (shell.js `CLING`, docs/clothes.md); a mantle is draped over the upper arms it covers and the legs (2026-10-30: it was a lampshade's cone), falls in under the arms toward the hips (it hung a box's walls from the elbows) and its cape lies on the shoulders (it stood a millstone's brim); the palla is wrapped from the left, its edge across the body. A reclining figure's gown lies on its legs (the cling GIVES as its axis tips toward the floor): it was a closed tube round both. A mantle's falling edge
+gathers SWAGS under it (docs/clothes.md: the himation's roll, the toga's sinus, now closed round the body). A pediment's figures FIT ITS TRIANGLE AT ONE SCALE (temples.py pediment_figures,
+2026-10-30: each sized to its own room, a row of standing figures shrank toward the corners like a scale drawing): the
+size the middle figure stands at under the ridge (`PEDIMENT_GOD` larger than the rest), and each place the tallest pose
+whose PROFILE (`PEDIMENT_POSES`; a reclining figure: its head and shoulders over its place, its legs low out to the
+corner) stands under the raking cornice there, a little smaller if it must (`PEDIMENT_GIVE`) -- the poses follow the
+slope down: standing in the middle facing out, seated further out on a seat of its own (a box as high as its knees:
+it used to sit on the ledge's edge, its legs and its skirt hanging over) turned toward the middle and the front,
+then a warrior kneeling with spear and shield (2026-10-30, Aegina's) turned further in, mirrored so the shield is on
+the side toward the tympanum (toward the front it hid the body) -- an aspis with its flat offset rim (`rimFlat`), the spear's butt on the floor he kneels on --, reclining in the corners facing out, its head toward the middle. Pedestals are the definition's own
 boxes (`statuary.pedestal`); at most 50 a building (`statuary.capped`: the first listed are the most prominent). The
 game stands them in one herd (index.html statueHerd, `?statues=0` none); the asset viewer shows them with the building
 (lifeOf, as the game reads them). Placed: the Parthenon (Athena Parthenos in gold, 23 with the two pediments, the
@@ -2268,7 +2399,9 @@ the Medieval India period's landmarks, the Indianized temples of Java and Cambod
 - The four galleries are walled in by balustrades: `enclosure`s on the terrace's own edge (their walls inward from
   it), the outline without its notch, broken over the stair. Each has a niche every 2.6 m, its openings written per
   face from the outline's own edges. A small stupa (cushion, bell, spire) stands over every niche, 392 in all. A
-  seated Buddha (a `statue`, limestone) sits in each of the first balustrade's 32 niches on the stair projections.
+  seated Buddha (a `statue`, limestone) sits in each of the first balustrade's 32 niches on the stair projections --
+  cross-legged, in its side's gesture as on site (`MUDRAS`: the east calling the earth to witness, the south granting
+  a boon, the west in meditation, the north fearless; statuary.json's `lotus` poses).
 - On the round terraces stand 72 perforated stupas in rings of 32, 24 and 16, set so that the stairs come up between
   two. Each is a lotus cushion, a `dome` on the bell section (the skirt flaring to the cushion, a level crown) with
   the jali lattice on it, the harmika (square on the first two rings, octagonal on the last) and the spire, each one
@@ -2369,3 +2502,59 @@ Left open:
 - The Frauenkirche: the mansard roof crosses the drum, because roofs have no `well`.
 - El Pilar: the finish rule `portal` does not reach the names `portal 1/...`.
 - The Temple of Heaven and St Paul's: their compass panels at `at: [0, 0]` cover nothing.
+
+## The Acropolis: a site of buildings, painted (2026-10-30)
+
+The Parthenon, the Hephaestus and four new buildings are painted as the reconstructions show them (Brinkmann and
+Koch-Brinkmann, the Acropolis Museum). The stone is left its own on the columns and walls. The colour is in the
+entablature, the pediments, the ceilings and the statues.
+
+**Temples** (tools/archgen/temples.py `temple`):
+- A gable roof's `rake` (assemble.js, lombard.js `rakeCorniceMesh`): the raking cornice up both slopes, the pediment's
+  frame. It is a moulding of its own, "<roof> rake", so a finish paints it apart from the tympanum ("roof", surface wall).
+- The acroteria are `type: item` parts of items/ornaments/acroterion: a palmette over two volutes on a calyx,
+  painted. They are `solid: false`.
+- `porches` (False: no pronaos or opisthodomos, as on the Nike temple).
+- `inner`: a two-storey colonnade inside the cella. It runs down both sides and across the back: "inner colonnade",
+  "inner colonnade back", "... upper", "... upper back", each with its entablature. A "cross wall" closes the naos off
+  from the back room. The Parthenon's has 9 a side and 5 across, 5.6 + 3.5 m. Athena Parthenos now stands at z -1.5,
+  with the colonnade behind her.
+
+**Statues** take `stone: "painted"` (dyed drapery, a man's skin sunburnt and a woman's pale, the hair and eyes their own)
+or `"chryselephantine"` (ivory flesh, gold hair and robe). See people/statuary.json `paint` and statues.js. The pediments'
+figures, the korai and the cult statues are painted. Athena Parthenos is gold and ivory.
+
+**The buildings** (tools/archgen/acropolis.py):
+- **The Erechtheion.** An Ionic east porch of six columns and the cella with its doors and windows. The west wall has
+  four engaged columns. The north porch is taller, with a coffered ceiling under its own gable. On the
+  south are the six korai on their podium, painted, in contrapposto, the capitals on their heads carrying the flat roof.
+  Inside stands the olivewood Athena Polias. The frieze is dark Eleusinian stone.
+- **The Propylaia.** Two Doric hexastyle porticoes, the gate wall with five doors, and the Ionic hall between them.
+  The north wing holds the Pinakotheke, its walls plastered red. The south wing is a shallower hall.
+- **Athena Nike.** An amphiprostyle Ionic temple, four columns at each end and no inner porches. The cult statue holds
+  a pomegranate.
+- **The Acropolis.** The rock: a 24-point outline raised 14 m as a battered prism. On its edges stand the circuit wall
+  and the Nike bastion's parapet, open at the stair. The buildings are `component`s:
+  - the Parthenon;
+  - the Erechtheion;
+  - the Propylaia;
+  - Athena Nike.
+
+  Also on the rock: the old temple's foundations, the great altar, and the bronze Athena Promachos (scale 5) on her
+  base, facing the gate. A ramp of steps climbs the west slope to the Propylaia.
+
+**A component's own finish** (arch/finish.js `withUses`, docs/patterns.md): the site's finish says `{use: "parthenon",
+in: "parthenon"}`. That expands to the Parthenon's own rules, matched only inside that component ("parthenon/..."), with
+their heights and plan places moved by the placement and its stone last. So each building is painted once, and the
+site follows it. architecture.js expands the catalogue's finishes at load, and archMesh expands any finish passed to it
+(the viewer passes the raw one).
+
+The Hephaestus was repainted the same way: blue triglyphs, red metopes, a meander on the cornice and the abaci, blue
+tympana.
+
+The whole site is a game landmark (`LANDMARKS`, the Greek period's menu). It holds its own Parthenon, so `LANDMARK_HOLDS`
+keeps the two out of one world.
+
+Left open:
+- The Erechtheion's north porch is one level. The real one stands about 3 m lower, on the rock's lower terrace.
+- The Propylaia's wings are simplified, and the eastern halls Mnesikles planned (never built) are left out.

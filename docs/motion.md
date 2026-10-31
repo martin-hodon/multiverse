@@ -59,16 +59,21 @@ turn with it.
 Joints are named `spine`, `neck` or `<side> <joint>` with side `right`, `left` or `both` (plurals allowed); a
 movement not named stays at rest. `mirror` makes a position another's mirror image (right and left swapped, the trunk's
 sideways movements and the body's roll and yaw turned round); `from` takes another position and changes some joints.
-A value out of its range is clamped (and reported by the tests). Beside the joints:
+A value out of its range is clamped (and reported by the tests) -- a LIMBER position (`"limber": true`, the lotus) by
+a movement's `limber` range where joints.json gives one: the hip's rotation to -95, the shin's own turn in the knee,
+which the model lacks, taken in the hip (in range, the lotus's shins hung down under it; limber, they lie flat on the
+floor, crossed). A `from` keeps its base's `limber` and its `lean`. Beside the joints:
 
 - `root` turns the whole body: `pitch` (+ face up: lying on the back is 90), `roll`, `yaw`, `lift` (metres up);
 - `anchor` is what keeps its place on the ground: `feet` (their middle, the default), `right foot`, `left foot`,
   `hands`, `knees`, `pelvis`. **The ground rule**: every frame the body's lowest point (its limbs and trunk -- not a
   skirt's hem) is put on the floor and the anchor where it stood at rest, so a squat sinks over its feet, a lunge stays
   on its front foot, a body laid down keeps its pelvis;
-- `support` names two things the body rests on at once (`feet`, `hands`, `forearms`, `knees`, `pelvis`, `back`,
-  `head`): the body's tilt (root pitch) is FOUND, by bisection, so that both touch -- a plank, a push-up, a crunch
+- `support` names two things the body rests on at once (`feet`, `hands`, `forearms`, `left forearm`, `right forearm`,
+  `knees`, `pelvis`, `back`, `head`): the body's tilt (root pitch) is FOUND, by bisection, so that both touch -- a plank, a push-up, a crunch
   on its back with the feet flat. A transition into a supported position takes that tilt in step with the way there.
+  `tilt: "roll"` finds the root's roll instead -- a body on its side propped on one elbow (`left forearm`, `right
+  forearm`: one arm's; the statues' `reclining`).
 
 Some positions were TUNED BY SEARCH over their angles (hands on hips: the palm on the waist, nothing through the trunk;
 the lunge's back leg: the toes on the floor, the knee just off it; the kneel): the searches live in the test pages
@@ -76,7 +81,7 @@ the lunge's back leg: the toes on the floor, the knee just off it; the kneel): t
 
 `reach` says where the HANDS go instead of how the arms bend -- `{ "hands": "toes" }` (both: the left arm the mirror
 of the right, the trunk bending straight forward), or `right hand` / `left hand`; places `toes`, `knees`, `floor`
-(ahead of the feet, shoulder-wide) -- and each body finds its own bend with the reach's solver (the spine, the pelvis
+(ahead of the feet, shoulder-wide), `lap` (before the hips, over the crossed legs: a Buddha's hands) -- and each body finds its own bend with the reach's solver (the spine, the pelvis
 tipped over the thighs, the knees soft if it must), once, when the position is first played on it. `lean` limits what
 else may move to get there: `true` (the trunk, the hips, the knees), `"spine"` (the trunk's forward bend alone),
 `false` (the arms alone, the body as the position holds it). The toe touch is written so: its palms end at the toes

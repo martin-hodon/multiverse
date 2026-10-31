@@ -48,7 +48,7 @@ export const FACE_PARAMS = {   // (every factor 1, every depth in metres; a defi
   forehead: 1, occiput: 1, crown: 1,
   noseL: 1, noseW: 1, noseTip: .028, noseBridge: .004, noseHump: 0, noseDorsum: .7, noseTopW: .008,
   eyeGap: 1, eyeR: .012, mouthW: 1, lipT: .005, lipUp: 1,
-  earS: 1.15, earOut: 18, earBack: 8, earY: -.028, browL: 1, browT: 1,
+  earS: 1.15, earOut: 18, earBack: 8, earY: -.028, earT: .004, browL: 1, browT: 1,
   hairline: .060, neckR: .038, neckL: .07, hair: "hair",
   bare: 1,   // (the height above which the scalp is skin again: a tonsure's shaven crown -- the hairstyle's cap.top)
 };
@@ -565,10 +565,31 @@ const PADS = [
 ];
 
 export const FRAME_DEBUG = { last: null };
-export function faceGeometry(p, P, emitFor, prims) {
+export const CARVED_EAR = { earT: .009, earOut: 14 };
+// THE CARVED IDEAL (2026-10-30): a statue's face is not a portrait of whoever it was drawn as but the age's ideal of
+// them -- each attribute in `to` taken `k` of the way from their own toward it, each in `times` scaled so far: the brow
+// running straight on into the nose (the Greek profile, no dip at its root), a small mouth with full lips over a deep
+// fold and a round, full chin, the flesh smooth over the bone. Their own, carved and lit hard, was a portrait -- a
+// hollow-cheeked face, a lip shelf, a jaw's corners. (Nothing of the forehead's: headGrid's scalp, the hair's, follows it.)
+export const CARVED_IDEAL = { k: .7, to: { noseBridge: .0008, noseHump: 0, mentolabial: .008, chinProjection: .003, lipProjection: 0, upperLipAngle: 2, eyeDepth: .0125, chubby: 1.6, cheekProjection: .002 },
+                              times: { mouthWidth: .88 } };
+const idealOf = (A) => Object.fromEntries([...Object.entries(CARVED_IDEAL.to).map(([k, v]) => [k, A[k] + (v - A[k]) * CARVED_IDEAL.k]),
+                                           ...Object.entries(CARVED_IDEAL.times).map(([k, v]) => [k, A[k] * (1 + (v - 1) * CARVED_IDEAL.k)])]);
+// (CARVED, the eyes and the brows are the stone's own form: the eye a smooth ball under its lids, the brow the edge of
+//  its ridge -- what is painted on a living face (the iris and the pupil, the catchlight, the lash line, the brow's
+//  hair) is not carved: discs standing off the eye stared, a strip over the ridge arched it in alarm)
+export const CARVED_OMIT = ["limbus", "iris", "pupil", "glint", "lash", "brow"];
+// (...but PAINTED -- P.painted, shell.js PAINTED -- the eye has its iris and pupil, the brow its colour, as the Greeks
+//  painted them: only the wet catchlight and the lashes are not)
+export const PAINTED_OMIT = ["glint", "lash"];
+const NO_EMIT = { vert: () => 0, tri: () => {}, quad: () => {} };
+export function faceGeometry(p, P, emitFor0, prims) {
+  const omit = P.carved ? (P.painted ? PAINTED_OMIT : CARVED_OMIT) : null;
+  const emitFor = omit ? (role, ...a) => (omit.includes(role) ? NO_EMIT : emitFor0(role, ...a)) : emitFor0;
   const H = headGrid(p, P), { Q, S, lv, yTop } = H;
   // (the attributes: the part's own, or the item's params by the same name -- a definition need not map each one)
-  const F = faceLattice(H, { ...Object.fromEntries(Object.keys(FACE_ATTRS).filter((k) => P[k] !== undefined).map((k) => [k, P[k]])), ...p }), { A, rows } = F;
+  const A0 = { ...FACE_ATTRS, ...Object.fromEntries(Object.keys(FACE_ATTRS).filter((k) => P[k] !== undefined).map((k) => [k, P[k]])), ...p };
+  const F = faceLattice(H, P.carved ? { ...A0, ...idealOf(A0) } : A0), { A, rows } = F;
   // ---- the whole ring: the right half's columns, the back of the head behind the outline (the skull's loft, its rows
   // spread evenly toward the nape), the left half mirrored
   const RN = rows.length, TH_BACK = [100, 125, 150, 180], yBackBot = -.115, yBackTop = .094;
@@ -782,11 +803,13 @@ export function faceGeometry(p, P, emitFor, prims) {
     for (let i = 0; i < NM; i++) { mouthE.tri(c0, ringM[i], ringM[(i + 1) % NM]); mouthE.tri(c0, ringM[(i + 1) % NM], ringM[i]); }
   }
   // ---- the ears: the helix's outline as a plate standing off the head, turned out and back
-  const EF = earFrame(H);
+  // (CARVED -- a statue's head, P.carved -- an ear is not a plate standing off the head: the sculptor leaves it thick and
+  //  laid close, CARVED_EAR -- seen from the front a thin plate turned out was a rod beside each cheek)
+  const EF = earFrame(H), ER = P.carved ? { ...Q, ...CARVED_EAR } : Q;
   for (const sg of [1, -1]) {
     const e = EF.e * S, cx = EF.c[0] * S, cy = EF.c[1] * S, cz = EF.c[2] * S * sg;
     const outline = [[.012, .030], [.004, .034], [-.006, .032], [-.014, .024], [-.018, .010], [-.017, -.006], [-.012, -.022], [-.004, -.032], [.004, -.031], [.010, -.022], [.013, -.008], [.011, .006], [.004, .014], [-.002, .016], [-.006, .010], [-.004, -.004], [.002, -.012], [.007, -.004], [.007, .010], [.010, .020]];
-    prims.plate(P.earDebug ? "lip" : "skin", outline.map(([x, y]) => [x * e, y * e]), .004 * e, [cx, cy, cz], sg, Q.earOut, Q.earBack);
+    prims.plate(P.earDebug ? "lip" : "skin", outline.map(([x, y]) => [x * e, y * e]), ER.earT * e, [cx, cy, cz], sg, ER.earOut, ER.earBack);
   }
   // ---- the GUIDE LINES, for the viewer: each guide span along the skin (only the face's guides, not the skull's frame)
   if (prims.guide) {

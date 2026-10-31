@@ -1,12 +1,14 @@
 {
   "name": "Skirt",
   "kind": "component",
-  "_about": "A SKIRT: a cone of cloth HANGING from a ring round the torso -- the waist or the hips -- to its hem, clear of the hips and the stride (it swings behind it; the legs it covers are not drawn). `flare`: how much wider it gets for every metre down (at least what the hips ask); `pleats` fold it in the light; `dags` scallop its hem; `wrap` opens it (a coat's front); a hem band may border it. Soft folds by default (pleats 9: cloth hangs in folds, shell.js foldPhase); a stiff one -- padded, mail, a flat panel -- says pleats 0.",
+  "_about": "A SKIRT: a cone of cloth HANGING from a ring round the torso -- the waist or the hips -- to its hem, clear of the hips and the stride (it swings behind it; the legs it covers are not drawn). `flare`: how much wider it gets for every metre down -- at least what the hips ask, or (`fit` \"ring\": a gown that falls straight from the hips, the chiton, the peplos, the stola) its own flare kept and its ring at the top widened to clear them; `pleats` fold it in the light; `dags` scallop its hem; `wrap` opens it (a coat's front); a hem band may border it. Soft folds by default (pleats 9: cloth hangs in folds, shell.js foldPhase); a stiff one -- padded, mail, a flat panel -- says pleats 0. `cling`: how far it falls in onto the legs under it (shell.js CLING) -- a bent knee shows through it, the stride carries it; 0 a skirt that stands as its own cone (a hoop, a stiff panel).",
   "params": {
     "from": "waist",
     "to": "ankle",
     "flare": 0.3,
+    "fit": "flare",
     "pleats": 9,
+    "cling": 0.5,
     "dags": 0,
     "hem": 0
   },
@@ -19,7 +21,9 @@
       "from": "from",
       "to": "to",
       "flare": "flare",
+      "fit": "fit",
       "pleats": "pleats",
+      "cling": "cling",
       "dags": "dags",
       "fabric": "main",
       "hem": {

@@ -399,15 +399,15 @@ export function finishTile(r) {
   if (!t && AHEAD.has(key)) {   // (drawn in a worker while the map grew: its layer's pixels, ready for the array)
     const a = AHEAD.get(key); AHEAD.delete(key);
     if (pk) pregenMiss("tile", r.pattern, pk);
-    finishTiles.set(key, t = { size: a.size, canvas: null, px: a.px, repeat: a.repeat });
+    finishTiles.set(key, t = { size: a.size, canvas: null, px: a.px, repeat: a.repeat, across: a.across });
   }
   if (!t) {
     const cached = pk && PREGEN.tiles.get(pk), def = patternOf(r.pattern);
-    const tile = cached ? { canvas: cached, size: patternSize(def, ruleParams(r)), repeat: def.repeat !== false }
+    const tile = cached ? { canvas: cached, size: patternSize(def, ruleParams(r)), repeat: def.repeat !== false, across: def.across ?? 1 }
                         : renderPattern(r.pattern, { palette: r.palette, params: ruleParams(r), res: r.res });
     if (pk) recordFor("tiles", pk, tile.canvas);
     if (pk && !cached) pregenMiss("tile", r.pattern, pk);
-    finishTiles.set(key, t = { size: tile.size, canvas: tile.canvas, repeat: tile.repeat });
+    finishTiles.set(key, t = { size: tile.size, canvas: tile.canvas, repeat: tile.repeat, across: tile.across });
   }
   return t;
 }
@@ -440,7 +440,7 @@ export function drawTilesAhead(finishes, library) {
     w.onmessage = (e) => {
       const m = e.data;
       if (m.err) failed++;
-      else if (!finishTiles.has(m.key)) { AHEAD.set(m.key, { size: m.size, repeat: m.repeat, px: m.px }); got++; }
+      else if (!finishTiles.has(m.key)) { AHEAD.set(m.key, { size: m.size, repeat: m.repeat, px: m.px, across: m.across }); got++; }
       next();
     };
     w.onerror = (e) => { e.preventDefault(); console.warn("tiles ahead: a worker failed (" + (e.message || "?") + ")"); drop(w); };
@@ -489,19 +489,22 @@ function tileArray(cap) {   // (grown: a new texture, the same node -- a materia
   TA.up = false; t.onUpdate = () => { TA.up = true; };   // (until its first upload the whole array goes up, layers and all)
   if (TA.node) { TA.node.value.dispose(); TA.node.value = t; } else TA.node = texture(t);
 }
-function tileLayer(t) {   // the tile's layer, drawn into the array the first time a finish asks for it
+function tileLayer(t) {   // the tile's first layer, drawn into the array the first time a finish asks for it; a wide painting runs over `across` layers side by side
   if (t.layer !== undefined) return t.layer;
-  if (TA.n === TA.cap) tileArray(TA.cap ? TA.cap + 16 : 64);   // (16 layers more at a time: a spare layer is a megabyte and a third)
-  const R = TILE_RES, row = R * 4, L = t.layer = TA.n++, base = L * R * row;
-  if (t.px) { TA.data.set(t.px, base); t.px = null; }   // (drawn ahead: the layer as it is made below, made in a worker)
+  const n = t.across ?? 1;
+  while (TA.n + n > TA.cap) tileArray(TA.cap ? TA.cap + 16 : 64);   // (16 layers more at a time: a spare layer is a megabyte and a third)
+  const R = TILE_RES, row = R * 4, L = t.layer = TA.n; TA.n += n;
+  if (t.px) { TA.data.set(t.px, L * R * row); t.px = null; }   // (drawn ahead: the layers as they are made below, made in a worker)
   else {
-    const cv = TA.scratch ??= new OffscreenCanvas(R, R), cx = cv.getContext("2d", { willReadFrequently: true });
-    cx.clearRect(0, 0, R, R); cx.drawImage(t.canvas, 0, 0, R, R);
-    const px = cx.getImageData(0, 0, R, R).data;
-    for (let y = 0; y < R; y++) TA.data.set(px.subarray(y * row, (y + 1) * row), base + (R - 1 - y) * row);   // (bottom row first: as a canvas texture reads)
+    const cv = TA.scratch ??= new OffscreenCanvas(R, R), cx = cv.getContext("2d", { willReadFrequently: true }), W = t.canvas.width, H = t.canvas.height;
+    for (let k = 0; k < n; k++) {
+      cx.clearRect(0, 0, R, R); cx.drawImage(t.canvas, k * W / n, 0, W / n, H, 0, 0, R, R);
+      const px = cx.getImageData(0, 0, R, R).data, base = (L + k) * R * row;
+      for (let y = 0; y < R; y++) TA.data.set(px.subarray(y * row, (y + 1) * row), base + (R - 1 - y) * row);   // (bottom row first: as a canvas texture reads)
+    }
   }
   const tex = TA.node.value;
-  if (TA.up) tex.addLayerUpdate(L);   // (once it is up, only the new layer goes up)
+  if (TA.up) for (let k = 0; k < n; k++) tex.addLayerUpdate(L + k);   // (once it is up, only the new layers go up)
   tex.needsUpdate = true;
   if (!PREGEN.record) t.canvas = null;   // (in the array now; the generator still writes the tiles out)
   return L;
@@ -520,7 +523,7 @@ function finishSlot(r) {
     TA.info = it;
   }
   const t = finishTile(r);
-  TA.infoData.set([tileLayer(t), 1 / (t.size[0] * k), 1 / (t.size[1] * k), 0], s * 4);
+  TA.infoData.set([tileLayer(t), 1 / (t.size[0] * k), 1 / (t.size[1] * k), t.across ?? 1], s * 4);
   TA.info.needsUpdate = true;
   TA.slots.set(key, s);
   return s;
@@ -528,7 +531,14 @@ function finishSlot(r) {
 const finishTexel = wgslFn(`
   fn finishTexel(tiles: texture_2d_array<f32>, samp: sampler, info: texture_2d<f32>, slot: f32, uv: vec2<f32>) -> vec3<f32> {
     let f = textureLoad(info, vec2<i32>(i32(slot + 0.5), 0), 0);
-    return textureSample(tiles, samp, uv * f.yz + vec2<f32>(0.5), i32(f.x + 0.5)).rgb;
+    let st = uv * f.yz + vec2<f32>(0.5);
+    let n = max(f.w, 1.0);                                    // (over n layers: which one by u, half a texel in from each side so none wraps to its own far edge)
+    let run = fract(st.x) * n;
+    let k = min(floor(run), n - 1.0);
+    let inside = (run - k) * (1.0 - 1.0 / ${TILE_RES}.0) + 0.5 / ${TILE_RES}.0;
+    let s = vec2<f32>(select(inside, st.x, n < 1.5), st.y);
+    let stretch = vec2<f32>(n, 1.0);
+    return textureSampleGrad(tiles, samp, s, i32(f.x + k + 0.5), dpdx(st) * stretch, dpdy(st) * stretch).rgb;
   }
 `);
 

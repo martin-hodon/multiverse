@@ -9,6 +9,7 @@
 import { registerPatterns, renderPattern } from "./patterns.js";
 import { registerGlyphs } from "./glyphs.js";   // (the layer kinds the page registers too: hieroglyphs, tomb paintings)
 import { registerMurals } from "./murals.js";
+import "./ornament.js";
 
 let R = 512, cv = null;
 self.onmessage = (e) => {
@@ -16,11 +17,13 @@ self.onmessage = (e) => {
   if (m.library) { registerPatterns(m.library.families); registerGlyphs(m.library.glyphs); registerMurals(m.library.murals); R = m.res; return; }
   try {
     const tile = renderPattern(m.pattern, { palette: m.palette, params: m.params, res: m.res });
-    const cx = (cv ??= new OffscreenCanvas(R, R)).getContext("2d", { willReadFrequently: true });
-    cx.clearRect(0, 0, R, R); cx.drawImage(tile.canvas, 0, 0, R, R);
-    const px = cx.getImageData(0, 0, R, R).data, row = R * 4, out = new Uint8Array(R * row);
-    for (let y = 0; y < R; y++) out.set(px.subarray(y * row, (y + 1) * row), (R - 1 - y) * row);
-    self.postMessage({ key: m.key, size: tile.size, repeat: tile.repeat, px: out }, [out.buffer]);
+    const cx = (cv ??= new OffscreenCanvas(R, R)).getContext("2d", { willReadFrequently: true }), n = tile.across, row = R * 4, out = new Uint8Array(n * R * row), W = tile.canvas.width, H = tile.canvas.height;
+    for (let k = 0; k < n; k++) {
+      cx.clearRect(0, 0, R, R); cx.drawImage(tile.canvas, k * W / n, 0, W / n, H, 0, 0, R, R);
+      const px = cx.getImageData(0, 0, R, R).data, base = k * R * row;
+      for (let y = 0; y < R; y++) out.set(px.subarray(y * row, (y + 1) * row), base + (R - 1 - y) * row);
+    }
+    self.postMessage({ key: m.key, size: tile.size, repeat: tile.repeat, across: n, px: out }, [out.buffer]);
   } catch (err) {
     self.postMessage({ key: m.key, err: String(err?.message ?? err) });
   }

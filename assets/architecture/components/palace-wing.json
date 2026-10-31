@@ -36,7 +36,10 @@
     "_stairAt": "how far the stair strip stands in from the -x end's inner face (clear of a neighbouring wing that overlaps this one's end)",
     "x0": "0 - L / 2 + t + stairAt",
     "_x0": "where the stair strip begins",
-    "_overhang": "the eaves reach past the cornice"
+    "_overhang": "the eaves reach past the cornice",
+    "doorPlusX": 0,
+    "doorMinusX": 0,
+    "_doorPlusX": "1: the middle opening of the top storey's +x end (doorMinusX: the -x end's) a door, not a window -- a terrace comes up to it there, Melk's Altane between its wings; an end with an odd row of windows (nz) has a middle. At the -x end the stair strip stands in from the face (`stairAt`) or the door opens over its landing"
   },
   "build": [
     "ground storey",
@@ -257,6 +260,11 @@
           },
           "surround": {
             "head": false
+          },
+          "middle": {
+            "width": "winW + (doorW - winW) * doorPlusX",
+            "sill": "sill * (1 - doorPlusX)",
+            "springing": "(sill + winH) * (1 - doorPlusX) + doorH * doorPlusX"
           }
         },
         "3": {
@@ -271,6 +279,11 @@
           },
           "surround": {
             "head": false
+          },
+          "middle": {
+            "width": "winW + (doorW - winW) * doorMinusX",
+            "sill": "sill * (1 - doorMinusX)",
+            "springing": "(sill + winH) * (1 - doorMinusX) + doorH * doorMinusX"
           }
         }
       },

@@ -8,6 +8,7 @@ period sources; the game builds them through items.js now (architecture.js itemG
     python3 tools/propgen.py
 """
 import json, math, os
+from potshapes import POTS, fit, rounded
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 ITEMS = os.path.join(ROOT, "assets", "items")
@@ -239,6 +240,37 @@ def vessel(key, name, about, profile, floor, colour):
 vessel("mug", "Mug", "a stoneware mug, open: you see the ale in it", [[0.045, 0], [0.045, 0.12]], 0.008, "#8b6a4a")
 vessel("jug", "Jug", "a stoneware jug: a belly, then a mouth wider than its foot", [[0.065, 0], [0.085, 0.15], [0.075, 0.25]], 0.008, "#6f5a46")
 vessel("bucket", "Wooden bucket", "a wooden bucket, the fountain's", [[0.11, 0], [0.13, 0.3]], 0.02, "#6b4a2c")
+# ---- Greek pots: a lathe wrapped by a painting along its whole profile (items.js `wrap`), a few paintings picked by seed;
+# their shapes and where each picture goes in potshapes.py, shared with greekgen.py
+# (assets/patterns/greek.json, greek.js); handles the ware's, as black as its glaze
+def _greek(key, name, about, painting, handles, glaze="#17110e"):
+    def pick(of): return {"pick": [{"pattern": f"greek/{of}-{k}", "palette": ["#000000", "#000000", "#000000", "#000000"]} for k in range(1, 5)]}
+    P = POTS[key]; profile, tondo = P["profile"], P.get("tondo")
+    PROPS["tableware/" + key] = item(name, "tableware", about, {}, {"paint": pick(painting), "glaze": glaze, **({"tondo": pick(painting + "-tondo")} if tondo else {})}, [
+        {"id": "body", "type": "lathe", "material": "paint", "sides": 40, "caps": False, "wrap": [-fit(key)[0][0], 1], "profile": rounded(profile)},
+        {"id": "well", "type": "lathe", "material": "tondo" if tondo else "glaze", "sides": 32 if tondo else 24, "caps": False, **({"disc": tondo} if tondo else {}), "profile": P.get("well") or [[max(r - .003, 0), y] for r, y in reversed(profile)]},   # (inside all glaze: down from the lip)
+        {"id": "foot", "type": "lathe", "material": "glaze", "sides": 24, "profile": [[profile[0][0], 0], [profile[0][0], .004]]},
+        *handles], era="-700--300", region="europe")
+def _handle(id_, *pts, r=.012):                   # (a pulled strap of clay: its bends a curve)
+    P, out = list(pts), []
+    for i in range(len(P) - 1):
+        a, b, c, d = P[max(i - 1, 0)], P[i], P[i + 1], P[min(i + 2, len(P) - 1)]
+        for k in range(4):
+            t = k / 4
+            out.append([.5 * (2 * b[j] + (c[j] - a[j]) * t + (2 * a[j] - 5 * b[j] + 4 * c[j] - d[j]) * t * t + (3 * b[j] - a[j] - 3 * c[j] + d[j]) * t ** 3) for j in range(3)])
+    out.append(list(P[-1]))
+    return [rod(f"{id_} {i}", "glaze", r, out[i], out[i + 1], 8) for i in range(len(out) - 1)]
+_greek("amphora", "Amphora (black-figure)", "an Attic neck amphora, a panel of black-figure on each side of its belly: two handles from the neck to the shoulder, lip down to foot one painted surface, its height 0.5 m", "bf-amphora",
+       _handle("handle R", (.05, .46, 0), (.1, .47, 0), (.12, .41, 0), (.12, .37, 0)) + _handle("handle L", (-.05, .46, 0), (-.1, .47, 0), (-.12, .41, 0), (-.12, .37, 0)))
+_greek("krater", "Bell krater (red-figure)", "a wide red-figure mixing bowl for wine, a picture on each side of its upper body under a lip of laurel: two handles low on its sides", "rf-krater",
+       _handle("handle R", (.14, .2, 0), (.205, .23, 0), (.205, .27, 0), (.165, .28, 0), r=.011) + _handle("handle L", (-.14, .2, 0), (-.205, .23, 0), (-.205, .27, 0), (-.165, .28, 0), r=.011))
+_greek("lekythos", "Lekythos (white-ground)", "a slender white-ground oil flask, a figure scene on the front of its tall body: one handle at the back from neck to shoulder", "wg-lekythos",
+       _handle("handle", (0, .27, -.012), (0, .262, -.038), (0, .24, -.036), r=.005))
+_greek("hydria", "Hydria (red-figure)", "a water jar: a round shoulder, a picture on the front of its body, two side handles for lifting and a tall one at the back for pouring", "hydria-rf",
+       _handle("lift R", (.15, .2, 0), (.19, .22, 0), (.155, .25, 0), r=.009) + _handle("lift L", (-.15, .2, 0), (-.19, .22, 0), (-.155, .25, 0), r=.009) + _handle("pour", (0, .41, -.05), (0, .42, -.13), (0, .34, -.15), (0, .3, -.13), r=.011))
+_greek("kylix", "Kylix (red-figure)", "a shallow two-handled wine cup on a tall stem, a round picture inside its bowl and figures round its outside", "kylix-rf",
+       _handle("handle R", (.1, .09, 0), (.155, .092, 0), (.182, .118, 0), (.158, .13, 0), (.127, .118, 0), r=.006) + _handle("handle L", (-.1, .09, 0), (-.155, .092, 0), (-.182, .118, 0), (-.158, .13, 0), (-.127, .118, 0), r=.006))
+
 PROPS["tableware/trough"] = item("Water trough", "tableware", "a stone water trough, open at the top (the water at its level: tableware.js)",
     {"w": 2.2, "h": 0.5, "d": 0.7, "t": 0.09, "floor": 0.12}, {"stone": {"pattern": "stone/ashlar", "palette": "sandstone-grey"}}, [
         box("floor", "stone", ["w", "floor", "d"], [0, "floor / 2", 0]),

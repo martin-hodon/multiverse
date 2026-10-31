@@ -54,7 +54,8 @@ export function createLibrary({ positions, movements, exercises }) {
     return { name, about: mv.about, segs: [...(mv.via ?? []).map((v) => ({ to: position(v), time: 1.0, hold: .15, label: `getting there: ${v}` })),
                                            { to: position(mv.start), time: 1, hold: .3, label: "start" }, ...mv.keys.map((k) => ({ to: position(k.to), time: k.time ?? 1, hold: k.hold ?? 0, hop: !!k.hop, label: k.to }))] };
   }
-  return { position, movement, timeline, positions: Object.keys(P), movements: Object.keys(M), exercises: Object.keys(X), exercise: (n) => X[n] };
+  const named = (o) => Object.keys(o).filter((k) => !k.startsWith("_"));   // (a key "_..." among them is a note on the ones after it)
+  return { position, movement, timeline, positions: named(P), movements: named(M), exercises: named(X), exercise: (n) => X[n] };
 }
 
 // THE RANGES: each movement of each joint (the trunk's, the right side's) in turn, out to one limit, the other and

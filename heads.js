@@ -18,7 +18,7 @@ import { paintedGeometry } from "./tools.js";
 import { wgslFn, normalWorld, positionWorld, cameraPosition, attribute, uv, texture, vec3, vec4, positionLocal, positionGeometry, time, sin } from "three/tsl";
 import { WIND, WIND_DIR, grassWind } from "./grass.js";   // (the hair stirs in the grass's wind)
 import { LIGHT } from "./light.js";   // the world's one static sun
-import { stoneMaterial } from "./shell.js";   // a statue's head: the stone its body is (statues.js)
+import { stoneMaterial, PAINTED } from "./shell.js";   // a statue's head: the stone its body is (statues.js)
 import { PREGEN, pregenOn, pregenMiss, recordFor, hasher, fetchFace, packFace } from "./pregen.js";   // (heads built once by build/pregen.py)
 
 const CANON_R = .090;   // the canon face's cranium radius (face.js LEVELS): scaled to each person's hr (a little under it: the SDF hair cap covers the skull)
@@ -36,6 +36,54 @@ export const faceGeometry = (built, recolor = null) => {
   if (!dark) cavities.set(built, dark = cavityOf(geo));
   return cavityShade(geo, CAVITY, dark);
 };
+// A CARVED HEAD's geometry (a statue's: shell.js stoneMaterial `head`): no paint -- its hollows as an attribute of their own
+// (`cavity`, the same darkness the paint takes), for the stone to cut them in; the hair's mask and uv for its locks
+// -- its normals SMOOTHED (CARVED_SMOOTH): the face's field is creased along its guide lines, the cheekbone's, the mouth's
+// corner to the jaw -- under paint unseen, in hard-lit stone a low-poly mask of planes. Its CURLS (`curl`: shell.js
+// CURLS): a beard's, always; the hair's where its hairstyle is carved so (`carve: "curls"`, the ushnisha's snail curls)
+// (`recolor`: a PAINTED one's colours -- shell.js PAINTED: its skin, hair, brows and lips, as a living face's)
+export const stoneFaceGeometry = (built, { curls = false, recolor = null } = {}) => {
+  const geo = paintedGeometry(built, { strands: ["hair"], wet: WET, recolor });
+  let dark = cavities.get(built);
+  if (!dark) cavities.set(built, dark = cavityOf(geo));
+  geo.setAttribute("cavity", new THREE.Float32BufferAttribute(dark, 1));
+  const curl = [];   // (per vertex, in paintedGeometry's order: each group's indices)
+  for (const g of built.groups) { const v = g.roles?.has("beard") || (curls && g.roles?.has("hair")) ? 1 : 0; for (let i = 0; i < g.idx.length; i++) curl.push(v); }
+  geo.setAttribute("curl", new THREE.Float32BufferAttribute(curl, 1));
+  return smoothNormals(geo);
+};
+// SMOOTHED NORMALS: each vertex's normal the mean of those within `r` (falling off with the distance), only of points
+// facing within `cos` of its own -- not across a lip to the other lip, a lid to the eye -- and of its own kind (skin,
+// the wet eye); not the hair's (its locks are lit by their own relief)
+export const CARVED_SMOOTH = { r: .022, cos: .3 };
+export function smoothNormals(geo, C = CARVED_SMOOTH) {
+  const P = geo.attributes.position.array, N = geo.attributes.normal.array, n = P.length / 3, hm = geo.attributes.hairMask?.array, wm = geo.attributes.wetMask?.array;
+  const R = C.r, cell = new Map(), ck = (a, b, c) => (a + 512) + (b + 512) * 1024 + (c + 512) * 1048576, out = new Float32Array(N);
+  for (let i = 0; i < n; i++) {
+    if (hm?.[i]) continue;
+    const k = ck(Math.floor(P[i * 3] / R), Math.floor(P[i * 3 + 1] / R), Math.floor(P[i * 3 + 2] / R)); let l = cell.get(k); if (!l) cell.set(k, l = []); l.push(i);
+  }
+  for (let i = 0; i < n; i++) {
+    if (hm?.[i]) continue;
+    const x = P[i * 3], y = P[i * 3 + 1], z = P[i * 3 + 2], nx = N[i * 3], ny = N[i * 3 + 1], nz = N[i * 3 + 2], wet = !!wm?.[i];
+    const cx = Math.floor(x / R), cy = Math.floor(y / R), cz = Math.floor(z / R);
+    let sx = 0, sy = 0, sz = 0;
+    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let c = -1; c <= 1; c++) {
+      const l = cell.get(ck(cx + a, cy + b, cz + c));
+      if (l) for (const j of l) {
+        if (!!wm?.[j] !== wet) continue;
+        const mx = N[j * 3], my = N[j * 3 + 1], mz = N[j * 3 + 2];
+        if (mx * nx + my * ny + mz * nz < C.cos) continue;
+        const d = Math.hypot(P[j * 3] - x, P[j * 3 + 1] - y, P[j * 3 + 2] - z);
+        if (d < R) { const w = 1 - d / R; sx += mx * w; sy += my * w; sz += mz * w; }
+      }
+    }
+    const L = Math.hypot(sx, sy, sz);
+    if (L > 1e-9) { out[i * 3] = sx / L; out[i * 3 + 1] = sy / L; out[i * 3 + 2] = sz / L; }
+  }
+  geo.setAttribute("normal", new THREE.Float32BufferAttribute(out, 3));
+  return geo;
+}
 // THE FACE'S HOLLOWS (2026-10-24): the sun's half-Lambert gives a head its round, not its form -- the eye sockets, the
 // creases beside the nose and under the lower lip, the ear's bowl, the hairline under the hair read as flat paint. So
 // every vertex is darkened by how CONCAVE the surface is round it: the mean of the points within `r` (two radii: the
@@ -198,7 +246,10 @@ export function hairFaceParams(bank, style) {
 }
 // shade: the faces' half-Lambert (config.json people.faceShade: dark, gamma or curve, skin) -- one material for all of them
 // how finely the game's heads are subdivided (face.js: 0 the guide lattice itself, 1 once -- config.json people.faceDetail)
-export const DETAIL = { face: 1 };
+// (a STATUE's carved head -- `stone` -- its own: seen close and lit hard by the stone's light, once was faceted planes
+//  over the cheeks and the jaw)
+export const DETAIL = { face: 1, stone: 1.5 };
+const detailOf = (s) => (s.stone ? DETAIL.stone : DETAIL.face);
 // A FACE'S SHAPE: everything about it but its size (the copy's scale: hr over the canon's) and its skin's and hair's
 // colours (painted on: built in placeholders) -- so pregen/ can keep it, and a village's heads share few builds.
 // Its FAMILY: the kind, the hair, what is worn -- another seed of one family stands in for a face pregen/ has not got
@@ -227,8 +278,8 @@ const browOf = (hair) => { const c = new THREE.Color(hair); c.getHSL(_hsl, THREE
 // STUBBLE: the skin, a third of the way to the brows' colour (face.js BEARDS stubble)
 export const STUBBLE = .35;
 const stubbleOf = (skin, hair) => "#" + new THREE.Color(skin).lerp(new THREE.Color(browOf(hair)), STUBBLE).getHexString();
-export const faceShape = (f) => ({ kind: f.kind, seed: f.seed % SEEDS, style: f.style ?? "", fringe: f.fringe ?? 0, stone: f.stone ?? 0, headwear: f.headwear ?? "", ears: f.ears ?? "" });
-export const faceFamily = (s) => `${s.kind}|${s.style}|${s.fringe}|${s.stone ? 1 : 0}|${s.headwear}|${s.ears}`;
+export const faceShape = (f) => ({ kind: f.kind, seed: f.seed % SEEDS, style: f.style ?? "", fringe: f.fringe ?? 0, stone: f.stone ?? 0, headwear: f.headwear ?? "", ears: f.ears ?? "", ...(f.beard ? { beard: f.beard } : {}) });
+export const faceFamily = (s) => `${s.kind}|${s.style}|${s.fringe}|${s.stone ? (PAINTED.has(s.stone) ? "p@" : "1@") + DETAIL.stone : 0}|${s.headwear}|${s.ears}${s.beard ? "|" + s.beard : ""}`;   // (a carved one at its detail: no other stands in)
 // (the definitions a face is made of: its key carries them, so an edited face, hairstyle or jewel is not found)
 const contentOf = new WeakMap();
 function faceContent(bank) {
@@ -240,11 +291,11 @@ function faceContent(bank) {
   }
   return c;
 }
-export const faceKey = (s, bank, SH) => hasher().str("face").str(faceContent(bank)).json({ ...s, detail: DETAIL.face, skin: SH.skin ?? null }).hex();
+export const faceKey = (s, bank, SH) => hasher().str("face").str(faceContent(bank)).json({ ...s, detail: detailOf(s), skin: SH.skin ?? null }).hex();
 export function buildFace(s, bank, lib, SH) {
   return buildItem("items/faces/" + s.kind, bank, lib, { seed: 1 + s.seed, materials: { skin: SH.skin ?? SKIN0, hairColour: HAIR0, brow: BROW0, stubble: STUB0, lip: LIP0 },
-    params: { detail: DETAIL.face, scale: 1, hairline: s.style === "none" ? .2 : HAIRLINE, seed: 1 + s.seed, ...(s.style ? { hairstyle: "items/hair/" + s.style, fringe: s.fringe, ...hairFaceParams(bank, s.style) } : {}),
-              ...(s.headwear ? { headwear: s.headwear } : {}), ...(s.ears ? { earrings: s.ears } : {}) } });   // (the person's own hairstyle, else the face's pick; what is worn on the head and the ears: jewelry.js)
+    params: { detail: detailOf(s), scale: 1, hairline: s.style === "none" ? .2 : HAIRLINE, seed: 1 + s.seed, ...(s.style ? { hairstyle: "items/hair/" + s.style, fringe: s.fringe, ...hairFaceParams(bank, s.style) } : {}), ...(s.stone ? { carved: 1, painted: PAINTED.has(s.stone) ? 1 : 0 } : {}),
+              ...(s.headwear ? { headwear: s.headwear } : {}), ...(s.ears ? { earrings: s.ears } : {}), ...(s.beard ? { beard: s.beard } : {}) } });   // (a beard the person is given -- an outfit's: face.js BEARDS -- over the face's own draw)   // (the person's own hairstyle, else the face's pick; what is worn on the head and the ears: jewelry.js)
 }
 // the generator (pregen.html): a person's face built and kept, unless it already is
 export function recordFace(f, { bank = ASSETS, lib = bank.get("items/materials")?.materials ?? {}, shade = {} } = {}) {
@@ -293,11 +344,15 @@ export function createHeads(scene, { cap = 48, bank = ASSETS, lib = bank.get("it
     const sh = shapeOf(f);
     if (sh.missing) return null;
     if (sh.pending) return null;
-    const key = `${sh.key}|${f.stone ? "" : (SH.skin ? "" : f.skin) + "|" + f.hair}`;
+    const painted = !f.stone || PAINTED.has(f.stone);   // (a living face, or a statue's painted: in its own colours)
+    const key = `${sh.key}|${painted ? (SH.skin ? "" : f.skin) + "|" + f.hair : ""}`;
     if (kinds.has(key)) return kinds.get(key);
-    // (a STATUE's head -- `stone`, its material: statues.js -- is carved: the stone's own material, not skin and hair)
-    const pool = poolOf(f.stone ? stoneMaterial(f.stone) : mat);
-    const k = { pool, shape: pool.add(faceGeometry(sh.built, f.stone ? null : { [SKIN0]: f.skin, [HAIR0]: f.hair, [BROW0]: browOf(f.hair), [STUB0]: stubbleOf(SH.skin ?? f.skin, f.hair), [LIP0]: lipOf(SH.skin ?? f.skin) })), n: 0 };
+    // (a STATUE's head -- `stone`, its material: statues.js -- is carved: the stone's own material, not skin and hair; its
+    //  hollows and its hair's locks cut in)
+    const pool = poolOf(f.stone ? stoneMaterial(f.stone, { head: true }) : mat);
+    const hs = bank.get("items/hair/" + f.style), curls = hs?.carve === "curls" || !!hs?.parts?.some((q) => q.carved?.carve === "curls");   // (its own, or what it is carved as: hair.js)
+    const recolor = painted ? { [SKIN0]: f.skin, [HAIR0]: f.hair, [BROW0]: browOf(f.hair), [STUB0]: stubbleOf(SH.skin ?? f.skin, f.hair), [LIP0]: lipOf(SH.skin ?? f.skin) } : null;
+    const k = { pool, shape: pool.add(f.stone ? stoneFaceGeometry(sh.built, { curls, recolor }) : faceGeometry(sh.built, recolor)), n: 0 };
     kinds.set(key, k);
     return k;
   };

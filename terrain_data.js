@@ -19,6 +19,21 @@ export function gradeRGB(h, grade, out) {
   return out;
 }
 
+// THE BARE GROUND: where a landscape world's land is rock, scree, sand or snow (landmap.js `surface`: its colour and
+// how bare, on the map's grid), its colour over the lawn's, bilinear between the samples
+export function bareRGB({ n, res, x0, z0, rgb, bare }, x, z, out) {
+  const fi = Math.max(0, Math.min(n - 1.001, (x - x0) / res)), fj = Math.max(0, Math.min(n - 1.001, (z - z0) / res));
+  const i = fi | 0, j = fj | 0, a = fi - i, b = fj - j, k = j * n + i;
+  const w0 = (1 - a) * (1 - b), w1 = a * (1 - b), w2 = (1 - a) * b, w3 = a * b;
+  const t = w0 * bare[k] + w1 * bare[k + 1] + w2 * bare[k + n] + w3 * bare[k + n + 1];
+  if (t <= 0) return out;
+  for (let c = 0; c < 3; c++) {
+    const v = w0 * rgb[k * 3 + c] + w1 * rgb[(k + 1) * 3 + c] + w2 * rgb[(k + n) * 3 + c] + w3 * rgb[(k + n + 1) * 3 + c];
+    out[c] += (v - out[c]) * t;
+  }
+  return out;
+}
+
 // Cells across a tile: the tile is the unit the error is judged in, and the coarsest that fits is used.
 const LEVELS = [1, 2, 4, 8, 16, 32];
 
@@ -83,7 +98,7 @@ function tileData(x0, z0, S, seg, colourAt, drop, H, nb = [seg, seg, seg, seg]) 
   const write = (k, x, y, z, nx, ny, nz) => {
     pos[k * 3] = x; pos[k * 3 + 1] = y; pos[k * 3 + 2] = z;
     nor[k * 3] = nx; nor[k * 3 + 1] = ny; nor[k * 3 + 2] = nz;
-    colourAt(y, c);
+    colourAt(y, c, x, z);
     col[k * 3] = c[0]; col[k * 3 + 1] = c[1]; col[k * 3 + 2] = c[2];
   };
   // A BORDER WITH A COARSER NEIGHBOUR FOLLOWS ITS LINE. The coarse tile's edge is a straight chord between its own
@@ -219,7 +234,7 @@ function roadTileData(x0, z0, S, colourAt, drop, H, roads, height, nb = [LAT, LA
     const k = key(x, z);
     if (vid.has(k)) return vid.get(k);
     const i = pos.length / 3;
-    pos.push(x, y, z); nor.push(...n); colourAt(y, c); col.push(c[0], c[1], c[2]);
+    pos.push(x, y, z); nor.push(...n); colourAt(y, c, x, z); col.push(c[0], c[1], c[2]);
     vid.set(k, i); return i;
   };
   const latN = (li, lj) => { const dx = (at(H, li + 1, lj) - at(H, li - 1, lj)) / (2 * d), dz = (at(H, li, lj + 1) - at(H, li, lj - 1)) / (2 * d), l = Math.hypot(dx, 1, dz); return [-dx / l, 1 / l, -dz / l]; };
@@ -317,7 +332,7 @@ function roadTileData(x0, z0, S, colourAt, drop, H, roads, height, nb = [LAT, LA
     else if (Math.abs(li) < 1e-6 && nb[2] < LAT) y = chord(0, lj, LAT / nb[2], false);
     else if (Math.abs(li - LAT) < 1e-6 && nb[3] < LAT) y = chord(LAT, lj, LAT / nb[3], false);
     if (y === null) continue;
-    pos[v * 3 + 1] = y; colourAt(y, c); col[v * 3] = c[0]; col[v * 3 + 1] = c[1]; col[v * 3 + 2] = c[2];
+    pos[v * 3 + 1] = y; colourAt(y, c, pos[v * 3], pos[v * 3 + 2]); col[v * 3] = c[0]; col[v * 3 + 1] = c[1]; col[v * 3 + 2] = c[2];
   }
   const nTop = pos.length / 3;
   const top = (v) => v < nTop;
@@ -348,10 +363,11 @@ function concatBlock(datas) {
 
 // radius: half the ground's extent, height: groundH, grade: grass.js's GRADE, tol: metres of vertical error
 // allowed, maxCell: the coarsest cell anywhere, block: tiles per drawn mesh
-export function buildTerrainData({ radius, height, grade, tiles = 16, tol = .15, maxCell = 32, block = 4, roads = null, shoulder = 3 }) {
+// surface: a landscape world's bare ground (landmap.js) -- its colour taking over the lawn's as bare as it is
+export function buildTerrainData({ radius, height, grade, tiles = 16, tol = .15, maxCell = 32, block = 4, roads = null, shoulder = 3, surface = null }) {
   const R = prepareRoads(roads);
   const S = 2 * radius / tiles;
-  const colourAt = (h, out) => gradeRGB(h, grade, out);
+  const colourAt = surface ? (h, out, x, z) => bareRGB(surface, x, z, gradeRGB(h, grade, out)) : (h, out) => gradeRGB(h, grade, out);
   const blocks = [], stats = { tiles: 0, blocks: 0, tris: 0, cells: {} };
   // every tile sampled and its subdivision chosen FIRST, so each is built knowing its neighbours' (tileData: the
   // finer side of a border follows the coarser one's line)

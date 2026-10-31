@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statuary — Bannerfield statues</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #c7ddee; font: 13px "Avenir Next", "Segoe UI", sans-serif; color: #22303c; }
+  canvas { display: block; }
+  #bar { position: absolute; left: 10px; top: 10px; max-width: 46em; background: rgba(255, 255, 255, .8); border-radius: 6px; padding: 8px 10px; line-height: 1.5; }
+  #bar b { font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="bar">
+  <b>Statuary</b>: the carved figures of statues.js on their pedestals, as the buildings' `statue` markers stand them.
+  Rows front to back: every pose · every stone · what they hold · styles of dress.
+  <br>Drag to orbit · <code>?row=N</code> one row · <code>?cam=x,y,z,tx,ty,tz</code> · <code>?specs=[statue data...]</code> those alone
+</div>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl": "https://unpkg.com/three@0.185.1/build/three.tsl.js",
+    "three/addons/": "https://unpkg.com/three@0.185.1/examples/jsm/"
+} }
+</script>
+<script type="module">
+// A test bench for the statues (statues.js): rows of carved figures on plain pedestals -- poses, stones, what they hold,
+// styles of dress -- each a `statue` marker's data as a building gives it. Headless shots drive it after window.__ready.
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { createComposite, pipeFromQuery } from "./composite.js";
+import { placeStatues, statuePose, STATUE_POSES } from "./statues.js";
+import { createTools } from "./tools.js";
+import { createHeads } from "./heads.js";
+import { stoneMaterial, STONES } from "./shell.js";
+
+const qp = new URLSearchParams(location.search);
+pipeFromQuery(qp);
+const renderer = new THREE.WebGPURenderer({ antialias: false });
+await renderer.init();
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xc7ddee);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial({ color: 0x9aad6a }));
+ground.rotation.x = -Math.PI / 2;
+scene.add(ground);
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, .05, 400);
+const cam = (qp.get("cam") ?? "0,2.6,9,0,1.6,0").split(",").map(Number);
+camera.position.set(cam[0], cam[1], cam[2]);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(cam[3], cam[4], cam[5]);
+controls.update();
+
+const FACE = -Math.PI / 2;   // +x forward -> facing the camera (+z)
+// the rows: [z, [statue data...]] -- the marker's data (statuary.py statue): kind, pose, style, outfit, hold, stone, scale, seed
+const POSES = Object.fromEntries(Object.entries(STATUE_POSES).filter(([k]) => !k.endsWith(" left")));   // (every pose once: the mirrored ones are the same)
+const rows = qp.has("specs") ? [[0, JSON.parse(qp.get("specs"))]] : [
+  [0, Object.keys(POSES).map((pose, i) => ({ pose, kind: i % 2 ? "woman" : "man", style: "greek", seed: 3 + i }))],
+  [-3, Object.keys(STONES).flatMap((stone, i) => [{ stone, kind: "man", style: "roman", seed: 11 + i }, { stone, kind: "woman", style: "greek", seed: 21 + i }])],
+  [-6, [{ hold: { R: "items/weapons/dory", L: "items/shields/aspis" }, style: "greek", seed: 5 }, { hold: { R: "items/weapons/sword" }, style: "gothic", seed: 7 },
+        { hold: { R: "items/tools/book" }, style: "gothic", seed: 8 }, { hold: { R: "items/tools/staff" }, kind: "woman", seed: 9 },
+        { hold: { L: "items/weapons/longbow" }, seed: 11 }, { hold: { R: "items/tools/torch" }, kind: "woman", style: "greek", seed: 12 },
+        { pose: "spear bearer", hold: { L: "items/tools/trident" }, style: "greek", seed: 13 }, { pose: "blessing", hold: { L: "items/tools/lyre" }, style: "greek", seed: 14 },
+        { pose: "aloft", hold: { L: "items/tools/caduceus" }, style: "greek", seed: 15 }, { pose: "offering", hold: { R: "items/tools/patera" }, kind: "woman", style: "roman", seed: 16 }]],
+  [-9, ["greek", "roman", "gothic", "chinese"].flatMap((style, i) => [{ style, kind: "man", seed: 31 + i }, { style, kind: "woman", seed: 41 + i }])],
+];
+const only = qp.has("row") ? +qp.get("row") : -1;
+const PED = { w: .8, h: .9 };   // a plain pedestal under each
+const pedMat = stoneMaterial(STONES.limestone);
+const statues = [];
+for (const [ri, [z0, specs]] of rows.entries()) if (only < 0 || only === ri) specs.forEach((d, i) => {
+  const x = (i - (specs.length - 1) / 2) * 1.5, z = only < 0 ? z0 : 0;
+  const ped = new THREE.Mesh(new THREE.BoxGeometry(PED.w, PED.h, PED.w), pedMat);
+  ped.position.set(x, PED.h / 2, z);
+  scene.add(ped);
+  const seat = statuePose({ pose: "stand", ...d })?.seat ? .45 * (d.scale ?? 1) : 0;   // (a seated figure on a throne-high block)
+  if (seat) { const b = new THREE.Mesh(new THREE.BoxGeometry(.5, seat, .6), pedMat); b.position.set(x - .05, PED.h + seat / 2, z); scene.add(b); }
+  statues.push({ x, y: PED.h + seat, z, h: FACE, kind: "man", pose: "stand", style: null, outfit: null, hold: null, stone: "marble", scale: 1, seed: 1, ...d });
+});
+const herd = createComposite(statues.length * 60);
+scene.add(herd.mesh);
+const tools = createTools(scene), heads = createHeads(scene, { shade: (await import("./config.json", { with: { type: "json" } })).default.people?.faceShade ?? {} });
+const figures = [], add = herd.add;   // (the figures as they are added: the probes read them)
+herd.add = (d) => { const an = add(d); figures.push(an); return an; };
+const held = placeStatues(herd, [{ x: 0, z: 0, statues }]);
+tools.prepare?.(held.map((h) => h.tool));
+addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
+let frames = 0;
+function frame() {
+  herd.update(0); tools.place([[herd, held]]); heads.place([herd]);
+  renderer.render(scene, camera);
+  if (++frames > 20) window.__ready = true;   // (a few frames: the heads' and the items' meshes come in after their first place)
+  requestAnimationFrame(frame);
+}
+window.__dbg = { THREE, herd, figures, statues, camera, controls, scene, renderer, tools, held };
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

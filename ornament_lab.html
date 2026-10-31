@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ornament lab</title>
+<style>html, body { margin: 0; background: #1b1d21; color: #d8d4cc; font: 12px ui-monospace, monospace; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1500" height="900"></canvas>
+<script type="module">
+// A bench for the ornament (ornament/*.js, docs/ornament.md), no three.js: each pattern twice across, so a seam shows, and small
+// beside it, as a distant wall's mipmap would average it.
+//   ?name=a,b &cell=340 &res=1024 &small=48 &palette=name
+// window.__metrics: per pattern, what its net reports, and `seam`: the step across the tile's edge against the step beside it.
+import { registerPatterns, renderPattern, patternOf } from "./patterns.js";
+import { measures } from "./ornament.js";
+
+const Q = new URLSearchParams(location.search), get = async (p) => (await fetch(p)).json();
+const doc = await get("assets/patterns/ornament.json");
+registerPatterns({ palettes: await get("assets/patterns/palettes.json"), ornament: doc });
+const names = (Q.get("name") ?? Object.keys(doc.patterns).join(",")).split(","), cell = +(Q.get("cell") ?? 340), small = +(Q.get("small") ?? 48);
+const W = +(Q.get("w") ?? 1500), cols = Math.max(1, Math.floor(W / (cell + small + 12))), rowH = cell + 20;
+const cv = document.getElementById("c");
+cv.width = W; cv.height = Math.ceil(names.length / cols) * rowH + 8;
+const g = cv.getContext("2d", { willReadFrequently: true });
+g.fillStyle = "#1b1d21"; g.fillRect(0, 0, cv.width, cv.height);
+const metrics = {};
+names.forEach((name, i) => {
+  const x = 6 + (i % cols) * (cell + small + 12), y = 6 + Math.floor(i / cols) * rowH, ref = `ornament/${name}`, def = patternOf(ref);
+  g.fillStyle = "#d8d4cc"; g.fillText(name, x, y + 10);
+  try {
+    const t0 = performance.now();
+    const t = renderPattern(ref, { res: +(Q.get("res") ?? def.res ?? 1024), palette: Q.get("palette") ?? undefined });
+    const ms = Math.round(performance.now() - t0);
+    const rep = def.repeat !== false, k = (rep ? cell / 2 : cell) / Math.max(t.px[0], t.px[1]);
+    g.save(); g.beginPath(); g.rect(x, y + 14, cell, cell); g.clip();
+    if (rep) { const f = g.createPattern(t.canvas, "repeat"); f.setTransform(new DOMMatrix([k, 0, 0, k, x, y + 14])); g.fillStyle = f; g.fillRect(x, y + 14, cell, cell); }
+    else g.drawImage(t.canvas, x, y + 14, t.px[0] * k, t.px[1] * k);
+    g.restore();
+    g.imageSmoothingQuality = "high";
+    g.drawImage(t.canvas, x + cell + 4, y + 14, small, small * t.px[1] / t.px[0]);
+    const px = t.canvas.getContext("2d").getImageData(0, 0, t.px[0], t.px[1]).data, [w, h] = t.px;
+    const diff = (a, b, horiz) => { let s = 0, n = horiz ? h : w; for (let q = 0; q < n; q++) { const A = (horiz ? q * w + a : a * w + q) * 4, B = (horiz ? q * w + b : b * w + q) * 4; s += Math.abs(px[A] - px[B]) + Math.abs(px[A + 1] - px[B + 1]) + Math.abs(px[A + 2] - px[B + 2]); } return s / n / 3; };
+    const m = { ms, px: t.px };
+    if (rep) m.seam = [diff(w - 1, 0, true) / Math.max(1, diff(0, 1, true)), diff(h - 1, 0, false) / Math.max(1, diff(0, 1, false))].map((v) => +v.toFixed(2));
+    for (const L of def.layers) if (L.kind) Object.assign(m, measures(L, t.size));
+    metrics[name] = m;
+  } catch (e) { metrics[name] = String(e.stack ?? e).slice(0, 300); g.fillStyle = "#e27a6a"; g.fillText(String(e.message).slice(0, 50), x, y + 40); }
+});
+window.__metrics = metrics; window.__ready = true;
+</script>
+</body>
+</html>

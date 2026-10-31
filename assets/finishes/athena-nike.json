@@ -1,0 +1,107 @@
+{
+ "name": "Temple of Athena Nike",
+ "building": "architecture/athena-nike",
+ "_about": "The temple of Athena Nike as it was painted: its continuous frieze (the gods, and Greeks fighting Persians) on a blue ground, a meander along the cornice's face over its blue-and-red soffit, the Ionic volutes' channels gilt and their echinus red and blue, a meander on the abaci, the tympana blue behind their figures, the ceiling blue with gold stars, the roof in marble tiles, the monolithic shafts fluted.",
+ "stone": {
+  "color": "#e4d8bf",
+  "accent": "#cfc0a2",
+  "pat": "marble"
+ },
+ "rules": [
+  {
+   "parts": "peristyle entablature",
+   "above": 5.35,
+   "pattern": "greek/nike-frieze",
+   "surface": "wall",
+   "params": {
+    "W": 3.9,
+    "H": 0.65
+   },
+   "align": "above"
+  },
+  {
+   "parts": "peristyle entablature",
+   "above": 5.35,
+   "color": "#2b5592",
+   "accent": "#24497e"
+  },
+  {
+   "parts": "peristyle cornice",
+   "surface": "ceiling",
+   "color": "#2b4479",
+   "accent": "#9a3826",
+   "pat": "grooves"
+  },
+  {
+   "parts": "peristyle cornice",
+   "surface": "wall",
+   "above": 6.0,
+   "pattern": "fabrics/meander",
+   "palette": "meander-red",
+   "scale": 3.13,
+   "align": "part"
+  },
+  {
+   "parts": [
+    "peristyle cornice",
+    "roof rake"
+   ],
+   "color": "#e4d8bf",
+   "accent": "#cfc0a2",
+   "pat": "marble"
+  },
+  {
+   "parts": "peristyle volutes",
+   "color": "#ddcfae",
+   "accent": "#b8923a",
+   "pat": "grooves"
+  },
+  {
+   "parts": "peristyle capitals",
+   "color": "#9a3826",
+   "accent": "#2b4479",
+   "pat": "grooves"
+  },
+  {
+   "parts": "peristyle abaci",
+   "surface": "wall",
+   "pattern": "fabrics/meander",
+   "palette": "meander-red",
+   "scale": 1.86,
+   "align": "part"
+  },
+  {
+   "parts": "roof",
+   "surface": "wall",
+   "color": "#2b5592",
+   "accent": "#24497e"
+  },
+  {
+   "parts": "peristyle shafts",
+   "count": 24,
+   "pattern": "stone/fluted",
+   "palette": "carrara"
+  },
+  {
+   "parts": "kind:ceiling",
+   "scale": 0.5,
+   "pattern": "painted/starry vault",
+   "palette": "starry"
+  },
+  {
+   "surface": "roof",
+   "pattern": "roofs/tube tiles",
+   "palette": "carrara"
+  },
+  {
+   "surface": "floor",
+   "pattern": "stone/marble",
+   "palette": "carrara"
+  },
+  {
+   "surface": "wall",
+   "pattern": "stone/ashlar fine",
+   "palette": "carrara"
+  }
+ ]
+}

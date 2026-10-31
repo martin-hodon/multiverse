@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Greek lab — vase and wall paintings</title>
+<style>
+  html, body { margin: 0; background: #1b1d21; color: #d8d4cc; font: 12px ui-monospace, monospace; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1500" height="900"></canvas>
+<script type="module">
+// A bench for the Greek paintings (greek/*.js, docs/greek.md), no three.js: contact sheets for review.
+//   ?view=rig|figure  &tech=black-figure,red-figure,...  &period=archaic|classical  &seed=N &dir=1|-1 &cell=220
+import { solvePose, stream } from "./greek/rig.js";
+import { buildFigure } from "./greek/figure.js";
+import { paintPieces, paintGround, TECHNIQUES } from "./greek/paint.js";
+import { resolve } from "./greek/scene.js";
+import { renderPainting } from "./greek/field.js";
+
+const Q = new URLSearchParams(location.search);
+const view = Q.get("view") ?? "figure", period = Q.get("period") ?? "classical", seed = +(Q.get("seed") ?? 1), cell = +(Q.get("cell") ?? 230);
+const techs = (Q.get("tech") ?? "black-figure,red-figure").split(",");
+const data = await (await fetch("assets/greek/canon.json")).json();
+if (view === "painting" || view === "group") {
+  // a sheet: one painting (or group) by seed: &name=a,b &seeds=1-6 &px=700
+  const list = (Q.get("name") ?? Object.keys(view === "group" ? data.scenes : data.paintings).join(",")).split(",");
+  const [s0, s1] = (Q.get("seeds") ?? "1-4").split("-").map(Number), px = +(Q.get("px") ?? 480);
+  const cv = document.getElementById("c"), g0 = [];
+  for (const name of list) for (let s = s0; s <= (s1 ?? s0); s++) {
+    const P = view === "group" ? { tech: techs[0], period, aspect: [1.4, 1], zones: [{ h: 1, scenes: [name], single: 1, fill: .9 }] } : data.paintings[name];
+    g0.push([`${name} #${s}`, renderPainting(data, Q.has("tech") ? { ...P, tech: techs[0] } : P, { px, seed: s })]);
+  }
+  const W = +(Q.get("w") ?? 1500), cols = Math.max(1, Math.floor(W / (px + 6)));
+  let x = 0, y = 0, rowH = 0; const at = [];
+  for (const [t, c] of g0) { if (x + c.width + 6 > W && x) { x = 0; y += rowH; rowH = 0; } at.push([t, c, x, y]); x += c.width + 6; rowH = Math.max(rowH, c.height + 18); }
+  cv.width = W; cv.height = y + rowH;
+  const g = cv.getContext("2d"); g.fillStyle = "#1b1d21"; g.fillRect(0, 0, cv.width, cv.height);
+  for (const [t, c, a, b] of at) { g.drawImage(c, a + 3, b + 3); g.fillStyle = "#d8d4cc"; g.fillText(t, a + 5, b + c.height + 14); }
+  window.__metrics = at.length; window.__ready = true;
+  throw 0;
+}
+const per = () => ({ period: data.canon.periods[period] });
+const names = Q.get("actions")?.split(",") ?? Object.keys(data.actions);
+const cv = document.getElementById("c"), W = +(Q.get("w") ?? 1500), cols = Math.floor(W / cell);
+const rows = Math.ceil(names.length * techs.length * 2 / cols);
+cv.width = W; cv.height = rows * (cell + 16) + 8;
+const g = cv.getContext("2d");
+g.fillStyle = "#1b1d21"; g.fillRect(0, 0, cv.width, cv.height);
+const metrics = [];
+let n = 0;
+for (const name of names) for (const tech of techs) for (const dir of [1, -1]) {
+  const col = n % cols, row = Math.floor(n / cols); n++;
+  const px = col * cell, py = row * (cell + 16);
+  const pose = solvePose(data, name, { dir, r: stream(seed, name, dir), over: per() });
+  metrics.push([name, dir, +pose.miss.toFixed(1)]);
+  const c = document.createElement("canvas"); c.width = c.height = cell - 4;
+  const x = c.getContext("2d"), ppu = (cell - 4) / 135;
+  x.setTransform(ppu, 0, 0, -ppu, (cell - 4) / 2, cell - 4 - 6 * ppu);
+  if (view === "rig") {
+    x.lineWidth = 1 / ppu * 2; x.strokeStyle = "#222";
+    const pl = (pts, col) => { x.strokeStyle = col; x.beginPath(); pts.forEach((q, i) => { const w = pose.place(q); i ? x.lineTo(w[0], w[1]) : x.moveTo(w[0], w[1]); }); x.stroke(); };
+    pl([pose.pelvis, pose.waist, pose.chest, pose.headBase], "#222");
+    for (const [S, col] of [[pose.near, "#a02020"], [pose.far, "#2050a0"]]) { pl([S.leg.hip, S.leg.knee, S.leg.ankle], col); pl([S.arm.sh, S.arm.el, S.arm.wr, S.arm.hand], col); }
+    x.fillStyle = "#c9733f"; x.globalCompositeOperation = "destination-over"; x.fillRect(-200, -200, 400, 400); x.globalCompositeOperation = "source-over";
+  } else {
+    const who = Q.has("cast") ? { ...resolve(data.cast[Q.get("cast")], stream(seed, "gear", name, dir)), rng: stream(seed, "cloth", name) } : { sex: Q.get("sex") ?? "m", beard: Q.has("beard"), hair: Q.get("hair") ?? "short" };
+    const pieces = buildFigure(data, pose, who, period);
+    paintPieces(x, pieces, tech, { ppu });
+    paintGround(x, tech, c.width, c.height);
+  }
+  g.drawImage(c, px + 2, py + 2);
+  g.fillStyle = "#d8d4cc"; g.fillText(`${name} ${dir > 0 ? ">" : "<"}`, px + 4, py + cell + 10);
+}
+window.__metrics = metrics;
+window.__ready = true;
+</script>
+</body>
+</html>

@@ -80,3 +80,6 @@ export function fabricIndex(ref) {
 export const periodOf = (ref, params) => sizeOf(patternOf(ref), params);
 // every fabric drawn so far, for a viewer
 export const fabricNames = () => [...names.keys()];
+// A FOLD's depth at the top of the layer it is cut in, as a share of its depth at the hem: the folds deepen as the cloth
+// falls (shell.js dressFold carves them so; clothes.js measures a standing piece's room for them by it)
+export const FOLD_TOP = .35;

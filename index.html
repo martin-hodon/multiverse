@@ -77,13 +77,15 @@ import { createHerd } from "./instanced.js";
 import { legLength } from "./skeleton.js";
 import { createComposite, occluderScene, OCC_LAYER, PIPE, setPipe, pipeFromQuery, LOD, POSE, beginSecondaryView, endSecondaryView, herds } from "./composite.js";
 import { SHELL } from "./shell.js";   // the figures as polygons: its LOD and its switches
-import { createGrassFringe, grassWind, grassBlade, GRADE, GRASS_LAYER, FRINGE, markGroundProp, GROUND_HOLES, DIG_RECTS, groundHole, WATER_LEVEL, WIND, WIND_DIR, GROUND_SNOW } from "./grass.js";
+import { createGrassFringe, grassWind, grassBlade, GRADE, GRASS_LAYER, FRINGE, markGroundProp, GROUND_HOLES, DIG_RECTS, groundHole, GROUND_BARE, bareHere, WATER_LEVEL, WIND, WIND_DIR, GROUND_SNOW } from "./grass.js";
 import { terrainMeshes, gradeColor } from "./terrain.js";
 import { buildTerrainData } from "./terrain_data.js";
 import { makeGround, WLEVEL } from "./ground.js";
 import { growMap } from "./mapgen.js";
+import { landscapeMap } from "./landmap.js";   // (the other land: a landscape scene scaled up -- ?geology=, ?climate=)
+import { GEOLOGY, CLIMATES } from "./landscape/presets.js";
 import { animateSpecies } from "./anim.js";
-import { BUILDINGS, LANDMARKS, LANDMARK_NAMES, LAND, DRESS, PATTERN_LIBRARY, finishesAhead, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
+import { BUILDINGS, LANDMARKS, LANDMARK_NAMES, LANDMARK_HOLDS, LAND, DRESS, PATTERN_LIBRARY, finishesAhead, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
 import { planTown, townStyle, townFinishes, doorNormal } from "./town.js";
 import { makeCart, wheelParams, FLEET, LOAD_VARIANTS, CART_SIZES } from "./carts.js";
 import { makeTree, TREE_SPECIES, WARM_TREES, makeMushroom, MUSHROOMS, makeBush, makeCloud, CLOUD_PARTS, rng } from "./flora.js";
@@ -212,9 +214,10 @@ const townRng = (() => { let a = townSeed; return () => { a = (a + 0x6D2B79F5) >
 // own stream: the rest of the world's draws stay as they were). The monuments, what people wear, the town's houses, the
 // fisherman's boat, the ground and the trees follow it.
 const PERIODS = ASSETS.get("world/periods")?.periods ?? {};
-// THE START MENU: the world's period, then its monument, chosen before anything is built -- everything else (the
-// seed: the land, the town, its people, the weather) drawn at random as always. The choice is written into the
-// address (?period=, ?monument=), so a reload or a shared link keeps it; ?menu=1 asks again, ?menu=0 never asks. Not
+// THE START MENU: the world's period, then its monument, then its land -- the river country the terrain lab grows, or
+// a landscape of the rock and the climate chosen (landmap.js) -- before anything is built; everything else (the seed:
+// the town, its people, the weather) drawn at random as always. The choice is written into the address (?period=,
+// ?monument=, ?geology=, ?climate=), so a reload or a shared link keeps it; ?menu=1 asks again, ?menu=0 never asks. Not
 // shown where the address already says (?period=, ?building=), nor to the build tools (pregen's recording, a
 // probe, any page driven headless).
 await chooseSetup();
@@ -227,20 +230,34 @@ async function chooseSetup() {
   const el = (tag, attrs, ...kids) => { const e = Object.assign(document.createElement(tag), attrs); e.append(...kids); return e; };
   const card = (title, note, onclick, any = false) => el("button", { className: "card" + (any ? " any" : ""), onclick }, el("b", { textContent: title }), el("span", { textContent: note }));
   return new Promise((done) => {
-    const finish = (period, monument) => {
+    const finish = (period, monument) => lands((geology, climate) => {
       let u = null;
       try { u = new URL(location.href); } catch { /* (a sandbox without an address) */ }
       for (const q of [qp, u?.searchParams]) if (q) {   // (the address as it is now: the seed is in it)
-        for (const [k, v] of [["period", period], ["monument", monument]]) v ? q.set(k, v) : q.delete(k);
+        for (const [k, v] of [["period", period], ["monument", monument], ["geology", geology], ["climate", climate]]) v ? q.set(k, v) : q.delete(k);
         q.delete("menu");
       }
       try { if (u) history.replaceState(null, "", u); } catch { /* (a sandbox without history) */ }
       box.remove(); done();
-    };
-    const show = (title, sub, cards, back) => {
+    }, () => ages_());
+    const show = (title, sub, cards, back, backLabel = "another age") => {
       box.replaceChildren(el("h1", { textContent: title }), el("p", { className: "sub", textContent: sub }), el("div", { className: "grid" }, ...cards),
-                          ...(back ? [el("button", { className: "back", textContent: "\u2190 another age", onclick: back })] : []));
+                          ...(back ? [el("button", { className: "back", textContent: "\u2190 " + backLabel, onclick: back })] : []));
       box.querySelector("button")?.focus();
+    };
+    // the land: the river country, or a landscape -- its rock, then its climate ("any": drawn from the seed)
+    const ROCK_NOTES = { canyon: "a sandstone scarp, the fall over it, the gorge it cut; slot canyons and hoodoos where it is dry",
+                         karst: "limestone: dolines, the stream that sinks, caves, tufa dams, bare pavement",
+                         volcanic: "basalt flows: a cinder cone or a maar, dikes and necks, hot springs",
+                         granite: "granite: domes and tors, its blocks rounded where it rotted, a fault for its step" };
+    const lands = (pick, back) => {
+      const climates = (g) => show(GEOLOGY[g].name, "and the climate it weathered in", [
+        ...Object.keys(CLIMATES).map((c) => card(CLIMATES[c].name, `${CLIMATES[c].rain} mm of rain, ${CLIMATES[c].temp} \u00b0C`, () => pick(g, c))),
+        card("Any climate", "drawn at random", () => pick(g, "any"), true)], () => lands(pick, back), "another land");
+      show("Choose the land", "what the town is built in", [
+        card("River country", "a big river through rolling hills, grown on the GPU", () => pick(null, null)),
+        ...Object.keys(GEOLOGY).map((g) => card(GEOLOGY[g].name, ROCK_NOTES[g] ?? "", () => climates(g))),
+        card("Surprise me", "any rock, any climate", () => pick("any", "any"), true)], back);
     };
     const ages_ = () => show("Choose an age", "its monument, its people's dress, its town, its fields and its trees -- the rest of the world is drawn at random", [
       ...ages.map((k) => card(PERIODS[k].name ?? k, monumentsOf(k).map((m) => LANDMARK_NAMES[m]).join(" \u00b7 "), () => monuments(k))),
@@ -276,12 +293,22 @@ bootMark("THE GROWN MAP (mapgen.js, docs/world.md):");
 // load, and the town, its farms and ONE landmark -- the monument -- go where it is flattest. ?map=0: the old world
 // (the sines, the lake, three landmarks); a stripped scene (?trees=0) has no room for one and keeps the old ground.
 const MAPGEN = qp.get("map") !== "0" && qp.get("trees") !== "0";
+// THE LANDSCAPE (landmap.js, docs/landscape.md "In the world"): ?geology= (a landscape.js GEOLOGY, or "any") grows the
+// land from a landscape scene of that rock -- ?climate= its climate (or "any") -- scaled up to the world, instead of
+// the terrain lab's river country; "any" is drawn from the seed
+const LANDSCAPE = MAPGEN && qp.has("geology") ? (() => {
+  const r = rng(townSeed * 41 + 11), gs = Object.keys(GEOLOGY), cs = Object.keys(CLIMATES), g = qp.get("geology"), c = qp.get("climate");
+  const geology = gs.includes(g) ? g : gs[Math.floor(r() * gs.length)], climate = cs.includes(c) ? c : cs[Math.floor(r() * cs.length)];
+  return { geology, climate };
+})() : null;
 const townKeys = bParam === "none" ? [] : bParam ? bParam.split(",").filter((k) => k in BUILDINGS)   // (`in`: naming one must not build it yet)
   : (() => {   // (the period's monuments -- ?monument= the one the start menu chose, first)
     const own = LANDMARKS.filter((k) => PERIOD.landmarks?.includes(k)), pool = own.length ? own : [...LANDMARKS], out = [];
     const m = qp.get("monument");
-    if (LANDMARKS.includes(m)) { out.push(m); if (pool.includes(m)) pool.splice(pool.indexOf(m), 1); }
-    while (out.length < (MAPGEN ? 1 : 3) && pool.length) out.push(pool.splice(Math.floor(townRng() * pool.length), 1)[0]);
+    const take = (k) => {   // (and what cannot stand beside it out of the draw: the Acropolis already has its Parthenon)
+      out.push(k); for (const o of [k, ...(LANDMARK_HOLDS[k] ?? []), ...Object.keys(LANDMARK_HOLDS).filter((h) => LANDMARK_HOLDS[h].includes(k))]) if (pool.includes(o)) pool.splice(pool.indexOf(o), 1); };
+    if (LANDMARKS.includes(m)) take(m);
+    while (out.length < (MAPGEN ? 1 : 3) && pool.length) take(pool[Math.floor(townRng() * pool.length)]);
     return out; })();
 bootMark("WHAT WAS WORKED OUT ONCE (pregen.js, build");
 // WHAT WAS WORKED OUT ONCE (pregen.js, build/pregen.py): these landmarks' finished geometry, wall fields and tiles, and
@@ -405,13 +432,21 @@ if (MAPGEN && groundR >= extent + 200) {
   const t0 = performance.now();
   try {
     // (?mapyears=: a shorter history -- the headless checks, whose GPU is the CPU pretending)
-    MAP = await growMap({ seed: townSeed, radius: groundR, device: renderer.backend.device, riverZ: extent + 120, years: num("mapyears", 150000),
-                          meadow: { x0: -(extent + 6), x1: extent + 6, z0: -(rows - 1) * gap - 12, z1: 12 },
-                          facade: { z: frontZ - lm[1] / 2, w: lm[0], d: lm[1], road: 16 } });
+    const meadow = { x0: -(extent + 6), x1: extent + 6, z0: -(rows - 1) * gap - 12, z1: 12 }, facade = { z: frontZ - lm[1] / 2, w: lm[0], d: lm[1], road: 16 };
+    MAP = LANDSCAPE ? landscapeMap({ seed: townSeed, radius: groundR, riverZ: extent + 120, meadow, facade, ...LANDSCAPE })
+        : await growMap({ seed: townSeed, radius: groundR, device: renderer.backend.device, riverZ: extent + 120, years: num("mapyears", 150000), meadow, facade });
     if (town[0]) town[0].x = MAP.monumentX;   // the monument where the facade line is flattest
     console.log(`map: grown in ${((performance.now() - t0) / 1000).toFixed(1)}s -- bridge at x ${MAP.bridgeX}, monument at x ${MAP.monumentX}, ` +
-                `${MAP.streams} side streams, ${MAP.falls} falls in the region (highest ${MAP.fallMax.toFixed(0)} m)`);
+                `${MAP.streams} side streams, ${MAP.falls} falls in the region (highest ${MAP.fallMax.toFixed(0)} m)` +
+                (MAP.kind === "landscape" ? ` -- a landscape: ${MAP.geology}, ${MAP.climate}, the town ${MAP.variant === "upland" ? "on the upland" : "below the scarp"}, ` +
+                 `scaled x${MAP.scale.toFixed(2)} (heights x${MAP.relief.toFixed(2)}), the land moved ${MAP.earthwork.toFixed(1)} m at most to settle it` : ""));
   } catch (err) { console.warn("map: could not grow one (" + (err?.message ?? err) + "): the old ground instead"); }
+}
+if (MAP?.surface) {   // (a landscape's bare ground: no lawn and no grass over its rock -- grass.js GROUND_BARE; its colour: terrain_data.js)
+  const { n, res, x0, z0, bare } = MAP.surface, tex = new THREE.DataTexture(bare, n, n, THREE.RedFormat, THREE.FloatType);
+  tex.needsUpdate = true;
+  GROUND_BARE.tex.value = tex;
+  GROUND_BARE.box.value.set(x0, z0, x0 + (n - 1) * res, z0 + (n - 1) * res);
 }
 
 // a building site's center z: facade-row sites line up on frontZ; the odd
@@ -470,9 +505,30 @@ if (MILL) {
   RIVERSIDE.push({ key: "bridge", x: VILLAGE_X, z: riverZ(VILLAGE_X), bank: "river" });
   // ---- THE TOWN (town.js): walled, on the south bank at the bridge's head, and its farms over the river -- laid out
   // and styled by the world's seed (?townstyle=timbered|stone|brick|plastered picks the style)
-  TOWN = planTown({ seed: townSeed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridgeX: VILLAGE_X, groundR, style: TOWN_STYLE, period: PERIOD.town ?? null });
+  // (THE TWO-METRE RULE, a landscape's land: a house, a farm's building or one of its plots stands only where its floor --
+  //  at the town's height, 0 -- is no more than FLOOR_DELTA off the ground anywhere under it, and the ground is dry: its
+  //  own plot levelled, nothing more. Where it would have to cut or fill more, the place is no place for it and it is
+  //  left out -- the town has as many houses, and as many farms, as its land has room for. And no levelling of the whole
+  //  town inside its walls: each building's plot its own, the streets over the land as it lies)
+  const FLOOR_DELTA = 2;
+  const landAt = (x, z) => {   // (the land as the map left it -- settled, carved -- before any plot is levelled)
+    const fi = Math.min(MAP.n - 1.001, Math.max(0, (x - MAP.x0) / MAP.res)), fj = Math.min(MAP.n - 1.001, Math.max(0, (z - MAP.z0) / MAP.res));
+    const i = Math.floor(fi), j = Math.floor(fj), a = fi - i, b = fj - j, k = j * MAP.n + i, g = (q) => MAP.base[q] - MAP.carve[q];
+    return (g(k) * (1 - a) + g(k + 1) * a) * (1 - b) + (g(k + MAP.n) * (1 - a) + g(k + MAP.n + 1) * a) * b;
+  };
+  const fits = MAP?.kind === "landscape" ? (x0, z0, x1, z1) => {
+    const nx = Math.max(2, Math.ceil((x1 - x0) / 3)), nz = Math.max(2, Math.ceil((z1 - z0) / 3));
+    for (let a = 0; a <= nx; a++) for (let b = 0; b <= nz; b++) {
+      const x = x0 + (x1 - x0) * a / nx, z = z0 + (z1 - z0) * b / nz;
+      if (waterSD(x, z) < 1.5 || Math.abs(landAt(x, z)) > FLOOR_DELTA) return false;
+    }
+    return true;
+  } : null;
+  TOWN = planTown({ seed: townSeed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridgeX: VILLAGE_X, groundR, style: TOWN_STYLE, period: PERIOD.town ?? null, fits });
   RIVERSIDE.push(...TOWN.sites);
-  flatZones.push(...TOWN.flats);
+  if (!fits) flatZones.push(...TOWN.flats);
+  if (fits) console.log(`town: ${TOWN.sites.filter((q) => q.home).length} homes; left out where the land is more than ${FLOOR_DELTA} m off level or wet: ` +
+                        `${TOWN.left.houses} houses, ${TOWN.left.farms} farms, ${TOWN.left.plots} plots`);
   // THE MINE (assets/architecture/village/mine): one a world, its ore by the seed (?mine=silver|copper|salt picks it, ?mine=0
   // none), on open land away from every other site and the water -- its galleries as well as its yard -- where the
   // ground over the galleries is nowhere far below the yard (they lie ten metres down), the higher the better (mines
@@ -924,7 +980,7 @@ const groundSnow = GROUND_SNOW.onRenderUpdate(() => Math.max(SNOW.value, frostK 
 // CPU per frame. What it cannot do is break a silhouette: no blade stands against the sky or a wall (that is
 // what the fringe pass is for).
 const groundOverlay = wgslFn(`
-  fn groundOverlay(lit: vec3<f32>, wp: vec3<f32>, t: f32, windK: f32, snow: f32,
+  fn groundOverlay(lit: vec3<f32>, wp: vec3<f32>, t: f32, windK: f32, snow: f32, bare: f32,
                    g0: texture_2d<f32>, s0: sampler, g1: texture_2d<f32>, s1: sampler,
                    g2: texture_2d<f32>, s2: sampler) -> vec3<f32> {
     var col = lit;
@@ -936,7 +992,7 @@ const groundOverlay = wgslFn(`
     var mixF = wf * 2.0 - 1.0;
     if (wf < 0.5) { gA = textureSample(g0, s0, wp.xz); gB = textureSample(g1, s1, wp.xz); mixF = wf * 2.0; }
     let gS = mix(gA, gB, mixF);
-    let gCov = gS.r;
+    let gCov = gS.r * (1.0 - bare);   // (no blades on bare rock, scree, sand: grass.js GROUND_BARE)
     let gTip = gS.g / max(gCov, 1e-3);
     let gTone = gS.b / max(gCov, 1e-3);
     let gPatch = ghashG(floor(wp.xz * 1.4) + 9.0);
@@ -952,7 +1008,7 @@ const groundOverlay = wgslFn(`
 
 // the flat lawn (?grass=flecks) and the no-texture fallback: the same field without the baked blades
 const groundFlecks = wgslFn(`
-  fn groundFlecks(lit: vec3<f32>, wp: vec3<f32>, snow: f32, textured: f32,
+  fn groundFlecks(lit: vec3<f32>, wp: vec3<f32>, snow: f32, bare: f32, textured: f32,
                   g: texture_2d<f32>, gs: sampler) -> vec3<f32> {
     var col = lit;
     var gPatch = ghashG(floor(wp.xz * 1.4) + 9.0);
@@ -965,8 +1021,8 @@ const groundFlecks = wgslFn(`
       gF2 = gT.g;
     }
     col = col * (0.94 + 0.09 * gPatch);
-    col = mix(col, col * vec3<f32>(0.78, 0.92, 0.66), gF1 * 0.7);
-    col = mix(col, col * vec3<f32>(1.12, 1.1, 0.9), gF2 * 0.8);
+    col = mix(col, col * vec3<f32>(0.78, 0.92, 0.66), gF1 * 0.7 * (1.0 - bare));
+    col = mix(col, col * vec3<f32>(1.12, 1.1, 0.9), gF2 * 0.8 * (1.0 - bare));
     let snowLum = dot(col, vec3<f32>(0.333));
     return mix(col, min(vec3<f32>(1.0), vec3<f32>(0.92, 0.93, 0.97) * (0.5 + 0.95 * snowLum)), snow);
   }
@@ -984,14 +1040,15 @@ const groundCut = wgslFn(`
 class GroundMaterial extends THREE.MeshToonNodeMaterial {
   setupOutput(builder, outputNode) {
     let rgb;
+    const groundBare = bareHere({ wp: positionWorld, bt: GROUND_BARE.tex, box: GROUND_BARE.box });
     if (TEXTURES.on && GRASS === "stalks") {
       const t0 = texture(tileTexture("grassL")), t1 = texture(tileTexture("grass")), t2 = texture(tileTexture("grassR"));
-      rgb = groundOverlay({ lit: outputNode.rgb, wp: positionWorld, t: groundT, windK: WIND.strength, snow: groundSnow,
+      rgb = groundOverlay({ lit: outputNode.rgb, wp: positionWorld, t: groundT, windK: WIND.strength, snow: groundSnow, bare: groundBare,
                             g0: t0, s0: t0, g1: t1, s1: t1, g2: t2, s2: t2 });
     } else {
       const tiled = TEXTURES.on && GRASS !== "bare";   // (sand: the ground's own colour and mottle, no blades)
       const tg = texture(tiled ? tileTexture("grass") : blankGroundTex());
-      rgb = groundFlecks({ lit: outputNode.rgb, wp: positionWorld, snow: groundSnow,
+      rgb = groundFlecks({ lit: outputNode.rgb, wp: positionWorld, snow: groundSnow, bare: groundBare,
                            textured: float(tiled ? 1 : 0), g: tg, gs: tg });
     }
     rgb = rgb.mul(meadowPatches({ p: positionWorld.xz }).sub(1).mul(groundSnow.oneMinus()).add(1));   // drier and lusher drifts over the lawn (cloudshadow.js) -- not on snow
@@ -1054,7 +1111,7 @@ if (TERRAIN === "grid") {
       }));
     } catch (err) {
       console.warn("terrain: no worker (" + (err?.message ?? err) + "), building on the main thread");
-      ({ blocks, stats } = buildTerrainData({ ...terrainOpts, height: groundH, grade: GRADE }));
+      ({ blocks, stats } = buildTerrainData({ ...terrainOpts, height: groundH, grade: GRADE, surface: MAP?.surface }));
     }
     for (const m of terrainMeshes(blocks, groundMat).children.slice()) ground.add(m);
     markGround(ground);

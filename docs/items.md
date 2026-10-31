@@ -51,7 +51,7 @@ another (`use`, merged as every definition is: defs.js). A dagger is a sword wit
 | `hair` | strands grown from that head's scalp (see Hair) |
 | `feathers` | a fan of feathers, each its own vane, seen from both sides (see Birds) |
 | `petals` | a whorl of curved blades round the part's y axis, seen from both sides -- a flower's petals and sepals, a leaf or two (see Flowers): `n`, `layers`, `length`, `width`, `cup`, `curl`, `cupped`, `shape`, `throat` / `band` |
-| `shield` | a shaped board (`shape`: round, oval, kite, heater, rect), bent and dished, a rim band, a back, a face whose heraldry is fitted to it |
+| `shield` | a shaped board (`shape`: round, oval, kite, heater, rect), bent and dished, a rim band, a back, a face whose heraldry is fitted to it; `rimFlat` (2026-10-30): the rim band a flat ring standing off the bowl, as an aspis's broad offset rim (it had read as a plain dish) |
 | (a component) | `use`: another item by path, its own `params` (expressions over the parent's) and `materials` |
 
 - `mirror` is in the part's own frame (the one its `at` is written in): `"x"` reflects across x = 0, `"z"` across
@@ -140,9 +140,32 @@ curled. Only the outside is seen, so a sheet of ribbons is enough: no volume ins
   by `thick`, more by `crown` at the top and back, thinning to nothing at its edge), whose EDGE runs lower than the
   skin's hairline as hair does: `front` (y at the forehead), `temple` (45 degrees round), `side` (over the ears),
   `nape` (the back), `fringe` the front's y when the face has one, `top` the y above which the skull is bare
-  (a tonsure). Strand groups with `edge: true` hang from that edge (one a column, `extra` between) instead of
+  (a tonsure), `sweep` (2026-10-30) the degrees round the head its locks run back for every 10 cm they fall from
+  the crown -- its u sheared by its height, so hair drawn back (a bun's, a braid's: hairgen.py `BACK` 80) is carved
+  and painted from a parting at the front back over the temples to the nape, where it had radiated from the crown as a
+  crop does (0, the default). Strand groups with `edge: true` hang from that edge (one a column, `extra` between) instead of
   growing all over the scalp -- a bob, long hair, the curls -- so the sides and back read as a rounded head of hair,
   not a sheet of ribbons.
+
+- CARVED (2026-10-30, hair.js `CARVE`; the face's `carved`, set by heads.js for a statue's head and handed to its
+  hairstyle): every strand is a solid LOCK (a crest standing `lock` of its width off the head, its sides falling to
+  its edges), its curls `curl` as wide, `length` as long, and a lock in front of the face (within `open` degrees of
+  the forehead) ends above the brows (`brow`). Flat ribbons in stone were chips lit from either side, and a fringe of
+  curls hung over a statue's eyes as a scatter of shards.
+  A style may say what a sculptor makes of it (2026-10-30, its part's `carved`: keys laid over the part when carved,
+  hair.js hairGeometry; `carve` there too, heads.js): `curly` is carved as its cap in round CURLS, its strands left off
+  -- the classical head of curls, a philosopher's, Zeus's -- and `short` as its cap alone, cut in locks combed from the
+  crown -- a Roman portrait's; their hanging strands had been carved as a mop of stone noodles over the brow. The cap is
+  the same either way: a wreath, a diadem is fitted to it.
+  Its cap and sheets are cut in WAVY LOCKS in relief (shell.js `stoneCarve`, `STONE.locks` .. `lockRelief`): the
+  hair's uv (u across it, v down it in metres -- a carved lock's own v too) makes each lock a rounded ridge whose slope
+  tilts the normal (the surface gradient from the pixel's derivatives), waving down the head as an S every `lockLen`,
+  each a little behind its neighbour. Straight grooves down the meridians had made every statue's hair a ribbed pot.
+  CURLS (2026-10-30, shell.js `stoneCurls`, `CURLS`; heads.js the geometry's `curl`): a beard is carved in curls, and so
+  is the hair of a hairstyle that says `"carve": "curls"` (`ushnisha`: a Buddha's -- a close cap and the crown's bump,
+  snail curls over both): domes packed over the surface, a Voronoi of jittered points `size` apart in the world (statues
+  stand still), each rising from the groove where it meets the next, a spiral cut round it `turns` times, the normal
+  tilted out from its middle by `relief`, the grooves in shade -- fading where a curl is under a few pixels.
 
 - `sheets` (2026-10-03): the hair as a CLOTH hung from the cap's edge -- its first ring IS the cap's edge, column for
   column; each further ring a horizontal cut (`drop` below the edge, `out` off the head, zig-zagged: points out by
@@ -310,7 +333,8 @@ Every item a hand can hold says where the hand closes on it. **`hold`**:
 | `grip2` | the other hand's place, for a two-handed hold (a halberd, a longsword, a bow's string) |
 | `carry` | `{ axis, face }` in the HAND's frame (+x forward, +y up, +z to the right): how it is carried -- upright by default |
 | `follow` | how much of the forearm's turn the HAND takes holding it -- the wrist: 1 rigid with the forearm, 0 upright in the figure's frame (0.7 by default: a hoe swings; a sword 0.35; polearms, shields, bows and the lute 0; a holder may give a negative one, tipping it forward: an axe on the block). The skeleton turns the hand so and the item lies rigidly in it, its grip in the fist (2026-10-24: it used to be placed in a frame of its own built from the forearm's heading, which flipped as the forearm passed upright, the hand going on without it) |
-| `rest` | `"ground"`: at rest it stands on its butt on the ground, and the hand slides along it (a spear, a halberd, an ordered musket); `"body"`: it rests against the body where the hand holds it on the whole, the hand playing over it (a lute: tools.js BODY_REST) |
+| `upright` | an ATTRIBUTE, shown held up whatever the hand does (2026-10-30): a statue's hand takes the `upright` grip for it, whatever its pose's grip (statues.js) -- a horn of plenty stands on an offering palm, it does not lie along the fingers into the body |
+| `rest` | `"ground"` (or a holder's `ground`, 2026-10-30: a statue's shield resting by its side): at rest it stands on its butt on the ground (the floor its figure stands on: a rig's `sole` under its origin, joints.js ground -- a kneeling spearman's spear had stood half a metre into the floor, at his lowered origin), and the hand slides along it (a spear, a halberd, an ordered musket); `"body"`: it rests against the body where the hand holds it on the whole, the hand playing over it (a lute: tools.js BODY_REST) |
 
 `holdMatrix(hold)` turns that into the one matrix that puts the item into any hand. `tools.js` moves each kind of item
 into the hand's frame once, at build, as one InstancedMesh per material. Each frame, every copy is one matrix at a
@@ -321,6 +345,18 @@ an item's path, or either with `#seed` for one of its kind (`"items/shields/heat
 shield), each an item or a pick. `items.js pickKit(kit, seed)` draws one for a person, and one of `variants` of each
 item, so a watch of a dozen carries a dozen weapons from only a few distinct meshes. The town's guards are armed this
 way (index.html).
+
+**Attributes** (2026-10-30, `tools/attributegen.py`): what a figure of myth or allegory carries, as items of
+`items/tools/`: the PALM FROND (a rachis, two `feathers` fans of leaflets swept toward its tip, long at the foot), the
+CORNUCOPIA (a `sweep` of growing radii curling to its point below the hand, a rim at the mouth, the food catalogue's
+grapes, apple, pear and pomegranate heaped in it by `use`), the SCROLL (a turned roll on its rod, knobs at either end)
+and the VICTOR'S WREATH (a ring of laurel, one sprig placed round it by an `at` list, held by its rim facing forward); and of the gods (2026-10-30): the PATERA (the libation dish, a turned bowl round its raised boss, tongues round it by
+`around`, level on the fingers), the LYRE (a turned dome laid on its back for the tortoise-shell box, `stretch`ed oval, two
+horns mirrored up out of it, a yoke, seven strings by `along` from a bridge; stood on the fist by its foot), the TRIDENT
+(a shaft, a socket, three barbed prongs, the outer two `mirror`ed; it `rest`s on the ground as a spear does) and the
+CADUCEUS (a short staff, two snakes one helix mirrored across it so they cross before and behind, their heads meeting
+under a pair of `feathers` wings turned upright).
+Each is `upright`; a statue's marker hands them out (`hold: { R: "items/tools/victor-wreath" }`).
 
 ## In a building
 
@@ -362,6 +398,14 @@ of villagers at work, armed through `tools.js` (`ref/kitshot.html`): grips in th
 out, pole butts on the ground (lowest point 0.00-0.07 m). The game, headless: the guards at the gate. The village's
 furniture assembled (`ref/furncheck.html`): item parts, their meshes and triangles, the markers with their headings
 drawn (a table's places face it, a pew's face the altar), every house's bed on its storey.
+
+## Ornaments (2026-10-30)
+
+Category `ornament` (`assets/items/ornaments/`): architectural ornaments that a building places as an item part
+(`type: item`). The first is the **acroterion**: a Greek temple's floral apex ornament. Two volutes rise in an S from a
+calyx of acanthus on its plinth, and a palmette fans out over them, its leaves alternately green and blue round a red
+heart, the volutes gilt. Its face is the x-y plane, seen from either side, and `h` is its height. The temples put one
+on each apex of a pediment (temples.py, acropolis.py `acroteria`).
 
 ## Not there yet
 

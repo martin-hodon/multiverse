@@ -51,7 +51,7 @@ A LAYER is one shape (or a group, a field, another pattern) and how many times i
 | `clip` | a shape (with its own `at`, `rot`) the layer is drawn only inside |
 | `layers` | a group: its children in this layer's frame (clip them together) |
 | `use`, `useScale`, `colors`, `palette`, `params` | another pattern, tiled inside this layer's shape, its slots mapped to this one's |
-| `kind` | a layer another module draws (`LAYER_KINDS`): `hieroglyphs` (glyphs.js: a wall of text, docs/glyphs.md) |
+| `kind` | a layer another module draws (`LAYER_KINDS`): `hieroglyphs` (glyphs.js: a wall of text, docs/glyphs.md); `stars`, `knot`, `scroll` (ornament.js: docs/ornament.md) |
 | `field` | a function of the point, per texel: `veins` (marble: `freq`, `turns`, `sharp`), `speckle` (granite: `grain`), `cloud` (plaster), `grain` (wood) -- periodic with the tile, so it repeats without a seam |
 
 The tile is drawn with every layer at the tile and its eight neighbours, so whatever crosses an edge carries on into
@@ -74,6 +74,7 @@ as a sheet; `tileSampler` reads a tile at (u, v) metres (the headless checks ren
 | fabrics | the tailor's cloth (clothes.js): plain, linen, twill, herringbone, stripes, checks, tartan, damask, brocade, quilted, mail, leather, fur, straw, braid... |
 | materials | what items are made of when it is not wood, stone or cloth: paint, metal (brushed), hammered, lacquer, horn |
 | hieroglyphs | walls of writing (glyphs.js, docs/glyphs.md): sunk relief, painted columns, tomb wall, blue tomb, temple frieze |
+| ornament | geometric ornament, generated (docs/ornament.md): strapwork stars of 6, 8, 10, 12 and 16 points, rosettes, zellige, guilloche, braid, cable, Celtic field, border and panel, Viking interlace, arabesque field, double and border, stars holding a vine |
 | heraldry | a shield's face (panels, `W` x `H`: fitted to the shield): plain; per pale, per fess, quarterly, per bend, gyronny; cross, saltire, chevron, bend, pale, fess, chief, bordure, roundel; paly, barry, chequy; wings, sun, lion |
 
 ## Finishes
@@ -93,10 +94,20 @@ A building's finish is a list of RULES; the first that matches a piece of surfac
 MATCH: `parts` (a part's name, its name less a trailing number, its own name inside a component, the component's name,
 or `kind:<kind>` -- the same list the building's colours were read by; a rule without `parts` never takes a window's
 GLASS: a pane is finished only by a rule that names it, its part or `kind:glass`, else it is the building's glass), `surface` (floor, wall, ceiling, roof), `side`
-(in, out), `below` / `above` (a height), `within` ([x0, z0, x1, z1] on the plan). GIVE: `pattern`, `palette`,
+(in, out), `below` / `above` (a height), `within` ([x0, z0, x1, z1] on the plan), `facing` (a wall by the way it looks: n, s, e, w), `in` (a component part's name: only
+the parts it made -- "propylaia" holds a rule to "propylaia/west portico shafts" and the rest). GIVE: `pattern`, `palette`,
 `scale`, `turn`, `map`, `align` ("part": the tile's foot on the part's foot -- a painted beam, a band), `offset`,
+`whole` (each flat wall face holds a whole number of tiles, stretched to fit, so a painting ends at the corner),
 `count` (tiles round a round thing: one balustrade panel to a bay), `params`, `res`; a PANEL at a point (`at`) or made
 to a rectangle (`fit`: its W and H); or a plain stone (`color`, `accent`, `pat`).
+
+**A component's own finish** (2026-10-30): `{ "use": "<building>", "in": "<part>" }` stands for every rule of that
+building's finish, held to the component part `in` (each gets `in`), its heights (`above`, `below`) raised and its plan
+places (`within`, a panel's `at` and `fit`) moved by where that component stands, and that finish's `stone` last -- so a
+SITE of buildings is painted as each is alone. The Acropolis (assets/finishes/acropolis.json) uses the Parthenon's, the
+Erechtheion's, the Propylaia's and Athena Nike's, then gives its own rock, walls and stair. arch/finish.js `withUses`
+expands them (architecture.js at startup for every finish, and archMesh for one handed in as written -- the viewer's);
+the component must be placed once, and unturned if the used rules have plan places.
 
 **Surface** is read from the triangle -- up-facing a floor, down-facing a ceiling, else a wall; a roof's or a dome's
 outside its roof. A ceiling no rule takes (a soffit under an arch, a window's head) is tried again as its wall.
@@ -134,7 +145,8 @@ A small up-facing face that is not a stair's (under 2 square metres, or a column
 
 **Mapping**, in metres: `plan` (floors and ceilings: u east, v north), `face` (walls: along, up), `revolve` (domes,
 vaults, drums, columns: round the part's own axis, a whole number of tiles round so the rows meet, and up a dome's
-meridian by its length -- the rows of a round roof converge toward its crown as the real ones do), `slope` (roofs: along
+meridian by its length -- the rows of a round roof converge toward its crown as the real ones do), `conformal` (the same, with v stretched as u narrows: a star stays a star and only shrinks toward the crown, as a real
+dome's lattice does; end it at a height, with a plan-mapped star for the crown), `slope` (roofs: along
 the eave, up the slope).
 
 ## In the game

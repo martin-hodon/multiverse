@@ -17,7 +17,7 @@
 import { evalNum } from "./expr.js";
 import { fetchAsset } from "./creatures.js";
 import { registerPatterns, PALETTES } from "./patterns.js";
-import { fabricIndex, periodOf } from "./fabric.js";
+import { fabricIndex, periodOf, FOLD_TOP } from "./fabric.js";
 
 // ---- the library ------------------------------------------------------------------------------------------------
 registerPatterns({ fabrics: await fetchAsset("patterns/fabrics"), palettes: await fetchAsset("patterns/palettes") });
@@ -74,6 +74,12 @@ const val = (v, P, marks, d) => {
   return evalNum(v, { ...P, ...marks });
 };
 const truthy = (v, P) => v === undefined || (typeof v === "string" ? !!P[v] : !!v);
+// a piece's word (a param's value by name, else the word itself): `arms` true | "left" | "right"
+const word = (v, P) => typeof v === "string" && v in P ? P[v] : v;
+// round the body, degrees from the figure's front toward its left (-z: the layers' own angle) -- the sides by name
+// (a param naming another param naming a side: a mantle's `edgeHigh` defaults to the shoulder it is worn `over`)
+const SIDES = { front: 0, left: 90, back: 180, right: -90 };
+const angleOf = (v, P, marks) => { const w = word(word(v, P), P); return typeof w === "string" && w in SIDES ? SIDES[w] : val(v, P, marks, 0); };
 
 // ---- the form: what people.js tells the tailor about a body -------------------------------------------------------
 // form = { torso: { parts: [{ id, top, bottom }], collar, half(y), flat, marks: { name: y } }, arms: [{ side, parts:
@@ -92,7 +98,9 @@ function marksOf(form, host, side) {
 // null (the legs a skirt covers are not drawn), armsUnder: the lowest edge of what hangs over the arms (a cloak) or null,
 // skirts: [their parts], layersOf }.
 export function tailor(form, outfit, { add, bone }) {
-  const wear = (outfit.wear ?? []).map((w, k) => ({ ...w, def: garmentDef(w.garment), k }))
+  // (an entry may say the LAYER it is worn at, `layer`: a peplos girded under its overfold, the belt laid on the bodice and
+  //  the apoptygma falling over it -- at its own 5, round the overfold's cone, it held the cloth out below it as a tray)
+  const wear = (outfit.wear ?? []).map((w, k) => { const def = garmentDef(w.garment); return { ...w, def: def && w.layer !== undefined ? { ...def, layer: w.layer } : def, k }; })
     .filter((w) => w.def && !(form.pose === "ride" && w.def.skirted));
   // OUTERMOST FIRST: the higher a garment's layer the further out; in one garment a later piece lies over an earlier
   wear.sort((a, b) => (b.def.layer ?? 2) - (a.def.layer ?? 2) || b.k - a.k);
@@ -113,7 +121,9 @@ export function tailor(form, outfit, { add, bone }) {
       const f = fabOf(pc.fabric ?? "main");
       const thick = val(pc.thick, P, {}, w.def.thick ?? .003 * (1 + (w.def.layer ?? 2) * .4));
       const base = { fabric: f.index, period: f.period, colors: f.colors, thick, pleats: val(pc.pleats, P, {}, 0),
-                     wear: w.def.wear ?? 1, dags: val(pc.dags, P, {}, 0), band: val(pc.band, P, {}, 0), garmentLayer: w.def.layer ?? 2 };
+                     wear: w.def.wear ?? 1, dags: val(pc.dags, P, {}, 0), band: val(pc.band, P, {}, 0), garmentLayer: w.def.layer ?? 2,
+                     // (a CASCADE: the edges of its opening hanging in zigzag folds, [teeth out, one every so far down] metres)
+                     ...(pc.cascade && val(pc.cascade[0], P, {}, 0) > 0 ? { cascade: [val(pc.cascade[0], P, {}, 0), val(pc.cascade[1], P, {}, .12)] } : {}) };
       // a HEM: a band of another fabric along the piece's lower edge (an embroidered border, a braid at a cuff)
       const hw = pc.hem ? val(pc.hem.width, P, {}, 0) : 0;
       // (it keeps the piece's pleats: it folds as the cloth does, and its lower edge waves with the hem -- shell.js foldPhase)
@@ -171,6 +181,15 @@ export function tailor(form, outfit, { add, bone }) {
     for (const L of Ls) if (!kept.some((O) => covers(O, L))) kept.push(L);
     dress.set(id, kept.slice(0, 6));
   }
+  // ...NOR A WHOLE PIECE another covers: hung further out from at or above its top to at or below its hem, all round --
+  // no wrap, no opening, no edge falling, no mouth the eye sees into (a tunica's skirt under a stola's to the feet).
+  // `covered`: a carving leaves it out (statues.js), its cloth one with the stone of what covers it; standing proud of
+  // that one's drape where its cone stood further out, its waistband came through the stola a shelf
+  // (one of its layers so, down its whole length: what is laid over it -- a stola's stripes, a belt -- need not be)
+  const whole = (st) => !st.part.open && st.part.dress.layers.some((L) => !L.wrap && !L.opening && !(L.edge?.[0] > 0) && L.s0 <= 0 && L.s1 >= st.part.clip.hi - 1e-3);
+  standing.forEach((a, i) => {
+    if (a.torso && standing.some((b, j) => j > i && b.torso && whole(b) && b.top >= a.top - 1e-3 && b.bottom <= a.bottom + 1e-3)) a.part.covered = true;
+  });
   return { dress, legsUnder, armsUnder, skirts, standing };
 }
 
@@ -215,7 +234,7 @@ export function outerSurface(form, worn) {
     for (const st of worn.standing) {
       if (!st.torso || y > st.top || y < st.bottom) continue;
       const k = (st.top - y) / Math.max(st.top - st.bottom, 1e-4), sz = st.part.size, rs = sz.r + (sz.r2 - sz.r) * k;
-      r = Math.max(r, oval(rs, st.part.clip?.squash || 1, th) + .002);
+      r = Math.max(r, oval(rs, st.part.clip?.squash || 1, th) + (st.offZ ?? 0) * Math.sin(th) + .002);   // (set off toward one arm: nearer there)
     }
     return r;
   };
@@ -224,7 +243,7 @@ export function outerSurface(form, worn) {
 // does layer O cover layer L wherever L is on their part? O reaches over L's stretch, round all of L's arc, and has no
 // hole there (a band has holes everywhere; a dagged hem at the bottom; a neckline only as far down as it reaches)
 function covers(O, L) {
-  if (O.band || O.s0 > L.s0 || O.s1 < L.s1) return false;
+  if (O.band || O.s0 + (O.edge?.[0] ?? 0) > L.s0 || O.s1 < L.s1) return false;
   if (O.dags && O.s1 < 1e2) return false;
   if (O.wrap) {
     if (!L.wrap) return false;
@@ -293,11 +312,24 @@ function openingOf(o, P, marks, form) {
 // A STANDING PIECE: a shell part of its own. `hang` -- a cone from a ring round its host down to its hem (a skirt, a
 // cloak, a capelet from the torso; a bell sleeve from an arm); `cowl` -- a ball round the head cut open for the face
 // (a hood, a coif); `crown`, `brim`, `cone` -- a hat's.
+// FOLDS A HAND'S WIDTH APART (2026-10-30): a standing piece has its `pleats` folds round it at the least, and on a wide one
+// one every FOLD_W metres round its hem -- crowded at a gathered top, spreading to the hem: a bell sleeve's nine round a
+// lampshade's mouth were a hand and a half wide each, a smooth cone; a gown's skirt keeps its own. (The layer's word
+// packs them under 64; its hem band waves with them.)
+const FOLD_W = .14;
+function foldsRound(layer, hem, r) {
+  if (!(layer.pleats > 0)) return;
+  layer.pleats = Math.min(63, Math.max(layer.pleats, Math.round(2 * Math.PI * r / FOLD_W)));
+  if (hem) hem.pleats = layer.pleats;
+}
 const LAYER_TOP = -.25;   // (a standing piece's layers begin this far above its own top: its lid and waistband inside them)
 function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
   const kind = pc.kind, id = (pc.id ?? w.def.id ?? w.garment) + (pc.name ? "_" + pc.name : "") + "_" + w.k;
   const wrap = wrapOf(pc.wrap, P, {});
-  const layer = { ...base, s0: -1e3, s1: 1e3, wrap, vOffset: 0, repeats: 0 };
+  // AN EDGE THAT FALLS ROUND IT (`edge` [drop, high]): its top at its own top at `high` (degrees round, or a side by
+  // name), `drop` metres lower opposite -- a mantle's edge from the shoulder it hangs on across the body under the other arm
+  const edge = pc.edge && val(pc.edge[0], P, marksOf(form, pc.on), 0) > 0 ? [val(pc.edge[0], P, marksOf(form, pc.on), 0), angleOf(pc.edge[1], P, {}) * Math.PI / 180] : null;
+  const layer = { ...base, s0: -1e3, s1: 1e3, wrap, vOffset: 0, repeats: 0, ...(edge ? { edge } : {}) };
   // (its hem band, if it has one, lies over the last `width` of it: `len` is the piece's own length down its axis)
   // (mouth: the piece ends at the garment's edge -- its hem band, its dags; a sleeve's piece ending at a joint has neither)
   // (a piece ending at the garment's edge -- a skirt's hem, a sleeve's mouth -- has its layers END there, `len` down it:
@@ -306,7 +338,7 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
   //  hem never waved. Its top stays open well above, LAYER_TOP: the waistband and the lid keep their cloth)
   const end = (len, mouth) => (len && mouth ? len : 1e3);
   const dress = (len, mouth = true) => ({ standing: true, layers: [...(hem && len && mouth ? [{ ...hem, s0: len - hem.width, s1: end(len, mouth), wrap, vOffset: 0, repeats: 0 }] : []),
-                                                                  mouth ? { ...layer, s0: len ? LAYER_TOP : -1e3, s1: end(len, mouth) } : { ...layer, dags: 0 }] });
+                                                                  mouth ? { ...layer, s0: edge ? 0 : len ? LAYER_TOP : -1e3, s1: end(len, mouth) } : { ...layer, dags: 0 }] });
   const S = form.S, H = form.head.hr;
   if (kind === "hang" && pc.on === "torso") {
     const t = form.torso, marks = marksOf(form, "torso");
@@ -315,12 +347,16 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
     const ease = val(pc.ease, P, marks, .006);
     // the ring at its top stands clear of the torso there, and the cone widens at least as fast as the torso under it
     // (a skirt from the waist has the hips to pass)
-    let rTop = Math.max(pc.fromRadius !== undefined ? val(pc.fromRadius, P, marks, 0) * S : t.half(yT), pc.arms ? t.halfArms(yT) : 0, form.neck.r) + ease + 2 * base.thick;
+    // (a cloak or a cape clears the ARMS too, hanging beside the torso down to the hands; `arms` "left" or "right" ONE
+    //  of them -- a mantle over one shoulder, the other arm free outside it: its ring set off toward that arm, `offZ`
+    //  across, by half what the arm adds to the torso's width at the armpit)
+    const arms = word(pc.arms, P), one = arms === "left" || arms === "right";
+    const offZ = one ? (arms === "right" ? 1 : -1) * (t.halfArms(t.collar - marks.armpit) - t.half(t.collar - marks.armpit)) / 2 : 0;
+    const clear = one ? (y) => Math.max(t.half(y) + Math.abs(offZ), t.halfArms(y) - Math.abs(offZ)) : arms ? t.halfArms : t.half;
+    let rTop = Math.max(pc.fromRadius !== undefined ? val(pc.fromRadius, P, marks, 0) * S : t.half(yT), arms ? clear(yT) : 0, form.neck.r) + ease + 2 * base.thick;
     let slope = val(pc.flare, P, marks, .2);
-    // (a cloak or a cape clears the ARMS too, hanging beside the torso down to the hands)
-    const clear = pc.arms ? t.halfArms : t.half;
     // (oval, as the torso is: `squash` its depth against its width -- so it clears the torso's depth at that share)
-    const sq = val(pc.squash, P, marks, pc.arms ? .62 : .85);
+    const sq = val(pc.squash, P, marks, one ? .75 : arms ? .62 : .85);
     const depthNeed = (y) => t.half(y) * t.flat / sq;
     // (and whatever already hangs round the torso there, a layer of cloth further out -- in its width and its depth)
     const hung = (y) => {
@@ -328,41 +364,95 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
       for (const u of under) {
         if (!u.torso || y > u.top || y < u.bottom) continue;
         const k = (u.top - y) / Math.max(u.top - u.bottom, 1e-4), ru = u.part.size.r + (u.part.size.r2 - u.part.size.r) * k;
-        r = Math.max(r, (ru + 2 * base.thick) * Math.max(1, (u.part.clip.squash || 1) / sq));
+        // (the two rings' centres apart by their offsets: a himation's set off toward its shoulder clears a chiton's skirt
+        //  on the far side too -- with the skirt's own offset alone, the skirt's flare came out through it under the free arm)
+        r = Math.max(r, (ru + Math.abs((u.offZ ?? 0) - offZ) + 2 * base.thick) * Math.max(1, (u.part.clip.squash || 1) / sq));
       }
       return r;
     };
     // HOW IT CLEARS WHAT IS UNDER IT: `fit` "flare" (a cape from the neck, a kirtle's skirt hugging the waist) keeps
     // its ring and widens its flare; "ring" (a hood's fall, a cloak over the arms) keeps its drape and widens its ring
-    const yLow = Math.max(yB, pc.arms ? t.hands : t.bottom);
+    // (the body as far as the hands or the torso go; the cloth under it as far as that goes -- a chiton's flared hem at
+    //  the knee, below a mantle's hands, came out through it)
+    const yBody = arms ? t.hands : t.bottom;
+    const yLow = Math.max(yB, Math.min(yBody, ...under.filter((u) => u.torso).map((u) => u.bottom)));
     rTop = Math.max(rTop, hung(yT - 1e-4));
     let ring = rTop;
+    // ("ring" keeps its drape over the BODY; the cloth under it, a hand's breadth below its top, it clears by its flare --
+    //  widened whole for a flared chiton's hem, a himation stood off the chest all the way up)
+    const fitRing = word(pc.fit, P) === "ring", below = [];
     for (let k = 1; k <= 32 && yLow < yT; k++) {             // (down to its own hem, or as far as what it clears goes)
-      const y = yT - (yT - yLow) * k / 32, need = Math.max(Math.max(clear(y), depthNeed(y)) + ease + 2 * base.thick, hung(y));
-      if (pc.fit === "ring") ring = Math.max(ring, need - slope * (yT - y));
-      else slope = Math.max(slope, (need - rTop) / (yT - y));
+      const y = yT - (yT - yLow) * k / 32, body = y >= yBody ? Math.max(clear(y), depthNeed(y)) + ease + 2 * base.thick : 0, h = hung(y);
+      if (!fitRing) slope = Math.max(slope, (Math.max(body, h) - rTop) / (yT - y));
+      else if (yT - y < .1 * S) ring = Math.max(ring, Math.max(body, h) - slope * (yT - y));
+      else { ring = Math.max(ring, body - slope * (yT - y)); below.push([y, h]); }
     }
+    for (const [y, h] of below) slope = Math.max(slope, (h - ring) / (yT - y));
     rTop = ring;
     const rHem = rTop + Math.min(slope, 6) * len;   // (a cut shell is a plain cone: it may be nearly flat, a cape over the shoulders)
     if (pc.opening) layer.opening = openingOf(pc.opening, P, Object.fromEntries(Object.entries(marks).map(([k, v]) => [k, v - (t.collar - yT)])));
     // (hung from the HIPS when it starts at the waist or below -- a skirt; from the TRUNK above them when it starts higher -- a
     // cape, a cloak, a tabard -- so it bends and turns with the shoulders it lies on: the two frames are one at rest)
     const host = yT > form.torso.marks.waist + 1e-3 ? form.torso.upperFrom ?? form.torso.hangFrom : form.torso.hangFrom;
-    const part = bone(id, host, [0, yT - form.torso.hangY, 0], [0, -1, 0], len, rTop, rHem, {
+    // DRAPED over the legs (`cling`: the share of the cone's excess over them it takes in -- shell.js CLING), clear of them
+    // by its ease and of whatever clings under it by that one's; and anything hung over a draped piece is draped too, if
+    // only to clear it (cling 0: its cone kept, pushed out only where what is under it is -- a stride under a toga); never
+    // clinging closer than what is under it, or it would fall in through it (what hangs on down over the legs, where it
+    // clings: a cape over the shoulders, a peplos's overfold to the hips do not hold it out; a skirt there that keeps its
+    // own cone keeps this one's too). Hung over the ARMS (a mantle), it is draped over the upper arms it covers as over
+    // the legs: the rig's "L" arm is at +z
+    const cling = val(pc.cling, P, marks, 0), clingUnder = under.filter((u) => u.torso && u.part.cling);
+    const holds = under.filter((u) => u.torso && u.bottom < t.bottom && u.top > yB);   // (under it: a gown's skirt is not under a cape)
+    const clingEase = ease + 2 * base.thick + Math.max(0, ...holds.filter((u) => u.part.cling).map((u) => u.part.cling.ease));
+    const overArms = form.arms.filter((l) => arms === true || arms === (l.side === "L" ? "right" : "left")).map((l) => l.parts[0].id);
+    // (the legs in their four slots -- shell.js reads them there -- then the arms it covers; hung over the arms, the CHEST
+    //  it hangs from too: a mantle lies on the chest and the back and falls from them, not a cone standing off the
+    //  shoulders -- the cape's was a millstone's brim round them)
+    // (its cling never more than what it hangs over clings, or it went in through that one's cloth -- `want`: its own,
+    //  carved in stone with what holds it out drawn as close, statues.js)
+    // (and the TRUNK it hangs over below that -- `trunk`: the belly, the hips -- for slots left free: statues.js, an arm
+    //  raised out of a mantle drawn close)
+    const legSlots = [0, 1, 2, 3].map((i) => form.legs.flatMap((l) => l.parts.map((q) => q.id))[i] ?? null);
+    foldsRound(layer, hem, rHem);
+    // (its ROOM: how far in its cone may go anywhere down it before it meets the body or the cloth under it -- carved, a
+    //  fold is cut no deeper, shell.js dressFold: an overfold's valleys over the skirt let the skirt through. Counted at
+    //  the folds' full depth: they are shallower toward the top, FOLD_TOP of it there, where a cape sits on the shoulders.
+    //  Clinging, it lies where the drape lays it, its cone no measure: unbounded; over a draped piece at cling 0 it keeps
+    //  its cone, pushed out where that one reaches it -- there its ease apart)
+    if (!(cling > 0)) {
+      let room = clingUnder.length ? clingEase - base.thick : 1e3;
+      for (let k = 0; k <= 32; k++) {
+        const y = yT - (yT - yB) * k / 32, need = Math.max(y >= yBody ? Math.max(clear(y), depthNeed(y)) + ease : 0, hung(y) - 2 * base.thick);
+        const tF = (yT - y - LAYER_TOP) / (len - LAYER_TOP);
+        if (need > 0) room = Math.min(room, (rTop + Math.min(slope, 6) * (yT - y) - need - base.thick) / (FOLD_TOP + (1 - FOLD_TOP) * tF));
+      }
+      if (room < 1e3) layer.room = hem ? (hem.room = Math.max(room, 0)) : Math.max(room, 0);
+    }
+    // (and what it is draped over but not held out by -- a peplos's overfold to the hips under a himation -- lies OVER
+    //  its cloth there: that one's folds are not cut, or each valley showed this cloth through it, a row of teeth)
+    if (cling > 0) for (const u of under) if (u.torso && u.top > yB && !holds.includes(u)) for (const L of u.part.dress?.layers ?? []) L.room = 0;
+    const part = bone(id, host, [0, yT - form.torso.hangY, offZ], [0, -1, 0], len, rTop, rHem, {
+      ...((cling > 0 || clingUnder.length) && form.legs?.length ? { cling: { k: Math.min(cling, 1, ...holds.map((u) => u.part.cling?.k ?? 0)), want: Math.min(cling, 1), holds: holds.map((u) => u.part.id), ease: clingEase,
+                                                                             trunk: form.torso.parts.filter((q) => q.id !== host && q.bottom < yT && q.top > yB).map((q) => q.id),
+                                                                             over: [...legSlots, ...overArms, ...(arms ? [host] : [])] } } : {}),
       color: base.colors[0], clip: { lo: 0, hi: len, lid: pc.lid !== false, squash: sq }, frame: "body",
+      // (`open`: its hem a MOUTH the eye sees into -- a cape's over the arms: carved, it stays open, statues.js -- closed,
+      //  a cape's hem was a millstone round the shoulders, a disc of stone on the upper arms)
+      ...(pc.open ? { open: true } : {}),
       anim: pc.swing === false ? undefined : { axis: "z", deg: 4, speed: .8, phase: -.7, amp: true, sway: 3 }, dress: dress(len, !pc.seam),
       trail: pc.trail ? val(pc.trail, P, marks, 0) * Math.PI / 180 : 0,   // (swept back as its wearer goes: skeleton.js TRAIL)
       // (a panel beside a cloak's opening: lifted by the arm on its side as it swings forward -- skeleton.js LIFT; its
       //  side, the wrap's middle: +z, the rig's "L")
       ...(pc.follow && wrap ? { follow: { part: "arm" + (Math.sin(wrap[0]) > 0 ? "L" : "R"), k: val(pc.follow, P, marks, 1) } } : {}) });
     layer.repeats = layer.wrap ? 0 : Math.max(1, Math.round(2 * Math.PI * (rTop + rHem) / 2 / base.period[0]));
-    return [{ part, torso: true, top: yT, bottom: yB, layer: w.def.layer ?? 2, skirt: !!pc.skirt, arms: !!pc.arms, garment: w.k }];
+    return [{ part, torso: true, top: yT, bottom: yB, layer: w.def.layer ?? 2, skirt: !!pc.skirt, arms: !!arms, garment: w.k, offZ, lap: !!pc.lap }];
   }
   if (kind === "hang" && pc.on === "arm") {
     return (pc.side ? [pc.side] : ["L", "R"]).map((side) => {
       const limb = form.arms.find((l) => l.side === side), marks = limb.marks;
       const d0 = val(pc.from, P, marks, 0), d1 = val(pc.to, P, marks, 1), len = Math.max(d1 - d0, .03 * S);
       const r0 = limb.radius(d0) + val(pc.ease, P, marks, .004) + base.thick, fl = val(pc.flare, P, marks, .3), rAt = (d) => r0 + fl * (d - d0);
+      foldsRound(layer, hem, rAt(d1));
       // ONE PIECE A BONE: a sleeve from the shoulder past the elbow is a cone on the upper arm and another on the forearm,
       // the radius running on unbroken from one to the next (a bell sleeve's flare continues) -- hung on the upper arm
       // alone, the forearm bent out of it at the elbow and stuck out through its side. Each piece but the last reaches
@@ -378,7 +468,8 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
             (e - a) + (last ? 0 : rAt(e) * .33);
           const part = bone(id + side + (out.length ? out.length : ""), p.id, [0, -(a - o), 0], [0, -1, 0], L, rAt(a), rAt(a + L),
                             { color: base.colors[0], clip: { lo: 0, hi: L }, dress: dress(L, last),
-                              sag: last ? Math.max(0, Math.atan(fl) - .08) : 0, fall: true });   // (the mouth sags with gravity -- skeleton.js; a margin for the arm's own girth. Every piece of it FALLS off a raised arm: a dalmatica's upper sleeve too)
+                              sag: last ? Math.max(0, Math.atan(fl) - .08) : 0, fall: true, open: last });   // (the mouth sags with gravity -- skeleton.js; a margin for the arm's own girth. Every piece of it FALLS off a raised arm: a dalmatica's upper sleeve too)
+          // (`open`: its far end is a MOUTH the eye sees into -- carved, statues.js leaves it open, the hollow in shade)
           out.push({ part, top: 0, bottom: 0, layer: w.def.layer ?? 2 });
         }
         o += p.len;
@@ -396,60 +487,75 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
     const part = bone(id, form.head.id, [c[0], c[1], 0], n, len, R, r2, { color: base.colors[0], clip: { lo, hi: 1e4 }, dress: dress() });
     return [{ part, top: 0, bottom: 0, layer: w.def.layer ?? 2 }];
   }
-  if (kind === "crown") {  // a hat's crown: a round cone from above the head down to the brim's height, its top closed
+  if (kind === "crown") {  // a hat's crown: a round cone from above the head down to the brim's height, its top closed (`x`: its middle forward of the head's)
     const top = val(pc.top, P, {}, 1.2), bot = val(pc.bottom, P, {}, .25), len = (top - bot) * H;
-    const part = bone(id, form.head.id, [0, top * H, 0], [0, -1, 0], len, val(pc.rTop, P, {}, .98) * H, val(pc.rBottom, P, {}, 1.08) * H,
+    const part = bone(id, form.head.id, [val(pc.x, P, {}, 0) * H, top * H, 0], [0, -1, 0], len, val(pc.rTop, P, {}, .98) * H, val(pc.rBottom, P, {}, 1.08) * H,
                       { color: base.colors[0], clip: { lo: 0, hi: len, solid: true }, dress: dress() });
     return [{ part, top: 0, bottom: 0, layer: w.def.layer ?? 2 }];
   }
-  if (kind === "brim") {   // a ball cut to a thin slab: a disc
+  if (kind === "brim") {   // a ball cut to a thin slab: a disc -- level at `at`, or square to `axis` round `centre` [x, y] (head radii: a crest, [0, 0, 1])
     const y = val(pc.at, P, {}, .3) * H, R = val(pc.radius, P, {}, 2.4) * H, t = val(pc.thickness, P, {}, .05) * H;
-    const part = bone(id, form.head.id, [0, y, 0], [0, -1, 0], .01, R, R, { color: base.colors[0], clip: { lo: -t, hi: t, solid: true }, dress: dress() });
+    const c = pc.centre ? pc.centre.map((v) => val(v, P, {}, 0) * H) : [0, y];
+    const part = bone(id, form.head.id, [c[0], c[1], 0], pc.axis ? norm(pc.axis) : [0, -1, 0], .01, R, R, { color: base.colors[0], clip: { lo: -t, hi: t, solid: true }, dress: dress() });
     return [{ part, top: 0, bottom: 0, layer: w.def.layer ?? 2 }];
   }
   if (kind === "cone") {   // a pointed crown's tip
     const at = (pc.at ?? [-.1, .45]).map((v) => val(v, P, {}, 0) * H), len = val(pc.length, P, {}, 2.1) * H;
-    const part = bone(id, form.head.id, [at[0], at[1], 0], pc.dir ?? [-.12, 1, 0], len, val(pc.radius, P, {}, 1) * H, val(pc.tip, P, {}, .06) * H,
-                      { color: base.colors[0], clip: { lo: 0, hi: 1e4, solid: true }, dress: dress() });
-    return [{ part, top: 0, bottom: 0, layer: w.def.layer ?? 2 }];
+    const tipOf = (i, pos, dir) => ({ part: bone(id + (i || ""), form.head.id, pos, dir, len, val(pc.radius, P, {}, 1) * H, val(pc.tip, P, {}, .06) * H,
+                                                  { color: base.colors[0], clip: { lo: 0, hi: 1e4, solid: true }, dress: dress() }), top: 0, bottom: 0, layer: w.def.layer ?? 2 });
+    // (`around`: n of them in a ring `ring` head radii round the head's upright through `at`, the first in front, each
+    //  leaning `out` from the upright -- a crown's points)
+    if (!pc.around) return [tipOf(0, [at[0], at[1], 0], pc.dir ?? [-.12, 1, 0])];
+    const n = Math.round(val(pc.around, P, {}, 4)), R = val(pc.ring, P, {}, 1) * H, out = val(pc.out, P, {}, 0);
+    return Array.from({ length: n }, (_, i) => {
+      const a = 2 * Math.PI * i / n, c = Math.cos(a), sn = Math.sin(a);
+      return tipOf(i, [at[0] + R * c, at[1], R * sn], [out * c, 1, out * sn]);
+    });
   }
   return null;
 }
 const norm = (v) => { const l = Math.hypot(...v) || 1; return v.map((x) => x / l); };
 // an open piece's arc, [centre, span] in degrees (either may be a param or an expression) -> [centre, half-width] radians
-const wrapOf = (w, P, marks) => w ? [val(w[0], P, marks, 0) * Math.PI / 180, val(w[1], P, marks, 360) * Math.PI / 360] : null;
+const wrapOf = (w, P, marks) => w ? [angleOf(w[0], P, marks) * Math.PI / 180, val(w[1], P, marks, 360) * Math.PI / 360] : null;
 
 // ---- the wardrobe: dressing a villager ------------------------------------------------------------------------------
 // WARDROBE.people[kind]: a list of OUTFITS, each { weight, wear: [{ garment, p (chance), fabrics: { slot: [choices] } }] }
 // -- a choice is "pattern:palette" or { pattern, palette }; `garment` may be a list (one of them). Drawn from the
 // person's own seeded stream `r`, so an outfit never moves the body's draws.
 // `style`: another time and place's dress (the wardrobe's `styles`: greek, roman, chinese, gothic) instead of the village's
-export function drawOutfit(kind, r, { female = kind === "woman", style = null, work = false } = {}) {
+// `only`: the outfits' names it may draw from (where any of them is in the list); `full`: every garment of it worn, none
+// left to its chance (a statue's: carved in the whole of it -- a citizen's toga, a matron's palla); `avoid`: palettes not
+// drawn where a choice has others (a painted statue's: its drapery dyed, not undyed wool -- statuary.json `paint`)
+export function drawOutfit(kind, r, { female = kind === "woman", style = null, work = false, only = null, full = false, avoid = null } = {}) {
   const pick = (a) => a[Math.floor(r() * a.length)];
+  const dyed = (cs) => { const k = avoid ? cs.filter((c) => !avoid.includes(typeof c === "string" ? c.split(":")[1] : c.palette)) : cs; return k.length ? k : cs; };
   const byWeight = (list) => { const tot = list.reduce((t, o) => t + (o.weight ?? 1), 0); let e = r() * tot; for (const o of list) if ((e -= o.weight ?? 1) <= 0) return o; return list[list.length - 1]; };
   const key = kind.startsWith("child") ? (female ? "girl" : "boy") : kind;
   const lists = (style && WARDROBE.styles?.[style]) || WARDROBE.people;
-  const all = lists[key] ?? lists.man ?? WARDROBE.people.man;
+  // (an outfit marked `statue` -- a hero's mantle alone, a nude -- is carved, never worn: drawn only where a statue's dress
+  //  names it, statuary.json)
+  const pool = lists[key] ?? lists.man ?? WARDROBE.people.man, listed = pool.filter((o) => !o.statue), allowed = only ? pool.filter((o) => only.includes(o.name)) : [];
+  const all = allowed.length ? allowed : listed;
   // (one at work wears what works: the list's outfits marked `work`, if it has any -- never a lady's gown in a field)
   const working = work ? all.filter((o) => o.work) : [];
   const outfit = byWeight(working.length ? working : all);
   const wear = [];
   for (const g of outfit.wear) {
-    if (r() > (g.p ?? 1)) continue;
+    if (r() > (full ? 1 : g.p ?? 1)) continue;
     const garment = Array.isArray(g.garment) ? pick(g.garment) : g.garment;
     const choice = (c) => typeof c === "string" ? { pattern: "fabrics/" + c.split(":")[0], palette: c.split(":")[1] } : c;
-    const fabrics = Object.fromEntries(Object.entries(g.fabrics ?? {}).map(([slot, cs]) => [slot, choice(pick(cs))]));
+    const fabrics = Object.fromEntries(Object.entries(g.fabrics ?? {}).map(([slot, cs]) => [slot, choice(pick(dyed(cs)))]));
     // (a param given as a list is drawn from it: a hem band or none, and how wide -- only those draw, so a garment
     //  without one keeps the stream of choices it had)
     const params = Object.fromEntries(Object.entries(g.params ?? {}).map(([k, v]) => [k, Array.isArray(v) ? pick(v) : v]));
-    wear.push({ garment, fabrics, params });
+    wear.push({ garment, fabrics, params, ...(g.layer !== undefined ? { layer: g.layer } : {}) });   // (`layer`: tailor)
   }
-  return { name: outfit.name, wear };
+  return { name: outfit.name, wear, ...(outfit.hair ? { hair: outfit.hair } : {}), ...(outfit.beard ? { beard: outfit.beard } : {}) };   // (an outfit's own hair and beard: a Buddha's ushnisha, beardless)
 }
 // a named outfit of the wardrobe (a guard's kit, a beast-man's), dressed as it stands (first choices)
 export function namedOutfit(name) {
   const o = WARDROBE.outfits?.[name];
   if (!o) throw new Error(`clothes: no outfit "${name}"`);
   const choice = (c) => typeof c === "string" ? { pattern: "fabrics/" + c.split(":")[0], palette: c.split(":")[1] } : c;
-  return { name, wear: o.wear.map((g) => ({ garment: g.garment, params: g.params ?? {}, fabrics: Object.fromEntries(Object.entries(g.fabrics ?? {}).map(([s, cs]) => [s, choice(Array.isArray(cs) ? cs[0] : cs)])) })) };
+  return { name, wear: o.wear.map((g) => ({ garment: g.garment, params: g.params ?? {}, ...(g.layer !== undefined ? { layer: g.layer } : {}), fabrics: Object.fromEntries(Object.entries(g.fabrics ?? {}).map(([s, cs]) => [s, choice(Array.isArray(cs) ? cs[0] : cs)])) })) };
 }

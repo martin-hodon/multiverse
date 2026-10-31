@@ -15,9 +15,10 @@ const hex = (c) => typeof c === "number" ? "#" + c.toString(16).padStart(6, "0")
 // from the rig itself (the arms' shoulder joint and the chest's girth), so it fits any height and build.
 //   wing: { kind: "bird" | "bat", k (span, x the rig's 1 m wing), ...the wing's own numbers }; horns: { r, len (x the head's
 //   radius), color }; hair: its colour ("#rrggbb", the mesh head's)
-export function winged(name, { wing: { kind: wk = "bird", k = 1, ...wo } = {}, horns = null, hair = null, call, ...person }) {
-  const man = makePerson(person), byId = (id) => man.parts.find((p) => p.id === id);
-  const arm = byId("armL"), chest = byId("chest"), S = (person.height ?? 1.78) / 1.78;
+// THE WINGS ALONE, for a person built already (a carved angel's, a Victory's: statues.js): the parts to add after its own
+export function wingsFor(man, { kind: wk = "bird", k = 1, ...wo } = {}, height = 1.78) {
+  const byId = (id) => man.parts.find((p) => p.id === id);
+  const arm = byId("armL"), chest = byId("chest"), S = height / 1.78;
   const back = -(chest.size.r * (chest.flat || 1)) * .85;   // (just inside the back: the root sinks into the shoulder blade)
   const at = [back, arm.pos[1] - .06 * S, Math.abs(arm.pos[2]) * .45];
   const mk = wk === "bat" ? batWing : birdWing;
@@ -25,7 +26,12 @@ export function winged(name, { wing: { kind: wk = "bird", k = 1, ...wo } = {}, h
   //  its back faces -x: a root bone turned a quarter about z maps the one onto the other -- the wings spread behind the
   //  back, their chord hanging down, and flap forward and back about the spine)
   const root = { id: "wingRoot", parent: "chest", shape: "capsule", size: { r: .01, len: .01 }, bone: true, pos: [at[0], at[1], 0], rot: [0, 0, 90] };
-  const wings = [root, ...[1, -1].flatMap((s) => mk(s, { k: k * S, parent: "wingRoot", x: 0, y: 0, z: at[2], lift: 35, ...wo }))];
+  return [root, ...[1, -1].flatMap((s) => mk(s, { k: k * S, parent: "wingRoot", x: 0, y: 0, z: at[2], lift: 35, ...wo }))];
+}
+
+export function winged(name, { wing = {}, horns = null, hair = null, call, ...person }) {
+  const man = makePerson(person), byId = (id) => man.parts.find((p) => p.id === id);
+  const wings = wingsFor(man, wing, person.height ?? 1.78);
   const head = byId("head"), extra = [];
   if (horns) for (const s of [1, -1]) {   // (a demon's: two short cones from the brow, curving back)
     // (a cone is centred on its pos: its base on the skull -- a little out, the mesh head is the fuller -- and its

@@ -225,12 +225,12 @@ import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from statuary import statue, pedestal, FACE_PZ, capped
 yP, zG, rise = 0.8 + CH + 2.2, PZ + PD + 0.4, (PW / 2) * math.tan(math.radians(20))   # the pediment's foot, its gable's face, its height
 stat = {"statue pediment apex": statue((0, yP + rise - 0.3, zG - 0.6), kind="man", style="roman", stone="limestone", scale=1.7, seed=3, face=FACE_PZ),
-        "statue pediment left": statue((-(PW / 2 - 0.8), yP, zG - 0.5), kind="woman", style="roman", stone="limestone", scale=1.4, seed=5, face=FACE_PZ),
-        "statue pediment right": statue((PW / 2 - 0.8, yP, zG - 0.5), kind="woman", style="roman", stone="limestone", scale=1.4, seed=7, face=FACE_PZ)}
+        "statue pediment left": statue((-(PW / 2 - 0.8), yP, zG - 0.5), kind="woman", style="roman", stone="limestone", scale=1.4, seed=5, face=FACE_PZ, wings="raised"),
+        "statue pediment right": statue((PW / 2 - 0.8, yP, zG - 0.5), kind="woman", style="roman", stone="limestone", scale=1.4, seed=7, face=FACE_PZ, wings="raised")}
 for sx, nm, sd in ((-1, "old covenant", 11), (1, "new covenant", 13)):
     x, z = sx * (PW / 2 - 1.4), PZ + PD + 2.6
     stat[f"pedestal {nm}"] = pedestal((x, 0, z), 1.6, 1.6, 2.2, f"the pedestal of the angel of the {nm}")
-    stat[f"statue {nm}"] = statue((x, 2.2, z), kind="woman", style="roman", stone="limestone", scale=1.5, seed=sd, face=FACE_PZ, hold={"R": "items/tools/book"})
+    stat[f"statue {nm}"] = statue((x, 2.2, z), kind="woman", style="roman", stone="limestone", scale=1.5, seed=sd, face=FACE_PZ, hold={"R": "items/tools/book"}, wings="folded")
 for k, v in capped(stat).items(): add(k, v)
 
 doc = {"name": "Karlskirche",

@@ -1,0 +1,620 @@
+{
+  "name": "Propylaia",
+  "era": "-437--432",
+  "region": "Greece",
+  "_about": "THE PROPYLAIA (437-432 BC, Mnesikles), the gateway: the central building's west and east fronts six Doric columns\neach under their triglyph friezes and pediments, the deep west hall between them, its coffered ceiling -- blue, with\ngold stars -- carried on two rows of tall Ionic columns either side of the road, the gate wall with its five doors\n(the middle one for the procession, the rest smaller the further out); the PINAKOTHEKE, the picture gallery, in the\nnorth-west wing behind its portico of three columns facing the approach, and its shallower twin in the south-west.\nIts origin the middle of the gate wall, +z east (into the sanctuary).",
+  "params": {
+    "detail": 4,
+    "D": 1.56,
+    "colH": 8.81,
+    "entH": 2.05,
+    "cornH": 0.55,
+    "cornOut": 0.45,
+    "base": 0.9,
+    "W": 18.2,
+    "wallT": 1.0,
+    "westZ": -15.5,
+    "eastZ": 7.5,
+    "wingX": 11.5,
+    "wingZ": -22.5,
+    "wD": 1.0,
+    "wH": 5.85
+  },
+  "build": [
+    "crepidoma",
+    "west portico",
+    "east portico",
+    "side walls",
+    "gate wall",
+    "hall columns",
+    "west ceiling",
+    "east ceiling",
+    "roof",
+    "acroteria",
+    "north wing portico",
+    "north wing antae",
+    "south wing portico",
+    "south wing antae",
+    "pinakotheke",
+    "pinakotheke hall",
+    "pinakotheke ceiling",
+    "north wing roof",
+    "south wing hall",
+    "south wing ceiling",
+    "south wing roof",
+    "north wing platform",
+    "south wing platform"
+  ],
+  "parts": {
+    "crepidoma": {
+      "type": "crepidoma",
+      "width": 20.2,
+      "length": 26.56,
+      "steps": 3,
+      "stepH": 0.3,
+      "stepOut": 0.4,
+      "at": [
+        [
+          0,
+          0,
+          -4.0,
+          0
+        ]
+      ],
+      "_about": "the stepped platform of the central building"
+    },
+    "west portico": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 6,
+      "spacing": 3.234,
+      "columnR": "D / 2",
+      "height": "colH",
+      "entablature": {
+        "h": "entH",
+        "depth": "D * 1.1",
+        "cornice": {
+          "h": "cornH",
+          "out": "cornOut"
+        },
+        "triglyphs": {
+          "w": "D * 0.55",
+          "d": 0.14
+        }
+      },
+      "at": [
+        [
+          0,
+          "base",
+          -15.5,
+          0
+        ]
+      ],
+      "_about": "the six Doric columns of the west front"
+    },
+    "east portico": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 6,
+      "spacing": 3.234,
+      "columnR": "D / 2",
+      "height": "colH",
+      "entablature": {
+        "h": "entH",
+        "depth": "D * 1.1",
+        "cornice": {
+          "h": "cornH",
+          "out": "cornOut"
+        },
+        "triglyphs": {
+          "w": "D * 0.55",
+          "d": 0.14
+        }
+      },
+      "at": [
+        [
+          0,
+          "base",
+          7.5,
+          0
+        ]
+      ],
+      "_about": "the six Doric columns of the east front"
+    },
+    "side walls": {
+      "type": "box",
+      "width": "wallT",
+      "length": 23.0,
+      "height": 10.86,
+      "at": [
+        [
+          8.443,
+          "base",
+          -4.0,
+          0
+        ],
+        [
+          -8.443,
+          "base",
+          -4.0,
+          0
+        ]
+      ],
+      "_about": "the walls of the halls, from the west front to the east"
+    },
+    "gate wall": {
+      "type": "wall",
+      "width": 15.886,
+      "height": 10.86,
+      "thickness": 1.2,
+      "beam": 6.0,
+      "openings": [
+        {
+          "at": 1.643,
+          "width": 1.4,
+          "sill": 0,
+          "springing": 3.1,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 4.343,
+          "width": 2.9,
+          "sill": 0,
+          "springing": 5.3,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 7.943,
+          "width": 4.2,
+          "sill": 0,
+          "springing": 7.4,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 11.543,
+          "width": 2.9,
+          "sill": 0,
+          "springing": 5.3,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        },
+        {
+          "at": 14.243,
+          "width": 1.4,
+          "sill": 0,
+          "springing": 3.1,
+          "head": {
+            "profile": "flat"
+          },
+          "glass": false
+        }
+      ],
+      "at": [
+        [
+          0,
+          "base",
+          0,
+          0
+        ]
+      ],
+      "_about": "the gate wall and its five doors, the middle one the procession's"
+    },
+    "hall columns": {
+      "type": "colonnade",
+      "order": "ionic",
+      "count": 3,
+      "spacing": 4.0,
+      "columnR": 0.52,
+      "height": 10.21,
+      "entablature": {
+        "h": 0.65,
+        "depth": 1.1
+      },
+      "at": [
+        [
+          2.9,
+          "base",
+          -7.75,
+          1.5707963
+        ],
+        [
+          -2.9,
+          "base",
+          -7.75,
+          1.5707963
+        ]
+      ],
+      "_about": "the Ionic columns of the west hall either side of the road, and the beams they carry"
+    },
+    "west ceiling": {
+      "type": "coffered-ceiling",
+      "width": 15.886,
+      "length": 14.042,
+      "thickness": "cornH",
+      "nx": 6,
+      "nz": 5,
+      "depth": 0.25,
+      "steps": 1,
+      "at": [
+        [
+          0,
+          "base + 10.86",
+          -7.621,
+          0
+        ]
+      ],
+      "_about": "the coffered marble ceiling of the west hall -- blue, with gold stars"
+    },
+    "east ceiling": {
+      "type": "coffered-ceiling",
+      "width": 15.886,
+      "length": 6.042,
+      "thickness": 2.6,
+      "nx": 6,
+      "nz": 2,
+      "depth": 0.25,
+      "steps": 1,
+      "at": [
+        [
+          0,
+          "base + 8.81",
+          3.621,
+          0
+        ]
+      ],
+      "_about": "the east portico's coffered ceiling"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 18.786,
+      "length": 25.616,
+      "pitch": 14,
+      "rake": {
+        "h": "cornH",
+        "out": 0.15
+      },
+      "at": [
+        [
+          0,
+          "base + 11.41",
+          -4.0,
+          0
+        ]
+      ],
+      "_about": "the central building's gable, a pediment over each front"
+    },
+    "acroteria": {
+      "type": "item",
+      "item": "items/ornaments/acroterion",
+      "params": {
+        "h": "D * 1.3"
+      },
+      "solid": false,
+      "at": [
+        [
+          0,
+          "base + 13.752",
+          8.558,
+          0
+        ],
+        [
+          0,
+          "base + 13.752",
+          -16.558,
+          0
+        ]
+      ],
+      "_about": "the floral acroteria on the apexes of the gable"
+    },
+    "north wing portico": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 3,
+      "spacing": 3.0,
+      "columnR": "wD / 2",
+      "height": "wH",
+      "entablature": {
+        "h": 1.35,
+        "depth": "wD * 1.1",
+        "cornice": {
+          "h": 0.4,
+          "out": 0.3
+        },
+        "triglyphs": {
+          "w": "wD * 0.55",
+          "d": 0.12
+        }
+      },
+      "at": [
+        [
+          11.5,
+          "base",
+          "wingZ",
+          1.5707963
+        ]
+      ],
+      "_about": "the north wing's portico of three Doric columns facing the approach"
+    },
+    "north wing antae": {
+      "type": "box",
+      "width": 2.6,
+      "length": 0.8,
+      "height": 7.199999999999999,
+      "at": [
+        [
+          12.8,
+          "base",
+          -16.9,
+          0
+        ],
+        [
+          12.8,
+          "base",
+          -28.1,
+          0
+        ]
+      ],
+      "_about": "the side walls ending in antae either end of the portico"
+    },
+    "south wing portico": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 3,
+      "spacing": 3.0,
+      "columnR": "wD / 2",
+      "height": "wH",
+      "entablature": {
+        "h": 1.35,
+        "depth": "wD * 1.1",
+        "cornice": {
+          "h": 0.4,
+          "out": 0.3
+        },
+        "triglyphs": {
+          "w": "wD * 0.55",
+          "d": 0.12
+        }
+      },
+      "at": [
+        [
+          -11.5,
+          "base",
+          "wingZ",
+          1.5707963
+        ]
+      ],
+      "_about": "the south wing's portico of three Doric columns facing the approach"
+    },
+    "south wing antae": {
+      "type": "box",
+      "width": 2.0,
+      "length": 0.8,
+      "height": 7.199999999999999,
+      "at": [
+        [
+          -12.5,
+          "base",
+          -16.9,
+          0
+        ],
+        [
+          -12.5,
+          "base",
+          -28.1,
+          0
+        ]
+      ],
+      "_about": "the side walls ending in antae either end of the portico"
+    },
+    "pinakotheke": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          9.0,
+          10.76
+        ]
+      },
+      "thickness": 0.8,
+      "height": 7.6,
+      "glass": false,
+      "faces": {
+        "3": [
+          {
+            "at": 0,
+            "width": 1.8,
+            "sill": 0,
+            "springing": 3.6,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          },
+          {
+            "at": -3.0,
+            "width": 1.1,
+            "sill": 1.5,
+            "springing": 3.4,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          },
+          {
+            "at": 3.0,
+            "width": 1.1,
+            "sill": 1.5,
+            "springing": 3.4,
+            "head": {
+              "profile": "flat"
+            },
+            "glass": false
+          }
+        ],
+        "0": [],
+        "1": [],
+        "2": []
+      },
+      "courses": [
+        {
+          "y": 5.85,
+          "h": 0.12,
+          "out": 0.06,
+          "profile": "band"
+        },
+        {
+          "y": 7.199999999999999,
+          "h": 0.4,
+          "out": 0.3,
+          "profile": "cornice"
+        }
+      ],
+      "at": [
+        [
+          18.6,
+          "base",
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "THE PINAKOTHEKE, the picture gallery: its door between two windows off the portico"
+    },
+    "pinakotheke hall": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          7.4,
+          9.16
+        ]
+      },
+      "height": 7.199999999999999,
+      "at": [
+        [
+          18.6,
+          "base",
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "the gallery's room: its walls' inner faces are inside (the finish paints them)"
+    },
+    "pinakotheke ceiling": {
+      "type": "box",
+      "width": 10.0,
+      "length": 9.16,
+      "height": 0.4,
+      "at": [
+        [
+          17.3,
+          "base + 7.199999999999999",
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "the gallery's and its portico's ceiling"
+    },
+    "north wing roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": 12.2,
+      "length": 12.2,
+      "pitch": 14,
+      "at": [
+        [
+          17.0,
+          "base + 7.6",
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "the north wing's hipped roof"
+    },
+    "south wing hall": {
+      "type": "box",
+      "width": 0.8,
+      "length": 11.2,
+      "height": 7.199999999999999,
+      "at": [
+        [
+          -13.9,
+          "base",
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "the back wall of the south wing's shallow hall"
+    },
+    "south wing ceiling": {
+      "type": "box",
+      "width": 3.2,
+      "length": 11.2,
+      "height": 0.4,
+      "at": [
+        [
+          -12.7,
+          "base + 7.199999999999999",
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "its ceiling"
+    },
+    "south wing roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": 4.4,
+      "length": 12.2,
+      "pitch": 14,
+      "at": [
+        [
+          -12.8,
+          "base + 7.6",
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "its hipped roof"
+    },
+    "north wing platform": {
+      "type": "box",
+      "width": 15.0,
+      "length": 13.6,
+      "height": "base",
+      "at": [
+        [
+          18.0,
+          0,
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "the floor the north wing stands on, level with the central building's"
+    },
+    "south wing platform": {
+      "type": "box",
+      "width": 5.6,
+      "length": 13.6,
+      "height": "base",
+      "at": [
+        [
+          -13.1,
+          0,
+          "wingZ",
+          0
+        ]
+      ],
+      "_about": "the south wing's floor"
+    }
+  }
+}

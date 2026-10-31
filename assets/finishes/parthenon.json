@@ -1,18 +1,211 @@
 {
-  "name": "Parthenon",
-  "building": "architecture/parthenon",
-  "_about": "The Parthenon: Pentelic marble, the columns fluted (20 flutes), the triglyphs painted dark blue, the coffered ceiling blue with gold stars, the roof in marble tiles.",
-  "stone": {
-    "color": "#ded8c6",
-    "accent": "#c9c0ac",
-    "pat": "marble"
+ "name": "Parthenon",
+ "building": "architecture/parthenon",
+ "_about": "The Parthenon as it was painted (Brinkmann, Koch-Brinkmann and the Acropolis Museum's reconstructions): Pentelic marble warmed by its wax-and-oil ganosis, the columns fluted (20 flutes) and left the stone's own -- the two storeys of them round Athena inside too --, and the colour all in the entablature -- the architrave plain under a blue taenia, the triglyphs blue-black with their grooves, the metopes' grounds red, a red-and-cream meander along the top of the cornice's face (its third row of a tile three to its height, `align` part) over the blue mutules and red viae of its soffit, a meander on every abacus, the pediments' tympana Egyptian blue behind their painted figures, framed by the raking cornice in plain marble, the acroteria gilt and green, the frieze round the cella blue, the coffered ceiling blue with gold stars, the roof in marble tiles. (The heights are the building's: stylobate 1.5, column tops 11.93, frieze from 13.23, cornice 14.53 to 15.22; the porches' frieze from 12.66.)",
+ "stone": {
+  "color": "#e4d8bf",
+  "accent": "#cfc0a2",
+  "pat": "marble"
+ },
+ "rules": [
+  {
+   "parts": "peristyle triglyphs",
+   "color": "#1c2538",
+   "accent": "#2f4166",
+   "pat": "grooves"
   },
-  "rules": [
-    {"parts": "peristyle triglyphs", "color": "#2c3a4a", "accent": "#1f2a36"},
-    {"parts": ["peristyle shafts", "pronaos shafts", "opisthodomos shafts"], "count": 20, "pattern": "stone/fluted", "palette": "carrara"},
-    {"parts": "ceiling", "scale": 0.5, "pattern": "painted/starry vault", "palette": "starry"},
-    {"parts": "roof", "surface": "roof", "pattern": "roofs/tube tiles", "palette": "carrara"},
-    {"surface": "floor", "pattern": "stone/marble", "palette": "carrara"},
-    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "carrara"}
-  ]
+  {
+   "parts": "peristyle entablature",
+   "above": 13.23,
+   "within": [
+    -16,
+    34.2,
+    16,
+    35
+   ],
+   "pattern": "greek/metopes-east",
+   "surface": "wall",
+   "params": {
+    "W": 16.652,
+    "H": 1.3
+   },
+   "align": "above"
+  },
+  {
+   "parts": "peristyle entablature",
+   "above": 13.23,
+   "within": [
+    -16,
+    -35,
+    16,
+    -34.2
+   ],
+   "pattern": "greek/metopes-west",
+   "surface": "wall",
+   "params": {
+    "W": 16.652,
+    "H": 1.3
+   },
+   "align": "above"
+  },
+  {
+   "parts": "peristyle entablature",
+   "above": 13.23,
+   "within": [
+    14.9,
+    -34.3,
+    15.6,
+    34.3
+   ],
+   "pattern": "greek/metopes-south",
+   "surface": "wall",
+   "params": {
+    "W": 16.94,
+    "H": 1.3
+   },
+   "align": "above"
+  },
+  {
+   "parts": "peristyle entablature",
+   "above": 13.23,
+   "within": [
+    -15.6,
+    -34.3,
+    -14.9,
+    34.3
+   ],
+   "pattern": "greek/metopes-north",
+   "surface": "wall",
+   "params": {
+    "W": 16.94,
+    "H": 1.3
+   },
+   "align": "above"
+  },
+  {
+   "parts": [
+    "cella sides",
+    "cella back",
+    "cella front"
+   ],
+   "above": 10.5,
+   "pattern": "greek/cella-frieze",
+   "surface": "wall",
+   "params": {
+    "W": 10,
+    "H": 1
+   },
+   "align": "above"
+  },
+  {
+   "parts": "peristyle entablature",
+   "above": 13.23,
+   "color": "#9a3826",
+   "accent": "#86301f"
+  },
+  {
+   "parts": "peristyle entablature",
+   "above": 13.05,
+   "color": "#2b4479",
+   "accent": "#233866"
+  },
+  {
+   "parts": "peristyle cornice",
+   "surface": "ceiling",
+   "color": "#2b4479",
+   "accent": "#8e2e1c",
+   "pat": "grooves"
+  },
+  {
+   "parts": "peristyle cornice",
+   "surface": "wall",
+   "above": 14.99,
+   "pattern": "fabrics/meander",
+   "palette": "meander-red",
+   "scale": 7.19,
+   "align": "part"
+  },
+  {
+   "parts": [
+    "peristyle cornice",
+    "roof rake"
+   ],
+   "color": "#e4d8bf",
+   "accent": "#cfc0a2",
+   "pat": "marble"
+  },
+  {
+   "parts": [
+    "peristyle abaci",
+    "pronaos abaci",
+    "opisthodomos abaci"
+   ],
+   "surface": "wall",
+   "pattern": "fabrics/meander",
+   "palette": "meander-red",
+   "scale": 9,
+   "align": "part"
+  },
+  {
+   "parts": [
+    "pronaos entablature",
+    "opisthodomos entablature"
+   ],
+   "above": 12.66,
+   "color": "#2b5592",
+   "accent": "#24497e"
+  },
+  {
+   "parts": [
+    "cella sides",
+    "cella back",
+    "cella front"
+   ],
+   "above": 10.5,
+   "color": "#2b5592",
+   "accent": "#24497e"
+  },
+  {
+   "parts": "roof",
+   "surface": "wall",
+   "color": "#2b5592",
+   "accent": "#24497e"
+  },
+  {
+   "parts": [
+    "peristyle shafts",
+    "pronaos shafts",
+    "opisthodomos shafts",
+    "inner colonnade shafts",
+    "inner colonnade back shafts",
+    "inner colonnade upper shafts",
+    "inner colonnade upper back shafts"
+   ],
+   "count": 20,
+   "pattern": "stone/fluted",
+   "palette": "carrara"
+  },
+  {
+   "parts": "ceiling",
+   "scale": 0.5,
+   "pattern": "painted/starry vault",
+   "palette": "starry"
+  },
+  {
+   "parts": "roof",
+   "surface": "roof",
+   "pattern": "roofs/tube tiles",
+   "palette": "carrara"
+  },
+  {
+   "surface": "floor",
+   "pattern": "stone/marble",
+   "palette": "carrara"
+  },
+  {
+   "surface": "wall",
+   "pattern": "stone/ashlar fine",
+   "palette": "carrara"
+  }
+ ]
 }

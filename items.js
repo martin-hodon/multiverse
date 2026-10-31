@@ -168,7 +168,11 @@ const sidesFor = (r, P, min = 5, max = 32) => Math.max(min, Math.min(max, Math.r
 // LATHE: a profile [[r, y], ...] turned about the y axis. Each profile segment is a band of its own (its normal from
 // its own slope: turned work has its edges -- a bead, a fillet, a cup -- where the profile turns). Caps where the
 // profile starts or ends off the axis. uv: along the profile (the grain runs along a turned leg), round the ring.
-function lathe(e, profile, sides, { capLo = true, capHi = true, faceted = false } = {}) {
+function lathe(e, profile, sides, { capLo = true, capHi = true, faceted = false, wrap = null, disc = null } = {}) {
+  // (`wrap` [W, H]: a painted pot -- one tile round it and along its whole profile, lip to foot, its y up: a picture, not a grain;
+  // `disc` R: a unit tile seen from above, R the radius it reaches, its top toward -z: a cup's round picture)
+  const total = wrap ? profile.reduce((a, q, i) => i ? a + Math.hypot(q[0] - profile[i - 1][0], q[1] - profile[i - 1][1]) : 0, 0) : 0;
+  const wrapUV = (a, along) => [a / (Math.PI * 2) * wrap[0], (along / total - .5) * wrap[1]];
   let along = 0;
   for (let k = 0; k + 1 < profile.length; k++) {
     const [r0, y0] = profile[k], [r1, y1] = profile[k + 1];
@@ -184,10 +188,14 @@ function lathe(e, profile, sides, { capLo = true, capHi = true, faceted = false 
       along += len; continue;
     }
     const ring0 = [], ring1 = [];
+    const slope = (j) => { const q0 = profile[j], q1 = profile[j + 1]; if (!q1 || j < 0) return null; const l = Math.hypot(q1[0] - q0[0], q1[1] - q0[1]); return l < 1e-9 ? null : [(q1[1] - q0[1]) / l, -(q1[0] - q0[0]) / l]; };
+    const eased = (o) => { if (!o || !wrap) return [nr, ny]; const d = nr * o[0] + ny * o[1], x = nr + o[0], z = ny + o[1], l = Math.hypot(x, z); return d > .6 ? [x / l, z / l] : [nr, ny]; };   // (a thrown pot's body has no edges: its bands shade as one, except at a real turn: the lip, the foot)
+    const [n0r, n0y] = eased(slope(k - 1)), [n1r, n1y] = eased(slope(k + 1));
     for (let i = 0; i <= sides; i++) {
-      const a = i / sides * Math.PI * 2, c = Math.cos(a), s = Math.sin(a), n = [nr * c, ny, nr * s];
-      ring0.push(e.vert([r0 * c, y0, r0 * s], n, [along, a * rm]));
-      ring1.push(e.vert([r1 * c, y1, r1 * s], n, [along + len, a * rm]));
+      const a = i / sides * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
+      const uv = (r, u) => disc ? [r * c / (2 * disc), -r * s / (2 * disc)] : wrap ? wrapUV(a, u) : [u, a * rm];
+      ring0.push(e.vert([r0 * c, y0, r0 * s], [n0r * c, n0y, n0r * s], uv(r0, along)));
+      ring1.push(e.vert([r1 * c, y1, r1 * s], [n1r * c, n1y, n1r * s], uv(r1, along + len)));
     }
     for (let i = 0; i < sides; i++) e.quad(ring0[i], ring0[i + 1], ring1[i + 1], ring1[i]);
     along += len;
@@ -381,7 +389,7 @@ function plate(e, p) {
 }
 
 // ---- SHIELDS: an outline, curved across (`bend`, the radius of the curve; 0 flat) and domed (`dish`), `thick` planks;
-// a RIM (`rim` wide round the face, its own material), a BOSS (`boss` [radius, height]) and the FACE painted as a
+// a RIM (`rim` wide round the face, its own material; `rimFlat`: square to the axis at the bowl's edge, the aspis's brim), a BOSS (`boss` [radius, height]) and the FACE painted as a
 // panel fitted to the shield (the face material's pattern gets W and H) -- the heraldry, the Viking's gyronny, the
 // Roman's wings, whatever the material names
 export function shieldOutline(shape, w, h, n = 48) {
@@ -414,19 +422,24 @@ function shield(sinkOf, M, p, P) {
   const scales = rimW > 0 ? [1, sRim, ...Array.from({ length: K }, (_, k) => sRim * (1 - (k + 1) / K))] : Array.from({ length: K + 1 }, (_, k) => 1 - k / K);
   const face = emitter(sinkOf(p.material ?? "face", { W: w, H: h }), M), rim = rimW > 0 ? emitter(sinkOf(p.rimMaterial ?? "rim"), M) : face;
   const back = emitter(sinkOf(p.backMaterial ?? "back"), M);
-  const ring = (s, em, off, sgn) => O.map(([x, y]) => { const X = x * s, Y = y * s, n = nOf(X, Y); return em.vert([X, Y, zOf(X, Y) + off], sgn > 0 ? n : n.map((v) => -v), [X, Y]); });
+  // (a FLAT rim -- `rimFlat`: the aspis's -- lies square to the axis at the height of the bowl's edge inside it, a brim
+  //  standing out round the dome; on the bowl's own curve, carved in one stone, the shield was a bare dome, a ball)
+  const flat = rimW > 0 && !!p.rimFlat;
+  const zAt = (x, y, s, onRim) => flat && onRim ? zOf(x * sRim, y * sRim) : zOf(x * s, y * s);
+  const ring = (s, em, off, sgn, onRim = false) => O.map(([x, y]) => { const X = x * s, Y = y * s, n = flat && onRim ? [0, 0, 1] : nOf(X, Y); return em.vert([X, Y, zAt(x, y, s, onRim) + off], sgn > 0 ? n : n.map((v) => -v), [X, Y]); });
   for (let k = 0; k + 1 < scales.length; k++) {
     const em = k === 0 && rimW > 0 ? rim : face;
-    const A = ring(scales[k], em, 0, 1), B = ring(scales[k + 1], em, 0, 1);
+    const A = ring(scales[k], em, 0, 1, k === 0), B = ring(scales[k + 1], em, 0, 1, k === 0);
     for (let i = 0; i < O.length; i++) { const j = (i + 1) % O.length; if (scales[k + 1] > 1e-6) em.quad(A[i], A[j], B[j], B[i]); else em.tri(A[i], A[j], B[i]); }
   }
   // the back: the same surface, `thick` behind, one fan (its planks are the back material's grain)
-  const Bk = ring(1, back, -T, -1), cb = back.vert([0, 0, zOf(0, 0) - T], nOf(0, 0).map((v) => -v), [0, 0]);
+  const Bk = ring(1, back, -T, -1, true), cb = back.vert([0, 0, zOf(0, 0) - T], nOf(0, 0).map((v) => -v), [0, 0]);
   for (let i = 0; i < O.length; i++) back.tri(cb, Bk[(i + 1) % O.length], Bk[i]);
   // the edge between them (the rim's, or the face's when it has none)
   for (let i = 0; i < O.length; i++) {
     const [ax, ay] = O[i], [bx, by] = O[(i + 1) % O.length], n = norm([by - ay, -(bx - ax), 0]);
-    const q = [[ax, ay, zOf(ax, ay)], [bx, by, zOf(bx, by)], [bx, by, zOf(bx, by) - T], [ax, ay, zOf(ax, ay) - T]].map((v, k) => rim.vert(v, n, [k === 1 || k === 2 ? 1 : 0, v[2]]));
+    const za = zAt(ax, ay, 1, true), zb = zAt(bx, by, 1, true);
+    const q = [[ax, ay, za], [bx, by, zb], [bx, by, zb - T], [ax, ay, za - T]].map((v, k) => rim.vert(v, n, [k === 1 || k === 2 ? 1 : 0, v[2]]));
     rim.quad(q[0], q[1], q[2], q[3]);
   }
 }
@@ -657,7 +670,7 @@ export function buildItem(def0, bank, lib, { seed = 1, params = {}, materials = 
       const sk = sinkOf(p.material ?? "wood"), v0 = sk.pos.length / 3, i0 = sk.idx.length;
       const e = emitter(sk, PM);
       switch (p.type) {
-        case "lathe": lathe(e, p.profile, p.sides ?? sidesFor(Math.max(...p.profile.map((q) => q[0])), P), { capLo: p.caps !== false, capHi: p.caps !== false, faceted: !!p.faceted }); break;
+        case "lathe": lathe(e, p.profile, p.sides ?? sidesFor(Math.max(...p.profile.map((q) => q[0])), P), { capLo: p.caps !== false, capHi: p.caps !== false, faceted: !!p.faceted, wrap: p.wrap ?? null, disc: p.disc ?? null }); break;
         case "rod": {
           const from = p.from ?? [0, 0, 0], to = p.to ?? [0, p.length ?? 1, 0], d = sub(to, from), L = Math.hypot(...d);
           const r0 = p.r0 ?? p.r ?? .01, r1 = p.r1 ?? p.r ?? r0;

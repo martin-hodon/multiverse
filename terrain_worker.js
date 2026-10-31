@@ -12,7 +12,7 @@ self.onmessage = (e) => {
   const { cfg, opts, grade } = e.data;
   const t0 = performance.now();
   const { groundH } = makeGround(cfg);
-  const { blocks, stats } = buildTerrainData({ ...opts, grade, height: groundH });
+  const { blocks, stats } = buildTerrainData({ ...opts, grade, height: groundH, surface: cfg.map?.surface });
   stats.ms = Math.round(performance.now() - t0);
   // every array is transferred: the worker hands the memory over instead of the page copying it back
   const transfer = [];

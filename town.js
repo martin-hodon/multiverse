@@ -284,14 +284,18 @@ function houseSpec(kind, r, { trade = null, cellar = r() < .35, big = false } = 
 }
 
 // ---- THE PLAN -----------------------------------------------------------------------------------------------------
-// world: { seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridgeX, groundR, style (a STYLES name, or null) }
+// world: { seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridgeX, groundR, style (a STYLES name, or null), fits }
+// fits(x0, z0, x1, z1): whether a house, a farm's building or one of its plots may stand on that rectangle (a
+// landscape's land, index.html: its floor no more than 2 m off the ground anywhere under it, and dry) -- where it may
+// not, it is left out: as many houses and farms as the land has room for, and more farms where it has more (null:
+// every one, as the town has always been laid out)
 // returns { style, sites, routes, flats, guards } -- sites as index.html places them ({ key, x, z, bank }), routes as
 // paths.js lays them ({ w, pts }), flats as ground.js levels them
 // period: the world's period's town (assets/world/periods.json `town`): `houses` -- its dwellings by weight
 // (assets/architecture/dwellings) stand in the rows instead of the village's houses, also for the inn and the farms;
 // `church: false` -- none, and no cross on the market; `walls`: [pattern, palette] its stone buildings are laid in
 // `furnish`: the word its village houses are furnished under (assets/architecture/furnishing.json `swaps`)
-export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridgeX, groundR, style = null, period = null }) {
+export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridgeX, groundR, style = null, period = null, fits = null }) {
   const S = periodStyle(seed, style, period), r = rng(seed * 13 + 5);
   const DW = period?.houses ?? null;
   const FURN = period?.furnish ? { furnish: period.furnish } : {};   // (the period's own furniture in the village's houses: furnishing.json `swaps`)
@@ -302,8 +306,13 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
     if (!dwellings.has(k)) dwellings.set(k, archBuilding(`dwellings/${name}`, { params: { yaw } }));
     return dwellings.get(k);
   };
-  const sites = [], routes = [], flats = [], guards = [];
+  const sites = [], routes = [], flats = [], guards = [], left = { houses: 0, farms: 0, plots: 0 };   // (left: what found no ground to stand on)
   const bank = (x) => riverZ(x) + riverHW(x);                       // the south bank line
+  const room = (def, X, Z) => {   // (a definition placed so its origin is at X, Z: whether its footprint fits)
+    if (!fits) return true;
+    const [ox, oz] = def.arch?.offset ?? [0, 0], [fw, fd] = def.footprint;
+    return fits(X - ox - fw / 2, Z - oz - fd / 2, X - ox + fw / 2, Z - oz + fd / 2);
+  };
   const BR = BUILDINGS.bridge, xB = bridgeX;
   const footS = riverZ(xB) + BR.halfL + BR.ramp;                    // where the bridge's south ramp meets the ground
   // THE FRAME: the main street east-west 30m south of the bridge's foot, the south street 36m beyond, the south wall
@@ -398,6 +407,7 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
     const plinth = h.kind === "stone" || h.def ? [] : [h.trade ? "plinth shop" : "plinth"];   // (a plinth of rough stone at the foot: not under a stone house)
     const def = h.def ?? archBuilding(`village/${h.kind}-house`, { name: h.trade ? SHOP_NAMES[h.trade] : "Town house",
       params: { ...P, ...FURN, yaw: h.yaw, build: [...h.spec.build, ...quoins, ...plinth] }, finish: houseFinish(S, { ...look, roof: roofAt(S, X, Z) }) });
+    if (!room(def, X, Z)) { left.houses++; continue; }
     const s = place(key(h.trade ?? "house"), def, X, Z, { home: true, ...(h.trade ? { trade: h.trade } : {}) });   // (a shop's trade: a lamp by its door, nightglow.js)
     const d = def.doors?.[0];
     if (d) {   // its door on the street
@@ -522,7 +532,11 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
   // period has none: its town's `without`, assets/world/periods.json, drops those plots)
   const FARMS = [{ x: xB - 34, plots: [["ryeField", "barleyField"], ["windmill"], ["pigYard"], ["cabbageField", "beanField"], ["orchard"]] },
                  { x: xB - 70, plots: [["stableYard"], ["soilField", "berries"]] },
-                 { x: BASIN.x + 32, plots: [["garlicField", "henYard"], ["apiary"]] }]
+                 { x: BASIN.x + 32, plots: [["garlicField", "henYard"], ["apiary"]] },
+                 // (and where the land has the room -- a landscape's, fits -- more: further west, and further east past the landing)
+                 ...(fits ? [{ x: xB - 106, plots: [["barleyField", "ryeField"], ["soilField"], ["orchard"]] },
+                             { x: xB - 142, plots: [["cabbageField", "beanField"], ["berries"]] },
+                             { x: BASIN.x + 70, plots: [["ryeField"], ["garlicField", "soilField"]] }] : [])]
     .map((F) => ({ ...F, plots: F.plots.map((q) => q.filter((k) => !period?.without?.includes(k))).filter((q) => q.length) }));
   const lf = longhouseFinish(S), yf = yardFinish(S);
   BUILDINGS.apiary = archBuilding("village/apiary", { name: "Beekeeper's garden", finish: yf });   // (the fence and the bench: the yards' wood)
@@ -532,7 +546,7 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
   }
   const siteOf = (k, X, Z, extra) => { const [ox, oz] = BUILDINGS[k].arch?.offset ?? [0, 0]; return { key: k, x: X - ox, z: Z - oz, ...extra }; };
   const footN = riverZ(xB) - BR.halfL - BR.ramp, trackZ = footN - 8;
-  let trackW = xB, westEdge = Infinity;   // (westEdge: the last western farm's plots' west edge)
+  let trackW = xB, westEdge = Infinity, eastEdge = -Infinity;   // (westEdge: the last western farm's plots' west edge; eastEdge the last eastern's east edge)
   for (const F of FARMS) {
     // how far the plots reach either side of the farm's line: a pair stands 1.5 m out each way from it, each plot its own
     // width beyond -- not half their sum (the wider one on the east had the side track running inside its fence)
@@ -540,10 +554,12 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
     const west = reach(-1), eastR = reach(1), east = F.x > BASIN.x;
     // (a farm west of another keeps its side track and the plots beyond it clear of that farm's: moved west if need be)
     if (!east && F.x + eastR + 3 > westEdge) F.x = westEdge - eastR - 3;
-    if (F.x - west < -groundR + 6) continue;                          // (a small world: no room this far west)
+    if (east && F.x - west - 3 < eastEdge) F.x = eastEdge + west + 3;  // (and one east of another, east of it)
+    if (F.x - west < -groundR + 6 || F.x + eastR > groundR - 6) continue;   // (a small world: no room this far out)
     const tz = east ? quayZ(F.x) : trackZ;                            // (the east farm fronts the quay road)
     const L = between(r, 16, 19, .5), B = between(r, 6.5, 7.5, .5);
     const def = DW ? dwelling(pickW(r, DW), 0) : archBuilding("village/longhouse", { name: "Longhouse", params: { L, B, ...FURN, pitch: Math.round(between(r, 46, 54, 1)) }, finish: lf });   // (the period's farmhouse)
+    if (!room(def, F.x, tz - 2.5 - B / 2 - .7)) { left.farms++; continue; }
     const s = place(key("longhouse"), def, F.x, tz - 2.5 - B / 2 - .7, { bank: undefined, home: true });
     const d = def.doors?.find((q) => q.z > 0) ?? def.doors?.[0];
     if (d) { const o = doorOut(s, d, 1.3); routes.push({ w: 1.2, pts: [[o[0], tz], o] }); }
@@ -552,18 +568,19 @@ export function planTown({ seed, BUILDINGS, riverZ, riverHW, quayZ, BASIN, bridg
       const fps = q.map((k) => BUILDINGS[k].footprint), deep = Math.max(...fps.map((f) => f[1]));
       // (`plot`: a farm's; `farm`: land the farmers work -- a field, the currants, the orchard -- not a yard or the hives)
       const tag = (k) => ({ plot: true, ...(BUILDINGS[k].crop || BUILDINGS[k].plants ? { farm: true } : {}) });
-      if (q.length === 1) sites.push(siteOf(q[0], F.x, z - fps[0][1] / 2, tag(q[0])));
-      else q.forEach((k, j) => sites.push(siteOf(k, F.x + (j ? 1 : -1) * (fps[j][0] / 2 + 1.5), z - fps[j][1] / 2, tag(k))));
+      const plot = (k, X, Z) => { if (room(BUILDINGS[k], X, Z)) sites.push(siteOf(k, X, Z, tag(k))); else left.plots++; };
+      if (q.length === 1) plot(q[0], F.x, z - fps[0][1] / 2);
+      else q.forEach((k, j) => plot(k, F.x + (j ? 1 : -1) * (fps[j][0] / 2 + 1.5), z - fps[j][1] / 2));
       z -= deep + 3;
     }
     routes.push({ w: 1.2, pts: [[F.x + eastR + 1.5, tz], [F.x + eastR + 1.5, z + 2]] });   // along the farm's side, past its plots
-    if (!east) { trackW = Math.min(trackW, F.x - west); westEdge = F.x - west; }
+    if (!east) { trackW = Math.min(trackW, F.x - west); westEdge = F.x - west; } else eastEdge = F.x + eastR;
   }
   if (trackW < xB) routes.push({ w: 2, pts: [[xB, footN + .5], [xB, trackZ], [trackW, trackZ]] });   // the farm track from the bridge's foot
 
   // (walkIn: the wall-walk's middle, in from the wall's line toward the town -- between the field parapet's inner face and
   //  the town-side rail -- where the watchman and the sentry walk, index.html)
-  return { style: S, sites, routes, flats, guards, frame: { xB, zM, zS2, ZS, XW, XE, footS, square: SQ, walkIn: (WP.fp - WP.ri) / 2 } };
+  return { style: S, sites, routes, flats, guards, left, frame: { xB, zM, zS2, ZS, XW, XE, footS, square: SQ, walkIn: (WP.fp - WP.ri) / 2 } };
 }
 function churchBuild(top) {
   const base = ["nave", "nave floor", "chancel north", "chancel south", "chancel east", "chancel floor", "nave roof", "chancel roof",

@@ -12,7 +12,7 @@
 // right -- tilted forward by the share of the forearm's lift the item's hold `follow`s (see place).
 import * as THREE from "three";
 import { batchPool } from "./batchpool.js";
-import { stoneMaterial } from "./shell.js";   // a statue's item: carved
+import { stoneMaterial, PAINTED } from "./shell.js";   // a statue's item: carved (or painted)
 import { ASSETS } from "./catalogue.js";
 import { buildItem, holdMatrix, transformGroups } from "./items.js";
 import { itemGeometry, itemMaterial } from "./architecture.js";
@@ -30,13 +30,15 @@ const BODY_REST = .6;   // seconds an item resting against the body takes to set
 // sheet's height) and a `hairMask` of 1, for a material that shades along it (heads.js faceMaterial: Kajiya-Kay)
 // (recolor: { "#hex": "#hex" } -- a group painted in one colour is painted in another: a head cached in placeholder
 //  colours wearing its person's skin and hair, heads.js)
+// (a material's colour: its palette's first -- written out, or a named one: "gold", "bronze"; a tan where there is none)
+const firstHex = (pal) => {
+  const named = typeof pal === "string" && !pal.startsWith("#") ? PALETTES[pal] : null;
+  return Array.isArray(pal) ? pal[0] : named ? named[0] : typeof pal === "string" && pal.startsWith("#") ? pal : "#c8a080";
+};
 export function paintedGeometry(built, { flat = [], strands = null, wet = null, recolor = null } = {}) {
   const pos = [], col = [], nor = [], uvs = [], mask = [], wets = [], c = new THREE.Color();   // (wet: { role: how wet } -- the eyes, the lips: a sharp highlight, heads.js)
   for (const g of built.groups) {
-    const pal = g.material.palette;
-    // (its colour: the palette's first -- written out, or a named one: "gold", "bronze"; a tan where there is none)
-    const named = typeof pal === "string" && !pal.startsWith("#") ? PALETTES[pal] : null;
-    const hex0 = Array.isArray(pal) ? pal[0] : named ? named[0] : typeof pal === "string" && pal.startsWith("#") ? pal : "#c8a080";
+    const hex0 = firstHex(g.material.palette);
     c.set(recolor?.[hex0] ?? hex0);
     const P = g.pos, N = g.nor, I = g.idx, isFlat = flat.some((r) => g.roles?.has(r)), U = g.uv, hairy = !!strands && strands.some((r) => g.roles?.has(r));
     const wv = wet ? Math.max(0, ...[...(g.roles ?? [])].map((r) => wet[r] ?? 0)) : 0;
@@ -113,6 +115,10 @@ export function createTools(scene, { cap = 64, bank = ASSETS, lib = bank.get("it
       const groups = transformGroups(built.groups, holdMatrix(built.hold));
       const shapes = groups.map((g) => {
         const geo = itemGeometry(g), pool = poolOf(stone ? stoneMaterial(stone) : itemMaterial(g.material, false, geo));
+        if (PAINTED.has(stone)) {   // (painted -- shell.js PAINTED: each material in its own colour, over the stone)
+          const c = new THREE.Color(firstHex(g.material.palette)), n = geo.attributes.position.count;
+          geo.setAttribute("color", new THREE.Float32BufferAttribute(Array.from({ length: n * 3 }, (_, i) => [c.r, c.g, c.b][i % 3]), 3));
+        }
         return { pool, shape: pool.add(geo) };
       });
       // how much of the forearm's lift it takes: a hoe's .7 by default; a spear and a shield stay upright in a
@@ -123,7 +129,8 @@ export function createTools(scene, { cap = 64, bank = ASSETS, lib = bank.get("it
       for (const g of groups) for (let i = 1; i < g.pos.length; i += 3) { lo = Math.min(lo, g.pos[i]); hi = Math.max(hi, g.pos[i]); }
       // ...and one that RESTS AGAINST THE BODY (a lute: `rest: "body"`) lies where the hand holds it on the whole, in the
       // figure's own frame, while the hand plays over it -- not bobbing with every stroke (holders' `rest`, in place)
-      k = { shapes, follow: built.hold?.follow ?? .7, ground: built.hold?.rest === "ground" ? [lo, hi] : null, body: built.hold?.rest === "body", n: 0 };
+      // (a holder may stand any item on the ground so -- `ground`: a statue's shield resting by its side -- by these extents)
+      k = { shapes, follow: built.hold?.follow ?? .7, ground: built.hold?.rest === "ground" ? [lo, hi] : null, extent: [lo, hi], body: built.hold?.rest === "body", n: 0 };
     } else console.warn(`tools: no item "${path}" (for "${tool}")`);
     kinds.set(tool, k);
     return k;
@@ -135,16 +142,19 @@ export function createTools(scene, { cap = 64, bank = ASSETS, lib = bank.get("it
     // made now rather than on the first frame it is held (its tiles drawn, its triangles built)
     prepare(tools) { for (const t of tools) if (t) kindOf(t); },
     // groups: [[herd, holders], ...] -- every composite herd with tools in hand this frame, after its update();
-    // holders: [{ an, tool, hand: handIndex(def[, "L"]), scale?, follow? }] (follow: this holder's share of the forearm's
+    // holders: [{ an, tool, hand: handIndex(def[, "L"]), scale?, follow?, turn?, ground? }] (turn: [x, y, z] degrees more in the
+    // hand's frame, after the follow -- a statue's grip, statues.js; follow: this holder's share of the forearm's
     // lift, over the item's. A share tips the item's top BACK -- which swings a hanging tool's blade forward, a spade's;
     // a negative one tips it forward, for a thing worked by what reaches up out of the hand: a rod over the water, an
-    // axe coming down on the block)
+    // axe coming down on the block; ground: it stands on the ground under the hand, as an item that rests there does --
+    // its turn about the upright alone, or its extents are not its height)
     place(groups) {
       const now = performance.now(), dt = Math.min(.1, (now - (lastPlace || now)) / 1000); lastPlace = now;
       for (const k of kinds.values()) if (k) k.n = 0;
       for (const p of pools.values()) p.begin();
       [was, gripped] = [gripped, was]; gripped.clear();
-      for (const [herd, holders] of groups) for (const { an, tool, hand: [hi], scale = 1, follow } of holders) {   // (scale: a colossus's sword is as big as it is)
+      for (const [herd, holders] of groups) for (const holder of holders) {
+        const { an, tool, hand: [hi], scale = 1, follow, turn, ground } = holder;   // (scale: a colossus's sword is as big as it is)
         const k = tool && kindOf(tool);
         if (!k || k.n >= cap || an.hidden) continue;
         // IN THE HAND, as the hand is: the skeleton turns the hand by the item's share of the forearm's turn (an.grip:
@@ -158,6 +168,8 @@ export function createTools(scene, { cap = 64, bank = ASSETS, lib = bank.get("it
         const [h, f] = herd.ends(an, hi);
         H.set((h[0] + f[0]) / 2, (h[1] + f[1]) / 2, (h[2] + f[2]) / 2);
         M.extractRotation(G);
+        // (`turn`: the item turned further in the hand's frame -- a statue's sword point down, a shield's face out to the side)
+        if (turn) M.multiply(holder._turn ??= new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...turn.map((d) => d * Math.PI / 180))));
         if (scale !== 1) M.scale(SC.set(scale, scale, scale));
         if (k.body) {   // (the hand's place in the figure's frame -- forward, up, across -- eased toward it over BODY_REST seconds)
           const c = Math.cos(an.rotY), sn = Math.sin(an.rotY), dx = H.x - an.position.x, dz = H.z - an.position.z;
@@ -167,7 +179,9 @@ export function createTools(scene, { cap = 64, bank = ASSETS, lib = bank.get("it
           H.set(an.position.x + c * r[0] + sn * r[2], an.position.y + r[1], an.position.z - sn * r[0] + c * r[2]);
         }
         M.setPosition(H);
-        if (k.ground) M.elements[13] = Math.max(H.y - k.ground[1] * scale, Math.min(H.y - k.ground[0] * scale, an.position.y - k.ground[0] * scale));   // (the butt on the feet's level; the hand stays on it)
+        const gr = k.ground ?? (ground ? k.extent : null);
+        // (the butt on the floor it stands on -- its rig's `sole` over its origin, joints.js ground; the hand stays on it)
+        if (gr) M.elements[13] = Math.max(H.y - gr[1] * scale, Math.min(H.y - gr[0] * scale, an.position.y + (an.rig?.sole ?? 0) - gr[0] * scale));
         for (const { pool, shape } of k.shapes) pool.put(shape, M);
         k.n++;
       }

@@ -393,12 +393,14 @@ export function batWing(s, { k = 1, x = -.2, y = .5, z = .4, bone = 0x4a2a3a, me
   ];
 }
 
-export function birdWing(s, { k = 1, x = -.2, y = .5, z = .4, color = 0xf2efe6, tip = color, bone = color, deg = 14, speed = .45, parent = "body", lift = 0 } = {}) {
+export function birdWing(s, { k = 1, x = -.2, y = .5, z = .4, color = 0xf2efe6, tip = color, bone = color, deg = 14, speed = .45, parent = "body", lift = 0, spread = 62, bend = 0 } = {}) {
   // A BIRD'S WING (2026-10-04: an angel's): the arm to the wrist and the hand beyond it, and the FEATHERS growing from
   // them -- ten primaries ROOTED ON THE HAND's axis, fanned from straight on to back; eight secondaries rooted along
   // the forearm, pointing back; coverts laid over their roots. Every feather is a long thin vane (a flat triangle) whose
   // root lies ON its bone's line, so the feathers follow the wing's own curve and overlap their neighbours into one
-  // surface -- not a row laid beside the bone, a gap along it.
+  // surface -- not a row laid beside the bone, a gap along it. `lift` (degrees) raises the arm off the back, `spread`
+  // (degrees) swings it out from straight back toward the side: 62 a bird's span; `bend` (degrees) folds the hand back at
+  // the wrist toward the trailing edge -- a wing raised and bent far, its primaries hanging, is a wing CLOSED at rest.
   const S = s > 0 ? "L" : "R", E = 1.08 * k, HL = .55 * k, R = .013 * k;
   const vane = (id, par, root, a, L, w, col) => {   // a feather: from `root` at angle `a` (degrees from +y toward -x), L long, its vane w wide on the trailing side
     const d = [-Math.sin(a * Math.PI / 180), Math.cos(a * Math.PI / 180), 0], tr = [-d[1], d[0], 0];   // along it; across, toward the trailing edge
@@ -407,9 +409,9 @@ export function birdWing(s, { k = 1, x = -.2, y = .5, z = .4, color = 0xf2efe6, 
   };
   const out = [
     { id: `wArm${S}`, parent, shape: "capsule", size: { r: .045 * k, len: 1.1 * k },
-      pos: [x, y, s * z], rot: [s * 62, 0, -lift], pivot: [0, .55 * k, 0], color: bone, edge: 0,
+      pos: [x, y, s * z], rot: [s * spread, 0, -lift], pivot: [0, .55 * k, 0], color: bone, edge: 0,
       anim: { axis: "x", deg: s * deg, speed, phase: 0, wing: true }, fold: [s * 118, 0, 70] },
-    { id: `wHand${S}`, parent: `wArm${S}`, shape: "capsule", size: { r: .035 * k, r2: .02 * k, len: HL }, pos: [0, E, 0], rot: [s * 25, 0, 0], pivot: [0, HL / 2, 0],
+    { id: `wHand${S}`, parent: `wArm${S}`, shape: "capsule", size: { r: .035 * k, r2: .02 * k, len: HL }, pos: [0, E, 0], rot: [s * 25, 0, bend], pivot: [0, HL / 2, 0],
       color: bone, edge: 0, anim: { axis: "x", deg: s * deg * 1.4, speed, phase: .5, wing: true }, fold: [-s * 25, 0, 0] },
   ];
   // primaries: on the hand, the outermost at its tip pointing on, the innermost at the wrist pointing back

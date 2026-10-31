@@ -178,6 +178,7 @@ import { loadUses } from "./arch/assemble.js";   // a building's COMPONENTS (oth
 import { gaitBase } from "./species.js";
 import { EXPRESSIONS, VISEMES } from "./face.js";
 import { drawSpecimen } from "./butterflies.js";
+import { registerGreek, drawGreekSheet } from "./greek.js";   // GREEK PAINTINGS: the data, each painting by seed
 import { registerMurals, drawMuralSheet } from "./murals.js";   // MURALS: tomb paintings -- their parts, the figures, the paintings   // BUTTERFLIES: a species as a specimen plate, upperside and underside   // the face's moods and mouth shapes, for the face view's dropdowns
 import { registerGlyphs, drawGlyphSheet, partNames, signCodes } from "./glyphs.js";   // HIEROGLYPHS: a category's signs as a sheet, the texts
 import { setQuads } from "./outline.js";
@@ -228,7 +229,7 @@ const glyphModes = () => ["", ...Object.keys(JSON.parse(source.get("glyphs/color
 const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem("assets." + k)) ?? d; } catch { return d; } },
                 set: (k, v) => { try { localStorage.setItem("assets." + k, JSON.stringify(v)); } catch {} } };
 const GROUPS = [["Recent", []], ["Creatures", ["creature"]], ["Buildings", ["building"]], ["People & clothes", ["body", "motion", "garment", "wardrobe"]],
-                ["Items", ["item", "item-kit", "item-materials"]], ["Surfaces", ["pattern", "finish"]], ["Hieroglyphs", glyphKinds], ["Butterflies", ["butterfly", "butterfly-shapes"]], ["Murals", ["mural"]]];
+                ["Items", ["item", "item-kit", "item-materials"]], ["Surfaces", ["pattern", "finish"]], ["Hieroglyphs", glyphKinds], ["Butterflies", ["butterfly", "butterfly-shapes"]], ["Murals", ["mural"]], ["Greek paintings", ["greek"]]];
 const openSet = new Set(store.get("open", ["Recent"]));
 const remember = (d, key) => { d.open = openSet.has(key); d.addEventListener("toggle", () => { if ($("q").value) return; d.open ? openSet.add(key) : openSet.delete(key); store.set("open", [...openSet]); }); };
 const linkOf = (p) => { const a = document.createElement("a"); a.textContent = p.split("/").pop(); a.dataset.path = p; a.title = p; a.onclick = () => show(p); return a; };
@@ -460,7 +461,15 @@ function build(path, text) {
   const kind = kindOf.get(path) ?? "creature";
   clearStand();
   $("motionOpts").style.display = kind === "motion" ? "inline-flex" : "none";
-  flat(kind === "pattern" || glyphKinds.includes(kind) || kind === "butterfly" || kind === "butterfly-shapes" || kind === "mural");
+  flat(kind === "pattern" || glyphKinds.includes(kind) || kind === "butterfly" || kind === "butterfly-shapes" || kind === "mural" || kind === "greek");
+  if (kind === "greek") {
+    registerGreek({ [path]: def });
+    const cv = $("sheet");
+    cv.width = Math.max(600, $("view").clientWidth - 20); cv.height = 10;
+    const errs = drawGreekSheet(cv, def);
+    if (errs.length) throw new Error(errs.join("\n"));
+    return { label: "Greek paintings", stats: `${Object.keys(def.paintings).length} paintings · ${Object.keys(def.scenes).length} scenes` };
+  }
   if (kind === "mural") {
     // the murals' three documents drawn together (the figures use the parts, the paintings the figures): the one being
     // edited from its text, the others as they stand

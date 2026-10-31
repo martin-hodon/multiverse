@@ -354,7 +354,9 @@ to the engine, all of them per part and all still closed-form:
   instead of a 27-cell search; the other engines keep the search). The
   dinosaurs wear it; the ankylosaurus keeps `scutes`.
 - **Flat parts.** `flat: f` squashes a capsule along the figure's forward
-  (the root segment, square to the part's axis) to f of its width: the
+  (the root segment, square to the part's axis) to f of its width (`palm`:
+  across the forward and its own axis instead -- a hand, palm in; the shell
+  cuts its fingers, shell.js `FINGERS`): the
   outline narrows with the view's angle to that axis, the exact hit is the
   round cone's in the unsquashed space, the normal is carried back through
   the squash (the near pass marches it round). Marked by a negative first
@@ -1205,7 +1207,8 @@ and a snake are long curved sweeps and want their rings spread along that length
 with a handful -- and a tube is one part but a curve, so it counts as long. The distance is measured in CHAIN
 LENGTHS, not metres, so a muzzle or an ear falls to the coarse grid while a body a hundred times its size keeps
 the fine one at the same distance. Nine grids, grown on demand, most
-of them nearly empty.
+of them nearly empty -- and three more, the finest
+with `STONE.divs` x its points round, for a statue's carved cloth near (its folds cut into the surface, docs/arch.md).
 
 **Hair at a distance** (2026-09-28): a head of hair vanished a few metres off. Two chord errors together, both
 about a centimetre -- and hair is a cut shell 1.2 cm thick over the scalp. ALONG the cap: a hair cap's chain is
@@ -1215,6 +1218,12 @@ the crown came out as one cone from the hairline to a point deep inside the skul
 circle leave the faces between them a tenth of the radius inside it, under the head's own points; the outer wall
 of a cut shell (and its rim) is now circumscribed, its faces touching the circle from outside (`1/cos` of half
 the step). Checked at 6, 16 and 40 m: the hair, a bun and a ponytail under a hat all hold.
+
+**A cut shell over the legs** (2026-10-30, shell.js `CLING`): a skirt that clings (docs/clothes.md) is reshaped per
+vertex by the posed legs -- its outer wall at least as far out as they reach above that height, the cone's excess
+taken in by its share. A cut shell is a one-part chain, so its instance's spare texels carry it: `aCh2` the four leg
+parts' slots, `aPart.w` 2 + cling in hundredths + 256 x its ease in tenths of a millimetre (a face mark's 1 is
+unchanged). The normal comes from two more reaches, a step down and a step round.
 
 `?shellchain=0` goes back to one lathe per part, `?shellblend=0` drops the fillets,
 `?shellthin=` sets a membrane's thickness, `?shell=0` brings the SDF engine back.
@@ -1615,7 +1624,10 @@ and gets its true normals now (the cone's lean, a sphere's over a rounded end). 
 ring 0 the low cut's rim, then the outer surface, one ring for the high rim, the inner surface back -- because the
 grid's ring count is now in the geometry (position.z). Laid out by fractions of u, the high rim's inner end fell
 between two rings at every grid the figures use: every skirt was an open tube at its hem and a seated lap ended in
-a hole. `clip.lid` (mode 3) closes a garment's near cut too (a skirt's waistband over the gap between a round skirt
+a hole. The inner rings lie at the OUTER ones' heights, in reverse (2026-10-30: on an even grid the lining had one
+ring fewer; its spare ring now lies on the low end), and each of their quads is split across the other diagonal
+(shellGrid), so both walls fold alike: where the drape turns sharply -- a mantle's tent over a forearm -- the lining
+had come out through the cloth, a dark diamond, by half the turn's height. `clip.lid` (mode 3) closes a garment's near cut too (a skirt's waistband over the gap between a round skirt
 and a flat torso). The FAR cut is an edge, not a lid -- a skirt's hem, a cloak's, a sleeve's mouth, a fall of hair end
 in their own thickness and stay open -- unless the cut is solid (mode 2: a hat's crown) or a thin slab (a brim).
 

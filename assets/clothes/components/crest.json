@@ -1,0 +1,29 @@
+{
+  "name": "Crest",
+  "kind": "component",
+  "_about": "A CREST: a helmet's plume of horsehair standing fore and aft over the crown -- a disc square to the head's side (a `brim` turned upright), its lower part sunk in the helmet (cranium radii). `rise`: its centre's height, `radius` its size, `thick` its thickness either side of the middle.",
+  "params": {
+    "rise": 1.05,
+    "back": -0.15,
+    "radius": 1.15,
+    "thick": 0.13
+  },
+  "pieces": [
+    {
+      "name": "crest",
+      "kind": "brim",
+      "centre": [
+        "back",
+        "rise"
+      ],
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "radius": "radius",
+      "thickness": "thick",
+      "fabric": "plume"
+    }
+  ]
+}

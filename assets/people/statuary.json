@@ -1,0 +1,70 @@
+{
+  "_about": "THE STATUES' POSES (statues.js, docs/arch.md 'Statues'): which body positions (assets/people/positions.json) a carved figure takes, and how each of its hands holds what it is given. A `statue` marker names a pose here -- `orator`, or its mirror image `orator left` (the right and the left swapped, the hands' grips with them) -- or a FAMILY (`stand`, `guard`, `sit`, `lie`): one of the family's poses drawn by the figure's seed, among those whose hands can hold what the marker puts in them (and, lying, whose `head` lies the way the marker's `head` says). A pose: `position` (a name in positions.json; `seat`: the figure built sitting, people.js pose `sit`), `family` (the names it answers to; `lie`: the figure built by people.js `recline`, its cloth falling in round the legs), `head` (left | right: the way a lying figure's head lies along the floor, from its own front; its mirror's the other), `mirror` (it has a mirror image), and `hands` { right, left }: a GRIP's name -- how an item lies in that hand -- or `free` (an open hand, a gesture: it holds nothing, and a marker that puts something there picks another pose). A hand not named holds as the item itself says (items.js hold).",
+  "kind": "statuary",
+  "grips": {
+    "_about": "HOW AN ITEM LIES IN A HAND (tools.js place: a holder's `follow` and `turn`): `follow` how much of the hand's own turn it takes -- 0 upright in the figure's frame whatever the arm does (a staff, a spear, a torch), 1 rigid in the hand -- and `turn` [x, y, z] degrees more, in the hand's frame (+x the figure's forward, +y up, +z its right) once the follow is taken, `ground` stood on the ground under the hand. A marker's `grip` { R, L } names one for that hand over its pose's",
+    "upright": { "follow": 0, "_about": "a staff, a spear, a sceptre, a torch: standing straight up through the fist" },
+    "hang": { "follow": 1, "_about": "carried in a hanging hand as the hand lies: a sword along the leg, a book at the side" },
+    "point down": { "follow": 0, "turn": [180, 0, 0], "_about": "a sword's point down by the foot, resting" },
+    "forward": { "follow": 1, "_about": "as the forearm holds it out: a bowl on the palm, a book" },
+    "shield side": { "follow": 0, "turn": [0, 90, 0], "_about": "a shield on the arm at the side, its face out to the side" },
+    "shield front": { "follow": 0, "_about": "a shield held before the body, its face forward" },
+    "shield rest": { "follow": 0, "turn": [180, -90, 0], "ground": true, "_about": "a shield standing on its rim on the ground by the figure's side, its face out, the hand resting on it -- an Athena Parthenos's (`ground`: the item stood on the feet's level under the hand, tools.js)" }
+  },
+  "wings": {
+    "_about": "A CARVED FIGURE'S WINGS (a marker's `wings`: a name here, or { of: a name, ...its numbers changed }): a bird's, grown from the back of the chest (winged.js wingsFor, mammals.js birdWing) -- `k` the span (x the rig's 1 m wing), `lift` degrees the wing's arm rises off the back, `spread` degrees it swings out from straight back toward the side (a bird's span 62), `bend` degrees its hand folds back at the wrist (raised and bent far: the wing closed, its primaries hanging)",
+    "raised": { "k": 0.9, "lift": 62, "spread": 32, "_about": "high behind the shoulders, their tips over the head: a Victory alighting, an angel on a pediment" },
+    "spread": { "k": 1.0, "lift": 28, "spread": 70, "_about": "open to the sides: a Victory on a column, an angel blessing" },
+    "folded": { "k": 0.6, "lift": 70, "spread": 30, "bend": 170, "_about": "closed behind the head, the hands bent back at the wrist and the primaries hanging: a mourning angel on a tomb" }
+  },
+  "physique": { "_about": "A CARVED FIGURE'S IDEAL by kind (people.js `physique`, body.json build.physiques), over which a pose's own (`physique`) or the marker's goes: the athlete's V of a trunk, the goddess's waist", "man": "heroic", "woman": "classical" },
+  "paint": { "_about": "A STATUE'S COLOURS by its stone (statues.js, shell.js STONES): PAINTED, as Greek marble was, the dress in its own colours and the flesh by the painters' convention -- a man's sunburnt, a woman's pale -- its hair and eyes its own, its drapery DYED (`avoid`: the undyed wool's palettes, never drawn where a garment has others -- clothes.js drawOutfit); CHRYSELEPHANTINE, Phidias' gold and ivory: the flesh ivory, the hair gold (the drapery gold whatever it is dyed). `skin` by kind or one colour, `hair` one colour.", "painted": { "skin": { "man": "#a8704c", "woman": "#e6c9a8" }, "avoid": ["undyed", "wool-grey", "russet", "linen"] }, "chryselephantine": { "skin": "#eedfc0", "hair": "#c8993c" } },
+  "drape": { "_about": "A MANTLE OVER A RAISED ARM (statues.js fitToPose): an arm the pose holds more than `raised` degrees out of the plumb is taken out of what a draped piece (a himation, a palla) lies over, and the piece drawn close, its cling at least `cling` -- wrapped under the arm as a sculptor frees it. Cut for the arms hanging, the cone stood a wall of stone off the shoulder there: the arm up out of it (a Victory), or a curtain off the hand held forward (a kneeling figure). A FOREARM held out past it over an arm left hanging is not carried in the cloth (skeleton.js `fore`): the cloth falls from the elbow, the forearm out of it -- carried, it hung a hollow box to the knees off an orator's forearm. Carved, a mantle over the arms clings at least `carved` (and what holds it out drawn as close): what was left of its cone, cut to clear a gown's bell under it, stood a wall of stone from the elbows down -- a Gothic queen's, a king's.", "raised": 50, "cling": 1, "carved": 0.9 },
+  "sleeves": { "_about": "A SLEEVE ON A RAISED ARM (statues.js): a hanging sleeve -- a chiton's, a dalmatica's -- on a bone its pose holds more than `raised` degrees out of the plumb (an arm raised, a forearm held out, an arm along a reclining body) is carved CLOSE round it, as a sculptor lays it: no flare, no fall. Let fall as a living sleeve does (skeleton.js SLIDE), gathered at the shoulder and flaring off the forearm, in stone it stood a mace or a trumpet against the sky. Closed no wider than its bone and `ease` metres: a great sleeve closed at its width at the elbow was a cannon's barrel off a forearm held out", "raised": 35, "ease": 0.035 },
+  "dress": {
+    "_about": "WHAT A FIGURE IS CARVED IN (statues.js, people.js outfit `dress`): of a style's outfits (clothes/wardrobe.json `styles`), the ones a statue may wear, by kind -- a citizen's, a matron's, a dignitary's: a figure set up in stone is dressed for it, not for work (a labourer's belted tunic on an orator; a traveller's petasos, a broad-brimmed disc on a pediment's god -- a Hermes wears it as a marker's `wear`). A style or a kind not named here draws from all its outfits; a marker's own `outfit` overrides it; a pose's `dress` names a table of its own here instead (`active`), a style it does not name dressed from the general one. Outfits marked `statue` in the wardrobe are carved only (a Greek god's or hero's himation alone, the chest bare; the heroic nude -- their bare torsos carved with their anatomy, shell.js ANATOMY): never drawn for the living.",
+    "greek": { "man": ["citizen", "hero", "nude"], "woman": ["chiton", "peplos"] },
+    "roman": { "man": ["citizen"], "woman": ["matron"] },
+    "byzantine": { "man": ["courtier", "dignitary"], "woman": ["lady", "matron"] },
+    "gothic": { "man": ["king", "saint"], "woman": ["queen", "veiled"] },
+    "chinese": { "man": ["scholar"], "woman": ["shenyi", "ruqun"] },
+    "egyptian": { "man": ["kilt", "robed"] },
+    "industrial": { "man": ["gentleman", "georgian"], "woman": ["lady"] },
+    "ottoman": { "man": ["efendi"], "woman": ["ferace"] },
+    "islamic": { "man": ["scholar", "merchant"], "woman": ["veiled"] },
+    "active": {
+      "_about": "a pose's `dress: \"active\"` -- a warrior kneeling on a pediment, a striding hero: girt short for it, no mantle to the feet (a kneeling figure in a himation was a stone tube to the floor round its legs)",
+      "greek": { "man": ["labourer", "nude"], "woman": ["chiton"] },
+      "roman": { "man": ["plebeian"], "woman": ["working woman"] },
+      "byzantine": { "man": ["citizen"] }
+    },
+    "monastic": {
+      "_about": "a pose's `dress: \"monastic\"` -- a Buddha seated cross-legged (the `lotus` poses): the robe over the left shoulder, the right bare, no hat",
+      "chinese": { "man": ["buddha"] }, "japanese": { "man": ["buddha"] }, "indian": { "man": ["buddha"] }
+    }
+  },
+  "poses": {
+    "contrapposto": { "position": "contrapposto", "family": ["stand"], "mirror": true, "hands": { "right": "hang", "left": "hang" } },
+    "orator": { "position": "orator", "family": ["stand"], "mirror": true, "hands": { "right": "free", "left": "upright" } },
+    "spear bearer": { "position": "spear bearer", "family": ["stand", "guard"], "mirror": true, "hands": { "right": "hang", "left": "upright" } },
+    "hand on hip": { "position": "hand on hip", "family": ["stand"], "mirror": true, "hands": { "right": "upright", "left": "free" } },
+    "offering": { "position": "offering", "family": ["stand"], "mirror": true, "hands": { "right": "forward", "left": "hang" } },
+    "aloft": { "position": "aloft", "family": ["stand"], "mirror": true, "hands": { "right": "upright", "left": "forward" } },
+    "blessing": { "position": "blessing", "family": ["stand"], "hands": { "right": "free", "left": "forward" } },
+    "prayer": { "position": "prayer", "family": ["stand"], "hands": { "right": "free", "left": "free" } },
+    "mourning": { "position": "mourning", "family": ["stand"], "hands": { "right": "free", "left": "free" } },
+    "victor": { "position": "victor", "family": ["stand"], "hands": { "right": "upright", "left": "free" } },
+    "striding": { "position": "striding", "family": ["guard"], "mirror": true, "dress": "active", "hands": { "right": "upright", "left": "shield front" } },
+    "kneeling": { "position": "kneeling", "family": ["kneel", "guard"], "mirror": true, "dress": "active", "hands": { "right": "upright", "left": "shield front" } },
+    "seated": { "position": "seated", "seat": true, "family": ["sit"], "hands": { "right": "forward", "left": "forward" } },
+    "enthroned": { "position": "enthroned", "seat": true, "family": ["sit"], "mirror": true, "hands": { "right": "upright", "left": "forward" } },
+    "seated reading": { "position": "seated reading", "seat": true, "family": ["sit"], "hands": { "right": "forward", "left": "free" } },
+    "pensive": { "position": "pensive", "seat": true, "family": ["sit"], "mirror": true, "hands": { "right": "free", "left": "forward" } },
+    "reclining": { "position": "reclining", "family": ["lie"], "mirror": true, "head": "left", "hands": { "right": "forward", "left": "free" } },
+    "lotus": { "position": "lotus", "family": ["lotus"], "floor": true, "dress": "monastic", "anatomy": "soft", "physique": "lion", "hands": { "right": "free", "left": "free" } },
+    "lotus earth": { "position": "lotus earth", "family": ["lotus"], "floor": true, "dress": "monastic", "anatomy": "soft", "physique": "lion", "hands": { "right": "free", "left": "free" } },
+    "lotus fearless": { "position": "lotus fearless", "family": ["lotus"], "floor": true, "dress": "monastic", "anatomy": "soft", "physique": "lion", "hands": { "right": "free", "left": "free" } },
+    "lotus boon": { "position": "lotus boon", "family": ["lotus"], "floor": true, "dress": "monastic", "anatomy": "soft", "physique": "lion", "hands": { "right": "free", "left": "free" } },
+    "lotus teaching": { "position": "lotus teaching", "family": ["lotus"], "floor": true, "dress": "monastic", "anatomy": "soft", "physique": "lion", "hands": { "right": "free", "left": "free" } }
+  }
+}

@@ -30,6 +30,14 @@ function rng(seed) {
 //   wave: { amp, per } (a sideways wave, its amplitude and period along the strand), curl: { r, per } (a helix)
 //   width: [at the root, at the tip], seg: segments (6)
 //   to: [x, y, z] gathers the strands there (a ponytail's tie, a topknot): each runs to that point instead of hanging
+// CARVED HAIR (2026-10-30: a statue's head, the face's `carved`): a sculptor's locks, not strands -- each a solid LOCK,
+// its crest standing `lock` of its width off the head and its sides falling away to its edges (a flat ribbon in stone
+// was a chip lit from either side, a head of curls a scatter of shards round the face), its curls `curl` as wide, every
+// strand `length` as long (stone does not hang free in thin coils) -- and the FACE KEPT CLEAR: a lock in front
+// (within `open` degrees of the forehead) ends where it would fall below `brow` (the head's frame: the brows' ridge
+// is at .012) -- the curls of a fringe had hung over the eyes
+// A STYLE may say what it is carved as (`carved` in its part: strands, carve -- hairGeometry, heads.js)
+export const CARVE = { lock: .5, curl: .6, length: .75, open: 70, brow: .024 };
 // THE CAP'S SHAPE (a style's `cap`, Q the head's params): the y of its edge at each angle round the head (0 the forehead,
 // 180 the nape), and how thick it stands off the skin at a height and an angle -- the cap below draws it, and what is
 // worn over the hair (jewelry.js headFit: a diadem, a wreath) lies on it
@@ -46,6 +54,9 @@ export function capShape(cap, Q, fringe) {
   return { edgeY, thickAt, top: cap.top };
 }
 export function hairGeometry(p, P, emitFor, prims) {
+  // (a style's `carved`: what a sculptor makes of it, over its own -- a head of curls carved as a cap of round curls, its
+  //  strands left off; short hair as its cap alone, cut in locks -- the cap itself kept: a wreath is fitted to it)
+  if (P.carved && p.carved) p = { ...p, ...p.carved };
   const H = headGrid(p, P), { Q, S, lv, grid, cols, nrm, R, C, skinAt, yTop } = H;
   const hair = emitFor("hair"), r = rng((p.seed ?? 1) * 7919 + 3);
   // how far out of the skull a point is: the ring at its height is a superellipse of the level's front, back and
@@ -66,7 +77,9 @@ export function hairGeometry(p, P, emitFor, prims) {
     return k < out && k > 1e-6 ? [cx + (q[0] - cx) * out / k, q[1], q[2] * out / k] : q;
   };
   // a ribbon along a polyline: `w` wide at the root tapering to the tip, its face turned out from the head
+  const carved = !!P.carved;
   const ribbon = (pts, w0, w1, uv0) => {
+    if (carved) return lock(pts, w0, w1, uv0);
     const ids = [];
     for (let i = 0; i < pts.length; i++) {
       const t = i / (pts.length - 1), w = lerp(w0, w1, t);
@@ -79,16 +92,36 @@ export function hairGeometry(p, P, emitFor, prims) {
     }
     for (let i = 0; i + 1 < pts.length; i++) hair.quad(ids[i][0], ids[i][1], ids[i + 1][1], ids[i + 1][0]);
   };
+  // ...carved, a LOCK (CARVE): its edges and a crest between them, out from the head, the normals turned out across it
+  const lock = (pts, w0, w1, uv0) => {
+    const ids = [];
+    let run = 0;
+    for (let i = 0; i < pts.length; i++) {
+      const t = i / (pts.length - 1), w = lerp(w0, w1, t);
+      const tan = norm(sub(pts[Math.min(pts.length - 1, i + 1)], pts[Math.max(0, i - 1)]));
+      let out = outward(pts[i]); out = norm(sub(out, mul(tan, dot(out, tan))));
+      if (Math.hypot(...out) < .5) out = [1, 0, 0];
+      const across = norm(cross(tan, out));
+      const a = add(pts[i], mul(across, w / 2)), b = sub(pts[i], mul(across, w / 2)), c = add(pts[i], mul(out, w * CARVE.lock * (1 - .6 * t)));
+      if (i) run += Math.hypot(...sub(pts[i], pts[i - 1]));   // (v down it in metres, as the cap's: its locks wave as theirs)
+      ids.push([hair.vert(mul(a, S), norm(add(across, mul(out, .6))), [uv0, run]), hair.vert(mul(c, S), out, [uv0 + .01, run]),
+                hair.vert(mul(b, S), norm(add(mul(across, -1), mul(out, .6))), [uv0 + .02, run])]);
+    }
+    for (let i = 0; i + 1 < pts.length; i++) {
+      hair.quad(ids[i][0], ids[i][1], ids[i + 1][1], ids[i + 1][0]);
+      hair.quad(ids[i][1], ids[i][2], ids[i + 1][2], ids[i + 1][1]);
+    }
+  };
   const COMB = { down: [0, -1, 0], back: [-1, -.3, 0], forward: [1, -.3, 0], out: [0, 0, 0], up: [0, 1, 0] };
   const combOf = (c, sg) => { const v = Array.isArray(c) ? c : COMB[c ?? "down"] ?? [0, -1, 0]; return [v[0], v[1], v[2] * (sg ?? 1)]; };
   // one strand from a scalp point q with normal n
   const grow = (q, n0, g, sg, seed) => {
     const n = Math.hypot(...n0) < .5 ? [0, 1, 0] : n0;   // (the crown's vertex has no normal of its own: up)
     const th = Math.atan2(Math.abs(q[2]), q[0]) / DEG;   // its angle round the head, 0 the forehead .. 180 the nape
-    const len = (Array.isArray(g.length) ? lerp(g.length[0], g.length[1], th / 180) : g.length ?? .1) * (1 + (r() - .5) * (g.vary ?? .15));
+    const len = (Array.isArray(g.length) ? lerp(g.length[0], g.length[1], th / 180) : g.length ?? .1) * (1 + (r() - .5) * (g.vary ?? .15)) * (carved ? CARVE.length : 1);
     const seg = Math.max(2, Math.round(g.seg ?? 6)), step = len / seg;
     const comb = combOf(g.comb, sg), hang = g.hang ?? .8, lift = g.lift ?? .006;
-    const wave = g.wave, curl = g.curl, ph = seed * 6.28;
+    const wave = g.wave, curl = g.curl && carved ? { ...g.curl, r: g.curl.r * CARVE.curl } : g.curl, ph = seed * 6.28;
     const to = g.to ? [g.to[0], g.to[1], g.to[2] * (g.toMirror ? (sg ?? 1) : 1)] : null;   // (gathered at a point -- one a side when mirrored)
     // it leaves the scalp ALONG it: the comb's direction laid on the surface (at the crown, where "down" has no
     // way along the skin, backward), a little off the skin; "out" stands along the normal
@@ -112,8 +145,11 @@ export function hairGeometry(p, P, emitFor, prims) {
       let q2 = pos;
       if (wave) { const across = norm(cross(dir, outward(pos))); q2 = add(q2, mul(across, wave.amp * Math.sin(t * len / wave.per * 6.2832 + ph))); }
       if (curl) { const across = norm(cross(dir, outward(pos))), o = outward(pos), a = t * len / curl.per * 6.2832 + ph; q2 = add(q2, add(mul(across, curl.r * Math.cos(a)), mul(o, curl.r * (Math.sin(a) + 1) * .5))); }
+      // (carved, a lock in front of the face ends above the brows)
+      if (carved && q2[1] < CARVE.brow && Math.atan2(Math.abs(q2[2]), q2[0]) / DEG < CARVE.open) break;
       pts.push(q2);
     }
+    if (pts.length < 2) return;
     ribbon(pts, g.width?.[0] ?? .02, g.width?.[1] ?? .01, seed);
   };
   // THE CAP: the hair's body as one rounded shell over the skull (the grid's own rows and rings, pushed out by its
@@ -121,8 +157,13 @@ export function hairGeometry(p, P, emitFor, prims) {
   // skin's hairline -- over the ears, to the nape -- as hair does; the strands hang from its edge. `cap`:
   //   front: y of the edge at the forehead, temple: at 45 degrees round, side: at the ears (90), nape: at the back (180)
   //   (the edge runs straight between), top: y above which the skull is bare (a tonsure), thick: metres off the skin,
-  //   crown: metres more at the crown and the back (its volume), fringe: the front edge's y when the face has a fringe
+  //   crown: metres more at the crown and the back (its volume), fringe: the front edge's y when the face has a fringe,
+  //   sweep (2026-10-30): how many degrees round the head its LOCKS run back for every 10 cm they fall from the crown --
+  //   the cap's u (round the head) sheared by its height, so its lines of one u are drawn back from the parting at the
+  //   front to the nape (a bun's, a braid's, the classical coiffure the carved locks follow, shell.js stoneCarve); 0 they
+  //   fall straight down from the crown, as cropped hair does
   const cap = p.cap ?? null, CS = capShape(cap, Q, P.fringe), edgeY = CS?.edgeY ?? null, thickAt = CS?.thickAt;
+  const capU = (th, y) => th / 180 - (cap?.sweep ?? 0) / 180 * (yTop - y) / .1;
   if (cap) {
     const top = cap.top ?? yTop + 1, V = new Map(), skin = new Map();   // per column: its vertices top to bottom (out) and the skin edge vertex
     const colOf = (c) => {
@@ -131,18 +172,18 @@ export function hairGeometry(p, P, emitFor, prims) {
       for (let rr = 0; rr < R; rr++) {
         const q = grid[rr][c];
         if (q[1] <= ye || q[1] >= top) continue;
-        if (rr === 0) { out.push({ y: q[1], id: V.get("vertex") ?? hair.vert(mul([q[0], q[1] + thickAt(q[1], 0), q[2]], S), [0, 1, 0], [0, 1]) }); V.set("vertex", out[0].id); continue; }
+        if (rr === 0) { out.push({ y: q[1], id: V.get("vertex") ?? hair.vert(mul([q[0], q[1] + thickAt(q[1], 0), q[2]], S), [0, 1, 0], [capU(0, q[1]), q[1]]) }); V.set("vertex", out[0].id); continue; }
         const n = nrm(rr, c), t = thickAt(q[1], th);
-        out.push({ y: q[1], id: hair.vert(mul(add(q, mul(n, t)), S), n, [th / 180, q[1]]) });
+        out.push({ y: q[1], id: hair.vert(mul(add(q, mul(n, t)), S), n, [capU(th, q[1]), q[1]]) });
       }
       if (ye < top) {   // the edge: on the skin's line, pushed out, and a rim vertex on the skin itself
         const q = skinAt(ye, th, sg), n = norm(add(outward(q), [0, -.3, 0])), t = thickAt(ye, th);
-        out.push({ y: ye, id: hair.vert(mul(add(q, mul(n, t)), S), n, [th / 180, ye]) });
-        skin.set(c, hair.vert(mul(q, S), [n[0] * .3, -1, n[2] * .3], [th / 180, ye]));
+        out.push({ y: ye, id: hair.vert(mul(add(q, mul(n, t)), S), n, [capU(th, ye), ye]) });
+        skin.set(c, hair.vert(mul(q, S), [n[0] * .3, -1, n[2] * .3], [capU(th, ye), ye]));
       }
       if (cap.top !== undefined && out.length) {   // a tonsure's inner rim: down to the skin at the top too
         const q = skinAt(Math.min(top, yTop - .001), th, sg);
-        out.unshift({ y: top, id: hair.vert(mul(q, S), [0, 1, 0], [th / 180, top]), rim: true });
+        out.unshift({ y: top, id: hair.vert(mul(q, S), [0, 1, 0], [capU(th, top), top]), rim: true });
       }
       V.set(c, out);
       return out;

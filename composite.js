@@ -106,10 +106,13 @@ export const capCode = (c) => c ? Math.min(127, Math.round((c.a ?? 1) * 100)) + 
 //   L2 [fabric, period u, period v, v offset] its cloth (fabric.js layer), the repeat in metres, where the repeat starts
 //   L3 [repeats round, thickness, flags, band] a whole number of repeats round it (0: by the girth), how much it lifts
 //                                             the surface, pleats + 64 x wear + 256 x dags, a band's width (0: filled)
-//   L4 [opening, a, b, c], L5 [d, e, 0, 0]    a cut-out: 1-5 a neckline (round scoop v square boat: a ball round the
+//                                             (+ 16384 x its ROOM in mm + 1, a standing piece's: how deep a carved fold may go)
+//   L4 [opening, a, b, c], L5 [d, e, drop, hi] a cut-out: 1-5 a neckline (round scoop v square boat: a ball round the
 //                                             collar point, a = where that point lies along the part, e its radius at the
 //                                             back plus c, at the front plus b, d the half-width of a v or a square), 6-7 a
-//                                             window (ellipse, slot: a = its angle, b its place along, d/e half-sizes)
+//                                             window (ellipse, slot: a = its angle, b its place along, d/e half-sizes);
+//                                             an EDGE THAT FALLS: its top s0 at `hi` radians round, `drop` metres lower opposite
+//                                             (no cut-out: L4 [0, 0, out, step], its opening's edges in a cascade's zigzag)
 const DRESSED = 1024;
 export const packRGB = (c) => { const q = new THREE.Color(c); return Math.round(q.r * 255) * 65536 + Math.round(q.g * 255) * 256 + Math.round(q.b * 255); };
 const layerCount = (parts) => parts.reduce((n, p) => n + (p.dress?.layers.length ?? 0), 0);
@@ -120,10 +123,12 @@ function packDress(stat, s, slot, L) {
   const cs = L.colors ?? [];
   put(1, packRGB(cs[0] ?? 0x808080), packRGB(cs[1] ?? cs[0] ?? 0x808080), packRGB(cs[2] ?? cs[0] ?? 0x808080), packRGB(cs[3] ?? cs[0] ?? 0x808080));
   put(2, L.fabric ?? 0, L.period?.[0] ?? .1, L.period?.[1] ?? .1, L.vOffset ?? 0);
-  put(3, L.repeats ?? 0, L.thick ?? 0, (L.pleats ?? 0) + 64 * (L.wear ?? 0) + 256 * (L.dags ?? 0), L.band ?? 0);
-  if (!op) { put(4, 0, 0, 0, 0); put(5, 0, 0, 0, 0); }
-  else if (op.neckline) put(4, 1 + ["round", "scoop", "v", "square", "boat"].indexOf(op.neckline), op.top, op.front, op.back), put(5, op.half ?? 1, op.base ?? .06, 0, 0);
-  else put(4, op.slot ? 7 : 6, op.angle ?? 0, op.at ?? 0, 0), put(5, op.half ?? .3, op.halfLength ?? .1, 0, 0);
+  put(3, L.repeats ?? 0, L.thick ?? 0, (L.pleats ?? 0) + 64 * (L.wear ?? 0) + 256 * Math.min(63, L.dags ?? 0)
+         + (L.room === undefined ? 0 : 16384 * (1 + Math.min(1000, Math.round(L.room * 1000)))), L.band ?? 0);
+  const ed = L.edge ?? [0, 0];
+  if (!op) { put(4, 0, 0, L.cascade?.[0] ?? 0, L.cascade?.[1] ?? 0); put(5, 0, 0, ed[0], ed[1]); }   // (no cut-out: L4 carries a CASCADE down its opening's edges, [out, step])
+  else if (op.neckline) put(4, 1 + ["round", "scoop", "v", "square", "boat"].indexOf(op.neckline), op.top, op.front, op.back), put(5, op.half ?? 1, op.base ?? .06, ed[0], ed[1]);
+  else put(4, op.slot ? 7 : 6, op.angle ?? 0, op.at ?? 0, 0), put(5, op.half ?? .3, op.halfLength ?? .1, ed[0], ed[1]);
 }
 
 // capacity = expected total part count (a hint: the textures grow if more animals are added)
@@ -359,10 +364,10 @@ export function createComposite(capacity = 256) {
       for (let i = 0; i < parts.length; i++) {
         const p = parts[i], t = (used + i) * 3;
         dyn[t * 4 + 3] = p.flat ? -p.r1 : p.r1; dyn[(t + 1) * 4 + 3] = p.r2; dyn[(t + 2) * 4 + 3] = p.flat ? capCode(p.caps) : p.clip ? p.clip[3] ?? 0 : p.k;   // (a flat part: its radius negative, the squash in C.x, its caps in C.w; a cut shell's own squash in C.w)
-        // C: a garment's cut -- or a flat part's squash, a painted band's colour and place
-        if (p.r2 >= 0) { const c = p.flat ? [p.flat, 0, 0] : p.clip ?? [0, 0, 0]; dyn[(t + 2) * 4] = c[0]; dyn[(t + 2) * 4 + 1] = c[1]; dyn[(t + 2) * 4 + 2] = c[2]; }
+        // C: a garment's cut -- or a flat part's squash (and a hand's palm flag, a torso's place on the trunk: shell.js ANATOMY), a painted band's colour and place
+        if (p.r2 >= 0) { const c = p.flat ? [p.flat, p.palm ? 1 : 0, p.anat ?? 0] : p.clip ?? (p.limb ? [p.limb, 0, 0] : [0, 0, 0]); dyn[(t + 2) * 4] = c[0]; dyn[(t + 2) * 4 + 1] = c[1]; dyn[(t + 2) * 4 + 2] = c[2]; }
         const s = (used + i) * ST * 4, cl = p.cloth;
-        stat[s] = p.color.r; stat[s + 1] = p.color.g; stat[s + 2] = p.color.b; stat[s + 3] = p.pat * 8 + p.body * 4 + p.edge * 2 + p.seam + (p.fur ? 256 : 0) + (p.fleece ? 512 : 0) + (p.stone ?? 0) * 2048;   // (stone: a statue's material, statues.js)
+        stat[s] = p.color.r; stat[s + 1] = p.color.g; stat[s + 2] = p.color.b; stat[s + 3] = p.pat * 8 + p.body * 4 + p.edge * 2 + p.seam + (p.fur ? 256 : 0) + (p.fleece ? 512 : 0) + (p.stone ?? 0) * 2048 + (p.stone ? 16384 * Math.min(parts.length, MAXP) : 0);   // (stone: a statue's material, statues.js; and how many parts the figure has -- shell.js selfShade)
         stat[s + 4] = p.color2.r; stat[s + 5] = p.color2.g; stat[s + 6] = p.color2.b;
         stat[s + 7] = cl ? Math.min(255, Math.round(cl.scale ?? 0)) : 0;   // (the strands' scale: hair, a braid)
         stat[s + 8] = stat[s + 9] = stat[s + 10] = stat[s + 11] = 0;
@@ -373,6 +378,7 @@ export function createComposite(capacity = 256) {
           for (const L of p.dress.layers) { packDress(stat, s, used + nextLayer, L); nextLayer += 2; }
         }
         if (p.root && !p.dress?.standing) { stat[s + 10] = -p.root; stat[s + 11] = upRow; }   // (a limb's root, dressed or bare: how far down it the body holds it -- negative, so never read as standing -- and the frame its rest is in)
+        if (p.limb && !stat[s + 11]) stat[s + 11] = upRow;   // (a limb, its muscles carved: the figure's up, to find its front -- shell.js LIMBS)
         if (p.dot) {   // a face mark: flags (iris, pupil, round), the iris as colour 2, its reach (for the cells) as r1
           const c2 = p.dot.iris ?? p.color;
           stat[s + 3] = (p.dot.iris ? 1 : 0) + 2 * p.dot.pupil + 8 * (p.dot.round ? 1 : 0) + 16 * p.dot.relief; stat[s + 4] = c2.r; stat[s + 5] = c2.g; stat[s + 6] = c2.b; stat[s + 7] = stat[s + 11] = 0;

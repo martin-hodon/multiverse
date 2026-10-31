@@ -20,7 +20,7 @@ export const PREGEN_BASE = new URL("./pregen/", import.meta.url).href;
 // buildings' geometry and wall fields, not every tile; an edit to the face's code, the faces -- one list for the whole
 // cache meant a line changed anywhere sent every start back to drawing everything
 export const SECTIONS = {
-  tiles: ["pregen.js", "patterns.js", "expr.js", "fabric.js", "glyphs.js", "murals.js"],          // pattern tiles, fabrics
+  tiles: ["pregen.js", "patterns.js", "expr.js", "fabric.js", "glyphs.js", "murals.js", "greek.js", "greek/rig.js", "greek/figure.js", "greek/drape.js", "greek/scene.js", "greek/beast.js", "greek/field.js", "greek/paint.js"],          // pattern tiles, fabrics
   buildings: ["pregen.js", "architecture.js", "arch/finish.js", "arch/solid.js", "patterns.js", "expr.js"],   // finished geometry, wall fields
   faces: ["pregen.js", "heads.js", "items.js", "face.js", "hair.js", "thorns.js", "jewelry.js", "petals.js", "defs.js", "expr.js"],   // heads with their hair and what is worn on them
   wings: ["pregen.js", "butterflies.js"],                                                       // the butterflies' painted wings

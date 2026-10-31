@@ -20,7 +20,7 @@ import { orderSize, pilasterSpots, pilasterMesh } from "./order.js";   // THE AP
 import { index as solidIndex, insideOf, cellOf, heightOver } from "./solid.js";
 import { fitFurniture } from "./room.js";   // the furniture given room: moved off chimneys, columns and doorways, or left out
 import { domeRows, earClip, lathe } from "./build.js";
-import { gableFriezeMesh } from "./lombard.js";
+import { gableFriezeMesh, rakeCorniceMesh } from "./lombard.js";
 import { helmMesh } from "./helm.js";
 import { shikharaMesh, shikharaHeight, samvaranaMesh, samvaranaHeight } from "./shikhara.js";
 import { evalNum, evalValue } from "../expr.js";
@@ -1379,11 +1379,15 @@ function buildPart_(name, defs, params) {
                                                      perSide: Math.round(P(def.perSide, Math.max(4, 2 * detailOf(params)))), lift })
                       : roofMesh(mesh(), levels, inner, wordOf(def.open, params) ?? null);
     const roof = { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "roof", ridge: levels[levels.length - 1].y + lift };
-    // (`frieze`: a gable's rising arched frieze up its rakes -- lombard.js -- a moulding of its own)
-    if (!def.frieze || chinese) return roof;
-    const fz = def.frieze === true ? {} : Object.fromEntries(Object.entries(def.frieze).filter(([k]) => !k.startsWith("_"))
+    // (`frieze`: a gable's rising arched frieze up its rakes; `rake`: a classical gable's raking cornice, the frame of its
+    //  pediment -- lombard.js -- each a moulding of its own, "<roof> frieze" and "<roof> rake")
+    if ((!def.frieze && !def.rake) || chinese) return roof;
+    const specOf = (d) => d === true ? {} : Object.fromEntries(Object.entries(d).filter(([k]) => !k.startsWith("_"))
       .map(([k, v]) => [k, k === "ends" ? v.map((e) => P(e)) : P(v)]));
-    return [roof, { name: name + " frieze", geometry: gableFriezeMesh(mesh(), levels, fz).arrays(), instances: roof.instances, kind: "moulding", shell: true }];
+    const out = [roof];
+    if (def.rake) out.push({ name: name + " rake", geometry: rakeCorniceMesh(mesh(), levels, specOf(def.rake)).arrays(), instances: roof.instances, kind: "moulding" });
+    if (def.frieze) out.push({ name: name + " frieze", geometry: gableFriezeMesh(mesh(), levels, specOf(def.frieze)).arrays(), instances: roof.instances, kind: "moulding", shell: true });
+    return out;
   }
 
   if (def.type === "flight") {
@@ -1696,7 +1700,8 @@ function buildPart_(name, defs, params) {
         };
         if (plan === "peristyle") {
           const W = P(def.width) / 2, L = P(def.length) / 2, nf = Math.round(P(def.front)), ns = Math.round(P(def.side));
-          for (const s of [-1, 1]) { row(-W, W, nf, s * (L + ed / 2), "x"); row(-L, L, ns, s * (W + ed / 2), "z"); }
+          const out = E.triglyphs.corner ? ed / 2 - tw / 2 : 0;   // (`corner`: the last triglyph on the frieze's corner, not its column, and the rest evenly between: no half metope at the end)
+          for (const s of [-1, 1]) { row(-W - out, W + out, nf, s * (L + ed / 2), "x"); row(-L - out, L + out, ns, s * (W + ed / 2), "z"); }
         } else for (const s of [-1, 1]) row(local[0][1], local[local.length - 1][1], local.length, s * ed / 2, "x");
         out.push({ name: name + " triglyphs", geometry: box(mesh(), -tw / 2, tw / 2, -fh / 2, fh / 2, -td / 2, td / 2).arrays(),
                    instances: compose(spots), kind: "box" });

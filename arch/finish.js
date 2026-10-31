@@ -7,6 +7,7 @@
 //                  name inside a component, the component's name) or "kind:<kind>", one or a list
 //           surface: floor | wall | ceiling | roof     side: in | out
 //           below / above: a height (the building's frame, 0 at the ground)     within: [x0, z0, x1, z1] on the plan
+//           in: a component's name -- only the parts it made ("propylaia": "propylaia/west portico shafts", ...)
 //           reveal: true -- only an opening's REVEAL (its jambs, its sill, its soffit: a face of a wall or a ring's bay
 //                  turned square to the wall's own face), false -- never one (a drum's deep oculi, plain in a panelled face)
 //   gives   pattern: "family/name", palette, scale (of its tile), turn (degrees), map, align, offset, params, res
@@ -14,6 +15,9 @@
 //           count: how many tiles round a revolved surface (else as many as fit)
 //           -- or a plain stone: color, accent, pat (the old tile patterns: ashlar, marble, tiles...)
 // What no rule matches is the building's `stone`.
+//   A COMPONENT'S OWN FINISH: { use: "<building>", in: "<part>" } stands for every rule of that building's finish, held to
+// the parts of the component part `in` (`in` on each), its heights and plan places moved by where the component stands,
+// and last its stone (withUses: a site of buildings -- the Acropolis -- each painted as it is alone).
 //
 // SURFACE is read from the triangle: up-facing (n.y >= .7) a floor, down-facing a ceiling, else a wall; on a roof or a
 // dome, its outside is its roof. SIDE is what the building SAYS: its INTERIORS (parts of type "interior": a nave, an
@@ -26,8 +30,12 @@
 //
 // MAPPING -- the pattern's (u, v), in metres: `plan` (a floor, a ceiling: u east, v north), `face` (a wall: u along it,
 // v up), `revolve` (a dome, a drum, a column, a round roof: u round the part's own axis -- a whole number of tiles round,
-// so the rows meet -- and v up the meridian's length on a dome), `slope` (a roof: u along the eave, v up the slope).
-// By kind unless the rule says. `align: "part"` sets the tile's foot on the part's foot (a painted beam, a band).
+// so the rows meet -- and v up the meridian's length on a dome; `conformal` the same with v stretched as u narrows, so a
+// star stays a star and only gets smaller toward the crown, as a real dome's lattice does), `slope` (a roof: u along the eave, v up the slope).
+// By kind unless the rule says. `align: "part"` sets the tile's foot on the part's foot (a painted beam, a band); `align:
+// "above"` on the rule's `above` line (a painted frieze high on a wall). `whole: true` on a wall: each flat face holds a
+// whole number of tiles, stretched to fit, so a painting ends at the room's corner and no picture folds round it.
+import { evalNum } from "../expr.js";
 
 // a part's names, most particular first: its name, its name less a trailing number ("aisle roof 3"), every tail of a name
 // nested in components, longest first ("tent/spire": the spire of every tower's tent, whatever the tower), its own name
@@ -150,6 +158,30 @@ function cutBy(poly, n, d) {
   return [lo, hi].filter((q) => q.length >= 3);
 }
 
+// ---- a component's own finish -----------------------------------------------------------------------------------------
+// every { use, in } rule of `finish` replaced by the rules of finishes[use], each held to the component `in` (a part of
+// `doc`, the building; `docOf` finds the used one's), its heights (above, below) raised and its plan places (within, a panel's at and fit) moved by
+// where that part stands, and the used finish's stone last -- a used finish's own uses, and its rules' own `in`, nested
+// under it. One placement, unturned where the rules have places on the plan (a turned copy would need them turned).
+export function withUses(finish, doc, { finishes, docOf }) {
+  if (!finish?.rules?.some((r) => r.use)) return finish;
+  const rules = finish.rules.flatMap((r) => {
+    if (!r.use) return [r];
+    const used = finishes[r.use], def = doc?.parts?.[r.in];
+    if (!used) throw new Error(`finish rule uses "${r.use}": no such finish`);
+    if (!def) throw new Error(`finish rule uses "${r.use}" in "${r.in}": no such part`);
+    if ((def.at ?? []).length !== 1 || def.repeat) throw new Error(`"${r.in}": a used finish needs its component placed once`);
+    const [x, y, z, yaw] = def.at[0].map((v) => evalNum(v ?? 0, doc.params ?? {}));
+    const inner = withUses(used, docOf(r.use), { finishes, docOf }).rules.concat([{ ...(used.stone ?? {}) }]);
+    if (yaw && inner.some((q) => q.within || q.at || q.fit)) throw new Error(`"${r.in}" is turned: its finish's plan places would need turning`);
+    const moveXZ = (q) => [q[0] + x, q[1] + z, ...(q.length > 2 ? [q[2] + x, q[3] + z] : [])];
+    return inner.map((q) => ({ ...q, in: q.in ? `${r.in}/${q.in}` : r.in,
+      ...(q.above !== undefined ? { above: q.above + y } : {}), ...(q.below !== undefined ? { below: q.below + y } : {}),
+      ...(q.within ? { within: moveXZ(q.within) } : {}), ...(q.at ? { at: moveXZ(q.at) } : {}), ...(q.fit ? { fit: moveXZ(q.fit) } : {}) }));
+  });
+  return { ...finish, rules };
+}
+
 // ---- rules ------------------------------------------------------------------------------------------------------------
 const listOf = (v) => v === undefined ? null : Array.isArray(v) ? v : [v];
 function compile(rule, sizeOf) {
@@ -166,13 +198,14 @@ function compile(rule, sizeOf) {
   return {
     rule, panel, within,
     needsSide: !!side || (surf ?? []).includes("roof"),
-    mayMatch: (names) => !parts || names.some((n) => parts.includes(n)),
+    mayMatch: (names) => (!rule.in || names[0].startsWith(rule.in + "/")) && (!parts || names.some((n) => parts.includes(n))),
     // `at` holds the piece: its names, its surface before its side is known (s0), the side (asked for only when a rule
     // needs it: casting rays is the one dear thing here) and its centre
     test(at) {
       // (a pane is finished only by a rule that names IT -- its own part, or kind:glass -- else it is glass: naming the
       //  component it belongs to (the name before the first "/") paints the walls, not their windows)
       const comp = at.glass && at.names[0].includes("/") ? at.names[0].split("/")[0] : null;
+      if (rule.in && !at.names[0].startsWith(rule.in + "/")) return false;
       if (parts && !at.names.some((n) => parts.includes(n) && n !== comp)) return false;
       if (!parts && at.glass) return false;
       const c = at.cen;
@@ -185,6 +218,7 @@ function compile(rule, sizeOf) {
         if (rev !== !!rule.reveal) return false;
       }
       if (surf && !surf.includes(at.surface())) return false;
+      if (rule.facing && !listOf(rule.facing).includes(Math.abs(at.n[0]) > Math.abs(at.n[2]) ? (at.n[0] > 0 ? "e" : "w") : (at.n[2] > 0 ? "s" : "n"))) return false;   // (which way a wall looks: one picture to a wall)
       if (side && at.side() !== side) return false;
       return true;
     },
@@ -310,7 +344,15 @@ function infoOf(p) {
     const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx, l = Math.hypot(nx, ny, nz);
     if (l > 1e-12 && ny / l > .2 && ny / l <= .95) { sw += l; ss += l * Math.sqrt(Math.max(0, 1 - (ny / l) ** 2)); }
   }
-  f = { R, y0, along, sinSlope: sw > 0 ? Math.max(.2, ss / sw) : 1 };
+  // (the same, a metre up the meridian counting for more as the circle round it narrows: map "conformal")
+  const C = [0];
+  for (let i = 1; i < mer.length; i++) C.push(C[i - 1] + (S[i] - S[i - 1]) * R / Math.max(R * .08, (mer[i][1] + mer[i - 1][1]) / 2));
+  const shrink = (y) => {
+    if (mer.length < 2 || y <= mer[0][0]) return y - (mer[0]?.[0] ?? 0);
+    for (let i = 1; i < mer.length; i++) if (y <= mer[i][0]) return C[i - 1] + (C[i] - C[i - 1]) * (y - mer[i - 1][0]) / (mer[i][0] - mer[i - 1][0]);
+    return C[C.length - 1];
+  };
+  f = { R, y0, along, shrink, sinSlope: sw > 0 ? Math.max(.2, ss / sw) : 1 };
   partInfo.set(p, f);
   return f;
 }
@@ -520,6 +562,15 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
       cur.inst = inst; cur.yaw = yaw; cur.X = X; cur.Z = Z;
       const c = Math.cos(yaw), s = Math.sin(yaw);
       const W = (j) => [P[j * 3] * c + P[j * 3 + 2] * s + X, P[j * 3 + 1] + Y, -P[j * 3] * s + P[j * 3 + 2] * c + Z];
+      const spans = new Map(), spanOf = (face, W, tx, tz) => {          // (how far a flat face runs along itself, this copy of it)
+        let q = spans.get(face);
+        if (!q) {
+          q = [Infinity, -Infinity];
+          for (const t of facesOf(p).members[face]) for (let e = 0; e < 3; e++) { const w = W(I[t * 3 + e]), u = w[0] * tx + w[2] * tz; if (u < q[0]) q[0] = u; if (u > q[1]) q[1] = u; }
+          spans.set(face, q);
+        }
+        return q;
+      };
       for (let k = 0; k < I.length; k += 3) {
         const a = W(I[k]), b = W(I[k + 1]), d = W(I[k + 2]);
         const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2], vx = d[0] - a[0], vy = d[1] - a[1], vz = d[2] - a[2];
@@ -579,21 +630,31 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
                                  : p.kind === "roof" ? "slope" : surf0 === "floor" || surf0 === "ceiling" ? "plan" : "face");
             if ((mode === "face" || mode === "slope") && Math.abs(n[1]) > .95) mode = "plan";
             if (mode === "slope" && Math.abs(n[1]) < .05) mode = "face";   // (a gable: its wall's own coordinates)
+            // (a pier's or a reveal's side looks along the circle, not out of it: round the axis it would be one stripe per tile)
+            if (mode === "revolve" && !r.map && !["dome", "vault"].includes(p.kind)) {
+              const cx = poly.reduce((q, v) => q + v[0], 0) / poly.length - X, cz = poly.reduce((q, v) => q + v[2], 0) / poly.length - Z, l = Math.hypot(cx, cz);
+              if (l > 1e-6 && Math.abs(n[0] * cx + n[2] * cz) / l < .5) mode = "face";
+            }
             const th = Math.hypot(n[0], n[2]) || 1, tx = n[2] / th, tz = -n[0] / th;
-            if (mode === "revolve") {
+            if (mode === "revolve" || mode === "conformal") {
               // (a whole number of tiles round -- `count` of them if the rule says: one carved panel to a balustrade's bay)
               const R = r.radius ?? info.R, C = (r.count ?? Math.max(1, Math.round(TAU * R / size[0]))) * size[0];
               let ang = poly.map((v) => Math.hypot(v[0] - X, v[2] - Z) < 1e-6 ? null : Math.atan2(v[0] - X, v[2] - Z));
               const known = ang.filter((q) => q !== null);
               if (known.length && Math.max(...known) - Math.min(...known) > Math.PI) ang = ang.map((q) => (q !== null && q < 0 ? q + TAU : q));
               const mean = known.length ? ang.filter((q) => q !== null).reduce((x, y) => x + y, 0) / known.length : 0;
-              uvs = poly.map((v, i) => [(ang[i] ?? mean) / TAU * C, ["dome", "vault"].includes(p.kind) ? info.along(v[1] - Y) : v[1]]);
+              uvs = poly.map((v, i) => [(ang[i] ?? mean) / TAU * C, mode === "conformal" ? info.shrink(v[1] - Y) : ["dome", "vault"].includes(p.kind) ? info.along(v[1] - Y) : v[1]]);
             } else if (mode === "plan") uvs = poly.map((v) => [v[0], -v[2]]);
             else if (mode === "slope") uvs = poly.map((v) => [v[0] * tx + v[2] * tz, v[1] / info.sinSlope]);
             else uvs = poly.map((v) => [v[0] * tx + v[2] * tz, v[1]]);
+            if (r.whole && mode === "face") {
+              const [lo, hi] = spanOf(facesOf(p).comp[k / 3], W, tx, tz), L = hi - lo || 1, n = Math.max(1, Math.round(L / size[0]));
+              uvs = uvs.map(([u, v]) => [(u - lo) / L * n * size[0] - size[0] / 2, v]);
+            }
             if (hit.panel) uvs = uvs.map(([u, v]) => [u - hit.panel.cx, v + hit.panel.cz]);
             if (r.turn) { const cs = Math.cos(r.turn * Math.PI / 180), sn = Math.sin(r.turn * Math.PI / 180); uvs = uvs.map(([u, v]) => [u * cs - v * sn, u * sn + v * cs]); }
             if (r.align === "part") { const foot = info.y0 + Y; uvs = uvs.map(([u, v]) => [u, v - foot - size[1] / 2]); }
+            if (r.align === "above") uvs = uvs.map(([u, v]) => [u, v - r.above - size[1] / 2]);   // (a painted frieze: its foot on the band's own line, moved with a used finish)
             if (r.offset) uvs = uvs.map(([u, v]) => [u + r.offset[0], v + r.offset[1]]);
           }
           for (let i = 1; i + 1 < poly.length; i++) for (const j of [0, i, i + 1]) {

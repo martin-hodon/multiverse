@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landscape lab</title>
+<style>
+  html, body { margin: 0; overflow: hidden; background: #0e1014; font: 12px/1.45 "Avenir Next", "Segoe UI", sans-serif; color: #e8ecf2; }
+  canvas#view { display: block; width: 100vw; height: 100vh; }
+  #hud { position: fixed; left: 10px; top: 10px; background: #0b0b12d0; padding: 8px 11px; border-radius: 7px; white-space: pre-wrap;
+         font: 11.5px/1.45 ui-monospace, Menlo, Consolas, monospace; pointer-events: none; max-width: 52em; }
+  #panel { position: fixed; right: 0; top: 0; bottom: 0; width: 250px; overflow-y: auto; background: #10131acc; border-left: 1px solid #ffffff1c; padding: 6px 10px 20px; }
+  #panel h3 { margin: 12px 0 4px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #9fb4c8; }
+  #panel label { display: grid; grid-template-columns: 90px 1fr; gap: 6px; align-items: center; margin: 3px 0; }
+  #panel select, #panel input, #panel button { background: #232a36; color: #e8ecf2; border: 1px solid #ffffff26; border-radius: 4px; padding: 3px 6px; font: inherit; }
+  #panel button { cursor: pointer; margin: 2px 2px 2px 0; }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="hud">growing…</div>
+<div id="panel"></div>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl": "https://unpkg.com/three@0.185.1/build/three.tsl.js",
+    "three/addons/": "https://unpkg.com/three@0.185.1/examples/jsm/"
+} }
+</script>
+<script type="module">
+// THE LANDSCAPE LAB (docs/landscape.md): a small scene made by landscape.js, drawn -- the ground coloured by what it is
+// (the bed a wall shows, scree, soil, grass, forest), the water, the boulders.
+//   ?geology= ?climate= ?seed= ?size= ?relief= ?view=0..15 (a camera), 16.. (each cave, bridge) ?no=lake,cave,... (features left out) ?with=coast (made, not by chance) ?hud=0
+import * as THREE from "three/webgpu";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { makeLandscape, GEOLOGY, CLIMATES, DEFAULT_FEATURES } from "./landscape.js";
+import { surfaceColours } from "./landscape/colour.js";
+
+const qp = new URLSearchParams(location.search);
+const canvas = document.getElementById("view"), hud = document.getElementById("hud"), panel = document.getElementById("panel");
+const renderer = new THREE.WebGPURenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(1.5, devicePixelRatio));
+renderer.setSize(innerWidth, innerHeight, false);
+await renderer.init();
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xa9c4dc);
+scene.fog = new THREE.Fog(0xa9c4dc, 400, 1100);
+const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, .5, 3000);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+const sun = new THREE.DirectionalLight(0xfff1dc, 2.6); sun.position.set(-200, 260, 120);
+scene.add(sun, new THREE.HemisphereLight(0xcfe2ff, 0x6b5a45, 1.1));
+addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
+
+const P = { geology: qp.get("geology") ?? "canyon", climate: qp.get("climate") ?? "temperate", seed: +(qp.get("seed") ?? 1), size: +(qp.get("size") ?? 320),
+            relief: +(qp.get("relief") ?? 1), no: new Set((qp.get("no") ?? "").split(",").filter(Boolean)) };
+let L = null, group = null, treeSets = [], cleared = false;   // (treeSets: the trees' instanced meshes, their matrices as made)
+
+function build() {
+  const features = { ...DEFAULT_FEATURES };
+  for (const k of P.no) features[k] = false;
+  for (const k of (qp.get("with") ?? "").split(",").filter(Boolean)) features[k] = true;   // (?with=coast: a feature that comes by chance, made)
+  const t0 = performance.now();
+  L = makeLandscape({ seed: P.seed, size: P.size, geology: P.geology, climate: P.climate, relief: P.relief, features });
+  const { N, dx, H, water, kind, surf, SURF, bed, strata } = L;
+  if (group) { scene.remove(group); group.traverse((o) => { o.geometry?.dispose(); o.material?.dispose?.(); }); }
+  group = new THREE.Group();
+  const half = L.size / 2;
+  // the ground
+  const pos = new Float32Array(N * N * 3), col = surfaceColours(L);   // (landscape/colour.js: rock, scree, soil, grass...)
+  for (let k = 0; k < N * N; k++) pos.set([(k % N) * dx - half, H[k], ((k / N) | 0) * dx - half], k * 3);
+  const idx = [];
+  // (each square split along the diagonal its heights differ least across: a steep edge running aslant the grid then
+  // follows it, not sawn into teeth by the one diagonal everywhere)
+  for (let j = 0; j < N - 1; j++) for (let i = 0; i < N - 1; i++) { const a = j * N + i, b = a + 1, c = a + N, d = c + 1; if (L.cut[a]) continue;
+    if (Math.abs(H[a] - H[d]) < Math.abs(H[b] - H[c])) idx.push(a, c, d, a, d, b); else idx.push(a, c, b, b, c, d); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(pos, 3)); g.setAttribute("color", new THREE.BufferAttribute(col, 3));
+  g.setIndex(idx); g.computeVertexNormals();
+  group.add(new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .95, metalness: 0 })));
+  // the water: over every wet cell (a dry corner at the water's level beside it, or just under its own ground where that
+  // is lower -- so the shore is where the ground rises through the water, its contour, not the edge of a cell)
+  const wpos = new Float32Array(N * N * 3), wcol = new Float32Array(N * N * 3), widx = [];
+  for (let k = 0; k < N * N; k++) {
+    const i = k % N, j = (k / N) | 0;
+    let w = water[k];
+    if (w === -Infinity) { let s = 0, c = 0; for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]) { const ii = i + a, jj = j + b; if (ii >= 0 && jj >= 0 && ii < N && jj < N && water[jj * N + ii] > -Infinity) { s += water[jj * N + ii]; c++; } } w = c ? Math.min(s / c, H[k] - .05) : H[k] - .5; }
+    wpos.set([i * dx - half, w, j * dx - half], k * 3);
+    wcol.set(kind[k] === 1 ? [.16, .33, .40] : [.33, .52, .55], k * 3);
+    // (the sea: deep blue off shore, lighter over the sand and the platform, white where the waves break on the shore)
+    // (a lake: lighter over its shallows, the bottom showing through; where the ice feeds it, milky turquoise -- the rock
+    // flour the ice ground hangs in it)
+    if (kind[k] === 1) { const d = w - H[k], t = Math.min(1, Math.max(0, d) / 2.5), deep = L.climate.temp < 4 ? [.17, .45, .5] : [.13, .29, .37], shal = L.climate.temp < 4 ? [.35, .6, .6] : [.32, .45, .4];
+      wcol.set(shal.map((v, q) => v + (deep[q] - v) * t), k * 3);
+      if (SURF[surf[k]] === "reeds") { const g = .72 + .2 * ((i * 7.3 + j * 3.1) % 1); wcol.set([.36, .45, .22].map((v, q) => wcol[k * 3 + q] + (v - wcol[k * 3 + q]) * g), k * 3); } }   // (a reed bed: green stems out of the water)
+    if (kind[k] === 4) { const d = w - H[k], t = Math.min(1, d / 5), f = Math.max(0, 1 - d / .35) * .6, c = [.3, .55, .57].map((v, q) => v + ([.06, .2, .3][q] - v) * t); wcol.set(c.map((v) => Math.min(.95, v + (.92 - v) * f)), k * 3); }
+  }
+  // (white where it tumbles: running water as white as it falls steeply -- rapids, a step, a fall)
+  for (let k = 0; k < N * N; k++) if (kind[k] === 2 || kind[k] === 3) {
+    const i = k % N, j = (k / N) | 0; let lo = wpos[k * 3 + 1];
+    for (let b = -1; b <= 1; b++) for (let a = -1; a <= 1; a++) { const ii = i + a, jj = j + b; if (ii >= 0 && jj >= 0 && ii < N && jj < N && kind[jj * N + ii]) lo = Math.min(lo, wpos[(jj * N + ii) * 3 + 1]); }
+    const t = Math.min(1, Math.max(0, ((wpos[k * 3 + 1] - lo) / dx - .12) / .5)) ** .7 * .85;
+    for (let q = 0; q < 3; q++) wcol[k * 3 + q] += ([.92, .95, .96][q] - wcol[k * 3 + q]) * t;
+  }
+  // (under a curtain, above its pool, the curtain is the water: no sheet of cells sloping through it)
+  // (only what the sheet falls past: over its pool, under the point it passes -- not the water it pours from at its top)
+  const veil = new Float32Array(N * N).fill(Infinity), veilTop = new Float32Array(N * N).fill(-Infinity);
+  for (const C of L.plan.curtains ?? []) for (const [x, y, z] of C.pts) { if (z < C.bot + 1.2) continue;   // (where it still falls: at its foot the stream it lands in, and the run on, are water)
+    const rr = C.w * 1.2, r = Math.ceil(rr / dx);
+    for (let jj = Math.round(y / dx) - r; jj <= Math.round(y / dx) + r; jj++) for (let ii = Math.round(x / dx) - r; ii <= Math.round(x / dx) + r; ii++)
+      if (ii >= 0 && jj >= 0 && ii < N && jj < N && Math.hypot(ii * dx - x, jj * dx - y) <= rr) { const m = jj * N + ii; veil[m] = Math.min(veil[m], C.bot + .4); veilTop[m] = Math.max(veilTop[m], z - .6); } }
+  for (let j = 0; j < N - 1; j++) for (let i = 0; i < N - 1; i++) {
+    const a = j * N + i, b = a + 1, c = a + N, d = c + 1;
+    if (!(kind[a] || kind[b] || kind[c] || kind[d])) continue;
+    if ([a, b, c, d].some((m) => wpos[m * 3 + 1] > veil[m] && wpos[m * 3 + 1] < veilTop[m])) continue;
+    // (no sheet hung between two levels: where the water steps down a wall, the curtain is what falls)
+    const za = wpos[a * 3 + 1], zb = wpos[b * 3 + 1], zc = wpos[c * 3 + 1], zd = wpos[d * 3 + 1];
+    if (Math.max(za, zb, zc, zd) - Math.min(za, zb, zc, zd) > 1.5 * dx) continue;
+    widx.push(a, c, b, b, c, d);
+  }
+  const wg = new THREE.BufferGeometry();
+  wg.setAttribute("position", new THREE.BufferAttribute(wpos, 3)); wg.setAttribute("color", new THREE.BufferAttribute(wcol, 3));
+  wg.setIndex(widx); wg.computeVertexNormals();
+  // (pulled toward the eye: where a shallow's bed lies a few cm under the water the two are all but one plane, and the
+  // ground would show through the sheet in the triangles' shapes)
+  group.add(new THREE.Mesh(wg, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .15, metalness: .1, transparent: true, opacity: .82, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 })));
+  // (where the water reaches the scene's edge, its side: down to the ground -- else the floor under it shows past its end)
+  { const sp = [], sc = [], deep = [.1, .22, .3];
+    const side = (k0, k1) => { if (!kind[k0] || !kind[k1]) return; const p0 = [...wpos.subarray(k0 * 3, k0 * 3 + 3)], p1 = [...wpos.subarray(k1 * 3, k1 * 3 + 3)];
+      const g0 = [p0[0], H[k0], p0[2]], g1 = [p1[0], H[k1], p1[2]];
+      sp.push(...p0, ...g0, ...p1, ...p1, ...g0, ...g1); sc.push(...[0, 1, 2, 2, 1, 0].flatMap((q) => q === 1 ? deep : [...wcol.subarray((q ? k1 : k0) * 3, (q ? k1 : k0) * 3 + 3)])); };
+    for (let q = 0; q < N - 1; q++) { side(q, q + 1); side((N - 1) * N + q, (N - 1) * N + q + 1); side(q * N, (q + 1) * N); side(q * N + N - 1, (q + 1) * N + N - 1); }
+    if (sp.length) { const sg = new THREE.BufferGeometry(); sg.setAttribute("position", new THREE.Float32BufferAttribute(sp, 3)); sg.setAttribute("color", new THREE.Float32BufferAttribute(sc, 3)); sg.computeVertexNormals();
+      group.add(new THREE.Mesh(sg, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .3, transparent: true, opacity: .9, side: THREE.DoubleSide }))); } }
+  // the caves: their patches of volume (x, y, z up -> three's x, y up, z: a mirror, so each triangle turned over)
+  for (const cv of L.caves) {
+    const n = cv.pos.length / 3, cp = new Float32Array(n * 3), cc = new Float32Array(n * 3), ci = new Uint32Array(cv.idx.length);
+    for (let q = 0; q < n; q++) {
+      const x = cv.pos[q * 3], y = cv.pos[q * 3 + 1], z = cv.pos[q * 3 + 2];
+      cp[q * 3] = x - half; cp[q * 3 + 1] = z; cp[q * 3 + 2] = y - half;
+      // (where the patch is the ground -- at the ground's height, open above -- it is coloured as the ground there; over
+      // a flooded cave the cells were let down to its floor, so the nearest cell still at the ground's height)
+      const gi = Math.min(N - 1, Math.max(0, Math.round(x / dx))), gj = Math.min(N - 1, Math.max(0, Math.round(y / dx)));
+      let gk = gj * N + gi;
+      if (cv.flood && cv.shade[q] === 1 && Math.abs(z - H[gk]) >= .45) {
+        let best = Infinity;
+        for (let dj = -4; dj <= 4; dj++) for (let di = -4; di <= 4; di++) {
+          const ii = gi + di, jj = gj + dj, m = jj * N + ii, d2 = di * di + dj * dj;
+          if (ii >= 0 && jj >= 0 && ii < N && jj < N && d2 < best && Math.abs(z - H[m]) < .45) { best = d2; gk = m; }
+        }
+      }
+      if (Math.abs(z - H[gk]) < .45 && cv.shade[q] === 1 && !(cv.span && z < H[gk] - .1)) { cc.set(col.subarray(gk * 3, gk * 3 + 3), q * 3); continue; }
+      const b = strata.beds[cv.bed[q]], depth = strata.datum(x, y) - z - strata.base[cv.bed[q]];
+      const band = (b.rock === "granite" ? 1 : 1 - .07 * ((depth * 1.7) % 1 < .5 ? 1 : 0) - .05 * Math.sin(depth * 5.1)) * cv.shade[q];
+      cc.set(b.color.map((v) => v * band), q * 3);
+    }
+    for (let q = 0; q < ci.length; q += 3) { ci[q] = cv.idx[q]; ci[q + 1] = cv.idx[q + 2]; ci[q + 2] = cv.idx[q + 1]; }
+    const vg = new THREE.BufferGeometry();
+    vg.setAttribute("position", new THREE.BufferAttribute(cp, 3)); vg.setAttribute("color", new THREE.BufferAttribute(cc, 3));
+    vg.setIndex(new THREE.BufferAttribute(ci, 1)); vg.computeVertexNormals();
+    group.add(new THREE.Mesh(vg, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .95, metalness: 0 })));
+  }
+  // each fall's curtain: a ribbon down its path, spreading as it falls, streaked; foam where it lands
+  for (const C of L.plan.curtains ?? []) if (C.pts.length > 2) {
+    const cp = [], cc = [], ci = [], S = 6, px = -C.dir[1], py = C.dir[0], z0 = C.pts[0][2];
+    C.pts.forEach(([x, y, z], r) => {
+      const drop = z0 - z, w = C.w * (1 + .025 * drop);
+      for (let c = 0; c <= S; c++) {
+        const f = c / S - .5, o = w * f, st = .82 + .18 * Math.sin(c * 2.7 + r * .11);
+        cp.push(x + px * o - half, Math.max(C.bot + .12, z + .08 * Math.sin(c * 1.9 + r * .4)), y + py * o - half);   // (above the pool: no flicker where it meets it)
+        cc.push(st, st, st * 1.02);
+      }
+    });
+    for (let r = 0; r < C.pts.length - 1; r++) for (let c = 0; c < S; c++) { const a = r * (S + 1) + c, b = a + 1, d = a + S + 1, e = d + 1; ci.push(a, d, b, b, d, e); }
+    const cg = new THREE.BufferGeometry();
+    cg.setAttribute("position", new THREE.Float32BufferAttribute(cp, 3)); cg.setAttribute("color", new THREE.Float32BufferAttribute(cc, 3));
+    cg.setIndex(ci); cg.computeVertexNormals();
+    group.add(new THREE.Mesh(cg, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .5, transparent: true, opacity: .8, side: THREE.DoubleSide, emissive: 0x334048 })));
+    // (blotches, overlapping and faint: the churned water, not a plate on it)
+    const [fx, fy] = C.pts.at(-1), fm = new THREE.MeshStandardMaterial({ color: 0xf2f6f8, transparent: true, opacity: .32, roughness: .8, depthWrite: false });
+    for (let q = 0; q < 5; q++) { const h1 = (fx * 7.31 + fy * 3.7 + q * 1.618) % 1, h2 = (fx * 2.13 + fy * 5.9 + q * 2.414) % 1, a = h1 * Math.PI * 2, rr = C.w * .7 * h2;
+      const foam = new THREE.Mesh(new THREE.CircleGeometry(C.w * (.55 + .55 * ((h1 + h2) % 1)), 16), fm);
+      foam.rotation.x = -Math.PI / 2; foam.position.set(fx - half + Math.cos(a) * rr, C.bot + .05 + q * .004, fy - half + Math.sin(a) * rr); group.add(foam); }
+  }
+  // the trees: a trunk and a crown (a cone for a conifer, a ball for a broadleaf), instanced
+  treeSets = [];
+  if (L.trees.length && qp.get("trees") !== "0") {   // (?trees=0: without them, to see the ground)
+    const M = new THREE.Matrix4(), q = new THREE.Quaternion(), V = (x, y, z) => new THREE.Vector3(x, y, z);
+    // (a reed clump: thin blades fanning out from one foot, some taller)
+    const reedTuft = () => { const pos = [];
+      for (let b = 0; b < 9; b++) { const a = b * 2.4, o = b ? .35 + .3 * ((b * 5) % 3) / 2 : 0, tl = b ? .22 + .1 * (b % 3) : 0;
+        const g = new THREE.ConeGeometry(.22, .7 + .3 * ((b * 7) % 5) / 4, 3).translate(0, .5, 0).rotateZ(-tl * Math.cos(a)).rotateX(tl * Math.sin(a)).translate(Math.cos(a) * o, 0, Math.sin(a) * o);
+        pos.push(...g.toNonIndexed().attributes.position.array); }
+      const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals(); return g; };
+    const kinds = [["conifer", new THREE.ConeGeometry(1, 1, 7).translate(0, .5, 0), 0x2c4a2a], ["broadleaf", new THREE.IcosahedronGeometry(1, 1), 0x3d5c2a],
+                   ["palm", new THREE.ConeGeometry(1, 1, 9).rotateX(Math.PI).translate(0, .5, 0), 0x4f7a2e], ["mangrove", new THREE.IcosahedronGeometry(1, 1), 0x2a4a22],
+                   ["umbrella", new THREE.IcosahedronGeometry(1, 1), 0x46602e], ["columnar", new THREE.IcosahedronGeometry(1, 1), 0x24402a],
+                   ["reed", reedTuft(), 0x6b7836]];   // (a palm's crown: fronds drooping from the top; an acacia's, a stone pine's flat; a cypress a flame)
+    const kindOf = (t) => t.shape ?? (t.mangrove ? "mangrove" : t.palm ? "palm" : t.conifer ? "conifer" : "broadleaf");
+    const trunks = new THREE.InstancedMesh(new THREE.CylinderGeometry(.5, .7, 1, 5).translate(0, .5, 0), new THREE.MeshStandardMaterial({ color: 0x4a3a2a, roughness: 1 }), L.trees.length);
+    L.trees.forEach((t, i) => { trunks.setMatrixAt(i, M.compose(V(t.x - half, t.z - .3, t.y - half), q, V(t.h * .025 + .1, t.h * (t.palm ? .97 : t.shape === "umbrella" ? .85 : t.shape === "columnar" ? .15 : t.conifer ? .3 : .5), t.h * .025 + .1).multiplyScalar(t.shape === "reed" ? 0 : 1))); });   // (a reed clump: no trunk)
+    group.add(trunks); treeSets.push({ im: trunks, list: L.trees, orig: trunks.instanceMatrix.array.slice() });
+    const col = new THREE.Color();
+    for (const [kind, geo, hex] of kinds) {
+      const list = L.trees.filter((t) => kindOf(t) === kind); if (!list.length) continue;
+      const im = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .95, flatShading: true }), list.length);
+      list.forEach((t, i) => {
+        if (kind === "conifer") M.compose(V(t.x - half, t.z + t.h * .15, t.y - half), q, V(t.r, t.h * .85, t.r));
+        else if (kind === "palm") M.compose(V(t.x - half, t.z + t.h - 1.6, t.y - half), q, V(t.r, 1.8, t.r));
+        else if (kind === "umbrella") { const e = t.h > 20 ? .5 : .28; M.compose(V(t.x - half, t.z + t.h - t.r * e * .7, t.y - half), q, V(t.r, t.r * e, t.r)); }   // (an emergent's crown a deep dome, not a stone pine's plate)
+        else if (kind === "columnar") M.compose(V(t.x - half, t.z + t.h * .52, t.y - half), q, V(t.r, t.h * .5, t.r));
+        else if (kind === "reed") M.compose(V(t.x - half, t.z, t.y - half), q, V(t.r * .75, t.h, t.r * .75));
+        else M.compose(V(t.x - half, t.z + t.h - t.r * .9, t.y - half), q, V(t.r, t.r * .85, t.r));
+        im.setMatrixAt(i, M); col.setHex(hex).multiplyScalar(.8 + .4 * ((t.x * 7.3 + t.y * 3.1) % 1)); im.setColorAt(i, col);
+      });
+      group.add(im); treeSets.push({ im, list, orig: im.instanceMatrix.array.slice() });
+    }
+  }
+  // a fumarole's steam: a few faint puffs rising and spreading over each vent
+  if (L.cone?.fumaroles?.length) {
+    const sm = new THREE.MeshStandardMaterial({ color: 0xf4f4f0, transparent: true, opacity: .14, roughness: 1, depthWrite: false }), sg = new THREE.IcosahedronGeometry(1, 2);
+    for (const o of L.cone.fumaroles) for (let q = 0; q < 8; q++) {   // (overlapping, each fainter and wider than the last: a plume, drifting downwind)
+      const m = new THREE.Mesh(sg, sm), r = o.r * (.3 + q * .2), w = q * q * .12, ph = (o.x * 7.3 + q * 1.7) % 1;
+      m.position.set(o.x - half + w + (ph - .5), o.z + .6 + q * 1.3, o.y - half + w * .4); m.scale.set(r, r * .7, r); group.add(m);
+    }
+  }
+  // the boulders
+  if (L.boulders.length) {
+    const bg = new THREE.IcosahedronGeometry(1, 1), bm = new THREE.MeshStandardMaterial({ color: new THREE.Color(...strata.beds[L.boulders[0].bed].color), roughness: .9, flatShading: true });
+    const im = new THREE.InstancedMesh(bg, bm, L.boulders.length), M = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler();
+    L.boulders.forEach((b, k) => { e.set(b.x, b.y, b.r); q.setFromEuler(e); M.compose(new THREE.Vector3(b.x - half, b.z + b.r * .3, b.y - half), q, new THREE.Vector3(b.r * 1.2, b.r * .8, b.r)); im.setMatrixAt(k, M); });
+    group.add(im);
+  }
+  // the hoodoos: a lathed column (lumpy, banded, waisted under its cap; worn to a point where it lost it), the cap a slab
+  if (L.hoodoos?.length) {
+    const lathe = (pts) => { const g = new THREE.LatheGeometry(pts.map(([r, y]) => new THREE.Vector2(r, y)), 9), p = g.attributes.position, c = [];
+      for (let i = 0; i < p.count; i++) { const y = p.getY(i), b = .82 + .18 * Math.sin(y * 23) + .08 * Math.sin(y * 57); c.push(b, b * .97, b * .95); }
+      g.setAttribute("color", new THREE.Float32BufferAttribute(c, 3)); g.computeVertexNormals(); return g; };
+    const capped = lathe([[0, 0], [1, 0], [.9, .14], [.95, .26], [.74, .4], [.8, .55], [.6, .7], [.66, .82], [.42, .94], [.48, 1], [0, 1]]);
+    const bare = lathe([[0, 0], [1, 0], [.86, .2], [.9, .32], [.66, .5], [.6, .68], [.34, .86], [.08, 1], [0, 1]]);
+    const M = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), col = new THREE.Color(), V = (a, b, c) => new THREE.Vector3(a, b, c);
+    for (const [geo, list] of [[capped, L.hoodoos.filter((o) => o.cap)], [bare, L.hoodoos.filter((o) => !o.cap)]]) {
+      if (!list.length) continue;
+      const im = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .95, flatShading: true }), list.length);
+      list.forEach((o, i) => { e.set(0, o.x * 1.7, 0); q.setFromEuler(e); M.compose(V(o.x - half, o.z, o.y - half), q, V(o.r * (.85 + .3 * (o.y * 3.7 % 1)), o.h, o.r * (.85 + .3 * (o.x * 5.1 % 1)))); im.setMatrixAt(i, M);
+        im.setColorAt(i, col.setRGB(...strata.beds[o.bed].color).lerp(new THREE.Color(...strata.beds[o.capBed].color), .25).multiplyScalar(.9 + .2 * ((o.x * 7.3 + o.y * 3.1) % 1))); });
+      group.add(im);
+    }
+    const caps = L.hoodoos.filter((o) => o.cap);
+    if (caps.length) {
+      const im = new THREE.InstancedMesh(new THREE.CylinderGeometry(1, .9, 1, 8), new THREE.MeshStandardMaterial({ roughness: .9, flatShading: true }), caps.length);
+      caps.forEach((o, i) => { e.set((o.x % 1 - .5) * .25, o.y, (o.y % 1 - .5) * .25); q.setFromEuler(e); M.compose(V(o.x - half, o.z + o.h + o.cap.h * .45, o.y - half), q, V(o.cap.r, o.cap.h, o.cap.r * (.8 + .3 * (o.x % 1)))); im.setMatrixAt(i, M);
+        im.setColorAt(i, col.setRGB(...strata.beds[o.capBed].color)); });
+      group.add(im);
+    }
+  }
+  sun.position.set(L.sun[0] * 233, 260, L.sun[1] * 233);   // (the sun the model put the snow out of)
+  scene.add(group);
+  hud.textContent = `${L.notes.join("\n")}\n${L.N}x${L.N} cells of ${L.dx} m -- made in ${L.ms} ms (${L.stages.map(([s, t]) => s + " " + t).join(", ")}); drawn in ${Math.round(performance.now() - t0 - L.ms)} ms`;
+}
+
+// the cameras: from above, then three looks at the fall and the lake, low
+function view(v) {
+  const half = L.size / 2, p = L.plan, [fx, fy] = p.toXY(p.fallU, p.streamV(p.fallU)), fz = L.H[Math.round(fy / L.dx) * L.N + Math.round(fx / L.dx)];
+  const at = (u, v) => { const [x, y] = p.toXY(u, v); return [x - half, y - half]; };
+  const [ax, az] = at(p.fallU, p.streamV(p.fallU));
+  const hAt = (u, v) => { const [x, y] = p.toXY(u, v); return L.H[Math.round(y / L.dx) * L.N + Math.round(x / L.dx)]; };
+  const look = [
+    () => { camera.position.set(-L.size * .2, L.size * .55, L.size * .75); controls.target.set(0, 15, 0); },
+    () => { const u = p.fallU + 48, [x, z] = at(u, p.streamV(u) + 3); camera.position.set(x, hAt(u, p.streamV(u) + 3) + 3.5, z); controls.target.set(ax, p.lipZ - p.fallH * .45, az); },
+    () => { const [x, z] = at(p.fallU - 120, p.streamV(p.fallU) - 70); camera.position.set(x, fz + 45, z); controls.target.set(ax, fz - 5, az); },
+    () => { const [x, z] = at(p.cross + 90, p.streamV(p.cross) + 90); camera.position.set(x, Math.max(fz + 30, hAt(p.cross + 90, p.streamV(p.cross) + 90) + 24), z); const [tx, tz] = at(p.cross - 30, p.streamV(p.cross)); controls.target.set(tx, fz - 10, tz); },
+    () => {   // (on the shore toward the scene's middle -- the lake's other side may be the edge -- looking across it)
+      if (!L.lake) return look[2]();
+      const [tx, tz] = at(L.lake.u, L.lake.v), dl = Math.hypot(tx, tz) || 1, x = tx - tx / dl * L.lake.r * 1.5, z = tz - tz / dl * L.lake.r * 1.5;
+      const gz = L.H[Math.round((z + half) / L.dx) * L.N + Math.round((x + half) / L.dx)] ?? L.lake.level;
+      camera.position.set(x, Math.max(gz, L.lake.level) + 9, z); controls.target.set(tx, L.lake.level, tz);
+    },
+    () => {   // (the second step's fall, from on the stream just out of its gorge -- the gorge bends, a straight line hits its wall)
+      const C = L.plan.curtains?.find((c) => c.name === "lower fall"); if (!C) return look[1]();
+      const u = p.cross2 + 8, [x, z] = at(u, p.streamV(u)), [lx, ly] = C.pts[0];
+      camera.position.set(x, hAt(u, p.streamV(u)) + 7, z); controls.target.set(lx - half, (C.top + C.bot) / 2, ly - half);
+    },
+    () => {   // (the side stream's fall: from the gorge's far rim, across from it, a little downstream)
+      const C = L.plan.curtains?.find((c) => c.name === "side fall"), T = L.plan.tributary;
+      if (!C && T?.ponor) {   // (or where it sinks: from up its blind valley, looking down at the ponor and the wall over it)
+        const w = T.way, [bx, by] = w[Math.max(0, w.length - 30)], P = T.ponor;
+        const gz = L.H[Math.round(by / L.dx) * L.N + Math.round(bx / L.dx)];
+        camera.position.set(bx - half, gz + 14, by - half); controls.target.set(P.x - half, P.z - 1, P.y - half); return;
+      }
+      if (!C) return look[1]();
+      const [lx, ly] = C.pts[0], x = lx + C.dir[0] * 34 + C.dir[1] * 10, y = ly + C.dir[1] * 34 - C.dir[0] * 10;
+      const gz = L.H[Math.min(L.N - 1, Math.max(0, Math.round(y / L.dx))) * L.N + Math.min(L.N - 1, Math.max(0, Math.round(x / L.dx)))];
+      camera.position.set(x - half, Math.max(gz, C.top) + 9, y - half); controls.target.set(lx - half, (C.top + C.bot) / 2, ly - half);
+    },
+    () => {   // (the coast: from out over the sea, off to one side of the cove, looking back at it and along the cliffs)
+      const c = L.coast; if (!c) return look[0]();
+      const [x, z] = at(c.uL + 48, c.vS + 30), [tx, tz] = at(c.uL - 4, c.vS);
+      camera.position.set(x, c.sea + 13, z); controls.target.set(tx, c.sea + c.cH * .5 + 1, tz);
+    },
+    () => {   // (the cinder cone: from toward the scene's middle, a little above its rim, its breach and flow to one side)
+      const c = L.cone; if (!c) return look[0]();
+      const dl = Math.hypot(c.x - half, c.y - half) || 1, ox = c.x - (c.x - half) / dl * c.Rb * 2.4, oy = c.y - (c.y - half) / dl * c.Rb * 2.4;
+      const gz = L.H[Math.round(c.y / L.dx) * L.N + Math.round(c.x / L.dx)];
+      if (c.maar) {   // (a maar: from over its ring, looking down into it)
+        const ox2 = c.x - (c.x - half) / dl * c.Rb * 1.25, oy2 = c.y - (c.y - half) / dl * c.Rb * 1.25, rz = L.H[Math.round(oy2 / L.dx) * L.N + Math.round(ox2 / L.dx)];
+        camera.position.set(ox2 - half, rz + 16, oy2 - half); controls.target.set(c.x - half, c.wt, c.y - half); return;
+      }
+      camera.position.set(ox - half, gz + c.hc * .9, oy - half); controls.target.set(c.x - half, gz - c.hc * .3, c.y - half);
+    },
+    () => {   // (the slot: from its rim a third of the way down, a little up, looking down into it and on along it)
+      const sl = L.slot; if (!sl) return look[0]();
+      const q = Math.floor(sl.pts.length * .3), a = sl.pts[q], b = sl.pts[Math.min(sl.pts.length - 1, q + 50)], c = sl.pts[q + 4];
+      const dl = Math.hypot(c.x - a.x, c.y - a.y) || 1, nx = -(c.y - a.y) / dl, ny = (c.x - a.x) / dl;
+      const gz = L.H[Math.round((a.y + ny * 5) / L.dx) * L.N + Math.round((a.x + nx * 5) / L.dx)];
+      camera.position.set(a.x + nx * 5 - half, gz + 4, a.y + ny * 5 - half); controls.target.set(b.x - half, b.z + 1, b.y - half);
+    },
+    () => {   // (the landslide: from out past its toe and to one side, up, looking back at the scar)
+      const sl = L.slide; if (!sl) return look[0]();
+      const [tx, ty] = sl.toe, [a, b] = sl.out, ox = tx + a * 22 - b * 26, oy = ty + b * 22 + a * 26, hz = (x, y) => L.H[Math.round(y / L.dx) * L.N + Math.round(x / L.dx)];
+      camera.position.set(ox - half, hz(tx, ty) + 38, oy - half); controls.target.set(sl.x - half, hz(sl.x, sl.y) - 6, sl.y - half);
+    },
+    () => {   // (the rock glacier: from out past its front and to one side, up, looking back up it to the cliff)
+      const rg = L.rockGlacier; if (!rg) return look[0]();
+      const [a, b] = rg.out, fx = rg.root[0] + a * rg.L, fy = rg.root[1] + b * rg.L, ox = fx + a * 18 - b * 24, oy = fy + b * 18 + a * 24;
+      const hz = (x, y) => L.H[Math.round(Math.min(L.size, Math.max(0, y)) / L.dx) * L.N + Math.round(Math.min(L.size, Math.max(0, x)) / L.dx)];
+      camera.position.set(ox - half, hz(fx, fy) + 16, oy - half); controls.target.set(rg.x - half, hz(rg.x, rg.y), rg.y - half);
+    },
+    () => {   // (the dome: from the land below it, out from the scarp and a little to one side, a little up)
+      const d = L.domes?.[0]; if (!d) return look[0]();
+      const [ox, oy] = p.toXY(d.u + d.r * 2.1, d.v + d.r * .9).map((c) => Math.min(L.size - 2, Math.max(2, c)));
+      const gz = L.H[Math.round(oy / L.dx) * L.N + Math.round(ox / L.dx)];
+      camera.position.set(ox - half, gz + 12, oy - half); controls.target.set(d.x - half, gz + d.h * .5, d.y - half);
+    },
+    () => {   // (the delta: from over the lake out in front of it and to one side, looking back at it and up the stream)
+      const dl = L.delta; if (!dl) return look[4]();
+      const [a, b] = dl.out, cx = dl.x + a * dl.r * .7, cy = dl.y + b * dl.r * .7;
+      camera.position.set(dl.x + a * dl.r * 2.4 - b * dl.r * 1.1 - half, L.lake.level + 10, dl.y + b * dl.r * 2.4 + a * dl.r * 1.1 - half); controls.target.set(cx - half, L.lake.level, cy - half);
+    },
+    () => {   // (the braids: from beside the belt, up, looking down it and across)
+      const br = L.braid; if (!br) return look[0]();
+      const um = br.u0 + (Math.min(br.u1, br.u0 + 120) - br.u0) * .55, [tx, tz] = at(um, p.streamV(um)), [ox, oz] = at(um - 30, p.streamV(um) + 34);
+      camera.position.set(ox, hAt(um, p.streamV(um)) + 20, oz); controls.target.set(tx, hAt(um, p.streamV(um)), tz);
+    },
+    () => {   // (the hot spring: from below its toe and to one side, a little up, looking up its terraces)
+      const hs = L.hotSpring; if (!hs) return look[0]();
+      const [a, b] = hs.dir, mx = hs.x + a * hs.L * .5, my = hs.y + b * hs.L * .5, ox = hs.x + a * (hs.L + 16) - b * 14, oy = hs.y + b * (hs.L + 16) + a * 14;
+      const hz = (x, y) => L.H[Math.round(Math.min(L.size, Math.max(0, y)) / L.dx) * L.N + Math.round(Math.min(L.size, Math.max(0, x)) / L.dx)];
+      camera.position.set(ox - half, Math.max(hz(ox, oy), hz(mx, my)) + 14, oy - half); controls.target.set(mx - half, hz(mx, my), my - half);
+    },
+  ];
+  // (a cave: from out in front of its mouth, a little up, looking in)
+  function caveLook(cv) {
+    if (cv.kind === "arch") {   // (an arch in a fin: from beside the fin, up over the fins, looking down at its window)
+      const [mx, my] = cv.mouth, [a, b] = cv.out;
+      camera.position.set(mx - b * 17 + a * 7 - half, cv.top + 8, my + a * 17 + b * 7 - half); controls.target.set(mx - half, cv.floor + 3, my - half); return;
+    }
+    const [mx, my] = cv.mouth, far = cv.kind === "grotto" ? 15 : cv.kind === "cenote" ? cv.parts[0].r * .85 : 13,   // (a cenote: from over its rim, high)
+      ox = mx + cv.out[0] * far - cv.out[1] * far * .3, oy = my + cv.out[1] * far + cv.out[0] * far * .3;
+    const g = cv.kind === "cenote" ? 1.8 : 1, gx = mx + (ox - mx) * g, gy = my + (oy - my) * g;   // (a cenote's ground: past its bell, where the upland is)
+    const gz = L.H[Math.min(L.N - 1, Math.max(0, Math.round(gy / L.dx))) * L.N + Math.min(L.N - 1, Math.max(0, Math.round(gx / L.dx)))];   // (out past the edge: the edge's)
+    camera.position.set(ox - half, Math.max(gz + (cv.kind === "cenote" ? 9 : 3), cv.floor + 2), oy - half); controls.target.set(mx - half, cv.floor + 2, my - half);
+  }
+  const cv = v >= look.length ? L.caves[v - look.length] : null;
+  if (cv) caveLook(cv); else look[v < look.length ? v : 0]();
+  void fx; void fy;
+  controls.update();
+  clearSight(v > 0 && (v < look.length || !!cv));
+}
+// (a preset camera low among trees sees bark: the trees between it and what it looks at are taken out of the way -- put
+// back when the camera is moved by hand)
+function clearSight(on) {
+  if (!on && !cleared) return;
+  const half = L.size / 2, a = camera.position.clone(), ab = controls.target.clone().sub(a), l2 = ab.lengthSq() || 1, p = new THREE.Vector3(), c = new THREE.Vector3();
+  for (const { im, list, orig } of treeSets) {
+    const arr = im.instanceMatrix.array;
+    list.forEach((t, i) => {
+      let hide = false;
+      if (on) for (const f of [.3, .6, .9]) {
+        p.set(t.x - half, t.z + t.h * f, t.y - half);
+        const s = Math.min(1, Math.max(0, p.clone().sub(a).dot(ab) / l2)); c.copy(a).addScaledVector(ab, s);
+        if (p.distanceTo(c) < t.r + 1.2) { hide = true; break; }
+      }
+      for (let e = 0; e < 16; e++) arr[i * 16 + e] = hide ? 0 : orig[i * 16 + e];
+    });
+    im.instanceMatrix.needsUpdate = true;
+  }
+  cleared = on;
+}
+controls.addEventListener("start", () => clearSight(false));
+
+// the panel
+const sel = (name, opts, val, on) => { const l = document.createElement("label"); l.innerHTML = `<span>${name}</span>`; const s = document.createElement("select");
+  for (const [k, o] of Object.entries(opts)) s.add(new Option(o.name ?? k, k, false, k === val)); s.onchange = () => on(s.value); l.append(s); panel.append(l); };
+panel.innerHTML = "<h3>Scene</h3>";
+sel("geology", GEOLOGY, P.geology, (v) => { P.geology = v; build(); cameraButtons(); });
+sel("climate", CLIMATES, P.climate, (v) => { P.climate = v; build(); cameraButtons(); });
+{ const l = document.createElement("label"); l.innerHTML = "<span>seed</span>"; const i = document.createElement("input"); i.type = "number"; i.value = P.seed; i.onchange = () => { P.seed = +i.value; build(); cameraButtons(); view(0); }; l.append(i); panel.append(l); }
+panel.insertAdjacentHTML("beforeend", "<h3>Features</h3>");
+for (const f of Object.keys(DEFAULT_FEATURES)) { const l = document.createElement("label"); l.innerHTML = `<span>${f}</span>`; const c = document.createElement("input"); c.type = "checkbox"; c.checked = !P.no.has(f);
+  c.onchange = () => { c.checked ? P.no.delete(f) : P.no.add(f); build(); cameraButtons(); }; l.append(c); panel.append(l); }
+panel.insertAdjacentHTML("beforeend", "<h3>Camera</h3>");
+const camBox = document.createElement("div"); panel.append(camBox);
+function cameraButtons() {   // (one for each cave or bridge this scene has)
+  camBox.replaceChildren();
+  ["above", "the fall", "over the lake", "the scarp", "the lake", "the lower fall", "the side fall (or its ponor)", "the coast", "the cone", "the slot", "the landslide", "the rock glacier", "the dome", "the delta", "the braids", "the hot spring", ...L.caves.map((c) => c.kind)].forEach((name, v) => {
+    const b = document.createElement("button"); b.textContent = name; b.onclick = () => view(v); camBox.append(b); });
+}
+
+build();
+cameraButtons();
+view(+(qp.get("view") ?? 0));
+// ?cam=x,y,z,tx,ty,tz: a camera of one's own (the scene's x, y on the ground, z up)
+if (qp.get("cam")) { const [x, y, z, tx, ty, tz] = qp.get("cam").split(",").map(Number), h = L.size / 2; camera.position.set(x - h, z, y - h); controls.target.set(tx - h, tz, ty - h); controls.update(); }
+if (qp.get("hud") === "0") hud.style.display = panel.style.display = "none";   // (?hud=0: the view alone)
+let frames = 0;
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); if (++frames === 5) window.__ready = true; });
+window.__L = L;
+</script>
+</body>
+</html>

@@ -85,6 +85,9 @@ export function compileDef(def) {
       fleece: !!part.fleece,    // composite: its surface heaped in lumps (a sheep's wool: shell.js FLEECE)
       stone: part.stone ?? 0,   // composite: carved -- a statue's material (1 marble, 2 bronze, 3 gold, 4 limestone): shell.js stoneAt
       flat: part.flat ?? 0,     // composite: a capsule squashed along the figure's forward to this share of its width (a flat torso)
+      palm: !!part.palm,        // ...squashed across its own axis and the figure's forward instead (a hand: palm in as it hangs, shell.js)
+      anat: part.anat ?? 0,     // ...where on the trunk a flat torso's piece is (people.js `anat`: a bare torso carved with its anatomy, shell.js ANATOMY)
+      limb: part.limb ?? 0,     // ...and a bare round limb's kind (people.js LIMB: a statue's carved with its muscles, shell.js LIMBS)
       // ...and its two end caps, as tall as `a` (the A end) and `b` of their radius and as square as the superellipse
       // exponent `p` (2: an ellipse; a person's shoulders are a low, squared cap) -- a flat part's only
       caps: part.caps ?? null,
@@ -102,8 +105,10 @@ export function compileDef(def) {
       body: part.frame === "body" ? 1 : 0,   // composite engine: pattern in the ANIMAL's frame (torso pieces: stripes run on across seams) instead of the part's
       level: !!part.level,        // keeps the root's orientation whatever its parents do (a foot stays flat on the ground)
       sag: part.sag ?? 0,         // a hanging sleeve's cone: its axis tipped toward the plumb line by up to this (radians), see writeAnimal
-      fall: !!part.fall,          // ...and on an arm raised past level it falls to hang plumb from its top (SLIDE.fall)
+      fall: !!part.fall,          // ...and on an arm raised past level it slides down the arm, gathered, drooping (SLIDE)
       drape: drapes.has(part.id) && i > lastLeg,
+      // ...and DRAPED over them (shell.js CLING): { k: its cling, ease, over: the legs' ids } -- the ids made indices below
+      cling: part.cling ? { k: part.cling.k, ease: part.cling.ease ?? 0, over: part.cling.over } : null,
       trail: part.trail ?? 0,     // a cloak's hem swept back by this at a run (radians; TRAIL), see writeAnimal   // a skirt: carried forward by the thighs under it (DRAPE; the legs are posed before it)
       // a cloak's front panel lifted by the arm under it (LIFT): that arm's index (posed before it), the share of its swing
       follow: part.follow && index.has(part.follow.part) ? index.get(part.follow.part) : -1, followK: part.follow?.k ?? 0,
@@ -130,6 +135,10 @@ export function compileDef(def) {
       root: part.root ?? 0,
     };
   });
+  for (const p of parts) if (p.cling) p.cling.over = p.cling.over.map((id) => index.get(id) ?? -1);
+  // (and its FOREARMS: where each arm it is draped over -- not the part it hangs from -- has its forearm in the very next
+  //  slot, its own child (people.js adds arm, forearm, hand in that order), shell.js reads the forearm there too: CLING)
+  for (const p of parts) if (p.cling) { const arms = p.cling.over.slice(4).filter((i) => i >= 0 && i !== p.parentIdx); p.cling.fore = arms.length > 0 && arms.every((i) => parts[i + 1]?.parentIdx === i); }
   // THE BIND POSE: every part's axis at rest -- its own rotation and its parents', no motion, no gesture -- in the root's
   // frame (composite.js restAxes: the cloth's frame and a limb root's rest are measured from it)
   const bind = [];
@@ -199,7 +208,7 @@ const _root = new THREE.Matrix4();
 const _pitch = new THREE.Matrix4(), _roll = new THREE.Matrix4();
 const _local = new THREE.Matrix4(), _nod = new THREE.Matrix4(), _nodT = new THREE.Matrix4();
 const _e = new THREE.Euler();
-const _gq = new THREE.Quaternion(), _gl = new THREE.Quaternion(), _gs = new THREE.Vector3(), _gp = new THREE.Vector3(), _gm = new THREE.Matrix4();
+const _gq = new THREE.Quaternion(), _gl = new THREE.Quaternion(), _gs = new THREE.Vector3(), _gp = new THREE.Vector3(), _gm = new THREE.Matrix4(), _gr = new THREE.Matrix4();
 const _v = new THREE.Vector3();
 const _lower = [];   // per part: the lower bone's angle computed with its upper bone
 let _swing = new Float32Array(64);   // per part: its swing forward this pose (rz in its parent) -- LIFT
@@ -220,10 +229,12 @@ let _swing = new Float32Array(64);   // per part: its swing forward this pose (r
 // mean swing forward, up to `max` degrees (a crouch, a stoop; a stride's thighs go both ways and leave it hanging).
 // writeAnimal for the gait and the gestures' crouch, joints.js setAngles for a held position.
 export const DRAPE = { k: .55, max: 70 };
-// a hanging sleeve on a raised arm: from how far up (the arm's rise over its length) it no longer stands round the arm
-// but hangs plumb from its top -- see writeAnimal. (It used to be shortened instead, to .35 of itself straight up, so its
-// mouth would not stand as a disc round the hand: a funnel all the same, and now it falls.)
-export const SLIDE = { fall: .35 };
+// A HANGING SLEEVE ON A RAISED ARM SLIDES DOWN IT: as the arm rises past level (its rise over its length, full by
+// `span`) the sleeve gathers toward its top, to `gather` of its length, and its mouth -- still round the arm, the hand
+// coming out through it -- droops as far as the gathered cone's own flare lets it, its top along the arm and the rest
+// hanging below. See writeAnimal. (It was held to the arm, a funnel stood round the raised hand; then it fell plumb from
+// its top ring, the forearm going up out of the cloth with the hand left inside it.)
+export const SLIDE = { span: .8, gather: .45 };
 // A CLOAK'S FRONT LIFTED BY THE ARM: the panel either side of a cloak's opening (clothes.js: a piece's `follow`) swings
 // forward with the arm under it -- its share of the arm's swing forward in the chest, beyond `from` degrees (an arm
 // hanging, a walk's swing, leave it hanging), up to `max` -- so a raised hand lifts the cloth's edge, not comes through it
@@ -373,10 +384,12 @@ export function writeAnimal(an, t, fA, fB, fC) {
     // tools.js lays in that hand rigidly: the hand and what it holds are one. (The item used to be placed by its own
     // frame, rebuilt from the forearm's heading across the ground -- which flips as a forearm passes upright, at the top
     // of every hammer stroke -- while the hand went on with the arm: it swung separately, out of step.)
+    // (a hand HELD by its joint -- a position, a statue's pose -- takes the same share: its upright frame is the hand's
+    //  rest in the figure's, as a hanging hand's is)
     const gf = an.grip?.[i];
-    if (gf !== undefined && !held) {
+    if (gf !== undefined) {
       world.decompose(_gp, _gq, _gs);
-      _gm.multiplyMatrices(_root, _local).decompose(_v, _gl, _v);
+      _gm.multiplyMatrices(_root, held ? _gr.makeRotationFromEuler(_e.set(p.baseRot[0], p.baseRot[1], p.baseRot[2])) : _local).decompose(_v, _gl, _v);
       world.compose(_gp, _gl.slerp(_gq, gf), _gs);
     }
     if (gf !== undefined) (an.gripM ??= {})[i] = (an.gripM[i] ?? new THREE.Matrix4()).copy(world);
@@ -386,19 +399,41 @@ export function writeAnimal(an, t, fA, fB, fC) {
     _v.copy(p.pB).applyMatrix4(world);
     if (p.sag || p.fall) {   // the cloth sags off the arm: its top rests along the arm, the rest hangs below -- tipped down toward the
       // plumb line (slerped) by no more than the cone's own half-angle, so the arm inside never comes through its side.
-      // ...and an arm raised past level lets it FALL (2026-10-24): over the first SLIDE.fall of the rise the limit gives
-      // way, and the sleeve hangs plumb from its top ring, the forearm going up out of that ring -- held to the cone, a
-      // raised forearm carried the whole bell up round the hand like a funnel
+      // ...and on an arm raised past level it SLIDES down the arm (SLIDE): shorter, gathered toward its top, and so flaring
+      // wider for its length -- which lets its mouth droop further, the arm still inside it and out through the mouth
       const ax = _v.x - fA[j], ay = _v.y - fA[j + 1], az = _v.z - fA[j + 2], L = Math.hypot(ax, ay, az) || 1;
-      const up = Math.max(0, Math.min(1, ay / L / SLIDE.fall)), lim = p.sag + (Math.PI - p.sag) * up * up * (3 - 2 * up);
-      const th = Math.acos(Math.max(-1, Math.min(1, -ay / L))), a = Math.min(th, lim), sn = Math.sin(th);
-      if (a > th - 1e-3 && a > 1e-4) _v.set(fA[j], fA[j + 1] - L, fA[j + 2]);   // (all the way: plumb -- also where the arm points straight up and no plane is left to turn in)
-      else if (a > 1e-4 && sn > 1e-3) {
-        const ku = Math.sin(th - a) / sn, kw = Math.sin(a) / sn;
-        _v.set(fA[j] + ax * ku, fA[j + 1] + ay * ku - L * kw, fA[j + 2] + az * ku);
+      let Ls = L, lim = p.sag;
+      if (p.fall) {
+        const u = Math.max(0, Math.min(1, ay / L / SLIDE.span)), k = u * u * (3 - 2 * u), g = 1 - (1 - SLIDE.gather) * k;
+        const rest = p.pB.distanceTo(p.pA) || 1, flare = Math.max(0, p.r2 - p.r1) / rest;
+        Ls = L * g;
+        // (the gathered cone's half-angle, less a margin for the arm's girth -- coming in with the rise: on an arm at or
+        // below level a sleeve's upper piece stays on the arm, its last piece sags as it always did)
+        lim = p.sag + Math.max(0, Math.atan(flare / g) - .08 - p.sag) * k;
       }
+      const th = Math.acos(Math.max(-1, Math.min(1, -ay / L))), a = Math.min(th, lim), sn = Math.sin(th);
+      let dx = ax / L, dy = ay / L, dz = az / L;
+      if (a > 1e-4 && sn > 1e-3) {
+        const ku = Math.sin(th - a) / sn, kw = Math.sin(a) / sn;
+        dx *= ku; dy = dy * ku - kw; dz *= ku;
+      } else if (a > 1e-4) {   // (an arm straight up: no plane to turn in -- it droops away from the body)
+        const r = an.base * 3, ox = fA[j] - fA[r], oz = fA[j + 2] - fA[r], ol = Math.hypot(ox, oz) || 1;
+        dx = Math.sin(a) * ox / ol; dy = Math.sign(dy || 1) * Math.cos(a); dz = Math.sin(a) * oz / ol;
+      }
+      _v.set(fA[j] + dx * Ls, fA[j + 1] + dy * Ls, fA[j + 2] + dz * Ls);
     }
     fB[j] = _v.x; fB[j + 1] = _v.y; fB[j + 2] = _v.z;
+    // (a HELD arm's swing forward -- what a cloak's panel follows, LIFT -- is read from where it points in the figure's
+    //  frame, and from where its forearm's end has gone: a position's forearm held out before the body over an upper arm
+    //  hanging -- a statue's offering, a book carried -- lifts the cloth clear of the hand, not the hand through it)
+    if (swing && held) {
+      const e = _root.elements, ang = (k) => {
+        const dx = fB[j] - fA[k], dy = fB[j + 1] - fA[k + 1], dz = fB[j + 2] - fA[k + 2];
+        return Math.atan2(dx * e[0] + dy * e[1] + dz * e[2], -(dx * e[4] + dy * e[5] + dz * e[6]));
+      };
+      swing[i] = ang(j);
+      if (p.parentIdx >= 0 && an.pose[p.parentIdx]) swing[p.parentIdx] = Math.max(swing[p.parentIdx], ang((an.base + p.parentIdx) * 3));
+    }
     if (p.r2 < 0) {
       _v.copy(p.pC).applyMatrix4(world);
       fC[j] = _v.x; fC[j + 1] = _v.y; fC[j + 2] = _v.z;

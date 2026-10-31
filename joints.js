@@ -38,16 +38,18 @@ const restOf = (def, mv) => {
 // ---- ANGLES: { joints: { [key]: { [movement]: degrees } }, root: { pitch, roll, yaw, lift }, anchor, support }
 //   anchor   what keeps its place on the ground (feet, right foot, left foot, hands, knees, pelvis)
 //   support  two things the body rests on at once (["forearms", "feet"]: a plank) -- the body's tilt (root pitch) is
-//            found so that both touch the ground; supportW how much of that tilt is taken (a transition into it)
+//            found so that both touch the ground; supportW how much of that tilt is taken (a transition into it);
+//            tilt "roll": the tilt found is the root's roll instead (a body on its side, propped on one elbow)
 
 export function restAngles() {
   const joints = {};
   for (const j of JOINT_LIST) joints[j.key] = Object.fromEntries(Object.keys(j.def.movements).map((mv) => [mv, restOf(j.def, mv)]));
-  return { joints, root: { pitch: 0, roll: 0, yaw: 0, lift: 0 }, anchor: "feet", support: null, supportW: 0 };
+  return { joints, root: { pitch: 0, roll: 0, yaw: 0, lift: 0 }, anchor: "feet", support: null, supportW: 0, tilt: "pitch" };
 }
 
 export const copyAngles = (a) => ({ joints: Object.fromEntries(Object.entries(a.joints).map(([k, v]) => [k, { ...v }])), root: { ...a.root },
-                                    anchor: a.anchor, anchors: a.anchors ?? null, support: a.support ?? null, supportW: a.supportW ?? 0 });
+                                    anchor: a.anchor, anchors: a.anchors ?? null, support: a.support ?? null, supportW: a.supportW ?? 0,
+                                    tilt: a.tilt ?? "pitch", ...(a.limber ? { limber: true } : {}) });
 
 // A POSITION as written (assets/people/positions.json): joints named `spine`, `neck`, or `<side> <joint>` with side
 // right, left or both ("both shoulders" / "both shoulder"); movements not named keep the base's (the rest)
@@ -68,8 +70,10 @@ export function readPosition(pos, base = restAngles()) {
   if (pos.root) Object.assign(a.root, pos.root);
   if (pos.anchor) a.anchor = pos.anchor;
   if (pos.support) { a.support = pos.support; a.supportW = 1; }
+  if (pos.tilt) a.tilt = pos.tilt;
   a.reach = pos.reach ?? null;   // (where the hands go, solved on each body: reach.js reachPosition)
-  a.reachLean = pos.lean ?? true;
+  a.reachLean = pos.lean ?? base.reachLean ?? true;   // (a variant -- `from` -- keeps its base's: the lotus's mudras sit upright as it does)
+  if (pos.limber) a.limber = true;   // (a movement's `limber` range open to it: clampAngles)
   return a;
 }
 
@@ -98,15 +102,17 @@ export function blendAngles(a, b, u, out = copyAngles(a)) {
   // (a support held at one end only: its tilt taken in step with the way there)
   out.support = b.support ?? a.support ?? null;
   out.supportW = a.support && b.support ? 1 : b.support ? u : a.support ? 1 - u : 0;
+  out.tilt = (b.support ? b.tilt : a.tilt) ?? "pitch";
   return out;
 }
 
-// every movement inside its range: the angles clamped, and what was out of it
+// every movement inside its range: the angles clamped, and what was out of it (a LIMBER position -- the lotus -- by a
+// movement's `limber` range where it has one: joints.json)
 export function clampAngles(a) {
   const out = [];
   for (const j of JOINT_LIST) for (const [mv, d] of Object.entries(j.def.movements)) {
-    const v = a.joints[j.key][mv];
-    if (v < d.min - 1e-6 || v > d.max + 1e-6) { out.push({ key: j.key, movement: mv, value: v, min: d.min, max: d.max }); a.joints[j.key][mv] = Math.min(d.max, Math.max(d.min, v)); }
+    const v = a.joints[j.key][mv], [min, max] = a.limber && d.limber ? d.limber : [d.min, d.max];
+    if (v < min - 1e-6 || v > max + 1e-6) { out.push({ key: j.key, movement: mv, value: v, min, max }); a.joints[j.key][mv] = Math.min(max, Math.max(min, v)); }
   }
   return out;
 }
@@ -214,18 +220,20 @@ function anchorPoint(rig, name, out) {
 // its feet instead of sliding, and a body laid down keeps its feet where they stood). Posed afresh each frame.
 // what a body can rest on (a support): its parts
 const SUPPORTS = { feet: ["footL", "footR"], "right foot": ["footL"], "left foot": ["footR"], hands: ["handL", "handR"], forearms: ["foreL", "foreR", "handL", "handR"],
+                   "right forearm": ["foreL", "handL"], "left forearm": ["foreR", "handR"],
                    knees: ["shinL", "shinR"], pelvis: ["hips"], back: ["chest", "belly", "hips"], head: ["head"] };
 const lowestOf = (rig, name) => { let low = Infinity; for (const id of SUPPORTS[name] ?? []) { const i = rig.index.get(id); if (i !== undefined) low = Math.min(low, lowest(rig, i)); } return low; };
 
-// THE TILT that rests the body on both its supports: the root's pitch, bisected between half a right angle either side
-// of the position's own until the two touch the ground together (the lower of each at the same height)
+// THE TILT that rests the body on both its supports: the root's pitch (or its roll: the angles' `tilt`), bisected
+// between half a right angle either side of the position's own until the two touch the ground together (the lower of
+// each at the same height)
 function supportTilt(rig) {
-  const an = rig.an, [s1, s2] = rig.angles.support, p0 = an.pitch;
-  const gap = (p) => { an.pitch = p; fk(rig); return lowestOf(rig, s1) - lowestOf(rig, s2); };
+  const an = rig.an, [s1, s2] = rig.angles.support, k0 = rig.angles.tilt === "roll" ? "roll" : "pitch", p0 = an[k0];
+  const gap = (p) => { an[k0] = p; fk(rig); return lowestOf(rig, s1) - lowestOf(rig, s2); };
   let lo = p0 - .8, hi = p0 + .8, glo = gap(lo), ghi = gap(hi);
-  if (Math.sign(glo) === Math.sign(ghi)) { an.pitch = p0; return; }   // (no tilt rests it on both: as written)
+  if (Math.sign(glo) === Math.sign(ghi)) { an[k0] = p0; return; }   // (no tilt rests it on both: as written)
   for (let k = 0; k < 18; k++) { const m = (lo + hi) / 2, gm = gap(m); if (Math.sign(gm) === Math.sign(glo)) { lo = m; glo = gm; } else hi = m; }
-  an.pitch = p0 + ((lo + hi) / 2 - p0) * (rig.angles.supportW ?? 1);
+  an[k0] = p0 + ((lo + hi) / 2 - p0) * (rig.angles.supportW ?? 1);
 }
 
 const _p = new THREE.Vector3(), _r = new THREE.Vector3();
@@ -243,6 +251,9 @@ export function ground(rig) {
   let low = Infinity;
   for (const i of rig.body) low = Math.min(low, lowest(rig, i));
   an.position.set(rig.home.x - _r.x, rig.home.y + (rig.floor - low) + (rig.angles.root.lift ?? 0), rig.home.z - _r.z);
+  // (where the floor it stands on is from its origin: lowered onto its knees, the origin is under it -- tools.js stands
+  //  an item resting on the ground there, not at the origin: a kneeling spearman's spear went half a metre into the floor)
+  rig.sole = rig.floor - an.position.y;
   fk(rig);   // (the frames where the body now stands: what the checks and the reach read)
   return rig;
 }

@@ -1,0 +1,22 @@
+{
+  "name": "Acropolis of Athens",
+  "building": "architecture/acropolis",
+  "_about": "The Acropolis: each building painted as it is alone (its own finish, used for its component: arch/finish.js withUses) -- the Parthenon, the Erechtheion, the Propylaia, the temple of Athena Nike; the rock its grey limestone weathered ochre (palette acropolis-rock), the circuit walls of squared limestone, the stair, the bases and the altar of marble.",
+  "stone": {
+    "color": "#e4d8bf",
+    "accent": "#cfc0a2",
+    "pat": "marble"
+  },
+  "rules": [
+    {"use": "parthenon", "in": "parthenon"},
+    {"use": "erechtheion", "in": "erechtheion"},
+    {"use": "propylaia", "in": "propylaia"},
+    {"use": "athena-nike", "in": "athena nike"},
+    {"parts": "rock", "surface": "floor", "pattern": "stone/rock face", "palette": "acropolis-rock", "scale": 2},
+    {"parts": "rock", "pattern": "stone/rock face", "palette": "acropolis-rock", "scale": 3},
+    {"parts": ["circuit wall", "nike parapet"], "pattern": "stone/ashlar", "palette": "limestone"},
+    {"parts": "old temple", "pattern": "stone/rubble", "palette": "limestone"},
+    {"surface": "floor", "pattern": "stone/marble", "palette": "carrara"},
+    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "carrara"}
+  ]
+}

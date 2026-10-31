@@ -104,3 +104,22 @@ export function gableFriezeMesh(m, levels, spec = {}) {
   }
   return m;
 }
+
+// THE RAKING CORNICE of a classical gable (a Greek temple's raking geison under its sima): a band `h` deep, square to
+// the rake, up both rakes of each end, its top `lift` over the roof's line (the sima standing over the tiles), `out`
+// proud of the gable's face and `back` into the roof -- the frame of the pediment, its tympanum the face inside it.
+// `spec`: { h (0.6), out (0.5), lift (h / 3), back (0.3), ends }; `levels` as gableFriezeMesh's
+export function rakeCorniceMesh(m, levels, spec = {}) {
+  const L0 = levels[0], L1 = levels[levels.length - 1];
+  if (levels.length !== 2 || Math.abs(L1.x1 - L1.x0) > 1e-6) return m;
+  const h = spec.h ?? .6, out = spec.out ?? .5, lift = spec.lift ?? h / 3, back = spec.back ?? .3, xc = L1.x0, yc = L1.y;
+  for (const [k, z] of [[0, L0.z0], [1, L0.z1]]) {
+    if (spec.ends && !spec.ends.includes(k)) continue;
+    const dir = k ? 1 : -1, { slab } = proudOf((x, y, s) => [x, y, z - dir * s], 0, m);
+    for (const xe of [L0.x0, L0.x1]) {
+      const sec = Math.hypot(1, (yc - L0.y) / Math.abs(xc - xe)), bv = h * sec, lv = lift * sec;   // (heights square to the rake, upright)
+      slab([[xe, L0.y + lv - bv], [xc, yc + lv - bv], [xc, yc + lv], [xe, L0.y + lv]], -back, out);
+    }
+  }
+  return m;
+}

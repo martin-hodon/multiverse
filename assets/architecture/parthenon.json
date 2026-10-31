@@ -39,9 +39,13 @@
     "cella front",
     "pronaos",
     "opisthodomos",
+    "inner colonnade",
+    "inner colonnade back",
+    "inner colonnade upper",
+    "inner colonnade upper back",
+    "cross wall",
     "Athena base",
     "Athena Parthenos",
-    "pediment east 0",
     "pediment east 1",
     "pediment east 2",
     "pediment east 3",
@@ -51,8 +55,6 @@
     "pediment east 7",
     "pediment east 8",
     "pediment east 9",
-    "pediment east 10",
-    "pediment west 0",
     "pediment west 1",
     "pediment west 2",
     "pediment west 3",
@@ -62,7 +64,6 @@
     "pediment west 7",
     "pediment west 8",
     "pediment west 9",
-    "pediment west 10",
     "ceiling",
     "roof",
     "acroteria"
@@ -103,8 +104,9 @@
           "out": "cornOut"
         },
         "triglyphs": {
-          "w": "D * 0.55",
-          "d": 0.14
+          "w": "D * 0.44",
+          "d": 0.14,
+          "corner": 1
         }
       },
       "at": [
@@ -220,6 +222,117 @@
       ],
       "_about": "the matching porch at the back"
     },
+    "inner colonnade": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 9,
+      "spacing": 2.75,
+      "columnR": 0.55,
+      "height": 5.6,
+      "entablature": {
+        "h": 0.7,
+        "depth": 1.265
+      },
+      "at": [
+        [
+          5.6,
+          "base",
+          9.15,
+          1.5707963
+        ],
+        [
+          -5.6,
+          "base",
+          9.15,
+          1.5707963
+        ]
+      ],
+      "_about": "the naos's colonnade down either side of the statue, its lower storey"
+    },
+    "inner colonnade back": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 5,
+      "spacing": 2.8,
+      "columnR": 0.55,
+      "height": 5.6,
+      "entablature": {
+        "h": 0.7,
+        "depth": 1.265
+      },
+      "at": [
+        [
+          0,
+          "base",
+          -4.6,
+          0
+        ]
+      ],
+      "_about": "the row across behind the statue, its lower storey"
+    },
+    "inner colonnade upper": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 9,
+      "spacing": 2.75,
+      "columnR": 0.413,
+      "height": 3.5,
+      "entablature": {
+        "h": 0.63,
+        "depth": 0.95
+      },
+      "at": [
+        [
+          5.6,
+          "base + 6.3",
+          9.15,
+          1.5707963
+        ],
+        [
+          -5.6,
+          "base + 6.3",
+          9.15,
+          1.5707963
+        ]
+      ],
+      "_about": "the naos's colonnade down either side of the statue, its upper storey"
+    },
+    "inner colonnade upper back": {
+      "type": "colonnade",
+      "order": "doric",
+      "count": 5,
+      "spacing": 2.8,
+      "columnR": 0.413,
+      "height": 3.5,
+      "entablature": {
+        "h": 0.63,
+        "depth": 0.95
+      },
+      "at": [
+        [
+          0,
+          "base + 6.3",
+          -4.6,
+          0
+        ]
+      ],
+      "_about": "the row across behind the statue, its upper storey"
+    },
+    "cross wall": {
+      "type": "box",
+      "width": "cellaW - 2 * wallT",
+      "length": 1.2,
+      "height": "cellaH",
+      "at": [
+        [
+          0,
+          "base",
+          -7.7,
+          0
+        ]
+      ],
+      "_about": "the wall between the naos and the west room"
+    },
     "Athena base": {
       "type": "box",
       "width": 8.06,
@@ -229,7 +342,7 @@
         [
           0,
           1.5,
-          -6.0,
+          -1.5,
           0
         ]
       ],
@@ -242,41 +355,28 @@
         [
           0,
           2.4,
-          -6.0,
+          -1.5,
           0
         ]
       ],
       "data": {
         "kind": "woman",
         "style": "greek",
-        "stone": "gold",
+        "stone": "chryselephantine",
         "scale": 5.1,
+        "pose": "offering",
         "hold": {
+          "R": "items/tools/victor-wreath",
           "L": "items/shields/aspis"
         },
+        "grip": {
+          "L": "shield rest"
+        },
+        "wear": [
+          "clothes/crested-helmet"
+        ],
         "seed": 7,
         "face": -1.5707963
-      }
-    },
-    "pediment east 0": {
-      "type": "marker",
-      "role": "statue",
-      "at": [
-        [
-          -13.091,
-          15.22,
-          34.35,
-          0
-        ]
-      ],
-      "data": {
-        "pose": "lie",
-        "scale": 0.377,
-        "stone": "marble",
-        "style": "greek",
-        "kind": "man",
-        "seed": 31,
-        "face": 0.0
       }
     },
     "pediment east 1": {
@@ -292,12 +392,13 @@
       ],
       "data": {
         "pose": "lie",
-        "scale": 1.116,
-        "stone": "marble",
+        "scale": 0.841,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 32,
-        "face": 0.0
+        "face": -1.5708,
+        "head": "left"
       }
     },
     "pediment east 2": {
@@ -312,13 +413,14 @@
         ]
       ],
       "data": {
-        "pose": "sit",
-        "scale": 0.944,
-        "stone": "marble",
+        "pose": "lie",
+        "scale": 1.388,
+        "stone": "painted",
         "style": "greek",
         "kind": "woman",
         "seed": 33,
-        "face": -0.7854
+        "face": -1.5708,
+        "head": "left"
       }
     },
     "pediment east 3": {
@@ -333,13 +435,20 @@
         ]
       ],
       "data": {
-        "pose": "sit",
-        "scale": 1.318,
-        "stone": "marble",
+        "pose": "kneeling",
+        "scale": 1.284,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 34,
-        "face": -0.7854
+        "face": -0.5236,
+        "hold": {
+          "R": "items/weapons/spear",
+          "L": "items/shields/aspis"
+        },
+        "wear": [
+          "clothes/crested-helmet"
+        ]
       }
     },
     "pediment east 4": {
@@ -355,8 +464,8 @@
       ],
       "data": {
         "pose": "stand",
-        "scale": 1.213,
-        "stone": "marble",
+        "scale": 1.284,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 35,
@@ -376,8 +485,8 @@
       ],
       "data": {
         "pose": "stand",
-        "scale": 1.557,
-        "stone": "marble",
+        "scale": 1.554,
+        "stone": "painted",
         "style": "greek",
         "kind": "woman",
         "seed": 36,
@@ -397,8 +506,8 @@
       ],
       "data": {
         "pose": "stand",
-        "scale": 1.213,
-        "stone": "marble",
+        "scale": 1.284,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 37,
@@ -417,13 +526,20 @@
         ]
       ],
       "data": {
-        "pose": "sit",
-        "scale": 1.318,
-        "stone": "marble",
+        "pose": "kneeling left",
+        "scale": 1.284,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 38,
-        "face": -2.3562
+        "face": -2.618,
+        "hold": {
+          "L": "items/weapons/spear",
+          "R": "items/shields/aspis"
+        },
+        "wear": [
+          "clothes/crested-helmet"
+        ]
       }
     },
     "pediment east 8": {
@@ -438,13 +554,14 @@
         ]
       ],
       "data": {
-        "pose": "sit",
-        "scale": 0.944,
-        "stone": "marble",
+        "pose": "lie",
+        "scale": 1.388,
+        "stone": "painted",
         "style": "greek",
         "kind": "woman",
         "seed": 39,
-        "face": -2.3562
+        "face": -1.5708,
+        "head": "right"
       }
     },
     "pediment east 9": {
@@ -460,54 +577,13 @@
       ],
       "data": {
         "pose": "lie",
-        "scale": 1.116,
-        "stone": "marble",
+        "scale": 0.841,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 40,
-        "face": 3.1416
-      }
-    },
-    "pediment east 10": {
-      "type": "marker",
-      "role": "statue",
-      "at": [
-        [
-          13.091,
-          15.22,
-          34.35,
-          0
-        ]
-      ],
-      "data": {
-        "pose": "lie",
-        "scale": 0.377,
-        "stone": "marble",
-        "style": "greek",
-        "kind": "man",
-        "seed": 41,
-        "face": 3.1416
-      }
-    },
-    "pediment west 0": {
-      "type": "marker",
-      "role": "statue",
-      "at": [
-        [
-          -13.091,
-          15.22,
-          -34.35,
-          0
-        ]
-      ],
-      "data": {
-        "pose": "lie",
-        "scale": 0.377,
-        "stone": "marble",
-        "style": "greek",
-        "kind": "man",
-        "seed": 62,
-        "face": 0.0
+        "face": -1.5708,
+        "head": "right"
       }
     },
     "pediment west 1": {
@@ -523,12 +599,13 @@
       ],
       "data": {
         "pose": "lie",
-        "scale": 1.116,
-        "stone": "marble",
+        "scale": 0.841,
+        "stone": "painted",
         "style": "greek",
         "kind": "woman",
         "seed": 63,
-        "face": 0.0
+        "face": 1.5708,
+        "head": "right"
       }
     },
     "pediment west 2": {
@@ -543,13 +620,14 @@
         ]
       ],
       "data": {
-        "pose": "sit",
-        "scale": 0.944,
-        "stone": "marble",
+        "pose": "lie",
+        "scale": 1.388,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 64,
-        "face": 0.7854
+        "face": 1.5708,
+        "head": "right"
       }
     },
     "pediment west 3": {
@@ -564,13 +642,20 @@
         ]
       ],
       "data": {
-        "pose": "sit",
-        "scale": 1.318,
-        "stone": "marble",
+        "pose": "kneeling",
+        "scale": 1.284,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 65,
-        "face": 0.7854
+        "face": 0.5236,
+        "hold": {
+          "R": "items/weapons/spear",
+          "L": "items/shields/aspis"
+        },
+        "wear": [
+          "clothes/crested-helmet"
+        ]
       }
     },
     "pediment west 4": {
@@ -586,8 +671,8 @@
       ],
       "data": {
         "pose": "stand",
-        "scale": 1.213,
-        "stone": "marble",
+        "scale": 1.284,
+        "stone": "painted",
         "style": "greek",
         "kind": "woman",
         "seed": 66,
@@ -607,8 +692,8 @@
       ],
       "data": {
         "pose": "stand",
-        "scale": 1.557,
-        "stone": "marble",
+        "scale": 1.554,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 67,
@@ -628,8 +713,8 @@
       ],
       "data": {
         "pose": "stand",
-        "scale": 1.213,
-        "stone": "marble",
+        "scale": 1.284,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 68,
@@ -648,13 +733,20 @@
         ]
       ],
       "data": {
-        "pose": "sit",
-        "scale": 1.318,
-        "stone": "marble",
+        "pose": "kneeling left",
+        "scale": 1.284,
+        "stone": "painted",
         "style": "greek",
-        "kind": "woman",
+        "kind": "man",
         "seed": 69,
-        "face": 2.3562
+        "face": 2.618,
+        "hold": {
+          "L": "items/weapons/spear",
+          "R": "items/shields/aspis"
+        },
+        "wear": [
+          "clothes/crested-helmet"
+        ]
       }
     },
     "pediment west 8": {
@@ -669,13 +761,14 @@
         ]
       ],
       "data": {
-        "pose": "sit",
-        "scale": 0.944,
-        "stone": "marble",
+        "pose": "lie",
+        "scale": 1.388,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 70,
-        "face": 2.3562
+        "face": 1.5708,
+        "head": "left"
       }
     },
     "pediment west 9": {
@@ -691,33 +784,13 @@
       ],
       "data": {
         "pose": "lie",
-        "scale": 1.116,
-        "stone": "marble",
+        "scale": 0.841,
+        "stone": "painted",
         "style": "greek",
         "kind": "man",
         "seed": 71,
-        "face": 3.1416
-      }
-    },
-    "pediment west 10": {
-      "type": "marker",
-      "role": "statue",
-      "at": [
-        [
-          13.091,
-          15.22,
-          -34.35,
-          0
-        ]
-      ],
-      "data": {
-        "pose": "lie",
-        "scale": 0.377,
-        "stone": "marble",
-        "style": "greek",
-        "kind": "woman",
-        "seed": 72,
-        "face": 3.1416
+        "face": 1.5708,
+        "head": "left"
       }
     },
     "ceiling": {
@@ -745,6 +818,10 @@
       "width": "W - 2 * inset + D * 1.1 + 2 * cornOut",
       "length": "L - 2 * inset + D * 1.1 + 2 * cornOut - 2.0",
       "pitch": "pitch",
+      "rake": {
+        "h": "cornH",
+        "out": 1.0
+      },
       "at": [
         [
           0,
@@ -756,10 +833,12 @@
       "_about": "one gable over the whole: its two ends are the pediments"
     },
     "acroteria": {
-      "type": "box",
-      "width": "D * 0.5",
-      "length": "D * 0.5",
-      "height": "D * 0.9",
+      "type": "item",
+      "item": "items/ornaments/acroterion",
+      "params": {
+        "h": "D * 1.6"
+      },
+      "solid": false,
       "at": [
         [
           0,
@@ -774,7 +853,7 @@
           0
         ]
       ],
-      "_about": "the ornaments on the apex of each pediment"
+      "_about": "the floral ornaments on the apex of each pediment"
     }
   }
 }

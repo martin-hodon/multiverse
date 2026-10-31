@@ -286,6 +286,10 @@
       "width": "W - 2 * inset + D * 1.1 + 2 * cornOut",
       "length": "L - 2 * inset + D * 1.1 + 2 * cornOut - 0.0",
       "pitch": "pitch",
+      "rake": {
+        "h": "cornH",
+        "out": 0.15
+      },
       "at": [
         [
           0,
@@ -297,10 +301,12 @@
       "_about": "one gable over the whole: its two ends are the pediments"
     },
     "acroteria": {
-      "type": "box",
-      "width": "D * 0.5",
-      "length": "D * 0.5",
-      "height": "D * 0.9",
+      "type": "item",
+      "item": "items/ornaments/acroterion",
+      "params": {
+        "h": "D * 1.6"
+      },
+      "solid": false,
       "at": [
         [
           0,
@@ -315,7 +321,7 @@
           0
         ]
       ],
-      "_about": "the ornaments on the apex of each pediment"
+      "_about": "the floral ornaments on the apex of each pediment"
     }
   }
 }

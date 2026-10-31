@@ -14,7 +14,7 @@
 //   planReach(rig, from, target, opts)     -> { keys: [angles...], side, target }: the hand along a straight line
 //                                             from where it is to the point, each step solved (motion.js plays it)
 import * as THREE from "three";
-import { MODEL, copyAngles, blendAngles, setAngles, ground, jointAt, endA, endB, clampAngles, limbOf, tipOf, midCircle, limbAngles, limbBase } from "./joints.js";
+import { MODEL, copyAngles, blendAngles, setAngles, ground, jointAt, endA, endB, radii, clampAngles, limbOf, tipOf, midCircle, limbAngles, limbBase } from "./joints.js";
 import { checkBody } from "./bodycheck.js";
 
 const RAD = Math.PI / 180, DEG = 180 / Math.PI;
@@ -140,7 +140,8 @@ export function planReach(rig, from, target, { side = "auto", steps = 6 } = {}) 
 // A POSITION THAT SAYS WHERE THE HANDS GO (positions.json `reach`: { "hands": "toes" }) solved on this body -- its
 // proportions decide how far it must bend. `hands`: both, the left arm the mirror of the right (the trunk bending
 // straight forward); `right hand` / `left hand`: one. Places: `toes` (just over and before the tip of that side's
-// foot), `knees` (before them), `floor` (on the floor just ahead of the shoulder: hands put down to get onto them)
+// foot), `knees` (before them), `floor` (on the floor just ahead of the shoulder: hands put down to get onto them),
+// `chin`, `breast`, `lap` (on the body: see PLACES)
 const fwdOf = (rig) => new THREE.Vector3(Math.cos(rig.rotY0), 0, -Math.sin(rig.rotY0));
 const outOf = (rig, side) => new THREE.Vector3(0, 1, 0).cross(fwdOf(rig)).multiplyScalar(-MODEL.sides[side].s);   // (the side's own outward)
 const PLACES = {
@@ -150,7 +151,17 @@ const PLACES = {
   },
   knees: (rig, side) => jointAt(rig, rig.index.get("shin" + MODEL.sides[side].tag)).addScaledVector(fwdOf(rig), .08),
   floor: (rig, side) => jointAt(rig, rig.index.get("arm" + MODEL.sides[side].tag)).addScaledVector(fwdOf(rig), .2).addScaledVector(outOf(rig, side), .03).setY(rig.floor + .05),   // (a little wider than the shoulder: where a push-up wants them)
+  // ON THE BODY ITSELF (2026-10-29: a statue's pensive chin on its hand, hands joined in prayer), found from the parts as
+  // they are posed -- the head's or the chest's own forward and up, so a bowed head brings its chin down with it:
+  // `chin` the palm just under and before the chin, `breast` before the breastbone
+  chin: (rig) => { const i = rig.index.get("head"), r = radii(rig, i)[0]; return midOf(rig, i).addScaledVector(axisOf(rig, i, 0), r * .75).addScaledVector(axisOf(rig, i, 1), -r * 1.25); },
+  breast: (rig) => { const i = rig.index.get("chest"), r = radii(rig, i)[0]; return midOf(rig, i).addScaledVector(axisOf(rig, i, 0), r * (rig.flat[i] || 1) + .07).addScaledVector(axisOf(rig, i, 1), -.02); },
+  // (`lap`, 2026-10-30: in the lap of a figure seated cross-legged -- before the belly's foot, over the crossed ankles: a
+  //  Buddha's hands laid there one in the other; by the hips' own girth, so a small figure's are as close)
+  lap: (rig) => { const i = rig.index.get("hips"), r = radii(rig, i)[0]; return endB(rig, i).addScaledVector(axisOf(rig, i, 0), r * ((rig.flat[i] || 1) + .55)).addScaledVector(axisOf(rig, i, 1), r * .45); },
 };
+const midOf = (rig, i) => endA(rig, i).add(endB(rig, i)).multiplyScalar(.5);
+const axisOf = (rig, i, col) => new THREE.Vector3().setFromMatrixColumn(rig.frames[i], col).normalize();   // (a part's frame: 0 its forward, 1 its up)
 export function reachPosition(rig, a) {
   let out = copyAngles(a);
   for (const [who, place] of Object.entries(a.reach)) {

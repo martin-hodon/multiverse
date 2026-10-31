@@ -1,0 +1,146 @@
+{
+ "kind": "item",
+ "name": "Palm frond",
+ "category": "tool",
+ "era": "-3000-1900",
+ "_about": "a palm frond, carried in triumph -- the victor's palm, the martyr's: a rachis, its leaflets swept toward the tip",
+ "params": {
+  "L": [
+   0.8,
+   1.0
+  ]
+ },
+ "materials": {
+  "stem": "stem-green",
+  "leaf": "leaf"
+ },
+ "parts": [
+  {
+   "id": "rachis",
+   "type": "sweep",
+   "material": "stem",
+   "radii": [
+    0.009,
+    0.007,
+    0.005,
+    0.003
+   ],
+   "path": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     "L * 0.35"
+    ],
+    [
+     0,
+     0,
+     "L * 0.7"
+    ],
+    [
+     0,
+     0,
+     "L"
+    ]
+   ]
+  },
+  {
+   "id": "leaflets out",
+   "type": "feathers",
+   "material": "leaf",
+   "n": 16,
+   "shape": "pointed",
+   "lift": 0.0003,
+   "droop": 0.5,
+   "lead": 1,
+   "roots": [
+    [
+     0,
+     "L * 0.12"
+    ],
+    [
+     0,
+     "L * 0.97"
+    ]
+   ],
+   "dir": [
+    -58,
+    -18
+   ],
+   "length": [
+    "L * 0.36",
+    "L * 0.07"
+   ],
+   "width": [
+    "L * 0.035",
+    "L * 0.012"
+   ]
+  },
+  {
+   "id": "leaflets in",
+   "type": "feathers",
+   "material": "leaf",
+   "n": 16,
+   "shape": "pointed",
+   "lift": 0.0003,
+   "droop": 0.5,
+   "lead": -1,
+   "roots": [
+    [
+     0,
+     "L * 0.12"
+    ],
+    [
+     0,
+     "L * 0.97"
+    ]
+   ],
+   "dir": [
+    58,
+    18
+   ],
+   "length": [
+    "L * 0.36",
+    "L * 0.07"
+   ],
+   "width": [
+    "L * 0.035",
+    "L * 0.012"
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0,
+   "L * 0.06"
+  ],
+  "axis": [
+   0,
+   0,
+   1
+  ],
+  "face": [
+   0,
+   1,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.2,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "upright": true
+ }
+}

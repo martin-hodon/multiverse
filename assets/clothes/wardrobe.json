@@ -1,7 +1,7 @@
 {
  "name": "Wardrobe",
  "kind": "wardrobe",
- "_about": "WHO WEARS WHAT (clothes.js drawOutfit). `people`: for each kind of person a list of OUTFITS by weight, each a list of garments worn from the skin out -- `p` the chance of wearing it at all, a list of garments means one of them, and `fabrics` the choices each fabric slot is dyed from ('pattern:palette', the fabrics family and the dyes of palettes.json). `outfits`: kits by name (a guard's, a beast-man's). `garments`: every garment there is (clothes.js loads them). A param given as a LIST is drawn from it, person by person (a tunic's or kirtle's `hem`: whether it has a band at its hem, and how wide -- 0 none). An outfit marked `work` is what one AT WORK wears -- in the fields, at a forge, under a sack (makePerson({ work })): a worker draws only from those of the list, never a lady's gown or a gentleman's frock coat.",
+ "_about": "WHO WEARS WHAT (clothes.js drawOutfit). `people`: for each kind of person a list of OUTFITS by weight, each a list of garments worn from the skin out -- `p` the chance of wearing it at all, a list of garments means one of them, and `fabrics` the choices each fabric slot is dyed from ('pattern:palette', the fabrics family and the dyes of palettes.json). `outfits`: kits by name (a guard's, a beast-man's). `garments`: every garment there is (clothes.js loads them). A param given as a LIST is drawn from it, person by person (a tunic's or kirtle's `hem`: whether it has a band at its hem, and how wide -- 0 none). An outfit marked `work` is what one AT WORK wears -- in the fields, at a forge, under a sack (makePerson({ work })): a worker draws only from those of the list, never a lady's gown or a gentleman's frock coat. An outfit marked `statue` is CARVED, never worn (a hero in his mantle alone, a nude): drawn only where a statue's dress names it (people/statuary.json `dress`). An outfit may name its own `hair` (a Buddha's topknot, the ushnisha).",
  "garments": {
   "apron": true,
   "belt": true,
@@ -38,6 +38,9 @@
   "shirt": true,
   "shoes": true,
   "steel-cap": true,
+  "crested-helmet": true,
+  "crown": true,
+  "mantle": true,
   "stola": true,
   "straw-hat": true,
   "surcoat": true,
@@ -1519,7 +1522,9 @@
         ]
        },
        "params": {
-        "length": "knee - 0.03"
+        "length": "knee - 0.03",
+        "fit": "flare",
+        "flare": 0.28
        }
       },
       {
@@ -1585,6 +1590,8 @@
        },
        "params": {
         "length": "knee - 0.06",
+        "fit": "flare",
+        "flare": 0.28,
         "sleeves": "biceps"
        }
       },
@@ -1642,7 +1649,9 @@
         ]
        },
        "params": {
-        "length": "knee - 0.06"
+        "length": "knee - 0.06",
+        "fit": "flare",
+        "flare": 0.28
        }
       },
       {
@@ -1660,6 +1669,46 @@
       }
      ],
      "work": true
+    },
+    {
+     "name": "hero",
+     "weight": 2,
+     "statue": true,
+     "_about": "a god's, a hero's statue: the himation alone, wrapped round the hips and over the left shoulder, the chest bare (its anatomy carved: shell.js ANATOMY)",
+     "wear": [
+      {
+       "garment": "himation",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:undyed",
+         "plain:wool-white",
+         "plain:madder",
+         "plain:woad",
+         "plain:tyrian",
+         "plain:russet",
+         "plain:wool-grey",
+         "plain:saffron"
+        ],
+        "trim": [
+         "meander:meander-red",
+         "meander:meander-black",
+         "meander:gold-braid"
+        ]
+       }
+      },
+      {
+       "garment": "sandals",
+       "p": 0.6
+      }
+     ]
+    },
+    {
+     "name": "nude",
+     "weight": 1,
+     "statue": true,
+     "_about": "the heroic nude: an athlete, a god, a warrior (Aegina's, helmeted: a marker's `wear`)",
+     "wear": []
     }
    ],
    "woman": [
@@ -1764,7 +1813,8 @@
        },
        "params": {
         "at": "waist"
-       }
+       },
+       "layer": 2
       },
       {
        "garment": "himation",
@@ -1822,6 +1872,8 @@
        },
        "params": {
         "length": "knee - 0.08",
+        "fit": "flare",
+        "flare": 0.28,
         "sleeves": "biceps"
        }
       },
@@ -1970,6 +2022,8 @@
        },
        "params": {
         "length": "floor - 0.04",
+        "fit": "ring",
+        "flare": 0.1,
         "sleeve": "elbow"
        }
       },
@@ -2038,6 +2092,8 @@
        },
        "params": {
         "length": "floor - 0.04",
+        "fit": "ring",
+        "flare": 0.1,
         "sleeve": "elbow"
        }
       },
@@ -2251,6 +2307,34 @@
       }
      ],
      "work": true
+    },
+    {
+     "name": "buddha",
+     "weight": 1,
+     "statue": true,
+     "hair": "ushnisha",
+     "beard": "none",
+     "_about": "a Buddha's statue (statuary.json dress `monastic`): the robe over the left shoulder, the right bare, the under-robe round the crossed legs to the ankles (trousers: the cloth on the legs, its hem carved at the ankles), the ushnisha under its snail curls (hair `ushnisha`)",
+     "wear": [
+      {
+       "garment": "trousers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:saffron"
+        ]
+       }
+      },
+      {
+       "garment": "himation",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:saffron"
+        ]
+       }
+      }
+     ]
     }
    ],
    "woman": [
@@ -2722,6 +2806,112 @@
       }
      ],
      "work": true
+    },
+    {
+     "name": "king",
+     "weight": 2,
+     "statue": true,
+     "_about": "a king of a cathedral's portal: the long gown and the mantle over it, crowned",
+     "wear": [
+      {
+       "garment": "shirt",
+       "p": 1
+      },
+      {
+       "garment": "hose",
+       "p": 1
+      },
+      {
+       "garment": "houppelande",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "damask:damask-red",
+         "damask:damask-blue",
+         "damask:damask-green",
+         "brocade:damask-red",
+         "brocade:damask-blue",
+         "plain:murrey",
+         "plain:black",
+         "plain:scarlet"
+        ]
+       }
+      },
+      {
+       "garment": "belt",
+       "p": 1
+      },
+      {
+       "garment": "shoes",
+       "p": 1
+      },
+      {
+       "garment": "mantle",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:scarlet",
+         "plain:woad",
+         "plain:murrey",
+         "damask:damask-blue",
+         "plain:tyrian"
+        ]
+       }
+      },
+      {
+       "garment": "crown",
+       "p": 1
+      }
+     ]
+    },
+    {
+     "name": "saint",
+     "weight": 2,
+     "statue": true,
+     "_about": "a saint, an apostle, a prophet of the portal's jambs: the long gown and the mantle, bareheaded",
+     "wear": [
+      {
+       "garment": "shirt",
+       "p": 1
+      },
+      {
+       "garment": "hose",
+       "p": 1
+      },
+      {
+       "garment": "houppelande",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "damask:damask-red",
+         "damask:damask-blue",
+         "damask:damask-green",
+         "brocade:damask-red",
+         "brocade:damask-blue",
+         "plain:murrey",
+         "plain:black",
+         "plain:scarlet"
+        ]
+       }
+      },
+      {
+       "garment": "shoes",
+       "p": 1
+      },
+      {
+       "garment": "mantle",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:scarlet",
+         "plain:woad",
+         "plain:murrey",
+         "damask:damask-blue",
+         "plain:tyrian"
+        ]
+       }
+      }
+     ]
     }
    ],
    "woman": [
@@ -2931,6 +3121,140 @@
       }
      ],
      "work": true
+    },
+    {
+     "name": "queen",
+     "weight": 2,
+     "statue": true,
+     "_about": "a queen of the portal (the Queen of Sheba, a royal ancestor): the gown, the mantle, the crown",
+     "wear": [
+      {
+       "garment": "chemise",
+       "p": 1
+      },
+      {
+       "garment": "kirtle",
+       "p": 1
+      },
+      {
+       "garment": "houppelande",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "damask:damask-red",
+         "damask:damask-blue",
+         "damask:damask-green",
+         "brocade:damask-red",
+         "brocade:damask-blue",
+         "plain:murrey",
+         "plain:black",
+         "plain:scarlet"
+        ],
+        "trim": [
+         "fur:fur-white",
+         "fur:fur-grey",
+         "fur:fur-brown"
+        ]
+       }
+      },
+      {
+       "garment": "belt",
+       "p": 0.8,
+       "fabrics": {
+        "main": [
+         "braid:gold-braid"
+        ]
+       },
+       "params": {
+        "at": "chest + 0.02"
+       }
+      },
+      {
+       "garment": "shoes",
+       "p": 1
+      },
+      {
+       "garment": "mantle",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:scarlet",
+         "plain:woad",
+         "plain:murrey",
+         "damask:damask-blue",
+         "plain:tyrian"
+        ]
+       }
+      },
+      {
+       "garment": "crown",
+       "p": 1
+      }
+     ]
+    },
+    {
+     "name": "veiled",
+     "weight": 2,
+     "statue": true,
+     "_about": "the Virgin, a holy woman: the gown and the mantle, a veil over the head",
+     "wear": [
+      {
+       "garment": "chemise",
+       "p": 1
+      },
+      {
+       "garment": "kirtle",
+       "p": 1
+      },
+      {
+       "garment": "houppelande",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "damask:damask-red",
+         "damask:damask-blue",
+         "damask:damask-green",
+         "brocade:damask-red",
+         "brocade:damask-blue",
+         "plain:murrey",
+         "plain:black",
+         "plain:scarlet"
+        ],
+        "trim": [
+         "fur:fur-white",
+         "fur:fur-grey",
+         "fur:fur-brown"
+        ]
+       }
+      },
+      {
+       "garment": "shoes",
+       "p": 1
+      },
+      {
+       "garment": "mantle",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:scarlet",
+         "plain:woad",
+         "plain:murrey",
+         "damask:damask-blue",
+         "plain:tyrian"
+        ]
+       }
+      },
+      {
+       "garment": "headscarf",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "linen:linen",
+         "plain:woad"
+        ]
+       }
+      }
+     ]
     }
    ],
    "boy": [
@@ -3053,6 +3377,8 @@
        },
        "params": {
         "length": "knee - 0.05",
+        "fit": "flare",
+        "flare": 0.28,
         "sleeves": "biceps",
         "hem": 0
        }
@@ -3145,6 +3471,8 @@
        },
        "params": {
         "length": "knee",
+        "fit": "flare",
+        "flare": 0.28,
         "sleeves": "biceps",
         "hem": 0
        }
@@ -3448,6 +3776,8 @@
        },
        "params": {
         "length": "floor - 0.03",
+        "fit": "ring",
+        "flare": 0.1,
         "sleeve": "wrist"
        }
       },
@@ -3560,6 +3890,8 @@
        },
        "params": {
         "length": "floor - 0.03",
+        "fit": "ring",
+        "flare": 0.1,
         "sleeve": "wrist"
        }
       },
@@ -5567,6 +5899,34 @@
        }
       }
      ]
+    },
+    {
+     "name": "buddha",
+     "weight": 1,
+     "statue": true,
+     "hair": "ushnisha",
+     "beard": "none",
+     "_about": "a Buddha's statue (statuary.json dress `monastic`): the robe over the left shoulder, the right bare, the under-robe round the crossed legs to the ankles (trousers: the cloth on the legs, its hem carved at the ankles), the ushnisha under its snail curls (hair `ushnisha`)",
+     "wear": [
+      {
+       "garment": "trousers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:saffron"
+        ]
+       }
+      },
+      {
+       "garment": "himation",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:saffron"
+        ]
+       }
+      }
+     ]
     }
    ],
    "woman": [
@@ -6529,6 +6889,34 @@
       }
      ],
      "work": true
+    },
+    {
+     "name": "buddha",
+     "weight": 1,
+     "statue": true,
+     "hair": "ushnisha",
+     "beard": "none",
+     "_about": "a Buddha's statue (statuary.json dress `monastic`): the robe over the left shoulder, the right bare, the under-robe round the crossed legs to the ankles (trousers: the cloth on the legs, its hem carved at the ankles), the ushnisha under its snail curls (hair `ushnisha`)",
+     "wear": [
+      {
+       "garment": "trousers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:saffron"
+        ]
+       }
+      },
+      {
+       "garment": "himation",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:saffron"
+        ]
+       }
+      }
+     ]
     }
    ],
    "woman": [

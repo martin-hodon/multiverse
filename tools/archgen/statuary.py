@@ -9,7 +9,10 @@ LIMIT = 50                                 # a building's statues at most: the m
 def statue(at, **d):
     """a `statue` marker at `at` (its feet -- or a seated figure's seat top), the figure's numbers in `d`:
     kind (man | woman), pose (stand | guard | sit | lie), style (greek | roman | gothic | chinese) or outfit,
-    hold { R, L } (items: its right hand, its left), stone (marble | bronze | gold | limestone), scale, seed, face"""
+    hold { R, L } (items: its right hand, its left), grip { R, L } (how that hand holds it, over its pose's: statuary.json
+    `grips` -- "shield rest"), wings (raised | spread | folded: an angel's, a Victory's --
+    assets/people/statuary.json `wings`), stone (marble | bronze | gold | limestone | painted | chryselephantine | ivory:
+    shell.js STONES), scale, seed, face"""
     return {"type": "marker", "role": "statue", "at": [[round(at[0], 3), round(at[1], 3), round(at[2], 3), 0]], "data": d}
 
 
