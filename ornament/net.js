@@ -20,18 +20,18 @@ export function buildNet(segs, lat) {
     const s = lat.steps(p[0], p[1]), o = lat.at(s[0], s[1]);
     return { p: [p[0] - o[0], p[1] - o[1]], s };
   };
-  const key = (x, y) => `${Math.round(x / Q)},${Math.round(y / Q)}`;
+  const key = (x, y) => Math.round(x / Q) * 134217728 + Math.round(y / Q);   // (a number, not a string: this is the hot path. Exact to 670 m either way, and the distance below would catch a clash)
+  const TRIES = lat ? [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]].map(([i, j]) => [i, j, ...lat.at(i, j)]) : [[0, 0, 0, 0]];
   const nodeAt = (p0) => {                                        // (a point: its node, and the period it stands in)
     const { p, s } = reduce(p0);
     // near the cell's edge a point may reduce to either side, so look at its neighbours in the rounding and across the cell
-    const tries = lat ? [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]] : [[0, 0]];
-    for (const [i, j] of tries) {
-      const o = lat ? lat.at(i, j) : [0, 0];
-      for (const dx of [-Q, 0, Q]) for (const dy of [-Q, 0, Q]) {
-        const n = index.get(key(p[0] + o[0] + dx, p[1] + o[1] + dy));
+    for (const [i, j, ox, oy] of TRIES) {
+      const X = p[0] + ox, Y = p[1] + oy;
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
+        const n = index.get(key(X + a * Q, Y + b * Q));
         if (n !== undefined) {
           const q = nodes[n];
-          if (Math.hypot(q.x - p[0] - o[0], q.y - p[1] - o[1]) < Q * 2) return { n, s: [s[0] - i, s[1] - j] };
+          if (Math.hypot(q.x - X, q.y - Y) < Q * 2) return { n, s: [s[0] - i, s[1] - j] };
         }
       }
     }
@@ -40,34 +40,69 @@ export function buildNet(segs, lat) {
     index.set(key(p[0], p[1]), n);
     return { n, s };
   };
-  // cut: every segment against every other, and against its copies one period away
-  const offs = lat ? [-1, 0, 1].flatMap((i) => [-1, 0, 1].map((j) => lat.at(i, j))) : [[0, 0]];
-  const cuts = segs.map(() => [0, 1]);
-  for (let i = 0; i < segs.length; i++) {
-    const [p, q] = segs[i], dx = q[0] - p[0], dy = q[1] - p[1];
-    for (let j = 0; j < segs.length; j++) for (const o of offs) {
-      if (i === j && !o[0] && !o[1]) continue;
-      const r = [segs[j][0][0] + o[0], segs[j][0][1] + o[1]], s = [segs[j][1][0] + o[0], segs[j][1][1] + o[1]];
-      const ex = s[0] - r[0], ey = s[1] - r[1], d = dx * ey - dy * ex, wx = r[0] - p[0], wy = r[1] - p[1];
-      if (Math.abs(d) < 1e-9) {                                   // (parallel: if on one line, the other's ends cut this one)
-        if (Math.abs(wx * dy - wy * dx) > 1e-7 * Math.hypot(dx, dy)) continue;
-        const L = dx * dx + dy * dy;
-        for (const e of [r, s]) { const t = ((e[0] - p[0]) * dx + (e[1] - p[1]) * dy) / L; if (t > EPS && t < 1 - EPS) cuts[i].push(t); }
-        continue;
+  // cut: every segment against every other that its box reaches (the order they come in doesn't matter: they're sorted below)
+  const N = segs.length, cuts = new Array(N);
+  for (let i = 0; i < N; i++) cuts[i] = [0, 1];
+  const cutBy = (i, j, ox, oy) => {
+    const P = segs[i][0], R = segs[i][1], A = segs[j][0], B = segs[j][1];
+    const dx = R[0] - P[0], dy = R[1] - P[1], rx = A[0] + ox, ry = A[1] + oy, ex = B[0] - A[0], ey = B[1] - A[1], d = dx * ey - dy * ex, wx = rx - P[0], wy = ry - P[1];
+    if (Math.abs(d) < 1e-9) {                                     // (parallel: if on one line, the other's ends cut this one)
+      if (Math.abs(wx * dy - wy * dx) > 1e-7 * Math.hypot(dx, dy)) return;
+      const L = dx * dx + dy * dy;
+      let t = (wx * dx + wy * dy) / L; if (t > EPS && t < 1 - EPS) cuts[i].push(t);
+      t = ((rx + ex - P[0]) * dx + (ry + ey - P[1]) * dy) / L; if (t > EPS && t < 1 - EPS) cuts[i].push(t);
+      return;
+    }
+    const t = (wx * ey - wy * ex) / d, u = (wx * dy - wy * dx) / d;
+    if (t > EPS && t < 1 - EPS && u > -EPS && u < 1 + EPS) cuts[i].push(t);
+  };
+  const box = new Float64Array(N * 4);                            // (each segment's: left, right, bottom, top)
+  let far = 0, x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  for (let i = 0; i < N; i++) {
+    const [p, q] = segs[i], a = Math.min(p[0], q[0]), b = Math.max(p[0], q[0]), c = Math.min(p[1], q[1]), d = Math.max(p[1], q[1]);
+    box[i * 4] = a; box[i * 4 + 1] = b; box[i * 4 + 2] = c; box[i * 4 + 3] = d;
+    far = Math.max(far, b - a, d - c); x0 = Math.min(x0, a); x1 = Math.max(x1, b); y0 = Math.min(y0, c); y1 = Math.max(y1, d);
+  }
+  if (lat) {                                                      // (and against its copies one period away; `lo` is what the tolerance on u can reach past a box)
+    const lo = 1e-6 + EPS * 2 * far, offs = [-1, 0, 1].flatMap((i) => [-1, 0, 1].map((j) => lat.at(i, j)));
+    for (let i = 0; i < N; i++) {
+      const a = box[i * 4] - lo, b = box[i * 4 + 1] + lo, c = box[i * 4 + 2] - lo, d = box[i * 4 + 3] + lo;
+      for (let j = 0; j < N; j++) for (const o of offs) {
+        if (i === j && !o[0] && !o[1]) continue;
+        if (box[j * 4 + 1] + o[0] < a || box[j * 4] + o[0] > b || box[j * 4 + 3] + o[1] < c || box[j * 4 + 2] + o[1] > d) continue;
+        cutBy(i, j, o[0], o[1]);
       }
-      const t = (wx * ey - wy * ex) / d, u = (wx * dy - wy * dx) / d;
-      if (t > EPS && t < 1 - EPS && u > -EPS && u < 1 + EPS) cuts[i].push(t);
+    }
+  } else if (N) {                                                 // (no period, many segments: a grid of cells, and only those sharing a cell are looked at)
+    const lo = 1e-6, G = Math.max(1, Math.ceil(Math.sqrt(N))), cw = Math.max(x1 - x0, 1e-9) / G, ch = Math.max(y1 - y0, 1e-9) / G, cells = new Array(G * G), seen = new Int32Array(N);
+    const cx = (x) => Math.max(0, Math.min(G - 1, Math.floor((x - x0) / cw))), cy = (y) => Math.max(0, Math.min(G - 1, Math.floor((y - y0) / ch)));
+    for (let i = 0; i < N; i++) for (let v = cy(box[i * 4 + 2] - lo), V = cy(box[i * 4 + 3] + lo); v <= V; v++) for (let u = cx(box[i * 4] - lo), U = cx(box[i * 4 + 1] + lo); u <= U; u++) (cells[v * G + u] ??= []).push(i);
+    for (let i = 0; i < N; i++) {
+      const a = box[i * 4] - lo, b = box[i * 4 + 1] + lo, c = box[i * 4 + 2] - lo, d = box[i * 4 + 3] + lo;
+      for (let v = cy(c), V = cy(d); v <= V; v++) for (let u = cx(a), U = cx(b); u <= U; u++) {
+        const cell = cells[v * G + u];
+        if (cell) for (const j of cell) {
+          if (j === i || seen[j] === i + 1) continue;
+          seen[j] = i + 1;
+          if (box[j * 4 + 1] < a || box[j * 4] > b || box[j * 4 + 3] < c || box[j * 4 + 2] > d) continue;
+          cutBy(i, j, 0, 0);
+        }
+      }
     }
   }
   // edges, each kept once (two copies of a shared polygon's side are one edge)
-  const edges = [], seen = new Set();
-  const eKey = (a, b, s) => a < b || (a === b && (s[0] > 0 || (s[0] === 0 && s[1] > 0))) ? `${a},${b},${s}` : `${b},${a},${[-s[0], -s[1]]}`;
-  segs.forEach(([p, q], i) => {
-    const ts = [...new Set(cuts[i].map((t) => Math.round(t * 1e7)))].sort((a, b) => a - b).map((t) => t / 1e7);
+  const edges = [], seen = new Set(), BIG = 67108864;
+  const eKey = lat ? (a, b, s) => a < b || (a === b && (s[0] > 0 || (s[0] === 0 && s[1] > 0))) ? `${a},${b},${s}` : `${b},${a},${[-s[0], -s[1]]}` : (a, b) => a < b ? a * BIG + b : b * BIG + a;
+  for (let i = 0; i < N; i++) {
+    const p = segs[i][0], q = segs[i][1], len = Math.hypot(q[0] - p[0], q[1] - p[1]);
+    const ts = cuts[i].length === 2 ? cuts[i] : [...new Set(cuts[i].map((t) => Math.round(t * 1e7)))].sort((a, b) => a - b).map((t) => t / 1e7);
+    let last = -1, B = null;                                      // (where this piece ended is where the next begins)
     for (let k = 0; k + 1 < ts.length; k++) {
       const at = (t) => [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t];
-      if ((ts[k + 1] - ts[k]) * Math.hypot(q[0] - p[0], q[1] - p[1]) < Q * 4) continue;
-      const A = nodeAt(at(ts[k])), B = nodeAt(at(ts[k + 1])), s = [B.s[0] - A.s[0], B.s[1] - A.s[1]];
+      if ((ts[k + 1] - ts[k]) * len < Q * 4) continue;
+      const A = last === k ? B : nodeAt(at(ts[k]));
+      B = nodeAt(at(ts[k + 1])); last = k + 1;
+      const s = [B.s[0] - A.s[0], B.s[1] - A.s[1]];
       if (A.n === B.n && !s[0] && !s[1]) continue;
       const K = eKey(A.n, B.n, s);
       if (seen.has(K)) continue;
@@ -77,7 +112,7 @@ export function buildNet(segs, lat) {
       nodes[A.n].out.push({ e, to: B.n, s });
       nodes[B.n].out.push({ e, to: A.n, s: [-s[0], -s[1]] });
     }
-  });
+  }
   const net = { nodes, edges, lat };
   const off = (s) => lat ? lat.at(s[0], s[1]) : [0, 0];
   for (const n of nodes) {

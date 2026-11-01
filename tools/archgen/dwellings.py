@@ -254,7 +254,8 @@ def court(rect, depth, storeys, h, roofspec, gate_w, gate_h, slab=0.2):
             "gate": {"face": 0, "width": gate_w, "height": gate_h}, "roof": roofspec, "at": [[0, 0, 0, 0]]}
 dwelling("domus", "Domus", "-200-400", "the Roman world", "the Roman town house: rooms round the atrium under a tiled roof sloping in to the open compluvium, the rain falling into the impluvium basin below",
          {"house": court((16.0, 20.0), 5.0, 1, 4.2, {"form": "shed", "pitch": 22}, 1.6, 2.8),
-          "impluvium": box(3.0, 3.0, 0.3, (0, 0, 0, 0))},
+          "impluvium": box(3.0, 3.0, 0.3, (0, 0, 0, 0)),
+          "paving": box(15.8, 19.8, 0.02, (0, 0, 0, 0))},
          [rule("house", "roofs/coppi", "terracotta", surface="roof"), rule("house", "stone/plaster", "plaster-red"), rule("impluvium", "stone/marble", "carrara")])
 dwelling("greek-house", "Greek house", "-600--100", "Greece", "the Greek house: plain walls to the street, its rooms round a court with an altar, a tiled roof",
          {"house": court((12.0, 14.0), 4.0, 1, 3.6, {"form": "shed", "pitch": 20}, 1.4, 2.4),

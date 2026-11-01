@@ -662,6 +662,9 @@ pot("kylix", "kylix-rf", "Red-figure kylix, outside", "red-figure", "classical",
 PAINTINGS["kylix-rf-tondo"] = {"name": "Red-figure kylix, inside", "tech": "red-figure", "period": "classical", "aspect": [1, 1], "round": {"r": .36, "w": .055, "band": "meander"}, "zones": [
     {"h": .24, "solid": 1}, {"h": .52, "panels": 1, "width": .52, "tight": .72, "fill": 1, "sparse": 1, "scenes": ["thiasos", "duel", "audience", "horseman"]}, {"h": .24, "solid": 1}]}
 
+# (emblemata for the mosaics, mosaic.js: one scene on white stone, in the technique a stone can draw)
+for k, sc in {"lions": ["lions", "lion-ox"], "nemean": ["nemean"], "thiasos": ["thiasos"], "sphinxes": ["sphinxes"], "centaurs": ["centaur-down", "centaur-struck"], "duel": ["duel", "herakles-club"]}.items():
+    PAINTINGS["emblem-" + k] = {"name": f"Emblema: {k}", "tech": "mosaic", "period": "classical", "aspect": [1.5, 1] if k in ("lions", "nemean", "sphinxes") else [1, 1], "ground": "#e7e0cf", "zones": [{"h": 1, "scenes": sc, "single": 1, "sparse": 1, "fill": .92}]}
 write("canon", {"canon": CANON, "legs": LEGS, "actions": ACTIONS, "parts": PARTS, "dress": DRESS, "styles": STYLES, "cast": CAST, "scenes": SCENES, "beats": BEATS, "paintings": PAINTINGS})
 
 # ---- as patterns (patterns.js layer kind `greek`, greek.js): each one painting over a W x H tile, several of a pot by seed

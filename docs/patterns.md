@@ -9,7 +9,7 @@ glazed tube tiles -- is written as MATHEMATICS and drawn into a texture when it 
     assets/finishes/*.json      one building's finish: its rules
     architecture.js             the finish material (the tile, lit and snowed on like every building material)
     tile_worker.js              tiles drawn in workers while the map grows (archmat.js drawTilesAhead)
-    assets.html                 a family shown as a sheet of swatches in its palettes; a building in its finish
+    assets.html                 a family listed, the one picked generated (its seed, palette, size asked of it); a building in its finish
 
 ## Why this way
 
@@ -51,7 +51,7 @@ A LAYER is one shape (or a group, a field, another pattern) and how many times i
 | `clip` | a shape (with its own `at`, `rot`) the layer is drawn only inside |
 | `layers` | a group: its children in this layer's frame (clip them together) |
 | `use`, `useScale`, `colors`, `palette`, `params` | another pattern, tiled inside this layer's shape, its slots mapped to this one's |
-| `kind` | a layer another module draws (`LAYER_KINDS`): `hieroglyphs` (glyphs.js: a wall of text, docs/glyphs.md); `stars`, `knot`, `scroll` (ornament.js: docs/ornament.md) |
+| `kind` | a layer another module draws (`LAYER_KINDS`): `hieroglyphs` (glyphs.js: a wall of text, docs/glyphs.md); `stars`, `knot`, `scroll` (ornament.js: docs/ornament.md); `mosaic` (mosaic.js: docs/mosaic.md) |
 | `field` | a function of the point, per texel: `veins` (marble: `freq`, `turns`, `sharp`), `speckle` (granite: `grain`), `cloud` (plaster), `grain` (wood) -- periodic with the tile, so it repeats without a seam |
 
 The tile is drawn with every layer at the tile and its eight neighbours, so whatever crosses an edge carries on into
@@ -75,6 +75,8 @@ as a sheet; `tileSampler` reads a tile at (u, v) metres (the headless checks ren
 | materials | what items are made of when it is not wood, stone or cloth: paint, metal (brushed), hammered, lacquer, horn |
 | hieroglyphs | walls of writing (glyphs.js, docs/glyphs.md): sunk relief, painted columns, tomb wall, blue tomb, temple frieze |
 | ornament | geometric ornament, generated (docs/ornament.md): strapwork stars of 6, 8, 10, 12 and 16 points, rosettes, zellige, guilloche, braid, cable, Celtic field, border and panel, Viking interlace, arabesque field, double and border, stars holding a vine |
+| mosaic | tesserae over a drawing, generated (docs/mosaic.md): plain and geometric floors, meander, wave, guilloche, figured emblemata, Byzantine gold grounds |
+| glass | leaded windows, generated (docs/glass.md): roses, stone roses to fit tracery, saints, medallions, grisaille, each cut to panes |
 | heraldry | a shield's face (panels, `W` x `H`: fitted to the shield): plain; per pale, per fess, quarterly, per bend, gyronny; cross, saltire, chevron, bend, pale, fess, chief, bordure, roundel; paly, barry, chequy; wings, sun, lion |
 
 ## Finishes
@@ -180,6 +182,7 @@ three.
 
 ## The viewer
 
-`assets.html`: **Patterns** -- a family is a sheet, each pattern two tiles across with its other colourings under it,
-edited live (the palettes are a sheet of their own); **Finishes** -- a finish on its building; a building in its finish
+`assets.html`: **Patterns** -- a family is listed and only the pattern picked is generated, two tiles across or whole if
+it's a panel; what can be asked of it (seed, palette, texels, its params) goes through **Regenerate**, and it's edited
+live (the palettes are a sheet of their own; `drawSheet` still draws a whole family, for the check harness); **Finishes** -- a finish on its building; a building in its finish
 when it has one (the **finish** box), or in plain stone.

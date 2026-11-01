@@ -18,7 +18,7 @@ from a table: bodies are solved, overlap, and aim at each other. Bench: `greek_l
 | Measure | `greek/measure.js` | a solved group's outline: `silhouette`, `unlike` (either way round), `notch` (the dip between two bodies) |
 | Field | `greek/field.js` | a painting as a stack of zones: bands, solid, frieze, panels; a run of scenes picked for even gaps |
 | Technique | `greek/paint.js` | the same pieces in any technique, a table of colours and line weights at the head of the file (`TECHNIQUES`; everything else is in `canon.json`) |
-| Place | `greek.js` | pattern layer `{ kind: "greek", painting, seed }`, the viewer's sheet |
+| Place | `greek.js` | pattern layer `{ kind: "greek", painting, seed }`, the sheet of a painting by a few seeds |
 
 **A body faces either way, and flipping is not mirroring.** It is solved facing forward and placed; flipped, the near arm
 changes (facing right the near arm is the right). So a right-facing hoplite shows his shield's inside with his far arm

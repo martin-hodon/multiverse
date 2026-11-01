@@ -19,6 +19,7 @@ procedural — no textures, no model files.
 ## Docs
 
 - [`docs/architecture.md`](docs/architecture.md) — file layout, the part vocabulary, the three interchangeable render engines, the demo orchestrator
+- [`docs/mosaic.md`](docs/mosaic.md), [`docs/glass.md`](docs/glass.md) — Roman mosaics and medieval stained glass, as pattern layers
 - [`docs/engines.md`](docs/engines.md) — the banner SDF math, perspective-correct flattening, per-pixel depth, the instanced pipeline, shader patterns
 - [`docs/world.md`](docs/world.md) — terrain, buildings and walkability, species/flora/people generators, wandering AI, weather/night/seasons, interactions
 - [`docs/networking.md`](docs/networking.md) — the WebRTC session, the presence protocol, what is and is not synchronized

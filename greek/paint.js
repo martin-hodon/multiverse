@@ -31,6 +31,9 @@ Object.assign(TECHNIQUES["red-figure"].roles, { tawny: "#a8602c", tawnyFar: "#8a
 // (the polychrome palette on a red ground: nothing red that would dissolve into it)
 for (const T of Object.values(TECHNIQUES)) T.roles.white = "#efe8d8";   // (an old head, in added white whatever else the painter has)
 TECHNIQUES.metope = { ...TECHNIQUES.polychrome, cloths: ["#3f6f78", "#ddd2b8", "#7a4a6a", "#2f5f86", "#d9b24e"], roles: { ...TECHNIQUES.polychrome.roles, cloth: "#3f6f78", crest: "#ddd2b8", shieldIn: "#ddd2b8" } };
+// (for laying in stone, mosaic.js: flat colours off the stone palette, lines a stone wide, nothing finer than a stone can draw)
+TECHNIQUES.mosaic = { drop: ["fine"], onInk: { roles: ["blazon"], c: "#d8b650" }, cloths: ["#a8502f", "#566b70", "#d8b650", "#6f7f52", "#e7e0cf"], ground: "#e7e0cf", contour: { c: "#1e1c1d", w: .62 }, form: { x: -1.5, y: 1.5, of: { "#cf9a6c": "#a06a45", "#a8502f": "#7a3a22", "#566b70": "#3e4f54", "#d8b650": "#a88a38", "#6f7f52": "#4d5a3a", "#e7e0cf": "#c4bba4", "#b9a27c": "#8d7a5a" }, line: { "#cf9a6c": "#6f452b", "#a06a45": "#6f452b" } }, roles: { ...TECHNIQUES.polychrome.roles, flame: "#a8502f", skin: "#cf9a6c", skinD: "#a06a45", skinG: "#a06a45", skinF: "#cf9a6c", hair: "#1e1c1d", beard: "#1e1c1d", cloth: "#a8502f", cloth2: "#566b70", metal: "#d8b650", crest: "#a8502f", wood: "#6f452b", horse: "#b9a27c", horseFar: "#6f452b", blazon: "#1e1c1d", shieldIn: "#a8502f", tawny: "#d8b650", tawnyFar: "#6f452b", blood: "#8a2f25", white: "#e7e0cf" },
+  band: { bg: "#d8b650", fg: "#1e1c1d", accent: "#a8502f" }, filler: "#6f452b", lines: { detail: { c: "#1e1c1d", w: .95 }, fold: { c: "#1e1c1d", w: .95 }, hem: { c: "#1e1c1d", w: .95 } } };
 const LIGHT = new Set(["skinF"]);
 
 // a ring as a smooth closed path through the midpoints, sharp at its corners
@@ -73,10 +76,14 @@ export function paintPieces(g, pieces, techName, { ppu = 1, poly } = {}) {
       const ring = area(r) < 0 ? [...r].reverse() : r;      // (one winding: rings of a piece never cancel where they overlap)
       ringPath(path, ring);
     }
-    const base = T.reserve?.[p.role] ?? T.contour, cont = { ...base, w: base.w * 2 };
+    const base = T.reserve?.[p.role] ?? T.contour, tint = p.role === "filler" ? T.filler : p.tint !== undefined && T.cloths ? T.cloths[p.tint % T.cloths.length] : T.roles[p.role] ?? T.roles.skin;
+    const cont = { ...base, w: base.w * 2, c: T.form?.line[tint] ?? base.c };          // (flesh is outlined in a darker flesh, not in black)
     if (p.rings.length && !p.noContour) stroke(path, cont, false);
-    g.fillStyle = p.role === "filler" ? T.filler : p.tint !== undefined && T.cloths ? T.cloths[p.tint % T.cloths.length] : T.roles[p.role] ?? T.roles.skin;
+    g.fillStyle = tint;
     if (p.rings.length) g.fill(path, "nonzero");
+    if (T.form?.of[tint] && p.rings.length) {                                // (a form shadow, away from the light: the same shape in its shadow stone, its own colour over it, moved up the light)
+      g.save(); g.clip(path, "nonzero"); g.fillStyle = T.form.of[tint]; g.fill(path, "nonzero"); g.translate(T.form.x, T.form.y); g.fillStyle = tint; g.fill(path, "nonzero"); g.restore();
+    }
     if (T.shade && p.rings.length && hpx > 40 && p.role !== "wood") {        // (a wall painter's modelling: a soft dark along the inside of each form)
       g.save(); g.clip(path, "nonzero"); g.strokeStyle = T.shade.c; g.globalAlpha = T.shade.a; g.lineWidth = T.shade.w; g.lineJoin = "round";
       const big = 1e4;                                                       // (each ring's edge only where no other ring of the piece covers it, no ball joints inside a limb)
@@ -91,7 +98,7 @@ export function paintPieces(g, pieces, techName, { ppu = 1, poly } = {}) {
     const light = LIGHT.has(p.role) && T.onLight;
     const inked = T.onInk?.roles.includes(p.role);
     for (const l of p.lines) {
-      if ((l.cls === "fine" && hpx < 60) || (l.cls === "detail" && hpx < 34)) continue;
+      if ((l.cls === "fine" && hpx < 60) || (l.cls === "detail" && hpx < 34) || T.drop?.includes(l.cls)) continue;
       const q = new Path2D(); linePath(q, l.pts, l.closed);
       const st = T.lines[l.cls] ?? T.lines.detail;
       const inside = (l.cls === "fold" || l.cls === "fine" || (l.cls === "hem" && p.role.startsWith("cloth"))) && p.rings.length;   // (a fold stops at its cloth's edge)

@@ -10,11 +10,15 @@ import { registerPatterns, renderPattern } from "./patterns.js";
 import { registerGlyphs } from "./glyphs.js";   // (the layer kinds the page registers too: hieroglyphs, tomb paintings)
 import { registerMurals } from "./murals.js";
 import "./ornament.js";
+import "./mosaic.js";
+import "./medieval.js";
+import "./glass.js";
+import { registerGreek } from "./greek.js";   // (a pattern may hold a Greek painting, an emblema's figures among them)
 
 let R = 512, cv = null;
 self.onmessage = (e) => {
   const m = e.data;
-  if (m.library) { registerPatterns(m.library.families); registerGlyphs(m.library.glyphs); registerMurals(m.library.murals); R = m.res; return; }
+  if (m.library) { registerPatterns(m.library.families); registerGlyphs(m.library.glyphs); registerMurals(m.library.murals); registerGreek(m.library.greek); R = m.res; return; }
   try {
     const tile = renderPattern(m.pattern, { palette: m.palette, params: m.params, res: m.res });
     const cx = (cv ??= new OffscreenCanvas(R, R)).getContext("2d", { willReadFrequently: true }), n = tile.across, row = R * 4, out = new Uint8Array(n * R * row), W = tile.canvas.width, H = tile.canvas.height;

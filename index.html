@@ -122,7 +122,7 @@ import { createIcicles } from "./icicles.js";
 import { createWindowBoxes } from "./windowbox.js";
 import { createWindowFrames, wallFrame, snowyLit, FRAME as WIN_FRAME } from "./windowframes.js";
 import { createRidgeCaps, RIDGE } from "./ridgecaps.js";
-import { leadedGlass, drawTilesAhead, tilesAheadDone } from "./archmat.js";
+import { leadedGlass, drawTilesAhead, tilesAheadDone, GLASS_DARK, GLASS_SUN } from "./archmat.js";
 import { bakeSunShadow, SUN, sunShade } from "./sunshadow.js";
 import { createFireworks } from "./fireworks.js";
 import { createLightning } from "./lightning.js";
@@ -6570,6 +6570,8 @@ function frameBody() {
   spray.update(t);
   fishing.update(t);
   if (!AMBIENT) for (const o of ambientMeshes()) o.visible = false;   // (?ambient=0: the world without them, to compare)
+  GLASS_DARK.value = dark;   // (the windows' pictures: archmat.js)
+  GLASS_SUN.value = (weather ? .25 : 1) * Math.max(0, 1 - dark / .38);   // (and the light they throw)
   glow.update(t, { night: dark > .25, level: dark, fireflies: weather === 0 && autumnLvl !== 2 });
   fireLight.update(t, dark);   // (the firelight round the hearths and candles)
   mark("water+precip");

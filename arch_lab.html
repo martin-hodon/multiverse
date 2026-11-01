@@ -41,6 +41,8 @@
 import * as THREE from "three";
 import { wgslFn, uniform, vec3, positionWorld, cameraPosition } from "three/tsl";
 import { plainStone, archMesh } from "./architecture.js";
+import { GLASS_DARK, GLASS_SUN } from "./archmat.js";
+GLASS_DARK.value = +(new URLSearchParams(location.search).get("dark") ?? 0); GLASS_SUN.value = 1 - GLASS_DARK.value;   // (?dark=1: the windows' pictures at night)
 // THE ENGINE IS RE-READ ON EVERY LOAD. A plain static server sends no cache headers, so a browser keeps serving
 // yesterday's build.js to a page that was reloaded -- and a fixed triangulation looks unfixed. Fetching each module
 // with cache:"reload" first refreshes the browser's copy, and the import that follows gets the new one.

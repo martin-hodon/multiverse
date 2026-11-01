@@ -30,7 +30,7 @@
 //
 // MAPPING -- the pattern's (u, v), in metres: `plan` (a floor, a ceiling: u east, v north), `face` (a wall: u along it,
 // v up), `revolve` (a dome, a drum, a column, a round roof: u round the part's own axis -- a whole number of tiles round,
-// so the rows meet -- and v up the meridian's length on a dome; `conformal` the same with v stretched as u narrows, so a
+// so the rows meet -- and v up the meridian's length on a dome; `meridian` the same in true metres, for a picture; `conformal` with v stretched as u narrows, so a
 // star stays a star and only gets smaller toward the crown, as a real dome's lattice does), `slope` (a roof: u along the eave, v up the slope).
 // By kind unless the rule says. `align: "part"` sets the tile's foot on the part's foot (a painted beam, a band); `align:
 // "above"` on the rule's `above` line (a painted frieze high on a wall). `whole: true` on a wall: each flat face holds a
@@ -220,6 +220,9 @@ function compile(rule, sizeOf) {
       if (surf && !surf.includes(at.surface())) return false;
       if (rule.facing && !listOf(rule.facing).includes(Math.abs(at.n[0]) > Math.abs(at.n[2]) ? (at.n[0] > 0 ? "e" : "w") : (at.n[2] > 0 ? "s" : "n"))) return false;   // (which way a wall looks: one picture to a wall)
       if (side && at.side() !== side) return false;
+      // (a CELL of a pane by its shape, and every nth of them: which picture each light gets -- map: "opening")
+      if (rule.opening && (!at.glass || at.cell().shape !== rule.opening)) return false;
+      if (rule.nth && at.glass && at.cell().nth % rule.nth[0] !== rule.nth[1]) return false;
       return true;
     },
   };
@@ -333,6 +336,9 @@ function infoOf(p) {
     for (let i = 1; i < mer.length; i++) if (y <= mer[i][0]) return S[i - 1] + (S[i] - S[i - 1]) * (y - mer[i - 1][0]) / (mer[i][0] - mer[i - 1][0]);
     return S[S.length - 1] + y - mer[mer.length - 1][0];
   };
+  // (`along` walks both shells of a thick dome, in and out, which the finishes' scales have grown used to. A picture has to be true: map "meridian" takes the outer one alone)
+  const outer = mer.filter((m, i) => mer.slice(i + 1).every((q) => q[1] < m[1]));
+  const arc = (y) => { let s = 0; for (let i = 1; i < outer.length; i++) { const a = outer[i - 1], b = outer[i], d = Math.hypot(b[0] - a[0], b[1] - a[1]); if (y <= b[0]) return s + d * Math.max(0, y - a[0]) / (b[0] - a[0]); s += d; } return s; };
   // a roof's slope: the mean sine of its upward faces' pitch (v up a roof is its height over that) -- of the faces
   // mapped up the slope, that is: a flat top is mapped on the plan, and a stepped roof's (a samvarana's courses) would
   // drag the mean down and squeeze its courses
@@ -352,7 +358,7 @@ function infoOf(p) {
     for (let i = 1; i < mer.length; i++) if (y <= mer[i][0]) return C[i - 1] + (C[i] - C[i - 1]) * (y - mer[i - 1][0]) / (mer[i][0] - mer[i - 1][0]);
     return C[C.length - 1];
   };
-  f = { R, y0, along, shrink, sinSlope: sw > 0 ? Math.max(.2, ss / sw) : 1 };
+  f = { R, y0, along, arc, shrink, sinSlope: sw > 0 ? Math.max(.2, ss / sw) : 1 };
   partInfo.set(p, f);
   return f;
 }
@@ -477,11 +483,121 @@ function minusCover(poly, ax, cover) {
   return out;   // (what was left inside every edge is the covered part: dropped)
 }
 
-export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
+// which way a pane looks out: the side an interior isn't on; where none says, the side that sees more sky (an aisle or a tower has no
+// interior of its own, and a tower's window may look over the nave's roof: more of the building ahead of it than behind)
+const solidOf = new WeakMap();
+function massOf(asm) {
+  let m = solidOf.get(asm);
+  if (m) return m;
+  const out = [];
+  for (const p of asm.parts) {
+    if (p.kind === "item" || p.kind === "glass" || p.kind === "marker" || p.kind === "tracery" || !p.geometry?.index) continue;
+    const P = p.geometry.position, I = p.geometry.index;
+    for (const [yaw, X, Y, Z] of p.instances) {
+      const c = Math.cos(yaw), s = Math.sin(yaw);
+      for (let k = 0; k < I.length; k += 3) {
+        const tri = [I[k], I[k + 1], I[k + 2]].flatMap((j) => [P[j * 3] * c + P[j * 3 + 2] * s + X, P[j * 3 + 1] + Y, -P[j * 3] * s + P[j * 3 + 2] * c + Z]);
+        const ax = tri[3] - tri[0], ay = tri[4] - tri[1], az = tri[5] - tri[2], bx = tri[6] - tri[0], by = tri[7] - tri[1], bz = tri[8] - tri[2];
+        if (Math.hypot(ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx) > .05) out.push(...tri);   // (no moulding: but a spire or a vault is many small faces, and sky mustn't leak through it)
+      }
+    }
+  }
+  solidOf.set(asm, m = new Float32Array(out));
+  return m;
+}
+function hitAt(T, i, o, d) {                                           // (how far along the ray triangle i lies, or -1)
+  const ax = T[i + 3] - T[i], ay = T[i + 4] - T[i + 1], az = T[i + 5] - T[i + 2], bx = T[i + 6] - T[i], by = T[i + 7] - T[i + 1], bz = T[i + 8] - T[i + 2];
+  const px = d[1] * bz - d[2] * by, py = d[2] * bx - d[0] * bz, pz = d[0] * by - d[1] * bx, det = ax * px + ay * py + az * pz;
+  if (Math.abs(det) < 1e-9) return -1;
+  const tx = o[0] - T[i], ty = o[1] - T[i + 1], tz = o[2] - T[i + 2], u = (tx * px + ty * py + tz * pz) / det;
+  if (u < 0 || u > 1) return -1;
+  const qx = ty * az - tz * ay, qy = tz * ax - tx * az, qz = tx * ay - ty * ax, v = (d[0] * qx + d[1] * qy + d[2] * qz) / det;
+  if (v < 0 || u + v > 1) return -1;
+  return (bx * qx + by * qy + bz * qz) / det;
+}
+function blocked(T, o, d) {                                            // (does a ray from the pane meet the building?)
+  for (let i = 0; i < T.length; i += 9) if (hitAt(T, i, o, d) > .5) return true;
+  return false;
+}
+function groundBelow(T, x, y, z, reach) {                              // (the height of what's under a point within reach, or Infinity)
+  let t = reach;
+  for (let i = 0; i < T.length; i += 9) { const h = hitAt(T, i, [x, y, z], [0, -1, 0]); if (h > 0 && h < t) t = h; }
+  return t < reach ? y - t : Infinity;
+}
+function skyAlong(T, o, m) {                                           // (of a fan of rays, level to steep, how many get out)
+  const l = Math.hypot(m[0], m[2]) || 1, x = m[0] / l, z = m[2] / l;
+  return [[0, 0], [.5, 0], [1.7, 0], [.5, .6], [.5, -.6]].filter(([up, yaw]) => !blocked(T, o, [x * Math.cos(yaw) - z * Math.sin(yaw), up, z * Math.cos(yaw) + x * Math.sin(yaw)])).length;
+}
+// the mullions before a pane, this copy of it: where the bars of its tracery cross a level, along the pane, as a sorted list
+function mullions(asm, p, inst, N, c0, u0, u1, level, rx, rz) {
+  const T = asm.parts.find((t) => t.kind === "tracery" && t.name === p.name.replace(/glass$/, "tracery"));
+  if (!T?.geometry?.index) return [];
+  const [yaw, X, Y, Z] = T.instances[inst] ?? T.instances[0], c = Math.cos(yaw), s = Math.sin(yaw), P = T.geometry.position, I = T.geometry.index, at = [];
+  const W = (j) => [P[j * 3] * c + P[j * 3 + 2] * s + X, P[j * 3 + 1] + Y, -P[j * 3] * s + P[j * 3 + 2] * c + Z];
+  for (let k = 0; k < I.length; k += 3) {
+    const a = W(I[k]), b = W(I[k + 1]), d = W(I[k + 2]), lo = Math.min(a[1], b[1], d[1]), hi = Math.max(a[1], b[1], d[1]);
+    if (lo > level || hi < level) continue;
+    const m = [(a[0] + b[0] + d[0]) / 3, (a[2] + b[2] + d[2]) / 3];
+    if (Math.abs((m[0] - c0[0]) * N[0] + (m[1] - c0[2]) * N[2]) > 1) continue;  // (another window's)
+    const u = m[0] * rx + m[1] * rz;
+    if (u > u0 + .05 && u < u1 - .05) at.push(u);
+  }
+  at.sort((x, y) => x - y);
+  const out = []; let run = [];
+  for (const u of at) { if (run.length && u - run[run.length - 1] > .25) { out.push(run.reduce((x, y) => x + y) / run.length); run = []; } run.push(u); }
+  if (run.length) out.push(run.reduce((x, y) => x + y) / run.length);
+  return out;
+}
+// how a light goes up in rows, whatever is painted on them: under the tall figure's build it's panels near square, a long light
+// figures one over another. The stone and the leads decide this, and a picture fills what it's given (levels, foot to top)
+function rowsOf(y0, y1, w) {
+  const a = (y1 - y0) / (w || 1);
+  let r = Math.ceil(a / 3.75);
+  if (a / r < 2.2) r = Math.max(1, Math.round(a / 1.1));
+  return Array.from({ length: r + 1 }, (_, j) => y0 + (y1 - y0) * j / r);
+}
+
+// THE LIGHT A WINDOW CASTS (docs/glass.md): its panes that face the sun, carried down the sun's rays to the level face they meet, as a group of their own (`cast`) with the glass's own uvs.
+// A ray a couple of metres of window: what the building shades casts nothing, and what meets a wall or a pier first is lost with it. Each pane falls in thirds, and a third that's left its floor is dropped
+function castLight(groups, asm, sun) {
+  const T = massOf(asm), lit = new Map(), lands = new Map(), under = new Map(), out = [], down = sun.map((v) => -v);
+  const memo = (m, c, size, f) => { const k = c.map((v) => Math.round(v / size)).join(); if (!m.has(k)) m.set(k, f()); return m.get(k); };
+  const open = (c) => memo(lit, c, 2, () => !blocked(T, c.map((v, i) => v + sun[i] * 2), sun));   // (from just past the wall's depth, each way: a reveal doesn't count)
+  const landing = (c) => memo(lands, c, 2, () => {
+    const o = c.map((v, i) => v + down[i] * 2);
+    let t = Infinity, at = -1;
+    for (let i = 0; i < T.length; i += 9) { const h = hitAt(T, i, o, down); if (h > .01 && h < t) { t = h; at = i; } }
+    if (at < 0) return null;
+    const ax = T[at + 3] - T[at], ay = T[at + 4] - T[at + 1], az = T[at + 5] - T[at + 2], bx = T[at + 6] - T[at], by = T[at + 7] - T[at + 1], bz = T[at + 8] - T[at + 2], nx = ay * bz - az * by, ny = az * bx - ax * bz, nz = ax * by - ay * bx;
+    return Math.abs(ny) > .9 * Math.hypot(nx, ny, nz) ? o[1] + down[1] * t : null;
+  });
+  const fall = (v, y) => { const d = (v[1] - y) / sun[1]; return [v[0] - sun[0] * d, y, v[2] - sun[2] * d]; };
+  const onFloor = (q) => Math.abs(memo(under, q, .4, () => groundBelow(T, q[0], q[1] + .3, q[2], .6)) - q[1]) < .05;
+  for (const g of groups) {
+    if (g.rule?.map !== "opening") continue;
+    const pos = [], nor = [], uv = [];
+    for (let i = 0; i < g.pos.length; i += 9) {
+      if (g.nor[i] * sun[0] + g.nor[i + 1] * sun[1] + g.nor[i + 2] * sun[2] < .05) continue;
+      const A = [0, 1, 2].map((k) => g.pos.slice(i + k * 3, i + k * 3 + 3)), U = [0, 1, 2].map((k) => g.uv.slice(i / 3 * 2 + k * 2, i / 3 * 2 + k * 2 + 2)), c = [0, 1, 2].map((q) => (A[0][q] + A[1][q] + A[2][q]) / 3);
+      if (!open(c)) continue;
+      const y = landing(c);
+      if (y === null) continue;
+      const at = (a, b) => { const k = 3 - a - b; return { q: fall([0, 1, 2].map((q) => (A[0][q] * a + A[1][q] * b + A[2][q] * k) / 3), y), u: [0, 1].map((q) => (U[0][q] * a + U[1][q] * b + U[2][q] * k) / 3) }; };
+      for (let a = 0; a < 3; a++) for (let b = 0; a + b < 3; b++) for (const tri of [[at(a, b), at(a + 1, b), at(a, b + 1)], ...(a + b < 2 ? [[at(a + 1, b), at(a + 1, b + 1), at(a, b + 1)]] : [])]) {
+        if (!tri.every(({ q }) => onFloor(q))) continue;
+        for (const { q, u } of tri) { pos.push(q[0], y + .02, q[2]); nor.push(0, 1, 0); uv.push(u[0], u[1]); }
+      }
+    }
+    if (pos.length) out.push({ rule: g.rule, glass: false, cast: true, pos: new Float32Array(pos), nor: new Float32Array(nor), uv: new Float32Array(uv), parts: new Map() });
+  }
+  return out;
+}
+
+export function finishPieces(asm, finish, { sizeOf = () => [1, 1], sun = null } = {}) {
   const t0 = performance.now();
   const covered = coverIndex(asm);   // (where another part's face takes this one's place in a plane)
   const rules = (finish?.rules ?? []).map((r) => compile(r, sizeOf));
-  const needSide = rules.some((r) => r.needsSide);
+  const needSide = rules.some((r) => r.needsSide), pictures = rules.some((r) => r.rule.map === "opening");
   const vols = needSide ? interiorsOf(asm) : null, planes = vols ? interiorPlanes(vols) : [];
   // the lines every piece is cut on: bands, regions
   const bands = [...new Set(rules.flatMap((r) => [r.rule.below, r.rule.above]).filter((v) => v !== undefined))].map((c) => [1, c]);
@@ -526,6 +642,18 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
     }
     return polys;
   };
+  const lookingOut = (m, c0) => {
+    let out = 0;
+    if (vols) for (const d of [.6, 1.2, 2.5, 4, 8]) {
+      const a = inInterior(vols, c0[0] + m[0] * d, c0[1] + m[1] * d, c0[2] + m[2] * d), b = inInterior(vols, c0[0] - m[0] * d, c0[1] - m[1] * d, c0[2] - m[2] * d);
+      if (a !== b) { out = a ? -1 : 1; break; }
+    }
+    if (!out) {
+      const T = massOf(asm), ahead = skyAlong(T, c0, m), behind = skyAlong(T, c0, [-m[0], -m[1], -m[2]]);
+      out = ahead !== behind ? (ahead > behind ? 1 : -1) : m[0] * c0[0] + m[2] * c0[2] < 0 ? -1 : 1;
+    }
+    return out < 0 ? [-m[0], -m[1], -m[2]] : m;
+  };
   const cur = {
     p: null, names: null, glass: false, inst: 0, yaw: 0, X: 0, Z: 0, n: null, cen: null, poly: null, tri: 0, surf0: "", sideV: null, surfV: null,
     side: () => cur.sideV ??= sideOf(),
@@ -562,6 +690,36 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
       cur.inst = inst; cur.yaw = yaw; cur.X = X; cur.Z = Z;
       const c = Math.cos(yaw), s = Math.sin(yaw);
       const W = (j) => [P[j * 3] * c + P[j * 3 + 2] * s + X, P[j * 3 + 1] + Y, -P[j * 3] * s + P[j * 3 + 2] * c + Z];
+      // A PANE, this copy of it: which way it looks out, its box along itself, seen from inside, and its CELLS: what the
+      // stone divides it into. Each row of each light between its mullions is one, the tracery over them another (a window of one
+      // light goes up in rows head and all, and a rose's whole pane is one). Each cell takes its own picture.
+      const paneBoxes = new Map();
+      cur.pane = () => {
+        const face = facesOf(p).comp[cur.tri];
+        let q = paneBoxes.get(face);
+        if (q) return q;
+        const N = lookingOut(cur.n, cur.cen), l = Math.hypot(N[0], N[2]) || 1, rx = -N[2] / l, rz = N[0] / l;
+        let u0 = Infinity, u1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        const pts = [];
+        for (const t of facesOf(p).members[face]) for (let e = 0; e < 3; e++) { const w = W(I[t * 3 + e]), u = w[0] * rx + w[2] * rz; pts.push(u, w[1]); if (u < u0) u0 = u; if (u > u1) u1 = u; if (w[1] < y0) y0 = w[1]; if (w[1] > y1) y1 = w[1]; }
+        const ratio = (y1 - y0) / (u1 - u0 || 1), full = facesOf(p).faceArea[face] / ((y1 - y0) * (u1 - u0) || 1), round = Math.abs(ratio - 1) < .12 && full < .82;
+        // (the springing: as high as it still runs its full width)
+        let spring = y0; for (let i = 0; i < pts.length; i += 2) if ((pts[i] - u0 < .01 || u1 - pts[i] < .01) && pts[i + 1] > spring) spring = pts[i + 1];
+        const walls = round ? [] : mullions(asm, p, inst, N, cur.cen, u0, u1, (y0 + spring) / 2, rx, rz);
+        // (lights end where their little arches close, not where those spring: the stone crops the picture, as it does in a church)
+        const cuts = [u0, ...walls, u1], width = (u1 - u0) / (walls.length + 1), top = walls.length ? Math.min(y1, spring + .87 * width) : y1;
+        paneBoxes.set(face, q = { N, rx, rz, u0, u1, y0, y1, round, top, cuts, ys: round ? [y0, y1] : rowsOf(y0, top, width), nth: inst + face });
+        return q;
+      };
+      cur.cell = () => cur.cellV ??= (() => {
+        const q = cur.pane(), u = cur.cen[0] * q.rx + cur.cen[2] * q.rz, head = cur.cen[1] > q.top;
+        if (q.round) return { shape: "round", nth: q.nth, u0: q.u0, u1: q.u1, y0: q.y0, y1: q.y1 };
+        if (head) return { shape: "head", nth: q.nth, u0: q.u0, u1: q.u1, y0: q.top, y1: q.y1 };
+        let k = 0, j = 0; while (k < q.cuts.length - 2 && u > q.cuts[k + 1]) k++;
+        while (j < q.ys.length - 2 && cur.cen[1] > q.ys[j + 1]) j++;
+        const u0 = q.cuts[k], u1 = q.cuts[k + 1], y0 = q.ys[j], y1 = q.ys[j + 1];
+        return { shape: (y1 - y0) / (u1 - u0 || 1) >= 2.2 ? "tall" : "short", nth: q.nth + k + j * 3, u0, u1, y0, y1 };
+      })();
       const spans = new Map(), spanOf = (face, W, tx, tz) => {          // (how far a flat face runs along itself, this copy of it)
         let q = spans.get(face);
         if (!q) {
@@ -596,9 +754,15 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
         const cov = covered.get(pi + "#" + inst + "#" + k / 3);
         if (cov) for (const { ax, w } of cov) polys = polys.flatMap((q) => minusCover(q, ax, w));   // (one face where two parts meet in a plane)
         if (!polys.length) continue;
+        if (glass && pictures) {                                         // (each cell of a pane cut out of it, so that a picture stops at the stone)
+          cur.cen = centre([a, b, d]); cur.cellV = null;
+          const q = cur.pane();
+          for (const c of q.cuts.slice(1, -1)) polys = polys.flatMap((poly) => cutBy(poly, [q.rx, 0, q.rz], c));
+          polys = polys.flatMap((poly) => cutAll(poly, [...q.ys.slice(1), q.y1].map((y) => [1, y])));
+        }
         for (const poly of polys) {
           const cen = centre(poly);
-          cur.cen = cen; cur.poly = poly; cur.sideV = p.side ?? (TRIM.has(p.kind) || (free && vols) ? "out" : null); cur.surfV = null;
+          cur.cen = cen; cur.poly = poly; cur.cellV = null; cur.sideV = p.side ?? (TRIM.has(p.kind) || (free && vols) ? "out" : null); cur.surfV = null;
           let hit = mine.find((r) => r.test(cur));
           // (a soffit -- under an arch, a window's head -- that no rule takes is the masonry of its wall)
           if (!hit && cur.surface() === "ceiling") { cur.surfV = "wall"; hit = mine.find((r) => r.test(cur)); }
@@ -636,14 +800,25 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
               if (l > 1e-6 && Math.abs(n[0] * cx + n[2] * cz) / l < .5) mode = "face";
             }
             const th = Math.hypot(n[0], n[2]) || 1, tx = n[2] / th, tz = -n[0] / th;
-            if (mode === "revolve" || mode === "conformal") {
+            if (mode === "opening") {
+              // (A PICTURE TO A CELL, read from inside: as wide as the cell, as many of it up the cell as its shape allows, filling it exactly.
+              //  Only a cell far wider than a picture crops it, about the middle, for a figure keeps its build. A rose fills; tracery is plain metres.)
+              const q = cur.pane(), c = cur.cell(), side90 = Math.abs(r.turn ?? 0) % 180 === 90, w = side90 ? size[1] : size[0], h = side90 ? size[0] : size[1];
+              const uAt = (v) => v[0] * q.rx + v[2] * q.rz;
+              if (c.shape === "head") uvs = poly.map((v) => [uAt(v) - q.u0, v[1] - c.y0]);
+              else if (c.shape === "round") uvs = poly.map((v) => [((uAt(v) - c.u0) / (c.u1 - c.u0 || 1) - .5) * w * .996, ((v[1] - c.y0) / (c.y1 - c.y0 || 1) - .5) * h * .996]);
+              else {
+                const cw = c.u1 - c.u0 || 1, ch = c.y1 - c.y0, row0 = cw * h / w, rows = Math.max(1, Math.round(ch / row0)), row = Math.max(ch / rows, row0 * .75), foot = (c.y0 + c.y1 - rows * row) / 2;
+                uvs = poly.map((v) => [((uAt(v) - c.u0) / cw - .5) * w * .996, ((v[1] - foot) / row - .5) * h]);
+              }
+            } else if (mode === "revolve" || mode === "conformal" || mode === "meridian") {
               // (a whole number of tiles round -- `count` of them if the rule says: one carved panel to a balustrade's bay)
               const R = r.radius ?? info.R, C = (r.count ?? Math.max(1, Math.round(TAU * R / size[0]))) * size[0];
               let ang = poly.map((v) => Math.hypot(v[0] - X, v[2] - Z) < 1e-6 ? null : Math.atan2(v[0] - X, v[2] - Z));
               const known = ang.filter((q) => q !== null);
               if (known.length && Math.max(...known) - Math.min(...known) > Math.PI) ang = ang.map((q) => (q !== null && q < 0 ? q + TAU : q));
               const mean = known.length ? ang.filter((q) => q !== null).reduce((x, y) => x + y, 0) / known.length : 0;
-              uvs = poly.map((v, i) => [(ang[i] ?? mean) / TAU * C, mode === "conformal" ? info.shrink(v[1] - Y) : ["dome", "vault"].includes(p.kind) ? info.along(v[1] - Y) : v[1]]);
+              uvs = poly.map((v, i) => [(ang[i] ?? mean) / TAU * C, mode === "meridian" ? info.arc(v[1] - Y) : mode === "conformal" ? info.shrink(v[1] - Y) : ["dome", "vault"].includes(p.kind) ? info.along(v[1] - Y) : v[1]]);
             } else if (mode === "plan") uvs = poly.map((v) => [v[0], -v[2]]);
             else if (mode === "slope") uvs = poly.map((v) => [v[0] * tx + v[2] * tz, v[1] / info.sinSlope]);
             else uvs = poly.map((v) => [v[0] * tx + v[2] * tz, v[1]]);
@@ -657,9 +832,10 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
             if (r.align === "above") uvs = uvs.map(([u, v]) => [u, v - r.above - size[1] / 2]);   // (a painted frieze: its foot on the band's own line, moved with a used finish)
             if (r.offset) uvs = uvs.map(([u, v]) => [u + r.offset[0], v + r.offset[1]]);
           }
+          const nv = g.rule?.map === "opening" ? cur.pane().N : n;   // (a picture's pane looks out: its material tells the two sides by this)
           for (let i = 1; i + 1 < poly.length; i++) for (const j of [0, i, i + 1]) {
             const v = poly[j];
-            g.pos.push(v[0], v[1], v[2]); g.nor.push(n[0], n[1], n[2]);
+            g.pos.push(v[0], v[1], v[2]); g.nor.push(nv[0], nv[1], nv[2]);
             if (uvs) g.uv.push(uvs[j][0], uvs[j][1]);
           }
         }
@@ -677,6 +853,7 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1] } = {}) {
              by: Object.fromEntries([...f.by.entries()].map(([k, a]) => [k === "stone" ? "stone" : (rules[k].rule.pattern ?? rules[k].rule.color ?? k), +a.toFixed(2)])),
              at: Object.fromEntries([...f.at.entries()].map(([k, c]) => [k === "stone" ? "stone" : (rules[k].rule.pattern ?? rules[k].rule.color ?? k), c])) };
   });
+  if (sun && out.some((g) => g.rule?.map === "opening")) out.push(...castLight(out, asm, sun));
   return { groups: out, mixed, stats: { ms: performance.now() - t0, interiors: vols?.length ?? 0 } };
 }
 

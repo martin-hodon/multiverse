@@ -35,7 +35,12 @@ import PAT_HIEROGLYPHS from "./assets/patterns/hieroglyphs.json" with { type: "j
 import PAT_MURALS from "./assets/patterns/murals.json" with { type: "json" };
 import PAT_GREEK from "./assets/patterns/greek.json" with { type: "json" };
 import PAT_ORNAMENT from "./assets/patterns/ornament.json" with { type: "json" };
+import PAT_MOSAIC from "./assets/patterns/mosaic.json" with { type: "json" };
+import PAT_GLASS from "./assets/patterns/glass.json" with { type: "json" };
 import "./ornament.js";   // (the layer kinds of that family: star patterns, knots, vines)
+import "./mosaic.js";   // (tesserae over a drawing)
+import "./medieval.js";   // (a figure in a drawing)
+import "./glass.js";   // (windows cut into panes)
 import { registerGreek } from "./greek.js";   // (vase and wall paintings: a pattern layer greek.js draws)
 import { registerMurals } from "./murals.js";   // (tomb paintings on walls: a pattern layer murals.js draws)
 import { registerGlyphs } from "./glyphs.js";   // (a wall of hieroglyphs is a pattern layer glyphs.js draws: its library from the catalogue)
@@ -209,7 +214,8 @@ import C_PIGSTY from "./assets/architecture/components/pigsty.json" with { type:
 import C_HEN_HOUSE from "./assets/architecture/components/hen-house.json" with { type: "json" };
 import C_STABLE from "./assets/architecture/components/stable.json" with { type: "json" };
 import { archRise, archCurve } from "./arch/profiles.js";   // how far a given arch profile rises over its span; its outline
-import { glassMat, archMaterial, placedMaterial, finishTile, finishTilesOf, finishMaterial, woodMaterial, plainStone } from "./archmat.js";   // how its surfaces are shaded (kept apart: the startup cache files geometry by this file's code)
+import { LIGHT } from "./light.js";
+import { glassMat, archMaterial, placedMaterial, finishTile, finishTilesOf, finishMaterial, glassFinishMaterial, castLightMaterial, woodMaterial, plainStone } from "./archmat.js";   // how its surfaces are shaded (kept apart: the startup cache files geometry by this file's code)
 export { placedMaterial, finishTilesOf, woodMaterial, plainStone };
 
 
@@ -224,7 +230,7 @@ export { SNOW };   // (snow lying -- one flag, kept in foliage.js, which the lea
 // patterns from it; the asset viewer shows it.
 export const PATTERN_FAMILIES = { palettes: PAT_PALETTES, shapes: PAT_SHAPES, stone: PAT_STONE, floors: PAT_FLOORS, carpets: PAT_CARPETS,
                    tiles: PAT_TILES, painted: PAT_PAINTED, roofs: PAT_ROOFS, panels: PAT_PANELS, timber: PAT_TIMBER,
-                   materials: PAT_MATERIALS, heraldry: PAT_HERALDRY, hieroglyphs: PAT_HIEROGLYPHS, murals: PAT_MURALS, greek: PAT_GREEK, ornament: PAT_ORNAMENT,
+                   materials: PAT_MATERIALS, heraldry: PAT_HERALDRY, hieroglyphs: PAT_HIEROGLYPHS, murals: PAT_MURALS, greek: PAT_GREEK, ornament: PAT_ORNAMENT, mosaic: PAT_MOSAIC, glass: PAT_GLASS,
                    fabrics: ASSETS.get("patterns/fabrics") };   // (the cloth a room's cushions, hangings and bedding are of: the tailor's own, clothes.js)
 registerPatterns(PATTERN_FAMILIES);
 // (the whole library, exported: archmat.js drawTilesAhead's workers register the same)
@@ -255,10 +261,10 @@ const hexOf = (c, d) => c === undefined ? d : typeof c === "number" ? c : parseI
 function finishMeshes(asm, finish, { side, glassColor = 0x4d5f7a } = {}) {
   // (the pieces pregenerated, if pregen/ has them for exactly this assembly and finish -- they are most of a
   //  building's cost: every surface told inside from outside by rays)
-  const pk = pregenOn() ? groupsKey(asm, finish, finishRuleSize) : null;
+  const pk = pregenOn() ? groupsKey(asm, finish, finishRuleSize, LIGHT.dir) : null;
   const cached = pk && PREGEN.groups.get(pk);
   const groups = cached ? cached.map((g) => ({ ...g, rule: g.rule >= 0 ? finish.rules[g.rule] : null }))
-                        : finishPieces(asm, finish, { sizeOf: finishRuleSize }).groups;
+                        : finishPieces(asm, finish, { sizeOf: finishRuleSize, sun: LIGHT.dir }).groups;
   if (pk && !cached && PREGEN.record) recordFor("groups", pk, packGroups(groups, finish));
   // (the generator notes every tile this building's rules draw with -- a material shared with a building made
   //  earlier never asks for its tile again, and the game fetches a building's tiles by this list)
@@ -272,7 +278,7 @@ function finishMeshes(asm, finish, { side, glassColor = 0x4d5f7a } = {}) {
     geo.setAttribute("position", new THREE.BufferAttribute(g.pos, 3));
     geo.setAttribute("normal", new THREE.BufferAttribute(g.nor, 3));
     let mat;
-    if (g.rule?.pattern) { geo.setAttribute("aUV", new THREE.BufferAttribute(g.uv, 2)); mat = finishMaterial(g.rule, side, !!finish.open, geo); }
+    if (g.rule?.pattern) { geo.setAttribute("aUV", new THREE.BufferAttribute(g.uv, 2)); mat = g.cast ? castLightMaterial(g.rule, geo) : g.rule.map === "opening" ? glassFinishMaterial(g.rule, geo) : finishMaterial(g.rule, side, !!finish.open, geo); }
     else if (g.glass && !g.rule) { paintGeometry(geo, glassColor, glassColor); mat = glassMat; }
     else {
       const r = g.rule ?? stone;

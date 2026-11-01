@@ -32,10 +32,12 @@ export function drawBand(g, O, x, y, w, h, band, orn, squeeze = 1) {
   clear();
 }
 
+// (a worker has no document; software-backed, or one drawn while WebGPU starts comes back empty)
+const canvasOf = (w, h) => typeof OffscreenCanvas !== "undefined" ? new OffscreenCanvas(w, h) : Object.assign(document.createElement("canvas"), { width: w, height: h });
+
 // a band bent into a ring round a picture, a cup's tondo: { r, w } shares of the width, [the band's name]
 function drawRing(g, O, W, H, R, band, orn) {
-  const r1 = (R.r + R.w) * W, len = Math.round(Math.PI * 2 * r1), h = Math.round(R.w * W), strip = document.createElement("canvas");
-  strip.width = len; strip.height = h;
+  const r1 = (R.r + R.w) * W, len = Math.round(Math.PI * 2 * r1), h = Math.round(R.w * W), strip = canvasOf(len, h);
   drawBand(strip.getContext("2d"), O, 0, 0, len, h, band, orn);
   const n = Math.round(len / 3), step = len / n;
   for (let i = 0; i < n; i++) {
@@ -130,8 +132,8 @@ function layoutRun(data, Z, width, period, seed) {
 // a painting on a new canvas: spec { tech, period, aspect, ground, ink, zones }, px its width
 export function renderPainting(data, spec, { px = 1024, seed = 1 } = {}) {
   const [aw, ah] = spec.aspect ?? [2, 1], W = Math.round(px), H = Math.round(px * ah / aw);
-  const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
-  const g = cv.getContext("2d"), T = TECHNIQUES[spec.tech] ?? TECHNIQUES["black-figure"], tech = spec.tech;
+  const cv = canvasOf(W, H);
+  const g = cv.getContext("2d", { willReadFrequently: true }), T = TECHNIQUES[spec.tech] ?? TECHNIQUES["black-figure"], tech = spec.tech;
   const period = spec.period ?? "classical", orn = data.parts.ornaments;
   const total = spec.zones.reduce((a, z) => a + z.h, 0);
   const inkFill = T.band.fg, Tb = T.band;

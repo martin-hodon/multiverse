@@ -20,7 +20,7 @@ export const PREGEN_BASE = new URL("./pregen/", import.meta.url).href;
 // buildings' geometry and wall fields, not every tile; an edit to the face's code, the faces -- one list for the whole
 // cache meant a line changed anywhere sent every start back to drawing everything
 export const SECTIONS = {
-  tiles: ["pregen.js", "patterns.js", "expr.js", "fabric.js", "glyphs.js", "murals.js", "greek.js", "greek/rig.js", "greek/figure.js", "greek/drape.js", "greek/scene.js", "greek/beast.js", "greek/field.js", "greek/paint.js"],          // pattern tiles, fabrics
+  tiles: ["pregen.js", "patterns.js", "expr.js", "fabric.js", "glyphs.js", "murals.js", "greek.js", "greek/rig.js", "greek/figure.js", "greek/drape.js", "greek/scene.js", "greek/beast.js", "greek/field.js", "greek/paint.js", "ornament.js", "ornament/net.js", "ornament/stars.js", "ornament/knot.js", "ornament/weave.js", "ornament/scroll.js", "mosaic.js", "mosaic/source.js", "mosaic/lay.js", "mosaic/paint.js", "medieval.js", "glass.js", "glass/cuts.js", "glass/forms.js", "glass/layout.js", "glass/panes.js", "glass/stain.js", "medieval/figure.js", "arch/tracery.js", "arch/profiles.js"],          // pattern tiles, fabrics
   buildings: ["pregen.js", "architecture.js", "arch/finish.js", "arch/solid.js", "patterns.js", "expr.js"],   // finished geometry, wall fields
   faces: ["pregen.js", "heads.js", "items.js", "face.js", "hair.js", "thorns.js", "jewelry.js", "petals.js", "defs.js", "expr.js"],   // heads with their hair and what is worn on them
   wings: ["pregen.js", "butterflies.js"],                                                       // the butterflies' painted wings
@@ -88,7 +88,7 @@ export function asmHash(asm) {
   asmHashes.set(asm, k = h.hex());
   return k;
 }
-export const groupsKey = (asm, finish, sizeOf) => hasher().str("groups").str(asmHash(asm)).json(finish)
+export const groupsKey = (asm, finish, sizeOf, sun) => hasher().str("groups").str(asmHash(asm)).json(finish).json(sun)   // (the sun: where a window's light falls)
   .json((finish.rules ?? []).map((r) => (r.pattern ? sizeOf(r) : null))).hex();
 export const wallsKey = (asm, cell) => hasher().str("walls").str(asmHash(asm)).json(cell).hex();
 // is the cache in play at all (a manifest found, or the generator recording)? -- else nobody pays for the hashing
@@ -189,13 +189,13 @@ async function readImage(file) {
 // a building's finished groups (arch/finish.js): a JSON header -- per group its rule (an index into the finish's rules),
 // whether it is glass, and how long its arrays are -- then the arrays, Float32, one after the other
 export function packGroups(groups, finish) {
-  const head = groups.map((g) => ({ rule: g.rule ? finish.rules.indexOf(g.rule) : -1, glass: !!g.glass, pos: g.pos.length, nor: g.nor.length, uv: g.uv?.length ?? 0, parts: g.parts ? [...g.parts] : undefined }));
+  const head = groups.map((g) => ({ rule: g.rule ? finish.rules.indexOf(g.rule) : -1, glass: !!g.glass, cast: !!g.cast, pos: g.pos.length, nor: g.nor.length, uv: g.uv?.length ?? 0, parts: g.parts ? [...g.parts] : undefined }));
   return pack(head, groups.flatMap((g) => [g.pos, g.nor, ...(g.uv ? [g.uv] : [])]));
 }
 export function unpackGroups(buf) {
   const { head, arrays } = unpack(buf);
   let i = 0;
-  return head.map((h) => ({ rule: h.rule, glass: h.glass, pos: arrays[i++], nor: arrays[i++], uv: h.uv ? arrays[i++] : null, parts: h.parts ? new Map(h.parts) : undefined }));
+  return head.map((h) => ({ rule: h.rule, glass: h.glass, cast: h.cast, pos: arrays[i++], nor: arrays[i++], uv: h.uv ? arrays[i++] : null, parts: h.parts ? new Map(h.parts) : undefined }));
 }
 // a FACE (heads.js): an item's groups as buildItem made them -- each its material and roles, then its arrays (indexed:
 // a head is a few thousand triangles over fewer vertices); the item's name and bounds

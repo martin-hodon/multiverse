@@ -20,7 +20,7 @@ import { landShade, valueNoise, WET, PUDDLE, puddleShade } from "./cloudshadow.j
 import { renderPattern, patternOf, sizeOf as patternSize } from "./patterns.js";
 import { PREGEN, pregenOn, pregenMiss, tileKey, recordFor } from "./pregen.js";
 import { ruleParams } from "./arch/finish.js";
-import { lightWGSL } from "./light.js";
+import { lightWGSL, LIGHT } from "./light.js";
 
 // GLASS: one material for every window in the world. Its colour used to be baked into a material of its own
 // (sixty of them, one mesh each -- exactly the mistake the building materials just stopped making); now it
@@ -585,26 +585,74 @@ const finishShade = wgslFn(`
   }
 `, [valueNoise, puddleShade]);
 const finishMats = new Map();
+// a finish rule's texel, from the geometry's `aUV` (and with the tile array its `aSlot`)
+function finishColour(r) {
+  if (TILE_ARRAY) return finishTexel({ tiles: TA.node, samp: TA.node, info: TA.infoNode, slot: attribute("aSlot", "float"), uv: attribute("aUV", "vec2") });
+  const t = finishTile(r), k = r.scale ?? 1;
+  return texture(tileTex(t), attribute("aUV", "vec2").div(uniform(new THREE.Vector2(t.size[0] * k, t.size[1] * k))).add(.5)).rgb;
+}
+// A PICTURE IN A WINDOW (docs/glass.md): lit by what comes through it, not by what falls on it. From inside by day it is
+// the sky through coloured glass, brighter the more the sun is on its far side; from outside by day it is dark, the
+// lead and glass with the sky glancing off them; at night it glows from outside, as though lamps stood within (every window, whether or not any do), and is nearly black from within.
+// The geometry's normal looks out (arch/finish.js); that holds because a site is only ever translated.
+export const GLASS_DARK = uniform(0);   // (the hour: 0 day, 1 night, set by the frame loop)
+const glassLight = wgslFn(`
+  fn glassLight(c: vec3<f32>, n: vec3<f32>, pw: vec3<f32>, eye: vec3<f32>, dark: f32) -> vec3<f32> {
+    let v = normalize(eye - pw);
+    let facing = dot(n, v);
+    let sun = max(dot(n, normalize(vec3<f32>(${LIGHT.dir.join(", ")}))), 0.0);
+    let day = 1.0 - dark;
+    let deep = pow(c, vec3<f32>(1.3));   // (thick pot metal: the deep colours deepen more than the pale)
+    let within = deep * (day * (1.0 + 0.22 * sun) + dark * 0.05);
+    let fresnel = pow(1.0 - abs(facing), 4.0);
+    let without = c * (day * 0.16 + dark * vec3<f32>(0.75, 0.62, 0.42)) + vec3<f32>(0.42, 0.5, 0.6) * day * (0.035 + 0.45 * fresnel);
+    return select(within, without, facing > 0.0);
+  }
+`);
+export function glassFinishMaterial(r, geo = null) {
+  if (TILE_ARRAY) {
+    if (!geo) throw new Error("glassFinishMaterial: the geometry is needed (its slot)");
+    geo.setAttribute("aSlot", new THREE.BufferAttribute(new Float32Array(geo.attributes.position.count).fill(finishSlot(r)), 1));
+  }
+  const key = TILE_ARRAY ? "glass" : "glass|" + finishKey(r) + "|" + (r.scale ?? 1);
+  let mat = finishMats.get(key);
+  if (!mat) {
+    mat = new THREE.MeshBasicNodeMaterial({ side: THREE.DoubleSide });
+    mat.colorNode = glassLight({ c: finishColour(r), n: attribute("normal", "vec3"), pw: positionWorld, eye: cameraPosition, dark: GLASS_DARK });
+    mat.userData.finish = key;
+    finishMats.set(key, mat);
+  }
+  return mat;
+}
+// the light a window throws on the floor (castLight, arch/finish.js): the same picture, added to what's under it, as much as there's sun
+const CAST = .5;
+export const GLASS_SUN = uniform(1);   // (how much sun there is: as the buildings' shadows have it, set by the frame loop)
+export function castLightMaterial(r, geo) {
+  if (TILE_ARRAY) geo.setAttribute("aSlot", new THREE.BufferAttribute(new Float32Array(geo.attributes.position.count).fill(finishSlot(r)), 1));
+  const key = TILE_ARRAY ? "cast" : "cast|" + finishKey(r) + "|" + (r.scale ?? 1);
+  let mat = finishMats.get(key);
+  if (!mat) {
+    mat = new THREE.MeshBasicNodeMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, fog: false });
+    mat.colorNode = finishColour(r).mul(GLASS_SUN.mul(CAST));
+    mat.userData.finish = key;
+    finishMats.set(key, mat);
+  }
+  return mat;
+}
 // a finish rule's material, for the geometry `geo` (its `aUV`, metres) -- which, with the tile array, is given its slot
 export function finishMaterial(r, side, open = false, geo = null) {   // open: an open-air site's (snow at any height)
   const pud = !!r.puddles;   // (a rule's `puddles`: open ground under the sky -- a square's paving -- rained on, puddles in its hollows)
   const outside = pud || (r.side !== "in" && r.surface !== "ceiling" && r.surface !== "floor");   // (rained on: not a room's inside, a ceiling or a floor)
   if (TILE_ARRAY) {
     if (!geo) throw new Error("finishMaterial: the geometry is needed (its slot)");
-    const slot = finishSlot(r);
-    geo.setAttribute("aSlot", new THREE.BufferAttribute(new Float32Array(geo.attributes.position.count).fill(slot), 1));
+    geo.setAttribute("aSlot", new THREE.BufferAttribute(new Float32Array(geo.attributes.position.count).fill(finishSlot(r)), 1));
   }
   const footKnown = outside && !pud && r.align !== "part" && !r.offset && !r.map && !r.turn;   // (finishShade's grime: the pattern's v is the height)
   const key = TILE_ARRAY ? `array|${side ?? ""}${outside ? "" : "|dry"}${open ? "|open" : ""}${pud ? "|pud" : ""}${footKnown ? "|foot" : ""}`
                          : finishKey(r) + "|" + (r.scale ?? 1) + "|" + (side ?? "") + (outside ? "" : "|dry") + (open ? "|open" : "") + (pud ? "|pud" : "") + (footKnown ? "|foot" : "");
   let mat = finishMats.get(key);
   if (!mat) {
-    let c;
-    if (TILE_ARRAY) c = finishTexel({ tiles: TA.node, samp: TA.node, info: TA.infoNode, slot: attribute("aSlot", "float"), uv: attribute("aUV", "vec2") });
-    else {
-      const t = finishTile(r), k = r.scale ?? 1;
-      c = texture(tileTex(t), attribute("aUV", "vec2").div(uniform(new THREE.Vector2(t.size[0] * k, t.size[1] * k))).add(.5)).rgb;
-    }
+    const c = finishColour(r);
     mat = new THREE.MeshBasicNodeMaterial({ side: side === "double" ? THREE.DoubleSide : THREE.FrontSide });
     mat.colorNode = finishShade({ c, nW: normalWorld, pW: positionWorld, snow: uniform(0).setGroup(renderGroup).onRenderUpdate(() => SNOW.value),
                                   wet: uniform(0).setGroup(renderGroup).onRenderUpdate(() => outside ? WET.value : 0), low: float(open ? 1 : 0),

@@ -137,7 +137,7 @@ function barLines(o, spec) {
 // rose into `lights` (as many as about 1.4m of its rim each, even), every light capped by a pointed ARCH from one
 // spoke's end to the next, and between each two arches and the rim, on the spoke's line, the largest CIRCLE that fits
 // -- the same rule as a window's head, turned round a centre. The rim is the wall's own edge.
-function roseLines(o, spec) {
+export function roseLines(o, spec) {
   const R = o.a, c = [o.at, o.springing], b = spec.bar ?? Math.max(.1, Math.min(.22, R * .035));
   const n = Math.round(spec.lights ?? Math.max(8, Math.min(16, 2 * Math.round(Math.PI * R / 1.4))));
   if (R < 1 || n < 6) return null;

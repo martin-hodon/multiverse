@@ -26,6 +26,7 @@ export function solveGroup(data, name, opts = {}) {
   best.faults = least;
   return best;
 }
+const LOWS = new WeakMap();                                             // (of a canon: an edited one starts again)
 const lowest = (pieces) => { let low = Infinity; for (const p of pieces) if (!p.shaft) for (const r of p.rings) for (const q of r) if (q[1] < low) low = q[1]; return low; };   // (a spear's butt lifts nobody)
 const handAt = (P, side) => P.place((P.nearSide === side ? P.near : P.far).arm.hand);
 const lift = (pose, by) => { const place = pose.place; pose.place = (q) => { const w = place(q); return [w[0], w[1] + by]; }; pose.y += by; };   // (drawn higher than solved: so is everything asked of the pose afterwards)
@@ -104,9 +105,17 @@ function composeGroup(data, name, { seed = 1, period = "classical", flip, tight 
     const dir = resolve(R.face, ra) * mirror, mount = actors[R.on]?.beast, bearer = actors[R.on]?.pose;   // (on a beast: at its seat, sharing its depth; on someone's back: at that place on him, drawn over him)
     const mp = mount?.anchors[R.onAt ?? "seat"], onMan = bearer && anchor(bearer, R.onAt ?? "chest"), x = mount ? mount.place([mp[0] + (R.onDx ?? 0), mp[1]])[0] : bearer ? onMan[0] + bearer.dir * (R.onDx ?? 0) : pick(R.at, ra) * mirror * tight, y = mount ? mp[1] + (R.onDy ?? 0) : bearer ? onMan[1] + (R.onDy ?? 0) : 0;
     const solve = (at, down = 0) => solvePose(data, action, { dir, x: at, y, scale: R.size ?? 1, r: stream(seed, "pose", id, name), targets: Object.fromEntries(Object.entries(targets).map(([k, q]) => [k, [q[0], q[1] - down]])), over: { period: per, arms, shield: !!who.shield } });
+    // (how low a body goes doesn't depend on where along the line it stands: a whole figure built to ask only that, once for each stance, and again for each try of a scene otherwise)
+    const lowOf = (P) => {
+      const k = Object.keys(targets).length ? null : `${seed}|${name}|${id}|${action}|${dir}|${y}|${R.size ?? 1}|${period}|${JSON.stringify(who)}|${JSON.stringify(arms)}`;
+      const kept = LOWS.get(data) ?? LOWS.set(data, new Map()).get(data);
+      let low = k ? kept.get(k) : undefined;
+      if (low === undefined) { low = lowest(buildFigure(data, P, { ...who, rng: stream(seed, "cloth", id, name) }, period)); if (k) kept.set(k, low); }
+      return low;
+    };
     const rests = (at) => {                                            // (one lying down rests on the ground line, a knee doesn't go through it, and he is aimed at there; a hand on someone is solved for where it ends up)
       let P = solve(at);
-      const low = lowest(buildFigure(data, P, { ...who, rng: stream(seed, "cloth", id, name) }, period)), by = data.actions[action].ground || (low < 0 && !R.on) ? -low : 0;
+      const low = lowOf(P), by = data.actions[action].ground || (low < 0 && !R.on) ? -low : 0;
       if (by) { if (Object.keys(targets).length) P = solve(at, by); lift(P, by); }
       return P;
     };

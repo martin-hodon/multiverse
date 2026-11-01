@@ -17,6 +17,20 @@
   #view canvas { display:block; width:100%; height:100%; }
   #view #sheet { width:auto; height:auto; }
   #view.flat { overflow:auto; }
+  /* one of a family: the list of them, what can be asked of it, and it */
+  #view.picking { overflow:hidden; }
+  #view.picking #sheet { left:216px !important; right:auto !important; bottom:auto !important; }
+  #pick { display:none; position:absolute; left:0; top:0; bottom:0; width:208px; flex-direction:column; gap:6px; padding:6px; background:var(--panel); border-right:1px solid var(--line); }
+  #pick input, #pick select { font:inherit; width:100%; min-width:0; background:#1e2126; color:var(--ink); border:1px solid var(--line); border-radius:3px; padding:2px 5px; outline:none; }
+  #pick .items { flex:1; min-height:60px; overflow:auto; display:flex; flex-direction:column; gap:1px; }
+  #pick .items button { flex:none; border:0; background:none; text-align:left; padding:2px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #pick .items button.on { background:#2f343b; color:var(--hot); }
+  #pick .ask { flex:none; max-height:45%; overflow:auto; display:flex; flex-direction:column; gap:3px; }
+  #pick .ask label { display:grid; grid-template-columns:70px 1fr; align-items:center; gap:4px; }
+  #pick .ask label span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #pick .acts { flex:none; display:flex; gap:4px; }
+  #pick .acts button { flex:1; padding:3px 4px; }
+  #pick .acts .go { border-color:var(--hot); color:var(--hot); }
   #bar { flex:none; padding:5px 10px; border-top:1px solid var(--line); background:var(--panel); display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
   #bar b { color:var(--hot); font-weight:600; }
   #edit { width:430px; flex:none; display:flex; flex-direction:column; border-left:1px solid var(--line); background:var(--panel); }
@@ -72,7 +86,7 @@
     <div id="tree"></div>
   </nav>
   <main id="mid">
-    <div id="view"><canvas id="sheet" style="display:none;position:absolute;inset:0;overflow:auto"></canvas></div>
+    <div id="view"><div id="pick"></div><canvas id="sheet" style="display:none;position:absolute;inset:0;overflow:auto"></canvas></div>
     <div id="bar">
       <span id="what">—</span>
       <span id="stats" style="color:var(--dim)"></span>
@@ -172,14 +186,16 @@ import { createJewels } from "./jewels.js";
 import { lifeOf } from "./architecture.js";   // FACES: shown as the game draws them (half-Lambert under the sun), with sliders
 import { LIGHT } from "./light.js";
 import CONFIG from "./config.json" with { type: "json" };
-import { registerPatterns, drawSheet, patternNames, PALETTES } from "./patterns.js";   // PATTERNS: a family shown as a sheet of swatches, in its palettes
+import { showPick, asked, drawPicked } from "./assetpick.js";   // ONE OF A FAMILY: listed, and only the one picked generated
+import { registerPatterns, drawSheet, renderPattern, patternNames, PALETTES } from "./patterns.js";   // PATTERNS: a family shown as a sheet of swatches, in its palettes
 import { bakeTiles } from "./textures.js";   // the older tiles (ashlar, marble, the orders' ornament...) a finish may still name as `pat`
 import { loadUses } from "./arch/assemble.js";   // a building's COMPONENTS (other definitions it `use`s), fetched before it is built
 import { gaitBase } from "./species.js";
 import { EXPRESSIONS, VISEMES } from "./face.js";
 import { drawSpecimen } from "./butterflies.js";
-import { registerGreek, drawGreekSheet } from "./greek.js";   // GREEK PAINTINGS: the data, each painting by seed
-import { registerMurals, drawMuralSheet } from "./murals.js";   // MURALS: tomb paintings -- their parts, the figures, the paintings   // BUTTERFLIES: a species as a specimen plate, upperside and underside   // the face's moods and mouth shapes, for the face view's dropdowns
+import { TECHNIQUES } from "./greek/paint.js";
+import { registerGreek, renderGreek } from "./greek.js";   // GREEK PAINTINGS: the data, each painting by seed
+import { registerMurals, drawMuralSheet, renderPainting as renderMural } from "./murals.js";   // MURALS: tomb paintings -- their parts, the figures, the paintings   // BUTTERFLIES: a species as a specimen plate, upperside and underside   // the face's moods and mouth shapes, for the face view's dropdowns
 import { registerGlyphs, drawGlyphSheet, partNames, signCodes } from "./glyphs.js";   // HIEROGLYPHS: a category's signs as a sheet, the texts
 import { setQuads } from "./outline.js";
 import { attachRig, setJointModel, setAngles, ground } from "./joints.js";   // THE BODY IN MOTION: joints, positions, movements, exercises, reaching
@@ -454,27 +470,51 @@ function motionLine() {
 }
 for (const id of ["motionPick", "motionWho", "motionFix"]) $(id).addEventListener("change", () => apply(current, $("json").value, { refit: id !== "motionFix" }));
 
+// ONE OF A FAMILY (assetpick.js): the room beside the list, and Regenerate going back through build, a frame later so that it can say so first
+const picked = () => { const w = Math.max(200, $("view").clientWidth - 224), h = Math.max(200, $("view").clientHeight - 8); return { w, h, auto: Math.min(1600, Math.max(w, 600)) }; };
+const tookOf = (ms) => ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(1)} s`;
+function pick(path, items, fields) {
+  $("view").classList.add("picking");
+  return showPick($("pick"), path, { items, fields, go: () => {
+    $("stats").textContent = "generating...";
+    requestAnimationFrame(() => setTimeout(() => apply(current, $("json").value), 0));
+  } });
+}
+
 // the asset, built from the TEXT in the editor: what you are looking at is what you have written
 function build(path, text) {
   const def = JSON.parse(text);
   front = def._view === "front";
   const kind = kindOf.get(path) ?? "creature";
   clearStand();
+  $("pick").style.display = "none"; $("view").classList.remove("picking");
   $("motionOpts").style.display = kind === "motion" ? "inline-flex" : "none";
   flat(kind === "pattern" || glyphKinds.includes(kind) || kind === "butterfly" || kind === "butterfly-shapes" || kind === "mural" || kind === "greek");
   if (kind === "greek") {
     registerGreek({ [path]: def });
-    const cv = $("sheet");
-    cv.width = Math.max(600, $("view").clientWidth - 20); cv.height = 10;
-    const errs = drawGreekSheet(cv, def);
-    if (errs.length) throw new Error(errs.join("\n"));
-    return { label: "Greek paintings", stats: `${Object.keys(def.paintings).length} paintings · ${Object.keys(def.scenes).length} scenes` };
+    const S = pick(path, Object.entries(def.paintings).map(([k, P]) => [k, P.name ?? k]), (k) => [
+      { key: "seed", own: 1 }, { key: "px", label: "width px", own: picked().auto },
+      { key: "tech", label: "style", own: def.paintings[k].tech, options: Object.keys(TECHNIQUES).map((t) => [t, t]) },
+      { key: "period", own: def.paintings[k].period ?? "classical", options: Object.keys(def.canon.periods).map((t) => [t, t]) },
+    ]);
+    const spec = { ...def.paintings[S.key] }, seed = asked(S, "seed") ?? 1, px = asked(S, "px") ?? picked().auto;
+    if (asked(S, "tech")) spec.tech = asked(S, "tech");
+    if (asked(S, "period")) spec.period = asked(S, "period");
+    const t0 = performance.now(), c = renderGreek(spec, { px, seed }), ms = performance.now() - t0;
+    drawPicked($("sheet"), c, picked());
+    return { label: spec.name ?? S.key, stats: `${tookOf(ms)} · ${c.width} x ${c.height} px · seed ${seed} · ${Object.keys(def.paintings).length} paintings` };
   }
   if (kind === "mural") {
     // the murals' three documents drawn together (the figures use the parts, the paintings the figures): the one being
     // edited from its text, the others as they stand
     const docs = Object.fromEntries(["murals/parts", "murals/figures", "murals/paintings"].map((p) => [p, p === path ? def : JSON.parse(source.get(p) ?? "{}")]));
     registerMurals(docs);
+    if (def.paintings) {
+      const S = pick(path, Object.entries(def.paintings).map(([k, P]) => [k, P.name ?? k]), () => [{ key: "seed", own: 1 }, { key: "px", label: "width px", own: picked().auto }]);
+      const seed = asked(S, "seed") ?? 1, px = asked(S, "px") ?? picked().auto, t0 = performance.now(), c = renderMural(S.key, { px, seed }), ms = performance.now() - t0;
+      drawPicked($("sheet"), c, picked());
+      return { label: def.paintings[S.key].name ?? S.key, stats: `${tookOf(ms)} · ${c.width} x ${c.height} px · seed ${seed} · ${Object.keys(def.paintings).length} paintings` };
+    }
     const cv = $("sheet");
     cv.width = Math.max(600, $("view").clientWidth - 20); cv.height = 10;
     const errs = def.parts ? drawGlyphSheet(cv, def, { cell: 150 }) : drawMuralSheet(cv, def, { cell: 200 });
@@ -507,6 +547,23 @@ function build(path, text) {
   if (kind === "pattern") {
     // a family of patterns (or the palettes): each pattern a swatch, two tiles across, with its other colourings under it
     registerPatterns({ [path.split("/").pop()]: def });
+    if (Object.keys(def.patterns ?? {}).length) {
+      const S = pick(path, Object.keys(def.patterns).map((k) => [k, k]), (k) => {
+        const P = def.patterns[k], own = P.palette, pals = [...new Set([...(own && typeof own === "string" ? [own] : []), ...(P.palettes ?? []).filter((q) => typeof q === "string")])];
+        return [
+          ...(P.layers ?? []).some((L) => L.seed !== undefined) ? [{ key: "seed", own: P.layers.find((L) => L.seed !== undefined).seed }] : [],
+          ...pals.length ? [{ key: "palette", own: typeof own === "string" ? own : undefined, options: pals.map((q) => [q, q]) }] : [],
+          { key: "res", label: "texels", own: P.res ?? 512 },
+          ...Object.entries(P.params ?? {}).filter(([, v]) => typeof v === "number" || typeof v === "string").map(([q, v]) => ({ key: `param.${q}`, label: q, own: v, text: typeof v === "string" })),
+        ];
+      });
+      const P = def.patterns[S.key], seed = asked(S, "seed"), params = {};
+      for (const k of Object.keys(S.values)) if (k.startsWith("param.") && asked(S, k) !== undefined) params[k.slice(6)] = asked(S, k);
+      const run = seed === undefined ? P : { ...P, layers: P.layers.map((L) => L.seed === undefined ? L : { ...L, seed }) };
+      const t0 = performance.now(), t = renderPattern(run, { palette: asked(S, "palette"), params, res: asked(S, "res") }), ms = performance.now() - t0;
+      drawPicked($("sheet"), t.canvas, { ...picked(), repeat: t.repeat });
+      return { label: S.key, stats: `${tookOf(ms)} · ${t.px[0]} x ${t.px[1]} px · ${t.size[0]} x ${t.size[1]} m${seed !== undefined ? ` · seed ${seed}` : ""} · ${Object.keys(def.patterns).length} patterns` };
+    }
     const cv = $("sheet");
     cv.width = Math.max(600, $("view").clientWidth - 20); cv.height = 10;
     const errs = drawSheet(cv, def, { cell: 200, small: 60 });
@@ -836,7 +893,7 @@ function edges(on) {
 $("edges").onchange = () => { edges($("edges").checked); if (current?.startsWith("items/")) apply(current, $("json").value); };   // (a face's guide lines come and go with its triangles)
 $("finish").onchange = () => apply(current, $("json").value);
 // (a 2D canvas can lose its pixels when the GPU process resets -- as it may while WebGPU starts: draw the sheet again)
-$("sheet").addEventListener("contextrestored", () => { if (["pattern", "butterfly", "butterfly-shapes", "mural", ...glyphKinds].includes(kindOf.get(current))) apply(current, $("json").value); });
+$("sheet").addEventListener("contextrestored", () => { if (["pattern", "greek", "butterfly", "butterfly-shapes", "mural", ...glyphKinds].includes(kindOf.get(current))) apply(current, $("json").value); });
 addEventListener("keydown", (e) => {
   if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
   if (e.key === "/") { e.preventDefault(); $("q").focus(); $("q").select(); return; }

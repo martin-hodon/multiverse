@@ -32,10 +32,10 @@ export function drawGreekSheet(cv, doc, { seeds = 3 } = {}) {
   return errs;
 }
 
-// ---- on a surface: the painting over the tile, by the tile's own width in pixels
+// ---- on a surface: the painting over the tile (or `box`, metres, where the layer stands), by its own width in pixels
 LAYER_KINDS.greek = {
   draw(g, L, { tile, ppm }) {
-    const [w, h] = tile, px = Math.max(16, Math.round(w * ppm)), key = `${L.painting}|${px}|${L.seed ?? 1}`;
+    const [w, h] = L.box ?? tile, px = Math.max(16, Math.round(w * ppm)), key = `${L.painting}|${px}|${L.seed ?? 1}`;
     let cv = cache.get(key);
     if (!cv) { cv = renderGreek(L.painting, { px, seed: L.seed ?? 1 }); cache.set(key, cv); if (cache.size > MAX) cache.delete(cache.keys().next().value); }
     g.save(); g.scale(1, -1); g.drawImage(cv, -w / 2, -h / 2, w, h); g.restore();

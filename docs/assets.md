@@ -99,6 +99,15 @@ draw themselves: what a thing IS, against what it carries.
 | `glyphs` | `glyphs.js` | hieroglyphs: the palette and modes, the parts, a Gardiner category's signs -- drawn as a sheet (docs/glyphs.md) |
 | `glyph-texture` | `glyphs.js` `renderTexture()` | walls of hieroglyphic text: grids of quadrats filled by seed |
 
+### One of a family
+
+Patterns, Greek paintings and mural paintings are families whose members can take a second each, so the viewer lists them
+and generates only the one picked (`assetpick.js`). Below the list is what can be asked of that one: `seed`, `palette`,
+`texels` and the pattern's `params`; `width px`, `style` and `period` on a Greek painting. An empty field means the item's own value,
+shown greyed. **Regenerate** draws it with what's asked, **New seed** with a random seed; the line under the view says how long
+it took. Nothing asked here is written to the definition: to keep it, put it in the form or the JSON. Picking another item
+clears what was asked.
+
 ## How the move was checked
 
 The definitions were written out of the code that used to hold them (`ref/gen.html`, `mammals.js` CAPTURE),

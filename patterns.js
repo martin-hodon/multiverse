@@ -318,7 +318,7 @@ function drawTile(def, { pal, px, params = {}, depth = 0 }) {
   const [W, H] = px, cv = mkCanvas(W, H), g = cv.getContext("2d", { willReadFrequently: true });   // (a software canvas: a GPU one can be lost, and blanked, while WebGPU starts)
   g.fillStyle = css(colorOf(def.ground ?? 0, pal)); g.fillRect(0, 0, W, H);
   g.setTransform(W / tile[0], 0, 0, -H / tile[1], W / 2, H / 2);            // metres, centred, y up
-  const ctx = { P, pal, tile, px, ppm: W / tile[0], depth };
+  const ctx = { P, pal, tile, px, ppm: W / tile[0], depth, repeat: def.repeat !== false };
   const offs = def.repeat === false ? [[0, 0]] : [-1, 0, 1].flatMap((i) => [-1, 0, 1].map((j) => [i * tile[0], j * tile[1]]));
   for (const [ox, oy] of offs) { g.save(); g.translate(ox, oy); drawLayers(g, def.layers, { ...ctx, top: true, copy: [ox, oy] }); g.restore(); }
   return cv;
