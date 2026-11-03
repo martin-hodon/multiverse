@@ -77,18 +77,21 @@ import { createHerd } from "./instanced.js";
 import { legLength } from "./skeleton.js";
 import { createComposite, occluderScene, OCC_LAYER, PIPE, setPipe, pipeFromQuery, LOD, POSE, beginSecondaryView, endSecondaryView, herds } from "./composite.js";
 import { SHELL } from "./shell.js";   // the figures as polygons: its LOD and its switches
-import { createGrassFringe, grassWind, grassBlade, GRADE, GRASS_LAYER, FRINGE, markGroundProp, GROUND_HOLES, DIG_RECTS, groundHole, GROUND_BARE, bareHere, WATER_LEVEL, WIND, WIND_DIR, GROUND_SNOW } from "./grass.js";
+import { createGrassFringe, grassWind, grassBlade, groundMottle, GRADE, GRASS_LAYER, FRINGE, markGroundProp, GROUND_HOLES, DIG_RECTS, groundHole, GROUND_BARE, bareHere, WATER_LEVEL, WIND, WIND_DIR, GROUND_SNOW } from "./grass.js";
 import { terrainMeshes, gradeColor } from "./terrain.js";
 import { buildTerrainData } from "./terrain_data.js";
-import { makeGround, WLEVEL } from "./ground.js";
+import { makeGround, moatSD, WLEVEL } from "./ground.js";
+import { MINE, placeMine, minePlan, mineDoc, mineFlat, mineBank, mineCover } from "./mine.js";
 import { growMap } from "./mapgen.js";
 import { landscapeMap } from "./landmap.js";   // (the other land: a landscape scene scaled up -- ?geology=, ?climate=)
+import { openWaterKind, openWaterPlan, addOpenWater, seaAPI, openWaterAttributes, farSea } from "./sea.js";   // (the sea, the big lake: ?water=)
+import { seaWaterNodes } from "./seawater.js";
 import { GEOLOGY, CLIMATES } from "./landscape/presets.js";
 import { animateSpecies } from "./anim.js";
-import { BUILDINGS, LANDMARKS, LANDMARK_NAMES, LANDMARK_HOLDS, LAND, DRESS, PATTERN_LIBRARY, finishesAhead, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
+import { seedFinishes, BUILDINGS, LANDMARKS, LANDMARK_NAMES, LANDMARK_HOLDS, LAND, DRESS, PATTERN_LIBRARY, finishesAhead, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
 import { planTown, townStyle, townFinishes, doorNormal } from "./town.js";
 import { makeCart, wheelParams, FLEET, LOAD_VARIANTS, CART_SIZES } from "./carts.js";
-import { makeTree, TREE_SPECIES, WARM_TREES, makeMushroom, MUSHROOMS, makeBush, makeCloud, CLOUD_PARTS, rng } from "./flora.js";
+import { makeTree, TREE_SPECIES, WARM_TREES, makeMushroom, MUSHROOMS, makeBush, rng } from "./flora.js";
 import { makePerson, personKind, PEOPLE, SOLDIER, setPeriodDress } from "./people.js";
 import { laneFrom, buildPathNetwork, planRoads, routeGraph, wanderLoop, ROAD_WET } from "./paths.js";
 import { createVillageLife } from "./village-life.js";
@@ -98,7 +101,7 @@ import { createHeads, DETAIL as HEAD_DETAIL } from "./heads.js";
 import { createJewels } from "./jewels.js";
 import { createButterflies } from "./butterflies.js";   // the butterflies: species of assets/butterflies, flapping flat wings
 import { createManes } from "./manes.js";
-import { placeStatues } from "./statues.js";   // carved figures at the buildings' `statue` markers   // manes of thorns on the creatures whose mane has `thorns` (a lion's)
+import { placeStatues, statuesSeen } from "./statues.js";   // carved figures at the buildings' `statue` markers   // manes of thorns on the creatures whose mane has `thorns` (a lion's)
 import { createFaces, VOCAL_FACES } from "./faces.js";
 import { createArchery } from "./archery.js";
 import { createTableware } from "./tableware.js";
@@ -122,7 +125,8 @@ import { createIcicles } from "./icicles.js";
 import { createWindowBoxes } from "./windowbox.js";
 import { createWindowFrames, wallFrame, snowyLit, FRAME as WIN_FRAME } from "./windowframes.js";
 import { createRidgeCaps, RIDGE } from "./ridgecaps.js";
-import { leadedGlass, drawTilesAhead, tilesAheadDone, GLASS_DARK, GLASS_SUN } from "./archmat.js";
+import { leadedGlass, drawTilesAhead, tilesAheadDone, GLASS_DARK, GLASS_SUN, archMaterial } from "./archmat.js";
+import { doorLeaves } from "./doors.js";   // (the doors of the landmarks, as their builders made them)
 import { bakeSunShadow, SUN, sunShade } from "./sunshadow.js";
 import { createFireworks } from "./fireworks.js";
 import { createLightning } from "./lightning.js";
@@ -159,7 +163,8 @@ import { SR, toBuffer, play } from "./dsp.js";
 import { createFootprints, FOOTPRINTS, printOf } from "./footprints.js";
 import { createFlags } from "./flags.js";
 import { createBreath, createPuffs } from "./breath.js";
-import { createFreight } from "./freight.js";
+import { createFreight, goodsCulture } from "./freight.js";
+import { planHarbour, buildHarbour, createHarbourLife } from "./harbour.js";
 import { TEXTURES, PARALLAX, bakeTiles, tileTexture } from "./textures.js";
 import { buildFoliage, FOLIAGE_T, FOLIAGE_BB, HARVEST } from "./foliage.js";
 FOLIAGE_BB.value = new URLSearchParams(location.search).get("billboard") === "0" ? 0 : 1;   // ?billboard=0: leaf cards fixed in space instead of turned to the camera
@@ -215,9 +220,10 @@ const townRng = (() => { let a = townSeed; return () => { a = (a + 0x6D2B79F5) >
 // fisherman's boat, the ground and the trees follow it.
 const PERIODS = ASSETS.get("world/periods")?.periods ?? {};
 // THE START MENU: the world's period, then its monument, then its land -- the river country the terrain lab grows, or
-// a landscape of the rock and the climate chosen (landmap.js) -- before anything is built; everything else (the seed:
+// a landscape of the rock and the climate chosen (landmap.js) -- then its water (sea.js: the river alone, a big lake, a
+// sea coast, or the seed's draw) before anything is built; everything else (the seed:
 // the town, its people, the weather) drawn at random as always. The choice is written into the address (?period=,
-// ?monument=, ?geology=, ?climate=), so a reload or a shared link keeps it; ?menu=1 asks again, ?menu=0 never asks. Not
+// ?monument=, ?geology=, ?climate=, ?water=), so a reload or a shared link keeps it; ?menu=1 asks again, ?menu=0 never asks. Not
 // shown where the address already says (?period=, ?building=), nor to the build tools (pregen's recording, a
 // probe, any page driven headless).
 await chooseSetup();
@@ -230,16 +236,22 @@ async function chooseSetup() {
   const el = (tag, attrs, ...kids) => { const e = Object.assign(document.createElement(tag), attrs); e.append(...kids); return e; };
   const card = (title, note, onclick, any = false) => el("button", { className: "card" + (any ? " any" : ""), onclick }, el("b", { textContent: title }), el("span", { textContent: note }));
   return new Promise((done) => {
-    const finish = (period, monument) => lands((geology, climate) => {
+    const finish = (period, monument) => lands((geology, climate) => waters((water) => {
       let u = null;
       try { u = new URL(location.href); } catch { /* (a sandbox without an address) */ }
       for (const q of [qp, u?.searchParams]) if (q) {   // (the address as it is now: the seed is in it)
-        for (const [k, v] of [["period", period], ["monument", monument], ["geology", geology], ["climate", climate]]) v ? q.set(k, v) : q.delete(k);
+        for (const [k, v] of [["period", period], ["monument", monument], ["geology", geology], ["climate", climate], ["water", water]]) v ? q.set(k, v) : q.delete(k);
         q.delete("menu");
       }
       try { if (u) history.replaceState(null, "", u); } catch { /* (a sandbox without history) */ }
       box.remove(); done();
-    }, () => ages_());
+    }, () => finish(period, monument)), () => ages_());
+    // the water (sea.js): the river alone, a big lake it runs through, a sea it runs out into -- or the seed's draw
+    const waters = (pick, back) => show("Choose the water", "what the river runs into", [
+      card("The river alone", "its banks, its mill, its bridge", () => pick("none")),
+      card("A big lake", "the river running through it, beaches and banks round it", () => pick("lake")),
+      card("A sea coast", "the river running out into it, a coast of beaches, rocks or cliffs", () => pick("sea")),
+      card("As it falls", "drawn from the world's seed", () => pick(null), true)], back, "another land");
     const show = (title, sub, cards, back, backLabel = "another age") => {
       box.replaceChildren(el("h1", { textContent: title }), el("p", { className: "sub", textContent: sub }), el("div", { className: "grid" }, ...cards),
                           ...(back ? [el("button", { className: "back", textContent: "\u2190 " + backLabel, onclick: back })] : []));
@@ -281,6 +293,7 @@ const PERIOD_NAME = (() => {
   return ks[0] ?? null;
 })();
 const PERIOD = PERIODS[PERIOD_NAME] ?? {};
+const GOODS_CULTURE = goodsCulture(PERIOD_NAME, PERIOD.dress);   // what the period ships its goods in (assets/world/goods.json; freight.js)
 setPeriodDress(PERIOD.dress ?? null);   // (people.js: whoever is given no style of their own)
 // the period's GROUND (periods.json `grounds`): its colours into grass.js GRADE before the terrain is coloured from it;
 // no blades where it is sand; how many flowers it keeps
@@ -317,6 +330,7 @@ await loadPregen([...townKeys, ...LAND, "town/" + townStyle(townSeed, TOWN_STYLE
 // THE TILES DRAWN WHILE THE MAP GROWS (archmat.js drawTilesAhead): the map is grown on the GPU next, the page waiting on
 // it, so the finish tiles this world's buildings will ask for -- the landmark's, the land's, every one the town's style
 // may use -- are drawn meanwhile in workers; whatever pregen/ had is not drawn again (?tilesahead=0: all on the page, to compare)
+seedFinishes(townSeed);   // (every planned window and mosaic, the world's own)
 if (qp.get("tilesahead") !== "0") drawTilesAhead([...finishesAhead(townKeys), ...townFinishes(townSeed, TOWN_STYLE, PERIOD.town ?? null)], PATTERN_LIBRARY);
 let town = [];
 {
@@ -433,8 +447,11 @@ if (MAPGEN && groundR >= extent + 200) {
   try {
     // (?mapyears=: a shorter history -- the headless checks, whose GPU is the CPU pretending)
     const meadow = { x0: -(extent + 6), x1: extent + 6, z0: -(rows - 1) * gap - 12, z1: 12 }, facade = { z: frontZ - lm[1] / 2, w: lm[0], d: lm[1], road: 16 };
-    MAP = LANDSCAPE ? landscapeMap({ seed: townSeed, radius: groundR, riverZ: extent + 120, meadow, facade, ...LANDSCAPE })
-        : await growMap({ seed: townSeed, radius: groundR, device: renderer.backend.device, riverZ: extent + 120, years: num("mapyears", 150000), meadow, facade });
+    // (OPEN WATER, sea.js: ?water=sea|lake|none, else the seed's draw -- planned before the land is shaped, so the town keeps clear of it)
+    const WPLAN = openWaterPlan(openWaterKind(townSeed, qp.get("water")), townSeed, { radius: groundR, riverZ: extent + 120, meadow, facade }), keep = WPLAN?.keep ?? null;
+    MAP = LANDSCAPE ? landscapeMap({ seed: townSeed, radius: groundR, riverZ: extent + 120, meadow, facade, ...LANDSCAPE, keep })
+        : await growMap({ seed: townSeed, radius: groundR, device: renderer.backend.device, riverZ: extent + 120, years: num("mapyears", 150000), meadow, facade, keep });
+    if (WPLAN) { addOpenWater(MAP, WPLAN); console.log(`map: open water -- ${MAP.sea.kind}, level ${MAP.sea.level.toFixed(2)} m, ${MAP.sea.shore.length.toFixed(0)} m of shore (${MAP.sea.rock}), ${MAP.sea.ms} ms`); }
     if (town[0]) town[0].x = MAP.monumentX;   // the monument where the facade line is flattest
     console.log(`map: grown in ${((performance.now() - t0) / 1000).toFixed(1)}s -- bridge at x ${MAP.bridgeX}, monument at x ${MAP.monumentX}, ` +
                 `${MAP.streams} side streams, ${MAP.falls} falls in the region (highest ${MAP.fallMax.toFixed(0)} m)` +
@@ -460,7 +477,8 @@ const siteRects = (s, m) => {
   const f = d.footprint, z = siteZ(s);
   return [{ x0: s.x - f[0] / 2 - m, x1: s.x + f[0] / 2 + m, z0: z - f[1] / 2 - m, z1: z + f[1] / 2 + m }];
 };
-const inSites = (x, z, m) => sites.some((s) => siteRects(s, m).some((r) => x > r.x0 && x < r.x1 && z > r.z0 && z < r.z1));
+let HARBOUR = null, HARBOUR_LIFE = null;   // a sea world's port (harbour.js): its plan, then its ships and dock hands
+const inSites = (x, z, m) => sites.some((s) => siteRects(s, m).some((r) => x > r.x0 && x < r.x1 && z > r.z0 && z < r.z1)) || !!HARBOUR?.inside(x, z, m);
 // rolling terrain: layered sines, blended flat under every building and the meadow
 const flatZones = town.map((s) => ({ x: s.x, z: siteZ(s),
   hx: BUILDINGS[s.key].footprint[0] / 2 + 3, hz: BUILDINGS[s.key].footprint[1] / 2 + 3 }));
@@ -473,6 +491,10 @@ bootMark("THE SHAPE OF THE LAND lives in ground.js");
 const moats = [];
 const GROUND = makeGround({ extent, groundR, flatZones, moats, map: MAP });
 const { LAKE, RIVER, BASIN, hasLake, hasRiver, lakeSD, riverZ, riverHW, riverLevel, riverSD, waterSD, waterY, groundH } = GROUND;
+// THE OPEN WATER's API (sea.js, docs/world.md "Open water"): null on a river-only world. (A sea's river ends at its mouth.)
+const SEA = seaAPI(MAP);
+if (SEA?.kind === "sea") RIVER.xEnd = SEA.mouth.x;
+window.__sea = SEA;
 // flatten the lake's surroundings first, so the carved bowl reliably dips below water level whatever hill the
 // sines put there
 if (hasLake) flatZones.push({ x: LAKE.x, z: LAKE.z, hx: LAKE.rc + LAKE.w + 5, hz: LAKE.rc + LAKE.w + 5 });
@@ -529,36 +551,31 @@ if (MILL) {
   if (!fits) flatZones.push(...TOWN.flats);
   if (fits) console.log(`town: ${TOWN.sites.filter((q) => q.home).length} homes; left out where the land is more than ${FLOOR_DELTA} m off level or wet: ` +
                         `${TOWN.left.houses} houses, ${TOWN.left.farms} farms, ${TOWN.left.plots} plots`);
-  // THE MINE (assets/architecture/village/mine): one a world, its ore by the seed (?mine=silver|copper|salt picks it, ?mine=0
-  // none), on open land away from every other site and the water -- its galleries as well as its yard -- where the
-  // ground over the galleries is nowhere far below the yard (they lie ten metres down), the higher the better (mines
-  // are in the hills), not too far from the village
+  // THE MINE (mine.js; 2026-11-03: laid into the land): one a world, its ore by the seed (?mine=silver|copper|salt picks
+  // it, ?mine=0 none). Only its shaft head needs level ground -- a small flat spot settled to the ground's own height
+  // there, a hillside's too (`flat`: a flat zone with its `y`); its yard dry and away from every other site; the
+  // galleries run under anything, the rock over them at least mine.js COVER, going deeper where the land above falls
+  // away. The higher the entrance the better (mines are in the hills), not too far from the village. Its definition is
+  // made for the place (mineDoc: every y the world's), so the site's `y` is its ground level, not 0.
   if (qp.get("mine") !== "0") {
-    const want = qp.get("mine"), key = want ? "mine" + want[0].toUpperCase() + want.slice(1) : ["mineSilver", "mineCopper", "mineSalt"][townSeed % 3];
-    const M = BUILDINGS[key], [ex, ez] = M.extent, cx0 = VILLAGE_X, cz0 = riverZ(VILLAGE_X);
+    const want = qp.get("mine"), ore = ["silver", "copper", "salt"].includes(want) ? want : ["silver", "copper", "salt"][townSeed % 3], key = "mine" + ore[0].toUpperCase() + ore.slice(1);
     const busy = RIVERSIDE.map((q) => { const f = BUILDINGS[q.key].footprint, e = BUILDINGS[q.key].extent ?? [0, 0], hx = Math.max(f[0] / 2, e[0]), hz = Math.max(f[1] / 2, e[1]); return [q.x - hx - 10, q.z - hz - 10, q.x + hx + 10, q.z + hz + 10]; });
-    let best = null; const why = { far: 0, busy: 0, wet: 0, low: 0 };
-    for (let gx = -groundR * .75; gx <= groundR * .75; gx += 8) for (let gz = -groundR * .75; gz <= groundR * .75; gz += 8) {
-      if (Math.hypot(gx, gz) > groundR * .75) { why.far++; continue; }
-      const b = [gx - ex - 4, gz - ez - 4, gx + ex + 4, gz + ez + 4];
-      if (busy.some((r) => r[0] < b[2] && r[2] > b[0] && r[1] < b[3] && r[3] > b[1])) { why.busy++; continue; }
-      // (the yard on dry land well off the water; over the galleries only rock enough -- their ceilings are 7.9 m down, so
-      //  the ground there may dip to -6.5, a stream's bed over them included)
-      const [fw, fd] = M.footprint;
-      let ok = true, sum = 0, n = 0;
-      for (let x = gx - fw / 2 - 4; x <= gx + fw / 2 + 4 && ok; x += 4) for (let z = gz - fd / 2 - 4; z <= gz + fd / 2 + 4 && ok; z += 4) if (waterSD(x, z) < 12) { ok = false; why.wet++; }
-      for (let x = b[0]; x <= b[2] && ok; x += 6) for (let z = b[1]; z <= b[3] && ok; z += 6) {
-        const h = groundH(x, z);
-        if (h < -6.5) { ok = false; why.low++; } else { sum += h; n++; }
-      }
-      if (!ok) continue;
-      const score = sum / n - .02 * Math.hypot(gx - cx0, gz - cz0);
-      if (!best || score > best.score) best = { x: gx, z: gz, score };
+    const at = qp.get("mineat")?.split(",").map(Number);   // (?mineat=x,z,dir: put it there, turned dir quarter turns -- to look at one on a slope)
+    const plan = at?.length >= 2 ? minePlan(groundH, at[0], at[1], at[2] || 0, at[3] ? "adit" : "shaft")   // (x,z,dir,1: an adit, its portal at x z)
+      : placeMine({ ground: groundH, wet: waterSD, busy: (x0, z0, x1, z1) => busy.some((r) => r[0] < x1 && r[2] > x0 && r[1] < z1 && r[3] > z0), R: groundR * .75, near: [VILLAGE_X, riverZ(VILLAGE_X)] });
+    if (plan?.bad) console.warn("mine: no", plan.kind, "there:", plan.bad);
+    else if (plan) {
+      const flat = mineFlat(plan);
+      flatZones.push(flat);   // (first: the yard's heap and bench stand on the ground as it is then)
+      const bank = mineBank(plan, groundH);   // (an adit's: the earth heaped behind its headwall -- ground.js `raise`)
+      if (bank) flatZones.push(bank);
+      BUILDINGS[key] = archBuilding(mineDoc(plan, { ore, ground: groundH }).doc, { name: { silver: "Silver mine", copper: "Copper mine", salt: "Salt mine" }[ore], params: { ore }, finish: ASSETS.get("finishes/mine-" + ore) });
+      RIVERSIDE.push({ key, x: plan.x, z: plan.z, y: plan.h0, flat, deep: MINE.DEEP });   // (deep 0: none of its floors opens the ground, only its `dig` -- the shafts' and the adit's mouths; DIG for the rest)
+      window.__mine = { key, x: plan.x, z: plan.z, y: plan.h0, plan, cover: () => mineCover(plan, groundH) };   // (cover(): the rock over each part, on the finished ground)
     }
-    if (best) { RIVERSIDE.push({ key, x: best.x, z: best.z }); window.__mine = { key, x: best.x, z: best.z }; }
-    else console.info("mine: no open land wide enough", JSON.stringify(why), "groundR", groundR);
   }
   for (const s of RIVERSIDE) {
+    if (s.flat) continue;   // (its own flat zone, pushed with it: the mine's shaft head)
     const f = BUILDINGS[s.key].footprint;
     // `level`: the carve (river bank) is suppressed under the building too, so no corner hangs over a
     // falling bank -- except for what is deliberately built out over the water (jetty, landing, mill wheel)
@@ -586,8 +603,8 @@ bootMark("HOLES IN THE GROUND under the town's build");
       const d = BUILDINGS[s.key], [a0, b0, a1, b1] = rs[k];
       // (0: no floor there at all -- a yard's open ground stays grass; a floor deeper than DIG -- a mine's gallery -- leaves
       //  the ground over it whole; its shafts' mouths are open by its `dig`)
-      const low = (x, z) => { const f = d.floorY(x - s.x, z - s.z), lx = x - s.x, lz = z - s.z;
-        return (Array.isArray(f) ? f : f ? [f] : []).some((h) => h < .5 && h > -DIG) || !!d.dig?.some(([a, b, c, e]) => lx >= a && lx <= c && lz >= b && lz <= e); };
+      const low = (x, z) => { const f = d.floorY(x - s.x, z - s.z), lx = x - s.x, lz = z - s.z, g0 = s.y ?? 0, D = s.deep ?? DIG;   // (g0: its ground's level -- a mine's on its hill; D 0: only its `dig` opens it -- the mine's yard on a slope, its adit)
+        return (D > 0 && (Array.isArray(f) ? f : f ? [f] : []).some((h) => h < g0 + .5 && h > g0 - D)) || !!d.dig?.some(([a, b, c, e]) => lx >= a && lx <= c && lz >= b && lz <= e); };
       // a cell is cut only where the floor covers ALL of it (its middle and its four corners): one straddling the edge of
       // an open slab -- a field's soil, a fountain's paving -- would open a slit of nothing along it
       for (let i = Math.floor((a0 - x0) / C); i < Math.ceil((a1 - x0) / C); i++) for (let j = Math.floor((b0 - z0) / C); j < Math.ceil((b1 - z0) / C); j++) {
@@ -618,7 +635,8 @@ bootMark("THE LANDMARKS' OPEN GROUND (`site.dig`: a");
 // carves, so filling it here is what puts the moats in the ground.
 for (const s2 of town.filter((t) => BUILDINGS[t.key].moat)) {
   const m = BUILDINGS[s2.key].moat;   // (ox/oz: an island off the site's middle -- a building whose bridge reaches out over its moat)
-  moats.push({ ...m, cx: s2.x + (m.ox ?? 0), cz: siteZ(s2) + (m.oz ?? 0) });
+  // (`surface`: water this far from the site's own ground -- a pond that stays full on a hill, where the one level would leave it dry)
+  moats.push({ ...m, cx: s2.x + (m.ox ?? 0), cz: siteZ(s2) + (m.oz ?? 0), ...(MAP && m.surface !== undefined ? { y: groundH(s2.x, siteZ(s2)) + m.surface } : {}) });
 }
 
 const scene = new THREE.Scene();
@@ -635,7 +653,7 @@ const EYE = num("cy", 1.5);          // person's eye height above the terrain
 // buildings provide floorY(x,z) height fields in their local frames; a spot
 // can carry SEVERAL walkable floors (storeys, a ramp bridging a hall)
 const heightFields = sites
-  .map((s) => ({ f: BUILDINGS[s.key].floorY, x: s.x, z: siteZ(s), dig: BUILDINGS[s.key].dig ?? null }))
+  .map((s) => ({ f: BUILDINGS[s.key].floorY, x: s.x, z: siteZ(s), dig: BUILDINGS[s.key].dig ?? null, deep: s.deep ?? DIG }))
   .filter((s) => s.f);
 // the buildings' spiral stairs, in the world: a walker on one turns with it (below, in the walk)
 const SPIRAL_STEER = { from: .9, most: .2, keep: .06 };   // (m from the axis the stair steers the view; radians a frame at most; radians a frame per metre off its walking line)
@@ -647,8 +665,8 @@ const floorsAt = (x, z) => {
   let dug = false;
   for (const s of heightFields) {
     const f = s.f(x - s.x, z - s.z);
-    if (Array.isArray(f)) { for (const h of f) { out.push(h); if (h < g - .3 && h > g - DIG) dug = true; } }
-    else if (f) { out.push(f); if (f < g - .3 && f > g - DIG) dug = true; }
+    if (Array.isArray(f)) { for (const h of f) { out.push(h); if (h < g - .3 && h > g - s.deep) dug = true; } }
+    else if (f) { out.push(f); if (f < g - .3 && f > g - s.deep) dug = true; }
     if (s.dig) { const lx = x - s.x, lz = z - s.z; if (s.dig.some(([a, b, c, d]) => lx > a && lx < c && lz > b && lz < d)) dug = true; }
   }
   if (!dug) out.push(g);
@@ -778,11 +796,11 @@ function collides(x, z, feetY, duck = false) {
   // pass under -- one rule for every component, walls to furniture
   // (`duck`: in a jump the body tucks -- head down, knees up -- and passes a gap 60cm tall: through a window)
   const lo = feetY + .5, hi = feetY + (duck ? 1.1 : 1.7);
-  for (const k of movers) {   // moving bodies (cart beds, the barge): solid below the deck, and their sides above it
+  for (const k of movers) {   // moving bodies (cart beds, the barge, the port's ships and their planks: harbour.js): solid below the deck, and their sides above it
     const dx = x - k.body.position.x, dz = z - k.body.position.z, c = Math.cos(k.yaw), s = Math.sin(k.yaw);
-    const lx = Math.abs(dx * c - dz * s), lz = Math.abs(dx * s + dz * c);
+    const sx = dx * c - dz * s, sz = dx * s + dz * c, lx = Math.abs(sx), lz = Math.abs(sz);
     if (lx > k.halfL + (k.shaft ?? 0) + CR || lz > k.halfW + CR) continue;
-    const top = k.body.position.y + k.top;
+    const top = k.ramp ? bedY(k, sx, sz) : k.body.position.y + k.top;   // (a ramp -- a ship's plank down to the quay: its bed where you are on it)
     if (lo < top - .02) return true;                                                          // the body itself
     if ((k.side ?? 0) > 0 && (lx > k.halfL - .2 || lz > k.halfW - .2) && lo < top + k.side) return true;   // the rim: boards you step over if low, jump if high
     if (k.shaft && lx > k.halfL && lx < k.halfL + k.shaft && lz < .6 + CR && lo < top + .3) return true;    // the shafts
@@ -795,11 +813,13 @@ function collides(x, z, feetY, duck = false) {
     if (d2 < cx * cx + cz * cz - 1e-6) return true;
   }
   for (const dr of doors) {   // a closed door is a wall; an open one lies against the inner wall
-    if (dr.open) continue;
-    if (dr.win ? (feetY + 1.7 < dr.wy || feetY + .5 > dr.wy + dr.h) : feetY >= 2.5) continue;   // a pane blocks only at its own height
-    const px = x - dr.wx, pz = z - dr.wz;
-    const along = px * dr.ax + pz * dr.az, across = px * dr.az - pz * dr.ax;
-    if (Math.abs(along) < dr.w / 2 + CR && Math.abs(across) < .1 + CR) return true;
+    if (dr.open && !dr.fixed) continue;
+    if (dr.win ? (feetY + 1.7 < dr.wy || feetY + .5 > dr.wy + dr.h) : dr.bars ? (feetY + 1.7 < dr.wy || feetY > dr.wy + 2.3) : feetY >= 2.5) continue;   // a pane blocks only at its own height (a leaf of its builders' making: at its own floor's)
+    for (const b of dr.bars ?? [dr]) {   // (a great leaf with its wicket cut out: the stretches either side of it)
+      const px = x - (b.x ?? b.wx), pz = z - (b.z ?? b.wz);
+      const along = px * dr.ax + pz * dr.az, across = px * dr.az - pz * dr.ax;
+      if (Math.abs(along) < b.w / 2 + CR && Math.abs(across) < .1 + CR) return true;
+    }
   }
   for (const tc of treeCols) {
     if (feetY > 8) break;   // above the trunks (crowns are soft banners)
@@ -995,8 +1015,8 @@ const groundOverlay = wgslFn(`
     let gCov = gS.r * (1.0 - bare);   // (no blades on bare rock, scree, sand: grass.js GROUND_BARE)
     let gTip = gS.g / max(gCov, 1e-3);
     let gTone = gS.b / max(gCov, 1e-3);
-    let gPatch = ghashG(floor(wp.xz * 1.4) + 9.0);
-    col = col * (0.94 + 0.09 * gPatch);
+    let gPatch = groundMottle(wp.xz);
+    col = col * (0.87 + 0.23 * gPatch);
     // the blade over the ground it grows from: darker at the root, catching the light at the tip
     col = mix(col, grassBlade(col, gTip, gTone), gCov * 0.9);
     // snow: white scaled by the shaded luminance, so elevation shading, contour bands and slope lighting stay
@@ -1004,14 +1024,14 @@ const groundOverlay = wgslFn(`
     let snowLum = dot(col, vec3<f32>(0.333));
     return mix(col, min(vec3<f32>(1.0), vec3<f32>(0.92, 0.93, 0.97) * (0.5 + 0.95 * snowLum)), snow);
   }
-`, [grassWind, grassBlade, wgslFn(`fn ghashG(p: vec2<f32>) -> f32 { return fract(sin(dot(p, vec2<f32>(127.1, 311.7))) * 43758.5); }`)]);
+`, [groundMottle, grassWind, grassBlade, wgslFn(`fn ghashG(p: vec2<f32>) -> f32 { return fract(sin(dot(p, vec2<f32>(127.1, 311.7))) * 43758.5); }`)]);
 
 // the flat lawn (?grass=flecks) and the no-texture fallback: the same field without the baked blades
 const groundFlecks = wgslFn(`
   fn groundFlecks(lit: vec3<f32>, wp: vec3<f32>, snow: f32, bare: f32, textured: f32,
                   g: texture_2d<f32>, gs: sampler) -> vec3<f32> {
     var col = lit;
-    var gPatch = ghashG(floor(wp.xz * 1.4) + 9.0);
+    var gPatch = groundMottle(wp.xz);
     var gF1 = step(0.8, ghashG(floor(wp.xz * 7.0)));
     var gF2 = step(0.93, ghashG(floor(wp.xz * 7.0) + 4.0));
     if (textured > 0.5) {
@@ -1020,13 +1040,13 @@ const groundFlecks = wgslFn(`
       gF1 = gT.r;
       gF2 = gT.g;
     }
-    col = col * (0.94 + 0.09 * gPatch);
+    col = col * (0.87 + 0.23 * gPatch);
     col = mix(col, col * vec3<f32>(0.78, 0.92, 0.66), gF1 * 0.7 * (1.0 - bare));
     col = mix(col, col * vec3<f32>(1.12, 1.1, 0.9), gF2 * 0.8 * (1.0 - bare));
     let snowLum = dot(col, vec3<f32>(0.333));
     return mix(col, min(vec3<f32>(1.0), vec3<f32>(0.92, 0.93, 0.97) * (0.5 + 0.95 * snowLum)), snow);
   }
-`, [wgslFn(`fn ghashG(p: vec2<f32>) -> f32 { return fract(sin(dot(p, vec2<f32>(127.1, 311.7))) * 43758.5); }`)]);
+`, [groundMottle, wgslFn(`fn ghashG(p: vec2<f32>) -> f32 { return fract(sin(dot(p, vec2<f32>(127.1, 311.7))) * 43758.5); }`)]);
 
 // setupOutput is where onBeforeCompile used to splice this in: three hands the lit fragment colour over, and
 // the lawn goes on top of it -- after the toon shading, before the output.
@@ -1057,7 +1077,10 @@ class GroundMaterial extends THREE.MeshToonNodeMaterial {
     return super.setupOutput(builder, vec4(rgb, outputNode.a));
   }
 }
-const groundMat = new GroundMaterial({ color: 0xffffff, vertexColors: true });
+// (a soft ramp for the sun on a slope: three's own toon default is a hard step at .7, and a hill's far side was one flat dark shape with an edge)
+const SLOPE_RAMP = new THREE.DataTexture(Uint8Array.from(Array.from({ length: 32 }, (_, i) => { const t = Math.min(1, Math.max(0, (i / 31 - .3) / .5)), v = Math.round(255 * (.66 + .34 * t * t * (3 - 2 * t))); return [v, v, v, 255]; }).flat()), 32, 1);
+SLOPE_RAMP.minFilter = SLOPE_RAMP.magFilter = THREE.LinearFilter; SLOPE_RAMP.needsUpdate = true;
+const groundMat = new GroundMaterial({ color: 0xffffff, vertexColors: true, gradientMap: SLOPE_RAMP });
 
 // the grass fringe (grass.js): the one pass that lets a stalk stand UP over what it grows in front of
 FRINGE.on = qp.has("fringe") ? qp.get("fringe") !== "0" : (CONFIG.renderer.grassFringe ?? true);
@@ -1082,9 +1105,16 @@ bootMark("THE ROADS are planned BEFORE the ground, w");
 // builder (terrain_data.js), which cuts the cells they touch along their edges -- the road mesh, made later of the
 // same points (buildPathNetwork), sharing them. The lattice the edges are split on is the finest tiles' (16 tiles,
 // 32 cells a tile).
+// THE PORT (harbour.js, docs/world.md "The harbour in the game"): its site and layout, its pads made flat zones before
+// the ground is built, its street one of the roads
+HARBOUR = planHarbour({ SEA, areas: MAP?.areas, period: PERIOD_NAME, dress: PERIOD.dress, seed: townSeed, flatZones, naturalH: GROUND.naturalH,
+                        routes: TOWN?.routes ?? [], blocked: (x, z) => inSites(x, z, 1.5) || waterSD(x, z) < 2, surface: MAP?.surface });
+if (HARBOUR && MAP?.surface && GROUND_BARE.tex.value?.image?.data === MAP.surface.bare) GROUND_BARE.tex.value.needsUpdate = true;   // (its lawn: the bare map eased off)
 const ROADPLAN = planRoads({ town, BUILDINGS, frontZ, extent, hasLake, LAKE, waterSD, riverZ, BASIN, MILL, RIVERSIDE, quayZ, VILLAGE_X, TOWN,
+                             extra: HARBOUR ? [HARBOUR.route] : [],
                              naturalH: GROUND.naturalH, lattice: { origin: -groundR, cell: 2 * groundR / 16 / 32 } });
 if (qp.get("roadcut") !== "0") GROUND.roads.push(...ROADPLAN.surfaces);   // (?roadcut=0: the roads laid over the ground as before, uncut)
+if (SEA) SEA.roads = ROADPLAN.surfaces;   // (sea.js harbourSite: near the roads)
 const terrainOpts = { radius: groundR, tiles: 16, block: +(qp.get("terrainblock") ?? 4),
                       tol: +(qp.get("terraintol") ?? .15), roads: qp.get("roadcut") !== "0" ? ROADPLAN.pieces : null };
 const markGround = (o) => o.traverse((m) => {
@@ -1135,12 +1165,13 @@ const roofBoards = [];  // the houses' roof edges, for their boards (windowframe
 // the finish rule that covers a roof part from outside (its pattern and palette: the ridge tiles' colour)
 const roofRuleOf = (finish, part) => finish?.rules?.find((r) => r.surface === "roof" && r.side !== "in" && (r.parts === part || (Array.isArray(r.parts) && r.parts.includes(part)))) ?? null;
 const doorMat = woodMaterial();          // the colour lives in the geometry now (paintGeometry, architecture.js)
+const doorPlainMat = archMaterial(undefined, undefined);   // (a lacquered or bronze door: its colour without the grain)
 const _pm = new THREE.Matrix4();
 const placePane = (dr) => {   // hinge transform x pane box -> its instance's matrix
   dr.grp.updateMatrix();
   _pm.multiplyMatrices(dr.grp.matrix, dr.local);
   dr.mesh.setMatrixAt(dr.idx, _pm);
-  dr.mesh.instanceMatrix.needsUpdate = true;
+  if (dr.mesh.isInstancedMesh) dr.mesh.instanceMatrix.needsUpdate = true;   // (a door's batch, a BatchedMesh, marks its own)
 };
 // a live fire: a few cones that sway, stretch and flicker in the vertex
 // shader on their own clock (much faster than the water), yellow core to
@@ -1294,6 +1325,23 @@ for (const site of sites) {
     const wx = site.x + d.x, wz = siteZ(site) + d.z;
     const base = -(d.yaw ?? 0) * Math.PI / 180;         // door axis: +x rotated by yaw
     const ax = Math.cos(base), az = -Math.sin(base);
+    if (d.look) {   // A DOOR OF ITS BUILDERS' MAKING (doors.js): its leaves, each on its own hinge -- swung, slid, or (a great
+      // door with a wicket) standing shut. The leaves of one doorway open together; a fixed one is a wall you cannot open.
+      const wy = d.y ?? .15, lx = wx - ax * d.w / 2, lz = wz - az * d.w / 2, group = [];
+      for (const lf of doorLeaves(d)) {
+        const grp = new THREE.Object3D();
+        grp.position.set(lx + ax * lf.hinge, wy, lz + az * lf.hinge); grp.rotation.y = base;
+        const mid = (lf.x0 + lf.x1) / 2, bar = (a, b) => ({ x: lx + ax * (a + b) / 2, z: lz + az * (a + b) / 2, w: b - a });
+        const bars = lf.tympanum ? [] : lf.notch ? [bar(lf.x0, lf.notch[0]), bar(lf.notch[1], lf.x1)] : [bar(lf.x0, lf.x1)];   // (a tympanum stands over the way)
+        const rec = { grp, local: new THREE.Matrix4(), geo: lf.geo, plainMat: lf.plain, wx: lx + ax * mid, wz: lz + az * mid, wy, w: lf.x1 - lf.x0,
+                      base, ax, az, open: false, ang: 0, panel: true, sign: lf.sign, openAng: lf.open, home: grp.position.clone(), bars, doorway: d, site: site.key,
+                      ...(lf.kind === "fixed" ? { fixed: true } : {}), ...(lf.kind === "slide" ? { slide: true } : {}), ...(lf.wicket ? { wicket: true } : {}) };
+        doors.push(rec); panelRecs.push(rec);
+        if (lf.kind !== "fixed") group.push(rec);
+      }
+      for (const r of group) r.group = group;
+      continue;
+    }
     const grp = new THREE.Object3D();
     const wy = d.y ?? .15;   // the floor the door stands on (upper storeys export y): the panel from the sill up
     grp.position.set(wx - ax * d.w / 2, wy, wz - az * d.w / 2);   // hinge at the jamb
@@ -1329,6 +1377,7 @@ for (const site of sites) {
   scene.add(b);
 }
 tilesAheadDone();   // (the tiles drawn ahead and not asked for, let go)
+if (HARBOUR) buildHarbour(HARBOUR, { scene, markGroundProp, siteGroups, colliderSites, heightFields });   // (the port's pieces: harbour.js)
 bootMark("buildings done");
 // THE SUN'S SHADOWS: the buildings drawn once from the sun into a depth map that the land and the buildings read
 // (sunshadow.js; ?sunshadow=0 off)
@@ -1397,32 +1446,96 @@ function roostTick() {
   const wet = weather !== 0;   // (and the cats on the sills go in out of the rain and the snow)
   for (const a of SILL_CATS.ans) if (!!a.hidden !== wet && unseen(a.position.x, a.position.z, a.position.y)) a.hidden = wet;
 }
-const STORK = { nests: 2, y: [5, 16], r: .62, courses: 4, sticks: 20, cycle: 260, flight: 95, ring: [34, 26], laps: 1.5 };
-// THE STORK FLIES now and then: up off the nest, gliding round a wide circle over the roofs on spread wings (banked into
-// the turn), and down again -- the standing bird hidden while the spread one flies
-const _stA = new THREE.Vector3(), _stB = new THREE.Vector3();
-function storkAt(n, u, out) {   // the flight's point at u (0..1): a curve up to the circle, the circle, a curve down
-  const R = STORK.ring[0], H = STORK.ring[1], cx = n.x - Math.cos(n.a0) * R, cz = n.z - Math.sin(n.a0) * R;   // (the circle passes over the nest)
-  const ring = (f) => { const a = n.a0 + n.turn * f * Math.PI * 2 * STORK.laps; return out.set(cx + Math.cos(a) * R, n.y + H, cz + Math.sin(a) * R); };
-  const up = .18, down = .82;
-  if (u < up || u > down) {   // up off the nest (or down onto it): a curve from the nest to the circle's start (end)
-    const k = u < up ? u / up : (1 - u) / (1 - down), e = k * k * (3 - 2 * k), end = ring(u < up ? 0 : 1).clone();
-    return out.set(n.x + (end.x - n.x) * e, n.y + (end.y - n.y) * Math.sin(e * Math.PI / 2), n.z + (end.z - n.z) * e);
+// (2026-11-03) They used to look like statues: both nest birds were rigid items that never moved, and the one flight
+// (95 s in every 260, never at night or in rain) began a minute or more after you arrived and went 26 m up on a 34 m ring,
+// out of sight of anyone looking at the nest. Now each bird of the pair is a SET of the stork item's poses
+// (items/birds/stork: tools/birdgen.py stork_poses) of which one is shown at a time:
+//   ON THE NEST both live (storkMood): standing, turning to a new heading now and then, bowing to the sticks, preening
+//   under a wing, sitting down in the bowl for a while (by night mostly), and greeting with the bill-clattering display
+//   (the head thrown back, two poses swapped fast) -- both of them, whenever the flier comes home.
+//   THE FLIER goes out every `rest` seconds (the first time within `first`): a flapping climb off the chimney, out over
+//   the roofs to the fields `field` m away, soaring `laps` circles there `high` m above the nest (never under `clear` m
+//   over the ground), gliding back with a few wingbeats now and then, a slow last approach with the wings raised and
+//   the legs down, and it lands on the nest -- by day and dry only (at night and in rain it stays home).
+const STORK = { nests: 2, y: [5, 16], r: .62, courses: 4, sticks: 20, first: [12, 40], rest: [50, 130], speed: 10, field: [65, 120],
+                high: [22, 32], clear: 20, soar: [20, 30], laps: [1, 2.2], beat: 2.1, sitDrop: .6, turn: 1.3 };
+const STORK_POSES = { nest: ["folded", "bow", "clatter", "clatter2", "preen", "sit"], air: ["spread", "flap-up", "flap-down", "landing"] };
+// what a bird does next on the nest, and for how long (seconds) -- from standing; anything else goes back to standing
+const STORK_MOOD = { stand: [.3, 4, 12], bow: [.15, 1.5, 3], preen: [.25, 3, 8], clatter: [.08, 2.5, 4], sit: [.22, 15, 45] };
+function storkSet(seed, air) {   // one bird: every pose it needs as a hidden group, one shown at a time
+  const g = new THREE.Group(), by = {};
+  for (const p of [...STORK_POSES.nest, ...(air ? STORK_POSES.air : [])]) {
+    const b = itemGroup("items/birds/stork", { seed, params: { pose: p } }); b.visible = false;
+    if (p === "sit") b.position.y = -STORK.sitDrop;   // (the legs folded under: the belly in the bowl)
+    g.add(b); by[p] = b;
   }
-  return ring((u - up) / (down - up));
+  g.userData.moves = true;
+  return { g, by, shown: null, show(p) { if (this.shown === p) return; if (this.shown) by[this.shown].visible = false; by[p].visible = true; this.shown = p; } };
 }
+const _stP = new THREE.Vector3(), _stT = new THREE.Vector3();
+const lerpR = (r, [a, b]) => a + (b - a) * r();
+// the flier's way out and home, a centripetal Catmull-Rom through: the nest, a climb toward the fields, a circle (or
+// two) over them, a wide swing back, a descent onto the nest from the side (the origin: its feet)
+function storkRoute(n) {
+  const r = n.r, a = r() * Math.PI * 2, ux = Math.cos(a), uz = Math.sin(a), D = lerpR(r, STORK.field), R = lerpR(r, STORK.soar);
+  const cx = n.x + ux * D, cz = n.z + uz * D, Y = Math.max(n.y + lerpR(r, STORK.high), groundH(cx, cz) + STORK.clear);
+  const turn = r() < .5 ? 1 : -1, laps = lerpR(r, STORK.laps), steps = Math.ceil(laps * 14);
+  const pts = [[n.x, n.y, n.z], [n.x + ux * 4, n.y + 1.4, n.z + uz * 4], [n.x + ux * 16, n.y + 6, n.z + uz * 16]];
+  for (let i = 0; i <= steps; i++) {   // (entered at its near side: the circle's point toward the nest)
+    const th = a + Math.PI + turn * i / steps * laps * Math.PI * 2;
+    pts.push([cx + Math.cos(th) * R, Y + Math.sin(i * .9) * 1.2, cz + Math.sin(th) * R]);
+  }
+  const b = a + turn * (.7 + r() * .9);   // (home along another line than the one out)
+  pts.push([n.x + Math.cos(b) * 42, n.y + 13, n.z + Math.sin(b) * 42], [n.x + Math.cos(b) * 18, n.y + 4.5, n.z + Math.sin(b) * 18],
+           [n.x + Math.cos(b) * 5, n.y + 1, n.z + Math.sin(b) * 5], [n.x, n.y, n.z]);
+  const curve = new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(...p)), false, "centripetal");
+  return { curve, L: curve.getLength(), s: 0, beatTill: 0, nextBeat: 0 };
+}
+function storkMood(b, T, dt, night) {   // one bird on the nest: its state, its heading, the pose shown
+  if (T >= b.till) {
+    let st = "stand";
+    if (b.st === "stand") { let x = b.r() * (night ? .5 : 1); for (const [k, [w]] of Object.entries(STORK_MOOD)) if ((x -= w) < 0) { st = k; break; } }
+    if (night && b.st !== "sit" && b.r() < .7) st = "sit";
+    const [, lo, hi] = STORK_MOOD[st];
+    b.st = st; b.till = T + lo + (hi - lo) * b.r() * (night && st === "sit" ? 4 : 1);
+    if (st === "stand" && b.r() < .6) b.yawTo = b.yaw + (b.r() - .5) * 2.4;   // (looks round: a new heading)
+  }
+  if (b.st !== "sit") { const d = b.yawTo - b.yaw; b.yaw += Math.max(-STORK.turn * dt, Math.min(STORK.turn * dt, d)); }
+  b.set.g.rotation.set(0, b.yaw, 0);
+  b.set.show(b.st === "stand" ? "folded" : b.st === "clatter" ? ((T * 7 | 0) % 2 ? "clatter" : "clatter2") : b.st);
+}
+let storkT0 = null;
 function storkTick(t) {
+  const dt = storkT0 === null ? 0 : Math.max(0, Math.min(.1, t - storkT0)); storkT0 = t;
+  const away = SNOW.value > .5 || autumnLvl === 2, night = dark > .5;   // (in late autumn and winter they are away south: the nest empty)
   for (const n of storkNests) {
-    const c = (t + n.phase) % STORK.cycle, u = c / STORK.flight, fly = u < 1 && dark < .5 && weather !== 1, away = SNOW.value > .5 || autumnLvl === 2;   // (in late autumn and winter they are away south: the nest empty; by night and in the rain on the nest)
-    n.bird.visible = !fly && !away; n.flying.visible = fly && !away; n.mate.visible = !away;
-    if (!fly || away) continue;
-    storkAt(n, u, _stA); storkAt(n, Math.min(1, u + .004), _stB);
-    const vx = _stB.x - _stA.x, vy = _stB.y - _stA.y, vz = _stB.z - _stA.z, h = Math.hypot(vx, vz);
-    n.flying.position.copy(_stA).y -= .8;   // (the item stands on its feet: its body a metre up)
-    if (h > 1e-4) {
-      const yaw = Math.atan2(-vz, vx), prev = n.yaw ?? yaw, dy = Math.atan2(Math.sin(yaw - prev), Math.cos(yaw - prev));
-      n.yaw = yaw; n.bank = (n.bank ?? 0) * .9 + Math.max(-.5, Math.min(.5, -dy * 40)) * .1;   // (banked into the turn, eased)
-      n.flying.rotation.set(n.bank, yaw, Math.atan2(vy, h) * .6, "YXZ");
+    n.bird.set.g.visible = n.mate.set.g.visible = !away;
+    if (away) { n.route = null; continue; }
+    if (n.next === undefined) n.next = t + lerpR(n.r, STORK.first);
+    if (!n.route && t >= n.next && !night && weather !== 1) {   // off it goes (by day and dry: else it waits at home)
+      n.route = storkRoute(n); n.route.nextBeat = t + 4 + n.r() * 6; n.bird.st = "fly"; n.mate.st = "bow"; n.mate.till = t + 2;
+    }
+    storkMood(n.mate, t, dt, night);
+    if (!n.route) { storkMood(n.bird, t, dt, night); continue; }
+    const R = n.route, b = n.bird, left = R.L - R.s;
+    R.s = Math.min(R.L, R.s + STORK.speed * Math.max(.22, Math.min(1, (R.s + 3) / 14, (left + 2) / 24)) * dt);   // (slow off the nest and onto it)
+    const u = R.s / R.L;
+    R.curve.getPointAt(u, _stP); R.curve.getTangentAt(Math.min(u, .999), _stT);
+    b.set.g.position.copy(_stP);
+    const h = Math.hypot(_stT.x, _stT.z), yaw = Math.atan2(-_stT.z, _stT.x), dy = Math.atan2(Math.sin(yaw - (R.yaw ?? yaw)), Math.cos(yaw - (R.yaw ?? yaw)));
+    R.yaw = yaw; R.bank = (R.bank ?? 0) * .92 + Math.max(-.55, Math.min(.55, -dy / Math.max(dt, 1e-3) * .9)) * .08;   // (banked into the turn, eased)
+    const landing = left < 7;
+    b.set.g.rotation.set(R.bank, yaw, Math.atan2(_stT.y, h) * .6 + (landing ? .35 : 0), "YXZ");   // (pitched with the climb; flared to land)
+    // wingbeats: all the climb, a burst now and then on the way, slow strokes coming in -- a glide on spread wings between
+    if (R.s < 24 || _stT.y / Math.max(h, 1e-3) > .25) R.beatTill = Math.max(R.beatTill, t + .3);
+    else if (t > R.nextBeat) { R.beatTill = t + 1.4 + n.r() * 1.2; R.nextBeat = t + 7 + n.r() * 9; }
+    const ph = (t * STORK.beat * (landing ? .7 : 1)) % 1, beat = t < R.beatTill || landing;
+    b.set.show(!beat ? (landing ? "landing" : "spread") : ph < .38 ? "flap-down" : ph < .5 ? (landing ? "landing" : "spread") : ph < .88 ? (landing ? "landing" : "flap-up") : "spread");
+    if (R.s >= R.L) {   // home: the bird stands where it left, and the pair greet each other
+      n.route = null; n.next = t + lerpR(n.r, STORK.rest);
+      b.set.g.position.set(n.x, n.y, n.z); b.yaw = b.yawTo = yaw;
+      b.st = n.mate.st = "clatter"; b.till = n.mate.till = t + 3 + n.r();
+      storkMood(b, t, 0, night);
     }
   }
 }
@@ -1442,15 +1555,14 @@ if (qp.get("frames") !== "0") {
       const a = r() * Math.PI, d = (r() - .5) * STORK.r;
       blocks.push({ at: [c.x + Math.cos(a + 1.57) * d, y0 + .05, c.z + Math.sin(a + 1.57) * d], size: [STORK.r * 1.5, .04, .04], yaw: -a, shape: "log", colour: [.27, .22, .17] });
     }
-    const bird = itemGroup("items/birds/stork", { seed: k + 3, params: { pose: "folded" } });
-    const flying = itemGroup("items/birds/stork", { seed: k + 3, params: { pose: "spread" } });
-    bird.position.set(c.x, y0 + .12, c.z); bird.rotation.y = r() * Math.PI * 2; flying.visible = false;
-    // ...and its MATE, who keeps the nest while the other is out: beside it, turned another way
-    const mate = itemGroup("items/birds/stork", { seed: k + 11, params: { pose: "folded" } }), ma = r() * Math.PI * 2;
-    mate.position.set(c.x + Math.cos(ma) * .3, y0 + .1, c.z + Math.sin(ma) * .3); mate.rotation.y = bird.rotation.y + (r() < .5 ? 1 : -1) * (1.6 + r() * .8);
-    bird.position.x -= Math.cos(ma) * .26; bird.position.z -= Math.sin(ma) * .26;   // (apart, the mate turned well away: not one bird with two heads)
-    scene.add(bird, flying, mate);
-    storkNests.push({ x: bird.position.x, y: y0 + .12, z: bird.position.z, bird, flying, mate, rest: bird.rotation.y, phase: r() * STORK.cycle, a0: r() * Math.PI * 2, turn: r() < .5 ? 1 : -1 });
+    // the pair (storkSet: every pose of the item, one shown): the one that flies, and its MATE, who keeps the nest while
+    // the other is out -- beside it, turned another way (not one bird with two heads)
+    const bird = storkSet(k + 3, true), mate = storkSet(k + 11, false), ma = r() * Math.PI * 2, yaw = r() * Math.PI * 2, myaw = yaw + (r() < .5 ? 1 : -1) * (1.6 + r() * .8);
+    mate.g.position.set(c.x + Math.cos(ma) * .3, y0 + .1, c.z + Math.sin(ma) * .3);
+    bird.g.position.set(c.x - Math.cos(ma) * .26, y0 + .12, c.z - Math.sin(ma) * .26);
+    scene.add(bird.g, mate.g);
+    const nr = rng(townSeed * 71 + k * 13 + 5), who = (set, y) => ({ set, yaw: y, yawTo: y, st: "stand", till: 0, r: nr });
+    storkNests.push({ x: bird.g.position.x, y: y0 + .12, z: bird.g.position.z, bird: who(bird, yaw), mate: who(mate, myaw), r: nr });
   }
   if (blocks.length) { const nm = snowyLit(); nm.side = THREE.DoubleSide; scene.add(blockMesh(blocks, "stork nests", nm)); }
 }
@@ -1854,13 +1966,22 @@ const fireLight = createFireGlow(glow.scene, fireSpots.map((f) => {
 // every window in the world in two draw calls: glass panes where a building
 // could pay for glass (def.glazed: the palace, the church), wooden shutters
 // everywhere else -- glass was a luxury in the Middle Ages
-{   // every door panel in the world: one draw per shape of door
-  const byShape = new Map();
-  for (const dr of panelRecs) { if (!byShape.has(dr.geo)) byShape.set(dr.geo, []); byShape.get(dr.geo).push(dr); }
-  for (const [geo, recs] of byShape) {
-    const mesh = new THREE.InstancedMesh(geo, doorMat, recs.length);
-    mesh.frustumCulled = false;
-    recs.forEach((dr, i) => { dr.mesh = mesh; dr.idx = i; placePane(dr); });
+{   // every door panel in the world: ONE BATCH per material (2026-11-03: it was one instanced draw per shape of door, some
+    // twenty a town of one or two leaves each, every one drawn wherever you looked) -- a BatchedMesh holds each shape
+    // once and each leaf as an instance of it, culled leaf by leaf
+  const batches = new Map();
+  for (const dr of panelRecs) {
+    const geo = dr.geo.index ? dr.geo : dr.geo.setIndex([...Array(dr.geo.attributes.position.count).keys()]);   // (a batch's shapes all indexed)
+    const key = (dr.plainMat ? "plain" : "grain") + ":" + Object.keys(geo.attributes).sort().join(",");   // (lacquer and bronze show no grain)
+    if (!batches.has(key)) batches.set(key, { mat: dr.plainMat ? doorPlainMat : doorMat, recs: [], geos: new Set() });
+    const b = batches.get(key); b.recs.push(dr); b.geos.add(geo);
+  }
+  for (const { mat, recs, geos } of batches.values()) {
+    let nv = 0, ni = 0;
+    for (const g of geos) { nv += g.attributes.position.count; ni += g.index.count; }
+    const mesh = new THREE.BatchedMesh(recs.length, nv, ni, mat), id = new Map();
+    for (const g of geos) id.set(g, mesh.addGeometry(g));
+    recs.forEach((dr) => { dr.mesh = mesh; dr.idx = mesh.addInstance(id.get(dr.geo)); placePane(dr); });
     scene.add(mesh);
   }
 }
@@ -2088,15 +2209,11 @@ function wanderStep(t) {
     p.y = routeY(w) + (w.lift ?? 0);
     w.setT(w.animT, undefined, undefined, w.moving, w.moving && runs(w.speed, w.base));   // rig animals fade their stride out when standing, run when fast for their size
   }
-  moveRiders(dt);   // riders, carts and clouds tick on the same deterministic clock
+  moveRiders(dt);   // riders and carts tick on the same deterministic clock
   moveCarts(dt);
   if (stir()) freightStep(dt);   // the dock hands' barrels and sacks: freight places their meshes as it steps them,
                                  // so stopping the herds alone left the goods sliding about (?figures)
   boatStep(dt);
-  for (const c of cloudHerd.animals) {
-    c.position.x += c.drift * dt;
-    if (c.position.x > groundR * 1.15) c.position.x = -groundR * 1.15;
-  }
 }
 // SHY ANIMALS (a species' `shy`: metres -- deer, hares, foxes, cats, the hens in their yard, ducks on the water...): come
 // nearer than that (you, or your dog: companion.js), on foot or riding (not flying high over them), and it bolts -- straight away from you, swinging
@@ -2544,6 +2661,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
     if (Math.abs(x) < extent + 4 && z < 4 && z > -(rows * gap + 6)) continue;   // the herd's meadow
     if (hasLake && lakeSD(x, z) < 4) continue;   // no trees in the lake
     if (riverSD(x, z) < 4) continue;              // nor in the river
+    if (SEA && waterSD(x, z) < 4) continue;       // nor in the sea or the big lake (sea.js)
     if (inSites(x, z, 5) || !offRoad(x, z, 2) || hitsBuildings(x, z, groundH(x, z))) continue;
     const td = makeTree(WILD[Math.floor(rand() * WILD.length)], { seed: placed + 11, autumn: autumnNow, spring: springNow });
     const t = treeHerd.add(td);
@@ -2571,7 +2689,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
   if (FOREST.trees && nTreesReq !== 0) {
     const fr = rng(4242), R = FOREST.radius ?? 46, sp = FOREST.spacing ?? 4.4, kinds = PERIOD.trees ? WILD : FOREST.species ?? TREE_SPECIES;
     const open = (x, z, m) => x * x + z * z < groundR * groundR * .8 && !(Math.abs(x) < extent + 8 && z < 10 && z > -(rows * gap + 12))
-      && !(hasLake && lakeSD(x, z) < m) && riverSD(x, z) > m && !inSites(x, z, 10 + m);
+      && !(hasLake && lakeSD(x, z) < m) && riverSD(x, z) > m && !(SEA && waterSD(x, z) < m) && !inSites(x, z, 10 + m);
     let best = null;
     for (let gx = -groundR * .8; gx <= groundR * .8; gx += 12) for (let gz = -groundR * .8; gz <= groundR * .8; gz += 12) {
       const ok = open(gx, gz, 6) && [.5, 1].every((k) => Array.from({ length: 12 }, (_, i) => i * Math.PI / 6).every((a) => open(gx + Math.cos(a) * R * k, gz + Math.sin(a) * R * k, 4)));
@@ -2611,7 +2729,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
     const wr = rng(913);
     for (let x = Math.min(RIVER.xEnd - 8, groundR * .9); x > -groundR * .9; x -= 22 + wr() * 14) for (const side of [-1, 1]) {
       const z = riverZ(x) + side * (riverHW(x) + 1.8 + wr() * .8), keep = wr() < .7;
-      if (!keep || inSites(x, z, 4) || (hasLake && lakeSD(x, z) < 3) || spots.some((s) => (s[0] - x) ** 2 + (s[1] - z) ** 2 < 49)) continue;
+      if (!keep || inSites(x, z, 4) || (hasLake && lakeSD(x, z) < 3) || (SEA && waterY(x, z) > groundH(x, z)) || spots.some((s) => (s[0] - x) ** 2 + (s[1] - z) ** 2 < 49)) continue;
       const td = makeTree(WILD.includes("willow") ? "willow" : WILD[0], { seed: 7000 + Math.round(x * 3) + side, autumn: autumnNow, spring: springNow });   // (the period's, where willows do not grow: the Nile's palms)
       const t = treeHerd.add(td);
       t.position.set(x, groundH(x, z) - .1, z); t.rotY = wr() * Math.PI * 2;
@@ -2627,7 +2745,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
     if (bspots.some((s) => (s[0] - x) ** 2 + (s[1] - z) ** 2 < 9)) continue;
     if (Math.abs(x) < extent + 4 && z < 4 && z > -(rows * gap + 6)) continue;
     if (hasLake && lakeSD(x, z) < 2) continue;
-    if (riverSD(x, z) < 2) continue;
+    if (riverSD(x, z) < 2 || (SEA && waterSD(x, z) < 2)) continue;
     if (inSites(x, z, 3) || !offRoad(x, z, 1.2) || hitsBuildings(x, z, groundH(x, z))) continue;
     const bd = makeBush({ seed: placed + 17, autumn: autumnNow, spring: springNow }), b = treeHerd.add(bd);
     b.position.set(x, groundH(x, z), z);
@@ -2755,27 +2873,8 @@ bootMark("flora done");
 let squirrels = null;
 if (herd && treeCols.length) squirrels = createSquirrels({ def: SQUIRREL, herd, trees: treeCols.slice(), groundH, gaitBase, track, count: Math.max(0, num("squirrels", CONFIG.crowds.squirrels)), TICK });
 
-// clouds: puffy banner clusters drifting slowly across the sky
-// 28 clouds; how many are out follows the weather: rain and snow bring
-// them all, a clear day shows few, half or many by the intensity key (O)
-const cloudTint = uniform(new THREE.Color(1, 1, 1));   // (the clouds' colour by the hour: sky.js `cloud`)
-const cloudHerd = createHerd(28 * CLOUD_PARTS, { pixelDepth, tint: cloudTint });
-scene.add(cloudHerd.mesh);
-function applyClouds() {
-  const n = weather ? 28 : [6, 14, 28][wxInt] ?? 14;
-  cloudHerd.animals.forEach((c, i) => { c.hidden = i >= n; });
-}
-{
-  const cr = rng(19);
-  for (let i = 0; i < 28; i++) {
-    const c = cloudHerd.add(makeCloud({ seed: i + 2 }));
-    const a = cr() * Math.PI * 2, d = cr() * groundR * .85;
-    c.position.set(Math.cos(a) * d, 68 + cr() * 55, Math.sin(a) * d);
-    c.rotY = cr() * Math.PI * 2;
-    c.drift = .8 + cr() * 1.4;
-  }
-  cloudHerd.update(0);
-}
+// clouds are the sky's now (sky.js): how many follows the weather -- rain and snow bring a full sky, a clear day few, half or many by the intensity key (O)
+const cloudTint = uniform(new THREE.Color(1, 1, 1));   // (the hour's colour on the smoke and the mist: sky.js `cloud`)
 
 // people: a small idle crowd near the meadow (?people=N)
 let folk = null;
@@ -2797,8 +2896,8 @@ const faces = createFaces();   // their faces change now and then as they speak 
 const COUNTRY = {
   x0: -groundR * .9, x1: groundR * .9, z0: -groundR * .9, z1: groundR * .9,
   inside: (x, z) => x * x + z * z < groundR * groundR * .8
-    && (!hasLake || lakeSD(x, z) > 4) && riverSD(x, z) > 4
-    && !moats.some((m) => Math.max(Math.abs(x - m.cx) - m.hw, Math.abs(z - m.cz) - m.hd) < m.w + 2)
+    && (!hasLake || lakeSD(x, z) > 4) && riverSD(x, z) > 4 && !(SEA && waterSD(x, z) < 4)
+    && !moats.some((m) => moatSD(m, x, z) < m.w + 2)
     && !inSites(x, z, 2),
   home: () => [0, extent],
   spawn: () => { for (let k = 0; k < 200; k++) { const x = (wrand() * 2 - 1) * groundR * .9, z = (wrand() * 2 - 1) * groundR * .9; if (COUNTRY.inside(x, z)) return [x, z]; } return [0, extent]; },
@@ -3774,7 +3873,7 @@ if (tagGreen && bonfire) {
 // paving, the fountain or the landing -- from its footprint; not a ROUND one (the windmill, the wall's towers): its
 // footprint's square laid a dark square round it, plain once the sun's own shadows came (sunshadow.js)
 const wallShade = qp.get("shadows") === "0" ? null : createWallShade(scene,
-  sites.filter((q) => !/Field$|orchard|berries|Yard$|apiary|market|fountain|landing|bridge|windmill|^tower/.test(q.key)).flatMap((q) => siteRects(q, 0)), groundH);
+  sites.filter((q) => !/Field$|orchard|berries|Yard$|apiary|market|fountain|landing|bridge|windmill|^tower|^mine/.test(q.key)).flatMap((q) => siteRects(q, 0)), groundH);   // (not the mine: its footprint is its open yard on the hill -- a dark rectangle on the grass)
 // HAYCOCKS in summer: the meadows round the farm fields mown, the hay piled in cocks to dry -- a rounded cone each (three
 // balls stacked, blocks.js, in the straw's shades), on open level ground near the fields, clear of the lanes, the sites,
 // the hedges and the green; one mesh, shown in summer only (I: the seasons)
@@ -3971,12 +4070,14 @@ function lintPlaces() {
     const hit = new Map(), note = (what) => hit.set(what, (hit.get(what) ?? 0) + 1);
     const m = BUILDINGS[s.key].moat, mx = m ? s.x + (m.ox ?? 0) : 0, mz = m ? siteZ(s) + (m.oz ?? 0) : 0;
     let n = 0;
-    for (const r of siteRects(s, -.5)) for (let x = r.x0; x <= r.x1; x += 1.5) for (let z = r.z0; z <= r.z1; z += 1.5) {
-      if (m) { const dr = Math.max(Math.abs(x - mx) - m.hw, Math.abs(z - mz) - m.hd); if (dr > -1 && dr < m.w + 1) continue; }
+    // (a site with a `flat` of its own -- the mine's shaft head -- only there, at its own `y`: its yard lies on the hill)
+    const F = s.flat, g0 = s.y ?? 0, rects = F ? [{ x0: F.x - F.hx + .5, x1: F.x + F.hx - .5, z0: F.z - F.hz + .5, z1: F.z + F.hz - .5 }] : siteRects(s, -.5);
+    for (const r of rects) for (let x = r.x0; x <= r.x1; x += 1.5) for (let z = r.z0; z <= r.z1; z += 1.5) {
+      if (m) { const dr = moatSD({ ...m, cx: mx, cz: mz }, x, z); if (m.pool ? dr < 1 : dr > -1 && dr < m.w + 1) continue; }
       n++;
       const g = groundH(x, z);
-      if (waterY(x, z) > -.3) note("water over its floor");
-      else if (g < -.8) note("ground fallen away under it");
+      if (waterY(x, z) > g0 - .3) note("water over its floor");
+      else if (g < g0 - .8) note("ground fallen away under it");
     }
     for (const [what, k] of hit) bad.push({ claim: "site " + s.key, what, share: +(k / Math.max(1, n)).toFixed(2), at: [+s.x.toFixed(1), +siteZ(s).toFixed(1)] });
   }
@@ -4008,7 +4109,7 @@ function swingTick(t, dt) {
 }
 
 // butterflies: bright fliers fluttering low over the whole range
-// (the species: assets/butterflies, butterflies.js -- one instanced draw a species, the wings painted from their bands)
+// (the species: assets/butterflies, butterflies.js -- one instanced draw for them all, the wings painted from their bands)
 let bflies = null;
 const nBfly = Math.max(0, num("butterflies", CONFIG.crowds.butterflies));
 if (nBfly) {
@@ -4061,8 +4162,8 @@ bootMark("A GROWN MAP'S WATER (mapgen.js): a sheet o");
 function mapWater(M) {
   const { n, res, x0, z0 } = M, lv = M.water.slice();
   for (const m of moats) for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {   // (the moats are known only now)
-    const x = x0 + i * res, z = z0 + j * res, dr = Math.max(Math.abs(x - m.cx) - m.hw, Math.abs(z - m.cz) - m.hd);
-    if (dr > 0 && dr < m.w && groundH(x, z) < WLEVEL) lv[j * n + i] = WLEVEL;
+    const x = x0 + i * res, z = z0 + j * res, dr = moatSD(m, x, z);
+    if ((m.pool ? dr < 0 : dr > 0 && dr < m.w) && groundH(x, z) < (m.y ?? WLEVEL)) lv[j * n + i] = m.y ?? WLEVEL;
   }
   const vid = new Int32Array(n * n).fill(-1), pos = [], riv = [], idx = [];
   for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
@@ -4095,6 +4196,7 @@ function mapWater(M) {
   g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
   g.setAttribute("river", new THREE.Float32BufferAttribute(riv, 1));
   g.setAttribute("fall", new THREE.Float32BufferAttribute(fall, 1));
+  if (M.sea) { const a = openWaterAttributes(M, pos); g.setAttribute("open", new THREE.Float32BufferAttribute(a.open, 1)); g.setAttribute("depth", new THREE.Float32BufferAttribute(a.depth, 1)); g.setAttribute("surf", new THREE.Float32BufferAttribute(a.surf, 1)); }   // (sea.js, seawater.js)
   g.setIndex(idx);
   g.computeBoundingSphere();
   // the grass must not grow under it: its surface as a height texture (-1e9: dry)
@@ -4174,8 +4276,8 @@ const riverBand = wgslFn(`
 // (fall: how much of it breaks white, a grown map's steep water)
 const waterShade = wgslFn(`
   fn waterShade(wave: mat4x4<f32>, wp: vec3<f32>, eye: vec3<f32>, refl: vec3<f32>, reflOn: f32, fall: f32, t: f32,
-                sky: vec3<f32>, sunDir: vec3<f32>, sunCol: vec3<f32>, moonDir: vec3<f32>, moonCol: vec3<f32>, rain: f32, ice: f32) -> vec4<f32> {
-    var col = wave[1].rgb;
+                sky: vec3<f32>, sunDir: vec3<f32>, sunCol: vec3<f32>, moonDir: vec3<f32>, moonCol: vec3<f32>, rain: f32, ice: f32, gp: vec3<f32>) -> vec4<f32> {
+    var col = wave[1].rgb;   // (gp: where the glitter is read off -- wp itself, but a sea's warped plane: seawater.js)
     if (ice > 0.01 && fall < 0.01) {   // FROZEN (ICE): pale blue-white ice, opaque -- snow blown over it in drifts, a few long
       // cracks, the low sun glinting on its glassy stretches; through, at the edges of its freezing, the water still
       let dn = fract(sin(dot(floor(wp.xz * 0.45), vec2<f32>(12.9898, 78.233))) * 43758.5453);
@@ -4213,10 +4315,10 @@ const waterShade = wgslFn(`
     if (reflOn > 0.5) { col = mix(col, refl * 0.95, mix(0.30, 0.92, fres)); }
     else { col = mix(col, sky * vec3<f32>(0.72, 0.8, 0.88), fres * 0.38); }   // (no mirror here: a share of the sky's colour at the horizon -- gold at sunset, deep blue at night -- through the water's own)
     // the sun's path on the water -- and the moon's -- broken into glitter by the crests
-    let n = normalize(vec3<f32>(wave[1].w * 0.16 + sin(wp.x * 2.7 + t * 1.7) * 0.05, 1.0, cos(wp.z * 2.1 - t * 1.3) * 0.06 + wave[0].w * 0.08));
+    let n = normalize(vec3<f32>(wave[1].w * 0.16 + sin(gp.x * 2.7 + t * 1.7) * 0.05, 1.0, cos(gp.z * 2.1 - t * 1.3) * 0.06 + wave[0].w * 0.08));
     let r = reflect(-v, n);
     // (glitter, not a blob: only the crests' facets that catch it, more of them the lower the light lies)
-    let sparkle = smoothstep(0.35, 0.9, sin(wp.x * 7.3 + t * 2.9 + wave[1].w * 3.0) * sin(wp.z * 8.9 - t * 2.3 + wave[0].w * 2.0));
+    let sparkle = smoothstep(0.35, 0.9, sin(gp.x * 7.3 + t * 2.9 + wave[1].w * 3.0) * sin(gp.z * 8.9 - t * 2.3 + wave[0].w * 2.0));
     let low = 1.0 - smoothstep(0.15, 0.7, sunDir.y);
     col = col + sunCol * pow(max(dot(r, sunDir), 0.0), 140.0) * mix(0.5, 2.6, low) * mix(sparkle, 0.35 + 0.65 * sparkle, low)
               + moonCol * pow(max(dot(r, moonDir), 0.0), 220.0) * (0.4 + 1.6 * sparkle);
@@ -4239,7 +4341,10 @@ let waterReflector = null;
   const inR = MAP ? attribute("river", "float")
     : riverBand({ wp: positionWorld, river: uniform(new THREE.Vector4(RIVER.z, RIVER.amp, RIVER.k, RIVER.ph)),
                   riverW: uniform(new THREE.Vector3(RIVER.hw, hasRiver ? RIVER.xEnd : -1e9, 0)) });
-  const wave = waterWave({ wp: positionWorld, t: waterT, inR, flow: float(RIVER.flow) });
+  // (OPEN WATER, seawater.js: a sea's or a big lake's depth colour, swell and shore foam -- only where the world has one)
+  const SEAW = SEA ? seaWaterNodes(SEA) : null;
+  let wave = waterWave({ wp: positionWorld, t: waterT, inR, flow: float(RIVER.flow) });
+  if (SEAW) wave = SEAW.wave(wave, waterT);
   // THE REFLECTION (?reflect=0 to compare): one plane, so ONE extra draw of the world lights every stretch of
   // water at once -- unlike the palace mirrors, which pay per wall. TSL's reflector does the hard parts (the
   // camera mirrored through the surface, its own target, the projective lookup); the crests shove that lookup
@@ -4251,9 +4356,11 @@ let waterReflector = null;
     reflColour = waterReflector.rgb;
     waterReflOn.value = REFLECT.mode === "raw" ? 3 : 1;
   }
-  const out = waterShade({ wave, wp: positionWorld, eye: waterEye, refl: reflColour, reflOn: waterReflOn,
+  let out = waterShade({ wave, wp: positionWorld, eye: waterEye, refl: reflColour, reflOn: waterReflOn,
                            fall: MAP ? attribute("fall", "float") : float(0), t: waterT,
-                           sky: waterSky, sunDir: waterSunDir, sunCol: waterSunCol, moonDir: waterMoonDir, moonCol: waterMoonCol, rain: waterRain, ice: ICE.k });
+                           sky: waterSky, sunDir: waterSunDir, sunCol: waterSunCol, moonDir: waterMoonDir, moonCol: waterMoonCol, rain: waterRain, ice: ICE.k,
+                           gp: SEAW ? SEAW.gp(waterT) : positionWorld });
+  if (SEAW) out = SEAW.finish(out, waterT, ICE.k);
   // (the buildings' shadows on the water too -- the bridge's, the mill's -- softer than on the land: what the water
   //  mirrors is not shaded, only its own colour and the sun's glitter; sunshadow.js)
   waterMat.colorNode = out.xyz.mul(sunShade(positionWorld, vec3(0, 1, 0)).mul(.7).add(.3));
@@ -4271,6 +4378,15 @@ let waterReflector = null;
   if (qp.get("nowater") === "1") water.visible = false;   // (a switch for telling water from everything else)
   if (!MAP) water.position.y = WLEVEL;
   scene.add(water);
+  const far = MAP?.sea ? farSea(MAP) : null;   // (sea.js: the sea's half of the world past the map's edge, out to the horizon)
+  if (far) {
+    const fg = new THREE.BufferGeometry(), nv = far.pos.length / 3;
+    fg.setAttribute("position", new THREE.Float32BufferAttribute(far.pos, 3));
+    for (const [k, a] of [["river", new Float32Array(nv)], ["fall", new Float32Array(nv)], ["open", far.open], ["depth", far.depth], ["surf", far.surf]]) fg.setAttribute(k, new THREE.Float32BufferAttribute(a, 1));
+    fg.setIndex(far.idx); fg.computeBoundingSphere();
+    const fm = new THREE.Mesh(fg, waterMat); fm.name = "far sea"; fm.visible = water.visible;
+    scene.add(fm);
+  }
   if (waterReflector) {   // the mirrored camera's own target plane, lying in the surface
     waterReflector.target.rotateX(-Math.PI / 2);
     waterReflector.target.position.y = WLEVEL;
@@ -4522,7 +4638,7 @@ bootMark("carts and wagons on the highway (carts.js,");
 // evenly, slowing behind a slower cart rather than driving through it.
 let cartHerd = null, cartSpare = null, cartSplit = null;   // (cartSpare, cartSplit: a pair under a yoke parted by a blow, combat.js)
 const carts = [], wheelSets = new Map();
-const nCarts = highway ? Math.max(0, num("carts", Math.min(12, Math.max(2, Math.round(highway.total / 200))))) : 0;
+const nCarts = highway && GOODS_CULTURE.teams?.length !== 0 ? Math.max(0, num("carts", Math.min(12, Math.max(2, Math.round(highway.total / 200))))) : 0;
 // the freight loop: landing yard -> up the freight road -> the highway's
 // south lane east -> into the palace yard and the castle yard (whichever
 // stand) -> round the east loop -> the north lane back west -> across and
@@ -4545,14 +4661,20 @@ if (LANDING && yards.length) {
 }
 const FREIGHT_FLEET = [{ size: "large", kind: "ox", animals: 4 }, { size: "medium", kind: "horse", animals: 2 }, { size: "small", kind: "horse", animals: 1 },
                        { size: "large", kind: "horse", animals: 4 }, { size: "medium", kind: "ox", animals: 2 }];   // five on a 2km loop
+// the draught beasts a culture had (goods.json `teams`; absent = all): the Maya had none, so no carts at all -- their
+// goods go on porters' backs; Egypt and Japan drew carts with oxen. A horse team swaps to oxen rather than vanishing.
+const TEAMS = GOODS_CULTURE.teams;
+const teamOf = (f) => !TEAMS || TEAMS.includes(f.kind) ? f : TEAMS.length ? { ...f, kind: TEAMS[0] } : null;
+const ROAD_FLEET = FLEET.map(teamOf).filter(Boolean), FREIGHT_TEAMS = FREIGHT_FLEET.map(teamOf).filter(Boolean);
 const movers = [];      // everything with a deck you can stand on that moves: carts, the barge
 let fisherHerd = null;  // the fisherman's own one-person herd (for arrows: every composite figure is a target)
 const handHerds = [];   // the dock hands' herd(s)
-if (nCarts || freightLane) {
+if (nCarts || (freightLane && FREIGHT_TEAMS.length)) {
   const defs = [];
-  for (let i = 0; i < nCarts; i++) defs.push(makeCart({ ...FLEET[i % FLEET.length], seed: i + 1, variant: i % LOAD_VARIANTS }));
-  const nFreight = freightLane ? FREIGHT_FLEET.length : 0;
-  for (let i = 0; i < nFreight; i++) defs.push(makeCart({ ...FREIGHT_FLEET[i], seed: 100 + i, variant: -1 }));
+  const LD = GOODS_CULTURE.loads ?? [...Array(LOAD_VARIANTS).keys()];   // (the loads this culture carts: assets/world/goods.json)
+  for (let i = 0; i < nCarts; i++) defs.push(makeCart({ ...ROAD_FLEET[i % ROAD_FLEET.length], seed: i + 1, variant: LD[i % LD.length] }));
+  const nFreight = freightLane ? FREIGHT_TEAMS.length : 0;
+  for (let i = 0; i < nFreight; i++) defs.push(makeCart({ ...FREIGHT_TEAMS[i], seed: 100 + i, variant: -1 }));
   cartHerd = createComposite(defs.reduce((a, c) => a + c.driver.parts.length + c.team.reduce((b, t) => b + t.def.parts.length, 0), 0));
   cartSpare = createComposite(6 * 70 + 40);   // a pair under a yoke parted by a blow (combat.js): the two beasts, the yoke between them
   scene.add(cartSpare.mesh);
@@ -4681,8 +4803,8 @@ function placeCarts(frac) {
     }
     k.items.forEach((it, m) => {   // live goods ride the bed
       const n = k.c.capacity;
-      _wm.makeRotationY(it.kind === "sack" ? Math.PI / 2 : 0).setPosition((m - (n - 1) / 2) * .9, k.c.floor + .02, 0);
-      _wm.premultiply(_cm); placeItemM(it, _wm);
+      _wm.makeTranslation((m - (n - 1) / 2) * .9, k.c.floor + .02, 0);
+      _wm.premultiply(_cm); placeRest(it, _wm);   // (each lies its vessel's way: assets/world/goods.json `rest`)
     });
   }
   for (const ws of wheelSets.values()) ws.commit();
@@ -4691,11 +4813,24 @@ function placeCarts(frac) {
 bootMark("freight (freight.js): goods and their stat");
 // ---- freight (freight.js): goods and their states, the barge, the landing's hands, the freight carts' stops
 let carrying = null;   // what you carry
-const { goods, goodsSets, GOODS, goodsTo, placeItemM, placeCarried, putDown, placeRiding, hands, bargeSt, bargePose, placeBarge, freightStep, freightStopStep }
-  = createFreight({ scene, BUILDINGS, LANDING, BASIN, freightLane, bargeDef, createComposite, makePerson, gaitBase,
-                    talkers, track, movers, cartUnder, carts, riverZ, riverHW, VILLAGE_X, WLEVEL, waterAt: surfaceAt, handHerds });
+const { goods, goodsSets, GOODS, goodsTo, placeItemM, placeRest, placeCarried, putDown, placeRiding, hands, bargeSt, bargePose, placeBarge, freightStep, freightStopStep, placeHands,
+        addDock, loadShip, placeItem: placeGoods }
+  = createFreight({ culture: GOODS_CULTURE, scene, BUILDINGS, LANDING, BASIN, freightLane, bargeDef, createComposite, makePerson, gaitBase,
+                    talkers, track, movers, cartUnder, carts, riverZ, riverHW, VILLAGE_X, WLEVEL, waterAt: surfaceAt, handHerds, port: !!HARBOUR });
+// the port's life (harbour.js): the culture's ships moored, under way, coming and going; its dock hands at their holds
+HARBOUR_LIFE = HARBOUR ? createHarbourLife(HARBOUR, { scene, SEA, freight: { addDock, loadShip, placeItem: placeGoods }, period: PERIOD_NAME, dress: PERIOD.dress,
+  seed: townSeed, standY: (x, z) => { const top = Math.max(groundH(x, z), HARBOUR.port.quayTop) + 1; return floorsAt(x, z).reduce((b, h) => (h <= top && h > b ? h : b), groundH(x, z)); },   // (the fixed floors: the movers are not made yet)
+  surfaceAt, camera, movers }) : null;
 placeCarts(0);   // placed before the first frame
 placeBarge(0);
+for (const y of GOODS_CULTURE.store ? yards : []) {   // the culture's store vessels (Greek pithoi) in pairs past the east end of each freight yard's rows
+  const V = ASSETS.get("world/goods").vessels[GOODS_CULTURE.store.vessel];   // (the rows span y.x +-5; the lane leaves toward the road, +z)
+  for (let i = 0; i < (GOODS_CULTURE.store.n ?? 3); i++) {
+    const x = y.x + 6.4 + (i % 2) * 1.1, z = y.z - 2.6 - (i >> 1) * 1.15, g = itemGroup(V.item, { seed: i + 1, params: V.params ?? {} });
+    g.position.set(x, groundH(x, z) - .05, z); g.rotation.y = i * 1.9; scene.add(g);
+    propCols.push({ x, z, r: .45, top: groundH(x, z) + 1.3, on: () => true, by: "pithos" });   // (solid: walked round, not through)
+  }
+}
 
 bootMark("the fisherman's boat: moored at the jetty,");
 // ---- the fisherman's boat: moored at the jetty, then rowed 22m downstream to the
@@ -4946,7 +5081,7 @@ function findInteraction() {
       resting = null; eyeH = EYE;
     } };
   const fx = -Math.sin(yaw), fz = -Math.cos(yaw);
-  if (carrying) return { label: `click to put down the ${carrying.kind}`, act: () => {
+  if (carrying) return { label: `click to put down the ${carrying.name ?? carrying.kind}`, act: () => {
     const x = camera.position.x + fx * 1.0, z = camera.position.z + fz * 1.0;
     const y = supportNear(x, z, camera.position.y);
     putDown(carrying, x, y, z, yaw); carrying = null;
@@ -4955,7 +5090,7 @@ function findInteraction() {
     if (!GOODS[it.state].pick || it.claimed) continue;   // (a hand already heading for it keeps its claim)
     const dx = it.x - camera.position.x, dz = it.z - camera.position.z, d = Math.hypot(dx, dz);
     if (d > 2.2 || d < .01 || (dx * fx + dz * fz) / d < .4 || Math.abs(it.y - standY) > 1.6) continue;
-    return { label: `click to pick up the ${it.kind}`, act: () => {
+    return { label: `click to pick up the ${it.name ?? it.kind}`, act: () => {
       goodsTo(it, "player"); carrying = it; } };   // (off the barge's manifest, the cart's load, the floor it rode)
   }
   const arw = archery.nearest(camera.position, fx, fz, standY);   // a stuck or fallen arrow in reach: take it back
@@ -5030,14 +5165,19 @@ function findInteraction() {
       } };
   }
   for (const dr of doors) {
-    const dx = dr.wx - camera.position.x, dz = dr.wz - camera.position.z;
+    if (dr.fixed) continue;   // (a great leaf that stands shut: its wicket opens)
+    let dx = dr.wx - camera.position.x, dz = dr.wz - camera.position.z;
+    if (dr.group) {   // (a wide leaf: reached anywhere along it, not only at its middle -- the nearest point of it)
+      const along = Math.max(-dr.w / 2, Math.min(dr.w / 2, -(dx * dr.ax + dz * dr.az)));
+      dx += dr.ax * along; dz += dr.az * along;
+    }
     const d = Math.hypot(dx, dz);
     if (d > 2.5) continue;
     if (Math.abs(dr.wy - standY) > 1.8) continue;   // same storey only -- not the window on the floor below
-    if ((dx * fx + dz * fz) / Math.max(d, .01) < .3) continue;
-    return { label: dr.open ? (dr.win ? "click to close the window" : "click to close")
-                            : (dr.win ? "click to open the window" : "click to open"),
-      act: () => { dr.open = !dr.open; netDoor(dr); } };
+    if ((dx * fx + dz * fz) / Math.max(d, .01) < .3 && d > .6) continue;
+    const what = dr.win ? " the window" : dr.wicket ? " the wicket" : dr.group?.length > 1 ? " the doors" : "";
+    return { label: `click to ${dr.open ? "close" : "open"}${what}`,
+      act: () => { const v = !dr.open; for (const q of dr.group ?? [dr]) { q.open = v; netDoor(q); } } };
   }
   return null;
 }
@@ -5133,7 +5273,7 @@ function applyNetOp(op) {
   } else if (op.k === "arrow") {   // a peer's shot: it flies and sticks here too
     archery.spawn(op.p, op.v, true);
   } else if (op.k === "env") {
-    weather = op.weather; wxInt = op.int; applyClouds();   // (the snow settles or melts from there: the tick eases SNOW)
+    weather = op.weather; wxInt = op.int;   // (the snow settles or melts from there: the tick eases SNOW)
     if ((darkTo > .5) !== !!op.night) darkTo = op.night ? 1 : 0;   // (the host's dusk, falling here too)
     if (op.autumn !== autumnLvl) { autumnLvl = op.autumn; buildFlora(autumnK(), springK()); }
   }
@@ -5660,7 +5800,6 @@ const roofedAt = (x, z, y) => {
 };
 const precip = createWeather(scene);   // the rain and snow curtains (weather.js)
 let wxInt = Math.min(2, Math.max(0, num("intensity", 1)));   // weather intensity: 0 low, 1 mid, 2 high ("O" cycles)
-applyClouds();   // cloud cover for the starting weather
 
 // night mode ("N"): a multiply pass dims the whole frame -- every material,
 // custom shaders included, with zero per-material work -- while the sky and
@@ -5728,7 +5867,7 @@ const AURORA = { chance: .3, ease: 30 };
 let aurora = 0, auroraOn = qp.get("aurora") === "1", skyT = 0;
 // the hour on the screen: the sky dome, the fog (the horizon's colour), the frame's tint, the stars and the moon
 const applyHour = () => {
-  const { horizon, tint, sunDir, sunCol, cloud } = sky.update(camera, dark, weather ? .3 + .3 * wxInt : 0, bow, { aurora, t: skyT });   // (rain or snow: an overcast sky, darker the harder it falls)
+  const { horizon, tint, sunDir, sunCol, cloud } = sky.update(camera, dark, weather ? .45 + .25 * wxInt : 0, bow, { aurora, t: skyT, cover: weather ? .92 + .04 * wxInt : [.3, .5, .72][wxInt] });   // (rain or snow: an overcast sky, darker the harder it falls)
   cloudTint.value.copy(cloud);
   waterSky.value.copy(horizon); waterSunDir.value.copy(sunDir); waterSunCol.value.copy(sunCol); ROAD_WET.sky.value.copy(horizon);
   waterMoonDir.value.copy(moon.position).normalize();
@@ -5841,8 +5980,8 @@ addEventListener("keydown", (e) => {
     el.style.display = el.style.display === "block" ? "none" : "block";
   }
   if (e.code === "Space") e.preventDefault();
-  if (e.code === "KeyP") { weather = (weather + 1) % 3; applyClouds(); netEnv(); }   // (the snow settles or melts over minutes: the tick eases SNOW)
-  if (e.code === "KeyO" && !e.shiftKey) { wxInt = (wxInt + 1) % 3; applyClouds(); netEnv(); }   // weather intensity low/mid/high -- and cloud cover on a clear day
+  if (e.code === "KeyP") { weather = (weather + 1) % 3; netEnv(); }   // (the snow settles or melts over minutes: the tick eases SNOW)
+  if (e.code === "KeyO" && !e.shiftKey) { wxInt = (wxInt + 1) % 3; netEnv(); }   // weather intensity low/mid/high -- and cloud cover on a clear day
   if (e.code === "KeyO" && e.shiftKey) setOutline(!outlineOn());   // the world's one outline switch: 1px lines on everything, or nothing (cheapest)
   if (e.code === "KeyI") { autumnLvl = (autumnLvl + 1) % 4; buildFlora(autumnK(), springK()); netEnv(); toast(["Summer", "Autumn", "Late autumn", "Spring: the orchards in blossom"][autumnLvl]); }   // summer / half / full autumn / spring
   if (e.code === "KeyN" && !e.shiftKey) { darkTo = darkTo > .5 ? 0 : 1; DUSK.day = 0; netEnv(); }   // (dusk or dawn: over DUSK.secs)
@@ -6219,7 +6358,7 @@ function poseAll(ta) {
   if (lifeHerd) lifeHerd.update(ta);
   if (guardHerd) guardHerd.update(ta);
   if (crewHerd) crewHerd.update(ta);
-  if (statueHerd) statueHerd.update(ta);
+  if (statueHerd) { statuesSeen(statueHerd, camera.position); statueHerd.update(ta); }
   mark("people");
   const lifeHold = lifeHerd ? life.holders() : null;
   if (dark > .25) {   // the lanterns' light: the wall lamps', and where the hands carrying lanterns are (nightglow.js setLamps)
@@ -6255,16 +6394,7 @@ function poseAll(ta) {
   mark("small herds");
   if (boatSt) boatSt.herd.update(ta);
   if (cartHerd) cartHerd.update(ta);
-  for (const h of hands) {   // the loaded rig stands in for the free one while a piece is in the arms, and the piece rides them
-    if (h.anC.down) { h.an.hidden = true; h.anC.hidden = false; continue; }   // struck down (combat.js): the one that fell stays, where it fell
-    if (h.an.down) { h.an.hidden = false; h.anC.hidden = true; continue; }
-    const p = h.an.position, c = Math.cos(h.an.rotY), s = Math.sin(h.an.rotY);
-    if (h.item) {
-      h.anC.position.copy(p); h.anC.rotY = h.an.rotY; h.anC.animT = h.an.animT; h.anC.amp = h.an.amp;
-      h.an.hidden = true; h.anC.hidden = false;
-      placeCarried(h.item, p.x + c * .42, p.y + .78, p.z - s * .42, h.an.rotY);
-    } else { h.an.hidden = false; h.anC.hidden = true; }
-  }
+  placeHands();   // the loaded rig of the piece's carrying style stands in for the free one, the piece rides it (freight.js)
   for (const hh of handHerds) hh.update(ta);
 }
 function tick() {
@@ -6307,6 +6437,7 @@ function frameBody() {
     if (SMOOTH) tracksDraw(Math.min(1, Math.max(0, (t + clockOff - simTick * TICK) / TICK)));   // draw between the last two ticks
   }
   if (freeze === null && stir()) { const fr = Math.max(0, t + clockOff - simTick * TICK); placeCarts(fr); placeBarge(fr); placeBoat(fr); }   // carts, barge and boat glide between ticks
+  if (freeze === null) HARBOUR_LIFE?.update(t, dt);   // the port's ships: under way, coming in, lying at their berths (harbour.js)
   placeRiding();   // goods set down on those moving floors go with them
   if (freeze === null) companion.update(dt, { x: camera.position.x, z: camera.position.z, yaw });   // your dog, at heel or fetching
   mark("sim tick");
@@ -6363,10 +6494,12 @@ function frameBody() {
   for (const ah of arenaHerds) ah.update(ta);
   mark("carts+hands+arena");
   for (const dr of doors) {   // doors swing smoothly toward their state
+    if (dr.fixed) continue;
     const target = dr.open ? dr.openAng ?? SHUTTER.door : 0;
     if (Math.abs(target - dr.ang) > .001) {
-      dr.ang += (target - dr.ang) * Math.min(1, dt * 5);
-      dr.grp.rotation.y = dr.base + dr.ang;
+      dr.ang += (target - dr.ang) * Math.min(1, dt * (dr.bars ? 3 : 5));   // (a great leaf swings slower)
+      if (dr.slide) dr.grp.position.set(dr.home.x - dr.ax * dr.sign * dr.ang, dr.home.y, dr.home.z - dr.az * dr.sign * dr.ang);   // (slid back behind the wall beside it)
+      else dr.grp.rotation.y = dr.base + (dr.sign ?? 1) * dr.ang;
       if (dr.win || dr.panel) placePane(dr);
     }
   }
@@ -6381,7 +6514,6 @@ function frameBody() {
   sword.update(dt);
   stones.update(dt, t);
   mark("doors+net+combat");
-  if (freeze === null) cloudHerd.update(0);   // drift happens in the sim ticks
   sailTurn += (freeze === null ? dt : 0) * .45 * WIND.strength.value;   // the sails turn with the wind: lazily on a still day, racing in a gale
   if (stir()) for (const hb of windmillHubs) hb.rotation.z = sailTurn;
   if (stir() && !iceFirm()) for (const ww of waterWheels) ww.grp.rotation.z = -ta * ww.omega;   // the current turns the mill wheel (undershot: bottom runs with the flow) -- not in a river frozen hard: it stands
@@ -6594,7 +6726,7 @@ function frameBody() {
   if (ONE_MATRIX) { scene.updateMatrixWorld(); scene.matrixWorldAutoUpdate = false; }   // ?onematrix=0 to compare
   cullBundles(camera);      // each static cell shown or hidden by its own box: the culling its bundle gave up
   mark("matrices");
-  if (MAP && waterReflector) waterReflector.target.position.y = riverLevel(camera.position.x);   // (a grown map's water is no one plane: mirror in the river's here)
+  if (MAP && waterReflector) waterReflector.target.position.y = SEA ? SEA.planeY(camera.position.x, camera.position.z, riverLevel) : riverLevel(camera.position.x);   // (a grown map's water is no one plane: mirror in the river's here)
   // SMALL THINGS FAR OFF are not drawn past where they would still show (a bee 100 m away is under a pixel): the bees,
   // the juggler's balls, the ducklings -- after everything has set what it shows this frame
   farOff(bees.mesh, BEE_AT, 100); farOff(juggler?.mesh, juggler?.an.position, 120);
@@ -6972,7 +7104,7 @@ addEventListener("resize", () => {
 
 window.__scene = scene; window.__THREE = THREE; window.__camera = camera;   // debug hooks for the headless harness
 window.__simStep = () => simTicks(simTick + 1);
-window.__dbg = Object.defineProperties({ ground: GROUND, get bflies() { return bflies; }, get pathRoutes() { return pathRoutes; }, pickables, forest: FOREST, supportNear, get standY() { return standY; }, get jumpState() { return { airborne, vy, jumpHeld, swimming, resting: !!resting, mounted: !!mounted }; }, buildings: BUILDINGS, map: MAP, riverZ, riverLevel, waterY, VILLAGE_X, scene, camera, renderer, poolMat, jetMat, herds, combat, combatNames, sword, setWeapon, archery, tableware, guards, mountables, keys, findInteraction, herd, talkers, callers, doors, carts, collides, colliderSites, goods, hands, get barge() { return bargeSt; }, get boat() { return boatSt; }, get life() { return life; }, sites, groundH, bargePose, yards, callNow: () => { for (const c of callers) c.next = 0; }, speech: () => ({ spoken, langMode, toneMode, wordMode, moodMode }),
+window.__dbg = Object.defineProperties({ ground: GROUND, sea: SEA, get harbour() { return HARBOUR_LIFE ?? HARBOUR; },get bflies() { return bflies; }, get pathRoutes() { return pathRoutes; }, pickables, forest: FOREST, supportNear, storkNests, period: PERIOD_NAME, get standY() { return standY; }, get controls() { return controls; }, get jumpState() { return { airborne, vy, jumpHeld, swimming, resting: !!resting, mounted: !!mounted }; }, buildings: BUILDINGS, map: MAP, riverZ, riverLevel, waterY, VILLAGE_X, scene, camera, renderer, poolMat, jetMat, herds, combat, combatNames, sword, setWeapon, archery, tableware, guards, mountables, keys, findInteraction, herd, talkers, callers, doors, carts, collides, colliderSites, goods, hands, get barge() { return bargeSt; }, get boat() { return boatSt; }, get life() { return life; }, sites, groundH, bargePose, yards, callNow: () => { for (const c of callers) c.next = 0; }, speech: () => ({ spoken, langMode, toneMode, wordMode, moodMode }),
   talkNow: () => { for (const t of talkers) t.next = 0; },
   look: (x, z, down = 0) => { yaw = Math.atan2(-(x - camera.position.x), -(z - camera.position.z)); pitch = -down; },   // (down: radians below level, for checks)
   pitch: (p) => { if (p !== undefined) pitch = p; return pitch; },

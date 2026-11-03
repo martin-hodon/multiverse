@@ -1,0 +1,527 @@
+{
+ "name": "Mitre tower",
+ "_about": "A MANUELINE TOWER: a square shaft `W` wide and `H` tall in `t`-thick walls, in three STAGES under a BELFRY -- `wins` windows `winW` wide in each face of each stage, `bells` round arches a face in the belfry (`belfryH` tall), a door `doorW` wide in face 0 (+z) at `doorAt` -- a string course and a PINNACLE at each corner over every stage (`pin`), a pierced balustrade round the flat top, and on it EITHER (build \"drum\", \"drum head\", \"dome\", \"finial\") an octagonal DRUM (`drumR`, `drumH`) under a POINTED stone dome -- Belem's bell tower and its mitre (1867-68) -- its two arcs' centres `spread` half-widths apart (1 equilateral, more a lancet, rising half-width * sqrt(1 + 2 spread)), OR (build \"spire\") a crocketed octagonal SPIRE `spireH` tall -- the 19th-century tower at the west end of the range; and (build \"turret\", \"turret cap\") a stair TURRET `turretR` at the +x +z corner, rising past the top.",
+ "params": {
+  "detail": 4,
+  "W": 10.0,
+  "H": 30.0,
+  "t": 1.2,
+  "belfryH": 7.0,
+  "bells": 2,
+  "wins": 1,
+  "winW": "W * 0.12",
+  "doorW": 1.6,
+  "doorAt": 0,
+  "drumR": "W * 0.36",
+  "drumH": "W * 0.4",
+  "spread": 1.6,
+  "pin": "W * 0.1",
+  "spireH": "W * 1.2",
+  "turretR": "W * 0.14"
+ },
+ "build": [
+  "shaft",
+  "stage floors",
+  "courses",
+  "stage pinnacles",
+  "head",
+  "balustrade",
+  "pinnacles",
+  "drum",
+  "drum head",
+  "dome",
+  "finial"
+ ],
+ "parts": {
+  "shaft": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "W",
+     "W"
+    ]
+   },
+   "thickness": "t",
+   "height": "H",
+   "interior": true,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "tiers": [
+    {
+     "h": "(H - belfryH) / 3",
+     "openings": {
+      "pattern": "wins",
+      "width": "winW",
+      "gap": "(W - 2 * t) / wins - winW",
+      "sill": "(H - belfryH) / 3 * 0.3",
+      "springing": "(H - belfryH) / 3 * 0.3 + winW * 1.8",
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    },
+    {
+     "h": "(H - belfryH) / 3",
+     "openings": {
+      "pattern": "wins",
+      "width": "winW",
+      "gap": "(W - 2 * t) / wins - winW",
+      "sill": "(H - belfryH) / 3 * 0.3",
+      "springing": "(H - belfryH) / 3 * 0.3 + winW * 1.8",
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    },
+    {
+     "h": "(H - belfryH) / 3",
+     "openings": {
+      "pattern": "wins",
+      "width": "winW",
+      "gap": "(W - 2 * t) / wins - winW",
+      "sill": "(H - belfryH) / 3 * 0.3",
+      "springing": "(H - belfryH) / 3 * 0.3 + winW * 1.8",
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    },
+    {
+     "openings": {
+      "pattern": "bells",
+      "width": "(W - 2 * t) / bells * 0.62",
+      "gap": "(W - 2 * t) / bells * 0.38",
+      "sill": 1.0,
+      "springing": "belfryH * 0.68",
+      "head": {
+       "profile": "semicircular"
+      },
+      "glass": false
+     }
+    }
+   ],
+   "faces": {
+    "0": [
+     {
+      "h": "(H - belfryH) / 3",
+      "openings": [
+       {
+        "at": "doorAt",
+        "width": "doorW",
+        "sill": 0,
+        "springing": "doorW * 1.5",
+        "head": {
+         "profile": "semicircular"
+        },
+        "glass": false
+       }
+      ]
+     },
+     {
+      "h": "(H - belfryH) / 3",
+      "openings": {
+       "pattern": "wins",
+       "width": "winW",
+       "gap": "(W - 2 * t) / wins - winW",
+       "sill": "(H - belfryH) / 3 * 0.3",
+       "springing": "(H - belfryH) / 3 * 0.3 + winW * 1.8",
+       "head": {
+        "profile": "semicircular"
+       }
+      }
+     },
+     {
+      "h": "(H - belfryH) / 3",
+      "openings": {
+       "pattern": "wins",
+       "width": "winW",
+       "gap": "(W - 2 * t) / wins - winW",
+       "sill": "(H - belfryH) / 3 * 0.3",
+       "springing": "(H - belfryH) / 3 * 0.3 + winW * 1.8",
+       "head": {
+        "profile": "semicircular"
+       }
+      }
+     },
+     {
+      "openings": {
+       "pattern": "bells",
+       "width": "(W - 2 * t) / bells * 0.62",
+       "gap": "(W - 2 * t) / bells * 0.38",
+       "sill": 1.0,
+       "springing": "belfryH * 0.68",
+       "head": {
+        "profile": "semicircular"
+       },
+       "glass": false
+      }
+     }
+    ]
+   },
+   "_about": "the square shaft: three stages of windows, the belfry's arches at its head, the door in its foot"
+  },
+  "stage floors": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "W - t",
+     "W - t"
+    ]
+   },
+   "height": 0.3,
+   "at": [
+    [
+     0,
+     "(H - belfryH) / 3 - 0.3",
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": 3,
+    "step": [
+     0,
+     "(H - belfryH) / 3",
+     0,
+     0
+    ]
+   },
+   "standsOn": [
+    "shaft"
+   ],
+   "walked": true
+  },
+  "courses": {
+   "type": "box",
+   "width": "W + 0.5",
+   "length": "W + 0.5",
+   "height": 0.35,
+   "at": [
+    [
+     0,
+     "(H - belfryH) / 3",
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": 3,
+    "step": [
+     0,
+     "(H - belfryH) / 3",
+     0,
+     0
+    ]
+   },
+   "_about": "the string courses between the stages"
+  },
+  "stage pinnacles": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": "pin * 1.2",
+    "h": "pin",
+    "s": "pin * 3"
+   },
+   "at": [
+    [
+     "-1 * (W / 2 - pin * 0.6)",
+     "(H - belfryH) / 3 + 0.35",
+     "-1 * (W / 2 - pin * 0.6)",
+     0
+    ],
+    [
+     "-1 * (W / 2 - pin * 0.6)",
+     "(H - belfryH) / 3 + 0.35",
+     "1 * (W / 2 - pin * 0.6)",
+     0
+    ],
+    [
+     "1 * (W / 2 - pin * 0.6)",
+     "(H - belfryH) / 3 + 0.35",
+     "-1 * (W / 2 - pin * 0.6)",
+     0
+    ],
+    [
+     "1 * (W / 2 - pin * 0.6)",
+     "(H - belfryH) / 3 + 0.35",
+     "1 * (W / 2 - pin * 0.6)",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": 3,
+    "step": [
+     0,
+     "(H - belfryH) / 3",
+     0,
+     0
+    ]
+   },
+   "standsOn": [
+    "courses"
+   ]
+  },
+  "head": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "W - t",
+     "W - t"
+    ]
+   },
+   "height": 0.4,
+   "at": [
+    [
+     0,
+     "H - 0.4",
+     0,
+     0
+    ]
+   ],
+   "standsOn": [
+    "shaft"
+   ],
+   "walked": true,
+   "_about": "the tower's flat top, a terrace round the drum or the spire"
+  },
+  "balustrade": {
+   "type": "cresting",
+   "run": [
+    [
+     "0 - W / 2 + 0.3",
+     0
+    ],
+    [
+     "W / 2 - 0.3",
+     0
+    ]
+   ],
+   "h": 1.1,
+   "panel": 1.0,
+   "t": 0.25,
+   "at": [
+    [
+     0,
+     "H",
+     "W / 2 - 0.3",
+     0
+    ],
+    [
+     0,
+     "H",
+     "0 - (W / 2 - 0.3)",
+     3.1415927
+    ],
+    [
+     "W / 2 - 0.3",
+     "H",
+     0,
+     1.5707963
+    ],
+    [
+     "0 - (W / 2 - 0.3)",
+     "H",
+     0,
+     -1.5707963
+    ]
+   ],
+   "standsOn": [
+    "head"
+   ],
+   "_about": "the pierced balustrade round the top"
+  },
+  "pinnacles": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": "pin * 1.6",
+    "h": "pin * 2",
+    "s": "pin * 5"
+   },
+   "at": [
+    [
+     "-1 * (W / 2 - pin * 0.6)",
+     "H",
+     "-1 * (W / 2 - pin * 0.6)",
+     0
+    ],
+    [
+     "-1 * (W / 2 - pin * 0.6)",
+     "H",
+     "1 * (W / 2 - pin * 0.6)",
+     0
+    ],
+    [
+     "1 * (W / 2 - pin * 0.6)",
+     "H",
+     "-1 * (W / 2 - pin * 0.6)",
+     0
+    ],
+    [
+     "1 * (W / 2 - pin * 0.6)",
+     "H",
+     "1 * (W / 2 - pin * 0.6)",
+     0
+    ]
+   ],
+   "standsOn": [
+    "head"
+   ]
+  },
+  "drum": {
+   "type": "enclosure",
+   "plan": {
+    "sides": 8,
+    "radius": "drumR"
+   },
+   "thickness": "t * 0.7",
+   "height": "drumH",
+   "glass": false,
+   "at": [
+    [
+     0,
+     "H",
+     0,
+     0
+    ]
+   ],
+   "openings": [
+    {
+     "at": 0,
+     "width": "drumR * 0.3",
+     "sill": "drumH * 0.25",
+     "springing": "drumH * 0.62",
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "standsOn": [
+    "head"
+   ]
+  },
+  "drum head": {
+   "type": "prism",
+   "plan": {
+    "sides": 8,
+    "radius": "drumR + 0.25"
+   },
+   "height": 0.35,
+   "at": [
+    [
+     0,
+     "H + drumH - 0.35",
+     0,
+     0
+    ]
+   ],
+   "flatRoof": true,
+   "standsOn": [
+    "drum"
+   ]
+  },
+  "dome": {
+   "type": "dome",
+   "sides": 8,
+   "radius": "drumR + 0.25",
+   "thickness": 0,
+   "head": {
+    "profile": "pointed",
+    "spread": "spread"
+   },
+   "at": [
+    [
+     0,
+     "H + drumH",
+     0,
+     0
+    ]
+   ],
+   "standsOn": [
+    "drum head"
+   ],
+   "_about": "the pointed stone dome, the mitre"
+  },
+  "finial": {
+   "type": "column",
+   "radius": "W * 0.03",
+   "height": "W * 0.2",
+   "sides": 6,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "atop": "dome",
+   "standsOn": [
+    "dome"
+   ]
+  },
+  "spire": {
+   "type": "pinnacle",
+   "w": "W * 0.62",
+   "h": "W * 0.12",
+   "s": "spireH",
+   "sides": 8,
+   "crockets": 1,
+   "at": [
+    [
+     0,
+     "H",
+     0,
+     0
+    ]
+   ],
+   "standsOn": [
+    "head"
+   ],
+   "_about": "the crocketed octagonal spire"
+  },
+  "turret": {
+   "type": "prism",
+   "plan": {
+    "sides": 8,
+    "radius": "turretR"
+   },
+   "height": "H + pin * 2",
+   "at": [
+    [
+     "W / 2",
+     0,
+     "W / 2",
+     0
+    ]
+   ],
+   "_about": "the stair turret at a corner, rising past the top"
+  },
+  "turret cap": {
+   "type": "pinnacle",
+   "w": "turretR * 2.2",
+   "h": "pin",
+   "s": "turretR * 5",
+   "sides": 8,
+   "crockets": 1,
+   "at": [
+    [
+     "W / 2",
+     "H + pin * 2",
+     "W / 2",
+     0
+    ]
+   ],
+   "standsOn": [
+    "turret"
+   ]
+  }
+ }
+}

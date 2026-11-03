@@ -1,0 +1,46 @@
+{
+ "kind": "item",
+ "name": "Bitts",
+ "category": "component",
+ "_about": "a pair of stout posts with a crosspiece, where the mooring lines and cables are made fast -- the ship's `moor` anchors are at them (s: their height)",
+ "params": {
+  "s": 0.8,
+  "gap": 0.6
+ },
+ "materials": {
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "post",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "s * 0.28",
+    "s",
+    "s * 0.28"
+   ],
+   "at": [
+    0,
+    "s / 2",
+    "gap / 2"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "cross",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "s * 0.18",
+    "s * 0.18",
+    "gap + s * 0.5"
+   ],
+   "at": [
+    "s * 0.12",
+    "s * 0.62",
+    0
+   ]
+  }
+ ]
+}

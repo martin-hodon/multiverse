@@ -28,6 +28,56 @@ ordinary wireframe. **F** frames it again; nothing turns on its own. `python3 to
 project and takes the **save**; with any other static server the page offers **download** instead (the same
 JSON).
 
+**The view** (2026-11-03, `cursornav.js`): the atlas's navigation (/home/martin/store/apps/atlas js/camera.js),
+ported to three.js and y up, in place of OrbitControls. **Drag** turns the view about the point of the asset UNDER
+THE POINTER -- that point keeps its place in the eye's frame, so it stays where it is on the page and the asset turns
+round it (off the asset: about the middle of the view, the target). The **wheel** zooms about the point under the
+pointer: the whole view is scaled about it, so it -- and everything on the line of sight through it -- stays under the
+pointer, and the eye closes in on it by the same fraction each notch and never passes through it (off the asset: the
+ground under the pointer if it lies nearer than the target -- ground beyond would carry the eye out past the asset --
+else the line of sight's point at the target's depth, which is the atlas's `zoomAt`); turns
+of the wheel at one spot keep the one point. **Right / middle drag** or **Shift+drag** pans, the grabbed point
+following the pointer; **two fingers** pinch about the point between them and pan. **F** (and the **frame** button)
+FLIES back to the framing, eased as the atlas's camera flies; a new asset is framed at once, and `"_view": "front"`
+(the door styles, the arch heads) still frames it square on. Near and far follow the distance, so a coin can be looked
+at from a centimetre. The point is picked by `standOn` in assets.html: a Raycaster against the building's / item's /
+doors' own triangles, and a figure's parts as capsules (their triangles are made in the vertex shader, so no CPU ray
+hits them). The state is the atlas's -- `target`, `yaw`, `pitch`, `r` -- and the page exposes it as
+`__assets.nav` (`controls` is the same object, kept for old drivers: `.target`, `.update()`). Another lab page can
+adopt it with `createNav(camera, canvas, { pick: meshPick(() => [root]) })` and `nav.update(dt)` per frame
+(`nav.lookAt(eye, target)` to frame, `nav.fly(nav.poseOf(eye, target))` to fly). The other lab pages have it too
+(2026-11-03) through `navControls`, an OrbitControls stand-in (`controls.target.set()` after placing the camera, then
+`controls.update()` each frame; its "start" event): statuary.html and wardrobe.html pick a column round each figure
+(`columnPick`: the figures are drawn in a shader) and statuary its pedestals; landscape_lab.html the land's meshes (not
+the trees' instanced sets), its own near and far kept for the fog; menagerie.html and grove.html the ground.
+
+**Cuts, parts and layers** (2026-11-03, `archview.js`, as the atlas has them): the panel at the view's top right.
+**cuts** -- three axis-aligned section planes through whatever 3D asset is shown, each with a box to switch it on, a
+slider across the asset's box (its place in metres beside it), **⇄** to keep the other side (by default the low side is
+kept: below a level cut, -x, -z) and **face** to fly the eye square onto the cut (switching one on does too). The **y**
+cut is the floor plan. Everything shown stands in a `THREE.ClippingGroup` (`stand` in assets.html); the three planes are
+always there, an unused one far off, so switching one compiles nothing. **caps** fills the section: every opaque mesh's
+back faces are drawn again after it in one flat red-brown, so a wall cut open reads as solid (no stencil: a closed solid's
+inside back faces are exactly where the section is; an open sheet -- a lawn, a single-sided roof -- shows the colour
+on its underside while a cut is on). **parts** (a building) -- with the tab open a CLICK (not a drag) picks the part
+under the pointer, lit in the editor's amber: a part of the definition's `build` list (a component's pieces are its
+part's: "church/high roof" is "church"), or with *pieces* the assembly's own part. **frame** flies to it, **isolate**
+shows it alone (and flies; again: the rest back), **hide** hides it, **show all** brings back everything, **JSON** selects
+its definition in the editor; Esc lets go. The list below shows every part with its triangles, a box to hide it and its
+name to pick it (a filter over it). **layers** (a building) -- roofs, outer walls, inner walls, floors, ceilings & vaults,
+stairs, windows & glass, doors, ornament, furniture, each with an opacity: 0 hides it, under 1 it is see-through (no
+depth written); *no roofs* (roofs and ceilings off) and *x-ray walls* are presets. A face's layer is read from its part's
+kind (roof, dome, vault, glass, tracery, a stair's, a moulding's...), which way it faces, and which side of it is IN --
+arch/finish.js's interiors, told as `finishPieces` tells it (a roof's upper face is outside, a dome's face toward its own
+axis inside, the rest by the air 30 cm before it). Picking, hiding and the layers need to know which part each drawn
+triangle came from, and the game's meshes do not say (one mesh per finish rule, every part merged): the first time
+parts or layers are asked for, the building is "exploded" -- each triangle looked up among the assembly's own (a
+finish's piece is cut out of exactly one of them, in its plane), the meshes split by (part, layer), each in a copy of its
+material whose opacity the layer's slider drives (Drachenburg: ~1100 meshes, ~0.6 s). Nothing in the game's code
+changes for it. A rebuild while the definition is typed keeps the cuts, and what was hidden, picked and isolated (by
+name). The page drives it as `__assets.view` (`cut(axis, on, at01, flip)`, `faceCut(axis)`, `setLayer(i, v)`,
+`select(name, "part"|"piece")`, `isolate()`, `hide()`, `showAll()`, `state`).
+
 **Finding an asset** (2026-10-03): the list is the catalogue in GROUPS by what the assets are -- Recent (the last
 twelve opened), Creatures, Buildings, People & clothes, Items, Surfaces -- each group and category folding (what is
 open is remembered), a big category split by its sub-folders. **/** jumps to the search: words in any order, all of

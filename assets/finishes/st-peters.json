@@ -1,0 +1,31 @@
+{
+  "name": "St. Peter's Basilica",
+  "building": "architecture/st-peters",
+  "_about": "St Peter's and its square: travertine throughout -- the front, the cross's walls, the drum, the colonnade's columns and the corridors -- the dome, the cupolas and the low roofs in lead, the dome's ribs travertine, the ball and the cross gilt bronze; the obelisk of Egyptian granite on bronze lions under its bronze star and cross, the fountains' bowls granite; the piazza paved in sampietrini (the small basalt setts named after it) with travertine rays from the obelisk and the ellipse's band, the steps and the sagrato travertine; inside, the floor of marble roundels and squares (porphyry), walls in marble, the dome's inside gold mosaic.",
+  "stone": {
+    "color": "#d9ccb0",
+    "accent": "#c4b596",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {"parts": ["lantern ball", "lantern cross", "lantern cross arm"], "pattern": "roofs/gold leaf", "palette": "gold", "_about": "the gilt bronze ball and cross"},
+    {"parts": ["obelisk crown", "obelisk lions"], "pattern": "materials/metal", "palette": "bronze", "_about": "the obelisk's bronze: the lions, the Chigi mounts and star, the cross"},
+    {"parts": ["obelisk", "obelisk pyramidion"], "pattern": "stone/granite", "palette": "granite-rose", "scale": 0.6, "_about": "the Egyptian red granite shaft, weathered to a pinkish grey"},
+    {"parts": ["Maderno fountain lower bowl", "Maderno fountain upper bowl", "Maderno fountain stem", "Maderno fountain upper stem",
+               "Bernini fountain lower bowl", "Bernini fountain upper bowl", "Bernini fountain stem", "Bernini fountain upper stem"],
+     "pattern": "stone/granite", "palette": "granite", "_about": "the fountains' granite bowls"},
+    {"parts": ["north clock dial", "south clock dial"], "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"parts": ["front inscription"], "pattern": "stone/marble", "palette": "marble-grey", "_about": "the dedication's band on the frieze"},
+    {"parts": "kind:column", "pattern": "stone/travertine drums", "palette": "travertine", "_about": "the columns' shafts in drums: no upright joints"},
+    {"parts": "kind:ribs", "pattern": "stone/travertine", "palette": "travertine", "_about": "the dome's ribs, travertine over the lead"},
+    {"parts": ["dome/dome", "kind:dome"], "side": "in", "pattern": "painted/gold mosaic", "_about": "the dome's inside and the apses' vaults: gold mosaic"},
+    {"parts": ["kind:dome", "kind:roof", "kind:vault"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead", "_about": "the dome, the cupolas, the apses' vaults and the low roofs in lead"},
+    {"parts": "paving", "surface": "floor", "pattern": "floors/sampietrini", "palette": "sampietrini", "_about": "the piazza's sampietrini"},
+    {"parts": ["ray", "ellipse band"], "surface": "floor", "pattern": "stone/travertine", "palette": "travertine", "scale": 0.8, "_about": "the travertine rays and band across the setts"},
+    {"surface": "floor", "side": "in", "pattern": "floors/opus sectile", "palette": "porphyry", "scale": 2.0, "_about": "the church's marble floor: roundels of porphyry in squares of yellow marble"},
+    {"surface": "ceiling", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white", "_about": "the vaults' white stucco"},
+    {"surface": "wall", "side": "in", "pattern": "stone/marble", "palette": "marble-grey", "_about": "marble revetment inside"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "travertine", "_about": "the steps, the sagrato, the terraces: travertine flags"},
+    {"pattern": "stone/travertine", "palette": "travertine", "_about": "travertine for everything else: the front, the walls, the drum, the columns, the corridors"}
+  ]
+}

@@ -12,7 +12,11 @@
    "#6a2c7e",
    "#4f83c8",
    "#c9721c",
-   "#142c74"
+   "#142c74",
+   "#7a4b28",
+   "#a8605c",
+   "#6d7a38",
+   "#8e9088"
   ],
   "paris": [
    "#3550b4",
@@ -24,7 +28,11 @@
    "#8a3596",
    "#6c98d8",
    "#de8a24",
-   "#1d3288"
+   "#1d3288",
+   "#85522c",
+   "#c26a6c",
+   "#7c8a3c",
+   "#9a9c94"
   ],
   "cologne": [
    "#2a58a6",
@@ -36,7 +44,11 @@
    "#764084",
    "#79a4d2",
    "#d08a2c",
-   "#1e3a7e"
+   "#1e3a7e",
+   "#845a34",
+   "#b4736a",
+   "#7c8848",
+   "#a0a096"
   ],
   "grisaille": [
    "#cfd2bb",
@@ -48,7 +60,11 @@
    "#a4493f",
    "#7f97a8",
    "#c9a657",
-   "#8d9a88"
+   "#8d9a88",
+   "#a08a60",
+   "#c49a8a",
+   "#a8ac78",
+   "#b4b6a4"
   ]
  },
  "patterns": {
@@ -138,7 +154,7 @@
      ],
      "lead": 0.011,
      "minPane": 0.00035,
-     "maxPane": 0.02,
+     "maxPane": 0.03,
      "seed": 3
     }
    ]
@@ -158,7 +174,7 @@
    ],
    "ground": 0,
    "res": 512,
-   "_about": "Chartres, the west rose: an eye, petals, then rings of squares and quatrefoils, cobalt ground",
+   "_about": "Chartres's kind: a cobalt ground, an eye and rings of roundels and squares, the seed's in number and in people",
    "layers": [
     {
      "kind": "glass",
@@ -169,94 +185,18 @@
      "ground": 0,
      "rings": [
       {
-       "shape": "sector",
-       "r0": 0.14,
-       "r1": 0.44,
-       "n": 12,
-       "turn": 0,
-       "fill": 0,
-       "role": "ground"
-      },
-      {
-       "shape": "sector",
-       "r0": 0.44,
-       "r1": 0.66,
-       "n": 12,
-       "turn": 0,
-       "fill": 0,
-       "role": "ground"
-      },
-      {
-       "shape": "sector",
-       "r0": 0.66,
-       "r1": 0.98,
-       "n": 12,
-       "turn": 0.5,
-       "fill": 0,
-       "role": "ground"
-      },
-      {
-       "shape": "round",
-       "r0": 0.14,
-       "r1": 0.44,
-       "n": 12,
-       "fills": [
-        1
-       ],
-       "inner": {
-        "k": 0.62,
-        "fills": [
-         2
-        ]
-       }
-      },
-      {
-       "shape": "square",
-       "r0": 0.44,
-       "r1": 0.66,
-       "n": 12,
-       "fills": [
-        1,
-        2
-       ],
-       "inner": {
-        "k": 0.55,
-        "fills": [
-         4
-        ]
-       }
-      },
-      {
-       "shape": "quatrefoil",
-       "r0": 0.66,
-       "r1": 0.98,
-       "n": 12,
-       "fills": [
-        0,
-        1
-       ],
-       "turn": 0.5,
-       "inner": {
-        "k": 0.55,
-        "fills": [
-         2,
-         3
-        ]
-       }
-      },
-      {
        "r1": 0.15,
        "fill": 2
-      },
-      {
-       "r1": 0.08,
-       "fill": 1
       }
      ],
      "lead": 0.011,
      "minPane": 0.00035,
-     "maxPane": 0.02,
-     "seed": 3
+     "maxPane": 0.03,
+     "seed": 3,
+     "plan": {
+      "kind": "rings",
+      "like": "chartres"
+     }
     }
    ]
   },
@@ -275,7 +215,7 @@
    ],
    "ground": 0,
    "res": 512,
-   "_about": "Paris, the north rose: twelve lights doubling to twenty-four, then twenty-four roundels at the rim",
+   "_about": "Paris's kind: lights doubling outwards, the seed's",
    "layers": [
     {
      "kind": "glass",
@@ -286,99 +226,18 @@
      "ground": 9,
      "rings": [
       {
-       "shape": "sector",
-       "r0": 0.13,
-       "r1": 0.46,
-       "n": 12,
-       "turn": 0,
-       "fill": 9,
-       "role": "ground"
-      },
-      {
-       "shape": "sector",
-       "r0": 0.46,
-       "r1": 0.78,
-       "n": 24,
-       "turn": 0,
-       "fill": 9,
-       "role": "ground"
-      },
-      {
-       "shape": "sector",
-       "r0": 0.78,
-       "r1": 1.02,
-       "n": 24,
-       "turn": 0.5,
-       "fill": 9,
-       "role": "ground"
-      },
-      {
-       "shape": "petal",
-       "r0": 0.13,
-       "r1": 0.46,
-       "n": 12,
-       "fills": [
-        0,
-        1
-       ],
-       "gap": 0.04,
-       "inner": {
-        "k": 0.5,
-        "fills": [
-         2,
-         4
-        ]
-       }
-      },
-      {
-       "shape": "petal",
-       "r0": 0.46,
-       "r1": 0.78,
-       "n": 24,
-       "fills": [
-        1,
-        0,
-        6,
-        0
-       ],
-       "gap": 0.04,
-       "inner": {
-        "k": 0.45,
-        "fills": [
-         2,
-         4
-        ]
-       }
-      },
-      {
-       "shape": "round",
-       "r0": 0.78,
-       "r1": 0.985,
-       "n": 24,
-       "turn": 0.5,
-       "fills": [
-        0,
-        1,
-        2,
-        1
-       ],
-       "inner": {
-        "k": 0.5,
-        "fills": [
-         4,
-         2
-        ]
-       }
-      },
-      {
-       "r1": 0.13,
+       "r1": 0.15,
        "fill": 2
       }
      ],
      "lead": 0.011,
      "minPane": 0.00035,
-     "maxPane": 0.02,
-     "seed": 3
+     "maxPane": 0.03,
+     "seed": 3,
+     "plan": {
+      "kind": "rings",
+      "like": "paris"
+     }
     }
    ]
   },
@@ -402,6 +261,9 @@
     {
      "kind": "glass",
      "form": "stone",
+     "plan": {
+      "kind": "rose"
+     },
      "opening": {
       "shape": "circle"
      },
@@ -416,97 +278,6 @@
       1,
       3,
       2
-     ],
-     "cast": [
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "book",
-       "robe": 7,
-       "mantle": 2,
-       "beard": 4,
-       "hair": 4,
-       "halo": 8,
-       "holdL": "key",
-       "holdR": "book",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 2,
-       "mantle": 1,
-       "veil": 3,
-       "halo": 4,
-       "holdL": "palm",
-       "attr": 3
-      },
-      {
-       "pose": "bless",
-       "robe": 4,
-       "mantle": 6,
-       "beard": 4,
-       "hair": 4,
-       "halo": 2,
-       "mitre": 2,
-       "holdR": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "bless",
-       "robe": 3,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "holdR": "sword",
-       "attr": 4
-      },
-      {
-       "pose": "stand",
-       "robe": 6,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "crown": 2,
-       "holdL": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "offer",
-       "robe": 1,
-       "mantle": 0,
-       "veil": 4,
-       "halo": 2,
-       "crown": 2
-      }
-     ],
-     "hubCast": [
-      {
-       "pose": "bless",
-       "robe": 1,
-       "mantle": 0,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "crossNimbus": true,
-       "bless": "L",
-       "holdR": "book",
-       "attr": 4
-      }
      ],
      "lead": 0.009,
      "minPane": 0.0004,
@@ -536,6 +307,9 @@
     {
      "kind": "glass",
      "form": "stone",
+     "plan": {
+      "kind": "rose"
+     },
      "opening": {
       "shape": "circle"
      },
@@ -550,97 +324,6 @@
       1,
       3,
       2
-     ],
-     "cast": [
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "book",
-       "robe": 7,
-       "mantle": 2,
-       "beard": 4,
-       "hair": 4,
-       "halo": 8,
-       "holdL": "key",
-       "holdR": "book",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 2,
-       "mantle": 1,
-       "veil": 3,
-       "halo": 4,
-       "holdL": "palm",
-       "attr": 3
-      },
-      {
-       "pose": "bless",
-       "robe": 4,
-       "mantle": 6,
-       "beard": 4,
-       "hair": 4,
-       "halo": 2,
-       "mitre": 2,
-       "holdR": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "bless",
-       "robe": 3,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "holdR": "sword",
-       "attr": 4
-      },
-      {
-       "pose": "stand",
-       "robe": 6,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "crown": 2,
-       "holdL": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "offer",
-       "robe": 1,
-       "mantle": 0,
-       "veil": 4,
-       "halo": 2,
-       "crown": 2
-      }
-     ],
-     "hubCast": [
-      {
-       "pose": "bless",
-       "robe": 1,
-       "mantle": 0,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "crossNimbus": true,
-       "bless": "L",
-       "holdR": "book",
-       "attr": 4
-      }
      ],
      "lead": 0.009,
      "minPane": 0.0004,
@@ -670,6 +353,9 @@
     {
      "kind": "glass",
      "form": "stone",
+     "plan": {
+      "kind": "rose"
+     },
      "opening": {
       "shape": "circle"
      },
@@ -684,97 +370,6 @@
       1,
       3,
       2
-     ],
-     "cast": [
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "book",
-       "robe": 7,
-       "mantle": 2,
-       "beard": 4,
-       "hair": 4,
-       "halo": 8,
-       "holdL": "key",
-       "holdR": "book",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 2,
-       "mantle": 1,
-       "veil": 3,
-       "halo": 4,
-       "holdL": "palm",
-       "attr": 3
-      },
-      {
-       "pose": "bless",
-       "robe": 4,
-       "mantle": 6,
-       "beard": 4,
-       "hair": 4,
-       "halo": 2,
-       "mitre": 2,
-       "holdR": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "bless",
-       "robe": 3,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "holdR": "sword",
-       "attr": 4
-      },
-      {
-       "pose": "stand",
-       "robe": 6,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "crown": 2,
-       "holdL": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "offer",
-       "robe": 1,
-       "mantle": 0,
-       "veil": 4,
-       "halo": 2,
-       "crown": 2
-      }
-     ],
-     "hubCast": [
-      {
-       "pose": "bless",
-       "robe": 1,
-       "mantle": 0,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "crossNimbus": true,
-       "bless": "L",
-       "holdR": "book",
-       "attr": 4
-      }
      ],
      "lead": 0.009,
      "minPane": 0.0004,
@@ -804,6 +399,9 @@
     {
      "kind": "glass",
      "form": "stone",
+     "plan": {
+      "kind": "rose"
+     },
      "opening": {
       "shape": "circle"
      },
@@ -818,97 +416,6 @@
       1,
       3,
       2
-     ],
-     "cast": [
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "book",
-       "robe": 7,
-       "mantle": 2,
-       "beard": 4,
-       "hair": 4,
-       "halo": 8,
-       "holdL": "key",
-       "holdR": "book",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 2,
-       "mantle": 1,
-       "veil": 3,
-       "halo": 4,
-       "holdL": "palm",
-       "attr": 3
-      },
-      {
-       "pose": "bless",
-       "robe": 4,
-       "mantle": 6,
-       "beard": 4,
-       "hair": 4,
-       "halo": 2,
-       "mitre": 2,
-       "holdR": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "bless",
-       "robe": 3,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "holdR": "sword",
-       "attr": 4
-      },
-      {
-       "pose": "stand",
-       "robe": 6,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "crown": 2,
-       "holdL": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "offer",
-       "robe": 1,
-       "mantle": 0,
-       "veil": 4,
-       "halo": 2,
-       "crown": 2
-      }
-     ],
-     "hubCast": [
-      {
-       "pose": "bless",
-       "robe": 1,
-       "mantle": 0,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "crossNimbus": true,
-       "bless": "L",
-       "holdR": "book",
-       "attr": 4
-      }
      ],
      "lead": 0.009,
      "minPane": 0.0004,
@@ -938,6 +445,9 @@
     {
      "kind": "glass",
      "form": "stone",
+     "plan": {
+      "kind": "rose"
+     },
      "opening": {
       "shape": "circle"
      },
@@ -952,97 +462,6 @@
       1,
       3,
       2
-     ],
-     "cast": [
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "book",
-       "robe": 7,
-       "mantle": 2,
-       "beard": 4,
-       "hair": 4,
-       "halo": 8,
-       "holdL": "key",
-       "holdR": "book",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 2,
-       "mantle": 1,
-       "veil": 3,
-       "halo": 4,
-       "holdL": "palm",
-       "attr": 3
-      },
-      {
-       "pose": "bless",
-       "robe": 4,
-       "mantle": 6,
-       "beard": 4,
-       "hair": 4,
-       "halo": 2,
-       "mitre": 2,
-       "holdR": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "orant",
-       "robe": 4,
-       "mantle": 2,
-       "hair": 8,
-       "halo": 2,
-       "wings": 7
-      },
-      {
-       "pose": "bless",
-       "robe": 3,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "holdR": "sword",
-       "attr": 4
-      },
-      {
-       "pose": "stand",
-       "robe": 6,
-       "mantle": 1,
-       "beard": 8,
-       "hair": 8,
-       "crown": 2,
-       "holdL": "staff",
-       "attr": 2
-      },
-      {
-       "pose": "offer",
-       "robe": 1,
-       "mantle": 0,
-       "veil": 4,
-       "halo": 2,
-       "crown": 2
-      }
-     ],
-     "hubCast": [
-      {
-       "pose": "bless",
-       "robe": 1,
-       "mantle": 0,
-       "beard": 8,
-       "hair": 8,
-       "halo": 2,
-       "crossNimbus": true,
-       "bless": "L",
-       "holdR": "book",
-       "attr": 4
-      }
      ],
      "lead": 0.009,
      "minPane": 0.0004,
@@ -1068,7 +487,7 @@
    ],
    "ground": 0,
    "res": 1536,
-   "_about": "Saint Peter under a canopy, a ruby ground, as in Chartres's choir clerestory",
+   "_about": "Saint Peter under a canopy, with what the seed puts with him",
    "layers": [
     {
      "kind": "glass",
@@ -1091,31 +510,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "saint",
-       "h": 1,
-       "cast": [
-        {
-         "pose": "book",
-         "robe": 7,
-         "mantle": 2,
-         "beard": 4,
-         "hair": 4,
-         "halo": 8,
-         "holdL": "key",
-         "holdR": "book",
-         "attr": 2
-        }
-       ],
-       "ground": 1,
-       "canopy": 2,
-       "canopy2": 4,
-       "base": 3,
-       "spring": 0.74
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1126,7 +522,11 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "saint",
+      "who": "peter"
+     }
     }
    ]
   },
@@ -1146,7 +546,7 @@
    ],
    "ground": 0,
    "res": 1536,
-   "_about": "Saint Paul, on cobalt",
+   "_about": "Saint Paul",
    "layers": [
     {
      "kind": "glass",
@@ -1169,31 +569,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "saint",
-       "h": 1,
-       "cast": [
-        {
-         "pose": "bless",
-         "robe": 3,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "halo": 2,
-         "holdR": "sword",
-         "attr": 4
-        }
-       ],
-       "ground": 0,
-       "canopy": 2,
-       "canopy2": 4,
-       "base": 3,
-       "spring": 0.74,
-       "arch": 1
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1204,7 +581,11 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "saint",
+      "who": "paul"
+     }
     }
    ]
   },
@@ -1224,7 +605,7 @@
    ],
    "ground": 0,
    "res": 1536,
-   "_about": "a bishop, on cobalt",
+   "_about": "a bishop saint",
    "layers": [
     {
      "kind": "glass",
@@ -1247,32 +628,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "saint",
-       "h": 1,
-       "cast": [
-        {
-         "pose": "bless",
-         "robe": 4,
-         "mantle": 6,
-         "beard": 4,
-         "hair": 4,
-         "halo": 2,
-         "mitre": 2,
-         "holdR": "staff",
-         "attr": 2
-        }
-       ],
-       "ground": 0,
-       "canopy": 2,
-       "canopy2": 4,
-       "base": 3,
-       "spring": 0.74,
-       "arch": 1
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1283,7 +640,11 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "saint",
+      "who": "nicholas"
+     }
     }
    ]
   },
@@ -1303,7 +664,7 @@
    ],
    "ground": 0,
    "res": 1536,
-   "_about": "the Virgin, on ruby",
+   "_about": "the Virgin, crowned",
    "layers": [
     {
      "kind": "glass",
@@ -1326,29 +687,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "saint",
-       "h": 1,
-       "cast": [
-        {
-         "pose": "offer",
-         "robe": 1,
-         "mantle": 0,
-         "veil": 4,
-         "halo": 2,
-         "crown": 2
-        }
-       ],
-       "ground": 1,
-       "canopy": 2,
-       "canopy2": 4,
-       "base": 3,
-       "spring": 0.74,
-       "arch": 0
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1359,7 +699,11 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "saint",
+      "who": "mary-queen"
+     }
     }
    ]
   },
@@ -1379,7 +723,7 @@
    ],
    "ground": 0,
    "res": 1536,
-   "_about": "a king, on ruby",
+   "_about": "a king",
    "layers": [
     {
      "kind": "glass",
@@ -1402,31 +746,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "saint",
-       "h": 1,
-       "cast": [
-        {
-         "pose": "stand",
-         "robe": 6,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "crown": 2,
-         "holdL": "staff",
-         "attr": 2
-        }
-       ],
-       "ground": 1,
-       "canopy": 2,
-       "canopy2": 4,
-       "base": 3,
-       "spring": 0.74,
-       "arch": 0
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1437,7 +758,11 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "saint",
+      "who": "louis"
+     }
     }
    ]
   },
@@ -1457,7 +782,7 @@
    ],
    "ground": 0,
    "res": 1536,
-   "_about": "a martyr with her palm, on cobalt",
+   "_about": "a martyr with her palm",
    "layers": [
     {
      "kind": "glass",
@@ -1480,30 +805,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "saint",
-       "h": 1,
-       "cast": [
-        {
-         "pose": "orant",
-         "robe": 2,
-         "mantle": 1,
-         "veil": 3,
-         "halo": 4,
-         "holdL": "palm",
-         "attr": 3
-        }
-       ],
-       "ground": 0,
-       "canopy": 2,
-       "canopy2": 4,
-       "base": 3,
-       "spring": 0.74,
-       "arch": 1
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1514,7 +817,69 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "saint",
+      "who": "agnes"
+     }
+    }
+   ]
+  },
+  "saint any": {
+   "size": [
+    3,
+    1
+   ],
+   "across": 3,
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 1536,
+   "_about": "any of forty saints, told apart by what they hold and what they wear",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": true,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 3
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "saint"
+     }
     }
    ]
   },
@@ -1534,7 +899,7 @@
    ],
    "ground": 0,
    "res": 1536,
-   "_about": "three medallions on a red and blue diaper: a story told upwards",
+   "_about": "medallions on a diaper: a story told upwards",
    "layers": [
     {
      "kind": "glass",
@@ -1557,87 +922,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "medallion",
-       "shape": "circle",
-       "ground": 0,
-       "cast": [
-        {
-         "pose": "bless",
-         "robe": 4,
-         "mantle": 6,
-         "beard": 4,
-         "hair": 4,
-         "halo": 2,
-         "mitre": 2,
-         "holdR": "staff",
-         "attr": 2,
-         "x": -24,
-         "size": 0.82,
-         "turn": 0.6
-        },
-        {
-         "pose": "stand",
-         "robe": 6,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "crown": 2,
-         "holdL": "staff",
-         "attr": 2,
-         "x": 26,
-         "size": 0.82,
-         "turn": -0.6
-        }
-       ]
-      },
-      {
-       "form": "medallion",
-       "shape": "quatrefoil",
-       "ground": 0,
-       "cast": [
-        {
-         "pose": "sit",
-         "robe": 1,
-         "mantle": 0,
-         "beard": 8,
-         "hair": 8,
-         "halo": 2,
-         "crossNimbus": true,
-         "bless": "L",
-         "holdR": "book",
-         "attr": 4,
-         "size": 0.95
-        }
-       ],
-       "props": [
-        {
-         "is": "throne",
-         "fill": 2,
-         "size": 0.95
-        }
-       ]
-      },
-      {
-       "form": "medallion",
-       "shape": "lozenge",
-       "ground": 0,
-       "cast": [
-        {
-         "pose": "orant",
-         "robe": 4,
-         "mantle": 2,
-         "hair": 8,
-         "halo": 2,
-         "wings": 7,
-         "size": 0.72
-        }
-       ],
-       "drop": 0.25
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1648,7 +934,17 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "infancy",
+       "passion",
+       "genesis",
+       "lives"
+      ],
+      "layout": "stack"
+     }
     }
    ]
   },
@@ -1668,7 +964,7 @@
    ],
    "ground": 0,
    "res": 1536,
-   "_about": "a narrative light: a ship on the sea, an annunciation, the three kings at a tower",
+   "_about": "a narrative light, its layout the seed's: medallions, clusters, registers, a band in white, a Tree of Jesse",
    "layers": [
     {
      "kind": "glass",
@@ -1691,132 +987,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "medallion",
-       "shape": "circle",
-       "ground": 7,
-       "cast": [
-        {
-         "pose": "stand",
-         "robe": 7,
-         "mantle": 2,
-         "beard": 4,
-         "hair": 4,
-         "halo": 8,
-         "holdL": null,
-         "holdR": null,
-         "attr": 2,
-         "x": -14,
-         "size": 0.55,
-         "y": 22,
-         "turn": 0.6
-        },
-        {
-         "pose": "point",
-         "robe": 3,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "halo": 2,
-         "holdR": null,
-         "attr": 4,
-         "x": 16,
-         "size": 0.55,
-         "y": 22,
-         "turn": -0.6
-        }
-       ],
-       "props": [
-        {
-         "is": "ship",
-         "y": 8,
-         "size": 0.85
-        },
-        {
-         "is": "wave",
-         "y": 2,
-         "size": 1.1
-        }
-       ]
-      },
-      {
-       "form": "medallion",
-       "shape": "circle",
-       "ground": 0,
-       "cast": [
-        {
-         "pose": "point",
-         "robe": 4,
-         "mantle": 2,
-         "hair": 8,
-         "halo": 2,
-         "wings": 7,
-         "x": -22,
-         "size": 0.78,
-         "turn": 0.6
-        },
-        {
-         "pose": "stand",
-         "robe": 1,
-         "mantle": 0,
-         "veil": 4,
-         "halo": 2,
-         "crown": null,
-         "x": 24,
-         "size": 0.78,
-         "turn": -0.6
-        }
-       ]
-      },
-      {
-       "form": "medallion",
-       "shape": "circle",
-       "ground": 0,
-       "cast": [
-        {
-         "pose": "stand",
-         "robe": 6,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "crown": 2,
-         "holdL": "staff",
-         "attr": 2,
-         "x": -24,
-         "size": 0.72,
-         "turn": 0.6
-        },
-        {
-         "pose": "offer",
-         "robe": 3,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "crown": 2,
-         "holdL": "staff",
-         "attr": 2,
-         "x": 2,
-         "size": 0.72,
-         "turn": 0.6
-        }
-       ],
-       "props": [
-        {
-         "is": "tower",
-         "x": 34,
-         "size": 0.8,
-         "fill": 4
-        },
-        {
-         "is": "ground",
-         "y": 0,
-         "fill": 3
-        }
-       ]
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1827,7 +999,16 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "infancy",
+       "passion",
+       "genesis",
+       "lives"
+      ]
+     }
     }
    ]
   },
@@ -1846,7 +1027,7 @@
    ],
    "ground": 0,
    "res": 512,
-   "_about": "one medallion, for a short light",
+   "_about": "one panel, for a short light: the apostles' boat on the sea",
    "layers": [
     {
      "kind": "glass",
@@ -1869,57 +1050,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "medallion",
-       "shape": "circle",
-       "ground": 7,
-       "cast": [
-        {
-         "pose": "stand",
-         "robe": 7,
-         "mantle": 2,
-         "beard": 4,
-         "hair": 4,
-         "halo": 8,
-         "holdL": null,
-         "holdR": null,
-         "attr": 2,
-         "x": -14,
-         "size": 0.55,
-         "y": 22,
-         "turn": 0.6
-        },
-        {
-         "pose": "point",
-         "robe": 3,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "halo": 2,
-         "holdR": null,
-         "attr": 4,
-         "x": 16,
-         "size": 0.55,
-         "y": 22,
-         "turn": -0.6
-        }
-       ],
-       "props": [
-        {
-         "is": "ship",
-         "y": 8,
-         "size": 0.85
-        },
-        {
-         "is": "wave",
-         "y": 2,
-         "size": 1.1
-        }
-       ]
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -1930,7 +1062,11 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "scene": "ship"
+     }
     }
    ]
   },
@@ -1949,7 +1085,7 @@
    ],
    "ground": 0,
    "res": 512,
-   "_about": "one medallion: an annunciation",
+   "_about": "one panel: the Annunciation",
    "layers": [
     {
      "kind": "glass",
@@ -1972,38 +1108,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "medallion",
-       "shape": "circle",
-       "ground": 0,
-       "cast": [
-        {
-         "pose": "point",
-         "robe": 4,
-         "mantle": 2,
-         "hair": 8,
-         "halo": 2,
-         "wings": 7,
-         "x": -22,
-         "size": 0.78,
-         "turn": 0.6
-        },
-        {
-         "pose": "stand",
-         "robe": 1,
-         "mantle": 0,
-         "veil": 4,
-         "halo": 2,
-         "crown": null,
-         "x": 24,
-         "size": 0.78,
-         "turn": -0.6
-        }
-       ]
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -2014,7 +1120,11 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "scene": "annunciation"
+     }
     }
    ]
   },
@@ -2033,7 +1143,7 @@
    ],
    "ground": 0,
    "res": 512,
-   "_about": "one medallion: the kings",
+   "_about": "one panel: the Adoration of the Magi",
    "layers": [
     {
      "kind": "glass",
@@ -2056,55 +1166,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "medallion",
-       "shape": "circle",
-       "ground": 0,
-       "cast": [
-        {
-         "pose": "stand",
-         "robe": 6,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "crown": 2,
-         "holdL": "staff",
-         "attr": 2,
-         "x": -24,
-         "size": 0.72,
-         "turn": 0.6
-        },
-        {
-         "pose": "offer",
-         "robe": 3,
-         "mantle": 1,
-         "beard": 8,
-         "hair": 8,
-         "crown": 2,
-         "holdL": "staff",
-         "attr": 2,
-         "x": 2,
-         "size": 0.72,
-         "turn": 0.6
-        }
-       ],
-       "props": [
-        {
-         "is": "tower",
-         "x": 34,
-         "size": 0.8,
-         "fill": 4
-        },
-        {
-         "is": "ground",
-         "y": 0,
-         "fill": 3
-        }
-       ]
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -2115,7 +1178,11 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "scene": "magi"
+     }
     }
    ]
   },
@@ -2134,7 +1201,7 @@
    ],
    "ground": 0,
    "res": 512,
-   "_about": "one medallion: a majesty",
+   "_about": "one panel: Christ in Majesty",
    "layers": [
     {
      "kind": "glass",
@@ -2157,36 +1224,8 @@
       "line": 9,
       "block": 0.16
      },
-     "panels": [
-      {
-       "form": "medallion",
-       "shape": "quatrefoil",
-       "ground": 0,
-       "cast": [
-        {
-         "pose": "sit",
-         "robe": 1,
-         "mantle": 0,
-         "beard": 8,
-         "hair": 8,
-         "halo": 2,
-         "crossNimbus": true,
-         "bless": "L",
-         "holdR": "book",
-         "attr": 4,
-         "size": 0.95
-        }
-       ],
-       "props": [
-        {
-         "is": "throne",
-         "fill": 2,
-         "size": 0.95
-        }
-       ]
-      }
-     ],
-     "lead": 0.0075,
+     "panels": [],
+     "lead": 0.0055,
      "minPane": 0.00012,
      "maxPane": 0.08,
      "maxAspect": 6,
@@ -2197,7 +1236,557 @@
      ],
      "fleuron": 7,
      "pearl": 4,
-     "seed": 3
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "scene": "majesty"
+     }
+    }
+   ]
+  },
+  "window infancy": {
+   "size": [
+    3.3,
+    1
+   ],
+   "across": 3,
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 1536,
+   "_about": "the Infancy of Christ",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": true,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 3.3
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "infancy"
+      ]
+     }
+    }
+   ]
+  },
+  "window passion": {
+   "size": [
+    3.3,
+    1
+   ],
+   "across": 3,
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 1536,
+   "_about": "the Passion, read from the foot",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": true,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 3.3
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "passion"
+      ]
+     }
+    }
+   ]
+  },
+  "window genesis": {
+   "size": [
+    3.3,
+    1
+   ],
+   "across": 3,
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 1536,
+   "_about": "the Old Testament, from Eden to Jonah",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": true,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 3.3
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "genesis"
+      ]
+     }
+    }
+   ]
+  },
+  "window lives": {
+   "size": [
+    3.3,
+    1
+   ],
+   "across": 3,
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 1536,
+   "_about": "the lives of the saints",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": true,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 3.3
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "lives"
+      ]
+     }
+    }
+   ]
+  },
+  "window jesse": {
+   "size": [
+    3.3,
+    1
+   ],
+   "across": 3,
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 1536,
+   "_about": "the Tree of Jesse: his line in ovals on a vine, up to the Virgin and Christ",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": true,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 3.3
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "tree"
+     }
+    }
+   ]
+  },
+  "window guilds": {
+   "size": [
+    3.3,
+    1
+   ],
+   "across": 3,
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 1536,
+   "_about": "what the guilds gave at Chartres, and signed with their trades",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": true,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 3.3
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "guilds"
+      ]
+     }
+    }
+   ]
+  },
+  "panel months": {
+   "size": [
+    1,
+    1.1
+   ],
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "a labour of the months",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": false,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 1.1
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "months"
+      ]
+     }
+    }
+   ]
+  },
+  "panel guild": {
+   "size": [
+    1,
+    1.1
+   ],
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "a guild's signature, low in its window",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": false,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 1.1
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "guilds"
+      ]
+     }
+    }
+   ]
+  },
+  "panel any": {
+   "size": [
+    1,
+    1.1
+   ],
+   "repeat": true,
+   "palette": "chartres",
+   "palettes": [
+    "chartres",
+    "paris",
+    "cologne",
+    "grisaille"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "one scene, any of them",
+   "layers": [
+    {
+     "kind": "glass",
+     "form": "light",
+     "lie": false,
+     "opening": {
+      "shape": "rect",
+      "w": 1,
+      "h": 1.1
+     },
+     "border": {
+      "t": 0.11,
+      "fills": [
+       1,
+       0,
+       2,
+       0
+      ],
+      "pearl": 4,
+      "line": 9,
+      "block": 0.16
+     },
+     "panels": [],
+     "lead": 0.0055,
+     "minPane": 0.00012,
+     "maxPane": 0.08,
+     "maxAspect": 6,
+     "depth": 0.3,
+     "ground": [
+      1,
+      9
+     ],
+     "fleuron": 7,
+     "pearl": 4,
+     "seed": 3,
+     "plan": {
+      "kind": "story",
+      "cycles": [
+       "infancy",
+       "passion",
+       "genesis",
+       "lives"
+      ]
+     }
     }
    ]
   },

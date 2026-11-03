@@ -1,0 +1,285 @@
+{
+ "name": "Phoenix",
+ "_about": "THE PHOENIX (hoo), the gilt bronze bird on a Japanese hall's ridge or finial -- Kinkaku-ji's on its pyramid, the pair on the Phoenix Hall's ridge ends: straight `bars` read as a silhouette (body, breast, neck and crest, two legs, the wings raised, the tail's fan), facing +z, on a square base. `s` its size (1: about a metre to the crest), `bw` `bh` the base, `pedestal` \"disc\" a round one, \"none\" none (set bh 0 with it), `tail_rise` the tail swept up. Written by tools/archgen/japanese.py.",
+ "params": {
+  "detail": 4,
+  "s": 1.0,
+  "bw": 0.62,
+  "bh": 0.2,
+  "pedestal": "square",
+  "tail_rise": 0
+ },
+ "build": [
+  "base",
+  "disc",
+  "legs",
+  "body",
+  "head",
+  "feathers"
+ ],
+ "parts": {
+  "base": {
+   "type": "box",
+   "width": "bw",
+   "length": "bw",
+   "height": "bh",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "pedestal": "square"
+   },
+   "_about": "the square base the bird stands on"
+  },
+  "disc": {
+   "type": "prism",
+   "plan": {
+    "sides": 12,
+    "radius": "bw / 2"
+   },
+   "height": "bh",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "pedestal": "disc"
+   },
+   "_about": "the round pedestal the bird stands on (pedestal \"disc\")"
+  },
+  "legs": {
+   "type": "bars",
+   "lines": [
+    [
+     "-0.07 * s",
+     "bh + 0 * s",
+     "0 * s",
+     "-0.03 * s",
+     "bh + 0.33 * s",
+     "0 * s"
+    ],
+    [
+     "0.07 * s",
+     "bh + 0 * s",
+     "0 * s",
+     "0.03 * s",
+     "bh + 0.33 * s",
+     "0 * s"
+    ]
+   ],
+   "w": "0.035 * s",
+   "h": "0.035 * s",
+   "caps": false,
+   "kind": "moulding"
+  },
+  "body": {
+   "type": "bars",
+   "paths": [
+    [
+     [
+      "0 * s",
+      "bh + 0.34 * s",
+      "-0.28 * s"
+     ],
+     [
+      "0 * s",
+      "bh + 0.42 * s",
+      "0 * s"
+     ],
+     [
+      "0 * s",
+      "bh + 0.52 * s",
+      "0.16 * s"
+     ],
+     [
+      "0 * s",
+      "bh + 0.74 * s",
+      "0.22 * s"
+     ],
+     [
+      "0 * s",
+      "bh + 0.9 * s",
+      "0.2 * s"
+     ]
+    ]
+   ],
+   "w": "0.16 * s",
+   "h": "0.17 * s",
+   "kind": "moulding",
+   "_about": "the body from the tail's root up the breast to the neck"
+  },
+  "head": {
+   "type": "bars",
+   "lines": [
+    [
+     "0 * s",
+     "bh + 0.9 * s",
+     "0.2 * s",
+     "0 * s",
+     "bh + 0.86 * s",
+     "0.34 * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.92 * s",
+     "0.2 * s",
+     "0 * s",
+     "bh + 1.05 * s",
+     "0.1 * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.88 * s",
+     "0.17 * s",
+     "0 * s",
+     "bh + 0.98 * s",
+     "0.04 * s"
+    ]
+   ],
+   "w": "0.05 * s",
+   "h": "0.08 * s",
+   "caps": false,
+   "kind": "moulding",
+   "_about": "the beak, the crest and the wattle"
+  },
+  "feathers": {
+   "type": "bars",
+   "lines": [
+    [
+     "-0.07 * s",
+     "bh + 0.46 * s",
+     "-0.02 * s",
+     "-0.12 * s",
+     "bh + 1.08 * s",
+     "-0.02 * s"
+    ],
+    [
+     "-0.07 * s",
+     "bh + 0.46 * s",
+     "-0.02 * s",
+     "-0.17 * s",
+     "bh + 1.0 * s",
+     "-0.14 * s"
+    ],
+    [
+     "-0.07 * s",
+     "bh + 0.46 * s",
+     "-0.02 * s",
+     "-0.22 * s",
+     "bh + 0.9 * s",
+     "-0.22 * s"
+    ],
+    [
+     "-0.07 * s",
+     "bh + 0.46 * s",
+     "-0.02 * s",
+     "-0.27 * s",
+     "bh + 0.78 * s",
+     "-0.28 * s"
+    ],
+    [
+     "0.07 * s",
+     "bh + 0.46 * s",
+     "-0.02 * s",
+     "0.12 * s",
+     "bh + 1.08 * s",
+     "-0.02 * s"
+    ],
+    [
+     "0.07 * s",
+     "bh + 0.46 * s",
+     "-0.02 * s",
+     "0.17 * s",
+     "bh + 1.0 * s",
+     "-0.14 * s"
+    ],
+    [
+     "0.07 * s",
+     "bh + 0.46 * s",
+     "-0.02 * s",
+     "0.22 * s",
+     "bh + 0.9 * s",
+     "-0.22 * s"
+    ],
+    [
+     "0.07 * s",
+     "bh + 0.46 * s",
+     "-0.02 * s",
+     "0.27 * s",
+     "bh + 0.78 * s",
+     "-0.28 * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.36 * s",
+     "-0.26 * s",
+     "0 * s",
+     "bh + (0.64 + 1 * tail_rise) * s",
+     "(-0.98 + 0.3 * tail_rise) * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.36 * s",
+     "-0.26 * s",
+     "0.11 * s",
+     "bh + (0.58 + 0.85 * tail_rise) * s",
+     "(-0.96 + 0.255 * tail_rise) * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.36 * s",
+     "-0.26 * s",
+     "-0.11 * s",
+     "bh + (0.58 + 0.85 * tail_rise) * s",
+     "(-0.96 + 0.255 * tail_rise) * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.36 * s",
+     "-0.26 * s",
+     "0.22 * s",
+     "bh + (0.48 + 0.65 * tail_rise) * s",
+     "(-0.88 + 0.195 * tail_rise) * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.36 * s",
+     "-0.26 * s",
+     "-0.22 * s",
+     "bh + (0.48 + 0.65 * tail_rise) * s",
+     "(-0.88 + 0.195 * tail_rise) * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.36 * s",
+     "-0.26 * s",
+     "0.3 * s",
+     "bh + (0.36 + 0.45 * tail_rise) * s",
+     "(-0.76 + 0.135 * tail_rise) * s"
+    ],
+    [
+     "0 * s",
+     "bh + 0.36 * s",
+     "-0.26 * s",
+     "-0.3 * s",
+     "bh + (0.36 + 0.45 * tail_rise) * s",
+     "(-0.76 + 0.135 * tail_rise) * s"
+    ]
+   ],
+   "w": "0.03 * s",
+   "h": "0.06 * s",
+   "caps": false,
+   "kind": "moulding",
+   "_about": "the raised wings, four flight feathers a side, and the fan of the tail"
+  }
+ }
+}

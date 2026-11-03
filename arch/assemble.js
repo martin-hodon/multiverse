@@ -19,9 +19,14 @@ import { coursesOf, coursesMesh, faceGaps } from "./courses.js";   // COURSES: p
 import { orderSize, pilasterSpots, pilasterMesh } from "./order.js";   // THE APPLIED ORDER: pilasters and entablature, sized from the storey
 import { index as solidIndex, insideOf, cellOf, heightOver } from "./solid.js";
 import { fitFurniture } from "./room.js";   // the furniture given room: moved off chimneys, columns and doorways, or left out
+import { twistedShaft } from "./build.js";   // a column's `twist`: the cable and the Solomonic shaft
 import { domeRows, earClip, lathe } from "./build.js";
 import { gableFriezeMesh, rakeCorniceMesh } from "./lombard.js";
 import { helmMesh } from "./helm.js";
+import { pinnacleMesh, crestingMesh, openSpireMesh } from "./pinnacle.js";
+import { barsMesh } from "./tracery.js";
+import { barMesh, trussBars } from "./truss.js";   // IRON IN THE AIR: bars between any two points, and trusses of them
+import { sweepMesh } from "./sweep.js";   // A PROFILE ALONG A CURVE: a serpentine bench, a coping, a kerb, a battered wall on a bend
 import { shikharaMesh, shikharaHeight, samvaranaMesh, samvaranaHeight } from "./shikhara.js";
 import { evalNum, evalValue } from "../expr.js";
 import { buildItem } from "../items.js";   // FURNITURE: the rooms' chairs, tables, beds and chests are items (assets/items/furniture)
@@ -65,6 +70,10 @@ export const ORDERS = {
   //   abacus only as wide as the shaft, so from below the architrave seems to float over the flowers
   hathoric:    { base: .4,  baseR: 1.22, cap: 3.8, capR: 1.18, abacus: .1,  flare: 1,   taper: .94, hathor: { block: .52, naos: .3, naosR: .86, lip: .08 } },
   campaniform: { base: .4,  baseR: 1.22, cap: 2.4, capR: 1.75, abacus: .14, flare: 1,   taper: .9,  bell: true },
+  // THE OTTOMAN COLUMN (a portico's, a kiosk's): a marble monolith hardly narrowing, on a moulded disc, under the tall
+  //   capital -- only the outline of the baklava capital: a tall plain flare to a thin abacus, faceted by the column's
+  //   `sides` (8 reads as the octagonal capital; its lozenge or muqarnas carving is not modelled)
+  ottoman:     { base: .6,  baseR: 1.25, cap: 1.8, capR: 1.35, abacus: .14, flare: .97, taper: .96 },
 };
 
 // An arch head's own numbers are expressions too -- "seg", "storeyH * 0.2" -- so they are evaluated here
@@ -266,6 +275,7 @@ export function usesOf(doc) {
   for (const d of Object.values(doc.parts ?? {})) {
     if (d && d.type === "component" && d.use) out.add(d.use);
     if (d && d.type === "tiered" && d.brackets) out.add(d.brackets.use ?? "components/dougong");   // (tiered.js: its bracket sets)
+    if (d && d.type === "tiered" && d.top?.ridgeEnds) out.add(d.top.ridgeEnds.use ?? "components/phoenix");   // (and its ridge's ornaments)
     if (d && d.type === "zone" && FURNISHING.zones[d.zone]?.use) out.add(FURNISHING.zones[d.zone].use);
   }
   return [...out];
@@ -280,12 +290,14 @@ const itemsOf = (doc) => {
 };
 const itemUses = (doc) => [...new Set([doc.use, ...(doc.parts ?? []).map((q) => q?.use)].filter((u) => typeof u === "string"))];
 // fetchDoc(path) takes a path under assets/architecture; an item's is reached from there ("../items/...")
-export async function loadUses(doc, fetchDoc) {
+// (a component the page has REGISTERED already -- the game's imports -- is looked into all the same: what IT uses may be
+//  newer than the registry, as a lantern drum-dome builds by name; `seen` keeps each looked into once)
+export async function loadUses(doc, fetchDoc, seen = new Set()) {
   for (const path of usesOf(doc)) {
-    if (LIB.has(path)) continue;
-    const sub = await fetchDoc(path);
-    LIB.set(path, sub);
-    await loadUses(sub, fetchDoc);
+    if (seen.has(path)) continue;
+    seen.add(path);
+    if (!LIB.has(path)) LIB.set(path, await fetchDoc(path));
+    await loadUses(LIB.get(path), fetchDoc, seen);
   }
   const items = itemsOf(doc);
   if (items.length && !LIB.has("items/materials")) LIB.set("items/materials", await fetchDoc("../items/materials"));
@@ -328,7 +340,7 @@ function laidOut(spec, L, P, params) {
     // `with`: other openings among them (a door in the row: `at` from the face's middle), and `clear` [[a, b], ...]: stretches
     // (from the middle) kept blind -- a stair against the face; a fitted opening that would overlap either is left out
     const k = Math.max(0, Math.floor((L - 2 * end - w) / ev + 1e-9) + 1), one = openingOf({ ...spec, at: 0 }, P, params);
-    const extra = (spec.with ?? []).map((q) => ({ ...openingOf(q, P, params), at: L / 2 + P(q.at, 0) }));
+    const extra = (spec.with ?? []).filter((q) => passes(q.when, params)).map((q) => ({ ...openingOf(q, P, params), at: L / 2 + P(q.at, 0) }));
     const blind = [...(spec.clear ?? []).map(([a, b]) => [L / 2 + P(a), L / 2 + P(b)]), ...extra.map((q) => [q.at - q.width / 2, q.at + q.width / 2])];
     const row = Array.from({ length: k }, (_, j) => ({ ...one, at: L / 2 + (j - (k - 1) / 2) * ev }))
       .filter((q) => !blind.some(([a, b]) => q.at + w / 2 > a - .25 && q.at - w / 2 < b + .25));
@@ -339,7 +351,8 @@ function laidOut(spec, L, P, params) {
     if (shift < -1e-9) throw new Error(`a face ${L.toFixed(2)}m long cannot hold a pattern ${o.width.toFixed(2)}m long`);
     return o.openings.map((q) => ({ ...q, at: q.at + shift }));
   }
-  return spec.map((k) => ({ ...openingOf(k, P, params), at: L / 2 + P(k.at, 0) }));
+  // (an opening listed may carry a `when`, as a part does: a tower's door where `portals` is three, its window where one)
+  return spec.filter((k) => passes(k.when, params)).map((k) => ({ ...openingOf(k, P, params), at: L / 2 + P(k.at, 0) }));
 }
 
 // A FACE'S TIERS: a list of { h, openings } bands (the last one takes whatever height is left if it gives none),
@@ -594,10 +607,18 @@ function basilicaOf(def, P, params) {
               vaultT: .5, clerSpring: 1.5, pitch: 55, aislePitch: 22, overhang: .5, lights: 4, aisleSill: 2.5, aisleWin: 3,
               buttressW: 1.6, buttressD: 2.8, flyW: .8, ribW: .32, ribD: .34 };
   const d = Object.fromEntries(Object.entries(D).map(([k, v]) => [k, P(def[k], v)]));
-  for (const k of ["arcadeRise", "vaultRise", "arm", "transeptT", "aisles", "flyerStages", "aisleDrop"]) if (def[k] !== undefined) d[k] = P(def[k]);
+  for (const k of ["arcadeRise", "vaultRise", "arm", "transeptT", "aisles", "flyerStages", "aisleDrop", "chancelBays", "sideApse", "choirWin", "choirButtress", "sideApsePitch"]) if (def[k] !== undefined) d[k] = P(def[k]);
+  // (a brick hall church: the wall raised over the vault, the windows' heads, wall piers INSIDE instead of
+  //  buttresses, a pent roof ring round the wall, doors in the aisle wall -- gothic.js)
+  for (const k of ["eaveRise", "aisleWinTop", "buttressIn", "buttressInTop"]) if (def[k] !== undefined) d[k] = P(def[k]);
+  if (def.pent) d.pent = Object.fromEntries(Object.entries(def.pent).map(([k, v]) => [k, P(v)]));
+  if (def.aisleDoors) d.aisleDoors = def.aisleDoors.map((q) => Object.fromEntries(Object.entries(q).map(([k, v]) => [k, k === "head" ? v : P(v)])));
+  if (def.ambulatory !== undefined) d.ambulatory = flagOf(def.ambulatory, params);   // (false: the staggered chevet -- gothic.js)
+  if (def.transeptRose !== undefined) d.transeptRose = flagOf(def.transeptRose, params);   // (false: a pointed window in the transept fronts)
   if (def.transept) d.transept = def.transept.map((v) => P(v));
   d.flyers = def.flyers === undefined ? true : flagOf(def.flyers, params);
   d.pinnacles = def.pinnacles === undefined ? true : flagOf(def.pinnacles, params);
+  if (def.pinnacleKinds) d.pinnacleKinds = def.pinnacleKinds;   // (the kinds of pinnacle, by turns along the church: gothic.js, pinnacle.js)
   d.tracery = def.tracery === undefined ? true : flagOf(def.tracery, params);
   d.wimpergs = def.wimpergs === undefined ? false : flagOf(def.wimpergs, params);
   d.hall = def.hall === undefined ? false : flagOf(def.hall, params);
@@ -903,8 +924,10 @@ function railingsFor(parts, spec, params) {
 }
 
 // `when` on a part: drawn only while a WORD parameter has the value (or one of the values) it names -- a fence's
-// `style` picks its rails, pickets, hurdles or dyke; a part without `when` is always drawn
-const passes = (when, params) => when === undefined || Object.entries(when).every(([k, v]) => (Array.isArray(v) ? v : [v]).includes(wordOf(k, params)));
+// `style` picks its rails, pickets, hurdles or dyke; a part without `when` is always drawn. A NUMBER parameter may be
+// asked too (a turret's `storeys`: 2 draws the two-storey shaft) -- the values named as numbers
+const passes = (when, params) => when === undefined || Object.entries(when).every(([k, v]) =>
+  (Array.isArray(v) ? v : [v]).includes(typeof params[k] === "number" ? params[k] : wordOf(k, params)));
 // `seat`: A ROOF THAT BEARS ON ITS WALL. A dome or a cone names the wall it stands on (a ring, or an enclosure on a
 // `sides` plan) and is lifted -- from its placement's height, as from the ground -- until its SOFFIT meets the wall's
 // outer edge 2 cm under the wall head: the rafters on the wall plate, the eaves running on past it, instead of a cone
@@ -934,9 +957,47 @@ function seatLift(name, def, defs, params) {
   return top - .02 - h;
 }
 
+// A PART OUT OF THE PLUMB, or out of round. `lean` { deg, toward [dx, dz], at [x, y, z], shift [x, y, z] }: tipped `deg` degrees
+// toward that heading about a level axis through `at`, then moved by `shift` (each storey of a tower that leans, carried to the
+// top of the one under it). `stretch` [sx, sy, sz], about the part's own placement: an oval dome from a round one. Baked into
+// the part's triangles, one placement at [0, 0, 0, 0] -- the instance [yaw, x, y, z] has no tilt -- so what reads the stone (walls, floors,
+// support, the finish) reads it as it stands. A flight or a spiral loses its stair data: don't lean a stair you mean to climb.
+//   `each: true`: every placement tipped about its own foot (its own [x, y, z], plus `at`) -- a row of columns each leaning out,
+// not the row swung as one; with `local: true` the heading is in each placement's own frame, turned by its yaw (columns along a
+// curve, each leaning off the curve).
+function leaned(q, def, P, params) {
+  const n0 = q.geometry?.position?.length ?? 0;
+  if (!n0) return q;
+  const { lean, stretch } = def, [sx, sy, sz] = (stretch ?? [1, 1, 1]).map((v) => P(v));
+  const a = P(lean?.deg, 0) * Math.PI / 180, ca = Math.cos(a), sa = Math.sin(a);
+  const [dx0, dz0] = (lean?.toward ?? [1, 0]).map((v) => P(v)), dl = Math.hypot(dx0, dz0) || 1;
+  const [ax0, ay0, az0] = (lean?.at ?? [0, 0, 0]).map((v) => P(v)), [bx, by, bz] = (lean?.shift ?? [0, 0, 0]).map((v) => P(v));
+  const each = flagOf(lean?.each, params), local = flagOf(lean?.local, params);
+  const G = q.geometry, N = G.index.length, I0 = q.instances.length;
+  const pos = new Float32Array(n0 * I0), idx = new (n0 * I0 / 3 > 65535 ? Uint32Array : Uint16Array)(N * I0);
+  q.instances.forEach(([yaw, X, Y, Z], k) => {
+    const c = Math.cos(yaw), s = Math.sin(yaw), o = k * n0;
+    const [ax, ay, az] = each ? [X + ax0, Y + ay0, Z + az0] : [ax0, ay0, az0];
+    const dx = (local ? dx0 * c + dz0 * s : dx0) / dl, dz = (local ? -dx0 * s + dz0 * c : dz0) / dl;
+    for (let i = 0; i < n0; i += 3) {
+      const x0 = G.position[i] * sx, y0 = G.position[i + 1] * sy, z0 = G.position[i + 2] * sz;
+      const x = x0 * c + z0 * s + X - ax, y = y0 + Y - ay, z = -x0 * s + z0 * c + Z - az;
+      const u = x * dx + z * dz, u2 = u * ca + y * sa;   // (along the heading: tipped; across it: as it was)
+      pos[o + i] = x + (u2 - u) * dx + ax + bx; pos[o + i + 1] = -u * sa + y * ca + ay + by; pos[o + i + 2] = z + (u2 - u) * dz + az + bz;
+    }
+    for (let i = 0; i < N; i++) idx[k * N + i] = G.index[i] + k * n0 / 3;
+  });
+  const { face, count, bayWidth, lintels, edges, ...rest } = q;
+  return { ...rest, geometry: { position: pos, index: idx }, instances: [[0, 0, 0, 0]] };
+}
+
 export function buildPart(name, defs, params) {
   if (defs[name]?.when !== undefined && !passes(defs[name].when, params)) return [];
   const def = defs[name];
+  if (def && (def.lean || def.stretch)) {
+    const out = buildPart(name, { ...defs, [name]: { ...def, lean: undefined, stretch: undefined } }, params);
+    return [out].flat().map((q) => leaned(q, def, (v, d) => num_(v ?? d, params), params));
+  }
   if (def && def.seat && def.type === "dome") {
     const lift = seatLift(name, def, defs, params);
     const out = buildPart(name, { ...defs, [name]: { ...def, seat: undefined } }, params);
@@ -1376,9 +1437,29 @@ function buildPart_(name, defs, params) {
     const lift = chinese && def.rest ? restLift(levels, lv0[0].y, lo, hi) : 0;
     const m = chinese ? curvedRoof(mesh(), levels, { lo, hi, steps: Math.round(P(def.steps, 2 * detailOf(params) + 2)), ring: form === "pent",
                                                      upturn: P(def.upturn, 0), flare: P(def.flare, 0), reach: def.reach !== undefined ? P(def.reach) : undefined,
-                                                     perSide: Math.round(P(def.perSide, Math.max(4, 2 * detailOf(params)))), lift })
+                                                     perSide: Math.round(P(def.perSide, Math.max(4, 2 * detailOf(params)))), lift,
+                                                     // (`gaps` [{ side "n" "e" "s" "w", lo, hi }]: a skirt cut open there -- tiered's lifted bay)
+                                                     gaps: (def.gaps ?? []).map((g) => ({ side: { n: 0, e: 1, s: 2, w: 3 }[g.side] ?? P(g.side), lo: P(g.lo), hi: P(g.hi) })) })
                       : roofMesh(mesh(), levels, inner, wordOf(def.open, params) ?? null);
     const roof = { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "roof", ridge: levels[levels.length - 1].y + lift };
+    // (`hips` { w, h, beasts, beast }: A CHINESE ROOF'S HIP RIDGES -- a raised bar up each corner of the slopes, following their
+    //  curve, and `beasts` small figures in a row on its foot (the imperial ridge beasts), `beast` metres high; a part of
+    //  its own, "<roof> hips". curvedRoof gives each corner's line)
+    if (def.hips && chinese) {
+      const hm = mesh(), w = P(def.hips.w, .5), h = P(def.hips.h, .5), nb = Math.round(P(def.hips.beasts, 0)), bh = P(def.hips.beast, .6);
+      for (const line of m.corners) {
+        for (let i = 0; i + 1 < line.length; i++) {
+          const [a, b] = [line[i], line[i + 1]], up = (p) => [p[0], p[1] + h * .35, p[2]];
+          barMesh(hm, up(a), up(b), w, h);
+        }
+        for (let k = 0; k < nb && line.length > 1; k++) {
+          const f = (k + 1.2) * .55 * bh / (Math.hypot(line[1][0] - line[0][0], line[1][1] - line[0][1], line[1][2] - line[0][2]) || 1);
+          const i = Math.min(line.length - 2, Math.floor(f)), g = f - i, a = line[i], b = line[i + 1], p = [0, 1, 2].map((c) => a[c] + (b[c] - a[c]) * g);
+          barMesh(hm, [p[0], p[1] + h * .5, p[2]], [p[0], p[1] + h * .5 + bh * (k ? .62 : 1), p[2]], bh * .42, bh * .42);
+        }
+      }
+      return [roof, { name: name + " hips", geometry: hm.arrays(), instances: roof.instances, kind: "moulding", shell: true }];
+    }
     // (`frieze`: a gable's rising arched frieze up its rakes; `rake`: a classical gable's raking cornice, the frame of its
     //  pediment -- lombard.js -- each a moulding of its own, "<roof> frieze" and "<roof> rake")
     if ((!def.frieze && !def.rake) || chinese) return roof;
@@ -1428,7 +1509,8 @@ function buildPart_(name, defs, params) {
     // (its APPROACH: the floor before its first riser, as deep as the flight is wide (2m for a broader one), where one
     //  stands to begin the climb -- check.js asks it to be floor, and clear)
     const fl = { name, geometry: m.arrays(), instances: placements(def, P, params),
-             face, kind: "flight", steps, rise, run, soffit: soff, topOf: top, ...(def.walk === false ? {} : { path, edges, foot: [-.5, base, -width / 2], approach: { x0: -Math.min(width, 2), x1: 0, z0: -width, z1: 0, y: base } }) };
+             face, kind: "flight", steps, rise, run, soffit: soff, topOf: top, ...(def.railing === false ? { railing: false } : {}),   // (`railing: false`: its sides left bare -- railingsFor)
+             ...(def.walk === false ? {} : { path, edges, foot: [-.5, base, -width / 2], approach: { x0: -Math.min(width, 2), x1: 0, z0: -width, z1: 0, y: base } }) };
     // (`arrive`: the floor it arrives on, built under it -- arrivalFloor)
     return def.arrive ? [fl, ...arrivalFloor(name, def, P, params, { tops: [{ a: [L + landing, top, 0], b: [L + landing, top, -width], out: [1, 0] }], soffit: soff ?? .3 })] : fl;
   }
@@ -1634,6 +1716,26 @@ function buildPart_(name, defs, params) {
       out.push({ name: name + " sistra", geometry: box(mesh(), -r * hs.naosR, r * hs.naosR, y1, y2, -r * hs.naosR, r * hs.naosR).arrays(), instances: cols, kind: "box" });
       out.push({ name: name + " sistrum lips", geometry: box(mesh(), -r * (hs.naosR + .08), r * (hs.naosR + .08), y2, y3, -r * (hs.naosR + .08), r * (hs.naosR + .08)).arrays(), instances: cols, kind: "box" });
       out.push({ name: name + " abaci", geometry: box(mesh(), -ar, ar, y3, H, -ar, ar).arrays(), instances: cols, kind: "box" });
+      // HER FACE, on all four sides of the block (one side built, on +z, and instanced round): a low oval boss -- a mound of three
+      // rings -- for the face, with a nose on it and a cow's ears at its temples; the heavy wig's two lappets and the band over
+      // the brow; the eyes, brows and mouth as blocks of their own, for a finish to paint dark. In r, so it fits any column
+      const fy = (y0 + y1) / 2, fz = cr, boss = (m, cx, cy, ax, ay, z0, t, sd = 10) => {
+        const rg = (c, q) => Array.from({ length: sd }, (_, k) => { const a = k * 2 * Math.PI / sd; return m.vert(cx + ax * c * Math.cos(a), cy + ay * c * Math.sin(a), z0 + t * q); });
+        const o = rg(1, 0), mid = rg(.86, .6), top = rg(.5, 1), ctr = m.vert(cx, cy, z0 + t * 1.08);
+        for (let k = 0; k < sd; k++) { const n = (k + 1) % sd; m.quad(o[k], o[n], mid[n], mid[k]); m.quad(mid[k], mid[n], top[n], top[k]); m.tri(ctr, top[k], top[n]); }
+        return m;
+      };
+      const fourFaces = cols.flatMap(([a, x, y, z]) => [0, 1, 2, 3].map((k) => [a + k * Math.PI / 2, x, y, z]));
+      const fm = mesh(); boss(fm, 0, fy - .04 * r, .62 * r, .84 * r, fz, .2 * r, 12); boss(fm, 0, fy - .14 * r, .1 * r, .3 * r, fz + .15 * r, .12 * r, 6);
+      for (const sx of [-1, 1]) boss(fm, sx * .84 * r, fy + .4 * r, .24 * r, .12 * r, fz + .12 * r, .09 * r, 6);   // (the ears lie out over the wig)
+      out.push({ name: name + " hathor faces", geometry: fm.arrays(), instances: fourFaces, kind: "box" });
+      const wm = mesh(); box(wm, -.72 * r, .72 * r, fy + .66 * r, y1 - .02 * r, fz, fz + .13 * r);
+      for (const sx of [-1, 1]) { box(wm, Math.min(sx * .58 * r, sx * 1.02 * r), Math.max(sx * .58 * r, sx * 1.02 * r), y0 + .34 * r, fy + .66 * r, fz, fz + .13 * r); boss(wm, sx * .8 * r, y0 + .3 * r, .3 * r, .26 * r, fz, .18 * r, 8); }
+      out.push({ name: name + " hathor wigs", geometry: wm.arrays(), instances: fourFaces, kind: "box" });
+      const em = mesh(); box(em, -.2 * r, .2 * r, fy - .44 * r, fy - .37 * r, fz + .08 * r, fz + .19 * r);
+      for (const sx of [-1, 1]) { const lo = (a, b) => [Math.min(sx * a, sx * b), Math.max(sx * a, sx * b)];
+        box(em, ...lo(.15 * r, .42 * r), fy + .1 * r, fy + .21 * r, fz + .08 * r, fz + .2 * r); box(em, ...lo(.12 * r, .46 * r), fy + .31 * r, fy + .36 * r, fz + .08 * r, fz + .18 * r); }
+      out.push({ name: name + " hathor features", geometry: em.arrays(), instances: fourFaces, kind: "box" });
     } else if (def.shaft !== "square" && O.bell) {
       // the bell: its radius swelling from the shaft's top out to `capR`, slowly and then fast -- the flowers opening
       const r0 = r * taper, rings = Math.max(3, detailOf(params)), yb = H - abH, ar = r0 * .95;
@@ -1820,6 +1922,127 @@ function buildPart_(name, defs, params) {
     return fz ? [helm, { name: name + " frieze", geometry: fz.m.arrays(), instances: helm.instances, kind: "moulding", shell: true }] : helm;
   }
 
+  if (def.type === "pinnacle") {
+    // A PINNACLE OF ITS OWN KIND (pinnacle.js): `w` `h` `s`, `sides`, `gablets`, `crockets`, `figure`, `attendants`, `pair`: one
+    // part per kind, so a facade can say which buttress carries which, and a mass can carry two
+    const pr = def.pair && { d: P(def.pair.d), axis: def.pair.axis, scale: P(def.pair.scale, 1) };
+    const { m, top } = pinnacleMesh(mesh(), { w: P(def.w), h: P(def.h), s: P(def.s), sides: P(def.sides, 4), gablets: P(def.gablets, 0), crockets: P(def.crockets, 0), figure: P(def.figure, 0), attendants: P(def.attendants, 0), pair: pr });
+    return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "pinnacle", ridge: top };
+  }
+
+  if (def.type === "open-spire") {
+    // AN OPENWORK SPIRE (pinnacle.js): `R` `rise`, `sides`, `rows`, `rib`, `bar`, `topR`, `crockets` (0: none), `finial`: a net of ribs and
+    // tracery, the sky showing through it (a shell: nothing is ever inside it)
+    const { m, top } = openSpireMesh(mesh(), { R: P(def.R), rise: P(def.rise), sides: P(def.sides, 8), rows: P(def.rows, 10), rib: P(def.rib, P(def.R) * .07), bar: P(def.bar, P(def.R) * .035), topR: P(def.topR, P(def.R) * .06), crockets: P(def.crockets, 1), finial: P(def.finial, P(def.R) * .5) });
+    return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "pinnacle", ridge: top, shell: true };
+  }
+
+  if (def.type === "cresting") {
+    // AN OPENWORK PARAPET along a line in the part's plane (pinnacle.js): `run` [[x, y], ...], `h`, `panel`, `t`, `bar`, and a
+    // spirelet { w, s } on every `every`th post
+    const sp = def.spirelet && { w: P(def.spirelet.w), s: P(def.spirelet.s) };
+    const m = crestingMesh(mesh(), { run: def.run.map(([x, y]) => [P(x), P(y)]), h: P(def.h), panel: P(def.panel, 1.5), t: P(def.t, .3), bar: P(def.bar, .12), every: P(def.every, 0), spirelet: sp }, barsMesh);
+    return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "moulding", shell: true };
+  }
+
+  if (def.type === "bars" || def.type === "truss") {
+    // IRON IN THE AIR (truss.js). `bars`: straight tubes, `lines` [[x0, y0, z0, x1, y1, z1], ...] or `paths` [[[x, y, z], ...], ...] (a
+    // polyline each; `closed` closes them), `w` across and `h` deep. `truss`: `stations` (cross sections along it, each a list of
+    // corners), `chord` `strut` `brace` their widths (0: left out), `bracing` "x" | "n" | "none", `faces`, `open`. A list of two
+    // widths runs from the first station to the last (a member thinning as it climbs).
+    // `caps` false leaves the tubes' ends open (a third fewer triangles, where the ends are buried in a joint).
+    const m = mesh(), caps = def.caps !== false, pt = (q) => q.map((v) => P(v));
+    if (def.type === "bars") {
+      const w = P(def.w), h = P(def.h, w);
+      for (const l of def.lines ?? []) { const v = pt(l); barMesh(m, v.slice(0, 3), v.slice(3, 6), w, h, caps); }
+      for (const path of def.paths ?? []) {
+        const q = path.map(pt);
+        q.forEach((a, i) => { if (i + 1 < q.length) barMesh(m, a, q[i + 1], w, h, caps); else if (def.closed) barMesh(m, a, q[0], w, h, caps); });
+      }
+    } else {
+      const stations = def.stations.map((S) => S.map(pt));
+      const y = (a) => a[1];
+      const lo = Math.min(...stations.flat().map(y)), hi = Math.max(...stations.flat().map(y));
+      const width = (v, a, b) => {   // (a width running first to last, read at the bar's middle height)
+        if (!Array.isArray(v)) return P(v, 0);
+        const f = hi > lo ? ((y(a) + y(b)) / 2 - lo) / (hi - lo) : 0;
+        return P(v[0]) + (P(v[1]) - P(v[0])) * f;
+      };
+      for (const { a, b, kind } of trussBars({ stations, bracing: def.bracing ?? "x", open: !!def.open, faces: def.faces ?? null })) {
+        const w = width(def[kind], a, b);
+        if (w > 0) barMesh(m, a, b, w, w, caps);
+      }
+    }
+    return { name, geometry: m.arrays(), instances: def.at ? placements(def, P, params) : [[0, 0, 0, 0]], kind: def.kind ?? "iron", shell: true };
+  }
+
+  if (def.type === "screen") {
+    // A STONE SCREEN: an outline [[x, y], ...] in the part's plane, its face at z 0 and `t` thick behind it, as a wall stands on
+    // its line -- a gable that is not one pitch (Milan's front, stepping up to the nave at a rake of its own for each bay)
+    const pts = def.outline.map(([x, y]) => [P(x), P(y)]), t = P(def.t), m = mesh(), area = pts.reduce((s, p, i) => { const q = pts[(i + 1) % pts.length]; return s + p[0] * q[1] - q[0] * p[1]; }, 0);
+    const O = area > 0 ? pts : [...pts].reverse(), f = O.map(([x, y]) => m.vert(x, y, 0)), b = O.map(([x, y]) => m.vert(x, y, -t));
+    for (const [a, c, e] of earClip(O, O.map((_, i) => i))) { const A = O[a], C = O[c], E = O[e], ccw = (C[0] - A[0]) * (E[1] - A[1]) - (C[1] - A[1]) * (E[0] - A[0]) > 0; if (ccw) { m.tri(f[a], f[c], f[e]); m.tri(b[e], b[c], b[a]); } else { m.tri(f[e], f[c], f[a]); m.tri(b[a], b[c], b[e]); } }
+    for (let i = 0; i < O.length; i++) { const j = (i + 1) % O.length; m.quad(f[j], f[i], b[i], b[j]); }
+    return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: def.kind ?? "wall" };
+  }
+
+  if (def.type === "sweep") {
+    // A SWEEP (arch/sweep.js): `profile` [[u, v], ...] (u right of the way the path runs, v up) carried along `path` [[x, z] |
+    // [x, y, z], ...] on a smooth curve, `step` metres a ring, `closed`, `wave` { amp, length, phase }, `round`, `caps`. Kind
+    // "prism" (a solid) unless the part says
+    const pt = (q) => q.map((v) => P(v));
+    const m = sweepMesh(mesh(), { path: def.path.map(pt), profile: def.profile.map(pt), closed: !!def.closed, step: P(def.step, .5), round: !!def.round, caps: def.caps !== false,
+                                  wave: def.wave ? { amp: P(def.wave.amp), length: P(def.wave.length), phase: P(def.wave.phase, 0) } : null });
+    return { name, geometry: m.arrays(), instances: def.at ? placements(def, P, params) : [[0, 0, 0, 0]], kind: def.kind ?? "prism" };
+  }
+
+  if (def.type === "loft") {
+    // A LOFT (2026-11-02): a smooth carved mass -- a Sphinx's flank, a head, a wooded hill -- skinned through `sections`
+    // along `axis` ("x", "y" or "z"), each a superellipse across it: { s (where along the axis), u, v (its middle across:
+    // for axis y, x and z; for x, z and y; for z, x and y), a, a2 (half-width on the +u and -u sides; a2 defaults to a),
+    // b, b2 (the same up +v and -v), n (2 an ellipse, more a rounded box, less a diamond) }. Between them it runs on a
+    // Catmull-Rom curve, `smooth` rings to a span. `sides` round. `half: true` skins only the +v half, standing on v's
+    // line (a mound on the ground: the rest would be buried); `hill` makes that half a bell. The ends close in a fan, unless their section comes to nothing.
+    const ax = def.axis ?? "z", sides = Math.max(4, Math.round(P(def.sides, 16))), half = !!def.half, kS = Math.max(1, Math.round(P(def.smooth, 1)));
+    const to3 = ax === "y" ? (s, u, v) => [u, s, v] : ax === "x" ? (s, u, v) => [s, v, u] : (s, u, v) => [u, v, s];
+    const secs = def.sections.map((q) => { const a = P(q.a), b = P(q.b); return { s: P(q.s), u: P(q.u, 0), v: P(q.v, 0), a, a2: P(q.a2, a), b, b2: P(q.b2, b), n: P(q.n, 2) }; });
+    if (secs.length < 2 || secs.some((q, i) => i && q.s <= secs[i - 1].s)) throw new Error(`loft "${name}": two sections at least, in order along the axis`);
+    const FIELDS = ["s", "u", "v", "a", "a2", "b", "b2", "n"], rings = [];
+    for (let i = 0; i + 1 < secs.length; i++) for (let j = 0; j < (i + 2 === secs.length ? kS + 1 : kS); j++) {
+      const t = j / kS, q0 = secs[Math.max(0, i - 1)], q1 = secs[i], q2 = secs[i + 1], q3 = secs[Math.min(secs.length - 1, i + 2)], r = {};
+      for (const k of FIELDS) r[k] = .5 * (2 * q1[k] + (q2[k] - q0[k]) * t + (2 * q0[k] - 5 * q1[k] + 4 * q2[k] - q3[k]) * t * t + (3 * q1[k] - q0[k] - 3 * q2[k] + q3[k]) * t * t * t);
+      for (const k of ["a", "a2", "b", "b2"]) r[k] = Math.max(0, r[k]);
+      r.n = Math.max(.5, r.n);
+      r.s = Math.min(q2.s, Math.max(q1.s, r.s));   // (a spline can overshoot its stations: not along the axis)
+      rings.push(r);
+    }
+    const steps = sides, closed = !half, m = mesh(), pw = (c, e) => Math.sign(c) * Math.abs(c) ** e;
+    // (`hill: true`, with `half`: a bell across, not a superellipse, whose foot would stand up from the ground like a wall: flat at its foot and its crown)
+    const bell = half && !!def.hill;
+    const ringAt = (r) => Array.from({ length: closed ? steps : steps + 1 }, (_, k) => {
+      if (bell) { const c = 1 - 2 * k / steps; return to3(r.s, r.u + c * (c >= 0 ? r.a : r.a2), r.v + (.5 + .5 * Math.cos(Math.PI * c)) * r.b); }
+      const t = (half ? Math.PI : 2 * Math.PI) * k / steps, e = 2 / r.n, c = pw(Math.cos(t), e), d = pw(Math.sin(t), e);
+      return to3(r.s, r.u + c * (c >= 0 ? r.a : r.a2), r.v + d * (d >= 0 ? r.b : r.b2));
+    });
+    const P3 = rings.map(ringAt), V = P3.map((pts) => pts.map((p) => m.vert(...p)));
+    const ctr = rings.map((r) => to3(r.s, r.u, r.v));
+    const face = (A, B, C, a, b, c, want) => {
+      const ux = B[0] - A[0], uy = B[1] - A[1], uz = B[2] - A[2], vx = C[0] - A[0], vy = C[1] - A[1], vz = C[2] - A[2];
+      const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+      if (nx * want[0] + ny * want[1] + nz * want[2] >= 0) m.tri(a, b, c); else m.tri(a, c, b);
+    };
+    for (let i = 0; i + 1 < rings.length; i++) for (let k = 0; k < steps; k++) {
+      const k2 = closed ? (k + 1) % steps : k + 1, A = P3[i][k], B = P3[i][k2], C = P3[i + 1][k2], D = P3[i + 1][k];
+      const mid = [0, 1, 2].map((j) => (A[j] + B[j] + C[j] + D[j]) / 4), c0 = [0, 1, 2].map((j) => (ctr[i][j] + ctr[i + 1][j]) / 2), want = mid.map((v, j) => v - c0[j]);
+      face(A, B, C, V[i][k], V[i][k2], V[i + 1][k2], want); face(A, C, D, V[i][k], V[i + 1][k2], V[i + 1][k], want);
+    }
+    for (const [i, sgn] of [[0, -1], [rings.length - 1, 1]]) {   // (the ends)
+      const c = m.vert(...ctr[i]), want = to3(sgn, 0, 0);
+      for (let k = 0; k < steps; k++) { const k2 = closed ? (k + 1) % steps : k + 1; face(ctr[i], P3[i][k], P3[i][k2], c, V[i][k], V[i][k2], want); }
+    }
+    return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "prism", ...(def.walked ? { walked: true } : {}) };
+  }
+
   if (def.type === "prism") {
     // A PRISM on a plan (build.js planPoints: `rect`, `chamfer`, `sides` + `radius`, or `points`), `height` tall:
     // a plinth, a platform, the solid core of a tower
@@ -1936,17 +2159,24 @@ function buildPart_(name, defs, params) {
     // -- written here and built as any other part, and named "<court>/<part>". `tracery` fills its windows (tracery.js:
     // a sash's glazing bars are { style: "bars" }).
     const O = planPoints(planOf(def.plan, P)), n = O.length;
-    const D = P(def.depth), N = Math.max(1, Math.round(P(def.storeys, 1))), H = P(def.storeyH, 4.5), t = P(def.thickness, .9);
+    // (`depths`: a depth for each face instead of one -- a court whose wings differ; `roof: false`: no roofs, the building gives its own)
+    const Ds = def.depths ? def.depths.map((d) => P(d)) : O.map(() => P(def.depth)), D = Ds[0], N = Math.max(1, Math.round(P(def.storeys, 1))), H = P(def.storeyH, 4.5), t = P(def.thickness, .9);
+    const insetBy = (o) => {                                   // (the outline `o` in from the faces' depths: each face's line moved in, neighbours met)
+      if (!def.depths) return insetPoints(O, D + o);
+      const line = (i) => { const a = O[i], b = O[(i + 1) % n], L = Math.hypot(b[0] - a[0], b[1] - a[1]), nx = (b[1] - a[1]) / L, nz = -(b[0] - a[0]) / L, d = Ds[i] + o; return [a[0] + nx * d, a[1] + nz * d, (b[0] - a[0]) / L, (b[1] - a[1]) / L]; };
+      return O.map((_, i) => { const [x0, z0, ex0, ez0] = line((i + n - 1) % n), [x1, z1, ex1, ez1] = line(i), c = ex0 * ez1 - ez0 * ex1, u = ((x1 - x0) * ez1 - (z1 - z0) * ex1) / c; return [x0 + ex0 * u, z0 + ez0 * u]; });
+    };
     const slab = P(def.slab, .35), axis = P(def.axis, 3.6), winW = P(def.winW, 1.3), sill = P(def.sill, .95), winH = P(def.winH, 2.3);
     const doorW = P(def.doorW, 1.6), doorH = P(def.doorH, 3.0), head = def.head ?? { profile: "segmental", seg: .35 };
     const gate = def.gate ? { face: Math.round(P(def.gate.face, 0)), width: P(def.gate.width, 3.6), height: Math.min(P(def.gate.height, 4.2), H - .3),
                               head: def.gate.head ?? { profile: "semicircular" } } : null;
     const sf = Math.round(P(def.stairFace, gate && gate.face === 1 ? 2 : 1)) % n;
-    const courtLine = insetPoints(O, D - t), roomsOut = insetPoints(O, t), roomsIn = insetPoints(O, D - t), court = insetPoints(O, D);
+    const courtLine = insetBy(-t), roomsOut = insetPoints(O, t), roomsIn = insetBy(-t), court = insetBy(0);
     const len = (a, b) => Math.hypot(b[0] - a[0], b[1] - a[1]);
     const row = (L, w, sl, h, extra = {}) => {                 // a centred row of openings, one per `axis` metres
       let k = Math.floor(L / axis - .5);
       if (extra.middle && k % 2 === 0) k -= 1;                 // (a middle opening needs an odd row)
+      if (extra.middle) while (k >= 1 && k * axis + extra.middle.width > L) k -= 2;   // (a short face: the wide opening takes a bay or two from the row)
       return k < 1 ? (extra.middle ? [{ at: 0, width: extra.middle.width, sill: 0, springing: extra.middle.springing, head }] : [])
         : { pattern: String(k), width: w, gap: axis - w, sill: sl, springing: sl + h, head, ...(def.tracery ? { tracery: def.tracery } : {}), ...extra };
     };
@@ -1956,7 +2186,8 @@ function buildPart_(name, defs, params) {
       springing: gate.height - archCurve(gate.width / 2, headOf(gate.head, params)).reduce((m, [, y]) => Math.max(m, y), 0) } } : {};
     // (`surround`: how its windows are dressed -- surround.js -- one for all, or a list, storey by storey)
     //  (on the court walls, on their back: the face the court sees)
-    const dress = (k, side) => { const v = Array.isArray(def.surround) ? def.surround[k] : def.surround;
+    const dress = (k, side) => { if (side && def.surroundCourt === false) return {}; const v = Array.isArray(def.surround) ? def.surround[k] : def.surround;   // (`surroundCourt: false`: plain toward the court)
+                                
                                  return v ? { surround: { ...(v === true ? {} : v), ...(side ? { side: 1 } : {}) } } : {}; };
     const tiers = (L, i, ground, side) => Array.from({ length: N }, (_, k) => ({ ...(k < N - 1 ? { h: H } : {}),
       openings: k === 0 ? ground(L, i) : row(L, winW, sill, winH, dress(k, side)) }));
@@ -1981,13 +2212,66 @@ function buildPart_(name, defs, params) {
       // (its courses stop where a joined building stands against a face)
       ...(def.courses ? { courses: { ...(def.courses === true ? {} : def.courses), clear: Object.fromEntries(O.map((p, i) => [i,
         joins.filter((j) => j.face === i).map((j) => { const L = len(p, O[(i + 1) % n]); return [L / 2 + j.at - j.width / 2, L / 2 + j.at + j.width / 2]; })])) } } : {}) };
+    // `arcade` { every, width, springing, head, sill, end, tracery } -- or a list, storey by storey (null: that storey keeps its
+    // windows): the court walls open in ARCHES all round instead of doors and windows, a cloister's walks round its garth
+    // (Belem, Batalha, any claustro). As many arches as a face holds at `every`, centred, `end` clear of its corners; unglazed;
+    // springing at half the storey unless it says. (An arcaded ground storey has no gate on the court side: the arches are the way in.)
+    const arcOf = (k) => (Array.isArray(def.arcade) ? def.arcade[k] : def.arcade) ?? null;
+    const arcSet = (L, a) => { const ev = P(a.every, axis); return { ev, w: P(a.width, ev * .7), c: Math.floor((L - 2 * P(a.end, .5)) / ev) }; };   // (a row of c is c bays long: half a pier each end)
+    const arcadeRow = (L, a) => {
+      const { ev, w, c } = arcSet(L, a);
+      return c < 1 ? [] : { pattern: String(c), width: w, gap: ev - w, sill: P(a.sill, 0), springing: P(a.springing, H * .5), glass: false,
+                            head: a.head ?? { profile: "semicircular" }, ...(a.tracery ? { tracery: a.tracery } : {}) };
+    };
+    // ...and set out where those arches are, on the ground storey's arcade: `buttress` { w, d, h, min, pinnacle { w, h, s } } on
+    // the garth side between the arches and at each row's ends (rows of at least `min` arches), and `vault` { springing, rise,
+    // ribs { width, depth } }: the walk behind a row vaulted bay by bay under the floor above, a transverse arch closing
+    // each end of the row -- a cloister's buttressed, vaulted walks (Belem)
+    const a0 = arcOf(0);
+    if (a0 && (a0.buttress || a0.vault)) {
+      const B = a0.buttress, V = a0.vault, bts = [], vts = [], xws = [], tw = .8;
+      const bw = B ? P(B.w, 1.2) : 0, bd = B ? P(B.d, 1.5) : 0, bh = B ? P(B.h, H) : 0;
+      const yawOf = (ex, ez) => Math.atan2(-ez, ex);
+      courtLine.forEach((p, i) => {
+        const q = courtLine[(i + 1) % n], L = len(p, q), { ev, w, c } = arcSet(L, a0);
+        if (c < 1) return;
+        const ex = (q[0] - p[0]) / L, ez = (q[1] - p[1]) / L, c0 = court[i], c1 = court[(i + 1) % n];
+        const mc = [(c0[0] + c1[0]) / 2, (c0[1] + c1[1]) / 2], ml = [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
+        const gl = Math.hypot(mc[0] - ml[0], mc[1] - ml[1]) || 1, g = [(mc[0] - ml[0]) / gl, (mc[1] - ml[1]) / gl];   // toward the garth
+        const pt = (o, d) => [mc[0] + ex * o + g[0] * d, mc[1] + ez * o + g[1] * d];
+        if (B && c >= P(B.min, 1)) for (const o of [...Array.from({ length: c - 1 }, (_, k) => (k - (c - 1) / 2 + .5) * ev), -c * ev / 2, c * ev / 2]) {
+          const [x, z] = pt(o, bd / 2 - .2); bts.push([x, 0, z, yawOf(ex, ez)]);
+        }
+        if (V && i !== sf) {                                   // (the stair's walk keeps its flat ceiling: the flight rises through it)
+          const Dw = Ds[i] - 2 * t, back = -(t + Dw / 2);
+          for (let k = 0; k < c; k++) { const [x, z] = pt((k - (c - 1) / 2) * ev, back); vts.push({ at: [x, 0, z, yawOf(ex, ez)], ev, Dw }); }
+          for (const s of [-1, 1]) { const [x, z] = pt(s * (c * ev / 2 + tw / 2), back); xws.push({ x, z, g, Dw, ex, ez }); }
+        }
+      });
+      if (bts.length) {
+        defs["buttresses"] = { type: "box", width: bw, length: bd, height: bh, at: bts };
+        if (B.pinnacle) defs["pinnacles"] = { type: "pinnacle", w: P(B.pinnacle.w, bw * .8), h: P(B.pinnacle.h, .8), s: P(B.pinnacle.s, 2), at: bts.map(([x, , z, a]) => [x, bh, z, a]), standsOn: ["buttresses"] };
+      }
+      if (vts.length) {
+        const top = H - slab, Dw = vts[0].Dw, ev = vts[0].ev, r = Math.min(P(V.rise, Dw / 2), Dw / 2 * .999, ev / 2 * .999), sp = P(V.springing, top - r - .1);
+        const seg_ = { profile: "segmental", rise: r };
+        defs["walk vaults"] = { type: "groin", width: ev, length: Dw, springing: sp, top, across: seg_, along: seg_, at: vts.map((v) => v.at) };
+        if (V.ribs) defs["walk ribs"] = { type: "ribs", on: "walk vaults", width: P(V.ribs.width, .3), depth: P(V.ribs.depth, .2) };
+        // the transverse arches at the rows' ends: a wall across the walk, run into both its walls, opening under the vault's springing
+        const ow = Dw - 1.6, osp = sp - ow / 2;
+        defs["walk arches"] = { type: "wall", width: Dw + .4, height: top, thickness: tw, openings: [{ at: (Dw + .4) / 2, width: ow, sill: 0, springing: osp, head: { profile: "semicircular" }, glass: false }],
+          at: xws.map(({ x, z, g }) => { const a = yawOf(g[0], g[1]), lz = [Math.sin(a), Math.cos(a)]; return [x + lz[0] * tw / 2, 0, z + lz[1] * tw / 2, a]; }) };
+      }
+    }
+    const courtTiers = (L, i) => !def.arcade ? tiers(L, i, (L, j) => row(L, doorW, 0, doorH - doorW / 2, { ...dress(0, true), ...gateOf(j) }), true)
+      : Array.from({ length: N }, (_, k) => ({ ...(k < N - 1 ? { h: H } : {}),
+          openings: arcOf(k) ? arcadeRow(L, arcOf(k)) : k === 0 ? row(L, doorW, 0, doorH - doorW / 2, { ...dress(0, true), ...gateOf(i) }) : row(L, winW, sill, winH, dress(k, true)) }));
     defs["court walls"] = { type: "enclosure", plan: { points: courtLine }, thickness: t, height: N * H, ...(def.glass !== undefined ? { glass: def.glass } : {}),
-      faces: Object.fromEntries(courtLine.map((p, i) => [i, tiers(len(p, courtLine[(i + 1) % n]), i,
-        (L, j) => row(L, doorW, 0, doorH - doorW / 2, { ...dress(0, true), ...gateOf(j) }), true)])),
+      faces: Object.fromEntries(courtLine.map((p, i) => [i, courtTiers(len(p, courtLine[(i + 1) % n]), i)])),
       // (round the court, on the walls' inner face: the one the court sees)
       ...(def.courses ? { courses: { ...(def.courses === true ? {} : def.courses), inner: true } } : {}) };
     // the floors: a trapezoid per side between the walls; on the stair's side, three pieces round its well
-    const run = .28, f = Math.round(H / .34), SW = 2.7, Ls = 2.8 + f * run, dv = D - 2 * t;
+    const run = .28, f = Math.round(H / .34), SW = 2.7, Ls = 2.8 + f * run, dv = Ds[sf] - 2 * t;
     const trap = (i) => [roomsOut[i], roomsOut[(i + 1) % n], roomsIn[(i + 1) % n], roomsIn[i]];
     const o0 = roomsOut[sf], o1 = roomsOut[(sf + 1) % n], Lo = len(o0, o1);
     const e = [(o1[0] - o0[0]) / Lo, (o1[1] - o0[1]) / Lo];
@@ -2012,8 +2296,8 @@ function buildPart_(name, defs, params) {
     // a roof over every side, along its outer edge -- its eaves reaching past the cornice under them
     const crown = coursesOf(coursesSpec(def.courses, params), N * H, t).filter((c) => c.y + c.h > N * H - 1e-6);
     const eaves = Math.max(P(def.roof?.overhang, .4), ...crown.map((c) => c.out + .1));
-    O.forEach((p, i) => {
-      const q = O[(i + 1) % n], L = len(p, q), ex = (q[0] - p[0]) / L, ez = (q[1] - p[1]) / L;
+    if (def.roof !== false) O.forEach((p, i) => {
+      const q = O[(i + 1) % n], L = len(p, q), ex = (q[0] - p[0]) / L, ez = (q[1] - p[1]) / L, D = Ds[i];
       let mx = -ez, mz = ex;
       const ci = court[i];
       if ((ci[0] - p[0]) * mx + (ci[1] - p[1]) * mz < 0) { mx = ez; mz = -ex; }
@@ -2021,7 +2305,7 @@ function buildPart_(name, defs, params) {
         overhang: eaves, at: [[(p[0] + q[0]) / 2 + mx * D / 2, N * H, (p[1] + q[1]) / 2 + mz * D / 2, Math.atan2(ex, ez)]] };
     });
     // its rooms' space: the ring between the outer and the court walls' middles, up to the eaves
-    defs["interior"] = { type: "interior", plan: { points: insetPoints(O, t / 2) }, hole: { points: insetPoints(O, D - t / 2) }, height: N * H };
+    defs["interior"] = { type: "interior", plan: { points: insetPoints(O, t / 2) }, hole: { points: insetBy(-t / 2) }, height: N * H };
     const places = placements(def, P, params);
     return Object.keys(defs).flatMap((k) => [buildPart(k, defs, params)].flat())
       .map((q) => ({ ...q, name: `${name}/${q.name}`, instances: composeAt(places, q.instances) }));
@@ -2128,7 +2412,12 @@ function buildPart_(name, defs, params) {
     const r = P(def.radius), h = P(def.height);
     const sides = Math.max(3, Math.round(def.sides !== undefined ? P(def.sides) : 4 * detailFor(params, r)));
     // `taper` is the top's share of the foot's radius: a shaft's entasis, a pier's batter
-    const m = drum(mesh(), r, r * P(def.taper, 1), 0, h, sides);
+    // `twist` { lobes, depth, turns, rows, helix } winds it (build.js twistedShaft): a cable of `lobes` strands, or with
+    // `helix` a Solomonic corkscrew; its section gets four faces a strand at the least, whatever `sides` says
+    const tw = def.twist;
+    const m = tw ? twistedShaft(mesh(), { r0: r, r1: r * P(def.taper, 1), y0: 0, y1: h, sides: Math.max(sides, 4 * Math.round(P(tw.lobes, 4))),
+                                          lobes: Math.round(P(tw.lobes, 4)), depth: P(tw.depth, .18), turns: P(tw.turns, 1), rows: Math.max(3, Math.round(P(tw.rows, 12) * Math.min(1, detailFor(params, r) / 4))), helix: P(tw.helix, 0) })   // (its rows by the detail level: fewer far off)
+                 : drum(mesh(), r, r * P(def.taper, 1), 0, h, sides);
     return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "column" };
   }
 

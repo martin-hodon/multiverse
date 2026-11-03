@@ -130,6 +130,16 @@
         }
       ]
     },
+    "beaver tail": {
+      "size": [0.36, 0.3], "palette": "fired-clay", "palettes": ["tile-red", "slate"], "ground": 3,
+      "_about": "plain tiles with rounded tails (Biberschwanz), 17cm wide, laid on a 15cm gauge, every other course set off by half a tile -- the steep roofs of southern Germany's churches and towns",
+      "layers": [{"shape": "rect", "w": 0.165, "h": 0.138, "r": 0.06, "fill": 0, "vary": 0.1, "grid": {"n": [2, 2], "offset": 0.5}}]
+    },
+    "diamond slate": {"size": [2.4, 2.4], "palette": "slate-light", "palettes": ["slate", "lead"], "ground": 3, "res": 1024,
+      "_about": "German slating in DIAMONDS (Rautendeckung): small slates 20 cm a side set on their points in rows 15 cm apart, and darker slates among them laid as a band round a great lozenge (slot 1, a 2.1 m lozenge in a 2.4 m tile) -- the patterned roofs of the Rhineland's 19th-century castles, Drachenburg's",
+      "layers": [{"shape": "rect", "w": 0.2, "h": 0.2, "rot": 45, "fill": 0, "vary": 0.07, "grid": {"n": [8, 16], "offset": 0.5}},
+                 {"shape": "rect", "w": 0.2, "h": 0.2, "rot": 45, "fill": 1, "vary": 0.07, "grid": {"n": [8, 16], "offset": 0.5}, "clip": {"shape": "rect", "w": 1.5, "h": 1.5, "rot": 45}},
+                 {"shape": "rect", "w": 0.2, "h": 0.2, "rot": 45, "fill": 0, "vary": 0.07, "grid": {"n": [8, 16], "offset": 0.5}, "clip": {"shape": "rect", "w": 1.08, "h": 1.08, "rot": 45}}]},
     "fish scale": {
       "size": [
         0.36,
@@ -528,6 +538,17 @@
             ]
           ]
         }
+      ]
+    },
+    "patterned tile": {
+      "size": [1.44, 1.2],
+      "palette": "parliament-tile",
+      "palettes": ["tile-red", "zsolnay", "slate", "glazed-green"],
+      "_about": "a patterned tile roof (the Hungarian Parliament's, Budapest's Zsolnay roofs, Central European Gothic Revival): round-ended tiles in rows, a lattice of lozenges laid in a darker glaze through them, a lighter diamond at each crossing",
+      "layers": [
+        {"shape": "circle", "r": 0.1, "fill": 0, "stroke": 3, "line": 0.006, "vary": 0.08, "grid": {"n": [8, 16], "offset": 0.5}},
+        {"shape": "frame", "w": 0.8, "h": 0.8, "t": 0.1, "rot": 45, "fill": 1, "alpha": 0.6, "at": [[0, 0], [0.72, 0.6]]},
+        {"shape": "rect", "w": 0.16, "h": 0.16, "rot": 45, "fill": 2, "alpha": 0.7, "at": [[0.36, 0.3], [-0.36, 0.3], [0.36, -0.3], [-0.36, -0.3]]}
       ]
     },
     "thatch": {

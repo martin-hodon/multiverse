@@ -1689,42 +1689,71 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
       }
     }
     // CARVED LIMBS: a bare limb's muscles swell its outline too -- the calf, the deltoid, the thigh's teardrop seen against
-    // the sky (LIMBS.swell of the field the fragment tilts the light by), eased off toward its joints (limbEase)
+    // the sky (LIMBS.swell of the field the fragment tilts the light by), eased off toward its joints (limbEase).
+    // EVERY OTHER LIMB, alive or dressed, has a plainer version of the same thing (PLAIN_LIMBS): one cone from joint to joint
+    // has no calf, no forearm's swell, no narrow ankle, and a foot no breadth at the ball
     if (!mark && !triPart && !isCut && CK[ringI].z < 0.5 && CK[ringI].x > 0.0) {
       let rsL = i32(CK[ringI].w + 0.5);
-      let flL = texel(sTex, rsL * ${ST}).w;
       let cL = texel(tex, rsL * 3 + 2).x;
-      if (floor(flL / 2048.0) - 8.0 * floor(flL / 16384.0) > 0.5 && cL > 0.5 && cL < 31.5) {
-        var upL = ${viewSpace ? "(view * vec4<f32>(0.0, 1.0, 0.0, 0.0)).xyz" : "vec3<f32>(0.0, 1.0, 0.0)"};
-        let urL = i32(texel(sTex, rsL * ${ST} + 2).w + 0.5);
-        if (urL > 0) {
-          let du = texel(tex, (urL - 1) * 3).xyz - texel(tex, (urL - 1) * 3 + 1).xyz;   // (the chest runs down from its A end)
-          upL = select(upL, normalize(du), dot(du, du) > 1e-10);
-        }
-        var fwL = texel(tex, base * 3 + 1).xyz - texel(tex, base * 3).xyz;
-        fwL = fwL - upL * dot(fwL, upL);
-        if (dot(fwL, fwL) > 1e-10) {
-          let fr = limbCoord(P, CA[ringI].xyz, CB[ringI].xyz, cL, normalize(fwL), upL);
-          let kind = i32(fr[2].z + 0.5);
-          if (kind > 0) {
-            let sA = fr[2].x;
-            let rad = mix(abs(CK[ringI].x), CB[ringI].w, clamp(sA, 0.0, 1.0));
-            P = P + N * (${sf(LIMBS.relief / .06 * LIMBS.swell)} * select(1.0, ${sf(LIMBS.soft)}, cL > 15.5) * rad * limbH(kind, clamp(sA, 0.0, 1.0), fr[2].y) * limbEase(kind, sA));
+      if (cL > 0.5 && cL < 31.5 && texel(tex, rsL * 3 + 1).w > -1.5) {   // (not a tube: its C is its curve's control point)
+        let flL = texel(sTex, rsL * ${ST}).w;
+        if (floor(flL / 2048.0) - 8.0 * floor(flL / 16384.0) > 0.5) {
+          var upL = ${viewSpace ? "(view * vec4<f32>(0.0, 1.0, 0.0, 0.0)).xyz" : "vec3<f32>(0.0, 1.0, 0.0)"};
+          let urL = i32(texel(sTex, rsL * ${ST} + 2).w + 0.5);
+          if (urL > 0) {
+            let du = texel(tex, (urL - 1) * 3).xyz - texel(tex, (urL - 1) * 3 + 1).xyz;   // (the chest runs down from its A end)
+            upL = select(upL, normalize(du), dot(du, du) > 1e-10);
+          }
+          var fwL = texel(tex, base * 3 + 1).xyz - texel(tex, base * 3).xyz;
+          fwL = fwL - upL * dot(fwL, upL);
+          if (dot(fwL, fwL) > 1e-10) {
+            let fr = limbCoord(P, CA[ringI].xyz, CB[ringI].xyz, cL, normalize(fwL), upL);
+            let kind = i32(fr[2].z + 0.5);
+            if (kind > 0) {
+              let sA = fr[2].x;
+              let rad = mix(abs(CK[ringI].x), CB[ringI].w, clamp(sA, 0.0, 1.0));
+              P = P + N * (${sf(LIMBS.relief / .06 * LIMBS.swell)} * select(1.0, ${sf(LIMBS.soft)}, cL > 15.5) * rad * limbH(kind, clamp(sA, 0.0, 1.0), fr[2].y) * limbEase(kind, sA));
+            }
+          }
+        } else {
+          let aP = CA[ringI].xyz;
+          let dP = CB[ringI].xyz - aP;
+          let sP = dot(P - aP, dP) / max(dot(dP, dP), 1e-8);
+          let kP = i32(cL - select(0.0, 16.0, cL > 15.5) - select(0.0, 8.0, cL - select(0.0, 16.0, cL > 15.5) > 7.5) + 0.5);
+          let tP = clamp(sP, 0.0, 1.0);
+          if (kP == 5) {   // (the foot: broad at the ball, a round cone is as wide as it is high -- its height is its own, its width this)
+            let axP = dP / max(length(dP), 1e-5);
+            let upP = ${viewSpace ? "(view * vec4<f32>(0.0, 1.0, 0.0, 0.0)).xyz" : "vec3<f32>(0.0, 1.0, 0.0)"};
+            var ltP = cross(axP, upP);
+            ltP = select(ltP, ltP / length(ltP), dot(ltP, ltP) > 1e-6);
+            let wP = ${sf(PLAIN_FOOT.heel)} + ${sf(PLAIN_FOOT.ball - PLAIN_FOOT.heel)} * smoothstep(0.0, ${sf(PLAIN_FOOT.at)}, tP);
+            P = P + ltP * dot(P - aP, ltP) * (wP - 1.0);
+            N = normalize(N + ltP * dot(N, ltP) * (1.0 / wP - 1.0));
+          } else {
+            let rP = mix(abs(CK[ringI].x), CB[ringI].w, tP);
+            let fP = texel(tex, base * 3 + 1).xyz - texel(tex, base * 3).xyz;
+            let zP = dot(N, select(vec3<f32>(0.0), fP / max(length(fP), 1e-5), dot(fP, fP) > 1e-10));
+            P = P + N * rP * limbPlain(kP, tP, zP);
           }
         }
       }
     }
-    // CARVED TRUNK: a bare torso's outline is its cone's too, a straight line from the armpit to the waist and on to the
-    // hip -- swelled by the anatomy the fragment cuts in (the pectorals' plate in profile) and by the TRUNK's masses (the
-    // lats' flare under the arms, the flanks over the iliac line, the buttocks), as a limb's by its muscles (trunkSwell)
+    // THE TRUNK'S OUTLINE: its cone's, a straight line from the armpit to the waist and on to the hip, a slab from the side --
+    // swelled by the TRUNK's masses (the chest's arch and the back's, the lats' flare under the arms, the flanks over the
+    // iliac line, the buttocks), for everyone, dressed (TRUNK.dressed of them: what is worn lies on them) or not; on a carved one
+    // by the anatomy the fragment cuts in as well (the pectorals' plate in profile), as a limb's by its muscles (trunkSwell)
     if (!mark && !triPart && !isCut && CK[ringI].x < 0.0) {
       let rsT = i32(CK[ringI].w + 0.5);
-      let flT = texel(sTex, rsT * ${ST}).w;
       let cT = texel(tex, rsT * 3 + 2);
-      if (floor(flT / 2048.0) - 8.0 * floor(flT / 16384.0) > 0.5 && cT.y < 0.5 && cT.z > 0.5) {
+      if (cT.y < 0.5 && cT.z > 0.5 && texel(tex, rsT * 3 + 1).w > -1.5) {   // (not a tube: its C is its curve's control point)
+        let flT = texel(sTex, rsT * ${ST}).w;
+        let dressedT = floor(flT / 1024.0) - 2.0 * floor(flT / 2048.0) > 0.5;
+        let carvedT = floor(flT / 2048.0) - 8.0 * floor(flT / 16384.0) > 0.5;
         let fwT = texel(tex, base * 3 + 1).xyz - texel(tex, base * 3).xyz;
-        let bareT = select(1.0, 0.0, floor(flT / 1024.0) - 2.0 * floor(flT / 2048.0) > 0.5);   // (dressed: the bust alone)
-        if (dot(fwT, fwT) > 1e-10) { P = P + N * trunkSwell(P, CA[ringI].xyz, CB[ringI].xyz, abs(CK[ringI].x), CB[ringI].w, cT.z, fwT, bareT); }
+        // (carved and dressed: the bust alone, the sculptor's drapery is its own)
+        let massT = select(select(1.0, ${sf(TRUNK.dressed)}, dressedT), select(1.0, 0.0, dressedT), carvedT);
+        let reliefT = select(0.0, select(1.0, 0.0, dressedT), carvedT);
+        if (dot(fwT, fwT) > 1e-10) { P = P + N * trunkSwell(P, CA[ringI].xyz, CB[ringI].xyz, abs(CK[ringI].x), CB[ringI].w, cT.z, fwT, massT, reliefT, max(0.0, -cT.y) * 2.0); }
       }
     }
     // FLEECE (bit 512): wool heaped in lumps -- the surface pushed out by a field of blobs fixed to the animal (in its
@@ -1756,7 +1785,7 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
     let sOut = select(ringSlot, -1.0, mark);
     return mat4x4<f32>(vec4<f32>(pv, sOut), vec4<f32>(nw, f32(base)), vec4<f32>(col, girthHere), vec4<f32>(loc, kf));
   }
-`, [texelFor(W), unpackAw, sdRoundCone, LIB.capsuleNormal, LIB.tubeUnpack, LIB.tubeR, LIB.bezier3, dressFns(W, ST).dressLift, dressFns(W, ST).dressTop, dressFns(W, ST).dressFold, clothFrame, drapeReach(W), limbCoord, limbH, limbEase, trunkSwell]);
+`, [texelFor(W), unpackAw, sdRoundCone, LIB.capsuleNormal, LIB.tubeUnpack, LIB.tubeR, LIB.bezier3, dressFns(W, ST).dressLift, dressFns(W, ST).dressTop, dressFns(W, ST).dressFold, clothFrame, drapeReach(W), limbCoord, limbH, limbEase, trunkSwell, limbPlain]);
 
 // THE SURFACE'S OWN COLOUR: the flat fill, then whatever the part carries -- a coat's pattern, a garment's
 // cloth, fur over either -- and then the world's light. None of it is new code: the pattern library is the
@@ -1838,8 +1867,8 @@ export const LIMBS = { relief: .016, dark: .35, far: .35, swell: .7, soft: .35, 
 //  IN, its silhouette waving with them, where a painted piece's folds are shading alone; statues are few)
 // PAINT on a statue (STONES painted): how much of the marble's mottle shows through it (+-), its waxed sheen, its glow in
 // the shade (of the marble's STONE.warm), how much purer than the cloth's dye its drapery is painted, the carving's shade
-// per channel (the power its darkening is raised to: under 1 holds on); ivory's own colour
-export const PAINT = { mottle: .05, sheen: .07, warm: .5, vivid: .45, shade: [.7, .95, 1.35], ivory: [.93, .86, .72] };
+// per channel (the power its darkening is raised to: under 1 holds on); sandstone's own colour
+export const PAINT = { mottle: .05, sheen: .07, warm: .5, vivid: .45, shade: [.7, .95, 1.35], sandstone: [.8, .59, .37] };
 export const STONE = { divs: 4, ambient: .42, warm: .14, rim: .32, rimPow: 2.2, veins: .16, veinSharp: 7, incise: .4, inciseK: 3, inciseMin: .06, inciseLine: .003, groove: .7, fold: .5, hollow: .45, hollowIn: .12, cavity: 1.3, locks: 18, lockDark: .36, lockWave: .35, lockPhase: .55, lockLen: .055, lockRelief: .0022 };
 const sf = (v) => Number(v).toFixed(4);
 // value noise in 3D, three octaves, 0..1 -- the lattice hashed in integers (a sin() hash in f32 tears at the cells' seams
@@ -1910,12 +1939,12 @@ const stoneAt = wgslFn(`
       base = pc * (${sf(1 - PAINT.mottle)} + ${sf(2 * PAINT.mottle)} * f);
       spec = pow(nh, 16.0) * ${sf(PAINT.sheen)};
       warm = vec3<f32>(1.0, 0.86, 0.72) * ${sf(STONE.warm * PAINT.warm)};
-    } else {                             // ivory: warm, close-grained, glowing in its shade (chryselephantine's flesh: its own colour, ivory)
-      base = select(vec3<f32>(${PAINT.ivory.join(", ")}), paint.xyz, chrys) * (0.96 + 0.06 * f);
+    } else {                             // sandstone (Nubian, Abu Simbel's rock): warm, close-grained, glowing in its shade -- and chryselephantine's flesh, in its own colour, ivory
+      base = select(vec3<f32>(${PAINT.sandstone.join(", ")}), paint.xyz, chrys) * (0.96 + 0.06 * f);
       spec = pow(nh, 20.0) * 0.16;
       warm = vec3<f32>(1.0, 0.84, 0.64) * ${sf(STONE.warm * 1.4)};
     }
-    // (painted and ivory, the shade is WARM -- the red and the yellow hold on as the light and the carving darken it,
+    // (painted and sandstone, the shade is WARM -- the red and the yellow hold on as the light and the carving darken it,
     //  PAINT.shade: grey on a pale skin read as a beard's shadow round the mouth)
     let pv = vec3<f32>(${PAINT.shade.join(", ")});
     let cv = select(vec3<f32>(carve), pow(vec3<f32>(max(carve, 0.0)), pv), k > 4.5);
@@ -1941,8 +1970,13 @@ const stoneAt = wgslFn(`
 export const SELF = { ao: 1.3, minAo: .45, sun: .85, pen: .3, inside: 1.04, minR: .02 };
 const SELF_OFF = typeof location !== "undefined" && new URLSearchParams(location.search).get("selfshade") === "0";   // (?selfshade=0: without it, to compare)
 const selfShade = (W, ST, viewSpace) => wgslFn(`
-  fn selfShade(tex: texture_2d<f32>, sTex: texture_2d<f32>, invView: mat4x4<f32>, pw: vec3<f32>, n: vec3<f32>, me: i32, first: i32, count: i32) -> vec2<f32> {
-    let L = vec3<f32>(${SUN.join(", ")});
+  fn selfShade(tex: texture_2d<f32>, sTex: texture_2d<f32>, invView: mat4x4<f32>, pw0: vec3<f32>, n0: vec3<f32>, me: i32, first: i32, count: i32) -> vec2<f32> {
+    // (ALL OF IT IN THE TEXTURE'S OWN SPACE: the point, its normal and the sun taken into camera space once, where every
+    //  part's ends were to be taken out of it, one matrix each, per caster per pixel -- lengths and dots do not care which)
+    let L0 = vec3<f32>(${SUN.join(", ")});
+    let pw = ${viewSpace ? "vec3<f32>(dot(pw0 - invView[3].xyz, invView[0].xyz), dot(pw0 - invView[3].xyz, invView[1].xyz), dot(pw0 - invView[3].xyz, invView[2].xyz))" : "pw0"};
+    let n = ${viewSpace ? "vec3<f32>(dot(n0, invView[0].xyz), dot(n0, invView[1].xyz), dot(n0, invView[2].xyz))" : "n0"};
+    let L = ${viewSpace ? "vec3<f32>(dot(L0, invView[0].xyz), dot(L0, invView[1].xyz), dot(L0, invView[2].xyz))" : "L0"};
     var occ = 0.0;
     var lit = 1.0;
     let meStands = texel(sTex, me * ${ST} + 2).z > 0.5;
@@ -1952,8 +1986,8 @@ const selfShade = (W, ST, viewSpace) => wgslFn(`
       let B4 = texel(tex, j * 3 + 1);
       let r1 = abs(unpackAw(A4.w).x);
       if (B4.w < 0.0 || max(r1, B4.w) < ${sf(SELF.minR)}) { continue; }
-      let A = ${viewSpace ? "(invView * vec4<f32>(A4.xyz, 1.0)).xyz" : "A4.xyz"};
-      let D = ${viewSpace ? "(invView * vec4<f32>(B4.xyz, 1.0)).xyz" : "B4.xyz"} - A;
+      let A = A4.xyz;
+      let D = B4.xyz - A;
       let dd = max(dot(D, D), 1e-8);
       if (texel(sTex, j * ${ST} + 2).z > 0.5) {
         // (a standing piece casts from its HEM: the point past it along its axis, whose ray to the sun crosses the hem's
@@ -1979,6 +2013,8 @@ const selfShade = (W, ST, viewSpace) => wgslFn(`
       if (dist < rr * ${sf(SELF.inside)}) { continue; }
       // (the occlusion: the ball at the nearest point, as the normal sees it)
       occ = occ + clamp(dot(n, v) / dist, 0.0, 1.0) * (rr * rr) / (dist * dist);
+      // (...and no sun to test where the whole caster lies down-sun of the point: its ray leaves without meeting it)
+      if (dot(v, L) + sqrt(dd) + max(r1, B4.w) * 1.5 < 0.0) { continue; }
       // (the sun: the ray's nearest pass by the axis -- two steps of nearest-point back and forth)
       var t = max(dot(A + D * u - pw, L), 0.0);
       var u2 = clamp(dot(pw + L * t - A, D) / dd, 0.0, 1.0);
@@ -2076,8 +2112,8 @@ export function stoneMaterial(m, { head = false } = {}) {
 }
 // A STATUE'S MATERIAL (statues.js `stone`): marble, bronze, gold, limestone -- or PAINTED, as the Greeks' marble was: its
 // dress in its colours, its skin, hair and eyes (shell.js paints them from the figure's own: stoneAt's `paint`);
-// CHRYSELEPHANTINE, Phidias' gold and ivory: the drapery and hair gold, the flesh ivory; IVORY. (3 bits: composite.js)
-export const STONES = { marble: 1, bronze: 2, gold: 3, limestone: 4, painted: 5, chryselephantine: 6, ivory: 7 };
+// CHRYSELEPHANTINE, Phidias' gold and ivory: the drapery and hair gold, the flesh ivory; SANDSTONE. (3 bits: composite.js)
+export const STONES = { marble: 1, bronze: 2, gold: 3, limestone: 4, painted: 5, chryselephantine: 6, sandstone: 7 };
 export const PAINTED = new Set([STONES.painted, STONES.chryselephantine]);
 
 // THE ANATOMY's height (in `relief`s) at u across, t up the trunk, zf how far round toward the front (1) or the back (-1)
@@ -2146,9 +2182,14 @@ const anatomyAt = wgslFn(`
 // (the pectorals' plate in profile). Without them the trunk was a cone from armpit to hip, a slab seen from the side.
 // And a woman's BUST (`bust` [t, w, h], each breast `bustU` off the middle, `bustW` across): hers dressed too -- the
 // bodice is lifted off the swelled surface, so a chiton clings over it as the sculptor's wet drapery does
-export const TRUNK = { swell: .7, lats: [.68, .2, .1], flanks: [.3, .08, .05], hips: [.08, .08, .03], fullHip: [.17, .12, .05],
-  buttocks: [.17, .07, .2], buttockU: .42,
-  chest: [.76, .16, .08], lumbar: [.38, .1, -.06], bust: [.78, .11, .35], bustU: .48, bustW: .2 };
+// (`chest`, `back`, `belly`, `pelvis`: taken from the atlas's body, assets/people/body.json `torso.depth`: its base is the depth of the
+//  hips, the chest and the belly stand out of it before and behind)
+export const TRUNK = { swell: .7, dressed: .7, lats: [.68, .2, .07], flanks: [.3, .08, .05], hips: [.08, .08, .03], fullHip: [.17, .12, .05],
+  buttocks: [.17, .07, .1], buttockU: .42,
+  chest: [.74, .17, .17], back: [.8, .17, .17], belly: [.42, .13, .07], pelvis: [.08, .09, -.07], lumbar: [.38, .1, -.02], bust: [.78, .11, .35], bustU: .48, bustW: .2,
+  // a stout body's BELLY (people.js `pot`, body.json build.variety perFat.belly: per unit of it) -- [t, w, h] as the others,
+  // round before and `potSide` of it over the flanks (people.js POT_CLEAR: what stands off the trunk clears it)
+  pot: [.4, .17, .3], potSide: .25 };
 // a woman's BUST at t up the trunk, u across it, zf its forward share (anat `code`: people.js -- 0 but for a woman), in its
 // half-widths: what the carved trunk swells by dressed (trunkSwell) and what cloth laid on it lies on (drapeReach)
 const trunkBust = wgslFn(`
@@ -2159,7 +2200,7 @@ const trunkBust = wgslFn(`
   }
 `);
 const trunkSwell = wgslFn(`
-  fn trunkSwell(pw: vec3<f32>, A: vec3<f32>, B: vec3<f32>, rA: f32, rB: f32, code: f32, fwd: vec3<f32>, bare: f32) -> f32 {
+  fn trunkSwell(pw: vec3<f32>, A: vec3<f32>, B: vec3<f32>, rA: f32, rB: f32, code: f32, fwd: vec3<f32>, massK: f32, relief: f32, pot: f32) -> f32 {
     let d = B - A;
     let len = max(length(d), 1e-5);
     let ax = d / len;
@@ -2179,12 +2220,18 @@ const trunkSwell = wgslFn(`
     let u = abs(dot(q, cross(ax, fw))) / rad;
     let flank = 1.0 - zf * zf;
     let rear = smoothstep(0.1, 0.7, -zf) * exp(-(u - ${sf(TRUNK.buttockU)}) * (u - ${sf(TRUNK.buttockU)}) / 0.05);
-    ${["lats", "flanks", "hips", "fullHip", "buttocks", "chest", "lumbar"].map((k) => `let ${k} = ${sf(TRUNK[k][2])} * exp(-(t - ${sf(TRUNK[k][0])}) * (t - ${sf(TRUNK[k][0])}) / ${sf(TRUNK[k][1] * TRUNK[k][1])});`).join(" ")}
+    ${["lats", "flanks", "hips", "fullHip", "buttocks", "chest", "back", "belly", "pelvis", "lumbar"].map((k) => `let ${k} = ${sf(TRUNK[k][2])} * exp(-(t - ${sf(TRUNK[k][0])}) * (t - ${sf(TRUNK[k][0])}) / ${sf(TRUNK[k][1] * TRUNK[k][1])});`).join(" ")}
     let fore = smoothstep(0.1, 0.7, zf);
     let spine = smoothstep(0.1, 0.7, -zf) * smoothstep(0.6, 0.2, u);
-    let mass = (1.0 - fem) * (lats + flanks) * flank + hips * flank + fem * fullHip * flank + buttocks * rear + chest * fore + lumbar * spine;
+    let aft = smoothstep(0.1, 0.7, -zf);
+    // (a BELLY -- pot, people.js: a stout body's -- out before the waist, rounding round its sides a little; and its flanks)
+    let paunch = pot * ${sf(TRUNK.pot[2])} * exp(-(t - ${sf(TRUNK.pot[0])}) * (t - ${sf(TRUNK.pot[0])}) / ${sf(TRUNK.pot[1] * TRUNK.pot[1])});
+    let mass = (1.0 - fem) * (lats + flanks) * flank + hips * flank + fem * fullHip * flank + buttocks * rear + (chest + belly + pelvis) * fore + back * aft + lumbar * spine
+             + paunch * (smoothstep(-0.3, 0.8, zf) + ${sf(TRUNK.potSide)} * flank);
     let breasts = trunkBust(code, t, u, zf);
-    return rad * (bare * (mass + ${sf(ANATOMY.relief / .17 * TRUNK.swell)} * anatomyH(u, t, zf, fem)) + breasts);
+    var carve = 0.0;
+    if (relief > 0.5) { carve = ${sf(ANATOMY.relief / .17 * TRUNK.swell)} * anatomyH(u, t, zf, fem); }
+    return rad * (massK * mass + carve + breasts);
   }
 `, [anatomyH, trunkBust]);
 // THE LIMB's height (in reliefs) at t down it, a (radians) round it, for its `kind` (people.js LIMB): LIMBS' features
@@ -2200,6 +2247,20 @@ const limbH = wgslFn(`
 `);
 // ...and how much of it the OUTLINE takes there: none at a joint the next part meets (its own swell eased off by
 // LIMBS.ease of its length -- the shade is not: there a feature sits on the joint or keeps off it, LIMBS)
+// A PLAIN LIMB'S OUTLINE (2026-11-01; anyone's: a statue's has its muscles, LIMBS): the swell of a limb of one cone at t down
+// it, as a share of its radius -- each kind its bumps [t, half-width, height, how far they go behind]: measured off the atlas's
+// skin (the atlas' slices, assets/people/body.json `arm._about`): the thigh's fullness high up, the calf under the knee and the narrow above the ankle, the deltoid and the biceps, the forearm's
+// swell below the elbow. zf: the normal's forward share, 1 before, -1 behind. (The foot its own: PLAIN_FOOT, how many times as wide as its round cone at the
+// heel and at the ball, `at` of the way along.)
+export const PLAIN_FOOT = { heel: 1.15, ball: 2.0, at: .68 };
+export const PLAIN_LIMBS = { thigh: [[.13, .12, .17, 0], [.42, .32, .1, .2], [.95, .1, -.04, 0]], shin: [[.33, .17, .17, .8], [.76, .16, -.1, 0]],
+  arm: [[.08, .2, .08, 0], [.55, .22, .06, 0]], fore: [[.2, .2, .1, 0], [.72, .17, -.07, 0]] };
+const limbPlain = wgslFn(`
+  fn limbPlain(kind: i32, t: f32, zf: f32) -> f32 {
+    ${["thigh", "shin", "arm", "fore"].map((k, i) => `if (kind == ${i + 1}) { return ${PLAIN_LIMBS[k].map(([t0, w, h, b]) => `${sf(h)} * (1.0 - ${sf(b)} * zf) * exp(-(t - ${sf(t0)}) * (t - ${sf(t0)}) / ${sf(w * w)})`).join(" + ")}; }`).join(" ")}
+    return 0.0;
+  }
+`);
 const limbEase = wgslFn(`
   fn limbEase(kind: i32, t: f32) -> f32 {
     var w = 1.0;
@@ -2530,6 +2591,7 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
     setArrays(b, SHELL_ROOM);                  // (room for a whole town's crowd from the start: see grow())
     b.mesh = new THREE.Mesh(b.geo, material);
     b.mesh.frustumCulled = false;
+    b.mesh.renderOrder = 1;       // (after the world's solids, whose depth then spares it the pixels they hide: this is the costliest shading drawn -- a figure behind a wall, or the statues inside Abu Simbel's rock, were shaded in full first. The driver, 2, stays after it)
     b.mesh.userData.sdf = true;   // its triangles are built in the vertex shader: no override material, no CPU wire
     b.mesh.visible = false;
     buckets.push(b);

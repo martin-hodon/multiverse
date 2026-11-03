@@ -1,0 +1,288 @@
+{
+  "name": "Ottoman kiosk",
+  "_about": "THE K\u00d6\u015eK: a room W x L, H tall to the beam, on a platform `plat` high (steps up the front before each door), inside a colonnade G deep on all four sides (`ottoman` columns, nf across the front and ns along the sides, corners counted in both, a `beam` on them), the whole under one low hipped lead roof (pitch) whose deep eave reaches `eave` past the columns; windows all round every wB (wW wide), two doors in the front dX either side of the middle. `dome` yes sets a dome (domeR) on a drum over the room, up through the roof. The Audience Chamber (Arz Odas\u0131) is this with 22 columns; the Baghdad and Yerevan kiosks with the dome. (tools/archgen/ottoman.py)",
+  "params": {
+    "detail": 4,
+    "W": 16.0,
+    "L": 18.0,
+    "H": 6.0,
+    "t": 1.0,
+    "G": 3.2,
+    "plat": 0.45,
+    "colR": 0.3,
+    "nf": 7,
+    "ns": 6,
+    "beam": 0.5,
+    "eave": 2.4,
+    "pitch": 16,
+    "wB": 3.2,
+    "wW": 1.2,
+    "wSill": 0.9,
+    "wSpr": 3.0,
+    "dW": 1.8,
+    "dS": 3.0,
+    "dX": 3.0,
+    "dome": "no",
+    "domeR": "min(W, L) * 0.32",
+    "_G": "the colonnade's depth: the column axes stand G - 0.5 out from the room's walls"
+  },
+  "build": [
+    "platform",
+    "steps",
+    "colonnade",
+    "room",
+    "ceiling",
+    "roof",
+    "drum",
+    "dome",
+    "alem"
+  ],
+  "parts": {
+    "platform": {
+      "type": "box",
+      "width": "W + 2 * G + 1.0",
+      "length": "L + 2 * G + 1.0",
+      "height": "plat",
+      "walked": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the low marble platform the kiosk and its colonnade stand on"
+    },
+    "steps": {
+      "type": "flight",
+      "width": "dW + 0.6",
+      "run": 0.34,
+      "rise": "plat / 3",
+      "top": "plat",
+      "base": 0,
+      "landing": 0,
+      "at": [
+        [
+          "-1 * dX + (dW + 0.6) / 2",
+          0,
+          "L / 2 + G + 0.5 + plat / (plat / 3) * 0.34",
+          1.5707963
+        ],
+        [
+          "1 * dX + (dW + 0.6) / 2",
+          0,
+          "L / 2 + G + 0.5 + plat / (plat / 3) * 0.34",
+          1.5707963
+        ]
+      ],
+      "_about": "three steps up the front before each of the two doors"
+    },
+    "colonnade": {
+      "type": "colonnade",
+      "plan": "peristyle",
+      "order": "ottoman",
+      "front": "nf",
+      "side": "ns",
+      "width": "W + 2 * G - 1.0",
+      "length": "L + 2 * G - 1.0",
+      "columnR": "colR",
+      "height": "H",
+      "sides": 8,
+      "entablature": {
+        "h": "beam",
+        "depth": "colR * 2.4"
+      },
+      "at": [
+        [
+          0,
+          "plat",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "platform"
+      ],
+      "_about": "the colonnade round all four sides, nf columns across the front, ns along the sides (corners in both), carrying a beam"
+    },
+    "room": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "L"
+        ]
+      },
+      "thickness": "t",
+      "height": "H + beam",
+      "interior": true,
+      "glass": true,
+      "openings": {
+        "every": "wB",
+        "width": "wW",
+        "end": 1.2,
+        "sill": "wSill",
+        "springing": "wSpr",
+        "head": {
+          "profile": "pointed",
+          "spread": 0.4
+        }
+      },
+      "faces": {
+        "0": {
+          "every": "wB",
+          "width": "wW",
+          "end": 1.2,
+          "sill": "wSill",
+          "springing": "wSpr",
+          "head": {
+            "profile": "pointed",
+            "spread": 0.4
+          },
+          "with": [
+            {
+              "at": "0 - dX",
+              "width": "dW",
+              "sill": 0,
+              "springing": "dS",
+              "head": {
+                "profile": "pointed",
+                "spread": 0.4
+              },
+              "glass": false
+            },
+            {
+              "at": "dX",
+              "width": "dW",
+              "sill": 0,
+              "springing": "dS",
+              "head": {
+                "profile": "pointed",
+                "spread": 0.4
+              },
+              "glass": false
+            }
+          ]
+        }
+      },
+      "at": [
+        [
+          0,
+          "plat",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "platform"
+      ],
+      "_about": "the room: windows all round, two doors in the front (dX either side of the middle) with the gift window between"
+    },
+    "ceiling": {
+      "type": "box",
+      "width": "W - 2 * t",
+      "length": "L - 2 * t",
+      "height": 0.3,
+      "at": [
+        [
+          0,
+          "plat + H + beam - 0.3",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "room"
+      ]
+    },
+    "roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": "W + 2 * G + 2 * eave",
+      "length": "L + 2 * G + 2 * eave",
+      "pitch": "pitch",
+      "at": [
+        [
+          0,
+          "plat + H + beam",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "room",
+        "colonnade"
+      ],
+      "_about": "one low hipped lead roof over room and colonnade, its deep eave out past the columns"
+    },
+    "drum": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": "domeR + 0.4",
+      "rInner": "domeR",
+      "height": "min(W, L) / 2 * (sin(pitch * 0.0174533) / cos(pitch * 0.0174533)) + 1.2",
+      "solid": true,
+      "place": [
+        [
+          0,
+          "plat + H + beam",
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "dome": "yes"
+      },
+      "standsOn": [
+        "room"
+      ]
+    },
+    "dome": {
+      "type": "dome",
+      "radius": "domeR + 0.4",
+      "thickness": 0.4,
+      "sides": 16,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          "plat + H + beam + min(W, L) / 2 * (sin(pitch * 0.0174533) / cos(pitch * 0.0174533)) + 1.2",
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "dome": "yes"
+      },
+      "standsOn": [
+        "drum"
+      ],
+      "_about": "the dome over the room on its drum, up through the roof (dome yes: the Baghdad Kiosk's)"
+    },
+    "alem": {
+      "type": "column",
+      "radius": 0.1,
+      "height": 1.8,
+      "sides": 6,
+      "taper": 0.3,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "dome",
+      "when": {
+        "dome": "yes"
+      },
+      "standsOn": [
+        "dome"
+      ]
+    }
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "name": "Lucarne",
+  "_about": "A LUCARNE (Zwerchhaus): the dormer of the late-Gothic Residenz, standing ON THE EAVE flush with the front -- the wall carried up `H` over the eave, `W` wide and `D` deep back into the great roof, with a window in each of its two storeys (the lower `low` of H), and over it its own GABLE, `GH` high on the front with a little pinnacle at each foot and one on the apex, its own gabled roof running back into the great one. The Albrechtsburg's ring of them makes its skyline. Place it at the middle of its front, on the eave, yawed so +z faces out; `head` its windows' heads (a profile name: curtain, pointed, flat...).",
+  "params": {
+    "detail": 4,
+    "W": 4.2,
+    "D": 6.0,
+    "H": 5.6,
+    "GH": 3.6,
+    "t": 0.45,
+    "low": 0.55,
+    "winW": 1.3,
+    "rise": 0.38,
+    "pinW": 0.32,
+    "pinH": 0.9,
+    "pinS": 1.3,
+    "head": "curtain",
+    "h0": "H * low",
+    "pitch": "atan2(GH * 0.92, W / 2) * 57.29578",
+    "_W": "its width; D how far its own roof runs back into the great roof (its back is hidden in it)",
+    "_low": "the share of H the lower window's storey takes; the upper window has the rest",
+    "_pitch": "its roof's pitch, from the gable"
+  },
+  "build": [
+    "body",
+    "gable",
+    "roof",
+    "pinnacles"
+  ],
+  "parts": {
+    "body": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "D"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "faces": {
+        "0": [
+          {
+            "h": "h0",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": 0.6,
+                "springing": "h0 - 0.45 - rise",
+                "head": {
+                  "profile": "head",
+                  "rise": "rise",
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "surround": {
+                  "band": 0.14,
+                  "depth": 0.06,
+                  "head": false,
+                  "sill": true
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW * 0.85",
+                "sill": 0.5,
+                "springing": "H - h0 - 0.4 - rise",
+                "head": {
+                  "profile": "head",
+                  "rise": "rise",
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "surround": {
+                  "band": 0.14,
+                  "depth": 0.06,
+                  "head": false,
+                  "sill": true
+                }
+              }
+            ]
+          }
+        ],
+        "1": [],
+        "2": [],
+        "3": []
+      },
+      "at": [
+        [
+          0,
+          0,
+          "0 - D / 2",
+          0
+        ]
+      ],
+      "_about": "the wall carried up over the eave, two windows in its front"
+    },
+    "gable": {
+      "type": "screen",
+      "outline": [
+        [
+          "0 - W / 2",
+          0
+        ],
+        [
+          "W / 2",
+          0
+        ],
+        [
+          0,
+          "GH"
+        ]
+      ],
+      "t": "t",
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "_about": "its gable, in the plane of the front"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "W - 0.05",
+      "length": "D - 0.1",
+      "pitch": "pitch",
+      "overhang": 0.12,
+      "at": [
+        [
+          0,
+          "H",
+          "0 - D / 2 - 0.1",
+          0
+        ]
+      ],
+      "_about": "its own roof, its ridge running back into the great roof"
+    },
+    "pinnacles": {
+      "type": "pinnacle",
+      "w": "pinW",
+      "h": "pinH",
+      "s": "pinS",
+      "at": [
+        [
+          "pinW / 2 - W / 2",
+          "H",
+          "0 - t / 2",
+          0
+        ],
+        [
+          "W / 2 - pinW / 2",
+          "H",
+          "0 - t / 2",
+          0
+        ],
+        [
+          0,
+          "H + GH - 0.25",
+          "0 - t / 2",
+          0
+        ]
+      ],
+      "_about": "a little pinnacle at each foot of the gable and on its apex"
+    }
+  }
+}

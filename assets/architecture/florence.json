@@ -52,7 +52,7 @@
     "domeRise": "octR * 1.4832",
     "_domeRise": "(w/2) * sqrt(1 + 2 * .6) over the springing -- 91m inside, as built",
     "lanternR": 4.2,
-    "lanternH": 21.0,
+    "lanternH": 13.0,
     "tribR": 19.0,
     "tribH": 24.0,
     "tribT": 2.0,
@@ -63,11 +63,11 @@
     "campDoorSpring": 3.4,
     "_doors": "the ways IN, as params: florence.json cuts them and architecture.js has to leave the same holes in its colliders, or an arch is drawn open and walked into as a wall",
     "campW": 14.45,
-    "campT": 2.2,
+    "campT": 3.3,
     "campH": 84.7,
     "campStorey": "campH / 5",
-    "campX": "bodyW / 2 + 20",
-    "campZ": "zc + naveL / 2 - campW / 2",
+    "campX": "bodyW / 2 + 6 + campW / 2 + 1.2",
+    "campZ": "zc + naveL / 2 + pierT - campW / 2 - 0.6",
     "stepRun": 0.3,
     "stepRise": 0.18,
     "_clearH": "Florence's clerestory is a shallow band with round OCULI in it, not a row of lancets -- which is what leaves the nave vault springing this low and crowning at 38m",
@@ -107,11 +107,12 @@
     "_roofZ0": "the nave's roof runs from the facade to the crossing's own wall",
     "tribD": "(octR + octT) * 0.92388",
     "_tribD": "a tribune's centre, out from the crossing's: on the octagon's outer face (the game reads it too)",
-    "campIn": "campW - 3 * campT",
+    "campIn": "campW - 2 * campT",
     "campStairW": 1.2,
     "_campIn": "the campanile's inside, between the inner faces of its walls",
     "outerT": 0.9,
-    "shellGap": 2.2
+    "shellGap": 2.2,
+    "_campT": "the tower's walls are 4m thick at the foot on the real one"
   },
   "parts": {
     "nave arcade": {
@@ -417,7 +418,7 @@
       "opening": {
         "width": 2.0,
         "sill": 2.0,
-        "springing": 5.0,
+        "springing": 7.5,
         "head": {
           "profile": "arch",
           "spread": "arcSpread"
@@ -433,7 +434,8 @@
       ],
       "_about": "the lantern: an octagonal turret of its own, standing on the oculus",
       "atop": "dome",
-      "atopR": "lanternR"
+      "atopR": "lanternR",
+      "polygon": true
     },
     "tribune": {
       "type": "ring",
@@ -480,191 +482,6 @@
       ],
       "polygon": true,
       "_about": "the three tribunes round the octagon, chapels lit by a tall traceried lancet in each outer face"
-    },
-    "campanile": {
-      "type": "wall",
-      "width": "campW",
-      "height": "campStorey",
-      "thickness": "campT",
-      "_about": "one storey of the bell tower, four walls round a square, for the upper four courses",
-      "openings": [
-        {
-          "at": "campW / 2",
-          "width": 3.2,
-          "sill": 1.4,
-          "springing": "campStorey - 6.2",
-          "head": {
-            "profile": "arch",
-            "spread": "arcSpread"
-          },
-          "glass": false
-        }
-      ],
-      "at": [
-        [
-          "campX",
-          "campStorey * 1",
-          "campZ + campW / 2 - campT / 2",
-          "0"
-        ],
-        [
-          "campX",
-          "campStorey * 1",
-          "campZ - campW / 2 + campT / 2",
-          "3.1415927"
-        ],
-        [
-          "campX + campW / 2 - campT / 2",
-          "campStorey * 1",
-          "campZ",
-          "quarter"
-        ],
-        [
-          "campX - campW / 2 + campT / 2",
-          "campStorey * 1",
-          "campZ",
-          "0 - quarter"
-        ],
-        [
-          "campX",
-          "campStorey * 2",
-          "campZ + campW / 2 - campT / 2",
-          "0"
-        ],
-        [
-          "campX",
-          "campStorey * 2",
-          "campZ - campW / 2 + campT / 2",
-          "3.1415927"
-        ],
-        [
-          "campX + campW / 2 - campT / 2",
-          "campStorey * 2",
-          "campZ",
-          "quarter"
-        ],
-        [
-          "campX - campW / 2 + campT / 2",
-          "campStorey * 2",
-          "campZ",
-          "0 - quarter"
-        ],
-        [
-          "campX",
-          "campStorey * 3",
-          "campZ + campW / 2 - campT / 2",
-          "0"
-        ],
-        [
-          "campX",
-          "campStorey * 3",
-          "campZ - campW / 2 + campT / 2",
-          "3.1415927"
-        ],
-        [
-          "campX + campW / 2 - campT / 2",
-          "campStorey * 3",
-          "campZ",
-          "quarter"
-        ],
-        [
-          "campX - campW / 2 + campT / 2",
-          "campStorey * 3",
-          "campZ",
-          "0 - quarter"
-        ],
-        [
-          "campX",
-          "campStorey * 4",
-          "campZ + campW / 2 - campT / 2",
-          "0"
-        ],
-        [
-          "campX",
-          "campStorey * 4",
-          "campZ - campW / 2 + campT / 2",
-          "3.1415927"
-        ],
-        [
-          "campX + campW / 2 - campT / 2",
-          "campStorey * 4",
-          "campZ",
-          "quarter"
-        ],
-        [
-          "campX - campW / 2 + campT / 2",
-          "campStorey * 4",
-          "campZ",
-          "0 - quarter"
-        ]
-      ],
-      "glass": false
-    },
-    "campanile base": {
-      "type": "wall",
-      "width": "campW",
-      "height": "campStorey",
-      "thickness": "campT",
-      "_about": "the ground storey: the same wall with a DOOR in the face toward the church, so the stair can be reached from the ground -- a tower whose first opening is a window ten metres up is a tower nobody climbs",
-      "openings": [
-        {
-          "at": "campW / 2",
-          "width": "campDoorW",
-          "sill": 0,
-          "springing": "campDoorSpring",
-          "head": {
-            "profile": "arch",
-            "spread": "arcSpread"
-          }
-        }
-      ],
-      "at": [
-        [
-          "campX",
-          0,
-          "campZ - campW / 2 + campT / 2",
-          "3.1415927"
-        ]
-      ]
-    },
-    "campanile base wall": {
-      "type": "wall",
-      "width": "campW",
-      "height": "campStorey",
-      "thickness": "campT",
-      "openings": [
-        {
-          "at": "campW / 2",
-          "width": 3.2,
-          "sill": 1.4,
-          "springing": "campStorey - 6.2",
-          "head": {
-            "profile": "arch",
-            "spread": "arcSpread"
-          },
-          "glass": false
-        }
-      ],
-      "at": [
-        [
-          "campX",
-          0,
-          "campZ + campW / 2 - campT / 2",
-          "0"
-        ],
-        [
-          "campX + campW / 2 - campT / 2",
-          0,
-          "campZ",
-          "quarter"
-        ],
-        [
-          "campX - campW / 2 + campT / 2",
-          0,
-          "campZ",
-          "0 - quarter"
-        ]
-      ]
     },
     "tribune roof": {
       "type": "ring",
@@ -830,13 +647,13 @@
       "type": "roof",
       "form": "gable",
       "width": "naveW + 2 * pierT + 0.6",
-      "length": "roofL - pierT",
+      "length": "roofL",
       "pitch": 23.2,
       "at": [
         [
           0,
           "naveTop",
-          "(roofZ0 - pierT + roofZ1) / 2",
+          "(roofZ0 + roofZ1) / 2",
           0
         ]
       ],
@@ -937,11 +754,11 @@
     "lantern roof": {
       "type": "dome",
       "sides": 8,
-      "radius": "lanternR + 1.6",
+      "radius": "lanternR + 1.4",
       "thickness": 0,
       "head": {
         "profile": "trigonal",
-        "rise": 4.5
+        "rise": 7.5
       },
       "atop": "lantern",
       "at": [
@@ -977,11 +794,11 @@
     "lantern buttresses": {
       "type": "flyer",
       "span": 3.2,
-      "low": -0.1,
-      "high": 9.5,
+      "low": -0.25,
+      "high": 7.5,
       "top0": 2.1,
-      "top1": 13.0,
-      "width": 0.9,
+      "top1": 10.5,
+      "width": 1.15,
       "at": [
         [
           "(lanternR + 4.2) * 0.382683",
@@ -1376,8 +1193,8 @@
     },
     "pavement tower": {
       "type": "box",
-      "width": "campW - 2 * campT - 0.1",
-      "length": "campW - 2 * campT - 0.1",
+      "width": "campW - campT",
+      "length": "campW - campT",
       "height": 0.3,
       "at": [
         [
@@ -1453,8 +1270,8 @@
       "type": "enclosure",
       "plan": {
         "rect": [
-          "campW - campT + 0.12",
-          "campW - campT + 0.12"
+          "campW + 0.12",
+          "campW + 0.12"
         ]
       },
       "thickness": 0.1,
@@ -1463,7 +1280,7 @@
       "at": [
         [
           "campX",
-          "1 * campStorey - 0.525",
+          14.55,
           "campZ",
           0
         ]
@@ -1473,8 +1290,8 @@
       "type": "enclosure",
       "plan": {
         "rect": [
-          "campW - campT + 0.12",
-          "campW - campT + 0.12"
+          "campW + 0.12",
+          "campW + 0.12"
         ]
       },
       "thickness": 0.1,
@@ -1483,7 +1300,7 @@
       "at": [
         [
           "campX",
-          "2 * campStorey - 0.525",
+          23.55,
           "campZ",
           0
         ]
@@ -1493,8 +1310,8 @@
       "type": "enclosure",
       "plan": {
         "rect": [
-          "campW - campT + 0.12",
-          "campW - campT + 0.12"
+          "campW + 0.12",
+          "campW + 0.12"
         ]
       },
       "thickness": 0.1,
@@ -1503,7 +1320,7 @@
       "at": [
         [
           "campX",
-          "3 * campStorey - 0.525",
+          38.05,
           "campZ",
           0
         ]
@@ -1513,8 +1330,8 @@
       "type": "enclosure",
       "plan": {
         "rect": [
-          "campW - campT + 0.12",
-          "campW - campT + 0.12"
+          "campW + 0.12",
+          "campW + 0.12"
         ]
       },
       "thickness": 0.1,
@@ -1523,7 +1340,7 @@
       "at": [
         [
           "campX",
-          "4 * campStorey - 0.525",
+          52.55,
           "campZ",
           0
         ]
@@ -2339,8 +2156,8 @@
       "height": "campH - 0.3",
       "plan": {
         "rect": [
-          "campW - 3 * campT + campT",
-          "campW - 3 * campT + campT"
+          "campW - campT",
+          "campW - campT"
         ]
       },
       "at": [
@@ -2352,6 +2169,1485 @@
         ]
       ],
       "_about": "the campanile's shaft round its stair, on its walls' middle, up to the terrace"
+    },
+    "campanile door face": {
+      "type": "wall",
+      "width": "campW",
+      "height": "campH",
+      "thickness": "campT",
+      "tiers": [
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0,
+              "width": "campDoorW",
+              "sill": 0,
+              "springing": "campDoorSpring",
+              "head": {
+                "profile": "arch",
+                "spread": "arcSpread"
+              }
+            }
+          ]
+        },
+        {
+          "h": 9.0,
+          "openings": [
+            {
+              "at": -4.05,
+              "width": 1.5,
+              "sill": 2.0,
+              "springing": 4.8,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "glass": false
+            },
+            {
+              "at": -1.35,
+              "width": 1.5,
+              "sill": 2.0,
+              "springing": 4.8,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "glass": false
+            },
+            {
+              "at": 1.35,
+              "width": 1.5,
+              "sill": 2.0,
+              "springing": 4.8,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "glass": false
+            },
+            {
+              "at": 4.05,
+              "width": 1.5,
+              "sill": 2.0,
+              "springing": 4.8,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 14.5,
+          "openings": [
+            {
+              "at": -2.75,
+              "width": 2.7,
+              "sill": 2.2,
+              "springing": 8.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "tracery": 2,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.3,
+                "depth": 0.25
+              }
+            },
+            {
+              "at": 2.75,
+              "width": 2.7,
+              "sill": 2.2,
+              "springing": 8.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "tracery": 2,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.3,
+                "depth": 0.25
+              }
+            }
+          ]
+        },
+        {
+          "h": 14.5,
+          "openings": [
+            {
+              "at": -2.75,
+              "width": 2.7,
+              "sill": 2.2,
+              "springing": 8.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "tracery": 2,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.3,
+                "depth": 0.25
+              }
+            },
+            {
+              "at": 2.75,
+              "width": 2.7,
+              "sill": 2.2,
+              "springing": 8.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "tracery": 2,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.3,
+                "depth": 0.25
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 5.4,
+              "sill": 3.2,
+              "springing": 19.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.6
+              },
+              "tracery": 3,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.4,
+                "depth": 0.3
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "campX",
+          0,
+          "campZ - campW / 2",
+          3.141593
+        ]
+      ],
+      "_about": "the same face with the door in its foot, so the stair can be reached from the ground"
+    },
+    "campanile buttresses": {
+      "type": "column",
+      "radius": 1.2,
+      "height": "campH - 3.2",
+      "sides": 8,
+      "at": [
+        [
+          "campX + (campW / 2 - 0.1)",
+          0,
+          "campZ + (campW / 2 - 0.1)",
+          0.392699
+        ],
+        [
+          "campX + (campW / 2 - 0.1)",
+          0,
+          "campZ - (campW / 2 - 0.1)",
+          0.392699
+        ],
+        [
+          "campX - (campW / 2 - 0.1)",
+          0,
+          "campZ + (campW / 2 - 0.1)",
+          0.392699
+        ],
+        [
+          "campX - (campW / 2 - 0.1)",
+          0,
+          "campZ - (campW / 2 - 0.1)",
+          0.392699
+        ]
+      ],
+      "_about": "the octagonal buttress at each corner, from the ground to the corbels"
+    },
+    "campanile niche backs": {
+      "type": "box",
+      "width": 2.1,
+      "length": 2.4,
+      "height": 6.0,
+      "at": [
+        [
+          "campX + -4.0500",
+          16.8,
+          "campZ + 5.1250",
+          0.0
+        ],
+        [
+          "campX + -1.3500",
+          16.8,
+          "campZ + 5.1250",
+          0.0
+        ],
+        [
+          "campX + 1.3500",
+          16.8,
+          "campZ + 5.1250",
+          0.0
+        ],
+        [
+          "campX + 4.0500",
+          16.8,
+          "campZ + 5.1250",
+          0.0
+        ],
+        [
+          "campX + 4.0500",
+          16.8,
+          "campZ + -5.1250",
+          3.141593
+        ],
+        [
+          "campX + 1.3500",
+          16.8,
+          "campZ + -5.1250",
+          3.141593
+        ],
+        [
+          "campX + -1.3500",
+          16.8,
+          "campZ + -5.1250",
+          3.141593
+        ],
+        [
+          "campX + -4.0500",
+          16.8,
+          "campZ + -5.1250",
+          3.141593
+        ],
+        [
+          "campX + 5.1250",
+          16.8,
+          "campZ + 4.0500",
+          1.570796
+        ],
+        [
+          "campX + 5.1250",
+          16.8,
+          "campZ + 1.3500",
+          1.570796
+        ],
+        [
+          "campX + 5.1250",
+          16.8,
+          "campZ + -1.3500",
+          1.570796
+        ],
+        [
+          "campX + 5.1250",
+          16.8,
+          "campZ + -4.0500",
+          1.570796
+        ],
+        [
+          "campX + -5.1250",
+          16.8,
+          "campZ + -4.0500",
+          -1.570796
+        ],
+        [
+          "campX + -5.1250",
+          16.8,
+          "campZ + -1.3500",
+          -1.570796
+        ],
+        [
+          "campX + -5.1250",
+          16.8,
+          "campZ + 1.3500",
+          -1.570796
+        ],
+        [
+          "campX + -5.1250",
+          16.8,
+          "campZ + 4.0500",
+          -1.570796
+        ]
+      ],
+      "_about": "what closes the niches: masonry, in the wall's thickness"
+    },
+    "campanile statues": {
+      "type": "pinnacle",
+      "w": 0.7,
+      "h": 0.2,
+      "s": 0.02,
+      "figure": 2.7,
+      "at": [
+        [
+          "campX + -4.0500",
+          17.0,
+          "campZ + 6.7250",
+          0.0
+        ],
+        [
+          "campX + -1.3500",
+          17.0,
+          "campZ + 6.7250",
+          0.0
+        ],
+        [
+          "campX + 1.3500",
+          17.0,
+          "campZ + 6.7250",
+          0.0
+        ],
+        [
+          "campX + 4.0500",
+          17.0,
+          "campZ + 6.7250",
+          0.0
+        ],
+        [
+          "campX + 4.0500",
+          17.0,
+          "campZ + -6.7250",
+          3.141593
+        ],
+        [
+          "campX + 1.3500",
+          17.0,
+          "campZ + -6.7250",
+          3.141593
+        ],
+        [
+          "campX + -1.3500",
+          17.0,
+          "campZ + -6.7250",
+          3.141593
+        ],
+        [
+          "campX + -4.0500",
+          17.0,
+          "campZ + -6.7250",
+          3.141593
+        ],
+        [
+          "campX + 6.7250",
+          17.0,
+          "campZ + 4.0500",
+          1.570796
+        ],
+        [
+          "campX + 6.7250",
+          17.0,
+          "campZ + 1.3500",
+          1.570796
+        ],
+        [
+          "campX + 6.7250",
+          17.0,
+          "campZ + -1.3500",
+          1.570796
+        ],
+        [
+          "campX + 6.7250",
+          17.0,
+          "campZ + -4.0500",
+          1.570796
+        ],
+        [
+          "campX + -6.7250",
+          17.0,
+          "campZ + -4.0500",
+          -1.570796
+        ],
+        [
+          "campX + -6.7250",
+          17.0,
+          "campZ + -1.3500",
+          -1.570796
+        ],
+        [
+          "campX + -6.7250",
+          17.0,
+          "campZ + 1.3500",
+          -1.570796
+        ],
+        [
+          "campX + -6.7250",
+          17.0,
+          "campZ + 4.0500",
+          -1.570796
+        ]
+      ],
+      "_about": "the sixteen prophets and sibyls of the niche storey"
+    },
+    "campanile hexagons": {
+      "type": "screen",
+      "outline": [
+        [
+          0.72,
+          0.0
+        ],
+        [
+          0.36,
+          0.624
+        ],
+        [
+          -0.36,
+          0.624
+        ],
+        [
+          -0.72,
+          0.0
+        ],
+        [
+          -0.36,
+          -0.624
+        ],
+        [
+          0.36,
+          -0.624
+        ]
+      ],
+      "t": 0.12,
+      "at": [
+        [
+          "campX + -4.8000",
+          4.6,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + -3.2000",
+          4.6,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + -1.6000",
+          4.6,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 0.0000",
+          4.6,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 1.6000",
+          4.6,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 3.2000",
+          4.6,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 4.8000",
+          4.6,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 4.8000",
+          4.6,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + 3.2000",
+          4.6,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + -3.2000",
+          4.6,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + -4.8000",
+          4.6,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + 7.3450",
+          4.6,
+          "campZ + 4.8000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          4.6,
+          "campZ + 3.2000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          4.6,
+          "campZ + 1.6000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          4.6,
+          "campZ + 0.0000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          4.6,
+          "campZ + -1.6000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          4.6,
+          "campZ + -3.2000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          4.6,
+          "campZ + -4.8000",
+          1.570796
+        ],
+        [
+          "campX + -7.3450",
+          4.6,
+          "campZ + -4.8000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          4.6,
+          "campZ + -3.2000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          4.6,
+          "campZ + -1.6000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          4.6,
+          "campZ + 0.0000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          4.6,
+          "campZ + 1.6000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          4.6,
+          "campZ + 3.2000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          4.6,
+          "campZ + 4.8000",
+          -1.570796
+        ]
+      ],
+      "_about": "Andrea Pisano's hexagonal reliefs, the lowest zone"
+    },
+    "campanile lozenges": {
+      "type": "screen",
+      "outline": [
+        [
+          0.62,
+          0
+        ],
+        [
+          0,
+          0.95
+        ],
+        [
+          -0.62,
+          0
+        ],
+        [
+          0,
+          -0.95
+        ]
+      ],
+      "t": 0.12,
+      "at": [
+        [
+          "campX + -4.8000",
+          11.3,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + -3.2000",
+          11.3,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + -1.6000",
+          11.3,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 0.0000",
+          11.3,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 1.6000",
+          11.3,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 3.2000",
+          11.3,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 4.8000",
+          11.3,
+          "campZ + 7.3450",
+          0.0
+        ],
+        [
+          "campX + 4.8000",
+          11.3,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + 3.2000",
+          11.3,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + 1.6000",
+          11.3,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + 0.0000",
+          11.3,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + -1.6000",
+          11.3,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + -3.2000",
+          11.3,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + -4.8000",
+          11.3,
+          "campZ + -7.3450",
+          3.141593
+        ],
+        [
+          "campX + 7.3450",
+          11.3,
+          "campZ + 4.8000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          11.3,
+          "campZ + 3.2000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          11.3,
+          "campZ + 1.6000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          11.3,
+          "campZ + 0.0000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          11.3,
+          "campZ + -1.6000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          11.3,
+          "campZ + -3.2000",
+          1.570796
+        ],
+        [
+          "campX + 7.3450",
+          11.3,
+          "campZ + -4.8000",
+          1.570796
+        ],
+        [
+          "campX + -7.3450",
+          11.3,
+          "campZ + -4.8000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          11.3,
+          "campZ + -3.2000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          11.3,
+          "campZ + -1.6000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          11.3,
+          "campZ + 0.0000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          11.3,
+          "campZ + 1.6000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          11.3,
+          "campZ + 3.2000",
+          -1.570796
+        ],
+        [
+          "campX + -7.3450",
+          11.3,
+          "campZ + 4.8000",
+          -1.570796
+        ]
+      ],
+      "_about": "the lozenges of the zone above, on their blue ground"
+    },
+    "campanile strings": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW + 0.5",
+          "campW + 0.5"
+        ]
+      },
+      "thickness": 0.35,
+      "height": 0.3,
+      "openings": [],
+      "at": [
+        [
+          "campX",
+          8.1,
+          "campZ",
+          0
+        ],
+        [
+          "campX",
+          15.0,
+          "campZ",
+          0
+        ],
+        [
+          "campX",
+          24.0,
+          "campZ",
+          0
+        ],
+        [
+          "campX",
+          38.5,
+          "campZ",
+          0
+        ],
+        [
+          "campX",
+          53.0,
+          "campZ",
+          0
+        ]
+      ],
+      "_about": "a moulding at each joint between the zones"
+    },
+    "campanile corbels": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW + 2.0",
+          "campW + 2.0"
+        ]
+      },
+      "thickness": 2.0,
+      "height": 1.6,
+      "openings": [],
+      "at": [
+        [
+          "campX",
+          "campH - 3.2",
+          "campZ",
+          0
+        ]
+      ],
+      "_about": "the corbel table the cornice juts out on"
+    },
+    "west rake right": {
+      "type": "screen",
+      "outline": [
+        [
+          "1 * (frontC / 2 + frontWing)",
+          "aisleTop + 8.0 - 0.05"
+        ],
+        [
+          "1 * (frontC / 2)",
+          "aisleTop + 8.0 - 0.05"
+        ],
+        [
+          "1 * (frontC / 2)",
+          36.8
+        ],
+        [
+          "1 * (frontC / 2 + frontWing)",
+          "aisleTop + 8.0"
+        ]
+      ],
+      "t": 1.0,
+      "at": [
+        [
+          0,
+          0,
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ],
+      "_about": "the wing's top, raking up to the middle bay"
+    },
+    "west rake lace right": {
+      "type": "cresting",
+      "run": [
+        [
+          "1 * (frontC / 2 + frontWing)",
+          "aisleTop + 8.0"
+        ],
+        [
+          "1 * (frontC / 2)",
+          36.8
+        ]
+      ],
+      "h": 1.1,
+      "panel": 1.5,
+      "t": 0.2,
+      "every": 3,
+      "spirelet": {
+        "w": 0.18,
+        "s": 0.8
+      },
+      "at": [
+        [
+          0,
+          0,
+          "zc + naveL / 2 + pierT - 0.4",
+          0
+        ]
+      ]
+    },
+    "west rake left": {
+      "type": "screen",
+      "outline": [
+        [
+          "-1 * (frontC / 2 + frontWing)",
+          "aisleTop + 8.0 - 0.05"
+        ],
+        [
+          "-1 * (frontC / 2)",
+          "aisleTop + 8.0 - 0.05"
+        ],
+        [
+          "-1 * (frontC / 2)",
+          36.8
+        ],
+        [
+          "-1 * (frontC / 2 + frontWing)",
+          "aisleTop + 8.0"
+        ]
+      ],
+      "t": 1.0,
+      "at": [
+        [
+          0,
+          0,
+          "zc + naveL / 2 + pierT",
+          0
+        ]
+      ],
+      "_about": "the wing's top, raking up to the middle bay"
+    },
+    "west rake lace left": {
+      "type": "cresting",
+      "run": [
+        [
+          "-1 * (frontC / 2 + frontWing)",
+          "aisleTop + 8.0"
+        ],
+        [
+          "-1 * (frontC / 2)",
+          36.8
+        ]
+      ],
+      "h": 1.1,
+      "panel": 1.5,
+      "t": 0.2,
+      "every": 3,
+      "spirelet": {
+        "w": 0.18,
+        "s": 0.8
+      },
+      "at": [
+        [
+          0,
+          0,
+          "zc + naveL / 2 + pierT - 0.4",
+          0
+        ]
+      ]
+    },
+    "west gable lace": {
+      "type": "cresting",
+      "run": [
+        [
+          -13.25,
+          "naveTop"
+        ],
+        [
+          0,
+          "naveTop + 8.28"
+        ],
+        [
+          13.25,
+          "naveTop"
+        ]
+      ],
+      "h": 1.0,
+      "panel": 1.5,
+      "t": 0.2,
+      "every": 3,
+      "spirelet": {
+        "w": 0.18,
+        "s": 0.8
+      },
+      "at": [
+        [
+          0,
+          0,
+          "zc + naveL / 2 + pierT - 0.5",
+          0
+        ]
+      ],
+      "_about": "the pierced gallery up the gable's rakes"
+    },
+    "west tondo": {
+      "type": "screen",
+      "outline": [
+        [
+          2.5,
+          0.0
+        ],
+        [
+          2.31,
+          0.957
+        ],
+        [
+          1.768,
+          1.768
+        ],
+        [
+          0.957,
+          2.31
+        ],
+        [
+          0.0,
+          2.5
+        ],
+        [
+          -0.957,
+          2.31
+        ],
+        [
+          -1.768,
+          1.768
+        ],
+        [
+          -2.31,
+          0.957
+        ],
+        [
+          -2.5,
+          0.0
+        ],
+        [
+          -2.31,
+          -0.957
+        ],
+        [
+          -1.768,
+          -1.768
+        ],
+        [
+          -0.957,
+          -2.31
+        ],
+        [
+          -0.0,
+          -2.5
+        ],
+        [
+          0.957,
+          -2.31
+        ],
+        [
+          1.768,
+          -1.768
+        ],
+        [
+          2.31,
+          -0.957
+        ]
+      ],
+      "t": 0.2,
+      "at": [
+        [
+          0,
+          "naveTop + 2.7",
+          "zc + naveL / 2 + pierT + 0.1",
+          0
+        ]
+      ],
+      "_about": "the tondo in the gable"
+    },
+    "west gable apex": {
+      "type": "pinnacle",
+      "w": 1.3,
+      "h": 2.0,
+      "s": 3.0,
+      "gablets": 0.8,
+      "at": [
+        [
+          0,
+          "naveTop + 8.0",
+          "zc + naveL / 2 + pierT - 0.5",
+          0
+        ]
+      ],
+      "_about": "the tabernacle at the gable's peak"
+    },
+    "west piers": {
+      "type": "box",
+      "width": 3.0,
+      "length": 1.8,
+      "height": 28.0,
+      "at": [
+        [
+          "1 * (frontC / 2)",
+          0,
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ],
+        [
+          "1 * (frontC / 2 + frontWing)",
+          0,
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ],
+        [
+          "-1 * (frontC / 2)",
+          0,
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ],
+        [
+          "-1 * (frontC / 2 + frontWing)",
+          0,
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ]
+      ],
+      "_about": "the front's four piers, their lower stage"
+    },
+    "west piers inner": {
+      "type": "box",
+      "width": 2.4,
+      "length": 1.5,
+      "height": "naveTop + 2.2 - 28",
+      "at": [
+        [
+          "1 * (frontC / 2)",
+          28,
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ],
+        [
+          "-1 * (frontC / 2)",
+          28,
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ]
+      ]
+    },
+    "west piers outer": {
+      "type": "box",
+      "width": 2.4,
+      "length": 1.5,
+      "height": "aisleTop + 8.0 + 1.2 - 28",
+      "at": [
+        [
+          "1 * (frontC / 2 + frontWing)",
+          28,
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ],
+        [
+          "-1 * (frontC / 2 + frontWing)",
+          28,
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ]
+      ]
+    },
+    "west pinnacles inner": {
+      "type": "pinnacle",
+      "w": 2.2,
+      "h": 4.2,
+      "s": 5.2,
+      "sides": 8,
+      "gablets": 1.2,
+      "crockets": 3,
+      "figure": 2.2,
+      "at": [
+        [
+          "1 * (frontC / 2)",
+          "naveTop + 2.15",
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ],
+        [
+          "-1 * (frontC / 2)",
+          "naveTop + 2.15",
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ]
+      ]
+    },
+    "west pinnacles outer": {
+      "type": "pinnacle",
+      "w": 2.1,
+      "h": 3.0,
+      "s": 4.2,
+      "gablets": 1.0,
+      "crockets": 2,
+      "at": [
+        [
+          "1 * (frontC / 2 + frontWing)",
+          "aisleTop + 8.0 + 1.15",
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ],
+        [
+          "-1 * (frontC / 2 + frontWing)",
+          "aisleTop + 8.0 + 1.15",
+          "zc + naveL / 2 + pierT - 0.2",
+          0
+        ]
+      ]
+    },
+    "apostles course": {
+      "type": "box",
+      "width": "bodyW - 0.2",
+      "length": 0.8,
+      "height": 0.45,
+      "at": [
+        [
+          0,
+          20.25,
+          "zc + naveL / 2 + pierT + 0.1",
+          0
+        ]
+      ],
+      "_about": "the course the apostles stand on"
+    },
+    "apostles": {
+      "type": "pinnacle",
+      "w": 0.8,
+      "h": 0.2,
+      "s": 0.02,
+      "figure": 2.6,
+      "at": [
+        [
+          -9.8,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -7.35,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -4.9,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -2.45,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          0.0,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          2.45,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          4.9,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          7.35,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          9.8,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          15.6,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          17.8,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          20.0,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -15.6,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -17.8,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -20.0,
+          20.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ]
+      ],
+      "_about": "the Madonna among the apostles, in a row across the front"
+    },
+    "apostles canopies": {
+      "type": "pinnacle",
+      "w": 1.05,
+      "h": 0.25,
+      "s": 1.5,
+      "gablets": 0.45,
+      "at": [
+        [
+          -9.8,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -7.35,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -4.9,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -2.45,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          0.0,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          2.45,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          4.9,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          7.35,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          9.8,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          15.6,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          17.8,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          20.0,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -15.6,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -17.8,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ],
+        [
+          -20.0,
+          23.7,
+          "zc + naveL / 2 + pierT + 0.2",
+          0
+        ]
+      ]
+    },
+    "lantern cross": {
+      "type": "box",
+      "width": 0.22,
+      "length": 0.22,
+      "height": 3.6,
+      "atop": "lantern ball",
+      "at": [
+        [
+          0,
+          -0.2,
+          "octZ",
+          0
+        ]
+      ],
+      "_about": "the cross on the ball"
+    },
+    "lantern cross arm": {
+      "type": "box",
+      "width": 1.5,
+      "length": 0.2,
+      "height": 0.2,
+      "atop": "lantern ball",
+      "at": [
+        [
+          0,
+          2.0,
+          "octZ",
+          0
+        ]
+      ]
     },
     "campanile stair": {
       "type": "staircase",
@@ -2376,27 +3672,6 @@
         ]
       ],
       "_about": "four flights a storey round the well on corner landings, five storeys, 420 steps to the terrace"
-    },
-    "campanile cornice": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          "campW + 1.4",
-          "campW + 1.4"
-        ]
-      },
-      "thickness": 2.6,
-      "height": 0.9,
-      "openings": [],
-      "at": [
-        [
-          "campX",
-          "campH",
-          "campZ",
-          0
-        ]
-      ],
-      "_about": "the cornice and parapet round the terrace"
     },
     "green band facade 1 1": {
       "type": "box",
@@ -2525,6 +3800,208 @@
           0
         ]
       ]
+    },
+    "campanile": {
+      "type": "wall",
+      "width": "campW",
+      "height": "campH",
+      "thickness": "campT",
+      "tiers": [
+        {
+          "h": 15.0,
+          "openings": []
+        },
+        {
+          "h": 9.0,
+          "openings": [
+            {
+              "at": -4.05,
+              "width": 1.5,
+              "sill": 2.0,
+              "springing": 4.8,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "glass": false
+            },
+            {
+              "at": -1.35,
+              "width": 1.5,
+              "sill": 2.0,
+              "springing": 4.8,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "glass": false
+            },
+            {
+              "at": 1.35,
+              "width": 1.5,
+              "sill": 2.0,
+              "springing": 4.8,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "glass": false
+            },
+            {
+              "at": 4.05,
+              "width": 1.5,
+              "sill": 2.0,
+              "springing": 4.8,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 14.5,
+          "openings": [
+            {
+              "at": -2.75,
+              "width": 2.7,
+              "sill": 2.2,
+              "springing": 8.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "tracery": 2,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.3,
+                "depth": 0.25
+              }
+            },
+            {
+              "at": 2.75,
+              "width": 2.7,
+              "sill": 2.2,
+              "springing": 8.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "tracery": 2,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.3,
+                "depth": 0.25
+              }
+            }
+          ]
+        },
+        {
+          "h": 14.5,
+          "openings": [
+            {
+              "at": -2.75,
+              "width": 2.7,
+              "sill": 2.2,
+              "springing": 8.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "tracery": 2,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.3,
+                "depth": 0.25
+              }
+            },
+            {
+              "at": 2.75,
+              "width": 2.7,
+              "sill": 2.2,
+              "springing": 8.2,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.5
+              },
+              "tracery": 2,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.3,
+                "depth": 0.25
+              }
+            }
+          ]
+        },
+        {
+          "openings": [
+            {
+              "at": 0,
+              "width": 5.4,
+              "sill": 3.2,
+              "springing": 19.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.6
+              },
+              "tracery": 3,
+              "glass": false,
+              "wimperg": {
+                "pitch": 60,
+                "coping": 0.4,
+                "depth": 0.3
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          "campX",
+          0,
+          "campZ + campW / 2",
+          0.0
+        ],
+        [
+          "campX + campW / 2",
+          0,
+          "campZ",
+          1.570796
+        ],
+        [
+          "campX - campW / 2",
+          0,
+          "campZ",
+          -1.570796
+        ]
+      ],
+      "_about": "a face of the tower, its zones as tiers: reliefs, niches, two storeys of pairs of two-light windows, the great three-light one"
+    },
+    "campanile cornice": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "campW + 2.8",
+          "campW + 2.8"
+        ]
+      },
+      "thickness": 2.9,
+      "height": 2.6,
+      "openings": [],
+      "at": [
+        [
+          "campX",
+          "campH - 1.6",
+          "campZ",
+          0
+        ]
+      ],
+      "_about": "the cornice and the parapet round the terrace on its top"
     }
   },
   "build": [
@@ -2536,12 +4013,38 @@
     "aisle vault",
     "nave roof",
     "west gable",
+    "west gable lace",
+    "west tondo",
+    "west gable apex",
     "aisle roofs",
     "aisle end roofs",
     "west front",
     "west rose",
+    "apostles course",
+    "apostles",
+    "apostles canopies",
     "west wing",
     "west wing upper",
+    "west piers",
+    "west piers outer",
+    "west pinnacles outer",
+    "west piers inner",
+    "west pinnacles inner",
+    "west rake left",
+    "west rake lace left",
+    "west rake right",
+    "west rake lace right",
+    "campanile",
+    "campanile door face",
+    "campanile buttresses",
+    "campanile niche backs",
+    "campanile statues",
+    "campanile hexagons",
+    "campanile lozenges",
+    "campanile stair",
+    "campanile terrace",
+    "campanile corbels",
+    "campanile cornice",
     "octagon",
     "octagon pier",
     "pier shaft inner",
@@ -2563,6 +4066,8 @@
     "lantern",
     "lantern roof",
     "lantern ball",
+    "lantern cross",
+    "lantern cross arm",
     "lantern buttresses",
     "tribune",
     "tribune chapels",
@@ -2573,12 +4078,6 @@
     "tribune spandrels right",
     "tribune vaults",
     "tribune roofs",
-    "campanile base",
-    "campanile base wall",
-    "campanile",
-    "campanile stair",
-    "campanile terrace",
-    "campanile cornice",
     "pavement",
     "pavement crossing",
     "pavement tribunes",
@@ -2604,6 +4103,7 @@
     "pier shaft",
     "lantern space",
     "campanile space",
+    "campanile strings",
     "green band facade 1 1",
     "green band facade 1 2",
     "red band facade 1 1",

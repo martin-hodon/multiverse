@@ -1,0 +1,192 @@
+{
+  "name": "Regensburg Cathedral",
+  "building": "architecture/regensburg",
+  "_about": "Regensburg Cathedral (written by tools/archgen/regensburg.py): pale Kelheim limestone with greensand blocks scattered through it (stone/ashlar two stones, palette regensburg), as cleaned of its black crust after 1985; the steep roofs in red-brown plain tile (fish scale, the nearest to beaver-tails), the Eselsturm's pyramid too; the Dachreiter in copper gone green; the Romanesque Eselsturm in plain ashlar of the same limestone; the medieval stained glass; inside, the limestone and a flagstone floor.",
+  "stone": {
+    "color": "#d3cbb5",
+    "accent": "#bbbaa2",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {
+      "parts": "kind:glass",
+      "opening": "head",
+      "map": "opening",
+      "pattern": "glass/tracery diaper",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "tall",
+      "nth": [
+        6,
+        0
+      ],
+      "map": "opening",
+      "turn": 90,
+      "pattern": "glass/saint peter",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "tall",
+      "nth": [
+        6,
+        1
+      ],
+      "map": "opening",
+      "turn": 90,
+      "pattern": "glass/medallion stack",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "tall",
+      "nth": [
+        6,
+        2
+      ],
+      "map": "opening",
+      "turn": 90,
+      "pattern": "glass/saint bishop",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "tall",
+      "nth": [
+        6,
+        3
+      ],
+      "map": "opening",
+      "turn": 90,
+      "pattern": "glass/medallion story",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "tall",
+      "nth": [
+        6,
+        4
+      ],
+      "map": "opening",
+      "turn": 90,
+      "pattern": "glass/saint virgin",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "tall",
+      "nth": [
+        6,
+        5
+      ],
+      "map": "opening",
+      "turn": 90,
+      "pattern": "glass/saint martyr",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "short",
+      "nth": [
+        2,
+        0
+      ],
+      "map": "opening",
+      "pattern": "glass/medallion annunciation",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "short",
+      "nth": [
+        2,
+        1
+      ],
+      "map": "opening",
+      "pattern": "glass/medallion majesty",
+      "palette": "cologne"
+    },
+    {
+      "parts": "kind:glass",
+      "pattern": "painted/stained glass",
+      "palette": "stained",
+      "_about": "the windows' stained glass"
+    },
+    {
+      "parts": [
+        "dachreiter"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the Dachreiter: copper, gone green"
+    },
+    {
+      "parts": [
+        "eselsturm roof"
+      ],
+      "pattern": "roofs/fish scale",
+      "palette": "tile-brown",
+      "_about": "the Eselsturm's pyramid: plain tile"
+    },
+    {
+      "parts": "kind:roof",
+      "surface": "roof",
+      "pattern": "roofs/fish scale",
+      "palette": "tile-red",
+      "_about": "the steep roofs and the side choirs' half cones: red-brown plain tile"
+    },
+    {
+      "parts": [
+        "eselsturm"
+      ],
+      "pattern": "stone/ashlar",
+      "palette": "regensburg",
+      "_about": "the Romanesque Eselsturm: plain ashlar of the same limestone, without the Gothic builders' greensand"
+    },
+    {
+      "parts": "kind:dome",
+      "surface": "roof",
+      "pattern": "stone/ashlar fine",
+      "palette": "regensburg",
+      "_about": "the pinnacles' and spirelets' stone caps"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/flagstones",
+      "palette": "limestone"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "granite"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "stone/ashlar",
+      "palette": "limestone",
+      "_about": "inside: the limestone (whitewashed in the Middle Ages, ochre and olive-grey since)"
+    },
+    {
+      "surface": "wall",
+      "pattern": "stone/ashlar two stones",
+      "palette": "regensburg",
+      "_about": "outside: limestone patched with greensand"
+    },
+    {
+      "side": "in",
+      "pattern": "stone/ashlar",
+      "palette": "limestone",
+      "_about": "the vaults' webs and ribs inside"
+    },
+    {
+      "pattern": "stone/ashlar two stones",
+      "palette": "regensburg",
+      "_about": "the rest -- pinnacles, mouldings, spires -- in the same two stones"
+    }
+  ]
+}

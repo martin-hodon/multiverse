@@ -1562,6 +1562,18 @@ size: a horn, a tusk or a fang is moved so its ROOT lands back on the smaller sk
 `headPiece: true` and shrinks with it. The big cats' frame was also a third too short in the body and half
 again too deep in the chest (a tiger stands on 50% leg), and the bear stood at 1.45 m with a metre-deep chest.
 
+**Stance and feet, 2026-11-01.** `mammal()` draws the foot by the species' `print`: a `hoof` or `cloven` foot is a flared horn
+cone kept level (its round end under the ground, so its tread is flat) where an ellipsoid came out a diamond under a
+column; a `paw` is a longer pad, kept level. Legs fold a little at rest (`legs.bend`, by `print` unless given: a hock
+behind the hind leg): the bones are that much longer than the reach, `legLen` stays the reach, so the gaits are as they
+were. A thigh's top stays inside the flank (a biped's excepted), and a leg a shade off the coat fades into it down the leg
+instead of a patch sewn on. Measures now, against zoology (over withers height, before > after): dog body 1.44 > 1.25,
+wolf 1.43 > 1.33, cow 1.47 > 1.36, deer 1.40 > 1.30, horse head .37 > .30 (and carried at 45 degrees, not level like a
+llama's), big cats' tail .57 > .95, sheep withers .94 > .80 m, giraffe 4.76 > 5.07 m tall; pigs, boars and hippos have
+necks. The chain of people (`assets/people/body.json`, shell.js `TRUNK`, `PLAIN_LIMBS`, `PLAIN_FOOT`) was measured against
+an anatomical atlas the same day: every figure's trunk has its chest, back and buttocks in profile, every limb its calf and
+forearm, and a foot its ball, in the vertex shader -- no more parts or rings than before.
+
 For people, the cranium was cut to the head's HEIGHT: a 24 cm-wide skull, half a head too broad seen from the
 front. A head is 23 cm chin to crown but 15 across and 20 deep, and a cross-section here is a circle, so the
 sphere is cut between the width and the depth (`hr = .056 h`) and the jaw below it carries the height. And the
@@ -1762,3 +1774,29 @@ always fine: a market view A/B'd at 64 against 4096 was identical pixel for pixe
 later, when many chains come close (the hedgehog's quills; a crowd walking up to you could too). A bucket still grows
 past 4096, and would then show the bug -- it says so in the console (`shell: a bucket ... grew past`); none does in a
 whole town.
+
+## Asking the ground its height (2026-11-01)
+
+`naturalH` walked every flat zone (one per building plot) on each height query, though a zone only reaches 20 m past its
+rectangle. On the medieval world that was 4% of the main thread in play and most of what the terrain worker does at
+load. Zones are now found through a 64 m grid (`indexZones`, ground.js; it follows `flatZones.length`, because the list
+grows while the town is laid out): 445k queries went from 2,189 ms to 60 ms, with the heights hash-identical. A zone
+whose position or size is changed in place would leave the grid stale; nothing does that today.
+
+## What the leaves cost (2026-11-01)
+
+Facing a wood from inside the medieval world, `__dbg.bench()` put the 64k leaf cards at 17-22 ms of about 31 ms of GPU work
+(bench figures with other jobs running on the machine: compare them with each other, not with the HUD). It is nearly all
+fill: a quarter of the pixels took it from 20.4 ms to 3.5 ms, half the cards only to 15.7 ms, because the nearest bushes
+cover the screen several times over. So thinning far crowns would buy little. The cloud shadow moved from the pixel to the
+card's corners (about 10%, A/B on two runs each; no visible change, a cloud's edge is far wider than a card). The rest of the
+card's light went the same way (2026-11-02: `leafLit`, `leafThrough`; a card is flat, so it's the same all over it): about 0.7 ms,
+15 paired runs on a quiet machine, 12 in its favour; the picture's mean colour within 0.1 of 255.
+
+Tried and not kept, same day. A depth pre-pass (the cut-out alone, then the colour with the depth test): 1-2 ms at most, in runs
+too noisy to say better, and it changes the picture, whichever way it's done: crowns go pale and speckled, because an edge that is
+now the only leaf left in its sample shows the sky or the ground, not the darker leaves behind it. Dropping `transparent` alone
+pales them the same way. Thinning crowns past 60 m (half the cards fade, the others grow a quarter): no gain (-0.02 ms) facing a
+wood, as the figures above said. Cutting each card to an octagon round its leaves (59-78% of the quad for the leaf styles): no
+gain either (-0.31 ms, 15 paired runs, 4 in its favour): an empty pixel is cheap, and 6 triangles a card pay back what it saves.
+Less MSAA is what's left, and that's a visible trade: not done.

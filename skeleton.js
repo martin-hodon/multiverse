@@ -87,6 +87,7 @@ export function compileDef(def) {
       flat: part.flat ?? 0,     // composite: a capsule squashed along the figure's forward to this share of its width (a flat torso)
       palm: !!part.palm,        // ...squashed across its own axis and the figure's forward instead (a hand: palm in as it hangs, shell.js)
       anat: part.anat ?? 0,     // ...where on the trunk a flat torso's piece is (people.js `anat`: a bare torso carved with its anatomy, shell.js ANATOMY)
+      pot: part.pot ?? 0,       // ...and its belly (people.js `pot`: shell.js TRUNK.pot)
       limb: part.limb ?? 0,     // ...and a bare round limb's kind (people.js LIMB: a statue's carved with its muscles, shell.js LIMBS)
       // ...and its two end caps, as tall as `a` (the A end) and `b` of their radius and as square as the superellipse
       // exponent `p` (2: an ellipse; a person's shoulders are a low, squared cap) -- a flat part's only

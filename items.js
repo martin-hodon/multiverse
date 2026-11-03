@@ -30,7 +30,7 @@ function rng(seed) {
 // numbers or gives them back as written, and a word param named by another definition must arrive as its word
 // (or a param holding an OBJECT -- a fit to lie on, a hairstyle's cap: jewelry.js -- handed on by its name as it is)
 const val = (v, P) => typeof v === "boolean" || v === null ? v
-  : typeof v === "string" && Object.prototype.hasOwnProperty.call(P, v) && (typeof P[v] === "string" || (P[v] !== null && typeof P[v] === "object")) ? P[v] : evalValue(v, P);
+  : typeof v === "string" && Object.prototype.hasOwnProperty.call(P, v) && (typeof P[v] === "string" || typeof P[v] === "object") ? P[v] : evalValue(v, P);   // (an object or a null, as it stands: a shaved head has no hairCap to hand a hat)
 const isRange = (v) => Array.isArray(v) && v.length === 2 && v.every((x) => typeof x === "number");
 function drawValue(v, P, r) {
   if (isRange(v)) return v[0] + (v[1] - v[0]) * r();

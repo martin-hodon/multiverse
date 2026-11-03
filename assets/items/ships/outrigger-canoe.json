@@ -19,7 +19,8 @@
   ],
   "B": "L * 0.1",
   "D": "B * 0.75",
-  "mastH": "L * 0.5"
+  "mastH": "L * 0.5",
+  "wl": "(D) * 0.45"
  },
  "materials": {
   "planks": "oak-grey",
@@ -128,33 +129,117 @@
    ]
   },
   {
-   "id": "mast",
+   "id": "mast sail",
    "type": "rod",
    "material": "wood",
    "from": [
-    "L * 0.55",
+    "L * 0.88 - (mastH * 1.15) * 0.2582",
     "D * 0.3",
     0
    ],
    "to": [
-    "L * 0.62",
-    "D * 0.3 + mastH",
+    "L * 0.88 - (mastH * 1.15) * 0.2582",
+    "D * 1.05 + (mastH * 1.15) * 0.4856 + (mastH * 1.15) * 0.04",
     0
    ],
    "r0": 0.06,
-   "r1": 0.04
+   "r1": 0.039
   },
   {
    "id": "sail",
    "use": "items/components/crab-claw-sail",
    "params": {
     "l": "mastH * 1.15",
-    "lift": 65,
-    "spread": 40
+    "lift": 62,
+    "spread": 40,
+    "set": "set"
    },
    "at": [
-    "L * 0.62",
-    "D * 0.4",
+    "L * 0.88",
+    "D * 1.05",
+    0
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "waterline",
+   "at": [
+    "L * 0.5",
+    "(D) * 0.45",
+    0
+   ],
+   "data": {
+    "draught": "(D) * 0.45"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.94",
+    "D * 1.32",
+    0
+   ],
+   "data": {
+    "end": "bow"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.06",
+    "D * 1.32",
+    0
+   ],
+   "data": {
+    "end": "stern"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.4",
+    "D * 1.0143 + 0.06",
+    "(B * 0.5) * 0.9143",
+    -90
+   ],
+   "data": {
+    "side": "starboard",
+    "deck": "(D) * 0.3"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.4",
+    "D * 1.0143 + 0.06",
+    "((B * 0.5) * 0.9143) * -1",
+    90
+   ],
+   "data": {
+    "side": "port",
+    "deck": "(D) * 0.3"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.4",
+    "(D) * 0.3",
+    0
+   ],
+   "data": {
+    "i": 0,
+    "w": "B * 0.5",
+    "l": "L * 0.5",
+    "floor": "(D) * 0.3"
+   }
+  },
+  {
+   "role": "helm",
+   "at": [
+    "L * 0.1",
+    "(D) * 0.3",
     0
    ]
   }

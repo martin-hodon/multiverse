@@ -1,0 +1,851 @@
+{
+ "kind": "item",
+ "name": "Atakebune",
+ "category": "ship",
+ "era": "1550-1640",
+ "region": "Sengoku and early Edo Japan",
+ "_about": "the warship of the warring states and of the Korean war: a broad flat hull carrying a fortress -- a box of planked shields (tatebita) the length of the ship, black-beamed, pierced by two rows of loopholes for the arquebuses and bows and by the ports the oars run out through, a gate in each side; its roof a fighting deck behind a loopholed parapet, and on it the yagura, a castle keep of three white-walled storeys under dark tiled eaves with gilt finials; one square sail of matting on a mast that can be lowered, banners along the parapet. (About 30-45 m: the Atake-maru of 1635 was about 47 m, most were smaller -- estimated from the screens and the Kaiyō records)",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "oars": {
+   "pick": [
+    "out",
+    "shipped"
+   ]
+  },
+  "L": [
+   30,
+   42
+  ],
+  "B": "L * 0.3",
+  "D": "B * 0.32",
+  "mastH": "L * 0.42",
+  "wallH": 2.6,
+  "wl": "(D) * 0.55"
+ },
+ "materials": {
+  "planks": "planks-tarred",
+  "deck": "deck",
+  "wood": "planks-tarred",
+  "cloth": "matting",
+  "rope": "hemp",
+  "metal": "iron",
+  "wall": "planks",
+  "white": "#e2dccb",
+  "roofm": "#34383c",
+  "dark": "#141210",
+  "beam": "#1e1a16",
+  "gilt": "gilt"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.8,
+   "plan": [
+    [
+     0,
+     0.6
+    ],
+    [
+     0.1,
+     0.9
+    ],
+    [
+     0.4,
+     1
+    ],
+    [
+     0.75,
+     0.9
+    ],
+    [
+     0.93,
+     0.45
+    ],
+    [
+     1,
+     0.12
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.5"
+    ],
+    [
+     0.12,
+     0
+    ],
+    [
+     0.8,
+     0
+    ],
+    [
+     1,
+     "D * 0.7"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.35"
+    ],
+    [
+     0.4,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.5"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.92",
+     "from": 0.02,
+     "to": 0.97
+    }
+   ],
+   "rail": 0.08
+  },
+  {
+   "id": "box side",
+   "type": "box",
+   "material": "wall",
+   "size": [
+    "L * 0.88",
+    "wallH",
+    0.14
+   ],
+   "at": [
+    "L * 0.5",
+    "D + wallH / 2",
+    "B * 0.5 + 0.12"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "box end",
+   "type": "box",
+   "material": "wall",
+   "size": [
+    0.14,
+    "wallH",
+    "B + 0.38"
+   ],
+   "at": [
+    [
+     "L * 0.06",
+     "D + wallH / 2",
+     0
+    ],
+    [
+     "L * 0.94",
+     "D + wallH / 2",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "box sill",
+   "type": "box",
+   "material": "beam",
+   "size": [
+    "L * 0.88 + 0.3",
+    0.3,
+    0.2
+   ],
+   "at": [
+    "L * 0.5",
+    "D + 0.12",
+    "B * 0.5 + 0.16"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "box cap",
+   "type": "box",
+   "material": "beam",
+   "size": [
+    "L * 0.88 + 0.3",
+    0.24,
+    "B + 0.56"
+   ],
+   "at": [
+    "L * 0.5",
+    "D + wallH",
+    0
+   ]
+  },
+  {
+   "id": "box posts",
+   "type": "box",
+   "material": "beam",
+   "size": [
+    0.16,
+    "wallH",
+    0.06
+   ],
+   "along": {
+    "n": 15,
+    "from": [
+     "L * 0.07",
+     "D + wallH / 2",
+     "B * 0.5 + 0.21"
+    ],
+    "to": [
+     "L * 0.93",
+     "D + wallH / 2",
+     "B * 0.5 + 0.21"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "loopholes",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.2,
+    0.26,
+    0.04
+   ],
+   "along": {
+    "n": 26,
+    "from": [
+     "L * 0.09",
+     "D + wallH * 0.72",
+     "B * 0.5 + 0.2"
+    ],
+    "to": [
+     "L * 0.91",
+     "D + wallH * 0.72",
+     "B * 0.5 + 0.2"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "oar ports aft",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.3,
+    0.3,
+    0.04
+   ],
+   "along": {
+    "n": 13,
+    "from": [
+     "L * 0.12",
+     "D + 0.5",
+     "B * 0.5 + 0.2"
+    ],
+    "to": [
+     "L * 0.44",
+     "D + 0.5",
+     "B * 0.5 + 0.2"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "oar ports fore",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.3,
+    0.3,
+    0.04
+   ],
+   "along": {
+    "n": 13,
+    "from": [
+     "L * 0.56",
+     "D + 0.5",
+     "B * 0.5 + 0.2"
+    ],
+    "to": [
+     "L * 0.88",
+     "D + 0.5",
+     "B * 0.5 + 0.2"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "gate",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    1.4,
+    1.9,
+    0.05
+   ],
+   "at": [
+    "L * 0.5",
+    "D + 0.95",
+    "B * 0.5 + 0.2"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "gate posts",
+   "type": "box",
+   "material": "beam",
+   "size": [
+    0.18,
+    "wallH",
+    0.1
+   ],
+   "at": [
+    [
+     "L * 0.5 - 0.8",
+     "D + wallH / 2",
+     "B * 0.5 + 0.22"
+    ],
+    [
+     "L * 0.5 + 0.8",
+     "D + wallH / 2",
+     "B * 0.5 + 0.22"
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "oars aft",
+   "use": "items/components/oars",
+   "params": {
+    "n": 13,
+    "from": "L * 0.12",
+    "to": "L * 0.44",
+    "y": "D + 0.5",
+    "z": "B * 0.5 + 0.2",
+    "l": "L * 0.17",
+    "dip": 26,
+    "reach": 0.25,
+    "state": "oars"
+   }
+  },
+  {
+   "id": "oars fore",
+   "use": "items/components/oars",
+   "params": {
+    "n": 13,
+    "from": "L * 0.56",
+    "to": "L * 0.88",
+    "y": "D + 0.5",
+    "z": "B * 0.5 + 0.2",
+    "l": "L * 0.17",
+    "dip": 26,
+    "reach": 0.25,
+    "state": "oars"
+   }
+  },
+  {
+   "id": "roof deck",
+   "type": "box",
+   "material": "deck",
+   "size": [
+    "L * 0.88",
+    0.1,
+    "B + 0.3"
+   ],
+   "at": [
+    "L * 0.5",
+    "D + wallH + 0.16",
+    0
+   ]
+  },
+  {
+   "id": "parapet",
+   "type": "box",
+   "material": "wall",
+   "size": [
+    "L * 0.88",
+    0.9,
+    0.1
+   ],
+   "at": [
+    "L * 0.5",
+    "D + wallH + 0.66",
+    "B * 0.5 + 0.1"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "parapet end",
+   "type": "box",
+   "material": "wall",
+   "size": [
+    0.1,
+    0.9,
+    "B + 0.3"
+   ],
+   "at": [
+    [
+     "L * 0.065",
+     "D + wallH + 0.66",
+     0
+    ],
+    [
+     "L * 0.935",
+     "D + wallH + 0.66",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "parapet cap",
+   "type": "box",
+   "material": "beam",
+   "size": [
+    "L * 0.88",
+    0.1,
+    0.16
+   ],
+   "at": [
+    "L * 0.5",
+    "D + wallH + 1.14",
+    "B * 0.5 + 0.1"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "parapet loopholes",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.18,
+    0.2,
+    0.04
+   ],
+   "along": {
+    "n": 20,
+    "from": [
+     "L * 0.1",
+     "D + wallH + 0.72",
+     "B * 0.5 + 0.16"
+    ],
+    "to": [
+     "L * 0.9",
+     "D + wallH + 0.72",
+     "B * 0.5 + 0.16"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "yagura 1",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.66",
+    "d": "L * 0.28",
+    "h": 2.5,
+    "roof": "flat",
+    "windows": 5
+   },
+   "materials": {
+    "wood": "white",
+    "roofm": "roofm",
+    "glass": "dark"
+   },
+   "at": [
+    "L * 0.12",
+    "D + wallH + 0.21",
+    0
+   ]
+  },
+  {
+   "id": "yagura 1 boards",
+   "type": "box",
+   "material": "beam",
+   "size": [
+    "L * 0.28 + 0.06",
+    1.0,
+    "B * 0.66 + 0.06"
+   ],
+   "at": [
+    "L * 0.26",
+    "D + wallH + 0.71",
+    0
+   ]
+  },
+  {
+   "id": "eaves 1",
+   "type": "plate",
+   "material": "roofm",
+   "thick": "L * 0.28 + 1.4",
+   "at": [
+    "L * 0.26",
+    "D + wallH + 2.71",
+    0,
+    90,
+    0,
+    0
+   ],
+   "outline": [
+    [
+     "-B * 0.33 - 0.9",
+     0
+    ],
+    [
+     "B * 0.33 + 0.9",
+     0
+    ],
+    [
+     "B * 0.24",
+     0.75
+    ],
+    [
+     "-B * 0.24",
+     0.75
+    ]
+   ]
+  },
+  {
+   "id": "yagura 2",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.46",
+    "d": "L * 0.18",
+    "h": 2.1,
+    "roof": "flat",
+    "windows": 3
+   },
+   "materials": {
+    "wood": "white",
+    "roofm": "roofm",
+    "glass": "dark"
+   },
+   "at": [
+    "L * 0.17",
+    "D + wallH + 3.4",
+    0
+   ]
+  },
+  {
+   "id": "yagura 2 boards",
+   "type": "box",
+   "material": "beam",
+   "size": [
+    "L * 0.18 + 0.06",
+    0.8,
+    "B * 0.46 + 0.06"
+   ],
+   "at": [
+    "L * 0.26",
+    "D + wallH + 3.8",
+    0
+   ]
+  },
+  {
+   "id": "eaves 2",
+   "type": "plate",
+   "material": "roofm",
+   "thick": "L * 0.18 + 1.2",
+   "at": [
+    "L * 0.26",
+    "D + wallH + 5.5",
+    0,
+    90,
+    0,
+    0
+   ],
+   "outline": [
+    [
+     "-B * 0.23 - 0.8",
+     0
+    ],
+    [
+     "B * 0.23 + 0.8",
+     0
+    ],
+    [
+     "B * 0.15",
+     0.65
+    ],
+    [
+     "-B * 0.15",
+     0.65
+    ]
+   ]
+  },
+  {
+   "id": "yagura 3",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.3",
+    "d": "L * 0.11",
+    "h": 1.8,
+    "roof": "pitched",
+    "windows": 2
+   },
+   "materials": {
+    "wood": "white",
+    "roofm": "roofm",
+    "glass": "dark"
+   },
+   "at": [
+    "L * 0.205",
+    "D + wallH + 6.1",
+    0
+   ]
+  },
+  {
+   "id": "finial",
+   "type": "box",
+   "material": "gilt",
+   "size": [
+    0.35,
+    0.55,
+    0.18
+   ],
+   "at": [
+    [
+     "L * 0.205 - 0.1",
+     "D + wallH + 7.9 + B * 0.105 + 0.2",
+     0
+    ],
+    [
+     "L * 0.315 + 0.1",
+     "D + wallH + 7.9 + B * 0.105 + 0.2",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "mast L * 0.62",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.3,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.62",
+    "D + wallH + 0.21",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.62 D + wallH + 0.21 + mastH * 0.95",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.36",
+    "h": "mastH * 0.66",
+    "foot": 1.0,
+    "set": "set",
+    "belly": "L * 0.03"
+   },
+   "at": [
+    "L * 0.62",
+    "D + wallH + 0.21 + mastH * 0.95",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 2.0",
+    "w": "B * 0.2",
+    "tiller": 0,
+    "thick": 0.14
+   },
+   "at": [
+    "L * 0.0",
+    "D * 1.3",
+    0
+   ]
+  },
+  {
+   "id": "banner pole",
+   "type": "rod",
+   "material": "beam",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    4.2,
+    0
+   ],
+   "r": 0.04,
+   "at": [
+    [
+     "L * 0.5",
+     "D + wallH + 1.2",
+     "B * 0.5"
+    ],
+    [
+     "L * 0.7",
+     "D + wallH + 1.2",
+     "B * 0.5"
+    ],
+    [
+     "L * 0.85",
+     "D + wallH + 1.2",
+     "B * 0.5"
+    ],
+    [
+     "L * 0.5",
+     "D + wallH + 1.2",
+     "-B * 0.5"
+    ],
+    [
+     "L * 0.7",
+     "D + wallH + 1.2",
+     "-B * 0.5"
+    ],
+    [
+     "L * 0.85",
+     "D + wallH + 1.2",
+     "-B * 0.5"
+    ]
+   ]
+  },
+  {
+   "id": "banner",
+   "type": "box",
+   "material": "white",
+   "size": [
+    0.6,
+    2.6,
+    0.03
+   ],
+   "at": [
+    [
+     "L * 0.5 - 0.32",
+     "D + wallH + 4.0",
+     "B * 0.5"
+    ],
+    [
+     "L * 0.7 - 0.32",
+     "D + wallH + 4.0",
+     "B * 0.5"
+    ],
+    [
+     "L * 0.85 - 0.32",
+     "D + wallH + 4.0",
+     "B * 0.5"
+    ],
+    [
+     "L * 0.5 - 0.32",
+     "D + wallH + 4.0",
+     "-B * 0.5"
+    ],
+    [
+     "L * 0.7 - 0.32",
+     "D + wallH + 4.0",
+     "-B * 0.5"
+    ],
+    [
+     "L * 0.85 - 0.32",
+     "D + wallH + 4.0",
+     "-B * 0.5"
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "waterline",
+   "at": [
+    "L * 0.5",
+    "(D) * 0.55",
+    0
+   ],
+   "data": {
+    "draught": "(D) * 0.55"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.96",
+    "D * 1.4667",
+    0
+   ],
+   "data": {
+    "end": "bow"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.03",
+    "D * 1.3237",
+    0
+   ],
+   "data": {
+    "end": "stern"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.5",
+    "D",
+    "B * 0.5 + 0.24",
+    -90
+   ],
+   "data": {
+    "side": "starboard",
+    "deck": "D * 0.92"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.5",
+    "D",
+    "(B * 0.5 + 0.24) * -1",
+    90
+   ],
+   "data": {
+    "side": "port",
+    "deck": "D * 0.92"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.7",
+    "(D) * 0.2",
+    0
+   ],
+   "data": {
+    "i": 0,
+    "w": "B * 0.5",
+    "l": "L * 0.5",
+    "floor": "(D) * 0.2"
+   }
+  },
+  {
+   "role": "helm",
+   "at": [
+    "L * 0.08",
+    "D + wallH + 0.21",
+    0
+   ]
+  }
+ ]
+}

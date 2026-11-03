@@ -16,7 +16,7 @@ export function solveBeast(data, kind, { dir = 1, x = 0, r = Math.random, gait, 
   if (!G) { parts((q) => q); return solved((q) => q); }
   const pitch = pick(G.pitch, r, 0) * DEG, [px, py] = B.pivot, cs = Math.cos(pitch), sn = Math.sin(pitch), lift = pick(G.lift, r, 0);
   const turn = ([a, b, k]) => { const u = a - px, v = b - py, q = [px + u * cs - v * sn, py + u * sn + v * cs + lift]; return k ? [q[0], q[1], 1] : q; };
-  const legs = { nearFore: B.fore, farFore: B.fore, nearHind: B.hind, farHind: B.hind };
+  const legs = { nearFore: B.fore, farFore: B.fore, ...(B.hind ? { nearHind: B.hind, farHind: B.hind } : null) };   // (no hind legs: what ends in a fish's tail)
   const leg = {}, reach = {};
   for (const name of Object.keys(legs)) reach[name] = pick(G.legs[name][0], r);
   for (const [name, L] of Object.entries(legs)) {
@@ -39,10 +39,10 @@ export function solveBeast(data, kind, { dir = 1, x = 0, r = Math.random, gait, 
     leg[name] = [[...front, ...(fore ? toes : toes.reverse()), at(coronet, -sg * w3), at(fet, -sg * w3 * 1.35), ...back]];
   }
   const role = tinted(B);
-  if (!has("fewLegs")) { piece(16, role + "Far", leg.farHind); piece(17, role + "Far", leg.farFore); }
+  if (!has("fewLegs")) { piece(16, role + "Far", leg.farHind ?? []); piece(17, role + "Far", leg.farFore); }
   const noHead = has("noHead"), body = (noHead ? B.bodyNoHead : B.body).map(turn);
   const lines = (noHead ? [] : B.lines ?? []).map((l) => ({ cls: "detail", pts: l.map(turn) })).concat((B.muscle ?? []).map((l) => ({ cls: "fine", pts: l.map(turn) })));
-  piece(25, role, [body, ...leg.nearHind, ...leg.nearFore], lines, noHead ? [] : (B.marks ?? []).map(([a, b, m]) => ({ cls: "detail", at: turn([a, b, 0]), r: m })));
+  piece(25, role, [body, ...(leg.nearHind ?? []), ...leg.nearFore], lines, noHead ? [] : (B.marks ?? []).map(([a, b, m]) => ({ cls: "detail", at: turn([a, b, 0]), r: m })));
   out.at(-1).body = 1;
   parts(turn);
   return solved(turn);

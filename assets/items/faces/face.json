@@ -5,6 +5,47 @@
  "era": "everywhere",
  "region": "everywhere",
  "_about": "the canon head on GUIDE LINES (face.js, docs/face.md): Farkas's adult means as attributes -- face height, upper and lower width, the eyes' distance and width, the nose's height, width and projection, the nasolabial and forehead angles, the mouth's width, the lips' heights -- placing the landmarks, the landmarks the lattice of guide lines (brow, lids, lip borders, jawline...), the skin the lattice subdivided with each region's roundness. expression / viseme (or the actions: smile, jawOpen, blink...) move the lines. The origin is the cranium's centre; +x is where it looks",
+ "variety": {
+  "_about": "HOW FACES OF A KIND DIFFER (heads.js faceVariety: drawn from the face's seed, so one seed is always one face). Not every attribute on its own: a few AXES move several together -- `robust` the sex's own range from its finer to its stronger end (the jaw and the chin broader, the jaw's angle squarer, the brow ridge and the brows heavier and lower, the nose bigger, the lips thinner, the eyes narrower), `long` a long narrow face against a short broad one, `eyes` big or small eyes, `set` the eyes and the mouth wide or close, `lips` full or thin, `arch` the brows -- each attribute a range of the kind's definition (man.json, woman.json...) gets its place in that range from the axes it names (weights) and `own` of its own draw. Then a CHIN SHAPE and a NOSE SHAPE picked by the kind's weights (`chins`, `noses`: each shape deltas in metres and degrees added to what was drawn) -- the chin receding, neutral, protruding, square or small and pointed; the nose straight, aquiline, snub, broad, long, humped or a button -- and the FULLNESS a stout or fat body's face has, or a thin one's lean face (`full`, by the step people.js draws: body.json build.variety fullBins). `kinds`: how much of the shapes and the fullness each kind takes (a child's chin is a child's).",
+  "own": 0.45,
+  "axes": {
+   "robust": { "lowerWidth": 1, "chinWidth": 0.8, "jawAngle": -0.8, "browRidge": 1, "browThickness": 0.7, "browHeight": -0.6, "noseWidth": 0.6, "noseProjection": 0.6, "noseHeight": 0.4, "foreheadAngle": 0.6, "chinHeight": 0.5, "upperVermilion": -0.5, "lowerVermilion": -0.4, "eyeHeight": -0.5, "chubCheek": -0.4, "earS": 0.4 },
+   "long": { "faceHeight": 1, "upperWidth": -0.6, "lowerWidth": -0.4, "noseHeight": 0.6, "upperLipHeight": 0.6, "lowerLipHeight": 0.6, "chinHeight": 0.5 },
+   "eyes": { "eyeWidth": 0.7, "eyeHeight": 1 },
+   "set": { "eyeDistance": 1, "mouthWidth": 0.4 },
+   "lips": { "upperVermilion": 1, "lowerVermilion": 1, "chubLips": 0.6, "mouthWidth": 0.3 },
+   "arch": { "browArch": 1, "browHeight": 0.6, "eyeTilt": 0.5 }
+  },
+  "chins": {
+   "receding": { "chinProjection": -0.007, "mentolabial": -0.002, "chinHeight": -0.002 },
+   "neutral": {},
+   "protruding": { "chinProjection": 0.003, "mentolabial": 0.001, "chinHeight": 0.001 },
+   "square": { "chinWidth": 0.007, "chinProjection": -0.001, "lowerWidth": 0.003 },
+   "pointed": { "chinWidth": -0.007, "chinProjection": -0.002 }
+  },
+  "noses": {
+   "straight": {},
+   "aquiline": { "noseHump": 0.003, "nasolabialAngle": -7, "noseTip": -0.001 },
+   "snub": { "nasolabialAngle": 12, "noseProjection": -0.003, "noseHeight": -0.004, "noseTip": 0.002 },
+   "broad": { "noseWidth": 0.005, "noseProjection": -0.002, "noseBridge": -0.001 },
+   "long": { "noseHeight": 0.005, "noseProjection": 0.003 },
+   "humped": { "noseHump": 0.005, "noseBridge": 0.002, "noseProjection": 0.002 },
+   "button": { "noseWidth": -0.003, "noseProjection": -0.003, "noseHeight": -0.003, "nasolabialAngle": 6 }
+  },
+  "weights": {
+   "man": { "chins": { "receding": 2, "neutral": 4, "protruding": 1.5, "square": 2.5 }, "noses": { "straight": 4, "aquiline": 2, "snub": 1, "broad": 2, "long": 1.5, "humped": 1.5 } },
+   "woman": { "chins": { "receding": 2.5, "neutral": 5, "protruding": 0.7, "pointed": 2.5 }, "noses": { "straight": 5, "aquiline": 1, "snub": 2.5, "broad": 1, "long": 0.5, "button": 2.5 } },
+   "elder": { "chins": { "receding": 3, "neutral": 4, "protruding": 1, "square": 1.5 }, "noses": { "straight": 3, "aquiline": 2.5, "broad": 2, "long": 2, "humped": 2.5 } },
+   "old-woman": { "chins": { "receding": 3, "neutral": 4, "pointed": 2 }, "noses": { "straight": 4, "aquiline": 2, "snub": 1, "broad": 1.5, "long": 1, "humped": 1 } },
+   "child": { "chins": { "receding": 2, "neutral": 6, "pointed": 1 }, "noses": { "straight": 3, "snub": 4, "button": 4, "broad": 1 } }
+  },
+  "full": {
+   "-1": { "chubby": -0.35, "chubCheek": -0.55, "chubJaw": -0.3, "chubChin": -0.3, "lowerWidth": -0.002 },
+   "1": { "chubby": 0.35, "chubCheek": 0.45, "chubJaw": 0.7, "chubChin": 0.7, "lowerWidth": 0.004, "upperWidth": 0.003, "neckR": 0.003 },
+   "2": { "chubby": 0.7, "chubCheek": 0.9, "chubJaw": 1.2, "chubChin": 1.2, "lowerWidth": 0.008, "upperWidth": 0.005, "neckR": 0.006 }
+  },
+  "kinds": { "child": 0.5, "beast-man": 0 }
+ },
  "params": {
   "scale": 1,
   "faceW": 1,
@@ -43,7 +84,7 @@
   "upperVermilion": 0.008,
   "lowerVermilion": 0.009,
   "lowerLipHeight": 0.019,
-  "chinProjection": 0,
+  "chinProjection": -0.0045,
   "chinHeight": 0.013,
   "chubby": 1,
   "expression": "neutral",

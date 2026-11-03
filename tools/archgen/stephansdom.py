@@ -23,7 +23,7 @@ OUT = NW / 2 + AW + TA / 2                 # the outer wall's face
 CROWN = SPR + (NW / 2 - T / 2) * 1.7321 * 0.9
 WALLTOP = CROWN + 0.5 + 0.3
 RIDGE = WALLTOP + (OUT + OV) * math.tan(math.radians(PITCH))
-add("church", {"type": "basilica", "hall": True, "bays": BAYS, "bayLen": BAY, "naveW": NW, "aisleW": AW, "t": T, "aisleT": TA,
+add("church", {"type": "basilica", "hall": True, "pinnacleKinds": [{"h": 2.4, "s": 3.6, "gablets": 0.5, "crockets": 2}, {"sides": 8, "h": 2.0, "s": 4.0, "gablets": 0.45, "crockets": 3}], "bays": BAYS, "bayLen": BAY, "naveW": NW, "aisleW": AW, "t": T, "aisleT": TA,
                "apse": 5, "spring": SPR, "aisleDrop": 3.0, "pierR": 0.95, "shaft": 0.3, "pitch": PITCH, "overhang": OV,
                "aisleSill": 6.0, "aisleWin": 3.2, "buttressW": 1.8, "buttressD": 3.4, "skipButtress": [[6, 6]], "wimpergs": True, "at": [[0, 0, 0, 0]],
                "_about": "nave and choir as one HALL: piers, arcades, rib vaults over nave, aisles and ambulatory at nearly one height, the outer walls with their tall windows, a stepped buttress and pinnacle at every bay and round the apse, one steep roof over all"})

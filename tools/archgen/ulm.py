@@ -158,6 +158,7 @@ NAVE_TOP = CLEAR_H + NAVE_RISE + 1.2       # 43.9: the vault's crown inside at 4
 along = lambda half_across, spread: ((1 + 2 * spread) * (half_across / (BAY / 2)) ** 2 - 1) / 2   # the lancet along a bay meeting the crown
 Z0 = NL / 2
 
+r4 = lambda v: round(v, 4)
 P = {"detail": 4}
 add("nave", comp("basilica", {"bays": BAYS, "bayLen": BAY, "naveW": NW, "aisleW": AW, "pierT": PT, "aisleT": AT, "openW": BAY - PT,
                               "spring": SPR, "crown": round(CROWN, 4), "arcadeH": ARC_H, "clearH": CLEAR_H, "naveTop": round(NAVE_TOP, 4),
@@ -203,8 +204,14 @@ add("aisle roofs", {"type": "roof", "form": "shed", "width": AR_W, "length": NL 
 FX = BODY / 2 + 1.2
 fb = {"pierH": 27.5, "span": round(FX - HB, 4), "low": 24.0, "high": CLEAR_H - 1.0, "top0": 26.8, "top1": CLEAR_H + 2.2, "pinH": 3.5, "pinS": 5.0}
 add("flying buttresses", comp("components/flying-buttress", fb, [[FX, 0, -Z0 + BAY, PI], [-FX, 0, -Z0 + BAY, 0]],
-                              repeat={"count": BAYS - 1, "step": [0, 0, BAY, 0]},
+                              repeat={"count": BAYS - 1, "step": [0, 0, BAY, 0]}, build=["pier", "flyer"],
                               _about="a flying buttress at every bay's end, both sides, clearing the double aisles to the clerestory"))
+# their pinnacles in two kinds by turns (pinnacle.js), a square crocketed one and an octagon among attendants
+PINK = [{"w": 1.3, "h": 2.6, "s": 4.6, "gablets": .5, "crockets": 2}, {"w": 1.3, "sides": 8, "h": 2.2, "s": 5.0, "gablets": .45, "crockets": 3, "attendants": .25}]
+for k, kind in enumerate(PINK):
+    add(f"flank pinnacles {k + 1}", {"type": "pinnacle", **kind,
+                                     "at": [[r4(sx * (FX + 1.3)), fb["pierH"], r4(-Z0 + BAY * (j + 1)), 0] for sx in (-1, 1) for j in range(BAYS - 1) if j % 2 == k],
+                                     "_about": "the flank's pinnacles on the flyers' piers" if k == 0 else ""})
 
 # ---- the CHOIR, its apse, and the gable over the chancel arch
 CW, CL, CT, CH = NW + 2 * PT, 26.0, 1.6, 27.0
@@ -240,8 +247,10 @@ for sx, nm in ((1, "south"), (-1, "north")):
     add(f"{nm} east tower octagon", comp("components/gothic-octagon-stage", {"R": 3.8, "H": 14.0, "t": 0.7, "low": 2.0},
                                          [[sx * EX, 46.0, EZ, 0]], **({"_about": "...the octagon..."} if sx > 0 else {})))
     add(f"{nm} east tower spire", comp("components/gothic-spire", {"R": 3.4, "rise": 26.0, "finial": 3.0, "pinR": 3.4},
-                                       [[sx * EX, 60.0, EZ, 0]], build=["spire", "ribs", "gables", "pinnacles", "finial"],
-                                       **({"_about": "...and the ribbed spire with its gables and pinnacles, to 86m"} if sx > 0 else {})))
+                                       [[sx * EX, 60.0, EZ, 0]], build=["gables", "pinnacles"],
+                                       **({"_about": "...the spire's gables and pinnacles..."} if sx > 0 else {})))
+    add(f"{nm} east tower open spire", {"type": "open-spire", "R": 3.4, "rise": 24.5, "topR": .35, "rows": 6, "rib": .22, "bar": .09, "finial": 3.0, "at": [[sx * EX, 60.0, EZ, 0]],
+                                        **({"_about": "...and the spire itself OPENWORK, as the east towers' are too, to 86m"} if sx > 0 else {})})
 
 # ---- the WEST TOWER: four square stages, the octagon, the spire and the gallery at 143m
 TZ = Z0 + TW / 2
@@ -273,8 +282,10 @@ CUT, TOP_R = GAL - SLAB - SP_Y, 3.3
 V_RISE = CUT * SP_R / (SP_R - TOP_R)       # where its sides would meet
 add("west tower spire", comp("components/gothic-spire", {"R": SP_R, "rise": round(V_RISE, 4),
                                                          "topR": TOP_R, "pinR": 6.6, "pinW": 1.2, "pinH": 3.0, "pinS": 6.0},
-                             [[0, SP_Y, TZ, 0]],
-                             _about="the openwork SPIRE on the octagon, ribbed, gabled and ringed by pinnacles at its foot (`gothic-spire`), cut off at the viewing gallery"))
+                             [[0, SP_Y, TZ, 0]], build=["gables", "pinnacles"],
+                             _about="the SPIRE's foot on the octagon: its gables and the pinnacles round it (`gothic-spire`)"))
+add("west tower open spire", {"type": "open-spire", "R": SP_R, "rise": round(CUT, 4), "topR": TOP_R, "rows": 8, "rib": 0.45, "bar": 0.16, "finial": 0, "at": [[0, SP_Y, TZ, 0]],
+                              "_about": "the spire itself, OPENWORK as it is at Ulm: the net of ribs and tracery round the round stair, cut off at the viewing gallery"})
 # the stair up the middle of octagon and spire: 384 steps from the gallery at 70m to the one at 143m, arriving in the
 # belvedere at the top, whose stone cap and finial are the spire's crown
 SR = 2.2

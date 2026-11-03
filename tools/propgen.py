@@ -61,6 +61,100 @@ PROPS["tools/sheaf"] = item("Sheaf", "tool", "a sheaf of corn bound with a twist
 PROPS["tools/sack-standing"] = item("Sack (standing)", "tool", "a grain sack stood on its end, tied at the neck on top -- tools/sack rolled up, its bottom at the origin",
     {}, {}, [{"id": "sack", "use": "items/tools/sack", "at": [0.24, 0.495, 0, 0, 0, 90]}])
 
+# ---- THE GOODS' VESSELS BY CULTURE (2026-11-03; assets/world/goods.json says which culture ships in which, freight.js
+# and the cart loads below use them). Each stands upright on its foot at the origin unless said; sizes are the usual
+# ones (sources in the notes): the game lays or carries them by goods.json's `rest` / `carry`.
+# a TRANSPORT AMPHORA (Greek, Roman, Byzantine): plain, unglazed, a long ovoid body on a spike toe (Dressel 1 / Greek
+# trade amphorae 0.6-1.1 m, ~25 l: here 0.74 m), a narrow neck stoppered with resin-sealed clay, two strap handles
+PROPS["tools/transport-amphora"] = item("Transport amphora", "tool", "a plain trade amphora for wine or oil: a long ovoid body on a spike toe, a narrow neck stoppered and sealed, two strap handles from the neck to the shoulder -- 0.74 m, its toe at the origin; shipped lying in straw, carried on the shoulder",
+    {}, {"clay": {"pick": ["#b0643e", "#b98458", "#a85a38"]}, "seal": "#5a3a24"}, [
+        {"id": "body", "type": "lathe", "material": "clay", "sides": 14, "profile": rounded([[0, 0], [.022, .004], [.03, .05], [.04, .1], [.1, .2], [.155, .32], [.17, .42], [.16, .52], [.12, .585], [.065, .625], [.048, .65], [.044, .7], [.058, .715], [.058, .735], [.04, .738]], 2)},
+        {"id": "seal", "type": "lathe", "material": "seal", "sides": 10, "profile": [[.042, .726], [.042, .742], [0, .748]]},
+        {"id": "handles", "type": "sweep", "material": "clay", "r": .013, "path": [[.045, .69, 0], [.1, .705, 0], [.13, .655, 0], [.125, .59, 0]], "mirror": "x"}],
+    hold={"grip": [0, .66, 0], "axis": [0, 1, 0], "face": [1, 0, 0]}, era="-800-700", region="the Mediterranean")
+# a PITHOS: the great storage jar (Knossos, Akrotiri: 1-2 m), kept in a store, never shipped full -- here 1.35 m, a
+# thick rolled rim, raised rope bands moulded round the belly
+PROPS["tools/pithos"] = item("Pithos", "tool", "a great storage jar for grain, oil or wine: 1.35 m on a narrow foot, a broad belly with raised rope bands, a thick rolled rim -- set in a store's row, half its height in the ground or standing",
+    {}, {"clay": {"pick": ["#a8603c", "#b07a52"]}}, [
+        {"id": "body", "type": "lathe", "material": "clay", "sides": 18, "profile": rounded([[0, 0], [.2, 0], [.24, .04], [.38, .3], [.47, .6], [.46, .88], [.38, 1.1], [.29, 1.22], [.3, 1.27], [.34, 1.3], [.33, 1.35], [.27, 1.34]], 2)},
+        {"id": "bands", "type": "ring", "material": "clay", "r": .475, "tube": .022, "at": [[0, .55, 0, 90, 0, 0], [0, .78, 0, 90, 0, 0]]},
+        {"id": "lugs", "type": "ring", "material": "clay", "r": .05, "tube": .016, "at": [[.4, 1.0, 0, 0, 0, 0], [-.4, 1.0, 0, 0, 0, 0]]}],
+    era="-2000-400", region="the Mediterranean")
+# a STORAGE JAR (Egypt, the Islamic lands, India, the Maya): ovoid, a short neck, a small flat foot, two lug handles,
+# the mouth tied over with cloth -- 0.62 m (the Egyptian "wine jar", the Maya olla, the Islamic zir in small)
+PROPS["tools/storage-jar"] = item("Storage jar", "tool", "an earthenware jar for grain, oil, wine or water: ovoid on a small flat foot, a short neck, two lug handles, the mouth tied over with cloth -- 0.62 m, carried on the head or on the back, shipped standing in straw",
+    {}, {"clay": {"pick": ["#ae6a44", "#a87a54", "#c4a07a", "#8a5a3a"]}, "cloth": "linen", "cord": "hemp"}, [
+        {"id": "body", "type": "lathe", "material": "clay", "sides": 14, "profile": rounded([[0, 0], [.07, 0], [.1, .03], [.19, .17], [.22, .32], [.2, .45], [.12, .54], [.075, .565], [.075, .59], [.09, .61], [.07, .615]], 2)},
+        {"id": "cover", "type": "lathe", "material": "cloth", "sides": 10, "profile": [[.095, .575], [.1, .61], [.07, .63], [0, .635]]},
+        {"id": "tie", "type": "ring", "material": "cord", "r": .08, "tube": .008, "at": [0, .585, 0, 90, 0, 0]},
+        {"id": "lugs", "type": "ring", "material": "clay", "r": .035, "tube": .012, "at": [[.17, .44, 0, 0, 0, 0], [-.17, .44, 0, 0, 0, 0]]}],
+    hold={"grip": [0, .3, 0], "axis": [0, 1, 0], "face": [1, 0, 0]}, era="-3000-1900", region="Egypt, the Islamic lands, India, the Americas")
+# a HAMPER: a big lidded basket of cane or palm, lashed shut (the porters' load in Egypt, India, China, the Maya) -- 0.55 m
+PROPS["tools/hamper"] = item("Hamper", "tool", "a big round basket with a domed lid, woven of cane or palm leaf and lashed shut with cord -- 0.55 m; carried on the head, on a pole or on the back by a tumpline",
+    {}, {"wicker": {"pick": ["cane", "reed", "straw"]}, "cord": "hemp"}, [
+        {"id": "body", "type": "lathe", "material": "wicker", "sides": 14, "double": True, "caps": False, "profile": [[.2, 0], [.255, .07], [.27, .3], [.265, .46]]},
+        {"id": "bottom", "type": "lathe", "material": "wicker", "sides": 14, "profile": [[.2, 0], [.2, .015]]},
+        {"id": "lid", "type": "lathe", "material": "wicker", "sides": 14, "profile": [[.28, .45], [.28, .49], [.2, .53], [0, .55]]},
+        {"id": "lashing", "type": "ring", "material": "cord", "r": .272, "tube": .008, "at": [[0, .15, 0, 90, 0, 0], [0, .38, 0, 90, 0, 0]]},
+        {"id": "cross cord", "type": "sweep", "material": "cord", "r": .007, "path": [[-.272, .38, 0], [-.285, .47, 0], [-.18, .54, 0], [0, .558, 0], [.18, .54, 0], [.285, .47, 0], [.272, .38, 0]]}],
+    hold={"grip": [0, .55, 0], "axis": [1, 0, 0], "face": [0, 0, 1]}, era="-3000-1900")
+# a BALE: goods (cloth, silk, cotton, wool, spice) sewn into canvas or matting and corded (the caravans' and the
+# ports' freight from Basra to Canton) -- 0.9 x 0.5 x 0.6 m, its long side along x
+PROPS["tools/bale"] = item("Bale", "tool", "a bale of cloth, cotton, silk or spice sewn into canvas or matting and corded both ways -- 0.9 x 0.5 x 0.6 m, its long side along x; carried on the back or the shoulder, shipped in courses",
+    {}, {"cover": {"pick": ["canvas", "hemp", "#b8a27a", "#9a8a6a"]}, "cord": "hemp"}, [
+        {"id": "bale", "type": "box", "material": "cover", "size": [.9, .5, .6], "at": [0, .25, 0], "round": .07},
+        {"id": "cords across", "type": "box", "material": "cord", "size": [.025, .515, .615], "at": [[-.27, .25, 0], [0, .25, 0], [.27, .25, 0]]},
+        {"id": "cord along", "type": "box", "material": "cord", "size": [.915, .515, .025], "at": [0, .25, 0]}],
+    hold={"grip": [0, .25, 0], "axis": [1, 0, 0], "face": [0, 1, 0]}, era="-1000-1900")
+# a TAWARA: the Japanese rice bale -- rice straw matting rolled round 60 kg of rice, its ends closed with straw lids
+# (sandawara), roped round -- 0.75 m long, 0.5 m across, lying along x, its belly on the ground at the origin
+PROPS["tools/straw-bale"] = item("Rice bale (tawara)", "tool", "a Japanese rice bale: rice-straw matting rolled round the rice, the ends closed with round straw lids, roped round in three places -- 0.75 m long, lying along x; carried on the shoulder, stacked on carts and boats",
+    {}, {"straw": "straw", "rope": "hemp"}, [
+        {"id": "roll", "type": "rod", "material": "straw", "r0": .22, "r1": .22, "from": [-.375, .25, 0], "to": [.375, .25, 0], "sides": 12},
+        {"id": "belly", "type": "sphere", "material": "straw", "r": .25, "sides": 12, "at": [0, .25, 0], "stretch": [1.45, 1, 1]},
+        {"id": "lids", "type": "rod", "material": "straw", "r": .2, "from": [-.39, .25, 0], "to": [-.37, .25, 0], "sides": 12, "mirror": "x"},
+        {"id": "ropes", "type": "ring", "material": "rope", "r": .245, "tube": .012, "at": [[-.24, .25, 0, 0, 90, 0], [0, .25, 0, 0, 90, 0], [.24, .25, 0, 0, 90, 0]]}],
+    hold={"grip": [0, .25, 0], "axis": [1, 0, 0], "face": [0, 1, 0]}, era="700-1900", region="Japan")
+# a CRATE: boards nailed on battens (Europe's crates for crockery, glass, tools, fruit) -- 0.8 x 0.5 x 0.55 m
+PROPS["tools/crate"] = item("Crate", "tool", "a wooden crate of boards nailed on corner battens, its lid nailed down -- 0.8 x 0.5 x 0.55 m, its long side along x; carried in the arms, stacked on carts",
+    {}, {"boards": {"pick": ["planks-pine", "planks", "planks-grey"]}, "batten": "#6a4e32"}, [
+        {"id": "box", "type": "box", "material": "boards", "size": [.8, .5, .55], "at": [0, .25, 0]},
+        {"id": "battens", "type": "box", "material": "batten", "size": [.05, .5, .05], "at": [[.39, .25, .26], [-.39, .25, .26], [.39, .25, -.26], [-.39, .25, -.26]]},
+        {"id": "bands", "type": "box", "material": "batten", "size": [.82, .05, .57], "at": [[0, .04, 0], [0, .47, 0]]}],
+    hold={"grip": [0, .25, 0], "axis": [1, 0, 0], "face": [0, 1, 0]}, era="1300-1900", region="Europe")
+# a TUB: the Chinese and Japanese cooper's tub (taru, tong) -- straight tapered staves bound with split-bamboo hoops,
+# a lid, two staves standing up as ears with a rope between them to hang it from a carrying pole -- 0.5 m
+PROPS["tools/tub"] = item("Tub", "tool", "a lidded wooden tub (taru, tong) of straight staves bound with split-bamboo hoops, two staves standing up as ears with a rope between them for the carrying pole -- 0.5 m; for oil, sauce, sake, pickles, salted fish",
+    {}, {"wood": {"pick": ["pine", "oak", "#a07848"]}, "hoop": "bamboo", "rope": "hemp"}, [
+        {"id": "staves", "type": "lathe", "material": "wood", "sides": 14, "double": True, "caps": False, "profile": [[.22, 0], [.25, .5]]},
+        {"id": "bottom", "type": "lathe", "material": "wood", "sides": 14, "profile": [[.22, .01], [.22, .03]]},
+        {"id": "lid", "type": "lathe", "material": "wood", "sides": 14, "profile": [[.24, .44], [.24, .47]]},
+        {"id": "hoops", "type": "lathe", "material": "hoop", "sides": 14, "caps": False, "profile": [[.232, .07], [.236, .11]]},
+        {"id": "hoop top", "type": "lathe", "material": "hoop", "sides": 14, "caps": False, "profile": [[.25, .4], [.255, .45]]},
+        {"id": "ears", "type": "box", "material": "wood", "size": [.06, .16, .03], "at": [[.24, .56, 0], [-.24, .56, 0]]},
+        {"id": "rope", "type": "sweep", "material": "rope", "r": .008, "path": [[-.24, .6, 0], [-.1, .66, 0], [0, .67, 0], [.1, .66, 0], [.24, .6, 0]]}],
+    hold={"grip": [0, .66, 0], "axis": [1, 0, 0], "face": [0, 0, 1]}, era="-500-1900", region="China, Japan")
+# the CARRYING POLE (biandan, tenbin-bo): a bamboo pole on the shoulder, a load hung from each end on cords. The
+# porter's own counterweight -- a basket -- hangs behind; the piece he carries hangs in front from the front cords (the
+# game hangs it there). Origin: where the pole lies on the shoulder; the pole along x (forward), the loads' feet `drop` below
+PROPS["tools/carrying-pole"] = item("Carrying pole", "tool", "a bamboo carrying pole on the shoulder with a load on cords at each end: the front cords for the piece carried, a basket of the porter's own behind -- origin where it lies on the shoulder, along x; the loads' feet `drop` below it",
+    {"drop": 1.12, "reach": .78, "top": .5}, {"pole": "bamboo", "cord": "hemp", "wicker": "cane"}, [
+        {"id": "pole", "type": "rod", "material": "pole", "r": .02, "from": [-.92, 0, 0], "to": [.92, 0, 0], "sides": 6},
+        *[{"id": f"cords {e} {j}", "type": "rod", "material": "cord", "r": .005, "from": [f"{sg} * reach", 0, 0], "to": [f"{sg} * reach + {dx}", "top - drop", dz], "sides": 3}
+          for e, sg in (("front", 1), ("back", -1)) for j, (dx, dz) in enumerate(((.16, 0), (-.16, 0), (0, .16), (0, -.16)))],
+        {"id": "basket", "type": "lathe", "material": "wicker", "sides": 12, "double": True, "caps": False, "at": ["0 - reach", "0 - drop", 0],
+         "profile": [[.17, 0], [.2, .05], [.2, .42]]},
+        {"id": "basket bottom", "type": "lathe", "material": "wicker", "sides": 12, "at": ["0 - reach", "0 - drop", 0], "profile": [[.17, 0], [.17, .015]]}],
+    era="-500-1900", region="China, Japan, South-East Asia")
+# the TUMPLINE: a broad strap round the load on the back and over the forehead (the Maya porters', and across Central
+# America and the Himalaya) -- in the carrier's frame (origin at its feet, +x forward, +z its right): `hy` the
+# forehead's height, `ly` the load's top behind the shoulders, `lx` how far back the load's front face is
+PROPS["tools/tumpline"] = item("Tumpline", "tool", "a carrying strap (mecapal): a band over the forehead, its two cords down past the ears to the load on the back -- in the carrier's frame, its forehead at hy",
+    {"hy": 1.62, "ly": 1.3, "lx": -.2}, {"band": "#8a6a44", "cord": "hemp"}, [
+        {"id": "band", "type": "sweep", "material": "band", "r": .014, "path": [[-.02, "hy + 0.02", .085], [.085, "hy + 0.04", .05], [.1, "hy + 0.045", 0], [.085, "hy + 0.04", -.05], [-.02, "hy + 0.02", -.085]]},
+        {"id": "cords", "type": "sweep", "material": "cord", "r": .007, "path": [[-.02, "hy + 0.02", .085], [-.08, "hy - 0.12", .13], ["lx", "ly", .16]], "mirror": "z"}],
+    era="-1500-1900", region="the Americas")
+
 # ---- the water wheel: axis along z through the origin, the axle running back (-z) through the wall to the pit wheel
 PROPS["components/water-wheel"] = item("Water wheel", "components", "an undershot mill wheel: two rims of fourteen felloes on seven spokes each, paddle boards between them, the axle back through the wall to the pit wheel inside -- turned about z by the game",
     {"r": 3.05, "w": 1.2, "axleBack": 5.2, "axleFwd": 0.95, "paddles": 14},
@@ -98,7 +192,13 @@ PROPS["ships/barge"] = item("River barge", "ships", "a flat river barge for frei
         box("tiller", "dark", [1.8, 0.08, 0.08], [-5.6, 1.15, 0, 0, 0, -20]),
         rod("bollards", "dark", 0.11, [0, 0.6, 0], [0, 1.1, 0], 8, at=[[-2.5, 0, -1.55], [2.5, 0, -1.55]])],
     markers=[{"role": "hold", "at": [-2.5 + (i % 5) * 1.3, 0.63, -0.75 if i < 5 else 0.75], "data": {"i": i}} for i in range(10)]
-            + [{"role": "plank", "at": [-0.5, 0.63, -4.1]}], era="1000-1900", region="Europe's rivers")
+            + [{"role": "plank", "at": [-0.5, 0.63, -4.1]}]
+            # (2026-11-03, docs/ships.md: the anchors every ship carries -- the origin is the waterline here)
+            + [{"role": "waterline", "at": [0, 0, 0], "data": {"draught": 0.8}},
+               {"role": "moor", "at": [2.5, 1.1, -1.55], "data": {"end": "bow"}}, {"role": "moor", "at": [-2.5, 1.1, -1.55], "data": {"end": "stern"}},
+               {"role": "gangplank", "at": [-0.5, 0.98, 1.7, -90], "data": {"side": "starboard", "deck": 0.63}},
+               {"role": "gangplank", "at": [-0.5, 0.98, -1.7, 90], "data": {"side": "port", "deck": 0.63}},
+               {"role": "helm", "at": [-5.0, 0.63, 0]}], era="1000-1900", region="Europe's rivers")
 PROPS["components/gangplank"] = item("Gangplank", "components", "a plank to walk aboard, hinged at its origin, running 2.6 m along -z",
     {}, {"wood": "#7a5a36"}, [box("plank", "wood", [1.2, 0.06, 2.6], [0, 0, -1.3])])
 
@@ -159,7 +259,51 @@ def loads(size, floor):
         xs = [-1.82, -1.3, -0.78, -0.26, 0.26, 0.78, 1.3, 1.82]; sacks(3, xs); sacks(3, [x + 0.26 for x in xs[:-1]], 1)
         big_lying(4, [-1.6, -0.85, -0.1]); big_lying(4, [-1.225, -0.475], top); sacks(4, [0.6, 1.12, 1.64]); sacks(4, [0.86, 1.38], 1)
         sheaves(5, 4.2, 4)
+    cultural(out, size, floor)
     return out
+
+
+def cultural(out, size, F):
+    """the loads of the other cultures (2026-11-03; goods.json `loads` picks them per culture): 6 transport amphorae lying
+    across the bed in a straw bed, two courses nested (how they travelled by cart and in ships' holds); 7 amphorae in
+    front, sacks behind; 8 storage jars standing in straw with hampers; 9 bales in two courses; 10 crates in two courses
+    and sacks; 11 tubs standing and bales; 12 Japanese rice bales (tawara) heaped in a pyramid"""
+    S = CARTS[size]; L, W = S["bedL"], S["bedW"]
+    x0, x1 = -L / 2 + 0.05, min(L / 2 - 0.05, S["seatX"] - 0.22)   # (behind the driver's board)
+    def row(pitch, lo=x0, hi=x1):
+        n = max(1, int((hi - lo) // pitch)); c = (lo + hi) / 2
+        return [round(c + (i - (n - 1) / 2) * pitch, 4) for i in range(n)]
+    put = lambda v, kind, at: out.setdefault(v, []).append((kind, None, [round(a, 4) for a in at]))
+    straw = lambda v, h: put(v, "straw", [(x0 + x1) / 2, F + h / 2, 0, x1 - x0, h, W - 0.04])
+    def amphorae(v, lo=x0, hi=x1):   # lying across, toes to alternate sides, the second course in the first's hollows
+        xs = row(0.36, lo, hi)
+        for c, xc in enumerate((xs, [(a + b) / 2 for a, b in zip(xs, xs[1:])])):
+            for j, x in enumerate(xc):
+                s = 1 if (j + c) % 2 else -1
+                put(v, "transport-amphora", [x, F + 0.1 + 0.17 + c * 0.29, -s * 0.37, s * 90, 0, 0])
+    straw(6, 0.12); amphorae(6)
+    mid = x0 + (x1 - x0) * 0.62
+    straw(7, 0.12); amphorae(7, x0 + (x1 - mid) + 0.05, x1)
+    for x in row(0.52, x0, x0 + (x1 - mid)): put(7, "sack", [x, F, 0, 90, 0, 0])
+    straw(8, 0.18)
+    zs = [-W / 4, W / 4] if W >= 1.3 else [0]
+    xs = row(0.48)
+    for j, x in enumerate(xs):
+        for z in zs: put(8, "hamper" if (j % 3 == 2) else "storage-jar", [x, F + 0.02, z])
+    for c in range(2):
+        for x in row(0.58 if c == 0 else 0.62, x0 + c * 0.25, x1 - c * 0.05): put(9, "bale", [x, F + c * 0.5, 0, 0, 90, 0])
+    xc = row(0.6, x0, x0 + (x1 - x0) * 0.7)
+    for c in range(2):
+        for x in (xc if c == 0 else xc[:-1]): put(10, "crate", [x + c * 0.1, F + c * 0.5, 0, 0, 90, 0])
+    for x in row(0.52, x0 + (x1 - x0) * 0.72, x1): put(10, "sack", [x, F, 0, 90, 0, 0])
+    xt = row(0.56, x0, x0 + (x1 - x0) * 0.6)
+    for x in xt:
+        for z in ([-W / 4 + 0.03, W / 4 - 0.03] if W >= 1.3 else [0]): put(11, "tub", [x, F, z])
+    for x in row(0.6, x0 + (x1 - x0) * 0.62, x1): put(11, "bale", [x, F, 0, 0, 90, 0])
+    xb = row(0.45)   # (side by side, touching: two even on the small cart)
+    for c in range(3):
+        for x in xb: put(12, "straw-bale", [x, F + c * 0.39, 0, 0, 90, 0])
+        xb = [(a + b) / 2 for a, b in zip(xb, xb[1:])]   # (the next course in this one's hollows)
 
 
 for size, S in CARTS.items():
@@ -181,10 +325,12 @@ for size, S in CARTS.items():
     for v, pieces in loads(size, F).items():
         for j, (kind, P, at) in enumerate(pieces):
             if kind == "cask": parts.append({"id": f"load {v} cask {j + 1}", "use": "items/furniture/cask", "params": P, "at": at, "when": {"load": v}, "seed": j})
+            elif kind == "straw": parts.append(box(f"load {v} straw", "straw", at[3:], at[:3], when={"load": v}))   # (the bed of straw the jars stand in)
+            elif kind != "sack" and kind != "sheaf": parts.append({"id": f"load {v} {kind} {j + 1}", "use": f"items/tools/{kind}", "at": at, "when": {"load": v}, "seed": j})
             else: parts.append({"id": f"load {v} {kind} {j + 1}", "use": f"items/tools/{kind}", "at": at, "when": {"load": v}})
-    PROPS[f"components/cart-{size}"] = item(S["name"], "components", f"the body of a {S['name'].lower()} ({L} m bed on {len(S['wheels'])} axle(s)): bed, sides, head- and tailboards, the driver's board, footboard, axles and bolsters -- its wheels apart (components/cart-wheel), and its LOAD by `load` (0..4: casks lying in chocked pyramids, standing casks, kegs, sacks in two courses; 5 sheaves heaped, the harvest's, never on the road; -1 empty)",
+    PROPS[f"components/cart-{size}"] = item(S["name"], "components", f"the body of a {S['name'].lower()} ({L} m bed on {len(S['wheels'])} axle(s)): bed, sides, head- and tailboards, the driver's board, footboard, axles and bolsters -- its wheels apart (components/cart-wheel), and its LOAD by `load` (0..4: casks lying in chocked pyramids, standing casks, kegs, sacks in two courses; 5 sheaves heaped, the harvest's, never on the road; 6..12 the other cultures' -- amphorae in straw, amphorae and sacks, jars and hampers, bales, crates and sacks, tubs and bales, rice bales, as assets/world/goods.json picks them; -1 empty)",
         {"load": 0, "seatTop": round(F + 0.465, 4), "seatX": S["seatX"], "bedL": L, "bedW": W, "floor": F, "side": H,
-         **{k: v for i, (x, r) in enumerate(S["wheels"]) for k, v in ((f"axle{i + 1}X", x), (f"wheel{i + 1}R", r))}}, {"wood": {"pick": ["#7a5a36", "#6f5433", "#846040", "#6a4a2c"]}, "dark": DARK}, parts)
+         **{k: v for i, (x, r) in enumerate(S["wheels"]) for k, v in ((f"axle{i + 1}X", x), (f"wheel{i + 1}R", r))}}, {"wood": {"pick": ["#7a5a36", "#6f5433", "#846040", "#6a4a2c"]}, "dark": DARK, "straw": "straw"}, parts)
 
 # ---- the arrow: its tip at the origin, the shaft back along -x
 PROPS["weapons/arrow"] = item("Arrow", "weapon/missile", "a war arrow: an iron bodkin head, a 76 cm shaft, two crossed fletchings -- its tip at the origin, back along -x",
@@ -207,7 +353,13 @@ PROPS["ships/fisher-boat"] = item("Fisherman's boat", "ships", "the fisherman's 
         box("stern", "hull", [0.8, 0.45, 1.3], [-1.9, 0.08, 0, 0, 0, -22]),
         box("bilge", "bilge", [3.2, 0.04, 1.2], [0, 0.02, 0]),
         box("thwarts", "plank", [0.25, 0.05, 1.4], [[-0.7, 0.3, 0], [0.6, 0.3, 0]]),
-        box("creel", "creel", [0.5, 0.3, 0.6], [1.2, 0.3, 0.3])], era="-500-1900", region="everywhere")
+        box("creel", "creel", [0.5, 0.3, 0.6], [1.2, 0.3, 0.3])],
+    markers=[{"role": "waterline", "at": [0, 0, 0], "data": {"draught": 0.28}},   # (2026-11-03, docs/ships.md: the origin is the waterline)
+             {"role": "moor", "at": [2.3, 0.4, 0], "data": {"end": "bow"}}, {"role": "moor", "at": [-2.2, 0.32, 0], "data": {"end": "stern"}},
+             {"role": "gangplank", "at": [0, 0.3, 0.75, -90], "data": {"side": "starboard", "deck": 0.02}},
+             {"role": "gangplank", "at": [0, 0.3, -0.75, 90], "data": {"side": "port", "deck": 0.02}},
+             {"role": "hold", "at": [1.2, 0.04, -0.3], "data": {"i": 0, "floor": 0.04}},
+             {"role": "helm", "at": [-0.7, 0.33, 0]}], era="-500-1900", region="everywhere")
 PROPS["components/fisher-oar"] = item("Oar", "components", "a rowing boat's oar, hinged at its origin (the gunwale): the handle inboard, the loom and blade outboard along +z (`side` -1: along -z)",
     {"side": 1}, {"loom": "#7a5a36", "blade": "#6a4a2c"}, [
         rod("loom", "loom", 0.025, [0, 0, "side * -0.4"], [0, 0, "side * 2.2"], 6),
@@ -419,10 +571,13 @@ def main():
     cats = {c["name"]: c for c in index["categories"]}
     where = {"tools": "Items: tools", "components": "Items: components", "ships": "Items: ships", "weapons": "Items: weapons",
              "furniture": "Items: furniture", "food": "Items: food", "tableware": "Items: tools"}
+    added = []
     for k in PROPS:
         c = cats[where[k.split("/")[0]]]["paths"]
-        if "items/" + k not in c: c.append("items/" + k)
-    json.dump(index, open(ipath, "w"), indent=1, ensure_ascii=False)
+        if "items/" + k not in c: c.append("items/" + k); added.append(k)
+    if added:   # (only when something is new, and in the file's own format: index.json is indent 2 with a final newline)
+        open(ipath, "w").write(json.dumps(index, indent=2, ensure_ascii=False) + "\n")
+        print("registered", added)
     print(len(PROPS), "props")
 
 

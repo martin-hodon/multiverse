@@ -113,8 +113,8 @@ for k in ["campanile stair", "gallery stair", "drum stair", "cupola stair"]:
     if k in build: build.remove(k)
 # THE CAMPANILE: four flights to a storey round the well, on corner landings, twenty in all, the first up the east
 # wall so the door (in the south wall) stays clear; the last arrives on the terrace at the top, which is cut away
-# only over that corner. (The walls stand half a thickness in from campW: the inside is campW - 3 campT square.)
-P["campIn"] = "campW - 3 * campT"; P["campStairW"] = 1.2
+# only over that corner.
+P["campIn"] = "campW - 2 * campT"; P["campStairW"] = 1.2
 P["_campIn"] = "the campanile's inside, between the inner faces of its walls"
 FLOOR = 0.3   # the pavements' height over the ground
 # (it starts on the tower's pavement, FLOOR up, and climbs the rest: 420 risers from there to the terrace)
@@ -250,9 +250,6 @@ facade_band(R + " facade 1", "winSill - 0.5", 0.22, low)
 facade_band(G + " facade 2", "aisleTop + 1.4", 0.5, [(-EDGE, -12.75), (12.75, EDGE)])
 facade_band(G + " front 1", "roseY - 0.8", 0.5, [(-12.81, 12.81)])
 facade_band(R + " front 1", "naveTop - 1.2", 0.45, [(-12.81, 12.81)])
-for k in range(1, 5):   # the campanile's courses, one to a storey, green and red in turn: a ring round its outside
-    add(f"{G if k % 2 else R} tower {k}", {"type": "enclosure", "plan": {"rect": ["campW - campT + 0.12", "campW - campT + 0.12"]}, "thickness": 0.1, "height": 0.45, "openings": [],
-                                           "at": [["campX", f"{k} * campStorey - 0.525", "campZ", 0]]})
 # the courses on the octagon and the tribunes: polygonal rings on their faces, set 4 cm into the wall and 8 cm proud
 # (radii are corner radii: a face offset over cos(pi / n)); the octagon's lowest runs over the tribunes' roofs, not
 # through the tribunes under them, and the two lowest not on the face toward the nave (bay 0): under the nave's roof
@@ -272,10 +269,7 @@ parts["west rose"]["openings"] = [{"at": "frontC / 2", "width": "roseW", "sill":
 P["roseW"] = 8.0
 parts["west front"]["openings"][0]["wimperg"] = {"pitch": 55, "coping": 0.6, "depth": 0.45}
 parts["west wing"]["openings"][0]["wimperg"] = {"pitch": 55, "coping": 0.45, "depth": 0.4}
-# (the campanile's lights stand OPEN, a belfry's and a stair tower's: no glass in them)
-for k in ("campanile", "campanile base wall"):
-    parts[k]["openings"][0]["glass"] = False
-parts["nave roof"].update({"length": "roofL - pierT", "at": [[0, "naveTop", "(roofZ0 - pierT + roofZ1) / 2", 0]]})
+# parts["nave roof"].update({"length": "roofL - pierT", "at": [[0, "naveTop", "(roofZ0 - pierT + roofZ1) / 2", 0]]})
 add("west gable", {"type": "roof", "form": "gable", "width": "frontC + 1.0", "length": "pierT", "pitch": 32,
                    "at": [[0, "naveTop", "zc + naveL / 2 + pierT / 2", 0]],
                    "_about": "the nave front's gable, on the facade's own thickness: steeper and higher than the roof behind it, a screen"}, after="nave roof")
@@ -349,4 +343,107 @@ add("lantern space", {"type": "interior", "height": "lanternH", "plan": {"sides"
 add("campanile space", {"type": "interior", "height": "campH - 0.3", "plan": {"rect": ["campW - 3 * campT + campT", "campW - 3 * campT + campT"]},
                         "at": [["campX", 0, "campZ", 0]],
                         "_about": "the campanile's shaft round its stair, on its walls' middle, up to the terrace"})
+# ---- GIOTTO'S CAMPANILE (2026-11-01): it was five equal storeys with one and the same window, a tower 12m wide with
+# fins at its corners (walls set half a thickness in, and as wide as the whole tower), 13m from the church. It is five
+# DIFFERENT zones on a square of 14.45m -- two of relief panels, hexagons under lozenges (0-15m), the niches with their
+# sixteen statues (15-24), two storeys with a pair of two-light windows on each face (24-53), and the great three-light
+# window of the last (53-81) -- under a cornice that juts out on corbels, an octagonal buttress at every corner the whole
+# way up, and it stands 6m off the aisle wall, level with the facade. One wall a face, with the zones as its `tiers`.
+FZ = "zc + naveL / 2 + pierT"
+P.update({"campT": 3.3, "campIn": "campW - 2 * campT", "campX": "bodyW / 2 + 6 + campW / 2 + 1.2", "campZ": f"{FZ} - campW / 2 - 0.6"})
+P["_campT"] = "the tower's walls are 4m thick at the foot on the real one"
+for k in ("campanile base", "campanile base wall", "campanile", "campanile cornice"):
+    parts.pop(k, None)
+    if k in build: build.remove(k)
+PT = {"profile": "pointed", "spread": 0.5}
+BIFORA = lambda at: {"at": at, "width": 2.7, "sill": 2.2, "springing": 8.2, "head": PT, "tracery": 2, "glass": False, "wimperg": {"pitch": 60, "coping": 0.3, "depth": 0.25}}
+NICHE = lambda at: {"at": at, "width": 1.5, "sill": 2.0, "springing": 4.8, "head": PT, "glass": False}
+UP = [{"h": 9.0, "openings": [NICHE(u) for u in (-4.05, -1.35, 1.35, 4.05)]},
+      {"h": 14.5, "openings": [BIFORA(-2.75), BIFORA(2.75)]},
+      {"h": 14.5, "openings": [BIFORA(-2.75), BIFORA(2.75)]},
+      {"openings": [{"at": 0, "width": 5.4, "sill": 3.2, "springing": 19.0, "head": {"profile": "pointed", "spread": 0.6}, "tracery": 3, "glass": False, "wimperg": {"pitch": 60, "coping": 0.4, "depth": 0.3}}]}]
+FACES = [(0.0, "campZ + campW / 2", "campX"), (math.pi, "campZ - campW / 2", "campX"), (math.pi / 2, "campZ", "campX + campW / 2"), (-math.pi / 2, "campZ", "campX - campW / 2")]
+def on_face(k, u, d):
+    # a point on face k: u along it, d out from its line
+    yaw = FACES[k][0]
+    return f"campX + {u * math.cos(yaw) + (P['campW'] / 2 + d) * math.sin(yaw):.4f}", f"campZ + {-u * math.sin(yaw) + (P['campW'] / 2 + d) * math.cos(yaw):.4f}", round(yaw, 6)
+wall_at = lambda k: [FACES[k][2], 0, FACES[k][1], round(FACES[k][0], 6)]
+add("campanile", {"type": "wall", "width": "campW", "height": "campH", "thickness": "campT", "tiers": [{"h": 15.0, "openings": []}] + UP, "at": [wall_at(k) for k in (0, 2, 3)],
+                  "_about": "a face of the tower, its zones as tiers: reliefs, niches, two storeys of pairs of two-light windows, the great three-light one"}, after="west wing upper")
+add("campanile door face", {"type": "wall", "width": "campW", "height": "campH", "thickness": "campT",
+                            "tiers": [{"h": 15.0, "openings": [{"at": 0, "width": "campDoorW", "sill": 0, "springing": "campDoorSpring", "head": {"profile": "arch", "spread": "arcSpread"}}]}] + UP,
+                            "at": [wall_at(1)], "_about": "the same face with the door in its foot, so the stair can be reached from the ground"}, after="campanile")
+cc = "campW / 2 - 0.1"
+add("campanile buttresses", {"type": "column", "radius": 1.2, "height": "campH - 3.2", "sides": 8,
+                             "at": [[f"campX {a} ({cc})", 0, f"campZ {b} ({cc})", round(math.pi / 8, 6)] for a in "+-" for b in "+-"],
+                             "_about": "the octagonal buttress at each corner, from the ground to the corbels"}, after="campanile door face")
+# the niches closed behind (an opening goes through the wall, and these are 90cm deep), a prophet standing in each
+backs, saints, hexes, lozes = [], [], [], []
+for k in range(4):
+    for u in (-4.05, -1.35, 1.35, 4.05):
+        x, z, yaw = on_face(k, u, -2.1)
+        backs.append([x, 15 + 1.8, z, yaw])
+        x, z, yaw = on_face(k, u, -0.5)
+        saints.append([x, 17.0, z, yaw])
+    for i in range(7):
+        u = (i - 3) * 1.6
+        x, z, yaw = on_face(k, u, 0.12)   # (its back on the wall's face: at the corners two walls overlap, and a point set inside both counts as inside neither)
+        lozes.append([x, 11.3, z, yaw])
+        if k != 1 or abs(u) > 2.5: hexes.append([x, 4.6, z, yaw])
+add("campanile niche backs", {"type": "box", "width": 2.1, "length": 2.4, "height": 6.0, "at": backs, "_about": "what closes the niches: masonry, in the wall's thickness"}, after="campanile buttresses")
+add("campanile statues", {"type": "pinnacle", "w": 0.7, "h": 0.2, "s": 0.02, "figure": 2.7, "at": saints, "_about": "the sixteen prophets and sibyls of the niche storey"}, after="campanile niche backs")
+hx = lambda r: [[round(r * math.cos(i * math.pi / 3), 3), round(r * math.sin(i * math.pi / 3), 3)] for i in range(6)]
+add("campanile hexagons", {"type": "screen", "outline": hx(0.72), "t": 0.12, "at": hexes, "_about": "Andrea Pisano's hexagonal reliefs, the lowest zone"}, after="campanile statues")
+add("campanile lozenges", {"type": "screen", "outline": [[0.62, 0], [0, 0.95], [-0.62, 0], [0, -0.95]], "t": 0.12, "at": lozes, "_about": "the lozenges of the zone above, on their blue ground"}, after="campanile hexagons")
+JOINTS = [15.0, 24.0, 38.5, 53.0]   # (the zones' joints: green and red in turn, a white moulding on each, and one between the two relief rows)
+for k, y in enumerate(JOINTS, 1):
+    add(f"{G if k % 2 else R} tower {k}", {"type": "enclosure", "plan": {"rect": ["campW + 0.12", "campW + 0.12"]}, "thickness": 0.1, "height": 0.45, "openings": [],
+                                           "at": [["campX", y - 0.45, "campZ", 0]]})
+add("campanile strings", {"type": "enclosure", "plan": {"rect": ["campW + 0.5", "campW + 0.5"]}, "thickness": 0.35, "height": 0.3, "openings": [],
+                          "at": [["campX", y, "campZ", 0] for y in [8.1] + JOINTS], "_about": "a moulding at each joint between the zones"})
+add("campanile corbels", {"type": "enclosure", "plan": {"rect": ["campW + 2.0", "campW + 2.0"]}, "thickness": 2.0, "height": 1.6, "openings": [], "at": [["campX", "campH - 3.2", "campZ", 0]],
+                          "_about": "the corbel table the cornice juts out on"}, after="campanile terrace")
+add("campanile cornice", {"type": "enclosure", "plan": {"rect": ["campW + 2.8", "campW + 2.8"]}, "thickness": 2.9, "height": 2.6, "openings": [], "at": [["campX", "campH - 1.6", "campZ", 0]],
+                          "_about": "the cornice and the parapet round the terrace on its top"}, after="campanile corbels")
+parts["pavement tower"].update({"width": "campW - campT", "length": "campW - campT"})
+parts["campanile space"]["plan"] = {"rect": ["campW - campT", "campW - campT"]}
+# ---- THE FACADE's outline (2026-11-01): De Fabris's front is three bays between four great piers carrying tabernacles;
+# the wings rake up to the middle bay rather than stopping level, a pierced gallery along every rake; a row of the
+# Madonna and apostles in niches runs the whole width over the portals; the gable carries the tondo. It had been two flat
+# wings and a plain gable, a box with holes in it.
+WTOP, RK, INNER = "aisleTop + 8.0", 36.8, "frontC / 2"
+EDGE_X = "frontC / 2 + frontWing"
+for sx, nm in ((1, "right"), (-1, "left")):
+    add(f"west rake {nm}", {"type": "screen", "outline": [[f"{sx} * ({EDGE_X})", f"{WTOP} - 0.05"], [f"{sx} * ({INNER})", f"{WTOP} - 0.05"], [f"{sx} * ({INNER})", RK], [f"{sx} * ({EDGE_X})", WTOP]], "t": 1.0,
+                            "at": [[0, 0, FZ, 0]], "_about": "the wing's top, raking up to the middle bay"}, after="west wing upper")
+    add(f"west rake lace {nm}", {"type": "cresting", "run": [[f"{sx} * ({EDGE_X})", WTOP], [f"{sx} * ({INNER})", RK]], "h": 1.1, "panel": 1.5, "t": 0.2, "every": 3,
+                                 "spirelet": {"w": 0.18, "s": 0.8}, "at": [[0, 0, f"{FZ} - 0.4", 0]]}, after=f"west rake {nm}")
+# (the gable's apex: its half width at 32 degrees over naveTop)
+add("west gable lace", {"type": "cresting", "run": [[-13.25, "naveTop"], [0, "naveTop + 8.28"], [13.25, "naveTop"]], "h": 1.0, "panel": 1.5, "t": 0.2, "every": 3,
+                        "spirelet": {"w": 0.18, "s": 0.8}, "at": [[0, 0, f"{FZ} - 0.5", 0]], "_about": "the pierced gallery up the gable's rakes"}, after="west gable")
+tondo = [[round(2.5 * math.cos(i * math.pi / 8), 3), round(2.5 * math.sin(i * math.pi / 8), 3)] for i in range(16)]
+add("west tondo", {"type": "screen", "outline": tondo, "t": 0.2, "at": [[0, "naveTop + 2.7", f"{FZ} + 0.1", 0]], "_about": "the tondo in the gable"}, after="west gable lace")
+add("west gable apex", {"type": "pinnacle", "w": 1.3, "h": 2.0, "s": 3.0, "gablets": 0.8, "at": [[0, "naveTop + 8.0", f"{FZ} - 0.5", 0]], "_about": "the tabernacle at the gable's peak"}, after="west tondo")
+# the four piers: proud of the front in two stages, each with its tabernacle -- not all alike (the inner pair the taller,
+# octagonal, a figure on each; the outer pair square)
+PX = ["frontC / 2", EDGE_X]
+add("west piers", {"type": "box", "width": 3.0, "length": 1.8, "height": 28.0, "at": [[f"{sx} * ({x})", 0, f"{FZ} - 0.2", 0] for sx in (1, -1) for x in PX], "_about": "the front's four piers, their lower stage"}, after="west wing upper")
+add("west piers inner", {"type": "box", "width": 2.4, "length": 1.5, "height": "naveTop + 2.2 - 28", "at": [[f"{sx} * ({PX[0]})", 28, f"{FZ} - 0.2", 0] for sx in (1, -1)]}, after="west piers")
+add("west piers outer", {"type": "box", "width": 2.4, "length": 1.5, "height": f"{WTOP} + 1.2 - 28", "at": [[f"{sx} * ({PX[1]})", 28, f"{FZ} - 0.2", 0] for sx in (1, -1)]}, after="west piers")
+add("west pinnacles inner", {"type": "pinnacle", "w": 2.2, "h": 4.2, "s": 5.2, "sides": 8, "gablets": 1.2, "crockets": 3, "figure": 2.2, "at": [[f"{sx} * ({PX[0]})", "naveTop + 2.15", f"{FZ} - 0.2", 0] for sx in (1, -1)]}, after="west piers inner")
+add("west pinnacles outer", {"type": "pinnacle", "w": 2.1, "h": 3.0, "s": 4.2, "gablets": 1.0, "crockets": 2, "at": [[f"{sx} * ({PX[1]})", f"{WTOP} + 1.15", f"{FZ} - 0.2", 0] for sx in (1, -1)]}, after="west piers outer")
+# the row of the Madonna and the apostles over the portals, on a course the whole width, under canopies
+APOS = [round(i * 2.45 - 8 * 2.45 / 2, 3) for i in range(9)] + [round(s * (15.6 + i * 2.2), 3) for s in (1, -1) for i in range(3)]
+Y0 = 20.7
+add("apostles course", {"type": "box", "width": "bodyW - 0.2", "length": 0.8, "height": 0.45, "at": [[0, Y0 - 0.45, f"{FZ} + 0.1", 0]], "_about": "the course the apostles stand on"}, after="west rose")
+add("apostles", {"type": "pinnacle", "w": 0.8, "h": 0.2, "s": 0.02, "figure": 2.6, "at": [[x, Y0, f"{FZ} + 0.2", 0] for x in APOS], "_about": "the Madonna among the apostles, in a row across the front"}, after="apostles course")
+add("apostles canopies", {"type": "pinnacle", "w": 1.05, "h": 0.25, "s": 1.5, "gablets": 0.45, "at": [[x, Y0 + 3.0, f"{FZ} + 0.2", 0] for x in APOS]}, after="apostles")
+# ---- THE LANTERN (2026-11-01) was 21m to its eaves and 4.5 of cone -- the real one is 21m with its cone, ball and cross:
+# 13 of octagon with tall lights, 7.5 of cone, a ball over two metres wide and the cross on it
+P["lanternH"] = 13.0
+parts["lantern"]["opening"].update({"springing": 7.5}); parts["lantern"]["polygon"] = True
+parts["lantern roof"].update({"radius": "lanternR + 1.4", "head": {"profile": "trigonal", "rise": 7.5}})
+parts["lantern buttresses"].update({"low": -0.25, "high": 7.5, "top1": 10.5, "width": 1.15})
+add("lantern cross", {"type": "box", "width": 0.22, "length": 0.22, "height": 3.6, "atop": "lantern ball", "at": [[0, -0.2, "octZ", 0]], "_about": "the cross on the ball"}, after="lantern ball")
+add("lantern cross arm", {"type": "box", "width": 1.5, "length": 0.2, "height": 0.2, "atop": "lantern ball", "at": [[0, 2.0, "octZ", 0]]}, after="lantern cross")
 open(p, "w").write(json.dumps(d, indent=2) + "\n")

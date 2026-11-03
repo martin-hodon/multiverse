@@ -72,6 +72,9 @@ The layers, painted in order over the ground (`t` and `a` ranges; `soft` the edg
 `butterflies.js createButterflies(scene)`: per species one texture (fore and hind, upperside and underside, the body)
 and one instanced geometry -- each wing a fan from its root, its two faces the two sides (the upper face takes the
 upperside's painting, the lower the underside's), the right the left's mirror; the flap is done in the vertex shader
-(a per-instance angle, hinged at the body), the light per pixel from the plane's own normal (light.js). One draw call
-a species. `config.json crowds.butterflies` how many; `butterflyScale` how much larger than life they fly (they are
+(a per-instance angle, hinged at the body), the light per pixel from the plane's own normal (light.js). ONE draw call
+for every species (2026-11-03; it was one a species, a dozen draws of one or two fliers each): every species' mesh has
+the same points in the same order, so the geometry is one set of triangles and each point's number, and where a point
+lies and its uv are read from the flier's species' row of a float texture (two texels a point); the species' atlases
+are stacked into one texture. `config.json crowds.butterflies` how many; `butterflyScale` how much larger than life they fly (they are
 small and fast: life-size they vanish).

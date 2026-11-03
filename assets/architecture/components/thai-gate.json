@@ -1,0 +1,282 @@
+{
+ "name": "Thai gate",
+ "_about": "A GATE in a Thai wall (pratu): two piers `w` across all told and `d` deep, the passage `pw` wide and `ph` high under the lintel, the body `bh` high, its cornice and attic, and the crown to `H`: a thai-spire of `tiers` (`crown` spire) or a prang (`crown` prang; `lean` yes: a lean one). The way through runs along z. Written by tools/archgen/thai.py.",
+ "params": {
+  "detail": 4,
+  "w": 7.0,
+  "d": 4.0,
+  "pw": 3.0,
+  "ph": 4.2,
+  "bh": 6.0,
+  "H": 16.0,
+  "crown": "spire",
+  "tiers": "five",
+  "lean": "no"
+ },
+ "build": [
+  "piers",
+  "lintel",
+  "cornice",
+  "attic",
+  "spire",
+  "prang"
+ ],
+ "parts": {
+  "piers": {
+   "type": "box",
+   "width": "(w - pw) / 2",
+   "length": "d",
+   "height": "bh",
+   "at": [
+    [
+     "(w + pw) / 4",
+     0,
+     0,
+     0
+    ],
+    [
+     "-(w + pw) / 4",
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the piers, the passage between"
+  },
+  "lintel": {
+   "type": "box",
+   "width": "pw",
+   "length": "d",
+   "height": "bh - ph",
+   "at": [
+    [
+     0,
+     "ph",
+     0,
+     0
+    ]
+   ],
+   "_about": "the lintel over the passage"
+  },
+  "cornice": {
+   "type": "box",
+   "width": "w + 0.5",
+   "length": "d + 0.5",
+   "height": 0.45,
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "_about": "the cornice"
+  },
+  "attic": {
+   "type": "prism",
+   "plan": {
+    "points": [
+     [
+      "-0.78 * min(w, d) * 0.42",
+      "0.88 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.78 * min(w, d) * 0.42",
+      "0.93 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.48 * min(w, d) * 0.42",
+      "0.93 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.48 * min(w, d) * 0.42",
+      "min(w, d) * 0.42"
+     ],
+     [
+      "0.48 * min(w, d) * 0.42",
+      "min(w, d) * 0.42"
+     ],
+     [
+      "0.48 * min(w, d) * 0.42",
+      "0.93 * min(w, d) * 0.42"
+     ],
+     [
+      "0.78 * min(w, d) * 0.42",
+      "0.93 * min(w, d) * 0.42"
+     ],
+     [
+      "0.78 * min(w, d) * 0.42",
+      "0.88 * min(w, d) * 0.42"
+     ],
+     [
+      "0.88 * min(w, d) * 0.42",
+      "0.88 * min(w, d) * 0.42"
+     ],
+     [
+      "0.88 * min(w, d) * 0.42",
+      "0.78 * min(w, d) * 0.42"
+     ],
+     [
+      "0.93 * min(w, d) * 0.42",
+      "0.78 * min(w, d) * 0.42"
+     ],
+     [
+      "0.93 * min(w, d) * 0.42",
+      "0.48 * min(w, d) * 0.42"
+     ],
+     [
+      "min(w, d) * 0.42",
+      "0.48 * min(w, d) * 0.42"
+     ],
+     [
+      "min(w, d) * 0.42",
+      "-0.48 * min(w, d) * 0.42"
+     ],
+     [
+      "0.93 * min(w, d) * 0.42",
+      "-0.48 * min(w, d) * 0.42"
+     ],
+     [
+      "0.93 * min(w, d) * 0.42",
+      "-0.78 * min(w, d) * 0.42"
+     ],
+     [
+      "0.88 * min(w, d) * 0.42",
+      "-0.78 * min(w, d) * 0.42"
+     ],
+     [
+      "0.88 * min(w, d) * 0.42",
+      "-0.88 * min(w, d) * 0.42"
+     ],
+     [
+      "0.78 * min(w, d) * 0.42",
+      "-0.88 * min(w, d) * 0.42"
+     ],
+     [
+      "0.78 * min(w, d) * 0.42",
+      "-0.93 * min(w, d) * 0.42"
+     ],
+     [
+      "0.48 * min(w, d) * 0.42",
+      "-0.93 * min(w, d) * 0.42"
+     ],
+     [
+      "0.48 * min(w, d) * 0.42",
+      "-(min(w, d) * 0.42)"
+     ],
+     [
+      "-0.48 * min(w, d) * 0.42",
+      "-(min(w, d) * 0.42)"
+     ],
+     [
+      "-0.48 * min(w, d) * 0.42",
+      "-0.93 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.78 * min(w, d) * 0.42",
+      "-0.93 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.78 * min(w, d) * 0.42",
+      "-0.88 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.88 * min(w, d) * 0.42",
+      "-0.88 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.88 * min(w, d) * 0.42",
+      "-0.78 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.93 * min(w, d) * 0.42",
+      "-0.78 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.93 * min(w, d) * 0.42",
+      "-0.48 * min(w, d) * 0.42"
+     ],
+     [
+      "-(min(w, d) * 0.42)",
+      "-0.48 * min(w, d) * 0.42"
+     ],
+     [
+      "-(min(w, d) * 0.42)",
+      "0.48 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.93 * min(w, d) * 0.42",
+      "0.48 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.93 * min(w, d) * 0.42",
+      "0.78 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.88 * min(w, d) * 0.42",
+      "0.78 * min(w, d) * 0.42"
+     ],
+     [
+      "-0.88 * min(w, d) * 0.42",
+      "0.88 * min(w, d) * 0.42"
+     ]
+    ]
+   },
+   "height": "(H - bh) * 0.1",
+   "at": [
+    [
+     0,
+     "bh + 0.45",
+     0,
+     0
+    ]
+   ],
+   "_about": "the attic the crown stands on"
+  },
+  "spire": {
+   "type": "component",
+   "use": "components/thai-spire",
+   "params": {
+    "w": "min(w, d) * 0.62",
+    "H": "(H - bh) * 0.9 - 0.45",
+    "tiers": "tiers"
+   },
+   "at": [
+    [
+     0,
+     "bh + 0.45 + (H - bh) * 0.1",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "crown": "spire"
+   },
+   "_about": "the crown: a spire of tiers"
+  },
+  "prang": {
+   "type": "component",
+   "use": "components/prang",
+   "params": {
+    "w": "min(w, d) * 0.7",
+    "H": "(H - bh) * 0.9 - 0.45",
+    "base": "no",
+    "by": 0,
+    "lean": "lean"
+   },
+   "at": [
+    [
+     0,
+     "bh + 0.45 + (H - bh) * 0.1",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "crown": "prang"
+   },
+   "_about": "the crown: a prang"
+  }
+ }
+}

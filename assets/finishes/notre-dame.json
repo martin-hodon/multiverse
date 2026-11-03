@@ -1,32 +1,254 @@
 {
-  "name": "Notre-Dame de Paris",
-  "building": "architecture/notre-dame",
-  "_about": "Notre-Dame: Paris limestone, the roofs in lead, the fleche in lead; stained glass; inside, pale stone and a chequered floor.",
-  "stone": {
-    "color": "#cfc6b0",
-    "accent": "#b3aa94",
-    "pat": "ashlar"
+ "name": "Notre-Dame de Paris",
+ "building": "architecture/notre-dame",
+ "_about": "Notre-Dame: Paris limestone, the roofs in lead, the fleche in lead; stained glass; inside, pale stone and a chequered floor.",
+ "stone": {
+  "color": "#cfc6b0",
+  "accent": "#b3aa94",
+  "pat": "ashlar"
+ },
+ "rules": [
+  {
+   "parts": [
+    "central tympanum",
+    "north tympanum",
+    "south tympanum"
+   ],
+   "color": "#a89f89",
+   "accent": "#958c78",
+   "pat": "ashlar",
+   "_about": "the tympana read darker: carved and shadowed in the real one"
   },
-  "rules": [
-    {"parts": "kind:glass", "opening": "round", "map": "opening", "pattern": "glass/rose stone 16", "palette": "paris"},
-    {"parts": "kind:glass", "opening": "head", "map": "opening", "pattern": "glass/tracery diaper", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [8, 0], "map": "opening", "turn": 90, "pattern": "glass/saint peter", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [8, 1], "map": "opening", "turn": 90, "pattern": "glass/saint bishop", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [8, 2], "map": "opening", "turn": 90, "pattern": "glass/saint virgin", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [8, 3], "map": "opening", "turn": 90, "pattern": "glass/saint paul", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [8, 4], "map": "opening", "turn": 90, "pattern": "glass/saint king", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [8, 5], "map": "opening", "turn": 90, "pattern": "glass/saint martyr", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [8, 6], "map": "opening", "turn": 90, "pattern": "glass/medallion stack", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [8, 7], "map": "opening", "turn": 90, "pattern": "glass/medallion story", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "short", "nth": [4, 0], "map": "opening", "pattern": "glass/medallion ship", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "short", "nth": [4, 1], "map": "opening", "pattern": "glass/medallion annunciation", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "short", "nth": [4, 2], "map": "opening", "pattern": "glass/medallion kings", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "short", "nth": [4, 3], "map": "opening", "pattern": "glass/medallion majesty", "palette": "chartres"},
-    {"parts": "kind:glass", "pattern": "painted/stained glass", "palette": "stained", "_about": "the windows' stained glass"},
-    {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
-    {"parts": "kind:dome", "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
-    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "granite"},
-    {"surface": "wall", "pattern": "stone/ashlar", "palette": "limestone"}
-  ]
+  {
+   "parts": [
+    "central archivolt 2",
+    "north archivolt 2",
+    "south archivolt 2"
+   ],
+   "color": "#a89f89",
+   "accent": "#958c78",
+   "pat": "ashlar"
+  },
+  {
+   "parts": [
+    "central archivolt 1",
+    "north archivolt 1",
+    "south archivolt 1",
+    "central archivolt 3",
+    "north archivolt 3",
+    "south archivolt 3"
+   ],
+   "color": "#bcb39d",
+   "accent": "#a89f89",
+   "pat": "ashlar"
+  },
+  {
+   "parts": [
+    "central door leaves",
+    "north door leaves",
+    "south door leaves"
+   ],
+   "color": "#4a3524",
+   "accent": "#35261a",
+   "pat": "wood",
+   "_about": "the portals' leaves: dark oak"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "round",
+   "map": "opening",
+   "pattern": "glass/rose stone 16",
+   "palette": "paris"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "head",
+   "map": "opening",
+   "pattern": "glass/tracery diaper",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "tall",
+   "nth": [
+    8,
+    0
+   ],
+   "map": "opening",
+   "turn": 90,
+   "pattern": "glass/saint peter",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "tall",
+   "nth": [
+    8,
+    1
+   ],
+   "map": "opening",
+   "turn": 90,
+   "pattern": "glass/saint bishop",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "tall",
+   "nth": [
+    8,
+    2
+   ],
+   "map": "opening",
+   "turn": 90,
+   "pattern": "glass/saint virgin",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "tall",
+   "nth": [
+    8,
+    3
+   ],
+   "map": "opening",
+   "turn": 90,
+   "pattern": "glass/saint paul",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "tall",
+   "nth": [
+    8,
+    4
+   ],
+   "map": "opening",
+   "turn": 90,
+   "pattern": "glass/saint king",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "tall",
+   "nth": [
+    8,
+    5
+   ],
+   "map": "opening",
+   "turn": 90,
+   "pattern": "glass/saint martyr",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "tall",
+   "nth": [
+    8,
+    6
+   ],
+   "map": "opening",
+   "turn": 90,
+   "pattern": "glass/medallion stack",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "tall",
+   "nth": [
+    8,
+    7
+   ],
+   "map": "opening",
+   "turn": 90,
+   "pattern": "glass/medallion story",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "short",
+   "nth": [
+    4,
+    0
+   ],
+   "map": "opening",
+   "pattern": "glass/medallion ship",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "short",
+   "nth": [
+    4,
+    1
+   ],
+   "map": "opening",
+   "pattern": "glass/medallion annunciation",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "short",
+   "nth": [
+    4,
+    2
+   ],
+   "map": "opening",
+   "pattern": "glass/medallion kings",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "opening": "short",
+   "nth": [
+    4,
+    3
+   ],
+   "map": "opening",
+   "pattern": "glass/medallion majesty",
+   "palette": "chartres"
+  },
+  {
+   "parts": "kind:glass",
+   "pattern": "painted/stained glass",
+   "palette": "stained",
+   "_about": "the windows' stained glass"
+  },
+  {
+   "parts": "kind:roof",
+   "surface": "roof",
+   "pattern": "roofs/sheet metal",
+   "palette": "lead"
+  },
+  {
+   "parts": "kind:dome",
+   "surface": "roof",
+   "pattern": "roofs/sheet metal",
+   "palette": "lead"
+  },
+  {
+   "parts": "towers",
+   "surface": "wall",
+   "side": "in",
+   "above": 43.0,
+   "color": "#3c3932",
+   "accent": "#2f2c27",
+   "_about": "the belfries' dark, behind the louvres: seen through the lancets, not pale stone"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "pattern": "floors/checker",
+   "palette": "marble-grey"
+  },
+  {
+   "surface": "floor",
+   "pattern": "floors/flagstones",
+   "palette": "granite"
+  },
+  {
+   "surface": "wall",
+   "pattern": "stone/ashlar",
+   "palette": "limestone"
+  }
+ ]
 }

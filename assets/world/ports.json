@@ -1,0 +1,133 @@
+{
+ "name": "Ports",
+ "kind": "ports",
+ "_about": "WHAT EACH CULTURE BUILDS ITS HARBOUR OF (2026-11-03; port.js layoutPort, docs/world.md 'Ports'; the pieces are tools/archgen/harbour.py's components). `cultures`: keyed as goods.json is -- by the world's period (periods.json), else by the first style of the period's `dress`, else `default`; `like` takes another culture's entry and overrides what it says. Each gives: `finish` (the finish every piece is dressed in: assets/finishes/<key>.json); `length` the most quay it builds; `quay` the quay's params (components/quay: style stone|timber|steps, F the quay top over the water, D the water's depth at the face, T the wall, B the apron; `reach` how far out from the face a hull lies: the steps' ledge); `piers` n [min, max] and L [min, max] (components/pier); `mole` L [min, max] and its params (components/mole), or none; `light` the light's piece and params, `on` mole (its head) or land (past the quay's end); `cranes` on the apron at the berths, `set` how far behind the face their origin stands, `swing` how port.js turns it over its berth's hold (jib: the `jib` param's turn and the `reach` = the hook's distance less `R`; lean: the polyspastos' `lean`); `waterfront` pieces that take the place of quay (their origin on the face: ship sheds, slips); `land` the row behind the apron, each with `n` [min, max], its footprint `w` x `d` (along the quay, inland), its `role` (warehouse, office, market, store) -- the office stands by the street up to the town. Every piece's `def` is a definition under assets/architecture (a component, a dwelling); `w` `d` are its plan's extent round its origin, which is the middle of its plan but for the waterfront pieces and cranes (origin on the quay face / `set`).",
+ "cultures": {
+  "greek": {
+   "finish": "finishes/greek-port", "length": 150,
+   "quay": { "style": "stone", "F": 1.6, "D": 3.5, "T": 1.6, "B": 11, "bay": 6 },
+   "piers": { "n": [0, 1], "L": [16, 24], "W": 3.4 },
+   "mole": { "L": [45, 70], "W": 9 },
+   "light": { "def": "components/pharos", "params": { "H": 20 }, "on": "mole", "w": 8, "d": 8 },
+   "cranes": [ { "def": "components/polyspastos", "params": { "Hc": 9, "lean": 2.6 }, "n": [1, 2], "set": -0.8, "w": 7, "d": 14, "swing": "lean" } ],
+   "waterfront": [ { "def": "components/ship-shed", "params": { "n": 4 }, "n": [1, 1], "w": 27.3, "d": 41, "out": 6, "role": "sheds" },
+                   { "def": "components/boat-slip", "n": [0, 1], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "dwellings/greek-house", "n": [1, 1], "w": 12.8, "d": 14.8, "role": "office" },
+             { "def": "components/horreum", "params": { "order": "doric", "L": 32, "Dp": 13 }, "n": [1, 2], "w": 33.4, "d": 14.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "roman": {
+   "finish": "finishes/roman-port", "length": 170,
+   "quay": { "style": "stone", "F": 1.8, "D": 4, "T": 1.8, "B": 11, "bay": 6 },
+   "piers": { "n": [1, 2], "L": [20, 30], "W": 3.6 },
+   "mole": { "L": [60, 90], "W": 9 },
+   "light": { "def": "components/pharos", "params": { "H": 26 }, "on": "mole", "w": 9.8, "d": 9.8 },
+   "cranes": [ { "def": "components/polyspastos", "params": { "Hc": 10, "lean": 3 }, "n": [1, 2], "set": -0.8, "w": 7, "d": 14, "swing": "lean" } ],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 1], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "components/customs-house", "params": { "arch": "semicircular" }, "n": [1, 1], "w": 17.3, "d": 11.3, "role": "office" },
+             { "def": "components/horreum", "params": { "order": "tuscan", "L": 32, "Dp": 13 }, "n": [2, 3], "w": 33.4, "d": 14.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "byzantine": { "like": "roman", "finish": "finishes/mediterranean-port",
+   "light": { "def": "components/light-tower", "params": { "H": 16 }, "on": "mole", "w": 6.4, "d": 6.4 },
+   "land": [ { "def": "components/customs-house", "params": { "arch": "semicircular" }, "n": [1, 1], "w": 17.3, "d": 11.3, "role": "office" },
+             { "def": "components/horreum", "params": { "order": "square", "L": 28, "Dp": 12 }, "n": [2, 3], "w": 29.4, "d": 13.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ] },
+  "egyptian": {
+   "finish": "finishes/nile-port", "length": 130,
+   "quay": { "style": "stone", "F": 1.4, "D": 3, "T": 1.6, "B": 10, "bay": 6 },
+   "piers": { "n": [1, 2], "L": [14, 22], "W": 3.2 },
+   "mole": "none",
+   "light": { "def": "components/pharos", "params": { "H": 22 }, "on": "land", "w": 8.8, "d": 8.8 },
+   "cranes": [],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 2], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "dwellings/egyptian-house", "n": [1, 1], "w": 8.4, "d": 10.4, "role": "office" },
+             { "def": "components/horreum", "params": { "order": "square", "L": 28, "Dp": 12 }, "n": [2, 3], "w": 29.4, "d": 13.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "indian": {
+   "finish": "finishes/rustic-port", "length": 120,
+   "quay": { "style": "steps", "F": 1.6, "D": 3, "T": 1.0, "B": 9, "bay": 8, "reach": 4.6 },
+   "piers": { "n": [1, 2], "L": [14, 22], "W": 3.2 },
+   "mole": "none", "light": "none", "cranes": [],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 1], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "components/horreum", "params": { "order": "square", "L": 24, "Dp": 11 }, "n": [2, 3], "w": 25.4, "d": 12.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "maya": {
+   "finish": "finishes/rustic-port", "length": 90,
+   "quay": { "style": "timber", "F": 1.2, "D": 2.5, "T": 1.0, "B": 8, "bay": 6 },
+   "piers": { "n": [1, 2], "L": [12, 20], "W": 3.0 },
+   "mole": { "L": [30, 45], "W": 7, "_about": "the sea wall of Isla Cerritos, Chichen Itza's port" },
+   "light": "none", "cranes": [],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 2], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "dwellings/maya-house", "n": [2, 3], "w": 8.6, "d": 5.6, "role": "store" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "chinese": {
+   "finish": "finishes/chinese-port", "length": 140,
+   "quay": { "style": "stone", "F": 1.6, "D": 3.5, "T": 1.6, "B": 9, "bay": 6 },
+   "piers": { "n": [1, 2], "L": [16, 26], "W": 3.6 },
+   "mole": "none",
+   "light": { "def": "components/beacon-pagoda", "params": { "H": 24 }, "on": "land", "w": 8.5, "d": 8.5 },
+   "cranes": [],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 1], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "components/chinese-hall", "params": { "nx": 3, "bw": 4.2, "nz": 2, "bd": 4.4, "H": 4.2 }, "n": [1, 1], "w": 18.6, "d": 18.7, "role": "office" },
+             { "def": "components/kura", "params": { "firewalls": "yes", "W": 12, "Dp": 8 }, "n": [2, 4], "w": 13.4, "d": 9.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "japanese": {
+   "finish": "finishes/japanese-port", "length": 130,
+   "quay": { "style": "steps", "F": 1.6, "D": 3, "T": 1.2, "B": 9, "bay": 8, "reach": 4.6 },
+   "piers": { "n": [1, 2], "L": [14, 22], "W": 3.2 },
+   "mole": { "L": [30, 45], "W": 7, "n": [0, 1], "_about": "the taisen breakwater of Tomo-no-ura" },
+   "light": { "def": "components/stone-lantern", "on": "land", "w": 4, "d": 4 },
+   "cranes": [],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 1], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "dwellings/minka", "n": [1, 1], "w": 11.8, "d": 8.8, "role": "office" },
+             { "def": "components/kura", "n": [2, 4], "w": 10.3, "d": 7.8, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "islamic": {
+   "finish": "finishes/mediterranean-port", "length": 140,
+   "quay": { "style": "stone", "F": 1.6, "D": 3.5, "T": 1.6, "B": 11, "bay": 6 },
+   "piers": { "n": [1, 1], "L": [18, 26], "W": 3.4 },
+   "mole": { "L": [45, 65], "W": 8 },
+   "light": { "def": "components/light-tower", "params": { "H": 16 }, "on": "mole", "w": 6.4, "d": 6.4 },
+   "cranes": [ { "def": "components/treadwheel-crane", "n": [0, 1], "set": -5.4, "w": 8.2, "d": 8.2, "swing": "jib", "R": 3.6 } ],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 1], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "components/customs-house", "params": { "arch": "pointed" }, "n": [1, 1], "w": 17.3, "d": 11.3, "role": "office" },
+             { "def": "components/horreum", "params": { "order": "square", "L": 28, "Dp": 12 }, "n": [1, 2], "w": 29.4, "d": 13.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "ottoman": { "like": "islamic" },
+  "medieval": {
+   "finish": "finishes/hanse-port", "length": 140,
+   "quay": { "style": "timber", "F": 1.5, "D": 3.5, "T": 1.4, "B": 12, "bay": 6 },
+   "piers": { "n": [1, 2], "L": [16, 26], "W": 3.6 },
+   "mole": "none",
+   "light": { "def": "components/light-tower", "params": { "H": 16 }, "on": "land", "w": 6.4, "d": 6.4 },
+   "cranes": [ { "def": "components/treadwheel-crane", "n": [1, 1], "set": -5.4, "w": 8.2, "d": 8.2, "swing": "jib", "R": 3.6 } ],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 1], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "components/customs-house", "params": { "arch": "pointed" }, "n": [1, 1], "w": 17.3, "d": 11.3, "role": "office" },
+             { "def": "components/speicher", "n": [3, 5], "w": 9.5, "d": 17.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "russian": { "like": "medieval", "light": "none",
+   "land": [ { "def": "components/speicher", "params": { "gableForm": "plain" }, "n": [3, 4], "w": 9.5, "d": 17.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ] },
+  "industrial": {
+   "finish": "finishes/industrial-port", "length": 180,
+   "quay": { "style": "stone", "F": 2.0, "D": 6, "T": 2.0, "B": 14, "bay": 8 },
+   "piers": { "n": [1, 2], "L": [24, 36], "W": 4.4 },
+   "mole": { "L": [60, 90], "W": 8 },
+   "light": { "def": "components/lighthouse", "on": "mole", "w": 6.7, "d": 6.7 },
+   "cranes": [ { "def": "components/jib-crane", "n": [2, 3], "set": -2.6, "w": 2.6, "d": 7, "swing": "jib", "R": 0 } ],
+   "waterfront": [ { "def": "components/boat-slip", "n": [1, 1], "w": 9, "d": 6, "out": 14, "role": "slip" } ],
+   "land": [ { "def": "components/customs-house", "params": { "arch": "segmental" }, "n": [1, 1], "w": 17.3, "d": 11.3, "role": "office" },
+             { "def": "components/speicher", "params": { "gableForm": "plain", "W": 12, "Dp": 20 }, "n": [3, 4], "w": 12.5, "d": 21.4, "role": "warehouse" },
+             { "def": "components/fish-market", "n": [1, 1], "w": 16, "d": 10, "role": "market" } ]
+  },
+  "default": { "like": "medieval" }
+ }
+}

@@ -26,6 +26,7 @@
 // Everything comes out as parts in the order it is built -- piers, walls, vaults, ribs, buttresses, flyers, roofs -- each
 // standing on the one before, which the support check (check.js floating) can follow down to the ground.
 import { mesh, earClip, drum, flyerMesh, tieredWall, stackMesh } from "./build.js";
+import { pinnacleAt } from "./pinnacle.js";
 
 // ---- arcs ----------------------------------------------------------------------------------------------------------
 // LEVEL CROWNS: the head of an opening `2a` wide whose crown is `rise` over its springing -- pointed when it rises more
@@ -274,7 +275,8 @@ function hallLevels(d, m) {
   const aisleCrown = crown - (d.aisleDrop ?? 0), vTop = crown + vT, aisleTop = aisleCrown + vT;
   // (the arcade's arch rises under the lower of the two wall arches over it, the nave's and the aisle's)
   const arcadeCrown = spring + (d.arcadeRise ?? Math.min(wallRise(Lb - t, crown, spring), wallRise(Lb - t, aisleCrown, spring), span0 / 2 * 2.4) - .4);
-  const wallTop = vTop + .3, roofT = .35;
+  // (`eaveRise`: the outer wall carried on that much over the vaults -- a brick hall's tall bare wall-head)
+  const wallTop = vTop + .3 + (d.eaveRise ?? 0), roofT = .35;
   const ridge = wallTop + (a + nA * w + tA / 2 + d.overhang) * Math.tan(d.pitch * Math.PI / 180);
   return { ...m, arcadeCrown, vT, aisleCrown, aisleTop, aisleEave: wallTop, roofT, aisleRidge: wallTop, clerSill: vTop,
            half, vSpring, crown, vTop, wallTop, ridge };
@@ -319,7 +321,14 @@ export function basilica(d, per90) {
   const X = d.transept ?? null, xNode = (k) => (k <= B ? k : NN - 1 - k);           // a straight node's number from the west
   const inCross = (i) => X !== null && westIndex(i) >= X[0] && westIndex(i) <= X[1];
   const crossInterior = (k) => X !== null && (k <= B || k >= NN - 1 - B) && xNode(k) > X[0] && xNode(k) < X[1] + 1;
-  const hasAisle = (i) => inCross(i) ? false : sides > 0 || bayKind(i) === "nave" ? !inSkip(d.skipAisle, i) : false;
+  // THE STAGGERED CHEVET (`ambulatory: false`: Regensburg's three choirs, the Benedictine Staffelchor): no aisle round the
+  // apse -- the arcade line there IS the choir's outer wall, from the ground, windowed in two tiers and buttressed at its
+  // nodes; the main choir stands out `chancelBays` straight bays past the aisles, and each aisle ends in its own small
+  // apse of `sideApse` sides (0: a flat wall) where it stops
+  const staggered = sides > 0 && d.ambulatory === false, chancelN = staggered ? Math.max(0, Math.round(d.chancelBays ?? 0)) : 0;
+  const chancel = (i) => staggered && (bayKind(i) === "apse" || (westIndex(i) >= 0 && westIndex(i) >= B - chancelN));
+  const chancelNode = (k) => chancel(Math.max(0, k - 1)) && chancel(Math.min(k, NN - 2));
+  const hasAisle = (i) => inCross(i) || chancel(i) ? false : sides > 0 || bayKind(i) === "nave" ? !inSkip(d.skipAisle, i) : false;
   const hasOuter = (i) => hasAisle(i) && !inSkip(d.skipOuter, i) && (sides > 0 || bayKind(i) === "nave");
   // (a flat east end: the bay across the east end is the east wall's, not an arcade's)
   const arcadeBay = (i) => sides > 0 || bayKind(i) === "nave";
@@ -367,6 +376,13 @@ export function basilica(d, per90) {
     if (sides === 0 && (k === B || k === B + 1)) continue;
     if (crossInterior(k)) continue;                   // (the crossing is open from pier to pier)
     const [x, z] = arc[k], o = normal(k), tg = [o[1], -o[0]];
+    if (chancelNode(k)) {
+      // (a node of the staggered choir's own wall: no pier, the vaulting shaft runs down its inner face to the floor)
+      const vx = x - o[0] * (t / 2 + rs * .5), vz = z - o[1] * (t / 2 + rs * .5);
+      lathe(shafts, vx, vz, [[rs + .12, 0], [rs, .45], [rs, vSpring - .5], [rs + .2, vSpring - .15]], 6);
+      blockAt(caps, vx, vz, tg, o, rs + .25, rs + .25, vSpring - .15, vSpring);
+      continue;
+    }
     // a shaft under each arch: along the line both ways, out to the aisle's vault, in to the nave's
     const aisled = hasAisle(Math.min(k, NN - 2)) || hasAisle(Math.max(0, k - 1));
     pierAt(x, z, o, [...along(arc, k), aisled ? o : null, [-o[0], -o[1]]].filter(Boolean));
@@ -401,6 +417,7 @@ export function basilica(d, per90) {
       continue;
     }
     const Lc = dist2(arc[i], arc[i + 1]);
+    if (chancel(i)) { arcadeFaces.push(null); continue; }   // (the staggered choir's wall: its own, from the ground, below)
     if (!arcadeBay(i)) { arcadeFaces.push([{ h: 0, openings: [] }]); continue; }
     const ow = Lc - 2 * ha, tiers = [];
     const arcH = arcadeCrown - spring + .4;
@@ -425,11 +442,32 @@ export function basilica(d, per90) {
     arcadeFaces.push(tiers);
   }
   const arcadeTop = (d.hall ? vTop : wallTop) - spring;
-  const fix = arcadeFaces.map((tiers) => { const used = tiers.slice(0, -1).reduce((s, q) => s + q.h, 0); return tiers.map((q, j) => (j === tiers.length - 1 ? { ...q, h: arcadeTop - used } : q)); });
+  const fix = arcadeFaces.map((tiers) => { if (!tiers) return null; const used = tiers.slice(0, -1).reduce((s, q) => s + q.h, 0); return tiers.map((q, j) => (j === tiers.length - 1 ? { ...q, h: arcadeTop - used } : q)); });
   const awall = mesh();
   wallNodes.push(NN - 1);
-  wallAlong(awall, wallNodes.map((k) => arc[k]), t, fix, glass, spring);
+  // (in runs: a staggered choir's bays break the arcade wall, their own wall standing from the ground)
+  const aRuns = []; let aCur = null;
+  fix.forEach((f, q) => { if (!f) { aCur = null; return; } if (!aCur) aRuns.push(aCur = { nodes: [wallNodes[q]], faces: [] }); aCur.nodes.push(wallNodes[q + 1]); aCur.faces.push(f); });
+  for (const r of aRuns) wallAlong(awall, r.nodes.map((k) => arc[k]), t, r.faces, glass, spring);
   add("arcade", awall, "wall");
+  // THE STAGGERED CHOIR'S WALL (`ambulatory: false`): on the arcade line round the chancel bays and the apse, from the ground --
+  // a tall window under the aisles' height and the clerestory's window over it, as the nave has them over its arcade
+  const chancelWall = mesh(), cBays = [];
+  for (let i = 0; i + 1 < NN; i++) if (chancel(i)) cBays.push(i);
+  if (cBays.length) {
+    const faces = cBays.map((i) => {
+      // (`choirWin`: both windows that fraction of the bay's clear width -- a chevet nearly all glass, Regensburg's; else a lancet as the aisles')
+      const Lc = dist2(arc[i], arc[i + 1]), cw = d.choirWin > 0 ? Math.max(.6, d.choirWin * (Lc - 2 * ha)) : 0;
+      const lw = cw || Math.max(.6, Math.min(d.aisleWin * 1.3, Lc - 2 * ha - .6)), top = aisleCrown - .5;
+      const lspr = Math.max(d.aisleSill + .5, top - lw / 2 * Math.sqrt(3));
+      const formRise = wallRise(Lc - 2 * (rs + .25), crown, vSpring), winW = cw ? Math.min(cw, Lc - 2 * ha - .5) : Math.max(.6, Lc - 2 * ha - .5);
+      const winCrown = vSpring + formRise - .45 - clerSill, winSpring = Math.max(.3, winCrown - winW / 2 * Math.sqrt(3) * .9);
+      return [{ h: clerSill, openings: [{ at: Lc / 2, width: lw, sill: d.aisleSill, springing: lspr, head: crownHead(lw / 2, top - lspr, per90), glass: true, ...tr, ...dress }] },
+              { h: wallTop - clerSill, openings: winCrown - winSpring > .2 ? [{ at: Lc / 2, width: winW, sill: .25, springing: winSpring, head: crownHead(winW / 2, winCrown - winSpring, per90), glass: true, ...tr, ...dress }] : [] }];
+    });
+    wallAlong(chancelWall, [...cBays.map((i) => arc[i]), arc[cBays[cBays.length - 1] + 1]], t, faces, glass, 0);
+  }
+  add("choir wall", chancelWall, "wall");
 
   // ---- THE OUTER WALL: the aisle's and the ambulatory's, a window a bay between the buttresses; responds inside it
   const runs = [];                                   // the outer line cut where a bay has no outer wall
@@ -439,13 +477,22 @@ export function basilica(d, per90) {
     if (last && last.to === i) { last.to = i + 1; last.bays.push(i); } else runs.push({ from: i, to: i + 1, bays: [i] });
   }
   const responds = mesh(), owallM = mesh();
-  const winA = { sill: d.aisleSill, top: aisleCrown - .5 };
+  const winA = { sill: d.aisleSill, top: d.aisleWinTop ?? aisleCrown - .5 };
   // (the wall's own height: to the aisle roof's eave)
   for (const r of runs) {
     const pts = out.slice(r.from, r.to + 1);
     const faces = r.bays.map((i) => {
       const Lc = dist2(out[i], out[i + 1]), ww = Math.min(d.aisleWin, Lc - d.buttressW - 1.2);
       const spr = Math.max(winA.sill + .5, winA.top - ww / 2 * Math.sqrt(3));
+      // (`aisleDoors` [{ bay (straight, from the west), x (the side: -1 left, 1 right), w, h, head }]: a portal in that
+      //  bay's outer wall, its window in a tier over it -- a hall church's side doors)
+      const mx = (out[i][0] + out[i + 1][0]) / 2, q = (d.aisleDoors ?? []).find((q) => westIndex(i) === q.bay && Math.sign(q.x) === Math.sign(mx));
+      if (q) {
+        const h1 = q.h + 1, sw = Math.min(q.w, Lc - 1.2), wSill = Math.max(.6, winA.sill - h1), wSpr = Math.max(wSill + .5, spr - h1);
+        const dHead = q.head === "ogee" ? { profile: "ogee", per90 } : crownHead(sw / 2, sw / 2 * 1.2, per90);
+        return [{ h: h1, openings: [{ at: Lc / 2, width: sw, sill: 0, springing: q.h - (q.head === "ogee" ? sw * .62 : sw * .6), head: dHead }] },
+                { h: aisleEave - h1, openings: ww > .5 ? [{ at: Lc / 2, width: ww, sill: wSill, springing: wSpr, head: crownHead(ww / 2, winA.top - h1 - wSpr, per90), glass: true, ...tr, ...wi(1), ...dress }] : [] }];
+      }
       return [{ h: aisleEave, openings: ww > .5 ? [{ at: Lc / 2, width: ww, sill: winA.sill, springing: spr, head: crownHead(ww / 2, winA.top - spr, per90), glass: true, ...tr, ...wi(1), ...dress }] : [],
                 ...(d.aisleLombard ? { lombard: d.aisleLombard } : {}) }];
     });
@@ -531,6 +578,34 @@ export function basilica(d, per90) {
     if (!hasAisle(i + 1)) ribUnder(ar, archPts(c[2], c[3], spring, rise(2), n), TR);
     if (j + 1 < nA) ribUnder(ar, archPts(c[1], c[2], spring, rise(1), n), TR);
   }
+  // THE SIDE CHOIRS (`ambulatory: false`): each aisle, where it stops short of the main choir, ends in a small apse of
+  // `sideApse` sides on its own middle line -- the half polygon from the outer wall round to the arcade line -- walled to
+  // the aisle's eave with a window a side, rib-vaulted at the aisle's height (0 sides: a flat wall across the aisle)
+  const sideApses = [], sideWall = mesh();
+  if (staggered) {
+    const m = Math.max(0, Math.round(d.sideApse ?? 3)), r = (outerR - a) / 2, kL = B - chancelN, kR = NN - 1 - kL, z1 = arc[kL][1];
+    for (const sx of [-1, 1]) {
+      const xc = sx * (a + outerR) / 2;
+      // (from the outer line round to the arcade line on the left, the other way on the right: the body's own walk)
+      const pts = m > 0 ? Array.from({ length: m + 1 }, (_, k) => { const th = Math.PI * (1 - k / m); return [xc + r * Math.cos(th), z1 - r * Math.sin(th)]; })
+                        : (sx < 0 ? [[-outerR, z1], [-a, z1]] : [[a, z1], [outerR, z1]]);
+      const faces = pts.slice(0, -1).map((p, k) => {
+        const Lc = dist2(p, pts[k + 1]), ww = Math.min(d.aisleWin, Lc - 1.4), top = aisleCrown - .5, spr = Math.max(d.aisleSill + .5, top - ww / 2 * Math.sqrt(3));
+        return [{ h: aisleEave, openings: ww > .5 ? [{ at: Lc / 2, width: ww, sill: d.aisleSill, springing: spr, head: crownHead(ww / 2, top - spr, per90), glass: true, ...tr, ...dress }] : [] }];
+      });
+      wallAlong(sideWall, pts, tA, faces, glass, 0);
+      sideApses.push({ sx, xc, z1, r, m, pts, k: sx < 0 ? kL : kR });
+      if (m < 2) continue;
+      // the vault: a fan of webs round the keystone on the chord, as the main apse's
+      const c0 = Array.from({ length: m + 1 }, (_, k) => { const th = Math.PI * k / m, rr = (k === 0 || k === m) ? r - tA / 2 : r - tA / 2 / Math.cos(Math.PI / (2 * m)); return [xc + rr * Math.cos(th), z1 - rr * Math.sin(th)]; });
+      let area = 0; for (let k = 0; k <= m; k++) { const [x0, z0] = c0[k], [x1, zz] = c0[(k + 1) % (m + 1)]; area += x0 * zz - x1 * z0; }
+      const c = area > 0 ? c0.slice().reverse() : c0, K = [xc, z1];
+      const webs = Array.from({ length: m }, (_, k) => k);
+      const v = ribVault(av, { corners: c, K, spring, crown: aisleCrown, rise: (s) => wallRise(dist2(c[s], c[s + 1]), aisleCrown, spring), webs, top: aisleTop, n, shared: [m] });
+      for (let k = 1; k < m; k++) ribUnder(ar, v.ribs[k], RIB);
+    }
+  }
+  add("side choir walls", sideWall, "wall");
   add("aisle vault", av, "groin", { abutted: true }); add("aisle ribs", ar, "ribs");
 
   // ---- THE TRANSEPT'S ARMS, either side of the crossing: the same vessel turned across -- side walls on the crossing
@@ -583,7 +658,10 @@ export function basilica(d, per90) {
         const pw = Math.min(5, W / 3), pTop = arcadeCrown - 1, pSpr = pTop - pw / 2 * Math.sqrt(3);
         const h1 = arcadeCrown + .6, D = Math.min(W - 2.4, wallTop - h1 - 1.6);
         const tiers = [{ h: h1, openings: [{ at: L / 2, width: pw, sill: 0, springing: pSpr, head: crownHead(pw / 2, pTop - pSpr, per90), glass: false, ...wi(0) }] },
-                       { h: wallTop - h1, openings: D > 1 ? [{ at: L / 2, width: D, sill: (wallTop - h1) / 2, springing: (wallTop - h1) / 2, head: { profile: "semicircular", per90 }, foot: { profile: "semicircular", per90 }, glass: true, ...tr }] : [] }];
+                       { h: wallTop - h1, openings: D > 1 ? [d.transeptRose === false
+                         // (`transeptRose` false: a tall pointed traceried window instead -- Regensburg's transept fronts)
+                         ? { at: L / 2, width: D * .8, sill: 1.2, springing: Math.max(1.6, wallTop - h1 - 1.4 - D * .8 * .866), head: { profile: "pointed", spread: 1, per90 }, glass: true, ...tr }
+                         : { at: L / 2, width: D, sill: (wallTop - h1) / 2, springing: (wallTop - h1) / 2, head: { profile: "semicircular", per90 }, foot: { profile: "semicircular", per90 }, glass: true, ...tr }] : [] }];
         // (walked so its front is outward: the left of the line is +x on the right arm)
         const ln = sx > 0 ? [[xc, z0], [xc, z1]] : [[xc, z1], [xc, z0]];
         wallAlong(tb, ln, tE, [tiers], glass, 0);
@@ -612,7 +690,7 @@ export function basilica(d, per90) {
 
   // ---- BUTTRESSES at the outer nodes, flyers to the clerestory, pinnacles on them
   const bw = d.buttressW, flyW = d.flyW;
-  const bm = mesh(), fm = mesh(), pm = mesh();
+  const bm = mesh(), fm = mesh(), pm = mesh(), wpm = mesh();
   // A FLIGHT of a flyer: from a pier face at `x0` (out from the axis) in to `x1`, landing at `high` -- springing as low as
   // it may over the aisle roof under its foot (the lean-to: its ridge against the clerestory, its eave over the outer wall),
   // its top a ramp up to 1.5m over where it lands. Returns its measures and the height its pier must reach.
@@ -633,13 +711,22 @@ export function basilica(d, per90) {
   const pierTop = d.hall ? wallTop - .6 : fOut.pierTop, midTop = fUp ? fUp.pierTop : 0;
   // (no buttress where something else stands against the wall: a tower beside a hall -- `skipButtress`, straight nodes from the west)
   const noButtress = (k) => (k <= B || k >= NN - 1 - B) && (d.skipButtress ?? []).some(([f, to]) => xNode(k) >= f && xNode(k) <= to);
-  const pinnacle = (cx, cz, tg, o, pw, y) => { blockAt(pm, cx, cz, tg, o, pw / 2, pw / 2, y, y + pw * 1.6); spireAt(pm, cx, cz, tg, o, pw / 2 + .08, y + pw * 1.6, y + pw * 4.8); };
+  // (`pinnacleKinds`: the building's own kinds, by turns along the church -- pinnacle.js; no kinds, a plain square shaft and spire)
+  const kinds = d.pinnacleKinds, pinnacle = (cx, cz, tg, o, pw, y, turn = 0) => { if (kinds?.length) { pinnacleAt(pm, kinds[turn % kinds.length], pw, cx, y, cz); return; } blockAt(pm, cx, cz, tg, o, pw / 2, pw / 2, y, y + pw * 1.6); spireAt(pm, cx, cz, tg, o, pw / 2 + .08, y + pw * 1.6, y + pw * 4.8); };
   for (const k of outerNodes) {
     // (a node between a bay with an outer wall and one without -- the tower's, the transept's -- is theirs)
     const bays = [k - 1, k].filter((i) => i >= 0 && i + 1 < NN);
     if (!bays.every((i) => hasOuter(i)) || noButtress(k)) continue;
     const [x, z] = out[k], o = normal(k), tg = [o[1], -o[0]];
     const x0 = tA / 2, x1 = tA / 2 + bd;             // along o from the outer line: the wall's outside to the buttress's face
+    // (`buttressIn`: the buttresses drawn INSIDE -- wall piers `buttressIn` deep standing in from the wall's inner face to
+    //  `buttressInTop` (the springing), chapels between them, the outside left plain: the Frauenkirche's, a brick hall's;
+    //  their heads weathered, falling toward the hall at 40 degrees)
+    if (d.buttressIn > 0) {
+      const wTop = d.buttressInTop ?? spring, wFall = d.buttressIn * Math.tan(40 * Math.PI / 180);
+      prismAcross(wpm, x, z, o, tg, [[-(x0 + d.buttressIn), 0], [-x0 + .05, 0], [-x0 + .05, wTop], [-(x0 + d.buttressIn), wTop - wFall]], bw / 2);
+      continue;
+    }
     // in three stages, each set back, up to the aisle eave; then the pier over the wall to the flyer's head
     // (its profile across the wall: from the wall's face out, up its set-offs, back over the wall to it)
     // (a hall's: its head clear of the great roof's eave -- the pinnacle on it stands out past the overhang, in front of
@@ -654,16 +741,38 @@ export function basilica(d, per90) {
     const fly = (f, px, pz) => { const q = mesh(); flyerMesh(q, { ...f, width: flyW, per90 }); appendTurned(fm, q, px, pz, [-o[0], -o[1]]); };
     if (d.flyers && !d.hall) fly(fOut, x + o[0] * x0, z + o[1] * x0);
     // the pinnacle over the pier: a shaft, a spire, a finial -- the weight that turns the thrust down into the pier
-    if (d.pinnacles) pinnacle(x + o[0] * pc, z + o[1] * pc, tg, o, pw, pierTop);
+    if (d.pinnacles) pinnacle(x + o[0] * pc, z + o[1] * pc, tg, o, pw, pierTop, k);
     if (fUp && !d.hall) {
       // the INTERMEDIATE PIER: on the free-standing pier between the aisles, from the vaults' extrados over their roof
       const [mx, mz] = mids[nA - 2][k];
       prismAcross(bm, mx, mz, o, tg, [[-md, aisleTop], [md, aisleTop], [md, midTop], [-md, midTop]], bw / 2);
       if (d.flyers) fly(fUp, mx - o[0] * md, mz - o[1] * md);
-      if (d.pinnacles) pinnacle(mx, mz, tg, o, Math.min(bw, 2 * md) * .8, midTop);
+      if (d.pinnacles) pinnacle(mx, mz, tg, o, Math.min(bw, 2 * md) * .8, midTop, k + 1);
+    }
+  }
+  // the STAGGERED CHOIR's buttresses: at every node of its own wall, from the ground to under the eave, in three set-offs,
+  // a pinnacle on each standing out past the roof's overhang (no aisle to leap: the wall takes the high vault's thrust
+  // through them alone, as a hall's does); the side choirs' at their polygons' nodes, to under their eaves
+  if (staggered) {
+    const H = wallTop - .6, pw = Math.min(bw, bd * .5) * .7, pc = t / 2 + d.overhang + .1 + pw / 2, u3 = Math.max(t / 2 + bd * .5, pc + pw / 2 + .05);
+    for (let k = 0; k < NN; k++) {
+      if (!chancelNode(k)) continue;
+      // (`choirButtress`: how far they stand out from the wall's face, metres -- the buttress depth by default)
+      const [x, z] = arc[k], o = normal(k), tg = [o[1], -o[0]], u1 = Math.max(t / 2 + (d.choirButtress > 0 ? d.choirButtress : bd), u3 + .5), u2 = (u1 + u3) / 2;
+      prismAcross(bm, x, z, o, tg, [[t / 2, 0], [u1, 0], [u1, H * .4], [u2, H * .4], [u2, H * .75], [u3, H * .75], [u3, H], [t / 2, H]], bw / 2);
+      if (d.pinnacles) pinnacle(x + o[0] * pc, z + o[1] * pc, tg, o, pw, H, k);
+    }
+    for (const s of sideApses) {
+      if (s.m < 2) continue;
+      const Hs = aisleEave - .4, bd2 = bd * .6;
+      for (let k = 1; k < s.m; k++) {
+        const [x, z] = s.pts[k], o = norm([x - s.xc, z - s.z1]), tg = [o[1], -o[0]];
+        prismAcross(bm, x, z, o, tg, [[tA / 2, 0], [tA / 2 + bd2, 0], [tA / 2 + bd2, Hs * .5], [tA / 2 + bd2 * .6, Hs * .5], [tA / 2 + bd2 * .6, Hs], [tA / 2, Hs]], bw * .4);
+      }
     }
   }
   // (all the open air's: over the aisle roof, inside the box of the aisles' interior)
+  add("wall piers", wpm, "wall", { side: "in" });
   add("buttresses", bm, "buttress", { side: "out" }); add("flyers", fm, "flyer", { side: "out" }); add("pinnacles", pm, "pinnacle", { side: "out" });
 
   // ---- ROOFS. The high roof: its eave round the arcade line's outside, a gable down the nave ending in a hip of as many
@@ -686,11 +795,32 @@ export function basilica(d, per90) {
     for (const [p, q, r] of earClip(eaveL, eaveL.map((_, i) => i))) tri(E[p], E[q], E[r]);   // the soffit, at the eave
   }
   add("high roof", roof, "roof");
+  // (`pent` { y, out, pitch (degrees), t }: a pent roof round the outer wall, `out` deep from its face down at `pitch`,
+  //  its head on the wall at `y` -- the ring of tiles under a brick hall's wall-head)
+  if (d.pent) {
+    const pent = mesh(), pOut = d.pent.out ?? 1.2, pY = d.pent.y ?? wallTop - 3, pDrop = pOut * Math.tan((d.pent.pitch ?? 35) * Math.PI / 180);
+    for (const r of runs) {
+      const pts = out.slice(r.from, r.to + 1);
+      leanTo(pent, offsetLine(pts, -(tA / 2 - .05)), offsetLine(pts, -(tA / 2 + pOut)), pY, pY - pDrop, d.pent.t ?? .2);
+    }
+    add("pent roof", pent, "roof", { side: "out" });
+  }
   // the lean-to over the aisles and the ambulatory: from the outer wall's eave up to the clerestory wall
   const lean = mesh(), lin = offsetLine(arc, -t / 2), lout = offsetLine(out, -(tA / 2 + ov));
   for (const r of d.hall ? [] : runs) {
     const I = lin.slice(r.from, r.to + 1), O = lout.slice(r.from, r.to + 1);
     leanTo(lean, I, O, aisleRidge, aisleEave, roofT);
+  }
+  // ...and over each side choir a half cone of as many faces as its polygon, from its eave up to a point over the
+  // chord's middle, against the lean-to's end
+  for (const s of sideApses) {
+    if (s.m < 2) continue;
+    const R = s.r + tA / 2 + ov, yA = aisleEave + R * Math.tan((d.sideApsePitch ?? d.pitch * .8) * Math.PI / 180);   // (`sideApsePitch`, degrees)
+    const E = Array.from({ length: s.m + 1 }, (_, k) => { const th = Math.PI * (1 - k / s.m), rr = (k === 0 || k === s.m) ? R : R / Math.cos(Math.PI / (2 * s.m)); return [s.xc + rr * Math.cos(th), aisleEave, s.z1 - rr * Math.sin(th)]; });
+    const apex = [s.xc, yA, s.z1], ref = [s.xc, aisleEave + .1, s.z1 - .3];
+    for (let k = 0; k < s.m; k++) faceAway(lean, [E[k], E[k + 1], apex], ref);
+    faceAway(lean, [E[s.m], E[0], apex], [s.xc, aisleEave + .1, s.z1 - R * .5]);
+    faceAway(lean, E, [s.xc, aisleEave + 1, s.z1 - .3]);
   }
   add("aisle roof", lean, "roof");
   if (glass.counts.tris) parts.push({ name: "glass", geometry: glass, kind: "glass", shell: true });
@@ -701,7 +831,13 @@ export function basilica(d, per90) {
   // the lean-to's slope: over the eave it is the open air's -- a tower's flank over the roof -- and what is under the
   // roof there is not seen); a hall's, to its one roof's ridge. The nave on the arcade's line, the transept across the
   // crossing to the middle of its end walls -- both up into the high roof
-  const interiors = [{ name: "interior", pts: out, y1: d.hall ? ridgeY : aisleEave }, { name: "nave interior", pts: arc, y1: ridgeY }];
+  // (a staggered chevet's body: the outer line down to where the aisles stop, round each side choir, the choir wall between)
+  let body = out;
+  if (sideApses.length === 2) {
+    const [L, R] = sideApses;
+    body = [...out.slice(0, L.k), ...L.pts, ...arc.slice(L.k + 1, R.k), ...R.pts, ...out.slice(R.k + 1)];
+  }
+  const interiors = [{ name: "interior", pts: body, y1: d.hall ? ridgeY : aisleEave }, { name: "nave interior", pts: arc, y1: ridgeY }];
   if (X !== null) {
     const zA = zs[X[0]], zB = zs[X[1] + 1], xE = outerR + tA / 2 + (d.arm ?? 0) - (d.transeptT ?? t * 1.4) / 2;
     interiors.push({ name: "transept interior", pts: [[-xE, zA], [xE, zA], [xE, zB], [-xE, zB]], y1: ridgeY });

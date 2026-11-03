@@ -1,0 +1,3333 @@
+{
+ "name": "Pisa",
+ "_about": "PISA: the Leaning Tower (15.48m across, 8 storeys, 56m, leaning 3.97 degrees south and curved back as it was built) and the Cathedral (100m long, 72m across the transept, its oval dome, its front of four tiers of loggias) (tools/archgen/pisa.py).",
+ "params": {
+  "detail": 3
+ },
+ "railing": false,
+ "build": [
+  "catino",
+  "catino floor",
+  "ground skin",
+  "ground core",
+  "ground door",
+  "ground columns",
+  "gallery 1 arcade",
+  "gallery 1 columns",
+  "gallery 1 core",
+  "gallery 1 floor",
+  "gallery 1 vault",
+  "gallery 2 arcade",
+  "gallery 2 columns",
+  "gallery 2 core",
+  "gallery 2 floor",
+  "gallery 2 vault",
+  "gallery 3 arcade",
+  "gallery 3 columns",
+  "gallery 3 core",
+  "gallery 3 floor",
+  "gallery 3 vault",
+  "gallery 4 arcade",
+  "gallery 4 columns",
+  "gallery 4 core",
+  "gallery 4 floor",
+  "gallery 4 vault",
+  "gallery 5 arcade",
+  "gallery 5 columns",
+  "gallery 5 core",
+  "gallery 5 floor",
+  "gallery 5 vault",
+  "gallery 6 arcade",
+  "gallery 6 columns",
+  "gallery 6 core",
+  "gallery 6 floor",
+  "gallery 6 vault",
+  "terrace",
+  "terrace rail",
+  "belfry",
+  "belfry columns",
+  "belfry top",
+  "nave",
+  "nave ceiling",
+  "nave roof",
+  "aisle ceilings",
+  "aisle roofs",
+  "crossing",
+  "south arm",
+  "south arm ceiling",
+  "south arm roof",
+  "south apse",
+  "north arm",
+  "north arm ceiling",
+  "north arm roof",
+  "north apse",
+  "choir",
+  "choir ceiling",
+  "choir roof",
+  "east apse",
+  "crossing head",
+  "drum",
+  "dome",
+  "lantern",
+  "door wall",
+  "blind arcade",
+  "blind arcade columns",
+  "tier 1 ledge",
+  "tier 1 arcade",
+  "tier 1 columns",
+  "tier 2 ledge",
+  "tier 2 arcade",
+  "tier 2 columns",
+  "tier 3 ledge",
+  "tier 3 arcade",
+  "tier 3 columns",
+  "tier 4 ledge",
+  "tier 4 arcade",
+  "tier 4 columns",
+  "nave floor",
+  "crossing floor",
+  "north arm floor",
+  "south arm floor",
+  "choir floor",
+  "front screen"
+ ],
+ "parts": {
+  "catino": {
+   "type": "enclosure",
+   "plan": {
+    "sides": 40,
+    "radius": 10.34
+   },
+   "thickness": 0.7,
+   "height": 0.7,
+   "glass": false,
+   "at": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "_about": "the catino: the low stone ring round the sunken foot of the tower (1838)"
+  },
+  "catino floor": {
+   "type": "prism",
+   "plan": {
+    "sides": 40,
+    "radius": 9.94
+   },
+   "height": 0.25,
+   "walked": true,
+   "at": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ]
+  },
+  "ground skin": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.74,
+   "rInner": 7.34,
+   "height": 11.9,
+   "y": -0.5,
+   "polygon": false,
+   "opening": {
+    "width": 2.62,
+    "springing": 7.9,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "courses": [
+    {
+     "y": 0,
+     "h": 0.7,
+     "out": 0.18,
+     "profile": "band"
+    },
+    {
+     "y": 10.9,
+     "h": 0.5,
+     "out": 0.42,
+     "profile": "band"
+    }
+   ],
+   "_about": "the ground storey's face: fifteen blind arches, the core showing behind them",
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     0.0,
+     -92.0
+    ],
+    "shift": [
+     0.0,
+     0.0,
+     0
+    ]
+   },
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ]
+  },
+  "ground core": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.34,
+   "rInner": 3.684,
+   "height": 11.9,
+   "y": -0.5,
+   "solid": true,
+   "skip": [
+    0
+   ],
+   "_about": "the wall, a well 7.37m across inside",
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     0.0,
+     -92.0
+    ],
+    "shift": [
+     0.0,
+     0.0,
+     0
+    ]
+   },
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ]
+  },
+  "ground door": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.34,
+   "rInner": 3.684,
+   "height": 11.9,
+   "y": -0.5,
+   "at": [
+    0
+   ],
+   "opening": {
+    "width": 1.6,
+    "sill": 0.5,
+    "springing": 4.6,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     0.0,
+     -92.0
+    ],
+    "shift": [
+     0.0,
+     0.0,
+     0
+    ]
+   },
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ]
+  },
+  "ground columns": {
+   "type": "colonnade",
+   "plan": "round",
+   "radius": 7.79,
+   "count": 15,
+   "columnR": 0.34,
+   "height": 8.4,
+   "order": "corinthian",
+   "sides": 8,
+   "at": [
+    [
+     38.0,
+     -0.5,
+     -92.0,
+     0.2094
+    ]
+   ],
+   "_about": "fifteen columns on the ground storey's piers",
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     0.0,
+     -92.0
+    ],
+    "shift": [
+     0.0,
+     0.0,
+     0
+    ]
+   }
+  },
+  "gallery 1 arcade": {
+   "type": "ring",
+   "count": 30,
+   "rOuter": 7.5,
+   "rInner": 7.08,
+   "height": 6.42,
+   "y": 11.4,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 1.04,
+    "springing": 4.45,
+    "sill": 0,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "courses": [
+    {
+     "y": 5.8,
+     "h": 0.62,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     11.4,
+     -92.0
+    ],
+    "shift": [
+     0.8448,
+     -0.0313,
+     0
+    ]
+   }
+  },
+  "gallery 1 columns": {
+   "type": "colonnade",
+   "plan": "round",
+   "radius": 7.29,
+   "count": 30,
+   "columnR": 0.2,
+   "height": 4.45,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     38.0,
+     11.4,
+     -92.0,
+     0.1047
+    ]
+   ],
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     11.4,
+     -92.0
+    ],
+    "shift": [
+     0.8448,
+     -0.0313,
+     0
+    ]
+   }
+  },
+  "gallery 1 core": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 5.95,
+   "rInner": 3.684,
+   "height": 6.42,
+   "y": 11.4,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     11.4,
+     -92.0
+    ],
+    "shift": [
+     0.8448,
+     -0.0313,
+     0
+    ]
+   }
+  },
+  "gallery 1 floor": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.25,
+   "y": 11.4,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     11.4,
+     -92.0
+    ],
+    "shift": [
+     0.8448,
+     -0.0313,
+     0
+    ]
+   }
+  },
+  "gallery 1 vault": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.6,
+   "y": 17.22,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.25,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     11.4,
+     -92.0
+    ],
+    "shift": [
+     0.8448,
+     -0.0313,
+     0
+    ]
+   }
+  },
+  "gallery 2 arcade": {
+   "type": "ring",
+   "count": 30,
+   "rOuter": 7.5,
+   "rInner": 7.08,
+   "height": 6.42,
+   "y": 17.82,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 1.04,
+    "springing": 4.45,
+    "sill": 0,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "courses": [
+    {
+     "y": 5.8,
+     "h": 0.62,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "lean": {
+    "deg": 4.2,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     17.82,
+     -92.0
+    ],
+    "shift": [
+     1.3206,
+     -0.049,
+     0
+    ]
+   }
+  },
+  "gallery 2 columns": {
+   "type": "colonnade",
+   "plan": "round",
+   "radius": 7.29,
+   "count": 30,
+   "columnR": 0.2,
+   "height": 4.45,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     38.0,
+     17.82,
+     -92.0,
+     0.1047
+    ]
+   ],
+   "lean": {
+    "deg": 4.2,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     17.82,
+     -92.0
+    ],
+    "shift": [
+     1.3206,
+     -0.049,
+     0
+    ]
+   }
+  },
+  "gallery 2 core": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 5.95,
+   "rInner": 3.684,
+   "height": 6.42,
+   "y": 17.82,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.2,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     17.82,
+     -92.0
+    ],
+    "shift": [
+     1.3206,
+     -0.049,
+     0
+    ]
+   }
+  },
+  "gallery 2 floor": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.25,
+   "y": 17.82,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.2,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     17.82,
+     -92.0
+    ],
+    "shift": [
+     1.3206,
+     -0.049,
+     0
+    ]
+   }
+  },
+  "gallery 2 vault": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.6,
+   "y": 23.64,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.2,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     17.82,
+     -92.0
+    ],
+    "shift": [
+     1.3206,
+     -0.049,
+     0
+    ]
+   }
+  },
+  "gallery 3 arcade": {
+   "type": "ring",
+   "count": 30,
+   "rOuter": 7.5,
+   "rInner": 7.08,
+   "height": 6.42,
+   "y": 24.24,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 1.04,
+    "springing": 4.45,
+    "sill": 0,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "courses": [
+    {
+     "y": 5.8,
+     "h": 0.62,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "lean": {
+    "deg": 4.1,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     24.24,
+     -92.0
+    ],
+    "shift": [
+     1.7908,
+     -0.0662,
+     0
+    ]
+   }
+  },
+  "gallery 3 columns": {
+   "type": "colonnade",
+   "plan": "round",
+   "radius": 7.29,
+   "count": 30,
+   "columnR": 0.2,
+   "height": 4.45,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     38.0,
+     24.24,
+     -92.0,
+     0.1047
+    ]
+   ],
+   "lean": {
+    "deg": 4.1,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     24.24,
+     -92.0
+    ],
+    "shift": [
+     1.7908,
+     -0.0662,
+     0
+    ]
+   }
+  },
+  "gallery 3 core": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 5.95,
+   "rInner": 3.684,
+   "height": 6.42,
+   "y": 24.24,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.1,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     24.24,
+     -92.0
+    ],
+    "shift": [
+     1.7908,
+     -0.0662,
+     0
+    ]
+   }
+  },
+  "gallery 3 floor": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.25,
+   "y": 24.24,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.1,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     24.24,
+     -92.0
+    ],
+    "shift": [
+     1.7908,
+     -0.0662,
+     0
+    ]
+   }
+  },
+  "gallery 3 vault": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.6,
+   "y": 30.06,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 4.1,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     24.24,
+     -92.0
+    ],
+    "shift": [
+     1.7908,
+     -0.0662,
+     0
+    ]
+   }
+  },
+  "gallery 4 arcade": {
+   "type": "ring",
+   "count": 30,
+   "rOuter": 7.5,
+   "rInner": 7.08,
+   "height": 6.42,
+   "y": 30.66,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 1.04,
+    "springing": 4.45,
+    "sill": 0,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "courses": [
+    {
+     "y": 5.8,
+     "h": 0.62,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "lean": {
+    "deg": 3.95,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     30.66,
+     -92.0
+    ],
+    "shift": [
+     2.2498,
+     -0.0827,
+     0
+    ]
+   }
+  },
+  "gallery 4 columns": {
+   "type": "colonnade",
+   "plan": "round",
+   "radius": 7.29,
+   "count": 30,
+   "columnR": 0.2,
+   "height": 4.45,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     38.0,
+     30.66,
+     -92.0,
+     0.1047
+    ]
+   ],
+   "lean": {
+    "deg": 3.95,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     30.66,
+     -92.0
+    ],
+    "shift": [
+     2.2498,
+     -0.0827,
+     0
+    ]
+   }
+  },
+  "gallery 4 core": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 5.95,
+   "rInner": 3.684,
+   "height": 6.42,
+   "y": 30.66,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.95,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     30.66,
+     -92.0
+    ],
+    "shift": [
+     2.2498,
+     -0.0827,
+     0
+    ]
+   }
+  },
+  "gallery 4 floor": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.25,
+   "y": 30.66,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.95,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     30.66,
+     -92.0
+    ],
+    "shift": [
+     2.2498,
+     -0.0827,
+     0
+    ]
+   }
+  },
+  "gallery 4 vault": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.6,
+   "y": 36.48,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.95,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     30.66,
+     -92.0
+    ],
+    "shift": [
+     2.2498,
+     -0.0827,
+     0
+    ]
+   }
+  },
+  "gallery 5 arcade": {
+   "type": "ring",
+   "count": 30,
+   "rOuter": 7.5,
+   "rInner": 7.08,
+   "height": 6.42,
+   "y": 37.08,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 1.04,
+    "springing": 4.45,
+    "sill": 0,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "courses": [
+    {
+     "y": 5.8,
+     "h": 0.62,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "lean": {
+    "deg": 3.8,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     37.08,
+     -92.0
+    ],
+    "shift": [
+     2.6921,
+     -0.0979,
+     0
+    ]
+   }
+  },
+  "gallery 5 columns": {
+   "type": "colonnade",
+   "plan": "round",
+   "radius": 7.29,
+   "count": 30,
+   "columnR": 0.2,
+   "height": 4.45,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     38.0,
+     37.08,
+     -92.0,
+     0.1047
+    ]
+   ],
+   "lean": {
+    "deg": 3.8,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     37.08,
+     -92.0
+    ],
+    "shift": [
+     2.6921,
+     -0.0979,
+     0
+    ]
+   }
+  },
+  "gallery 5 core": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 5.95,
+   "rInner": 3.684,
+   "height": 6.42,
+   "y": 37.08,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.8,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     37.08,
+     -92.0
+    ],
+    "shift": [
+     2.6921,
+     -0.0979,
+     0
+    ]
+   }
+  },
+  "gallery 5 floor": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.25,
+   "y": 37.08,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.8,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     37.08,
+     -92.0
+    ],
+    "shift": [
+     2.6921,
+     -0.0979,
+     0
+    ]
+   }
+  },
+  "gallery 5 vault": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.6,
+   "y": 42.9,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.8,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     37.08,
+     -92.0
+    ],
+    "shift": [
+     2.6921,
+     -0.0979,
+     0
+    ]
+   }
+  },
+  "gallery 6 arcade": {
+   "type": "ring",
+   "count": 30,
+   "rOuter": 7.5,
+   "rInner": 7.08,
+   "height": 6.42,
+   "y": 43.5,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 1.04,
+    "springing": 4.45,
+    "sill": 0,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "courses": [
+    {
+     "y": 5.8,
+     "h": 0.62,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "lean": {
+    "deg": 3.6,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     43.5,
+     -92.0
+    ],
+    "shift": [
+     3.1175,
+     -0.112,
+     0
+    ]
+   }
+  },
+  "gallery 6 columns": {
+   "type": "colonnade",
+   "plan": "round",
+   "radius": 7.29,
+   "count": 30,
+   "columnR": 0.2,
+   "height": 4.45,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     38.0,
+     43.5,
+     -92.0,
+     0.1047
+    ]
+   ],
+   "lean": {
+    "deg": 3.6,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     43.5,
+     -92.0
+    ],
+    "shift": [
+     3.1175,
+     -0.112,
+     0
+    ]
+   }
+  },
+  "gallery 6 core": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 5.95,
+   "rInner": 3.684,
+   "height": 6.42,
+   "y": 43.5,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.6,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     43.5,
+     -92.0
+    ],
+    "shift": [
+     3.1175,
+     -0.112,
+     0
+    ]
+   }
+  },
+  "gallery 6 floor": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.25,
+   "y": 43.5,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.6,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     43.5,
+     -92.0
+    ],
+    "shift": [
+     3.1175,
+     -0.112,
+     0
+    ]
+   }
+  },
+  "gallery 6 vault": {
+   "type": "ring",
+   "count": 15,
+   "rOuter": 7.08,
+   "rInner": 5.95,
+   "height": 0.6,
+   "y": 49.32,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "solid": true,
+   "lean": {
+    "deg": 3.6,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     43.5,
+     -92.0
+    ],
+    "shift": [
+     3.1175,
+     -0.112,
+     0
+    ]
+   }
+  },
+  "terrace": {
+   "type": "prism",
+   "plan": {
+    "sides": 30,
+    "radius": 7.5
+   },
+   "height": 0.3,
+   "at": [
+    [
+     38.0,
+     49.92,
+     -92.0,
+     0
+    ]
+   ],
+   "lean": {
+    "deg": 3.3,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     49.92,
+     -92.0
+    ],
+    "shift": [
+     3.5207,
+     -0.1247,
+     0
+    ]
+   }
+  },
+  "terrace rail": {
+   "type": "ring",
+   "count": 30,
+   "rOuter": 7.5,
+   "rInner": 7.25,
+   "height": 1.3,
+   "y": 50.22,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 0.9,
+    "sill": 0.25,
+    "springing": 0.8,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "lean": {
+    "deg": 3.3,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     49.92,
+     -92.0
+    ],
+    "shift": [
+     3.5207,
+     -0.1247,
+     0
+    ]
+   }
+  },
+  "belfry": {
+   "type": "ring",
+   "count": 12,
+   "rOuter": 6.1,
+   "rInner": 5.4,
+   "height": 5.7,
+   "y": 50.22,
+   "place": [
+    [
+     38.0,
+     0,
+     -92.0,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 2.2,
+    "sill": 0.5,
+    "springing": 3.3,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "courses": [
+    {
+     "y": 5.1,
+     "h": 0.6,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "lean": {
+    "deg": 3.3,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     49.92,
+     -92.0
+    ],
+    "shift": [
+     3.5207,
+     -0.1247,
+     0
+    ]
+   }
+  },
+  "belfry columns": {
+   "type": "colonnade",
+   "plan": "round",
+   "radius": 6.2,
+   "count": 12,
+   "columnR": 0.25,
+   "height": 3.9,
+   "order": "corinthian",
+   "sides": 8,
+   "at": [
+    [
+     38.0,
+     50.22,
+     -92.0,
+     0.2618
+    ]
+   ],
+   "lean": {
+    "deg": 3.3,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     49.92,
+     -92.0
+    ],
+    "shift": [
+     3.5207,
+     -0.1247,
+     0
+    ]
+   }
+  },
+  "belfry top": {
+   "type": "prism",
+   "plan": {
+    "sides": 24,
+    "radius": 6.2
+   },
+   "height": 0.35,
+   "at": [
+    [
+     38.0,
+     55.92,
+     -92.0,
+     0
+    ]
+   ],
+   "lean": {
+    "deg": 3.3,
+    "toward": [
+     1,
+     0
+    ],
+    "at": [
+     38.0,
+     49.92,
+     -92.0
+    ],
+    "shift": [
+     3.5207,
+     -0.1247,
+     0
+    ]
+   }
+  },
+  "nave": {
+   "type": "component",
+   "use": "basilica",
+   "params": {
+    "bays": 12,
+    "bayLen": 4.5,
+    "naveW": 13.6,
+    "aisleW": 8.6,
+    "pierT": 1.3,
+    "aisleT": 1.3,
+    "openW": 3.0,
+    "spring": 8.0,
+    "crown": 9.5,
+    "arcadeH": 17.0,
+    "clearH": 23.5,
+    "naveTop": 29.5,
+    "aisleSpring": 9.5,
+    "aisleTop": 14.4,
+    "arch": "semicircular",
+    "winW": 1.6,
+    "winSill": 5.0,
+    "clearWinW": 1.6,
+    "clearSill": 2.2,
+    "clearSpring": 4.6,
+    "lombard": 1
+   },
+   "at": [
+    [
+     0,
+     0,
+     21.7,
+     0
+    ]
+   ],
+   "build": [
+    "arcade",
+    "clerestory",
+    "aisle wall"
+   ],
+   "_about": "the nave and aisles: twelve round arches a side, the clerestory, the aisle walls in blind arcades (the real five aisles and their galleries read as three)"
+  },
+  "nave ceiling": {
+   "type": "box",
+   "width": 16.2,
+   "length": 54.0,
+   "height": 0.4,
+   "flatRoof": true,
+   "at": [
+    [
+     0,
+     29.5,
+     21.7,
+     0
+    ]
+   ],
+   "_about": "the flat coffered ceiling"
+  },
+  "nave roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 16.7,
+   "length": 54.0,
+   "pitch": 27,
+   "at": [
+    [
+     0,
+     29.9,
+     21.7,
+     0
+    ]
+   ]
+  },
+  "aisle ceilings": {
+   "type": "box",
+   "width": 9.9,
+   "length": 54.0,
+   "height": 0.3,
+   "flatRoof": true,
+   "at": [
+    [
+     -13.05,
+     15.6,
+     21.7,
+     0
+    ],
+    [
+     13.05,
+     15.6,
+     21.7,
+     0
+    ]
+   ]
+  },
+  "aisle roofs": {
+   "type": "roof",
+   "form": "shed",
+   "width": 9.9,
+   "length": 54.0,
+   "pitch": 14,
+   "at": [
+    [
+     -13.05,
+     15.9,
+     21.7,
+     0
+    ],
+    [
+     13.05,
+     15.9,
+     21.7,
+     3.141592653589793
+    ]
+   ]
+  },
+  "crossing": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     16.2,
+     18.0
+    ]
+   },
+   "thickness": 1.3,
+   "height": 29.9,
+   "openings": [],
+   "glass": false,
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 17.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "1": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 17.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "2": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 17.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "3": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 17.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     -14.3,
+     0
+    ]
+   ],
+   "_about": "the crossing's four great arches"
+  },
+  "south arm": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     19.0,
+     18.0
+    ]
+   },
+   "thickness": 1.3,
+   "height": 25.0,
+   "glass": true,
+   "lombard": {
+    "arch": 0.9,
+    "bay": 4.5,
+    "lesene": 0.6
+   },
+   "openings": [],
+   "faces": {
+    "3": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 13.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "1": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 13.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "0": [
+     {
+      "at": -5,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     },
+     {
+      "at": 0,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     },
+     {
+      "at": 5,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "2": [
+     {
+      "at": -5,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     },
+     {
+      "at": 0,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     },
+     {
+      "at": 5,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     17.6,
+     0,
+     -14.3,
+     0
+    ]
+   ],
+   "_about": "a transept arm, three windows a side, open to the crossing and to its apse"
+  },
+  "south arm ceiling": {
+   "type": "box",
+   "width": 19.0,
+   "length": 18.0,
+   "height": 0.4,
+   "flatRoof": true,
+   "at": [
+    [
+     17.6,
+     25.0,
+     -14.3,
+     0
+    ]
+   ]
+  },
+  "south arm roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 18.5,
+   "length": 19.0,
+   "pitch": 27,
+   "at": [
+    [
+     17.6,
+     25.4,
+     -14.3,
+     1.5707963267948966
+    ]
+   ]
+  },
+  "south apse": {
+   "type": "component",
+   "use": "components/gallery-apse",
+   "params": {
+    "R": 8.0,
+    "T": 1.3,
+    "spring": 15.0,
+    "conchT": 0.8,
+    "arcT": 0.4,
+    "pass": 0.7,
+    "galH": 3.0,
+    "roofRise": 3.6,
+    "winW": 1.6,
+    "winSill": 5.0,
+    "winSpring": 10.0,
+    "galW": 0.8,
+    "galSill": 1.0
+   },
+   "at": [
+    [
+     27.1,
+     0,
+     -14.3,
+     1.5708
+    ]
+   ]
+  },
+  "north arm": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     19.0,
+     18.0
+    ]
+   },
+   "thickness": 1.3,
+   "height": 25.0,
+   "glass": true,
+   "lombard": {
+    "arch": 0.9,
+    "bay": 4.5,
+    "lesene": 0.6
+   },
+   "openings": [],
+   "faces": {
+    "1": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 13.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "3": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 13.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "0": [
+     {
+      "at": -5,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     },
+     {
+      "at": 0,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     },
+     {
+      "at": 5,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "2": [
+     {
+      "at": -5,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     },
+     {
+      "at": 0,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     },
+     {
+      "at": 5,
+      "width": 1.8,
+      "sill": 7,
+      "springing": 13,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     -17.6,
+     0,
+     -14.3,
+     0
+    ]
+   ],
+   "_about": "a transept arm, three windows a side, open to the crossing and to its apse"
+  },
+  "north arm ceiling": {
+   "type": "box",
+   "width": 19.0,
+   "length": 18.0,
+   "height": 0.4,
+   "flatRoof": true,
+   "at": [
+    [
+     -17.6,
+     25.0,
+     -14.3,
+     0
+    ]
+   ]
+  },
+  "north arm roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 18.5,
+   "length": 19.0,
+   "pitch": 27,
+   "at": [
+    [
+     -17.6,
+     25.4,
+     -14.3,
+     1.5707963267948966
+    ]
+   ]
+  },
+  "north apse": {
+   "type": "component",
+   "use": "components/gallery-apse",
+   "params": {
+    "R": 8.0,
+    "T": 1.3,
+    "spring": 15.0,
+    "conchT": 0.8,
+    "arcT": 0.4,
+    "pass": 0.7,
+    "galH": 3.0,
+    "roofRise": 3.6,
+    "winW": 1.6,
+    "winSill": 5.0,
+    "winSpring": 10.0,
+    "galW": 0.8,
+    "galSill": 1.0
+   },
+   "at": [
+    [
+     -27.1,
+     0,
+     -14.3,
+     -1.5708
+    ]
+   ]
+  },
+  "choir": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     16.2,
+     15.0
+    ]
+   },
+   "thickness": 1.3,
+   "height": 25.0,
+   "glass": true,
+   "lombard": {
+    "arch": 0.9,
+    "bay": 4.5,
+    "lesene": 0.6
+   },
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 13.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ],
+    "2": [
+     {
+      "at": 0,
+      "width": 10.5,
+      "sill": 0,
+      "springing": 13.0,
+      "head": {
+       "profile": "semicircular"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     0,
+     -30.8,
+     0
+    ]
+   ],
+   "_about": "the choir, open to the crossing and the apse"
+  },
+  "choir ceiling": {
+   "type": "box",
+   "width": 16.2,
+   "length": 15.0,
+   "height": 0.4,
+   "flatRoof": true,
+   "at": [
+    [
+     0,
+     25.0,
+     -30.8,
+     0
+    ]
+   ]
+  },
+  "choir roof": {
+   "type": "roof",
+   "form": "gable",
+   "width": 16.7,
+   "length": 15.0,
+   "pitch": 27,
+   "at": [
+    [
+     0,
+     25.4,
+     -30.8,
+     0
+    ]
+   ]
+  },
+  "east apse": {
+   "type": "component",
+   "use": "components/gallery-apse",
+   "params": {
+    "R": 8.1,
+    "T": 1.3,
+    "spring": 16.0,
+    "conchT": 0.8,
+    "arcT": 0.4,
+    "pass": 0.7,
+    "galH": 3.0,
+    "roofRise": 3.6,
+    "winW": 1.6,
+    "winSill": 5.0,
+    "winSpring": 10.0,
+    "galW": 0.8,
+    "galSill": 1.0
+   },
+   "at": [
+    [
+     0,
+     0,
+     -38.3,
+     3.141592653589793
+    ]
+   ],
+   "_about": "the great apse"
+  },
+  "crossing head": {
+   "type": "box",
+   "width": 16.2,
+   "length": 18.0,
+   "height": 0.4,
+   "flatRoof": true,
+   "at": [
+    [
+     0,
+     29.9,
+     -14.3,
+     0
+    ]
+   ]
+  },
+  "drum": {
+   "type": "ring",
+   "count": 16,
+   "rOuter": 7.0,
+   "rInner": 6.0,
+   "height": 5.0,
+   "y": 30.3,
+   "place": [
+    [
+     0,
+     0,
+     -14.3,
+     0
+    ]
+   ],
+   "polygon": true,
+   "opening": {
+    "width": 1.0,
+    "sill": 1.0,
+    "springing": 3.2,
+    "head": {
+     "profile": "semicircular"
+    }
+   },
+   "glass": false,
+   "courses": [
+    {
+     "y": 4.3,
+     "h": 0.7,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "stretch": [
+    1.25,
+    1,
+    0.95
+   ]
+  },
+  "dome": {
+   "type": "dome",
+   "radius": 7.0,
+   "thickness": 0,
+   "sides": 24,
+   "head": {
+    "profile": "pointed",
+    "spread": 0.35
+   },
+   "at": [
+    [
+     0,
+     35.3,
+     -14.3,
+     0
+    ]
+   ],
+   "stretch": [
+    1.25,
+    1,
+    0.95
+   ],
+   "_about": "the oval dome, its section a little pointed"
+  },
+  "lantern": {
+   "type": "column",
+   "radius": 0.9,
+   "height": 2.2,
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0,
+     -14.3,
+     0
+    ]
+   ],
+   "atop": "dome"
+  },
+  "front screen": {
+   "type": "screen",
+   "t": 1.2,
+   "outline": [
+    [
+     17.7,
+     13.0
+    ],
+    [
+     17.7,
+     17.8
+    ],
+    [
+     13.2,
+     22.8
+    ],
+    [
+     9.0,
+     22.8
+    ],
+    [
+     9.0,
+     31.4
+    ],
+    [
+     0,
+     34.2
+    ],
+    [
+     -9.0,
+     31.4
+    ],
+    [
+     -9.0,
+     22.8
+    ],
+    [
+     -13.2,
+     22.8
+    ],
+    [
+     -17.7,
+     17.8
+    ],
+    [
+     -17.7,
+     13.0
+    ]
+   ],
+   "at": [
+    [
+     0,
+     0,
+     50.0,
+     0
+    ]
+   ],
+   "_about": "the front's silhouette: the aisles' slopes and the nave's low gable"
+  },
+  "door wall": {
+   "type": "wall",
+   "width": 35.4,
+   "height": 13.0,
+   "thickness": 1.2,
+   "glass": false,
+   "openings": [
+    {
+     "at": 7.5857,
+     "width": 3.0,
+     "sill": 0,
+     "springing": 6.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 17.7,
+     "width": 4.0,
+     "sill": 0,
+     "springing": 7.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 27.8143,
+     "width": 3.0,
+     "sill": 0,
+     "springing": 6.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "at": [
+    [
+     0,
+     0,
+     49.4,
+     0
+    ]
+   ],
+   "_about": "the three bronze doors"
+  },
+  "blind arcade": {
+   "type": "wall",
+   "width": 35.4,
+   "height": 13.0,
+   "thickness": 0.5,
+   "glass": false,
+   "openings": [
+    {
+     "at": 2.5286,
+     "width": 3.9571,
+     "sill": 0,
+     "springing": 9.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 7.5857,
+     "width": 3.9571,
+     "sill": 0,
+     "springing": 9.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 12.6429,
+     "width": 3.9571,
+     "sill": 0,
+     "springing": 9.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 17.7,
+     "width": 3.9571,
+     "sill": 0,
+     "springing": 9.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 22.7571,
+     "width": 3.9571,
+     "sill": 0,
+     "springing": 9.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 27.8143,
+     "width": 3.9571,
+     "sill": 0,
+     "springing": 9.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 32.8714,
+     "width": 3.9571,
+     "sill": 0,
+     "springing": 9.2,
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "at": [
+    [
+     0,
+     0,
+     50.25,
+     0
+    ]
+   ],
+   "courses": [
+    {
+     "y": 12.4,
+     "h": 0.6,
+     "out": 0.3,
+     "profile": "band"
+    }
+   ],
+   "_about": "seven tall blind arches across the foot, the doors in the middle and the third from each end"
+  },
+  "blind arcade columns": {
+   "type": "colonnade",
+   "count": 8,
+   "spacing": 5.0571,
+   "columnR": 0.42,
+   "height": 9.2,
+   "order": "corinthian",
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0,
+     50.55,
+     0
+    ]
+   ]
+  },
+  "tier 1 ledge": {
+   "type": "box",
+   "width": 35.4,
+   "length": 1.5,
+   "height": 0.35,
+   "at": [
+    [
+     0,
+     13.0,
+     50.75,
+     0
+    ]
+   ]
+  },
+  "tier 1 arcade": {
+   "type": "wall",
+   "width": 35.4,
+   "height": 4.75,
+   "thickness": 0.32,
+   "glass": false,
+   "openings": [
+    {
+     "at": 0.9316,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 2.7947,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 4.6579,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 6.5211,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 8.3842,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 10.2474,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 12.1105,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 13.9737,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 15.8368,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 17.7,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 19.5632,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 21.4263,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 23.2895,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 25.1526,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 27.0158,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 28.8789,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 30.7421,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 32.6053,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 34.4684,
+     "width": 1.3632,
+     "sill": 0,
+     "springing": 2.8684,
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "courses": [
+    {
+     "y": 4.3,
+     "h": 0.45,
+     "out": 0.25,
+     "profile": "band"
+    }
+   ],
+   "at": [
+    [
+     0,
+     13.35,
+     51.34,
+     0
+    ]
+   ]
+  },
+  "tier 1 columns": {
+   "type": "colonnade",
+   "count": 20,
+   "spacing": 1.8632,
+   "columnR": 0.2,
+   "height": 2.8684,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     0,
+     13.35,
+     51.34,
+     0
+    ]
+   ]
+  },
+  "tier 2 ledge": {
+   "type": "box",
+   "width": 26.4,
+   "length": 1.5,
+   "height": 0.35,
+   "at": [
+    [
+     0,
+     18.1,
+     50.75,
+     0
+    ]
+   ]
+  },
+  "tier 2 arcade": {
+   "type": "wall",
+   "width": 26.4,
+   "height": 4.45,
+   "thickness": 0.32,
+   "glass": false,
+   "openings": [
+    {
+     "at": 0.88,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 2.64,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 4.4,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 6.16,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 7.92,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 9.68,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 11.44,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 13.2,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 14.96,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 16.72,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 18.48,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 20.24,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 22.0,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 23.76,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 25.52,
+     "width": 1.26,
+     "sill": 0,
+     "springing": 2.62,
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "courses": [
+    {
+     "y": 4.0,
+     "h": 0.45,
+     "out": 0.25,
+     "profile": "band"
+    }
+   ],
+   "at": [
+    [
+     0,
+     18.45,
+     51.34,
+     0
+    ]
+   ]
+  },
+  "tier 2 columns": {
+   "type": "colonnade",
+   "count": 16,
+   "spacing": 1.76,
+   "columnR": 0.2,
+   "height": 2.62,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     0,
+     18.45,
+     51.34,
+     0
+    ]
+   ]
+  },
+  "tier 3 ledge": {
+   "type": "box",
+   "width": 18.0,
+   "length": 1.5,
+   "height": 0.35,
+   "at": [
+    [
+     0,
+     22.9,
+     50.75,
+     0
+    ]
+   ]
+  },
+  "tier 3 arcade": {
+   "type": "wall",
+   "width": 18.0,
+   "height": 4.05,
+   "thickness": 0.32,
+   "glass": false,
+   "openings": [
+    {
+     "at": 1.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 3.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 5.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 7.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 9.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 11.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 13.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 15.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 17.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 2.1,
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "courses": [
+    {
+     "y": 3.6,
+     "h": 0.45,
+     "out": 0.25,
+     "profile": "band"
+    }
+   ],
+   "at": [
+    [
+     0,
+     23.25,
+     51.34,
+     0
+    ]
+   ]
+  },
+  "tier 3 columns": {
+   "type": "colonnade",
+   "count": 10,
+   "spacing": 2.0,
+   "columnR": 0.2,
+   "height": 2.1,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     0,
+     23.25,
+     51.34,
+     0
+    ]
+   ]
+  },
+  "tier 4 ledge": {
+   "type": "box",
+   "width": 18.0,
+   "length": 1.5,
+   "height": 0.35,
+   "at": [
+    [
+     0,
+     27.3,
+     50.75,
+     0
+    ]
+   ]
+  },
+  "tier 4 arcade": {
+   "type": "wall",
+   "width": 18.0,
+   "height": 3.85,
+   "thickness": 0.32,
+   "glass": false,
+   "openings": [
+    {
+     "at": 1.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 3.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 5.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 7.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 9.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 11.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 13.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 15.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    },
+    {
+     "at": 17.0,
+     "width": 1.5,
+     "sill": 0,
+     "springing": 1.9,
+     "head": {
+      "profile": "semicircular"
+     }
+    }
+   ],
+   "courses": [
+    {
+     "y": 3.4,
+     "h": 0.45,
+     "out": 0.25,
+     "profile": "band"
+    }
+   ],
+   "at": [
+    [
+     0,
+     27.65,
+     51.34,
+     0
+    ]
+   ]
+  },
+  "tier 4 columns": {
+   "type": "colonnade",
+   "count": 10,
+   "spacing": 2.0,
+   "columnR": 0.2,
+   "height": 1.9,
+   "order": "corinthian",
+   "sides": 6,
+   "at": [
+    [
+     0,
+     27.65,
+     51.34,
+     0
+    ]
+   ]
+  },
+  "nave floor": {
+   "type": "box",
+   "width": 36.0,
+   "length": 54.0,
+   "height": 0.12,
+   "walked": true,
+   "at": [
+    [
+     0,
+     0,
+     21.7,
+     0
+    ]
+   ],
+   "_about": "the marble floor"
+  },
+  "crossing floor": {
+   "type": "box",
+   "width": 16.2,
+   "length": 18.0,
+   "height": 0.12,
+   "walked": true,
+   "at": [
+    [
+     0,
+     0,
+     -14.3,
+     0
+    ]
+   ]
+  },
+  "north arm floor": {
+   "type": "box",
+   "width": 19.0,
+   "length": 18.0,
+   "height": 0.12,
+   "walked": true,
+   "at": [
+    [
+     -17.6,
+     0,
+     -14.3,
+     0
+    ]
+   ]
+  },
+  "south arm floor": {
+   "type": "box",
+   "width": 19.0,
+   "length": 18.0,
+   "height": 0.12,
+   "walked": true,
+   "at": [
+    [
+     17.6,
+     0,
+     -14.3,
+     0
+    ]
+   ]
+  },
+  "choir floor": {
+   "type": "box",
+   "width": 16.2,
+   "length": 15.0,
+   "height": 0.12,
+   "walked": true,
+   "at": [
+    [
+     0,
+     0,
+     -30.8,
+     0
+    ]
+   ]
+  }
+ }
+}

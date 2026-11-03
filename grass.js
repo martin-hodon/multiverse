@@ -143,7 +143,7 @@ export function markGroundProp(obj) {
 // tip. The fringe must use exactly this or its stalks would be a different green from the lawn they rise out of,
 // and the seam where they fade out would show. GRADE's numbers are shared with the CPU that colours the ground's
 // vertices (index.html), so the two cannot drift.
-export const GRADE = { lo: 0x527e43, mid: 0x7fa864, hi: 0xa6b264, span: 9.6, band: 1.1 };
+export const GRADE = { lo: 0x4f7f44, mid: 0x7ba863, hi: 0xa8b568, span: 9.6, band: 1.1 };
 const hex = (h) => `vec3(${(h >> 16 & 255) / 255}, ${(h >> 8 & 255) / 255}, ${(h & 255) / 255})`;
 // The lawn's colour, shared by the ground (index.html), the baked tile and the fringe below -- one definition,
 // so a stalk and the grass it grows out of can never be two different greens.
@@ -152,7 +152,7 @@ export const GRASS_COLOR_WGSL = /* wgsl */ `
   fn grassGround(t: f32, band: f32, mottle: f32) -> vec3<f32> {
     var c = mix(${hex(GRADE.mid)}, ${hex(GRADE.hi)}, (t - 0.5) * 2.0);
     if (t < 0.5) { c = mix(${hex(GRADE.lo)}, ${hex(GRADE.mid)}, t * 2.0); }
-    return c * select(0.96, 1.05, band > 0.5) * (0.94 + 0.09 * mottle);
+    return c * select(0.99, 1.012, band > 0.5) * (0.87 + 0.23 * mottle);
   }
   // a blade over the ground it grows from: dark at the root, catching the light at the tip, its own tone
   fn grassBlade(base: vec3<f32>, tip: f32, tone: f32) -> vec3<f32> {
@@ -162,12 +162,27 @@ export const GRASS_COLOR_WGSL = /* wgsl */ `
 export const grassGrade = wgslFn(`
   fn grassGrade(y: f32) -> f32 { return clamp(y / ${GRADE.span.toFixed(2)} + 0.5, 0.0, 1.0); }
 `);
+// the ground's fine tone, 0..1: smooth noise at two scales, shared with the stalks so they're of the lawn they stand in (it was square cells .7 m across, and read as paving)
+export const groundMottle = wgslFn(`
+  fn groundMottle(p: vec2<f32>) -> f32 {
+    var sum = 0.0;
+    var q = p * 0.9;
+    for (var o = 0; o < 2; o = o + 1) {
+      let i = floor(q); let f = fract(q); let u = f * f * (3.0 - 2.0 * f);
+      let k = vec2<f32>(127.1, 311.7);
+      let v = fract(sin(vec4<f32>(dot(i, k), dot(i + vec2<f32>(1.0, 0.0), k), dot(i + vec2<f32>(0.0, 1.0), k), dot(i + vec2<f32>(1.0, 1.0), k))) * 43758.5);
+      sum = sum * 0.4 + mix(mix(v.x, v.y, u.x), mix(v.z, v.w, u.x), u.y) * 0.6;
+      q = q * 3.3 + 5.0;
+    }
+    return sum * 1.3;
+  }
+`);
 // built when the fringe is (createGrassFringe), so a period's ground colours set into GRADE before it count
 const grassGround = () => wgslFn(`
   fn grassGround(t: f32, band: f32, mottle: f32) -> vec3<f32> {
     var c = mix(${hex(GRADE.mid)}, ${hex(GRADE.hi)}, (t - 0.5) * 2.0);
     if (t < 0.5) { c = mix(${hex(GRADE.lo)}, ${hex(GRADE.mid)}, t * 2.0); }
-    return c * select(0.96, 1.05, band > 0.5) * (0.94 + 0.09 * mottle);
+    return c * select(0.99, 1.012, band > 0.5) * (0.87 + 0.23 * mottle);
   }
 `);
 export const grassBlade = wgslFn(`
@@ -293,7 +308,7 @@ const FRINGE_BODY = `
       // the lawn's OWN colour at that spot -- graded by elevation, banded, patched, exactly as the ground
       // shades itself -- then bladed. That is what makes the stalks and the lawn behind them one field.
       let bandY = floor(gp.y / ${GRADE.band});
-      let base = grassGround(m.r, bandY - 2.0 * floor(bandY / 2.0), gHash(floor(gp.xz * 1.4) + 9.0));
+      let base = grassGround(m.r, bandY - 2.0 * floor(bandY / 2.0), groundMottle(gp.xz));
       let col = grassBlade(base, f, r3) * (1.0 + 0.06 * wind);
       // ITS OWN DEPTH: the stalk stands at its root (a hand's breadth of lean toward the eye at the tip), so
       // the world's z-buffer decides what covers it. A figure, a tree, a cart in front of the root hides the

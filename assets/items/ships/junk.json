@@ -19,7 +19,8 @@
   ],
   "B": "L * 0.26",
   "D": "B * 0.5",
-  "mastH": "L * 0.75"
+  "mastH": "L * 0.75",
+  "wl": "(D) * 0.6"
  },
  "materials": {
   "planks": "planks",
@@ -165,7 +166,8 @@
    "params": {
     "w": "L * 0.3",
     "h": "mastH * 0.8",
-    "battens": 6
+    "battens": 6,
+    "set": "set"
    },
    "at": [
     "L * 0.55",
@@ -194,7 +196,8 @@
    "params": {
     "w": "L * 0.2",
     "h": "mastH * 0.48",
-    "battens": 4
+    "battens": 4,
+    "set": "set"
    },
    "at": [
     "L * 0.82",
@@ -223,7 +226,8 @@
    "params": {
     "w": "L * 0.14",
     "h": "mastH * 0.34",
-    "battens": 3
+    "battens": 3,
+    "set": "set"
    },
    "at": [
     "L * 0.2",
@@ -260,6 +264,157 @@
    "sides": 12,
    "mirror": "z",
    "double": true
+  },
+  {
+   "id": "bitts bow",
+   "use": "items/components/bitts",
+   "params": {
+    "s": "max(0.45, min(1.0, B * 0.07))",
+    "gap": "max(0.35, B * 0.06)"
+   },
+   "at": [
+    "L * 0.95",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "bitts stern",
+   "use": "items/components/bitts",
+   "params": {
+    "s": "max(0.45, min(1.0, B * 0.07))",
+    "gap": "max(0.35, B * 0.06)"
+   },
+   "at": [
+    "L * 0.27",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "hatch 0",
+   "use": "items/components/hatch",
+   "params": {
+    "w": "B * 0.35",
+    "d": "L * 0.07",
+    "h": "min(0.45, D * 0.08)"
+   },
+   "at": [
+    "L * 0.4",
+    "D * 0.85",
+    0
+   ]
+  },
+  {
+   "id": "hatch 1",
+   "use": "items/components/hatch",
+   "params": {
+    "w": "B * 0.35",
+    "d": "L * 0.07",
+    "h": "min(0.45, D * 0.08)"
+   },
+   "at": [
+    "L * 0.68",
+    "D * 0.85",
+    0
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "waterline",
+   "at": [
+    "L * 0.5",
+    "(D) * 0.6",
+    0
+   ],
+   "data": {
+    "draught": "(D) * 0.6"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.95",
+    "D * 0.85 + max(0.45, min(1.0, B * 0.07))",
+    0
+   ],
+   "data": {
+    "end": "bow"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.27",
+    "D * 0.85 + max(0.45, min(1.0, B * 0.07))",
+    0
+   ],
+   "data": {
+    "end": "stern"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.45",
+    "D * 1.02 + 0.06",
+    "(B * 0.5) * 1",
+    -90
+   ],
+   "data": {
+    "side": "starboard",
+    "deck": "D * 0.85"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.45",
+    "D * 1.02 + 0.06",
+    "((B * 0.5) * 1) * -1",
+    90
+   ],
+   "data": {
+    "side": "port",
+    "deck": "D * 0.85"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.4",
+    "D * 0.85 + min(0.45, D * 0.08)",
+    0
+   ],
+   "data": {
+    "i": 0,
+    "w": "B * 0.35",
+    "l": "L * 0.07",
+    "floor": "(D) * 0.15"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.68",
+    "D * 0.85 + min(0.45, D * 0.08)",
+    0
+   ],
+   "data": {
+    "i": 1,
+    "w": "B * 0.35",
+    "l": "L * 0.07",
+    "floor": "(D) * 0.15"
+   }
+  },
+  {
+   "role": "helm",
+   "at": [
+    "L * 0.08",
+    "D * 0.85",
+    0
+   ]
   }
  ]
 }

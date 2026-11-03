@@ -1,0 +1,870 @@
+{
+ "name": "Yaksha",
+ "_about": "A YAKSHA, the giant guarding a Thai temple's gate (Wat Phra Kaew's twelve, after the Ramakien): standing on his pedestal `plinthH` high, feet apart, both hands on the head of the club planted before him; the skirt, the belt, the jewelled collar, the bracelets, the glaring head and the tall tiered crown (chada). Carved in lofts; `S` his height to the crown's tip, facing +z. The skin parts (legs, feet, arms, torso, head, ears) take his colour, the rest is his costume. Written by tools/archgen/thai.py.",
+ "params": {
+  "detail": 4,
+  "S": 6.0,
+  "plinthH": 1.2
+ },
+ "build": [
+  "plinth",
+  "leg right",
+  "foot right",
+  "upper arm right",
+  "forearm right",
+  "bracelet right",
+  "leg left",
+  "foot left",
+  "upper arm left",
+  "forearm left",
+  "bracelet left",
+  "skirt",
+  "torso",
+  "belt",
+  "collar",
+  "head",
+  "ears",
+  "crown",
+  "club",
+  "club head"
+ ],
+ "parts": {
+  "plinth": {
+   "type": "box",
+   "width": "S * 0.5",
+   "length": "S * 0.36",
+   "height": "plinthH",
+   "at": [
+    [
+     0,
+     0,
+     "S * 0.04",
+     0
+    ]
+   ],
+   "_about": "the pedestal he stands on"
+  },
+  "leg right": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 10,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "0.02 * S",
+     "u": "-0.11 * S",
+     "v": 0,
+     "a": "0.034 * S",
+     "b": "0.036 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.12 * S",
+     "u": "-0.112 * S",
+     "v": 0,
+     "a": "0.042 * S",
+     "b": "0.046 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.23 * S",
+     "u": "-0.108 * S",
+     "v": "0.012 * S",
+     "a": "0.043 * S",
+     "b": "0.046 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.34 * S",
+     "u": "-0.1 * S",
+     "v": 0,
+     "a": "0.064 * S",
+     "b": "0.066 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.45 * S",
+     "u": "-0.085 * S",
+     "v": 0,
+     "a": "0.076 * S",
+     "b": "0.072 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ],
+   "_about": "the legs set apart, the knees a little bent"
+  },
+  "foot right": {
+   "type": "loft",
+   "axis": "z",
+   "sides": 8,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "-0.04 * S",
+     "u": "-0.112 * S",
+     "v": "0.016 * S",
+     "a": "0.03 * S",
+     "b": "0.016 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.02 * S",
+     "u": "-0.115 * S",
+     "v": "0.02 * S",
+     "a": "0.04 * S",
+     "b": "0.022 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.09 * S",
+     "u": "-0.12 * S",
+     "v": "0.012 * S",
+     "a": "0.035 * S",
+     "b": "0.012 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "upper arm right": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 10,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "0.555 * S",
+     "u": "-0.205 * S",
+     "v": "0.085 * S",
+     "a": "0.043 * S",
+     "b": "0.043 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.63 * S",
+     "u": "-0.21 * S",
+     "v": "0.04 * S",
+     "a": "0.05 * S",
+     "b": "0.05 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.7 * S",
+     "u": "-0.19 * S",
+     "v": 0,
+     "a": "0.056 * S",
+     "b": "0.056 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ],
+   "_about": "the arms: down from the shoulders, the forearms in to the club's head"
+  },
+  "forearm right": {
+   "type": "loft",
+   "axis": "z",
+   "sides": 10,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "0.07 * S",
+     "u": "-0.2 * S",
+     "v": "0.56 * S",
+     "a": "0.044 * S",
+     "b": "0.044 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.13 * S",
+     "u": "-0.13 * S",
+     "v": "0.53 * S",
+     "a": "0.04 * S",
+     "b": "0.04 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.185 * S",
+     "u": "-0.065 * S",
+     "v": "0.52 * S",
+     "a": "0.042 * S",
+     "b": "0.04 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.215 * S",
+     "u": "-0.032 * S",
+     "v": "0.52 * S",
+     "a": "0.03 * S",
+     "b": "0.035 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "bracelet right": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 10,
+   "smooth": 1,
+   "sections": [
+    {
+     "s": "0.555 * S",
+     "u": "-0.205 * S",
+     "v": "0.085 * S",
+     "a": "0.05 * S",
+     "b": "0.05 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.585 * S",
+     "u": "-0.207 * S",
+     "v": "0.07 * S",
+     "a": "0.052 * S",
+     "b": "0.052 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "leg left": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 10,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "0.02 * S",
+     "u": "0.11 * S",
+     "v": 0,
+     "a": "0.034 * S",
+     "b": "0.036 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.12 * S",
+     "u": "0.112 * S",
+     "v": 0,
+     "a": "0.042 * S",
+     "b": "0.046 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.23 * S",
+     "u": "0.108 * S",
+     "v": "0.012 * S",
+     "a": "0.043 * S",
+     "b": "0.046 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.34 * S",
+     "u": "0.1 * S",
+     "v": 0,
+     "a": "0.064 * S",
+     "b": "0.066 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.45 * S",
+     "u": "0.085 * S",
+     "v": 0,
+     "a": "0.076 * S",
+     "b": "0.072 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "foot left": {
+   "type": "loft",
+   "axis": "z",
+   "sides": 8,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "-0.04 * S",
+     "u": "0.112 * S",
+     "v": "0.016 * S",
+     "a": "0.03 * S",
+     "b": "0.016 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.02 * S",
+     "u": "0.115 * S",
+     "v": "0.02 * S",
+     "a": "0.04 * S",
+     "b": "0.022 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.09 * S",
+     "u": "0.12 * S",
+     "v": "0.012 * S",
+     "a": "0.035 * S",
+     "b": "0.012 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "upper arm left": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 10,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "0.555 * S",
+     "u": "0.205 * S",
+     "v": "0.085 * S",
+     "a": "0.043 * S",
+     "b": "0.043 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.63 * S",
+     "u": "0.21 * S",
+     "v": "0.04 * S",
+     "a": "0.05 * S",
+     "b": "0.05 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.7 * S",
+     "u": "0.19 * S",
+     "v": 0,
+     "a": "0.056 * S",
+     "b": "0.056 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "forearm left": {
+   "type": "loft",
+   "axis": "z",
+   "sides": 10,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "0.07 * S",
+     "u": "0.2 * S",
+     "v": "0.56 * S",
+     "a": "0.044 * S",
+     "b": "0.044 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.13 * S",
+     "u": "0.13 * S",
+     "v": "0.53 * S",
+     "a": "0.04 * S",
+     "b": "0.04 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.185 * S",
+     "u": "0.065 * S",
+     "v": "0.52 * S",
+     "a": "0.042 * S",
+     "b": "0.04 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.215 * S",
+     "u": "0.032 * S",
+     "v": "0.52 * S",
+     "a": "0.03 * S",
+     "b": "0.035 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "bracelet left": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 10,
+   "smooth": 1,
+   "sections": [
+    {
+     "s": "0.555 * S",
+     "u": "0.205 * S",
+     "v": "0.085 * S",
+     "a": "0.05 * S",
+     "b": "0.05 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.585 * S",
+     "u": "0.207 * S",
+     "v": "0.07 * S",
+     "a": "0.052 * S",
+     "b": "0.052 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "skirt": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 14,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "0.36 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.2 * S",
+     "b": "0.125 * S",
+     "n": 2.4
+    },
+    {
+     "s": "0.42 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.185 * S",
+     "b": "0.115 * S",
+     "n": 2.4
+    },
+    {
+     "s": "0.5 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.16 * S",
+     "b": "0.1 * S",
+     "n": 2.4
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ],
+   "_about": "the skirt (chong kraben) and its flaps"
+  },
+  "torso": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 14,
+   "smooth": 3,
+   "sections": [
+    {
+     "s": "0.48 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.14 * S",
+     "b": "0.092 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.56 * S",
+     "u": 0,
+     "v": "0.012 * S",
+     "a": "0.136 * S",
+     "b": "0.09 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.64 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.165 * S",
+     "b": "0.09 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.705 * S",
+     "u": 0,
+     "v": "-0.005 * S",
+     "a": "0.195 * S",
+     "b": "0.085 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.745 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.07 * S",
+     "b": "0.055 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ],
+   "_about": "the torso: the belly, the deep chest, the broad shoulders"
+  },
+  "belt": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 14,
+   "smooth": 1,
+   "sections": [
+    {
+     "s": "0.48 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.15 * S",
+     "b": "0.1 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.51 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.148 * S",
+     "b": "0.098 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "collar": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 14,
+   "smooth": 1,
+   "sections": [
+    {
+     "s": "0.655 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.18 * S",
+     "b": "0.1 * S",
+     "n": 2.4
+    },
+    {
+     "s": "0.7 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.21 * S",
+     "b": "0.098 * S",
+     "n": 2.4
+    },
+    {
+     "s": "0.735 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.12 * S",
+     "b": "0.07 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ],
+   "_about": "the jewelled collar over the shoulders"
+  },
+  "head": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 12,
+   "smooth": 2,
+   "sections": [
+    {
+     "s": "0.735 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.05 * S",
+     "b": "0.05 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.765 * S",
+     "u": 0,
+     "v": "0.012 * S",
+     "a": "0.064 * S",
+     "b": "0.07 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.8 * S",
+     "u": 0,
+     "v": "0.012 * S",
+     "a": "0.066 * S",
+     "b": "0.07 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.835 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.055 * S",
+     "b": "0.056 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ],
+   "_about": "the head: the glaring eyes, the tusks"
+  },
+  "ears": {
+   "type": "loft",
+   "axis": "x",
+   "sides": 8,
+   "smooth": 1,
+   "sections": [
+    {
+     "s": "-0.09 * S",
+     "u": 0,
+     "v": "0.79 * S",
+     "a": "0.022 * S",
+     "b": "0.05 * S",
+     "n": 2.2
+    },
+    {
+     "s": 0,
+     "u": 0,
+     "v": "0.79 * S",
+     "a": "0.022 * S",
+     "b": "0.05 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.09 * S",
+     "u": 0,
+     "v": "0.79 * S",
+     "a": "0.022 * S",
+     "b": "0.05 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ]
+  },
+  "crown": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 10,
+   "smooth": 1,
+   "sections": [
+    {
+     "s": "0.82 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.066 * S",
+     "b": "0.066 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.85 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.058 * S",
+     "b": "0.058 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.87 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.046 * S",
+     "b": "0.046 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.885 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.052 * S",
+     "b": "0.052 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.905 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.036 * S",
+     "b": "0.036 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.92 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.041 * S",
+     "b": "0.041 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.94 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.025 * S",
+     "b": "0.025 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.955 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.029 * S",
+     "b": "0.029 * S",
+     "n": 2.2
+    },
+    {
+     "s": "0.975 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.012 * S",
+     "b": "0.012 * S",
+     "n": 2.2
+    },
+    {
+     "s": "1.0 * S",
+     "u": 0,
+     "v": 0,
+     "a": "0.002 * S",
+     "b": "0.002 * S",
+     "n": 2.2
+    }
+   ],
+   "at": [
+    [
+     0,
+     "plinthH",
+     0,
+     0
+    ]
+   ],
+   "_about": "the tall tiered crown (chada), its tiers stepping in to a point"
+  },
+  "club": {
+   "type": "column",
+   "radius": "S * 0.024",
+   "taper": 0.75,
+   "sides": 8,
+   "height": "S * 0.52",
+   "at": [
+    [
+     0,
+     "plinthH",
+     "S * 0.205",
+     0
+    ]
+   ],
+   "_about": "the club (krabong) planted before him, his hands on its head"
+  },
+  "club head": {
+   "type": "column",
+   "radius": "S * 0.03",
+   "taper": 0.8,
+   "sides": 8,
+   "height": "S * 0.06",
+   "at": [
+    [
+     0,
+     "plinthH + S * 0.47",
+     "S * 0.205",
+     0
+    ]
+   ]
+  }
+ }
+}

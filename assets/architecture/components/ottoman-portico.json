@@ -1,0 +1,364 @@
+{
+  "name": "Ottoman portico",
+  "_about": "AN OTTOMAN PORTICO (revak) with its deep eave: n bays B apart along x, centred; marble columns (`ottoman` order, colR, colH) on the front line z 0 carrying pointed arches (archH of arcade wall, t thick, springing spr over the capitals) -- or with `arches` no a beam archH deep; a lead shed roof from the back (z -D) out past the columns by `eave` (eaveS at the ends), pitch `pitch`, its flat soffit the painted sa\u00e7ak; a fascia board on its edge. `back` 1 builds a back wall (bt thick, a pointed window every bay: wW, wSill, wSpr) and `door` yes a door in it (gW, gS); `back` 0 stands the roof against another building; with a back wall the roof reaches over it. `dome` yes sets a small dome (domeR) on a drum over the middle bay, up through the roof -- the Gate of Felicity's canopy. `endL`/`endR` 0 leave out the column at the -x/+x end: two porticoes meeting at a court's corner share one corner column. (The vaulted, arcaded walk is `arcade-walk`; this is the timber-roofed Ottoman kind, its eave reaching past the columns.) (tools/archgen/ottoman.py)",
+  "params": {
+    "detail": 4,
+    "n": 5,
+    "B": 4.0,
+    "L": "n * B",
+    "colR": 0.28,
+    "colH": 4.2,
+    "t": "colR * 2.6",
+    "spr": 0.25,
+    "archH": "spr + (B - t) * 0.75 + 0.7",
+    "arches": "yes",
+    "D": 5.0,
+    "eave": 2.0,
+    "eaveS": 0.6,
+    "pitch": 10,
+    "fascia": 0.35,
+    "back": 1,
+    "door": "no",
+    "bt": 0.9,
+    "wW": 1.3,
+    "wSill": 1.0,
+    "wSpr": 2.6,
+    "gW": 2.6,
+    "gS": 3.2,
+    "dome": "no",
+    "domeR": "B * 0.42",
+    "endL": 1,
+    "endR": 1,
+    "eaveL": "eaveS",
+    "eaveR": "eaveS",
+    "roofForm": "shed",
+    "_eaveL": "how far the roof runs past the -x end (eaveR the +x): a portico's roof carried on over a court's corner",
+    "_roofForm": "shed (against the building behind) or hip (hipped round its ends: a free-standing canopy)",
+    "_endL": "1: a column at the row's -x end (endR: the +x end); 0: none -- the corner column is the neighbouring portico's",
+    "_D": "from the column line back to the back wall's face; the roof covers D + eave",
+    "_archH": "the arcade wall's height over the capitals: the arches' crown (pointed, about 0.67 of their span over spr) and a band over it; with arches no the beam's",
+    "_arches": "yes: pointed arches between the columns; no: a plain beam on them"
+  },
+  "build": [
+    "columns",
+    "arcade",
+    "beam",
+    "back wall",
+    "back wall door",
+    "roof",
+    "roof hipped",
+    "fascia",
+    "drum",
+    "dome",
+    "dome alem"
+  ],
+  "parts": {
+    "columns": {
+      "type": "colonnade",
+      "order": "ottoman",
+      "count": "n - 1 + endL + endR",
+      "spacing": "B",
+      "columnR": "colR",
+      "height": "colH",
+      "sides": 8,
+      "at": [
+        [
+          "(endL - endR) * B / 2 * (0 - 1)",
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "marble columns on the front line (z 0), faceted capitals; an end's column left out (endL, endR 0) where the neighbouring portico's corner column carries it"
+    },
+    "arcade": {
+      "type": "wall",
+      "width": "L + t",
+      "height": "archH",
+      "thickness": "t",
+      "glass": false,
+      "at": [
+        [
+          0,
+          "colH",
+          0,
+          0
+        ]
+      ],
+      "openings": {
+        "pattern": "n",
+        "width": "B - t",
+        "gap": "t",
+        "end": "t",
+        "sill": 0,
+        "springing": "spr",
+        "head": {
+          "profile": "pointed",
+          "spread": 0.4
+        }
+      },
+      "standsOn": [
+        "columns"
+      ],
+      "when": {
+        "arches": "yes"
+      },
+      "_about": "pointed arches from capital to capital, the spandrels between"
+    },
+    "beam": {
+      "type": "box",
+      "width": "L + t",
+      "length": "t",
+      "height": "archH",
+      "at": [
+        [
+          0,
+          "colH",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "columns"
+      ],
+      "when": {
+        "arches": "no"
+      },
+      "_about": "arches no: a beam from capital to capital, the eave straight on it (a canopy's, the Gate of Felicity's)"
+    },
+    "back wall": {
+      "type": "wall",
+      "width": "L + t",
+      "height": "colH + archH + (D + eave) * (sin(pitch * 0.0174533) / cos(pitch * 0.0174533))",
+      "thickness": "bt",
+      "glass": true,
+      "at": [
+        [
+          0,
+          0,
+          "0 - D - bt / 2",
+          0
+        ]
+      ],
+      "tiers": [
+        {
+          "openings": {
+            "every": "B",
+            "width": "wW",
+            "end": "B * 0.7",
+            "sill": "wSill",
+            "springing": "wSpr",
+            "head": {
+              "profile": "pointed",
+              "spread": 0.4
+            }
+          }
+        }
+      ],
+      "repeat": {
+        "count": "back",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "when": {
+        "door": "no"
+      },
+      "_about": "the back wall: a pointed window in every bay"
+    },
+    "back wall door": {
+      "type": "wall",
+      "width": "L + t",
+      "height": "colH + archH + (D + eave) * (sin(pitch * 0.0174533) / cos(pitch * 0.0174533))",
+      "thickness": "bt",
+      "glass": true,
+      "at": [
+        [
+          0,
+          0,
+          "0 - D - bt / 2",
+          0
+        ]
+      ],
+      "tiers": [
+        {
+          "openings": {
+            "every": "B",
+            "width": "wW",
+            "end": "B * 0.7",
+            "sill": "wSill",
+            "springing": "wSpr",
+            "head": {
+              "profile": "pointed",
+              "spread": 0.4
+            },
+            "with": [
+              {
+                "at": 0,
+                "width": "gW",
+                "sill": 0,
+                "springing": "gS",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.4
+                },
+                "glass": false
+              }
+            ]
+          }
+        }
+      ],
+      "repeat": {
+        "count": "back",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "when": {
+        "door": "yes"
+      },
+      "_about": "the back wall with a door in its middle (door yes)"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "shed",
+      "width": "D + eave + back * bt",
+      "length": "L + t + eaveL + eaveR",
+      "pitch": "pitch",
+      "at": [
+        [
+          "(eaveR - eaveL) / 2",
+          "colH + archH",
+          "(eave - D - back * bt) / 2",
+          1.5707963
+        ]
+      ],
+      "standsOn": [
+        "arcade",
+        "beam"
+      ],
+      "when": {
+        "roofForm": "shed"
+      },
+      "_about": "the lead shed roof, from the back wall out over the columns to the deep eave (sa\u00e7ak); its flat soffit the painted ceiling"
+    },
+    "roof hipped": {
+      "type": "roof",
+      "form": "hip",
+      "width": "2 * (D + eave + back * bt)",
+      "length": "L + t + eaveL + eaveR",
+      "pitch": "pitch",
+      "at": [
+        [
+          "(eaveR - eaveL) / 2",
+          "colH + archH",
+          "0 - D - back * bt",
+          1.5707963
+        ]
+      ],
+      "standsOn": [
+        "arcade",
+        "beam"
+      ],
+      "when": {
+        "roofForm": "hip"
+      },
+      "_about": "roofForm hip: the eave hipped round its ends too -- a canopy standing free of its neighbours (its back half runs into the building behind)"
+    },
+    "fascia": {
+      "type": "box",
+      "width": "L + t + eaveL + eaveR",
+      "length": 0.18,
+      "height": "fascia",
+      "at": [
+        [
+          "(eaveR - eaveL) / 2",
+          "colH + archH - fascia",
+          "eave - 0.09",
+          0
+        ]
+      ],
+      "standsOn": [
+        "roof",
+        "roof hipped"
+      ],
+      "_about": "the eave's front board"
+    },
+    "drum": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": "domeR + 0.3",
+      "rInner": "domeR",
+      "height": "(D + eave) * (sin(pitch * 0.0174533) / cos(pitch * 0.0174533)) * 0.6 + 0.9",
+      "solid": true,
+      "place": [
+        [
+          0,
+          "colH + archH",
+          "0 - D * 0.45",
+          0
+        ]
+      ],
+      "when": {
+        "dome": "yes"
+      },
+      "standsOn": [
+        "roof",
+        "roof hipped"
+      ],
+      "_about": "the drum of the dome over the middle bay, up through the roof"
+    },
+    "dome": {
+      "type": "dome",
+      "radius": "domeR + 0.3",
+      "thickness": 0.3,
+      "sides": 16,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          "colH + archH + (D + eave) * (sin(pitch * 0.0174533) / cos(pitch * 0.0174533)) * 0.6 + 0.9",
+          "0 - D * 0.45",
+          0
+        ]
+      ],
+      "when": {
+        "dome": "yes"
+      },
+      "standsOn": [
+        "drum"
+      ],
+      "_about": "a small lead dome over the middle bay (dome yes)"
+    },
+    "dome alem": {
+      "type": "column",
+      "radius": 0.08,
+      "height": 1.4,
+      "sides": 6,
+      "taper": 0.3,
+      "at": [
+        [
+          0,
+          0,
+          "0 - D * 0.45",
+          0
+        ]
+      ],
+      "atop": "dome",
+      "when": {
+        "dome": "yes"
+      },
+      "standsOn": [
+        "dome"
+      ]
+    }
+  }
+}

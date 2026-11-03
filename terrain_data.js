@@ -10,7 +10,7 @@ const srgbToLinear = (c) => (c < .04045 ? c * .0773993808 : Math.pow(c * .947867
 export function gradeRGB(h, grade, out) {
   const t = Math.min(1, Math.max(0, h / grade.span + .5));
   const a = t < .5 ? grade.lo : grade.mid, b = t < .5 ? grade.mid : grade.hi, f = t < .5 ? t * 2 : (t - .5) * 2;
-  const band = Math.floor(h / grade.band) % 2 ? 1.05 : .96;
+  const band = Math.floor(h / grade.band) % 2 ? 1.012 : .99;
   for (let i = 0; i < 3; i++) {
     const shift = 16 - i * 8;
     const ca = srgbToLinear(((a >> shift) & 255) / 255), cb = srgbToLinear(((b >> shift) & 255) / 255);

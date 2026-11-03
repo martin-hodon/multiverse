@@ -1,0 +1,708 @@
+{
+ "name": "Gaudi pavilion",
+ "_about": "THE PARK GUELL PAVILION, a gingerbread house of 1901: low walls of the hill's own rubble round a plan whose corners are cut so far it reads as an oval, parabolic windows and door framed in trencadis, a 'Park Guell' plaque, a thick eave carrying the attic's terraces behind rounded merlons, a tall roof of lobes rising and falling both ways dressed in trencadis, a rubble tower out of it with a mirador and a mushroom on top, mushroom chimneys on the crests -- and, asked for, a hyperboloid tower at one end carrying Gaudi's cross. The door is on the back face (away from the street, +z the front).",
+ "params": {
+  "w": 14.8,
+  "l": 7.66,
+  "ch": 2.2,
+  "t": 0.6,
+  "h": 7.0,
+  "storeys": 2,
+  "winW": 1.0,
+  "winGap": 2.6,
+  "surBand": 0.2,
+  "doorW": 1.4,
+  "doorH": 2.0,
+  "doorAt": 0,
+  "plaqueW": 2.4,
+  "eave": 0.35,
+  "eaveH": 0.55,
+  "terr": 0.8,
+  "merlonR": 0.24,
+  "roofH": 5.5,
+  "wave": 0.4,
+  "towerR": 1.8,
+  "towerX": 2.0,
+  "towerZ": 0.4,
+  "towerH": 17.5,
+  "lookH": 2.4,
+  "capR": 2.3,
+  "capH": 3.4,
+  "bell": 1.0,
+  "chimneys": "yes",
+  "chimR": 0.32,
+  "chimH": 2.2,
+  "chimX": "w / 4",
+  "chimY": "h + eaveH * 0.5 + roofH * 0.9",
+  "spire": "no",
+  "spireX": 5.5,
+  "spireY": 0,
+  "spireZ": 0,
+  "spireH": 18.0,
+  "spireR": 1.6,
+  "crossH": 3.8,
+  "_w": "the plan: w along the street (x), l deep, ch the corners cut; t the walls, h to the eave in `storeys` floors (the attic is in the roof)",
+  "_winW": "the windows: winW wide, the street face's lower pair winGap either side of the middle; surBand their trencadis frames",
+  "_doorW": "the door on the back face: doorW wide, springing at doorH, doorAt along the face; plaqueW the street plaque",
+  "_eave": "the eave: eave out from the wall, eaveH thick; terr the terrace between it and the roof; merlonR the merlons on it",
+  "_roofH": "the roof's crest over the eave; wave: how deep its troughs fall (0 a plain mound)",
+  "_towerH": "the tower's top (from the ground) where the mushroom sits; lookH its mirador; capR/capH/bell the mushroom",
+  "_chimneys": "yes: two mushroom chimneys chimR wide and chimH tall, at x = +-chimX, their feet at chimY (on the roof's crests)",
+  "_spire": "yes: the hyperboloid tower at [spireX, spireY, spireZ], spireH its shaft, spireR its foot's radius, crossH its cross"
+ },
+ "build": [
+  "plinth",
+  "walls",
+  "plaques",
+  "floors",
+  "ceiling",
+  "cornice",
+  "merlons",
+  "roof",
+  "roof lobes",
+  "tower",
+  "lookout",
+  "lookout floor",
+  "cupola",
+  "chimneys",
+  "spire"
+ ],
+ "parts": {
+  "plinth": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "w + 0.3",
+     "l + 0.3"
+    ],
+    "chamfer": "ch + 0.15"
+   },
+   "height": 0.6,
+   "at": [
+    [
+     0,
+     -0.4,
+     0,
+     0
+    ]
+   ],
+   "_about": "a footing a little wider than the walls, sunk into the ground"
+  },
+  "walls": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "w",
+     "l"
+    ],
+    "chamfer": "ch"
+   },
+   "thickness": "t",
+   "height": "h",
+   "glass": true,
+   "tiers": [
+    {
+     "h": "(h / storeys)",
+     "openings": [
+      {
+       "at": "0 - winGap",
+       "width": "winW",
+       "sill": "(h / storeys) * 0.3",
+       "springing": "(h / storeys) * 0.62",
+       "head": {
+        "profile": "pointed",
+        "spread": 1.0
+       },
+       "surround": {
+        "band": "surBand",
+        "depth": 0.07
+       }
+      },
+      {
+       "at": "winGap",
+       "width": "winW",
+       "sill": "(h / storeys) * 0.3",
+       "springing": "(h / storeys) * 0.62",
+       "head": {
+        "profile": "pointed",
+        "spread": 1.0
+       },
+       "surround": {
+        "band": "surBand",
+        "depth": 0.07
+       }
+      }
+     ]
+    },
+    {
+     "h": "(h - h / storeys)",
+     "openings": [
+      {
+       "at": 0,
+       "width": "winW",
+       "sill": "(h - h / storeys) * 0.25",
+       "springing": "(h - h / storeys) * 0.58",
+       "head": {
+        "profile": "pointed",
+        "spread": 1.0
+       },
+       "surround": {
+        "band": "surBand",
+        "depth": 0.07
+       }
+      }
+     ]
+    }
+   ],
+   "faces": {
+    "1": [],
+    "3": [],
+    "5": [],
+    "7": [],
+    "0": [
+     {
+      "h": "(h / storeys)",
+      "openings": [
+       {
+        "at": 0,
+        "width": "winW",
+        "sill": "(h / storeys) * 0.3",
+        "springing": "(h / storeys) * 0.62",
+        "head": {
+         "profile": "pointed",
+         "spread": 1.0
+        },
+        "surround": {
+         "band": "surBand",
+         "depth": 0.07
+        }
+       }
+      ]
+     },
+     {
+      "h": "(h - h / storeys)",
+      "openings": [
+       {
+        "at": 0,
+        "width": "winW",
+        "sill": "(h - h / storeys) * 0.25",
+        "springing": "(h - h / storeys) * 0.58",
+        "head": {
+         "profile": "pointed",
+         "spread": 1.0
+        },
+        "surround": {
+         "band": "surBand",
+         "depth": 0.07
+        }
+       }
+      ]
+     }
+    ],
+    "4": [
+     {
+      "h": "(h / storeys)",
+      "openings": [
+       {
+        "at": 0,
+        "width": "winW",
+        "sill": "(h / storeys) * 0.3",
+        "springing": "(h / storeys) * 0.62",
+        "head": {
+         "profile": "pointed",
+         "spread": 1.0
+        },
+        "surround": {
+         "band": "surBand",
+         "depth": 0.07
+        }
+       }
+      ]
+     },
+     {
+      "h": "(h - h / storeys)",
+      "openings": [
+       {
+        "at": 0,
+        "width": "winW",
+        "sill": "(h - h / storeys) * 0.25",
+        "springing": "(h - h / storeys) * 0.58",
+        "head": {
+         "profile": "pointed",
+         "spread": 1.0
+        },
+        "surround": {
+         "band": "surBand",
+         "depth": 0.07
+        }
+       }
+      ]
+     }
+    ],
+    "6": [
+     {
+      "h": "(h / storeys)",
+      "openings": [
+       {
+        "at": "doorAt",
+        "width": "doorW",
+        "sill": 0,
+        "springing": "doorH",
+        "head": {
+         "profile": "pointed",
+         "spread": 1.0
+        },
+        "surround": {
+         "band": "surBand",
+         "depth": 0.07
+        }
+       }
+      ]
+     },
+     {
+      "h": "(h - h / storeys)",
+      "openings": [
+       {
+        "at": 0,
+        "width": "winW",
+        "sill": "(h - h / storeys) * 0.25",
+        "springing": "(h - h / storeys) * 0.58",
+        "head": {
+         "profile": "pointed",
+         "spread": 1.0
+        },
+        "surround": {
+         "band": "surBand",
+         "depth": 0.07
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "_about": "the walls of the place's own stone, laid rough, round a plan whose corners are cut so far it reads oval; parabolic windows and door framed in trencadis (the door on the back, face 6, away from the street)"
+  },
+  "plaques": {
+   "type": "box",
+   "width": "plaqueW",
+   "length": 0.1,
+   "height": "plaqueW * 0.3",
+   "at": [
+    [
+     0,
+     "(h / storeys) * 0.42",
+     "l / 2 + 0.03",
+     0
+    ]
+   ],
+   "_about": "the plaque with 'Park Guell' in trencadis on the street face, between the windows"
+  },
+  "floors": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "w - 2 * t",
+     "l - 2 * t"
+    ],
+    "chamfer": "max(0.1, ch - t * 0.6)"
+   },
+   "height": 0.25,
+   "at": [
+    [
+     0,
+     "(h / storeys) - 0.25",
+     0,
+     0
+    ]
+   ],
+   "_about": "the upper floor"
+  },
+  "ceiling": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "w - 2 * t + 0.02",
+     "l - 2 * t + 0.02"
+    ],
+    "chamfer": "max(0.1, ch - t * 0.6)"
+   },
+   "height": 0.3,
+   "at": [
+    [
+     0,
+     "h - 0.3",
+     0,
+     0
+    ]
+   ],
+   "_about": "the vault over the top floor, the roof's bed"
+  },
+  "cornice": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "w + 2 * eave",
+     "l + 2 * eave"
+    ],
+    "chamfer": "ch + eave"
+   },
+   "height": "eaveH",
+   "at": [
+    [
+     0,
+     "h",
+     0,
+     0
+    ]
+   ],
+   "_about": "the eave: a thick rolled lip all round, its top the terraces round the roof, dressed in trencadis"
+  },
+  "merlons": {
+   "type": "prism",
+   "plan": {
+    "sides": 8,
+    "radius": "merlonR"
+   },
+   "height": "merlonR * 2.6",
+   "at": [
+    [
+     "(w / 2 - ch) * -1.0",
+     "h + eaveH",
+     "(l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * -1.0",
+     "h + eaveH",
+     "0 - (l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * -0.5",
+     "h + eaveH",
+     "(l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * -0.5",
+     "h + eaveH",
+     "0 - (l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * 0.0",
+     "h + eaveH",
+     "(l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * 0.0",
+     "h + eaveH",
+     "0 - (l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * 0.5",
+     "h + eaveH",
+     "(l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * 0.5",
+     "h + eaveH",
+     "0 - (l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * 1.0",
+     "h + eaveH",
+     "(l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 - ch) * 1.0",
+     "h + eaveH",
+     "0 - (l / 2 + eave * 0.2)",
+     0
+    ],
+    [
+     "(w / 2 + eave * 0.2)",
+     "h + eaveH",
+     "0 - l / 6",
+     0
+    ],
+    [
+     "(w / 2 + eave * 0.2)",
+     "h + eaveH",
+     "l / 6",
+     0
+    ],
+    [
+     "0 - (w / 2 + eave * 0.2)",
+     "h + eaveH",
+     "0 - l / 6",
+     0
+    ],
+    [
+     "0 - (w / 2 + eave * 0.2)",
+     "h + eaveH",
+     "l / 6",
+     0
+    ]
+   ],
+   "_about": "the almenas: rounded merlons on the eave round the attic terraces, white trencadis"
+  },
+  "roof": {
+   "type": "loft",
+   "axis": "x",
+   "sides": 16,
+   "smooth": 3,
+   "half": true,
+   "at": [
+    [
+     0,
+     "h + eaveH * 0.5",
+     0,
+     0
+    ]
+   ],
+   "sections": [
+    {
+     "s": "0 - w / 2 + terr * 0.5",
+     "a": "l / 2 - ch * 0.6",
+     "b": "roofH * 0.3",
+     "n": 2.2
+    },
+    {
+     "s": "0 - w / 2 + ch * 0.5",
+     "a": "l / 2 - terr",
+     "b": "roofH * (1 - wave)",
+     "n": 2.2
+    },
+    {
+     "s": "0 - w / 4",
+     "a": "l / 2 - terr",
+     "b": "roofH",
+     "n": 2.2
+    },
+    {
+     "s": 0,
+     "a": "l / 2 - terr",
+     "b": "roofH * (1 - wave)",
+     "n": 2.2
+    },
+    {
+     "s": "w / 4",
+     "a": "l / 2 - terr",
+     "b": "roofH",
+     "n": 2.2
+    },
+    {
+     "s": "w / 2 - ch * 0.5",
+     "a": "l / 2 - terr",
+     "b": "roofH * (1 - wave)",
+     "n": 2.2
+    },
+    {
+     "s": "w / 2 - terr * 0.5",
+     "a": "l / 2 - ch * 0.6",
+     "b": "roofH * 0.3",
+     "n": 2.2
+    }
+   ],
+   "_about": "the roof: no plane in it -- the hyperbolic vaults of the attic as a mound rising and falling along the house in lobes (wave: how deep the troughs are), the 'sugar icing' of the gingerbread house, in trencadis; terr in from the eave, the terrace"
+  },
+  "roof lobes": {
+   "type": "loft",
+   "axis": "z",
+   "sides": 12,
+   "smooth": 3,
+   "half": true,
+   "at": [
+    [
+     "0 - w / 4",
+     "h + eaveH * 0.5",
+     0,
+     0
+    ],
+    [
+     "w / 4",
+     "h + eaveH * 0.5",
+     0,
+     0
+    ]
+   ],
+   "sections": [
+    {
+     "s": "0 - l / 2 + terr",
+     "a": "w * 0.07",
+     "b": "roofH * 0.25",
+     "n": 2.2
+    },
+    {
+     "s": "0 - l / 4",
+     "a": "w * 0.11",
+     "b": "roofH * 0.85",
+     "n": 2.2
+    },
+    {
+     "s": "l / 4",
+     "a": "w * 0.11",
+     "b": "roofH * 0.85",
+     "n": 2.2
+    },
+    {
+     "s": "l / 2 - terr",
+     "a": "w * 0.07",
+     "b": "roofH * 0.25",
+     "n": 2.2
+    }
+   ],
+   "_about": "a lobe across the roof over each crest, so it swells both ways like a mushroom's gills"
+  },
+  "tower": {
+   "type": "prism",
+   "plan": {
+    "sides": 10,
+    "radius": "towerR"
+   },
+   "height": "towerH - lookH - (h + eaveH)",
+   "at": [
+    [
+     "towerX",
+     "h + eaveH",
+     "towerZ",
+     0
+    ]
+   ],
+   "batter": {
+    "out": "towerR * 0.18",
+    "power": 1.6
+   },
+   "_about": "the tower out of the roof, of rubble, swelling a little toward its foot"
+  },
+  "lookout": {
+   "type": "enclosure",
+   "plan": {
+    "sides": 10,
+    "radius": "towerR * 0.92"
+   },
+   "thickness": 0.3,
+   "height": "lookH",
+   "glass": false,
+   "openings": [
+    {
+     "at": 0,
+     "width": "towerR * 0.42",
+     "sill": "lookH * 0.3",
+     "springing": "lookH * 0.58",
+     "head": {
+      "profile": "pointed",
+      "spread": 1.0
+     }
+    }
+   ],
+   "at": [
+    [
+     "towerX",
+     "towerH - lookH",
+     "towerZ",
+     0
+    ]
+   ],
+   "_about": "the mirador: the tower's top storey opened all round"
+  },
+  "lookout floor": {
+   "type": "prism",
+   "plan": {
+    "sides": 10,
+    "radius": "towerR * 0.92"
+   },
+   "height": 0.2,
+   "at": [
+    [
+     "towerX",
+     "towerH - lookH - 0.2",
+     "towerZ",
+     0
+    ]
+   ]
+  },
+  "cupola": {
+   "type": "component",
+   "use": "components/gaudi-mushroom",
+   "params": {
+    "stemR": "towerR * 0.8",
+    "stemH": "towerR * 0.25",
+    "capR": "capR",
+    "capH": "capH",
+    "bell": "bell",
+    "lip": 0.9,
+    "foot": 1.0
+   },
+   "at": [
+    [
+     "towerX",
+     "towerH",
+     "towerZ",
+     0
+    ]
+   ],
+   "_about": "the mushroom on the mirador -- the porter's lodge's bell-shaped amanita"
+  },
+  "chimneys": {
+   "type": "component",
+   "use": "components/gaudi-mushroom",
+   "when": {
+    "chimneys": "yes"
+   },
+   "params": {
+    "stemR": "chimR",
+    "stemH": "chimH",
+    "capR": "chimR * 1.9",
+    "capH": "chimR * 1.6",
+    "bell": 0.4,
+    "sides": 12
+   },
+   "at": [
+    [
+     "chimX",
+     "chimY",
+     "0 - l * 0.1",
+     0
+    ],
+    [
+     "0 - chimX",
+     "chimY",
+     "l * 0.1",
+     0
+    ]
+   ],
+   "_about": "two chimneys, little mushrooms of their own, standing on the roof's crests (chimneys: no leaves them off)"
+  },
+  "spire": {
+   "type": "component",
+   "use": "components/hyperboloid-tower",
+   "when": {
+    "spire": "yes"
+   },
+   "params": {
+    "h": "spireH",
+    "r0": "spireR",
+    "rw": "spireR * 0.58",
+    "r1": "spireR * 0.72",
+    "waistAt": 0.62,
+    "crossH": "crossH"
+   },
+   "at": [
+    [
+     "spireX",
+     "spireY",
+     "spireZ",
+     0
+    ]
+   ],
+   "_about": "the hyperboloid tower at one end, standing out of the wall (spire: yes), Gaudi's cross on it"
+  }
+ }
+}

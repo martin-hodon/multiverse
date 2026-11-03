@@ -1,0 +1,216 @@
+{
+ "name": "Paduraksa",
+ "_about": "A PADURAKSA, the roofed gate in a Javanese court wall: two piers `w` across all told and `d` deep, the passage `pw` wide and `ph` high under the lintel (a kala's face on it), a roof of three steps narrowing to a point, ratnas on its ledges and the crowning one, `h` high in all. The way through runs along z. Written by tools/archgen/javanese.py.",
+ "params": {
+  "detail": 4,
+  "w": 6.0,
+  "d": 3.0,
+  "pw": 2.6,
+  "ph": 3.2,
+  "h": 9.0
+ },
+ "build": [
+  "piers",
+  "lintel",
+  "roof 1",
+  "roof 2",
+  "roof 3",
+  "roof 1 ratnas",
+  "roof 2 ratnas",
+  "crown"
+ ],
+ "parts": {
+  "piers": {
+   "type": "box",
+   "width": "(w - pw) / 2",
+   "length": "d",
+   "height": "ph + 0.9",
+   "at": [
+    [
+     "(w + pw) / 4",
+     0,
+     0,
+     0
+    ],
+    [
+     "-(w + pw) / 4",
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the two piers, the passage between"
+  },
+  "lintel": {
+   "type": "box",
+   "width": "w",
+   "length": "d",
+   "height": 0.9,
+   "at": [
+    [
+     0,
+     "ph",
+     0,
+     0
+    ]
+   ],
+   "_about": "the lintel, its kala"
+  },
+  "roof 1": {
+   "type": "box",
+   "width": "w * 0.86",
+   "length": "d * 0.86",
+   "height": "(h - ph - 0.9) * 0.22",
+   "at": [
+    [
+     0,
+     "ph + 0.9 + (h - ph - 0.9) * 0",
+     0,
+     0
+    ]
+   ]
+  },
+  "roof 2": {
+   "type": "box",
+   "width": "w * 0.64",
+   "length": "d * 0.64",
+   "height": "(h - ph - 0.9) * 0.17",
+   "at": [
+    [
+     0,
+     "ph + 0.9 + (h - ph - 0.9) * 0.22",
+     0,
+     0
+    ]
+   ]
+  },
+  "roof 3": {
+   "type": "box",
+   "width": "w * 0.44",
+   "length": "d * 0.44",
+   "height": "(h - ph - 0.9) * 0.13",
+   "at": [
+    [
+     0,
+     "ph + 0.9 + (h - ph - 0.9) * 0.39",
+     0,
+     0
+    ]
+   ]
+  },
+  "roof 1 ratnas": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "w * 0.035",
+    "h": "(h - ph - 0.9) * 0.16",
+    "n": 6,
+    "detail": 2
+   },
+   "at": [
+    [
+     "w * 0.375",
+     "ph + 0.9 + (h - ph - 0.9) * 0.22",
+     "d * 0.375",
+     0
+    ],
+    [
+     "w * 0.375",
+     "ph + 0.9 + (h - ph - 0.9) * 0.22",
+     "d * -0.375",
+     0
+    ],
+    [
+     "w * -0.375",
+     "ph + 0.9 + (h - ph - 0.9) * 0.22",
+     "d * 0.375",
+     0
+    ],
+    [
+     "w * -0.375",
+     "ph + 0.9 + (h - ph - 0.9) * 0.22",
+     "d * -0.375",
+     0
+    ],
+    [
+     0,
+     "ph + 0.9 + (h - ph - 0.9) * 0.22",
+     "d * 0.375",
+     0
+    ],
+    [
+     0,
+     "ph + 0.9 + (h - ph - 0.9) * 0.22",
+     "d * -0.375",
+     0
+    ]
+   ]
+  },
+  "roof 2 ratnas": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "w * 0.035",
+    "h": "(h - ph - 0.9) * 0.16",
+    "n": 6,
+    "detail": 2
+   },
+   "at": [
+    [
+     "w * 0.27",
+     "ph + 0.9 + (h - ph - 0.9) * 0.39",
+     "d * 0.27",
+     0
+    ],
+    [
+     "w * 0.27",
+     "ph + 0.9 + (h - ph - 0.9) * 0.39",
+     "d * -0.27",
+     0
+    ],
+    [
+     "w * -0.27",
+     "ph + 0.9 + (h - ph - 0.9) * 0.39",
+     "d * 0.27",
+     0
+    ],
+    [
+     "w * -0.27",
+     "ph + 0.9 + (h - ph - 0.9) * 0.39",
+     "d * -0.27",
+     0
+    ],
+    [
+     0,
+     "ph + 0.9 + (h - ph - 0.9) * 0.39",
+     "d * 0.27",
+     0
+    ],
+    [
+     0,
+     "ph + 0.9 + (h - ph - 0.9) * 0.39",
+     "d * -0.27",
+     0
+    ]
+   ]
+  },
+  "crown": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "w * 0.07",
+    "h": "(h - ph - 0.9) * 0.48",
+    "n": 6
+   },
+   "at": [
+    [
+     0,
+     "ph + 0.9 + (h - ph - 0.9) * 0.52",
+     0,
+     0
+    ]
+   ],
+   "_about": "the crowning ratna"
+  }
+ }
+}

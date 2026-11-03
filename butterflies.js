@@ -4,10 +4,10 @@
 // to the inner margin (1) -- so one band scheme (the nymphalid ground plan: basal, discal, central, border ocelli,
 // submarginal, marginal, fringe) fits every outline. Painted once per species into a texture (fore and hind, upper and
 // under, the body); drawn as flat wings -- one plane each, its two faces the two sides, the right the left's mirror --
-// flapping in the vertex shader, one instanced draw a species (createButterflies); the asset viewer shows a species
+// flapping in the vertex shader, one instanced draw for every species (createButterflies); the asset viewer shows a species
 // as a specimen plate (drawSpecimen).
 import * as THREE from "three";
-import { wgslFn, positionLocal, positionWorld, cameraPosition, attribute, instancedBufferAttribute, texture, uv } from "three/tsl";
+import { wgslFn, positionWorld, cameraPosition, attribute, instancedBufferAttribute, texture, varying } from "three/tsl";
 import { lightWGSL } from "./light.js";
 import { PREGEN, pregenOn, pregenMiss, recordFor, hasher } from "./pregen.js";   // (the wings, painted once by build/pregen.py)
 
@@ -260,9 +260,20 @@ export function speciesGeometry(sp, A) {
 }
 
 // ---- THE MATERIAL: the wing turned by its flap about the body's axis, then the instance placed (heading, scale,
-// position) -- all in the vertex stage, as the geometry is instanced by hand; lit per pixel by the plane's own normal
+// position) -- all in the vertex stage, as the geometry is instanced by hand; lit per pixel by the plane's own normal.
+// Every species is the same mesh (speciesGeometry: the rings and the body have the same points in the same order), so
+// the one geometry is only its triangles and each point's number (`vid`); where the point lies, and its uv in the
+// atlas, are read from the species' row of a float texture (createButterflies: two texels a point, xyz u and v)
+const fetchUV = wgslFn(`
+  fn bflyUV(vid: f32, ik: f32, data: texture_2d<f32>) -> vec2<f32> {
+    let a = textureLoad(data, vec2<i32>(i32(vid + 0.5) * 2, i32(ik + 0.5)), 0);
+    let b = textureLoad(data, vec2<i32>(i32(vid + 0.5) * 2 + 1, i32(ik + 0.5)), 0);
+    return vec2<f32>(a.w, b.x);
+  }
+`);
 const place = wgslFn(`
-  fn bflyPlace(p: vec3<f32>, side: f32, flap: f32, at: vec4<f32>, sc: f32) -> vec3<f32> {
+  fn bflyPlace(vid: f32, side: f32, flap: f32, at: vec4<f32>, sc: f32, ik: f32, data: texture_2d<f32>) -> vec3<f32> {
+    let p = textureLoad(data, vec2<i32>(i32(vid + 0.5) * 2, i32(ik + 0.5)), 0).xyz;
     let th = -side * flap;
     let c = cos(th); let s = sin(th);
     let q = vec3<f32>(p.x, p.y * c - p.z * s, p.y * s + p.z * c) * sc;
@@ -277,57 +288,89 @@ const shade = wgslFn(`
     return vec4<f32>(c.rgb * ${lightWGSL("n")}, c.a);
   }
 `);
-function speciesMaterial(tex, at, sc, flap) {
+function speciesMaterial(tex, dataTex, at, sc, flap, ik) {
   const m = new THREE.MeshBasicNodeMaterial({ side: THREE.FrontSide });
-  m.positionNode = place({ p: positionLocal, side: attribute("side", "float"), flap: instancedBufferAttribute(flap), at: instancedBufferAttribute(at), sc: instancedBufferAttribute(sc) });
-  m.colorNode = shade({ c: texture(tex, uv()), pw: positionWorld, cam: cameraPosition });
+  const vid = attribute("vid", "float"), k = instancedBufferAttribute(ik), data = texture(dataTex);
+  m.positionNode = place({ vid, side: attribute("side", "float"), flap: instancedBufferAttribute(flap), at: instancedBufferAttribute(at), sc: instancedBufferAttribute(sc), ik: k, data });
+  m.colorNode = shade({ c: texture(tex, varying(fetchUV({ vid, ik: k, data }))), pw: positionWorld, cam: cameraPosition });
   m.alphaTest = .5;
   return m;
 }
 
-// ---- THE GAME'S BUTTERFLIES: one instanced mesh a species; add() a flier (a species) -> { position, rotY, animT },
-// update(t) writes their places and flaps
+// ---- THE GAME'S BUTTERFLIES: add() a flier (a species) -> { position, rotY, animT }, update(t) writes their places
+// and flaps. ONE DRAW FOR ALL OF THEM (2026-11-03): a species was an instanced mesh of its own, and a field of them was
+// a dozen draws of one or two fliers each; now the species' atlases are stacked into one texture, their points (and
+// those points' uvs in it) are rows of a float texture, and each flier names its row. Made at the first update() after
+// a new species came (they all come at the start)
 export function createButterflies(scene, species, { shapes, scale = 3, cap = 64 } = {}) {
-  const kinds = new Map(), all = [];
+  const kinds = new Map(), all = [], CAP = cap * Math.max(1, species.length);
+  const at = new THREE.InstancedBufferAttribute(new Float32Array(CAP * 4), 4), sc = new THREE.InstancedBufferAttribute(new Float32Array(CAP), 1);
+  const flap = new THREE.InstancedBufferAttribute(new Float32Array(CAP), 1), ik = new THREE.InstancedBufferAttribute(new Float32Array(CAP), 1);
+  for (const b of [at, sc, flap, ik]) b.setUsage(THREE.DynamicDrawUsage);
+  const D = { mesh: null, geo: null, tex: null, dataTex: null, reach: 0, stale: false };
   const kindOf = (def) => {
     if (kinds.has(def.name)) return kinds.get(def.name);
-    const sp = resolveSpecies(def, shapes), A = speciesAtlas(sp), geo = speciesGeometry(sp, A);
-    const tex = new THREE.CanvasTexture(A.canvas);
-    tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = true; tex.minFilter = THREE.LinearMipmapLinearFilter; tex.anisotropy = 4;
-    const at = new THREE.InstancedBufferAttribute(new Float32Array(cap * 4), 4), sc = new THREE.InstancedBufferAttribute(new Float32Array(cap), 1), flap = new THREE.InstancedBufferAttribute(new Float32Array(cap), 1);
-    for (const b of [at, sc, flap]) b.setUsage(THREE.DynamicDrawUsage);
-    const mesh = new THREE.Mesh(geo, speciesMaterial(tex, at, sc, flap));
-    geo.instanceCount = 0;
-    // (culled as a whole: a sphere round where its fliers are now, update() -- a species all behind you is not drawn)
-    geo.computeBoundingSphere(); const reach = geo.boundingSphere.radius; geo.boundingSphere = new THREE.Sphere();
-    scene.add(mesh);
-    const k = { sp, mesh, geo, at, sc, flap, list: [], reach };
+    const sp = resolveSpecies(def, shapes), A = speciesAtlas(sp);
+    const k = { sp, A, geo: speciesGeometry(sp, A), id: kinds.size, get mesh() { return D.mesh ?? { visible: false }; } };
     kinds.set(def.name, k);
+    D.stale = true;
     return k;
+  };
+  // the one geometry and the one texture, over every species so far
+  const build = () => {
+    const ks = [...kinds.values()], W = Math.max(...ks.map((k) => k.A.W)), H = ks.reduce((h, k) => h + k.A.H + 4, 0);
+    const cv = typeof OffscreenCanvas !== "undefined" ? new OffscreenCanvas(W, H) : Object.assign(document.createElement("canvas"), { width: W, height: H });
+    const g = cv.getContext("2d");
+    const G0 = ks[0].geo, nV = G0.attributes.position.count, data = new Float32Array(ks.length * nV * 8);
+    let y = 0, reach = 0;
+    for (const k of ks) {
+      g.drawImage(k.A.canvas, 0, y);
+      const G = k.geo, P = G.attributes.position.array, U = G.attributes.uv.array;
+      if (G.attributes.position.count !== nV || G.index.count !== G0.index.count) throw new Error(`butterflies: ${k.sp.name}'s mesh is not the others'`);
+      // (its uv into its row: u scaled by its width, v -- 1 at the canvas's top -- moved down by the rows above it)
+      for (let i = 0; i < nV; i++) data.set([P[i * 3], P[i * 3 + 1], P[i * 3 + 2], U[i * 2] * k.A.W / W, 1 - (y + (1 - U[i * 2 + 1]) * k.A.H) / H], (k.id * nV + i) * 8);
+      G.computeBoundingSphere(); reach = Math.max(reach, G.boundingSphere.radius);
+      y += k.A.H + 4;
+    }
+    const geo = new THREE.InstancedBufferGeometry();
+    geo.setAttribute("position", G0.attributes.position);
+    geo.setAttribute("side", G0.attributes.side);
+    geo.setAttribute("vid", new THREE.Float32BufferAttribute(Float32Array.from({ length: nV }, (_, i) => i), 1));
+    geo.setIndex(G0.index);
+    const dataTex = new THREE.DataTexture(data, nV * 2, ks.length, THREE.RGBAFormat, THREE.FloatType);
+    dataTex.minFilter = dataTex.magFilter = THREE.NearestFilter; dataTex.generateMipmaps = false; dataTex.needsUpdate = true;
+    geo.boundingSphere = new THREE.Sphere();   // (culled as a whole: a sphere round where the fliers are now, update())
+    const tex = new THREE.CanvasTexture(cv);
+    tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = true; tex.minFilter = THREE.LinearMipmapLinearFilter; tex.anisotropy = 4;
+    if (D.mesh) { scene.remove(D.mesh); D.geo.dispose(); D.tex.dispose(); D.dataTex.dispose(); D.mesh.material.dispose(); }
+    D.mesh = new THREE.Mesh(geo, speciesMaterial(tex, dataTex, at, sc, flap, ik));
+    Object.assign(D, { geo, tex, dataTex, reach, stale: false });
+    scene.add(D.mesh);
   };
   return {
     add(def) {
+      if (all.length >= CAP) return null;
       const k = kindOf(def);
-      if (k.list.length >= cap) return null;
       const b = { position: new THREE.Vector3(), rotY: 0, animT: 0, phase: all.length * 1.7, hz: def.fly?.hz ?? 4, k };
-      k.list.push(b); all.push(b);
+      all.push(b);
       return b;
     },
     update(t) {
-      for (const k of kinds.values()) {
-        k.list.forEach((b, i) => {
-          k.at.array.set([b.position.x, b.position.y, b.position.z, b.rotY], i * 4);   // (the body's forward, +x, turned to the heading as the herds turn theirs)
-          k.sc.array[i] = scale * (b.size ?? 1);
-          // the flap: up over the back and down below level, on the wanderer's clock (still while it glides)
-          k.flap.array[i] = .55 + .8 * Math.sin(2 * Math.PI * b.hz * b.animT + b.phase);
-        });
-        k.geo.instanceCount = k.list.length;
-        k.at.needsUpdate = k.sc.needsUpdate = k.flap.needsUpdate = true;
-        const S = k.geo.boundingSphere.makeEmpty();
-        for (const b of k.list) S.expandByPoint(b.position);
-        S.radius += k.reach * scale * 1.5;   // (a wing's reach at the largest size)
-        k.mesh.visible = k.list.length > 0;
-      }
+      if (D.stale) build();
+      if (!D.mesh) return;
+      const S = D.geo.boundingSphere.makeEmpty();
+      all.forEach((b, i) => {
+        at.array.set([b.position.x, b.position.y, b.position.z, b.rotY], i * 4);   // (the body's forward, +x, turned to the heading as the herds turn theirs)
+        sc.array[i] = scale * (b.size ?? 1);
+        ik.array[i] = b.k.id;
+        // the flap: up over the back and down below level, on the wanderer's clock (still while it glides)
+        flap.array[i] = .55 + .8 * Math.sin(2 * Math.PI * b.hz * b.animT + b.phase);
+        S.expandByPoint(b.position);
+      });
+      S.radius += D.reach * scale * 1.5;   // (a wing's reach at the largest size)
+      D.geo.instanceCount = all.length;
+      at.needsUpdate = sc.needsUpdate = flap.needsUpdate = ik.needsUpdate = true;
+      D.mesh.visible = all.length > 0;
     },
     get count() { return all.length; },
     get all() { return all; },   // (every flier: the checks look at one)

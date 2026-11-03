@@ -1,6 +1,6 @@
 {
   "name": "Domed arcade",
-  "_about": "A ROW OF DOMED BAYS -- the portico of an Ottoman mosque, a medrese's cells' gallery, a caravanserai's arcade: n square bays B apart along x, centred on x = 0; a pointed ARCADE along the front (z = 0, facing +z), arched CROSS WALLS between the bays, a BACK WALL (at z = -B) with a window in every bay and a gate in the middle, and over every bay PENDENTIVES, a low drum and a small dome. The bays' clear square is B - p; the piers and walls are p thick.",
+  "_about": "A ROW OF DOMED BAYS -- the portico of an Ottoman mosque, a medrese's cells' gallery, a caravanserai's arcade: n square bays B apart along x, centred on x = 0; a pointed ARCADE along the front (z = 0, facing +z), arched CROSS WALLS between the bays, a BACK WALL (at z = -B) with a window in every bay and a gate in the middle, and over every bay PENDENTIVES, a low drum and a small dome. The bays' clear square is B - p; the piers and walls are p thick. Closed (`front` wall | door | doors) it is a DOMED HALL -- a treasury, the Divan's chambers, a kitchen; `chimney` yes sets a stack on every dome; `backWin` arches opens the back wall into a second row behind.",
   "params": {
     "detail": 4,
     "n": 5,
@@ -34,17 +34,34 @@
     "_half": "the back wall's windows either side of the gate: n is odd, 3 or more (a gate gW = wW is one more window)",
     "back": 1,
     "ends": 1,
-    "_back": "1: a back wall of its own; 0: the row stands against another building's wall. ends 1: walls closing both ends"
+    "_back": "1: a back wall of its own; 0: the row stands against another building's wall. ends 1: walls closing both ends",
+    "front": "arcade",
+    "dOff": 0,
+    "_front": "arcade (open), wall (closed, a window every bay), door (and a door dOff from the middle), doors (a door every bay)",
+    "backWin": "gate",
+    "_backWin": "the back wall's openings: gate (windows and a gate in the middle) or arches (an arch every bay, cw/cs: a spine between two rows)",
+    "chimney": "no",
+    "chR": "s * 0.15",
+    "chH": "s * 0.8",
+    "chCap": "cone",
+    "_chimney": "yes: a chimney chR, chH over every dome's crown, capped by a cone or a dome (chCap)"
   },
   "build": [
     "arcade",
+    "front wall",
+    "front wall door",
+    "front wall doors",
     "cross walls",
     "end walls",
     "back wall",
+    "back arches",
     "pendentives",
     "drums",
     "domes",
-    "finials"
+    "finials",
+    "chimneys",
+    "chimney caps",
+    "chimney domes"
   ],
   "parts": {
     "arcade": {
@@ -73,7 +90,126 @@
           "spread": 0.4
         }
       },
+      "when": {
+        "front": "arcade"
+      },
       "_about": "the arcade to the court: a pointed arch in every bay, on the row's front line (z = 0)"
+    },
+    "front wall": {
+      "type": "wall",
+      "width": "arcL",
+      "height": "crown",
+      "thickness": "p",
+      "at": [
+        [
+          0,
+          0,
+          "p / 2",
+          0
+        ]
+      ],
+      "glass": true,
+      "tiers": [
+        {
+          "openings": {
+            "every": "B",
+            "width": "wW",
+            "end": "(B + p - wW) / 2",
+            "sill": "wSill",
+            "springing": "wSpr",
+            "head": {
+              "profile": "pointed",
+              "spread": 0.4
+            }
+          }
+        }
+      ],
+      "when": {
+        "front": "wall"
+      },
+      "_about": "front wall: a closed row, a window in every bay"
+    },
+    "front wall door": {
+      "type": "wall",
+      "width": "arcL",
+      "height": "crown",
+      "thickness": "p",
+      "at": [
+        [
+          0,
+          0,
+          "p / 2",
+          0
+        ]
+      ],
+      "glass": true,
+      "tiers": [
+        {
+          "openings": {
+            "every": "B",
+            "width": "wW",
+            "end": "(B + p - wW) / 2",
+            "sill": "wSill",
+            "springing": "wSpr",
+            "head": {
+              "profile": "pointed",
+              "spread": 0.4
+            },
+            "with": [
+              {
+                "at": "dOff",
+                "width": "gW",
+                "sill": 0,
+                "springing": "gS",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.4
+                },
+                "glass": false
+              }
+            ]
+          }
+        }
+      ],
+      "when": {
+        "front": "door"
+      },
+      "_about": "front door: the windows and a door dOff from the middle"
+    },
+    "front wall doors": {
+      "type": "wall",
+      "width": "arcL",
+      "height": "crown",
+      "thickness": "p",
+      "at": [
+        [
+          0,
+          0,
+          "p / 2",
+          0
+        ]
+      ],
+      "glass": true,
+      "tiers": [
+        {
+          "openings": {
+            "every": "B",
+            "width": "gW",
+            "end": "(B + p - gW) / 2",
+            "sill": 0,
+            "springing": "gS",
+            "head": {
+              "profile": "pointed",
+              "spread": 0.4
+            },
+            "glass": false
+          }
+        }
+      ],
+      "when": {
+        "front": "doors"
+      },
+      "_about": "front doors: a door into every bay (a row of kitchens on their street)"
     },
     "cross walls": {
       "type": "wall",
@@ -178,7 +314,50 @@
           "glass": false
         }
       },
+      "when": {
+        "backWin": "gate"
+      },
       "_about": "the back wall: a window in every bay, and in the middle of an odd row a gate"
+    },
+    "back arches": {
+      "type": "wall",
+      "width": "L - p",
+      "height": "crown + dk + 0.6",
+      "thickness": "p",
+      "at": [
+        [
+          0,
+          0,
+          "0 - B - p / 2",
+          3.141592653589793
+        ]
+      ],
+      "repeat": {
+        "count": "back",
+        "step": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "glass": false,
+      "openings": {
+        "pattern": "n",
+        "width": "cw",
+        "gap": "B - cw",
+        "end": "(B - p - cw) / 2",
+        "sill": 0,
+        "springing": "cs",
+        "head": {
+          "profile": "pointed",
+          "spread": 0.4
+        }
+      },
+      "when": {
+        "backWin": "arches"
+      },
+      "_about": "backWin arches: the back wall a spine of arches, one in every bay -- two rows back to back, one space"
     },
     "pendentives": {
       "type": "pendentives",
@@ -293,7 +472,117 @@
       },
       "standsOn": [
         "domes"
-      ]
+      ],
+      "when": {
+        "chimney": "no"
+      }
+    },
+    "chimneys": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": "chR"
+      },
+      "height": "chH + s * 0.1",
+      "at": [
+        [
+          "B / 2 - L / 2",
+          "crown + dk + dh + s / 2 + dt - s * 0.1",
+          "0 - B / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "B",
+          0,
+          0,
+          0
+        ]
+      },
+      "standsOn": [
+        "domes"
+      ],
+      "when": {
+        "chimney": "yes"
+      },
+      "courses": [
+        {
+          "y": "chH + s * 0.1 - 0.5",
+          "h": 0.3,
+          "out": 0.15,
+          "profile": "band"
+        }
+      ],
+      "_about": "chimney yes: an octagonal stack chR across, chH over the dome's crown, a band under its top"
+    },
+    "chimney caps": {
+      "type": "dome",
+      "radius": "chR + 0.15",
+      "thickness": 0,
+      "sides": 8,
+      "head": {
+        "profile": "trigonal",
+        "rise": "chR * 0.9"
+      },
+      "at": [
+        [
+          "B / 2 - L / 2",
+          "crown + dk + dh + s / 2 + dt + chH",
+          "0 - B / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "B",
+          0,
+          0,
+          0
+        ]
+      },
+      "standsOn": [
+        "chimneys"
+      ],
+      "when": {
+        "chimney": "yes",
+        "chCap": "cone"
+      }
+    },
+    "chimney domes": {
+      "type": "dome",
+      "radius": "chR + 0.15",
+      "thickness": 0,
+      "sides": 8,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          "B / 2 - L / 2",
+          "crown + dk + dh + s / 2 + dt + chH",
+          "0 - B / 2",
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "n",
+        "step": [
+          "B",
+          0,
+          0,
+          0
+        ]
+      },
+      "standsOn": [
+        "chimneys"
+      ],
+      "when": {
+        "chimney": "yes",
+        "chCap": "dome"
+      }
     },
     "bays space": {
       "type": "interior",

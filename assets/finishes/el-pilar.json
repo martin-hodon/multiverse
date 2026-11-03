@@ -1,27 +1,568 @@
 {
   "name": "El Pilar",
   "building": "architecture/el-pilar",
-  "_about": "El Pilar: brick with stone trim, the cupolas in glazed tiles of blue, yellow, green and white, the roofs in red tiles; inside, frescoed cupolas and a marble floor.",
+  "_about": "El Pilar: warm red-brown brick walls and towers, every dressing -- window surrounds, the orders, courses, portals, balustrades, statues -- in pale stone; the eleven domes in glazed tiles laid in diamonds of green, yellow, blue and white (the great one in a grey-green glaze of scales, its ribs in stone), the lanterns' caps in lead, the towers' helms in green copper with gilt balls, the roofs in buff glazed tile; inside, white stucco picked out in gold, the cupolas and the coreto's vault painted (Goya, the Bayeus, González Velázquez), Forment's retablo in alabaster, the Santa Capilla in jasper and gilt, the coro in oak, marble floors in patterns.",
   "stone": {
     "color": "#a65f45",
     "accent": "#8e4f39",
     "pat": "brick"
   },
   "rules": [
-    {"parts": "kind:railing", "color": "#2e2f31", "accent": "#1f2022", "_about": "iron railings"},
-    {"parts": ["cornice", "piers", "wall piers", "portal"], "pattern": "stone/ashlar fine", "palette": "limestone"},
-    {"parts": ["kind:barrel", "kind:pendentives"], "color": "#e2d6c0", "accent": "#cdbfa6"},
-    {"parts": "central dome/dome", "surface": "roof", "pattern": "roofs/glazed diamonds", "palette": "el-pilar-green"},
-    {"parts": "nave cupolas/dome", "surface": "roof", "pattern": "roofs/glazed diamonds", "palette": "el-pilar"},
-    {"parts": "aisle cupolas/dome", "surface": "roof", "pattern": "roofs/glazed chevrons", "palette": "el-pilar"},
-    {"parts": ["climbed tower/cap", "towers/cap"], "surface": "roof", "pattern": "roofs/glazed diamonds", "palette": "el-pilar"},
-    {"parts": ["central dome/lantern/cap"], "pattern": "roofs/gold leaf"},
-    {"parts": ["nave cupolas/lantern/cap", "aisle cupolas/lantern/cap", "climbed tower/lantern/cap", "towers/lantern/cap"], "pattern": "roofs/glazed diamonds", "palette": "el-pilar-green"},
-    {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/coppi", "palette": "tile-red"},
-    {"parts": "kind:dome", "side": "in", "pattern": "stone/plaster", "palette": "baroque-rose"},
-    {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-grey"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "granite"},
-    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
-    {"surface": "wall", "pattern": "stone/brick", "palette": "brick"}
+    {
+      "parts": [
+        "clocks/hands",
+        "clocks/marks"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "iron",
+      "_about": "the hands and hour marks"
+    },
+    {
+      "parts": [
+        "clocks/ring",
+        "clocks/hub"
+      ],
+      "pattern": "roofs/gold leaf"
+    },
+    {
+      "parts": [
+        "clocks/dial",
+        "clocks"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "the white dials"
+    },
+    {
+      "parts": [
+        "helms/ball",
+        "helms/cross",
+        "great dome/lantern/finial",
+        "small domes/lantern/finial",
+        "middle domes/lantern/finial"
+      ],
+      "pattern": "roofs/gold leaf",
+      "_about": "the gilt balls, crosses and finials"
+    },
+    {
+      "parts": [
+        "helms/bulb",
+        "helms/bulb 2",
+        "helms/spike"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the towers' helms in green copper"
+    },
+    {
+      "parts": [
+        "small domes/lantern/cap",
+        "middle domes/lantern/cap",
+        "great dome/lantern/cap"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "lead",
+      "_about": "the lanterns' caps in lead"
+    },
+    {
+      "parts": [
+        "great dome/dome"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/fish scale",
+      "palette": "pilar-glaze-grey",
+      "scale": 2.2,
+      "_about": "the great dome: glazed scales in grey-green and white"
+    },
+    {
+      "parts": [
+        "middle domes/dome"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/glazed diamonds",
+      "palette": "el-pilar-green",
+      "scale": 4.0,
+      "_about": "the middling domes: big diamonds of green and yellow tiles, white and blue at their crossings"
+    },
+    {
+      "parts": [
+        "small domes/dome"
+      ],
+      "surface": "roof",
+      "within": [
+        -70,
+        -40,
+        0,
+        0
+      ],
+      "pattern": "roofs/glazed diamonds",
+      "palette": "el-pilar",
+      "scale": 3.5,
+      "_about": "the small domes: diamonds of blue and yellow, of white and green, in turn"
+    },
+    {
+      "parts": [
+        "small domes/dome"
+      ],
+      "surface": "roof",
+      "within": [
+        0,
+        0,
+        70,
+        40
+      ],
+      "pattern": "roofs/glazed diamonds",
+      "palette": "el-pilar",
+      "scale": 3.5
+    },
+    {
+      "parts": [
+        "small domes/dome"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/glazed diamonds",
+      "palette": "el-pilar-white",
+      "scale": 3.5
+    },
+    {
+      "parts": [
+        "great dome/ribs"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone",
+      "_about": "the great dome's ribs in stone"
+    },
+    {
+      "parts": [
+        "kind:roof",
+        "great pendentives deck 1",
+        "great pendentives deck 2",
+        "great pendentives deck 3",
+        "great pendentives deck 4",
+        "middle pendentives deck 1",
+        "middle pendentives deck 2",
+        "middle pendentives deck 3",
+        "middle pendentives deck 4",
+        "small pendentives deck 1",
+        "small pendentives deck 2",
+        "small pendentives deck 3",
+        "small pendentives deck 4"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/coppi",
+      "palette": "pilar-tile",
+      "_about": "the roofs in buff glazed tile"
+    },
+    {
+      "parts": [
+        "santa capilla columns shafts",
+        "santa capilla columns bases",
+        "pillar"
+      ],
+      "pattern": "stone/marble",
+      "palette": "pilar-jasper",
+      "_about": "the Santa Capilla's columns and the pillar in jasper"
+    },
+    {
+      "parts": [
+        "pillar base"
+      ],
+      "pattern": "materials/metal",
+      "palette": "silver",
+      "_about": "the pillar's silver foot"
+    },
+    {
+      "parts": [
+        "pillar canopy",
+        "pillar canopy posts",
+        "santa capilla entablature",
+        "santa capilla columns capitals",
+        "santa capilla columns abaci",
+        "dome rings",
+        "small dome rings",
+        "pier imposts",
+        "coro grille",
+        "coro grille posts"
+      ],
+      "pattern": "roofs/gold leaf",
+      "_about": "gilt: the cornice rings under the domes, the piers' imposts, the Santa Capilla's entablature and canopy, Celma's grille"
+    },
+    {
+      "parts": [
+        "santa capilla dome"
+      ],
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "pilar-fresco",
+      "_about": "the Santa Capilla's painted dome"
+    },
+    {
+      "parts": [
+        "santa capilla dome"
+      ],
+      "pattern": "roofs/gold leaf"
+    },
+    {
+      "parts": [
+        "santa capilla pedestals",
+        "venida",
+        "trascoro",
+        "trascoro niche",
+        "coro walls",
+        "pier bases"
+      ],
+      "pattern": "stone/marble",
+      "palette": "marble-rose",
+      "_about": "marble: the pedestals, the Venida's altar, the coro's walls, the piers' bases"
+    },
+    {
+      "parts": [
+        "retablo",
+        "retablo predella",
+        "retablo back",
+        "retablo cornice",
+        "retablo pinnacle middle",
+        "retablo pinnacle north",
+        "retablo pinnacle south",
+        "retablo posts",
+        "retablo post pinnacles",
+        "retablo canopies"
+      ],
+      "pattern": "stone/marble",
+      "palette": "alabaster",
+      "_about": "Forment's retablo in alabaster"
+    },
+    {
+      "parts": [
+        "coro stalls north",
+        "coro stalls south",
+        "coro stalls north front",
+        "coro stalls south front",
+        "coro stalls west",
+        "coreto stalls north",
+        "coreto stalls south",
+        "coro dais",
+        "coro dais west",
+        "organ loft",
+        "coreto organ loft"
+      ],
+      "pattern": "timber/wood",
+      "palette": "oak",
+      "_about": "the coro's and coreto's oak stalls and lofts"
+    },
+    {
+      "parts": [
+        "small domes/dome",
+        "middle domes/dome",
+        "great dome/dome",
+        "small pendentives",
+        "middle pendentives",
+        "great pendentives"
+      ],
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "pilar-fresco",
+      "_about": "the cupolas and their pendentives painted (Goya's Regina Martyrum on the Ebro side, the Bayeus')"
+    },
+    {
+      "parts": [
+        "aisle vaults 1",
+        "aisle vaults 2",
+        "nave vaults 3",
+        "nave vaults 4"
+      ],
+      "side": "in",
+      "within": [
+        43.0,
+        -10,
+        56.0,
+        10
+      ],
+      "pattern": "stone/plaster",
+      "palette": "pilar-fresco",
+      "_about": "the coreto's vault: Goya's Adoration of the Name of God"
+    },
+    {
+      "parts": [
+        "kind:moulding"
+      ],
+      "side": "in",
+      "pattern": "roofs/gold leaf",
+      "_about": "the mouldings inside gilt"
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "towers clock stage",
+        "towers arch stage",
+        "towers belfry",
+        "nw tower shaft",
+        "nw tower clock stage",
+        "nw tower arch stage",
+        "nw tower belfry",
+        "nw tower deck",
+        "towers deck",
+        "towers floors",
+        "lift shaft",
+        "nw tower stair"
+      ],
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/flagstones",
+      "palette": "pilar-tile",
+      "_about": "the towers' floors in tile"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "within": [
+        28.4,
+        -7.0,
+        38.4,
+        7.0
+      ],
+      "pattern": "floors/compass",
+      "palette": "marble-rose",
+      "_about": "the Santa Capilla's floor, a marble star"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "within": [
+        -39.2,
+        -8.55,
+        -27.6,
+        8.55
+      ],
+      "pattern": "floors/checker",
+      "palette": "marble-bw",
+      "_about": "the coro's floor"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "within": [
+        -55.0,
+        -8.55,
+        55.0,
+        8.55
+      ],
+      "pattern": "floors/opus sectile",
+      "palette": "marble-grey",
+      "_about": "the middle nave in marble"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/checker diagonal",
+      "palette": "marble-grey",
+      "_about": "marble floors"
+    },
+    {
+      "surface": "ceiling",
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "white stucco vaults and arches"
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "nw tower shaft"
+      ],
+      "surface": "wall",
+      "below": 16.0,
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "within": [
+        54.8,
+        23.8,
+        65.0,
+        24.3
+      ],
+      "_about": "the towers' faces toward the end and side chapels, in stucco as the chapels are"
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "nw tower shaft"
+      ],
+      "surface": "wall",
+      "below": 16.0,
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "within": [
+        54.8,
+        23.8,
+        55.3,
+        34.4
+      ]
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "nw tower shaft"
+      ],
+      "surface": "wall",
+      "below": 16.0,
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "within": [
+        54.8,
+        -24.3,
+        65.0,
+        -23.8
+      ]
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "nw tower shaft"
+      ],
+      "surface": "wall",
+      "below": 16.0,
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "within": [
+        54.8,
+        -34.4,
+        55.3,
+        -23.8
+      ]
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "nw tower shaft"
+      ],
+      "surface": "wall",
+      "below": 16.0,
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "within": [
+        -65.0,
+        23.8,
+        -54.8,
+        24.3
+      ]
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "nw tower shaft"
+      ],
+      "surface": "wall",
+      "below": 16.0,
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "within": [
+        -55.3,
+        23.8,
+        -54.8,
+        34.4
+      ]
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "nw tower shaft"
+      ],
+      "surface": "wall",
+      "below": 16.0,
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "within": [
+        -65.0,
+        -24.3,
+        -54.8,
+        -23.8
+      ]
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "nw tower shaft"
+      ],
+      "surface": "wall",
+      "below": 16.0,
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "within": [
+        -55.3,
+        -34.4,
+        -54.8,
+        -23.8
+      ]
+    },
+    {
+      "parts": [
+        "towers shaft",
+        "towers clock stage",
+        "towers arch stage",
+        "towers belfry",
+        "nw tower shaft",
+        "nw tower clock stage",
+        "nw tower arch stage",
+        "nw tower belfry",
+        "nw tower deck",
+        "towers deck",
+        "towers floors",
+        "lift shaft"
+      ],
+      "side": "in",
+      "pattern": "stone/brick",
+      "palette": "pilar-brick",
+      "_about": "the towers bare brick inside"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "white stucco walls"
+    },
+    {
+      "parts": [
+        "kind:moulding",
+        "kind:column",
+        "kind:colonnade",
+        "frontispiece",
+        "relief",
+        "portico west",
+        "portico east",
+        "portal columns west",
+        "portal columns east",
+        "statue pedestals",
+        "urns",
+        "urn knobs",
+        "wall heads",
+        "end wall heads",
+        "great dome/buttress entablature",
+        "great dome/buttress cornice",
+        "great dome/paired columns",
+        "nw tower deck",
+        "towers deck",
+        "helms/foot",
+        "helms/lantern",
+        "helms/lantern head",
+        "helms/lantern 2",
+        "helms/lantern 2 head"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone",
+      "_about": "pale stone: every course, surround, column, portal, balustrade, the helms' lanterns"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "limestone",
+      "_about": "the steps and the decks in stone"
+    },
+    {
+      "surface": "wall",
+      "pattern": "stone/brick",
+      "palette": "pilar-brick",
+      "_about": "warm red-brown brick"
+    }
   ]
 }

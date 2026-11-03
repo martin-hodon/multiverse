@@ -1,15 +1,56 @@
 {
-  "name": "Kandariya Mahadeva Temple",
-  "building": "architecture/kandariya",
-  "_about": "Kandariya Mahadeva: all of it the buff sandstone of Panna, coursed -- the terrace, the plinths, the walls, the roofs and the tower alike, one stone from the ground to the kalasha; the floors flagged in it, the cell inside dark.",
-  "stone": {
-    "color": "#d2b48a",
-    "accent": "#a88a62",
-    "pat": "ashlar"
+ "name": "Kandariya Mahadeva Temple",
+ "building": "architecture/kandariya",
+ "_about": "Kandariya Mahadeva: all of it the buff sandstone of Panna, coursed -- the terrace, the plinths, the walls, the roofs and the tower alike, one stone from the ground to the kalasha; the floors flagged in it, the cell inside dark.",
+ "stone": {
+  "color": "#d2b48a",
+  "accent": "#a88a62",
+  "pat": "ashlar"
+ },
+ "rules": [
+  {
+   "parts": [
+    "sanctum walls",
+    "sanctum pratirathas",
+    "sanctum pratirathas across",
+    "sanctum bhadra",
+    "antarala walls",
+    "hall walls"
+   ],
+   "surface": "wall",
+   "above": 5.5,
+   "below": 11.2,
+   "pattern": "stone/nagara figures",
+   "palette": "sandstone",
+   "_about": "the jangha: its registers of carved figures, the temple's glory"
   },
-  "rules": [
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone"},
-    {"parts": ["shikhara", "kind:roof"], "pattern": "stone/ashlar fine", "palette": "sandstone", "_about": "the roofs and the tower in finer courses"},
-    {"pattern": "stone/ashlar", "palette": "sandstone"}
-  ]
+  {
+   "parts": [
+    "shikhara",
+    "shikhara shringas",
+    "shikhara karna shringas"
+   ],
+   "pattern": "stone/gavaksha mesh",
+   "palette": "sandstone",
+   "_about": "the tower under its net of horseshoe dormers"
+  },
+  {
+   "surface": "floor",
+   "pattern": "floors/flagstones",
+   "palette": "sandstone"
+  },
+  {
+   "parts": [
+    "shikhara",
+    "kind:roof"
+   ],
+   "pattern": "stone/ashlar fine",
+   "palette": "sandstone",
+   "_about": "the roofs and the tower in finer courses"
+  },
+  {
+   "pattern": "stone/ashlar",
+   "palette": "sandstone"
+  }
+ ]
 }

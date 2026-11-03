@@ -75,9 +75,15 @@ export const cloudShade = wgslFn(`
 export const meadowPatches = wgslFn(`
   fn meadowPatches(p: vec2<f32>) -> vec3<f32> {
     let m = valueNoise2(p * 0.017) * 0.65 + valueNoise2(p * 0.052 + vec2<f32>(7.0, 3.0)) * 0.35;
-    return mix(vec3<f32>(0.86, 0.95, 0.82), vec3<f32>(1.1, 1.05, 0.88), smoothstep(0.3, 0.72, m));
+    let n = valueNoise2(p * 0.21 + vec2<f32>(11.0, 5.0));
+    let lush = valueNoise2(p * 0.0061 + vec2<f32>(2.0, 19.0));
+    // (broad drifts, drier and lusher; through them smaller swathes, and over the whole a slow change of green: a meadow is never one colour)
+    let tone = mix(vec3<f32>(0.68, 0.9, 0.68), vec3<f32>(1.24, 1.12, 0.82), smoothstep(0.34, 0.66, m));
+    return tone * mix(vec3<f32>(0.86, 0.95, 0.88), vec3<f32>(1.1, 1.05, 0.96), smoothstep(0.25, 0.75, n)) * mix(vec3<f32>(1.04, 1.0, 0.92), vec3<f32>(0.95, 1.01, 1.03), smoothstep(0.25, 0.75, lush));
   }
 `, [valueNoise]);
 
 // (and the sun's own shadows -- the buildings', baked once: sunshadow.js -- on everything that lies on the land)
-export const landShade = () => cloudShade({ p: positionWorld.xz, t: CLOUD.t, amount: CLOUD.amount, cover: CLOUD.cover }).mul(sunShade());
+// (a vec3: in shade the sky is the light, so a shadow is a little blue, never grey)
+const shadeTint = wgslFn(`fn shadeTint(s: f32) -> vec3<f32> { let d = 1.0 - s; return vec3<f32>(s) * vec3<f32>(1.0 - 0.3 * d, 1.0 - 0.14 * d, 1.0 + 0.22 * d); }`);
+export const landShade = () => shadeTint({ s: cloudShade({ p: positionWorld.xz, t: CLOUD.t, amount: CLOUD.amount, cover: CLOUD.cover }).mul(sunShade()) });

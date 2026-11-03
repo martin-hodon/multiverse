@@ -1,0 +1,1477 @@
+{
+ "name": "Manueline portal",
+ "_about": "A MANUELINE PORTAL (Belem, Batalha, Tomar): a carved screen standing out from a wall round TWIN DOORS -- two buttress PIERS wound with twisted rope shafts and crowned with pinnacles, a splayed EMBRASURE of `orders` (0-3) stepped jambs with a twisted shaft on each, the TRUMEAU between the doors a twisted column carrying a statue under a canopy, the doors' heads under a deep basket ARCHIVOLT, the relief FIELD over them, and up the middle the TABERNACLE: `tiers` (1-4) NICHES one over the next, each `taper` times narrower and shallower than the one under it, a statue in each under its canopy and pinnacles, the cross of the Order of Christ on top. `W` wide, `H` high (the cross's top), the piers `pw` wide and `D` out from the wall, the doors `doorW` wide each with their crowns at `doorH`, `gap` between them. The wall's own doorways are the building's (manueline.py portal_doors): two openings `doorW` wide, crowns at `doorH`, centred `gap / 2 + doorW / 2` either side of the middle. Its frame: z out of the wall (the wall's face at z 0); every piece runs `wallIn` back into the wall.",
+ "params": {
+  "detail": 4,
+  "W": 12.0,
+  "H": 32.0,
+  "D": 2.0,
+  "pw": 1.6,
+  "doorW": 2.6,
+  "doorH": 6.2,
+  "gap": 1.0,
+  "tiers": 4,
+  "taper": 0.85,
+  "orders": 3,
+  "wallIn": 0.4,
+  "fieldD": 0.6,
+  "archR": "min(3.2, (W / 2 - pw) * 0.75)",
+  "band": 0.9,
+  "tabW": "min(2.8, W * 0.24)",
+  "_tiers": "the tabernacle's niches (1-4), one over the next, from over the archivolt to under the cross",
+  "_orders": "the embrasure's stepped jambs each side (0-3)"
+ },
+ "build": [
+  "piers",
+  "pier shafts",
+  "pier pinnacles",
+  "pier ledges",
+  "pier canopies",
+  "pier statues",
+  "field",
+  "archivolt",
+  "jamb order 1",
+  "jamb shafts 1",
+  "jamb order 2",
+  "jamb shafts 2",
+  "jamb order 3",
+  "jamb shafts 3",
+  "trumeau",
+  "trumeau bracket",
+  "trumeau statue",
+  "trumeau canopy",
+  "trumeau spire",
+  "niche 1 back",
+  "niche 1 posts",
+  "niche 1 canopy",
+  "niche 1 ledge",
+  "niche 1 pinnacles",
+  "niche 1 statue",
+  "niche 2 back",
+  "niche 2 posts",
+  "niche 2 canopy",
+  "niche 2 ledge",
+  "niche 2 pinnacles",
+  "niche 2 statue",
+  "niche 3 back",
+  "niche 3 posts",
+  "niche 3 canopy",
+  "niche 3 ledge",
+  "niche 3 pinnacles",
+  "niche 3 statue",
+  "niche 4 back",
+  "niche 4 posts",
+  "niche 4 canopy",
+  "niche 4 ledge",
+  "niche 4 pinnacles",
+  "niche 4 statue",
+  "field ledges",
+  "field statues",
+  "field canopies",
+  "cross shaft",
+  "cross arms"
+ ],
+ "parts": {
+  "piers": {
+   "type": "box",
+   "width": "pw",
+   "length": "D + wallIn",
+   "height": "H * 0.72",
+   "at": [
+    [
+     "0 - (W / 2 - pw / 2)",
+     0,
+     "(D - wallIn) / 2",
+     0
+    ],
+    [
+     "W / 2 - pw / 2",
+     0,
+     "(D - wallIn) / 2",
+     0
+    ]
+   ],
+   "_about": "the two buttress piers either side, carved all over"
+  },
+  "pier shafts": {
+   "type": "column",
+   "radius": "pw * 0.2",
+   "height": "H * 0.72",
+   "sides": 12,
+   "twist": {
+    "lobes": 3,
+    "depth": 0.24,
+    "turns": "max(1, H * 0.72 / 2.0)",
+    "rows": 4
+   },
+   "at": [
+    [
+     "0 - (W / 2 - pw / 2) - pw * 0.32",
+     0,
+     "D + pw * 0.05",
+     0
+    ],
+    [
+     "0 - (W / 2 - pw / 2) + pw * 0.32",
+     0,
+     "D + pw * 0.05",
+     0
+    ],
+    [
+     "W / 2 - pw / 2 - pw * 0.32",
+     0,
+     "D + pw * 0.05",
+     0
+    ],
+    [
+     "W / 2 - pw / 2 + pw * 0.32",
+     0,
+     "D + pw * 0.05",
+     0
+    ]
+   ],
+   "_about": "the twisted rope shafts wound up the piers' fronts"
+  },
+  "pier pinnacles": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": "pw",
+    "h": "H * 0.05",
+    "s": "H * 0.17"
+   },
+   "at": [
+    [
+     "0 - (W / 2 - pw / 2)",
+     "H * 0.72",
+     "(D - wallIn) / 2",
+     0
+    ],
+    [
+     "W / 2 - pw / 2",
+     "H * 0.72",
+     "(D - wallIn) / 2",
+     0
+    ]
+   ],
+   "standsOn": [
+    "piers"
+   ]
+  },
+  "pier ledges": {
+   "type": "box",
+   "width": "pw * 0.6",
+   "length": 0.45,
+   "height": 0.25,
+   "at": [
+    [
+     "0 - (W / 2 - pw / 2)",
+     "H * 0.28",
+     "D + 0.2",
+     0
+    ],
+    [
+     "W / 2 - pw / 2",
+     "H * 0.28",
+     "D + 0.2",
+     0
+    ],
+    [
+     "0 - (W / 2 - pw / 2)",
+     "H * 0.48",
+     "D + 0.2",
+     0
+    ],
+    [
+     "W / 2 - pw / 2",
+     "H * 0.48",
+     "D + 0.2",
+     0
+    ]
+   ],
+   "_about": "brackets on the piers' fronts, a statue on each"
+  },
+  "pier canopies": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": "pw * 0.55",
+    "h": 0.4,
+    "s": 1.3
+   },
+   "at": [
+    [
+     "0 - (W / 2 - pw / 2)",
+     "H * 0.28 + 2.3",
+     "D + 0.2",
+     0
+    ],
+    [
+     "W / 2 - pw / 2",
+     "H * 0.28 + 2.3",
+     "D + 0.2",
+     0
+    ],
+    [
+     "0 - (W / 2 - pw / 2)",
+     "H * 0.48 + 2.3",
+     "D + 0.2",
+     0
+    ],
+    [
+     "W / 2 - pw / 2",
+     "H * 0.48 + 2.3",
+     "D + 0.2",
+     0
+    ]
+   ]
+  },
+  "field": {
+   "type": "box",
+   "width": "W - 2 * pw",
+   "length": "fieldD + wallIn",
+   "height": "H * 0.72 - doorH - 0.2",
+   "at": [
+    [
+     0,
+     "doorH + 0.2",
+     "(fieldD - wallIn) / 2",
+     0
+    ]
+   ],
+   "_about": "the relief field between the piers, over the doors' heads"
+  },
+  "archivolt": {
+   "type": "screen",
+   "outline": [
+    [
+     "(W / 2 - pw) * 1.0",
+     "doorH + 0.6 + archR * 0.0"
+    ],
+    [
+     "(W / 2 - pw) * 0.9659",
+     "doorH + 0.6 + archR * 0.2588"
+    ],
+    [
+     "(W / 2 - pw) * 0.866",
+     "doorH + 0.6 + archR * 0.5"
+    ],
+    [
+     "(W / 2 - pw) * 0.7071",
+     "doorH + 0.6 + archR * 0.7071"
+    ],
+    [
+     "(W / 2 - pw) * 0.5",
+     "doorH + 0.6 + archR * 0.866"
+    ],
+    [
+     "(W / 2 - pw) * 0.2588",
+     "doorH + 0.6 + archR * 0.9659"
+    ],
+    [
+     "(W / 2 - pw) * 0.0",
+     "doorH + 0.6 + archR * 1.0"
+    ],
+    [
+     "(W / 2 - pw) * -0.2588",
+     "doorH + 0.6 + archR * 0.9659"
+    ],
+    [
+     "(W / 2 - pw) * -0.5",
+     "doorH + 0.6 + archR * 0.866"
+    ],
+    [
+     "(W / 2 - pw) * -0.7071",
+     "doorH + 0.6 + archR * 0.7071"
+    ],
+    [
+     "(W / 2 - pw) * -0.866",
+     "doorH + 0.6 + archR * 0.5"
+    ],
+    [
+     "(W / 2 - pw) * -0.9659",
+     "doorH + 0.6 + archR * 0.2588"
+    ],
+    [
+     "(W / 2 - pw) * -1.0",
+     "doorH + 0.6 + archR * 0.0"
+    ],
+    [
+     "(W / 2 - pw + band) * -1.0",
+     "doorH + 0.6 + (archR + band) * 0.0"
+    ],
+    [
+     "(W / 2 - pw + band) * -0.9659",
+     "doorH + 0.6 + (archR + band) * 0.2588"
+    ],
+    [
+     "(W / 2 - pw + band) * -0.866",
+     "doorH + 0.6 + (archR + band) * 0.5"
+    ],
+    [
+     "(W / 2 - pw + band) * -0.7071",
+     "doorH + 0.6 + (archR + band) * 0.7071"
+    ],
+    [
+     "(W / 2 - pw + band) * -0.5",
+     "doorH + 0.6 + (archR + band) * 0.866"
+    ],
+    [
+     "(W / 2 - pw + band) * -0.2588",
+     "doorH + 0.6 + (archR + band) * 0.9659"
+    ],
+    [
+     "(W / 2 - pw + band) * 0.0",
+     "doorH + 0.6 + (archR + band) * 1.0"
+    ],
+    [
+     "(W / 2 - pw + band) * 0.2588",
+     "doorH + 0.6 + (archR + band) * 0.9659"
+    ],
+    [
+     "(W / 2 - pw + band) * 0.5",
+     "doorH + 0.6 + (archR + band) * 0.866"
+    ],
+    [
+     "(W / 2 - pw + band) * 0.7071",
+     "doorH + 0.6 + (archR + band) * 0.7071"
+    ],
+    [
+     "(W / 2 - pw + band) * 0.866",
+     "doorH + 0.6 + (archR + band) * 0.5"
+    ],
+    [
+     "(W / 2 - pw + band) * 0.9659",
+     "doorH + 0.6 + (archR + band) * 0.2588"
+    ],
+    [
+     "(W / 2 - pw + band) * 1.0",
+     "doorH + 0.6 + (archR + band) * 0.0"
+    ]
+   ],
+   "t": "0.9 + fieldD * 0",
+   "at": [
+    [
+     0,
+     0,
+     "fieldD + 0.85",
+     0
+    ]
+   ],
+   "_about": "the archivolt: a deep carved band round the basket arch that gathers both doors under it"
+  },
+  "jamb order 1": {
+   "type": "box",
+   "width": 0.42,
+   "length": "0.15 + wallIn",
+   "height": "doorH + 0.6",
+   "at": [
+    [
+     "0 - (gap / 2 + doorW + 0.21 + 0.0)",
+     0,
+     "(0.15 - wallIn) / 2",
+     0
+    ],
+    [
+     "gap / 2 + doorW + 0.21 + 0.0",
+     0,
+     "(0.15 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, orders - 0))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "_about": "the splayed embrasure: the jambs stepping out in orders"
+  },
+  "jamb shafts 1": {
+   "type": "column",
+   "radius": 0.17,
+   "height": "doorH + 0.6",
+   "sides": 12,
+   "twist": {
+    "lobes": 3,
+    "depth": 0.25,
+    "turns": "max(1, doorH / 1.2)",
+    "rows": 4
+   },
+   "at": [
+    [
+     "0 - (gap / 2 + doorW + 0.21 + 0.0)",
+     0,
+     "0.15",
+     0
+    ],
+    [
+     "gap / 2 + doorW + 0.21 + 0.0",
+     0,
+     "0.15",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, orders - 0))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "jamb order 2": {
+   "type": "box",
+   "width": 0.42,
+   "length": "0.5 + wallIn",
+   "height": "doorH + 0.6",
+   "at": [
+    [
+     "0 - (gap / 2 + doorW + 0.21 + 0.42)",
+     0,
+     "(0.5 - wallIn) / 2",
+     0
+    ],
+    [
+     "gap / 2 + doorW + 0.21 + 0.42",
+     0,
+     "(0.5 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, orders - 1))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "jamb shafts 2": {
+   "type": "column",
+   "radius": 0.17,
+   "height": "doorH + 0.6",
+   "sides": 12,
+   "twist": {
+    "lobes": 3,
+    "depth": 0.25,
+    "turns": "max(1, doorH / 1.2)",
+    "rows": 4
+   },
+   "at": [
+    [
+     "0 - (gap / 2 + doorW + 0.21 + 0.42)",
+     0,
+     "0.5",
+     0
+    ],
+    [
+     "gap / 2 + doorW + 0.21 + 0.42",
+     0,
+     "0.5",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, orders - 1))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "jamb order 3": {
+   "type": "box",
+   "width": 0.42,
+   "length": "0.85 + wallIn",
+   "height": "doorH + 0.6",
+   "at": [
+    [
+     "0 - (gap / 2 + doorW + 0.21 + 0.84)",
+     0,
+     "(0.85 - wallIn) / 2",
+     0
+    ],
+    [
+     "gap / 2 + doorW + 0.21 + 0.84",
+     0,
+     "(0.85 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, orders - 2))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "jamb shafts 3": {
+   "type": "column",
+   "radius": 0.17,
+   "height": "doorH + 0.6",
+   "sides": 12,
+   "twist": {
+    "lobes": 3,
+    "depth": 0.25,
+    "turns": "max(1, doorH / 1.2)",
+    "rows": 4
+   },
+   "at": [
+    [
+     "0 - (gap / 2 + doorW + 0.21 + 0.84)",
+     0,
+     "0.85",
+     0
+    ],
+    [
+     "gap / 2 + doorW + 0.21 + 0.84",
+     0,
+     "0.85",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, orders - 2))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "trumeau": {
+   "type": "column",
+   "radius": "gap * 0.38",
+   "height": "doorH * 0.45",
+   "sides": 12,
+   "twist": {
+    "lobes": 4,
+    "depth": 0.2,
+    "turns": "max(1, doorH * 0.45 / 1.0)",
+    "rows": 4
+   },
+   "at": [
+    [
+     0,
+     0,
+     "gap * 0.3",
+     0
+    ]
+   ],
+   "_about": "the trumeau between the doors: a twisted column"
+  },
+  "trumeau bracket": {
+   "type": "box",
+   "width": "gap * 1.1",
+   "length": "gap * 0.9 + wallIn",
+   "height": 0.25,
+   "at": [
+    [
+     0,
+     "doorH * 0.45",
+     "(gap * 0.9 - wallIn) / 2",
+     0
+    ]
+   ]
+  },
+  "trumeau canopy": {
+   "type": "box",
+   "width": "gap * 1.1",
+   "length": "gap * 0.9 + wallIn",
+   "height": 0.3,
+   "at": [
+    [
+     0,
+     "doorH * 0.45 + 2.25",
+     "(gap * 0.9 - wallIn) / 2",
+     0
+    ]
+   ]
+  },
+  "trumeau spire": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": "gap * 0.7",
+    "h": 0.2,
+    "s": "max(0.4, doorH + 0.2 - (doorH * 0.45 + 2.55) - 0.25)"
+   },
+   "at": [
+    [
+     0,
+     "doorH * 0.45 + 2.55",
+     "gap * 0.3",
+     0
+    ]
+   ],
+   "standsOn": [
+    "trumeau canopy"
+   ]
+  },
+  "niche 1 back": {
+   "type": "box",
+   "width": "tabW * 1",
+   "length": "D * 0.85 * 1 * 0.45 + wallIn",
+   "height": "(H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 0",
+     "(D * 0.85 * 1 * 0.45 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 0))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "_about": "the tabernacle: niches one over the next up the middle, each narrower than the one under it"
+  },
+  "niche 1 posts": {
+   "type": "box",
+   "width": 0.3,
+   "length": "D * 0.85 * 1 + wallIn",
+   "height": "(H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers - 0.45",
+   "at": [
+    [
+     "-1 * (tabW * 1 / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 0",
+     "(D * 0.85 * 1 - wallIn) / 2",
+     0
+    ],
+    [
+     "1 * (tabW * 1 / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 0",
+     "(D * 0.85 * 1 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 0))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 1 canopy": {
+   "type": "box",
+   "width": "tabW * 1",
+   "length": "D * 0.85 * 1 + wallIn",
+   "height": 0.45,
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 0 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers - 0.45",
+     "(D * 0.85 * 1 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 0))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 1 ledge": {
+   "type": "box",
+   "width": "tabW * 1 * 0.45",
+   "length": 0.45,
+   "height": 0.25,
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 0",
+     "D * 0.85 * 1 * 0.45 + 0.2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 0))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 1 pinnacles": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": 0.3,
+    "h": 0.25,
+    "s": 1.1
+   },
+   "at": [
+    [
+     "-1 * (tabW * 1 / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 0 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+     "D * 0.85 * 1 - 0.15",
+     0
+    ],
+    [
+     "1 * (tabW * 1 / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 0 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+     "D * 0.85 * 1 - 0.15",
+     0
+    ]
+   ],
+   "standsOn": [
+    "niche 1 canopy"
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 0))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 1 statue": {
+   "type": "marker",
+   "role": "statue",
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 0 + 0.25",
+     "D * 0.85 * 1 * 0.45 + 0.2",
+     0
+    ]
+   ],
+   "data": {
+    "style": "gothic",
+    "stone": "limestone",
+    "face": -1.5707963,
+    "kind": "woman",
+    "pose": "stand",
+    "scale": 0.85,
+    "seed": 3
+   },
+   "repeat": {
+    "count": "min(1, max(0, tiers - 0))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 2 back": {
+   "type": "box",
+   "width": "tabW * taper",
+   "length": "D * 0.85 * taper * 0.45 + wallIn",
+   "height": "(H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 1",
+     "(D * 0.85 * taper * 0.45 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 1))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 2 posts": {
+   "type": "box",
+   "width": 0.3,
+   "length": "D * 0.85 * taper + wallIn",
+   "height": "(H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers - 0.45",
+   "at": [
+    [
+     "-1 * (tabW * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 1",
+     "(D * 0.85 * taper - wallIn) / 2",
+     0
+    ],
+    [
+     "1 * (tabW * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 1",
+     "(D * 0.85 * taper - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 1))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 2 canopy": {
+   "type": "box",
+   "width": "tabW * taper",
+   "length": "D * 0.85 * taper + wallIn",
+   "height": 0.45,
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 1 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers - 0.45",
+     "(D * 0.85 * taper - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 1))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 2 ledge": {
+   "type": "box",
+   "width": "tabW * taper * 0.45",
+   "length": 0.45,
+   "height": 0.25,
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 1",
+     "D * 0.85 * taper * 0.45 + 0.2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 1))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 2 pinnacles": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": 0.3,
+    "h": 0.25,
+    "s": 1.1
+   },
+   "at": [
+    [
+     "-1 * (tabW * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 1 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+     "D * 0.85 * taper - 0.15",
+     0
+    ],
+    [
+     "1 * (tabW * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 1 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+     "D * 0.85 * taper - 0.15",
+     0
+    ]
+   ],
+   "standsOn": [
+    "niche 2 canopy"
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 1))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 2 statue": {
+   "type": "marker",
+   "role": "statue",
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 1 + 0.25",
+     "D * 0.85 * taper * 0.45 + 0.2",
+     0
+    ]
+   ],
+   "data": {
+    "style": "gothic",
+    "stone": "limestone",
+    "face": -1.5707963,
+    "kind": "man",
+    "pose": "stand",
+    "scale": 0.85,
+    "seed": 4
+   },
+   "repeat": {
+    "count": "min(1, max(0, tiers - 1))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 3 back": {
+   "type": "box",
+   "width": "tabW * taper * taper",
+   "length": "D * 0.85 * taper * taper * 0.45 + wallIn",
+   "height": "(H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 2",
+     "(D * 0.85 * taper * taper * 0.45 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 2))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 3 posts": {
+   "type": "box",
+   "width": 0.3,
+   "length": "D * 0.85 * taper * taper + wallIn",
+   "height": "(H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers - 0.45",
+   "at": [
+    [
+     "-1 * (tabW * taper * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 2",
+     "(D * 0.85 * taper * taper - wallIn) / 2",
+     0
+    ],
+    [
+     "1 * (tabW * taper * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 2",
+     "(D * 0.85 * taper * taper - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 2))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 3 canopy": {
+   "type": "box",
+   "width": "tabW * taper * taper",
+   "length": "D * 0.85 * taper * taper + wallIn",
+   "height": 0.45,
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 2 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers - 0.45",
+     "(D * 0.85 * taper * taper - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 2))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 3 ledge": {
+   "type": "box",
+   "width": "tabW * taper * taper * 0.45",
+   "length": 0.45,
+   "height": 0.25,
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 2",
+     "D * 0.85 * taper * taper * 0.45 + 0.2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 2))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 3 pinnacles": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": 0.3,
+    "h": 0.25,
+    "s": 1.1
+   },
+   "at": [
+    [
+     "-1 * (tabW * taper * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 2 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+     "D * 0.85 * taper * taper - 0.15",
+     0
+    ],
+    [
+     "1 * (tabW * taper * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 2 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+     "D * 0.85 * taper * taper - 0.15",
+     0
+    ]
+   ],
+   "standsOn": [
+    "niche 3 canopy"
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 2))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 3 statue": {
+   "type": "marker",
+   "role": "statue",
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 2 + 0.25",
+     "D * 0.85 * taper * taper * 0.45 + 0.2",
+     0
+    ]
+   ],
+   "data": {
+    "style": "gothic",
+    "stone": "limestone",
+    "face": -1.5707963,
+    "kind": "man",
+    "pose": "stand",
+    "scale": 0.85,
+    "seed": 5
+   },
+   "repeat": {
+    "count": "min(1, max(0, tiers - 2))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 4 back": {
+   "type": "box",
+   "width": "tabW * taper * taper * taper",
+   "length": "D * 0.85 * taper * taper * taper * 0.45 + wallIn",
+   "height": "(H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 3",
+     "(D * 0.85 * taper * taper * taper * 0.45 - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 3))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 4 posts": {
+   "type": "box",
+   "width": 0.3,
+   "length": "D * 0.85 * taper * taper * taper + wallIn",
+   "height": "(H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers - 0.45",
+   "at": [
+    [
+     "-1 * (tabW * taper * taper * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 3",
+     "(D * 0.85 * taper * taper * taper - wallIn) / 2",
+     0
+    ],
+    [
+     "1 * (tabW * taper * taper * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 3",
+     "(D * 0.85 * taper * taper * taper - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 3))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 4 canopy": {
+   "type": "box",
+   "width": "tabW * taper * taper * taper",
+   "length": "D * 0.85 * taper * taper * taper + wallIn",
+   "height": 0.45,
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers - 0.45",
+     "(D * 0.85 * taper * taper * taper - wallIn) / 2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 3))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 4 ledge": {
+   "type": "box",
+   "width": "tabW * taper * taper * taper * 0.45",
+   "length": 0.45,
+   "height": 0.25,
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 3",
+     "D * 0.85 * taper * taper * taper * 0.45 + 0.2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 3))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 4 pinnacles": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": 0.3,
+    "h": 0.25,
+    "s": 1.1
+   },
+   "at": [
+    [
+     "-1 * (tabW * taper * taper * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+     "D * 0.85 * taper * taper * taper - 0.15",
+     0
+    ],
+    [
+     "1 * (tabW * taper * taper * taper / 2 - 0.15)",
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers",
+     "D * 0.85 * taper * taper * taper - 0.15",
+     0
+    ]
+   ],
+   "standsOn": [
+    "niche 4 canopy"
+   ],
+   "repeat": {
+    "count": "min(1, max(0, tiers - 3))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "niche 4 statue": {
+   "type": "marker",
+   "role": "statue",
+   "at": [
+    [
+     0,
+     "doorH + 0.6 + archR + band + 0.3 + (H - H * 0.08 - (doorH + 0.6 + archR + band + 0.3)) / tiers * 3 + 0.25",
+     "D * 0.85 * taper * taper * taper * 0.45 + 0.2",
+     0
+    ]
+   ],
+   "data": {
+    "style": "gothic",
+    "stone": "limestone",
+    "face": -1.5707963,
+    "kind": "man",
+    "pose": "stand",
+    "scale": 0.85,
+    "seed": 6
+   },
+   "repeat": {
+    "count": "min(1, max(0, tiers - 3))",
+    "step": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "field ledges": {
+   "type": "box",
+   "width": 0.9,
+   "length": 0.5,
+   "height": 0.25,
+   "at": [
+    [
+     "-1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.42",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.42",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "-1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.58",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.58",
+     "fieldD + 0.2",
+     0
+    ]
+   ]
+  },
+  "field canopies": {
+   "type": "component",
+   "use": "components/pinnacle",
+   "params": {
+    "w": 0.8,
+    "h": 0.4,
+    "s": 1.4
+   },
+   "at": [
+    [
+     "-1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.42 + 2.3",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.42 + 2.3",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "-1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.58 + 2.3",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.58 + 2.3",
+     "fieldD + 0.2",
+     0
+    ]
+   ]
+  },
+  "cross shaft": {
+   "type": "box",
+   "width": "H * 0.08 * 0.16",
+   "length": "H * 0.08 * 0.16",
+   "height": "H * 0.08",
+   "at": [
+    [
+     0,
+     "H - H * 0.08",
+     "D * 0.3",
+     0
+    ]
+   ],
+   "_about": "the cross of the Order of Christ, crowning the tabernacle"
+  },
+  "cross arms": {
+   "type": "box",
+   "width": "H * 0.08 * 0.62",
+   "length": "H * 0.08 * 0.16",
+   "height": "H * 0.08 * 0.16",
+   "at": [
+    [
+     0,
+     "H - H * 0.08 * 0.62",
+     "D * 0.3",
+     0
+    ]
+   ],
+   "standsOn": [
+    "cross shaft"
+   ]
+  },
+  "trumeau statue": {
+   "type": "marker",
+   "role": "statue",
+   "at": [
+    [
+     0,
+     "doorH * 0.45 + 0.25",
+     "gap * 0.45",
+     0
+    ]
+   ],
+   "data": {
+    "style": "gothic",
+    "stone": "limestone",
+    "face": -1.5707963,
+    "kind": "man",
+    "pose": "guard",
+    "scale": 0.95,
+    "seed": 11
+   }
+  },
+  "pier statues": {
+   "type": "marker",
+   "role": "statue",
+   "at": [
+    [
+     "0 - (W / 2 - pw / 2)",
+     "H * 0.28 + 0.25",
+     "D + 0.2",
+     0
+    ],
+    [
+     "W / 2 - pw / 2",
+     "H * 0.28 + 0.25",
+     "D + 0.2",
+     0
+    ],
+    [
+     "0 - (W / 2 - pw / 2)",
+     "H * 0.48 + 0.25",
+     "D + 0.2",
+     0
+    ],
+    [
+     "W / 2 - pw / 2",
+     "H * 0.48 + 0.25",
+     "D + 0.2",
+     0
+    ]
+   ],
+   "data": {
+    "style": "gothic",
+    "stone": "limestone",
+    "face": -1.5707963,
+    "kind": "man",
+    "pose": "stand",
+    "scale": 0.85,
+    "seed": 5
+   }
+  },
+  "field statues": {
+   "type": "marker",
+   "role": "statue",
+   "at": [
+    [
+     "-1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.42 + 0.25",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.42 + 0.25",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "-1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.58 + 0.25",
+     "fieldD + 0.2",
+     0
+    ],
+    [
+     "1 * (W / 2 - pw + tabW / 2) / 2",
+     "H * 0.58 + 0.25",
+     "fieldD + 0.2",
+     0
+    ]
+   ],
+   "data": {
+    "style": "gothic",
+    "stone": "limestone",
+    "face": -1.5707963,
+    "kind": "man",
+    "pose": "stand",
+    "scale": 0.85,
+    "seed": 7
+   }
+  }
+ }
+}

@@ -17,7 +17,7 @@ import * as THREE from "three";
 import { wgslFn, uniform, texture, attribute, varying, float, vec4, positionGeometry,
          cameraViewMatrix, cameraProjectionMatrix, cameraPosition, renderGroup } from "three/tsl";
 import { MASK_MODE, NOGRASS_LAYER, WIND } from "./grass.js";
-import { lightWGSL } from "./light.js";
+import { LIGHT, lightWGSL } from "./light.js";
 import { leafAtlasTexture, LEAF_STYLES } from "./textures.js";
 import { cloudShade, CLOUD } from "./cloudshadow.js";
 
@@ -63,11 +63,31 @@ const leafUv = wgslFn(`
   }
 `);
 
+// the card's light, worked out at its corners: a card is flat, so the light is the same all over it, and leaves are
+// drawn over each other many times a pixel. rgb: what the leaf's colour is lit by (sunlit warm and shaded cool);
+// w: the light itself, which the snow takes
+const leafLit = wgslFn(`
+  fn leafLit(nrm: vec3<f32>, C: vec3<f32>, shade: f32, eye: vec3<f32>) -> vec4<f32> {
+    var n = normalize(nrm);
+    if (dot(n, eye - C) < 0.0) { n = -n; }                       // the side we see
+    let k = ${lightWGSL("n")};
+    return vec4<f32>(k * shade * mix(vec3<f32>(0.9, 0.98, 0.95), vec3<f32>(1.12, 1.1, 0.86), smoothstep(0.62, 1.0, k)), k);
+  }
+`);
+
+// a leaf with the sun behind it glows: it's thin
+const leafThrough = wgslFn(`
+  fn leafThrough(C: vec3<f32>, shade: f32, eye: vec3<f32>) -> f32 {
+    let through = max(0.0, dot(normalize(C - eye), vec3<f32>(${LIGHT.dir.map((v) => v.toFixed(3)).join(", ")})));
+    return through * through * shade;
+  }
+`);
+
 // the leaf's colour and its cut-out edge: the atlas's alpha sharpened to a one-pixel edge (for
-// alpha-to-coverage), the crown's own shade, and the mask pass's black where a leaf is not grass
+// alpha-to-coverage), the card's light, and the mask pass's black where a leaf is not grass
 const leafFrag = wgslFn(`
   fn leafFrag(atlas: texture_2d<f32>, samp: sampler, uv: vec2<f32>, atlasSize: vec2<f32>, col: vec3<f32>,
-              nrm: vec3<f32>, wp: vec3<f32>, shade: f32, eye: vec3<f32>, maskMode: f32, snow: f32) -> vec4<f32> {
+              nrm: vec3<f32>, lit: vec4<f32>, through: f32, shade: f32, maskMode: f32, snow: f32) -> vec4<f32> {
     let tex = textureSample(atlas, samp, uv);
     let dx = dpdx(uv * atlasSize);
     let dy = dpdy(uv * atlasSize);
@@ -75,20 +95,18 @@ const leafFrag = wgslFn(`
     var a = tex.a * (1.0 + mip * 0.25);                          // keep far crowns full
     a = (a - 0.5) / max(abs(dpdx(a)) + abs(dpdy(a)), 1e-4) + 0.5;  // a one-pixel edge for alpha-to-coverage
     if (a <= 0.0) { discard; }
-    var n = normalize(nrm);
-    if (dot(n, eye - wp) < 0.0) { n = -n; }                      // the side we see
-    let k = ${lightWGSL("n")};
     // the grass mask (grass.js): a leaf is not grass and nothing may be painted over it. Its shape is this
     // alpha, so the mask cuts with it here rather than through an override material that never sees it.
     if (maskMode > 0.5) {
       if (a < 0.5) { discard; }
       return vec4<f32>(0.0, 0.0, 0.0, 1.0);
     }
-    var c = col * tex.rgb * k * shade;
+    var c = col * tex.rgb * lit.xyz;
+    c = c + col * vec3<f32>(0.42, 0.5, 0.12) * through;
     // snow lying on the crown: on the leaves that face up, and more on the outside of it (a card's shade)
     if (snow > 0.001) {
       let up = smoothstep(-0.15, 0.7, abs(normalize(nrm).y));
-      c = mix(c, vec3<f32>(0.9, 0.93, 0.98) * k, snow * clamp(up * 0.75 + (shade - 0.76) * 1.2, 0.0, 0.85));
+      c = mix(c, vec3<f32>(0.9, 0.93, 0.98) * lit.w, snow * clamp(up * 0.75 + (shade - 0.76) * 1.2, 0.0, 0.85));
     }
     return vec4<f32>(c, clamp(a, 0.0, 1.0));
   }
@@ -125,16 +143,20 @@ export function buildFoliage(cards) {
                         view: cameraViewMatrix, t: uT, billboard: uBillboard, gust: WIND.strength });
   const mat = new THREE.MeshBasicNodeMaterial({ side: THREE.DoubleSide, alphaToCoverage: true, transparent: true });
   mat.vertexNode = cameraProjectionMatrix.mul(cameraViewMatrix.mul(vec4(p, 1.0)));
-  const leafW = varying(p, "vLeafW");
+  const leafN = varying(A.R.cross(A.U).normalize(), "vLeafN");
   const out = leafFrag({
     atlas: texNode, samp: texNode,
     uv: varying(leafUv({ corner: positionGeometry, info: A.info, styles: float(LEAF_STYLES.length) }), "vLeafUv"),
     atlasSize: uniform(new THREE.Vector2(atlas.image.width, atlas.image.height)),
-    col: A.col, nrm: varying(A.R.cross(A.U).normalize(), "vLeafN"), wp: leafW,
-    shade: A.info.w, eye: cameraPosition, maskMode: uMask, snow: uniform(0).setGroup(renderGroup).onRenderUpdate(() => SNOW.value),
+    col: A.col, nrm: leafN,
+    lit: varying(leafLit({ nrm: leafN, C: A.C, shade: A.info.w, eye: cameraPosition }), "vLeafLit"),
+    through: varying(leafThrough({ C: A.C, shade: A.info.w, eye: cameraPosition }), "vLeafThrough"),
+    shade: A.info.w, maskMode: uMask, snow: uniform(0).setGroup(renderGroup).onRenderUpdate(() => SNOW.value),
   });
-  // (the clouds' shadows passing over the crowns, as over the land -- not in the mask pass: its channels are data)
-  mat.colorNode = out.xyz.mul(uMask.greaterThan(.5).select(float(1), cloudShade({ p: leafW.xz, t: CLOUD.t, amount: CLOUD.amount, cover: CLOUD.cover })));
+  // (the clouds' shadows passing over the crowns, as over the land -- not in the mask pass: its channels are data.
+  // Worked out at the card's corners: a cloud's edge is far wider than a card, and leaves are drawn over each other many times a pixel)
+  const cloudAt = varying(cloudShade({ p: p.xz, t: CLOUD.t, amount: CLOUD.amount, cover: CLOUD.cover }), "vLeafCloud");
+  mat.colorNode = out.xyz.mul(uMask.greaterThan(.5).select(float(1), cloudAt));
   mat.opacityNode = out.w;
   const mesh = new THREE.Mesh(geo, mat);
   mesh.frustumCulled = false;

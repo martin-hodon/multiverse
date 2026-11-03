@@ -6,7 +6,7 @@
 // everything about tracks -- their layout, the dry routing, the ribbons --
 // lives here, once.
 import * as THREE from "three";
-import { wgslFn, uniform, uv, positionWorld, cameraPosition, float, renderGroup } from "three/tsl";
+import { wgslFn, uniform, uv, positionWorld, cameraPosition, float, vec3, renderGroup } from "three/tsl";
 import { MASK_MODE, NOGRASS_LAYER, GROUND_SNOW } from "./grass.js";
 import { valueNoise, landShade, WET, PUDDLE, puddleShade } from "./cloudshadow.js";
 
@@ -193,7 +193,7 @@ function trackMaterial() {
   mat.blending = THREE.NoBlending;       // in the mask pass the channels are data; in the world it is opaque
   const out = trackFrag({ uvc: uv(), wp: positionWorld, maskMode: uMask, wet: ROAD_WET.wet, sky: ROAD_WET.sky, t: ROAD_WET.t, rain: ROAD_WET.rain, cam: cameraPosition, snow: GROUND_SNOW });
   // (the clouds' shadows on it, as on the ground -- not in the mask pass, where the channels are data)
-  mat.colorNode = out.xyz.mul(uMask.greaterThan(.5).select(float(1), landShade()));
+  mat.colorNode = out.xyz.mul(uMask.greaterThan(.5).select(vec3(1), landShade()));
   mat.opacityNode = out.w;
   return mat;
 }
@@ -311,6 +311,8 @@ export function planRoads(world) {
       highway = laneFrom(lane);
       hwGeom.xc = xc; hwGeom.a0 = a0;
     }
+    // (world.extra: streets planned elsewhere -- a sea port's, from the quay up to the town's streets: harbour.js)
+    for (const rt of world.extra ?? []) routes.push({ w: rt.w, pts: rt.pts.map((q) => q.slice()) });
     for (const rt of routes) rt.path = dryRoute(rt.pts, rt.w);
   }
   // ---- the surfaces: samples, heights, edges, pieces

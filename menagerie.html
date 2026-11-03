@@ -28,7 +28,7 @@
 // A test bench for animal shapes: each chosen species once, side by side,
 // posed and drawn exactly as the world does (composite herd, skeleton.js).
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { navControls } from "./cursornav.js";   // (the view turns and zooms about the point under the pointer, as the atlas's: here the ground's)
 import { createComposite, PIPE, setPipe, pipeFromQuery } from "./composite.js";
 import { SPECIES, makeFish, makeDolphin, makeShark, makeCat, partExtent } from "./species.js";
 
@@ -51,7 +51,7 @@ scene.add(ground);
 const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, .05, 500);
 const cam = (qp.get("cam") ?? "0,2.2,9,0,.6,0").split(",").map(Number);
 camera.position.set(cam[0], cam[1], cam[2]);
-const controls = new OrbitControls(camera, renderer.domElement);
+const controls = navControls(camera, renderer.domElement);
 controls.target.set(cam[3], cam[4], cam[5]);
 controls.update();
 
@@ -72,6 +72,7 @@ addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); ca
 let t = 0, last = performance.now();
 (function frame(now) {
   t = freeze ?? t + Math.min(now - last, 50) / 1000; last = now;
+  controls.update();
   for (const an of herd.animals) an.animT = t;
   herd.update(t);
   renderer.render(scene, camera);

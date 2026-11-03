@@ -356,8 +356,13 @@ function standPiece(form, pc, P, base, { add, bone }, w, hem, under = []) {
     let rTop = Math.max(pc.fromRadius !== undefined ? val(pc.fromRadius, P, marks, 0) * S : t.half(yT), arms ? clear(yT) : 0, form.neck.r) + ease + 2 * base.thick;
     let slope = val(pc.flare, P, marks, .2);
     // (oval, as the torso is: `squash` its depth against its width -- so it clears the torso's depth at that share)
-    const sq = val(pc.squash, P, marks, one ? .75 : arms ? .62 : .85);
+    // (a stout trunk deeper than the oval -- people.js POT_CLEAR -- makes the oval ROUNDER, up to a circle (shell.js clamps
+    //  a squash at 1), before it widens the ring: at the canon's squash a fat man's peplum stood out a hand past his hips)
+    const sq = Math.max(val(pc.squash, P, marks, one ? .75 : arms ? .62 : .85), arms ? 0 : Math.min(1, t.flat));
     const depthNeed = (y) => t.half(y) * t.flat / sq;
+    // (its top ring clears the torso's DEPTH there too -- a stout body's belly at a skirt's waist (people.js POT_CLEAR): the
+    //  width alone left the depth to the flare, which then had to make up the belly in the first centimetre, a skirt out flat)
+    if (pc.fromRadius === undefined) rTop = Math.max(rTop, depthNeed(yT) + ease + 2 * base.thick);
     // (and whatever already hangs round the torso there, a layer of cloth further out -- in its width and its depth)
     const hung = (y) => {
       let r = 0;

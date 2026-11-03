@@ -1,0 +1,729 @@
+{
+ "kind": "item",
+ "name": "Koch",
+ "category": "ship",
+ "era": "1400-1800",
+ "region": "the Russian north: the Pomors of the White Sea, Mangazeya, Siberia's rivers",
+ "_about": "the Pomor koch: a stout single-decked ship with a rounded 'nutshell' hull sheathed with an ice belt of planks at the waterline so the ice squeezes it up instead of crushing it, one mast with a square sail of hide or canvas (a small foremast often), a stern rudder, a deckhouse aft. (About 18-24 m by 5-8 m, sourced from the Mangazeya finds and the Arctic expeditions' descriptions)",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "L": [
+   18,
+   24
+  ],
+  "B": "L * 0.3",
+  "D": "B * 0.5",
+  "mastH": "L * 0.65",
+  "wl": "(D) * 0.58"
+ },
+ "materials": {
+  "planks": {
+   "pick": [
+    "planks-grey",
+    "planks-tarred"
+   ]
+  },
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": {
+   "pick": [
+    "canvas",
+    "hide"
+   ]
+  },
+  "rope": "hemp",
+  "metal": "iron"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.38,
+   "tumblehome": 0.18,
+   "plan": [
+    [
+     0,
+     0.15
+    ],
+    [
+     0.12,
+     0.65
+    ],
+    [
+     0.4,
+     1
+    ],
+    [
+     0.65,
+     1
+    ],
+    [
+     0.88,
+     0.6
+    ],
+    [
+     1,
+     0.04
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.3"
+    ],
+    [
+     0.1,
+     0
+    ],
+    [
+     0.88,
+     0
+    ],
+    [
+     1,
+     "D * 0.45"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.2"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     1,
+     "D * 1.25"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.86",
+     "from": 0.03,
+     "to": 0.97
+    }
+   ],
+   "rail": 0.08,
+   "keelBeam": [
+    0.28,
+    0.3
+   ],
+   "postRise": "D * 0.1"
+  },
+  {
+   "id": "ice belt",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "L * 0.46",
+    "D * 0.22",
+    0.1
+   ],
+   "at": [
+    "L * 0.52",
+    "D * 0.55",
+    "B * 0.5 - 0.06"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "deckhouse",
+   "use": "items/components/cabin",
+   "params": {
+    "w": "B * 0.5",
+    "d": "L * 0.13",
+    "h": 1.7,
+    "roof": "pitched",
+    "windows": 1
+   },
+   "materials": {
+    "wood": "planks",
+    "roofm": "planks-tarred"
+   },
+   "at": [
+    "L * 0.05",
+    "D * 0.86",
+    0
+   ]
+  },
+  {
+   "id": "rudder",
+   "use": "items/components/rudder",
+   "params": {
+    "h": "D * 1.05",
+    "w": "B * 0.1",
+    "tiller": "L * 0.12"
+   },
+   "at": [
+    0,
+    "D * 1.0",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.5",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.24,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.86",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.86 + mastH * 0.92",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.5",
+    "h": "mastH * 0.62",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.06"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.86 + mastH * 0.92",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.86",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH * 0.45",
+    "r": 0.14,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.86",
+    "D * 0.86",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.86 D * 0.86 + mastH * 0.42",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.2",
+    "h": "mastH * 0.28",
+    "foot": 0.92,
+    "set": "set",
+    "belly": "L * 0.02"
+   },
+   "at": [
+    "L * 0.86",
+    "D * 0.86 + mastH * 0.42",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "anchor",
+   "use": "items/components/anchor",
+   "params": {
+    "h": "D * 0.5"
+   },
+   "at": [
+    "L * 0.9",
+    "D * 1.05",
+    "B * 0.45"
+   ]
+  },
+  {
+   "id": "stay L * 0.5-L * 0.97",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.86 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.97",
+    "D * 1.3",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.5-L * 0.03",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.86 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.03",
+    "D * 1.25",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "bitts bow",
+   "use": "items/components/bitts",
+   "params": {
+    "s": "max(0.45, min(1.0, B * 0.07))",
+    "gap": "max(0.35, B * 0.06)"
+   },
+   "at": [
+    "L * 0.9",
+    "D * 0.86",
+    0
+   ]
+  },
+  {
+   "id": "bitts stern",
+   "use": "items/components/bitts",
+   "params": {
+    "s": "max(0.45, min(1.0, B * 0.07))",
+    "gap": "max(0.35, B * 0.06)"
+   },
+   "at": [
+    "L * 0.06",
+    "D * 0.86",
+    0
+   ]
+  },
+  {
+   "id": "hatch 0",
+   "use": "items/components/hatch",
+   "params": {
+    "w": "B * 0.35",
+    "d": "L * 0.08",
+    "h": "min(0.45, D * 0.08)"
+   },
+   "at": [
+    "L * 0.38",
+    "D * 0.86",
+    0
+   ]
+  },
+  {
+   "id": "hatch 1",
+   "use": "items/components/hatch",
+   "params": {
+    "w": "B * 0.35",
+    "d": "L * 0.08",
+    "h": "min(0.45, D * 0.08)"
+   },
+   "at": [
+    "L * 0.66",
+    "D * 0.86",
+    0
+   ]
+  },
+  {
+   "id": "shroud L * 0.5 0",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.86 + (mastH) * 0.97",
+    0
+   ],
+   "to": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * -0.2",
+    "D",
+    "(B * 0.5) * 0.82"
+   ],
+   "r": 0.029,
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "shroud L * 0.5 1",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.86 + (mastH) * 0.97",
+    0
+   ],
+   "to": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * -0.05",
+    "D",
+    "(B * 0.5) * 0.82"
+   ],
+   "r": 0.029,
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "shroud L * 0.5 2",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.86 + (mastH) * 0.97",
+    0
+   ],
+   "to": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.1",
+    "D",
+    "(B * 0.5) * 0.82"
+   ],
+   "r": 0.029,
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "ratline L * 0.5 0",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * -0.172",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.14",
+    "((B * 0.5) * 0.82) * 0.86"
+   ],
+   "to": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.086",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.14",
+    "((B * 0.5) * 0.82) * 0.86"
+   ]
+  },
+  {
+   "id": "ratline L * 0.5 1",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * -0.144",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.28",
+    "((B * 0.5) * 0.82) * 0.72"
+   ],
+   "to": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.072",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.28",
+    "((B * 0.5) * 0.82) * 0.72"
+   ]
+  },
+  {
+   "id": "ratline L * 0.5 2",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * -0.116",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.42",
+    "((B * 0.5) * 0.82) * 0.58"
+   ],
+   "to": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.058",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.42",
+    "((B * 0.5) * 0.82) * 0.58"
+   ]
+  },
+  {
+   "id": "ratline L * 0.5 3",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * -0.088",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.56",
+    "((B * 0.5) * 0.82) * 0.44"
+   ],
+   "to": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.044",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.56",
+    "((B * 0.5) * 0.82) * 0.44"
+   ]
+  },
+  {
+   "id": "ratline L * 0.5 4",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * -0.06",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.7",
+    "((B * 0.5) * 0.82) * 0.3"
+   ],
+   "to": [
+    "L * 0.5 + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.03",
+    "(D) + ((D * 0.86 + (mastH) * 0.97) - (D)) * 0.7",
+    "((B * 0.5) * 0.82) * 0.3"
+   ]
+  },
+  {
+   "id": "shroud L * 0.86 0",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.86",
+    "D * 0.86 + (mastH * 0.45) * 0.97",
+    0
+   ],
+   "to": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * -0.2",
+    "D * 1.18",
+    "(B * 0.5) * 0.5205"
+   ],
+   "r": 0.017,
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "shroud L * 0.86 1",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.86",
+    "D * 0.86 + (mastH * 0.45) * 0.97",
+    0
+   ],
+   "to": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * -0.05",
+    "D * 1.18",
+    "(B * 0.5) * 0.5205"
+   ],
+   "r": 0.017,
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "shroud L * 0.86 2",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.86",
+    "D * 0.86 + (mastH * 0.45) * 0.97",
+    0
+   ],
+   "to": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.1",
+    "D * 1.18",
+    "(B * 0.5) * 0.5205"
+   ],
+   "r": 0.017,
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "ratline L * 0.86 0",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * -0.172",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.14",
+    "((B * 0.5) * 0.5205) * 0.86"
+   ],
+   "to": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.086",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.14",
+    "((B * 0.5) * 0.5205) * 0.86"
+   ]
+  },
+  {
+   "id": "ratline L * 0.86 1",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * -0.144",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.28",
+    "((B * 0.5) * 0.5205) * 0.72"
+   ],
+   "to": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.072",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.28",
+    "((B * 0.5) * 0.5205) * 0.72"
+   ]
+  },
+  {
+   "id": "ratline L * 0.86 2",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * -0.116",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.42",
+    "((B * 0.5) * 0.5205) * 0.58"
+   ],
+   "to": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.058",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.42",
+    "((B * 0.5) * 0.5205) * 0.58"
+   ]
+  },
+  {
+   "id": "ratline L * 0.86 3",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * -0.088",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.56",
+    "((B * 0.5) * 0.5205) * 0.44"
+   ],
+   "to": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.044",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.56",
+    "((B * 0.5) * 0.5205) * 0.44"
+   ]
+  },
+  {
+   "id": "ratline L * 0.86 4",
+   "type": "rod",
+   "material": "rope",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * -0.06",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.7",
+    "((B * 0.5) * 0.5205) * 0.3"
+   ],
+   "to": [
+    "L * 0.86 + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.03",
+    "(D * 1.18) + ((D * 0.86 + (mastH * 0.45) * 0.97) - (D * 1.18)) * 0.7",
+    "((B * 0.5) * 0.5205) * 0.3"
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "waterline",
+   "at": [
+    "L * 0.5",
+    "(D) * 0.58",
+    0
+   ],
+   "data": {
+    "draught": "(D) * 0.58"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.9",
+    "D * 0.86 + max(0.45, min(1.0, B * 0.07))",
+    0
+   ],
+   "data": {
+    "end": "bow"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.06",
+    "D * 0.86 + max(0.45, min(1.0, B * 0.07))",
+    0
+   ],
+   "data": {
+    "end": "stern"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.5",
+    "D + 0.06",
+    "(B * 0.5) * 0.82",
+    -90
+   ],
+   "data": {
+    "side": "starboard",
+    "deck": "D * 0.86"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.5",
+    "D + 0.06",
+    "((B * 0.5) * 0.82) * -1",
+    90
+   ],
+   "data": {
+    "side": "port",
+    "deck": "D * 0.86"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.38",
+    "D * 0.86 + min(0.45, D * 0.08)",
+    0
+   ],
+   "data": {
+    "i": 0,
+    "w": "B * 0.35",
+    "l": "L * 0.08",
+    "floor": "(D) * 0.15"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.66",
+    "D * 0.86 + min(0.45, D * 0.08)",
+    0
+   ],
+   "data": {
+    "i": 1,
+    "w": "B * 0.35",
+    "l": "L * 0.08",
+    "floor": "(D) * 0.15"
+   }
+  },
+  {
+   "role": "helm",
+   "at": [
+    "L * 0.12",
+    "D * 0.86",
+    0
+   ]
+  }
+ ]
+}

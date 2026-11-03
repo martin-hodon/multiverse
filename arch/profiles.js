@@ -13,6 +13,7 @@
 //   pointed        TWO centres, moved apart horizontally by `spread` half-widths: the gothic family, from
 //                  equilateral (spread 1) through lancet (> 1) to drop (< 1)
 //   trigonal       two straight chamfers meeting at a point: the triangular head
+//   curtain        quarter-round shoulders and hanging swags: the late-Gothic Vorhangbogen
 //   flat           a straight lintel, so an opening can be square-headed without a special case
 //
 // HOW MANY POINTS A CURVE GETS is one knob for the whole building, in powers of two: `per90` segments per 90
@@ -98,6 +99,26 @@ export const PROFILES = {
     const left = [[-a, 0]];
     for (let k = 1; k <= n; k++) { const x = -a + (a - cap) * k / n, y = rise * k / n; left.push([left[left.length - 1][0], y], [x, y]); }
     return pin([...left, ...left.slice().reverse().map(([x, y]) => [-x, y])], a);
+  },
+
+  // THE CURTAIN ARCH (Vorhangbogen, Saxon late Gothic -- the Albrechtsburg's windows): the head of a curtain drawn up
+  // at its hooks. Each shoulder is a quarter circle of radius `rise` centred on the jamb at the cusp's height, so it
+  // leaves the springing level and bulges INTO the opening up to a cusp; between the two cusps hang `lobes` swags,
+  // each a shallow arc sagging `sag` (share of the rise) below the cusps. The crown is the cusps, at `rise`.
+  curtain: (a, p) => {
+    const h = Math.min(p.rise ?? a * .4, a * .45), n = Math.max(1, Math.round(p.lobes ?? 1));
+    const L = 2 * (a - h) / n, s = Math.min(Math.max(.01, p.sag ?? .5) * h, L * .45);
+    const R = (L * L / 4 + s * s) / (2 * s), t0 = Math.atan2(-(R - s), -L / 2), t1 = Math.atan2(-(R - s), L / 2);
+    const out = arc(-a, h, h, -Math.PI / 2, 0, segsFor(Math.PI / 2, p, n + 2), []);
+    for (let k = 0; k < n; k++) {
+      const swag = arc(-a + h + L * (k + .5), h + R - s, R, t0, t1, Math.max(2, segsFor(t1 - t0, p, n + 2)), []);
+      swag[0] = out.pop();                                   // the cusp is one point, not two
+      swag[swag.length - 1] = [-a + h + L * (k + 1), h];
+      out.push(...swag);
+    }
+    out.pop();
+    out.push(...arc(a, h, h, Math.PI, Math.PI * 1.5, segsFor(Math.PI / 2, p, n + 2), []));
+    return pin(out, a);
   },
 
   // a square head, so a window needs no special case elsewhere

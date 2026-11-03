@@ -40,6 +40,7 @@ const LEVELS = [
   ["gnathion",-.132,   .070,  .034, -.050],
 ];
 const GONION_Y = -.090;   // the jaw's angle
+const JAW_FOLLOW = 1.0;   // (headGrid: how far the loft's jaw follows the face's lower width -- at 1.8 a woman's lower face fell to under .65 of her cheekbones' breadth at the mouth: gaunt, a V, the neck behind it as wide)
 // the angles round each ring from the front (0) to the back (180): denser over the face
 const THETAS = [0, 8, 16, 25, 35, 48, 62, 80, 100, 122, 145, 165, 180];
 
@@ -57,6 +58,19 @@ export const FACE_PARAMS = {   // (every factor 1, every depth in metres; a defi
 // at each, its normals, and a point of the skin at any height and angle
 export function headGrid(p, P) {
   const Q = { ...FACE_PARAMS, ...p }, S = Q.scale, det = Math.max(.5, Math.min(2, P.detail ?? 1));
+  // (the loft's JAW as broad as the face's own lower width says, unless `jawW` is given: at the canon's breadth behind a
+  //  narrow-jawed woman's face, the ramus behind her cheeks stood out a square jaw under the ears -- 2026-11-03)
+  //  (`JAW_FOLLOW` times the lower width's own share: the loft's breadth there is the masseter's and the ramus's, which
+  //  differ between the sexes more than the bony bigonial does)
+  // (and the loft's jaw ANGLE as high as the face's own gonion -- faceLattice's `go`, from the jaw angle -- unless `jawY`
+  //  is given: at the canon's -.09 under the lattice's -.055 of an open-angled woman's jaw the loft made a second, lower,
+  //  square angle behind it, a jaw reaching down from the ears -- 2026-11-03)
+  if (p.jawY === undefined && typeof p.jawAngle === "number") {
+    const me = -(p.faceHeight ?? FACE_ATTRS.faceHeight), eye = p.eyeLevel ?? FACE_ATTRS.eyeLevel;
+    const go = Math.max(me + .019, Math.min(eye - .045, me + .004 + .062 * tanD(p.jawAngle - 90)));
+    Q.jawY = Math.max(.55, Math.min(1.1, go / GONION_Y));
+  }
+  if (p.jawW === undefined && typeof p.lowerWidth === "number") Q.jawW =Math.max(.7, Math.min(1.15, 1 + JAW_FOLLOW * (p.lowerWidth / FACE_ATTRS.lowerWidth - 1)));
   // ---- the levels as this face has them
   const lv = LEVELS.map(([name, y, f, s, b]) => ({ name, y, f, s, b }));
   const at = (name) => lv.find((l) => l.name === name);

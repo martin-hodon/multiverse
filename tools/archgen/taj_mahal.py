@@ -93,9 +93,23 @@ add("pishtaq crowns", {"type": "box", "width": MAIN[1], "length": 1.6, "height":
                        "spiral": {"count": 4, "radius": a - 0.8, "turn": 0, "y": PH + H},
                        "_about": "each great iwan's frame, the pishtaq, rising above the parapet"})
 add("drum", {"type": "ring", "count": 32, "rOuter": 9.3, "rInner": 8.6, "height": 10, "y": PH + H, "solid": True, "place": [[0, 0, 0, 0]]})
-add("dome", {"type": "dome", "radius": 9.3, "thickness": 0, "head": {"profile": "onion", "bulge": 1.12, "neck": 0.85}, "at": [[0, PH + H + 10, 0, 0]],
-             "_about": "the onion, its bulb swelling past the drum"})
-add("finial", {"type": "column", "radius": 0.35, "height": 10, "sides": 8, "taper": 0.3, "at": [[0, PH + H + 10 + 21.1, 0, 0]]})
+DB, DN = 1.2, .32                           # the bulb: nearly a ball, swelling well past the drum, drawn up only at the very tip (not the long neck of an onion)
+DTIP = 9.3 * (math.sqrt(DB * DB - 1) + math.sqrt(DB * DB + 2 * DB * DN))
+add("dome", {"type": "dome", "radius": 9.3, "thickness": 0, "head": {"profile": "onion", "bulge": DB, "neck": DN}, "at": [[0, PH + H + 10, 0, 0]],
+             "_about": "the great bulb, swelling past the drum, its tip short"})
+add("finial", {"type": "column", "radius": 0.28, "height": 5.0, "sides": 8, "taper": 0.45, "at": [[0, round(PH + H + 10 + DTIP - .2, 3), 0, 0]], "_about": "the gilt finial, to 73m"})
+# the frame of black calligraphy round each great iwan, and the slender guldastas that rise from the pishtaqs' and the chamfers' corners
+FW, FH, FB = 8.4, 27.6, .85
+fr = []
+for k, (nx, nz) in enumerate(((0, 1), (1, 0), (0, -1), (-1, 0))):
+    for u, y, ww, hh in ((-FW, 0, FB, FH), (FW, 0, FB, FH), (0, FH - FB, 2 * FW + FB, FB)):
+        fr.append(([round(nx * (W / 2 + .03) + nz * u, 3), PH + y, round(nz * (W / 2 + .03) + nx * u, 3), 0], (ww, .06, hh) if nz else (.06, ww, hh)))
+for j, (a_, b_, c_) in enumerate(sorted({sz for _, sz in fr})):
+    add(f"iwan frame {j + 1}", {"type": "box", "width": a_, "length": b_, "height": c_, "at": [p_ for p_, sz in fr if sz == (a_, b_, c_)], **({"_about": "the calligraphic frame"} if j == 0 else {})})
+pc = W / 2 - .2
+gu = [[sx * pc, sz * round(pc - C, 2)] for sx in (-1, 1) for sz in (-1, 1)] + [[sx * round(pc - C, 2), sz * pc] for sx in (-1, 1) for sz in (-1, 1)]
+gu += [[sx * 9.95, sz * pc] for sx in (-1, 1) for sz in (-1, 1)] + [[sx * pc, sz * 9.95] for sx in (-1, 1) for sz in (-1, 1)]
+add("guldastas", {"type": "pinnacle", "w": .75, "sides": 8, "h": 2.6, "s": 2.6, "at": [[x, PH + H + .2, z, 0] for x, z in gu], "_about": "the slender shafts with little cupolas"})
 add("chhatris", {"type": "component", "use": "components/chhatri", "params": {"r": 3.2, "floor": 0},
                  "at": [[s * 16.5, PH + H, t * 16.5, 0] for s, t in ((1, 1), (1, -1), (-1, -1), (-1, 1))],
                  "_about": "the four chhatris round the dome, over the corner chambers"})

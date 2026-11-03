@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Story lab</title>
+<style>html, body { margin: 0; background: #16140f; color: #d8d4cc; font: 11px ui-monospace, monospace; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1500" height="900"></canvas>
+<script type="module">
+// A bench for the scenes (story/compose.js, docs/story.md), before any glass or stone: each flat, in plain colours. ?name=a,b (or ?cycle=infancy) &seeds=1,2,3 &cell=240 &w=1500
+import { composeScene, personPieces, dyeOf, CANON } from "./story/compose.js";
+const Q = new URLSearchParams(location.search), cell = +(Q.get("cell") ?? 240), W = +(Q.get("w") ?? 1500), seeds = (Q.get("seeds") ?? "1").split(",").map(Number), who = Q.get("people");
+const names = who ? (who === "all" ? CANON.standing : who.split(",")) : Q.get("cycle") ? Q.get("cycle").split(",").flatMap((c) => CANON.cycles[c]) : (Q.get("name") ?? Object.keys(CANON.scenes).join(",")).split(",");
+const COL = { cobalt: "#1d44a8", ruby: "#b0161c", gold: "#e4ad22", emerald: "#1f7a45", white: "#dfe0cc", flesh: "#e0b596", purple: "#6a2c7e", sky: "#4f83c8", amber: "#c9721c", navy: "#142c74", brown: "#7a4f2c", rose: "#c98a86", olive: "#6e7c3a", grey: "#8a8c86" };
+const dye = dyeOf(Object.fromEntries(Object.keys(COL).map((k) => [k, COL[k]])));
+const cols = Math.max(1, Math.floor(W / (cell + 6))), items = names.flatMap((n) => seeds.map((s) => [n, s]));
+const cv = document.getElementById("c"); cv.width = W; cv.height = Math.ceil(items.length / cols) * (cell + 18) + 4;
+const g = cv.getContext("2d", { willReadFrequently: true }), errors = {}; g.fillStyle = "#16140f"; g.fillRect(0, 0, W, cv.height);
+items.forEach(([n, s], i) => {
+  const x = 3 + (i % cols) * (cell + 6), y = 3 + Math.floor(i / cols) * (cell + 18), k = cell / 200;
+  g.fillStyle = "#d8d4cc"; g.fillText(`${n} ${s}`, x, y + 10);
+  g.save(); g.beginPath(); g.rect(x, y + 14, cell, cell); g.clip(); g.fillStyle = Q.get("ground") ?? "#26324f"; g.fillRect(x, y + 14, cell, cell);
+  g.translate(x + cell / 2, y + 14 + cell); g.scale(k, -k);
+  try {
+    const pieces = who ? personPieces(n, { seed: s, dye }).map((p) => ({ ...p, pts: p.pts.map(([a, b]) => [a * 1.5, b * 1.5 + 12]), paint: p.paint?.map((l) => ({ ...l, w: (l.w ?? .4) * 1.5, pts: l.pts.map(([a, b]) => [a * 1.5, b * 1.5 + 12]) })) })) : composeScene(n, { seed: s, dye, frame: { x0: -94, x1: 94, y0: 6, y1: 194 }, pxPerUnit: k }).pieces;
+    for (const p of pieces) {
+      g.fillStyle = typeof p.fill === "string" ? p.fill : "#f0f"; g.strokeStyle = "#0a0806"; g.lineWidth = .7;
+      g.beginPath(); p.pts.forEach((q, j) => j ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); g.closePath(); g.fill(); g.stroke();
+      g.save(); g.clip();
+      for (const l of p.paint ?? []) { g.globalAlpha = l.alpha ?? 1; g.beginPath(); l.pts.forEach((q, j) => j ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); if (l.closed) g.closePath(); if (l.fill !== undefined) { g.fillStyle = l.fill; g.fill(); } else { g.strokeStyle = l.c ?? "#1d120b"; g.lineWidth = Math.max(.3, l.w ?? .4); g.stroke(); } g.globalAlpha = 1; }
+      g.restore();
+    }
+  } catch (e) { errors[`${n}#${s}`] = String(e.stack ?? e).slice(0, 300); g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = "#e27a6a"; g.fillText(String(e.message).slice(0, 44), x, y + 40); }
+  g.restore();
+});
+window.__metrics = errors; window.__ready = true;
+</script>
+</body>
+</html>

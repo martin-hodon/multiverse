@@ -81,7 +81,28 @@ import FIN_SULTAN_QABOOS from "./assets/finishes/sultan-qaboos.json" with { type
 import FIN_TAJ_MAHAL from "./assets/finishes/taj-mahal.json" with { type: "json" };
 import FIN_TEMPLE_OF_HEAVEN from "./assets/finishes/temple-of-heaven.json" with { type: "json" };
 import FIN_SHEIKH_ZAYED from "./assets/finishes/sheikh-zayed.json" with { type: "json" };
+import FIN_PONT_DU_GARD from "./assets/finishes/pont-du-gard.json" with { type: "json" };
+import FIN_ABU_SIMBEL from "./assets/finishes/abu-simbel.json" with { type: "json" };
+import FIN_TIKAL from "./assets/finishes/tikal.json" with { type: "json" };
+import FIN_PISA from "./assets/finishes/pisa.json" with { type: "json" };
+import FIN_REGENSBURG from "./assets/finishes/regensburg.json" with { type: "json" };
+import FIN_BYODO_IN from "./assets/finishes/byodo-in.json" with { type: "json" };
+import FIN_TOPKAPI from "./assets/finishes/topkapi.json" with { type: "json" };
+import FIN_JERONIMOS from "./assets/finishes/jeronimos.json" with { type: "json" };
+import FIN_PARK_GUELL from "./assets/finishes/park-guell.json" with { type: "json" };
+import FIN_PRAMBANAN from "./assets/finishes/prambanan.json" with { type: "json" };
+import FIN_DRACHENBURG from "./assets/finishes/drachenburg.json" with { type: "json" };
+import FIN_GRAND_PALACE from "./assets/finishes/grand-palace.json" with { type: "json" };
+import FIN_US_CAPITOL from "./assets/finishes/us-capitol.json" with { type: "json" };
+import FIN_FULDA from "./assets/finishes/fulda.json" with { type: "json" };
+import FIN_FRAUENKIRCHE_MUNICH from "./assets/finishes/frauenkirche-munich.json" with { type: "json" };
+import FIN_ST_PETERS from "./assets/finishes/st-peters.json" with { type: "json" };
+import FIN_ALBRECHTSBURG from "./assets/finishes/albrechtsburg.json" with { type: "json" };
 import FIN_IMAM_MOSQUE from "./assets/finishes/imam-mosque.json" with { type: "json" };
+import FIN_FORBIDDEN_CITY from "./assets/finishes/forbidden-city.json" with { type: "json" };
+import FIN_ST_MARKS from "./assets/finishes/st-marks.json" with { type: "json" };
+import FIN_DOME_OF_THE_ROCK from "./assets/finishes/dome-of-the-rock.json" with { type: "json" };
+import FIN_EIFFEL_TOWER from "./assets/finishes/eiffel-tower.json" with { type: "json" };
 import FIN_SUMMER_PALACE from "./assets/finishes/summer-palace.json" with { type: "json" };
 import FIN_ANGKOR_WAT from "./assets/finishes/angkor-wat.json" with { type: "json" };
 import FIN_BOROBUDUR from "./assets/finishes/borobudur.json" with { type: "json" };
@@ -135,6 +156,18 @@ import C_TOWER_STAIR from "./assets/architecture/components/tower-stair.json" wi
 import SACRE_DOC from "./assets/architecture/sacre-coeur.json" with { type: "json" };
 import STEPHAN_DOC from "./assets/architecture/stephansdom.json" with { type: "json" };
 import C_DRUM_DOME from "./assets/architecture/components/drum-dome.json" with { type: "json" };
+// the Thai kit (tools/archgen/thai.py: the Grand Palace's halls, prasats, spires, chedis, prangs, walls, gates, yakshas)
+import C_THAI_GABLE from "./assets/architecture/components/thai-gable.json" with { type: "json" };
+import C_THAI_HALL from "./assets/architecture/components/thai-hall.json" with { type: "json" };
+import C_THAI_CROSS from "./assets/architecture/components/thai-cross.json" with { type: "json" };
+import C_THAI_ROOF from "./assets/architecture/components/thai-roof.json" with { type: "json" };
+import C_THAI_SPIRE from "./assets/architecture/components/thai-spire.json" with { type: "json" };
+import C_CHEDI from "./assets/architecture/components/chedi.json" with { type: "json" };
+import C_PRANG from "./assets/architecture/components/prang.json" with { type: "json" };
+import C_THAI_WALL from "./assets/architecture/components/thai-wall.json" with { type: "json" };
+import C_THAI_GATE from "./assets/architecture/components/thai-gate.json" with { type: "json" };
+import C_YAKSHA from "./assets/architecture/components/yaksha.json" with { type: "json" };
+import C_SEATED_BUDDHA from "./assets/architecture/components/seated-buddha.json" with { type: "json" };
 import C_PORTICO from "./assets/architecture/components/portico.json" with { type: "json" };
 import STPAULS_DOC from "./assets/architecture/st-pauls.json" with { type: "json" };
 import PARLIAMENT_DOC from "./assets/architecture/parliament.json" with { type: "json" };
@@ -160,13 +193,35 @@ import C_PORTAL from "./assets/architecture/components/portal.json" with { type:
 import C_GOTHIC_TOWER_STAGE from "./assets/architecture/components/gothic-tower-stage.json" with { type: "json" };
 import C_GOTHIC_OCTAGON_STAGE from "./assets/architecture/components/gothic-octagon-stage.json" with { type: "json" };
 import C_GOTHIC_SPIRE from "./assets/architecture/components/gothic-spire.json" with { type: "json" };
+import C_STAGE_TOWER from "./assets/architecture/components/stage-tower.json" with { type: "json" };
 import C_DOME_CASCADE from "./assets/architecture/components/dome-cascade.json" with { type: "json" };
 import C_DOMED_ARCADE from "./assets/architecture/components/domed-arcade.json" with { type: "json" };
 import C_RIWAQ from "./assets/architecture/components/riwaq.json" with { type: "json" };
 import C_OTTOMAN_MINARET from "./assets/architecture/components/ottoman-minaret.json" with { type: "json" };
 import TEMPLE_OF_HEAVEN_DOC from "./assets/architecture/temple-of-heaven.json" with { type: "json" };
 import SHEIKH_ZAYED_DOC from "./assets/architecture/sheikh-zayed.json" with { type: "json" };
+import PONT_DU_GARD_DOC from "./assets/architecture/pont-du-gard.json" with { type: "json" };
+import ABU_SIMBEL_DOC from "./assets/architecture/abu-simbel.json" with { type: "json" };
+import TIKAL_DOC from "./assets/architecture/tikal.json" with { type: "json" };
+import PISA_DOC from "./assets/architecture/pisa.json" with { type: "json" };
+import REGENSBURG_DOC from "./assets/architecture/regensburg.json" with { type: "json" };
+import BYODO_IN_DOC from "./assets/architecture/byodo-in.json" with { type: "json" };
+import TOPKAPI_DOC from "./assets/architecture/topkapi.json" with { type: "json" };
+import JERONIMOS_DOC from "./assets/architecture/jeronimos.json" with { type: "json" };
+import PARK_GUELL_DOC from "./assets/architecture/park-guell.json" with { type: "json" };
+import PRAMBANAN_DOC from "./assets/architecture/prambanan.json" with { type: "json" };
+import DRACHENBURG_DOC from "./assets/architecture/drachenburg.json" with { type: "json" };
+import GRAND_PALACE_DOC from "./assets/architecture/grand-palace.json" with { type: "json" };
+import US_CAPITOL_DOC from "./assets/architecture/us-capitol.json" with { type: "json" };
+import FULDA_DOC from "./assets/architecture/fulda.json" with { type: "json" };
+import FRAUENKIRCHE_MUNICH_DOC from "./assets/architecture/frauenkirche-munich.json" with { type: "json" };
+import ST_PETERS_DOC from "./assets/architecture/st-peters.json" with { type: "json" };
+import ALBRECHTSBURG_DOC from "./assets/architecture/albrechtsburg.json" with { type: "json" };
 import IMAM_MOSQUE_DOC from "./assets/architecture/imam-mosque.json" with { type: "json" };
+import FORBIDDEN_CITY_DOC from "./assets/architecture/forbidden-city.json" with { type: "json" };
+import ST_MARKS_DOC from "./assets/architecture/st-marks.json" with { type: "json" };
+import DOME_OF_THE_ROCK_DOC from "./assets/architecture/dome-of-the-rock.json" with { type: "json" };
+import EIFFEL_TOWER_DOC from "./assets/architecture/eiffel-tower.json" with { type: "json" };
 import SUMMER_PALACE_DOC from "./assets/architecture/summer-palace.json" with { type: "json" };
 import ANGKOR_WAT_DOC from "./assets/architecture/angkor-wat.json" with { type: "json" };
 import BOROBUDUR_DOC from "./assets/architecture/borobudur.json" with { type: "json" };
@@ -241,7 +296,7 @@ registerGlyphs(PATTERN_LIBRARY.glyphs);
 registerMurals(PATTERN_LIBRARY.murals);
 registerGreek(PATTERN_LIBRARY.greek);
 // every building's finish, by its document (archBuilding finds its own; Florence and the arena are built by code and ask)
-export const FINISHES = { "arena": FIN_ARENA, "colosseum": FIN_COLOSSEUM, "berliner-dom": FIN_BERLINER_DOM, "blue-mosque": FIN_BLUE_MOSQUE, "chichen-itza": FIN_CHICHEN_ITZA, "cologne": FIN_COLOGNE, "dendera": FIN_DENDERA, "giza": FIN_GIZA, "didyma": FIN_DIDYMA, "windmill": FIN_WINDMILL, "el-pilar": FIN_EL_PILAR, "fishermans-bastion": FIN_FISHERMANS_BASTION, "florence": FIN_FLORENCE, "frauenkirche": FIN_FRAUENKIRCHE, "hagia-sophia": FIN_HAGIA_SOPHIA, "hephaestus": FIN_HEPHAESTUS, "kandariya": FIN_KANDARIYA, "karlskirche": FIN_KARLSKIRCHE, "mainz": FIN_MAINZ, "maria-laach": FIN_MARIA_LAACH, "melk": FIN_MELK, "milan": FIN_MILAN, "moritzburg": FIN_MORITZBURG, "notre-dame": FIN_NOTRE_DAME, "pantheon": FIN_PANTHEON, "parliament": FIN_PARLIAMENT, "parthenon": FIN_PARTHENON, "sacre-coeur": FIN_SACRE_COEUR, "schwerin": FIN_SCHWERIN, "st-basil": FIN_ST_BASIL, "st-isaacs": FIN_ST_ISAACS, "st-pauls": FIN_ST_PAULS, "stephansdom": FIN_STEPHANSDOM, "sultan-qaboos": FIN_SULTAN_QABOOS, "taj-mahal": FIN_TAJ_MAHAL, "temple-of-heaven": FIN_TEMPLE_OF_HEAVEN, "sheikh-zayed": FIN_SHEIKH_ZAYED, "imam-mosque": FIN_IMAM_MOSQUE, "summer-palace": FIN_SUMMER_PALACE, "angkor-wat": FIN_ANGKOR_WAT, "borobudur": FIN_BOROBUDUR, "himeji": FIN_HIMEJI, "horyuji": FIN_HORYUJI, "kinkakuji": FIN_KINKAKUJI, "fushimi-inari": FIN_FUSHIMI_INARI, "ulm": FIN_ULM, "zwinger": FIN_ZWINGER };
+export const FINISHES = { "regensburg": FIN_REGENSBURG, "byodo-in": FIN_BYODO_IN, "topkapi": FIN_TOPKAPI, "jeronimos": FIN_JERONIMOS, "park-guell": FIN_PARK_GUELL, "prambanan": FIN_PRAMBANAN, "drachenburg": FIN_DRACHENBURG, "grand-palace": FIN_GRAND_PALACE, "us-capitol": FIN_US_CAPITOL, "fulda": FIN_FULDA, "frauenkirche-munich": FIN_FRAUENKIRCHE_MUNICH, "st-peters": FIN_ST_PETERS, "albrechtsburg": FIN_ALBRECHTSBURG, "forbidden-city": FIN_FORBIDDEN_CITY, "st-marks": FIN_ST_MARKS, "dome-of-the-rock": FIN_DOME_OF_THE_ROCK, "eiffel-tower": FIN_EIFFEL_TOWER, "arena": FIN_ARENA, "colosseum": FIN_COLOSSEUM, "pont-du-gard": FIN_PONT_DU_GARD, "abu-simbel": FIN_ABU_SIMBEL, "tikal": FIN_TIKAL, "pisa": FIN_PISA, "berliner-dom": FIN_BERLINER_DOM, "blue-mosque": FIN_BLUE_MOSQUE, "chichen-itza": FIN_CHICHEN_ITZA, "cologne": FIN_COLOGNE, "dendera": FIN_DENDERA, "giza": FIN_GIZA, "didyma": FIN_DIDYMA, "windmill": FIN_WINDMILL, "el-pilar": FIN_EL_PILAR, "fishermans-bastion": FIN_FISHERMANS_BASTION, "florence": FIN_FLORENCE, "frauenkirche": FIN_FRAUENKIRCHE, "hagia-sophia": FIN_HAGIA_SOPHIA, "hephaestus": FIN_HEPHAESTUS, "kandariya": FIN_KANDARIYA, "karlskirche": FIN_KARLSKIRCHE, "mainz": FIN_MAINZ, "maria-laach": FIN_MARIA_LAACH, "melk": FIN_MELK, "milan": FIN_MILAN, "moritzburg": FIN_MORITZBURG, "notre-dame": FIN_NOTRE_DAME, "pantheon": FIN_PANTHEON, "parliament": FIN_PARLIAMENT, "parthenon": FIN_PARTHENON, "sacre-coeur": FIN_SACRE_COEUR, "schwerin": FIN_SCHWERIN, "st-basil": FIN_ST_BASIL, "st-isaacs": FIN_ST_ISAACS, "st-pauls": FIN_ST_PAULS, "stephansdom": FIN_STEPHANSDOM, "sultan-qaboos": FIN_SULTAN_QABOOS, "taj-mahal": FIN_TAJ_MAHAL, "temple-of-heaven": FIN_TEMPLE_OF_HEAVEN, "sheikh-zayed": FIN_SHEIKH_ZAYED, "imam-mosque": FIN_IMAM_MOSQUE, "summer-palace": FIN_SUMMER_PALACE, "angkor-wat": FIN_ANGKOR_WAT, "borobudur": FIN_BOROBUDUR, "himeji": FIN_HIMEJI, "horyuji": FIN_HORYUJI, "kinkakuji": FIN_KINKAKUJI, "fushimi-inari": FIN_FUSHIMI_INARI, "ulm": FIN_ULM, "zwinger": FIN_ZWINGER };
 // the finishes these landmarks (built already: index.html placed them by their footprints) and the village's land will
 // be built with -- every village/ finish (the fields, the riverside, the three mines) and the windmill's -- and, as a
 // finish of their own, the materials of the items a landmark is furnished with (index.html: their tiles drawn while the
@@ -495,11 +550,11 @@ function geoFor(shape, size, inflate = 0) {
 // the village draws a static building as a single mesh and merges it with its neighbours. Flat normals come
 // from the triangles themselves (the engine welds its vertices, which is what makes the pieces MEET, so there
 // are no per-corner normals to average and none are wanted: architecture is flat faces and sharp arrises).
-const ARCH_DOCS = { arena: ARENA_DOC, colosseum: COLOSSEUM_DOC, basilica: BASILICA_DOC, florence: FLORENCE_DOC, "pantheon": PANTHEON_DOC, "parthenon": PARTHENON_DOC, "hephaestus": HEPHAESTUS_DOC, "taj-mahal": TAJ_DOC, "st-basil": STBASIL_DOC, "frauenkirche": FRAUENKIRCHE_DOC, "zwinger": ZWINGER_DOC, "notre-dame": NOTREDAME_DOC, "milan": MILAN_DOC, "cologne": COLOGNE_DOC, "dendera": DENDERA_DOC, "giza": GIZA_DOC, "didyma": DIDYMA_DOC, "windmill": WINDMILL_DOC, "hagia-sophia": HAGIA_DOC, "melk": MELK_DOC, "schwerin": SCHWERIN_DOC, "karlskirche": KARLSKIRCHE_DOC, "chichen-itza": CHICHEN_DOC, "sacre-coeur": SACRE_DOC, "stephansdom": STEPHAN_DOC, "st-pauls": STPAULS_DOC, "parliament": PARLIAMENT_DOC, "st-isaacs": STISAACS_DOC, "berliner-dom": BERLINERDOM_DOC, "moritzburg": MORITZBURG_DOC, "fishermans-bastion": FISHERMANS_DOC, "mainz": MAINZ_DOC, "maria-laach": MARIA_LAACH_DOC, "kandariya": KANDARIYA_DOC, "el-pilar": EL_PILAR_DOC, "sultan-qaboos": SULTAN_QABOOS_DOC, "ulm": ULM_DOC, "blue-mosque": BLUE_MOSQUE_DOC, "temple-of-heaven": TEMPLE_OF_HEAVEN_DOC, "sheikh-zayed": SHEIKH_ZAYED_DOC, "imam-mosque": IMAM_MOSQUE_DOC, "summer-palace": SUMMER_PALACE_DOC, "angkor-wat": ANGKOR_WAT_DOC, "borobudur": BOROBUDUR_DOC, "himeji": HIMEJI_DOC, "horyuji": HORYUJI_DOC, "kinkakuji": KINKAKUJI_DOC, "fushimi-inari": FUSHIMI_INARI_DOC,
+const ARCH_DOCS = { "regensburg": REGENSBURG_DOC, "byodo-in": BYODO_IN_DOC, "topkapi": TOPKAPI_DOC, "jeronimos": JERONIMOS_DOC, "park-guell": PARK_GUELL_DOC, "prambanan": PRAMBANAN_DOC, "drachenburg": DRACHENBURG_DOC, "grand-palace": GRAND_PALACE_DOC, "us-capitol": US_CAPITOL_DOC, "fulda": FULDA_DOC, "frauenkirche-munich": FRAUENKIRCHE_MUNICH_DOC, "st-peters": ST_PETERS_DOC, "albrechtsburg": ALBRECHTSBURG_DOC, "forbidden-city": FORBIDDEN_CITY_DOC, "st-marks": ST_MARKS_DOC, "dome-of-the-rock": DOME_OF_THE_ROCK_DOC, "eiffel-tower": EIFFEL_TOWER_DOC, arena: ARENA_DOC, colosseum: COLOSSEUM_DOC, "pont-du-gard": PONT_DU_GARD_DOC, "abu-simbel": ABU_SIMBEL_DOC, "tikal": TIKAL_DOC, "pisa": PISA_DOC, basilica: BASILICA_DOC, florence: FLORENCE_DOC, "pantheon": PANTHEON_DOC, "parthenon": PARTHENON_DOC, "hephaestus": HEPHAESTUS_DOC, "taj-mahal": TAJ_DOC, "st-basil": STBASIL_DOC, "frauenkirche": FRAUENKIRCHE_DOC, "zwinger": ZWINGER_DOC, "notre-dame": NOTREDAME_DOC, "milan": MILAN_DOC, "cologne": COLOGNE_DOC, "dendera": DENDERA_DOC, "giza": GIZA_DOC, "didyma": DIDYMA_DOC, "windmill": WINDMILL_DOC, "hagia-sophia": HAGIA_DOC, "melk": MELK_DOC, "schwerin": SCHWERIN_DOC, "karlskirche": KARLSKIRCHE_DOC, "chichen-itza": CHICHEN_DOC, "sacre-coeur": SACRE_DOC, "stephansdom": STEPHAN_DOC, "st-pauls": STPAULS_DOC, "parliament": PARLIAMENT_DOC, "st-isaacs": STISAACS_DOC, "berliner-dom": BERLINERDOM_DOC, "moritzburg": MORITZBURG_DOC, "fishermans-bastion": FISHERMANS_DOC, "mainz": MAINZ_DOC, "maria-laach": MARIA_LAACH_DOC, "kandariya": KANDARIYA_DOC, "el-pilar": EL_PILAR_DOC, "sultan-qaboos": SULTAN_QABOOS_DOC, "ulm": ULM_DOC, "blue-mosque": BLUE_MOSQUE_DOC, "temple-of-heaven": TEMPLE_OF_HEAVEN_DOC, "sheikh-zayed": SHEIKH_ZAYED_DOC, "imam-mosque": IMAM_MOSQUE_DOC, "summer-palace": SUMMER_PALACE_DOC, "angkor-wat": ANGKOR_WAT_DOC, "borobudur": BOROBUDUR_DOC, "himeji": HIMEJI_DOC, "horyuji": HORYUJI_DOC, "kinkakuji": KINKAKUJI_DOC, "fushimi-inari": FUSHIMI_INARI_DOC,
                     "village/church": V_CHURCH, "village/eaves-house": V_EAVES_HOUSE, "village/gable-house": V_GABLE_HOUSE, "village/gatehouse": V_GATEHOUSE, "village/jettied-house": V_JETTIED_HOUSE, "village/longhouse": V_LONGHOUSE, "village/stone-house": V_STONE_HOUSE, "village/wall": V_WALL, "village/wall-tower": V_WALL_TOWER };
 // the COMPONENTS those buildings use (a definition `use`d by another: Florence's tribune morte are `iwan`s, the
 // Taj Mahal's minarets carry `chhatri`s, Notre-Dame's nave is the `basilica`)
-registerDocs({ "components/chhatri": C_CHHATRI, "components/minaret": C_MINARET, "components/iwan": IWAN_DOC, "components/domed-tower": C_DOMED_TOWER, "components/gallery": C_GALLERY, "components/curved-gallery": C_CURVED_GALLERY, "components/pavilion": C_PAVILION, "components/pinnacle": C_PINNACLE, "components/pedestal": C_PEDESTAL, "components/serpent-head": C_SERPENT_HEAD, "components/serpent-column": C_SERPENT_COLUMN, "components/flying-buttress": C_FLYING_BUTTRESS, "components/bridge": C_BRIDGE, "components/palace-wing": C_PALACE_WING, "components/tower-stair": C_TOWER_STAIR, "components/drum-dome": C_DRUM_DOME, "components/portico": C_PORTICO, "components/apse": C_APSE, "components/round-stair-tower": C_ROUND_STAIR_TOWER, "components/baroque-tower": C_BAROQUE_TOWER, "components/arcade-walk": C_ARCADE_WALK, "components/crenellation": C_CRENELLATION, "components/omani-minaret": C_OMANI_MINARET, "components/portal": C_PORTAL, "components/gothic-tower-stage": C_GOTHIC_TOWER_STAGE, "components/gothic-octagon-stage": C_GOTHIC_OCTAGON_STAGE, "components/gothic-spire": C_GOTHIC_SPIRE, "components/dome-cascade": C_DOME_CASCADE, "components/domed-arcade": C_DOMED_ARCADE, "components/riwaq": C_RIWAQ, "components/ottoman-minaret": C_OTTOMAN_MINARET, "components/dougong": C_DOUGONG, "components/chinese-hall": C_CHINESE_HALL, "components/palace-wall": C_PALACE_WALL, basilica: BASILICA_DOC,
+registerDocs({ "components/chhatri": C_CHHATRI, "components/minaret": C_MINARET, "components/iwan": IWAN_DOC, "components/domed-tower": C_DOMED_TOWER, "components/gallery": C_GALLERY, "components/curved-gallery": C_CURVED_GALLERY, "components/pavilion": C_PAVILION, "components/pinnacle": C_PINNACLE, "components/pedestal": C_PEDESTAL, "components/serpent-head": C_SERPENT_HEAD, "components/serpent-column": C_SERPENT_COLUMN, "components/flying-buttress": C_FLYING_BUTTRESS, "components/bridge": C_BRIDGE, "components/palace-wing": C_PALACE_WING, "components/tower-stair": C_TOWER_STAIR, "components/drum-dome": C_DRUM_DOME, "components/thai-gable": C_THAI_GABLE, "components/thai-hall": C_THAI_HALL, "components/thai-cross": C_THAI_CROSS, "components/thai-roof": C_THAI_ROOF, "components/thai-spire": C_THAI_SPIRE, "components/chedi": C_CHEDI, "components/prang": C_PRANG, "components/thai-wall": C_THAI_WALL, "components/thai-gate": C_THAI_GATE, "components/yaksha": C_YAKSHA, "components/seated-buddha": C_SEATED_BUDDHA, "components/portico": C_PORTICO, "components/apse": C_APSE, "components/round-stair-tower": C_ROUND_STAIR_TOWER, "components/baroque-tower": C_BAROQUE_TOWER, "components/arcade-walk": C_ARCADE_WALK, "components/crenellation": C_CRENELLATION, "components/omani-minaret": C_OMANI_MINARET, "components/portal": C_PORTAL, "components/gothic-tower-stage": C_GOTHIC_TOWER_STAGE, "components/gothic-octagon-stage": C_GOTHIC_OCTAGON_STAGE, "components/gothic-spire": C_GOTHIC_SPIRE, "components/stage-tower": C_STAGE_TOWER, "components/dome-cascade": C_DOME_CASCADE, "components/domed-arcade": C_DOMED_ARCADE, "components/riwaq": C_RIWAQ, "components/ottoman-minaret": C_OTTOMAN_MINARET, "components/dougong": C_DOUGONG, "components/chinese-hall": C_CHINESE_HALL, "components/palace-wall": C_PALACE_WALL, basilica: BASILICA_DOC,
              "furniture/altar": F_ALTAR, "furniture/bakery": F_BAKERY, "furniture/barrels": F_BARRELS, "furniture/bed": F_BED, "furniture/butcher": F_BUTCHER, "furniture/carpenter": F_CARPENTER, "furniture/chest": F_CHEST, "furniture/cooper": F_COOPER, "furniture/hearth": F_HEARTH, "furniture/pew": F_PEW, "furniture/pottery": F_POTTERY, "furniture/smithy": F_SMITHY, "furniture/table": F_TABLE, "furniture/tailor": F_TAILOR, "furniture/tavern-room": F_TAVERN_ROOM, "furniture/weaver": F_WEAVER, "village/church": V_CHURCH, "village/eaves-house": V_EAVES_HOUSE, "village/gable-house": V_GABLE_HOUSE, "village/gatehouse": V_GATEHOUSE, "village/jettied-house": V_JETTIED_HOUSE, "village/longhouse": V_LONGHOUSE, "village/stone-house": V_STONE_HOUSE, "village/wall": V_WALL, "village/wall-tower": V_WALL_TOWER,
              "village/pig-yard": V_PIG_YARD, "village/bridge": V_BRIDGE, "village/market": V_MARKET, "village/apiary": V_APIARY, "village/hen-yard": V_HEN_YARD, "village/stable-yard": V_STABLE_YARD, "components/fence": C_FENCE, "components/gate": C_GATE, "components/pigsty": C_PIGSTY, "components/hen-house": C_HEN_HOUSE, "components/stable": C_STABLE, "components/gallery-apse": C_GALLERY_APSE });
 // (and every ITEM in the catalogue -- a building's `item` parts, its chairs and beds, by the same paths the asset viewer
@@ -513,6 +568,14 @@ for (const [k, v] of ASSETS) if (k.startsWith("finishes/") && v.building?.starts
 // (a site's finish may use its buildings' own -- the Acropolis's, the Parthenon's for the Parthenon: arch/finish.js withUses)
 const docNamed = (k) => ARCH_DOCS[k] ?? docOf(k);
 for (const k of Object.keys(FINISHES)) FINISHES[k] = withUses(FINISHES[k], docNamed(k), { finishes: FINISHES, docOf: docNamed });
+// (A WORLD'S OWN PICTURES. A planned window or mosaic takes its seed from the world and the building, so Notre-Dame's "medallion story" is not Cologne's, and another world's is another again; what it shows is still the plan's -- the Deesis stays the Deesis. One seed per pattern per building: rules sharing a pattern still share a tile. Called once, before any tile is drawn)
+export function seedFinishes(world) {
+  const hash = (t) => { let h = 2166136261; for (let i = 0; i < t.length; i++) h = Math.imul(h ^ t.charCodeAt(i), 16777619); return ((h ^ (h >>> 15)) >>> 0) % 99991 + 1; };
+  const planned = (n) => { const d = patternOf(n); return !d?.pinned && !!d?.layers?.some((L) => L.seed !== undefined && (L.plan || L.theme || L.follow !== undefined) && (L.kind === "mosaic" || L.kind === "glass")); };
+  const seed = (k, f) => { for (const r of f?.rules ?? []) if (r.pattern && /^(mosaic|glass)\//.test(r.pattern) && planned(r.pattern)) r.params = { ...r.params, seed: hash(`${world}|${k}|${r.pattern}`) }; };
+  for (const [k, f] of Object.entries(FINISHES)) seed(k, f);
+  // (BUILDINGS is left alone: its entries are lazy, reading one builds it, and a building takes its finish from FINISHES)
+}
 const archCacheAsm = new Map();
 // `yaw` (degrees, among the params): the whole building TURNED about its origin -- a house facing its street. The
 // assembly itself is turned (every instance of every part), so its mesh, its floors and walls, its finish and its
@@ -541,7 +604,7 @@ function turnAssembly(asm, deg) {
 export function lifeOf(asm, cx, cz) {   // (exported: the asset viewer reads a building's statues by it, as the game does)
   const L = { beds: [], doors: [], windows: [], folkSpots: [], seats: [], fires: [], guards: [], up: [], pen: null, blocks: [], vessels: [], statues: [],
               dishes: [], flows: [], cobwebs: [], plants: [], crops: [], quaySlots: [], way: [], boatDock: null, wheelAt: null, wheel: null, drop: null, bargeZ: null,
-              lifts: [], paintings: [], mirrors: [], spins: [], chimneys: [], ridges: [], peaks: [], edges: [], hips: [] };
+              lifts: [], paintings: [], mirrors: [], spins: [], chimneys: [], ridges: [], peaks: [], edges: [], hips: [], doorways: [] };
   for (const p of asm.parts) {
     // a ROOF's RIDGE (a part of kind "roof"): its top line, end to end -- where the pigeons sit (pigeons.js); and the
     // top of a part marked `perch` (a merlon: its own share of the birds, `share`)
@@ -613,6 +676,12 @@ export function lifeOf(asm, cx, cz) {   // (exported: the asset viewer reads a b
       }
       continue;
     }
+    // its DOORWAYS (arch/build.js extrude: every opening from a face's foot), each placement's, in the site's frame:
+    // where the doors of assets/doors are hung (doorsOf)
+    if (p.geometry?.doorways) for (const dw of p.geometry.doorways) for (const [a, X, Y, Z] of p.instances) {
+      const c = Math.cos(a), s = Math.sin(a), at = ([x, y, z]) => [X + x * c + z * s - cx, Y + y, Z - x * s + z * c - cz];
+      L.doorways.push({ part: p.name, front: dw.front.map(at), back: dw.back.map(at), spring: dw.spring, crown: dw.crown, head: dw.head, ...(dw.glass ? { glass: true } : {}) });
+    }
     if (p.kind !== "marker") continue;
     const d0 = p.data ?? {};
     for (const [i, [a, X, Y, Z]] of p.instances.entries()) {
@@ -637,7 +706,7 @@ export function lifeOf(asm, cx, cz) {   // (exported: the asset viewer reads a b
       // the marker facing `face` (on whatever pedestal the definition built under it)
       else if (p.role === "statue") L.statues.push({ x, y: Y, z, h: (d.face ?? 0) + a, kind: d.kind ?? "man", pose: d.pose ?? "stand", style: d.style ?? null,
                                                     outfit: d.outfit ?? null, hold: d.hold ?? null, stone: d.stone ?? "marble", scale: d.scale ?? 1, seed: d.seed ?? 1, gesture: d.gesture ?? null,
-                                                    head: d.head ?? null, wings: d.wings ?? null, grip: d.grip ?? null, wear: d.wear ?? null });   // (head: the way a lying one's head lies; wings: an angel's; grip: how a hand holds, over its pose's; wear: put on over its dress -- a helmet)
+                                                    head: d.head ?? null, wings: d.wings ?? null, grip: d.grip ?? null, wear: d.wear ?? null, broken: d.broken ?? null, seen: d.seen ?? null });   // (seen: where from it can be seen at all, statues.js; head: the way a lying one's head lies; wings: an angel's; grip: how a hand holds, over its pose's; wear: put on over its dress -- a helmet)
       else if (p.role === "way") L.up.push({ order: d.order ?? 0, storey: d.storey ?? 0, at: [x, z] });   // the route up the stairs
       // a farmyard's stock: its `pen` (the range, w by d about the marker, of a `kind`), the `block` rects it keeps out of, its `trough`
       else if (p.role === "pen") L.pen = { x0: x - (d.w ?? 10) / 2, x1: x + (d.w ?? 10) / 2, z0: z - (d.d ?? 10) / 2, z1: z + (d.d ?? 10) / 2, kind: d.kind ?? "pigs" };
@@ -1057,6 +1126,8 @@ export function archFloorField(name, params = {}, cell = 3) {
 // counts if something is over it with a room's height (not a pitched roof: that is a roof space), or if it is open to
 // the sky and its part says it is walked (`walked: true`: a terrace, a roof walk).
 // Returns { levels: [{ y, area, reached }], unreached: [{ y, area, at }] } -- areas in square metres.
+const WALKER_R = .18;   // (the game's walker: config.json player.collisionRadius -- squeezes through 60 cm)
+const RIM = [[0, 0], [WALKER_R, 0], [-WALKER_R, 0], [0, WALKER_R], [0, -WALKER_R]];
 export function archAccess(name, params = {}, { cell = .25, minArea = 8, probe = null } = {}) {
   const asm = archAssembly(name, params), floors = archFloorField(name, params), walls = archWallField(name, params);
   // the flat floors and what is over them, per grid cell: every triangle's heights, whether it faces up, its kind
@@ -1111,8 +1182,8 @@ export function archAccess(name, params = {}, { cell = .25, minArea = 8, probe =
     for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {   // (diagonals too: a door askew to the grid)
       const i2 = i + di, j2 = j + dj;
       if (i2 < 0 || j2 < 0 || i2 >= NX || j2 >= NZ) continue;
-      // (the walker's circle, as the game samples it: its middle and four points of its rim, 0.25m out)
-      if ([[0, 0], [.25, 0], [-.25, 0], [0, .25], [0, -.25]].some(([ox, oz]) => walls(cx(i2) + ox, cz(j2) + oz, h + .5, h + 1.7))) continue;
+      // (the walker's circle, as the game samples it: its middle and four points of its rim, WALKER_R out)
+      if (RIM.some(([ox, oz]) => walls(cx(i2) + ox, cz(j2) + oz, h + .5, h + 1.7))) continue;
       visit(i2, j2, supportAt(i2, j2, h + .5));
     }
   }
@@ -1134,7 +1205,7 @@ export function archAccess(name, params = {}, { cell = .25, minArea = 8, probe =
     if (over && over.h > f.h + 20 && !f.walked) return "a ceiling 20m up";
     if (!over && !f.walked) return "open to the sky, not walked";
     // (where the walker's circle -- the walk's own test -- meets a wall: no one stands there, it is the wall's foot)
-    if ([[0, 0], [.25, 0], [-.25, 0], [0, .25], [0, -.25]].some(([ox, oz]) => walls(x + ox, z + oz, f.h + .5, f.h + 1.7))) return "in a wall";
+    if (RIM.some(([ox, oz]) => walls(x + ox, z + oz, f.h + .5, f.h + 1.7))) return "in a wall";
     return null;
   };
   if (probe) {                                            // (what the check sees over one point: every surface, and the walk's heights there; a list of points: one such each)
@@ -1300,6 +1371,7 @@ export function archBuilding(doc, { name, params = {}, color = 0xdcd4c2, accent 
   const cx = origin ? 0 : (x0 + x1) / 2, cz = origin ? 0 : (z0 + z1) / 2;
   const floors = archFloorField(doc, params), walls = archWallField(doc, params);
   const life = lifeOf(asm, cx, cz);
+  if (typeof doc === "string") life.doors.push(...doorsOf(doc, life, cx, cz));
   // (an iron railing is iron; a stone or balustered one is the building's stone)
   const iron = (typeof doc === "string" ? ARCH_DOCS[doc] : doc)?.railing?.type === "iron";
   const palette = { "kind:dome": { color: 0xa9532e, accent: 0x8c4426 }, "kind:roof": { color: 0x9a5a3e, accent: 0x7e4631 },
@@ -1314,7 +1386,7 @@ export function archBuilding(doc, { name, params = {}, color = 0xdcd4c2, accent 
     // (where the ground is OPEN over it: `site.dig`, rectangles [x0, z0, x1, z1] in its frame -- a shaft's mouth, which
     //  has no floor near the surface to open it as a cellar's stair does)
     ...(site?.dig ? { dig: site.dig.map(([a, b, c, d]) => [a - cx, b - cz, c - cx, d - cz]) } : {}),
-    ...(moat ? { moat: { ...moat, ox: -cx, oz: -cz } } : {}),
+    ...(moat ? { moat: { ...moat, ox: -cx + (moat.x ?? 0), oz: -cz + (moat.z ?? 0) } } : {}),   // (`x` `z`: water set off from the definition's origin -- a pond in front)
     floorY: (x, z) => floors(x + cx, z + cz),
     wallField: (x, z, lo, hi) => walls(x + cx, z + cz, lo, hi),
     spirals: spiralsOf(asm, cx, cz),
@@ -1332,6 +1404,62 @@ export function archBuilding(doc, { name, params = {}, color = 0xdcd4c2, accent 
     ...(life.lifts.length ? { lifts: life.lifts } : {}), ...(life.paintings.length ? { paintings: life.paintings } : {}), ...(life.mirrors.length ? { mirrors: life.mirrors } : {}),
     ...(site?.glazed || asm.params?.glazed ? { glazed: true } : {}),   // (its windows' panes are glass, not shutters: a palace's, a merchant's stone house)
   };
+}
+// A BUILDING'S DOORS (2026-11-02): assets/doors/<its definition>.json says which of its doorways have doors and what
+// doors -- a building's definition says where its walls are cut, not what hangs in the cuts, and a cathedral's
+// doorways are arches like its arcade's. Each entry is
+//   { part, near: [x, z] | [[x, z], ...], style, ...a door's own words (doors.js) }   the doorways a part's walls cut
+//        (arch/build.js extrude: lifeOf's `doorways`), every one of them or the one nearest each point (the
+//        definition's own frame); the door hangs at the wall's INNER face and swings inward -- the face nearer the
+//        building's middle, or the other with `flip` (a door between two rooms); `below` a height keeps only the
+//        doorways whose sill is lower (a tower's door, not the belfry opening over it); `set` metres deeper in
+//   { at: [x, y, z, yaw], w, h, spring, head, style, ... }                           a doorway the walls do not cut
+//        (a gap between two piers): the marker's own placement, its +z the outside
+//   { markers: true, near?, style, ... }                                              the definition's own door markers,
+//        restyled (the nearest one to `near`, or all)
+// `style` is one of assets/doors/styles.json: a look, its colours, its leaves -- what the entry says over it.
+const HEXC = (v) => (typeof v === "string" && /^#[0-9a-f]{6}$/i.test(v) ? parseInt(v.slice(1), 16) : v);
+const DOOR_WORDS = ["look", "color", "accent", "leaves", "wicket", "slide", "post", "studs", "rows", "open", "leafH", "fill", "pane"];
+function doorStyle(e, styles = ASSETS.get("doors/styles")) {
+  const st = { ...(styles?.styles?.[e.style] ?? {}) };
+  for (const k of DOOR_WORDS) if (e[k] !== undefined) st[k] = e[k];
+  for (const k of ["color", "accent", "fill"]) if (st[k] !== undefined) st[k] = HEXC(st[k]);
+  return Object.fromEntries(DOOR_WORDS.filter((k) => st[k] !== undefined).map((k) => [k, st[k]]));
+}
+// (`spec` and `styles`: the doors file and the styles as an editor has them -- assets.html -- else the catalogue's)
+export function doorsOf(docName, life, cx = 0, cz = 0, { spec = ASSETS.get(`doors/${docName}`), styles } = {}) {
+  const out = [];
+  if (!spec) return out;
+  const nears = (e) => (e.near === undefined ? null : (typeof e.near[0] === "number" ? [e.near] : e.near).map(([x, z]) => [x - cx, z - cz]));
+  for (const e of spec.doors ?? []) {
+    const look = { ...doorStyle(e, styles), frame: false };
+    if (e.markers) {
+      const ds = life.doors, pick = nears(e)?.map(([x, z]) => ds.reduce((b, d) => (Math.hypot(d.x - x, d.z - z) < Math.hypot(b.x - x, b.z - z) ? d : b))) ?? ds;
+      for (const d of pick) Object.assign(d, look);
+      continue;
+    }
+    if (e.at) {
+      const [x, y, z, yaw = 0] = e.at;
+      out.push({ x: x - cx, y, z: z - cz, w: e.w, h: e.h, yaw: -yaw, ...(e.head ? { head: { per90: 4, ...e.head }, spring: e.spring ?? e.h } : {}), ...look });
+      continue;
+    }
+    const names = [].concat(e.part), ways = life.doorways.filter((q) => names.includes(q.part)   // (a part, or a list of them;
+      && (e.below === undefined || Math.min(q.front[0][1], q.front[1][1]) < e.below));             //  `below` a height: its doors that low)
+    if (!ways.length) { console.warn(`doors/${docName}: no doorway in "${e.part}"`); continue; }
+    const mid = (q, s) => [(q[s][0][0] + q[s][1][0]) / 2, (q[s][0][2] + q[s][1][2]) / 2];
+    const centre = (q) => { const a = mid(q, "front"), b = mid(q, "back"); return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; };
+    const chosen = nears(e)?.map(([x, z]) => ways.reduce((b, q) => (Math.hypot(centre(q)[0] - x, centre(q)[1] - z) < Math.hypot(centre(b)[0] - x, centre(b)[1] - z) ? q : b))) ?? ways;
+    for (const q of new Set(chosen)) {
+      // the outside: the face farther from the building's middle (its frame's origin, here)
+      const F = mid(q, "front"), B = mid(q, "back"), outer = (Math.hypot(...F) > Math.hypot(...B)) !== !!e.flip ? "front" : "back", inner = outer === "front" ? "back" : "front";
+      const I = mid(q, inner), O = mid(q, outer), dl = Math.hypot(O[0] - I[0], O[1] - I[1]) || 1, ox = (O[0] - I[0]) / dl, oz = (O[1] - I[1]) / dl;
+      const [J0, J1] = q[inner], w = Math.hypot(J1[0] - J0[0], J1[2] - J0[2]);
+      const a = Math.atan2(ox, oz), set = Math.min(dl / 2, .12 + (e.set ?? 0));   // (its inner face this far into the reveal)
+      out.push({ x: I[0] + ox * set, y: Math.min(J0[1], J1[1]), z: I[1] + oz * set, w, h: q.crown, yaw: -a * 180 / Math.PI,
+                 ...(q.head && q.head.profile !== "flat" ? { head: q.head, spring: q.spring } : {}), ...look });
+    }
+  }
+  return out;
 }
 // A FIELD'S CROP, painted: the plants are a shader pattern on thin see-through panels (archFrag PAT 13-16, swaying with
 // the wind), rows across the plot both ways so the field reads from every side -- a few dozen panels instead of thousands
@@ -2046,7 +2174,7 @@ const BUILD_FACTORIES = {
   house: () => archBuilding("village/gable-house", { name: "Town House" }),
   bighouse: () => archBuilding("village/eaves-house", { name: "Merchant House", params: { W: 11, D: 10, n: 3, build: ["walls 0", "walls 1", "walls 2", "windows 0 front", "windows 0 back", "windows 1", "windows 2", "floor 0",
     "floor 1 beside", "floor 1 front", "floor 1 back", "floor 2 beside", "floor 2 front", "floor 2 back", "floor 2 col A", "flight 0", "flight 1",
-    "way 1", "way 1 top", "way 2", "way 2 top", "roof", "chimney", "hearth", "table", "bed 1", "sleep 1", "bed 2", "sleep 2", "door"] } }),
+    "way 1", "way 1 top", "way 2", "way 2 top", "roof", "chimney", "hearth", "table", "bed 1", "bed 2", "door"] } }),
   windmill: () => {   // (its sail cross turns at the hub the definition says: sx, sy, sz, sailR -- in the site's frame)
     const d = archBuilding("windmill", { name: "Windmill" }), P = archAssembly("windmill").params, [ox, oz] = d.arch.offset;
     return Object.assign(d, { sailAt: [P.sx + ox, P.sy, P.sz + oz], sailR: P.sailR });
@@ -2065,7 +2193,8 @@ const BUILD_FACTORIES = {
   // St Basil's: red brick with white trim, and no two onions alike -- each chapel's cap its own colours and pattern
   stbasil: () => archBuilding("st-basil", { name: "St Basil's Cathedral" }),
   frauenkirche: () => archBuilding("frauenkirche", { name: "Frauenkirche" }),
-  zwinger: () => archBuilding("zwinger", { name: "Zwinger", moat: { hw: 115, hd: 56.5, w: 12, depth: 4.4 } }),
+  // (the Zwingergraben is the definition's own: `site.moat`, a pool along the Kronentor's side, OSM's shore)
+  zwinger: () => archBuilding("zwinger", { name: "Zwinger" }),
   // Hagia Sophia: rendered walls the colour of its ochre plaster, the domes in lead
   hagiasophia: () => archBuilding("hagia-sophia", { name: "Hagia Sophia" }),
   // Stift Melk: Melk yellow with white trim, red roofs, the church's caps and dome in green copper
@@ -2105,6 +2234,27 @@ const BUILD_FACTORIES = {
   sheikhzayed: () => archBuilding("sheikh-zayed", { name: "Sheikh Zayed Grand Mosque" }),
   // the Imam Mosque: haft-rangi tiles, cobalt and turquoise, on every face of the court and the domes; buff brick outside
   imammosque: () => archBuilding("imam-mosque", { name: "Imam Mosque" }),
+  forbiddencity: () => archBuilding("forbidden-city", { name: "Hall of Supreme Harmony" }),
+  stmarks: () => archBuilding("st-marks", { name: "St Mark's Basilica" }),
+  domeoftherock: () => archBuilding("dome-of-the-rock", { name: "Dome of the Rock" }),
+  eiffeltower: () => archBuilding("eiffel-tower", { name: "Eiffel Tower" }),
+  pontdugard: () => archBuilding("pont-du-gard", { name: "Pont du Gard" }),
+  abusimbel: () => archBuilding("abu-simbel", { name: "Abu Simbel" }),
+  tikal: () => archBuilding("tikal", { name: "Tikal Temple I" }),
+  pisa: () => archBuilding("pisa", { name: "Pisa" }),
+  regensburg: () => archBuilding("regensburg", { name: "Regensburg Cathedral" }),
+  byodoin: () => archBuilding("byodo-in", { name: "Byodo-in" }),
+  topkapi: () => archBuilding("topkapi", { name: "Topkapi Palace" }),
+  jeronimos: () => archBuilding("jeronimos", { name: "Jeronimos Monastery" }),
+  parkguell: () => archBuilding("park-guell", { name: "Park Guell" }),
+  prambanan: () => archBuilding("prambanan", { name: "Prambanan" }),
+  drachenburg: () => archBuilding("drachenburg", { name: "Schloss Drachenburg" }),
+  grandpalace: () => archBuilding("grand-palace", { name: "Grand Palace" }),
+  uscapitol: () => archBuilding("us-capitol", { name: "United States Capitol" }),
+  fulda: () => archBuilding("fulda", { name: "Fulda Cathedral" }),
+  frauenkirchemunich: () => archBuilding("frauenkirche-munich", { name: "Frauenkirche (Munich)" }),
+  stpeters: () => archBuilding("st-peters", { name: "St. Peter's Basilica" }),
+  albrechtsburg: () => archBuilding("albrechtsburg", { name: "Albrechtsburg" }),
   summerpalace: () => archBuilding("summer-palace", { name: "Summer Palace" }),
   angkorwat: () => archBuilding("angkor-wat", { name: "Angkor Wat" }),
   borobudur: () => archBuilding("borobudur", { name: "Borobudur" }),
@@ -2114,7 +2264,7 @@ const BUILD_FACTORIES = {
   fushimiinari: () => archBuilding("fushimi-inari", { name: "Fushimi Inari Taisha" }),
   // the Fisherman's Bastion: white limestone, dark tent caps
   fishermansbastion: () => archBuilding("fishermans-bastion", { name: "Fisherman's Bastion" }),
-  moritzburg: () => archBuilding("moritzburg", { name: "Moritzburg Castle", moat: { hw: MORITZBURG_DOC._moat.hw, hd: MORITZBURG_DOC._moat.hd, w: MORITZBURG_DOC._moat.w, depth: 4.4 } }),
+  moritzburg: () => archBuilding("moritzburg", { name: "Moritzburg Castle", moat: { depth: 4.4, ...MORITZBURG_DOC._moat } }),   // (the doc's `_moat`: the Schlossteich as a pool round the island)
   // St Isaac's: grey marble, the portico columns red granite, the domes gilded
   stisaacs: () => archBuilding("st-isaacs", { name: "St Isaac's Cathedral" }),
 };
@@ -2135,7 +2285,7 @@ for (const [k, make] of Object.entries(BUILD_FACTORIES)) {
 }
 // the DRESS of a landmark's people (clothes: the wardrobe's `styles`): its congregation wears it, and so does a share of
 // the world's wanderers when the landmark stands (index.html)
-export const DRESS = { hephaestus: "greek", parthenon: "greek", acropolis: "greek", didyma: "greek", colosseum: "roman", pantheon: "roman", templeofheaven: "chinese", sheikhzayed: "islamic", imammosque: "islamic", summerpalace: "chinese", angkorwat: "indian", borobudur: "indian", himeji: "japanese", horyuji: "japanese", kinkakuji: "japanese", fushimiinari: "japanese",
+export const DRESS = { regensburg: "gothic", byodoin: "japanese", topkapi: "ottoman", jeronimos: "gothic", parkguell: "industrial", prambanan: "indian", frauenkirchemunich: "gothic", albrechtsburg: "gothic", forbiddencity: "chinese", domeoftherock: "islamic", pontdugard: "roman", abusimbel: "egyptian", tikal: "maya", pisa: "gothic", hephaestus: "greek", parthenon: "greek", acropolis: "greek", didyma: "greek", colosseum: "roman", pantheon: "roman", templeofheaven: "chinese", sheikhzayed: "islamic", imammosque: "islamic", summerpalace: "chinese", angkorwat: "indian", grandpalace: "indian", borobudur: "indian", himeji: "japanese", horyuji: "japanese", kinkakuji: "japanese", fushimiinari: "japanese",
                        giza: "egyptian", notredame: "gothic", cologne: "gothic", milan: "gothic", ulm: "gothic", stephansdom: "gothic", florence: "gothic", mainz: "gothic", marialaach: "gothic", caerphilly: "gothic",
                        kandariya: "indian", chichenitza: "maya", stbasil: "russian" };
 // THE VILLAGE'S LAND AND ITS RIVERSIDE: definitions in their own finishes, the same in every world -- pregen caches them
@@ -2143,7 +2293,9 @@ export const DRESS = { hephaestus: "greek", parthenon: "greek", acropolis: "gree
 export const LAND = ["watermill", "windmill", "landing", "fisherHut", "fountain", "ryeField", "barleyField", "cabbageField", "beanField", "garlicField", "soilField", "berries", "orchard",
                      "mineSilver", "mineCopper", "mineSalt"];
 export const LANDMARKS = ["florence", "dendera", "giza", "didyma", "milan", "notredame", "cologne", "hephaestus", "parthenon", "colosseum",
-                          "versailles", "caerphilly", "pantheon", "tajmahal", "stbasil", "frauenkirche", "zwinger", "hagiasophia", "melk", "schwerin", "karlskirche", "chichenitza", "sacrecoeur", "stephansdom", "stpauls", "parliament", "stisaacs", "berlinerdom", "moritzburg", "fishermansbastion", "mainz", "elpilar", "sultanqaboos", "ulm", "bluemosque", "templeofheaven", "sheikhzayed", "imammosque", "summerpalace", "borobudur", "angkorwat", "himeji", "horyuji", "kinkakuji", "fushimiinari", "marialaach", "kandariya", "acropolis"];
+                          "versailles", "caerphilly", "pantheon", "tajmahal", "stbasil", "frauenkirche", "zwinger", "hagiasophia", "melk", "schwerin", "karlskirche", "chichenitza", "sacrecoeur", "stephansdom", "stpauls", "parliament", "stisaacs", "berlinerdom", "moritzburg", "fishermansbastion", "mainz", "elpilar", "sultanqaboos", "ulm", "bluemosque", "templeofheaven", "sheikhzayed", "imammosque", "pontdugard", "abusimbel", "tikal", "pisa", "summerpalace", "borobudur", "angkorwat", "grandpalace", "himeji", "horyuji", "kinkakuji", "fushimiinari", "marialaach", "kandariya", "acropolis", "forbiddencity", "stmarks", "domeoftherock", "eiffeltower",
+                          "regensburg", "byodoin", "topkapi", "jeronimos", "parkguell", "prambanan",
+                          "drachenburg", "uscapitol", "fulda", "frauenkirchemunich", "stpeters", "albrechtsburg"];
 // (a landmark that is a site holding another: the two never stand in one world -- index.html townKeys)
 export const LANDMARK_HOLDS = { acropolis: ["parthenon"] };
 // what each landmark is called, for the start menu (index.html chooseSetup) -- read from its factory's own `name`, so

@@ -138,6 +138,11 @@ export const IDLE_SWAY = .022;
 // A LIMB'S ROOT: how far down an arm or a leg (in its own top radii) the body holds its top -- the shoulder, the hip --
 // as it moves (skeleton.js `root`, shell.js "A LIMB'S ROOT")
 export const ROOT = 1.6;
+// A BELLY's depth (people.js `pot`, shell.js TRUNK.pot: its forward swell, in the trunk's half-widths at a unit) -- what
+// stands off the trunk clears it (the torso's `flat` as clothes.js reads it)
+export const POT_CLEAR = .36;
+// how much of a hanging arm's radius may lie in the body it hangs beside (people.js `abduction`: a stout body's arms lean out)
+export const ARM_TOUCH = .6;
 // A LIMB's kind (skeleton.js `limb`, shell.js LIMBS: a statue's bare limb carved with its muscles) -- and `left` added
 // for one on the figure's +z side, so its outer side is known whatever the pose crosses; `soft` for a woman's or a
 // body given `anatomy: "soft"` (shell.js LIMBS soft: its forms only hinted)
@@ -237,14 +242,18 @@ const wornOnHead = (w) => !!garmentDef(w.garment)?.head, wornOnFeet = (w) => !!g
 // the villagers' jobs are handed out by it (village-life.js)
 const kindFrom = (kr, adult) => adult ? (kr < .5 ? "man" : "woman") : kr < .4 ? "man" : kr < .8 ? "woman" : kr < .9 ? "child10" : "child5";
 export const personKind = (seed, adult = false) => kindFrom(rng(seed * 771 + 13)(), adult);
-export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit, beast = null, upper = false, body = null, style = null, skin: skinAs = null, hair: hairAs = null, old = false, work = false, anatomy = null, physique = null } = {}) {
+export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit, beast = null, upper = false, body = null, style = null, skin: skinAs = null, hair: hairAs = null, old = false, work = false, anatomy = null, physique = null, fat: fatAs = null } = {}) {
   const B = body ?? BODY;   // `body`: another canon than the world's (the asset viewer, editing it live)
   const r = rng(seed * 771 + 13);
   const kr = r();
   if (!kind) kind = kindFrom(kr, adult);
   const isChild = kind.startsWith("child");
   const st = B.stature[kind] ?? B.stature.man;
-  const h = height ?? st[0] + r() * st[1];
+  // HOW THIS ONE DIFFERS (body.json build.variety, bodyOf below): a stream of its own, so every other draw keeps its seed --
+  // the stature's draw made bell-shaped by a second one, then fat and frame (drawn once the sex is known)
+  // (its seed mixed with the KIND: a man and a woman of one seed were the same build)
+  const V = B.build.variety, vr = rng(seed * 1931 + 47 + [...kind].reduce((a, c) => a * 31 + c.charCodeAt(0), 0) % 100003), hu = r(), hv = vr();
+  const h = height ?? st[0] + st[1] * (V ? hu + (hv - hu) * V.height : hu);
   const skinDrawn = SKIN[Math.floor(r() * SKIN.length)], skin = skinAs ?? (beast ? beast.hide : skinDrawn);   // (skinAs: a demon's red)   // (drawn either way: the seed's stream stays put)
   const hairDrawn = HAIR[Math.floor(r() * HAIR.length)];   // (drawn either way: the seed's stream stays put)
   const hairC = hairAs ?? (old && !isChild ? OLD_HAIR[Math.floor(hairDrawn % OLD_HAIR.length)] : isChild && GREY_HAIR.has(hairDrawn) ? 0xa87433 : hairDrawn);   // (old: grey, or white; a child never grey; hairAs: a gold statue's)
@@ -280,7 +289,20 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   // athlete's V of a trunk, a Buddha's lion shoulders), multiplied in
   const sx0 = female ? bs.sex.female : bs.sex.male, ph = physique ? bs.physiques?.[physique] : null;
   if (physique && !ph) console.warn(`person: no physique "${physique}" (body.json build.physiques)`);
-  const sx = ph ? Object.fromEntries([...new Set([...Object.keys(sx0), ...Object.keys(ph)])].filter((k) => k !== "_about").map((k) => [k, (sx0[k] ?? 1) * (ph[k] ?? 1)])) : sx0;
+  const sx1 = ph ? Object.fromEntries([...new Set([...Object.keys(sx0), ...Object.keys(ph)])].filter((k) => k !== "_about").map((k) => [k, (sx0[k] ?? 1) * (ph[k] ?? 1)])) : sx0;
+  // ...and THIS ONE's BUILD (body.json build.variety): fat (thin .. stout .. fat) and the frame's breadth -- none for an
+  // ideal (a physique: a statue's canon) or a beast; `fat` given, that (the lineups)
+  const fz = (vr() + vr() + vr() - 1.5) * 2, frz = (vr() + vr() + vr() - 1.5) * 2;   // (about a unit bell each; drawn either way: the stream stays put)
+  const fat = !V || ph || beast ? 0 : fatAs ?? Math.max(V.fat.min, Math.min(V.fat.max, (fz > 0 ? fz * V.fat.sd * (1 + V.fat.skew * fz * V.fat.sd) : fz * V.fat.sd) * (isChild ? V.fat.child : 1) + (old && !isChild ? V.fat.old : 0)));
+  const frame = !V || ph || beast ? 0 : frz * V.frame * (isChild ? .5 : 1);
+  const pf = V?.perFat?.[female ? "female" : "male"] ?? {}, fe = fat < 0 ? fat * (V?.thinShare ?? 1) : fat;
+  const F = (k) => 1 + (pf[k] ?? 0) * fe;   // (a width's factor for this much fat)
+  const sx = { ...sx1, shoulders: sx1.shoulders * (1 + frame) * F("shoulders"), chest: (sx1.chest ?? 1) * F("chest"), waist: sx1.waist * F("waist"), hips: sx1.hips * (1 + frame * .8) * F("hips"),
+               thighs: sx1.thighs * F("thighs"), arms: (sx1.arms ?? 1) * F("arms"), knees: F("knees"), bust: sx1.bust * F("depth") };
+  // (the BELLY: the trunk's forward swell over the waist, shell.js TRUNK.pot -- carried by the torso's cuts; the face's
+  //  FULLNESS, one of a few steps of fat, heads.js `full`)
+  const pot = Math.max(0, fat) * (pf.belly ?? 0);
+  const fb = V?.fullBins ?? [-1, 1, 2], full = fat < fb[0] ? -1 : fat >= fb[2] ? 2 : fat >= fb[1] ? 1 : 0;
   const hr = h * (kind === "child5" ? Bh.r.child5 : kind === "child10" ? Bh.r.child10 : Bh.r.adult);
   const hipY = h * (kind === "child5" ? Bt.hip.child5 : kind === "child10" ? Bt.hip.child10 : Bt.hip.adult);
   const shY = h - Bt.shoulder.heads * hr - Bt.shoulder.fromCrown * h, T = shY - hipY;
@@ -289,9 +311,11 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   // under the armpits (tW), the natural waist (wW), the hips (hW) -- its top a low squared cap up to the collar,
   // the shoulders, and its bottom a rounder one down to the crotch
   const HW = Bt.halfWidth, wid = h * build;
-  const sW = HW.shoulder * wid * sx.shoulders, tW = HW.chest * wid * sx.shoulders, wW = HW.waist * wid * sx.waist, hW = HW.hip * wid * sx.hips;
+  const sW = HW.shoulder * wid * sx.shoulders, tW = HW.chest * wid * sx.shoulders * (sx.chest ?? 1), wW = HW.waist * wid * sx.waist, hW = HW.hip * wid * sx.hips;
   const rimY = shY - Bt.rim * h, pitY = shY - Bt.armpit * h, collarY = shY + Bt.collar * h, baseY = hipY + Bt.base * h, crotchY = hipY - Bt.crotch * h;
-  const torsoFlat = Bt.depth * sx.bust;
+  // (a BELLY stands out of the trunk's front by POT_CLEAR of its half-width a unit, shell.js TRUNK.pot: what stands off the
+  //  trunk -- a skirt from the waist, an apron, a cloak -- clears that much more depth)
+  const torsoFlat = Bt.depth * sx.bust, torsoClear = (Bt.depthClear ?? Bt.depth) * sx.bust + POT_CLEAR * pot;   // (what is drawn; and what stands off it clears: the shell's masses, shell.js TRUNK, stand out of the drawn depth)
   const RINGS = [[rimY, sW], [pitY, tW], [waistY, wW], [baseY, hW]];
   const torsoHalf = (y) => {   // its half-width at a height: over the shoulders' cap, and between the rings
     if (y >= collarY) return 0;
@@ -299,19 +323,28 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
     for (let i = 1; i < RINGS.length; i++) if (y >= RINGS[i][0]) { const [y0, r0] = RINGS[i - 1], [y1, r1] = RINGS[i]; return r1 + (r0 - r1) * (y - y1) / (y0 - y1); }
     return hW;
   };
-  const armU = Ba.upper * h, armF = Ba.fore * h, rArmU = Ba.rUpper * h * build * (sx.arms ?? 1), rElbow = Ba.rElbow * h * build, rArmF = Ba.rFore * h * build * (sx.arms ?? 1), rWrist = Ba.rWrist * h * build;
+  const armU = Ba.upper * h, armF = Ba.fore * h, rArmU = Ba.rUpper * h * build * (sx.arms ?? 1), rElbow = Ba.rElbow * h * build * sx.knees, rArmF = Ba.rFore * h * build * (sx.arms ?? 1), rWrist = Ba.rWrist * h * build;
   // THE HAND, not a fist. A ball on the wrist left every arm a tenth of a body short: a real hand is .11 of
   // the stature long (the wrist sits at .49 h, the fingertips at .38), as wide as it is thick is thin. It is
   // a flattened pill down the forearm -- no fingers at this scale, a mitten, which is what the coat sleeves
   // and gloves of the period look like anyway.
   const rHand = Ba.rHand * h, handL = Ba.hand * h;
   const ankY = Bl.ankle * h, legU = (hipY - ankY) * Bl.upperShare, legLo = hipY - ankY - legU;
-  const rThigh = Bl.rThigh * h * build * sx.thighs, rKnee = Bl.rKnee * h * build, rAnk = Bl.rAnkle * h, rFoot = Bl.rFoot * h;
+  const rThigh = Bl.rThigh * h * build * sx.thighs, rKnee = Bl.rKnee * h * build * sx.knees, rAnk = Bl.rAnkle * h, rFoot = Bl.rFoot * h;
   const hipZ = Bl.hipZ * h * build * sx.hips;
-  // THE ARMS HANG BESIDE THE TORSO, not in it: the shoulder joint a little under the rim and clear of the side
-  // by the arm's own girth, the arm leaning out by `abduction` -- so it never enters the chest or the hips, and a
-  // sleeve and a bodice are two sheets that meet at the shoulder instead of one passing through the other
-  const armY = rimY - Ba.drop * h, shZ = tW + rArmU + Ba.gap * h;   // (clear of the chest; the shoulders' flare covers the joint)
+  // THE ARMS HANG BESIDE THE TORSO, not in it: the shoulder joint a little under the rim at its end, the arm's cap
+  // ending the shoulder's line, the arm leaning out by `abduction` -- so below the armpit it clears the chest and the hips,
+  // and a sleeve and a bodice are two sheets that meet at the shoulder instead of one passing through the other
+  const armY = rimY - Ba.drop * h, shZ = sW + Ba.gap * h;   // (the joint under the end of the shoulder, so the arm's cap is the end of that line; the lean takes it clear of the ribs below the armpit)
+  // (...leaning out further where the body is wider below the shoulders than the canon's lean clears -- a stout waist, a
+  //  fat woman's hips and thighs: the arm hangs over them, not through them; `ARM_TOUCH` of its radius may lie in them, as
+  //  a hand at rest lies against the thigh)
+  let abduction = Ba.abduction;
+  for (let k = 1; k <= 12; k++) {
+    const d = (armU + armF) * k / 12, y = armY - d, ra = d < armU ? rArmU + (rArmF - rArmU) * d / armU : rArmF + (rWrist - rArmF) * (d - armU) / armF;
+    const body = Math.max(y >= crotchY ? torsoHalf(y) : 0, y < baseY ? hipZ + rThigh : 0);
+    abduction = Math.max(abduction, Math.atan2(body + ra * (1 - ARM_TOUCH) - shZ, d) * 180 / Math.PI);
+  }
   // a beast's animal parts (head and tail): scaled so its head sphere is a man's, a little over (the muzzle adds length)
   const bf = beast ? hr * (beast.headScale ?? 1.1) / beast.head.r : 1;
   const beastPart = (p) => { const q = scalePart(p, bf); if (q.k) q.k *= bf; if (beast.eye && q.dot) q.dot = { ...q.dot, iris: beast.eye }; return q; };
@@ -354,11 +387,11 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   const trunkAt = (y) => Math.round(Math.max(0, Math.min(1.27, (y - crotchY) / (rimY - crotchY))) * 100);
   const cut = (id, parent, [yA, rA], [yB, rB], extra = {}) => add({ id, parent, shape: "capsule", pos: [0, 0, 0], frame: "body", k: kT, spine: true,
         size: { r: rA, r2: rB, len: yA - yB }, pivot: [0, (yA + yB) / 2 - chestO, 0], flat: torsoFlat, color: skin,
-        anat: 1 + trunkAt(yA) + 128 * trunkAt(yB) + (female || anatomy === "soft" ? 16384 : 0) + (female ? 32768 : 0), ...extra });
+        anat: 1 + trunkAt(yA) + 128 * trunkAt(yB) + (female || anatomy === "soft" ? 16384 : 0) + (female ? 32768 : 0), ...(pot > 0 ? { pot } : {}), ...extra });   // (pot: its belly, shell.js TRUNK.pot)
   cut("chest", "pelvis", RINGS[0], RINGS[1], { caps: { a: (collarY - rimY) / sW, b: 1, p: Bt.capSquare },
         anim: { axis: "y", deg: 4, speed: .8, phase: Math.PI, amp: true, work: workOf("chest", 1) } });
   cut("belly", "chest", RINGS[1], RINGS[2]);
-  cut("hips", "chest", RINGS[2], RINGS[3], { caps: { a: 1, b: (baseY - crotchY) / hW, p: 2 } });
+  cut("hips", "chest", RINGS[2], RINGS[3], { caps: { a: 1, b: (baseY - crotchY) / hW, p: 1.6 } });   // (narrowing early, into the thighs: not a hem standing over them)
   // THE NECK STARTS UNDER THE JAW, not inside the skull. The shell engine sweeps a part and its neighbour as
   // ONE LATHE where they meet, share a colour and run the same way -- head and neck do all three -- and the
   // neck's top used to sit ABOVE the chin, so that lathe doubled back on itself and came out as one long
@@ -368,11 +401,13 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   // jawline.
   const hL = beast ? 0 : Bh.jawLength * hr, hJaw = Bh.jawRadius * hr;
   const neckBot = collarY - .02 * h, neckTop = headY - hL - hJaw * .4;   // (its foot inside the shoulders' cap)
-  const neckR = hr * (isChild ? Bh.neckRadius.child : beast ? Bh.neckRadius.beast : Bh.neckRadius.adult);
+  const neckR = hr * (isChild ? Bh.neckRadius.child : beast ? Bh.neckRadius.beast : ph ? Bh.neckRadius.ideal ?? Bh.neckRadius.adult : female ? Bh.neckRadius.female ?? Bh.neckRadius.adult : Bh.neckRadius.adult) * F("neck");   // (a statue's physique: the sculptor's, `ideal`)
   // (a physique's `neck`: the athlete's strong neck -- its foot that much wider, rising into the shoulders, its top under
   //  the jaw a third of it: as wide all the way up, it stood out before the chin)
-  const neckFoot = neckR * (ph?.neck ?? 1), neckHead = neckR * (1 + ((ph?.neck ?? 1) - 1) / 3);
-  add({ id: "neck", parent: "chest", shape: "capsule", size: { r: neckHead, r2: neckFoot, len: neckTop - neckBot }, pos: [0, (neckTop + neckBot) / 2 - chestO, 0], color: skin, k: .03 * S });
+  const neckFoot = neckR * (ph?.neck ?? 1) * (Bh.neckFoot ?? 1), neckHead = neckR * (1 + ((ph?.neck ?? 1) - 1) / 3);
+  // (leaning forward as it rises, the head carried a little before the chest: `neckLean`, a column stood straight up and the
+  //  head sat on it like a ball on a post; its foot wider, the trapezius rising into it: Bh.neckFoot)
+  add({ id: "neck", parent: "chest", shape: "capsule", size: { r: neckHead, r2: neckFoot, len: neckTop - neckBot }, pos: [0, (neckTop + neckBot) / 2 - chestO, 0], rot: [0, 0, -(beast ? 0 : Bh.neckLean ?? 0)], color: skin, k: .03 * S });
   // The head is an OVOID, not a ball: a round cone standing on its own axis -- the CRANIUM is the sphere it
   // always was (its top cap centre sits at the part's own origin, so the hair, the hats and the eyes keep
   // exactly the places they had), and below it the head runs on for hL and narrows to hJaw: a jaw and a chin.
@@ -380,7 +415,7 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   // the jaw is the part a face shows. (Round about its axis: it cannot also be narrower across than deep.)
   // (hL, hJaw: the jaw, declared above the neck that hangs under it)
   const headPart = add({ id: "head", parent: "chest", shape: "capsule", size: { r: hr, r2: hJaw, len: hL }, pivot: [0, -hL / 2, 0],
-        pos: [.01 * S, headY - chestO, 0], color: skin, k: .02 * S,
+        pos: [(beast ? .01 * S : (Bh.forward ?? .006) * h), headY - chestO, 0], color: skin, k: .02 * S,
         anim: { axis: "y", deg: 14, speed: .22, phase: headPh } });
 
   // ---- the face (head-local, in head radii)
@@ -496,13 +531,13 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   for (const [s, tag] of [[1, "L"], [-1, "R"]]) {
     const ph = s > 0 ? Math.PI : 0;   // the left arm swings forward with the right leg
     add({ id: "arm" + tag, parent: "chest", shape: "capsule", size: { r: rArmU, r2: rElbowJ, len: armU },
-          pos: [0, armY - chestO, s * shZ], rot: [-s * Ba.abduction, 0, 0], pivot: [0, -armU / 2, 0], k: .025 * S, color: skin, root: ROOT * rArmU, limb: limbOf("arm", s),
+          pos: [0, armY - chestO, s * shZ], rot: [-s * abduction, 0, 0], pivot: [0, -armU / 2, 0], k: .025 * S, color: skin, root: ROOT * rArmU, limb: limbOf("arm", s),
           anim: { axis: "z", deg: 20, speed: .8, phase: ph, amp: true, work: workOf("arm", s) } });
     add({ id: "fore" + tag, parent: "arm" + tag, shape: "capsule", size: { r: rElbowJ, r2: rWrist, len: armF },
           pos: [0, -armU, 0], rot: [0, 0, JOINTS.joints.elbow.rest.flexion], pivot: [0, -armF / 2, 0], k: .01 * S, color: skin, limb: limbOf("fore", s),
           hinge: { bend: [EL.min, EL.max], turn: s > 0 ? [ROT.min, ROT.max] : [-ROT.max, -ROT.min] },   // (skeleton.js HINGE)
           anim: { axis: "z", deg: 9, speed: .8, phase: ph, amp: true, work: workOf("fore", s) } });
-    add({ id: "hand" + tag, parent: "fore" + tag, shape: "capsule", size: { r: rHand * .95, r2: rHand, len: handL }, flat: .5, palm: true,
+    add({ id: "hand" + tag, parent: "fore" + tag, shape: "capsule", size: { r: rHand * .95, r2: rHand, len: handL }, flat: .5, palm: true, caps: { a: 1, b: .6, p: 2.6 },
           pos: [0, -armF, 0], pivot: [0, -handL / 2, 0], color: skin, k: .008 * S });
   }
 
@@ -537,14 +572,14 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   // (a skirt, a cloak, a hood, a hat: shells of their own)
   const byId = (id) => parts.find((p) => p.id === id);
   const kneeY = ankY + legLo, handY = armY - armU - armF - handL;
-  const abd = Math.sin(Ba.abduction * Math.PI / 180);
+  const abd = Math.sin(abduction * Math.PI / 180);
   const armR = (d) => d < armU ? rArmU + (rElbowJ - rArmU) * d / armU : d < armU + armF ? rElbowJ + (rWrist - rElbowJ) * (d - armU) / armF : rHand;
   const ellipse = (a, b) => { const q = ((a - b) / (a + b)) ** 2; return Math.PI * (a + b) * (1 + 3 * q / (10 + Math.sqrt(4 - 3 * q))); };
   const form = {
     h, S, pose,
     torso: {
       parts: [{ id: "chest", top: rimY, bottom: pitY }, { id: "belly", top: pitY, bottom: waistY }, { id: "hips", top: waistY, bottom: baseY }],
-      collar: collarY, bottom: crotchY, half: torsoHalf, flat: torsoFlat, circumference: ellipse(tW, tW * torsoFlat),
+      collar: collarY, bottom: crotchY, half: torsoHalf, flat: torsoClear, circumference: ellipse(tW, tW * torsoFlat),
       // (with the arms: the torso's half-width, or the arms' outer edge where they hang beside it -- what a cloak clears)
       halfArms: (y) => Math.max(torsoHalf(y), (y > armY + rArmU ? 0 : y > armY ? shZ + Math.sqrt(Math.max(0, rArmU * rArmU - (y - armY) ** 2)) : shZ + (armY - y) * abd + armR(armY - y)) + .008 * S),
       hands: handY,
@@ -592,6 +627,19 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
       Object.assign(byId("arm" + t), { rot: [-s * 12, 0, 32] }); delete byId("arm" + t).anim;
       Object.assign(byId("fore" + t), { rot: [s * 28, 0, 52] }); delete byId("fore" + t).anim;
     }
+  // THE PORTERS' WAYS (freight.js, assets/world/goods.json `carry`): the figure's RIGHT is the rig's "L" (s = 1: out to the side is a negative x rotation, forward a positive z);
+  // a hand not named keeps its walking swing
+  const PORTER = {
+    shoulder: { L: [[-25, 0, 55], [0, 0, 95]] },   // a load on the right shoulder, the right hand up before it at the neck
+    head: { L: [[-150, 0, 8], [10, 0, 62]] },   // a jar or basket on the head, the right hand up at its side
+    pole: { L: [[-10, 0, 42], [0, 0, 62]] },   // a pole on the right shoulder, the right hand on it before him
+    back: { L: [[-34, 0, 34], [0, 0, 126]], R: [[34, 0, 34], [0, 0, 126]] },   // a bale high on the back, both hands at the cords at the shoulders
+    tumpline: { L: [[-30, 0, 62], [0, 0, 118]], R: [[30, 0, 62], [0, 0, 118]] },   // the strap over the brow, both hands up at it
+  }[pose];
+  if (PORTER) for (const [t, [a, f]] of Object.entries(PORTER)) {
+    Object.assign(byId("arm" + t), { rot: a }); delete byId("arm" + t).anim;
+    Object.assign(byId("fore" + t), { rot: f }); delete byId("fore" + t).anim;
+  }
   if (pose === "guard") {   // the weapon arm lifted -- the figure's RIGHT, the rig's "L" (its L/R are mirrored: "L" sits at +z) --
     // the upper arm a little forward, the forearm raised about 60 degrees from hanging
     Object.assign(byId("armL"), { rot: [-8, 0, 15] }); delete byId("armL").anim;
@@ -756,7 +804,7 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   const hex = (c) => "#" + c.toString(16).padStart(6, "0");
   // (the kind: a child's face for a girl too -- she had a grown woman's; the old their own)
   const faceOf = (list) => meshFace ? { kind: isChild ? "child" : old ? (female ? "old-woman" : "elder") : female ? "woman" : "man", seed, skin: hex(skin), hair: hex(hairC), hr, style: meshHair, fringe: o.fringe && !hatOn ? 1 : 0,   // (no fringe under a hat: the flat hair's forelock came through a coif, a bonnet, a hood's cowl -- clipcheck)
-                                        headwear: hatOn ? null : o.jewelry?.head ?? null, ears: o.jewelry?.ears ?? null, ...(o.beard ? { beard: o.beard } : {}),
+                                        headwear: hatOn ? null : o.jewelry?.head ?? null, ears: o.jewelry?.ears ?? null, ...(o.beard ? { beard: o.beard } : {}), ...(full ? { full } : {}),   // (full: the face's fullness by the body's fat -- heads.js)
                                         head: list.findIndex((p) => p.id === "head"), gaze: list.findIndex((p) => p.id === "nose") } : null;
   // what hangs round the neck (jewels.js): the items, the fit they lie on, the parts that carry it (the chest, and the
   // root whose axis is the figure's forward -- the frame the torso is drawn in)
@@ -801,7 +849,7 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
            jewelry: jewelOf(parts), fitNeck,   // what hangs round the neck (jewels.js), and the fit it lies on
            eyeAt: [.01 * S + .9 * hr, headY + .16 * hr],   // where the eyes are, standing: forward of the feet and up (a player's own body: index.html updateSelf)
            sitAt: (top) => top + SEAT_CLEAR - hipOut, rideAt: (back) => back - hipOut,
-           gaits, crouch: CROUCH, legLen: L, probe: .25, outfit: o,
+           gaits, crouch: CROUCH, legLen: L, probe: .25, outfit: o, build: { h, fat, frame, pot, full, abduction },   // (build: how this one was drawn -- body.json build.variety)
            // what the JOINTS need (joints.js): the head turns about the top of the neck, not the skull's centre (in the
            // head's frame); the skirts, which hang from the hips and drape over the thighs as they rise
            motion: { pivots: { neck: [-.01 * S, neckTop - headY, 0] }, skirts: pose === "sit" ? [] : skirts.map((p) => p.id), handLen: handL } };   // (seated, a skirt is already a lap and its fall: no thigh drapes it again -- joints.js)

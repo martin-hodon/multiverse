@@ -32,6 +32,21 @@ def finial(name, x, y, z, h, about=None):
     add(name, {"type": "column", "radius": r4(h * .045), "height": h, "sides": 8, "taper": .3, "at": [[r4(x), r4(y), r4(z), 0]],
                **({"_about": about} if about else {})})
     add(name + " ball", {"type": "column", "radius": r4(h * .1), "height": r4(h * .14), "sides": 10, "taper": .5, "at": [[r4(x), r4(y + h * .4), r4(z), 0]]})
+def muqarnas(name, X, Z, yaw, w, s, it, tiers=(5, 7, 9, 11, 13), rise=1.35):
+    """the stalactite hood of an iwan: tiers of little cells hung under its half dome, each a block turned to the middle, drawing in and
+    climbing as the vault does -- ending in the small crown. (X, Z, yaw): the `portal`'s placement; w s it its opening"""
+    r = w / 2 + .05; zc = w / 2 + it; at = []; n = len(tiers); c, sn = math.cos(yaw), math.sin(yaw)
+    for k, m in enumerate(tiers[::-1]):
+        f = (k + .35) / (n + .4); phi = f * math.pi / 2 * .94
+        rr, y = r * math.cos(phi), s + r * rise * math.sin(phi)
+        for j in range(m):
+            th = -math.pi / 2 * .96 + math.pi * .96 * (j + (.5 if k % 2 else .0) + (0 if k % 2 else .5)) / m
+            lx, lz = (rr - .2) * math.sin(th), zc - (rr - .2) * math.cos(th)
+            at.append([r4(X + c * lx + sn * lz), r4(y), r4(Z - sn * lx + c * lz), r4(yaw + th)])
+    return at
+def muqarnas_part(name, at, w):
+    cw = r4(w * .1)
+    add(name, {"type": "box", "width": cw, "length": r4(w * .06), "height": r4(w * .085), "at": at, "_about": "its cells"})
 def door(at=0, w=3.2, s=4.5): return {"at": r4(at), "width": r4(w), "sill": 0, "springing": r4(s), "head": POINTED}
 def iwan_door(w, it, s):
     """the door through a `portal`'s iwan (its own default), which the building behind must open to match"""
@@ -46,7 +61,7 @@ def side_away(path, c):
 HX, HZ, HH, HT, RS = 19.0, 45.5, 14.0, 2.0, .6       # the hall: x -19..19, z -45.5..45.5, its walls' height and thickness, its roof slab
 S, PR, SPR = 24.0, 3.0, 10.0                         # the chamber: its span between the piers, the piers, the arches' springing
 CT, RO = SPR + S / 2, S / 2 + PR                     # the pendentives' top (the drum's foot), the chamber's reach from the axis
-QW, QH, QD, Qw, Qs, Qit = 30.0, 30.0, 8.0, 14.0, 14.0, .8   # the qibla iwan's pishtaq: width, height, depth; its arch
+QW, QH, QD, Qw, Qs, Qit = 30.0, 30.0, 9.2, 16.4, 16.5, .8   # the qibla iwan's pishtaq: width, height, depth; its arch
 qd, qs = iwan_door(Qw, Qit, Qs)
 add("sanctuary", {"type": "enclosure", "plan": {"rect": [2 * HX, 2 * HZ]}, "thickness": HT, "height": HH, "interior": True, "glass": False,
                   "faces": {"1": [door(0, qd, qs)],
@@ -95,8 +110,12 @@ add("sanctuary piers", {"type": "box", "width": 1.6, "length": 1.6, "height": HH
                         "_about": "the piers of the prayer halls either side of the dome chamber"})
 add("qibla iwan", comp("components/portal", {"W": QW, "Hh": QH, "D": QD, "w": Qw, "s": Qs, "spread": .5, "it": Qit},
                        [[HX, 0, 0, Q]], _about="the qibla iwan's pishtaq on the court's west side, 30m: the great arch, the half dome of muqarnas, the door into the dome chamber"))
+muqarnas_part("qibla muqarnas", muqarnas("q", HX, 0, Q, Qw, Qs, Qit), Qw)
+# the sheet of low brick domes over the prayer halls either side of the chamber (seen from the square past the iwan)
+add("hall domes", {"type": "dome", "radius": 3.6, "thickness": 0, "sides": 10, "head": {"profile": "semicircular"},
+                   "at": [[r4(x), HH + RS, r4(sz * z), 0] for x in (-9.0, 9.0) for z in (26.0, 38.0) for sz in (-1, 1)], "_about": "the prayer halls' domes"})
 # the two minarets beside it, on the sanctuary's roof
-MR = 2.4
+MR = 1.8                                             # (slender: the shafts stand about fifteen times their width)
 add("qibla minarets", comp("components/minaret", {"h": 27.0, "r": MR, "balconies": 1, "bw": 1.1},
                            [[r4(HX - MR - .5), HH + RS, r4(sz * (QW / 2 + MR + .3)), 0] for sz in (-1, 1)],
                            _about="the two minarets beside the qibla iwan, standing on the sanctuary's roof: a balcony on its muqarnas and a kiosk, 48m"))
@@ -105,7 +124,7 @@ add("qibla minarets", comp("components/minaret", {"h": 27.0, "r": MR, "balconies
 CX0, CX1, CZ = HX + QD, 83.0, 37.5                   # the court's faces: x 27 (the qibla iwan's front) .. 83, z -37.5 .. 37.5
 CW, CH = 8.0, 13.0                                   # the ranges round it: their depth and height
 CC = ((CX0 + CX1) / 2, 0.0)                          # the court's middle
-SW_, SH_, SD_, Sw_, Ss_, Sit_ = 24.0, 19.0, CW, 11.0, 9.0, .7    # the three other iwans' pishtaqs
+SW_, SH_, SD_, Sw_, Ss_, Sit_ = 24.0, 23.0, CW, 14.4, 11.5, .7    # the three other iwans' pishtaqs
 sd, ss = iwan_door(Sw_, Sit_, Ss_)
 niche = lambda sill, spr: {"every": 5.0, "width": 3.0, "end": 1.2, "sill": sill, "springing": spr, "head": POINTED}
 COURT_FACE = {"in": [{"h": 6.5, "openings": niche(0, 3.8)}, {"openings": niche(1.0, 4.0)}]}
@@ -128,6 +147,12 @@ add("north iwan", comp("components/portal", {"W": SW_, "Hh": SH_, "D": SD_, "w":
                        [[CC[0], 0, r4(-CZ - SD_), 0]], _about="the iwan on the court's north side, into the winter hall behind it"))
 add("east iwan", comp("components/portal", {"W": SW_, "Hh": SH_, "D": SD_, "w": Sw_, "s": Ss_, "spread": .5, "it": Sit_},
                       [[r4(CX1 + SD_), 0, 0, -Q]], _about="the iwan on the court's east side, facing the qibla iwan: the way in from the vestibule"))
+for nm, X, Z, Y in (("south", CC[0], CZ + SD_, math.pi), ("north", CC[0], -CZ - SD_, 0), ("east", CX1 + SD_, 0, -Q)):
+    muqarnas_part(f"{nm} muqarnas", muqarnas(nm, X, Z, Y, Sw_, Ss_, Sit_), Sw_)
+# the little wooden kiosk (goldasteh) on the iwan's head on the court's north-west side, from which the call was given: open on all sides, a turquoise pyramid
+add("kiosk", {"type": "tiered", "storeys": [{"w": 5.0, "l": 5.0, "h": 2.8, "windows": {"every": 1.6, "width": 1.2, "end": .3, "sill": .9, "springing": 2.4, "head": {"profile": "flat"}}}],
+              "wall": {"t": .15}, "roof": {"pitch": 25, "overhang": .7}, "top": {"form": "hip", "pitch": 34, "overhang": .8}, "floors": False,
+              "at": [[CC[0], SH_, r4(-CZ - SD_ / 2), 0]]})
 add("pool", {"type": "prism", "plan": {"rect": [10.0, 16.0]}, "height": .45, "at": [[CC[0], 0, 0, 0]],
              "_about": "the pool for ablutions in the middle of the court"})
 
@@ -183,7 +208,7 @@ EX = CX1 + SD_                                       # the east iwan's back (x 9
 back = (EX + 5.0, 5.0 * nz / nx)                     # the vestibule's back face 5m out: the line from its door hits the iwan's
 vc = (back[0] + nx * VS / 2, back[1] + nz * VS / 2)
 vf = (vc[0] + nx * VS / 2, vc[1] + nz * VS / 2)
-EW, EH_, ED, Ew, Es, Eit = 26.0, 27.0, 9.0, 12.0, 13.0, .7
+EW, EH_, ED, Ew, Es, Eit = 26.0, 27.0, 9.0, 16.0, 15.0, .7
 ed, es = iwan_door(Ew, Eit, Es)
 add("vestibule", {"type": "enclosure", "plan": {"rect": [VS, VS]}, "thickness": 1.6, "height": 14.0, "interior": True, "glass": False,
                   "faces": {"0": [door(0, ed, es)], "2": [door(0, 3.2, 4.5)],
@@ -199,9 +224,10 @@ finial("vestibule dome finial", vc[0], 14.6 + 2.4 + onion_h(6.1, BULGE, NECK) - 
 add("entrance portal", comp("components/portal", {"W": EW, "Hh": EH_, "D": ED, "w": Ew, "s": Es, "spread": .5, "it": Eit},
                             [[r4(vf[0]), 0, r4(vf[1]), r4(YAW)]],
                             _about="the entrance portal on the square, 27m: its half dome of muqarnas over the door, turned square to the square"))
+muqarnas_part("entrance muqarnas", muqarnas("e", vf[0], vf[1], YAW, Ew, Es, Eit), Ew)
 ER = 2.2
 sx_, sz_ = nz, -nx                                   # (across the portal)
-add("entrance minarets", comp("components/minaret", {"h": 35.0, "r": ER, "balconies": 1, "bw": 1.0},
+add("entrance minarets", comp("components/minaret", {"h": 35.0, "r": 1.6, "balconies": 1, "bw": 1.0},
                               [[r4(vf[0] + k * sx_ * (VS / 2 + ER + .4) - nx * (ER + .4)), 0, r4(vf[1] + k * sz_ * (VS / 2 + ER + .4) - nz * (ER + .4)), 0]
                                for k in (-1, 1)],
                               _about="the two minarets behind the entrance portal's corners, 42m"))

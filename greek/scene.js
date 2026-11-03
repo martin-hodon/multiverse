@@ -5,14 +5,9 @@ import { solvePose, stream, pick, anchor, shieldCentre } from "./rig.js";
 import { faults } from "./faults.js";
 import { buildFigure } from "./figure.js";
 import { solveBeast } from "./beast.js";
-
-// a cast's or scene's value: { p, v } a chance of v, { of: [...] } one of them, plain as it is; down through objects
-export function resolve(v, r) {
-  if (Array.isArray(v) || v === null || typeof v !== "object") return v;
-  if ("of" in v) return resolve(v.of[Math.floor(r() * v.of.length)], r);
-  if ("p" in v) return r() < v.p ? resolve("v" in v ? v.v : 1, r) : undefined;
-  return Object.fromEntries(Object.entries(v).map(([k, q]) => [k, resolve(q, r)]));
-}
+import { resolve } from "../story/seed.js";
+import { rolesOf } from "../story/roles.js";
+export { resolve };
 
 // a group at the origin, { pieces, min, max, height, actors } in world units, the ground at 0: of a few tries, further apart and then another draw, the first with nothing wrong, or the one with least
 export function solveGroup(data, name, opts = {}) {
@@ -36,32 +31,7 @@ function composeGroup(data, name, { seed = 1, period = "classical", flip, tight 
   tight = (S.rigid || (S.wide && !sparse) ? 1 : tight) * spread;       // (bodies too wide to tangle closer, but in a panel of their own, as a metope's do; a team yoked to its car never)
   const rl = stream(seed, "layout", name);
   const mirror = (flip ?? rl() < .5) ? -1 : 1, per = data.canon.periods[period];
-  let roles = S.roles, beats = S.beats;
-  if (S.variants) {                                                    // (what happens, a pick of the whole: each role's pick follows from it)
-    const free = S.variants.filter((v) => !Object.entries(roles).some(([k, q]) => { const c = (v[k]?.cast ?? q.cast); return c?.of ? c.of.every((n) => not?.has(n)) : not?.has(c); })), pool = free.length ? free : S.variants;   // (whoever has come already, `not`, isn't drawn again)
-    const v = pool[Math.floor(rl() * pool.length)];
-    roles = Object.fromEntries(Object.entries(roles).map(([k, q]) => [k, { ...q, ...v[k] }]));
-    beats = v.beats ? { ...beats, ...v.beats } : beats;
-  }
-  if (beats && !sparse) {                                              // (whoever else is there, each where the scene has room; drawn first, and on a stream of their own so the rest keep their poses)
-    const rb = stream(seed, "beat", name), pool = [...beats.of], free = { ...S.slots }, extra = {};
-    for (let n = Math.round(pick(beats.n, rb)), i = 0; i < n && pool.length; i++) {
-      const B = data.beats[pool.splice(Math.floor(rb() * pool.length), 1)[0]], slot = B.slots.find((q) => free[q]);
-      if (slot) { extra[`beat${i}`] = { face: free[slot].face, ...B, at: free[slot].at }; delete free[slot]; }
-    }
-    roles = { ...extra, ...roles };
-  }
-  if (S.chain) {                                                       // a line of bodies, all alike in kind and each its own
-    const n = Math.round(pick(S.chain.n, rl)), step = pick(S.chain.step, rl);
-    roles = {};
-    for (let i = 0; i < n; i++) {
-      const at = -i * step + (rl() - .5) * 6;
-      if (S.chain.rider) {                                             // (a chain of riders: each a beast and whoever is on it)
-        roles[`h${i}`] = { beast: S.chain.beast, gait: S.chain.gait, face: S.chain.face, at };
-        roles[`c${i}`] = { cast: S.chain.cast, action: S.chain.action, face: S.chain.face, on: `h${i}` };
-      } else roles[`c${i}`] = { ...S.chain, at, ...(i ? null : S.chain.lead) };   // (the one in front may do what the rest don't: look back at them)
-    }
-  }
+  const roles = rolesOf(S, rl, { sparse, not, beatRng: () => stream(seed, "beat", name), beatsData: data.beats });
   const actors = {}, order = Object.keys(roles);
   const spot = (A, where) => {                                         // a named place on anyone, in the world
     if (A.beast) return A.beast.place(A.beast.anchors[where] ?? A.beast.anchors.seat);

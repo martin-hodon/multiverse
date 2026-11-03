@@ -1,0 +1,184 @@
+{
+  "name": "Frauenkirche (Munich)",
+  "building": "architecture/frauenkirche-munich",
+  "_about": "The Frauenkirche: red-brown brick in monk bond, the towers banded by light friezes of blind tracery and one more under the eave; the great roof in red plain tiles (Biberschwanz), the pent roof and the dormers too; the Welsche Hauben in green copper with gilt balls; the clocks' gilt dials; light leaded glass, coloured in the choir and the west window; inside, white plaster with ochre ribs over a floor of green-grey and red diamonds.",
+  "stone": {
+    "color": "#8c4a35",
+    "accent": "#a39686",
+    "pat": "brick"
+  },
+  "rules": [
+    {
+      "parts": "kind:glass",
+      "within": [
+        -30,
+        -70,
+        30,
+        -36.85
+      ],
+      "pattern": "painted/stained glass",
+      "palette": "stained",
+      "_about": "the choir's coloured windows"
+    },
+    {
+      "parts": "west front glass",
+      "pattern": "painted/stained glass",
+      "palette": "stained",
+      "_about": "and the west window's"
+    },
+    {
+      "parts": "kind:glass",
+      "pattern": "glass/quarries",
+      "palette": "grisaille",
+      "_about": "the rest light, in leaded quarries (only partly coloured)"
+    },
+    {
+      "parts": [
+        "haubes/ball",
+        "haubes/cross",
+        "clocks/dial",
+        "kind:marks",
+        "kind:hands"
+      ],
+      "pattern": "roofs/gold leaf",
+      "palette": "gold",
+      "_about": "the gilt balls and crosses; the clocks' gilt rims, marks and hands"
+    },
+    {
+      "parts": "clocks/ring",
+      "color": "#1f2a3c",
+      "accent": "#28344a",
+      "pat": "plaster",
+      "_about": "the clocks' dark blue faces"
+    },
+    {
+      "parts": [
+        "haubes",
+        "broaches"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the caps and the broaches in green copper, standing seams"
+    },
+    {
+      "parts": [
+        "south tower 3",
+        "north tower 3"
+      ],
+      "surface": "floor",
+      "above": 57.5,
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the ledges round the octagons' feet, copper-clad"
+    },
+    {
+      "parts": [
+        "church/high roof",
+        "church/pent roof",
+        "narthex roof",
+        "dormers",
+        "kind:roof"
+      ],
+      "surface": [
+        "roof",
+        "floor"
+      ],
+      "side": "out",
+      "pattern": "roofs/beaver tail",
+      "palette": "fired-clay",
+      "_about": "plain tiles"
+    },
+    {
+      "parts": "dormers",
+      "surface": "wall",
+      "color": "#4a3328",
+      "accent": "#5a4032",
+      "pat": "plaster",
+      "_about": "the dormers' dark faces"
+    },
+    {
+      "parts": [
+        "south tower courses",
+        "north tower courses",
+        "porch courses"
+      ],
+      "below": 1.1,
+      "pattern": "stone/ashlar",
+      "palette": "sandstone-grey",
+      "_about": "the plinths"
+    },
+    {
+      "parts": [
+        "south tower courses",
+        "south tower 2 courses",
+        "south tower 3 courses",
+        "north tower courses",
+        "north tower 2 courses",
+        "north tower 3 courses",
+        "octagons courses",
+        "porch courses"
+      ],
+      "pattern": "stone/tracery frieze",
+      "align": "part",
+      "_about": "the friezes of blind tracery between the storeys"
+    },
+    {
+      "parts": "church/aisle wall",
+      "side": "out",
+      "above": 31.2,
+      "below": 32.4,
+      "pattern": "stone/tracery frieze",
+      "align": "above",
+      "_about": "the frieze under the eave, over the pent roof"
+    },
+    {
+      "parts": [
+        "kind:moulding",
+        "kind:wimperg"
+      ],
+      "pattern": "stone/ashlar",
+      "palette": "sandstone-grey",
+      "_about": "the portal's stone frame and gable"
+    },
+    {
+      "parts": [
+        "church/high ribs",
+        "church/aisle ribs"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-ochre",
+      "_about": "the vault ribs picked out in ochre"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/checker diagonal",
+      "palette": "munich-floor",
+      "_about": "the floor's diamonds of green-grey and red stone"
+    },
+    {
+      "surface": [
+        "wall",
+        "ceiling"
+      ],
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "white inside"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "granite"
+    },
+    {
+      "surface": [
+        "wall",
+        "ceiling",
+        "roof"
+      ],
+      "pattern": "stone/brick monk bond",
+      "palette": "munich-brick"
+    }
+  ]
+}

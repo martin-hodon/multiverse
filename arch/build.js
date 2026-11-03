@@ -34,8 +34,10 @@ export function mesh() {
     tri(a, b, c) { if (a !== b && b !== c && a !== c) idx.push(a, b, c); },
     quad(a, b, c, d) { api.tri(a, b, c); api.tri(a, c, d); },
     get counts() { return { verts: pos.length / 3, tris: idx.length / 3 }; },
+    doorways: null,   // (the openings from the floor the wall faces cut: extrude)
     arrays() {
-      return { position: new Float32Array(pos), index: (pos.length / 3 > 65535 ? Uint32Array : Uint16Array).from(idx) };
+      return { position: new Float32Array(pos), index: (pos.length / 3 > 65535 ? Uint32Array : Uint16Array).from(idx),
+               ...(api.doorways ? { doorways: api.doorways } : {}) };
     },
   };
   return api;
@@ -299,6 +301,7 @@ const rings = loops.map((loop) => ({ loop, hole: area(loop) < 0 }));
 // boundary rather than as holes. What it must still satisfy is everything else -- no T-junction, no edge used
 // by three triangles, and its neighbours' vertices landing exactly on its own.
 export function extrude(face, map, m = mesh(), emit = null) {
+  map = chordMap(face, map);
   // caps: true for both ends of the sweep, or "front"/"back" for one of them -- a landing's inner wall is
   // masonry and its outer one is where the flights arrive, so the two are not the same decision.
   const capF = !emit || emit.caps === true || emit.caps === "front";
@@ -321,7 +324,40 @@ export function extrude(face, map, m = mesh(), emit = null) {
       m.quad(front[b], front[a], back[a], back[b]);
     }
   }
+  // A DOORWAY: an opening from the face's foot -- its jambs' feet on both sides of the wall, where it springs and how
+  // high it reaches, and its head, in the part's own frame. Nothing is drawn: what hangs in it, if anything, is
+  // the building's to say (architecture.js doorsOf: assets/doors)
+  for (const o of face.openings ?? []) {
+    if (o.sill > .05 || o.foot) continue;
+    const ends = (s) => [map(o.j0, o.sill, s), map(o.j1, o.sill, s)];
+    (m.doorways ??= []).push({ front: ends(0), back: ends(1), spring: o.springing - o.sill, crown: o.crown - o.sill, head: o.head ?? null, ...(o.glass ? { glass: true } : {}) });
+  }
   return m;
+}
+
+// A CURVED MAP LAID FLAT OVER EACH OPENING. A round bay (`radial`) bends the face round its arc, but the face is
+// triangles: a solid strip beside an opening is one quad, so it is the flat chord between its two edges, and that
+// is fine -- its edges are vertical, and two vertical lines are always in one plane. The masonry over a head is
+// not: ear-clipped, it runs long triangles from the top corners down to points on the curve, each on a different
+// chord, and the wall FOLDS along their diagonals -- an extra edge over every arch of a drum, an apse, a turret
+// door. So within an opening's span every point is put on the chord between the span's two edges, at its own
+// height: the opening, its reveals and the masonry over it are one flat facet, like the strips beside it. A
+// straight map is linear in x and comes back to the bit, so a flat wall is untouched; the top and bottom edges
+// stay where the map puts them, as the parts above and below share them.
+export function chordMap(face, map) {
+  const ops = face.openings ?? [], h = face.h ?? Infinity;
+  if (!ops.length) return map;
+  return (x, y, side) => {
+    const p = map(x, y, side);
+    if (y < 1e-9 || y > h - 1e-9) return p;
+    for (const o of ops) {
+      if (x <= o.x0 + 1e-9 || x >= o.x1 - 1e-9) continue;
+      const a = map(o.x0, y, side), b = map(o.x1, y, side), t = (x - o.x0) / (o.x1 - o.x0);
+      const q = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+      return Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]) < 1e-7 ? p : q;
+    }
+    return p;
+  };
 }
 
 // AN ANNULAR BARREL VAULT, one bay of it. The face is the vault's CROSS-SECTION -- x runs outward across the
@@ -1120,6 +1156,27 @@ export function drum(m, r0, r1, y0, y1, sides) {
   return m;
 }
 
+// A TWISTED SHAFT (a column's `twist`): a rope of `lobes` strands round the axis -- the section a circle swelling by
+// `depth` (a share of the radius) at each strand -- turned `turns` times over its height, `rows` rings to a turn; `helix`
+// swings the axis itself round a circle that wide (a Solomonic column's corkscrew), easing to the middle at both ends so
+// the shaft stands on its base and under its capital. The Manueline cable column (Belem, Setubal), the Solomonic altar.
+export function twistedShaft(m, { r0, r1, y0, y1, sides, lobes = 4, depth = .18, turns = 1, rows = 12, helix = 0 }) {
+  const n = Math.min(240, Math.max(2, Math.ceil(rows * Math.max(Math.abs(turns), .25))));   // (rings: capped)
+  const rings = [];
+  for (let j = 0; j <= n; j++) {
+    const f = j / n, y = y0 + (y1 - y0) * f, r = r0 + (r1 - r0) * f, ph = turns * 2 * Math.PI * f;
+    const sw = helix * Math.sin(Math.PI * f), cx = sw * Math.cos(ph), cz = sw * Math.sin(ph);
+    rings.push(Array.from({ length: sides }, (_, k) => {
+      const t = k * 2 * Math.PI / sides, rr = r * (1 - depth + depth * Math.cos(lobes * (t - ph)));
+      return [m.vert(cx + rr * Math.cos(t), y, cz + rr * Math.sin(t)), cx, cz];
+    }));
+  }
+  for (let j = 0; j < n; j++) for (let k = 0; k < sides; k++) m.quad(rings[j][k][0], rings[j + 1][k][0], rings[j + 1][(k + 1) % sides][0], rings[j][(k + 1) % sides][0]);
+  const cLo = m.vert(rings[0][0][1], y0, rings[0][0][2]), cHi = m.vert(rings[n][0][1], y1, rings[n][0][2]);
+  for (let k = 0; k < sides; k++) { m.tri(cLo, rings[0][k][0], rings[0][(k + 1) % sides][0]); m.tri(cHi, rings[n][(k + 1) % sides][0], rings[n][k][0]); }
+  return m;
+}
+
 // A TURNED SOLID: the profile [[r, y], ...] (bottom to top) revolved round the y axis in `sides`, capped at both ends --
 // a bell capital, a baluster: one closed surface, no rings stacked on rings
 export function lathe(m, prof, sides) {
@@ -1368,11 +1425,12 @@ export function wellPoints(w) {
 // beside the glass: the part that takes the glass takes them as a part of their own. An open window -- a belfry's,
 // an openwork stage's -- may have tracery and no glass.
 // (`height`: what the wall it is part of rises to over the face's foot -- a wimperg stands within it)
-export function glassPanes(face, map, g, height = face.h) {
+export function glassPanes(face, map0, g, height = face.h) {
+  const map = chordMap(face, map0);   // (what hangs in an opening, on the facet its reveal is: chordMap)
   const mid = (x, y) => { const a = map(x, y, 0), b = map(x, y, 1); return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2]; };
   // (the dressed openings of the row, counted from its middle: which pediment an alternating row gives each)
   // (a LOMBARD BAND over the face, its lesenes and arched corbel table: lombard.js)
-  if (face.lombard) lombardMesh(face, face.lombard, map, g.surround ??= mesh(), height);
+  if (face.lombard) lombardMesh(face, face.lombard, map0, g.surround ??= mesh(), height);
   const dressed = (face.openings ?? []).filter((o) => o.surround);
   // (and the free wall each side of each: to the face's end, or half the pier it shares with the next opening)
   const ops = [...(face.openings ?? [])].sort((p, q) => p.x0 - q.x0);
@@ -1616,7 +1674,10 @@ export function restLift(levels, rest, lo, hi) {
   return H > 0 && t > 0 && t < 1 ? H * (t - curveRise(lo, hi, t)) : 0;
 }
 // `lift`: the whole roof raised that far (restLift).
-export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 0, flare = 0, reach, perSide = 6, ring = false, lift = 0 } = {}) {
+// `gaps` [{ side, lo, hi }] (a ring's only): the skirt cut open on side `side` (0 the -z side, 1 +x, 2 +z, 3 -x: the ring's
+// order) between `lo` and `hi` along it (x on 0 and 2, z on 1 and 3) -- every level gets those two points, so the stack
+// still closes, the slope, soffit and inner face are left out between them and each cut end is closed (a lifted bay)
+export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 0, flare = 0, reach, perSide = 6, ring = false, lift = 0, gaps = [] } = {}) {
   const y0 = levels[0].y + lift, H = levels[levels.length - 1].y - levels[0].y;
   if (!(H > 0)) throw new Error("a curved roof needs a form that rises");
   const F = (t) => curveRise(lo, hi, t);
@@ -1632,6 +1693,8 @@ export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 
   const R = reach ?? .35 * Math.min(E.x1 - E.x0, E.z1 - E.z0);
   const outN = [[0, -1], [1, 0], [0, 1], [-1, 0]];               // each side's outward normal, in the ring's order
   let last = [];                                                   // (the top ring's points, x and z)
+  m.corners = [[], [], [], []];                                    // (each corner's line up the roof, eave to top: a hip ridge's -- assemble.js `hips`)
+  const cut = new Set();                                           // (a gap's first point: the piece after it is left out)
   const rings = lv.map((L) => {
     const t = (L.y - levels[0].y) / H, w = (1 - t) ** 2, y = y0 + H * F(t);
     last = [];
@@ -1639,19 +1702,29 @@ export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 
     const pts = [];
     for (let s = 0; s < 4; s++) {
       const [ax, az] = C[s], [bx, bz] = C[(s + 1) % 4], len = Math.hypot(bx - ax, bz - az);
-      for (let q = 0; q < S; q++) {
-        const u = q / S, d = Math.min(u, 1 - u) * len, e = R > 0 ? Math.max(0, 1 - d / R) ** 2 : 0;
+      let us = Array.from({ length: S }, (_, q) => q / S);
+      const g = ring && gaps.find((G) => G.side === s);
+      if (g) {                                                     // (the same count of points on every level: n1 before the gap, n2 after)
+        const along = (c) => (s % 2 ? (c - az) / (bz - az) : (c - ax) / (bx - ax));
+        const [u0, u1] = [along(g.lo), along(g.hi)].sort((p, q) => p - q), n1 = Math.max(1, Math.ceil(S / 2)), n2 = n1;
+        us = [...Array.from({ length: n1 }, (_, q) => u0 * q / n1), u0, u1, ...Array.from({ length: n2 - 1 }, (_, q) => u1 + (1 - u1) * (q + 1) / n2)];
+        cut.add(pts.length + n1);
+      }
+      for (let q = 0; q < us.length; q++) {
+        const u = us[q], d = Math.min(u, 1 - u) * len, e = R > 0 ? Math.max(0, 1 - d / R) ** 2 : 0;
         let x = ax + (bx - ax) * u, z = az + (bz - az) * u;
         const push = flare * w * e;
         x += outN[s][0] * push; z += outN[s][1] * push;
         if (q === 0) { const p = outN[(s + 3) % 4]; x += p[0] * flare * w; z += p[1] * flare * w; }   // (a corner is on the side before, too)
         pts.push(m.vert(x, y + upturn * w * e, z)); last.push([x, z]);
+        if (q === 0) m.corners[s].push([x, y + upturn * w * e, z]);
       }
     }
     return pts;
   });
-  const N = 4 * S;
+  const N = rings[0].length;                                       // (4 * perSide, and two more for every gap)
   for (let i = 0; i + 1 < rings.length; i++) for (let k = 0; k < N; k++) {
+    if (cut.has(k)) continue;
     const a = rings[i], b = rings[i + 1], k2 = (k + 1) % N;
     m.quad(a[k2], a[k], b[k], b[k2]);                                  // outward, as roofMesh winds them
   }
@@ -1660,9 +1733,13 @@ export function curvedRoof(m, levels, { lo = .35, hi = 1.2, steps = 6, upturn = 
     // (the footprint's ring at the eave's level, point for point under the top ring -- the flare is nothing up there)
     const foot = last.map(([x, z]) => m.vert(x, y0, z));
     for (let k = 0; k < N; k++) {
+      if (cut.has(k)) continue;
       const k2 = (k + 1) % N;
       m.quad(lo0[k], lo0[k2], foot[k2], foot[k]);                     // the soffit, facing down
       m.quad(foot[k], foot[k2], top[k2], top[k]);                      // the face up the footprint, facing in
+    }
+    for (const k0 of cut) for (const k of [k0, (k0 + 1) % N]) {        // (a gap's two cut ends: the section, seen from either side)
+      for (let i = 0; i + 1 < rings.length; i++) { m.tri(foot[k], rings[i][k], rings[i + 1][k]); m.tri(foot[k], rings[i + 1][k], rings[i][k]); }
     }
     return m;
   }

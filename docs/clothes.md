@@ -22,13 +22,51 @@ and, given one (makePerson `physique`, 2026-10-30: a statue's), by an IDEAL (`bu
 athlete's broad chest over a narrow waist and full arms; `classical`, a goddess's waist; `lion`, a Buddha's shoulders),
 its factors multiplied in, `arms` the arms' girth. Carved at the survey's mean a nude's trunk was a box.
 
+EVERY PERSON IS BUILT A LITTLE DIFFERENTLY (2026-11-03, `build.variety`; people.js, drawn from a stream of the seed's own
+so every other draw -- skin, hair, outfit -- keeps its seed, and the same seed is always the same body: village-life.js's
+walking, seated, lying and carrying copies of one villager agree). Before it everybody was one shape scaled by a +-8%
+`spread`: no one fat, no one thin. Now:
+
+- FAT, one number per person: about a bell round 0 (three draws averaged, `sd` .85 -- .7 at first, and a crowd of 24
+  showed no one clearly fat or thin), its upper side stretched (`skew` .5) and clamped to -1.6..2.6; the thin side narrows
+  by the full `perFat` (`thinShare` 1). The stream is seeded by the seed AND the kind (man/woman), so a man and a woman of
+  one seed -- every lineup pairs them -- are not built alike (they were: one fat stream for both). Roughly a fifth come
+  out stout, one in ten fat, one in six lean; a child half as much, the old a
+  little more (`old`), an ideal (a `physique`: a statue) and a beast none; `makePerson({ fat })` sets it (lineups, tests).
+  Each unit widens by `perFat` (by sex): a man's waist .2, his belly, his chest, arms and thighs -- an apple; a woman's
+  hips, thighs and bust more and her waist less -- a pear; the neck, the knees and elbows, the torso's depth with them. On
+  the thin side everything narrows by `thinShare` of that. The BELLY is a swell of its own on the trunk's front over the
+  waist (`perFat.belly` a unit, carried by the torso's cuts as `pot` -- composite.js packs it as a negative C.y, the palm
+  flag's slot -- and drawn by shell.js TRUNK.pot, round before and a quarter of it over the flanks).
+- FRAME: the skeleton's breadth, the shoulders and the hips together (`frame`, +-3.5% sd), independent of fat.
+- HEIGHT: the stature's uniform draw averaged with one more (`height` .25), over a wider `stature` (man 1.63-1.93,
+  woman 1.50-1.75 m): a crowd of 24 runs about 1.53 to 1.90.
+- NECK (`head.neckRadius`): a man's .56 cranium radii, a woman's .38 -- about the mesh face's own neck ring; at .56 and
+  .44 her body's neck stood out round the face's from under her jaw up to her ears, as wide as the jaw.
+- The FACE's fullness follows the fat in steps (`fullBins`: lean, average, stout, fat -- heads.js `full`, docs/face.md).
+
+What a wider body asks of the rest: the ARMS lean out further than the canon's 5.5 degrees where the waist, the hips or
+a woman's thighs below the shoulders would take them in (`abduction`, at most ARM_TOUCH of the arm's radius lying in the
+body: a hand rests against the thigh); what stands off the trunk clears the belly (`POT_CLEAR` added to the torso's
+clearing depth) and a hung piece's top ring clears the torso's depth as well as its width (clothes.js: before, a skirt
+from a fat man's waist had to make up his belly in its first centimetre and flared out flat as a millstone) -- its
+oval made ROUNDER first, up to a circle (a piece not over the arms: its squash at least the trunk's clearing depth;
+shell.js clamps a squash at 1), then wider: a fat man's doublet skirt at the canon's .85 was .34 m round, now .29. Fitted
+cloth -- a bodice, a sleeve, hose -- is laid on the body's own parts and fits whatever it is.
+
+Known (2026-11-03, clipcheck): a SEATED short skirt's lap (people.js LAP_SHORT, LAP_SQUASH) lets the thighs through it
+already at fat 0 (a tunic's, a tunica's, a cotehardie's: 7.5-9 cm); a fat body adds ~1 cm to it, more under a loincloth
+(4.5 -> 9.7) and a doublet's skirt (0 -> 11 cm; seed 16170 gothic). The ring is still centred on the trunk, so a belly
+makes it round where it might rather be set forward (an offset along the forward the engines and clipcheck would need).
+Standing and walking, the worst clips are as before (whole run: 7,026 kinds over 1 cm, it was 7,172 before the rounder oval).
+
 The TORSO is one shape: three cuts swept as a single flattened lathe through four rings -- the shoulders' rim, the chest
 under the armpits, the natural waist, the hips -- closed at the top by a low, squared cap that is the shoulders and at the
 bottom by a rounder one down to the crotch (the engine's flat `spine` chain and `caps`). The ARMS hang beside it: the
-shoulder joint just outside the chest, under the shoulders' flare (which covers the joint as a deltoid does), the arm a
-couple of degrees out from the vertical -- so no arm passes through the chest or the hips, and a bodice and a sleeve are
-two sheets that meet at the shoulder, not one passing through the other. That makes the shoulders about 6% wider than
-the real mean (bideltoid .30 of the stature against .28).
+shoulder joint at the end of the shoulders' rim, the arm's cap ending their line as a deltoid does, the arm 5.5 degrees out
+from the vertical -- so below the armpit no arm passes through the chest or the hips, and a bodice and a sleeve are two
+sheets that meet at the shoulder, not one passing through the other. The shoulders measure the real mean (bideltoid .28 of
+the stature; the joint used to stand clear of the chest, which made .30 and an epaulette over a notch).
 
 ## The sheet
 

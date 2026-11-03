@@ -1,0 +1,221 @@
+{
+ "kind": "item",
+ "name": "Carrying pole",
+ "category": "tool",
+ "era": "-500-1900",
+ "region": "China, Japan, South-East Asia",
+ "_about": "a bamboo carrying pole on the shoulder with a load on cords at each end: the front cords for the piece carried, a basket of the porter's own behind -- origin where it lies on the shoulder, along x; the loads' feet `drop` below it",
+ "params": {
+  "drop": 1.12,
+  "reach": 0.78,
+  "top": 0.5
+ },
+ "materials": {
+  "pole": "bamboo",
+  "cord": "hemp",
+  "wicker": "cane"
+ },
+ "parts": [
+  {
+   "id": "pole",
+   "type": "rod",
+   "material": "pole",
+   "r": 0.02,
+   "from": [
+    -0.92,
+    0,
+    0
+   ],
+   "to": [
+    0.92,
+    0,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "cords front 0",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.005,
+   "from": [
+    "1 * reach",
+    0,
+    0
+   ],
+   "to": [
+    "1 * reach + 0.16",
+    "top - drop",
+    0
+   ],
+   "sides": 3
+  },
+  {
+   "id": "cords front 1",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.005,
+   "from": [
+    "1 * reach",
+    0,
+    0
+   ],
+   "to": [
+    "1 * reach + -0.16",
+    "top - drop",
+    0
+   ],
+   "sides": 3
+  },
+  {
+   "id": "cords front 2",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.005,
+   "from": [
+    "1 * reach",
+    0,
+    0
+   ],
+   "to": [
+    "1 * reach + 0",
+    "top - drop",
+    0.16
+   ],
+   "sides": 3
+  },
+  {
+   "id": "cords front 3",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.005,
+   "from": [
+    "1 * reach",
+    0,
+    0
+   ],
+   "to": [
+    "1 * reach + 0",
+    "top - drop",
+    -0.16
+   ],
+   "sides": 3
+  },
+  {
+   "id": "cords back 0",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.005,
+   "from": [
+    "-1 * reach",
+    0,
+    0
+   ],
+   "to": [
+    "-1 * reach + 0.16",
+    "top - drop",
+    0
+   ],
+   "sides": 3
+  },
+  {
+   "id": "cords back 1",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.005,
+   "from": [
+    "-1 * reach",
+    0,
+    0
+   ],
+   "to": [
+    "-1 * reach + -0.16",
+    "top - drop",
+    0
+   ],
+   "sides": 3
+  },
+  {
+   "id": "cords back 2",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.005,
+   "from": [
+    "-1 * reach",
+    0,
+    0
+   ],
+   "to": [
+    "-1 * reach + 0",
+    "top - drop",
+    0.16
+   ],
+   "sides": 3
+  },
+  {
+   "id": "cords back 3",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.005,
+   "from": [
+    "-1 * reach",
+    0,
+    0
+   ],
+   "to": [
+    "-1 * reach + 0",
+    "top - drop",
+    -0.16
+   ],
+   "sides": 3
+  },
+  {
+   "id": "basket",
+   "type": "lathe",
+   "material": "wicker",
+   "sides": 12,
+   "double": true,
+   "caps": false,
+   "at": [
+    "0 - reach",
+    "0 - drop",
+    0
+   ],
+   "profile": [
+    [
+     0.17,
+     0
+    ],
+    [
+     0.2,
+     0.05
+    ],
+    [
+     0.2,
+     0.42
+    ]
+   ]
+  },
+  {
+   "id": "basket bottom",
+   "type": "lathe",
+   "material": "wicker",
+   "sides": 12,
+   "at": [
+    "0 - reach",
+    "0 - drop",
+    0
+   ],
+   "profile": [
+    [
+     0.17,
+     0
+    ],
+    [
+     0.17,
+     0.015
+    ]
+   ]
+  }
+ ]
+}

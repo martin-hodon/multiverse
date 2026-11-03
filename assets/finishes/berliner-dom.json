@@ -1,23 +1,108 @@
 {
-  "name": "Berliner Dom",
-  "building": "architecture/berliner-dom",
-  "_about": "The Berliner Dom: Silesian sandstone, the domes in green copper, the crosses gilt; inside, gold mosaic in the dome, faux marble walls, a grey chequered floor.",
-  "stone": {
-    "color": "#c4b89c",
-    "accent": "#aea286",
-    "pat": "ashlar"
+ "name": "Berliner Dom",
+ "building": "architecture/berliner-dom",
+ "_about": "The Berliner Dom: Silesian sandstone, the domes in green copper, the crosses gilt; inside, gold mosaic in the dome, faux marble walls, a grey chequered floor.",
+ "stone": {
+  "color": "#c4b89c",
+  "accent": "#aea286",
+  "pat": "ashlar"
+ },
+ "rules": [
+  {
+   "parts": "body",
+   "within": [
+    -8.0,
+    35.0,
+    8.0,
+    37.0
+   ],
+   "above": 0.1,
+   "color": "#8b7c5f",
+   "accent": "#7a6c52",
+   "_about": "the back of the great arch's niche, in its shade"
   },
-  "rules": [
-    {"parts": ["finial", "cross"], "pattern": "roofs/gold leaf"},
-    {"parts": "kind:ribs", "color": "#7fb095"},
-    {"parts": "pediment", "pattern": "stone/ashlar", "palette": "sandstone-grey"},
-    {"parts": "kind:moulding", "pattern": "stone/ashlar fine", "palette": "sandstone-grey", "_about": "courses, pilasters and entablatures in dressed sandstone"},
-    {"parts": ["body", "corner tower back west", "corner tower front west", "corner tower back east", "corner tower front east", "frontispiece", "south wing outer wall", "south wing end walls", "north wing outer wall", "north wing end walls"], "surface": "wall", "side": "out", "below": 15, "pattern": "stone/rusticated", "palette": "sandstone-grey", "_about": "the whole ground storey rusticated, round the towers and the wings too: one base under the order"},
-    {"parts": ["kind:dome", "cap"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
-    {"parts": "dome/dome", "side": "in", "pattern": "painted/gold mosaic", "_about": "the dome shell inside"},
-    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone-grey"},
-    {"surface": "wall", "side": "in", "pattern": "painted/faux marble", "palette": "baroque"},
-    {"surface": "wall", "pattern": "stone/ashlar", "palette": "sandstone-grey"}
-  ]
+  {
+   "parts": [
+    "finial",
+    "cross"
+   ],
+   "pattern": "roofs/gold leaf"
+  },
+  {
+   "parts": "kind:ribs",
+   "color": "#7fb095"
+  },
+  {
+   "parts": [
+    "pediment",
+    "frontispiece cornice west",
+    "frontispiece cornice east"
+   ],
+   "pattern": "stone/ashlar",
+   "palette": "sandstone-grey"
+  },
+  {
+   "parts": "kind:moulding",
+   "pattern": "stone/ashlar fine",
+   "palette": "sandstone-grey",
+   "_about": "courses, pilasters and entablatures in dressed sandstone"
+  },
+  {
+   "parts": [
+    "body",
+    "corner tower back west",
+    "corner tower front west",
+    "corner tower back east",
+    "corner tower front east",
+    "frontispiece",
+    "south wing outer wall",
+    "south wing end walls",
+    "north wing outer wall",
+    "north wing end walls"
+   ],
+   "surface": "wall",
+   "side": "out",
+   "below": 15,
+   "pattern": "stone/rusticated",
+   "palette": "sandstone-grey",
+   "_about": "the whole ground storey rusticated, round the towers and the wings too: one base under the order"
+  },
+  {
+   "parts": [
+    "kind:dome",
+    "cap"
+   ],
+   "surface": "roof",
+   "pattern": "roofs/sheet metal",
+   "palette": "copper"
+  },
+  {
+   "parts": "dome/dome",
+   "side": "in",
+   "pattern": "painted/gold mosaic",
+   "_about": "the dome shell inside"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "pattern": "floors/checker",
+   "palette": "marble-grey"
+  },
+  {
+   "surface": "floor",
+   "pattern": "floors/flagstones",
+   "palette": "sandstone-grey"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "pattern": "painted/faux marble",
+   "palette": "baroque"
+  },
+  {
+   "surface": "wall",
+   "pattern": "stone/ashlar",
+   "palette": "sandstone-grey"
+  }
+ ]
 }

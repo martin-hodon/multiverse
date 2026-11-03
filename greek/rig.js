@@ -3,19 +3,8 @@
 // units of a figure 100 tall; solved facing +x ("forward"), then `place` puts a point in the world: x flipped for a figure
 // facing left. Flipping swaps which arm is NEAR, never which arm holds what: facing right the near arm is the right.
 
-// a seed's streams, one per label: changing what one label draws leaves the others as they were
-export function stream(seed, ...labels) {
-  let h = Math.imul((seed | 0) ^ 0x9e3779b9, 0x2c1b3c6d) ^ 2166136261;
-  for (const c of labels.join("/")) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
-  return () => {
-    h = (h + 0x6d2b79f5) | 0;
-    let t = Math.imul(h ^ (h >>> 15), 1 | h);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-// a number, or a [low, high] a stream picks in
-export const pick = (v, r, d = 0) => v === undefined ? d : Array.isArray(v) ? v[0] + (v[1] - v[0]) * r() : v;
+import { stream, pick } from "../story/seed.js";
+export { stream, pick };                                                // (the seed's grammar is shared by all the 2D engines: docs/story.md)
 const DEG = Math.PI / 180;
 
 // where the middle joint of two bones falls: bend > 0 to the left of the line a -> c, and c pulled in when out of reach

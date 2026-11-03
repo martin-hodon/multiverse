@@ -1,0 +1,374 @@
+{
+  "name": "baroque helm",
+  "_about": "THE MULTI-STAGE HELM OF A BAROQUE TOWER (Zwiebelhaube, Schweifkuppel), set on a tower's head: a moulded foot, a first BULB (profile bell: the concave sweep and round crown of the Schweifkuppel; onion: the Zwiebel), an open LANTERN standing on it where it has narrowed to LR, its cornice, a second smaller BULB, a second LANTERN, the SPIKE, the gilt BALL and the CROSS -- Fulda's towers. lanterns: one stops at the first lantern with a finial (the ribbed, lanternless Renaissance cap is components/welsche-haube). Place it at the middle of the tower's head.",
+  "params": {
+    "detail": 4,
+    "sides": 8,
+    "R": 3.6,
+    "footH": 0.6,
+    "profile": "bell",
+    "waist": 0.78,
+    "lift": 0.58,
+    "bulge": 1.25,
+    "neck": 0.85,
+    "rise": "R",
+    "LR": "R * 0.48",
+    "LH": "R * 1.0",
+    "glazed": 0,
+    "lanterns": "two",
+    "R2": "LR * 1.15",
+    "profile2": "bell",
+    "waist2": 0.8,
+    "lift2": 0.6,
+    "bulge2": 1.3,
+    "neck2": 0.8,
+    "rise2": "R2",
+    "L2R": "R2 * 0.36",
+    "L2H": "R2 * 0.8",
+    "spikeProfile": "trigonal",
+    "spikeH": "R * 0.75",
+    "ballR": "R * 0.13",
+    "crossH": "R * 0.7",
+    "crossW": "R * 0.035",
+    "_R": "the first bulb's radius at its foot (the tower's head is a little wider: the foot reaches R * 1.06); sides its plan (8: an octagon)",
+    "_profile": "the first bulb: bell (waist, lift: height R * (lift + waist), the round crown R * waist across) or onion (bulge, neck) or any dome profile",
+    "_lanterns": "two (the bulb, lantern, second bulb, second lantern, spike, ball, cross) or one (the bulb, its lantern and a finial)",
+    "_LR": "the first lantern: LR in radius, LH tall, standing where the bulb has narrowed to LR; glazed 1 puts glass in its arches",
+    "_R2": "the second bulb (profile2 and its own waist2/lift2/bulge2/neck2), standing on the lantern's cornice",
+    "_L2R": "the second lantern, L2R by L2H, on the second bulb",
+    "_spikeH": "the spike over the second lantern (spikeProfile trigonal: a cone spikeH tall; onion: a little bulb), the ball ballR and the cross crossH on it"
+  },
+  "build": [
+    "foot",
+    "bulb",
+    "lantern",
+    "lantern head",
+    "bulb 2",
+    "lantern 2",
+    "lantern 2 head",
+    "spike",
+    "ball",
+    "cross",
+    "finial"
+  ],
+  "parts": {
+    "foot": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R * 1.06"
+      },
+      "height": "footH",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "courses": [
+        {
+          "y": "footH * 0.55",
+          "h": "footH * 0.45",
+          "out": "R * 0.04",
+          "profile": "cornice"
+        }
+      ],
+      "_about": "the moulded foot the first bulb stands on, on the tower's head"
+    },
+    "bulb": {
+      "type": "dome",
+      "sides": "sides",
+      "radius": "R",
+      "thickness": 0,
+      "at": [
+        [
+          0,
+          "footH",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "foot"
+      ],
+      "head": {
+        "profile": "profile",
+        "bulge": "bulge",
+        "neck": "neck",
+        "waist": "waist",
+        "lift": "lift",
+        "rise": "rise"
+      },
+      "_about": "the first bulb: a bell (concave sweep, round crown: the Schweifkuppel) or an onion"
+    },
+    "lantern": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "LR"
+      },
+      "thickness": "LR * 0.16",
+      "height": "LH",
+      "openings": [
+        {
+          "at": 0,
+          "width": "LR * 0.62",
+          "sill": "LH * 0.16",
+          "springing": "LH * 0.78 - LR * 0.31",
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "glass": "glazed",
+      "at": [
+        [
+          0,
+          "0 - LR * 0.06",
+          0,
+          0
+        ]
+      ],
+      "atop": "bulb",
+      "atopR": "LR",
+      "standsOn": [
+        "bulb"
+      ],
+      "_about": "the lantern on the bulb where it has narrowed to LR: an arch in every face (open: glazed 0)"
+    },
+    "lantern head": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "LR * 1.14"
+      },
+      "height": "LH * 0.1",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "lantern",
+      "standsOn": [
+        "lantern"
+      ],
+      "_about": "its cornice and the floor of the next bulb"
+    },
+    "bulb 2": {
+      "type": "dome",
+      "sides": "sides",
+      "radius": "R2",
+      "thickness": 0,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "lantern head",
+      "standsOn": [
+        "lantern head"
+      ],
+      "head": {
+        "profile": "profile2",
+        "bulge": "bulge2",
+        "neck": "neck2",
+        "waist": "waist2",
+        "lift": "lift2",
+        "rise": "rise2"
+      },
+      "when": {
+        "lanterns": "two"
+      },
+      "_about": "the second, smaller bulb on the lantern"
+    },
+    "lantern 2": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "L2R"
+      },
+      "thickness": "L2R * 0.2",
+      "height": "L2H",
+      "openings": [
+        {
+          "at": 0,
+          "width": "L2R * 0.6",
+          "sill": "L2H * 0.2",
+          "springing": "L2H * 0.75 - L2R * 0.3",
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "glass": "glazed",
+      "at": [
+        [
+          0,
+          "0 - L2R * 0.06",
+          0,
+          0
+        ]
+      ],
+      "atop": "bulb 2",
+      "atopR": "L2R",
+      "standsOn": [
+        "bulb 2"
+      ],
+      "when": {
+        "lanterns": "two"
+      },
+      "_about": "the second lantern, on the second bulb"
+    },
+    "lantern 2 head": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "L2R * 1.16"
+      },
+      "height": "L2H * 0.12",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "lantern 2",
+      "standsOn": [
+        "lantern 2"
+      ],
+      "when": {
+        "lanterns": "two"
+      }
+    },
+    "spike": {
+      "type": "dome",
+      "sides": "sides",
+      "radius": "L2R * 0.95",
+      "thickness": 0,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "lantern 2 head",
+      "standsOn": [
+        "lantern 2 head"
+      ],
+      "head": {
+        "profile": "spikeProfile",
+        "rise": "spikeH",
+        "bulge": 1.15,
+        "neck": 0.9
+      },
+      "when": {
+        "lanterns": "two"
+      },
+      "_about": "the spike (Spitzhelm) over the second lantern: a cone, or a little onion"
+    },
+    "ball": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "ballR * 0.4",
+      "thickness": 0,
+      "at": [
+        [
+          0,
+          "0 - ballR * 0.1",
+          0,
+          0
+        ]
+      ],
+      "atop": "spike",
+      "atopR": "ballR * 0.4",
+      "standsOn": [
+        "spike"
+      ],
+      "head": {
+        "profile": "onion",
+        "bulge": 2.5,
+        "neck": 0.45
+      },
+      "when": {
+        "lanterns": "two"
+      },
+      "_about": "the gilt ball (a pineapple at Fulda) on the spike's point"
+    },
+    "cross": {
+      "type": "bars",
+      "w": "crossW",
+      "h": "crossW",
+      "lines": [
+        [
+          0,
+          0,
+          0,
+          0,
+          "crossH",
+          0
+        ],
+        [
+          "0 - crossH * 0.28",
+          "crossH * 0.66",
+          0,
+          "crossH * 0.28",
+          "crossH * 0.66",
+          0
+        ]
+      ],
+      "at": [
+        [
+          0,
+          "0 - ballR * 0.2",
+          0,
+          0
+        ]
+      ],
+      "atop": "ball",
+      "standsOn": [
+        "ball"
+      ],
+      "when": {
+        "lanterns": "two"
+      },
+      "_about": "the cross on the ball"
+    },
+    "finial": {
+      "type": "column",
+      "radius": "LR * 0.08",
+      "height": "LH * 0.9",
+      "sides": 6,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "lantern head",
+      "standsOn": [
+        "lantern head"
+      ],
+      "when": {
+        "lanterns": "one"
+      },
+      "_about": "a finial on the first lantern: the one-lantern helm's (lanterns: one)"
+    }
+  }
+}

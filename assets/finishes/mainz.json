@@ -1,32 +1,261 @@
 {
   "name": "Mainz Cathedral",
   "building": "architecture/mainz",
-  "_about": "Mainz Cathedral: red sandstone inside and out, the roofs in green copper, the vaults limewashed, the finials gilt; stained glass; a floor chequered in rose and red.",
+  "_about": "Mainz Cathedral: red Main sandstone in courses, a paler band now and then, the dressings -- lesenes, Lombard friezes, the openings' orders, cornices -- paler still; slate on the nave, the transepts, the towers' tents and cones, the choirs and conchs, the Memorie, the cloister and the Gotthardkapelle; green copper on the lean-tos over the aisles and chapels and on the sacristy; Neumann's crown all stone, the cock gilt. Inside the walls in the red-ochre paint of the 1970s restoration with white joints drawn on it, the vaults pale with their joints, the ribs red stone; sandstone flags underfoot; the Domhaeuser plastered white.",
   "stone": {
     "color": "#a4513b",
-    "accent": "#8c4432",
+    "accent": "#c99a7a",
     "pat": "ashlar"
   },
   "rules": [
-    {"parts": "kind:glass", "opening": "round", "map": "opening", "pattern": "glass/rose chartres", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "head", "map": "opening", "pattern": "glass/tracery white", "palette": "grisaille"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [4, 0], "map": "opening", "turn": 90, "pattern": "glass/saint peter", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [4, 1], "map": "opening", "turn": 90, "pattern": "glass/saint paul", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [4, 2], "map": "opening", "turn": 90, "pattern": "glass/medallion stack", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "tall", "nth": [4, 3], "map": "opening", "pattern": "glass/grisaille strap", "palette": "grisaille"},
-    {"parts": "kind:glass", "opening": "short", "nth": [3, 0], "map": "opening", "pattern": "glass/grisaille strap", "palette": "grisaille"},
-    {"parts": "kind:glass", "opening": "short", "nth": [3, 1], "map": "opening", "pattern": "glass/medallion majesty", "palette": "chartres"},
-    {"parts": "kind:glass", "opening": "short", "nth": [3, 2], "map": "opening", "pattern": "glass/grisaille lattice", "palette": "grisaille"},
-    {"parts": "kind:glass", "pattern": "painted/stained glass", "palette": "stained", "_about": "the windows' stained glass"},
-    {"parts": ["finial", "west tower finial", "east tower finial"], "pattern": "roofs/gold leaf"},
-    {"parts": ["kind:roof", "kind:dome"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
-    {"parts": ["kind:vault", "kind:groin"], "pattern": "stone/plaster", "palette": "plaster-white"},
-    {"parts": "kind:ribs", "pattern": "stone/ashlar fine", "palette": "red-sandstone"},
-    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-rose"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "red-sandstone"},
-    {"parts": "kind:moulding", "pattern": "stone/ashlar fine", "palette": "sandstone", "_about": "the articulation -- lesenes, arched friezes, the portals' orders -- in a lighter dressed stone"},
-    {"surface": "wall", "side": "in", "above": 3.2, "below": 3.8, "pattern": "ornament/guilloche", "palette": "zellige", "scale": 4, "align": "above", "_about": "a painted band"},
-    {"parts": "gallery", "pattern": "stone/ashlar fine", "palette": "sandstone", "_about": "the apses' dwarf galleries, their arcades light against the passage"},
-    {"surface": "wall", "pattern": "stone/ashlar", "palette": "red-sandstone"}
+    {
+      "parts": [
+        "domsgickel",
+        "east tower finial"
+      ],
+      "pattern": "roofs/gold leaf",
+      "_about": "the gilt cock and cross"
+    },
+    {
+      "parts": [
+        "west tower clock/ring",
+        "west tower clock/hands",
+        "west tower clock/marks"
+      ],
+      "pattern": "roofs/gold leaf",
+      "_about": "the clock's gilt ring, marks and hands on a dark dial"
+    },
+    {
+      "parts": [
+        "west tower clock/dial",
+        "west tower clock/hub"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "iron"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "round",
+      "map": "opening",
+      "pattern": "glass/rose wheel",
+      "palette": "chartres",
+      "_about": "the roses in colour"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "head",
+      "map": "opening",
+      "pattern": "glass/tracery white",
+      "palette": "grisaille"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "tall",
+      "nth": [
+        3,
+        1
+      ],
+      "map": "opening",
+      "turn": 90,
+      "pattern": "glass/saint bishop",
+      "palette": "chartres"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "tall",
+      "map": "opening",
+      "pattern": "glass/grisaille lattice",
+      "palette": "grisaille"
+    },
+    {
+      "parts": "kind:glass",
+      "map": "opening",
+      "pattern": "glass/quarries",
+      "palette": "grisaille",
+      "_about": "leaded quarries elsewhere"
+    },
+    {
+      "parts": [
+        "lean-to north",
+        "lean-to south",
+        "lean-to south west",
+        "sacristy roof"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "green copper on the lean-tos and the sacristy"
+    },
+    {
+      "parts": [
+        "west tower 2 roof",
+        "west tower 3 roof",
+        "west tower helm",
+        "west tower spire",
+        "west tower lantern",
+        "west tower balustrade",
+        "west tower pinnacles",
+        "west tower 3 pinnacles",
+        "west choir tower caps",
+        "west choir tower spikes",
+        "west choir tower lanterns"
+      ],
+      "pattern": "stone/ashlar",
+      "palette": "red-sandstone",
+      "_about": "Neumann's stone crown: the roofs of its stages, the helm, the spire, the balustrade; the side towers' caps"
+    },
+    {
+      "parts": [
+        "nave roof",
+        "east transept roofs",
+        "east tower roof",
+        "east tower gables",
+        "west transept roofs",
+        "west choir roofs",
+        "west choir cross roof",
+        "memorie roof",
+        "cloister roofs",
+        "cloister south roof",
+        "cloister east roof",
+        "gotthard roof",
+        "gotthard passage roof",
+        "dom-cafe roof",
+        "dominformation roof",
+        "cloister walk roof",
+        "west conch roof",
+        "north conch roof",
+        "south conch roof",
+        "east apse/roof",
+        "gotthard apse/roof",
+        "south stair tower/cap",
+        "north stair tower/cap"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/slate",
+      "palette": "slate",
+      "_about": "slate"
+    },
+    {
+      "parts": [
+        "kind:roof"
+      ],
+      "surface": "wall",
+      "pattern": "stone/banded ashlar",
+      "palette": "mainz",
+      "_about": "the gables' faces in the walls' stone"
+    },
+    {
+      "parts": [
+        "dom-cafe",
+        "dominformation"
+      ],
+      "side": "out",
+      "surface": "wall",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "the Domhaeuser plastered white"
+    },
+    {
+      "parts": [
+        "st martin"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "rose-sandstone"
+    },
+    {
+      "parts": [
+        "garth"
+      ],
+      "pattern": "materials/grass",
+      "palette": "lawn"
+    },
+    {
+      "parts": [
+        "kind:ribs",
+        "kind:column",
+        "crypt capitals"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "red-sandstone",
+      "_about": "the ribs and columns red stone"
+    },
+    {
+      "parts": [
+        "nave vaults",
+        "aisle vaults",
+        "chapel vaults north 1",
+        "chapel vaults north 2",
+        "chapel vaults north 3",
+        "chapel vaults north 4",
+        "chapel vaults north 5",
+        "chapel vaults north 6",
+        "chapel vaults north 7",
+        "chapel vaults north 8",
+        "chapel vaults north 9",
+        "chapel vaults north 10",
+        "chapel vaults south 1",
+        "chapel vaults south 2",
+        "chapel vaults south 3",
+        "chapel vaults south 4",
+        "chapel vaults south 5",
+        "chapel vaults south 6",
+        "chapel vaults south 7",
+        "east arm vaults",
+        "crypt vaults",
+        "crypt vaults apse",
+        "east crossing dome",
+        "west arm vaults",
+        "west crossing dome",
+        "west choir vault",
+        "west conch vault",
+        "north conch vault",
+        "south conch vault",
+        "memorie vault",
+        "west walk vaults",
+        "south walk vaults",
+        "east walk vaults",
+        "gotthard lower vaults",
+        "gotthard upper vaults"
+      ],
+      "side": "in",
+      "pattern": "stone/stucco lines",
+      "palette": "mainz-vault",
+      "_about": "the vaults' webs pale, their joints drawn on"
+    },
+    {
+      "parts": "kind:moulding",
+      "pattern": "stone/ashlar fine",
+      "palette": "rose-sandstone",
+      "_about": "the dressings paler: lesenes, Lombard friezes, orders, cornices"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/flagstones",
+      "palette": "sandstone-grey",
+      "_about": "sandstone flags inside"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "red-sandstone"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "stone/stucco lines",
+      "palette": "mainz-paint",
+      "_about": "inside, the red-ochre paint with white joints drawn on"
+    },
+    {
+      "surface": "wall",
+      "pattern": "stone/banded ashlar",
+      "palette": "mainz",
+      "_about": "red sandstone in courses, a paler band now and then"
+    },
+    {
+      "pattern": "stone/ashlar",
+      "palette": "red-sandstone",
+      "_about": "whatever else is stone"
+    }
   ]
 }

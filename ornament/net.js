@@ -22,7 +22,15 @@ export function buildNet(segs, lat) {
   };
   const key = (x, y) => Math.round(x / Q) * 134217728 + Math.round(y / Q);   // (a number, not a string: this is the hot path. Exact to 670 m either way, and the distance below would catch a clash)
   const TRIES = lat ? [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]].map(([i, j]) => [i, j, ...lat.at(i, j)]) : [[0, 0, 0, 0]];
-  const nodeAt = (p0) => {                                        // (a point: its node, and the period it stands in)
+  const S0 = [0, 0], nodeAt = (p0) => {                                        // (a point: its node, and the period it stands in)
+    if (!lat) {                                                   // (no period: no period to stand in, nothing to make for the collector. A window builds its net many times over)
+      const x = p0[0], y = p0[1], kx = Math.round(x / Q), ky = Math.round(y / Q);
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
+        const n = index.get((kx + a) * 134217728 + ky + b);
+        if (n !== undefined) { const q = nodes[n], dx = q.x - x, dy = q.y - y; if (dx * dx + dy * dy < Q * Q * 4) return { n, s: S0 }; }
+      }
+      const n = nodes.length; nodes.push({ x, y, out: [] }); index.set(key(x, y), n); return { n, s: S0 };
+    }
     const { p, s } = reduce(p0);
     // near the cell's edge a point may reduce to either side, so look at its neighbours in the rounding and across the cell
     for (const [i, j, ox, oy] of TRIES) {
@@ -98,10 +106,9 @@ export function buildNet(segs, lat) {
     const ts = cuts[i].length === 2 ? cuts[i] : [...new Set(cuts[i].map((t) => Math.round(t * 1e7)))].sort((a, b) => a - b).map((t) => t / 1e7);
     let last = -1, B = null;                                      // (where this piece ended is where the next begins)
     for (let k = 0; k + 1 < ts.length; k++) {
-      const at = (t) => [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t];
       if ((ts[k + 1] - ts[k]) * len < Q * 4) continue;
-      const A = last === k ? B : nodeAt(at(ts[k]));
-      B = nodeAt(at(ts[k + 1])); last = k + 1;
+      const A = last === k ? B : nodeAt([p[0] + (q[0] - p[0]) * ts[k], p[1] + (q[1] - p[1]) * ts[k]]);
+      B = nodeAt([p[0] + (q[0] - p[0]) * ts[k + 1], p[1] + (q[1] - p[1]) * ts[k + 1]]); last = k + 1;
       const s = [B.s[0] - A.s[0], B.s[1] - A.s[1]];
       if (A.n === B.n && !s[0] && !s[1]) continue;
       const K = eKey(A.n, B.n, s);
@@ -126,12 +133,13 @@ export function buildNet(segs, lat) {
 // outer boundary of a plain plane comes out with negative area, and is left out.
 export function facesOf(net) {
   const { nodes, lat } = net, off = (s) => lat ? lat.at(s[0], s[1]) : [0, 0];
-  const done = new Set(), faces = [];
+  const first = new Int32Array(nodes.length + 1); nodes.forEach((n, i) => { first[i + 1] = first[i] + n.out.length; });
+  const done = new Uint8Array(first[nodes.length]), faces = [];     // (each node's way out, walked or not)
   nodes.forEach((n0, a0) => n0.out.forEach((o0, k0) => {
-    if (done.has(`${a0},${k0}`)) return;
+    if (done[first[a0] + k0]) return;
     const pts = []; let a = a0, k = k0, s = [0, 0], guard = 0;
     do {
-      done.add(`${a},${k}`);
+      done[first[a] + k] = 1;
       const w = off(s), n = nodes[a], o = n.out[k];
       pts.push([n.x + w[0], n.y + w[1]]);
       s = [s[0] + o.s[0], s[1] + o.s[1]];

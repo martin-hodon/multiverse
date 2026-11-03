@@ -28,7 +28,8 @@ export const CART_SIZES = Object.fromEntries(Object.keys(TEAMS).map((size) => {
   const wheels = [1, 2].filter((i) => P[`axle${i}X`] !== undefined).map((i) => ({ x: P[`axle${i}X`], r: P[`wheel${i}R`] }));
   return [size, { bedL: P.bedL, bedW: P.bedW, floor: P.floor, side: P.side, seatX: P.seatX, seatTop: P.seatTop, wheels, teams: TEAMS[size] }];
 }));
-export const LOAD_VARIANTS = 5;   // (the bodies' `load` 0..4 on the road: casks lying, standing casks, kegs, sacks in two courses, mixed; -1 empty; 5 the harvest's sheaves, index.html CHORES)
+export const LOAD_VARIANTS = 5;   // (the bodies' `load` 0..4 on the road: casks lying, standing casks, kegs, sacks in two courses, mixed; -1 empty; 5 the harvest's sheaves, index.html CHORES;
+// 6-12 the other cultures' loads -- amphorae, jars and hampers, bales, crates, tubs, rice bales: which a world draws is assets/world/goods.json `loads`)
 
 // the cart body: its item, the load drawn, the driver's board
 export function cartBody(size, { seed = 1, variant = 0 } = {}) {

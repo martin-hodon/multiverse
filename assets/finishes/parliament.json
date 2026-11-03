@@ -1,19 +1,112 @@
 {
   "name": "Hungarian Parliament",
   "building": "architecture/parliament",
-  "_about": "The Hungarian Parliament: white limestone, red tiled roofs and a red dome between white ribs; inside, Zsolnay-tiled floors (octagon and dot) and faux marble.",
+  "_about": "The Hungarian Parliament: white limestone (S\u00f3sk\u00fat), the roofs in dark maroon patterned tile -- a lattice of darker glazed lozenges -- the dome the same between dark lead ribs, the lantern, its spire and the turrets' spires dark, their tips copper; inside, Zsolnay-tiled floors and faux marble.",
   "stone": {
-    "color": "#e9e3d3",
-    "accent": "#d2cab6",
+    "color": "#ece5d3",
+    "accent": "#d6cdb8",
     "pat": "ashlar"
   },
   "rules": [
-    {"parts": "kind:moulding", "pattern": "stone/ashlar fine", "palette": "limestone", "_about": "the courses in the walls' own limestone: relief, not colour"},
-    {"parts": "kind:ribs", "color": "#f1ece0"},
-    {"parts": ["kind:roof", "kind:dome"], "surface": "roof", "pattern": "roofs/fish scale", "palette": "tile-red"},
-    {"surface": "floor", "side": "in", "pattern": "floors/octagon and dot", "palette": "marble-rose"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "limestone"},
-    {"surface": "wall", "side": "in", "pattern": "painted/faux marble", "palette": "baroque"},
-    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "limestone"}
+    {
+      "parts": "kind:moulding",
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone",
+      "_about": "the courses in the walls' own limestone: relief, not colour"
+    },
+    {
+      "parts": "kind:ribs",
+      "color": "#3f4640",
+      "_about": "the dome's ribs: lead"
+    },
+    {
+      "parts": "river centre loggia back",
+      "color": "#6b645a",
+      "_about": "the loggia's back wall, in its shadow"
+    },
+    {
+      "parts": [
+        "south chamber towers tips",
+        "south end turrets tips",
+        "south land towers tips",
+        "south frontispiece tower tips",
+        "north chamber towers tips",
+        "north end turrets tips",
+        "north land towers tips",
+        "north frontispiece tower tips"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the copper tips of the turrets' spires"
+    },
+    {
+      "parts": [
+        "dome spire",
+        "dome lantern",
+        "south chamber towers spires",
+        "south end turrets spires",
+        "south land towers spires",
+        "south frontispiece tower spires",
+        "north chamber towers spires",
+        "north end turrets spires",
+        "north land towers spires",
+        "north frontispiece tower spires"
+      ],
+      "pattern": "roofs/fish scale",
+      "palette": "slate",
+      "_about": "the dark spires: the turrets', the lantern's"
+    },
+    {
+      "parts": [
+        "dome drum pinnacles",
+        "dome foot pinnacles",
+        "dome buttresses",
+        "south river tower spire",
+        "south river tower stage 2",
+        "south river tower octagon",
+        "north river tower spire",
+        "north river tower stage 2",
+        "north river tower octagon"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone",
+      "_about": "the stone spires and pinnacles: the river towers', the dome's rings"
+    },
+    {
+      "parts": [
+        "kind:roof",
+        "kind:dome"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/patterned tile",
+      "palette": "parliament-tile"
+    },
+    {
+      "parts": "kind:dome",
+      "pattern": "roofs/patterned tile",
+      "palette": "parliament-tile"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/octagon and dot",
+      "palette": "marble-rose"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "limestone"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "painted/faux marble",
+      "palette": "baroque"
+    },
+    {
+      "surface": "wall",
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone"
+    }
   ]
 }

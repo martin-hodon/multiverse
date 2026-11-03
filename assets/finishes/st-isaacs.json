@@ -1,88 +1,394 @@
 {
   "name": "St Isaac's Cathedral",
   "building": "architecture/st-isaacs",
-  "_about": "St Isaac's: grey marble facing, the porticoes' columns red granite on granite steps, the domes gilt, the roofs in lead; inside, grey marble revetment and a patterned marble floor.",
+  "_about": "St Isaac's: walls of light grey Ruskeala marble, the podium and steps grey granite, the portico and colonnade columns red granite, the domes gilded, the roofs grey sheet metal, the statues and pediment reliefs dark bronze. Inside: white Italian marble walls, pink and cherry marble columns, floors of grey Ruskeala with pink and cherry, gilded and painted vaults, the dome painted, the iconostasis in gilt and mosaic icons, malachite and lapis columns, the stained-glass Resurrection in the apse window.",
   "stone": {
-    "color": "#bdbab2",
-    "accent": "#a6a39b",
+    "color": "#a8a59d",
+    "accent": "#94918a",
     "pat": "ashlar"
   },
   "rules": [
     {
-      "parts": "kind:railing",
-      "color": "#2e2f31",
-      "accent": "#1f2022",
-      "_about": "iron railings"
-    },
-    {
-      "parts": "body courses",
-      "below": 2.4,
-      "pattern": "stone/granite",
-      "palette": "granite-red",
-      "_about": "the plinth in granite, as the porticoes' columns"
-    },
-    {
-      "parts": "kind:moulding",
-      "pattern": "stone/ashlar fine",
-      "palette": "marble-grey",
-      "_about": "the walls' trim -- plinth, pilasters, entablature, window surrounds -- one dressed marble"
+      "parts": "kind:glass",
+      "within": [
+        -4,
+        -46,
+        4,
+        -42
+      ],
+      "map": "opening",
+      "pattern": "glass/window passion",
+      "palette": "chartres",
+      "_about": "the stained-glass Resurrection in the apse window"
     },
     {
       "parts": [
-        "porticoes/pediment",
-        "porticoes/columns entablature",
-        "porticoes/side columns entablature"
+        "apostle south apex",
+        "apostle south a",
+        "apostle south b",
+        "apostle north apex",
+        "apostle north a",
+        "apostle north b",
+        "apostle west apex",
+        "apostle west a",
+        "apostle west b",
+        "apostle east apex",
+        "apostle east a",
+        "apostle east b",
+        "lamp angel -1 -1",
+        "lamp angel -1 1",
+        "lamp angel 1 -1",
+        "lamp angel 1 1",
+        "angel 0",
+        "angel 1",
+        "angel 2",
+        "angel 3",
+        "angel 4",
+        "angel 5",
+        "angel 6",
+        "angel 7",
+        "angel 8",
+        "angel 9",
+        "angel 10",
+        "angel 11",
+        "angel 12",
+        "angel 13",
+        "angel 14",
+        "angel 15",
+        "angel 16",
+        "angel 17",
+        "angel 18",
+        "angel 19",
+        "angel 20",
+        "angel 21",
+        "angel 22",
+        "angel 23"
       ],
-      "pattern": "stone/ashlar fine",
-      "palette": "marble-grey"
+      "pattern": "materials/metal",
+      "palette": [
+        "#5b4a2e",
+        "#3e3220",
+        "#7a6440",
+        "#2c2416"
+      ],
+      "_about": "the bronze apostles and angels"
     },
     {
-      "parts": "porticoes/steps",
-      "pattern": "stone/granite",
-      "palette": "granite"
+      "parts": [
+        "portico south/pediment",
+        "portico north/pediment",
+        "portico west/pediment",
+        "portico east/pediment"
+      ],
+      "surface": "wall",
+      "pattern": "stone/candi reliefs",
+      "palette": [
+        "#5b4a2e",
+        "#3e3220",
+        "#7a6440",
+        "#2c2416"
+      ],
+      "_about": "the pediments' bronze reliefs: the Resurrection (north), the Adoration of the Magi (south), St Isaac meeting Theodosius (west), St Isaac stopping Valens (east)"
     },
     {
-      "parts": "porticoes",
-      "pattern": "stone/granite",
-      "palette": "granite-red"
+      "parts": [
+        "iconostasis malachite shafts"
+      ],
+      "pattern": "stone/marble",
+      "palette": [
+        "#1f6b4a",
+        "#0e4a32",
+        "#3f9a6c",
+        "#0a2f20"
+      ],
+      "_about": "the malachite columns"
     },
     {
-      "parts": "kind:dome",
-      "surface": "roof",
+      "parts": [
+        "iconostasis lapis shafts"
+      ],
+      "pattern": "stone/marble",
+      "palette": [
+        "#26408b",
+        "#1a2d66",
+        "#3a5bb8",
+        "#c9a24a"
+      ],
+      "_about": "the lapis-lazuli columns"
+    },
+    {
+      "parts": [
+        "iconostasis malachite bases",
+        "iconostasis malachite capitals",
+        "iconostasis malachite abaci",
+        "iconostasis lapis bases",
+        "iconostasis lapis capitals",
+        "iconostasis lapis abaci",
+        "iconostasis cornice"
+      ],
+      "pattern": "roofs/gold leaf",
+      "_about": "their gilt bases and capitals, the gilt entablature over them"
+    },
+    {
+      "parts": [
+        "iconostasis"
+      ],
+      "surface": "wall",
+      "pattern": "mosaic/wall apostles",
+      "scale": 2.5,
+      "_about": "the iconostasis: its icons (mosaic) in tiers"
+    },
+    {
+      "parts": [
+        "altar",
+        "solea"
+      ],
+      "pattern": "stone/marble",
+      "palette": "marble-rose"
+    },
+    {
+      "parts": [
+        "kind:dome"
+      ],
+      "side": "in",
+      "pattern": "painted/caisson",
+      "palette": [
+        "#f3ecd8",
+        "#d9b45a",
+        "#b88f2e",
+        "#efe6cc"
+      ],
+      "_about": "the dome's inside painted and gilt (Bryullov's Virgin in glory)"
+    },
+    {
+      "in": "dome/ribbed lantern",
+      "pattern": "roofs/gold leaf",
+      "_about": "the gilded lantern"
+    },
+    {
+      "in": "belfry domes/ribbed lantern",
       "pattern": "roofs/gold leaf"
     },
     {
-      "parts": "dome/dome",
-      "surface": [
-        "wall",
-        "ceiling"
+      "parts": [
+        "kind:dome",
+        "dome/ribs",
+        "belfry domes/ribs",
+        "dome/lantern ball",
+        "dome/lantern cross",
+        "dome/lantern cross arm",
+        "dome/lantern spire",
+        "belfry domes/lantern ball",
+        "belfry domes/lantern cross",
+        "belfry domes/lantern cross arm",
+        "belfry domes/lantern spire",
+        "dome/lantern columns bases",
+        "dome/lantern columns shafts",
+        "dome/lantern columns capitals",
+        "dome/lantern columns abaci"
+      ],
+      "pattern": "roofs/gold leaf",
+      "_about": "the gilded domes, their ribs, the lanterns and crosses"
+    },
+    {
+      "parts": [
+        "kind:roof"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/sheet metal",
+      "palette": "lead",
+      "_about": "the pediments' roofs in grey sheet metal"
+    },
+    {
+      "parts": [
+        "portico south/columns shafts",
+        "portico north/columns shafts",
+        "portico west/columns shafts",
+        "portico east/columns shafts",
+        "portico south rows shafts",
+        "portico north rows shafts",
+        "dome/peristyle shafts"
+      ],
+      "pattern": "stone/granite",
+      "palette": "granite-red",
+      "_about": "the red granite monoliths of the porticoes and the drum's colonnade"
+    },
+    {
+      "parts": [
+        "portico south/columns bases",
+        "portico south/columns capitals",
+        "portico south/columns abaci",
+        "portico north/columns bases",
+        "portico north/columns capitals",
+        "portico north/columns abaci",
+        "portico west/columns bases",
+        "portico west/columns capitals",
+        "portico west/columns abaci",
+        "portico east/columns bases",
+        "portico east/columns capitals",
+        "portico east/columns abaci",
+        "portico south rows bases",
+        "portico south rows capitals",
+        "portico south rows abaci",
+        "portico north rows bases",
+        "portico north rows capitals",
+        "portico north rows abaci"
+      ],
+      "pattern": "materials/metal",
+      "palette": [
+        "#5b4a2e",
+        "#3e3220",
+        "#7a6440",
+        "#2c2416"
+      ],
+      "_about": "their bronze bases and capitals"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/opus sectile",
+      "palette": [
+        "#9a9a96",
+        "#b9b7b2",
+        "#c98f8a",
+        "#7e2f33"
+      ],
+      "_about": "the floors of grey Ruskeala with pink and cherry marble"
+    },
+    {
+      "parts": [
+        "podium",
+        "steps south",
+        "steps north",
+        "steps west",
+        "steps east",
+        "base"
+      ],
+      "pattern": "stone/granite",
+      "palette": "granite",
+      "_about": "the granite podium and steps"
+    },
+    {
+      "parts": [
+        "kind:barrel",
+        "pendentives"
       ],
       "side": "in",
-      "pattern": "stone/plaster",
-      "palette": "baroque",
-      "_about": "the dome shell inside"
+      "pattern": "painted/caisson",
+      "palette": [
+        "#f3ecd8",
+        "#d9b45a",
+        "#b88f2e",
+        "#efe6cc"
+      ],
+      "_about": "the coffered vaults, white and gold"
     },
     {
-      "surface": "floor",
+      "parts": [
+        "kind:column"
+      ],
       "side": "in",
-      "pattern": "floors/cosmati",
-      "palette": "marble-bw"
+      "pattern": "stone/marble",
+      "palette": [
+        "#c98f8a",
+        "#b07069",
+        "#7e2f33",
+        "#e2bdb5"
+      ]
     },
     {
-      "surface": "floor",
-      "pattern": "floors/flagstones",
-      "palette": "granite"
+      "surface": "ceiling",
+      "side": "in",
+      "pattern": "painted/caisson",
+      "palette": [
+        "#f3ecd8",
+        "#d9b45a",
+        "#b88f2e",
+        "#efe6cc"
+      ]
+    },
+    {
+      "parts": [
+        "pier line north",
+        "pier line south",
+        "crossing wall west",
+        "crossing wall east",
+        "west bay wall",
+        "sanctuary wall"
+      ],
+      "surface": "wall",
+      "pattern": "stone/revetment",
+      "palette": [
+        "#ece6da",
+        "#d9aaa2",
+        "#e0d8c8",
+        "#b9817a"
+      ],
+      "_about": "the piers sheathed in white marble, framed in pink and cherry Tivdia marble"
     },
     {
       "surface": "wall",
       "side": "in",
       "pattern": "stone/revetment",
-      "palette": "marble-grey"
+      "palette": [
+        "#efece4",
+        "#e2ddd2",
+        "#d8d2c4",
+        "#c9c2b0"
+      ],
+      "_about": "the walls inside in white Italian marble on a dark base"
+    },
+    {
+      "surface": "floor",
+      "pattern": "stone/granite",
+      "palette": "granite",
+      "_about": "the porches, the roof walks and the colonnade walk"
+    },
+    {
+      "parts": [
+        "colonnade stair railing"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": [
+        "#a8a59d",
+        "#9a978f",
+        "#b3b0a8",
+        "#8f8c85"
+      ],
+      "_about": "the flight's stone parapets"
+    },
+    {
+      "parts": [
+        "kind:moulding"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": [
+        "#a8a59d",
+        "#9a978f",
+        "#b3b0a8",
+        "#8f8c85"
+      ]
+    },
+    {
+      "surface": "ceiling",
+      "pattern": "stone/ashlar fine",
+      "palette": [
+        "#a8a59d",
+        "#9a978f",
+        "#b3b0a8",
+        "#8f8c85"
+      ]
     },
     {
       "surface": "wall",
       "pattern": "stone/ashlar fine",
-      "palette": "marble-grey"
+      "palette": [
+        "#a8a59d",
+        "#9a978f",
+        "#b3b0a8",
+        "#8f8c85"
+      ],
+      "_about": "the grey Ruskeala marble walls"
     }
   ]
 }

@@ -1,0 +1,419 @@
+{
+  "name": "Conical tower",
+  "_about": "A TOWER UNDER A K\u00dcLAH -- the Ottoman palace's: a stone shaft, octagonal (`plan` polygon, `sides`) or square (`plan` square), w across its flats and H tall with a belt course at beltY; a cornice standing out corOut, corH deep; on a square shaft an upper stage by `upper` yes (Hu tall, wu wide, a tall round-arched window uw wide in each face from uSill to uSpr, corner piers or by `upperCols` yes paired engaged columns (ucR) flanking every window, its own cornice ucH, by `upperPed` yes a segmental pediment pedH high over every face -- the Tower of Justice's Empire lantern); then the tall pointed lead cap (capR, capH, capSides facets: 16 reads round) and its alem. The Middle Gate's two towers, the Tower of Justice. y 0 on the ground. (tools/archgen/ottoman.py)",
+  "params": {
+    "detail": 4,
+    "plan": "polygon",
+    "sides": 8,
+    "w": 6.0,
+    "H": 14.0,
+    "beltY": "H * 0.55",
+    "beltH": 0.3,
+    "beltOut": 0.12,
+    "corH": 0.6,
+    "corOut": 0.35,
+    "upper": "no",
+    "Hu": 0,
+    "wu": "w * 0.86",
+    "ut": 0.5,
+    "uw": "wu * 0.4",
+    "ucH": 0,
+    "uSill": "Hu * 0.08",
+    "uSpr": "Hu * 0.75",
+    "upperCols": "no",
+    "ucR": "wu * 0.035",
+    "upperPed": "no",
+    "pedH": "wu * 0.2",
+    "_upperCols": "yes: paired engaged corinthian columns (ucR) either side of every window; no: plain corner piers",
+    "_upperPed": "yes: a segmental pediment pedH high over every face of the upper stage",
+    "capR": "w / 2 + corOut + 0.25",
+    "capH": "w * 1.5",
+    "capSides": 16,
+    "_plan": "polygon (sides) or square",
+    "_Hu": "the upper stage's height: 0 with upper no; with upper yes give Hu and ucH (its cornice)",
+    "_capR": "the cap's radius at its eave: past the cornice, so it overhangs"
+  },
+  "build": [
+    "shaft",
+    "shaft square",
+    "cornice",
+    "cornice square",
+    "upper",
+    "upper piers",
+    "upper columns",
+    "upper cornice",
+    "upper pediments",
+    "cap",
+    "alem"
+  ],
+  "parts": {
+    "shaft": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "w / 2 / cos(3.14159265 / sides)"
+      },
+      "height": "H",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "plan": "polygon"
+      },
+      "courses": [
+        {
+          "y": "beltY",
+          "h": "beltH",
+          "out": "beltOut",
+          "profile": "band"
+        }
+      ],
+      "_about": "the stone shaft on its polygon (w across the flats), a belt course at beltY"
+    },
+    "shaft square": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          "w",
+          "w"
+        ]
+      },
+      "height": "H",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "plan": "square"
+      },
+      "courses": [
+        {
+          "y": "beltY",
+          "h": "beltH",
+          "out": "beltOut",
+          "profile": "band"
+        }
+      ]
+    },
+    "cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "(w / 2 + corOut) / cos(3.14159265 / sides)"
+      },
+      "height": "corH",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "plan": "polygon"
+      },
+      "standsOn": [
+        "shaft"
+      ],
+      "_about": "the cornice the cap sits on, standing out corOut"
+    },
+    "cornice square": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          "w + 2 * corOut",
+          "w + 2 * corOut"
+        ]
+      },
+      "height": "corH",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "plan": "square"
+      },
+      "standsOn": [
+        "shaft square"
+      ]
+    },
+    "upper": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "wu",
+          "wu"
+        ]
+      },
+      "thickness": "ut",
+      "height": "Hu",
+      "openings": [
+        {
+          "at": 0,
+          "width": "uw",
+          "sill": "uSill",
+          "springing": "uSpr",
+          "head": {
+            "profile": "semicircular"
+          }
+        }
+      ],
+      "glass": true,
+      "at": [
+        [
+          0,
+          "H + corH",
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "upper": "yes"
+      },
+      "standsOn": [
+        "cornice square"
+      ],
+      "_about": "the upper stage (upper: yes, a square shaft): a room with a tall round-arched window in every face"
+    },
+    "upper piers": {
+      "type": "box",
+      "width": "uw * 0.22",
+      "length": "uw * 0.22",
+      "height": "Hu",
+      "at": [
+        [
+          "-1 * (wu / 2)",
+          "H + corH",
+          "-1 * (wu / 2)",
+          0
+        ],
+        [
+          "-1 * (wu / 2)",
+          "H + corH",
+          "1 * (wu / 2)",
+          0
+        ],
+        [
+          "1 * (wu / 2)",
+          "H + corH",
+          "-1 * (wu / 2)",
+          0
+        ],
+        [
+          "1 * (wu / 2)",
+          "H + corH",
+          "1 * (wu / 2)",
+          0
+        ]
+      ],
+      "when": {
+        "upper": "yes",
+        "upperCols": "no"
+      },
+      "standsOn": [
+        "cornice square"
+      ],
+      "_about": "engaged piers at the upper stage's corners"
+    },
+    "upper columns": {
+      "type": "colonnade",
+      "order": "corinthian",
+      "count": 2,
+      "spacing": "ucR * 2.6",
+      "columnR": "ucR",
+      "height": "Hu",
+      "at": [
+        [
+          "-1 * (wu / 2 - ucR * 2.4)",
+          "H + corH",
+          "wu / 2 + ucR * 0.5",
+          0.0
+        ],
+        [
+          "1 * (wu / 2 - ucR * 2.4)",
+          "H + corH",
+          "wu / 2 + ucR * 0.5",
+          0.0
+        ],
+        [
+          "wu / 2 + ucR * 0.5",
+          "H + corH",
+          "0 - (-1 * (wu / 2 - ucR * 2.4))",
+          1.5707963
+        ],
+        [
+          "wu / 2 + ucR * 0.5",
+          "H + corH",
+          "0 - (1 * (wu / 2 - ucR * 2.4))",
+          1.5707963
+        ],
+        [
+          "0 - (-1 * (wu / 2 - ucR * 2.4))",
+          "H + corH",
+          "0 - (wu / 2 + ucR * 0.5)",
+          3.1415926
+        ],
+        [
+          "0 - (1 * (wu / 2 - ucR * 2.4))",
+          "H + corH",
+          "0 - (wu / 2 + ucR * 0.5)",
+          3.1415926
+        ],
+        [
+          "0 - (wu / 2 + ucR * 0.5)",
+          "H + corH",
+          "-1 * (wu / 2 - ucR * 2.4)",
+          4.7123889
+        ],
+        [
+          "0 - (wu / 2 + ucR * 0.5)",
+          "H + corH",
+          "1 * (wu / 2 - ucR * 2.4)",
+          4.7123889
+        ]
+      ],
+      "when": {
+        "upper": "yes",
+        "upperCols": "yes"
+      },
+      "standsOn": [
+        "cornice square"
+      ],
+      "_about": "upperCols yes: paired engaged columns flanking every face's window"
+    },
+    "upper cornice": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          "wu + 2 * corOut",
+          "wu + 2 * corOut"
+        ]
+      },
+      "height": "ucH",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H + corH + Hu",
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "upper": "yes"
+      },
+      "standsOn": [
+        "upper"
+      ]
+    },
+    "upper pediments": {
+      "type": "loft",
+      "axis": "z",
+      "half": true,
+      "sides": 16,
+      "sections": [
+        {
+          "s": "wu / 2 + corOut - 0.45",
+          "a": "wu / 2 + corOut",
+          "b": "pedH",
+          "n": 2.6
+        },
+        {
+          "s": "wu / 2 + corOut",
+          "a": "wu / 2 + corOut",
+          "b": "pedH",
+          "n": 2.6
+        }
+      ],
+      "at": [
+        [
+          0,
+          "H + corH + Hu + ucH",
+          0,
+          0.0
+        ],
+        [
+          0,
+          "H + corH + Hu + ucH",
+          0,
+          1.5707963
+        ],
+        [
+          0,
+          "H + corH + Hu + ucH",
+          0,
+          3.1415926
+        ],
+        [
+          0,
+          "H + corH + Hu + ucH",
+          0,
+          4.7123889
+        ]
+      ],
+      "when": {
+        "upper": "yes",
+        "upperPed": "yes"
+      },
+      "standsOn": [
+        "upper cornice"
+      ],
+      "_about": "upperPed yes: a segmental pediment over every face"
+    },
+    "cap": {
+      "type": "dome",
+      "radius": "capR",
+      "thickness": 0,
+      "sides": "capSides",
+      "head": {
+        "profile": "trigonal",
+        "rise": "capH"
+      },
+      "at": [
+        [
+          0,
+          "H + corH + Hu + ucH",
+          0,
+          0
+        ]
+      ],
+      "_about": "the k\u00fclah: a tall pointed lead cap on the cornice"
+    },
+    "alem": {
+      "type": "column",
+      "radius": "capR * 0.05",
+      "height": "capH * 0.22",
+      "sides": 6,
+      "taper": 0.35,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "cap",
+      "standsOn": [
+        "cap"
+      ],
+      "_about": "the gilt alem on the tip"
+    }
+  }
+}

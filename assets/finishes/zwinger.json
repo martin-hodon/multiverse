@@ -1,18 +1,237 @@
 {
   "name": "Zwinger, Dresden",
   "building": "architecture/zwinger",
-  "_about": "The Zwinger: Elbe sandstone, copper roofs gone green, the Kronentor's crown and lantern gilt; floors in flags outside and in grey marble within.",
+  "_about": "The Zwinger: warm Saxon (Elbe) sandstone, its sculpture weathered darker; green copper on the pavilions' roofs, the Kronentor's onion dark with gilt ribs and the crown gilt; the Sempergalerie in the darker sandstone, its ground storey rusticated, a slate roof and a copper dome; the court's red-brown gravel, lawns, water; inside, marble floors and stucco walls, the stairs and floors of the galleries in sandstone flags.",
   "stone": {
-    "color": "#dcc8a0",
-    "accent": "#c0aa7e",
+    "color": "#d9c49c",
+    "accent": "#b9a27a",
     "pat": "ashlar"
   },
   "rules": [
-    {"parts": ["kronentor lantern/cap", "kronentor lantern/finial", "kronentor lantern/tower", "kronentor lantern/drum"], "pattern": "roofs/gold leaf"},
-    {"parts": ["kind:dome", "kind:roof"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
-    {"surface": "floor", "side": "in", "pattern": "floors/checker", "palette": "marble-grey"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone-grey"},
-    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
-    {"surface": "wall", "pattern": "stone/ashlar", "palette": "sandstone"}
+    {
+      "parts": [
+        "kronentor crown",
+        "kronentor crown eagles"
+      ],
+      "pattern": "roofs/gold leaf",
+      "_about": "the gilt crown and eagles"
+    },
+    {
+      "parts": [
+        "kronentor onion"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "lead",
+      "_about": "the onion's dark copper"
+    },
+    {
+      "parts": [
+        "glockenspiel bells"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "white Meissen porcelain"
+    },
+    {
+      "parts": [
+        "glockenspiel bell frame",
+        "glockenspiel bell beams"
+      ],
+      "pattern": "roofs/gold leaf"
+    },
+    {
+      "parts": [
+        "semper dome"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the Sempergalerie's copper dome"
+    },
+    {
+      "parts": [
+        "sempergalerie east roof",
+        "sempergalerie west roof"
+      ],
+      "pattern": "roofs/slate",
+      "palette": "slate"
+    },
+    {
+      "parts": [
+        "vase bodies",
+        "vase lids",
+        "wall fountain shells",
+        "wall fountains",
+        "basin jet bowls",
+        "kronentor attic",
+        "kronentor attic 2"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "meissen-sandstone",
+      "_about": "the vases, the fountains' shells and bowls: carved sandstone"
+    },
+    {
+      "parts": [
+        "mathematisch-physikalischer salon roof",
+        "porzellanpavillon roof",
+        "franzoesischer pavillon roof",
+        "deutscher pavillon roof",
+        "wallpavillon roof",
+        "wallpavillon rear roof",
+        "glockenspielpavillon roof",
+        "glockenspielpavillon rear roof"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the pavilions' green copper"
+    },
+    {
+      "parts": "kind:roof",
+      "pattern": "roofs/sheet metal",
+      "palette": "copper"
+    },
+    {
+      "parts": "kind:dome",
+      "pattern": "roofs/sheet metal",
+      "palette": "copper"
+    },
+    {
+      "parts": [
+        "basin water",
+        "basin jets",
+        "long basin water",
+        "wallpavillon fountain water",
+        "rampart shell water",
+        "nymphenbad cascade 1",
+        "nymphenbad cascade 2",
+        "nymphenbad cascade 3",
+        "nymphenbad cascade 4",
+        "nymphenbad cascade pool",
+        "nymphenbad fountain water",
+        "nymphenbad jets"
+      ],
+      "color": "#4f6a72",
+      "accent": "#7d98a0",
+      "_about": "the water of the basins, the cascade and the jets"
+    },
+    {
+      "parts": [
+        "lawn ws",
+        "lawn wn",
+        "lawn es",
+        "lawn en",
+        "apse lawns",
+        "semper embankment west",
+        "semper embankment east"
+      ],
+      "pattern": "materials/grass",
+      "palette": "lawn"
+    },
+    {
+      "parts": [
+        "court",
+        "kronentor passage floor"
+      ],
+      "pattern": "stone/sand",
+      "palette": "gravel",
+      "_about": "the court's red-brown gravel"
+    },
+    {
+      "parts": [
+        "sempergalerie west",
+        "sempergalerie east",
+        "semper arch"
+      ],
+      "surface": "wall",
+      "side": "out",
+      "pattern": "stone/rusticated",
+      "palette": "meissen-dark",
+      "_about": "the Sempergalerie's rusticated ground storey"
+    },
+    {
+      "parts": [
+        "sempergalerie west upper",
+        "sempergalerie east upper",
+        "semper arch hall",
+        "semper arch attic",
+        "sempergalerie east attic",
+        "sempergalerie west attic"
+      ],
+      "surface": "wall",
+      "side": "out",
+      "pattern": "stone/ashlar",
+      "palette": "meissen-dark",
+      "_about": "its upper storey in the darker sandstone"
+    },
+    {
+      "parts": [
+        "rampart"
+      ],
+      "surface": "floor",
+      "pattern": "materials/grass",
+      "palette": "lawn",
+      "_about": "the lawns on the rampart"
+    },
+    {
+      "parts": [
+        "rampart",
+        "nymphenbad walls"
+      ],
+      "pattern": "stone/ashlar",
+      "palette": "meissen-sandstone"
+    },
+    {
+      "parts": [
+        "sempergalerie west spine 0",
+        "sempergalerie west cross 0.1",
+        "sempergalerie west cross 0.2",
+        "sempergalerie west cabinet 0.2",
+        "sempergalerie west cross 0.3",
+        "sempergalerie west cabinet 0.3",
+        "sempergalerie west spine 1",
+        "sempergalerie west cross 1.1",
+        "sempergalerie west cross 1.2",
+        "sempergalerie west cabinet 1.2",
+        "sempergalerie west cross 1.3",
+        "sempergalerie west cabinet 1.3",
+        "sempergalerie east spine 0",
+        "sempergalerie east cross 0.1",
+        "sempergalerie east cross 0.2",
+        "sempergalerie east cabinet 0.2",
+        "sempergalerie east cross 0.3",
+        "sempergalerie east cabinet 0.3",
+        "sempergalerie east spine 1",
+        "sempergalerie east cross 1.1",
+        "sempergalerie east cross 1.2",
+        "sempergalerie east cabinet 1.2",
+        "sempergalerie east cross 1.3",
+        "sempergalerie east cabinet 1.3"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-ochre",
+      "_about": "the halls' partitions in ochre stucco"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/checker",
+      "palette": "marble-grey"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "sandstone"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-ochre"
+    },
+    {
+      "surface": "wall",
+      "pattern": "stone/ashlar",
+      "palette": "meissen-sandstone",
+      "_about": "the warm Elbe sandstone, ashlar"
+    }
   ]
 }

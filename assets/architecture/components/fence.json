@@ -19,16 +19,16 @@
    "sides": 6,
    "at": [
     [
-     "(1 - p0) * L / round(L / bay)",
+     "(1 - p0) * L / max(1, round(L / bay))",
      0,
      0,
      0
     ]
    ],
    "repeat": {
-    "count": "round(L / bay) - 1 + p0 + p1",
+    "count": "max(1, round(L / bay)) - 1 + p0 + p1",
     "step": [
-     "L / round(L / bay)",
+     "L / max(1, round(L / bay))",
      0,
      0,
      0
@@ -43,21 +43,21 @@
   },
   "rail low": {
    "type": "box",
-   "width": "L / round(L / bay)",
+   "width": "L / max(1, round(L / bay))",
    "length": 0.07,
    "height": 0.09,
    "at": [
     [
-     "L / round(L / bay) / 2",
+     "L / max(1, round(L / bay)) / 2",
      0.46,
      0,
      0
     ]
    ],
    "repeat": {
-    "count": "round(L / bay)",
+    "count": "max(1, round(L / bay))",
     "step": [
-     "L / round(L / bay)",
+     "L / max(1, round(L / bay))",
      0,
      0,
      0
@@ -69,21 +69,21 @@
   },
   "rail high": {
    "type": "box",
-   "width": "L / round(L / bay)",
+   "width": "L / max(1, round(L / bay))",
    "length": 0.07,
    "height": 0.09,
    "at": [
     [
-     "L / round(L / bay) / 2",
+     "L / max(1, round(L / bay)) / 2",
      "h - 0.2",
      0,
      0
     ]
    ],
    "repeat": {
-    "count": "round(L / bay)",
+    "count": "max(1, round(L / bay))",
     "step": [
-     "L / round(L / bay)",
+     "L / max(1, round(L / bay))",
      0,
      0,
      0
@@ -95,27 +95,27 @@
   },
   "picket rails": {
    "type": "box",
-   "width": "L / round(L / bay)",
+   "width": "L / max(1, round(L / bay))",
    "length": 0.05,
    "height": 0.07,
    "at": [
     [
-     "L / round(L / bay) / 2",
+     "L / max(1, round(L / bay)) / 2",
      0.3,
      0,
      0
     ],
     [
-     "L / round(L / bay) / 2",
+     "L / max(1, round(L / bay)) / 2",
      "h - 0.35",
      0,
      0
     ]
    ],
    "repeat": {
-    "count": "round(L / bay)",
+    "count": "max(1, round(L / bay))",
     "step": [
-     "L / round(L / bay)",
+     "L / max(1, round(L / bay))",
      0,
      0,
      0
@@ -132,16 +132,16 @@
    "height": "h - 0.15",
    "at": [
     [
-     "L / round(L / 0.16) / 2",
+     "L / max(1, round(L / 0.16)) / 2",
      0.1,
      0.0325,
      0
     ]
    ],
    "repeat": {
-    "count": "round(L / 0.16)",
+    "count": "max(1, round(L / 0.16))",
     "step": [
-     "L / round(L / 0.16)",
+     "L / max(1, round(L / 0.16))",
      0,
      0,
      0
@@ -165,9 +165,9 @@
     ]
    ],
    "repeat": {
-    "count": "round(L / 1.2) + 1",
+    "count": "max(1, round(L / 1.2)) + 1",
     "step": [
-     "L / round(L / 1.2)",
+     "L / max(1, round(L / 1.2))",
      0,
      0,
      0
@@ -220,7 +220,7 @@
     ]
    ],
    "repeat": {
-    "count": "ceil(round(L / bay) / 2)",
+    "count": "ceil(max(1, round(L / bay)) / 2)",
     "step": [
      "2 * bay",
      0,
@@ -258,7 +258,7 @@
     ]
    ],
    "repeat": {
-    "count": "floor(round(L / bay) / 2)",
+    "count": "floor(max(1, round(L / bay)) / 2)",
     "step": [
      "2 * bay",
      0,

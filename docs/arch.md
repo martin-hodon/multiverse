@@ -1131,6 +1131,8 @@ railing"), so they meet the flights' railings end to end rather than welding int
 - **`when`** on any part: drawn only while a WORD parameter has the value (or one of the values) it names
   (`"when": {"style": ["rails", "picket"]}`) -- one fence definition holds its five styles. A word param is
   passed to a component by name (`"params": {"style": "fence"}`: the yard's `fence` word reaches the component).
+  An OPENING in a face's list (or a fitted row's `with`) may carry a `when` too (2026-11-03): twin-tower-front's
+  `portals: one|three` puts a door in each tower's front in place of its window.
   `p0`/`p1` 0 leave out the post at the start/the end of a run: where two runs meet at a corner ONE post stands
   (the town wall's town-side balustrades both run to the corner, `ia`/`ib` = T/2 - .15; the wall a side begins
   leaves its end post out, `ka`/`kb`).
@@ -2558,3 +2560,753 @@ keeps the two out of one world.
 Left open:
 - The Erechtheion's north porch is one level. The real one stands about 3 m lower, on the rock's lower terrace.
 - The Propylaia's wings are simplified, and the eastern halls Mnesikles planned (never built) are left out.
+
+## Landmarks against the originals: kinds of pinnacle, open spires, fronts of their own (2026-11-01)
+
+Every landmark was rendered and compared with the real building. The worst were the ones whose parts could only say one thing: one
+pinnacle for a whole skyline, one window for a whole tower, one front for every Gothic church. So the abstractions changed first.
+
+**`pinnacle` (arch/pinnacle.js).** One part per kind: `w` `h` `s`, `sides` (4 or 8), `gablets`, `crockets`, `figure`, `attendants`, and
+`pair` { d, axis, scale } for a mass carrying two. A `basilica` takes `pinnacleKinds` (sizes in shaft widths), given out by turns along the
+church; with none it keeps the old plain shaft and spire. Transept pinnacles are not converted yet.
+
+**`cresting`.** An openwork parapet along a raking `run` in the part's plane, with a spirelet every `every` posts.
+
+**`screen`.** A stone outline of any shape, its face at z 0 and `t` behind, as a wall stands on its line: a gable that is not one pitch, a
+tondo, a relief plaque. Set a plaque's back exactly on the wall's face. Where two copies of a wall part overlap at a corner, a point
+inside both counts as inside neither, and support reports it floating.
+
+**`open-spire`.** A net of ribs, rings and tracery lozenges with the sky through it: `R` `rise`, `sides`, `rows`, `rib`, `bar`, `topR`, `crockets`,
+`finial`. It is a shell, so give it a core or a stair to stand round if something rides on top.
+
+**`gothic()` takes `front`** (tools/archgen/notre_dame.py): tier heights, portals, what stands in the middle tier of the wall and of the towers,
+open galleries, belfry lights, `towerOut` (towers standing out past the aisle walls), stepped buttresses, string courses, a gable. A church
+without it keeps the old front.
+
+**The lab.** `arch_lab.html?still=1` draws a few frames and hides its panels (they had been darkening whatever stood behind them in shots, which looks
+exactly like a dark lantern). Scripts get `__view`, `__bbox`, `__parts`, `__ready`.
+
+What changed, building by building:
+
+- **Milan.** 14 bays and 158 m, not 10. Five aisles in three levels, transept aisles, the sacristies, a five-faced apse. The front is the
+  real broken gable between six buttresses, with three kinds of pinnacle, the doubled ones doubled, lace, statues under canopies, and
+  Pellegrini's pedimented portals and windows under pointed ones. The tiburio has its open spire round a core and the gold Madonnina.
+- **Florence.** The campanile is five different zones on the true 14.45 m square, not five equal storeys: hexagons under lozenges, sixteen niches
+  with statues, two storeys of paired two-light windows, the great three-light one, a cornice on corbels, octagonal corner buttresses. It stands 6 m off
+  the aisle wall, level with the front (it was 13 m off). The front has four piers with tabernacles, raking wings, the apostles' row, the gable's
+  lace and tondo. The lantern is 13 m of octagon under a tall cone, with a cross on the ball.
+- **Notre-Dame.** Broad portals, the rose tier with paired windows, the gallery running across towers and wall alike, stepped buttresses, string
+  courses, wider towers. The flèche is now taller than the towers. It was shorter.
+- **Cologne.** The front is 60 m wide on towers 19.5 m square (it was 44 m on 14.4), with a great window where it had a rose, tiers of tall lights, a
+  gable and open spires.
+- **Ulm.** The west spire is open round its stair. The east spires are still solid. Its nave is the older `basilica.json` component, not the `basilica` part, so `pinnacleKinds` does not reach it: its flank pinnacles are still one kind. (Both done: see "Closer looks" below.)
+- **Stephansdom.** Two kinds of pinnacle.
+- **Sacre-Coeur.** The dome is the tall egg on a colonnaded drum, the rose is glazed, and the campanile has stages: shaft, open belfry, corner
+  buttresses and pinnacles, an arcaded head, a small dome.
+
+Triangles: Milan 73.8k to 139k (+88%, a good part of it the true length), Florence 58.5k to 76.5k (+31%), Notre-Dame 78k to 82k, Cologne 98k to 115.5k
+(+18%), Ulm 75.6k to 78.8k, Stephansdom 54.2k to 56.9k, Sacre-Coeur 20.3k to 28.9k (+43%).
+
+Left open:
+- Florence's body is 48 m wide against the real 43, and its finish has rules tied to coordinates, so narrowing it means redoing those. The
+  Baptistery is not there; it would be a new building.
+- Milan's transept aisles stand at the outer aisles' height (the real ones are higher), and its front has a fraction of the real ornament.
+- Notre-Dame's side portals have no door leaves. The Gallery of Kings was raised to 20.3 m, but no statues showed in the lab's renders, and why has not been looked into. (Both done: see "Closer looks" below.)
+- Schwerin is still a symmetrical pentagon, where the real castle is irregular with a crowd of turrets. It needs its own rebuild. (Rebuilt: see "Closer looks" below.)
+- Baked data under `dist/` and any pregenerated worlds may need regenerating to pick up the new sizes. Neither was checked, and neither was the game itself: all of this was seen in the lab.
+
+
+## Four more landmarks: Forbidden City, St Mark's, Dome of the Rock, Eiffel Tower (2026-11-02)
+
+Each has a generator in `tools/archgen/`, a JSON in `assets/architecture/`, a finish, an entry in its period's landmarks and one in `LANDMARKS`. Sizes are the
+published ones (Wikipedia's pages for each, and the figures their generators' headers name); no plan came from OSM this time, so positions are worked from sizes, not traced.
+
+New parts (arch/truss.js, arch/assemble.js, arch/build.js):
+
+**`bars`.** Square tubes between points: `lines` [[x0, y0, z0, x1, y1, z1], ...] or `paths` of points (`closed`), `w`, `h`, `caps`. A shell, kind "iron" unless the part says
+otherwise. At 12 triangles a bar (8 with `caps: false`) it is the cheap way to draw anything thin: rails, a cross, a balustrade's posts, dragon spouts, a horse.
+
+**`truss`.** A lattice between cross sections: `stations` (each a list of corners [x, y, z]), `chord`, `strut`, `brace` widths (or [first, last], tapered by height), `bracing` ("x", "n",
+"none"), `faces`, `open`. Real tubes with the sky between them, so openwork needs no alpha. The Eiffel Tower's legs are one truss turned four times.
+
+**`hips` on a Chinese roof.** `{ w, h, beasts, beast }`: a raised bar up each corner of the slopes, following their curve (curvedRoof now records `m.corners`), and the row of
+beasts on its foot. It comes out as its own part, "<roof> hips", so a finish can name it.
+
+| building | triangles | what was used |
+|---|---|---|
+| Forbidden City | 84.6k | terrace 8.13 m in three tiers, I-shaped, 130 x 232 m; hall on the published bays, 59.6 x 33.3 m on its columns, 27.5 m to the chiwen over the terrace, 35.7 m over the court |
+| St Mark's | 39.9k | 76.5 m long, 62.6 m across the transept, front 51.8 m, cross 44.5 m (real 43); Campanile shaft 12 m square, spire 96.4 m plus its angel |
+| Dome of the Rock | 18.3k | octagon side 20.6 m, walls 11.6 m, dome 20.4 m inside, crown 34.9 m over the floor |
+| Eiffel Tower | 63.4k | the published half-widths by height, floors 57.6, 115.7 and 276 m, 300 m plus the mast to 330 |
+
+Left open:
+- Forbidden City: the court and its Gate of Supreme Harmony are left out (only the axial way runs on), so the terrace stands in open country. The Baohe Dian is single-eaved where the
+  real one is double. Posts stand every 3.3 m against the real 1.7 or so, and a spout under each makes 732 against the real 1,142. The dragons on the gilded columns are plain gilding.
+- St Mark's: the column clusters are far fewer than the real 500, in flat colours; no Treasury, Porta della Carta or Piazza arcades; the north and south sides have only a short run of the
+  crown. The mosaics are the library's own pictures, not the real scenes. The horses are bars, readable at a distance only. The Campanile's place is estimated, not surveyed.
+- Dome of the Rock: the tile is the library's pattern in a blue palette, not Suleiman's designs, and the platform is a clean plain tiled block, without the Haram's real shape.
+- Eiffel Tower: no stairs or lifts to walk; the floors cannot be reached on foot. Its first-floor buildings are simple boxes.
+- `pregen/` was not rerun: until it is, these four are built at startup rather than read from the cache.
+
+## Four landmarks for periods that had none: Pont du Gard, Abu Simbel, Tikal, Pisa (2026-11-02)
+
+Generators in `tools/archgen/` (`pont_du_gard.py`, `abu_simbel.py`, `tikal.py`, `pisa.py`), each writing its building and its finish. All four are in
+their period's `landmarks` (roman, egyptian, maya, medieval), with `?monument=pontdugard|abusimbel|tikal|pisa`.
+
+New parts, all generic:
+
+- **`lean` and `stretch` on any part** (`arch/assemble.js leaned`). `lean { deg, toward: [dx, dz], at: [x, y, z], shift: [x, y, z] }` tips the part's built
+  geometry about `at`, then moves it by `shift`; `stretch: [sx, sy, sz]` scales it. Either one bakes the part to a single instance at the origin, its
+  triangles already in place, so walls, floors and the support check read the leaning surfaces. It drops `face`, `count`, `bayWidth`, `lintels` and
+  `edges`, so the finish can't address a leaned part's bays. Pisa's tower is all `lean`, one angle a storey; the Duomo's oval dome is a `stretch`.
+- **A filled moat: `site.moat.pool: true`** (`ground.js`, `index.html`). The rectangle `hw` x `hd` itself is the water, not a ring round an island; `w` is
+  ignored, and the bed slopes down over its first 2.5m. The map and the lint follow. It is not a river: the Pont du Gard's Gardon is a rectangle of
+  water that stops at its ends.
+- **A statue's `broken: true`** (`statues.js`): everything from the chest up isn't carved and it has no face.
+- **Pose `colossus`** (positions.json, statuary.json), an Egyptian king enthroned. **Garments** `clothes/pharaoh-crown` (nemes as a cap, double crown,
+  cobra, false beard) and `clothes/falcon-head` (head, beak, sun disc). Palette **`nubian sandstone`**, warmer than `sandstone`.
+
+What each is built from:
+
+- **Pont du Gard.** Real counts and lengths: 48.8m high; 6 arches, 142m, 6m thick, 22m high; 11 arches, 242m, 4m, 20m; 35 arches, 275m, 3m, 7m; a
+  1.2 x 1.8m channel. Bosses are one box through each pier, proud on both faces. Beds of rock climb both banks, with `steep` flights up the east one to
+  the conduit's roof, which is walked. Arch spans are estimates. No 1743 road bridge (the period is Roman) and no curve in the conduit.
+- **Abu Simbel.** The front 38 x 33m with torus, cornice and 22 baboons; four colossi about 20m to the crown (scale 12.5) on rock thrones, the one left
+  of the door `broken` with its pieces at its feet; Ra-Horakhty in the niche. Rooms on one axis: hypostyle with eight Osirid figures (hall 18 x 16.7m),
+  second hall with four pillars, vestibule, sanctuary with four seated gods. The statues are `sandstone` in `STONES`.
+- **Tikal Temple I.** 47m (the sources disagree, 47 to 55), nine terraces with recessed corners and aprons, 102 steep steps, three corbelled rooms one
+  behind another, a three-stage comb with the seated king. The foot (36 x 34m), terrace heights and comb sizes are estimates from the proportions.
+- **Pisa.** Tower: 15.48m across, well 7.37m, 55.8m on its axis, 3.97 degrees average with the top 3.87m out and the lean easing storey by storey (the
+  curve is real, the per-storey angles are chosen to reach that offset); ground storey of 15 blind arches, six galleries of 30, belfry of 12 (belfry
+  sizes unsourced). Duomo: about 100m long, front 35.4 x 34.2m, transept about 72m, four loggia tiers, three doors. It reads as three aisles, not five.
+
+Triangles (`build/archcheck.py`, statues not included): Pont du Gard 5,936, Abu Simbel 2,326, Tikal 6,858, Pisa 88,637 (tower alone about 44k).
+
+Left open:
+
+- The colossi are the people engine's figure: mannequin limbs, a bare body with no kilt (a garment showed a saucer at the waist), and a generic face
+  with its hair and beard under the crown, not Ramesses'. Close to, this is the building's weakest point.
+- Abu Simbel's hill is a faceted symmetrical bun, where the real one is an irregular cliff. The Pont du Gard's banks are stepped, not natural slopes.
+- Pisa's tower has no spiral stair: its galleries and top are floors no one can reach. No bells, and no statue on the Duomo's gable. Its piers are square
+  where the real ones are columns.
+- `archcheck`'s support test doesn't count a touch against a wall's +z face (a boss, a lintel set on it was reported floating; the -z face wasn't). Worked
+  round by running those parts through the wall; the cause wasn't looked into.
+
+## Closer looks: Schwerin, Notre-Dame's kings, Kinkaku-ji's pond and others against photographs (2026-11-02)
+
+Each building here was rendered in close views (`arch_lab.html`, not the low-res surveys) and laid beside photographs from its Wikipedia page, and for Schwerin the
+OpenStreetMap plan. Proportions marked "read off a photograph" are that, not survey figures.
+
+- **Schwerin** (`schwerin.py`, rewritten). On OSM's plan (relation 20744): one seven-sided `court` with a depth per wing, the town front toward -z. Wings of
+  differing storeys and roofs, the town towers, the great tower, the gilded dome, the copper dome and the slender turrets (`components/stage-tower`), the portal block with
+  its niches, the loggia, the chapel's Gothic choir, chimneys, the forecourt, the bridge. Town-front heights read off a photograph, scaled by the towers' spacing.
+- **Notre-Dame.** The kings did not show because a `statue` marker has no geometry: the game's herd draws it, and the lab drew none. `arch_lab.html?statues=1` now does.
+  They had also been spread evenly, so some stood inside buttresses: they are three runs between the buttresses now, under pointed arcading. Portals have tympana, lintels,
+  archivolts and door leaves (shut on the side portals, opened back on the central one).
+- **Kinkaku-ji.** It had an island, a stone bridge and a raked-gravel yard, none of them real. It stands on the north shore with the pond in FRONT (`pool` moat, `z` offset), its stone
+  edge in the water, rocks and islets in the pond, the sosei on piles off the west end. About 12.5 m plus phoenix (it was about 16.5), the first storey dark with a white plaster bay,
+  railed balconies, the phoenix in `bars` on a stepped base.
+- **St Basil.** The central tent was barely over the onions: it now reaches about 65 m, the axial onions about two-thirds of that. Chapels crowded closer, rows of kokoshniki and white string
+  courses, onions drawn up from balls, the tent red with white diamonds, the belfry at the south-east corner, a roof round the gallery, two tented porches.
+- **Imam Mosque.** Iwan mouths were under half their frames' width: widened, within what `portal` allows (it needs `D >= w / 2 + it`). Side iwans raised, minarets thinned, a block-cell muqarnas
+  under each hood, low domes on the prayer halls, the kiosk on the north iwan (which side was worked out from one photograph).
+- **Versailles.** The T of three blocks is now the real massing on rectangular blocks: the corps standing forward, wings set back behind it, the narrow brick Marble Court, stone arms and
+  Ministers' wings under slate with dormers and chimneys, the Royal Chapel, the Royal Court and its grille, two water parterres.
+- **Ulm.** East spires are `open-spire`s. The flank pinnacles come off `flying-buttress` as `pinnacle` parts, two kinds by turns. **Stephansdom's** pinnacles were looked at close to: they are crocketed and gableted, but those views did not clearly show the two kinds apart.
+- **Taj Mahal.** The dome was an onion with a long neck and a 10 m finial: it is a near-ball with a short tip and a 5 m finial. Plain white marble on the walls (the pietra dura panels read as a grey
+  grid), calligraphy frames round the great iwans, guldastas at the corners.
+- **Summer Palace:** the hill's terraces are green on top, not stone. **Frauenkirche:** the body's roofs are sandstone-coloured, not green.
+
+New in the engine: `court` `depths` (per face), `roof: false`, `surroundCourt: false`, `extra.middle`'s fit in `row`. `site.moat` `x` `z` (water set off from the origin) and `surface` (a level relative to the site's
+own ground, on grown maps: `moat.y`, read by `waterY` and `mapWater`). Without `surface` a moat fills only where its carved bed falls below the world's one level, so **any other moat on a site
+higher than about 2 m stays dry**; that was seen at Kinkaku-ji. Schwerin, Caerphilly, Moritzburg and the Zwinger were then shot in the game (seed 3, grown map) and all four have water in their rings.
+
+Triangles (`build/archcheck.py`, before and after): Schwerin 56,323 to 111,117; Versailles 152,976 to 267,376; Notre-Dame 81,780 to 84,336; Ulm about 78.8k to 84,775; St Basil 45,572 to 47,604; Imam Mosque 37,704 to 41,050; Kinkaku-ji 19,444 to 21,520. The check finds nothing on any of these; its only findings are the 46 on the Acropolis, Erechtheion and Propylaia, left alone.
+
+Left open:
+
+- Versailles' garden front is about 500 m where the real one is about 670 m; it has no gardens beyond the parterres, and no rounded apse on the chapel. It is the heaviest building by far (see the counts).
+- Schwerin's moat is still a rectangle, not the lake; no Orangerie or Burggarten; Niklot stands rather than rides.
+- Kinkaku-ji's pond is smaller than the real one. `map=0` worlds ignore `surface`, so the water sits lower there and its rocks stand tall.
+- St Basil's podklet is plain brick (no arches), the porches are solids, and the tent's real colours are simplified. Onions are ribbed, not twisted.
+- The Imam Mosque's muqarnas is a pattern of blocks, not vaulting, and mostly reads as spots of colour. The iwan frames are one tile pattern, which shimmers at distance.
+- Dendera's Hathor capitals are blocks without faces.
+- Statue heads and hands do not draw in `?statues=1`, so sleeves look detached there. `statuary.html` draws whole figures.
+
+### Second pass: every remaining landmark from the front, three-quarter and close to (2026-11-02)
+
+Every key in `periods.json` `landmarks` (56) has had lab renders with finishes: six views at the least, from the front or back low down, three-quarter and near. That is what was seen, and no more: nearly all of it in the lab, compared with memory of the buildings and not with photographs (none were fetched in this pass); near views that land inside a building or against a blank wall show little; interiors were not walked. In the game, only Kinkaku-ji, Abu Simbel, Versailles before its trim, the moats above and an earlier Summer Palace hill, not the final one. Most held up. These were changed:
+
+- **Giza.** The Great Sphinx (a stack of the rock's own beds, drawn in as they rise; the small head and nemes, the forepaws) at the pyramids' quarter scale, the Sphinx Temple before it, Khafre's Valley Temple in granite, his causeway and mortuary temple. `tools/archgen/giza_sphinx.py` adds them to the otherwise hand-written `giza.json`.
+- **Fushimi Inari.** The senbon torii stood on bare grey plinths in a flat yard. They now climb a green hillside, terraces either side of their level stretches, with the foot of Mount Inari behind.
+- **Summer Palace.** Longevity Hill had no hill: the tower's terrace and the summit were a grey cube on a lawn. (Reworked below: one smooth hill, and the lake as real water.)
+- **Karlskirche.** The giant columns' relief band stood out so far it read as a stair round a screw: it is a low relief now, half as many pieces. The dome gained its eight ribs, and the drum slim pilasters between its windows.
+- **Melk.** The towers were blank ochre shafts: three white cornices and corner pilasters.
+- **Hagia Sophia.** The semidomes were plaster below their crowns (`surface: roof` only takes the shallow part of a dome): lead right down now.
+- **Pantheon.** The ring of white dashes on the lead was the top row of coffers coming out through the dome: a soffit is the outer shell moved in sideways by `domeT`, so the shell thins upward (.82 m square to that row against pockets .9 deep). The coffers are .68 deep now.
+- **Kandariya.** A pattern of figure registers on the jangha, and a net of horseshoe dormers on the shikhara and its urushringas (`stone/nagara figures`, `stone/gavaksha mesh`). Painted, not carved, and close to the mesh reads as wallpaper. **Sheikh Zayed:** the court's floor is inlaid flowers in colour, tile by tile, not the real flowing design.
+- **St Mark's.** The decks and pier heads round the domes were bare default stone among the lead: leaded now. **Sacré-Coeur:** its flat roofs white, not sand. **Cologne:** the stone seen through the towers' lancets dark, not pale. **Pont du Gard:** scrub on the valley sides' beds of rock.
+- **Moss (archmat.js `BARE_OF_MOSS`).** It no longer grows on sheet metal, gold leaf, glazed tile, or the palettes lead and copper (a flag by the finish's pattern and palette, not a shader guess). Seen on the Pantheon's roof, clean, and on Schwerin's slate, still mossy.
+- **Rain streaks (archmat.js `finishShade`).** They covered every wall in fine parallel lines, so plain plaster read as planks (Moritzburg, Melk, Himeji and others). Wider and in patches now, as their comment always said.
+- **Versailles** drew 1.86M triangles in frame with it in view against 0.86M looking away (a frame's budget 116% against 56%, the rest of that being the town and the woods). About 105k of its own were roofline balustrades 18 m up: one baluster a metre instead of two, except on the corps, leaves them about 60k and the building at 219,496 from 267,376 (`build/archcheck.py`), 47,880 saved. The game's frame cost was not measured again.
+
+`build/archcheck.py --all` after all this: 121 buildings, 3,935,228 triangles, findings only on the Acropolis, Erechtheion and Propylaia (the same 46).
+
+## Closing the open list, and a check against sources (2026-11-02)
+
+**`loft`** (arch/assemble.js): a smooth carved mass skinned through `sections` along `axis`, each a superellipse `{s, u, v, a, a2, b, b2, n}`, on a Catmull-Rom curve, `smooth` rings to a span. `half` skins only the upper half, standing on the ground. `hill` with `half` makes that half a bell, flat at foot and crown, because a superellipse's foot stands up like a wall. It returns kind `prism`.
+
+**`drum-dome` attic.** `attic: "yes"` with `atticH`, built by name (`attic`, `attic piers`): a second windowed storey of the drum over the peristyle's deck, the dome on it. `entH` is the peristyle's entablature and deck. Used by St Isaac's, the Berliner Dom and St Paul's, whose old attic was a window row high up a single drum.
+
+- **Giza.** The plan now follows the coordinates on Wikipedia's four pages, at the pyramids' quarter scale: Khafre 339 m south and 322 m west of Khufu, Menkaure 740 m south and 563 m west, the Sphinx 434 m south and 329 m east. Each pyramid is turned a half-circle so its entrance faces true north, with chamber, sarcophagus, `dig` and mural offsets following. A chamber wall's name stays the builder's local one: north and south are true, east and west trade places. The Sphinx is lofts: body, haunches, shoulders, paws, nemes, face. The three queens' pyramids stand south of Menkaure's; their position there is from the photograph and memory, not a source's figures.
+- **Summer Palace.** Longevity Hill is one `hill` loft, its crown behind the summit, its long south slopes swinging forward either side of the stone axis. Kunming Lake is real water: `site.moat` as a pool, in place of the painted prism, with the plate (`base`) removed so it doesn't cover it. The pool now has a `shore` (below): straight along the embankment as the north shore is, then swinging round, wide at the north and drawn in to the south, inside the 300 x 67 m rectangle the site keeps it in. A low `lake meadow` prism fills the rectangle outside the shore, and a `south lake island` prism stands in for South Lake Island (no Seventeen-Arch Bridge: it would not fit). Still far smaller than the real lake.
+- **St Isaac's, Berliner Dom.** Attic drums as above, St Isaac's with a parapet at the attic's foot. The Berliner Dom's front has the great arch: 16 m wide, springing at 20, an archivolt from `surround`, three doors and a great window in a darker niche, heavier paired columns and the order's cornice carried along the front.
+- **Didyma** stays in its fullest ancient form, on purpose. The game has no ruined building: the Parthenon and the Colosseum are both whole, and the only ruin-like things are single `broken` statues. The temple really was never finished, and the model already says what that meant: no roof and no pediments. It is not shown as it is since the 1493 earthquake, because Wikipedia gives no count of what stands, so a ruin would be invented. Some columns were also never erected, and all stand here.
+- **Abu Simbel.** The hill is one loft from the ground, and the rock behind the front is its own part. It keeps a superellipse, not a `hill` bell, because a bell would be too low behind the front; its exponent is now 1.8 (was 2.4), and a wider, lower `hill scree` bell round its foot meets the plain flat, so the hill no longer comes down as a wall. The colossi use `sandstone`, which replaces `ivory` in `STONES` (nothing else used it). Chryselephantine flesh keeps its own colour.
+  Kilts: the wardrobe's carved `kilt` on the seated `colossus` pose falls to the ankles as two tubes, so the colossi's shendyt is the rock's own: per colossus a `kilt` loft over hips and thighs stopping short of the knees, a `kilt belt` and a `kilt tab` down the lap over the seat's edge (plain sandstone, `stone/plaster`). The statues stay `bare`.
+- **Tikal.** `stone/rubble long`: unequal courses of unequal blocks on a 4.2 x 3 m tile.
+- **Kandariya, Sheikh Zayed.** Left alone. A carved net or a flowing court design would be a new geometry generator or a very large tile, not a cheap fix.
+
+In the game, seen once each (a camera on the building, one seed, default weather): rain streaks and moss on Moritzburg, Melk, the Pantheon and Schwerin; the hill and the lake at the Summer Palace; Abu Simbel's colossi against the rock. Abu Simbel's frame from its front read 220% of budget, with GPU 24 ms; see the next section for why and the fix. A paired Versailles frame cost, and game views of Giza, St Isaac's and the Berliner Dom, were not taken: that batch was stopped when the machine ran low on memory.
+
+**Reference check.** Fifteen landmarks, each lab render set side by side with the lead images of its Wikipedia page, which were fetched for the purpose. These compare one or two photographs against untextured-sky lab views, so they catch silhouette, massing and colour, not detail.
+
+- Changed: **Notre-Dame** (belfry lancets wider, dark behind them), **St Paul's** (attic, dome ribs, smaller tower caps), **Sacré-Coeur** (small domes near half the great dome's width), **Pantheon** (the block's second pediment, the block lower, a duller brick), **Hagia Sophia** (paler plaster, the dome's ribs in lead), **Giza** (above).
+- No clear difference at this level: **Milan, Florence, Cologne, Taj Mahal, Parthenon, Colosseum, Himeji, St Basil**. **Pisa**: only the tower was compared, the page's lead images have no view of the cathedral.
+- The Parthenon and Giza are shown restored and the photographs show them as they are now, so colour there was not compared.
+
+`build/archcheck.py --all` after all this: 121 buildings, 3,949,586 triangles, findings only on the Acropolis, Erechtheion and Propylaia (the same 46).
+
+Left open then: Dendera's Hathor capitals without faces, Kunming Lake a rectangle. Both done below.
+
+## The last round: the statues' cost, the capitals' faces, the lake's shore (2026-11-02)
+
+**Why Abu Simbel's front cost 24 ms of GPU.** Measured with paired `__dbg.bench`-style timings, one load, the camera placed by hand (the orbit camera 65 m in front on the axis, then turned away): 28.5 ms toward, 9.9 ms away. Hiding every figure took the toward view to 7.5 ms; hiding only the 17 statues took it to 5.3. So it was the statues, not the hill's triangles or the rock's overdraw: the four colossi with the sun god about 13 ms, the twelve statues inside the rock about 6 ms, the rest of the world's figures about 1.5 ms. Three causes, all in how carved figures are shaded (shell.js):
+- **Self-shading per pixel.** `selfShade` loops every part of the figure per pixel, taking each part's ends out of camera space with a matrix each. `?selfshade=0` took the view from 28.5 to 16.4 ms (80 to 37 ms close up). It now does the arithmetic in the texture's own camera space (the point, normal and sun brought in once), and skips the sun test for a part lying wholly down-sun of the point. Same picture.
+- **Drawn first.** The shells were drawn among the world's solids, so a statue behind a wall was shaded in full before the wall hid it. The shell buckets now have `renderOrder = 1` (after the solids, before the composite driver at 2), so the depth test spares the hidden pixels.
+- **Statues inside the rock.** The depth test spares pixels, not the vertex work. A statue marker may now carry `seen`: rectangles `[x0, x1, z0, z1]` about the statue where the eye must be for it to be drawn at all (statues.js `statuesSeen`, called each frame before the statue herd updates). Abu Simbel's Osiris pillars and sanctuary gods are seen from inside the rock or on the axis in front of the door only.
+Result from the same spot: 17.9 ms toward (from 28.5), 24 ms close up (from 80); the HUD there read 143% with GPU 15.9 (was 220%, GPU 24.4). The colossi still cost about 12 ms on this machine when they fill a third of the screen: what's left is the stone shading itself.
+
+**Hathor capitals** (arch/assemble.js, the `hathoric` order): each capital block now has her face on all four sides, one side built and instanced round. A low oval boss for the face with a nose on it and a cow's ears over the wig (`<colonnade> hathor faces`), the wig's lappets with curled ends and its band over the brow (`hathor wigs`), the eyes, brows and mouth as blocks (`hathor features`) for the finish to paint dark. Dendera's finish paints the wig blue. Sized in the column's radius, so the roof kiosk's small columns have them too.
+
+**Pool shores** (ground.js `moatSD`): a `pool` moat may have `shore`, a closed polygon about its middle inside its rectangle. Every question of whether a point is in a moat's water now goes through `moatSD` (ground.js's carving and water level, the water sheet, the wanderers' ground and the site checks in index.html). It returns the rectangle's distance outside the rectangle and the polygon's signed distance inside it. Kunming Lake uses it.
+
+**St Isaac's**: the two dark diagonal strokes at the roofline left of the drum were the iron railings (`kind:railing`, near black) of the `colonnade stair`, the flight from the roof up onto the colonnade, seen over the front. The flight now has stone parapets in the drum's marble (`railing: {type: "stone"}` and a finish rule ahead of the iron one).
+
+**Seen in the game this round** (one page at a time, free memory above 2 GB throughout): Tikal, Notre-Dame, St Paul's, Sacré-Coeur, Hagia Sophia, St Isaac's, Abu Simbel and the Summer Palace from a camera in front of each, and the Domus's dining room in a Roman world (`period=roman`, the town's houses are all domus): the emblema shows under the triclinium's table, and the meander band round the room. Khufu's and Menkaure's chambers were seen in the lab: the murals are centred on their walls and the sarcophagi stand where they should. Notre-Dame's front read 197% of budget (GPU 21.9 ms, 1.54 M triangles, 193 draw calls); not looked into.
+
+**Kandariya, Sheikh Zayed**: still left alone, no cheaper route than before.
+
+
+## Doors in the doorways (2026-11-02)
+
+A definition says where its walls are cut, not what hangs in the cuts, and a cathedral's west portal is an arch like its arcade's: so most landmarks had doorways and no doors. Now **`assets/doors/<definition>.json`** says which doorways have doors and what doors (architecture.js `doorsOf`, read after `lifeOf`; the Doors category in `assets/index.json`). An entry is one of:
+- `{ part, near?, below?, flip?, set?, style, ... }`: the doorways a part's walls cut (arch/build.js `extrude` now records every opening with no sill as `geometry.doorways`; `lifeOf` carries them into the site's frame as `L.doorways`), all of them or the one nearest each `near` point (the definition's frame), only those lower than `below` (a tower's door, not the belfry opening over it at the same spot). The door hangs at the inner face (the face nearer the building's middle; `flip` the other) and swings inward.
+- `{ at: [x, y, z, yaw], w, h, ... }`: a doorway the walls do not cut (Notre-Dame's west portals stand between piers; its old fixed `door leaves` parts are gone from the generator).
+- `{ markers: true, near?, ... }`: restyles the definition's own door markers (Versailles, Caerphilly).
+
+**Styles by culture** (`assets/doors/styles.json`): a look from doors.js -- `boards`, `iron` (oak under Biscornet-style scrolled straps), `trellis` (a Russian church's diamond strapping), `panel` (stiles, rails, sunk margins and raised fields; gilt beads on a pale painted leaf), `bronze` (coffers and bosses), `studded` (a Chinese gate's rows of nail heads and lion rings), `lattice` (Chinese geshan, Japanese shoji; `slide` slides; `pane` wide makes a French door's glazing bars), `carved` (lozenges and bosses: mosques, Mughal) -- with colours and leaves: gothic, gothic-great, romanesque, tower, bronze, bronze-great, greek, baroque, baroque-green, classical, palace, french, castle, russian, byzantine, islamic, ottoman, persian, mughal, gulf, chinese-gate, chinese-hall, japanese-swing, japanese-slide, japanese-castle, egyptian, plain.
+
+**The great portal stands shut.** `wicket: true` cuts a small door in the left leaf and makes the great leaves `fixed`: the wicket is the way in, as at most cathedrals (Notre-Dame's Last Judgment portal, Cologne, Stephansdom, Milan, Pisa, Florence, the castle gates). `leafH` caps the leaves and fills the arch above with a fixed tympanum in `fill` (a lintel, an inner arch moulding, a mandorla in relief): a 14m doorway gets 7m leaves, not 14m ones.
+
+**In the game** (index.html): each leaf is its own door record, grouped per doorway -- "click to open the doors / the wicket" toggles the group; a fixed leaf and the tympanum never open; the collider follows each leaf (two bars round a wicket's notch). Lacquered and bronze leaves are drawn without the wood's grain.
+
+**Where there are none, on purpose**: Giza, Tikal, Chichen Itza, Angkor, Borobudur, Kandariya, the Colosseum, the Pont du Gard, the Eiffel Tower, Abu Simbel; arcades, cloisters, porch arches, the Kronentor, the Long Corridor, the Rōmon and the haiden stand open. St Mark's west doors and the Taihe Dian's door bays had been glazed by their wall's `glass: true` (an opening with no sill takes it too, assemble.js `glazed`); they now say `glass: false` (and their generators).
+
+Checked: every entry of the 46 door files finds its doorway (no warnings); each building's doors photographed from outside; in the game, the Notre-Dame wicket, Kinkaku-ji's sliding doors and a Forbidden City four-leaf door each show their prompt, block shut and pass open, the great leaves beside the wicket still block. Building geometry changed (arch/build.js, architecture.js), so the pregen caches are stale until `build/pregen.py` runs again.
+
+In the asset manager (assets.html) every building now shows its doors shut, built by `doorGroup` (doors.js) from the same records the game uses. `doorsOf` takes the doors file and styles as the editor has them, so an unsaved edit shows at once. A doors file (Buildings › Doors) opens on its building. `doors/styles` lays out one door of each style in rows of nine, seen square on.
+
+## Six more landmarks: Regensburg, Byodo-in, Topkapi, Jeronimos, Park Guell, Prambanan (2026-11-02)
+
+Each was analysed from its Wikipedia pages (several languages: German for Regensburg, Japanese for Byodo-in, Portuguese for Jeronimos, Catalan and Spanish for
+Park Guell, Indonesian and German for Prambanan), built, then reviewed by someone who had not built it (likeness against photographs, abstraction, finish)
+and fixed after the review. Each has its generator in `tools/archgen/`, its building and finish JSON, a doors file (not Prambanan: its cellas stand open), an
+entry in `LANDMARKS` and in its period (`?monument=regensburg|byodoin|topkapi|jeronimos|parkguell|prambanan`; periods medieval, japanese, ottoman, medieval,
+industrial, indian). The generators' headers say which numbers are sourced and which are estimates.
+
+What is reusable goes in the lowest layer general enough for it: engine part types (L0, `arch/*.js`), parametric components (L1,
+`assets/architecture/components/`), style libraries that compose them (L2, `tools/archgen/<style>.py`), the landmark's own numbers (L3).
+
+**L2 libraries, new:** `ottoman.py` (conical-tower, ottoman-portico, ottoman-kiosk), `japanese.py` (phoenix, hoju, railed balconies, raised corridor
+wings; Kinkaku-ji now uses its phoenix and rails and regenerates byte-identical), `manueline.py` (portal orders, front buttresses, crests,
+manueline-portal, mitre-tower), `gaudi.py` (gaudi-pavilion, gaudi-mushroom, gaudi-cross, hyperboloid-tower, `hypostyle()`), `javanese.py` (candi,
+ratna, paduraksa, `finish_rules()`). `notre_dame.gothic()` gained `more=` (a callback with the anchors: side, towerZ, towerTop, front, bodyW, zCross, crossW)
+and `spire=` (octagon, gables, pinnacles and open spire in one); `shapes.py` gained `inset_points` and `plan_edges`.
+
+**L1 components, new:** `triangle-porch` (a porch on a polygon plan round one pier: arches, free gables, pinnacles; `half`, `depth`), `phoenix`
+(`pedestal`, `tail_rise`), `hoju`, `conical-tower`, `ottoman-portico`, `ottoman-kiosk`, `manueline-portal`, `mitre-tower`, `gaudi-pavilion`,
+`gaudi-mushroom`, `gaudi-cross`, `hyperboloid-tower`, `candi` (foot, tiers, ratnas per side, stairs 1/2/4, a cheap variant for the 224 perwara), `ratna`
+(vajra, bell, spike), `paduraksa`. `domed-arcade` gained options (chimneys, back arches) that build Topkapi's Divan, treasury and kitchens; the old
+`domed-hall` was folded into it. All are in index.json's Architecture components.
+
+**L0, new or extended (additive; buildings that don't set the new keys build as before):**
+- `sweep` (arch/sweep.js): a profile swept along a curve (Park Guell's serpentine bench, its pavilions' lobed roofs).
+- `column.twist` (build.js `twistedShaft`): rope and Solomonic shafts, rings by detail level, capped at 240. `court.arcade` places its own buttresses and
+  walk vaults (Jeronimos' cloister).
+- `lean.each` / `lean.local`: one lean per instance, about its own foot (Park Guell's leaning columns).
+- gothic.js: `ambulatory: false` (staggered polygonal choirs), `chancelBays`, `sideApse`, `sideApsePitch`, `transeptRose: false`, `choirWin`,
+  `choirButtress`.
+- tiered.js: per-face openings of a storey (`faces`), a raised bay cut through a skirt roof (`lift`, build.js `gaps`), a railing on the skirt (`rail`),
+  ornaments on the ridge's ends or a pyramid's apex (`top.ridgeEnds`, components).
+- A flight's `railing: false` is now passed through (only a literal false).
+- `site.moat.pool` with `islands` (ground.js): rings of land inside the shore (Byodo-in on its island in the Aji pond).
+- A `shards` layer kind for patterns (ornament/shards.js, docs/patterns.md): trencadis, crazy paving, field-stone rubble.
+
+**Surfaces:** patterns `stone/ashlar two stones` (limestone with scattered greensand), `stone/pebbles`, `stone/almasik`, `stone/manueline band`,
+`manueline relief`, `manueline candelabra`, `stone/field rubble`, `stone/candi reliefs`, `prambanan motif`, `candi niches`, `timber/renji` (slats),
+`painted/sachak` (a painted eave's soffit), `tiles/trencadis` (plain, chequer, bands, spotted). Palettes `regensburg`, `byodo-ni`, `suhama`, `almasik`,
+`divan-green`, `lioz`, `andesite` (four tones), `trencadis` (multicolour, -white, -blue, -green, -ochre, -amanita), `montjuic`.
+
+| building | triangles | what was built |
+|---|---|---|
+| Regensburg | 99.0k | 85.4 m long, 34.8 m wide, vault 32.8 m, spires 105 m; three choirs without ambulatory, the triangle porch, Eselsturm, tile roofs, copper Dachreiter |
+| Byodo-in | 22.5k | the Phoenix Hall facing east on its island: core 3x2 bays under its mokoshi, raised front bay, phoenixes, folded wings with towers, tail corridor on posts |
+| Topkapi | 57.5k | the ceremonial core: Middle Gate, Second Court porticoes, Divan, Tower of Justice, kitchens, Gate of Felicity, Audience Chamber |
+| Jeronimos | 106.5k | hall church, south portal (tabernacle of tapering niches), west portal, bell tower, two-storey chamfered vaulted cloister, the south front, the west tower |
+| Park Guell | 66.3k | the entrance pavilions, dragon stair, hypostyle (vaults and medallions), Nature Square and bench, the portico up the hill |
+| Prambanan | 114.4k | Shiva 47 m, Vishnu and Brahma 33 m, the vahana temples, apit, kelir, patok; 224 perwara in four rows (cheap variant); gates and walls |
+
+Left open:
+- Regensburg: the main choir is glassier than before but still less open than the real one (each apse side is only 3.5 m wide). The Eselsturm overlaps
+  the transept window by 2.8 m, so it doesn't cover the door.
+- Byodo-in: the walled back of the skirt is red, not white earth wall. The window behind the raised bay is round-headed, not fan-shaped. One of the two
+  north bridges is built. The tower doors are holes, not hung doors.
+- Topkapi: no Baghdad Kiosk (the kiosk component can build it), no trees or court paths. The kitchens are 24.9 m deep against 21 m. The Divan's marble and
+  porphyry are not modelled.
+- Jeronimos: the Manueline carving is patterns, not relief geometry, so it reads flat close up. The 19th-century range is simplified to its rhythm.
+- Park Guell: the columns are plain Doric (no flutes or octagonal abacus: that would mean changing the shared order engine). No side grottos at the
+  vestibule. The vault trencadis streaks seen straight up (UV of a stretched dome). Downhill, the portico shows up to 7 m of rubble terrace. The square's
+  back edge stands as a drop above the hill.
+- Prambanan: the gods are limestone (statue stones are shader ids). The upper tiers carry a simpler moulding. The perwara are coarse by design.
+  `borobudur.py`'s `square_outline` cuts each corner on the diagonal; Prambanan doesn't share it, and it isn't fixed.
+- `pregen/` was not rerun.
+
+## Six more landmarks and the Parliament rebuilt: Drachenburg, US Capitol, Fulda, Frauenkirche Munich, St Peter's, Albrechtsburg (2026-11-03)
+
+The same method as the round before: analysis from the Wikipedia pages (German, English, Italian, Hungarian), OSM outlines where they exist, a build,
+a review by someone who had not built it (likeness against photographs, abstraction, finish), then a second build applying the review.
+`?monument=drachenburg|uscapitol|fulda|frauenkirchemunich|stpeters|albrechtsburg|parliament`; periods industrial (Drachenburg, Capitol, Fulda,
+St Peter's) and medieval (Frauenkirche, Albrechtsburg, both dress gothic). Each has its doors file.
+
+**L2 libraries, new:** `historicism.py` (cone-turret, oriel, castle-tower; `gable()`/`gabled()` pointed or stepped gable screens with their roof,
+`storey_row`, `block`, `crest_rect`, `parapets(holes=, closed=)`), `neoclassical.py` (`block` with pilasters, `Balusters`, `temple_front(pedOut)`,
+`grand_stair`, `dome_on_drum(windows=)`, `dome_windows`, the generated `tholos` with `check_tholos()`), `baroque.py` (baroque-helm `lanterns: one|two`,
+twin-tower-front with every helm param passed as `h<Param>`, `clock`, `pediment`, `clockStage`; `basilica_body()`: nave, aisles, transept with barrel
+vaults and lunettes), `clocks.py` (`clock-dial`), `roman_baroque.py` (curved-colonnade, `arc_points`, `obelisk(lions=, crown=)`, `fountain`,
+`giant_front`), `late_gothic.py` (curtain-arch and `castle_window`, `Frame` on `shapes.plan_edges`, `lucarne_row`, `wing`/`storeys`, wendelstein,
+lucarne), `neogothic.py` (`Rect`, `facade_block`, `turret`, `gothic_tower`, `flyer_ring`, `gothic_dome` with `oculus`/`atticRound`/`footPin`, `arcade`,
+`great_gable` with rose, `risalit`).
+
+**L1 components, new:** `welsche-haube` (the Munich cap: flared skirt, ribbed bulb), `cone-turret` (1-4 storeys, up to 32 sides), `oriel`,
+`castle-tower`, `tholos`, `baroque-helm`, `twin-tower-front`, `clock-dial` (plate, chapter ring, marks, hub, hands; `R t ring marks mw hw hour minute`;
+origin on the wall face facing +z: shared by Fulda, Munich and Drachenburg), `curved-colonnade` (rows of columns on an arc with entablature, roof,
+saints, end and middle piers, `colGrow`), `wendelstein` (an open spiral stair tower: arcade foot, open pointed storeys on slender piers, balustrade
+bands, crown gables, slate needle; `turns`, `arch`, `pier`, `climb` (0 level storeys as Meissen, 1 stepped per face as Torgau); variants
+`wendelstein-n{n}-r{rows}` by `write_components(variants=)`), `lucarne` (a two-storey dormer with pinnacled gable). `drum-dome` grew additive params and
+by-name parts: drum a/b, buttresses with cornice, paired columns, attic strips, rib pairs (`ribPair`), lucarnes (`lucN`, `lucR1-3`, `lucW1-3`), a
+ribbed lantern with columns, spire, ball and cross placed with `atop`, `atticSill`/`atticWinH`/`atticHead`, `domeR`, `domePlinth`, `plinth`, `tholosN`,
+`tholosGlobe`. Its default build is unchanged (St Paul's, St Isaac's, Berliner Dom re-assembled to the same triangle counts).
+
+**L0, additive:**
+- gothic.js hall church: `eaveRise`, `aisleWinTop`, `aisleDoors`, `buttressIn`/`buttressInTop` (internal wall piers, sloped tops), `pent`.
+- profiles.js: the `curtain` head (Vorhangbogen; `rise`, `lobes`, `sag`, `seg`).
+- assemble.js: `loadUses` always recurses (with a seen set), so the uses of an already registered component load too; a part's `when` can name values
+  of a NUMBER param (`{"storeys": 2}`), before only word params matched.
+
+**Surfaces:** patterns `stone/brick monk bond`, `stone/tracery frieze`, `roofs/beaver tail`, `stone/banded ashlar`, `roofs/diamond slate`,
+`floors/sampietrini`, `stone/travertine drums`, `roofs/patterned tile`; palettes `munich-brick`, `munich-floor`, `drachenburg`, `rose-sandstone`,
+`slate-light`, `capitol-marble`, `iron-white`, `lawn`, `fulda`, `meissen-sandstone`, `meissen-dark`, `tile-saxon`, `granite-rose`, `parliament-tile`;
+material `grass`.
+
+| building | triangles | what was built |
+|---|---|---|
+| Drachenburg | 51.5k | the villa on its terrace and mound, red stone gables with crestings, Nordturm with bartizans and clock, Kunsthalle with stained glass, round bastion with flank flights and gatehouse, garden and fountain, the Vorburg |
+| US Capitol | 122.5k | Bulfinch's centre with the east portico, the cast-iron dome (peristyle, attic, three tiers of windows, tholos, Freedom at 87.8 m), Senate and House extensions with porticoes, the west terraces with three stairs |
+| Fulda | 46.5k | the twin-tower front with stacked paired orders and clocks, the nave with barrel vaults and lunettes, the crossing drum dome above the ridges, domed side chapels, obelisks |
+| Frauenkirche Munich | 55.3k | the brick hall church under one roof, towers to 98.5 m in three stages with copper broaches and Welsche Hauben, clocks, the west portal, the pent roof, the interior with ochre ribs |
+| St Peter's | 135.1k | Maderno's front (eight giant columns, attic, loggia), the cross plan with apses, Michelangelo's dome (paired columns, rib pairs, lucarnes, lantern, 136.4 m), minor cupolas; Bernini's colonnade, the trapezoidal piazza retta, obelisk, fountains, paving rays |
+| Albrechtsburg | 75.9k | the palace on the Burgberg 32 m above the Elbe on its battered rock, substructures, curtain-arch windows, lucarnes, the Grosser Wendelstein; Meissen Cathedral (~42%): west front with spires to 81 m, Hoeckriger Turm, Fuerstenkapelle |
+| Parliament | 150.2k | rebuilt: the river front with arcade, loggia and risalits, pinnacled piers, the 16-sided drum with oculi and ribbed dome to 96 m, the two chambers, end pavilions, courts per OSM, river towers with open spires, the land porch |
+
+Left open:
+- Drachenburg: the hill is a flat-topped mound, not the wooded Drachenfels slope; the south towers rise from the terrace instead of corbelling out;
+  `stepped_gable` is copied from schwerin.py (importing it would regenerate Schwerin: it lacks a `__main__` guard).
+- DRACHENBURG, its interior and its garden (2026-11-03, user report: untextured spots, no stair from the garden, no
+  inside, no stags, lawns askew). `tools/archgen/drachenburg.py`:
+  - THE WHITE SPOTS were the open porches' walls dressed as rooms: the loggia, the south porch, the portico and the
+    gatehouse were blocks with an interior, so every wall facing into them -- the arches' reveals, the house's own
+    wall behind -- took the interior's white plaster. historicism.py `block(..., interior=False)`: an open porch, no
+    room inside, its walls the facade's. And each porch's back wall (a blind skipped face) stood in front of the door
+    behind it: the doors opened on 0.6 m of stone. Now the porch's back wall opens where the door is (`PORTAL`).
+  - THE VENUSTERRASSE: the terrace's south end is a garden 1.5 m LOWER (GL 3.5, the hill's top 3.4 under it), the
+    terrace polygon cut square to the garden's own walls (OSM's: turned ~10 degrees from the castle's axis; `gu`, `gv`).
+    The FREITREPPE (9 steps, 3.4 m wide) climbs from it to the terrace on the garden's middle line; the two GILT STAGS
+    (components/standing-stag, tools/archgen/stag.py: lofts -- body, neck, head, ears, legs, antlers with brow, trez
+    and crown tines) stand on pedestals either side of it; the FOUNTAIN in the middle -- an octagonal basin (as on the
+    1887 plan), a column in it carrying a white robed figure (Venus once; replaced in the 1930s); four lawns in gravel
+    and a round tiered flower bed ("Tortenbeet") in each, all square to the garden's walls; a gap in its back wall to
+    the hill. The lawn by the Nordturm is turned square to the terrace's wall there.
+  - THE INTERIOR, after the ground-floor plan of 1887 (Architektonische Rundschau; Wikimedia Commons), fitted to OSM's
+    walls: portico -> vestibule -> the HALL along the hill side (to the stair hall and to the south wing's salon), off
+    it the Kneipzimmer and Billardzimmer (hill side), the dining room (an arch into the gable bay) and the music room
+    (out to the loggia, through to the corner room) on the Rhine side. The STAIR HALL holds the great stair: 13 + 13
+    steps a storey round a landing at the Rhine end, twice (`repeat`), a balustraded gallery beside the well. The
+    KUNSTHALLE is one tall hall, its domed end parted off by a screen with one wide arch; through it the north wing's
+    room. Upstairs the walls repeat the ground floor's (the upper plans were not found), floors and thresholds through
+    the doubled walls. Not built: the towers' rooms, the service stair, the cellars, door leaves inside.
+  - THE WALKER'S WIDTH: config.json `player.collisionRadius` 0.25 -> 0.18 (`near` 0.2 -> 0.12, under it): the walls'
+    field is in 0.2 m cells, so a 60 cm gap keeps two clear cells, 40 cm -- a radius under 0.2 squeezes through, as a
+    person turned sideways does. archAccess walks with the same radius (`WALKER_R`).
+- FOLLOW-UPS (2026-11-03, user report):
+  - A WALL BEHIND AN ORIEL went white beside it (Drachenburg's south oriel): the oriel's interior sets in from the wall
+    by the oriel's own wall, so the planes of its plan never reached the wall's face to cut it -- yet the face's probe,
+    30 cm out, landed inside, and all of a long triangle reaching past the oriel was "in". finish.js cutByInteriors now
+    cuts a surface on every interior plane within PROBE of its stretch, not only on it.
+  - PARLIAMENT'S ROSE: neogothic.great_gable stood the rose's wall in a SOLID gable, the gable's face exactly where the
+    rose's glass is -- the two fought, the stone breaking through the window. The gable's outline is now notched round the
+    rose's wall, so the rose is a real window.
+  - MILAN: the front's pinnacles as they are -- by the nave a doubled pair, between the aisles one, at the corners three
+    (a heavy one before two lighter side by side). Every flyer's straight back now clears its quarter-ellipse soffit
+    (by 0.7-0.8 m: the arch rises off its pier vertically and bulges some 0.41 of its rise over the chord, and broke up
+    through the back, rounding the top -- the lower tier's soffit is kept 7.3 m over the terrace by the arcade, where the
+    terrace stair's landing passes under). The nave and transept roofs are laid at 15 degrees, the nave's walked, a stair up
+    the clerestory from each inner terrace (three pairs of flights, each pair its own part: railingsFor takes no stair
+    for stone beside itself, and one part repeated up had its landing railed shut over the next pair's foot).
+  - A FOLD OVER EVERY ARCH OF A ROUND WALL (a turret's door, a drum's windows, an apse's): a `radial` bay bends its face
+    round the arc, and the masonry over a head, ear-clipped, ran long triangles from the top corners down to points of the
+    curve, each on its own chord -- the wall creased along their diagonals (up to 20 degrees). build.js chordMap now lays
+    everything within an opening's span on the chord between its two edges, at its own height (extrude and glassPanes
+    use it; the lombard band keeps the curve): opening, reveals, head masonry and glass are one flat facet, as the solid
+    strips beside it already were. A straight map is linear in x and comes back to the bit, so flat walls are untouched;
+    the face's top and bottom edges keep the map's points, which the parts above and below share. What is left is the
+    reveal's own warp (outer and inner chords differ in width: ~2 degrees in a soffit).
+- EL PILAR REWORKED (2026-11-03; tools/archgen/el_pilar.py rewritten, writes el-pilar.json, its finish and doors; new
+  palettes el-pilar-white, pilar-glaze-grey, pilar-tile, pilar-brick, alabaster, pilar-fresco, pilar-jasper -- added,
+  none changed). The plan from OSM (relation 1352311, its building:part ways for the domes and towers) and the Commons
+  plans of the church and the Santa Capilla: a 131 x 69 m brick HALL CHURCH on the Ebro, three naves of one height on
+  two rows of cruciform piers (seven bays), side chapels between buttress walls, end chapels and vestibules; pendentives
+  under the domes and sail vaults ('platos') over the other bays, each closed by an interior so the cupolas are stucco
+  and fresco inside. ELEVEN DOMES, each with its lantern: eight small `drum-dome`s over the side naves and two middling
+  ones on the axis (Santa Capilla, coro) in glazed diamonds (green/yellow, blue/yellow, white/green), the great one on
+  a tall drum with eight buttresses of paired columns, ribbed, in grey-green scales. Hip roofs of buff tile over the
+  vaults, lean-to roofs over the chapels, a balustrade with saints. The plaza front: giant Corinthian order, two
+  pedimented porticoes and the great niche with the relief; two storeys of windows in stone surrounds. FOUR TOWERS
+  (~89 m: brick shaft, clock stage, open arched stage, belfry, balustrades and urns, the copper helm of two lanterns,
+  `baroque-helm`), each with a door from the church; the north-west one (San Francisco de Borja) has a street door, a
+  `tower-stair` to 54 m and a `lift` marker beside it, and its belfry glazed as the MIRADOR (the real viewpoint is at
+  ~80 m). Inside: the Santa Capilla (twelve jasper columns on an oval, the gilt entablature an oval `enclosure`, the
+  painted oval dome open in an oculus, the Venida's altar, the pillar with its silver foot and the Virgin under a gilt
+  canopy, angels), Forment's alabaster retablo (predella, three niches under canopies, buttresses and pinnacles), the
+  coro (marble walls, oak stalls in tiers, organ loft and organ, lectern, Celma's grille), the coreto (stalls, organ,
+  Goya's vault), pews, chapel altars; marble floors (compass, checker, opus sectile). The towers' faces toward the end
+  chapels are stuccoed by a `within`/`below` rule (no chapel interior reaches them). The `baroque-tower` component the
+  old generator wrote is no longer used (left in place). Not modelled: the humilladero, the stone cladding of the plaza
+  front (brick here with stone dressings), the real mirador's height.
+- MAINZ CATHEDRAL REWORKED (2026-11-03; tools/archgen/mainz.py rewritten, writes mainz.json, its finish and doors and,
+  unchanged, components/round-stair-tower.json; new palettes mainz, mainz-paint, mainz-vault -- added, none changed).
+  The plan is OpenStreetMap's (way 155551498 and its building:parts; the cloister, Gotthardkapelle, sacristy and the
+  two Domhaeuser as their own ways), turned 12.7 degrees onto the nave's axis (+z west, +x south), checked against the
+  Commons ground plan (File:MZ_Dom_Grundriss.png) for piers, chapels, trefoil and crypt; heights from OSM's parts and
+  Wikipedia (nave 13.6 m wide, vault 28 m, ridges 42 m, Westturm 83.5 m). No `base`: the crypt is at the ground's level.
+  Built from walls (`seg`/`fl`: a wall on a line, openings by z or x) instead of the old `basilica` component: ten round
+  arches a side under five rib vaults over double bays, the blind storey and clerestory under a Lombard band; aisles
+  rib-vaulted per arch; the GOTHIC CHAPELS between buttresses (pinnacles) under one copper lean-to a side, the north row
+  broken by the MARKTPORTAL's vestibule (three-order surround, bronze doors) between the Dom-Cafe and Dominformation;
+  the EAST TRANSEPT as walls (triumphal arch, arm vaults), the crossing octagon with gables and slate tent (~75 m), the
+  octagonal dome on squinches, the `gallery-apse`, the two `round-stair-tower`s (38 m belvederes, reached), the hall
+  CRYPT (segmental groins on columns) under the raised EAST CHOIR with two flights up from the nave; the WEST TRANSEPT
+  (Leichhof portal, three-light end fronts, buttresses), the WESTTURM (Romanesque octagon with dwarf gallery, Gothic
+  belfry with clock, Neumann's balustrade, pinnacles, two stone stages, bell helm, lantern, spire, gilt cock); the
+  TREFOIL WEST CHOIR nine steps up, choir stalls, three polygonal conchs (`ring` polygon, half-domes, an open dwarf
+  gallery each, slate half-pyramids set 0.4 m into the bay's wall so their cut face never shows inside), crossing gables
+  with roses, St Martin on horseback, two slender octagonal towers; the sacristy (OSM outline, flat copper). South: the
+  MEMORIE (one rib vault, door to the aisle and the west walk), the CLOISTER's three vaulted walks with tracery to the
+  garth, the ranges behind them and the DOMMUSEUM storey over all, reached by a two-flight staircase. North: the
+  GOTTHARDKAPELLE, a double chapel (lower vaults open in the middle, a spiral in the north-west bay to the upper chapel),
+  its apse, the passage to the transept. Finish: banded red sandstone outside, paler dressings, slate and copper, the
+  red-ochre paint with white joints inside, pale vault webs, red ribs, sandstone flags, the Domhaeuser plastered white.
+  Not modelled: the Nassau chapel, the Domhaeuser's interiors, the cloister's upper vaults, the east crossing's Gothic
+  turret detail; the plan is symmetric about the axis (OSM's flanks differ by up to a metre).
+  assets/index.json now lists components/equestrian: it was missing, so in game a definition using it (St Martin here,
+  Sacre-Coeur's statues) failed with "component is not loaded" -- the lab's loadUses fetched it, hiding that.
+- ST PAUL'S CATHEDRAL REWORKED (2026-11-03; tools/archgen/st_pauls.py rewritten, writes st-pauls.json and its finish;
+  new palette thornhill-grisaille -- added, none changed; no engine change). The old model was a `drum-dome` and a
+  `portico` on a box-ish cross with nothing walkable above the floor. The plan now is OpenStreetMap's (way 369161987,
+  turned onto the church's axis: dome centre at the origin, west front +z, north -x) with the inside from Remi Parr's
+  engraved plan (Yale Center for British Art, on Commons) and Wren's plan and section: the outer walls one `enclosure`
+  on the 28-point outline (basement with the crypt's windows, the lower storey's round-headed windows with keystones,
+  the upper storey -- the SCREEN hiding the aisle flats and the `flyer`s behind it -- with alternating pediments; an
+  order on each storey, balustrade along the head); nave and choir arcades (`wall` tiers: arch per bay, clerestory
+  lunette), transverse arches, `pendentives` and saucer domes in every bay of nave, choir and transepts and smaller ones
+  in the aisles; the CROSSING an octagon `enclosure` (four great arches, four diagonal ones, crypt arches under), the
+  Whispering Gallery (walked ring, balustrade), the inner drum (32 bays: windows in threes between niches), the inner
+  dome with its oculus; outside the podium, the PERISTYLE of 32 columns with every fourth bay filled, the STONE GALLERY
+  on its entablature, the attic, the lead outer dome (pointed, ribbed), the Golden Gallery and the lantern
+  (`domed-tower`, `atop` the dome) with the gilt ball and cross at 111 m. West: the portico in two storeys of paired
+  columns (six pairs, four over) under the pediment with St Paul, Peter and James; the two baroque towers (plinth with
+  the clock in the south-west one, belfry with paired columns, chamfered stage, ogee lead cap, gilt pineapple); the
+  four Evangelists. The transepts' half-round porticoes under half domes, the apse in two storeys under its half dome.
+  Inside: chairs, Gibbons's stalls, the organ, the baldacchino on four Solomonic columns (`twist`), Nelson's tomb in the
+  CRYPT under the whole church (pier grid), reached by a dog-leg stair from the south transept. THE WAY UP: a spiral in
+  the south-west corner block from the floor to the lead flats round the drum; a door through the podium into a SHAFT
+  in the drum's wall (its outer skin stands 0.45 m out of the drum, behind the peristyle: a spiral needs 1.45 m radius
+  for the walker in 0.2 m wall cells), a door from it onto the Whispering Gallery and a spiral up it (100 steps) to a
+  door onto the Stone Gallery; the GEOMETRIC STAIRCASE (open-well spiral) in the south-west tower to its upper floor
+  and the door onto the portico's upper loggia. archAccess: every floor reached but slivers inside the 2.2 m outer walls
+  (the base under a solid wall's bottom face looks like a floor). Finish: pale Portland ashlar, rusticated basement, lead
+  roofs and domes, gilt ball, cross, pineapples and baldacchino; inside pale stone, the choir's saucers and pendentives
+  in gold mosaic, the apse's half dome gold-ground, the inner dome a grisaille arcade (mosaic `wall arcade` in the new
+  palette), black-and-white marble floors with a compass under the dome. Not modelled: the Golden Gallery is not walked
+  (no stair inside the brick cone), the Library and Trophy Room, the transepts' steps are straight flights (the real
+  ones fan round the half rounds), the upper order is Corinthian (Composite in the real one).
+- GRAND PALACE, BANGKOK (2026-11-03, NEW: tools/archgen/grand_palace.py on the new Thai library tools/archgen/thai.py;
+  writes assets/architecture/grand-palace.json, assets/finishes/grand-palace.json, assets/doors/grand-palace.json and the
+  eleven components thai-gable, thai-hall, thai-cross, thai-roof, thai-spire, chedi, prang, thai-wall, thai-gate,
+  yaksha, seated-buddha). The plan comes from OpenStreetMap (way 23482754 the palace wall, relation 10124 the cloister,
+  23482983 the ubosot, 23482991-98 the eight prangs, relation 18593471 Chakri, 82541999 Dusit, 205631558/82538505/229772447
+  Maha Monthien), checked against the labelled Commons plans of Wat Phra Kaew and the Grand Palace. +z is north, +x west.
+  - THAI KIT: a roof is stacked tiers telescoped along the ridge (each end piece a step lower), green-glazed eaves, every
+    gable a `thai-gable` (na ban, bai raka serrations, chofa horn), halls on a stepped platform with pillars round, a
+    cross plan (`thai-cross`) for the prasats with a `thai-spire` at the crossing; `chedi` (stepped base, lotus rings,
+    bell, rings, spire), `prang` (redented tower in bhumis, a cheap `lean` variant), merloned `thai-wall`, `thai-gate`
+    (prang or crown over the arch).
+  - WAT PHRA KAEW: the ubosot on its terrace, three doors each end, sema shrines round, the EMERALD BUDDHA (jade green) on
+    a gilt altar of four stages under a canopy, painted walls and a starry ceiling inside; the upper terrace with the Phra
+    Si Rattana Chedi, the Mondop, Phra Thep Bidon and the Angkor model; the eight prangs in porcelain, each its colour; the
+    cloister (galleries walked round, the Ramakien murals inside) with its gates, the twelve yakshas each in his colour,
+    the salas, bell tower, Wihan Yot, Hor Phra Nak, golden chedis.
+  - THE PALACE: Chakri Maha Prasat (neoclassical.block wings and centre under three Thai spires; its doorways' glass
+    taken out after the call so the doors walk), the Dusit Maha Prasat (cross, spire, throne inside), Aphorn Phimok,
+    the Maha Monthien group (Amarin Winitchai with its throne and busabok, Phaisan Thaksin, Chakraphat Phiman), the
+    Boromphiman, Sitalaphirom in the Siwalai garden, the walls and forts, gates, lawns, paving.
+  - THE OUTER COURT'S BUILDINGS (offices, museums, the ranges along the walls), first plain prisms -- flat-topped grey
+    boxes, some as tall as the cloister's roofs -- now: each OSM outline turned to its own axes (its longest side) and
+    cut greedily into the largest oblongs it holds (0.5 m cells, none under 3 m), each oblong a windowed `enclosure`
+    (one storey to 6 m, two to 11, three from 12; a window every 5.2 m; string courses and cornice) under a hip roof
+    of red tiles (the Middle Court's lesser halls glazed orange, Sala Sahathai Samakhom under a `thai-roof`). The five
+    big outlines (north range, textile museum, Sala Luk Khun Nai, the Royal Household Bureau, the Emerald Buddha
+    museum) are engine `court`s on their quadrangle -- a ring of rooms round a courtyard, a gate in -- the rest of
+    their outline cut into wings. Probes 0.9 m out of every face blank the windows where another building or a wall
+    stands against it; a door goes where a probe 3 m out is clear too (two on a big wing), so every wing is walked.
+  - Every hall is walked inside (archAccess: 6 small regions unreached, 135 m^2, ledges of chedis, a platform course
+    and a strip of the wall's plinth under a range's eaves). 3075 parts, ~432k triangles (382k before the outer
+    court's buildings had windows and courts; merlons now 2.6 m apart, the bai raka's fins 4 a side) -- heavy.
+- STIFT MELK REBUILT (2026-11-03, tools/archgen/melk.py, which now writes its finish and assets/doors/melk.json too): the
+  old model was one court block, a church and a curved terrace. Now on OpenStreetMap's plan (way 41656763 the abbey,
+  303398928 the church, the building:parts 827142334..827142370, the courts' ways), turned so the axis (7.1 degrees off
+  east) is x, z south, the dome's centre the origin; dimensions from de.wikipedia "Stift Melk" (320 m axis, Praelatenhof
+  84 x 42 m, the 196 m Kaisergang on the first floor) and austria-forum (towers and dome 64 m), heights read off the
+  Commons photographs. Note the Library is the NORTH pavilion and the Marble Hall the SOUTH one.
+  - WINGS: every range is one `enclosure` on its OSM outline (the two arms splayed 9 degrees) with storeys of 6.0, 4.6,
+    4.4, 4.0 m to 19 m eaves, a window every 3.9 m centred per face; where two wings meet (versailles' scheme) both faces
+    are blind, their courses cleared, a doorway through both on each storey and an `interior` strip between the walls'
+    middles. Hipped red-tile roofs over each wing's middle line, pedimented Zwerchhaus fronts on the pavilions and the
+    courts' axes.
+  - INSIDE: the Praelatenhof's wings and the Kaisertrakt have slabs on every storey, a corridor wall along the court
+    side (the KAISERGANG) with a door into every room, partitions with an enfilade by the windows; the KAISERSTIEGE in
+    the west wing's south end is a dog-leg `staircase` per storey (each its own part) round a balustraded well. The
+    LIBRARY (walnut, parquet, a gallery round three sides at the second floor up a `flight`, Troger's ceiling), the small
+    library and the WENDELTREPPE (`spiral-stair` r 2.05 to the ground, the door to the Kolomanihof); the MARBLE HALL
+    (marbled walls, rose marble floor); between them the ALTANE, a `range` whose walked roof meets both halls' doors at
+    the principal floor, balusters on both edges, the great arch through it with its columns.
+  - THE CHURCH, built in fulda.py's frame and turned in (a helper rotates every `at`; a prism's plan stays local, its
+    yaw carries it): `twin-tower-front` (Tuscan + Corinthian storeys, three portals, no pediment but an attic with
+    Christ and two angels, Peter, Paul, Michael, the guardian angel; clock stage with dials, chamfered belfry, ONION
+    helms with two lanterns, 65 m), the nave as `baroque.basilica_body` (its aisles the wall-pillar chapels, their outer
+    walls given two window tiers by overriding faces 1/3 after the call), the EMPOREN as prisms over the chapels with a
+    `spiral-stair` up to each, the transept, crossing piers and arches, `pendentives`, `drum-dome` (with its `interior`)
+    to 65 m, the presbytery with a gilt retable, the monks' choir with a little helm, slate roofs, pews and altar zones.
+  - SPIRAL STAIRS NEED ROOM: a spiral of r 1.15 (newel 0.28) was climbed only a quarter turn -- its railing at the
+    outer edge falls in the same 0.2 m wall cell as the walker's rim on the walking line. r 1.45 / newel 0.25 is climbed;
+    and of two stairs mirrored across the nave the north one was only climbed with `hand: "left"` (mirrored too).
+  - TORWARTLHOF: the gate building between two bastions (prisms walked on top, balustrades, a `flight` up to each from
+    the court), Leopold and Koloman by the gateway, the round tower with a helm; the Kolomanibrunnen
+    (roman_baroque.fountain) in the Praelatenhof. archAccess: every court, storey, the halls, the Library gallery, the
+    Emporen, the Altane walk and the bastions reached; unreached only the fountain's basin and the towers' ledges.
+    Not built: the towers' and the outer ranges' upper floors, the rock and the town below (the site is a flat base).
+- ST ISAAC'S REBUILT (2026-11-03, tools/archgen/st_isaacs.py, which now writes its finish too): the old model was a
+  60 x 76 m box with four identical porticoes and round colonnaded drums for belfries. Now from the ground plan
+  (Commons "File:Plan of St. Isaac's cathedral.png", scaled to Wikipedia's 111.3 x 97.6 m over the steps; OSM relation
+  3229838 for proportions and orientation; the Commons cross-section and south-front photographs for heights). Frame: +z
+  the west (entrance) front, -z the altar, +x south (St Isaac's Square), -x north (the Neva).
+  - OUTSIDE: a granite podium 1.8 m (nine steps) under a 52.8 x 90.3 m body of grey marble, a giant Corinthian order
+    through two storeys of windows, an attic to the flat roof walked at 33 m, balustrades round it. Porticoes of 17 m red
+    granite monoliths: north and south of sixteen (eight in front, two rows of four behind columns 1, 3, 6, 8 -- the
+    plan's Pantheon layout, extra `colonnade`s under the `portico`'s pediment), west and east of eight, each on its own
+    `crepidoma`; bronze reliefs on the tympana (finish: `stone/candi reliefs` in a bronze palette). Four corner towers
+    against the flanks beside the north and south porches: the NW and SE ones (the plan's two spirals) hold
+    `tower-stair`s from the porch to the roof, all four have a door at their foot and one onto the roof; on each a square
+    belfry -- an arched core, columns paired at its corners, crossed pediments, a small gilded `drum-dome` with a ribbed
+    lantern and cross (to 54 m). The stylobate ring to 43 m is the visitors' colonnade walk, a flight up from the roof on
+    the east axis; the `drum-dome`: R 11 (22 m inside), 12 windows, 24 columns of 14 m, Hermann's 24 angels over them on
+    the balustrade, the attic, a plinth, the gilded dome 25.8 m across with 24 ribs, the colonnaded `ribbed lantern`, the
+    cross at 102.0 m (0.5 over the real one). 40 bronze statues (12 apostles on the pediments, 4 lamp angels on the attic
+    corners, 24 angels), under statuary.LIMIT.
+  - INSIDE: pier lines (`wall`s 3.5 m thick) and cross walls with their arches set out a central nave and two side naves
+    under barrel vaults (each in lengths from wall to wall), the north-south arm through the crossing, pendentives under the
+    drum; the west bay behind the great door; the iconostasis across the nave -- a screen with the royal doors and the
+    deacons' doors, six malachite columns (9.66 m) and two small lapis ones by the royal doors, a gilt entablature -- on
+    a solea; behind it the sanctuary with the altar and the stained-glass apse window, a chapel either side (doors from
+    the side naves). Finish: floors of grey, pink and cherry marble (`floors/opus sectile`), white marble walls, the
+    piers white framed in pink, white-and-gold `painted/caisson` vaults and dome.
+  - CHECKED: asm 261 parts, 84.7 k triangles; archAccess reaches the whole church floor, the porches, both stairs, the roof
+    walk (2860 of 2863 m2) and the colonnade walk (331 of 335 m2). Left unreached: the main entablature's top at 22.9 m
+    (four ledges of ~39 m2 under the attic cornice -- ornament). Two lessons: the analysis counts a floor INSIDE A THICK
+    WALL as unreached when something else's underside (a vault running through the wall, a neighbour's string course)
+    is the next surface over it -- split vaults at the walls and keep a course off a face buried in another block
+    (`courses.skip`); and two enclosures overlapping their walls left such cells too: the towers now stand against the
+    body's face, not into it.
+  - NOT BUILT: the portico ceilings' coffers, the inner galleries, the crypt; the iconostasis' icons are a repeated
+    mosaic, the dome's Bryullov painting a caisson pattern; the drum's columns stand on the walk with no pedestals.
+- SACRE-COEUR REBUILT (2026-11-03, tools/archgen/sacre_coeur.py, which now writes its finish; new tools/archgen/horse.py ->
+  components/equestrian.json). The old model was a 120-line Greek cross of guessed sizes. Now from OSM (way 23762981 and
+  its building:parts: the arms' eaves 24 m and ridges 33 m, the corner drums 33 m, small domes 46 m, the porch's statue
+  piers 13 m, the campanile), Wikipedia (en/fr: 85 x 35 m, the dome ~83 m, the campanile 84 m, the apse mosaic 475 m2) and
+  the Commons plans ("Plan de la Basilique du Sacre-Coeur de Montmartre.jpg", "Sacre-Coeur-de-Montmartre plan roofs.png").
+  Frame kept: +z the front (south, toward Paris), the origin at the dome's centre.
+  - OUTSIDE: four barrel-vaulted gabled arms round the 16 m crossing, gutter walks along their wall heads; four corner
+    towers over sail-vaulted bays, each with an octagonal `drum-dome` (pointed, ribbed lantern); the great `drum-dome`
+    (16 windows, attic, pointed egg dome with 16 ribs, the colonnaded lantern, the gilt cross at 88.9 m) over a gallery
+    storey with the open 48-arch outer arcade and the inner gallery; low aisles under flat roofs; the long choir, the apse
+    with its half dome and roof, the ambulatory and six half-domed radiating chapels (the axial one the campanile's
+    foot); the square campanile (string courses, belfry with the Savoyarde in a bell frame, buttress pinnacles, the top
+    stage and its small dome); the porch of three arches with a balustrade, the two bronze equestrians (Saint Louis west,
+    Joan of Arc east: the new `equestrian` component, a horse in lofts as the stag is, the rider a seated `statue`
+    marker) on plinths run forward of the piers, the Sacred Heart in its niche on the gable, the turrets beside it; the
+    parvis and the great flight.
+  - INSIDE: the crypt under the whole church (piers, arches through every wall, the chapels' crypts, a door out on the
+    west), the church floor (nave, transepts, crossing, aisles, corner bays, choir, ambulatory, chapels), `interior`
+    markers for crypt, church, nave/vaults and campanile. The climb: a `round-stair-tower` in the back west angle to the
+    choir-aisle terrace, the gutter walks to the deck round the drum, a second turret against the drum to the outer and
+    inner galleries at 48.5 m.
+  - FINISH: white travertine (carrara ashlar) outside, limestone ashlar inside, flagstones in the crypt and opus sectile
+    above; gold mosaic on the choir barrel and apse wall, the half dome one picture (`mosaic/wall deesis`, `map:
+    meridian`, `count: 2` -- one tile over the half round, `offset` its foot on the springing; Merson's Christ with the
+    Virgin and Saint Michael is a Deesis-like group); stained glass (roses, saints, medallions); bronze; gilt cross.
+  - CHECKED: asm 278 parts, 78.8 k triangles; archAccess: the ground/crypt 2475 of 2685 m2, the parvis 669 of 670, the
+    church floor 3115 of 3154, the high terraces 719 of 721, the galleries 147 of 147. Left: six crypt-floor pockets of
+    8-15 m2 inside the 2.85 m arm walls between their arches (the thick-wall artefact St Isaac's notes).
+  - NOT BUILT: the dome's double shell and the stair between them, the real climb's route (the turrets are a plausible
+    one), the aisle roofs as walks, the mosaic's own figures, the organ, the Joan/Louis statues' real poses (both ride
+    with a raised sword).
+- US Capitol: bronze has no patina option (shell.js STONES). (Freedom's globe was fixed 2026-11-03: the tholos's `globe`
+  is now a full sphere of `globeR` -- `lanternR * 0.18` in drum-dome.json, 1.0 m on the Capitol -- on a collar, sunk 0.165 R
+  into it, with a band at 0.715 R; `tholos_heights` counts it, so Freedom still stands on its top.)
+- Fulda: no oculus into the lantern, statues on pedestals (no blind-niche primitive). (`portals: three` exists now -- an opening's
+  `when` -- but Fulda keeps its one portal: the sources found did not settle whether its towers have doors.)
+- Frauenkirche: the portal is a deep recess in the porch, not one fifth of the tower's height.
+- St Peter's: no curved central flight; one colonnade saint dropped by the 50-statue cap.
+- Albrechtsburg: no Bischofsschloss (and its round white tower); one straight flight up from the town.
+- Parliament: no hip/ridge finish selector for lead ridges; 8 courts, not 10. (The LIONS are there now: a pair of
+  `components/couchant-lion` on plinths either side of the main stair's foot, facing Kossuth Square -- a stone lion lying
+  with its head up and its forepaws out, carved in lofts as the Sphinx is: body, folded haunches, forelegs, the mane's ruff
+  down over the chest, head and short muzzle, the tail round the flank; `S` its length, `plinthH`; tools/archgen/lion.py.
+  The statues are people only, so a lion is architecture, not statuary.)
+- `pregen/` was not rerun.
+- ZWINGER REBUILT (2026-11-03, tools/archgen/zwinger.py): the plan is OpenStreetMap's (ways 192745237 Langgalerie,
+  192745235 Kronentor, 23039959 Wallpavillon, 192745254 Glockenspielpavillon, 23039960 / 192745244 / 23039962 / 192745236
+  the corner pavilions, 3278037 / 192749266 / 243012354 the Bogengalerien, 3278006 Sempergalerie, 148734764 Nymphenbad,
+  242553936 Zwingergraben) turned into the model frame and made symmetric, checked against the 1755 plans on Commons
+  (GrundrissZwinger1755NaturalienGalerien / ...Obergeschoss). THE FRAME WAS MIRRORED before: +x now points to the
+  Glockenspielpavillon (bearing 122 degrees), the Wallpavillon at -x; +z is still the front, the Kronentor and the moat.
+  - LEVELS: the court at 0; every gallery and pavilion floor at 1.05 (the raised walk, four steps, along the Bogengalerien;
+    steps at the doors elsewhere); the galleries' walls 8.6, their flat roofs the TERRACES at 9.2 -- walked all round the
+    court (Langgalerie, through the Kronentor's open stage, the four Bogengalerien), and level with the pavilions' upper
+    halls, the rampart behind the Wallpavillon, the terraces to the Sempergalerie and its upper floor.
+  - PIECES: the court (gravel, the four L lawns, four quatrefoil basins with jets, the long basins and wall fountains
+    under the Langgalerie, lawns in the apses); points enclosures for the Bogengalerien (a straight run and a 7-bay
+    quarter circle each; openings chosen per edge tag); corner pavilions with a dog-leg `staircase` beside the outer wall
+    and the upper floor slabbed round its well (railed), a front terrace and perron, copper mansards; the Wallpavillon's
+    grand stair (one flight in through the middle arch, the grotto landing, two arms back to the festival hall), Hercules
+    on the roof; the Glockenspielpavillon's passage, stair and forty bells (bell-profile domes on gilt frames); the
+    Kronentor's gate storey, open Corinthian stage, onion and gilt crown (`components/domed-tower`), `components/bridge`
+    over the moat; the Nymphenbad (a `solid` range wall round its apse, four cascade falls, the basins, the steps down from
+    the Franzoesischer Pavillon); the Sempergalerie (rusticated ground storey, Corinthian upper one, halls / spine /
+    cabinets with doors in line on both floors, a dog-leg stair per wing, the passage and the domed hall over it --
+    `components/drum-dome`); the rampart (lawn top, balustrade, the shell fountain).
+  - MOAT: the Zwingergraben is now the definition's `site.moat` (a `pool` with OSM's shore, kept clear of the
+    Langgalerie's outer face); architecture.js no longer hard-codes `moat` for `zwinger`.
+  - CHECKED: asm 382 parts, 163 k triangles; archcheck clean; archAccess reaches 14651 of 14671 m2 at the court, 4306 of
+    4343 at the raised floors, 1744 of 1828 in the Sempergalerie's ground floor (left: two strips of its passage floor
+    under the walls) and 7233 of 7288 on the terraces and upper floors.
+  - LESSON: a `staircase` stands CENTRED on its placement (build.js: z to the right of the heading, -w/2 .. w/2), while a
+    `flight` spans local z -w .. 0 -- place a staircase by its foot's middle, a flight by its corner.
+  - NOT BUILT: the Polish crown's eagles are pinnacles, the crown a small gilt onion tower; Permoser's sculpture is
+    statue markers only (no herms, no cartouches); the perrons are straight flights; the annexes behind the corner
+    pavilions are plain blocks; the Nymphenbad's grotto niches and the Semper passage's coffering are plain.
+- SCHLOSS MORITZBURG REBUILT (2026-11-03, tools/archgen/moritzburg.py, which now writes its finish too; the old model
+  was a `court` with domed-tower components on a rectangle): the plan is OpenStreetMap's turned into the castle's own
+  frame (+x east, +z south = the causeway, origin the middle of the four towers; relations 20405783 castle, 20408145
+  terrace, 124276 lake/island; ways 246775517/521/529/533 towers, 246775488 chapel), heights from OSM and photographs
+  (Commons: the south-west view 2005, the "Above the Moritzburg Castle" aerials), rooms after de.wikipedia and the
+  SBG/museum-digital descriptions.
+  - OUTSIDE: the main body (13 axes, the Mittelbau's five with the portal, the south balcony and the halls' tall
+    arched lights) between the two wings; four 24-sided round towers of the same four storeys (TT 5.0 + 4.8/5.4/4.6/4.2,
+    cornice 24) under red bell caps with two rings of oeil-de-boeuf dormers, white octagonal lanterns, copper caps,
+    gilt vanes; the chapel risalit (west: tall arched windows, oculi, side wings, mansard, slate Dachreiter with an
+    octagonal clock stage and `baroque-helm` with two lanterns and the needle spire to 43 m); the Speisesaal risalit
+    (east, hipped roof); red mansards with dormers, the Mittelbau's high hip (ridge 34), lead flat between the ranges;
+    white lesenes between the axes over the ground floor. The TERRACE (5 m, grey sandstone, OSM's outline) with vault
+    doors and windows, a balustrade with piers, vases and 15 statue markers (huntsmen, Diana, putti) at the ramp and stair
+    heads, the north and south ramps (sloped prisms, setts, parapets), the four curved stairs down the lobes (three
+    flights each with landings, OSM's steps), the two Piqueurs on pedestals at the south ramp's foot. The ISLAND (OSM
+    polygon, quay walls into the water), gravel walks, 144 trees, 8 guardhouses, boat landings (water stairs) in the
+    east and west coves, the south bridge and causeway, the north footbridge.
+  - INSIDE: vaulted entrance halls on the axis; on the principal floor the Billardsaal, Steinsaal and Monstroesensaal
+    (two storeys each, no floor at the second) and the Speisesaal in the east risalit, with 97 red-deer trophies
+    (`bars` antlers on boards); the chapel (one room, altar and retable, pews) with the princely gallery on the principal
+    floor entered from the west wing; the Federzimmer's bed in the west wing; enfilade doors in the wings, cross walls
+    with doorways through the ranges, rooms in the towers; two dog-leg `staircase`s (one part per storey) where the
+    light wells are, every floor slabbed round its well. Finish: ochre plaster, white trim and lesenes, red beaver-tail
+    roofs, grey sandstone terrace, flags/parquet/marble inside, red and brown leather hangings in the halls, sandstone
+    Steinsaal, assets/doors/moritzburg.json re-pointed at the portals, the risalit's door and the guardhouses.
+  - LAKE: the doc's `_moat` is now a `pool` (OSM's shore, the causeway notched out, the island as `islands`, 270 x 330
+    site, `site.origin`); architecture.js's `moritzburg` entry spreads `_moat` instead of copying hw/hd/w (one line).
+  - CHECKED: asm 365 parts, 200 k triangles; archAccess: nothing unreached, every probe (portal halls, the four halls,
+    chapel and gallery, towers, all storeys of both stairs, terrace, ramps, lobe stairs, island, guardhouses, boat
+    landings, causeway) reached; lab views with finish clean, no console errors.
+  - LESSONS: `baroque-helm`'s lantern takes the helm's `sides` -- at 24 sides its arches (LR * 0.62) are wider than a
+    face and assembly throws, so the towers' caps are built from the same stages by hand (sides 24 bell, 8-sided
+    lantern). An enclosure's walls stand INSIDE its rect (inner face T in) while a `wall`'s `at` is a face -- offset it
+    by t/2 for a wall centred on its line. Openings in one tier must not overlap in plan: an oculus over a tall window
+    needs a tier of its own.
+  - NOT BUILT: the light wells and the D-shaped sunken courts of the terrace; the curved stairs are straight flights;
+    the causeway stops after 35 m; the upper storeys' room plans are inferred; the Federzimmer's place is assumed.
+
+## The harbour's pieces (2026-11-03)
+
+`tools/archgen/harbour.py` writes eighteen components and nine finishes; `port.js` (docs/world.md, "The port's
+layout") places them, `tools/archgen/port_sample.mjs` writes one laid-out harbour per finish (`harbour/*.json`, the
+"Harbour" category). **One frame for every piece**: y 0 its quay top, +z the sea, x along the shore, the water at y -F,
+the bed at -F-D -- so a piece's origin sits on the quay face and the layout only turns and moves it.
+
+- **Quay and water**: `quay` (`style` stone: ashlar wall, coping, oak fenders, bronze rings, a water stair between two
+  bollards; timber: plank bulkhead on piles, cap beam, ladder -- the Hanse Bollwerk; steps: the whole face a flight to a
+  ledge -- gangi, ghats; paved apron B deep, bollards a `bay` apart, `slot` markers), `pier` (plank deck on piles, caps,
+  braces, bollards, ladder), `mole` (rubble mound with a battered head, parapet on the open-sea `side`).
+- **Lights**: `pharos` (square, octagon, drum, columned lantern, fire: Alexandria/Ostia), `light-tower` (round tower,
+  corbelled parapet, turret: La Lanterna, Travemuende), `lighthouse` (tapered tower, gallery, glazed lantern, dome),
+  `stone-lantern` (Japanese toro on `hoju`), `beacon-pagoda` (seven eaves).
+- **Stores and offices**: `horreum` (colonnaded porch, `order` doric/tuscan/ionic/square), `speicher` (four storeys,
+  loading doors over each other, hoist beam and hood, `gableForm` stepped|plain), `kura` (white walls on a skirt,
+  heavy roof, `firewalls`), `customs-house` (arcade below, `arch` its head, offices above, hipped roof), `fish-market`
+  (open hall, tables with the catch, sellers' spots), `ship-shed` (neosoikoi: `n` sloping slips under a row of
+  roofs), `boat-slip` (ramp, capstan, a fisher boat).
+- **Cranes**: `treadwheel-crane` (round tower, roof, jib, treadwheel: Danzig, Lueneburg), `polyspastos` (Roman
+  A-frame with its block and wheel, leaning `lean` m), `jib-crane` (iron pillar and jib).
+- **Finishes** (building `architecture/harbour/<key>`): greek-port, roman-port, hanse-port, chinese-port,
+  japanese-port, industrial-port, rustic-port (Maya, India, villages: thatch, earth, timber), mediterranean-port
+  (Byzantine, Islamic, Ottoman), nile-port. Rules are by part names, so the same finish dresses a piece wherever it
+  stands. `assets/world/ports.json` says per culture which pieces, how many, which params and which finish. A dwelling
+  the layout sets on the quay (greek-house, minka, maya-house, egyptian-house) keeps its own finish's rules: harbour.py
+  copies them into its port's finish (`borrow`), so one finish dresses the whole harbour. chinese-port dresses the
+  merchants' hall (`chinese-hall`, the office): grey tube tiles, red-lacquered columns, white plaster, painted beams and
+  brackets. hanse-port's brick is the new palette `hanse-brick` (patterns/palettes.json: deep red stretchers, headers burnt
+  near black, grey lime joints -- Luebeck's; `brick` with its pale joints read pink at a distance).
+- **Turning**: `treadwheel-crane` and `jib-crane` take `jib` (degrees from straight out over the water, toward +x): the
+  cap, jib, rope and hook swing round the tower/post (`swung()` in harbour.py). `pier` takes `z0`, where its bents begin
+  (a pier over a stepped quay: the deck spans the steps, the stringers start clear of the top steps).
+
+Checked: archcheck clean (0 findings, mesh) for all eighteen components and the nine harbours with their finishes;
+headless assemble with stair headroom and support checks clean.

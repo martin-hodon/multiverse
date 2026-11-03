@@ -1,6 +1,6 @@
 {
   "name": "Schloss Schwerin",
-  "_about": "SCHLOSS SCHWERIN, the castle on its island (rebuilt 1845-57), from components: a `court` round its five-sided courtyard, one ring of rooms walked all the way round on every storey; a round `domed-tower` over every corner of the court, covering the joint where two wings meet, under a gilded bell cupola; the great gate tower in the middle of the town front, its gate at the foot and a gilded dome with a lantern over its drum; and the `bridge` over the lake to the gate. The lake is carved round the island by the game.",
+  "_about": "SCHLOSS SCHWERIN on its island, on its real irregular plan (OpenStreetMap): a `court` of seven faces and differing depths, one ring of rooms; a fifth storey and a French mansard over the town, west and south wings; red stepped gables over the east wing, plain ones over the north; stage towers on the ring's corners, the great round tower over the Burggarten the tallest; the gilded and the copper domes on the court's corners; the portal block with its loggia and Niklot's niche; the chapel's Gothic choir; the forecourt and the bridge. The lake is carved round the island by the game.",
   "params": {
     "detail": 4
   },
@@ -10,466 +10,3650 @@
     "stepOut": 0.5,
     "plan": {
       "rect": [
-        95.0802,
-        87.5426
+        120.6424,
+        124.1879
       ]
     }
   },
   "_moat": {
-    "hw": 48.04,
-    "hd": 44.27,
-    "w": 16.0
+    "hw": 60.82,
+    "hd": 62.59,
+    "w": 22.0
   },
   "build": [
-    "court",
-    "corner towers",
-    "gate storey",
-    "gate storey floor",
-    "gate tower",
-    "gate lantern",
+    "ring",
+    "front top storey",
+    "front top floor",
+    "south top storey",
+    "south top floor",
+    "west top storey",
+    "west top floor",
+    "west roof",
+    "south roof",
+    "southeast roof",
+    "front roof",
+    "north roof",
+    "east roof",
+    "link roof",
+    "great gable 0",
+    "great gable roof 0",
+    "great gable 1",
+    "great gable roof 1",
+    "great gable 2",
+    "great gable roof 2",
+    "north gable 0",
+    "north gable roof 0",
+    "north gable 1",
+    "north gable roof 1",
+    "north gable 2",
+    "north gable roof 2",
+    "north gable 3",
+    "north gable roof 3",
+    "north gable 4",
+    "north gable roof 4",
+    "north gable 5",
+    "north gable roof 5",
+    "dormer gable 0",
+    "dormer gable roof 0",
+    "dormer gable 1",
+    "dormer gable roof 1",
+    "dormer gable 2",
+    "dormer gable roof 2",
+    "dormer gable 3",
+    "dormer gable roof 3",
+    "dormer gable 4",
+    "dormer gable roof 4",
+    "west dormers",
+    "south dormers",
+    "west risalit",
+    "west risalit gable",
+    "west risalit gable roof",
+    "west risalit pinnacles",
+    "south risalit",
+    "south risalit gable",
+    "south risalit gable roof",
+    "south risalit pinnacles",
+    "town tower north",
+    "town tower south",
+    "west tower",
+    "south tower",
+    "great tower",
+    "north turret",
+    "chapel turret",
+    "court turret",
+    "gold tower",
+    "copper tower",
+    "gold lantern",
+    "copper lantern",
+    "gold figure",
+    "portal block",
+    "niche back",
+    "niche floor",
+    "niklot plinth",
+    "niklot",
+    "portal crown",
+    "portal roof",
+    "loggia",
+    "loggia floor",
+    "loggia balustrade",
+    "chapel",
+    "chapel roof",
+    "chapel pinnacles",
+    "chimneys",
+    "forecourt balustrade",
+    "forecourt balustrade east",
+    "lodge",
     "bridge",
+    "bridge lamps",
+    "bridge lanterns",
     "bridge steps"
   ],
   "parts": {
-    "court": {
+    "ring": {
       "type": "court",
       "plan": {
         "points": [
           [
-            22.3358,
-            -32.3713
+            17.3312,
+            -31.0782
           ],
           [
-            -22.3358,
-            -32.3713
+            -7.4276,
+            -31.094
           ],
           [
-            -36.1401,
-            10.114
+            -48.3212,
+            -0.949
           ],
           [
-            0.0,
-            36.3713
+            -37.849,
+            44.7383
           ],
           [
-            36.1401,
-            10.114
+            17.5602,
+            53.094
+          ],
+          [
+            41.0396,
+            32.6314
+          ],
+          [
+            48.3212,
+            14.7435
           ]
         ]
       },
-      "depth": 12.0,
+      "depths": [
+        19.0,
+        20.5,
+        19.0,
+        15.5,
+        18.5,
+        18.0,
+        20.0
+      ],
       "storeys": 4,
-      "storeyH": 4.6,
-      "axis": 3.4,
+      "storeyH": 4.4,
+      "axis": 3.3,
+      "winH": 2.5,
       "gate": {
         "face": 0,
-        "width": 4.0,
-        "height": 5.5
+        "width": 4.2,
+        "height": 3.9
       },
-      "roof": {
-        "form": "hip",
-        "pitch": 52
-      },
+      "roof": false,
       "courses": true,
+      "stairFace": 6,
+      "surroundCourt": false,
       "surround": [
-        {
-          "head": false
-        },
+        null,
         {
           "pediment": "alternate"
         },
         {
           "head": "cornice"
         },
-        {
-          "head": false
-        }
+        null
       ],
-      "_about": "the castle's five wings round its court, one ring of rooms walked all the way round, entered through the gate tower"
+      "_about": "the castle's ring of rooms: seven faces of different lengths and depths round the five-cornered court, walked all the way round, the gate through the town front"
     },
-    "corner towers": {
-      "type": "component",
-      "use": "components/domed-tower",
-      "params": {
-        "sides": 8,
-        "R": 7.4,
-        "H": 25.4,
-        "t": 0.9,
-        "drumR": 4.588,
-        "drumH": 3.2,
-        "capR": 4.884,
-        "kok": 0.6,
-        "finial": 2.4,
-        "doorH": 3.2,
-        "cap": "bell",
-        "waist": 0.78,
-        "lift": 1.05
-      },
-      "at": [
-        [
-          -22.3358,
-          0,
-          -32.3713,
-          0
-        ],
-        [
-          22.3358,
-          0,
-          -32.3713,
-          0
-        ],
-        [
-          36.1401,
-          0,
-          10.114,
-          0
-        ],
-        [
-          0.0,
-          0,
-          36.3713,
-          0
-        ],
-        [
-          -36.1401,
-          0,
-          10.114,
-          0
-        ]
-      ],
-      "build": [
-        "tower",
-        "drum",
-        "cap",
-        "finial"
-      ],
-      "_about": "a round tower over every corner of the court, taller than the wings, under a gilded bell cupola"
-    },
-    "gate storey": {
+    "front top storey": {
       "type": "enclosure",
       "plan": {
-        "rect": [
-          16.0,
-          16.0
+        "points": [
+          [
+            17.3312,
+            -31.0782
+          ],
+          [
+            -7.4276,
+            -31.094
+          ],
+          [
+            1.3389,
+            -12.0884
+          ],
+          [
+            6.0317,
+            -12.0854
+          ]
         ]
       },
-      "thickness": 1.4,
-      "height": 22.4,
-      "glass": false,
-      "tiers": [
-        {
-          "h": 10.0,
-          "openings": []
-        },
-        {
-          "openings": {
-            "pattern": "2",
-            "width": 1.6,
-            "gap": 3.0,
-            "sill": 2.0,
-            "springing": 5.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        }
-      ],
+      "thickness": 0.8,
+      "height": 4.6,
+      "glass": true,
       "faces": {
         "0": [
           {
-            "h": 10.0,
-            "openings": [
-              {
-                "at": 0,
-                "width": 4.4,
-                "sill": 0,
-                "springing": 4.8,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
-          {
             "openings": {
-              "pattern": "2",
-              "width": 1.6,
-              "gap": 3.0,
-              "sill": 2.0,
-              "springing": 5.0,
+              "pattern": "6",
+              "width": 1.3,
+              "gap": 2.0,
+              "sill": 0.9,
+              "springing": 3.0,
               "head": {
-                "profile": "semicircular"
-              }
-            }
-          }
-        ],
-        "2": [
-          {
-            "h": 10.0,
-            "openings": [
-              {
-                "at": 0,
-                "width": 4.4,
-                "sill": 0,
-                "springing": 4.8,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
-          {
-            "openings": {
-              "pattern": "2",
-              "width": 1.6,
-              "gap": 3.0,
-              "sill": 2.0,
-              "springing": 5.0,
-              "head": {
-                "profile": "semicircular"
+                "profile": "segmental",
+                "seg": 0.35
+              },
+              "surround": {
+                "head": "cornice"
               }
             }
           }
         ],
         "1": [
           {
-            "h": 4.6,
-            "openings": [
-              {
-                "at": -5.1,
-                "width": 1.6,
-                "sill": 0,
-                "springing": 2.4,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
-          {
-            "h": 4.6,
-            "openings": [
-              {
-                "at": -5.1,
-                "width": 1.6,
-                "sill": 0,
-                "springing": 2.4,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
-          {
-            "h": 4.6,
-            "openings": [
-              {
-                "at": -5.1,
-                "width": 1.6,
-                "sill": 0,
-                "springing": 2.4,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
-          {
-            "h": 4.6,
-            "openings": [
-              {
-                "at": -5.1,
-                "width": 1.6,
-                "sill": 0,
-                "springing": 2.4,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
+            "openings": []
+          }
+        ],
+        "2": [
           {
             "openings": []
           }
         ],
         "3": [
           {
-            "h": 4.6,
-            "openings": [
-              {
-                "at": 5.1,
-                "width": 1.6,
-                "sill": 0,
-                "springing": 2.4,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
+            "openings": []
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          17.6,
+          0,
+          0
+        ]
+      ],
+      "_about": "the front wing's fifth storey, over the ring"
+    },
+    "front top floor": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            17.3312,
+            -31.0782
+          ],
+          [
+            -7.4276,
+            -31.094
+          ],
+          [
+            1.3389,
+            -12.0884
+          ],
+          [
+            6.0317,
+            -12.0854
+          ]
+        ]
+      },
+      "height": 0.3,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          21.900000000000002,
+          0,
+          0
+        ]
+      ]
+    },
+    "south top storey": {
+      "type": "enclosure",
+      "plan": {
+        "points": [
+          [
+            -48.3212,
+            -0.949
+          ],
+          [
+            -37.849,
+            44.7383
+          ],
+          [
+            -21.38,
+            31.5466
+          ],
+          [
+            -26.6522,
+            8.5454
+          ]
+        ]
+      },
+      "thickness": 0.8,
+      "height": 4.6,
+      "glass": true,
+      "faces": {
+        "0": [
           {
-            "h": 4.6,
-            "openings": [
-              {
-                "at": 5.1,
-                "width": 1.6,
-                "sill": 0,
-                "springing": 2.4,
-                "head": {
-                  "profile": "semicircular"
-                }
+            "openings": {
+              "pattern": "13",
+              "width": 1.3,
+              "gap": 2.0,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.35
+              },
+              "surround": {
+                "head": "cornice"
               }
-            ]
-          },
+            }
+          }
+        ],
+        "1": [
           {
-            "h": 4.6,
-            "openings": [
-              {
-                "at": 5.1,
-                "width": 1.6,
-                "sill": 0,
-                "springing": 2.4,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
+            "openings": []
+          }
+        ],
+        "2": [
           {
-            "h": 4.6,
-            "openings": [
-              {
-                "at": 5.1,
-                "width": 1.6,
-                "sill": 0,
-                "springing": 2.4,
-                "head": {
-                  "profile": "semicircular"
-                }
+            "openings": {
+              "pattern": "6",
+              "width": 1.3,
+              "gap": 2.0,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.35
+              },
+              "surround": {
+                "head": "cornice"
               }
-            ]
-          },
+            }
+          }
+        ],
+        "3": [
           {
             "openings": []
           }
         ]
       },
-      "interior": true,
       "at": [
         [
-          0.0,
           0,
-          -32.3713,
+          17.6,
+          0,
           0
         ]
       ],
-      "_about": "the gate tower's square storey on the town front: the gateway straight through it, from the bridge to the court's gate"
+      "_about": "the south wing's fifth storey, over the ring"
     },
-    "gate storey floor": {
+    "south top floor": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -48.3212,
+            -0.949
+          ],
+          [
+            -37.849,
+            44.7383
+          ],
+          [
+            -21.38,
+            31.5466
+          ],
+          [
+            -26.6522,
+            8.5454
+          ]
+        ]
+      },
+      "height": 0.3,
       "flatRoof": true,
-      "type": "box",
-      "width": 13.2,
-      "length": 13.2,
-      "height": 0.5,
       "at": [
         [
-          0.0,
-          20.299999999999997,
-          -32.3713,
+          0,
+          21.900000000000002,
+          0,
           0
         ]
-      ],
-      "_about": "the floor closing the gate storey under its octagon, low over the attic (a void, not a room)"
+      ]
     },
-    "gate tower": {
-      "type": "component",
-      "use": "components/domed-tower",
-      "params": {
-        "sides": 8,
-        "R": 7.6,
-        "H": 12.0,
-        "t": 1.2,
-        "drumR": 5.76,
-        "drumH": 6.0,
-        "cap": "semicircular",
-        "capR": 6.24,
-        "kok": 0.8,
-        "finial": 5.0,
-        "doorH": 3.0,
-        "winW": 2.0
+    "west top storey": {
+      "type": "enclosure",
+      "plan": {
+        "points": [
+          [
+            -7.4276,
+            -31.094
+          ],
+          [
+            -48.3212,
+            -0.949
+          ],
+          [
+            -26.6522,
+            8.5454
+          ],
+          [
+            1.3389,
+            -12.0884
+          ]
+        ]
+      },
+      "thickness": 0.8,
+      "height": 4.6,
+      "glass": true,
+      "faces": {
+        "0": [
+          {
+            "openings": {
+              "pattern": "14",
+              "width": 1.3,
+              "gap": 2.0,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.35
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          }
+        ],
+        "1": [
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "openings": {
+              "pattern": "9",
+              "width": 1.3,
+              "gap": 2.0,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "segmental",
+                "seg": 0.35
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          }
+        ],
+        "3": [
+          {
+            "openings": []
+          }
+        ]
       },
       "at": [
         [
-          0.0,
-          22.4,
-          -32.3713,
+          0,
+          17.6,
+          0,
           0
         ]
       ],
-      "build": [
-        "tower",
-        "kokoshniki",
-        "drum",
-        "cap",
-        "finial"
-      ],
-      "_about": "over it the octagon, the drum and the gilded dome"
+      "_about": "the west wing's fifth storey, over the ring"
     },
-    "gate lantern": {
+    "west top floor": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            -7.4276,
+            -31.094
+          ],
+          [
+            -48.3212,
+            -0.949
+          ],
+          [
+            -26.6522,
+            8.5454
+          ],
+          [
+            1.3389,
+            -12.0884
+          ]
+        ]
+      },
+      "height": 0.3,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          21.900000000000002,
+          0,
+          0
+        ]
+      ]
+    },
+    "west roof": {
+      "type": "roof",
+      "form": "mansard",
+      "width": 21.1,
+      "length": 50.80354318352215,
+      "pitch": 28,
+      "overhang": 0.5,
+      "lowerPitch": 68,
+      "breakH": 5.0,
+      "at": [
+        [
+          -21.7924,
+          22.200000000000003,
+          -7.7709,
+          -0.9356
+        ]
+      ],
+      "_about": "the west wing's roof, its own: a tall French mansard over the Renaissance front"
+    },
+    "south roof": {
+      "type": "roof",
+      "form": "mansard",
+      "width": 19.6,
+      "length": 46.87216658103186,
+      "pitch": 28,
+      "overhang": 0.5,
+      "lowerPitch": 68,
+      "breakH": 5.0,
+      "at": [
+        [
+          -33.8252,
+          22.200000000000003,
+          19.7722,
+          0.2253
+        ]
+      ],
+      "_about": "the south wing's roof, its own: a tall French mansard over the Renaissance front"
+    },
+    "southeast roof": {
+      "type": "roof",
+      "form": "mansard",
+      "width": 16.1,
+      "length": 56.0357029044876,
+      "pitch": 28,
+      "overhang": 0.5,
+      "lowerPitch": 66,
+      "breakH": 4.5,
+      "at": [
+        [
+          -8.9888,
+          17.6,
+          41.2528,
+          1.4211
+        ]
+      ],
+      "_about": "the southeast wing's roof, its own: a tall French mansard over the Renaissance front"
+    },
+    "front roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": 19.6,
+      "length": 24.75883680627989,
+      "pitch": 50,
+      "overhang": 0.5,
+      "at": [
+        [
+          4.9457,
+          22.200000000000003,
+          -21.5861,
+          -1.5714
+        ]
+      ],
+      "_about": "the front wing's roof"
+    },
+    "north roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 20.6,
+      "length": 55.31726674375733,
+      "pitch": 46,
+      "overhang": 0.5,
+      "at": [
+        [
+          24.5428,
+          17.6,
+          -2.5651,
+          -2.5469
+        ]
+      ],
+      "_about": "the north wing's roof"
+    },
+    "east roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 19.1,
+      "length": 31.144823004794887,
+      "pitch": 46,
+      "overhang": 0.5,
+      "at": [
+        [
+          23.2225,
+          17.6,
+          35.8893,
+          2.2876
+        ]
+      ],
+      "_about": "the east wing's roof"
+    },
+    "link roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": 18.6,
+      "length": 19.313207915827963,
+      "pitch": 50,
+      "overhang": 0.5,
+      "at": [
+        [
+          36.3446,
+          17.6,
+          20.2942,
+          2.755
+        ]
+      ],
+      "_about": "the link wing's roof"
+    },
+    "great gable 0": {
+      "type": "screen",
+      "outline": [
+        [
+          -4.25,
+          0.0
+        ],
+        [
+          -4.08,
+          1.6304
+        ],
+        [
+          -3.1875,
+          1.6304
+        ],
+        [
+          -3.0175,
+          3.2609
+        ],
+        [
+          -2.125,
+          3.2609
+        ],
+        [
+          -1.955,
+          4.8913
+        ],
+        [
+          -1.0625,
+          4.8913
+        ],
+        [
+          -0.8925,
+          6.5217
+        ],
+        [
+          -0.7969,
+          6.5217
+        ],
+        [
+          -0.7969,
+          7.5
+        ],
+        [
+          0.7969,
+          7.5
+        ],
+        [
+          0.7969,
+          6.5217
+        ],
+        [
+          0.8925,
+          6.5217
+        ],
+        [
+          1.0625,
+          4.8913
+        ],
+        [
+          1.955,
+          4.8913
+        ],
+        [
+          2.125,
+          3.2609
+        ],
+        [
+          3.0175,
+          3.2609
+        ],
+        [
+          3.1875,
+          1.6304
+        ],
+        [
+          4.08,
+          1.6304
+        ],
+        [
+          4.25,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          21.1058,
+          17.6,
+          50.2029,
+          0.7168
+        ]
+      ],
+      "_about": "a gable of the east wing"
+    },
+    "great gable roof 0": {
+      "type": "roof",
+      "form": "gable",
+      "width": 7.82,
+      "length": 9.25,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          17.9686,
+          17.6,
+          46.6031,
+          0.7168
+        ]
+      ]
+    },
+    "great gable 1": {
+      "type": "screen",
+      "outline": [
+        [
+          -4.25,
+          0.0
+        ],
+        [
+          -4.08,
+          1.6304
+        ],
+        [
+          -3.1875,
+          1.6304
+        ],
+        [
+          -3.0175,
+          3.2609
+        ],
+        [
+          -2.125,
+          3.2609
+        ],
+        [
+          -1.955,
+          4.8913
+        ],
+        [
+          -1.0625,
+          4.8913
+        ],
+        [
+          -0.8925,
+          6.5217
+        ],
+        [
+          -0.7969,
+          6.5217
+        ],
+        [
+          -0.7969,
+          7.5
+        ],
+        [
+          0.7969,
+          7.5
+        ],
+        [
+          0.7969,
+          6.5217
+        ],
+        [
+          0.8925,
+          6.5217
+        ],
+        [
+          1.0625,
+          4.8913
+        ],
+        [
+          1.955,
+          4.8913
+        ],
+        [
+          2.125,
+          3.2609
+        ],
+        [
+          3.0175,
+          3.2609
+        ],
+        [
+          3.1875,
+          1.6304
+        ],
+        [
+          4.08,
+          1.6304
+        ],
+        [
+          4.25,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          29.3985,
+          17.6,
+          42.9758,
+          0.7168
+        ]
+      ],
+      "_about": "a gable of the east wing"
+    },
+    "great gable roof 1": {
+      "type": "roof",
+      "form": "gable",
+      "width": 7.82,
+      "length": 9.25,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          26.2612,
+          17.6,
+          39.376,
+          0.7168
+        ]
+      ]
+    },
+    "great gable 2": {
+      "type": "screen",
+      "outline": [
+        [
+          -4.25,
+          0.0
+        ],
+        [
+          -4.08,
+          1.6304
+        ],
+        [
+          -3.1875,
+          1.6304
+        ],
+        [
+          -3.0175,
+          3.2609
+        ],
+        [
+          -2.125,
+          3.2609
+        ],
+        [
+          -1.955,
+          4.8913
+        ],
+        [
+          -1.0625,
+          4.8913
+        ],
+        [
+          -0.8925,
+          6.5217
+        ],
+        [
+          -0.7969,
+          6.5217
+        ],
+        [
+          -0.7969,
+          7.5
+        ],
+        [
+          0.7969,
+          7.5
+        ],
+        [
+          0.7969,
+          6.5217
+        ],
+        [
+          0.8925,
+          6.5217
+        ],
+        [
+          1.0625,
+          4.8913
+        ],
+        [
+          1.955,
+          4.8913
+        ],
+        [
+          2.125,
+          3.2609
+        ],
+        [
+          3.0175,
+          3.2609
+        ],
+        [
+          3.1875,
+          1.6304
+        ],
+        [
+          4.08,
+          1.6304
+        ],
+        [
+          4.25,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          37.6911,
+          17.6,
+          35.7486,
+          0.7168
+        ]
+      ],
+      "_about": "a gable of the east wing"
+    },
+    "great gable roof 2": {
+      "type": "roof",
+      "form": "gable",
+      "width": 7.82,
+      "length": 9.25,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          34.5539,
+          17.6,
+          32.1489,
+          0.7168
+        ]
+      ]
+    },
+    "north gable 0": {
+      "type": "screen",
+      "outline": [
+        [
+          -3.4,
+          0.0
+        ],
+        [
+          -3.264,
+          1.3043
+        ],
+        [
+          -2.55,
+          1.3043
+        ],
+        [
+          -2.414,
+          2.6087
+        ],
+        [
+          -1.7,
+          2.6087
+        ],
+        [
+          -1.564,
+          3.913
+        ],
+        [
+          -0.85,
+          3.913
+        ],
+        [
+          -0.714,
+          5.2174
+        ],
+        [
+          -0.6375,
+          5.2174
+        ],
+        [
+          -0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          5.2174
+        ],
+        [
+          0.714,
+          5.2174
+        ],
+        [
+          0.85,
+          3.913
+        ],
+        [
+          1.564,
+          3.913
+        ],
+        [
+          1.7,
+          2.6087
+        ],
+        [
+          2.414,
+          2.6087
+        ],
+        [
+          2.55,
+          1.3043
+        ],
+        [
+          3.264,
+          1.3043
+        ],
+        [
+          3.4,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          45.2753,
+          17.6,
+          9.9721,
+          2.1655
+        ]
+      ],
+      "_about": "a gable of the north wing"
+    },
+    "north gable roof 0": {
+      "type": "roof",
+      "form": "gable",
+      "width": 6.256,
+      "length": 10.0,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          41.0094,
+          17.6,
+          12.8573,
+          2.1655
+        ]
+      ]
+    },
+    "north gable 1": {
+      "type": "screen",
+      "outline": [
+        [
+          -3.4,
+          0.0
+        ],
+        [
+          -3.264,
+          1.3043
+        ],
+        [
+          -2.55,
+          1.3043
+        ],
+        [
+          -2.414,
+          2.6087
+        ],
+        [
+          -1.7,
+          2.6087
+        ],
+        [
+          -1.564,
+          3.913
+        ],
+        [
+          -0.85,
+          3.913
+        ],
+        [
+          -0.714,
+          5.2174
+        ],
+        [
+          -0.6375,
+          5.2174
+        ],
+        [
+          -0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          5.2174
+        ],
+        [
+          0.714,
+          5.2174
+        ],
+        [
+          0.85,
+          3.913
+        ],
+        [
+          1.564,
+          3.913
+        ],
+        [
+          1.7,
+          2.6087
+        ],
+        [
+          2.414,
+          2.6087
+        ],
+        [
+          2.55,
+          1.3043
+        ],
+        [
+          3.264,
+          1.3043
+        ],
+        [
+          3.4,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          40.2333,
+          17.6,
+          2.5171,
+          2.1655
+        ]
+      ],
+      "_about": "a gable of the north wing"
+    },
+    "north gable roof 1": {
+      "type": "roof",
+      "form": "gable",
+      "width": 6.256,
+      "length": 10.0,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          35.9674,
+          17.6,
+          5.4022,
+          2.1655
+        ]
+      ]
+    },
+    "north gable 2": {
+      "type": "screen",
+      "outline": [
+        [
+          -3.4,
+          0.0
+        ],
+        [
+          -3.264,
+          1.3043
+        ],
+        [
+          -2.55,
+          1.3043
+        ],
+        [
+          -2.414,
+          2.6087
+        ],
+        [
+          -1.7,
+          2.6087
+        ],
+        [
+          -1.564,
+          3.913
+        ],
+        [
+          -0.85,
+          3.913
+        ],
+        [
+          -0.714,
+          5.2174
+        ],
+        [
+          -0.6375,
+          5.2174
+        ],
+        [
+          -0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          5.2174
+        ],
+        [
+          0.714,
+          5.2174
+        ],
+        [
+          0.85,
+          3.913
+        ],
+        [
+          1.564,
+          3.913
+        ],
+        [
+          1.7,
+          2.6087
+        ],
+        [
+          2.414,
+          2.6087
+        ],
+        [
+          2.55,
+          1.3043
+        ],
+        [
+          3.264,
+          1.3043
+        ],
+        [
+          3.4,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          35.1913,
+          17.6,
+          -4.938,
+          2.1655
+        ]
+      ],
+      "_about": "a gable of the north wing"
+    },
+    "north gable roof 2": {
+      "type": "roof",
+      "form": "gable",
+      "width": 6.256,
+      "length": 10.0,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          30.9254,
+          17.6,
+          -2.0529,
+          2.1655
+        ]
+      ]
+    },
+    "north gable 3": {
+      "type": "screen",
+      "outline": [
+        [
+          -3.4,
+          0.0
+        ],
+        [
+          -3.264,
+          1.3043
+        ],
+        [
+          -2.55,
+          1.3043
+        ],
+        [
+          -2.414,
+          2.6087
+        ],
+        [
+          -1.7,
+          2.6087
+        ],
+        [
+          -1.564,
+          3.913
+        ],
+        [
+          -0.85,
+          3.913
+        ],
+        [
+          -0.714,
+          5.2174
+        ],
+        [
+          -0.6375,
+          5.2174
+        ],
+        [
+          -0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          5.2174
+        ],
+        [
+          0.714,
+          5.2174
+        ],
+        [
+          0.85,
+          3.913
+        ],
+        [
+          1.564,
+          3.913
+        ],
+        [
+          1.7,
+          2.6087
+        ],
+        [
+          2.414,
+          2.6087
+        ],
+        [
+          2.55,
+          1.3043
+        ],
+        [
+          3.264,
+          1.3043
+        ],
+        [
+          3.4,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          30.1493,
+          17.6,
+          -12.3931,
+          2.1655
+        ]
+      ],
+      "_about": "a gable of the north wing"
+    },
+    "north gable roof 3": {
+      "type": "roof",
+      "form": "gable",
+      "width": 6.256,
+      "length": 10.0,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          25.8834,
+          17.6,
+          -9.5079,
+          2.1655
+        ]
+      ]
+    },
+    "north gable 4": {
+      "type": "screen",
+      "outline": [
+        [
+          -3.4,
+          0.0
+        ],
+        [
+          -3.264,
+          1.3043
+        ],
+        [
+          -2.55,
+          1.3043
+        ],
+        [
+          -2.414,
+          2.6087
+        ],
+        [
+          -1.7,
+          2.6087
+        ],
+        [
+          -1.564,
+          3.913
+        ],
+        [
+          -0.85,
+          3.913
+        ],
+        [
+          -0.714,
+          5.2174
+        ],
+        [
+          -0.6375,
+          5.2174
+        ],
+        [
+          -0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          5.2174
+        ],
+        [
+          0.714,
+          5.2174
+        ],
+        [
+          0.85,
+          3.913
+        ],
+        [
+          1.564,
+          3.913
+        ],
+        [
+          1.7,
+          2.6087
+        ],
+        [
+          2.414,
+          2.6087
+        ],
+        [
+          2.55,
+          1.3043
+        ],
+        [
+          3.264,
+          1.3043
+        ],
+        [
+          3.4,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          25.1073,
+          17.6,
+          -19.8482,
+          2.1655
+        ]
+      ],
+      "_about": "a gable of the north wing"
+    },
+    "north gable roof 4": {
+      "type": "roof",
+      "form": "gable",
+      "width": 6.256,
+      "length": 10.0,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          20.8414,
+          17.6,
+          -16.963,
+          2.1655
+        ]
+      ]
+    },
+    "north gable 5": {
+      "type": "screen",
+      "outline": [
+        [
+          -3.4,
+          0.0
+        ],
+        [
+          -3.264,
+          1.3043
+        ],
+        [
+          -2.55,
+          1.3043
+        ],
+        [
+          -2.414,
+          2.6087
+        ],
+        [
+          -1.7,
+          2.6087
+        ],
+        [
+          -1.564,
+          3.913
+        ],
+        [
+          -0.85,
+          3.913
+        ],
+        [
+          -0.714,
+          5.2174
+        ],
+        [
+          -0.6375,
+          5.2174
+        ],
+        [
+          -0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          6.0
+        ],
+        [
+          0.6375,
+          5.2174
+        ],
+        [
+          0.714,
+          5.2174
+        ],
+        [
+          0.85,
+          3.913
+        ],
+        [
+          1.564,
+          3.913
+        ],
+        [
+          1.7,
+          2.6087
+        ],
+        [
+          2.414,
+          2.6087
+        ],
+        [
+          2.55,
+          1.3043
+        ],
+        [
+          3.264,
+          1.3043
+        ],
+        [
+          3.4,
+          0.0
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          20.0653,
+          17.6,
+          -27.3033,
+          2.1655
+        ]
+      ],
+      "_about": "a gable of the north wing"
+    },
+    "north gable roof 5": {
+      "type": "roof",
+      "form": "gable",
+      "width": 6.256,
+      "length": 10.0,
+      "pitch": 55.3533,
+      "overhang": 0.1,
+      "at": [
+        [
+          15.7994,
+          17.6,
+          -24.4181,
+          2.1655
+        ]
+      ]
+    },
+    "dormer gable 0": {
+      "type": "screen",
+      "outline": [
+        [
+          -2.5,
+          0
+        ],
+        [
+          2.5,
+          0
+        ],
+        [
+          0,
+          4.5
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          -26.9767,
+          17.8,
+          46.5296,
+          -0.1497
+        ]
+      ],
+      "_about": "a gable of the southeast wing"
+    },
+    "dormer gable roof 0": {
+      "type": "roof",
+      "form": "gable",
+      "width": 4.6,
+      "length": 5.0,
+      "pitch": 55.8821,
+      "overhang": 0.1,
+      "at": [
+        [
+          -26.5816,
+          17.8,
+          43.9092,
+          -0.1497
+        ]
+      ]
+    },
+    "dormer gable 1": {
+      "type": "screen",
+      "outline": [
+        [
+          -2.5,
+          0
+        ],
+        [
+          2.5,
+          0
+        ],
+        [
+          0,
+          4.5
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          -18.0774,
+          17.8,
+          47.8716,
+          -0.1497
+        ]
+      ],
+      "_about": "a gable of the southeast wing"
+    },
+    "dormer gable roof 1": {
+      "type": "roof",
+      "form": "gable",
+      "width": 4.6,
+      "length": 5.0,
+      "pitch": 55.8821,
+      "overhang": 0.1,
+      "at": [
+        [
+          -17.6822,
+          17.8,
+          45.2512,
+          -0.1497
+        ]
+      ]
+    },
+    "dormer gable 2": {
+      "type": "screen",
+      "outline": [
+        [
+          -2.5,
+          0
+        ],
+        [
+          2.5,
+          0
+        ],
+        [
+          0,
+          4.5
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          -9.178,
+          17.8,
+          49.2136,
+          -0.1497
+        ]
+      ],
+      "_about": "a gable of the southeast wing"
+    },
+    "dormer gable roof 2": {
+      "type": "roof",
+      "form": "gable",
+      "width": 4.6,
+      "length": 5.0,
+      "pitch": 55.8821,
+      "overhang": 0.1,
+      "at": [
+        [
+          -8.7828,
+          17.8,
+          46.5932,
+          -0.1497
+        ]
+      ]
+    },
+    "dormer gable 3": {
+      "type": "screen",
+      "outline": [
+        [
+          -2.5,
+          0
+        ],
+        [
+          2.5,
+          0
+        ],
+        [
+          0,
+          4.5
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          -0.2786,
+          17.8,
+          50.5556,
+          -0.1497
+        ]
+      ],
+      "_about": "a gable of the southeast wing"
+    },
+    "dormer gable roof 3": {
+      "type": "roof",
+      "form": "gable",
+      "width": 4.6,
+      "length": 5.0,
+      "pitch": 55.8821,
+      "overhang": 0.1,
+      "at": [
+        [
+          0.1166,
+          17.8,
+          47.9352,
+          -0.1497
+        ]
+      ]
+    },
+    "dormer gable 4": {
+      "type": "screen",
+      "outline": [
+        [
+          -2.5,
+          0
+        ],
+        [
+          2.5,
+          0
+        ],
+        [
+          0,
+          4.5
+        ]
+      ],
+      "t": 0.7,
+      "at": [
+        [
+          8.6208,
+          17.8,
+          51.8976,
+          -0.1497
+        ]
+      ],
+      "_about": "a gable of the southeast wing"
+    },
+    "dormer gable roof 4": {
+      "type": "roof",
+      "form": "gable",
+      "width": 4.6,
+      "length": 5.0,
+      "pitch": 55.8821,
+      "overhang": 0.1,
+      "at": [
+        [
+          9.0159,
+          17.8,
+          49.2772,
+          -0.1497
+        ]
+      ]
+    },
+    "west dormers": {
+      "type": "screen",
+      "outline": [
+        [
+          -1.2,
+          0
+        ],
+        [
+          1.2,
+          0
+        ],
+        [
+          1.2,
+          1.6500000000000001
+        ],
+        [
+          0,
+          3.0
+        ],
+        [
+          -1.2,
+          1.6500000000000001
+        ]
+      ],
+      "t": 2.2,
+      "at": [
+        [
+          -11.0043,
+          22.8,
+          -26.8423,
+          -2.5064
+        ],
+        [
+          -15.8339,
+          22.8,
+          -23.2822,
+          -2.5064
+        ],
+        [
+          -38.3721,
+          22.8,
+          -6.668,
+          -2.5064
+        ],
+        [
+          -43.2017,
+          22.8,
+          -3.1078,
+          -2.5064
+        ]
+      ],
+      "_about": "the west wing's dormers, a stone gable each"
+    },
+    "south dormers": {
+      "type": "screen",
+      "outline": [
+        [
+          -1.2,
+          0
+        ],
+        [
+          1.2,
+          0
+        ],
+        [
+          1.2,
+          1.6500000000000001
+        ],
+        [
+          0,
+          3.0
+        ],
+        [
+          -1.2,
+          1.6500000000000001
+        ]
+      ],
+      "t": 2.2,
+      "at": [
+        [
+          -45.3927,
+          22.8,
+          6.0087,
+          -1.3455
+        ],
+        [
+          -44.1639,
+          22.8,
+          11.3696,
+          -1.3455
+        ],
+        [
+          -39.4721,
+          22.8,
+          31.8388,
+          -1.3455
+        ],
+        [
+          -38.2433,
+          22.8,
+          37.1998,
+          -1.3455
+        ]
+      ],
+      "_about": "the south wing's dormers, a stone gable each"
+    },
+    "west risalit": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          13.0,
+          2.8
+        ]
+      },
+      "thickness": 0.7,
+      "height": 23.200000000000003,
+      "glass": true,
+      "tiers": [
+        {
+          "h": 4.640000000000001,
+          "openings": []
+        },
+        {
+          "h": 4.640000000000001,
+          "openings": []
+        },
+        {
+          "h": 4.640000000000001,
+          "openings": []
+        },
+        {
+          "h": 4.640000000000001,
+          "openings": []
+        },
+        {
+          "openings": []
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 4.640000000000001,
+            "openings": {
+              "pattern": "4",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "h": 4.640000000000001,
+            "openings": {
+              "pattern": "4",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "h": 4.640000000000001,
+            "openings": {
+              "pattern": "4",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "h": 4.640000000000001,
+            "openings": {
+              "pattern": "4",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "4",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          }
+        ]
+      },
+      "courses": true,
+      "at": [
+        [
+          -27.8744,
+          0.0,
+          -16.0215,
+          -2.5064
+        ]
+      ],
+      "_about": "a risalit, the wall stepping forward under its own gable"
+    },
+    "west risalit gable": {
+      "type": "screen",
+      "outline": [
+        [
+          -6.5,
+          0.0
+        ],
+        [
+          -6.24,
+          1.5217
+        ],
+        [
+          -4.875,
+          1.5217
+        ],
+        [
+          -4.615,
+          3.0435
+        ],
+        [
+          -3.25,
+          3.0435
+        ],
+        [
+          -2.99,
+          4.5652
+        ],
+        [
+          -1.625,
+          4.5652
+        ],
+        [
+          -1.365,
+          6.087
+        ],
+        [
+          -1.2188,
+          6.087
+        ],
+        [
+          -1.2188,
+          7.0
+        ],
+        [
+          1.2188,
+          7.0
+        ],
+        [
+          1.2188,
+          6.087
+        ],
+        [
+          1.365,
+          6.087
+        ],
+        [
+          1.625,
+          4.5652
+        ],
+        [
+          2.99,
+          4.5652
+        ],
+        [
+          3.25,
+          3.0435
+        ],
+        [
+          4.615,
+          3.0435
+        ],
+        [
+          4.875,
+          1.5217
+        ],
+        [
+          6.24,
+          1.5217
+        ],
+        [
+          6.5,
+          0.0
+        ]
+      ],
+      "t": 0.9,
+      "at": [
+        [
+          -28.7941,
+          23.2,
+          -17.2691,
+          -2.5064
+        ]
+      ]
+    },
+    "west risalit gable roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 12.22,
+      "length": 11.48,
+      "pitch": 41.447,
+      "overhang": 0.1,
+      "at": [
+        [
+          -25.2992,
+          23.200000000000003,
+          -12.5281,
+          -2.5064
+        ]
+      ]
+    },
+    "west risalit pinnacles": {
+      "type": "pinnacle",
+      "w": 0.8,
+      "h": 2.2,
+      "s": 1.8,
+      "sides": 8,
+      "at": [
+        [
+          -23.2251,
+          23.2,
+          -20.7532,
+          -2.5064
+        ],
+        [
+          -33.7698,
+          23.2,
+          -12.9801,
+          -2.5064
+        ]
+      ]
+    },
+    "south risalit": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          11.0,
+          2.4
+        ]
+      },
+      "thickness": 0.7,
+      "height": 23.200000000000003,
+      "glass": true,
+      "tiers": [
+        {
+          "h": 4.640000000000001,
+          "openings": []
+        },
+        {
+          "h": 4.640000000000001,
+          "openings": []
+        },
+        {
+          "h": 4.640000000000001,
+          "openings": []
+        },
+        {
+          "h": 4.640000000000001,
+          "openings": []
+        },
+        {
+          "openings": []
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 4.640000000000001,
+            "openings": {
+              "pattern": "3",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "h": 4.640000000000001,
+            "openings": {
+              "pattern": "3",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "h": 4.640000000000001,
+            "openings": {
+              "pattern": "3",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "h": 4.640000000000001,
+            "openings": {
+              "pattern": "3",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "3",
+              "width": 1.5,
+              "gap": 1.5,
+              "sill": 0.9,
+              "springing": 3.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "surround": {
+                "head": "cornice"
+              }
+            }
+          }
+        ]
+      },
+      "courses": true,
+      "at": [
+        [
+          -43.0851,
+          0.0,
+          21.8947,
+          -1.3455
+        ]
+      ],
+      "_about": "a risalit, the wall stepping forward under its own gable"
+    },
+    "south risalit gable": {
+      "type": "screen",
+      "outline": [
+        [
+          -5.5,
+          0.0
+        ],
+        [
+          -5.28,
+          1.3043
+        ],
+        [
+          -4.125,
+          1.3043
+        ],
+        [
+          -3.905,
+          2.6087
+        ],
+        [
+          -2.75,
+          2.6087
+        ],
+        [
+          -2.53,
+          3.913
+        ],
+        [
+          -1.375,
+          3.913
+        ],
+        [
+          -1.155,
+          5.2174
+        ],
+        [
+          -1.0312,
+          5.2174
+        ],
+        [
+          -1.0312,
+          6.0
+        ],
+        [
+          1.0312,
+          6.0
+        ],
+        [
+          1.0312,
+          5.2174
+        ],
+        [
+          1.155,
+          5.2174
+        ],
+        [
+          1.375,
+          3.913
+        ],
+        [
+          2.53,
+          3.913
+        ],
+        [
+          2.75,
+          2.6087
+        ],
+        [
+          3.905,
+          2.6087
+        ],
+        [
+          4.125,
+          1.3043
+        ],
+        [
+          5.28,
+          1.3043
+        ],
+        [
+          5.5,
+          0.0
+        ]
+      ],
+      "t": 0.9,
+      "at": [
+        [
+          -44.401,
+          23.2,
+          22.1963,
+          -1.3455
+        ]
+      ]
+    },
+    "south risalit gable roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 10.34,
+      "length": 10.64,
+      "pitch": 41.8141,
+      "overhang": 0.1,
+      "at": [
+        [
+          -39.0693,
+          23.200000000000003,
+          20.9742,
+          -1.3455
+        ]
+      ]
+    },
+    "south risalit pinnacles": {
+      "type": "pinnacle",
+      "w": 0.8,
+      "h": 2.2,
+      "s": 1.8,
+      "sides": 8,
+      "at": [
+        [
+          -45.1536,
+          23.2,
+          16.6749,
+          -1.3455
+        ],
+        [
+          -42.6737,
+          23.2,
+          27.4943,
+          -1.3455
+        ]
+      ]
+    },
+    "town tower north": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 4.7,
+        "H": 24.5,
+        "Ru": 4.0,
+        "Hu": 6.5,
+        "tent": 6.5,
+        "Lr": 1.05,
+        "Lh": 2.6,
+        "tip": 1.8
+      },
+      "at": [
+        [
+          16.6441,
+          0,
+          -30.3516,
+          0
+        ]
+      ],
+      "_about": "the town front's north tower: round, its upper stage set back, four gablets and corner turrets at the tent's foot, an open lantern"
+    },
+    "town tower south": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 4.7,
+        "H": 24.5,
+        "Ru": 4.0,
+        "Hu": 6.5,
+        "tent": 6.5,
+        "Lr": 1.05,
+        "Lh": 2.6,
+        "tip": 1.8
+      },
+      "at": [
+        [
+          -7.7712,
+          0,
+          -30.7307,
+          0
+        ]
+      ],
+      "_about": "the town front's other tower"
+    },
+    "west tower": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 6.0,
+        "H": 23.5,
+        "Ru": 4.2,
+        "Hu": 5.0,
+        "tent": 6.5,
+        "Lr": 1.0,
+        "Lh": 2.2,
+        "tip": 2.2
+      },
+      "at": [
+        [
+          -47.6341,
+          0,
+          -1.6756,
+          0
+        ]
+      ],
+      "_about": "the corner tower at the west wing's far end, OSM's r 6 foot and r 4 upper stage"
+    },
+    "south tower": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 5.8,
+        "H": 23.0,
+        "Ru": 4.0,
+        "Hu": 5.0,
+        "tent": 6.5,
+        "Lr": 1.0,
+        "Lh": 2.2,
+        "tip": 2.2
+      },
+      "at": [
+        [
+          -37.849,
+          0,
+          44.7383,
+          0
+        ]
+      ],
+      "_about": "the south corner tower, between the south and south-east wings"
+    },
+    "great tower": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 6.5,
+        "H": 33.0,
+        "Ru": 5.3,
+        "Hu": 3.6,
+        "tent": 9.0,
+        "Lr": 1.3,
+        "Lh": 2.8,
+        "tip": 2.6,
+        "storeys": 7,
+        "turrets": 1
+      },
+      "at": [
+        [
+          14.9382,
+          0,
+          47.8618,
+          0
+        ]
+      ],
+      "_about": "the great round tower over the Burggarten: the castle's tallest, OSM's 50 m, a keep's shaft with a ring of little turrets at its head"
+    },
+    "north turret": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 2.5,
+        "H": 26,
+        "Ru": 2.05,
+        "Hu": 2.2,
+        "tent": 4.5,
+        "Lr": 0.55,
+        "Lh": 1.3,
+        "tip": 1.4,
+        "storeys": 5
+      },
+      "at": [
+        [
+          45.7387,
+          0,
+          10.925,
+          0
+        ]
+      ],
+      "_about": "a slender round turret: OSM's r 2.5, a stair's"
+    },
+    "chapel turret": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 2.5,
+        "H": 22,
+        "Ru": 2.05,
+        "Hu": 2.2,
+        "tent": 4.5,
+        "Lr": 0.55,
+        "Lh": 1.3,
+        "tip": 1.4,
+        "storeys": 5
+      },
+      "at": [
+        [
+          43.0022,
+          0,
+          26.9175,
+          0
+        ]
+      ],
+      "_about": "a slender round turret: OSM's r 2.5, a stair's"
+    },
+    "court turret": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 2.6,
+        "H": 21.5,
+        "Ru": 2.132,
+        "Hu": 2.2,
+        "tent": 4.5,
+        "Lr": 0.55,
+        "Lh": 1.3,
+        "tip": 1.4,
+        "storeys": 5
+      },
+      "at": [
+        [
+          -18.4329,
+          0,
+          30.7557,
+          0
+        ]
+      ],
+      "_about": "a slender round turret: OSM's r 2.5, a stair's"
+    },
+    "gold tower": {
       "type": "component",
       "use": "components/domed-tower",
       "params": {
-        "sides": 8,
-        "R": 1.6,
-        "H": 3.0,
-        "t": 0.3,
-        "drumR": 1.1,
-        "drumH": 0.8,
-        "capR": 1.2,
-        "kok": 0.2,
-        "finial": 2.0,
-        "doorH": 1.0,
+        "sides": 16,
+        "R": 5.0,
+        "H": 28.0,
+        "t": 0.9,
+        "drumR": 4.2,
+        "drumH": 6.6,
         "cap": "bell",
-        "waist": 0.78,
-        "lift": 1.05
+        "bulge": 1.0,
+        "neck": 0.9,
+        "waist": 0.86,
+        "lift": 1.0,
+        "capR": 4.368,
+        "capRise": 4.4,
+        "kok": 0.8,
+        "finial": 0.1,
+        "doorH": 3.6,
+        "winW": 1.3,
+        "capRibs": 24
       },
       "at": [
         [
-          0.0,
-          46.839999999999996,
-          -32.3713,
+          5.1216,
+          0,
+          -12.3452,
           0
         ]
       ],
       "build": [
         "tower",
-        "cap",
-        "finial"
+        "head",
+        "neck",
+        "drum",
+        "cornice",
+        "cap"
       ],
-      "_about": "the lantern on the dome"
+      "_about": "the gilded dome over the town front: a round tower on the court's corner, its drum and its dome"
+    },
+    "copper tower": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 16,
+        "R": 6.5,
+        "H": 24.0,
+        "t": 0.9,
+        "drumR": 4.4,
+        "drumH": 3.2,
+        "cap": "bell",
+        "bulge": 1.0,
+        "neck": 0.9,
+        "waist": 0.86,
+        "lift": 1.0,
+        "capR": 4.5760000000000005,
+        "capRise": 4.4,
+        "kok": 0.6,
+        "finial": 0.1,
+        "doorH": 3.6,
+        "winW": 1.3,
+        "capRibs": 24
+      },
+      "at": [
+        [
+          -25.8487,
+          0,
+          5.8508,
+          0
+        ]
+      ],
+      "build": [
+        "tower",
+        "head",
+        "neck",
+        "drum",
+        "cornice",
+        "cap"
+      ],
+      "_about": "the green copper dome over the west wing, OSM's r 7 foot: a round tower on the court's corner, its drum and its dome"
+    },
+    "gold lantern": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "H": 38.6,
+        "Hu": 0,
+        "tent": 0,
+        "Lr": 1.1,
+        "Lh": 2.4,
+        "tip": 1.8
+      },
+      "at": [
+        [
+          5.1216,
+          0,
+          -12.3452,
+          0
+        ]
+      ],
+      "build": [
+        "lantern",
+        "lantern cap",
+        "spike"
+      ],
+      "_about": "its lantern, open, a little dome and a spike on it"
+    },
+    "copper lantern": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "H": 31.1,
+        "Hu": 0,
+        "tent": 0,
+        "Lr": 0.9,
+        "Lh": 1.9,
+        "tip": 1.8
+      },
+      "at": [
+        [
+          -25.8487,
+          0,
+          5.8508,
+          0
+        ]
+      ],
+      "build": [
+        "lantern",
+        "lantern cap",
+        "spike"
+      ],
+      "_about": "its lantern, open, a little dome and a spike on it"
+    },
+    "gold figure": {
+      "type": "pinnacle",
+      "w": 0.5,
+      "h": 0.5,
+      "s": 0.8,
+      "sides": 8,
+      "figure": 2.0,
+      "at": [
+        [
+          5.1216,
+          43.9,
+          -12.3452,
+          0
+        ]
+      ],
+      "_about": "the gilt figure on the lantern (a turned silhouette at this height)"
+    },
+    "portal block": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          11.0,
+          4.8
+        ]
+      },
+      "thickness": 0.8,
+      "height": 26.5,
+      "glass": true,
+      "tiers": [
+        {
+          "h": 9.6,
+          "openings": []
+        },
+        {
+          "h": 8.9,
+          "openings": []
+        },
+        {
+          "openings": []
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 9.6,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.2,
+                "sill": 0,
+                "springing": 3.6,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": 8.9,
+            "openings": [
+              {
+                "at": -1.35,
+                "width": 1.05,
+                "sill": 2.8,
+                "springing": 5.3,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": true
+              },
+              {
+                "at": 0,
+                "width": 1.05,
+                "sill": 2.8,
+                "springing": 5.3,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": true
+              },
+              {
+                "at": 1.35,
+                "width": 1.05,
+                "sill": 2.8,
+                "springing": 5.3,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": true
+              },
+              {
+                "at": -3.9,
+                "width": 1.0,
+                "sill": 2.8,
+                "springing": 5.0,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              },
+              {
+                "at": 3.9,
+                "width": 1.0,
+                "sill": 2.8,
+                "springing": 5.0,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 3.8,
+                "sill": 0.2,
+                "springing": 4.9,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              },
+              {
+                "at": -3.7,
+                "width": 1.5,
+                "sill": 1.6,
+                "springing": 4.2,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              },
+              {
+                "at": 3.7,
+                "width": 1.5,
+                "sill": 1.6,
+                "springing": 4.2,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          4.9518,
+          0.0,
+          -31.0861,
+          3.141
+        ]
+      ],
+      "_about": "the portal block standing forward of the town front: the gate, the three arched lights between two statue niches, the great arched niche with a lesser one either side"
+    },
+    "niche back": {
+      "type": "box",
+      "width": 10.0,
+      "length": 0.4,
+      "height": 7.999999999999998,
+      "at": [
+        [
+          4.952,
+          18.5,
+          -31.3861,
+          3.141
+        ]
+      ],
+      "_about": "the niches' back wall, dark in the finish (Niklot stands before it)"
+    },
+    "niche floor": {
+      "type": "box",
+      "width": 10.0,
+      "length": 2.2,
+      "height": 0.25,
+      "flatRoof": true,
+      "at": [
+        [
+          4.9525,
+          18.5,
+          -32.2861,
+          3.141
+        ]
+      ]
+    },
+    "niklot plinth": {
+      "type": "box",
+      "width": 1.6,
+      "length": 1.6,
+      "height": 1.0,
+      "at": [
+        [
+          4.9525,
+          18.75,
+          -32.2861,
+          3.141
+        ]
+      ],
+      "_about": "the plinth of Niklot's statue (the real one is on horseback)"
+    },
+    "niklot": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          4.9525,
+          19.75,
+          -32.2861,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "pose": "guard",
+        "style": "gothic",
+        "stone": "bronze",
+        "scale": 1.5,
+        "face": 1.5702,
+        "seed": 7
+      },
+      "_about": "Niklot (standing: the engine has no horseman yet)"
+    },
+    "portal crown": {
+      "type": "screen",
+      "outline": [
+        [
+          -5.5,
+          0
+        ],
+        [
+          5.5,
+          0
+        ],
+        [
+          5.5,
+          1.2
+        ],
+        [
+          3.4,
+          1.2
+        ],
+        [
+          2.8,
+          3.0
+        ],
+        [
+          1.1,
+          3.0
+        ],
+        [
+          0,
+          4.4
+        ],
+        [
+          -1.1,
+          3.0
+        ],
+        [
+          -2.8,
+          3.0
+        ],
+        [
+          -3.4,
+          1.2
+        ],
+        [
+          -5.5,
+          1.2
+        ]
+      ],
+      "t": 1.0,
+      "at": [
+        [
+          4.9533,
+          26.5,
+          -33.4861,
+          3.141
+        ]
+      ],
+      "_about": "the block's crown, a shaped gable before the gold drum"
+    },
+    "portal roof": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          9.4,
+          3.1999999999999997
+        ]
+      },
+      "height": 0.3,
+      "flatRoof": true,
+      "at": [
+        [
+          4.9518,
+          26.2,
+          -31.0861,
+          3.141
+        ]
+      ]
+    },
+    "loggia": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          27.0,
+          8.0
+        ]
+      },
+      "thickness": 0.9,
+      "height": 9.0,
+      "glass": false,
+      "tiers": [
+        {
+          "openings": []
+        }
+      ],
+      "interior": true,
+      "faces": {
+        "0": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.8,
+                "sill": 0,
+                "springing": 4.4,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              },
+              {
+                "at": -5.2,
+                "width": 2.6,
+                "sill": 0,
+                "springing": 3.8,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              },
+              {
+                "at": 5.2,
+                "width": 2.6,
+                "sill": 0,
+                "springing": 3.8,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              },
+              {
+                "at": -9.8,
+                "width": 2.6,
+                "sill": 0,
+                "springing": 3.8,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              },
+              {
+                "at": 9.8,
+                "width": 2.6,
+                "sill": 0,
+                "springing": 3.8,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.6,
+                "sill": 0,
+                "springing": 3.8,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          }
+        ],
+        "3": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.6,
+                "sill": 0,
+                "springing": 3.8,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          4.9543,
+          0.0,
+          -34.9861,
+          3.141
+        ]
+      ],
+      "_about": "the arcaded porch before the gate, as in the photographs"
+    },
+    "loggia floor": {
+      "type": "prism",
+      "plan": {
+        "rect": [
+          27.5,
+          8.5
+        ]
+      },
+      "height": 0.5,
+      "flatRoof": true,
+      "at": [
+        [
+          4.9543,
+          9.0,
+          -34.9861,
+          3.141
+        ]
+      ]
+    },
+    "loggia balustrade": {
+      "type": "cresting",
+      "run": [
+        [
+          -13.6,
+          0
+        ],
+        [
+          13.6,
+          0
+        ]
+      ],
+      "h": 1.0,
+      "panel": 1.1,
+      "t": 0.22,
+      "bar": 0.1,
+      "at": [
+        [
+          4.957,
+          9.5,
+          -39.1861,
+          3.141
+        ]
+      ]
+    },
+    "chapel": {
+      "type": "enclosure",
+      "plan": {
+        "points": [
+          [
+            -4.3,
+            -6.5
+          ],
+          [
+            4.3,
+            -6.5
+          ],
+          [
+            4.3,
+            3.3
+          ],
+          [
+            2.322,
+            6.5
+          ],
+          [
+            -2.322,
+            6.5
+          ],
+          [
+            -4.3,
+            3.3
+          ]
+        ]
+      },
+      "thickness": 0.8,
+      "height": 14.5,
+      "glass": true,
+      "openings": {
+        "pattern": "1",
+        "width": 1.8,
+        "gap": 0.6,
+        "sill": 3.2,
+        "springing": 9.0,
+        "head": {
+          "profile": "pointed"
+        }
+      },
+      "at": [
+        [
+          43.3852,
+          0,
+          27.9679,
+          1.1842
+        ]
+      ],
+      "_about": "the castle chapel: its Gothic choir, tall pointed windows, three-sided, standing out of the ring by the great gables"
+    },
+    "chapel roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": 9.0,
+      "length": 13.2,
+      "pitch": 66,
+      "overhang": 0.2,
+      "at": [
+        [
+          43.3852,
+          14.5,
+          27.9679,
+          1.1842
+        ]
+      ]
+    },
+    "chapel pinnacles": {
+      "type": "pinnacle",
+      "w": 0.7,
+      "h": 3.2,
+      "s": 2.6,
+      "sides": 4,
+      "at": [
+        [
+          44.8205,
+          14.5,
+          33.1948,
+          0
+        ],
+        [
+          48.0629,
+          14.5,
+          25.2294,
+          0
+        ],
+        [
+          50.281,
+          14.5,
+          28.2679,
+          0
+        ],
+        [
+          48.5301,
+          14.5,
+          32.5692,
+          0
+        ]
+      ]
+    },
+    "chimneys": {
+      "type": "box",
+      "width": 1.3,
+      "length": 0.9,
+      "height": 7.0,
+      "at": [
+        [
+          -15.9236,
+          25.200000000000003,
+          -14.1346,
+          -2.5064
+        ],
+        [
+          -29.6075,
+          25.200000000000003,
+          -4.0474,
+          -2.5064
+        ],
+        [
+          -36.7591,
+          25.200000000000003,
+          13.7761,
+          -1.3455
+        ],
+        [
+          -33.8546,
+          25.200000000000003,
+          26.4475,
+          -1.3455
+        ],
+        [
+          -22.0284,
+          20.6,
+          40.5405,
+          -0.1497
+        ],
+        [
+          -3.2408,
+          20.6,
+          43.3736,
+          -0.1497
+        ],
+        [
+          35.672,
+          20.6,
+          11.0345,
+          2.1655
+        ],
+        [
+          25.588,
+          20.6,
+          -3.8757,
+          2.1655
+        ],
+        [
+          15.504,
+          20.6,
+          -18.7858,
+          2.1655
+        ],
+        [
+          20.0486,
+          20.6,
+          40.6186,
+          0.7168
+        ],
+        [
+          28.3413,
+          20.6,
+          33.3915,
+          0.7168
+        ]
+      ],
+      "_about": "the tall stacks along the ridges"
+    },
+    "forecourt balustrade": {
+      "type": "cresting",
+      "run": [
+        [
+          -14.0,
+          0
+        ],
+        [
+          -5,
+          0
+        ]
+      ],
+      "h": 1.1,
+      "panel": 1.2,
+      "t": 0.3,
+      "bar": 0.12,
+      "at": [
+        [
+          4.9518,
+          0,
+          -61.294,
+          0
+        ]
+      ],
+      "_about": "the forecourt's balustrade either side of the bridge"
+    },
+    "forecourt balustrade east": {
+      "type": "cresting",
+      "run": [
+        [
+          5,
+          0
+        ],
+        [
+          14.0,
+          0
+        ]
+      ],
+      "h": 1.1,
+      "panel": 1.2,
+      "t": 0.3,
+      "bar": 0.12,
+      "at": [
+        [
+          4.9518,
+          0,
+          -61.294,
+          0
+        ]
+      ]
+    },
+    "lodge": {
+      "type": "component",
+      "use": "components/stage-tower",
+      "params": {
+        "R": 1.9,
+        "H": 4.2,
+        "Ru": 1.5,
+        "Hu": 0.8,
+        "tent": 2.0,
+        "Lr": 0.3,
+        "Lh": 0.5,
+        "tip": 0.6,
+        "storeys": 2
+      },
+      "at": [
+        [
+          -9.0482,
+          0,
+          -59.494,
+          0
+        ],
+        [
+          18.9518,
+          0,
+          -59.494,
+          0
+        ]
+      ],
+      "_about": "the forecourt's two round lodges (`h` on the old plan)"
     },
     "bridge": {
       "type": "component",
       "use": "components/bridge",
       "params": {
-        "L": 20.9,
-        "W": 7,
+        "L": 25.0,
+        "W": 10,
         "depth": 5.0,
-        "n": 4
+        "n": 3
       },
       "at": [
         [
-          0.0,
+          4.9518,
           0,
-          -40.3713,
+          -60.594,
           3.141592653589793
         ]
       ],
-      "_about": "the bridge over the lake to the gate"
+      "_about": "the Schlossbr\u00fccke to the forecourt, on the portal's axis"
+    },
+    "bridge lamps": {
+      "type": "column",
+      "radius": 0.28,
+      "height": 5.2,
+      "sides": 8,
+      "at": [
+        [
+          0.6518,
+          1.0,
+          -61.094,
+          0
+        ],
+        [
+          0.6518,
+          1.0,
+          -68.594,
+          0
+        ],
+        [
+          0.6518,
+          1.0,
+          -76.094,
+          0
+        ],
+        [
+          0.6518,
+          1.0,
+          -83.594,
+          0
+        ],
+        [
+          9.2518,
+          1.0,
+          -61.094,
+          0
+        ],
+        [
+          9.2518,
+          1.0,
+          -68.594,
+          0
+        ],
+        [
+          9.2518,
+          1.0,
+          -76.094,
+          0
+        ],
+        [
+          9.2518,
+          1.0,
+          -83.594,
+          0
+        ]
+      ],
+      "_about": "the tall candelabra along the bridge"
+    },
+    "bridge lanterns": {
+      "type": "prism",
+      "plan": {
+        "sides": 6,
+        "radius": 0.55
+      },
+      "height": 1.0,
+      "at": [
+        [
+          0.6518,
+          6.2,
+          -61.094,
+          0
+        ],
+        [
+          0.6518,
+          6.2,
+          -68.594,
+          0
+        ],
+        [
+          0.6518,
+          6.2,
+          -76.094,
+          0
+        ],
+        [
+          0.6518,
+          6.2,
+          -83.594,
+          0
+        ],
+        [
+          9.2518,
+          6.2,
+          -61.094,
+          0
+        ],
+        [
+          9.2518,
+          6.2,
+          -68.594,
+          0
+        ],
+        [
+          9.2518,
+          6.2,
+          -76.094,
+          0
+        ],
+        [
+          9.2518,
+          6.2,
+          -83.594,
+          0
+        ]
+      ]
     },
     "bridge steps": {
       "type": "flight",
-      "width": 6,
+      "width": 8,
       "run": 0.32,
       "rise": 0.15,
       "top": 0,
@@ -477,9 +3661,9 @@
       "landing": 0,
       "at": [
         [
-          -3.0,
+          0.9518,
           0,
-          -62.5513,
+          -86.874,
           -1.5707963
         ]
       ],

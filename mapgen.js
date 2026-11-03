@@ -88,7 +88,7 @@ function course(c, N, W, stop) {
 // facade: { z, w, d, road } the monument's line (its middle's z), its footprint, and how far its road reaches in front
 export async function growMap({ seed = 1, radius = 300, device = null, N = 128, years = 150000, riverZ = 150, res = 2,
                                 meadow = { x0: -30, x1: 30, z0: -30, z1: 12 }, facade = { z: -80, w: 60, d: 50, road: 20 },
-                                onProgress = null } = {}) {
+                                onProgress = null, keep = null } = {}) {
   // ---- GROW (the lab's ages on the GPU: most of a start's waiting -- so pregen/ keeps the grown land by its seed, the
   //      fields the rest of this reads, and a land it has is fetched instead of grown)
   const mk = pregenOn() ? mapKey({ seed, N, years, preset: "river" }) : null;
@@ -108,7 +108,7 @@ export async function growMap({ seed = 1, radius = 300, device = null, N = 128, 
     if (mk) { pregenMiss("map", String(seed), mk); if (PREGEN.record) recordFor("maps", mk, { buf: packMap(grown), seed }); }
   }
   const { dx } = grown, outlets = PRESETS.river.outlets.map(([x, y, w]) => [x * (N - 1) * dx, y * (N - 1) * dx, w]);   // (where the river leaves the lab, m)
-  return shapeMap({ ...grown, N, outlets, falls: grown.stats.falls }, { seed, radius, riverZ, res, meadow, facade });
+  return shapeMap({ ...grown, N, outlets, falls: grown.stats.falls }, { seed, radius, riverZ, res, meadow, facade, keep });
 }
 
 // SHAPE: the world cut out of a grown land and made ready for it -- CUT, UPSCALE, SITES, SETTLE, CARVE, WATER above.
@@ -124,7 +124,7 @@ export async function growMap({ seed = 1, radius = 300, device = null, N = 128, 
 // `main`: the big river's cells, inlet to outlet, where the land knows them (else traced down its water from the inlet)
 export function shapeMap({ H, W, Q, N, dx, inlet, outlets, falls }, { seed = 1, radius = 300, riverZ = 150, res = 2,
                           meadow = { x0: -30, x1: 30, z0: -30, z1: 12 }, facade = { z: -80, w: 60, d: 50, road: 20 },
-                          score = null, siteCost = null, detail = 1, round = false, main: mainCells = null } = {}) {
+                          score = null, siteCost = null, detail = 1, round = false, main: mainCells = null, keep = null } = {}) {
   const Qin = inlet[2];
   const sH = sampler(H, N, dx), sW = sampler(W, N, dx), sD = sampler(W.map((w, i) => w - H[i]), N, dx);
   const slopeAt = (u, v) => Math.hypot(sH.lin(u + 5, v) - sH.lin(u - 5, v), sH.lin(u, v + 5) - sH.lin(u, v - 5)) / 10;
@@ -225,6 +225,8 @@ export function shapeMap({ H, W, Q, N, dx, inlet, outlets, falls }, { seed = 1, 
     for (let xb = -radius + 95; xb <= radius - 135; xb += 5) {
       const zc = riverZf(xb), fallAcross = Math.abs(rAt(lvl, xb - 70) - rAt(lvl, xb + 125));
       if (zc + hw0 + 130 > radius || zc - hw0 - 85 < -radius || fallAcross > quiet) continue;
+      // (`keep(rect, riverZf)`: a world with open water (sea.js) keeps the town and its farms clear of it)
+      if (keep && !(keep({ x0: xb - 70, x1: xb + 125, z0: zc + hw0 + 6, z1: zc + hw0 + 122 }, riverZf) && keep({ x0: xb - 65, x1: xb + 105, z0: zc - hw0 - 82, z1: zc - hw0 - 5 }, riverZf))) continue;
       // (and its piers, 4.9 m either side of the middle (village/bridge zPier), in water a pier can be footed in -- the bridge
       //  stands them on the bed; a gorge's deep channel is no bridge site)
       let deep = 0;
@@ -240,7 +242,8 @@ export function shapeMap({ H, W, Q, N, dx, inlet, outlets, falls }, { seed = 1, 
       // (and banks about as high over the water as a town's quay wants, 2.2 m: less to settle)
       const r = t.r + 0.7 * f.r + fallAcross
               + 0.6 * (Math.abs(t.mean - rAt(lvl, xb) - 2.2) + Math.abs(f.mean - rAt(lvl, xb) - 2.2))   // (a terrace over a gorge: all of it cut down to the water)
-              + (siteCost ? siteCost(xb, rAt(lvl, xb) + 2.2, groundAt, (x, z) => { const [u, v] = toLab(WIN, x, z); return sD.lin(u, v) > 0.5; }, zc) : 0);
+              + (siteCost ? siteCost(xb, rAt(lvl, xb) + 2.2, groundAt, (x, z) => { const [u, v] = toLab(WIN, x, z); return sD.lin(u, v) > 0.5; }, zc) : 0)
+              + (keep?.cost ? keep.cost({ x0: xb - 70, x1: xb + 125, z0: zc + hw0 + 6, z1: zc + hw0 + 122 }, riverZf) : 0);   // (and near its shore)
       if (r < bestR) { bestR = r; bridgeX = xb; }
     }
     if (bestR < Infinity) break;
@@ -252,6 +255,7 @@ export function shapeMap({ H, W, Q, N, dx, inlet, outlets, falls }, { seed = 1, 
   let monumentX = 0, bestM = Infinity;
   for (let x = -radius + facade.w / 2 + 30; x <= radius - facade.w / 2 - 30; x += 5) {   // (its road's turning loops too)
     if (x + facade.w / 2 > meadow.x0 - 10 && x - facade.w / 2 < meadow.x1 + 10 && facade.z + facade.d / 2 > meadow.z0) continue;
+    if (keep && !keep({ x0: x - facade.w / 2 - 8, x1: x + facade.w / 2 + 8, z0: facade.z - facade.d / 2 - 8, z1: facade.z + facade.d / 2 + facade.road }, riverZf)) continue;
     const q = rough(x - facade.w / 2, x + facade.w / 2, facade.z - facade.d / 2, facade.z + facade.d / 2 + facade.road);
     const r = q.r + 0.15 * Math.abs(q.mean - townH);
     if (r < bestM) { bestM = r; monumentX = x; }

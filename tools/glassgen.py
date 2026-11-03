@@ -5,37 +5,31 @@ import json, os
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "assets", "patterns", "glass.json")
 
-# 0 cobalt 1 ruby 2 gold 3 emerald 4 white 5 flesh 6 purple 7 sky blue 8 amber 9 dark blue
-CHARTRES = ["#1d44a8", "#b0161c", "#e4ad22", "#1f7a45", "#dfe0cc", "#e0b596", "#6a2c7e", "#4f83c8", "#c9721c", "#142c74"]
+# 0 cobalt 1 ruby 2 gold 3 emerald 4 white 5 flesh 6 purple 7 sky blue 8 amber 9 dark blue 10 brown 11 murrey 12 olive 13 grey (the canon's tints, assets/story/canon.json, in this order)
+CHARTRES = ["#1d44a8", "#b0161c", "#e4ad22", "#1f7a45", "#dfe0cc", "#e0b596", "#6a2c7e", "#4f83c8", "#c9721c", "#142c74", "#7a4b28", "#a8605c", "#6d7a38", "#8e9088"]
 PALETTES = {
     "chartres": CHARTRES,
     # (brighter and more red and violet, later: the Sainte-Chapelle's)
-    "paris": ["#3550b4", "#c0182c", "#efc437", "#27884e", "#e8e6d4", "#e6bd9f", "#8a3596", "#6c98d8", "#de8a24", "#1d3288"],
-    "cologne": ["#2a58a6", "#a72422", "#e8c04b", "#3b8253", "#eae5cf", "#e5c0a4", "#764084", "#79a4d2", "#d08a2c", "#1e3a7e"],
+    "paris": ["#3550b4", "#c0182c", "#efc437", "#27884e", "#e8e6d4", "#e6bd9f", "#8a3596", "#6c98d8", "#de8a24", "#1d3288", "#85522c", "#c26a6c", "#7c8a3c", "#9a9c94"],
+    "cologne": ["#2a58a6", "#a72422", "#e8c04b", "#3b8253", "#eae5cf", "#e5c0a4", "#764084", "#79a4d2", "#d08a2c", "#1e3a7e", "#845a34", "#b4736a", "#7c8848", "#a0a096"],
     # (the white glass of a Cistercian: shades of grey-green and straw, a little colour)
-    "grisaille": ["#cfd2bb", "#bcc2a8", "#dcd8bd", "#a8b49d", "#e9e6d1", "#d6b98c", "#a4493f", "#7f97a8", "#c9a657", "#8d9a88"],
+    "grisaille": ["#cfd2bb", "#bcc2a8", "#dcd8bd", "#a8b49d", "#e9e6d1", "#d6b98c", "#a4493f", "#7f97a8", "#c9a657", "#8d9a88", "#a08a60", "#c49a8a", "#a8ac78", "#b4b6a4"],
 }
 
 def rose(about, rings, ground=0, palette="chartres", **k):
     # (the armature: every ring's ground is sectors, its irons and leads running out from the eye; so a pane of ground holds one shape, not all of them)
     back = [{"shape": "sector", "r0": r["r0"], "r1": 1.02 if r is rings[-2] else rings[i + 1]["r0"] if rings[i + 1].get("r0") else r["r1"], "n": r["n"], "turn": r.get("turn", 0), "fill": ground, "role": "ground"} for i, r in enumerate(rings) if r.get("n", 1) > 1]
     rings = back + rings
-    L = {"kind": "glass", "form": "rose", "opening": {"shape": "circle"}, "ground": ground, "rings": rings, "lead": .011, "minPane": .00035, "maxPane": .02, "seed": 3, **k}
+    L = {"kind": "glass", "form": "rose", "opening": {"shape": "circle"}, "ground": ground, "rings": rings, "lead": .011, "minPane": .00035, "maxPane": .03, "seed": 3, **k}
     return {"size": [2, 2], "repeat": False, "palette": palette, "palettes": list(PALETTES), "ground": 0, "res": 512, "_about": about, "layers": [L]}
 
-# THE CAST. Slots: 0 cobalt 1 ruby 2 gold 3 emerald 4 white 5 flesh 6 purple 7 sky 8 amber 9 dark blue
-PETER = {"pose": "book", "robe": 7, "mantle": 2, "beard": 4, "hair": 4, "halo": 8, "holdL": "key", "holdR": "book", "attr": 2}
-PAUL = {"pose": "bless", "robe": 3, "mantle": 1, "beard": 8, "hair": 8, "halo": 2, "holdR": "sword", "attr": 4}
-BISHOP = {"pose": "bless", "robe": 4, "mantle": 6, "beard": 4, "hair": 4, "halo": 2, "mitre": 2, "holdR": "staff", "attr": 2}
-VIRGIN = {"pose": "offer", "robe": 1, "mantle": 0, "veil": 4, "halo": 2, "crown": 2}
-MAJESTY = {"pose": "sit", "robe": 1, "mantle": 0, "beard": 8, "hair": 8, "halo": 2, "crossNimbus": True, "bless": "L", "holdR": "book", "attr": 4}
-ANGEL = {"pose": "orant", "robe": 4, "mantle": 2, "hair": 8, "halo": 2, "wings": 7}
-MARTYR = {"pose": "orant", "robe": 2, "mantle": 1, "veil": 3, "halo": 4, "holdL": "palm", "attr": 3}
-KING = {"pose": "stand", "robe": 6, "mantle": 1, "beard": 8, "hair": 8, "crown": 2, "holdL": "staff", "attr": 2}
 
 def stone(lights, about):
-    L = {"kind": "glass", "form": "stone", "opening": {"shape": "circle"}, "lights": lights, "ground": 9, "fills": [0, 1], "hub": 2, "roundel": [1, 3, 2], "cast": [ANGEL, PETER, MARTYR, BISHOP, ANGEL, PAUL, KING, VIRGIN], "hubCast": [{**MAJESTY, "pose": "bless"}], "lead": .009, "minPane": .0004, "maxPane": .08, "depth": .4, "seed": 3}
+    L = {"kind": "glass", "form": "stone", "plan": {"kind": "rose"}, "opening": {"shape": "circle"}, "lights": lights, "ground": 9, "fills": [0, 1], "hub": 2, "roundel": [1, 3, 2], "lead": .009, "minPane": .0004, "maxPane": .08, "depth": .4, "seed": 3}
     return {"size": [2, 2], "repeat": False, "palette": "chartres", "palettes": list(PALETTES), "ground": 0, "res": 512, "_about": about, "layers": [L]}
+
+def rings(about, like, palette="chartres", ground=0):
+    return rose(about, [{"r1": .15, "fill": 2}], ground=ground, palette=palette, plan={"kind": "rings", "like": like})
 
 PATTERNS = {
     "rose wheel": rose("a wheel: spokes of lancet lights about a small eye, a ring of roundels", [
@@ -43,18 +37,8 @@ PATTERNS = {
         {"shape": "round", "r0": .74, "r1": .98, "n": 12, "turn": .5, "fills": [0, 1], "inner": {"k": .55, "fills": [2, 3]}},
         {"r1": .16, "fill": 2},
     ], ground=9),
-    "rose chartres": rose("Chartres, the west rose: an eye, petals, then rings of squares and quatrefoils, cobalt ground", [
-        {"shape": "round", "r0": .14, "r1": .44, "n": 12, "fills": [1], "inner": {"k": .62, "fills": [2]}},
-        {"shape": "square", "r0": .44, "r1": .66, "n": 12, "fills": [1, 2], "inner": {"k": .55, "fills": [4]}},
-        {"shape": "quatrefoil", "r0": .66, "r1": .98, "n": 12, "fills": [0, 1], "turn": .5, "inner": {"k": .55, "fills": [2, 3]}},
-        {"r1": .15, "fill": 2}, {"r1": .08, "fill": 1},
-    ], ground=0),
-    "rose paris": rose("Paris, the north rose: twelve lights doubling to twenty-four, then twenty-four roundels at the rim", [
-        {"shape": "petal", "r0": .13, "r1": .46, "n": 12, "fills": [0, 1], "gap": .04, "inner": {"k": .5, "fills": [2, 4]}},
-        {"shape": "petal", "r0": .46, "r1": .78, "n": 24, "fills": [1, 0, 6, 0], "gap": .04, "inner": {"k": .45, "fills": [2, 4]}},
-        {"shape": "round", "r0": .78, "r1": .985, "n": 24, "turn": .5, "fills": [0, 1, 2, 1], "inner": {"k": .5, "fills": [4, 2]}},
-        {"r1": .13, "fill": 2},
-    ], ground=9, palette="paris"),
+    "rose chartres": rings("Chartres's kind: a cobalt ground, an eye and rings of roundels and squares, the seed's in number and in people", "chartres"),
+    "rose paris": rings("Paris's kind: lights doubling outwards, the seed's", "paris", palette="paris", ground=9),
     "rose stone 8": stone(8, "the glass for a stone rose of eight lights: what the mason's bars enclose"),
     "rose stone 10": stone(10, "of ten lights"),
     "rose stone 12": stone(12, "of twelve lights"),
@@ -69,36 +53,40 @@ def light(about, panels, h=3, palette="chartres", border=None, res=512, **k):
     # (with no border, or one up its sides only, the opening runs past the tile, so no lead follows that edge: a field that repeats)
     grow = 1.04 if not B.get("t") else 1
     tall = 1.04 if B.get("sides") else grow
-    L = {"kind": "glass", "form": "light", "lie": h > 1.3, "opening": {"shape": "rect", "w": grow, "h": h * tall}, "border": B, "panels": panels, "lead": .0075, "minPane": .00012, "maxPane": .08, "maxAspect": 6, "depth": .3, "ground": [1, 9], "fleuron": 7, "pearl": 4, "seed": 3, **k}
+    L = {"kind": "glass", "form": "light", "lie": h > 1.3, "opening": {"shape": "rect", "w": grow, "h": h * tall}, "border": B, "panels": panels, "lead": .0055 if k.get("plan") else .0075, "minPane": .00012, "maxPane": .08, "maxAspect": 6, "depth": .3, "ground": [1, 9], "fleuron": 7, "pearl": 4, "seed": 3, **k}
     if not L["lie"]: return {"size": [1, h], "repeat": True, "palette": palette, "palettes": list(PALETTES), "ground": 0, "res": res, "_about": about, "layers": [L]}
     # (kept lying, over as many layers of the game's tile array as it is long: a finish's rule gives it turn: 90)
     across = max(1, round(h))
     return {"size": [h, 1], "across": across, "repeat": True, "palette": palette, "palettes": list(PALETTES), "ground": 0, "res": res * across, "_about": about, "layers": [L]}
 
-def saint(who, about, ground=1, arch=None, **k):
-    return light(about, [{"form": "saint", "h": 1, "cast": [who], "ground": ground, "canopy": 2, "canopy2": 4, "base": 3, "spring": .74, **({"arch": arch} if arch is not None else {})}], **k)
-
-SHIP = {"form": "medallion", "shape": "circle", "ground": 7, "cast": [{**PETER, "pose": "stand", "holdL": None, "holdR": None, "x": -14, "size": .55, "y": 22, "turn": .6}, {**PAUL, "holdR": None, "pose": "point", "x": 16, "size": .55, "y": 22, "turn": -.6}], "props": [{"is": "ship", "y": 8, "size": .85}, {"is": "wave", "y": 2, "size": 1.1}]}
-ANNUNCIATION = {"form": "medallion", "shape": "circle", "ground": 0, "cast": [{**ANGEL, "pose": "point", "x": -22, "size": .78, "turn": .6}, {**VIRGIN, "pose": "stand", "crown": None, "x": 24, "size": .78, "turn": -.6}]}
-KINGS = {"form": "medallion", "shape": "circle", "ground": 0, "cast": [{**KING, "x": -24, "size": .72, "turn": .6}, {**KING, "pose": "offer", "robe": 3, "x": 2, "size": .72, "turn": .6}], "props": [{"is": "tower", "x": 34, "size": .8, "fill": 4}, {"is": "ground", "y": 0, "fill": 3}]}
-ENCOUNTER = {"form": "medallion", "shape": "circle", "ground": 0, "cast": [{**BISHOP, "x": -24, "size": .82, "turn": .6}, {**KING, "x": 26, "size": .82, "turn": -.6}]}
-THRONED = {"form": "medallion", "shape": "quatrefoil", "ground": 0, "cast": [{**MAJESTY, "size": .95}], "props": [{"is": "throne", "fill": 2, "size": .95}]}
-ANGELS = {"form": "medallion", "shape": "lozenge", "ground": 0, "cast": [{**ANGEL, "size": .72}], "drop": .25}
 WHITE = {"palette": "grisaille", "border": {"t": .06, "sides": True, "fills": [6, 8], "line": 3, "block": .18}}
 
+def story(about, plan, h=3.3, **k): return light(about, [], h=h, plan=plan, **k)
+ALL = ["infancy", "passion", "genesis", "lives"]
 PATTERNS.update({
-    "saint peter": saint(PETER, "Saint Peter under a canopy, a ruby ground, as in Chartres's choir clerestory"),
-    "saint paul": saint(PAUL, "Saint Paul, on cobalt", ground=0, arch=1),
-    "saint bishop": saint(BISHOP, "a bishop, on cobalt", ground=0, arch=1),
-    "saint virgin": saint(VIRGIN, "the Virgin, on ruby", arch=0),
-    "saint king": saint(KING, "a king, on ruby", arch=0),
-    "saint martyr": saint(MARTYR, "a martyr with her palm, on cobalt", ground=0, arch=1),
-    "medallion stack": light("three medallions on a red and blue diaper: a story told upwards", [ENCOUNTER, THRONED, ANGELS], h=3.3),
-    "medallion story": light("a narrative light: a ship on the sea, an annunciation, the three kings at a tower", [SHIP, ANNUNCIATION, KINGS], h=3.3),
-    "medallion ship": light("one medallion, for a short light", [SHIP], h=1.1),
-    "medallion annunciation": light("one medallion: an annunciation", [ANNUNCIATION], h=1.1),
-    "medallion kings": light("one medallion: the kings", [KINGS], h=1.1),
-    "medallion majesty": light("one medallion: a majesty", [THRONED], h=1.1),
+    # (a plan names the subject; the seed says the layout, the run of the story, the dress, border and ground: glass/window.js. The first names the finishes use, each still that subject)
+    "saint peter": story("Saint Peter under a canopy, with what the seed puts with him", {"kind": "saint", "who": "peter"}, h=3),
+    "saint paul": story("Saint Paul", {"kind": "saint", "who": "paul"}, h=3),
+    "saint bishop": story("a bishop saint", {"kind": "saint", "who": "nicholas"}, h=3),
+    "saint virgin": story("the Virgin, crowned", {"kind": "saint", "who": "mary-queen"}, h=3),
+    "saint king": story("a king", {"kind": "saint", "who": "louis"}, h=3),
+    "saint martyr": story("a martyr with her palm", {"kind": "saint", "who": "agnes"}, h=3),
+    "saint any": story("any of forty saints, told apart by what they hold and what they wear", {"kind": "saint"}, h=3),
+    "medallion stack": story("medallions on a diaper: a story told upwards", {"kind": "story", "cycles": ALL, "layout": "stack"}),
+    "medallion story": story("a narrative light, its layout the seed's: medallions, clusters, registers, a band in white, a Tree of Jesse", {"kind": "story", "cycles": ALL}),
+    "medallion ship": story("one panel, for a short light: the apostles' boat on the sea", {"kind": "story", "scene": "ship"}, h=1.1),
+    "medallion annunciation": story("one panel: the Annunciation", {"kind": "story", "scene": "annunciation"}, h=1.1),
+    "medallion kings": story("one panel: the Adoration of the Magi", {"kind": "story", "scene": "magi"}, h=1.1),
+    "medallion majesty": story("one panel: Christ in Majesty", {"kind": "story", "scene": "majesty"}, h=1.1),
+    "window infancy": story("the Infancy of Christ", {"kind": "story", "cycles": ["infancy"]}),
+    "window passion": story("the Passion, read from the foot", {"kind": "story", "cycles": ["passion"]}),
+    "window genesis": story("the Old Testament, from Eden to Jonah", {"kind": "story", "cycles": ["genesis"]}),
+    "window lives": story("the lives of the saints", {"kind": "story", "cycles": ["lives"]}),
+    "window jesse": story("the Tree of Jesse: his line in ovals on a vine, up to the Virgin and Christ", {"kind": "tree"}),
+    "window guilds": story("what the guilds gave at Chartres, and signed with their trades", {"kind": "story", "cycles": ["guilds"]}),
+    "panel months": story("a labour of the months", {"kind": "story", "cycles": ["months"]}, h=1.1),
+    "panel guild": story("a guild's signature, low in its window", {"kind": "story", "cycles": ["guilds"]}, h=1.1),
+    "panel any": story("one scene, any of them", {"kind": "story", "cycles": ALL}, h=1.1),
     "grisaille lattice": light("white glass painted with vine, the Cistercian's", [{"form": "grisaille", "h": 1, "d": 1 / 6}], h=1, fleuron=None, **WHITE),
     "grisaille strap": light("grisaille with a strapwork circle, colour at the knots", [{"form": "grisaille", "h": 1, "d": 1 / 6, "strap": {"n": 1, "fill": 4, "knot": 6, "knot2": 8}}], h=1, **WHITE),
     "quarries": light("plain diamonds in lead: a parish's window", [{"form": "grisaille", "h": 1, "vine": False, "d": .2}], h=1, palette="grisaille", border={"t": .035, "sides": True, "fills": [4], "line": 4, "block": .22}, minPane=.00006),

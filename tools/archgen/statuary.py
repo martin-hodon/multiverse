@@ -11,7 +11,7 @@ def statue(at, **d):
     kind (man | woman), pose (stand | guard | sit | lie), style (greek | roman | gothic | chinese) or outfit,
     hold { R, L } (items: its right hand, its left), grip { R, L } (how that hand holds it, over its pose's: statuary.json
     `grips` -- "shield rest"), wings (raised | spread | folded: an angel's, a Victory's --
-    assets/people/statuary.json `wings`), stone (marble | bronze | gold | limestone | painted | chryselephantine | ivory:
+    assets/people/statuary.json `wings`), stone (marble | bronze | gold | limestone | painted | chryselephantine | sandstone:
     shell.js STONES), scale, seed, face"""
     return {"type": "marker", "role": "statue", "at": [[round(at[0], 3), round(at[1], 3), round(at[2], 3), 0]], "data": d}
 

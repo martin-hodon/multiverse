@@ -1,0 +1,1505 @@
+{
+ "name": "Ships",
+ "kind": "ships",
+ "_about": "the world's ships (written by tools/shipgen.py; see docs/ships.md). `cultures` keyed like goods.json -- the world's period, else its dress's first style, else default -- each listing its merchant, war and small craft as [ship, weight]. `ships`: per ship its item, type (merchant|war|small), drive (sail|oar|paddle|pole|sail+oar|sail+paddle), crew [min, max], hull length [min, max] m, beam m, draught m (keel to the waterline marker, at the middle size; for the centre-framed boats the waterline is their origin), cargo {tons, holds: its hold markers}, `params` the state params it takes, `frame` stern (x = 0 the stern, +x the bow, y up from the keel, +z starboard) or centre (the origin at the waterline amidships). `states`: the params a pose passes to buildItem. `anchors`: the marker roles every shipgen ship carries.",
+ "states": {
+  "moored": {
+   "set": "furled",
+   "oars": "shipped"
+  },
+  "sailing": {
+   "set": "full",
+   "oars": "shipped"
+  },
+  "rowing": {
+   "set": "furled",
+   "oars": "out"
+  },
+  "under way": {
+   "set": "full",
+   "oars": "out"
+  }
+ },
+ "anchors": {
+  "waterline": "one, amidships on the centre line at the load waterline; data {draught}: sink the ship until it sits at the water's surface",
+  "moor": "two, data {end: bow|stern}: on the bitts (a decked ship) or the stem- and sternpost heads -- where the lines run to the quay's bollards",
+  "gangplank": "two, data {side: starboard|port, deck}: on the rail amidships, its yaw outboard -- the plank's inboard end; people board here",
+  "hold": "one per hatch (data {i, w, l, floor}) or per stowage place on an open boat: where cargo is lowered and stowed",
+  "helm": "one: where the steersman stands (at the tiller, the wheel, the steering oar)"
+ },
+ "ships": {
+  "dugout": {
+   "item": "items/ships/dugout",
+   "name": "Dugout canoe",
+   "type": "small",
+   "drive": "paddle",
+   "crew": [
+    1,
+    3
+   ],
+   "length": [
+    4.2,
+    6
+   ],
+   "beam": 0.72,
+   "draught": 0.22,
+   "cargo": {
+    "tons": 0.3,
+    "holds": 1
+   },
+   "era": "-8000-1900",
+   "region": "everywhere",
+   "frame": "stern",
+   "params": []
+  },
+  "reed-boat": {
+   "item": "items/ships/reed-boat",
+   "name": "Reed boat",
+   "type": "small",
+   "drive": "paddle",
+   "crew": [
+    1,
+    3
+   ],
+   "length": [
+    4,
+    6
+   ],
+   "beam": 1.4,
+   "draught": 0.28,
+   "cargo": {
+    "tons": 0.3,
+    "holds": 1
+   },
+   "era": "-4000-1900",
+   "region": "Egypt, Mesopotamia, Lake Titicaca",
+   "frame": "stern",
+   "params": []
+  },
+  "egyptian-boat": {
+   "item": "items/ships/egyptian-boat",
+   "name": "Egyptian river boat",
+   "type": "merchant",
+   "drive": "sail+oar",
+   "crew": [
+    6,
+    14
+   ],
+   "length": [
+    12,
+    16
+   ],
+   "beam": 3.36,
+   "draught": 0.71,
+   "cargo": {
+    "tons": 10,
+    "holds": 2
+   },
+   "era": "-2500--500",
+   "region": "Egypt",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "trireme": {
+   "item": "items/ships/trireme",
+   "name": "Trireme",
+   "type": "war",
+   "drive": "sail+oar",
+   "crew": [
+    170,
+    200
+   ],
+   "length": [
+    35,
+    38
+   ],
+   "beam": 5.47,
+   "draught": 1.26,
+   "cargo": {
+    "tons": 5,
+    "holds": 1
+   },
+   "era": "-550--300",
+   "region": "Greece, Phoenicia, Rome",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "roman-merchant": {
+   "item": "items/ships/roman-merchant",
+   "name": "Roman merchantman",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    10,
+    20
+   ],
+   "length": [
+    22,
+    28
+   ],
+   "beam": 8.0,
+   "draught": 2.4,
+   "cargo": {
+    "tons": 150,
+    "holds": 2
+   },
+   "era": "-100-400",
+   "region": "the Mediterranean",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "longship": {
+   "item": "items/ships/longship",
+   "name": "Longship",
+   "type": "war",
+   "drive": "sail+oar",
+   "crew": [
+    30,
+    70
+   ],
+   "length": [
+    20,
+    28
+   ],
+   "beam": 4.8,
+   "draught": 0.91,
+   "cargo": {
+    "tons": 5,
+    "holds": 1
+   },
+   "era": "800-1100",
+   "region": "Scandinavia",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "knarr": {
+   "item": "items/ships/knarr",
+   "name": "Knarr",
+   "type": "merchant",
+   "drive": "sail+oar",
+   "crew": [
+    6,
+    12
+   ],
+   "length": [
+    14,
+    18
+   ],
+   "beam": 4.8,
+   "draught": 1.19,
+   "cargo": {
+    "tons": 25,
+    "holds": 2
+   },
+   "era": "800-1200",
+   "region": "Scandinavia, the North Atlantic",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "cog": {
+   "item": "items/ships/cog",
+   "name": "Cog",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    8,
+    20
+   ],
+   "length": [
+    20,
+    26
+   ],
+   "beam": 7.13,
+   "draught": 2.35,
+   "cargo": {
+    "tons": 100,
+    "holds": 2
+   },
+   "era": "1200-1450",
+   "region": "the Hanseatic north",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "carrack": {
+   "item": "items/ships/carrack",
+   "name": "Carrack",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    40,
+    100
+   ],
+   "length": [
+    28,
+    36
+   ],
+   "beam": 9.6,
+   "draught": 3.46,
+   "cargo": {
+    "tons": 400,
+    "holds": 2
+   },
+   "era": "1450-1600",
+   "region": "Portugal, Spain, Genoa, England",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "caravel": {
+   "item": "items/ships/caravel",
+   "name": "Caravel",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    15,
+    25
+   ],
+   "length": [
+    18,
+    24
+   ],
+   "beam": 5.88,
+   "draught": 1.71,
+   "cargo": {
+    "tons": 60,
+    "holds": 2
+   },
+   "era": "1440-1550",
+   "region": "Portugal, Spain",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "galleon": {
+   "item": "items/ships/galleon",
+   "name": "Galleon",
+   "type": "war",
+   "drive": "sail",
+   "crew": [
+    100,
+    250
+   ],
+   "length": [
+    40,
+    48
+   ],
+   "beam": 11.44,
+   "draught": 4.26,
+   "cargo": {
+    "tons": 500,
+    "holds": 2
+   },
+   "era": "1550-1650",
+   "region": "Spain, England, the Netherlands",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "galley": {
+   "item": "items/ships/galley",
+   "name": "Galley",
+   "type": "war",
+   "drive": "sail+oar",
+   "crew": [
+    200,
+    350
+   ],
+   "length": [
+    40,
+    48
+   ],
+   "beam": 5.72,
+   "draught": 1.14,
+   "cargo": {
+    "tons": 20,
+    "holds": 1
+   },
+   "era": "1300-1750",
+   "region": "the Mediterranean",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "dhow": {
+   "item": "items/ships/dhow",
+   "name": "Dhow",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    12,
+    30
+   ],
+   "length": [
+    18,
+    26
+   ],
+   "beam": 5.94,
+   "draught": 1.89,
+   "cargo": {
+    "tons": 100,
+    "holds": 2
+   },
+   "era": "800-1900",
+   "region": "Arabia, the Persian Gulf, East Africa, India",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "junk": {
+   "item": "items/ships/junk",
+   "name": "Junk",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    20,
+    60
+   ],
+   "length": [
+    28,
+    40
+   ],
+   "beam": 8.84,
+   "draught": 2.65,
+   "cargo": {
+    "tons": 200,
+    "holds": 2
+   },
+   "era": "1200-1900",
+   "region": "China, South-East Asia",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "sampan": {
+   "item": "items/ships/sampan",
+   "name": "Sampan",
+   "type": "small",
+   "drive": "oar",
+   "crew": [
+    1,
+    4
+   ],
+   "length": [
+    5,
+    7
+   ],
+   "beam": 1.62,
+   "draught": 0.26,
+   "cargo": {
+    "tons": 1,
+    "holds": 1
+   },
+   "era": "1000-1900",
+   "region": "China, South-East Asia",
+   "frame": "stern",
+   "params": []
+  },
+  "outrigger-canoe": {
+   "item": "items/ships/outrigger-canoe",
+   "name": "Outrigger canoe",
+   "type": "small",
+   "drive": "sail+paddle",
+   "crew": [
+    1,
+    4
+   ],
+   "length": [
+    7,
+    10
+   ],
+   "beam": 0.85,
+   "draught": 0.29,
+   "cargo": {
+    "tons": 0.3,
+    "holds": 1
+   },
+   "era": "-1000-1900",
+   "region": "Polynesia, Micronesia, Melanesia",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "voyaging-canoe": {
+   "item": "items/ships/voyaging-canoe",
+   "name": "Voyaging canoe",
+   "type": "merchant",
+   "drive": "sail+paddle",
+   "crew": [
+    12,
+    30
+   ],
+   "length": [
+    15,
+    20
+   ],
+   "beam": 1.57,
+   "draught": 0.71,
+   "cargo": {
+    "tons": 5,
+    "holds": 1
+   },
+   "era": "800-1800",
+   "region": "Polynesia",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "gondola": {
+   "item": "items/ships/gondola",
+   "name": "Gondola",
+   "type": "small",
+   "drive": "oar",
+   "crew": [
+    1,
+    2
+   ],
+   "length": [
+    10.5,
+    11.5
+   ],
+   "beam": 1.42,
+   "draught": 0.25,
+   "cargo": {
+    "tons": 0.5,
+    "holds": 1
+   },
+   "era": "1500-1900",
+   "region": "Venice",
+   "frame": "stern",
+   "params": []
+  },
+  "birchbark-canoe": {
+   "item": "items/ships/birchbark-canoe",
+   "name": "Birchbark canoe",
+   "type": "small",
+   "drive": "paddle",
+   "crew": [
+    1,
+    4
+   ],
+   "length": [
+    4.5,
+    6
+   ],
+   "beam": 0.94,
+   "draught": 0.18,
+   "cargo": {
+    "tons": 0.3,
+    "holds": 1
+   },
+   "era": "-1000-1900",
+   "region": "North America",
+   "frame": "stern",
+   "params": []
+  },
+  "kayak": {
+   "item": "items/ships/kayak",
+   "name": "Kayak",
+   "type": "small",
+   "drive": "paddle",
+   "crew": [
+    1,
+    1
+   ],
+   "length": [
+    5,
+    6
+   ],
+   "beam": 0.56,
+   "draught": 0.15,
+   "cargo": {
+    "tons": 0.05,
+    "holds": 1
+   },
+   "era": "-2000-1900",
+   "region": "the Arctic: Inuit, Aleut",
+   "frame": "stern",
+   "params": []
+  },
+  "umiak": {
+   "item": "items/ships/umiak",
+   "name": "Umiak",
+   "type": "small",
+   "drive": "oar",
+   "crew": [
+    4,
+    12
+   ],
+   "length": [
+    8,
+    10
+   ],
+   "beam": 1.98,
+   "draught": 0.37,
+   "cargo": {
+    "tons": 1.5,
+    "holds": 1
+   },
+   "era": "-1000-1900",
+   "region": "the Arctic: Inuit",
+   "frame": "stern",
+   "params": [
+    "oars"
+   ]
+  },
+  "coracle": {
+   "item": "items/ships/coracle",
+   "name": "Coracle",
+   "type": "small",
+   "drive": "paddle",
+   "crew": [
+    1,
+    1
+   ],
+   "length": [
+    1.5,
+    1.8
+   ],
+   "beam": 1.52,
+   "draught": 0.2,
+   "cargo": {
+    "tons": 0.1,
+    "holds": 1
+   },
+   "era": "-500-1900",
+   "region": "Wales, Ireland, Iraq, India",
+   "frame": "stern",
+   "params": []
+  },
+  "fishing-boat": {
+   "item": "items/ships/fishing-boat",
+   "name": "Fishing boat",
+   "type": "small",
+   "drive": "sail+oar",
+   "crew": [
+    2,
+    6
+   ],
+   "length": [
+    6,
+    8
+   ],
+   "beam": 2.38,
+   "draught": 0.45,
+   "cargo": {
+    "tons": 2,
+    "holds": 1
+   },
+   "era": "1000-1900",
+   "region": "the coasts of Europe",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "skiff": {
+   "item": "items/ships/skiff",
+   "name": "Skiff",
+   "type": "small",
+   "drive": "oar",
+   "crew": [
+    1,
+    3
+   ],
+   "length": [
+    3.8,
+    5
+   ],
+   "beam": 1.5,
+   "draught": 0.25,
+   "cargo": {
+    "tons": 0.5,
+    "holds": 1
+   },
+   "era": "1200-1900",
+   "region": "everywhere",
+   "frame": "stern",
+   "params": [
+    "oars"
+   ]
+  },
+  "fluyt": {
+   "item": "items/ships/fluyt",
+   "name": "Fluyt",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    12,
+    20
+   ],
+   "length": [
+    28,
+    34
+   ],
+   "beam": 7.44,
+   "draught": 3.23,
+   "cargo": {
+    "tons": 300,
+    "holds": 2
+   },
+   "era": "1600-1750",
+   "region": "the Netherlands",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "xebec": {
+   "item": "items/ships/xebec",
+   "name": "Xebec",
+   "type": "war",
+   "drive": "sail+oar",
+   "crew": [
+    100,
+    300
+   ],
+   "length": [
+    30,
+    38
+   ],
+   "beam": 8.16,
+   "draught": 1.88,
+   "cargo": {
+    "tons": 30,
+    "holds": 1
+   },
+   "era": "1650-1800",
+   "region": "the Barbary coast, Spain, France",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "felucca": {
+   "item": "items/ships/felucca",
+   "name": "Felucca",
+   "type": "small",
+   "drive": "sail",
+   "crew": [
+    2,
+    5
+   ],
+   "length": [
+    10,
+    14
+   ],
+   "beam": 3.6,
+   "draught": 0.65,
+   "cargo": {
+    "tons": 6,
+    "holds": 1
+   },
+   "era": "1500-1900",
+   "region": "Egypt, the Levant",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "ship-of-the-line": {
+   "item": "items/ships/ship-of-the-line",
+   "name": "Ship of the line",
+   "type": "war",
+   "drive": "sail",
+   "crew": [
+    550,
+    750
+   ],
+   "length": [
+    50,
+    58
+   ],
+   "beam": 14.04,
+   "draught": 5.66,
+   "cargo": {
+    "tons": 300,
+    "holds": 2
+   },
+   "era": "1700-1800",
+   "region": "England, France, Spain",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "frigate": {
+   "item": "items/ships/frigate",
+   "name": "Frigate",
+   "type": "war",
+   "drive": "sail",
+   "crew": [
+    220,
+    300
+   ],
+   "length": [
+    42,
+    48
+   ],
+   "beam": 11.25,
+   "draught": 3.71,
+   "cargo": {
+    "tons": 150,
+    "holds": 2
+   },
+   "era": "1750-1800",
+   "region": "England, France, America",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "east-indiaman": {
+   "item": "items/ships/east-indiaman",
+   "name": "East Indiaman",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    100,
+    150
+   ],
+   "length": [
+    46,
+    54
+   ],
+   "beam": 13.0,
+   "draught": 5.24,
+   "cargo": {
+    "tons": 800,
+    "holds": 2
+   },
+   "era": "1700-1800",
+   "region": "England, the Netherlands, France, Sweden",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "punt-ship": {
+   "item": "items/ships/punt-ship",
+   "name": "Egyptian seagoing ship",
+   "type": "merchant",
+   "drive": "sail+oar",
+   "crew": [
+    30,
+    40
+   ],
+   "length": [
+    21,
+    25
+   ],
+   "beam": 4.83,
+   "draught": 0.96,
+   "cargo": {
+    "tons": 40,
+    "holds": 2
+   },
+   "era": "-2500--1000",
+   "region": "Egypt, the Red Sea",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "gaulos": {
+   "item": "items/ships/gaulos",
+   "name": "Phoenician merchantman",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    6,
+    15
+   ],
+   "length": [
+    18,
+    24
+   ],
+   "beam": 6.72,
+   "draught": 1.94,
+   "cargo": {
+    "tons": 150,
+    "holds": 2
+   },
+   "era": "-1100--300",
+   "region": "Phoenicia, Carthage, the Greek and Punic Mediterranean",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "dromon": {
+   "item": "items/ships/dromon",
+   "name": "Dromon",
+   "type": "war",
+   "drive": "sail+oar",
+   "crew": [
+    150,
+    230
+   ],
+   "length": [
+    30,
+    34
+   ],
+   "beam": 4.64,
+   "draught": 1.04,
+   "cargo": {
+    "tons": 15,
+    "holds": 1
+   },
+   "era": "500-1200",
+   "region": "Byzantium",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "kadirga": {
+   "item": "items/ships/kadirga",
+   "name": "Kadırga",
+   "type": "war",
+   "drive": "sail+oar",
+   "crew": [
+    250,
+    400
+   ],
+   "length": [
+    40,
+    46
+   ],
+   "beam": 5.59,
+   "draught": 1.17,
+   "cargo": {
+    "tons": 20,
+    "holds": 1
+   },
+   "era": "1450-1800",
+   "region": "the Ottoman Empire",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "hulk": {
+   "item": "items/ships/hulk",
+   "name": "Hulk",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    20,
+    40
+   ],
+   "length": [
+    28,
+    34
+   ],
+   "beam": 9.3,
+   "draught": 3.24,
+   "cargo": {
+    "tons": 300,
+    "holds": 2
+   },
+   "era": "1300-1550",
+   "region": "the Hanseatic north, England, the Low Countries",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "treasure-ship": {
+   "item": "items/ships/treasure-ship",
+   "name": "Treasure ship",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    300,
+    600
+   ],
+   "length": [
+    55,
+    64
+   ],
+   "beam": 13.69,
+   "draught": 3.94,
+   "cargo": {
+    "tons": 1500,
+    "holds": 3
+   },
+   "era": "1400-1500",
+   "region": "Ming China",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "bezaisen": {
+   "item": "items/ships/bezaisen",
+   "name": "Bezaisen",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    12,
+    18
+   ],
+   "length": [
+    24,
+    30
+   ],
+   "beam": 7.02,
+   "draught": 1.62,
+   "cargo": {
+    "tons": 150,
+    "holds": 2
+   },
+   "era": "1650-1870",
+   "region": "Edo Japan",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "atakebune": {
+   "item": "items/ships/atakebune",
+   "name": "Atakebune",
+   "type": "war",
+   "drive": "sail+oar",
+   "crew": [
+    100,
+    200
+   ],
+   "length": [
+    30,
+    42
+   ],
+   "beam": 10.8,
+   "draught": 1.9,
+   "cargo": {
+    "tons": 20,
+    "holds": 1
+   },
+   "era": "1550-1640",
+   "region": "Sengoku and early Edo Japan",
+   "frame": "stern",
+   "params": [
+    "set",
+    "oars"
+   ]
+  },
+  "maya-canoe": {
+   "item": "items/ships/maya-canoe",
+   "name": "Maya trading canoe",
+   "type": "merchant",
+   "drive": "paddle",
+   "crew": [
+    20,
+    30
+   ],
+   "length": [
+    14,
+    18
+   ],
+   "beam": 2.35,
+   "draught": 0.42,
+   "cargo": {
+    "tons": 3,
+    "holds": 2
+   },
+   "era": "-500-1550",
+   "region": "the Maya coasts: Yucatán, Belize, Honduras",
+   "frame": "stern",
+   "params": [
+    "oars"
+   ]
+  },
+  "koch": {
+   "item": "items/ships/koch",
+   "name": "Koch",
+   "type": "merchant",
+   "drive": "sail",
+   "crew": [
+    10,
+    15
+   ],
+   "length": [
+    18,
+    24
+   ],
+   "beam": 6.3,
+   "draught": 1.83,
+   "cargo": {
+    "tons": 30,
+    "holds": 2
+   },
+   "era": "1400-1800",
+   "region": "the Russian north: the Pomors of the White Sea, Mangazeya, Siberia's rivers",
+   "frame": "stern",
+   "params": [
+    "set"
+   ]
+  },
+  "barge": {
+   "item": "items/ships/barge",
+   "name": "River barge",
+   "type": "merchant",
+   "drive": "pole",
+   "crew": [
+    2,
+    4
+   ],
+   "length": [
+    10.8,
+    10.8
+   ],
+   "beam": 3.4,
+   "draught": 0.8,
+   "cargo": {
+    "tons": 30,
+    "holds": 10
+   },
+   "era": "1000-1900",
+   "region": "Europe's rivers",
+   "frame": "centre",
+   "params": []
+  },
+  "fisher-boat": {
+   "item": "items/ships/fisher-boat",
+   "name": "Fisherman's boat",
+   "type": "small",
+   "drive": "oar",
+   "crew": [
+    1,
+    3
+   ],
+   "length": [
+    4,
+    4
+   ],
+   "beam": 1.4,
+   "draught": 0.28,
+   "cargo": {
+    "tons": 0.5,
+    "holds": 1
+   },
+   "era": "-500-1900",
+   "region": "everywhere",
+   "frame": "centre",
+   "params": []
+  }
+ },
+ "cultures": {
+  "greek": {
+   "merchant": [
+    [
+     "gaulos",
+     2
+    ],
+    [
+     "roman-merchant",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "trireme",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "fishing-boat",
+     2
+    ],
+    [
+     "skiff",
+     1
+    ]
+   ]
+  },
+  "roman": {
+   "merchant": [
+    [
+     "roman-merchant",
+     3
+    ],
+    [
+     "gaulos",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "trireme",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "fishing-boat",
+     2
+    ],
+    [
+     "skiff",
+     1
+    ]
+   ]
+  },
+  "egyptian": {
+   "merchant": [
+    [
+     "punt-ship",
+     1
+    ],
+    [
+     "egyptian-boat",
+     2
+    ]
+   ],
+   "war": [
+    [
+     "punt-ship",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "reed-boat",
+     2
+    ],
+    [
+     "dugout",
+     1
+    ]
+   ]
+  },
+  "chinese": {
+   "merchant": [
+    [
+     "junk",
+     3
+    ],
+    [
+     "treasure-ship",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "treasure-ship",
+     1
+    ],
+    [
+     "junk",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "sampan",
+     1
+    ]
+   ]
+  },
+  "japanese": {
+   "merchant": [
+    [
+     "bezaisen",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "atakebune",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "sampan",
+     1
+    ],
+    [
+     "fisher-boat",
+     1
+    ]
+   ]
+  },
+  "indian": {
+   "merchant": [
+    [
+     "dhow",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "dhow",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "fishing-boat",
+     1
+    ],
+    [
+     "outrigger-canoe",
+     1
+    ]
+   ]
+  },
+  "maya": {
+   "merchant": [
+    [
+     "maya-canoe",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "maya-canoe",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "dugout",
+     1
+    ]
+   ]
+  },
+  "medieval": {
+   "merchant": [
+    [
+     "cog",
+     3
+    ],
+    [
+     "hulk",
+     2
+    ],
+    [
+     "knarr",
+     1
+    ],
+    [
+     "carrack",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "cog",
+     1
+    ],
+    [
+     "longship",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "fishing-boat",
+     2
+    ],
+    [
+     "skiff",
+     1
+    ]
+   ]
+  },
+  "byzantine": {
+   "merchant": [
+    [
+     "roman-merchant",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "dromon",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "fishing-boat",
+     1
+    ]
+   ]
+  },
+  "ottoman": {
+   "merchant": [
+    [
+     "galleon",
+     1
+    ],
+    [
+     "xebec",
+     1
+    ],
+    [
+     "dhow",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "kadirga",
+     2
+    ],
+    [
+     "galley",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "felucca",
+     1
+    ],
+    [
+     "skiff",
+     1
+    ]
+   ]
+  },
+  "islamic": {
+   "merchant": [
+    [
+     "dhow",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "galley",
+     1
+    ],
+    [
+     "dhow",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "felucca",
+     1
+    ],
+    [
+     "fishing-boat",
+     1
+    ]
+   ]
+  },
+  "russian": {
+   "merchant": [
+    [
+     "koch",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "longship",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "dugout",
+     1
+    ],
+    [
+     "skiff",
+     1
+    ]
+   ]
+  },
+  "industrial": {
+   "merchant": [
+    [
+     "east-indiaman",
+     1
+    ],
+    [
+     "fluyt",
+     2
+    ]
+   ],
+   "war": [
+    [
+     "ship-of-the-line",
+     1
+    ],
+    [
+     "frigate",
+     2
+    ]
+   ],
+   "small": [
+    [
+     "fishing-boat",
+     2
+    ],
+    [
+     "skiff",
+     1
+    ]
+   ]
+  },
+  "default": {
+   "merchant": [
+    [
+     "cog",
+     1
+    ],
+    [
+     "fluyt",
+     1
+    ]
+   ],
+   "war": [
+    [
+     "frigate",
+     1
+    ]
+   ],
+   "small": [
+    [
+     "fishing-boat",
+     2
+    ],
+    [
+     "skiff",
+     1
+    ]
+   ]
+  }
+ }
+}

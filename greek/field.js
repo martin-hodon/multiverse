@@ -4,6 +4,7 @@
 // Everything is one layer; cuts show the ground, which goes in last (paint.js).
 import { stream, pick } from "./rig.js";
 import { solveGroup } from "./scene.js";
+import { planDeck, shuffledDeck } from "../story/roles.js";
 import { silhouette, unlike, notch } from "./measure.js";
 import { paintPieces, paintGround, ringPath, linePath, TECHNIQUES } from "./paint.js";
 
@@ -78,25 +79,6 @@ function fitGroup(data, name, Z, w, h, opts) {
   return { G, ppu: Math.min(h * fill / Math.max(Z.sparse ? 0 : data.canon.man, G.height + 3), w * edge / (G.max - G.min)) };   // (a hand may reach the panel's side, never past: cut off there it is a stump; a scene's `press` asks for distance, and pays for it in size)
 }
 
-// which of a zone's scenes a tile's panels get, in order: `must` first, then each `shape` (how bodies are arranged; a scene's own name if it says none) its turn
-// in an order the seed picks, so a list longer than a tile leaves out different shapes on different tiles; then no two neighbours alike
-function planDeck(data, Z, s0) {
-  const r = stream(s0, "plan"), draw = (a) => a.splice(Math.floor(r() * a.length), 1)[0], shape = (i) => data.scenes[Z.scenes[i]].shape ?? Z.scenes[i];
-  const left = new Map(), taken = [];
-  Z.scenes.forEach((n, i) => { if (Z.must?.includes(n) && !taken.some((q) => Z.scenes[q] === n)) taken.push(i); else left.set(shape(i), [...(left.get(shape(i)) ?? []), i]); });
-  const turns = [...left.keys()], order = [], had = new Set(taken.map(shape));
-  while (turns.length) order.push(draw(turns));
-  order.sort((a, b) => had.has(a) - had.has(b));                       // (a shape `must` has brought comes round last)
-  const dealt = [];
-  while (order.some((q) => left.get(q).length)) for (const q of order) if (left.get(q).length) dealt.push(draw(left.get(q)));
-  const spare = dealt.splice(Math.max(0, Z.panels - taken.length));
-  taken.push(...dealt);
-  const deck = [];
-  while (taken.length) { const ok = taken.filter((i) => !deck.length || shape(i) !== shape(deck.at(-1))); const i = draw(ok.length ? ok : [...taken]); taken.splice(taken.indexOf(i), 1); deck.push(i); }
-  deck.spare = spare;                                                  // (whoever didn't get a panel: a stand-in where a panel's own scene looks too like its neighbours)
-  return deck;
-}
-
 // a filler standing in a gap
 function fillerPieces(F, x, height, r) {
   const stem = F.stem.map(([a, b]) => [x + a, b * height / 100]), rings = [];
@@ -141,11 +123,8 @@ export function renderPainting(data, spec, { px = 1024, seed = 1 } = {}) {
 
   // one scene or a run of them over a rectangle
   const choose = (Z, w, h, s, k = 0, s0 = s, seen = Object.assign(new Set(), { sils: [] })) => {
-    const n = Z.scenes.length, deck = Z.scenes.map((_, i) => i), rd = stream(s0, "scene");
-    for (let i = n - 1; i > 0; i--) { const j = Math.floor(rd() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
-    if (Z.must) for (let i = 0, f = 0; i < n; i++) if (Z.must.includes(Z.scenes[deck[i]])) { [deck[f], deck[i]] = [deck[i], deck[f]]; f++; }   // (`must`: of a list longer than a tile, these always come; then the panels shuffled again, or they'd hold the first ones)
-    if (Z.must) for (let i = Math.min(n, Z.panels) - 1; i > 0; i--) { const j = Math.floor(rd() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
-    const plan = Z.plan && planDeck(data, Z, s0), name = Z.scenes[plan ? plan[k % plan.length] : Z.deal ? (seed * (Z.panels ?? 1) + k) % n : deck[k % n]];   // (panels deal from a shuffled list, so none comes twice before all have; `deal`: a pot's few paintings each their own, by seed)
+    const n = Z.scenes.length, deck = shuffledDeck(Z, s0);
+    const plan = Z.plan && planDeck(data.scenes, Z, s0), name = Z.scenes[plan ? plan[k % plan.length] : Z.deal ? (seed * (Z.panels ?? 1) + k) % n : deck[k % n]];   // (panels deal from a shuffled list, so none comes twice before all have; `deal`: a pot's few paintings each their own, by seed)
     let G, ppu, keep;
     for (let t = 0; t < 12; t++) {                           // (a panel doesn't look like one already there, its two bodies aren't one mass, nothing wrong in it; above all, not anyone who comes `one` to a zone)
       const stand = plan && t >= 4 && plan.spare.length && !Z.must?.includes(name) ? Z.scenes[plan.spare[(t - 4) % plan.spare.length]] : name;

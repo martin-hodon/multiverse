@@ -1,0 +1,31 @@
+{
+  "name": "Dome of the Rock",
+  "building": "architecture/dome-of-the-rock",
+  "_about": "The Dome of the Rock's surfaces: the dome in gold leaf; the drum and the octagon's upper walls in Suleiman's blue and white tile, with the tiled frieze of the Sura Ya-Sin round the parapet; white and grey marble panels to sill height; the roof in lead; inside, gold mosaic on the arcades, on the drum and over the ambulatories; the platform in pale Jerusalem limestone.",
+  "stone": { "color": "#d9cdb3", "accent": "#c3b596", "pat": "ashlar" },
+  "rules": [
+    { "parts": ["great dome", "finial", "finial ball", "crescent"], "surface": "roof", "pattern": "roofs/gold leaf" },
+    { "parts": ["finial", "finial ball", "crescent"], "pattern": "roofs/gold leaf" },
+    { "parts": "great dome/dome", "side": "in", "pattern": "mosaic/gold ground", "scale": 4.6 },
+    { "parts": "great dome/drum", "side": "in", "pattern": "mosaic/gold ground", "scale": 4.6 },
+    { "parts": "great dome/drum", "above": 25.6, "pattern": "tiles/iznik frieze", "palette": "isfahan", "scale": 1.2, "align": "above", "_about": "the inscription round the drum's head" },
+    { "parts": "great dome/drum", "pattern": "tiles/iznik rumi", "palette": "isfahan", "scale": 2.4, "_about": "the drum: blue tile" },
+    { "parts": "kind:glass", "pattern": "panels/jali", "palette": "mughal", "_about": "the lights' pierced grilles" },
+    { "parts": "octagon", "side": "out", "above": 14.0, "pattern": "tiles/iznik frieze", "palette": "isfahan", "scale": 1.5, "align": "above", "_about": "the parapet's band, the tiled inscription" },
+    { "parts": "octagon", "side": "out", "above": 9.4, "pattern": "tiles/iznik rumi", "palette": "isfahan", "scale": 1.6, "_about": "the upper walls: Suleiman's tile" },
+    { "parts": "octagon", "side": "out", "pattern": "stone/revetment", "palette": "marble-grey", "_about": "the dado: book-matched marble panels" },
+    { "parts": "octagon", "side": "in", "pattern": "stone/revetment", "palette": "marble-grey" },
+    { "parts": ["roof", "chain roof", "chain dome"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead" },
+    { "parts": "roof", "pattern": "mosaic/gold ground", "scale": 4.6, "_about": "the ambulatories' ceilings, gold" },
+    { "parts": ["octagonal arcade", "circular arcade"], "above": 9.2, "pattern": "mosaic/gold ground", "scale": 2 },
+    { "parts": ["octagonal arcade", "circular arcade"], "pattern": "stone/revetment", "palette": "marble-grey" },
+    { "parts": ["circular columns", "arcade columns", "south arcade columns", "north arcade columns", "east arcade columns", "west arcade columns", "chain outer columns"], "pattern": "stone/marble", "palette": "marble-grey" },
+    { "parts": "chain drum", "above": 8.0, "pattern": "tiles/iznik rumi", "palette": "iznik-turquoise", "scale": 1.2 },
+    { "parts": "rock", "pattern": "stone/rock face", "palette": "stone" },
+    { "parts": ["south porch front", "east porch front", "north porch front", "west porch front", "south porch ends", "east porch ends", "north porch ends", "west porch ends"], "surface": "wall", "pattern": "stone/marble", "palette": "carrara" },
+    { "surface": "floor", "side": "in", "pattern": "stone/marble", "palette": "marble-grey" },
+    { "parts": "platform", "surface": "floor", "pattern": "floors/flagstones", "palette": "limestone" },
+    { "surface": "floor", "pattern": "floors/flagstones", "palette": "limestone" },
+    { "pattern": "stone/ashlar fine", "palette": "limestone" }
+  ]
+}

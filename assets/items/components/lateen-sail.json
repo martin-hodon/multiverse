@@ -2,7 +2,7 @@
  "kind": "item",
  "name": "Lateen sail",
  "category": "component",
- "_about": "the triangular sail of the Mediterranean and the Indian Ocean: a long yard slung at `tilt` degrees, its tack low and forward (-x), its peak high and aft; the clew hangs below the peak. In the ship's frame as it is (its x fore and aft), bellied to +z",
+ "_about": "the triangular sail of the Mediterranean and the Indian Ocean: a long yard slung from the masthead (the origin) at `tilt` degrees, its TACK low and FORWARD (+x, the bow: fixed near the stem or the deck), its PEAK high and aft; the clew hangs below the peak, aft. In the ship's frame as it is (its x fore and aft), bellied to +z; `set` full or furled (the cloth rolled along the yard). (2026-11-03: the tack had been aft and the peak forward -- every lateen in the catalogue flew backwards; and its third corner doubled the first, a degenerate fan drawn black)",
  "params": {
   "l": 14,
   "tilt": 52,
@@ -21,12 +21,12 @@
    "type": "rod",
    "material": "wood",
    "from": [
-    "-l * 0.42 * cos(tilt * 0.017453)",
+    "l * 0.42 * cos(tilt * 0.017453)",
     "-l * 0.42 * sin(tilt * 0.017453)",
     0
    ],
    "to": [
-    "l * 0.58 * cos(tilt * 0.017453)",
+    "-l * 0.58 * cos(tilt * 0.017453)",
     "l * 0.58 * sin(tilt * 0.017453)",
     0
    ],
@@ -48,15 +48,19 @@
    ],
    "corners": [
     [
-     "-l * 0.42 * cos(tilt * 0.017453)",
-     "-l * 0.42 * sin(tilt * 0.017453)"
-    ],
-    [
-     "l * 0.58 * cos(tilt * 0.017453)",
+     "-l * 0.58 * cos(tilt * 0.017453)",
      "l * 0.58 * sin(tilt * 0.017453)"
     ],
     [
-     "l * 0.58 * cos(tilt * 0.017453) - l * 0.12",
+     "l * 0.42 * cos(tilt * 0.017453)",
+     "-l * 0.42 * sin(tilt * 0.017453)"
+    ],
+    [
+     "(l * 0.42 * cos(tilt * 0.017453) - l * 0.58 * cos(tilt * 0.017453) + l * 0.12) / 2",
+     "(l * 0.58 * sin(tilt * 0.017453) - l * drop - l * 0.42 * sin(tilt * 0.017453)) / 2"
+    ],
+    [
+     "-l * 0.58 * cos(tilt * 0.017453) + l * 0.12",
      "l * 0.58 * sin(tilt * 0.017453) - l * drop"
     ]
    ]
@@ -69,12 +73,12 @@
    },
    "material": "cloth",
    "from": [
-    "-l * 0.4 * cos(tilt * 0.017453)",
+    "l * 0.4 * cos(tilt * 0.017453)",
     "-l * 0.4 * sin(tilt * 0.017453) - r * 2",
     0
    ],
    "to": [
-    "l * 0.56 * cos(tilt * 0.017453)",
+    "-l * 0.56 * cos(tilt * 0.017453)",
     "l * 0.56 * sin(tilt * 0.017453) - r * 2",
     0
    ],

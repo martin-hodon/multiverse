@@ -59,6 +59,8 @@ add("aedicula pediments", {"type": "roof", "form": "gable", "width": 3.0, "lengt
                            "spiral": {"count": 8, "radius": "R - 1.0", "turn": 0.3927, "y": "floor + 6.4"},
                            "_about": "...and a pediment on top"})
 # ---- dome and its outside
+# (the coffers stop .68 deep, not .9: the soffit is the outer shell moved IN by domeT, so the shell thins upward -- .82 square to the top row's surface, less the meridian's facets -- and the pockets at .9 came out through the lead as a ring of white dashes)
+old["dome"]["coffers"]["depth"] = 0.68
 add("dome", old["dome"])
 # THE STEP RINGS round the dome's haunches start where the dome's outer surface is at their FOOT -- sqrt(domeR^2 - h^2)
 # at their lowest height over the springing -- divided by cos 7.5 (a ring bay's face is a flat chord between its
@@ -71,7 +73,9 @@ for i, k in enumerate(("step 1", "step 2", "step 3")):
 # ---- portico on its podium
 add("portico steps", {"type": "crepidoma", "width": "portW", "length": "portD", "steps": 3, "stepH": 0.2, "stepOut": 0.6,
                       "at": [[0, 0, "portZ0 + portD / 2", 0]], "_about": "the portico's podium: three steps up from the square"})
-blk = old["intermediate block"]; blk["openings"][0]["sill"] = "floor"; blk["openings"][0]["springing"] = "floor + 7.5"; blk["openings"][0]["glass"] = False; add("intermediate block", blk)
+blk = old["intermediate block"]; blk["height"] = 24.0; blk["openings"][0]["sill"] = "floor"; blk["openings"][0]["springing"] = "floor + 7.5"; blk["openings"][0]["glass"] = False; add("intermediate block", blk)
+add("upper pediment", {"type": "roof", "form": "gable", "width": "portW", "length": 9.0, "pitch": 23, "overhang": 0.3, "at": [[0, 24.0, "portZ0", 0]],
+                        "_about": "the block's own pediment, over the portico's and behind it: the rotunda's front has two"})
 add("passage floor", {"type": "box", "width": 4.4, "length": "portZ0 - R - wallT + 9.2", "height": "floor",
                       "at": [[0, 0, "(portZ0 + R + wallT - 9.2) / 2 + 0.2", 0]], "_about": "the floor through the door, level with the portico's and the rotunda's"})
 # (the passage from the bronze doors, in the intermediate block's front half, through the rotunda's wall: the

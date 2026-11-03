@@ -1,7 +1,7 @@
 // THE GLASS AS PAINT (docs/glass.md): panes filled, each its own sheet (a colour a little its own, and uneven through its thickness),
 // what's painted on them, the leads, the bars and the rim; outside the opening a flat colour. What it writes is what light comes
 // through: arch materials do the lighting. Deterministic.
-import { stream } from "../greek/rig.js";
+import { stream } from "../story/seed.js";
 
 const mk = (w, h) => typeof OffscreenCanvas !== "undefined" ? new OffscreenCanvas(w, h) : Object.assign(document.createElement("canvas"), { width: w, height: h });
 const css = (c) => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
@@ -44,8 +44,9 @@ export function paintPanes(results, { tile, px, pal, L }) {
     q.save(); if (R.clip) { trace(q, R.clip); q.clip(); }
     for (const P of R.pieces) {
       if (!P.paint && !any) continue;
+      if (P.within) { q.save(); trace(q, P.within); q.clip(); }
       q.globalCompositeOperation = "destination-out"; q.fillStyle = "#000"; trace(q, P.pts); q.fill(); q.globalCompositeOperation = "source-over";
-      if (!P.paint) continue;
+      if (!P.paint) { if (P.within) q.restore(); continue; }
       any = true;
       q.save(); trace(q, P.pts); q.clip();
       for (const s of P.paint) {
@@ -53,6 +54,7 @@ export function paintPanes(results, { tile, px, pal, L }) {
         q.strokeStyle = s.c ?? (L.paintColor ?? "#1d120b"); q.globalAlpha = s.alpha ?? 1; q.lineWidth = Math.max(.7, (s.w ?? .006) * ppm); q.lineCap = q.lineJoin = "round"; trace(q, s.pts, !!s.closed); q.stroke(); q.globalAlpha = 1;
       }
       q.restore();
+      if (P.within) q.restore();
     }
     q.restore();
   }

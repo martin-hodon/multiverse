@@ -70,6 +70,21 @@ def tunnel(name, x):
 tunnel("senbon west", LANES[0])
 tunnel("senbon east", LANES[1])
 
+# ---- the mountain: the slope the tunnels climb, so their paths lie in a hillside and don't stand on plinths ------------
+# a terrace either side of the lanes at each level stretch's height, and Mount Inari's foot behind, wooded green
+HX0, HX1 = -19.0, -2.0
+def hillside(name, z0, z1, h, about=None):
+    add(name, {"type": "prism", "plan": {"rect": [HX1 - HX0, z0 - z1]}, "height": h, "walked": True,
+               "at": [[(HX0 + HX1) / 2, 0, r4((z0 + z1) / 2), 0]], **({"_about": about} if about else {})})
+z1 = Z0 - LEGS[0][1] - LEGS[1][1] * RUN; y1 = LEGS[1][1] * RISE     # the second level stretch: where, how high
+z2 = z1 - LEGS[2][1] - LEGS[3][1] * RUN; y2 = y1 + LEGS[3][1] * RISE
+zE = z2 - LEGS[4][1]
+hillside("hillside lower", r4(z1), r4(z2 + LEGS[3][1] * RUN), r4(y1), "the slope of Mount Inari at the second level of the tunnels")
+hillside("hillside middle", r4(z2 + LEGS[3][1] * RUN), r4(z2), r4(y1))
+hillside("hillside upper", r4(z2), r4(zE), r4(y2), "...and at the third")
+add("mount inari", {"type": "prism", "plan": {"sides": 10, "radius": 7.0}, "height": 14.0, "batter": {"out": 24.0, "power": 1.5}, "at": [[-8.0, 0, r4(zE - 18.0), 0]],
+                    "_about": "the foot of Mount Inari, wooded, closing the view up the tunnels (the real path goes on 4km to the top)"})
+
 doc = {
     "name": "Fushimi Inari Taisha",
     "_about": "FUSHIMI INARI TAISHA: the great torii, the tower gate, the worship and main halls, and the senbon torii -- two tunnels "

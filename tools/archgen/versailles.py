@@ -40,13 +40,20 @@ LV = [0.0, 5.2, 13.0, 18.5]
 H = LV[3]
 BAY, T, ROOM = 5.5, 1.0, 11
 DOOR_W, DOOR_H, RAMP_W = 3.4, 4.2, 2.0
+# (x along the garden front, -z toward the garden, +z toward the town.) The corps stands forward into the garden, the long wings set well back
+# behind its front (the step that makes the real plan's E); round the Marble Court the old chateau's brick, narrow, and outside it stone arms
+# which go on as the Ministers' wings along the Royal Court
 BLOCKS = [
     {"name": "corps", "x": 0, "z": -21, "w": 100, "d": 24, "ramp": True, "gallery": True, "gilt": True,
-     "door": [["s", 0], ["s", -41], ["s", 41], ["n", 0], ["w", 6], ["e", 6]]},   # (the end doors 6 m toward the court: clear of the stairs)
-    {"name": "north court wing", "x": -41, "z": 12, "w": 18, "d": 42, "brick": True, "gilt": True, "door": [["e", 0], ["n", 0]], "plain": ["n"]},
-    {"name": "south court wing", "x": 41, "z": 12, "w": 18, "d": 42, "brick": True, "gilt": True, "door": [["w", 0], ["n", 0]], "plain": ["n"]},
-    {"name": "north wing", "x": -107.5, "z": -22.5, "w": 115, "d": 21, "ramp": True, "door": [["s", 0], ["e", 7.5]], "plain": ["e"]},
-    {"name": "south wing", "x": 107.5, "z": -22.5, "w": 115, "d": 21, "ramp": True, "door": [["s", 0], ["w", 7.5]], "plain": ["w"]},
+     "door": [["s", 0], ["s", -41], ["s", 41], ["s", -22], ["s", 22], ["n", 0], ["w", 6], ["e", 6]]},   # (the end doors 6 m toward the court: clear of the stairs)
+    {"name": "north court wing", "x": -22, "z": 12, "w": 18, "d": 42, "brick": True, "gilt": True, "door": [["e", 0], ["n", 0], ["w", 0]], "plain": ["n", "w"]},
+    {"name": "south court wing", "x": 22, "z": 12, "w": 18, "d": 42, "brick": True, "gilt": True, "door": [["w", 0], ["n", 0], ["e", 0]], "plain": ["n", "e"]},
+    {"name": "north wing", "x": -151, "z": 10, "w": 200, "d": 21, "ramp": True, "door": [["n", -80], ["n", 0], ["e", 0]], "plain": ["e"]},
+    {"name": "south wing", "x": 151, "z": 10, "w": 200, "d": 21, "ramp": True, "door": [["n", 80], ["n", 0], ["w", 0]], "plain": ["w"]},
+    {"name": "north arm", "x": -41, "z": 12, "w": 20, "d": 42, "door": [["n", 0], ["e", 0], ["w", -2], ["s", 0]], "plain": ["n", "e"]},
+    {"name": "south arm", "x": 41, "z": 12, "w": 20, "d": 42, "door": [["n", 0], ["w", 0], ["e", -2], ["s", 0]], "plain": ["n", "w"]},
+    {"name": "north ministers", "x": -41, "z": 71, "w": 20, "d": 76, "door": [["n", 0], ["e", 0]], "plain": ["n"]},
+    {"name": "south ministers", "x": 41, "z": 71, "w": 20, "d": 76, "door": [["n", 0], ["w", 0]], "plain": ["n"]},
 ]
 FACES = {"n": (0, -1), "s": (0, 1), "e": (1, 0), "w": (-1, 0)}
 OPP = {"n": "s", "s": "n", "e": "w", "w": "e"}
@@ -154,10 +161,11 @@ for bi, b in enumerate(BLOCKS):
         if hi - at0 > 1.0: free.append((at0, hi))
         for a0, a1 in free:
             w = a1 - a0
+            BP = 0.5 if b.get("gallery") else 1.0   # (a baluster every 50cm on the corps; every metre on the rest, 18m up, where the eye can't count them: the building 267,376 to 219,496 triangles)
             nx, nz, uc = *FACES[f], (a0 + a1) / 2
             x, z = (b["x"] + uc, b["z"] + nz * b["d"] / 2) if along else (b["x"] + nx * b["w"] / 2, b["z"] + uc)   # (its outer face on the block's edge)
             balustrades.append({"type": "wall", "width": R(w), "height": 0.4 + BAL_H, "thickness": BAL_T, "glass": False,
-                                "openings": {"pattern": str(max(1, int((w - 0.6) // 0.5))), "width": 0.32, "gap": 0.18, "sill": 0.62, "springing": 1.2, "head": {"profile": "flat"}, "glass": False},
+                                "openings": {"pattern": str(max(1, int((w - 0.6) // BP))), "width": BP * 0.64, "gap": BP * 0.36, "sill": 0.62, "springing": 1.2, "head": {"profile": "flat"}, "glass": False},
                                 "at": [[R(x), R(H), R(z), YAW[f]]]})
         if is_plain: continue
         for i, u in enumerate(us):
@@ -276,7 +284,7 @@ for i in range(math.floor(b0["w"] / ROOM)):
         items["tables"].append([R(rc), R(LV[1] + 0.3), b0["z"] - 4, 0])
         items["chairs"] += [[R(rc - 1.5), R(LV[1] + 0.3), b0["z"] - 4, PI2], [R(rc + 1.5), R(LV[1] + 0.3), b0["z"] - 4, R(3 * PI2)]]
         items["sofas"].append([R(rc), R(LV[1] + 0.3), b0["z"] - 7, PI])
-for bw in BLOCKS[3:]:
+for bw in [b for b in BLOCKS if b.get("ramp") and b is not b0]:
     for i in range(0, math.floor(bw["w"] / ROOM), 2):
         rc = bw["x"] - bw["w"] / 2 + (i + 0.5) * ROOM
         items["beds"].append([R(rc), 0.2, R(bw["z"] + 1.5), 0])
@@ -325,10 +333,33 @@ for i, (b, f, u) in enumerate(sorted(ROOF_STATUES, key=lambda q: q[1] != "s")):
     stat[f"roof statue {f} {i}"] = statue((x, H + 0.4 + BAL_H, z), kind="woman" if i % 3 == 1 else "man", style="roman", stone="limestone", scale=1.35, seed=40 + i, face=OUTWARD[f],
                                           **({"hold": {"R": "items/weapons/spear"}} if i % 4 == 0 else {"hold": {"L": "items/shields/round"}} if i % 4 == 2 else {}))
 parts.update(capped(stat))
+# THE COURT SIDE'S ROOFS: the steep slate of the old chateau and the Ministers' wings (the garden front alone keeps its flat balustraded line),
+# a row of dormers on each long side and chimneys in pairs
+for b in BLOCKS:
+    if b["name"] not in ("north court wing", "south court wing", "north arm", "south arm", "north ministers", "south ministers"): continue
+    parts[f"{b['name']} mansard"] = {"type": "roof", "form": "hip", "width": b["w"] - .3, "length": b["d"] - .3, "pitch": 40, "at": [[b["x"], H + .05, b["z"], 0]], "_about": "steep slate over the court range"}
+    zz = [R(b["z"] - b["d"] / 2 + 5 + 6.5 * k) for k in range(int((b["d"] - 8) // 6.5) + 1)]
+    parts[f"{b['name']} dormers"] = {"type": "roof", "form": "gable", "width": 1.8, "length": 1.6, "pitch": 55,
+                                     "at": [[R(b["x"] + sx * (b["w"] / 2 - 2.6)), R(H + 2.0), z, R(sx * PI2)] for z in zz for sx in (-1, 1)], "_about": "the dormers in the slate"}
+    parts[f"{b['name']} chimneys"] = {"type": "box", "width": 1.0, "length": 2.6, "height": 7.5, "at": [[b["x"], R(H + 2.5), z, 0] for z in zz[::2]]}
+# THE ROYAL CHAPEL (1699-1710), north of the Royal Court, standing high over the palace's roofs: tall round-headed windows, the steep gilded roof
+CHX, CHZ, CHW, CHL, CHH = -60.0, 44.0, 18.0, 42.0, 25.0
+tall = {"every": 5.2, "width": 3.0, "end": 2.6, "sill": 9.5, "springing": 18.5, "head": {"profile": "semicircular"}}
+parts["chapel"] = {"type": "enclosure", "plan": {"rect": [CHW, CHL]}, "thickness": 1.2, "height": CHH, "interior": True, "glass": False, "openings": tall,
+                   "at": [[CHX, 0, CHZ, 0]], "_about": "the chapel's tall body"}
+parts["chapel roof"] = {"type": "roof", "form": "gable", "width": CHW + .6, "length": CHL + .6, "pitch": 50, "at": [[CHX, CHH, CHZ, 0]], "_about": "its steep slate"}
+# THE ROYAL COURT, its paving and the gilded grille across it; the Marble Court's checker; the two great water parterres on the garden side
+parts["marble court"] = {"type": "box", "width": 25.6, "length": 41.8, "height": .06, "at": [[0, 0, 12, 0]], "_about": "the Marble Court's black and white"}
+parts["royal court"] = {"type": "box", "width": 61.6, "length": 76, "height": .05, "at": [[0, 0, 71, 0]]}
+GX0, GX1, GY = -31.0, 31.0, 4.2
+gl = [[x, 0, 109.0, x, GY, 109.0] for x in [R(GX0 + .55 * k) for k in range(int((GX1 - GX0) / .55) + 1)] if abs(x) > 2.8]
+gl += [[GX0, y, 109.0, -2.8, y, 109.0] for y in (.5, 3.4, GY)] + [[2.8, y, 109.0, GX1, y, 109.0] for y in (.5, 3.4, GY)]
+parts["grille"] = {"type": "bars", "lines": gl, "w": .07, "h": .07, "caps": False, "kind": "moulding", "_about": "the gilded grille"}
+parts["water parterres"] = {"type": "box", "width": 78, "length": 50, "height": .22, "at": [[-48, 0, -68, 0], [48, 0, -68, 0]], "_about": "the two great mirrors of water before the garden front"}
 xs = [v for b in BLOCKS for v in (b["x"] - b["w"] / 2, b["x"] + b["w"] / 2)]
-zs = [v for b in BLOCKS for v in (b["z"] - b["d"] / 2, b["z"] + b["d"] / 2)]
+zs = [v for b in BLOCKS for v in (b["z"] - b["d"] / 2, b["z"] + b["d"] / 2)] + [-94]
 write("architecture", "versailles", {"name": "Palace of Versailles",
-      "_about": "THE PALACE OF VERSAILLES, garden front and court (a simplified plan at its real scale): the 100 m corps central between 115 m wings on a ~330 m garden front, the court wings in the old chateau's brick embracing the Cour Royale, three storeys (ground, piano nobile, attic) to a balustraded flat roofline at 18.5 m; stairs to every storey in the corps and the wings; rooms in enfilade; the Hall of Mirrors with its mirrors and the canvases behind them; chandeliers, salons, bedrooms. The court opens toward +z. (tools/archgen/versailles.py: the plan's rules, party walls and all.)",
+      "_about": "THE PALACE OF VERSAILLES, garden front and court (a simplified plan on rectangular blocks at about its real scale): the 100 m corps central standing forward into the garden between long wings set back behind it on a ~500 m garden front (the real one is about 670 m), the Marble Court in the old chateau's brick and the stone arms and Ministers' wings along the Royal Court under steep slate, the Royal Chapel, the grille, the two water parterres; three storeys (ground, piano nobile, attic) to a balustraded flat roofline at 18.5 m; stairs to every storey in the corps and the wings; rooms in enfilade; the Hall of Mirrors with its mirrors and the canvases behind them; chandeliers, salons, bedrooms. The court opens toward +z. (tools/archgen/versailles.py: the plan's rules, party walls and all.)",
       "site": {"origin": True, "glazed": True},
       "params": {"detail": 4, "footW": max(xs) - min(xs) + 2, "footD": max(zs) - min(zs) + 2}, "parts": parts,
       "build": [k for k in parts if " stair " not in k] + [k for k in parts if " stair " in k]})   # (the stairs once the floors they start on and reach are laid)
@@ -344,6 +375,12 @@ write("finishes", "versailles", {"name": "Palace of Versailles", "building": "ar
                 {"parts": "well rails", "pattern": "timber/bark", "palette": "walnut"},
                 {"parts": "partition ground", "pattern": "stone/marble", "palette": "carrara"},
                 {"parts": ["partition piano", "gallery wall"], "pattern": "panels/wainscot", "palette": "baroque"},
+                {"parts": "grille", "pattern": "stone/plaster", "palette": "gold"},
+                {"parts": "water parterres", "color": "#50707f", "accent": "#42616e", "_about": "the water"},
+                {"parts": "marble court", "pattern": "floors/checker", "palette": "marble-grey"},
+                {"parts": "royal court", "pattern": "stone/ashlar fine", "palette": "granite"},
+                {"parts": "chapel roof", "surface": "roof", "pattern": "roofs/slate", "palette": "slate"},
+                {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/slate", "palette": "slate"},
                 {"parts": "kind:moulding", "pattern": "stone/ashlar fine", "palette": "limestone"},
                 {"parts": ["north court wing", "south court wing"], "side": "out", "pattern": "stone/brick", "palette": "brick"},
                 {"parts": ["corps", "north wing", "south wing"], "surface": "wall", "side": "out", "below": 5.2, "pattern": "stone/rusticated", "palette": "limestone"},

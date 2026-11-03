@@ -1,23 +1,622 @@
 {
-  "name": "Schloss Moritzburg",
-  "building": "architecture/moritzburg",
-  "_about": "Moritzburg: ochre render with white trim, red tiled roofs and tower caps, the terraces in sandstone; inside, parquet and pale plaster.",
-  "stone": {
-    "color": "#e3b75a",
-    "accent": "#f3eee2",
-    "pat": "ashlar"
+ "name": "Schloss Moritzburg",
+ "building": "architecture/moritzburg",
+ "_about": "Schloss Moritzburg: ochre-yellow plastered walls, every dressing white -- the lesenes, the cornices and string courses, the window surrounds, the lanterns -- the roofs in red Saxon plain tiles, the bells' lanterns under copper, gilt vanes; the chapel's Dachreiter hung with slate; the terrace, its balustrade, the ramps and stairs in grey Elbe sandstone; inside, sandstone flags on the ground floor, parquet upstairs, the Steinsaal's walls of stone, the Speisesaal's and the Monstroesensaal's gilt leather hangings; the island's lawns and gravel, its white guardhouses.",
+ "stone": {
+  "color": "#e7b24f",
+  "accent": "#f4efe4",
+  "pat": "plaster"
+ },
+ "rules": [
+  {
+   "parts": [
+    "tower vanes",
+    "tower vane balls",
+    "dachreiter helm/ball",
+    "dachreiter helm/cross",
+    "dachreiter helm/finial"
+   ],
+   "pattern": "roofs/gold leaf",
+   "_about": "gilt vanes, balls and finials"
   },
-  "rules": [
-    {"parts": "kind:moulding", "pattern": "stone/plaster", "palette": "plaster-white", "_about": "the white trim on the ochre: plinth, storey bands, cornice"},
-    {"parts": ["finial"], "pattern": "roofs/gold leaf"},
-    {"parts": "kind:tracery", "color": "#f3eee2", "_about": "the sash bars: painted white, like the dormers"},
-    {"parts": "dormers", "color": "#f3eee2"},
-    {"parts": "dormer windows", "color": "#3a3f46"},
-    {"parts": ["roof", "kind:roof", "cap", "kind:dome"], "surface": "roof", "pattern": "roofs/fish scale", "palette": "tile-red"},
-    {"surface": "floor", "side": "in", "color": "#8a5a36", "accent": "#6e4428", "pat": "parquet"},
-    {"parts": ["kind:wall", "kind:box", "kind:flight"], "pattern": "stone/ashlar", "palette": "sandstone-grey"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone"},
-    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
-    {"surface": "wall", "pattern": "stone/plaster", "palette": "plaster-ochre"}
-  ]
+  {
+   "parts": [
+    "dachreiter clocks/hands",
+    "dachreiter clocks/marks"
+   ],
+   "pattern": "roofs/gold leaf"
+  },
+  {
+   "parts": [
+    "dachreiter clocks/dial",
+    "dachreiter clocks/ring",
+    "dachreiter clocks"
+   ],
+   "pattern": "roofs/sheet metal",
+   "palette": "slate"
+  },
+  {
+   "parts": [
+    "tower lantern caps"
+   ],
+   "pattern": "roofs/sheet metal",
+   "palette": "copper",
+   "_about": "the lanterns' copper caps"
+  },
+  {
+   "parts": [
+    "tower lanterns",
+    "tower lantern heads",
+    "bell dormers",
+    "bell oculi"
+   ],
+   "pattern": "stone/plaster",
+   "palette": "plaster-white",
+   "_about": "the white lanterns and dormer frames"
+  },
+  {
+   "parts": [
+    "bell dormer hoods"
+   ],
+   "pattern": "roofs/sheet metal",
+   "palette": "copper"
+  },
+  {
+   "parts": [
+    "tower cap feet"
+   ],
+   "pattern": "stone/plaster",
+   "palette": "plaster-white"
+  },
+  {
+   "parts": [
+    "tower bells"
+   ],
+   "pattern": "roofs/fish scale",
+   "palette": "tile-red",
+   "_about": "the bells in red plain tiles"
+  },
+  {
+   "parts": [
+    "dachreiter base",
+    "dachreiter stage",
+    "dachreiter helm",
+    "dachreiter helm/foot",
+    "dachreiter helm/bulb",
+    "dachreiter helm/lantern",
+    "dachreiter helm/lantern head",
+    "dachreiter helm/bulb 2",
+    "dachreiter helm/lantern 2",
+    "dachreiter helm/lantern 2 head",
+    "dachreiter helm/spike"
+   ],
+   "pattern": "roofs/slate",
+   "palette": "slate",
+   "_about": "the Dachreiter hung with slate"
+  },
+  {
+   "parts": [
+    "trophies"
+   ],
+   "color": "#d9c9a8",
+   "accent": "#9c8463",
+   "_about": "the antlers, bone and brown"
+  },
+  {
+   "parts": [
+    "trophy boards"
+   ],
+   "pattern": "timber/wood",
+   "palette": "walnut"
+  },
+  {
+   "parts": [
+    "lesenes",
+    "balcony",
+    "balcony balustrade",
+    "balcony balustrade ends",
+    "chapel gallery balustrade"
+   ],
+   "pattern": "stone/plaster",
+   "palette": "plaster-white",
+   "_about": "the white lesenes"
+  },
+  {
+   "parts": [
+    "kind:railing"
+   ],
+   "within": [
+    -29.8,
+    -22.4,
+    29.6,
+    22.6
+   ],
+   "above": 5.5,
+   "pattern": "stone/plaster",
+   "palette": "plaster-white",
+   "_about": "the stairs' railings inside"
+  },
+  {
+   "parts": [
+    "kind:railing"
+   ],
+   "pattern": "stone/ashlar",
+   "palette": "sandstone-grey",
+   "_about": "the railings outside: sandstone"
+  },
+  {
+   "parts": [
+    "kind:moulding"
+   ],
+   "below": 5.2,
+   "pattern": "stone/ashlar",
+   "palette": "sandstone-grey",
+   "_about": "the terrace's mouldings in grey sandstone"
+  },
+  {
+   "parts": [
+    "kind:moulding"
+   ],
+   "pattern": "stone/plaster",
+   "palette": "plaster-white",
+   "_about": "every cornice, string course and window surround white"
+  },
+  {
+   "parts": [
+    "terrace doors",
+    "terrace gates"
+   ],
+   "pattern": "timber/boards",
+   "palette": "oak-grey",
+   "_about": "the vaults' doors"
+  },
+  {
+   "parts": [
+    "terrace windows"
+   ],
+   "color": "#2f3436",
+   "accent": "#202426",
+   "_about": "the vaults' windows, dark"
+  },
+  {
+   "parts": [
+    "kind:roof",
+    "chimneys"
+   ],
+   "surface": "wall",
+   "pattern": "stone/plaster",
+   "palette": "plaster-ochre"
+  },
+  {
+   "parts": [
+    "middle leads"
+   ],
+   "pattern": "roofs/sheet metal",
+   "palette": "lead"
+  },
+  {
+   "parts": [
+    "kind:roof"
+   ],
+   "pattern": "roofs/beaver tail",
+   "palette": "tile-red",
+   "_about": "the red plain-tile roofs"
+  },
+  {
+   "parts": [
+    "tree trunks"
+   ],
+   "pattern": "timber/bark",
+   "palette": "oak"
+  },
+  {
+   "parts": [
+    "tree crowns"
+   ],
+   "color": "#4d7034",
+   "accent": "#3c5a28",
+   "_about": "the clipped limes"
+  },
+  {
+   "parts": [
+    "island",
+    "causeway"
+   ],
+   "surface": "floor",
+   "pattern": "materials/grass",
+   "palette": "lawn",
+   "_about": "the island's lawns"
+  },
+  {
+   "parts": [
+    "island",
+    "causeway",
+    "mooring posts"
+   ],
+   "pattern": "stone/ashlar",
+   "palette": "sandstone-grey",
+   "_about": "its quay walls"
+  },
+  {
+   "parts": [
+    "gravel north walk",
+    "gravel south walk",
+    "gravel causeway",
+    "gravel west walk",
+    "gravel west round",
+    "gravel west landing walk",
+    "gravel east walk",
+    "gravel east round",
+    "gravel east landing walk",
+    "gravel terrace ring north",
+    "gravel terrace ring south",
+    "gravel terrace ring west",
+    "gravel terrace ring east"
+   ],
+   "pattern": "stone/sand",
+   "palette": "gravel"
+  },
+  {
+   "parts": [
+    "guardhouse 1",
+    "guardhouse 2",
+    "guardhouse 3",
+    "guardhouse 4",
+    "guardhouse 5",
+    "guardhouse 6",
+    "guardhouse 7",
+    "guardhouse 8"
+   ],
+   "side": "out",
+   "surface": "wall",
+   "pattern": "stone/plaster",
+   "palette": "plaster-white",
+   "_about": "the guardhouses white"
+  },
+  {
+   "parts": [
+    "north ramp",
+    "south ramp"
+   ],
+   "surface": "floor",
+   "pattern": "floors/sampietrini",
+   "palette": "sampietrini",
+   "_about": "the ramps' setts"
+  },
+  {
+   "parts": [
+    "terrace",
+    "terrace piers",
+    "vase feet",
+    "vases",
+    "north ramp",
+    "south ramp",
+    "north ramp parapet west",
+    "north ramp parapet east",
+    "south ramp parapet west",
+    "south ramp parapet east",
+    "north ramp pedestals",
+    "north ramp urns",
+    "piqueurs",
+    "south bridge",
+    "north bridge",
+    "boat landing west",
+    "boat landing east",
+    "terrace balustrade 1",
+    "terrace balustrade 2",
+    "terrace balustrade 3",
+    "terrace balustrade 4",
+    "terrace balustrade 5",
+    "terrace balustrade 6",
+    "terrace balustrade 7",
+    "terrace balustrade 8",
+    "terrace balustrade 9",
+    "terrace balustrade 10",
+    "terrace balustrade 11",
+    "terrace balustrade 12",
+    "terrace balustrade 13",
+    "terrace balustrade 14",
+    "terrace balustrade 15",
+    "terrace balustrade 16",
+    "terrace balustrade 17",
+    "terrace balustrade 18",
+    "terrace balustrade 19",
+    "terrace balustrade 20",
+    "terrace balustrade 21",
+    "terrace balustrade 22",
+    "terrace balustrade 23",
+    "terrace balustrade 24",
+    "terrace balustrade 25",
+    "terrace balustrade 26",
+    "terrace balustrade 27",
+    "terrace balustrade 28",
+    "terrace balustrade 29",
+    "terrace balustrade 30",
+    "terrace balustrade 31",
+    "terrace balustrade 32",
+    "terrace balustrade 33",
+    "terrace balustrade 34",
+    "terrace balustrade 35",
+    "terrace balustrade 36",
+    "terrace balustrade 37",
+    "stair west south 1",
+    "stair west south landing 1",
+    "stair west south 2",
+    "stair west south landing 2",
+    "stair west south 3",
+    "stair west north 1",
+    "stair west north landing 1",
+    "stair west north 2",
+    "stair west north landing 2",
+    "stair west north 3",
+    "stair east north 1",
+    "stair east north landing 1",
+    "stair east north 2",
+    "stair east north landing 2",
+    "stair east north 3",
+    "stair east south 1",
+    "stair east south landing 1",
+    "stair east south 2",
+    "stair east south landing 2",
+    "stair east south 3"
+   ],
+   "surface": "floor",
+   "side": "out",
+   "pattern": "floors/flagstones",
+   "palette": "sandstone-grey",
+   "_about": "the terrace's paving"
+  },
+  {
+   "parts": [
+    "terrace",
+    "terrace piers",
+    "vase feet",
+    "vases",
+    "north ramp",
+    "south ramp",
+    "north ramp parapet west",
+    "north ramp parapet east",
+    "south ramp parapet west",
+    "south ramp parapet east",
+    "north ramp pedestals",
+    "north ramp urns",
+    "piqueurs",
+    "south bridge",
+    "north bridge",
+    "boat landing west",
+    "boat landing east",
+    "terrace balustrade 1",
+    "terrace balustrade 2",
+    "terrace balustrade 3",
+    "terrace balustrade 4",
+    "terrace balustrade 5",
+    "terrace balustrade 6",
+    "terrace balustrade 7",
+    "terrace balustrade 8",
+    "terrace balustrade 9",
+    "terrace balustrade 10",
+    "terrace balustrade 11",
+    "terrace balustrade 12",
+    "terrace balustrade 13",
+    "terrace balustrade 14",
+    "terrace balustrade 15",
+    "terrace balustrade 16",
+    "terrace balustrade 17",
+    "terrace balustrade 18",
+    "terrace balustrade 19",
+    "terrace balustrade 20",
+    "terrace balustrade 21",
+    "terrace balustrade 22",
+    "terrace balustrade 23",
+    "terrace balustrade 24",
+    "terrace balustrade 25",
+    "terrace balustrade 26",
+    "terrace balustrade 27",
+    "terrace balustrade 28",
+    "terrace balustrade 29",
+    "terrace balustrade 30",
+    "terrace balustrade 31",
+    "terrace balustrade 32",
+    "terrace balustrade 33",
+    "terrace balustrade 34",
+    "terrace balustrade 35",
+    "terrace balustrade 36",
+    "terrace balustrade 37",
+    "stair west south 1",
+    "stair west south landing 1",
+    "stair west south 2",
+    "stair west south landing 2",
+    "stair west south 3",
+    "stair west north 1",
+    "stair west north landing 1",
+    "stair west north 2",
+    "stair west north landing 2",
+    "stair west north 3",
+    "stair east north 1",
+    "stair east north landing 1",
+    "stair east north 2",
+    "stair east north landing 2",
+    "stair east north 3",
+    "stair east south 1",
+    "stair east south landing 1",
+    "stair east south 2",
+    "stair east south landing 2",
+    "stair east south 3"
+   ],
+   "pattern": "stone/ashlar",
+   "palette": "sandstone-grey",
+   "_about": "the terrace, its balustrade, ramps and stairs in grey Elbe sandstone"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "below": 9.3,
+   "pattern": "floors/flagstones",
+   "palette": "sandstone",
+   "_about": "the ground floor's sandstone flags"
+  },
+  {
+   "parts": [
+    "chapel retable"
+   ],
+   "pattern": "stone/marble",
+   "palette": "marble-rose",
+   "_about": "the chapel's marble retable"
+  },
+  {
+   "parts": [
+    "chapel altar"
+   ],
+   "pattern": "stone/marble",
+   "palette": "carrara"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "within": [
+    -40.7,
+    -5.3,
+    -29.400000000000002,
+    7.4
+   ],
+   "below": 9.3,
+   "pattern": "floors/checker diagonal",
+   "palette": "marble-bw",
+   "_about": "the chapel's marble floor"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "within": [
+    -40.7,
+    -5.3,
+    -29.400000000000002,
+    7.4
+   ],
+   "pattern": "stone/stucco lines",
+   "palette": "plaster-white",
+   "_about": "its white stucco"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "within": [
+    -9.7,
+    -15.0,
+    7.4,
+    15.6
+   ],
+   "below": 15.2,
+   "pattern": "floors/checker",
+   "palette": "marble-grey",
+   "_about": "the halls' stone floors"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "within": [
+    28.6,
+    -6.4,
+    43.4,
+    6.5
+   ],
+   "below": 15.2,
+   "pattern": "floors/checker",
+   "palette": "marble-grey"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "pattern": "timber/basket parquet",
+   "palette": "oak",
+   "_about": "parquet upstairs"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "within": [
+    -9.7,
+    -4.9,
+    7.4,
+    5.4
+   ],
+   "above": 9.8,
+   "below": 19.8,
+   "pattern": "stone/ashlar fine",
+   "palette": "sandstone",
+   "_about": "the Steinsaal: walls of stone"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "within": [
+    28.6,
+    -6.4,
+    43.4,
+    6.5
+   ],
+   "above": 11.0,
+   "below": 19.8,
+   "pattern": "fabrics/leather",
+   "palette": "leather-red",
+   "_about": "the Speisesaal's gilt leather hangings"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "within": [
+    -9.7,
+    5.4,
+    7.4,
+    15.6
+   ],
+   "above": 11.0,
+   "below": 19.8,
+   "pattern": "fabrics/leather",
+   "palette": "leather",
+   "_about": "the Monstroesensaal's"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "within": [
+    -9.7,
+    -15.0,
+    7.4,
+    -4.9
+   ],
+   "above": 11.0,
+   "below": 19.8,
+   "pattern": "fabrics/leather",
+   "palette": "leather-dark",
+   "_about": "the Billardsaal's"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "above": 9.8,
+   "below": 11.0,
+   "pattern": "panels/wainscot",
+   "palette": "baroque",
+   "_about": "the wainscots"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "pattern": "stone/plaster",
+   "palette": "plaster-white"
+  },
+  {
+   "surface": "wall",
+   "below": 5.05,
+   "pattern": "stone/ashlar",
+   "palette": "sandstone-grey"
+  },
+  {
+   "surface": "wall",
+   "pattern": "stone/plaster",
+   "palette": "plaster-ochre",
+   "_about": "the ochre walls"
+  }
+ ]
 }

@@ -1,19 +1,190 @@
 {
-  "name": "St Paul's Cathedral",
-  "building": "architecture/st-pauls",
-  "_about": "St Paul's: Portland stone, the dome and roofs in lead, the ball and cross gilt; inside, the floor of black and white marble set diagonally with the compass under the dome, the apse's gold mosaic.",
-  "stone": {
-    "color": "#e7e2d6",
-    "accent": "#d3cdbf",
-    "pat": "ashlar"
+ "name": "St Paul's Cathedral",
+ "building": "architecture/st-pauls",
+ "_about": "St Paul's: Portland stone, weathered pale and streaked; the roofs and the domes in lead, the ball, the cross and the towers' pineapples gilt. Inside, pale stone, the choir's saucer domes and the apse in Richmond's gold mosaics, Thornhill's grisaille in the inner dome, the floor black and white marble (the compass under the dome).",
+ "stone": {
+  "color": "#e4dfd2",
+  "accent": "#cdc6b5",
+  "pat": "ashlar"
+ },
+ "rules": [
+  {
+   "parts": [
+    "golden ball",
+    "golden cross",
+    "golden cross arm",
+    "lantern spire",
+    "south-west pineapple",
+    "north-west pineapple",
+    "clock/hands",
+    "clock/marks",
+    "clock/ring"
+   ],
+   "pattern": "roofs/gold leaf",
+   "_about": "the gilt ball and cross, the towers' pineapples, the clock's hands"
   },
-  "rules": [
-    {"parts": ["finial"], "pattern": "roofs/gold leaf"},
-    {"parts": ["kind:dome", "kind:vault", "kind:roof"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
-    {"parts": "apse", "side": "in", "pattern": "painted/gold mosaic"},
-    {"surface": "floor", "side": "in", "at": [0, 0], "scale": 1.4, "pattern": "floors/compass", "palette": "marble-bw", "_about": "the compass under the dome"},
-    {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-bw"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "limestone"},
-    {"surface": "wall", "pattern": "stone/ashlar", "palette": "limestone"}
-  ]
+  {
+   "parts": [
+    "baldacchino columns",
+    "baldacchino crown"
+   ],
+   "pattern": "roofs/gold leaf",
+   "_about": "the baldacchino's gilt"
+  },
+  {
+   "parts": "baldacchino canopy",
+   "color": "#3b3330",
+   "accent": "#7a6a52",
+   "pat": "marble"
+  },
+  {
+   "parts": "nelson sarcophagus",
+   "color": "#1d1b1a",
+   "accent": "#3a3633",
+   "pat": "marble",
+   "_about": "Nelson's black marble"
+  },
+  {
+   "parts": "clock/dial",
+   "color": "#1e2430",
+   "accent": "#2c3442",
+   "_about": "the clock's dark faces"
+  },
+  {
+   "parts": [
+    "kind:dome",
+    "kind:roof",
+    "outer dome ribs",
+    "lantern/cap",
+    "lantern/cap ribs",
+    "south-west tower cap",
+    "north-west tower cap"
+   ],
+   "surface": "roof",
+   "pattern": "roofs/sheet metal",
+   "palette": "lead",
+   "_about": "lead: the domes, the caps, the roofs"
+  },
+  {
+   "parts": [
+    "aisle roofs",
+    "nave aisle roofs",
+    "choir aisle roofs",
+    "transept aisle roofs",
+    "crossing roof",
+    "dome stair head",
+    "west flats"
+   ],
+   "surface": "floor",
+   "pattern": "roofs/sheet metal",
+   "palette": "lead",
+   "_about": "the lead flats"
+  },
+  {
+   "parts": "inner dome",
+   "side": "in",
+   "pattern": "mosaic/wall arcade",
+   "palette": "thornhill-grisaille",
+   "scale": 3,
+   "_about": "Thornhill's grisaille in the inner dome: painted architecture and the life of St Paul in browns and greys"
+  },
+  {
+   "parts": "vessel saucer domes",
+   "within": [
+    -10,
+    -62,
+    10,
+    -20
+   ],
+   "side": "in",
+   "pattern": "painted/gold mosaic",
+   "_about": "the choir's saucer domes, Richmond's gold mosaics"
+  },
+  {
+   "parts": [
+    "vessel pendentives"
+   ],
+   "within": [
+    -10,
+    -62,
+    10,
+    -20
+   ],
+   "side": "in",
+   "pattern": "painted/gold mosaic"
+  },
+  {
+   "parts": "apse half dome",
+   "side": "in",
+   "pattern": "mosaic/gold ground",
+   "_about": "Christ in majesty in the apse"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "above": 3.8,
+   "below": 4.2,
+   "pattern": "floors/compass",
+   "palette": "marble-bw",
+   "fit": [
+    -14,
+    -14,
+    14,
+    14
+   ],
+   "_about": "the compass under the dome"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "above": 3.8,
+   "below": 4.2,
+   "pattern": "floors/checker diagonal",
+   "palette": "marble-bw",
+   "_about": "the church's floor, black and white marble"
+  },
+  {
+   "surface": "floor",
+   "side": "in",
+   "pattern": "floors/flagstones",
+   "palette": "limestone"
+  },
+  {
+   "surface": "floor",
+   "pattern": "floors/flagstones",
+   "palette": "limestone"
+  },
+  {
+   "surface": [
+    "wall",
+    "ceiling"
+   ],
+   "side": "in",
+   "pattern": "stone/ashlar fine",
+   "palette": "limestone",
+   "_about": "pale stone inside"
+  },
+  {
+   "surface": "wall",
+   "below": 4.0,
+   "pattern": "stone/rusticated",
+   "palette": "limestone",
+   "_about": "the basement storey, rusticated"
+  },
+  {
+   "parts": "kind:moulding",
+   "pattern": "stone/ashlar fine",
+   "palette": "limestone"
+  },
+  {
+   "surface": [
+    "wall",
+    "ceiling",
+    "roof"
+   ],
+   "pattern": "stone/ashlar",
+   "palette": "limestone",
+   "_about": "Portland stone outside"
+  }
+ ]
 }

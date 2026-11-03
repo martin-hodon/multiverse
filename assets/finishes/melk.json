@@ -1,23 +1,378 @@
 {
   "name": "Stift Melk",
   "building": "architecture/melk",
-  "_about": "Stift Melk: Melk yellow with white trim, red tiled roofs, the church's caps and dome in green copper, the crosses gilt; inside, pink faux marble and frescoed vaults, the floors chequered in red and white.",
+  "_about": "Stift Melk (written by tools/archgen/melk.py): the facades' ochre-yellow stucco with every order, cornice, band and window surround white, the ground storey and the Altane in banded stucco; the wings' roofs red tile, the church's grey slate, the helms, the dome and the lanterns green copper with gilt balls and crosses; inside, the church's warm marbled stucco and gold under painted vaults, the Marble Hall's marbled walls on a rose marble floor under Troger's ceiling, the Library's walnut and its parquet, the Kaisergang's and the rooms' white walls, stone flags below and parquet above.",
   "stone": {
-    "color": "#e6c36c",
-    "accent": "#f1e9d6",
+    "color": "#e3b75a",
+    "accent": "#d4a64a",
     "pat": "ashlar"
   },
   "rules": [
-    {"parts": ["finial"], "pattern": "roofs/gold leaf"},
-    {"parts": "kind:moulding", "pattern": "stone/plaster", "palette": "plaster-white", "_about": "the white trim: plinth, storey bands and cornices on the yellow"},
-    {"parts": "drum", "color": "#f1e9d6", "accent": "#e6c36c"},
-    {"parts": ["kind:dome", "cap"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "copper"},
-    {"parts": ["roof", "kind:roof"], "surface": "roof", "pattern": "roofs/fish scale", "palette": "tile-red"},
-    {"parts": "kind:dome", "side": "in", "pattern": "stone/plaster", "palette": "baroque"},
-    {"surface": "ceiling", "side": "in", "pattern": "stone/plaster", "palette": "baroque"},
-    {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-rose"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "sandstone-grey"},
-    {"surface": "wall", "side": "in", "pattern": "painted/faux marble", "palette": "baroque-rose"},
-    {"surface": "wall", "pattern": "stone/stucco lines", "palette": "plaster-ochre"}
+    {
+      "parts": "kind:glass",
+      "pattern": "glass/quarries",
+      "palette": "grisaille",
+      "_about": "clear leaded glass"
+    },
+    {
+      "parts": [
+        "church front/helms/ball",
+        "church front/helms/cross",
+        "church front/helms/finial",
+        "choir turret/ball",
+        "choir turret/cross",
+        "choir turret/finial",
+        "round tower helm/ball",
+        "round tower helm/cross",
+        "round tower helm/finial",
+        "dome/lantern/finial",
+        "dome/lantern/cross",
+        "dome/lantern/ball",
+        "high altar columns",
+        "high altar",
+        "high altar crown"
+      ],
+      "pattern": "roofs/gold leaf",
+      "palette": "gold",
+      "_about": "the balls and crosses gilt; the high altar's gilt retable"
+    },
+    {
+      "parts": [
+        "church front/clocks/ring",
+        "church front/clocks/marks",
+        "church front/clocks/hub",
+        "church front/clocks/hands"
+      ],
+      "pattern": "roofs/gold leaf",
+      "palette": "gold",
+      "_about": "the clocks: gilt ring, marks and hands..."
+    },
+    {
+      "parts": "church front/clocks/dial",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "...on white dials"
+    },
+    {
+      "parts": [
+        "church front/helms",
+        "choir turret",
+        "round tower helm",
+        "dome/lantern"
+      ],
+      "side": "out",
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the helms, their lanterns and the dome's lantern: green copper"
+    },
+    {
+      "parts": "kind:dome",
+      "surface": "roof",
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the dome: green copper"
+    },
+    {
+      "parts": "kind:pendentives",
+      "surface": "roof",
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the deck round the drum's foot"
+    },
+    {
+      "parts": [
+        "nave roof",
+        "transept roofs",
+        "presbytery roof",
+        "monks choir roof",
+        "nave aisle roofs",
+        "south sacristy roof"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/slate",
+      "palette": "slate",
+      "_about": "the church's roofs: grey slate"
+    },
+    {
+      "parts": "kind:roof",
+      "surface": "roof",
+      "pattern": "roofs/beaver tail",
+      "palette": "tile-red",
+      "_about": "the wings' and pavilions' roofs: red tile"
+    },
+    {
+      "parts": [
+        "altane",
+        "altane/walk"
+      ],
+      "surface": "floor",
+      "side": "out",
+      "pattern": "floors/flagstones",
+      "palette": "marble-grey",
+      "_about": "the Altane's terrace walk"
+    },
+    {
+      "parts": [
+        "north bastion",
+        "south bastion"
+      ],
+      "surface": "floor",
+      "pattern": "stone/sand",
+      "palette": "gravel",
+      "_about": "the bastions' gravel terraces"
+    },
+    {
+      "parts": [
+        "library gallery",
+        "library gallery stair",
+        "library balustrade plinths",
+        "library balustrade balusters",
+        "library balustrade rails"
+      ],
+      "pattern": "timber/wood",
+      "palette": "walnut",
+      "_about": "the Library's gallery, its stair and rail: walnut"
+    },
+    {
+      "within": [
+        -73.0,
+        -33.5,
+        -38.6,
+        -12.0
+      ],
+      "side": "in",
+      "surface": "wall",
+      "pattern": "timber/panelling",
+      "palette": "walnut",
+      "_about": "the Library's walls: walnut shelving and panelling"
+    },
+    {
+      "within": [
+        -73.0,
+        -33.5,
+        -38.6,
+        -12.0
+      ],
+      "side": "in",
+      "surface": "floor",
+      "pattern": "timber/basket parquet",
+      "palette": "oak",
+      "_about": "...its parquet"
+    },
+    {
+      "within": [
+        -73.0,
+        -33.5,
+        -38.6,
+        -12.0
+      ],
+      "side": "in",
+      "surface": "ceiling",
+      "pattern": "stone/plaster",
+      "palette": "fresco",
+      "_about": "...Troger's ceiling"
+    },
+    {
+      "within": [
+        -73.0,
+        12.0,
+        -46.0,
+        34.5
+      ],
+      "side": "in",
+      "surface": "wall",
+      "above": 6.8,
+      "pattern": "painted/faux marble",
+      "palette": "verona",
+      "_about": "the Marble Hall's marbled stucco walls"
+    },
+    {
+      "within": [
+        -73.0,
+        12.0,
+        -46.0,
+        34.5
+      ],
+      "side": "in",
+      "surface": "floor",
+      "above": 6.3,
+      "pattern": "floors/checker diagonal",
+      "palette": "marble-rose",
+      "_about": "...its marble floor"
+    },
+    {
+      "within": [
+        -73.0,
+        12.0,
+        -46.0,
+        34.5
+      ],
+      "side": "in",
+      "surface": "ceiling",
+      "above": 6.8,
+      "pattern": "stone/plaster",
+      "palette": "fresco",
+      "_about": "...Troger's ceiling"
+    },
+    {
+      "parts": [
+        "kind:barrel",
+        "kind:groin",
+        "kind:pendentives",
+        "dome/dome",
+        "dome/drum",
+        "dome/interior"
+      ],
+      "side": "in",
+      "surface": "ceiling",
+      "pattern": "stone/plaster",
+      "palette": "fresco",
+      "_about": "the church's painted vaults, pendentives and cupola (Rottmayr)"
+    },
+    {
+      "parts": [
+        "kind:barrel",
+        "kind:groin"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "baroque",
+      "_about": "the arches' and vaults' sides: gilt-edged stucco"
+    },
+    {
+      "within": [
+        -35.0,
+        -4.0,
+        -31.0,
+        4.0
+      ],
+      "reveal": true,
+      "pattern": "painted/faux marble",
+      "palette": "baroque-rose",
+      "_about": "the arch from the front's hall into the nave"
+    },
+    {
+      "within": [
+        -42.6,
+        -14.8,
+        30.5,
+        14.8
+      ],
+      "side": "in",
+      "surface": "wall",
+      "pattern": "painted/faux marble",
+      "palette": "baroque-rose",
+      "_about": "the church: marbled stucco in ochre, rose and grey, gold"
+    },
+    {
+      "within": [
+        -42.6,
+        -14.8,
+        30.5,
+        14.8
+      ],
+      "side": "in",
+      "surface": "floor",
+      "pattern": "floors/checker",
+      "palette": "marble-grey",
+      "_about": "...its marble floor"
+    },
+    {
+      "within": [
+        -42.6,
+        -14.8,
+        30.5,
+        14.8
+      ],
+      "side": "in",
+      "surface": "ceiling",
+      "pattern": "stone/plaster",
+      "palette": "fresco"
+    },
+    {
+      "parts": [
+        "north emporen",
+        "south emporen",
+        "church front"
+      ],
+      "side": "in",
+      "surface": "ceiling",
+      "pattern": "stone/plaster",
+      "palette": "fresco"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "below": 6.3,
+      "pattern": "floors/flagstones",
+      "palette": "marble-grey",
+      "_about": "the ground floor's stone flags"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "timber/herringbone",
+      "palette": "oak",
+      "_about": "the upper floors' parquet (the Kaisergang, the imperial rooms)"
+    },
+    {
+      "surface": "ceiling",
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "the corridors and rooms: white walls"
+    },
+    {
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "sandstone-grey",
+      "_about": "the courts' paving"
+    },
+    {
+      "parts": [
+        "kind:moulding",
+        "kind:column",
+        "kind:colonnade",
+        "kind:bars"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "every order, cornice, band, window surround and balustrade: white"
+    },
+    {
+      "parts": [
+        "altane",
+        "altane/walls",
+        "north bastion",
+        "south bastion",
+        "round tower"
+      ],
+      "surface": "wall",
+      "pattern": "stone/stucco lines",
+      "palette": "plaster-ochre",
+      "_about": "the Altane and the bastions: banded ochre stucco"
+    },
+    {
+      "surface": "wall",
+      "below": 6.8,
+      "pattern": "stone/stucco lines",
+      "palette": "plaster-ochre",
+      "_about": "the ground storey: banded stucco"
+    },
+    {
+      "pattern": "stone/plaster",
+      "palette": "plaster-ochre",
+      "_about": "the facades: ochre-yellow stucco"
+    }
   ]
 }

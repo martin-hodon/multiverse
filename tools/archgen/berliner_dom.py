@@ -29,9 +29,9 @@ side = lambda door: [{"h": 15, "openings": {"pattern": "7", "gap": 5.4, **win1, 
 FW, FD = 30.0, 4.0                         # the projecting centre of the front: its width, how far it stands out
 fx = [16.0, 22.0]                          # the front's windows either side of the centre
 add("body", {"type": "enclosure", "plan": {"rect": [BW, BL]}, "thickness": T, "height": RT,
-             "faces": {"0": [{"h": 15, "openings": [{"at": 0, "width": 5.0, "sill": 0, "springing": 8.5, "head": {"profile": "semicircular"}, "glass": False}]
+             "faces": {"0": [{"h": 15, "openings": [{"at": s, "width": 4.0 if s else 5.0, "sill": 0, "springing": 5.5 if s else 7.0, "head": {"profile": "semicircular"}, "glass": False} for s in (-5.5, 0, 5.5)]
                                                      + [{"at": s * x, **win1} for x in fx for s in (-1, 1)]},
-                             {"openings": [{"at": 0, "width": 3.2, "sill": 2.0, "springing": 6.5, "head": {"profile": "semicircular"}}] + [{"at": s * x, **win2} for x in fx for s in (-1, 1)]}],
+                             {"openings": [{"at": 0, "width": 11.0, "sill": 0.6, "springing": 5.5, "head": {"profile": "semicircular"}}] + [{"at": s * x, **win2} for x in fx for s in (-1, 1)]}],
                        "1": side(True), "3": side(True), "2": side(False)},
              # (its COURSES -- arch/courses.js: the plinth, the floor line between the storeys, the cornice under the parapet --
              #  stopping at the corner towers' sides, which carry their own)
@@ -100,7 +100,8 @@ add("tower domes", comp("components/drum-dome", {"R": 3.6, "dt": 0.6, "H": 6.5, 
 
 # ---- the great dome: the stylobate over the roof, the drum-dome with its peristyle, the lantern and the cross
 SB = 6.0                                   # the stylobate: the drum's own base, only a walk's width round its colonnade
-DR, DT, DH, LR, LH = S / 2, 1.5, 26.0, 4.0, 14.0
+DR, DT, DH, LR, LH = S / 2, 1.5, 23.5, 4.0, 14.0
+DA = 6.0                                   # the attic over the peristyle, under the dome: the drum's second, smaller-windowed storey
 PW = 1.4                                   # (the columns close against the drum, in the real one's paired rhythm: no broad deck over them)
 BR = DR + DT + PW + 2.8                     # (a 2m walk round the outside of the colonnade, at its foot)
 add("stylobate", {"walked": True, "type": "ring", "count": N, "rOuter": BR, "rInner": S / 2, "height": SB, "y": BH, "turn": 0.5, "solid": True, "place": [[0, 0, 0, 0]],
@@ -112,25 +113,28 @@ add("gallery stair", {"type": "flight", "width": 3.0, "run": 0.3, "rise": 0.16, 
                       "at": [[1.5, 0, BR + steps * 0.3, Q]], "_about": "the flight from the roof walk up onto the gallery round the drum"})
 add("dome", comp("components/drum-dome", {"R": DR, "dt": DT, "H": DH, "n": N, "every": 2, "winW": 2.2, "winSill": 4.0, "winH": 9.0,
                                           "profile": "pointed", "spread": 0.7, "domeT": 1.2, "colN": N, "colR": 0.8, "colH": 21.0, "pw": PW,
-                                          "lanternR": LR, "lanternH": LH},
-                 [[0, BH + SB, 0, 0]], build=["drum", "drum piers", "peristyle", "peristyle deck", "dome", "ribs", "lantern"],
-                 _about="the drum and its peristyle of 32 columns, the copper dome and its ribs, the lantern"))
+                                          "attic": "yes", "atticH": DA, "atticWin": 1.8, "lanternR": LR, "lanternH": LH},
+                 [[0, BH + SB, 0, 0]], build=["drum", "drum piers", "peristyle", "peristyle deck", "attic", "attic piers", "dome", "ribs", "lantern"],
+                 _about="the drum and its peristyle of 32 columns, the windowed attic over them, the copper dome and its ribs, the lantern"))
 # ---- the main front: the portal niche in the projecting centre, paired giant columns, the attic, pediment, statues
 FZ = BL / 2 + FD
+AW, AS = 16.0, 20.0                        # the great arch: its width, its springing: three doors and the great window stand behind it, in the niche
 add("frontispiece", {"type": "wall", "width": FW, "thickness": FD, "height": RT,
-                     "tiers": [{"h": RT, "openings": [{"at": 0, "width": 14.0, "sill": 0, "springing": 19.0, "head": {"profile": "semicircular"}, "glass": False}]}],
+                     "tiers": [{"h": RT, "openings": [{"at": 0, "width": AW, "sill": 0, "springing": AS, "head": {"profile": "semicircular"}, "glass": False, "surround": {"band": 1.3, "depth": 0.6, "head": False}}]}],
                      "at": [[0, 0, FZ, 0]], "_about": "the projecting centre of the front, the great round-arched portal niche through it"})
-CR, CH, EH = 0.9, 20.0, 2.5
+CR, CH, EH = 1.05, 22.0, 2.5
 for s, n in ((-1, "west"), (1, "east")):
-    add("paired columns " + n, {"type": "colonnade", "order": "corinthian", "count": 2, "spacing": 2.8, "columnR": CR, "height": CH, "taper": 0.86,
-                                "entablature": {"h": EH, "depth": CR * 2.6}, "at": [[s * 10.4, 0, FZ + CR * 1.3, 0]],
+    add("paired columns " + n, {"type": "colonnade", "order": "corinthian", "count": 2, "spacing": 3.0, "columnR": CR, "height": CH, "taper": 0.86,
+                                "entablature": {"h": EH, "depth": CR * 2.6}, "at": [[s * 11.0, 0, FZ + CR * 1.3, 0]],
                                 "_about": "a pair of giant Corinthian columns beside the portal niche"})
+    add("frontispiece cornice " + n, {"type": "box", "width": 15.0 - 8.0, "length": 1.2, "height": 1.3, "at": [[s * 11.5, CH + EH - 1.3, FZ + 0.6, 0]],
+                                      "_about": "the order's cornice carried on along the front, to the great arch"})
 AH = 5.0
 add("attic", {"type": "box", "width": FW, "length": FD, "height": AH, "flatRoof": True, "at": [[0, RT, BL / 2 + FD / 2, 0]],
               "_about": "the attic over the portal"})
 add("pediment", {"type": "roof", "form": "gable", "width": 18.0, "length": FD, "pitch": 20, "overhang": 0.3, "at": [[0, RT + AH, BL / 2 + FD / 2, 0]],
                  "_about": "the pediment crowning the attic"})
-ped = [[s * x, RT + AH, BL / 2 + FD / 2, 0] for x in (11.8, 14.0) for s in (-1, 1)] + [[s * 10.4, CH + EH, FZ + CR * 1.3, 0] for s in (-1, 1)]
+ped = [[s * x, RT + AH, BL / 2 + FD / 2, 0] for x in (11.8, 14.0) for s in (-1, 1)] + [[s * 11.0, CH + EH, FZ + CR * 1.3, 0] for s in (-1, 1)]
 # the statues, each on its pedestal (components/pedestal): the evangelists along the attic, a figure over each pair of columns
 for i, (group, seed) in enumerate(((ped[0:2], 21), (ped[2:4], 34), (ped[4:6], 55))):
     add(f"statues {i + 1}", comp("components/pedestal", {"W": 1.0, "L": 1.0, "H": 1.2, "scale": 1.5, "stone": "limestone", "style": "roman", "seed": seed},

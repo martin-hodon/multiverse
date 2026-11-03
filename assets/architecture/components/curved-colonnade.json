@@ -1,0 +1,670 @@
+{
+  "name": "Curved colonnade",
+  "_about": "BERNINI'S COLONNADE, St Peter's Square: rows of free-standing columns on concentric arcs, radially in line, under one entablature swept along the arc over all of them, a low lead roof and a parapet on either edge for the saints; pediments over the arc's ends and the middle of its faces by name. Written by tools/archgen/roman_baroque.py.",
+  "params": {
+    "detail": 4,
+    "R": 68.5,
+    "arc": 145.0,
+    "count": 33,
+    "d2": 4.4,
+    "d3": 10.6,
+    "d4": 15.0,
+    "order": "tuscan",
+    "colR": 0.8,
+    "colH": 13.0,
+    "taper": 0.86,
+    "colSides": 10,
+    "colGrow": 0,
+    "entH": 2.8,
+    "cornH": 0.8,
+    "cornOut": 0.7,
+    "roofRise": 2.0,
+    "balH": 1.6,
+    "balT": 0.5,
+    "step": 2.5,
+    "pitch": 22,
+    "endD": 2.0,
+    "midW": 16.0,
+    "midD": 3.0,
+    "_R": "the inner row's axis radius round the component's origin; arc its angle in degrees, centred on +z; count the columns in EVERY row (so the rows are radially in line)",
+    "_d2": "rows 2, 3 and 4 at R + d2, R + d3, R + d4 (Bernini's: the middle gap wider, a carriage way)",
+    "_order": "the columns' order (ORDERS), colR their radius, colH base to abacus, colSides their facets, taper the shaft's top; colGrow: the outer rows' columns thicker, row 4's by that share (Bernini's, so the rows line up as one)",
+    "_entH": "the swept entablature over all rows (cornH its cornice, cornOut how far it stands out); roofRise the low roof's ridge; balH, balT the parapets",
+    "_step": "metres between the rings of the swept parts along the arc (their cost)",
+    "_endD": "end fronts / middle fronts (by name): pediments of `pitch` -- each end's endD * 2 deep, its front at the arc's end; the middle ones midW wide, midD deep; end piers / middle piers (by name): the square pillars under them"
+  },
+  "build": [
+    "row 1",
+    "row 2",
+    "row 3",
+    "row 4",
+    "entablature",
+    "roof",
+    "inner balustrade",
+    "outer balustrade"
+  ],
+  "parts": {
+    "row 1": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": "arc",
+      "count": "count",
+      "radius": "R + 0",
+      "order": "order",
+      "columnR": "colR * (1 + colGrow * 0 / 3)",
+      "height": "colH",
+      "taper": "taper",
+      "sides": "colSides",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the rows of columns, one arc each, the same count in every row: radially in line, so from the arc's centre the four read as one"
+    },
+    "row 2": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": "arc",
+      "count": "count",
+      "radius": "R + d2",
+      "order": "order",
+      "columnR": "colR * (1 + colGrow * 1 / 3)",
+      "height": "colH",
+      "taper": "taper",
+      "sides": "colSides",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "row 3": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": "arc",
+      "count": "count",
+      "radius": "R + d3",
+      "order": "order",
+      "columnR": "colR * (1 + colGrow * 2 / 3)",
+      "height": "colH",
+      "taper": "taper",
+      "sides": "colSides",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "row 4": {
+      "type": "colonnade",
+      "plan": "round",
+      "arc": "arc",
+      "count": "count",
+      "radius": "R + d4",
+      "order": "order",
+      "columnR": "colR * (1 + colGrow * 3 / 3)",
+      "height": "colH",
+      "taper": "taper",
+      "sides": "colSides",
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "entablature": {
+      "type": "sweep",
+      "path": [
+        [
+          "R * sin((0 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((0 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((1 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((1 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((2 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((2 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((3 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((3 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((4 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((4 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((5 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((5 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((6 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((6 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((7 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((7 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((8 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((8 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((9 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((9 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((10 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((10 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((11 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((11 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((12 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((12 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((13 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((13 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((14 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((14 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((15 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((15 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((16 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((16 / 16 - 0.5) * arc * 0.0174533)"
+        ]
+      ],
+      "step": "step",
+      "kind": "moulding",
+      "profile": [
+        [
+          "0 - colR * 1.6",
+          "colH"
+        ],
+        [
+          "d4 + colR * 1.6",
+          "colH"
+        ],
+        [
+          "d4 + colR * 1.6",
+          "colH + entH - cornH"
+        ],
+        [
+          "d4 + colR * 1.6 + cornOut",
+          "colH + entH - cornH"
+        ],
+        [
+          "d4 + colR * 1.6 + cornOut",
+          "colH + entH"
+        ],
+        [
+          "0 - colR * 1.6 - cornOut",
+          "colH + entH"
+        ],
+        [
+          "0 - colR * 1.6 - cornOut",
+          "colH + entH - cornH"
+        ],
+        [
+          "0 - colR * 1.6",
+          "colH + entH - cornH"
+        ]
+      ],
+      "standsOn": [
+        "row 1"
+      ],
+      "_about": "ONE entablature over all the rows, swept along the arc: architrave and frieze, the cornice standing out on both faces"
+    },
+    "roof": {
+      "type": "sweep",
+      "path": [
+        [
+          "R * sin((0 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((0 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((1 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((1 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((2 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((2 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((3 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((3 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((4 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((4 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((5 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((5 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((6 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((6 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((7 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((7 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((8 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((8 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((9 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((9 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((10 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((10 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((11 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((11 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((12 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((12 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((13 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((13 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((14 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((14 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((15 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((15 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((16 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((16 / 16 - 0.5) * arc * 0.0174533)"
+        ]
+      ],
+      "step": "step",
+      "kind": "roof",
+      "profile": [
+        [
+          "0 - colR * 1.6 + balT",
+          "colH + entH"
+        ],
+        [
+          "d4 + colR * 1.6 - balT",
+          "colH + entH"
+        ],
+        [
+          "d4 / 2",
+          "colH + entH + roofRise"
+        ]
+      ],
+      "standsOn": [
+        "entablature"
+      ],
+      "_about": "the low lead roof between the parapets"
+    },
+    "inner balustrade": {
+      "type": "sweep",
+      "path": [
+        [
+          "R * sin((0 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((0 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((1 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((1 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((2 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((2 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((3 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((3 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((4 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((4 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((5 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((5 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((6 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((6 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((7 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((7 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((8 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((8 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((9 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((9 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((10 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((10 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((11 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((11 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((12 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((12 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((13 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((13 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((14 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((14 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((15 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((15 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((16 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((16 / 16 - 0.5) * arc * 0.0174533)"
+        ]
+      ],
+      "step": "step",
+      "kind": "moulding",
+      "standsOn": [
+        "entablature"
+      ],
+      "profile": [
+        [
+          "0 - colR * 1.6 - cornOut + 0.1",
+          "colH + entH"
+        ],
+        [
+          "0 - colR * 1.6 - cornOut + 0.1 + balT",
+          "colH + entH"
+        ],
+        [
+          "0 - colR * 1.6 - cornOut + 0.1 + balT",
+          "colH + entH + balH"
+        ],
+        [
+          "0 - colR * 1.6 - cornOut + 0.1",
+          "colH + entH + balH"
+        ]
+      ],
+      "_about": "the balustrades along both edges of the roof (the saints stand on the inner one: the building's statues)"
+    },
+    "outer balustrade": {
+      "type": "sweep",
+      "path": [
+        [
+          "R * sin((0 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((0 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((1 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((1 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((2 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((2 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((3 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((3 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((4 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((4 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((5 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((5 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((6 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((6 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((7 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((7 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((8 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((8 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((9 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((9 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((10 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((10 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((11 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((11 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((12 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((12 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((13 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((13 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((14 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((14 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((15 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((15 / 16 - 0.5) * arc * 0.0174533)"
+        ],
+        [
+          "R * sin((16 / 16 - 0.5) * arc * 0.0174533)",
+          "R * cos((16 / 16 - 0.5) * arc * 0.0174533)"
+        ]
+      ],
+      "step": "step",
+      "kind": "moulding",
+      "standsOn": [
+        "entablature"
+      ],
+      "profile": [
+        [
+          "d4 + colR * 1.6 + cornOut - 0.1 - balT",
+          "colH + entH"
+        ],
+        [
+          "d4 + colR * 1.6 + cornOut - 0.1",
+          "colH + entH"
+        ],
+        [
+          "d4 + colR * 1.6 + cornOut - 0.1",
+          "colH + entH + balH"
+        ],
+        [
+          "d4 + colR * 1.6 + cornOut - 0.1 - balT",
+          "colH + entH + balH"
+        ]
+      ]
+    },
+    "end fronts": {
+      "type": "component",
+      "use": "components/portico",
+      "params": {
+        "count": 2,
+        "spacing": "d4 + colR * 1.6 * 2 + cornOut * 2",
+        "colR": "colR",
+        "colH": "colH",
+        "entH": "entH",
+        "order": "tuscan",
+        "depth": "endD * 2",
+        "steps": 0,
+        "pitch": "pitch",
+        "W": "d4 + colR * 1.6 * 2 + cornOut * 2"
+      },
+      "build": [
+        "pediment"
+      ],
+      "at": [
+        [
+          "(R + d4 / 2) * sin(1 * (arc / 2 * 0.0174533 + colR * 1.6 / (R + d4 / 2) - endD / (R + d4 / 2)))",
+          0,
+          "(R + d4 / 2) * cos(1 * (arc / 2 * 0.0174533 + colR * 1.6 / (R + d4 / 2) - endD / (R + d4 / 2)))",
+          "1 * (arc / 2 * 0.0174533 + colR * 1.6 / (R + d4 / 2) - endD / (R + d4 / 2)) + 1 * 1.5707963"
+        ],
+        [
+          "(R + d4 / 2) * sin(-1 * (arc / 2 * 0.0174533 + colR * 1.6 / (R + d4 / 2) - endD / (R + d4 / 2)))",
+          0,
+          "(R + d4 / 2) * cos(-1 * (arc / 2 * 0.0174533 + colR * 1.6 / (R + d4 / 2) - endD / (R + d4 / 2)))",
+          "-1 * (arc / 2 * 0.0174533 + colR * 1.6 / (R + d4 / 2) - endD / (R + d4 / 2)) + -1 * 1.5707963"
+        ]
+      ],
+      "standsOn": [
+        "entablature"
+      ],
+      "_about": "a pediment over each end of the arc, turned along it (by name)"
+    },
+    "middle fronts": {
+      "type": "component",
+      "use": "components/portico",
+      "params": {
+        "count": 2,
+        "spacing": "midW",
+        "colR": "colR",
+        "colH": "colH",
+        "entH": "entH",
+        "order": "tuscan",
+        "depth": "midD",
+        "steps": 0,
+        "pitch": "pitch",
+        "W": "midW"
+      },
+      "build": [
+        "pediment"
+      ],
+      "at": [
+        [
+          0,
+          0,
+          "R - colR * 1.6 - cornOut + midD / 2",
+          3.1415927
+        ],
+        [
+          0,
+          0,
+          "R + d4 + colR * 1.6 + cornOut - midD / 2",
+          0
+        ]
+      ],
+      "standsOn": [
+        "entablature"
+      ],
+      "_about": "...and over the middle of the inner face and of the outer, facing out of each (by name)"
+    },
+    "end piers": {
+      "type": "box",
+      "width": "colR * 2.6",
+      "length": "colR * 2.6",
+      "height": "colH",
+      "courses": true,
+      "at": [
+        [
+          "R * sin(1 * (arc / 2 * 0.0174533))",
+          0,
+          "R * cos(1 * (arc / 2 * 0.0174533))",
+          "1 * (arc / 2 * 0.0174533)"
+        ],
+        [
+          "R * sin(-1 * (arc / 2 * 0.0174533))",
+          0,
+          "R * cos(-1 * (arc / 2 * 0.0174533))",
+          "-1 * (arc / 2 * 0.0174533)"
+        ],
+        [
+          "(R + d4) * sin(1 * (arc / 2 * 0.0174533))",
+          0,
+          "(R + d4) * cos(1 * (arc / 2 * 0.0174533))",
+          "1 * (arc / 2 * 0.0174533)"
+        ],
+        [
+          "(R + d4) * sin(-1 * (arc / 2 * 0.0174533))",
+          0,
+          "(R + d4) * cos(-1 * (arc / 2 * 0.0174533))",
+          "-1 * (arc / 2 * 0.0174533)"
+        ]
+      ],
+      "_about": "square pillars at the arc's ends, in place of the inner and outer rows' last columns, under the end fronts (by name)"
+    },
+    "middle piers": {
+      "type": "box",
+      "width": "colR * 2.6",
+      "length": "colR * 2.6",
+      "height": "colH",
+      "courses": true,
+      "at": [
+        [
+          "R * sin(1 * (midW / 2 - colR * 1.3) / R)",
+          0,
+          "R * cos(1 * (midW / 2 - colR * 1.3) / R)",
+          "1 * (midW / 2 - colR * 1.3) / R"
+        ],
+        [
+          "R * sin(-1 * (midW / 2 - colR * 1.3) / R)",
+          0,
+          "R * cos(-1 * (midW / 2 - colR * 1.3) / R)",
+          "-1 * (midW / 2 - colR * 1.3) / R"
+        ],
+        [
+          "(R + d4) * sin(1 * (midW / 2 - colR * 1.3) / (R + d4))",
+          0,
+          "(R + d4) * cos(1 * (midW / 2 - colR * 1.3) / (R + d4))",
+          "1 * (midW / 2 - colR * 1.3) / (R + d4)"
+        ],
+        [
+          "(R + d4) * sin(-1 * (midW / 2 - colR * 1.3) / (R + d4))",
+          0,
+          "(R + d4) * cos(-1 * (midW / 2 - colR * 1.3) / (R + d4))",
+          "-1 * (midW / 2 - colR * 1.3) / (R + d4)"
+        ]
+      ],
+      "_about": "...and either side of the middle fronts, on the inner and the outer row (by name)"
+    }
+  }
+}

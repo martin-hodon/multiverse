@@ -365,7 +365,7 @@ export function createComposite(capacity = 256) {
         const p = parts[i], t = (used + i) * 3;
         dyn[t * 4 + 3] = p.flat ? -p.r1 : p.r1; dyn[(t + 1) * 4 + 3] = p.r2; dyn[(t + 2) * 4 + 3] = p.flat ? capCode(p.caps) : p.clip ? p.clip[3] ?? 0 : p.k;   // (a flat part: its radius negative, the squash in C.x, its caps in C.w; a cut shell's own squash in C.w)
         // C: a garment's cut -- or a flat part's squash (and a hand's palm flag, a torso's place on the trunk: shell.js ANATOMY), a painted band's colour and place
-        if (p.r2 >= 0) { const c = p.flat ? [p.flat, p.palm ? 1 : 0, p.anat ?? 0] : p.clip ?? (p.limb ? [p.limb, 0, 0] : [0, 0, 0]); dyn[(t + 2) * 4] = c[0]; dyn[(t + 2) * 4 + 1] = c[1]; dyn[(t + 2) * 4 + 2] = c[2]; }
+        if (p.r2 >= 0) { const c = p.flat ? [p.flat, p.palm ? 1 : -Math.min(.99, (p.pot ?? 0) / 2), p.anat ?? 0]   /* (a torso's belly, halved, as a negative C.y: shell.js TRUNK.pot) */ : p.clip ?? (p.limb ? [p.limb, 0, 0] : [0, 0, 0]); dyn[(t + 2) * 4] = c[0]; dyn[(t + 2) * 4 + 1] = c[1]; dyn[(t + 2) * 4 + 2] = c[2]; }
         const s = (used + i) * ST * 4, cl = p.cloth;
         stat[s] = p.color.r; stat[s + 1] = p.color.g; stat[s + 2] = p.color.b; stat[s + 3] = p.pat * 8 + p.body * 4 + p.edge * 2 + p.seam + (p.fur ? 256 : 0) + (p.fleece ? 512 : 0) + (p.stone ?? 0) * 2048 + (p.stone ? 16384 * Math.min(parts.length, MAXP) : 0);   // (stone: a statue's material, statues.js; and how many parts the figure has -- shell.js selfShade)
         stat[s + 4] = p.color2.r; stat[s + 5] = p.color2.g; stat[s + 6] = p.color2.b;

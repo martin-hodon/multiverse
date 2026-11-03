@@ -31,13 +31,20 @@ function indexed({ W, H, rgba }, pal, wrap) {
     return k;
   };
   const n = W * H, idx = new Uint8Array(n), sure = new Uint8Array(n);
-  for (let i = 0; i < n; i++) { const k = near(rgba[i * 4], rgba[i * 4 + 1], rgba[i * 4 + 2]); idx[i] = lut[k]; sure[i] = err[k] < .0012 ? 1 : 0; }
+  for (let i = 0; i < n; i++) { const r = rgba[i * 4], g = rgba[i * 4 + 1], b = rgba[i * 4 + 2]; let k = (r >> 3) << 10 | (g >> 3) << 5 | b >> 3; if (lut[k] < 0) k = near(r, g, b); idx[i] = lut[k]; sure[i] = err[k] < .0012 ? 1 : 0; }
   // (a fringe's blend can land on another stone's colour: it isn't sure unless some of its neighbours agree)
   const fringe = [];
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const i = y * W + x; if (!sure[i]) continue;
+    const c = idx[i];
+    if (x > 0 && y > 0 && x < W - 1 && y < H - 1) {   // (three are enough to know: most stop there)
+      let same = 0;
+      if (idx[i - W - 1] === c) same++; if (idx[i - W] === c) same++; if (idx[i - W + 1] === c) same++; if (same < 3) { if (idx[i - 1] === c) same++; if (idx[i + 1] === c) same++; if (same < 3) { if (idx[i + W - 1] === c) same++; if (idx[i + W] === c) same++; if (idx[i + W + 1] === c) same++; } }
+      if (same < 3) fringe.push(i);
+      continue;
+    }
     let same = 0;
-    for (let v = -1; v <= 1; v++) for (let u = -1; u <= 1; u++) { const Y = y + v, X = x + u; if ((u || v) && (wrap || (X >= 0 && Y >= 0 && X < W && Y < H)) && idx[((Y + H) % H) * W + (X + W) % W] === idx[i]) same++; }
+    for (let v = -1; v <= 1; v++) for (let u = -1; u <= 1; u++) { const Y = y + v, X = x + u; if ((u || v) && (wrap || (X >= 0 && Y >= 0 && X < W && Y < H)) && idx[((Y + H) % H) * W + (X + W) % W] === c) same++; }
     if (same < 3) fringe.push(i);
   }
   for (const i of fringe) sure[i] = 0;
@@ -69,17 +76,17 @@ function settle(idx, sure, W, H, wrap) {
 // connected regions of one colour, across the tile's edge when it repeats
 function regions(idx, W, H, wrap) {
   const n = W * H, up = new Int32Array(n);
-  for (let i = 0; i < n; i++) up[i] = i;
   const find = (a) => { while (up[a] !== a) a = up[a] = up[up[a]]; return a; };
   const join = (a, b) => { a = find(a); b = find(b); if (a !== b) up[b] = a; };
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    const i = y * W + x;
-    if (x + 1 < W ? idx[i + 1] === idx[i] : wrap && idx[y * W] === idx[i]) join(i, x + 1 < W ? i + 1 : y * W);
-    if (y + 1 < H ? idx[i + W] === idx[i] : wrap && idx[x] === idx[i]) join(i, y + 1 < H ? i + W : x);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {   // (a texel like the one before it is that one's, and needs the row above only where they weren't already joined through it)
+    const i = y * W + x, c = idx[i], left = x > 0 && idx[i - 1] === c;
+    up[i] = left ? up[i - 1] : i;
+    if (y > 0 && idx[i - W] === c && !(left && idx[i - W - 1] === c)) join(i - W, i);
   }
-  const id = new Int32Array(n), names = new Map();
-  for (let i = 0; i < n; i++) { const r = find(i); let v = names.get(r); if (v === undefined) names.set(r, v = names.size); id[i] = v; }
-  return { id, count: names.size };
+  if (wrap) { for (let y = 0; y < H; y++) if (idx[y * W + W - 1] === idx[y * W]) join(y * W + W - 1, y * W); for (let x = 0; x < W; x++) if (idx[(H - 1) * W + x] === idx[x]) join((H - 1) * W + x, x); }
+  const id = new Int32Array(n), names = new Int32Array(n).fill(-1); let count = 0;
+  for (let i = 0; i < n; i++) { const r = find(i); if (names[r] < 0) names[r] = count++; id[i] = names[r]; }
+  return { id, count };
 }
 
 // a region too small for a stone is the drawing's dust: it goes to what most of it touches
@@ -99,8 +106,9 @@ function dedust(idx, id, count, W, H, wrap, least) {
       const t = touch.get(c) ?? new Map(); touch.set(c, t); t.set(idx[j], (t.get(idx[j]) ?? 0) + 1);
     }
   }
-  for (const i of small) { const t = touch.get(id[i]); if (t) { let best = idx[i], bc = 0; for (const [s, k] of t) if (k > bc) { bc = k; best = s; } idx[i] = best; } }
-  return true;
+  let moved = false;
+  for (const i of small) { const t = touch.get(id[i]); if (t) { let best = idx[i], bc = 0; for (const [s, k] of t) if (k > bc) { bc = k; best = s; } if (idx[i] !== best) { idx[i] = best; moved = true; } } }
+  return moved;   // (nothing moved, nothing to find again)
 }
 
 // how far each texel is from its region's edge (8SSEDT; wrapped, its sweeps go twice round). A panel's own edge is an edge.
@@ -117,18 +125,21 @@ function distances(id, W, H, wrap) {
     const j = Y * W + X, a = dx[j] + ox, b = dy[j] + oy, p = dx[i], q = dy[i];
     if (a * a + b * b < p * p + q * q) { dx[i] = a; dy[i] = b; }
   };
+  const near = (i, j, ox, oy) => { const a = dx[j] + ox, b = dy[j] + oy, p = dx[i], q = dy[i]; if (a * a + b * b < p * p + q * q) { dx[i] = a; dy[i] = b; } };   // (`look`, inside the tile)
   for (let round = 0; round < (wrap ? 2 : 1); round++) {
     for (let y = 0; y < H; y++) {
-      for (let x = 0; x < W; x++) { const i = y * W + x; look(i, x - 1, y, 1, 0); look(i, x, y - 1, 0, 1); look(i, x - 1, y - 1, 1, 1); look(i, x + 1, y - 1, -1, 1); }
-      for (let x = W - 1; x >= 0; x--) look(y * W + x, x + 1, y, -1, 0);
+      const mid = y > 0;
+      for (let x = 0; x < W; x++) { const i = y * W + x; if (dx[i] === 0 && dy[i] === 0) continue; if (mid && x > 0 && x < W - 1) { near(i, i - 1, 1, 0); near(i, i - W, 0, 1); near(i, i - W - 1, 1, 1); near(i, i - W + 1, -1, 1); } else { look(i, x - 1, y, 1, 0); look(i, x, y - 1, 0, 1); look(i, x - 1, y - 1, 1, 1); look(i, x + 1, y - 1, -1, 1); } }
+      for (let x = W - 1; x >= 0; x--) { const i = y * W + x; if (x < W - 1) near(i, i + 1, -1, 0); else look(i, x + 1, y, -1, 0); }
     }
     for (let y = H - 1; y >= 0; y--) {
-      for (let x = W - 1; x >= 0; x--) { const i = y * W + x; look(i, x + 1, y, -1, 0); look(i, x, y + 1, 0, -1); look(i, x + 1, y + 1, -1, -1); look(i, x - 1, y + 1, 1, -1); }
-      for (let x = 0; x < W; x++) look(y * W + x, x - 1, y, 1, 0);
+      const mid = y < H - 1;
+      for (let x = W - 1; x >= 0; x--) { const i = y * W + x; if (dx[i] === 0 && dy[i] === 0) continue; if (mid && x > 0 && x < W - 1) { near(i, i + 1, -1, 0); near(i, i + W, 0, -1); near(i, i + W + 1, -1, -1); near(i, i + W - 1, 1, -1); } else { look(i, x + 1, y, -1, 0); look(i, x, y + 1, 0, -1); look(i, x + 1, y + 1, -1, -1); look(i, x - 1, y + 1, 1, -1); } }
+      for (let x = 0; x < W; x++) { const i = y * W + x; if (x > 0) near(i, i - 1, 1, 0); else look(i, x - 1, y, 1, 0); }
     }
   }
   const dist = new Float32Array(n);
-  for (let i = 0; i < n; i++) { const a = dx[i], b = dy[i]; dist[i] = a === FAR ? 1e6 : Math.hypot(a, b) + .5; }
+  for (let i = 0; i < n; i++) { const a = dx[i], b = dy[i]; dist[i] = a === FAR ? 1e6 : Math.sqrt(a * a + b * b) + .5; }
   return dist;
 }
 

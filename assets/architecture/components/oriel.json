@@ -1,0 +1,397 @@
+{
+  "name": "Oriel",
+  "_about": "AN ORIEL (Erker): a three-sided bay `w` wide at the wall and `d` deep, its slanted faces coming in `c`, `H` tall from its floor (the placement, on the wall's face, +z out), carried on a stepped corbel `foot` deep below it; a pointed window in each face (winW, from sill to spring), a sill course and a cornice; `cap` helm puts a slate helm `capRise` tall over it, `cap` flat a parapet parH high round a flat top.",
+  "params": {
+    "detail": 4,
+    "w": 3.0,
+    "d": 1.3,
+    "c": "d * 0.8",
+    "H": 4.0,
+    "t": 0.3,
+    "foot": 1.5,
+    "winW": "(w - 2 * c) * 0.6",
+    "sill": "H * 0.22",
+    "spring": "H * 0.75",
+    "cap": "flat",
+    "capRise": "w * 0.9",
+    "parH": 0.9,
+    "_c": "how far each slanted face comes in toward the middle (c = d: 45 degrees)",
+    "_cap": "helm: a slate helm capRise tall; flat: a parapet parH high round its top"
+  },
+  "build": [
+    "corbel 1",
+    "corbel 2",
+    "corbel 3",
+    "body",
+    "sill course",
+    "cornice",
+    "parapet",
+    "helm",
+    "helm finial"
+  ],
+  "parts": {
+    "corbel 1": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "0 - (w / 2 + 0) * 0.3",
+            0
+          ],
+          [
+            "0 - (w / 2 + 0 - c) * 0.3",
+            "(d + 0) * 0.3"
+          ],
+          [
+            "(w / 2 + 0 - c) * 0.3",
+            "(d + 0) * 0.3"
+          ],
+          [
+            "(w / 2 + 0) * 0.3",
+            0
+          ]
+        ]
+      },
+      "height": "foot / 3",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "0 - foot + foot / 3 * 0",
+          0,
+          0
+        ]
+      ],
+      "_about": "the stepped corbel the bay is carried on, widening upward in three courses"
+    },
+    "corbel 2": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "0 - (w / 2 + 0) * 0.6",
+            0
+          ],
+          [
+            "0 - (w / 2 + 0 - c) * 0.6",
+            "(d + 0) * 0.6"
+          ],
+          [
+            "(w / 2 + 0 - c) * 0.6",
+            "(d + 0) * 0.6"
+          ],
+          [
+            "(w / 2 + 0) * 0.6",
+            0
+          ]
+        ]
+      },
+      "height": "foot / 3",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "0 - foot + foot / 3 * 1",
+          0,
+          0
+        ]
+      ],
+      "_about": "the stepped corbel the bay is carried on, widening upward in three courses"
+    },
+    "corbel 3": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "0 - (w / 2 + 0) * 0.85",
+            0
+          ],
+          [
+            "0 - (w / 2 + 0 - c) * 0.85",
+            "(d + 0) * 0.85"
+          ],
+          [
+            "(w / 2 + 0 - c) * 0.85",
+            "(d + 0) * 0.85"
+          ],
+          [
+            "(w / 2 + 0) * 0.85",
+            0
+          ]
+        ]
+      },
+      "height": "foot / 3",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "0 - foot + foot / 3 * 2",
+          0,
+          0
+        ]
+      ],
+      "_about": "the stepped corbel the bay is carried on, widening upward in three courses"
+    },
+    "body": {
+      "type": "enclosure",
+      "plan": {
+        "points": [
+          [
+            "0 - (w / 2 + 0) * 1",
+            0
+          ],
+          [
+            "0 - (w / 2 + 0 - c) * 1",
+            "(d + 0) * 1"
+          ],
+          [
+            "(w / 2 + 0 - c) * 1",
+            "(d + 0) * 1"
+          ],
+          [
+            "(w / 2 + 0) * 1",
+            0
+          ]
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "faces": {
+        "0": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW * 0.7",
+                "sill": "sill",
+                "springing": "spring",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.6
+                }
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "sill",
+                "springing": "spring",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.6
+                }
+              }
+            ]
+          }
+        ],
+        "2": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW * 0.7",
+                "sill": "sill",
+                "springing": "spring",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.6
+                }
+              }
+            ]
+          }
+        ],
+        "3": [
+          {
+            "openings": []
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the bay: its three faces each with a pointed window (the slanted ones narrower), the back on the wall"
+    },
+    "sill course": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "0 - (w / 2 + 0.08) * 1",
+            0
+          ],
+          [
+            "0 - (w / 2 + 0.08 - c) * 1",
+            "(d + 0.08) * 1"
+          ],
+          [
+            "(w / 2 + 0.08 - c) * 1",
+            "(d + 0.08) * 1"
+          ],
+          [
+            "(w / 2 + 0.08) * 1",
+            0
+          ]
+        ]
+      },
+      "height": 0.2,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "sill - 0.2",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "body"
+      ]
+    },
+    "cornice": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "0 - (w / 2 + 0.18) * 1",
+            0
+          ],
+          [
+            "0 - (w / 2 + 0.18 - c) * 1",
+            "(d + 0.18) * 1"
+          ],
+          [
+            "(w / 2 + 0.18 - c) * 1",
+            "(d + 0.18) * 1"
+          ],
+          [
+            "(w / 2 + 0.18) * 1",
+            0
+          ]
+        ]
+      },
+      "height": 0.35,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "body"
+      ],
+      "_about": "the cornice round its head"
+    },
+    "parapet": {
+      "type": "enclosure",
+      "plan": {
+        "points": [
+          [
+            "0 - (w / 2 + 0.05) * 1",
+            0
+          ],
+          [
+            "0 - (w / 2 + 0.05 - c) * 1",
+            "(d + 0.05) * 1"
+          ],
+          [
+            "(w / 2 + 0.05 - c) * 1",
+            "(d + 0.05) * 1"
+          ],
+          [
+            "(w / 2 + 0.05) * 1",
+            0
+          ]
+        ]
+      },
+      "thickness": 0.18,
+      "height": "parH",
+      "glass": false,
+      "openings": [],
+      "faces": {
+        "3": [
+          {
+            "openings": []
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          "H + 0.35",
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "cap": "flat"
+      },
+      "standsOn": [
+        "cornice"
+      ],
+      "_about": "cap flat: a low parapet round its flat top (a balcony for the window over it)"
+    },
+    "helm": {
+      "type": "dome",
+      "radius": "w / 2 + 0.2",
+      "thickness": 0,
+      "sides": 8,
+      "turn": 0.5,
+      "head": {
+        "profile": "trigonal",
+        "rise": "capRise"
+      },
+      "at": [
+        [
+          0,
+          "H + 0.35",
+          0,
+          0
+        ]
+      ],
+      "when": {
+        "cap": "helm"
+      },
+      "standsOn": [
+        "cornice"
+      ],
+      "_about": "cap helm: a slate helm over it, its back half in the wall"
+    },
+    "helm finial": {
+      "type": "column",
+      "radius": 0.05,
+      "height": "capRise * 0.25",
+      "sides": 6,
+      "taper": 0.4,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "helm",
+      "when": {
+        "cap": "helm"
+      },
+      "standsOn": [
+        "helm"
+      ]
+    }
+  }
+}

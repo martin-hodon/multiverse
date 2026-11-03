@@ -1,0 +1,42 @@
+{
+ "name": "Goods and their vessels",
+ "kind": "goods",
+ "_about": "WHAT EACH CULTURE SHIPS ITS GOODS IN (2026-11-03; freight.js, carts.js, index.html; docs/world.md 'Freight'). `cultures`: keyed by the world's period (periods.json, PERIOD_NAME), else by the first style of the period's `dress`, else `default`. Each gives `freight` -- the vessels of the barge-to-yard chain (the dock hands' loads, the freight carts' beds, the yards) as {vessel: weight}: the pool of `pool` pieces is shared out by weight; `carry` -- per vessel, how a porter carries it (a style of `carry` below; the vessel's own `carry` if not said); `loads` -- the road carts' load variants (items/components/cart-*: 0 casks lying, 1 standing casks, 2 kegs, 3 sacks, 4 casks and sacks, 6 amphorae in straw, 7 amphorae and sacks, 8 jars and hampers in straw, 9 bales, 10 crates and sacks, 11 tubs and bales, 12 rice bales); `teams` -- the draught beasts it put to carts (absent: all; [] none, so no carts: the Maya had no draught animals; Egypt and Japan oxen); `store` -- a vessel kept in the freight yards' stores (Greek pithoi), `n` of them. `vessels`: the item, its params, how it lies when set down (`rest`: `rot` degrees x y z, `at` metres, in its own frame -- an amphora on its belly, a sack across), its `carry` style and where it sits in that style's frame (`carried`: at, rot). `carry`: the porter's styles -- the figure's `pose` (people.js), the anchor (`from`: the feet, the top of the shoulder or the crown of the head, read off the figure; +x its forward, +z its right) and `at` from it; `with`: an item carried along (the carrying pole, the tumpline strap). Sources: transport amphorae lying in straw on carts and in holds and carried on the shoulder (Attic vase painting, Roman reliefs -- the Ostia and Igel reliefs show casks only north of the Alps from the 1st century); pithoi as storage (Knossos magazines); Egyptian porters with jars and baskets on the head and the shoulder (tomb paintings, Ti, Rekhmire); Chinese and Japanese carrying poles (biandan, tenbin-bo) with tubs and baskets, Japanese rice in straw tawara; Ottoman hamals with bales on the back; Maya porters with the tumpline (mecapal); medieval and later Europe casks, sacks and crates.",
+ "pool": 28,
+ "vessels": {
+  "cask": {"item": "items/furniture/cask", "params": {"r": 0.35, "h": 0.95, "bulge": 0.171}, "carry": "arms", "name": "barrel"},
+  "sack": {"item": "items/tools/sack", "rest": {"rot": [0, 90, 0]}, "carry": "arms", "carried": {"arms": {"at": [0.24, 0.5, 0], "rot": [0, 0, 90]}, "shoulder": {"at": [0, -0.06, 0]}, "back": {"at": [-0.3, 0.95, 0], "rot": [0, 90, 0]}}, "name": "sack"},
+  "amphora": {"item": "items/tools/transport-amphora", "rest": {"at": [0, 0.17, -0.37], "rot": [90, 0, 0]}, "carry": "shoulder", "carried": {"shoulder": {"at": [-0.58, -0.03, 0.06], "rot": [0, 0, -68]}}, "name": "amphora"},
+  "jar": {"item": "items/tools/storage-jar", "carry": "head", "carried": {"head": {"at": [0, 0.03, 0]}, "tumpline": {"at": [-0.36, 0, 0]}}, "name": "jar"},
+  "hamper": {"item": "items/tools/hamper", "carry": "head", "carried": {"head": {"at": [0, 0.03, 0]}, "pole": {"at": [0.78, -1.15, 0]}, "tumpline": {"at": [-0.42, 0, 0]}}, "name": "basket"},
+  "bale": {"item": "items/tools/bale", "carry": "back", "carried": {"back": {"at": [-0.42, 0, 0], "rot": [0, 90, 0]}, "shoulder": {"at": [0, -0.08, 0]}}, "name": "bale"},
+  "tawara": {"item": "items/tools/straw-bale", "carry": "shoulder", "carried": {"shoulder": {"at": [0, -0.04, 0]}}, "name": "rice bale"},
+  "crate": {"item": "items/tools/crate", "carry": "arms", "carried": {"arms": {"at": [0.05, 0, 0], "rot": [0, 90, 0]}}, "name": "crate"},
+  "tub": {"item": "items/tools/tub", "carry": "pole", "carried": {"pole": {"at": [0.78, -1.17, 0]}}, "name": "tub"},
+  "pithos": {"item": "items/tools/pithos", "name": "pithos"}
+ },
+ "carry": {
+  "arms": {"pose": "carry", "from": "feet", "at": [0.42, 0.78, 0], "_about": "held in both arms before the belly"},
+  "shoulder": {"pose": "shoulder", "from": "shoulder", "at": [0, 0, 0.2], "_about": "on the right shoulder, the right hand up steadying it"},
+  "head": {"pose": "head", "from": "crown", "at": [0.01, 0, 0], "_about": "on the head on a pad, the right hand up at its side"},
+  "pole": {"pose": "pole", "from": "shoulder", "at": [0, 0.02, 0.17], "with": "items/tools/carrying-pole", "_about": "hung from the front of a pole on the right shoulder, the porter's own basket behind, the right hand on the pole before him"},
+  "back": {"pose": "back", "from": "feet", "at": [0, 0.95, 0], "_about": "on the back, high, the hands at the cords over the shoulders"},
+  "tumpline": {"pose": "tumpline", "from": "feet", "at": [0, 0.88, 0], "with": "items/tools/tumpline", "_about": "on the back, held by the strap over the forehead, the hands up at the strap"}
+ },
+ "cultures": {
+  "greek": {"freight": {"amphora": 3, "sack": 1}, "carry": {"sack": "shoulder"}, "loads": [6, 6, 7], "store": {"vessel": "pithos", "n": 4}},
+  "roman": {"freight": {"amphora": 3, "sack": 1}, "carry": {"sack": "shoulder"}, "loads": [6, 7, 7, 3], "store": {"vessel": "pithos", "n": 3}},
+  "byzantine": {"freight": {"amphora": 2, "sack": 1, "bale": 1}, "carry": {"sack": "shoulder"}, "loads": [6, 7, 9, 3]},
+  "egyptian": {"teams": ["ox"], "freight": {"jar": 2, "hamper": 1, "sack": 1}, "carry": {"sack": "shoulder"}, "loads": [8, 8, 3]},
+  "indian": {"freight": {"jar": 1, "bale": 1, "sack": 1, "hamper": 1}, "carry": {"sack": "shoulder"}, "loads": [8, 9, 3]},
+  "maya": {"teams": [], "freight": {"jar": 1, "hamper": 1}, "carry": {"jar": "tumpline", "hamper": "tumpline"}, "loads": [8]},
+  "chinese": {"freight": {"tub": 1, "hamper": 1, "bale": 1}, "carry": {"hamper": "pole", "bale": "shoulder"}, "loads": [11, 9, 3]},
+  "japanese": {"teams": ["ox"], "freight": {"tawara": 2, "tub": 1, "hamper": 1}, "carry": {"hamper": "pole"}, "loads": [12, 11, 12]},
+  "islamic": {"freight": {"bale": 2, "jar": 1, "sack": 1}, "carry": {"sack": "back", "jar": "shoulder"}, "loads": [9, 8, 3]},
+  "ottoman": {"freight": {"bale": 2, "jar": 1, "sack": 1}, "carry": {"sack": "back"}, "loads": [9, 8, 3, 10]},
+  "medieval": {"freight": {"cask": 2, "sack": 2, "crate": 1}, "loads": [0, 1, 2, 3, 4, 10]},
+  "russian": {"freight": {"cask": 1, "sack": 2, "crate": 1}, "loads": [0, 1, 3, 4, 10]},
+  "industrial": {"freight": {"cask": 2, "crate": 2, "sack": 1}, "loads": [0, 1, 2, 3, 4, 10]},
+  "default": {"freight": {"cask": 1, "sack": 1}, "loads": [0, 1, 2, 3, 4]}
+ }
+}

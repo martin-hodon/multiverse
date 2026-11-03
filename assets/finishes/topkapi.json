@@ -1,0 +1,29 @@
+{
+  "name": "Topkapı Palace",
+  "building": "architecture/topkapi",
+  "_about": "Topkapı's Second Court: pale limestone for the Middle Gate's wall and towers; white marble for the porticoes' arcades and columns and the Tower of Justice's lantern, read against the darker stone of the walls behind them; Ottoman alternating stone-and-brick (almaşık) on the kitchens and the treasury; lead on every dome, cap, roof and pendentive deck, the alems gilt; the painted soffit (saçak, green and white with gold) only under the porticoes, the Gate of Felicity's canopy and the Audience Chamber's eaves, the plain ranges' eaves plastered; marble revetment on the Audience Chamber's outer walls; Iznik tiles and stencilled kalemişi inside the Divan and the Audience Chamber.",
+  "stone": {"color": "#c4b89c", "accent": "#aea286", "pat": "ashlar"},
+  "rules": [
+    {"parts": ["alem", "dome alem"], "pattern": "roofs/gold leaf", "palette": "gold"},
+    {"parts": "kind:dome", "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"parts": ["divan/pendentives deck", "treasury/pendentives deck", "treasury rear/pendentives deck", "kitchens/pendentives deck", "kitchens rear/pendentives deck"], "pattern": "roofs/sheet metal", "palette": "lead", "_about": "the flat leads between the domes"},
+    {"parts": ["roof", "roof hipped"], "surface": "ceiling", "pattern": "painted/sachak", "palette": "divan-green", "_about": "the painted soffits: only a portico's, the Felicity canopy's and the Audience Chamber's roof (the plain ranges' roofs are top-level parts named '... roof')"},
+    {"parts": "kind:roof", "surface": "ceiling", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"parts": "kind:roof", "pattern": "roofs/sheet metal", "palette": "lead"},
+    {"parts": "fascia", "pattern": "painted/sachak", "palette": "divan-green", "scale": 0.4},
+    {"parts": "ceiling", "surface": "ceiling", "pattern": "painted/caisson", "palette": "divan-green"},
+    {"parts": "tower of justice", "above": 21.0, "pattern": "stone/marble", "palette": "carrara", "_about": "the lantern stage, its paired columns and pediments: white marble over the limestone shaft"},
+    {"parts": ["columns shafts", "columns bases", "columns capitals", "colonnade shafts", "colonnade bases", "colonnade capitals", "colonnade entablature"], "pattern": "stone/marble", "palette": "marble-grey"},
+    {"parts": ["arcade", "beam"], "pattern": "stone/marble", "palette": "carrara", "_about": "the porticoes' arches, white against the darker walls behind"},
+    {"parts": ["divan", "audience chamber"], "surface": "wall", "side": "in", "below": 3.2, "pattern": "tiles/iznik carnation", "palette": "iznik"},
+    {"parts": ["divan", "audience chamber"], "side": "in", "pattern": "painted/kalemisi", "palette": "iznik"},
+    {"parts": "audience chamber/room", "surface": "wall", "side": "out", "pattern": "stone/revetment", "palette": "carrara"},
+    {"parts": ["kitchens", "kitchens rear", "treasury", "treasury rear", "kitchen range"], "surface": "wall", "side": "out", "pattern": "stone/almasik", "palette": "almasik"},
+    {"parts": ["chimneys"], "pattern": "stone/almasik", "palette": "almasik"},
+    {"parts": ["gate towers", "tower of justice", "gate wall", "gate crenellation"], "surface": "wall", "pattern": "stone/ashlar", "palette": "limestone"},
+    {"parts": "platform", "pattern": "floors/flagstones", "palette": "marble-grey"},
+    {"surface": "floor", "pattern": "floors/flagstones", "palette": "marble-grey"},
+    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "sandstone-grey", "_about": "the walls behind the porticoes, the Divan, the ranges: a darker stone than the marble arcades before them"}
+  ]
+}

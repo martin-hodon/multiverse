@@ -1,0 +1,17 @@
+{
+  "name": "Eiffel Tower",
+  "building": "architecture/eiffel-tower",
+  "_about": "The Eiffel Tower's surfaces: wrought iron in its Eiffel brown, darkest at the foot and paling as it climbs (three shades, as it is painted, so that it reads as one colour against the sky); the masonry feet in dressed limestone, the floors' boards, the pavilions' lead roofs and glass.",
+  "stone": { "color": "#6e5a46", "accent": "#5c4a39", "pat": "ashlar" },
+  "rules": [
+    { "parts": "feet", "pattern": "stone/ashlar", "palette": "limestone" },
+    { "parts": ["lower legs", "leg ribs", "arches", "spandrels", "first floor girders", "first floor inner girders", "first floor arcade"], "color": "#5e4b3a", "accent": "#4e3d2f" },
+    { "parts": ["middle legs", "second floor girders"], "color": "#6a5643", "accent": "#584636" },
+    { "parts": ["upper legs", "shaft", "lift guides", "crown", "mast", "first floor rail", "second floor rail", "third floor rail"], "color": "#776350", "accent": "#655341" },
+    { "parts": "kind:glass", "color": "#9fb6c0", "accent": "#7f97a2" },
+    { "parts": ["first floor pavilions roof", "second floor pavilions roof", "crown room roof", "lantern dome"], "pattern": "roofs/sheet metal", "palette": "lead" },
+    { "surface": "floor", "pattern": "floors/flagstones", "palette": "stone" },
+    { "parts": ["first floor pavilions", "second floor pavilions", "third floor gallery", "crown room", "lantern"], "color": "#7a6652", "accent": "#685643" },
+    { "color": "#6e5a46", "accent": "#5c4a39" }
+  ]
+}

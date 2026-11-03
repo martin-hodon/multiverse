@@ -259,7 +259,7 @@ function drawLayer(g, L, ctx) {
     if (L.kind) {                                                            // a kind another module draws
       const k = LAYER_KINDS[L.kind];
       if (!k) throw new Error(`pattern layer kind "${L.kind}" is not registered (${Object.keys(LAYER_KINDS).join(" ") || "none are"})`);
-      k.draw(g, L, ctx);
+      k.draw(g, ctx.P.seed != null && L.seed !== undefined && (L.plan || L.theme || L.follow !== undefined) ? { ...L, seed: ctx.P.seed } : L, ctx);   // (a planned picture: its seed the rule's, if the rule gives one. architecture.js seedFinishes)
     } else if (L.layers) drawLayers(g, L.layers, { ...ctx, top: false });            // a group, in this frame
     else if (L.use) {                                                         // another pattern, tiled inside the clip
       const sub = patternOf(L.use);

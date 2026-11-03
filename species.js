@@ -23,6 +23,7 @@
 
 import { catRig, CAT_COATS, eyeMark } from "./mammals.js";
 import "./winged.js";   // (registers the winged people's kind with creatures.js: assets/creatures/monsters/angel.json)
+import "./dragons.js";  // (...and the dragons', one rule for many: assets/creatures/dragons/*.json)
 import { buildCreature } from "./creatures.js";
 import { CATALOGUE, ASSETS } from "./catalogue.js";
 import { makePerson } from "./people.js";
@@ -418,6 +419,17 @@ export const SPECIES = [
   beastman("smilodonman", A("smilodon"), { seed: 27, height: 2.2, build: 1.25, outfit: { named: "smilodonman" } }),
   A("manticore"),
   A("dragon"),
+  A("red dragon"),
+  A("black dragon"),
+  A("frost dragon"),
+  A("gold dragon"),
+  A("drake"),
+  A("wyvern"),
+  A("chinese dragon"),
+  A("azure dragon"),
+  A("imperial dragon"),
+  A("ryu"),
+  A("feathered serpent"),
   A("hydra"),
   A("tyrannosaur"),
   A("triceratops"),

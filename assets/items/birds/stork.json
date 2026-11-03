@@ -4,7 +4,7 @@
  "category": "birds",
  "era": "everywhere",
  "region": "Europe, Africa",
- "_about": "a stork: white, black flight feathers, the long red beak and red legs",
+ "_about": "a stork: white, black flight feathers, the long red beak and red legs; poses beyond the pick: bow, clatter, clatter2, preen, sit (on the nest), flap-up, flap-down, landing (in the air)",
  "params": {
   "s": [
    0.92,
@@ -15,7 +15,8 @@
     "spread",
     "folded"
    ]
-  }
+  },
+  "sitDrop": 0.62
  },
  "materials": {
   "back": "plumage-white",
@@ -115,7 +116,17 @@
      "s * 1.0716",
      0
     ]
-   ]
+   ],
+   "when": {
+    "pose": [
+     "folded",
+     "sit",
+     "spread",
+     "flap-up",
+     "flap-down",
+     "landing"
+    ]
+   }
   },
   {
    "id": "head",
@@ -127,7 +138,17 @@
     "s * 0.3940",
     "s * 1.0716",
     0
-   ]
+   ],
+   "when": {
+    "pose": [
+     "folded",
+     "sit",
+     "spread",
+     "flap-up",
+     "flap-down",
+     "landing"
+    ]
+   }
   },
   {
    "id": "eye",
@@ -140,7 +161,17 @@
     "s * 1.0841",
     "s * 0.0400"
    ],
-   "mirror": "z"
+   "mirror": "z",
+   "when": {
+    "pose": [
+     "folded",
+     "sit",
+     "spread",
+     "flap-up",
+     "flap-down",
+     "landing"
+    ]
+   }
   },
   {
    "id": "beak",
@@ -163,7 +194,17 @@
     "s * 0.1700",
     "s * -0.0113",
     0
-   ]
+   ],
+   "when": {
+    "pose": [
+     "folded",
+     "sit",
+     "spread",
+     "flap-up",
+     "flap-down",
+     "landing"
+    ]
+   }
   },
   {
    "id": "thigh",
@@ -183,7 +224,14 @@
    ],
    "mirror": "z",
    "when": {
-    "pose": "folded"
+    "pose": [
+     "folded",
+     "bow",
+     "clatter",
+     "clatter2",
+     "preen",
+     "landing"
+    ]
    }
   },
   {
@@ -204,7 +252,14 @@
    ],
    "mirror": "z",
    "when": {
-    "pose": "folded"
+    "pose": [
+     "folded",
+     "bow",
+     "clatter",
+     "clatter2",
+     "preen",
+     "landing"
+    ]
    }
   },
   {
@@ -238,7 +293,14 @@
    },
    "mirror": "z",
    "when": {
-    "pose": "folded"
+    "pose": [
+     "folded",
+     "bow",
+     "clatter",
+     "clatter2",
+     "preen",
+     "landing"
+    ]
    }
   },
   {
@@ -260,7 +322,14 @@
    ],
    "mirror": "z",
    "when": {
-    "pose": "folded"
+    "pose": [
+     "folded",
+     "bow",
+     "clatter",
+     "clatter2",
+     "preen",
+     "landing"
+    ]
    }
   },
   {
@@ -281,7 +350,11 @@
    ],
    "mirror": "z",
    "when": {
-    "pose": "spread"
+    "pose": [
+     "spread",
+     "flap-up",
+     "flap-down"
+    ]
    }
   },
   {
@@ -302,7 +375,11 @@
    ],
    "mirror": "z",
    "when": {
-    "pose": "spread"
+    "pose": [
+     "spread",
+     "flap-up",
+     "flap-down"
+    ]
    }
   },
   {
@@ -324,7 +401,11 @@
    ],
    "mirror": "z",
    "when": {
-    "pose": "spread"
+    "pose": [
+     "spread",
+     "flap-up",
+     "flap-down"
+    ]
    }
   },
   {
@@ -403,7 +484,14 @@
    "id": "wing folded",
    "use": "items/components/wing",
    "when": {
-    "pose": "folded"
+    "pose": [
+     "folded",
+     "bow",
+     "clatter",
+     "clatter2",
+     "preen",
+     "sit"
+    ]
    },
    "mirror": "z",
    "params": {
@@ -426,6 +514,508 @@
     "s * 0.0525",
     0,
     70,
+    0
+   ]
+  },
+  {
+   "id": "neck bow",
+   "type": "sweep",
+   "material": "head",
+   "sides": 7,
+   "seg": 2,
+   "radii": [
+    "s * 0.0480",
+    "s * 0.0400",
+    "s * 0.0360"
+   ],
+   "path": [
+    [
+     "s * 0.2000",
+     "s * 0.7945",
+     0
+    ],
+    [
+     "s * 0.3700",
+     "s * 0.8300",
+     0
+    ],
+    [
+     "s * 0.4000",
+     "s * 0.6600",
+     0
+    ]
+   ],
+   "when": {
+    "pose": "bow"
+   }
+  },
+  {
+   "id": "head bow",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.0500",
+   "sides": 8,
+   "at": [
+    "s * 0.4000",
+    "s * 0.6600",
+    0
+   ],
+   "when": {
+    "pose": "bow"
+   }
+  },
+  {
+   "id": "eye bow L",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.3982",
+    "s * 0.6343",
+    "s * 0.0400"
+   ],
+   "when": {
+    "pose": "bow"
+   }
+  },
+  {
+   "id": "eye bow R",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.3982",
+    "s * 0.6343",
+    "s * -0.0400"
+   ],
+   "when": {
+    "pose": "bow"
+   }
+  },
+  {
+   "id": "beak bow",
+   "type": "rod",
+   "material": "beak",
+   "sides": 4,
+   "r0": "s * 0.0180",
+   "r1": "s * 0.0014",
+   "at": [
+    "s * 0.4159",
+    "s * 0.6260",
+    0
+   ],
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * 0.0719",
+    "s * -0.1541",
+    0
+   ],
+   "when": {
+    "pose": "bow"
+   }
+  },
+  {
+   "id": "neck clatter",
+   "type": "sweep",
+   "material": "head",
+   "sides": 7,
+   "seg": 2,
+   "radii": [
+    "s * 0.0480",
+    "s * 0.0400",
+    "s * 0.0360"
+   ],
+   "path": [
+    [
+     "s * 0.2000",
+     "s * 0.7945",
+     0
+    ],
+    [
+     "s * 0.2700",
+     "s * 0.9700",
+     0
+    ],
+    [
+     "s * 0.1600",
+     "s * 1.0700",
+     0
+    ]
+   ],
+   "when": {
+    "pose": "clatter"
+   }
+  },
+  {
+   "id": "head clatter",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.0500",
+   "sides": 8,
+   "at": [
+    "s * 0.1600",
+    "s * 1.0700",
+    0
+   ],
+   "when": {
+    "pose": "clatter"
+   }
+  },
+  {
+   "id": "eye clatter L",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.1639",
+    "s * 1.0954",
+    "s * -0.0400"
+   ],
+   "when": {
+    "pose": "clatter"
+   }
+  },
+  {
+   "id": "eye clatter R",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.1639",
+    "s * 1.0954",
+    "s * 0.0400"
+   ],
+   "when": {
+    "pose": "clatter"
+   }
+  },
+  {
+   "id": "beak clatter",
+   "type": "rod",
+   "material": "beak",
+   "sides": 4,
+   "r0": "s * 0.0180",
+   "r1": "s * 0.0014",
+   "at": [
+    "s * 0.1469",
+    "s * 1.1051",
+    0
+   ],
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * -0.0593",
+    "s * 0.1593",
+    0
+   ],
+   "when": {
+    "pose": "clatter"
+   }
+  },
+  {
+   "id": "neck clatter2",
+   "type": "sweep",
+   "material": "head",
+   "sides": 7,
+   "seg": 2,
+   "radii": [
+    "s * 0.0480",
+    "s * 0.0400",
+    "s * 0.0360"
+   ],
+   "path": [
+    [
+     "s * 0.2000",
+     "s * 0.7945",
+     0
+    ],
+    [
+     "s * 0.2800",
+     "s * 0.9600",
+     0
+    ],
+    [
+     "s * 0.1900",
+     "s * 1.0600",
+     0
+    ]
+   ],
+   "when": {
+    "pose": "clatter2"
+   }
+  },
+  {
+   "id": "head clatter2",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.0500",
+   "sides": 8,
+   "at": [
+    "s * 0.1900",
+    "s * 1.0600",
+    0
+   ],
+   "when": {
+    "pose": "clatter2"
+   }
+  },
+  {
+   "id": "eye clatter2 L",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.2006",
+    "s * 1.0834",
+    "s * -0.0400"
+   ],
+   "when": {
+    "pose": "clatter2"
+   }
+  },
+  {
+   "id": "eye clatter2 R",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.2006",
+    "s * 1.0834",
+    "s * 0.0400"
+   ],
+   "when": {
+    "pose": "clatter2"
+   }
+  },
+  {
+   "id": "beak clatter2",
+   "type": "rod",
+   "material": "beak",
+   "sides": 4,
+   "r0": "s * 0.0180",
+   "r1": "s * 0.0014",
+   "at": [
+    "s * 0.1870",
+    "s * 1.0974",
+    0
+   ],
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * -0.0137",
+    "s * 0.1694",
+    0
+   ],
+   "when": {
+    "pose": "clatter2"
+   }
+  },
+  {
+   "id": "neck preen",
+   "type": "sweep",
+   "material": "head",
+   "sides": 7,
+   "seg": 2,
+   "radii": [
+    "s * 0.0480",
+    "s * 0.0400",
+    "s * 0.0360"
+   ],
+   "path": [
+    [
+     "s * 0.2000",
+     "s * 0.7945",
+     0
+    ],
+    [
+     "s * 0.2700",
+     "s * 0.9300",
+     "s * 0.0300"
+    ],
+    [
+     "s * 0.0900",
+     "s * 0.9000",
+     "s * 0.1000"
+    ]
+   ],
+   "when": {
+    "pose": "preen"
+   }
+  },
+  {
+   "id": "head preen",
+   "type": "sphere",
+   "material": "head",
+   "r": "s * 0.0500",
+   "sides": 8,
+   "at": [
+    "s * 0.0800",
+    "s * 0.8900",
+    "s * 0.1100"
+   ],
+   "when": {
+    "pose": "preen"
+   }
+  },
+  {
+   "id": "eye preen L",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.0671",
+    "s * 0.8906",
+    "s * 0.0642"
+   ],
+   "when": {
+    "pose": "preen"
+   }
+  },
+  {
+   "id": "eye preen R",
+   "type": "sphere",
+   "material": "eye",
+   "r": "s * 0.0090",
+   "sides": 5,
+   "at": [
+    "s * 0.0437",
+    "s * 0.8906",
+    "s * 0.1408"
+   ],
+   "when": {
+    "pose": "preen"
+   }
+  },
+  {
+   "id": "beak preen",
+   "type": "rod",
+   "material": "beak",
+   "sides": 4,
+   "r0": "s * 0.0180",
+   "r1": "s * 0.0014",
+   "at": [
+    "s * 0.0482",
+    "s * 0.8726",
+    "s * 0.1003"
+   ],
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    "s * -0.1440",
+    "s * -0.0790",
+    "s * -0.0439"
+   ],
+   "when": {
+    "pose": "preen"
+   }
+  },
+  {
+   "id": "wing flap-up",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "flap-up"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 1.0000",
+    "chord": "s * 0.3200",
+    "pri": 11,
+    "sec": 14,
+    "spread": 1,
+    "sweep": -10,
+    "band": 0
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0750",
+    "s * 0.8470",
+    "s * 0.0840",
+    -42,
+    -8,
+    0
+   ]
+  },
+  {
+   "id": "wing flap-down",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "flap-down"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 1.0000",
+    "chord": "s * 0.3200",
+    "pri": 11,
+    "sec": 14,
+    "spread": 1,
+    "sweep": -10,
+    "band": 0
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0750",
+    "s * 0.8470",
+    "s * 0.0840",
+    28,
+    -8,
+    0
+   ]
+  },
+  {
+   "id": "wing landing",
+   "use": "items/components/wing",
+   "when": {
+    "pose": "landing"
+   },
+   "mirror": "z",
+   "params": {
+    "span": "s * 1.0000",
+    "chord": "s * 0.3200",
+    "pri": 11,
+    "sec": 14,
+    "spread": 1,
+    "sweep": -10,
+    "band": 0
+   },
+   "materials": {
+    "coverts": "wing",
+    "feather": "primaries",
+    "tips": "tips"
+   },
+   "at": [
+    "s * 0.0750",
+    "s * 0.8470",
+    "s * 0.0840",
+    -30,
+    -22,
     0
    ]
   }

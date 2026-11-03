@@ -1,0 +1,201 @@
+{
+  "name": "Triangle porch",
+  "_about": "A PORCH ON A TRIANGULAR PLAN before a portal (Regensburg's Dreieckportal, c. 1410): its back is the wall it stands against (from x = -half to half on z = 0), its tip `depth` out on +z, where ONE PILLAR carries the two front faces. Each face is a wall `w` long, open in a pointed arch (`pier` of wall either side, springing at `spring`) and only `h` high -- just over the arch's crown; over it a crocketed GABLE (wimperg) stands FREE, its tracery open to the sky, up to `gableTop` at most (steeper or flatter by `pitch`). A slab closes the porch at `h`, a pierced parapet runs along the faces' heads behind the gables, pinnacles stand on its back corners and a tall one over the pillar. `w` and `yaw` (the faces' length and turn) follow from half and depth. Place it with its back on the wall's face, facing +z.",
+  "params": {
+    "detail": 4,
+    "half": 5.6,
+    "depth": 6.0,
+    "w": "sqrt(half * half + depth * depth)",
+    "yaw": "atan2(depth, half)",
+    "t": 0.9,
+    "pier": 1.4,
+    "spring": 3.5,
+    "h": "spring + (w - 2 * pier) * 0.866 + 1.1",
+    "gableTop": "h + 5.5",
+    "pitch": 66,
+    "pierR": 0.9,
+    "slab": 0.6,
+    "crest": 1.1,
+    "pinW": 1.1,
+    "pinH": 2.6,
+    "pinS": 4.2,
+    "tipW": 1.4,
+    "tipH": 5.5,
+    "tipS": 6.5,
+    "_yaw": "the right face's turn (a yaw turns +x towards -z); the left one's is its negative",
+    "_h": "the faces' walls: just over the arches' crowns (an equilateral arch rises 0.866 of its width)",
+    "_gableTop": "the most the gables may rise to: wimperg.js flattens a gable that would rise higher, and drops one it cannot fit",
+    "_tipW": "the pinnacle over the pillar (tipW, tipH, tipS); pinW, pinH, pinS the back corners'"
+  },
+  "build": [
+    "faces",
+    "pillar",
+    "slab",
+    "parapet",
+    "corner pinnacles",
+    "tip pinnacle"
+  ],
+  "parts": {
+    "faces": {
+      "type": "wall",
+      "width": "w",
+      "height": "h",
+      "thickness": "t",
+      "glass": false,
+      "openings": [
+        {
+          "at": "w / 2",
+          "width": "w - 2 * pier",
+          "sill": 0,
+          "springing": "spring",
+          "head": {
+            "profile": "pointed",
+            "spread": 1.0
+          },
+          "wimperg": {
+            "pitch": "pitch",
+            "coping": 0.4,
+            "depth": 0.3,
+            "top": "gableTop"
+          }
+        }
+      ],
+      "at": [
+        [
+          "0 - half / 2",
+          0,
+          "depth / 2",
+          "0 - yaw"
+        ],
+        [
+          "half / 2",
+          0,
+          "depth / 2",
+          "yaw"
+        ]
+      ],
+      "_about": "the two front faces, each open in a pointed arch under its free-standing gable (their outer faces on the triangle's sides)"
+    },
+    "pillar": {
+      "type": "column",
+      "radius": "pierR",
+      "height": "h",
+      "sides": 8,
+      "at": [
+        [
+          0,
+          0,
+          "depth - pierR * 0.7",
+          0
+        ]
+      ],
+      "_about": "the one pillar at the tip, which both arches spring from"
+    },
+    "slab": {
+      "type": "prism",
+      "plan": {
+        "points": [
+          [
+            "0 - half",
+            0
+          ],
+          [
+            "half",
+            0
+          ],
+          [
+            0,
+            "depth"
+          ]
+        ]
+      },
+      "height": "slab",
+      "at": [
+        [
+          0,
+          "h - slab",
+          0,
+          0
+        ]
+      ],
+      "_about": "the porch's head: a slab over its vault, the faces' tops"
+    },
+    "parapet": {
+      "type": "cresting",
+      "run": [
+        [
+          "0 - w / 2",
+          0
+        ],
+        [
+          "w / 2",
+          0
+        ]
+      ],
+      "h": "crest",
+      "panel": 1.2,
+      "t": 0.25,
+      "every": 2,
+      "spirelet": {
+        "w": 0.18,
+        "s": 0.8
+      },
+      "at": [
+        [
+          "0 - half / 2 + sin(yaw) * t / 2",
+          "h",
+          "depth / 2 - cos(yaw) * t / 2",
+          "0 - yaw"
+        ],
+        [
+          "half / 2 - sin(yaw) * t / 2",
+          "h",
+          "depth / 2 - cos(yaw) * t / 2",
+          "yaw"
+        ]
+      ],
+      "_about": "a pierced parapet along each face's head, on the wall behind its gable"
+    },
+    "corner pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": "pinW",
+        "h": "pinH",
+        "s": "pinS"
+      },
+      "at": [
+        [
+          "0 - half + pinW / 2",
+          "h",
+          "pinW / 2",
+          0
+        ],
+        [
+          "half - pinW / 2",
+          "h",
+          "pinW / 2",
+          0
+        ]
+      ]
+    },
+    "tip pinnacle": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": "tipW",
+        "h": "tipH",
+        "s": "tipS"
+      },
+      "at": [
+        [
+          0,
+          "h",
+          "depth - tipW * 0.6",
+          0
+        ]
+      ],
+      "_about": "the tall pinnacle over the pillar"
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+ "name": "Hyperboloid tower",
+ "_about": "A TOWER DRAWN IN AT A WAIST: a ruled surface Gaudi built in brick and dressed in trencadis -- the administration pavilion's at Park Guell, white and blue in a chequer, 'the typical cross of four arms' on its domed crown. r0 at the foot, rw at the waist, r1 at the top; the shaft and crown take their own finishes.",
+ "params": {
+  "h": 14.0,
+  "r0": 1.6,
+  "rw": 0.9,
+  "r1": 1.2,
+  "waistAt": 0.6,
+  "t": 0.12,
+  "sides": 24,
+  "cross": "yes",
+  "crossH": 3.8,
+  "_h": "the shaft's height from where it stands (the crown and cross go on top); r0, rw, r1: radii at foot, waist (at waistAt of h) and top",
+  "_cross": "yes: Gaudi's cross on the crown, crossH tall",
+  "_t": "the crown's tip, where the cross stands",
+  "_sides": "facets round"
+ },
+ "build": [
+  "shaft",
+  "crown",
+  "cross"
+ ],
+ "parts": {
+  "shaft": {
+   "type": "loft",
+   "axis": "y",
+   "sides": "sides",
+   "smooth": 4,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "sections": [
+    {
+     "s": 0,
+     "a": "r0",
+     "b": "r0"
+    },
+    {
+     "s": "h * waistAt * 0.5",
+     "a": "(r0 + rw) / 2 + (r0 - rw) * 0.1",
+     "b": "(r0 + rw) / 2 + (r0 - rw) * 0.1"
+    },
+    {
+     "s": "h * waistAt",
+     "a": "rw",
+     "b": "rw"
+    },
+    {
+     "s": "h * (waistAt + (1 - waistAt) * 0.6)",
+     "a": "(rw + r1) / 2",
+     "b": "(rw + r1) / 2"
+    },
+    {
+     "s": "h",
+     "a": "r1",
+     "b": "r1"
+    }
+   ],
+   "_about": "the shaft: a hyperboloid of one sheet, drawn in to rw at waistAt of its height, flaring to r1 at the top"
+  },
+  "crown": {
+   "type": "loft",
+   "axis": "y",
+   "sides": "sides",
+   "smooth": 3,
+   "at": [
+    [
+     0,
+     "h",
+     0,
+     0
+    ]
+   ],
+   "sections": [
+    {
+     "s": 0,
+     "a": "r1 * 1.08",
+     "b": "r1 * 1.08"
+    },
+    {
+     "s": "r1 * 0.5",
+     "a": "r1 * 0.85",
+     "b": "r1 * 0.85"
+    },
+    {
+     "s": "r1 * 1.1",
+     "a": "r1 * 0.35",
+     "b": "r1 * 0.35"
+    },
+    {
+     "s": "r1 * 1.4",
+     "a": "t",
+     "b": "t"
+    }
+   ],
+   "_about": "the domed crown the cross stands on"
+  },
+  "cross": {
+   "type": "component",
+   "use": "components/gaudi-cross",
+   "when": {
+    "cross": "yes"
+   },
+   "params": {
+    "h": "crossH",
+    "arm": "crossH * 0.24",
+    "t": "crossH * 0.085"
+   },
+   "at": [
+    [
+     0,
+     "h + r1 * 1.4 - 0.1",
+     0,
+     0
+    ]
+   ],
+   "_about": "Gaudi's cross on the crown (cross: no leaves it off)"
+  }
+ }
+}

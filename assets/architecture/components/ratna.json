@@ -1,0 +1,136 @@
+{
+ "name": "Ratna",
+ "_about": "A RATNA, the jewel finial a Central Javanese roof bristles with, `h` high to its tip, `r` its foot's half-width, `n` its sides. `form` \"vajra\": Prambanan's Hindu form -- a swelling drum and a long point; \"bell\": the Buddhist form (a square foot, a bell like a small stupa's -- as wide as `r` allows within the height -- and its point); \"spike\": a four-sided point alone, for temples seen by the hundred. y 0 on the ledge it stands on. Written by tools/archgen/javanese.py.",
+ "params": {
+  "detail": 4,
+  "r": 0.4,
+  "h": 1.6,
+  "n": 6,
+  "form": "vajra",
+  "rb": "min(r, h * 0.28)"
+ },
+ "build": [
+  "swell",
+  "point",
+  "foot",
+  "bell",
+  "tip",
+  "spike"
+ ],
+ "parts": {
+  "swell": {
+   "type": "column",
+   "radius": "r",
+   "taper": 0.55,
+   "height": "h * 0.45",
+   "sides": "n",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "form": "vajra"
+   },
+   "_about": "the vajra's body: a drum swelling to its shoulder"
+  },
+  "point": {
+   "type": "column",
+   "radius": "r * 0.55",
+   "taper": 0,
+   "height": "h * 0.55",
+   "sides": "n",
+   "at": [
+    [
+     0,
+     "h * 0.45",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "form": "vajra"
+   },
+   "_about": "the long point"
+  },
+  "foot": {
+   "type": "box",
+   "width": "r * 2",
+   "length": "r * 2",
+   "height": "h * 0.2",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "form": "bell"
+   },
+   "_about": "the square stepped foot (padma)"
+  },
+  "bell": {
+   "type": "dome",
+   "radius": "rb",
+   "sides": "n",
+   "head": {
+    "profile": "bell",
+    "waist": 0.78,
+    "lift": 0.85
+   },
+   "at": [
+    [
+     0,
+     "h * 0.2",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "form": "bell"
+   },
+   "_about": "the bell, as a little stupa's (its height 1.63 of its radius)"
+  },
+  "tip": {
+   "type": "column",
+   "radius": "rb * 0.3",
+   "taper": 0.12,
+   "height": "h * 0.8 - rb * 1.55",
+   "sides": "n",
+   "at": [
+    [
+     0,
+     "h * 0.2 + rb * 1.55",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "form": "bell"
+   },
+   "_about": "the bell's pointed top, to the ratna's height"
+  },
+  "spike": {
+   "type": "pyramid",
+   "base": "r * 2",
+   "height": "h",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "form": "spike"
+   },
+   "_about": "the far form: a four-sided point, square with its temple"
+  }
+ }
+}

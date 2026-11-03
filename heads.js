@@ -14,6 +14,8 @@ import * as THREE from "three";
 import { batchPool } from "./batchpool.js";
 import { ASSETS } from "./catalogue.js";
 import { buildItem } from "./items.js";
+import { flatten } from "./defs.js";
+import { FACE_ATTRS, FACE_PARAMS } from "./face.js";   // (the canon's values: what a face variety's deltas add to)
 import { paintedGeometry } from "./tools.js";
 import { wgslFn, normalWorld, positionWorld, cameraPosition, attribute, uv, texture, vec3, vec4, positionLocal, positionGeometry, time, sin } from "three/tsl";
 import { WIND, WIND_DIR, grassWind } from "./grass.js";   // (the hair stirs in the grass's wind)
@@ -23,17 +25,24 @@ import { PREGEN, pregenOn, pregenMiss, recordFor, hasher, fetchFace, packFace } 
 
 const CANON_R = .090;   // the canon face's cranium radius (face.js LEVELS): scaled to each person's hr (a little under it: the SDF hair cap covers the skull)
 const HAIRLINE = .042;  // the mesh's own hairline, under the cap's: whatever skull shows through the cap shows as hair
-const SEEDS = 5;        // how many of a kind and colouring are told apart (their ranges drawn by the seed)
+const SEEDS = 16;       // how many of a kind and colouring are told apart (their ranges drawn by the seed: faceVariety) -- 5 made a village of a few faces
 
 // A BUILT FACE AS ONE GEOMETRY: tools.js paintedGeometry, shaded by faceMaterial in the WORLD's light (light.js) -- the
 // lips too: face.js gives every vertex the smooth surface's own normal, so their rolls take the light as the skin does
 // WET: the eyes (all but the catchlight, which is the highlight already) and, less, the lips take a sharp specular
 export const WET = { eye: 1, iris: 1, pupil: 1, limbus: 1, lip: .3 };
 const cavities = new WeakMap();   // built face -> its vertices' darkness (cavityOf: the shape's, kept for every colouring of it)
+// (a living face's normals SMOOTHED a little too -- LIVING_SMOOTH, smoothNormals below: the field's creases along its
+//  guide lines read as hard planes down the cheeks and the jaw, a faceted mask; worked out once a shape, as the hollows)
+export const LIVING_SMOOTH = { r: .013, cos: .5 };
+const smoothed = new WeakMap(), carved = new WeakMap();   // (built face -> its smoothed normals: a living face's, a carved one's)
 export const faceGeometry = (built, recolor = null) => {
   const geo = paintedGeometry(built, { strands: ["hair"], wet: WET, recolor });
   let dark = cavities.get(built);
   if (!dark) cavities.set(built, dark = cavityOf(geo));
+  const sm = smoothed.get(built);
+  if (sm && sm.length === geo.attributes.normal.array.length) geo.setAttribute("normal", new THREE.Float32BufferAttribute(sm, 3));
+  else smoothed.set(built, smoothNormals(geo, LIVING_SMOOTH).attributes.normal.array);
   return cavityShade(geo, CAVITY, dark);
 };
 // A CARVED HEAD's geometry (a statue's: shell.js stoneMaterial `head`): no paint -- its hollows as an attribute of their own
@@ -50,7 +59,10 @@ export const stoneFaceGeometry = (built, { curls = false, recolor = null } = {})
   const curl = [];   // (per vertex, in paintedGeometry's order: each group's indices)
   for (const g of built.groups) { const v = g.roles?.has("beard") || (curls && g.roles?.has("hair")) ? 1 : 0; for (let i = 0; i < g.idx.length; i++) curl.push(v); }
   geo.setAttribute("curl", new THREE.Float32BufferAttribute(curl, 1));
-  return smoothNormals(geo);
+  const sm = carved.get(built);   // (a shape's smoothing, once: a temple's statues share their heads)
+  if (sm && sm.length === geo.attributes.normal.array.length) { geo.setAttribute("normal", new THREE.Float32BufferAttribute(sm, 3)); return geo; }
+  carved.set(built, smoothNormals(geo).attributes.normal.array);
+  return geo;
 };
 // SMOOTHED NORMALS: each vertex's normal the mean of those within `r` (falling off with the distance), only of points
 // facing within `cos` of its own -- not across a lip to the other lip, a lid to the eye -- and of its own kind (skin,
@@ -58,29 +70,42 @@ export const stoneFaceGeometry = (built, { curls = false, recolor = null } = {})
 export const CARVED_SMOOTH = { r: .022, cos: .3 };
 export function smoothNormals(geo, C = CARVED_SMOOTH) {
   const P = geo.attributes.position.array, N = geo.attributes.normal.array, n = P.length / 3, hm = geo.attributes.hairMask?.array, wm = geo.attributes.wetMask?.array;
-  const R = C.r, cell = new Map(), ck = (a, b, c) => (a + 512) + (b + 512) * 1024 + (c + 512) * 1048576, out = new Float32Array(N);
+  // the surface's own points, once each (the geometry repeats a vertex in every triangle it is in: cavityOf's keys), each
+  // with its own normal and kind -- and how many copies it stands for, its weight: the same sums as over every copy, with
+  // a sixth of the points and a thirty-sixth of the pairs (2026-11-03: over every copy, 73 s of a Greek world's start)
+  const uniq = new Map(), of = new Int32Array(n).fill(-1), U = [], W = [];
   for (let i = 0; i < n; i++) {
     if (hm?.[i]) continue;
-    const k = ck(Math.floor(P[i * 3] / R), Math.floor(P[i * 3 + 1] / R), Math.floor(P[i * 3 + 2] / R)); let l = cell.get(k); if (!l) cell.set(k, l = []); l.push(i);
+    const k = (Math.round(P[i * 3] * 2e4) + 8192) + (Math.round(P[i * 3 + 1] * 2e4) + 8192) * 16384 + (Math.round(P[i * 3 + 2] * 2e4) + 8192) * 268435456;
+    let l = uniq.get(k); if (!l) uniq.set(k, l = []);
+    let u = -1;
+    for (const q of l) { const j = U[q]; if (N[j * 3] === N[i * 3] && N[j * 3 + 1] === N[i * 3 + 1] && N[j * 3 + 2] === N[i * 3 + 2] && !!wm?.[j] === !!wm?.[i]) { u = q; break; } }
+    if (u < 0) { u = U.length; U.push(i); W.push(0); l.push(u); }
+    W[u]++; of[i] = u;
   }
-  for (let i = 0; i < n; i++) {
-    if (hm?.[i]) continue;
-    const x = P[i * 3], y = P[i * 3 + 1], z = P[i * 3 + 2], nx = N[i * 3], ny = N[i * 3 + 1], nz = N[i * 3 + 2], wet = !!wm?.[i];
+  const R = C.r, cell = new Map(), ck = (a, b, c) => (a + 512) + (b + 512) * 1024 + (c + 512) * 1048576, out = new Float32Array(N), su = new Float32Array(U.length * 3), ok = new Uint8Array(U.length);
+  for (let u = 0; u < U.length; u++) {
+    const i = U[u], k = ck(Math.floor(P[i * 3] / R), Math.floor(P[i * 3 + 1] / R), Math.floor(P[i * 3 + 2] / R)); let l = cell.get(k); if (!l) cell.set(k, l = []); l.push(u);
+  }
+  for (let u = 0; u < U.length; u++) {
+    const i = U[u], x = P[i * 3], y = P[i * 3 + 1], z = P[i * 3 + 2], nx = N[i * 3], ny = N[i * 3 + 1], nz = N[i * 3 + 2], wet = !!wm?.[i];
     const cx = Math.floor(x / R), cy = Math.floor(y / R), cz = Math.floor(z / R);
     let sx = 0, sy = 0, sz = 0;
     for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let c = -1; c <= 1; c++) {
       const l = cell.get(ck(cx + a, cy + b, cz + c));
-      if (l) for (const j of l) {
+      if (l) for (const q of l) {
+        const j = U[q];
         if (!!wm?.[j] !== wet) continue;
         const mx = N[j * 3], my = N[j * 3 + 1], mz = N[j * 3 + 2];
         if (mx * nx + my * ny + mz * nz < C.cos) continue;
         const d = Math.hypot(P[j * 3] - x, P[j * 3 + 1] - y, P[j * 3 + 2] - z);
-        if (d < R) { const w = 1 - d / R; sx += mx * w; sy += my * w; sz += mz * w; }
+        if (d < R) { const w = (1 - d / R) * W[q]; sx += mx * w; sy += my * w; sz += mz * w; }
       }
     }
     const L = Math.hypot(sx, sy, sz);
-    if (L > 1e-9) { out[i * 3] = sx / L; out[i * 3 + 1] = sy / L; out[i * 3 + 2] = sz / L; }
+    if (L > 1e-9) { su[u * 3] = sx / L; su[u * 3 + 1] = sy / L; su[u * 3 + 2] = sz / L; ok[u] = 1; }
   }
+  for (let i = 0; i < n; i++) { const u = of[i]; if (u >= 0 && ok[u]) { out[i * 3] = su[u * 3]; out[i * 3 + 1] = su[u * 3 + 1]; out[i * 3 + 2] = su[u * 3 + 2]; } }
   geo.setAttribute("normal", new THREE.Float32BufferAttribute(out, 3));
   return geo;
 }
@@ -278,8 +303,46 @@ const browOf = (hair) => { const c = new THREE.Color(hair); c.getHSL(_hsl, THREE
 // STUBBLE: the skin, a third of the way to the brows' colour (face.js BEARDS stubble)
 export const STUBBLE = .35;
 const stubbleOf = (skin, hair) => "#" + new THREE.Color(skin).lerp(new THREE.Color(browOf(hair)), STUBBLE).getHexString();
-export const faceShape = (f) => ({ kind: f.kind, seed: f.seed % SEEDS, style: f.style ?? "", fringe: f.fringe ?? 0, stone: f.stone ?? 0, headwear: f.headwear ?? "", ears: f.ears ?? "", ...(f.beard ? { beard: f.beard } : {}) });
-export const faceFamily = (s) => `${s.kind}|${s.style}|${s.fringe}|${s.stone ? (PAINTED.has(s.stone) ? "p@" : "1@") + DETAIL.stone : 0}|${s.headwear}|${s.ears}${s.beard ? "|" + s.beard : ""}`;   // (a carved one at its detail: no other stands in)
+export const faceShape = (f) => ({ kind: f.kind, seed: f.seed % SEEDS, style: f.style ?? "", fringe: f.fringe ?? 0, stone: f.stone ?? 0, headwear: f.headwear ?? "", ears: f.ears ?? "", ...(f.beard ? { beard: f.beard } : {}), ...(f.full ? { full: f.full } : {}) });
+// (its FULLNESS -- `full`, the body's fat in steps: people.js -- is of the family: a fat man's face never stands in for a thin one's)
+export const faceFamily = (s) => `${s.kind}|${s.style}|${s.fringe}|${s.stone ? (PAINTED.has(s.stone) ? "p@" : "1@") + DETAIL.stone : 0}|${s.headwear}|${s.ears}${s.beard ? "|" + s.beard : ""}${s.full ? "|f" + s.full : ""}`;   // (a carved one at its detail: no other stands in)
+// HOW THIS FACE DIFFERS from the others of its kind (assets/items/faces/face.json `variety`, docs/face.md): its seed's place
+// on a few AXES that move several attributes together within the kind's own ranges -- a woman's finer or stronger jaw, brow
+// and nose at once, never a man's -- then a chin and a nose SHAPE picked by the kind's weights, and the FULLNESS of a stout
+// or a lean body's face (s.full) -> the params handed to the face over its definition's own draws
+const vrng = (seed) => { let a = (seed >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+export function faceVariety(s, bank) {
+  const def = bank.get("items/faces/" + s.kind);
+  if (!def || s.stone) return {};   // (a carved head: the sculptor's ideal, as its definition has it)
+  const flat = flatten(def, bank), V = flat.variety, P = flat.params ?? {};
+  if (!V) return {};
+  const k = V.kinds?.[s.kind] ?? 1;
+  if (k <= 0) return {};
+  const r = vrng((1 + s.seed) * 7907 + [...s.kind].reduce((h, c) => h * 31 + c.charCodeAt(0), 7));
+  const bell = () => (r() + r() + r() - 1.5) / 1.5;   // (-1..1, most near 0)
+  const z = Object.fromEntries(Object.keys(V.axes ?? {}).map((a) => [a, bell()]));
+  const out = {}, base = {};
+  // the attributes the kind gives as RANGES: placed in them by the axes (their weights, normalised) and their own share
+  for (const [name, v] of Object.entries(P)) {
+    if (!(Array.isArray(v) && v.length === 2 && v.every((x) => typeof x === "number"))) continue;
+    let s2 = 0, w2 = 0;
+    for (const [a, ws] of Object.entries(V.axes ?? {})) if (ws[name] !== undefined) { s2 += ws[name] * z[a]; w2 += ws[name] * ws[name]; }
+    const own = bell(), x = w2 > 0 ? (1 - V.own) * s2 / Math.sqrt(w2) + V.own * own : own;
+    out[name] = v[0] + (v[1] - v[0]) * Math.max(-.15, Math.min(1.15, .5 + .75 * x));
+  }
+  for (const [name, v] of Object.entries(P)) if (typeof v === "number") base[name] = v;
+  const val = (name) => out[name] ?? base[name] ?? FACE_ATTRS[name] ?? FACE_PARAMS[name] ?? 0;
+  const pickOf = (table, weights) => {
+    const ks = Object.keys(weights ?? {}).filter((n) => table?.[n]), tot = ks.reduce((t, n) => t + weights[n], 0);
+    let x = r() * tot;
+    for (const n of ks) if ((x -= weights[n]) < 0) return n;
+    return ks[ks.length - 1] ?? null;
+  };
+  const W = V.weights?.[s.kind] ?? {}, chin = pickOf(V.chins, W.chins), nose = pickOf(V.noses, W.noses);
+  const add = (deltas, f = k) => { for (const [n, d] of Object.entries(deltas ?? {})) if (!n.startsWith("_")) out[n] = val(n) + d * f; };
+  add(V.chins?.[chin]); add(V.noses?.[nose]); add(V.full?.[s.full ?? 0]);
+  return out;
+}
 // (the definitions a face is made of: its key carries them, so an edited face, hairstyle or jewel is not found)
 const contentOf = new WeakMap();
 function faceContent(bank) {
@@ -294,7 +357,7 @@ function faceContent(bank) {
 export const faceKey = (s, bank, SH) => hasher().str("face").str(faceContent(bank)).json({ ...s, detail: detailOf(s), skin: SH.skin ?? null }).hex();
 export function buildFace(s, bank, lib, SH) {
   return buildItem("items/faces/" + s.kind, bank, lib, { seed: 1 + s.seed, materials: { skin: SH.skin ?? SKIN0, hairColour: HAIR0, brow: BROW0, stubble: STUB0, lip: LIP0 },
-    params: { detail: detailOf(s), scale: 1, hairline: s.style === "none" ? .2 : HAIRLINE, seed: 1 + s.seed, ...(s.style ? { hairstyle: "items/hair/" + s.style, fringe: s.fringe, ...hairFaceParams(bank, s.style) } : {}), ...(s.stone ? { carved: 1, painted: PAINTED.has(s.stone) ? 1 : 0 } : {}),
+    params: { ...faceVariety(s, bank), detail: detailOf(s), scale: 1, hairline: s.style === "none" ? .2 : HAIRLINE, seed: 1 + s.seed, ...(s.style ? { hairstyle: "items/hair/" + s.style, fringe: s.fringe, ...hairFaceParams(bank, s.style) } : {}), ...(s.stone ? { carved: 1, painted: PAINTED.has(s.stone) ? 1 : 0 } : {}),
               ...(s.headwear ? { headwear: s.headwear } : {}), ...(s.ears ? { earrings: s.ears } : {}), ...(s.beard ? { beard: s.beard } : {}) } });   // (a beard the person is given -- an outfit's: face.js BEARDS -- over the face's own draw)   // (the person's own hairstyle, else the face's pick; what is worn on the head and the ears: jewelry.js)
 }
 // the generator (pregen.html): a person's face built and kept, unless it already is

@@ -1,0 +1,2820 @@
+{
+  "name": "Regensburg Cathedral",
+  "_about": "REGENSBURG CATHEDRAL (Dom St. Peter) from the same components as Notre-Dame (the `gothic` generator): the `basilica` nave of five bays, 31.85 m to the vault, rib-vaulted on compound piers, flyers down the flanks; a transept that does not project; and no ambulatory but THREE STAGGERED CHOIRS, the main one a bay further east, nearly all glass between deep buttresses, each closed in a polygon; the west front between two towers, the great traceried window over the main portal and before it the TRIANGULAR PORCH on its one pillar under free-standing gables (`triangle-porch`); the towers' open octagons and openwork spires to 105 m; the copper Dachreiter over the crossing; and west of the north transept front the Romanesque Eselsturm. Pale limestone patched with greensand under red-brown tiled roofs.",
+  "params": {
+    "detail": 4,
+    "bays": 9,
+    "bayLen": 8.5,
+    "naveW": 14.0,
+    "aisleW": 8.8,
+    "pierT": 1.6,
+    "aisleT": 1.6,
+    "naveL": "bays * bayLen",
+    "bodyW": "naveW + 2 * pierT + 2 * aisleW + 2 * aisleT",
+    "_naveW": "the nave's and the aisles' clear widths, between the walls' faces",
+    "spring": 7.0,
+    "arcadeH": 17.0,
+    "clearH": 31.85,
+    "_arcadeH": "the heights the furnishing is laid out to (the organ, the gallery)",
+    "frontH": 38.0,
+    "towerW": 12.4,
+    "towerH": 14.0,
+    "roofPitch": 58,
+    "towerBays": 1,
+    "_towerBays": "the aisles' last bays at the west end, which the towers stand over: they have no aisle vault or roof of their own",
+    "towerD": "towerBays * bayLen + 3",
+    "_towerD": "a tower's depth: over the aisle bays it stands on and the west front's 3m -- its back is the next bay's transverse arch",
+    "crossA": 5,
+    "_crossA": "the first of the two bays the crossing spans, from the west (the crossing square: two bays by the nave's width)",
+    "zCross": "naveL / 2 - (crossA + 1) * bayLen",
+    "arm": 0.0,
+    "apse": 5,
+    "pierR": 0.85,
+    "shaft": 0.25,
+    "clerSpring": 3.7,
+    "flyerStages": 1,
+    "_flyerStages": "Notre-Dame's flyers clear both aisles in one leap (rebuilt so in the 1220s); Cologne's in two, from intermediate piers",
+    "_clerSpring": "the high vault springs this far over the clerestory sill: Notre-Dame's tall clerestory"
+  },
+  "base": {
+    "height": 0.9,
+    "steps": 3,
+    "stepOut": 0.6,
+    "margin": 4
+  },
+  "railing": {
+    "type": "stone"
+  },
+  "build": [
+    "church",
+    "west front",
+    "west interior",
+    "towers",
+    "tower stairs",
+    "tower parapets",
+    "front buttresses 1",
+    "front buttresses side 1",
+    "front buttresses 2",
+    "front buttresses side 2",
+    "front buttresses 3",
+    "front buttresses side 3",
+    "front courses",
+    "west gable",
+    "west gable lace",
+    "west gable apex",
+    "tower octagons",
+    "tower spire feet",
+    "tower spires",
+    "tower pinnacles",
+    "west gallery",
+    "gallery parapet",
+    "seating",
+    "altar",
+    "organ",
+    "central tympanum",
+    "central lintel",
+    "central archivolt 1",
+    "central archivolt 2",
+    "central archivolt 3",
+    "north tympanum",
+    "north lintel",
+    "north trumeau",
+    "north archivolt 1",
+    "north archivolt 2",
+    "north archivolt 3",
+    "south tympanum",
+    "south lintel",
+    "south trumeau",
+    "south archivolt 1",
+    "south archivolt 2",
+    "south archivolt 3",
+    "porch",
+    "eselsturm",
+    "eselsturm roof",
+    "dachreiter"
+  ],
+  "parts": {
+    "church": {
+      "type": "basilica",
+      "bays": "bays",
+      "bayLen": "bayLen",
+      "naveW": "naveW + pierT",
+      "aisleW": "(aisleW + (pierT + aisleT) / 2) / 2",
+      "aisles": 2,
+      "flyerStages": "flyerStages",
+      "t": "pierT",
+      "aisleT": "aisleT",
+      "apse": "apse",
+      "spring": "spring",
+      "pierR": "pierR",
+      "shaft": "shaft",
+      "clerSpring": "clerSpring",
+      "pitch": "roofPitch",
+      "aislePitch": 18,
+      "aisleWin": 3.0,
+      "aisleSill": 4.0,
+      "skipAisle": [
+        [
+          0,
+          "towerBays - 1"
+        ]
+      ],
+      "transept": [
+        "crossA",
+        "crossA + 1"
+      ],
+      "arm": "arm",
+      "transeptT": 2.0,
+      "pinnacleKinds": [
+        {
+          "h": 2.2,
+          "s": 3.2,
+          "gablets": 0.5,
+          "crockets": 2
+        },
+        {
+          "sides": 8,
+          "h": 1.7,
+          "s": 3.6,
+          "gablets": 0.45,
+          "crockets": 3,
+          "attendants": 0.22
+        }
+      ],
+      "ambulatory": false,
+      "chancelBays": 1,
+      "sideApse": 3,
+      "transeptRose": false,
+      "choirWin": 0.95,
+      "choirButtress": 3.2,
+      "sideApsePitch": 50,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "nave, crossing, transept, apse and ambulatory as one vaulted skeleton: piers, arches, rib vaults, buttresses, flyers, roofs"
+    },
+    "west front": {
+      "type": "wall",
+      "width": "2 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) - towerW",
+      "height": "frontH",
+      "thickness": 3.0,
+      "at": [
+        [
+          0,
+          0,
+          "naveL / 2 + 3",
+          0
+        ]
+      ],
+      "tiers": [
+        {
+          "h": 16,
+          "openings": [
+            {
+              "at": 0,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 5.5,
+              "head": {
+                "profile": "pointed",
+                "spread": 1
+              },
+              "wimperg": true
+            }
+          ]
+        },
+        {
+          "h": 14,
+          "openings": [
+            {
+              "at": 0,
+              "width": 7.6,
+              "sill": 1.5,
+              "springing": 7.0,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.9
+              },
+              "tracery": 4
+            }
+          ]
+        },
+        {
+          "openings": {
+            "pattern": "5",
+            "width": 1.2,
+            "gap": 0.7,
+            "pier": 0.7,
+            "sill": 1.6,
+            "springing": 4.2,
+            "head": {
+              "profile": "pointed",
+              "spread": 1.0
+            }
+          },
+          "glass": false
+        }
+      ],
+      "_about": "the west front between the towers, in three tiers: the central portal; the great rose; the open gallery"
+    },
+    "west interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          "2 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) - towerW",
+          3
+        ]
+      },
+      "height": 30,
+      "at": [
+        [
+          0,
+          0,
+          "naveL / 2",
+          0
+        ]
+      ]
+    },
+    "towers": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "towerW",
+          "towerD"
+        ]
+      },
+      "thickness": 1.6,
+      "height": "frontH + towerH",
+      "tiers": [
+        {
+          "h": 16,
+          "openings": []
+        },
+        {
+          "h": 14,
+          "openings": []
+        },
+        {
+          "h": "frontH - 30",
+          "openings": [
+            {
+              "at": 0,
+              "width": 4.6,
+              "sill": 0.8,
+              "springing": 3.6,
+              "head": {
+                "profile": "pointed",
+                "spread": 0.9
+              },
+              "tracery": 2
+            }
+          ]
+        },
+        {
+          "openings": {
+            "pattern": "2",
+            "width": 3.0,
+            "gap": 1.5,
+            "pier": 1.6,
+            "sill": 3.5,
+            "springing": "towerH - 9",
+            "head": {
+              "profile": "pointed",
+              "spread": 1.6
+            },
+            "wimperg": {
+              "pitch": 62,
+              "coping": 0.3,
+              "depth": 0.3
+            }
+          },
+          "glass": false
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 16,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.4,
+                "sill": 0,
+                "springing": 5.0,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 1
+                },
+                "wimperg": true
+              }
+            ]
+          },
+          {
+            "h": 14,
+            "openings": [
+              {
+                "at": 0,
+                "width": 5.6,
+                "sill": 1.2,
+                "springing": 6.8,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.9
+                },
+                "tracery": 3,
+                "wimperg": {
+                  "pitch": 62,
+                  "coping": 0.35,
+                  "depth": 0.3
+                }
+              }
+            ]
+          },
+          {
+            "h": "frontH - 30",
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.6,
+                "sill": 0.8,
+                "springing": 3.6,
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.9
+                },
+                "tracery": 2
+              }
+            ],
+            "glass": false
+          },
+          {
+            "openings": {
+              "pattern": "2",
+              "width": 3.0,
+              "gap": 1.5,
+              "pier": 1.6,
+              "sill": 3.5,
+              "springing": "towerH - 9",
+              "head": {
+                "profile": "pointed",
+                "spread": 1.6
+              },
+              "wimperg": {
+                "pitch": 62,
+                "coping": 0.3,
+                "depth": 0.3
+              }
+            },
+            "glass": false
+          }
+        ],
+        "2": [
+          {
+            "h": 16,
+            "openings": [
+              {
+                "at": 0,
+                "width": "towerW - 5.2",
+                "sill": 0,
+                "springing": "16 - 1.1 - (towerW - 5.2) / 2 * 1.7321",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 1
+                }
+              }
+            ]
+          },
+          {
+            "h": 14,
+            "openings": []
+          },
+          {
+            "h": "frontH - 30",
+            "openings": []
+          },
+          {
+            "openings": {
+              "pattern": "2",
+              "width": 3.0,
+              "gap": 1.5,
+              "pier": 1.6,
+              "sill": 3.5,
+              "springing": "towerH - 9",
+              "head": {
+                "profile": "pointed",
+                "spread": 1.6
+              },
+              "wimperg": {
+                "pitch": 62,
+                "coping": 0.3,
+                "depth": 0.3
+              }
+            },
+            "glass": false
+          }
+        ]
+      },
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          0,
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          0,
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ]
+      ],
+      "interior": "frontH + towerH - 1",
+      "_about": "the two towers, from the ground: a portal in the front, a window, a blind stage, then the belfry's lancet pairs; the back an arch across the aisle"
+    },
+    "tower stairs": {
+      "type": "component",
+      "use": "components/tower-stair",
+      "params": {
+        "W": "towerW - 3.2",
+        "H": "frontH + towerH",
+        "tR": 2.1,
+        "tx": 1.5,
+        "tz": 0,
+        "hand": "left"
+      },
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          0,
+          "naveL / 2 + 3 - towerD / 2",
+          3.14159265
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          0,
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ]
+      ],
+      "_about": "the stair up each tower (`tower-stair`): the spiral turret against the outer flank, from the aisle to the terrace on top, which is the floor round its head"
+    },
+    "tower parapets": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "towerW + 0.4",
+          "towerD + 0.4"
+        ]
+      },
+      "thickness": 0.4,
+      "height": 1.4,
+      "openings": [],
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ]
+      ]
+    },
+    "front buttresses 1": {
+      "type": "box",
+      "width": 2.2,
+      "length": 2.4,
+      "height": 16,
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          0,
+          "naveL / 2 + 3 + 1.15",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          0,
+          "naveL / 2 + 3 + 1.15",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          0,
+          "naveL / 2 + 3 + 1.15",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          0,
+          "naveL / 2 + 3 + 1.15",
+          0
+        ]
+      ]
+    },
+    "front buttresses side 1": {
+      "type": "box",
+      "width": 2.4,
+      "length": 2.2,
+      "height": 16,
+      "at": [
+        [
+          "-1 * ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) + towerW / 2 + 1.15)",
+          0,
+          "naveL / 2 + 3 - 1.1",
+          0
+        ],
+        [
+          "1 * ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) + towerW / 2 + 1.15)",
+          0,
+          "naveL / 2 + 3 - 1.1",
+          0
+        ]
+      ]
+    },
+    "front buttresses 2": {
+      "type": "box",
+      "width": 1.9000000000000001,
+      "length": 1.6,
+      "height": 22,
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          16,
+          "naveL / 2 + 3 + 0.75",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          16,
+          "naveL / 2 + 3 + 0.75",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          16,
+          "naveL / 2 + 3 + 0.75",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          16,
+          "naveL / 2 + 3 + 0.75",
+          0
+        ]
+      ]
+    },
+    "front buttresses side 2": {
+      "type": "box",
+      "width": 1.6,
+      "length": 1.9000000000000001,
+      "height": 22,
+      "at": [
+        [
+          "-1 * ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) + towerW / 2 + 0.75)",
+          16,
+          "naveL / 2 + 3 - 1.1",
+          0
+        ],
+        [
+          "1 * ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) + towerW / 2 + 0.75)",
+          16,
+          "naveL / 2 + 3 - 1.1",
+          0
+        ]
+      ]
+    },
+    "front buttresses 3": {
+      "type": "box",
+      "width": 1.6,
+      "length": 1.0,
+      "height": 14,
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          38,
+          "naveL / 2 + 3 + 0.45",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          38,
+          "naveL / 2 + 3 + 0.45",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          38,
+          "naveL / 2 + 3 + 0.45",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          38,
+          "naveL / 2 + 3 + 0.45",
+          0
+        ]
+      ]
+    },
+    "front buttresses side 3": {
+      "type": "box",
+      "width": 1.0,
+      "length": 1.6,
+      "height": 14,
+      "at": [
+        [
+          "-1 * ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) + towerW / 2 + 0.45)",
+          38,
+          "naveL / 2 + 3 - 1.1",
+          0
+        ],
+        [
+          "1 * ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) + towerW / 2 + 0.45)",
+          38,
+          "naveL / 2 + 3 - 1.1",
+          0
+        ]
+      ]
+    },
+    "front courses": {
+      "type": "box",
+      "width": "2 * ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) + towerW / 2) + 0.4",
+      "length": 0.5,
+      "height": 0.35,
+      "at": [
+        [
+          0,
+          16.0,
+          "naveL / 2 + 3 + 0.2",
+          0
+        ],
+        [
+          0,
+          30.0,
+          "naveL / 2 + 3 + 0.2",
+          0
+        ],
+        [
+          0,
+          38.0,
+          "naveL / 2 + 3 + 0.2",
+          0
+        ]
+      ],
+      "_about": "the string courses across the whole front"
+    },
+    "west gable": {
+      "type": "screen",
+      "outline": [
+        [
+          "0 - ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) - towerW / 2 - 0.1)",
+          "frontH - 0.05"
+        ],
+        [
+          "(bodyW / 2 - towerW / 2 - 0.5 + 0.5) - towerW / 2 - 0.1",
+          "frontH - 0.05"
+        ],
+        [
+          0,
+          "frontH + 10.0"
+        ]
+      ],
+      "t": 1.2,
+      "at": [
+        [
+          0,
+          0,
+          "naveL / 2 + 3",
+          0
+        ]
+      ],
+      "_about": "the gable over the great window, between the towers"
+    },
+    "west gable lace": {
+      "type": "cresting",
+      "run": [
+        [
+          "0 - ((bodyW / 2 - towerW / 2 - 0.5 + 0.5) - towerW / 2 - 0.1)",
+          "frontH"
+        ],
+        [
+          0,
+          "frontH + 10.0"
+        ],
+        [
+          "(bodyW / 2 - towerW / 2 - 0.5 + 0.5) - towerW / 2 - 0.1",
+          "frontH"
+        ]
+      ],
+      "h": 1.2,
+      "panel": 1.6,
+      "t": 0.25,
+      "every": 3,
+      "spirelet": {
+        "w": 0.2,
+        "s": 0.9
+      },
+      "at": [
+        [
+          0,
+          0,
+          "naveL / 2 + 3 - 0.4",
+          0
+        ]
+      ]
+    },
+    "west gable apex": {
+      "type": "pinnacle",
+      "w": 1.2,
+      "h": 1.6,
+      "s": 3.2,
+      "gablets": 0.5,
+      "crockets": 2,
+      "at": [
+        [
+          0,
+          "frontH + 10.0 - 0.4",
+          "naveL / 2 + 3 - 0.6",
+          0
+        ]
+      ]
+    },
+    "tower octagons": {
+      "type": "component",
+      "use": "components/gothic-octagon-stage",
+      "params": {
+        "R": 5.8,
+        "H": 15.0,
+        "t": 0.8,
+        "low": 3.0,
+        "lights": 2
+      },
+      "build": [
+        "walls"
+      ],
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ]
+      ],
+      "_about": "the open octagon on each tower, a tall traceried lancet in every face (`gothic-octagon-stage`)"
+    },
+    "tower spire feet": {
+      "type": "component",
+      "use": "components/gothic-spire",
+      "params": {
+        "R": 5.5,
+        "rise": 35.0,
+        "pinR": 5.9,
+        "pinW": 0.9,
+        "pinH": 2.6,
+        "pinS": 4.6
+      },
+      "build": [
+        "gables",
+        "pinnacles"
+      ],
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          "frontH + towerH + 15.0",
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          "frontH + towerH + 15.0",
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ]
+      ],
+      "_about": "the gables and pinnacles round each spire's foot (`gothic-spire`)"
+    },
+    "tower spires": {
+      "type": "open-spire",
+      "R": 5.5,
+      "rise": 34.5,
+      "topR": 0.4,
+      "rows": 9,
+      "rib": 0.4,
+      "bar": 0.15,
+      "finial": 3.0,
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          "frontH + towerH + 15.0",
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5)",
+          "frontH + towerH + 15.0",
+          "naveL / 2 + 3 - towerD / 2",
+          0
+        ]
+      ],
+      "_about": "the OPENWORK spires"
+    },
+    "tower pinnacles": {
+      "type": "component",
+      "use": "components/pinnacle",
+      "params": {
+        "w": 1.5,
+        "h": 4.0,
+        "s": 6.5
+      },
+      "at": [
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2 + -1 * (towerD / 2 - 1.1)",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2 + 1 * (towerD / 2 - 1.1)",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2 + -1 * (towerD / 2 - 1.1)",
+          0
+        ],
+        [
+          "-1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2 + 1 * (towerD / 2 - 1.1)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2 + -1 * (towerD / 2 - 1.1)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + -1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2 + 1 * (towerD / 2 - 1.1)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2 + -1 * (towerD / 2 - 1.1)",
+          0
+        ],
+        [
+          "1 * (bodyW / 2 - towerW / 2 - 0.5 + 0.5) + 1 * (towerW / 2 - 1.1)",
+          "frontH + towerH",
+          "naveL / 2 + 3 - towerD / 2 + 1 * (towerD / 2 - 1.1)",
+          0
+        ]
+      ],
+      "_about": "a pinnacle on every corner of the towers' heads, where the octagon stage begins"
+    },
+    "west gallery": {
+      "walked": true,
+      "type": "box",
+      "width": "naveW",
+      "length": "bayLen - 0.4",
+      "height": 0.5,
+      "at": [
+        [
+          0,
+          "arcadeH * 0.45 - 0.5",
+          "naveL / 2 - bayLen / 2 + 0.2",
+          0
+        ]
+      ],
+      "_about": "the organ loft: a gallery across the nave's west bay, the doors passing under it"
+    },
+    "gallery parapet": {
+      "type": "box",
+      "width": "naveW",
+      "length": 0.25,
+      "height": 1.0,
+      "at": [
+        [
+          0,
+          "arcadeH * 0.45",
+          "naveL / 2 - bayLen + 0.4",
+          0
+        ]
+      ]
+    },
+    "seating": {
+      "type": "zone",
+      "zone": "seating",
+      "w": "naveW - 1.6",
+      "d": "(naveL / 2 - bayLen - 1.5) - (zCross + bayLen + 1.5)",
+      "h": "arcadeH",
+      "at": [
+        [
+          0,
+          0,
+          "((zCross + bayLen + 1.5) + (naveL / 2 - bayLen - 1.5)) / 2",
+          1.5707963
+        ]
+      ],
+      "_about": "the nave's seating between the arcades, from under the gallery up to the crossing, on a middle aisle"
+    },
+    "altar": {
+      "type": "zone",
+      "zone": "altar",
+      "w": "naveW - 2",
+      "d": 3.2,
+      "h": "arcadeH",
+      "at": [
+        [
+          0,
+          0,
+          "zCross - bayLen - 2.5",
+          1.5707963
+        ]
+      ],
+      "_about": "the high altar just east of the crossing"
+    },
+    "organ": {
+      "type": "zone",
+      "zone": "organ",
+      "w": "min(naveW - 2, 10)",
+      "d": "bayLen * 0.6",
+      "h": "(clearH - arcadeH * 0.45) * 0.6",
+      "at": [
+        [
+          0,
+          "arcadeH * 0.45",
+          "naveL / 2 - bayLen / 2 + 0.6",
+          1.5707963
+        ]
+      ],
+      "_about": "the great organ on the west gallery, its pipes facing east down the nave"
+    },
+    "central tympanum": {
+      "type": "screen",
+      "outline": [
+        [
+          2.95,
+          4.5
+        ],
+        [
+          2.95,
+          5.5
+        ],
+        [
+          2.9,
+          6.27
+        ],
+        [
+          2.749,
+          7.027
+        ],
+        [
+          2.501,
+          7.758
+        ],
+        [
+          2.16,
+          8.45
+        ],
+        [
+          1.731,
+          9.092
+        ],
+        [
+          1.222,
+          9.672
+        ],
+        [
+          0.642,
+          10.181
+        ],
+        [
+          0.0,
+          10.61
+        ],
+        [
+          -0.642,
+          10.181
+        ],
+        [
+          -1.222,
+          9.672
+        ],
+        [
+          -1.731,
+          9.092
+        ],
+        [
+          -2.16,
+          8.45
+        ],
+        [
+          -2.501,
+          7.758
+        ],
+        [
+          -2.749,
+          7.027
+        ],
+        [
+          -2.9,
+          6.27
+        ],
+        [
+          -2.95,
+          5.5
+        ],
+        [
+          -2.95,
+          4.5
+        ]
+      ],
+      "t": 0.4,
+      "at": [
+        [
+          0.0,
+          0,
+          39.75,
+          0
+        ]
+      ],
+      "_about": "the tympanum filling the arch's head, carved in the real one, over its lintel"
+    },
+    "central lintel": {
+      "type": "box",
+      "width": 5.9,
+      "length": 0.5,
+      "height": 0.7,
+      "at": [
+        [
+          0.0,
+          4.0,
+          39.8,
+          0
+        ]
+      ]
+    },
+    "central archivolt 1": {
+      "type": "screen",
+      "outline": [
+        [
+          3.01,
+          5.5
+        ],
+        [
+          2.958,
+          6.286
+        ],
+        [
+          2.805,
+          7.058
+        ],
+        [
+          2.552,
+          7.804
+        ],
+        [
+          2.203,
+          8.51
+        ],
+        [
+          1.766,
+          9.165
+        ],
+        [
+          1.247,
+          9.757
+        ],
+        [
+          0.655,
+          10.276
+        ],
+        [
+          0.0,
+          10.713
+        ],
+        [
+          -0.655,
+          10.276
+        ],
+        [
+          -1.247,
+          9.757
+        ],
+        [
+          -1.766,
+          9.165
+        ],
+        [
+          -2.203,
+          8.51
+        ],
+        [
+          -2.552,
+          7.804
+        ],
+        [
+          -2.805,
+          7.058
+        ],
+        [
+          -2.958,
+          6.286
+        ],
+        [
+          -3.01,
+          5.5
+        ],
+        [
+          -2.76,
+          5.5
+        ],
+        [
+          -2.713,
+          6.221
+        ],
+        [
+          -2.572,
+          6.929
+        ],
+        [
+          -2.34,
+          7.612
+        ],
+        [
+          -2.02,
+          8.26
+        ],
+        [
+          -1.619,
+          8.86
+        ],
+        [
+          -1.143,
+          9.403
+        ],
+        [
+          -0.6,
+          9.879
+        ],
+        [
+          0.0,
+          10.28
+        ],
+        [
+          0.6,
+          9.879
+        ],
+        [
+          1.143,
+          9.403
+        ],
+        [
+          1.619,
+          8.86
+        ],
+        [
+          2.02,
+          8.26
+        ],
+        [
+          2.34,
+          7.612
+        ],
+        [
+          2.572,
+          6.929
+        ],
+        [
+          2.713,
+          6.221
+        ],
+        [
+          2.76,
+          5.5
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          0.0,
+          0,
+          40.85,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "central archivolt 2": {
+      "type": "screen",
+      "outline": [
+        [
+          2.76,
+          5.5
+        ],
+        [
+          2.713,
+          6.221
+        ],
+        [
+          2.572,
+          6.929
+        ],
+        [
+          2.34,
+          7.612
+        ],
+        [
+          2.02,
+          8.26
+        ],
+        [
+          1.619,
+          8.86
+        ],
+        [
+          1.143,
+          9.403
+        ],
+        [
+          0.6,
+          9.879
+        ],
+        [
+          0.0,
+          10.28
+        ],
+        [
+          -0.6,
+          9.879
+        ],
+        [
+          -1.143,
+          9.403
+        ],
+        [
+          -1.619,
+          8.86
+        ],
+        [
+          -2.02,
+          8.26
+        ],
+        [
+          -2.34,
+          7.612
+        ],
+        [
+          -2.572,
+          6.929
+        ],
+        [
+          -2.713,
+          6.221
+        ],
+        [
+          -2.76,
+          5.5
+        ],
+        [
+          -2.51,
+          5.5
+        ],
+        [
+          -2.467,
+          6.155
+        ],
+        [
+          -2.339,
+          6.799
+        ],
+        [
+          -2.128,
+          7.421
+        ],
+        [
+          -1.837,
+          8.01
+        ],
+        [
+          -1.473,
+          8.556
+        ],
+        [
+          -1.04,
+          9.05
+        ],
+        [
+          -0.546,
+          9.483
+        ],
+        [
+          0.0,
+          9.847
+        ],
+        [
+          0.546,
+          9.483
+        ],
+        [
+          1.04,
+          9.05
+        ],
+        [
+          1.473,
+          8.556
+        ],
+        [
+          1.837,
+          8.01
+        ],
+        [
+          2.128,
+          7.421
+        ],
+        [
+          2.339,
+          6.799
+        ],
+        [
+          2.467,
+          6.155
+        ],
+        [
+          2.51,
+          5.5
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          0.0,
+          0,
+          40.5,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "central archivolt 3": {
+      "type": "screen",
+      "outline": [
+        [
+          2.51,
+          5.5
+        ],
+        [
+          2.467,
+          6.155
+        ],
+        [
+          2.339,
+          6.799
+        ],
+        [
+          2.128,
+          7.421
+        ],
+        [
+          1.837,
+          8.01
+        ],
+        [
+          1.473,
+          8.556
+        ],
+        [
+          1.04,
+          9.05
+        ],
+        [
+          0.546,
+          9.483
+        ],
+        [
+          0.0,
+          9.847
+        ],
+        [
+          -0.546,
+          9.483
+        ],
+        [
+          -1.04,
+          9.05
+        ],
+        [
+          -1.473,
+          8.556
+        ],
+        [
+          -1.837,
+          8.01
+        ],
+        [
+          -2.128,
+          7.421
+        ],
+        [
+          -2.339,
+          6.799
+        ],
+        [
+          -2.467,
+          6.155
+        ],
+        [
+          -2.51,
+          5.5
+        ],
+        [
+          -2.26,
+          5.5
+        ],
+        [
+          -2.221,
+          6.09
+        ],
+        [
+          -2.106,
+          6.67
+        ],
+        [
+          -1.916,
+          7.23
+        ],
+        [
+          -1.654,
+          7.76
+        ],
+        [
+          -1.326,
+          8.252
+        ],
+        [
+          -0.936,
+          8.696
+        ],
+        [
+          -0.492,
+          9.086
+        ],
+        [
+          0.0,
+          9.414
+        ],
+        [
+          0.492,
+          9.086
+        ],
+        [
+          0.936,
+          8.696
+        ],
+        [
+          1.326,
+          8.252
+        ],
+        [
+          1.654,
+          7.76
+        ],
+        [
+          1.916,
+          7.23
+        ],
+        [
+          2.106,
+          6.67
+        ],
+        [
+          2.221,
+          6.09
+        ],
+        [
+          2.26,
+          5.5
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          0.0,
+          0,
+          40.15,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "north tympanum": {
+      "type": "screen",
+      "outline": [
+        [
+          2.15,
+          4.0
+        ],
+        [
+          2.15,
+          5.0
+        ],
+        [
+          2.113,
+          5.561
+        ],
+        [
+          2.003,
+          6.113
+        ],
+        [
+          1.823,
+          6.646
+        ],
+        [
+          1.574,
+          7.15
+        ],
+        [
+          1.261,
+          7.618
+        ],
+        [
+          0.891,
+          8.041
+        ],
+        [
+          0.468,
+          8.411
+        ],
+        [
+          0.0,
+          8.724
+        ],
+        [
+          -0.468,
+          8.411
+        ],
+        [
+          -0.891,
+          8.041
+        ],
+        [
+          -1.261,
+          7.618
+        ],
+        [
+          -1.574,
+          7.15
+        ],
+        [
+          -1.823,
+          6.646
+        ],
+        [
+          -2.003,
+          6.113
+        ],
+        [
+          -2.113,
+          5.561
+        ],
+        [
+          -2.15,
+          5.0
+        ],
+        [
+          -2.15,
+          4.0
+        ]
+      ],
+      "t": 0.4,
+      "at": [
+        [
+          -12.8,
+          0,
+          40.25,
+          0
+        ]
+      ],
+      "_about": "the tympanum filling the arch's head, carved in the real one, over its lintel"
+    },
+    "north lintel": {
+      "type": "box",
+      "width": 4.3,
+      "length": 0.5,
+      "height": 0.7,
+      "at": [
+        [
+          -12.8,
+          3.5,
+          40.3,
+          0
+        ]
+      ]
+    },
+    "north trumeau": {
+      "type": "column",
+      "radius": 0.34,
+      "height": 3.5,
+      "sides": 8,
+      "at": [
+        [
+          -12.8,
+          0,
+          40.37,
+          0
+        ]
+      ],
+      "_about": "the pier parting the doorway"
+    },
+    "north archivolt 1": {
+      "type": "screen",
+      "outline": [
+        [
+          2.21,
+          5.0
+        ],
+        [
+          2.172,
+          5.577
+        ],
+        [
+          2.059,
+          6.144
+        ],
+        [
+          1.874,
+          6.691
+        ],
+        [
+          1.618,
+          7.21
+        ],
+        [
+          1.297,
+          7.691
+        ],
+        [
+          0.915,
+          8.125
+        ],
+        [
+          0.481,
+          8.507
+        ],
+        [
+          0.0,
+          8.828
+        ],
+        [
+          -0.481,
+          8.507
+        ],
+        [
+          -0.915,
+          8.125
+        ],
+        [
+          -1.297,
+          7.691
+        ],
+        [
+          -1.618,
+          7.21
+        ],
+        [
+          -1.874,
+          6.691
+        ],
+        [
+          -2.059,
+          6.144
+        ],
+        [
+          -2.172,
+          5.577
+        ],
+        [
+          -2.21,
+          5.0
+        ],
+        [
+          -1.96,
+          5.0
+        ],
+        [
+          -1.926,
+          5.512
+        ],
+        [
+          -1.826,
+          6.015
+        ],
+        [
+          -1.662,
+          6.5
+        ],
+        [
+          -1.435,
+          6.96
+        ],
+        [
+          -1.15,
+          7.386
+        ],
+        [
+          -0.812,
+          7.772
+        ],
+        [
+          -0.426,
+          8.11
+        ],
+        [
+          0.0,
+          8.395
+        ],
+        [
+          0.426,
+          8.11
+        ],
+        [
+          0.812,
+          7.772
+        ],
+        [
+          1.15,
+          7.386
+        ],
+        [
+          1.435,
+          6.96
+        ],
+        [
+          1.662,
+          6.5
+        ],
+        [
+          1.826,
+          6.015
+        ],
+        [
+          1.926,
+          5.512
+        ],
+        [
+          1.96,
+          5.0
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          -12.8,
+          0,
+          41.35,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "north archivolt 2": {
+      "type": "screen",
+      "outline": [
+        [
+          1.96,
+          5.0
+        ],
+        [
+          1.926,
+          5.512
+        ],
+        [
+          1.826,
+          6.015
+        ],
+        [
+          1.662,
+          6.5
+        ],
+        [
+          1.435,
+          6.96
+        ],
+        [
+          1.15,
+          7.386
+        ],
+        [
+          0.812,
+          7.772
+        ],
+        [
+          0.426,
+          8.11
+        ],
+        [
+          0.0,
+          8.395
+        ],
+        [
+          -0.426,
+          8.11
+        ],
+        [
+          -0.812,
+          7.772
+        ],
+        [
+          -1.15,
+          7.386
+        ],
+        [
+          -1.435,
+          6.96
+        ],
+        [
+          -1.662,
+          6.5
+        ],
+        [
+          -1.826,
+          6.015
+        ],
+        [
+          -1.926,
+          5.512
+        ],
+        [
+          -1.96,
+          5.0
+        ],
+        [
+          -1.71,
+          5.0
+        ],
+        [
+          -1.681,
+          5.446
+        ],
+        [
+          -1.593,
+          5.885
+        ],
+        [
+          -1.45,
+          6.309
+        ],
+        [
+          -1.252,
+          6.71
+        ],
+        [
+          -1.003,
+          7.082
+        ],
+        [
+          -0.708,
+          7.418
+        ],
+        [
+          -0.372,
+          7.713
+        ],
+        [
+          0.0,
+          7.962
+        ],
+        [
+          0.372,
+          7.713
+        ],
+        [
+          0.708,
+          7.418
+        ],
+        [
+          1.003,
+          7.082
+        ],
+        [
+          1.252,
+          6.71
+        ],
+        [
+          1.45,
+          6.309
+        ],
+        [
+          1.593,
+          5.885
+        ],
+        [
+          1.681,
+          5.446
+        ],
+        [
+          1.71,
+          5.0
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          -12.8,
+          0,
+          41.0,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "north archivolt 3": {
+      "type": "screen",
+      "outline": [
+        [
+          1.71,
+          5.0
+        ],
+        [
+          1.681,
+          5.446
+        ],
+        [
+          1.593,
+          5.885
+        ],
+        [
+          1.45,
+          6.309
+        ],
+        [
+          1.252,
+          6.71
+        ],
+        [
+          1.003,
+          7.082
+        ],
+        [
+          0.708,
+          7.418
+        ],
+        [
+          0.372,
+          7.713
+        ],
+        [
+          0.0,
+          7.962
+        ],
+        [
+          -0.372,
+          7.713
+        ],
+        [
+          -0.708,
+          7.418
+        ],
+        [
+          -1.003,
+          7.082
+        ],
+        [
+          -1.252,
+          6.71
+        ],
+        [
+          -1.45,
+          6.309
+        ],
+        [
+          -1.593,
+          5.885
+        ],
+        [
+          -1.681,
+          5.446
+        ],
+        [
+          -1.71,
+          5.0
+        ],
+        [
+          -1.46,
+          5.0
+        ],
+        [
+          -1.435,
+          5.381
+        ],
+        [
+          -1.361,
+          5.756
+        ],
+        [
+          -1.238,
+          6.117
+        ],
+        [
+          -1.069,
+          6.46
+        ],
+        [
+          -0.857,
+          6.778
+        ],
+        [
+          -0.605,
+          7.065
+        ],
+        [
+          -0.318,
+          7.317
+        ],
+        [
+          0.0,
+          7.529
+        ],
+        [
+          0.318,
+          7.317
+        ],
+        [
+          0.605,
+          7.065
+        ],
+        [
+          0.857,
+          6.778
+        ],
+        [
+          1.069,
+          6.46
+        ],
+        [
+          1.238,
+          6.117
+        ],
+        [
+          1.361,
+          5.756
+        ],
+        [
+          1.435,
+          5.381
+        ],
+        [
+          1.46,
+          5.0
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          -12.8,
+          0,
+          40.65,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "south tympanum": {
+      "type": "screen",
+      "outline": [
+        [
+          2.15,
+          4.0
+        ],
+        [
+          2.15,
+          5.0
+        ],
+        [
+          2.113,
+          5.561
+        ],
+        [
+          2.003,
+          6.113
+        ],
+        [
+          1.823,
+          6.646
+        ],
+        [
+          1.574,
+          7.15
+        ],
+        [
+          1.261,
+          7.618
+        ],
+        [
+          0.891,
+          8.041
+        ],
+        [
+          0.468,
+          8.411
+        ],
+        [
+          0.0,
+          8.724
+        ],
+        [
+          -0.468,
+          8.411
+        ],
+        [
+          -0.891,
+          8.041
+        ],
+        [
+          -1.261,
+          7.618
+        ],
+        [
+          -1.574,
+          7.15
+        ],
+        [
+          -1.823,
+          6.646
+        ],
+        [
+          -2.003,
+          6.113
+        ],
+        [
+          -2.113,
+          5.561
+        ],
+        [
+          -2.15,
+          5.0
+        ],
+        [
+          -2.15,
+          4.0
+        ]
+      ],
+      "t": 0.4,
+      "at": [
+        [
+          12.8,
+          0,
+          40.25,
+          0
+        ]
+      ],
+      "_about": "the tympanum filling the arch's head, carved in the real one, over its lintel"
+    },
+    "south lintel": {
+      "type": "box",
+      "width": 4.3,
+      "length": 0.5,
+      "height": 0.7,
+      "at": [
+        [
+          12.8,
+          3.5,
+          40.3,
+          0
+        ]
+      ]
+    },
+    "south trumeau": {
+      "type": "column",
+      "radius": 0.34,
+      "height": 3.5,
+      "sides": 8,
+      "at": [
+        [
+          12.8,
+          0,
+          40.37,
+          0
+        ]
+      ],
+      "_about": "the pier parting the doorway"
+    },
+    "south archivolt 1": {
+      "type": "screen",
+      "outline": [
+        [
+          2.21,
+          5.0
+        ],
+        [
+          2.172,
+          5.577
+        ],
+        [
+          2.059,
+          6.144
+        ],
+        [
+          1.874,
+          6.691
+        ],
+        [
+          1.618,
+          7.21
+        ],
+        [
+          1.297,
+          7.691
+        ],
+        [
+          0.915,
+          8.125
+        ],
+        [
+          0.481,
+          8.507
+        ],
+        [
+          0.0,
+          8.828
+        ],
+        [
+          -0.481,
+          8.507
+        ],
+        [
+          -0.915,
+          8.125
+        ],
+        [
+          -1.297,
+          7.691
+        ],
+        [
+          -1.618,
+          7.21
+        ],
+        [
+          -1.874,
+          6.691
+        ],
+        [
+          -2.059,
+          6.144
+        ],
+        [
+          -2.172,
+          5.577
+        ],
+        [
+          -2.21,
+          5.0
+        ],
+        [
+          -1.96,
+          5.0
+        ],
+        [
+          -1.926,
+          5.512
+        ],
+        [
+          -1.826,
+          6.015
+        ],
+        [
+          -1.662,
+          6.5
+        ],
+        [
+          -1.435,
+          6.96
+        ],
+        [
+          -1.15,
+          7.386
+        ],
+        [
+          -0.812,
+          7.772
+        ],
+        [
+          -0.426,
+          8.11
+        ],
+        [
+          0.0,
+          8.395
+        ],
+        [
+          0.426,
+          8.11
+        ],
+        [
+          0.812,
+          7.772
+        ],
+        [
+          1.15,
+          7.386
+        ],
+        [
+          1.435,
+          6.96
+        ],
+        [
+          1.662,
+          6.5
+        ],
+        [
+          1.826,
+          6.015
+        ],
+        [
+          1.926,
+          5.512
+        ],
+        [
+          1.96,
+          5.0
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          12.8,
+          0,
+          41.35,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "south archivolt 2": {
+      "type": "screen",
+      "outline": [
+        [
+          1.96,
+          5.0
+        ],
+        [
+          1.926,
+          5.512
+        ],
+        [
+          1.826,
+          6.015
+        ],
+        [
+          1.662,
+          6.5
+        ],
+        [
+          1.435,
+          6.96
+        ],
+        [
+          1.15,
+          7.386
+        ],
+        [
+          0.812,
+          7.772
+        ],
+        [
+          0.426,
+          8.11
+        ],
+        [
+          0.0,
+          8.395
+        ],
+        [
+          -0.426,
+          8.11
+        ],
+        [
+          -0.812,
+          7.772
+        ],
+        [
+          -1.15,
+          7.386
+        ],
+        [
+          -1.435,
+          6.96
+        ],
+        [
+          -1.662,
+          6.5
+        ],
+        [
+          -1.826,
+          6.015
+        ],
+        [
+          -1.926,
+          5.512
+        ],
+        [
+          -1.96,
+          5.0
+        ],
+        [
+          -1.71,
+          5.0
+        ],
+        [
+          -1.681,
+          5.446
+        ],
+        [
+          -1.593,
+          5.885
+        ],
+        [
+          -1.45,
+          6.309
+        ],
+        [
+          -1.252,
+          6.71
+        ],
+        [
+          -1.003,
+          7.082
+        ],
+        [
+          -0.708,
+          7.418
+        ],
+        [
+          -0.372,
+          7.713
+        ],
+        [
+          0.0,
+          7.962
+        ],
+        [
+          0.372,
+          7.713
+        ],
+        [
+          0.708,
+          7.418
+        ],
+        [
+          1.003,
+          7.082
+        ],
+        [
+          1.252,
+          6.71
+        ],
+        [
+          1.45,
+          6.309
+        ],
+        [
+          1.593,
+          5.885
+        ],
+        [
+          1.681,
+          5.446
+        ],
+        [
+          1.71,
+          5.0
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          12.8,
+          0,
+          41.0,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "south archivolt 3": {
+      "type": "screen",
+      "outline": [
+        [
+          1.71,
+          5.0
+        ],
+        [
+          1.681,
+          5.446
+        ],
+        [
+          1.593,
+          5.885
+        ],
+        [
+          1.45,
+          6.309
+        ],
+        [
+          1.252,
+          6.71
+        ],
+        [
+          1.003,
+          7.082
+        ],
+        [
+          0.708,
+          7.418
+        ],
+        [
+          0.372,
+          7.713
+        ],
+        [
+          0.0,
+          7.962
+        ],
+        [
+          -0.372,
+          7.713
+        ],
+        [
+          -0.708,
+          7.418
+        ],
+        [
+          -1.003,
+          7.082
+        ],
+        [
+          -1.252,
+          6.71
+        ],
+        [
+          -1.45,
+          6.309
+        ],
+        [
+          -1.593,
+          5.885
+        ],
+        [
+          -1.681,
+          5.446
+        ],
+        [
+          -1.71,
+          5.0
+        ],
+        [
+          -1.46,
+          5.0
+        ],
+        [
+          -1.435,
+          5.381
+        ],
+        [
+          -1.361,
+          5.756
+        ],
+        [
+          -1.238,
+          6.117
+        ],
+        [
+          -1.069,
+          6.46
+        ],
+        [
+          -0.857,
+          6.778
+        ],
+        [
+          -0.605,
+          7.065
+        ],
+        [
+          -0.318,
+          7.317
+        ],
+        [
+          0.0,
+          7.529
+        ],
+        [
+          0.318,
+          7.317
+        ],
+        [
+          0.605,
+          7.065
+        ],
+        [
+          0.857,
+          6.778
+        ],
+        [
+          1.069,
+          6.46
+        ],
+        [
+          1.238,
+          6.117
+        ],
+        [
+          1.361,
+          5.756
+        ],
+        [
+          1.435,
+          5.381
+        ],
+        [
+          1.46,
+          5.0
+        ]
+      ],
+      "t": 0.35,
+      "at": [
+        [
+          12.8,
+          0,
+          40.65,
+          0
+        ]
+      ],
+      "_about": "a ring of the arch's mouldings"
+    },
+    "porch": {
+      "type": "component",
+      "use": "components/triangle-porch",
+      "params": {
+        "half": 5.6,
+        "depth": 6.0
+      },
+      "at": [
+        [
+          0,
+          0,
+          "naveL / 2 + 3",
+          0
+        ]
+      ],
+      "_about": "the TRIANGULAR PORCH (Dreieckportal, c. 1410) before the main portal: its tip on one pillar, open in two arches under free-standing gables (`triangle-porch`)"
+    },
+    "eselsturm": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          8.5,
+          8.5
+        ]
+      },
+      "thickness": 1.4,
+      "height": 33.0,
+      "glass": false,
+      "tiers": [
+        {
+          "h": 13.0,
+          "openings": []
+        },
+        {
+          "h": 7.0,
+          "openings": {
+            "pattern": "1",
+            "width": 0.8,
+            "gap": 0,
+            "pier": 1.2,
+            "sill": 3.0,
+            "springing": 4.6,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "h": 6.5,
+          "openings": {
+            "pattern": "1",
+            "width": 0.9,
+            "gap": 0,
+            "pier": 1.2,
+            "sill": 2.6,
+            "springing": 4.4,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "h": 6.5,
+          "openings": {
+            "pattern": "2",
+            "width": 1.0,
+            "gap": 0.45,
+            "pier": 1.2,
+            "sill": 2.2,
+            "springing": 4.4,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        }
+      ],
+      "courses": true,
+      "at": [
+        [
+          "0 - (bodyW / 2 + 3.65)",
+          0,
+          "naveL / 2 - crossA * bayLen - 0.25",
+          0
+        ]
+      ],
+      "_about": "the ESELSTURM, the Romanesque tower left from the old cathedral, west of the north transept front: small round-headed openings, paired at the top"
+    },
+    "eselsturm roof": {
+      "type": "dome",
+      "sides": 4,
+      "radius": 6.4346,
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 7.0
+      },
+      "at": [
+        [
+          "0 - (bodyW / 2 + 3.65)",
+          33.0,
+          "naveL / 2 - crossA * bayLen - 0.25",
+          0
+        ]
+      ],
+      "_about": "its steep tiled pyramid roof"
+    },
+    "dachreiter": {
+      "type": "component",
+      "use": "components/domed-tower",
+      "params": {
+        "sides": 8,
+        "R": 1.6,
+        "H": 5.0,
+        "t": 0.25,
+        "cap": "trigonal",
+        "capRise": 13,
+        "capR": 1.8,
+        "drumR": 1.3,
+        "drumH": 1.6,
+        "kok": 0.2,
+        "finial": 1.6,
+        "glazed": 0
+      },
+      "build": [
+        "tower",
+        "drum",
+        "cap",
+        "finial"
+      ],
+      "atop": "church",
+      "atopLevel": "ridge",
+      "at": [
+        [
+          0,
+          -3.2,
+          "zCross",
+          0
+        ]
+      ],
+      "_about": "the Dachreiter over the crossing: a small open lantern and its spire, copper (`domed-tower`)"
+    }
+  }
+}

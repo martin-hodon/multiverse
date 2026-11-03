@@ -193,7 +193,16 @@ def domed_arcade():
     rep = lambda count, dx="B": {"count": count, "step": [dx, 0, 0, 0]}
     add("arcade", {"type": "wall", "width": "arcL", "height": "crown", "thickness": "p", "at": [[0, 0, "p / 2", 0]], "glass": False,
                    "openings": {"pattern": "n", "width": "ow", "gap": "B - ow", "end": "(arcL - n * B + B - ow) / 2", "sill": 0, "springing": "os", "head": POINTED},
-                   "_about": "the arcade to the court: a pointed arch in every bay, on the row's front line (z = 0)"})
+                   "when": {"front": "arcade"}, "_about": "the arcade to the court: a pointed arch in every bay, on the row's front line (z = 0)"})
+    # (`front` wall | door | doors: the row closed -- a domed hall, a treasury, a kitchen -- its front a wall where the arcade
+    #  stands, a window in every bay; `door` one door dOff from the middle among them, `doors` a door in every bay instead)
+    win = {"every": "B", "width": "wW", "end": "(B + p - wW) / 2", "sill": "wSill", "springing": "wSpr", "head": POINTED}
+    front = lambda o: {"type": "wall", "width": "arcL", "height": "crown", "thickness": "p", "at": [[0, 0, "p / 2", 0]], "glass": True, "tiers": [{"openings": o}]}
+    add("front wall", {**front(win), "when": {"front": "wall"}, "_about": "front wall: a closed row, a window in every bay"})
+    add("front wall door", {**front({**win, "with": [{"at": "dOff", "width": "gW", "sill": 0, "springing": "gS", "head": POINTED, "glass": False}]}),
+                            "when": {"front": "door"}, "_about": "front door: the windows and a door dOff from the middle"})
+    add("front wall doors", {**front({"every": "B", "width": "gW", "end": "(B + p - gW) / 2", "sill": 0, "springing": "gS", "head": POINTED, "glass": False}),
+                             "when": {"front": "doors"}, "_about": "front doors: a door into every bay (a row of kitchens on their street)"})
     add("cross walls", {"type": "wall", "width": "s", "height": "crown", "thickness": "p", "glass": False,
                         "openings": [{"at": "s / 2", "width": "cw", "sill": 0, "springing": "cs", "head": POINTED}],
                         "at": [["B - L / 2 + p / 2", 0, "0 - B / 2", Q]], "repeat": rep("n - 1"),
@@ -205,7 +214,11 @@ def domed_arcade():
                       "repeat": {"count": "back", "step": [0, 0, 0, 0]},
                       "openings": {"pattern": "half-1-half", "width": "wW", "gap": "B - wW", "pier": "B - (wW + gW) / 2", "end": "(B - p - wW) / 2", "sill": "wSill", "springing": "wSpr",
                                    "head": POINTED, "middle": {"width": "gW", "sill": 0, "springing": "gS", "glass": False}},
-                      "_about": "the back wall: a window in every bay, and in the middle of an odd row a gate"})
+                      "when": {"backWin": "gate"}, "_about": "the back wall: a window in every bay, and in the middle of an odd row a gate"})
+    add("back arches", {"type": "wall", "width": "L - p", "height": "crown + dk + 0.6", "thickness": "p", "at": [[0, 0, "0 - B - p / 2", math.pi]],
+                        "repeat": {"count": "back", "step": [0, 0, 0, 0]}, "glass": False,
+                        "openings": {"pattern": "n", "width": "cw", "gap": "B - cw", "end": "(B - p - cw) / 2", "sill": 0, "springing": "cs", "head": POINTED},
+                        "when": {"backWin": "arches"}, "_about": "backWin arches: the back wall a spine of arches, one in every bay -- two rows back to back, one space"})
     bay = lambda y: [["B / 2 - L / 2", y, "0 - B / 2", 0]]
     add("pendentives", {"type": "pendentives", "span": "s", "springing": "SP", "sides": "cn", "deck": {"thickness": "dk", "out": "p / 2"},
                         "at": bay(0), "repeat": rep("n"), "_about": "every bay's pendentives, and the roof round its drum"})
@@ -214,7 +227,17 @@ def domed_arcade():
     add("domes", {"type": "dome", "sides": "cn", "turn": -0.5, "radius": "s / 2 + dt", "thickness": "dt", "head": {"profile": "semicircular"},
                   "at": bay("crown + dk + dh"), "repeat": rep("n"), "standsOn": ["drums"], "_about": "a small lead dome over every bay"})
     add("finials", {"type": "column", "radius": 0.08, "height": 1.0, "sides": 6, "taper": 0.3,
-                    "at": bay("crown + dk + dh + s / 2 + dt"), "repeat": rep("n"), "standsOn": ["domes"]})
+                    "at": bay("crown + dk + dh + s / 2 + dt"), "repeat": rep("n"), "standsOn": ["domes"], "when": {"chimney": "no"}})
+    # (`chimney` yes: a broad stack on every dome's crown instead of the finial -- Sinan's kitchens at Topkapi -- capped by a
+    #  pointed lead cone or a little dome, `chCap`)
+    add("chimneys", {"type": "prism", "plan": {"sides": 8, "radius": "chR"}, "height": "chH + s * 0.1",
+                     "at": bay("crown + dk + dh + s / 2 + dt - s * 0.1"), "repeat": rep("n"), "standsOn": ["domes"], "when": {"chimney": "yes"},
+                     "courses": [{"y": "chH + s * 0.1 - 0.5", "h": 0.3, "out": 0.15, "profile": "band"}],
+                     "_about": "chimney yes: an octagonal stack chR across, chH over the dome's crown, a band under its top"})
+    add("chimney caps", {"type": "dome", "radius": "chR + 0.15", "thickness": 0, "sides": 8, "head": {"profile": "trigonal", "rise": "chR * 0.9"},
+                         "at": bay("crown + dk + dh + s / 2 + dt + chH"), "repeat": rep("n"), "standsOn": ["chimneys"], "when": {"chimney": "yes", "chCap": "cone"}})
+    add("chimney domes", {"type": "dome", "radius": "chR + 0.15", "thickness": 0, "sides": 8, "head": {"profile": "semicircular"},
+                          "at": bay("crown + dk + dh + s / 2 + dt + chH"), "repeat": rep("n"), "standsOn": ["chimneys"], "when": {"chimney": "yes", "chCap": "dome"}})
     # the row's space, from the arcade's middle to the back wall's -- a row with no back of its own (`back` 0) reaching
     # past the middle of the wall it stands against -- up to the pendentives' top; and each drum's, up to its dome
     parts["bays space"] = {"type": "interior", "plan": {"rect": ["L", "B + (1 - back) * p"]}, "height": "crown",
@@ -229,9 +252,12 @@ def domed_arcade():
               "wW": 1.4, "wSill": 1.2, "wSpr": 3.2, "gW": 3.6, "gS": 4.0, "_gW": "the gate in the middle of the back wall (an odd n)",
               "dk": 0.4, "dh": 0.8, "dt": 0.3, "cn": 12, "_cn": "the domes: cn sides (a multiple of four), a drum dh high, dt thick",
               "half": "(n - 1) / 2", "_half": "the back wall's windows either side of the gate: n is odd, 3 or more (a gate gW = wW is one more window)",
-              "back": 1, "ends": 1, "_back": "1: a back wall of its own; 0: the row stands against another building's wall. ends 1: walls closing both ends"}
+              "back": 1, "ends": 1, "_back": "1: a back wall of its own; 0: the row stands against another building's wall. ends 1: walls closing both ends",
+              "front": "arcade", "dOff": 0, "_front": "arcade (open), wall (closed, a window every bay), door (and a door dOff from the middle), doors (a door every bay)",
+              "backWin": "gate", "_backWin": "the back wall's openings: gate (windows and a gate in the middle) or arches (an arch every bay, cw/cs: a spine between two rows)",
+              "chimney": "no", "chR": "s * 0.15", "chH": "s * 0.8", "chCap": "cone", "_chimney": "yes: a chimney chR, chH over every dome's crown, capped by a cone or a dome (chCap)"}
     return {"name": "Domed arcade",
-            "_about": "A ROW OF DOMED BAYS -- the portico of an Ottoman mosque, a medrese's cells' gallery, a caravanserai's arcade: n square bays B apart along x, centred on x = 0; a pointed ARCADE along the front (z = 0, facing +z), arched CROSS WALLS between the bays, a BACK WALL (at z = -B) with a window in every bay and a gate in the middle, and over every bay PENDENTIVES, a low drum and a small dome. The bays' clear square is B - p; the piers and walls are p thick.",
+            "_about": "A ROW OF DOMED BAYS -- the portico of an Ottoman mosque, a medrese's cells' gallery, a caravanserai's arcade: n square bays B apart along x, centred on x = 0; a pointed ARCADE along the front (z = 0, facing +z), arched CROSS WALLS between the bays, a BACK WALL (at z = -B) with a window in every bay and a gate in the middle, and over every bay PENDENTIVES, a low drum and a small dome. The bays' clear square is B - p; the piers and walls are p thick. Closed (`front` wall | door | doors) it is a DOMED HALL -- a treasury, the Divan's chambers, a kitchen; `chimney` yes sets a stack on every dome; `backWin` arches opens the back wall into a second row behind.",
             "params": params, "build": build, "parts": parts}
 
 

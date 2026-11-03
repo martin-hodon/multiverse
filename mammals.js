@@ -35,6 +35,9 @@
 //         toes: { n, len, r: [base, tip], spread (radians between toes), color } -- tapered toes fanning forward
 //         from the foot's heel on its sole, the middle one longest (a theropod's splayed three); the foot is then its pad
 //         the lower bone is whatever reaches the foot joint at rest; the foot ellipsoid's sole stands on the ground
+//         bend: [front, hind] bones this much longer than the reach, so that they fold at rest (default by `print`: hoof
+//         and cloven [1.004, 1.025], paw [1.008, 1.032], else straight); a hoof or cloven `print` draws the foot as a flared
+//         horn cone kept level, a paw as a longer pad kept level
 //   tail: { c: [cx, cy], R, a0, a1, r1, r2, n, tuft, tuftColor, sway, speed, phase, z, zEnd } arc from angle a0 to a1 (radians, xy plane at z, drifting to zEnd);
 //         start it ON the rump's rear edge (a root inside the rump hides the tail's first span in the body's silhouette)
 //   extras: pills { id, parent, from, to, r1, r2, color, mirror, k, anim, pat }, ellipsoids { id, parent, ell, color, mirror, k },
@@ -108,13 +111,31 @@ export function eyeMark(id, parent, H, R, E, r, iris, { pupil = "round" } = {}) 
 // everywhere else n is ignored and the curve decides.
 const ARC_SEG = 1.2;                                  // radians of arc per tube (~70 degrees)
 const arcControl = (R, dA) => R / Math.cos(dA / 2);   // where the arc's end tangents cross
-function arcChain(id, parent, origin, { c: [cx, cy], R, a0, a1, r1, r2, n = 5, links = false, tuft = 0, tuftOut = 0, tuftColor, sway = 12, speed = .6, phase = 0, z = 0, zEnd = z, axis = "x", color, pat, k, fold }) {
+function arcChain(id, parent, origin, { c: [cx, cy], R, a0, a1, n = 5, links = false, z = 0, zEnd = z, ...o }) {
   const pt = (a, rr = R) => [cx + rr * Math.cos(a), cy + rr * Math.sin(a), z + (zEnd - z) * (a - a0) / (a1 - a0)];   // zEnd: the arc drifts sideways (a hydra's necks splay)
   const nSeg = links ? n : Math.max(1, Math.ceil(Math.abs(a1 - a0) / ARC_SEG)), dA = (a1 - a0) / nSeg;
-  const out = [];
+  const segs = Array.from({ length: nSeg }, (_, i) => { const t0 = a0 + dA * i; return { A: pt(t0), B: pt(t0 + dA), C: pt(t0 + dA / 2, arcControl(R, dA)) }; });
+  return tubeChain(id, parent, origin, segs, o);
+}
+// A CHAIN ALONG A PATH: the curve that runs through the middles of a polygon's sides, its corners the controls (a
+// quadratic B-spline -- one tube per corner, each meeting the next with the same tangent), from the first point to the
+// last. A serpent's tail of waves, where an arc can only curl one way. `path`: root-space points (z optional).
+function pathChain(id, parent, origin, { path, ...o }) {
+  const p = path.map((q) => [q[0], q[1], q[2] ?? 0]), mid = (a, b) => a.map((v, i) => (v + b[i]) / 2);
+  const segs = p.length < 3 ? [{ A: p[0], B: p[1], C: mid(p[0], p[1]) }]
+    : p.slice(1, -1).map((C, i) => ({ A: i ? mid(p[i], C) : p[0], B: i === p.length - 3 ? p[p.length - 1] : mid(C, p[i + 2]), C }));
+  return tubeChain(id, parent, origin, segs, o);
+}
+// the tubes of a chain, each the child of the one before, in its own frame (aimed with +y along its chord).
+// crest: { h, r, n (per tube), color, lean, k } -- a row of spikes or fins standing up from it (a dragon's down its tail),
+// on each tube's upper side, in its frame: they ride its sway; their height follows its girth
+// shape "tri": fins or plates instead (w: half their length along the tube). end: parts hung at the chain's tip, posed in
+// the last tube's frame with the tip as their origin (a spade, a club, a tuft of flame)
+function tubeChain(id, parent, origin, segs, { r1, r2, tuft = 0, tuftOut = 0, tuftColor, sway = 12, speed = .6, phase = 0, axis = "x", color, pat, k, fold, crest, end }) {
+  const nSeg = segs.length, out = [];
   let par = parent, M = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], lastLen = 0;
   for (let i = 0; i < nSeg; i++) {
-    const t0 = a0 + dA * i, A = pt(t0), B = pt(t0 + dA), C = pt(t0 + dA / 2, arcControl(R, dA));
+    const { A, B, C } = segs[i];
     const rA = r1 + (r2 - r1) * i / nSeg, rB = r1 + (r2 - r1) * (i + 1) / nSeg;
     const { len, rx, rz, rot } = aim(mulT(M, vSub(B, A)));
     const Mi = mul(rotX(rx), rotZ(rz));                      // this segment's own rotation inside its parent's frame
@@ -124,8 +145,22 @@ function arcChain(id, parent, origin, { c: [cx, cy], R, a0, a1, r1, r2, n = 5, l
                pos: i ? [0, lastLen, 0] : P(A, origin), rot, color, pat, k, edge: 0,
                anim: i ? undefined : { axis, deg: sway, speed, phase }, fold: fold ? [0, 0, i ? fold[1] : fold[0]] : undefined });
     M = mul(M, Mi);
+    if (crest) {   // (up: the chord's normal in its vertical plane that points to the sky; leaning back down the chain)
+      const { h, r = h * .25, n = 2, color: cc = color, lean = .45, k: ck = 0, shape = "spike", w = h * .5 } = crest, d = vSub(B, A);
+      let up = [d[1], -d[0], 0]; if (up[1] < 0) up = up.map((v) => -v);
+      const ul = Math.hypot(...up) || 1, u = mulT(M, up.map((v) => v / ul));
+      const mc = mulT(M, vSub(C, A)), curve = (t) => [0, 1, 2].map((j) => 2 * t * (1 - t) * mc[j] + t * t * (j === 1 ? len : 0));   // (on the tube's own bend)
+      for (let j = 0; j < n; j++) {
+        const t = (j + .5) / n, rr = rA + (rB - rA) * t, g = rr / Math.max(r1, 1e-4), at = curve(t);
+        const base = at.map((v, q) => v + u[q] * rr * .8), up2 = (q) => (u[q] + (q === 1 ? lean : 0)) * h * g;
+        if (shape === "tri") out.push({ id: `${lid}Crest${j}`, parent: lid, shape: "tri", pos: base, color: cc, k: ck, edge: 0,
+                                        size: { a: [0, -w * g, 0], b: [0, w * g, 0], c: [0, 1, 2].map(up2), r: r * g * .3 } });
+        else out.push(pillPart(`${lid}Crest${j}`, lid, base, base.map((v, q) => v + up2(q)), r * g, r * g * .15, [0, 0, 0], cc, { k: ck }));
+      }
+    }
     par = lid; lastLen = len;
   }
+  for (const q of end ?? []) out.push({ ...q, parent: par, pos: [q.pos[0], lastLen + q.pos[1], q.pos[2]] });
   if (tuft) out.push({ id: `${id}Tuft`, parent: par, shape: "sphere", size: { r: tuft }, pos: [0, lastLen + tuftOut, 0], color: tuftColor ?? color, k, edge: 0 });   // (tuftOut: past the end -- a full brush's white tip, not buried in it)
   return out;
 }
@@ -229,20 +264,36 @@ export function mammal(o) {
   }
 
   // ---- legs: upper bone (IK driver), lower bone (follows), foot
-  const L = legs, foot = L.foot, footY = foot[1] + .02;
+  const L = legs, footY = legs.foot[1] + .02;
+  // WHAT IT STANDS ON (its `print`). A hoof is the widest thing on the leg, a horn cone flaring from the pastern to a flat
+  // tread (its round end under the ground, its sole cut by it, and kept level as the leg swings) -- an ellipsoid that size
+  // came out a small diamond under a column. A paw is longer than it is wide, the toes forward of the wrist.
+  const hoofed = flags.print === "hoof" || flags.print === "cloven", pawed = flags.print === "paw" && !L.toes;
+  const foot = pawed ? [Math.max(L.foot[0], L.foot[2] * 1.4), L.foot[1], L.foot[2]] : L.foot;
+  // ...and how it stands: legs longer than the reach from hip to ground, so that the IK folds them a little at rest --
+  // a hock behind the hind leg, a dog's and a cat's sprung wrists -- where they were two bones in one straight line
+  // (legLen stays the reach itself: the gaits' strides do not change). `bend`: [front, hind], 1 straight.
+  const bend = L.bend ?? (hoofed ? [1.004, 1.025] : pawed ? [1.008, 1.032] : [1, 1]);
   const [rHip0, rKnee, rFoot] = L.radii, thigh = L.thigh ?? 1.35;   // the hind upper bone is the thigh: wider at the hip
+  // (a leg a shade off the coat is that shade from the knee: its top melts into the flank, not a patch sewn on it -- a colour's edge cuts the sweep)
+  const off = [16, 8, 0].reduce((n, sh) => n + Math.abs(((cLeg >> sh) & 255) - ((cBody >> sh) & 255)), 0), near = off && off < 150, cThigh = near ? mixC(cLeg, cBody, .7) : cLeg, cShin = near ? mixC(cLeg, cBody, .3) : cLeg;
   let legLen = 0;
   [["FL", L.front, 1, L.kneeF ?? 1], ["FR", L.front, -1, L.kneeF ?? 1], ["HL", L.hind, 1, L.kneeH ?? -1], ["HR", L.hind, -1, L.kneeH ?? -1]].forEach(([tag, d, sz, side], i) => {
     if (flags.biped && i < 2) return;   // two legs: the hind pair carries it
-    const [hx, hy, hz, upper] = d, lower = hy - upper - footY, rHip = i < 2 ? rHip0 : rHip0 * thigh;
-    if (lower <= .01) throw new Error(`${name}: leg ${tag}: upper bone ${upper} leaves no lower bone (hip ${hy}, foot ${footY})`);
-    if (i === (flags.biped ? 2 : 0)) legLen = upper + lower;
+    const [hx, hy, hz0, upper0] = d, lower0 = hy - upper0 - footY, rHip = i < 2 ? rHip0 : rHip0 * thigh;
+    if (lower0 <= .01) throw new Error(`${name}: leg ${tag}: upper bone ${upper0} leaves no lower bone (hip ${hy}, foot ${footY})`);
+    if (i === (flags.biped ? 2 : 0)) legLen = upper0 + lower0;
+    const fold = bend[i < 2 ? 0 : 1], upper = upper0 * fold, lower = lower0 * fold;
+    // (the top of the leg INSIDE the flank, its outer side flush with it: set out further, a thigh is a doll's joint stuck on the rump)
+    const flank = (i < 2 ? front : rear)[5], hz = flags.biped ? hz0 : Math.min(hz0, Math.max(flank * 1.08 - rHip, hz0 * .45));
     parts.push(
       { id: `leg${tag}u`, parent: "body", shape: "capsule", size: { r: rHip, r2: rKnee, len: upper }, pos: [hx - R[0], hy - R[1], hz * sz - R[2]],
-        pivot: [0, -upper / 2, 0], color: cLeg, pat: patFor("leg"), k: kL, edge: 0, ik: { leg: i, upper, lower, side, foot: footY - R[1], phase: 0 } },
+        pivot: [0, -upper / 2, 0], color: cThigh, pat: patFor("leg"), k: kL, edge: 0, ik: { leg: i, upper, lower, side, foot: footY - R[1], phase: 0 } },
       { id: `leg${tag}l`, parent: `leg${tag}u`, shape: "capsule", size: { r: rKnee, r2: rFoot, len: lower }, pos: [0, -upper, 0],
-        pivot: [0, -lower / 2, 0], color: col("sock", cLeg), pat: patFor("leg"), k: kL, edge: 0, ik: { leg: i, follow: true } },   // (sock: a white lower leg -- a coat's)
-      ellPart(`foot${tag}`, `leg${tag}l`, [L.toe ?? .02, -lower - .02, 0, foot[0], foot[1], foot[2]], [0, 0, 0], cols.foot, { k: kL * .5 }));
+        pivot: [0, -lower / 2, 0], color: col("sock", cShin), pat: patFor("leg"), k: kL, edge: 0, ik: { leg: i, follow: true } },   // (sock: a white lower leg -- a coat's)
+      hoofed ? { id: `foot${tag}`, parent: `leg${tag}l`, shape: "capsule", size: { r: rFoot * 1.05, r2: Math.max(foot[0], foot[2]) * 1.15, len: footY * .85 + rFoot }, pos: [0, -lower + rFoot, 0],
+                 pivot: [0, -(footY * .85 + rFoot) / 2, 0], level: true, color: cols.foot, k: kL * .25, edge: 0 }
+             : ellPart(`foot${tag}`, `leg${tag}l`, [L.toe ?? (pawed ? foot[0] * .45 : .02), -lower - .02, 0, foot[0], foot[1], foot[2]], [0, 0, 0], cols.foot, { k: kL * .5, ...(pawed ? { level: true } : {}) }));
     if (L.toes) {   // in the foot's frame: origin at its centre, the sole at -foot[1]
       const { n = 3, len, r: [r0, r1] = [.08, .04], spread = .45, color } = L.toes, x0 = -foot[0] * .4, mid = (n - 1) / 2;
       for (let j = 0; j < n; j++) {
@@ -253,7 +304,7 @@ export function mammal(o) {
   });
 
   // ---- tail: an arc of chained tapered links
-  if (tail) parts.push(...arcChain("tail", "body", R, { ...tail, color: cols.tail, pat: patFor("tail"), k: kL, axis: "x", tuftColor: tail.tuftColor ?? cols.tuft }));
+  if (tail) parts.push(...(tail.path ? pathChain : arcChain)("tail", "body", R, { ...tail, color: cols.tail, pat: patFor("tail"), k: kL, axis: "x", tuftColor: tail.tuftColor ?? cols.tuft }));
 
   // ---- extras: horns, manes, humps, tusks, wings, a rider's torso...
   for (const x0 of extras) {
@@ -283,7 +334,13 @@ export function mammal(o) {
       if (x.raw) parts.push({ ...x.raw, parent: x.raw.parent === "front" ? "body" : x.raw.parent, pos: x.at ? P(x.at, origin) : x.raw.pos });
       // (pat: an extra's arc -- a dinosaur's tail, a hydra's neck -- wears the species' pattern like the rest
       //  of it; it used to be dropped here, so scaled animals had bare tails)
-      else if (x.arc) parts.push(...arcChain(id, par, origin, { ...x.arc, color: x.color, k: x.k ?? kL, pat: x.pat ?? patFor("tail"), tuftColor: x.arc.tuftColor ?? x.color }));
+      // (mirrored: the other side's arc or path runs at -z, and sways the other way)
+      else if (x.arc || x.path) {
+        const side = s > 0 ? {} : { z: -(x.arc?.z ?? 0), zEnd: -(x.arc?.zEnd ?? x.arc?.z ?? 0), sway: -(x.arc?.sway ?? x.path?.sway ?? 12),
+                                     ...(x.path ? { path: x.path.path.map((q) => [q[0], q[1], -(q[2] ?? 0)]) } : {}) };
+        // (pat: null -- a horn, a whisker: bare, not in the tail's pattern)
+        parts.push(...(x.path ? pathChain : arcChain)(id, par, origin, { ...(x.arc ?? x.path), ...side, color: x.color, k: x.k ?? kL, pat: x.pat === null ? undefined : x.pat ?? patFor("tail"), tuftColor: (x.arc ?? x.path).tuftColor ?? x.color }));
+      }
       else if (x.ell) { const e = x.ell.slice(); e[2] *= s; parts.push(ellPart(id, par, e, origin, x.color, extra)); }
       else parts.push(pillPart(id, par, s > 0 ? x.from : mirrorZ(x.from), s > 0 ? x.to : mirrorZ(x.to), x.r1, x.r2 ?? x.r1, origin, x.color, extra));
     }
@@ -453,9 +510,9 @@ export const CAT_COATS = [
 ];
 export const catRig = (c = CAT_COATS[0]) => mammal({ name: "cat",   // back ~.3m, curled-up tail
       rear: [-.12, .2, 0, .14, .09, .085], front: [.08, .2, 0, .13, .09, .08],
-      neck: [.18, .24, 0, .26, .3, 0, .06, .055], head: [.3, .32, 0, .08], muzzle: [.36, .29, 0, .05, .035, .045], nose: [.405, .3, 0, .012],
+      neck: [.18, .24, 0, .26, .3, 0, .05, .042], head: [.3, .32, 0, .08], muzzle: [.36, .29, 0, .05, .035, .045], nose: [.405, .3, 0, .012],
       ears: [.28, .38, .04, .27, .46, .055, .025, .006], eyes: [.35, .34, .04, .015],
       legs: { front: [.12, .2, .05, .08], hind: [-.12, .2, .055, .085], radii: [.03, .025, .02], foot: [.03, .02, .028] },
       tail: { c: [-.38, .3], R: .13, a0: -.43, a1: 1.9, r1: .022, r2: .015, n: 6, sway: 20, speed: .9 },
-      c, headTurn: 22, pupil: "slit", headScale: .62 });
+      c, headTurn: 22, pupil: "slit", headScale: .54 });
 

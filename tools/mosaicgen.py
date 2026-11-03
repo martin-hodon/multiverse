@@ -6,8 +6,8 @@ import json, math, os
 OUT = os.path.join(os.path.dirname(__file__), "..", "assets", "patterns", "mosaic.json")
 
 PALETTES = {
-    # 0 gold, 1 light gold, 2 dark gold, 3 ruby, 4 lapis, 5 white, 6 dark, 7 flesh, 8 green, 9 shadow flesh
-    "gold-stone": ["#d0a845", "#efd478", "#a98332", "#8d2b20", "#27386b", "#efe6d0", "#2a211a", "#d0a27a", "#4d6b4a", "#9c6e4e"],
+    # 0 gold, 1 light gold, 2 dark gold, 3 ruby, 4 lapis, 5 white, 6 dark, 7 flesh, 8 green, 9 shadow flesh, 10 purple, 11 sky, 12 brown, 13 grey
+    "gold-stone": ["#d0a845", "#efd478", "#a98332", "#8d2b20", "#27386b", "#efe6d0", "#2a211a", "#d0a27a", "#4d6b4a", "#9c6e4e", "#5b2a6e", "#5f7fa6", "#6a4a2c", "#8b8676"],
     "opus-bw": ["#e8e1d2", "#1d1c1f", "#c9bda6"],
     # 0 white marble, 1 black, 2 limestone, 3 terracotta, 4 flesh, 5 brown, 6 blue-grey, 7 green, 8 yellow, 9 deep red, 10 shadow flesh; then the shadow stones of 3, 6, 8, 7, 0, 2
     "opus-stone": ["#e7e0cf", "#1e1c1d", "#b9a27c", "#a8502f", "#cf9a6c", "#6f452b", "#566b70", "#6f7f52", "#d8b650", "#8a2f25", "#a06a45", "#7a3a22", "#3e4f54", "#a88a38", "#4d5a3a", "#c4bba4", "#8d7a5a"],
@@ -102,6 +102,70 @@ PATTERNS.update({
     "emblem centaurs": emblem("a centaur going down", "emblem-centaurs"),
     "emblem duel": emblem("two warriors", "emblem-duel"),
 })
+# THE SEED'S FLOORS AND WALLS (mosaic/floor.js): a subject, or none; all else from the seed. Their people come from assets/story/canon.json
+MODEL = {"2": [-.12, -.03, .05], "3": [-.14, -.04, .05], "4": [-.14, -.03, .06, .1], "5": [-.12, -.03, .05], "6": [-.14, -.04, .05], "7": [-.14, -.04, .05], "8": [-.1, -.02, .05], "9": [-.12, -.03, .05]}
+def roman(about, subject="any", size=(1.6, 1.6), stone=.0115, across=1, **k):
+    pl = {"kind": "floor", "subject": subject, **k}
+    L = {"kind": "mosaic", "stone": stone, "joint": .11, "groutColor": "#5a5448", "seed": 3, "halo": 2, "flow": [4, 10], "fine": {"4": .9, "10": .9}, "thin": .45, "tone": .06, "ground": 0, "model": MODEL, "plan": pl, "layers": []}
+    p = {"size": list(size), "repeat": False, "palette": "opus-stone", "ground": 0, "res": 512 * across, "_about": about, "layers": [L]}
+    if across > 1: p["across"] = across
+    return p
+def wall(about, subject="any", size=(1.5, 1.5), stone=.0125, across=1, **k):
+    p = gold(about, size, [], stone=stone, res=512 * across, model=FLESH, plan={"kind": "wall", "subject": subject, **k}); p["repeat"] = False
+    if across > 1: p["across"] = across
+    return p
+LONG = {"size": (2.6, 1.3), "stone": .0135, "across": 2}   # (twice as wide as a layer of the array: a long wall at the same stones)
+PATTERNS.update({
+    "floor any": roman("a Roman floor: its frame, its layout, what's in it, all the seed's"),
+    "floor wide": roman("a floor twice as long as it's wide: an emblema or two panels", size=(2.4, 1.2), stone=.0115, across=2),
+    "floor hunt": roman("hunters after the boar, the stag, the lion, the hare", "hunt"),
+    "floor arena": roman("gladiators, net-fighters, beast fights, a victor", "arena"),
+    "floor neptune": roman("Neptune's triumph: frontal, drawn by sea horses, or among his creatures", "neptune"),
+    "floor dionysus": roman("Dionysus: in his chariot, on his panther, or the vintage", "dionysus"),
+    "floor orpheus": roman("Orpheus and the beasts, a wheel of compartments", "orpheus"),
+    "floor seasons": roman("a story at the heart, the four seasons' heads at the corners", layout="seasons"),
+    "floor sea": roman("the sea: fish, dolphins, an octopus", "sea"),
+    "floor xenia": roman("xenia: what a host sets out, in compartments", "xenia"),
+    "floor ostia": roman("Ostia's black and white: figures in black silhouette on white, their lines picked out", bw=True),
+    "wall any": wall("a wall of a Byzantine church: what it shows, gold or night, its bands, the seed's", **LONG),
+    "wall pantocrator": wall("Christ Pantocrator: the bust, the book, the blessing", "bust"),
+    "wall virgin": wall("the Virgin and Child enthroned", "virgin"),
+    "wall deesis": wall("the Deesis: Christ between his Mother and the Baptist", "deesis", **LONG),
+    "wall emperor": wall("an emperor with his court", "court", **LONG),
+    "wall empress": wall("an empress with her ladies", "empress", **LONG),
+    "wall apostles": wall("the apostles in a row", "apostles", **LONG),
+    "wall fathers": wall("church fathers, frontal, hieratic", "fathers", **LONG),
+    "wall shepherd": wall("the Good Shepherd among his sheep", "shepherd", **LONG),
+    "wall lambs": wall("twelve lambs and the Lamb", "lambs", **LONG),
+    "wall cross": wall("an apse's jewelled cross in a starry heaven", "cross", ground="blue"),
+    "wall roundels": wall("busts in roundels, jewelled", "roundels", **LONG),
+    "wall arcade": wall("saints under arches", "arcade", **LONG),
+})
+def field(about, size=(1.2, 1.2), stone=.013, palette="opus-bw", schemes=[[1, 1, 2, 1, 0]], **k):
+    p = floor(about, size, [], palette=palette, stone=stone, plan={"kind": "field", "schemes": schemes, **k})
+    return p
+COLOUR = [[1, 3, 8, 1, 0], [6, 3, 8, 1, 0], [9, 5, 8, 1, 0], [7, 1, 8, 5, 2], [3, 6, 0, 1, 2], [5, 7, 8, 1, 0], [1, 9, 2, 1, 0], [6, 1, 2, 1, 15]]
+PATTERNS.update({
+    "field bw": field("a Roman geometric field in black and white; the seed picks which"),
+    "field colour": field("a geometric field in the floor's stones; which and in which colours, the seed's", palette="opus-stone", schemes=COLOUR),
+    "strip any": {**floor("a border's band, tiling along: guilloche, key, wave, dentils, chequer...", [.72, .24], [], palette="opus-stone", stone=.0075, plan={"kind": "strip", "schemes": COLOUR}), },
+})
+# (what the finishes hold keeps its drawing at its own seed; any other seed is the same kind of thing, newly drawn)
+BW = {"field": lambda **k: {"kind": "field", "schemes": [[1, 1, 2, 1, 0]], **k}}
+PATTERNS["bw hexagons"]["layers"][0]["plan"] = {"kind": "field", "field": "hexagons", "keep": 3, "n": 3, "schemes": [[1, 1, 2, 1, 0]]}
+PATTERNS["bw chequer"]["layers"][0]["plan"] = {"kind": "field", "keep": 3, "fields": ["chequer", "chequer", "lozenges", "chevrons", "triangles", "basket"], "stone": .015, "set": {"wander": .35, "thin": .3}, "sets": {"chequer": {"stone": .02, "set": {"wander": .35}}}, "schemes": [[1, 1, 2, 1, 0]]}   # (`wander`: a true chequer's rows and columns average out, so nothing in the drawing masks the courses of stones running straight across the tile. `thin`: a sharp tip is no line, and a line's stones lie over what's beside it)
+PATTERNS["bw scales"]["layers"][0]["plan"] = {"kind": "field", "field": "scales", "keep": 3, "schemes": [[1, 1, 2, 1, 0]]}
+PATTERNS["bw star8"]["layers"][0]["plan"] = {"kind": "field", "keep": 3, "fields": ["octagons", "stars", "rosettes", "petals"], "n": 3, "stone": .0075, "schemes": [[1, 1, 2, 1, 0]]}
+PATTERNS["bw meander"]["layers"][0]["plan"] = {"kind": "strip", "keep": 3, "strips": ["meander", "tkey", "wave", "lozenges", "dentil"], "schemes": [[1, 1, 2, 1, 0]]}
+PATTERNS["bw wave"]["layers"][0]["plan"] = {"kind": "strip", "keep": 3, "strips": ["wave", "saw", "dentil", "beads"], "schemes": [[1, 1, 2, 1, 0]]}
+PATTERNS["bw guilloche"]["layers"][0]["plan"] = {"kind": "strip", "keep": 3, "stone": .0062, "strips": ["guilloche", "plait", "ivy"], "schemes": [[1, 2, 0, 1, 0]]}
+PATTERNS["gold braid"]["layers"][0]["plan"] = {"kind": "strip", "keep": 5, "stone": .0085, "strips": ["plait", "guilloche", "lozenges", "beads", "chequer", "saw"], "schemes": [[3, 4, 5, 6, 0], [4, 3, 1, 6, 0], [3, 8, 5, 6, 0], [5, 3, 1, 6, 4]]}
+PATTERNS["gold scales"]["layers"][0]["plan"] = {"kind": "field", "field": "scales", "keep": 5, "schemes": [[1, 3, 5, 3, 0], [4, 3, 1, 6, 0], [3, 1, 5, 6, 0]]}
+PATTERNS["gold virgin"]["layers"][0]["plan"] = {"kind": "wall", "subject": "virgin", "keep": 5, "bands": False, "reach": .74}
+PATTERNS["gold fathers"]["pinned"] = True   # (its figures stand between one building's windows: every world keeps them there. architecture.js seedFinishes)
+PATTERNS["gold fathers"]["layers"][0]["plan"] = {"kind": "wall", "subject": "fathers", "keep": 5, "bands": False, "ground": "gold", "piers": [-1, 0, 1], "h": 1.56, "foot": -1.035, "sill": [-1.15, .15]}
+for n, s in [("lions", 3 + 1), ("nemean", 4), ("thiasos", 4), ("sphinxes", 4), ("centaurs", 4), ("duel", 4)]:
+    PATTERNS[f"emblem {n}"]["layers"][0]["follow"] = -3    # (a seed here is a new painting of the same subject, drawn by the Greek engine)
 for p in PATTERNS.values():
     for L in p["layers"]:
         for q in L.get("layers", []):

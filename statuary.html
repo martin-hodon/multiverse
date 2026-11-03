@@ -29,7 +29,7 @@
 // A test bench for the statues (statues.js): rows of carved figures on plain pedestals -- poses, stones, what they hold,
 // styles of dress -- each a `statue` marker's data as a building gives it. Headless shots drive it after window.__ready.
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { navControls, meshPick, columnPick, anyPick } from "./cursornav.js";   // (the view turns and zooms about the point under the pointer, as the atlas's)
 import { createComposite, pipeFromQuery } from "./composite.js";
 import { placeStatues, statuePose, STATUE_POSES } from "./statues.js";
 import { createTools } from "./tools.js";
@@ -51,7 +51,9 @@ scene.add(ground);
 const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, .05, 400);
 const cam = (qp.get("cam") ?? "0,2.6,9,0,1.6,0").split(",").map(Number);
 camera.position.set(cam[0], cam[1], cam[2]);
-const controls = new OrbitControls(camera, renderer.domElement);
+// (picked: the pedestals, and a column round each statue -- the figures are drawn in a shader, no triangles to meet)
+const peds = [];
+const controls = navControls(camera, renderer.domElement, { pick: anyPick(meshPick(peds), columnPick(() => statues.map((s) => ({ x: s.x, z: s.z, r: .32 * (s.scale ?? 1), y0: s.y, y1: s.y + 1.9 * (s.scale ?? 1) })))) });
 controls.target.set(cam[3], cam[4], cam[5]);
 controls.update();
 
@@ -76,7 +78,7 @@ for (const [ri, [z0, specs]] of rows.entries()) if (only < 0 || only === ri) spe
   const x = (i - (specs.length - 1) / 2) * 1.5, z = only < 0 ? z0 : 0;
   const ped = new THREE.Mesh(new THREE.BoxGeometry(PED.w, PED.h, PED.w), pedMat);
   ped.position.set(x, PED.h / 2, z);
-  scene.add(ped);
+  scene.add(ped); peds.push(ped);
   const seat = statuePose({ pose: "stand", ...d })?.seat ? .45 * (d.scale ?? 1) : 0;   // (a seated figure on a throne-high block)
   if (seat) { const b = new THREE.Mesh(new THREE.BoxGeometry(.5, seat, .6), pedMat); b.position.set(x - .05, PED.h + seat / 2, z); scene.add(b); }
   statues.push({ x, y: PED.h + seat, z, h: FACE, kind: "man", pose: "stand", style: null, outfit: null, hold: null, stone: "marble", scale: 1, seed: 1, ...d });
@@ -91,6 +93,7 @@ tools.prepare?.(held.map((h) => h.tool));
 addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
 let frames = 0;
 function frame() {
+  controls.update();
   herd.update(0); tools.place([[herd, held]]); heads.place([herd]);
   renderer.render(scene, camera);
   if (++frames > 20) window.__ready = true;   // (a few frames: the heads' and the items' meshes come in after their first place)

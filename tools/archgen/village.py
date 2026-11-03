@@ -654,16 +654,16 @@ def fence_component():
     deg = 25 * 3.14159265 / 180
     parts = {
         # (p0/p1 0: no post at the start/the end -- the run meets another at a corner, whose post is the other's)
-        "posts": {**col(0.07, "h", [["(1 - p0) * L / round(L / bay)", 0, 0, 0]], sides=6), "repeat": {"count": "round(L / bay) - 1 + p0 + p1", "step": ["L / round(L / bay)", 0, 0, 0]}, "when": {"style": ["rails", "picket"]}},
-        "rail low": {**box("L / round(L / bay)", 0.07, 0.09, ["L / round(L / bay) / 2", 0.46, 0, 0]), "repeat": {"count": "round(L / bay)", "step": ["L / round(L / bay)", 0, 0, 0]}, "when": {"style": "rails"}},
-        "rail high": {**box("L / round(L / bay)", 0.07, 0.09, ["L / round(L / bay) / 2", "h - 0.2", 0, 0]), "repeat": {"count": "round(L / bay)", "step": ["L / round(L / bay)", 0, 0, 0]}, "when": {"style": "rails"}},
-        "picket rails": {**box("L / round(L / bay)", 0.05, 0.07, [["L / round(L / bay) / 2", 0.3, 0, 0], ["L / round(L / bay) / 2", "h - 0.35", 0, 0]]), "repeat": {"count": "round(L / bay)", "step": ["L / round(L / bay)", 0, 0, 0]}, "when": {"style": "picket"}},
-        "pickets": {**box(0.07, 0.025, "h - 0.15", ["L / round(L / 0.16) / 2", 0.1, 0.0325, 0]),   # (nailed to the rails: 5mm into their face, not 2.5mm off it)
-        "repeat": {"count": "round(L / 0.16)", "step": ["L / round(L / 0.16)", 0, 0, 0]}, "when": {"style": "picket"}},
-        "wattle posts": {**col(0.06, "h - 0.05", [[0, 0, 0, 0]], sides=6), "repeat": {"count": "round(L / 1.2) + 1", "step": ["L / round(L / 1.2)", 0, 0, 0]}, "when": {"style": "wattle"}},
+        "posts": {**col(0.07, "h", [["(1 - p0) * L / max(1, round(L / bay))", 0, 0, 0]], sides=6), "repeat": {"count": "max(1, round(L / bay)) - 1 + p0 + p1", "step": ["L / max(1, round(L / bay))", 0, 0, 0]}, "when": {"style": ["rails", "picket"]}},
+        "rail low": {**box("L / max(1, round(L / bay))", 0.07, 0.09, ["L / max(1, round(L / bay)) / 2", 0.46, 0, 0]), "repeat": {"count": "max(1, round(L / bay))", "step": ["L / max(1, round(L / bay))", 0, 0, 0]}, "when": {"style": "rails"}},
+        "rail high": {**box("L / max(1, round(L / bay))", 0.07, 0.09, ["L / max(1, round(L / bay)) / 2", "h - 0.2", 0, 0]), "repeat": {"count": "max(1, round(L / bay))", "step": ["L / max(1, round(L / bay))", 0, 0, 0]}, "when": {"style": "rails"}},
+        "picket rails": {**box("L / max(1, round(L / bay))", 0.05, 0.07, [["L / max(1, round(L / bay)) / 2", 0.3, 0, 0], ["L / max(1, round(L / bay)) / 2", "h - 0.35", 0, 0]]), "repeat": {"count": "max(1, round(L / bay))", "step": ["L / max(1, round(L / bay))", 0, 0, 0]}, "when": {"style": "picket"}},
+        "pickets": {**box(0.07, 0.025, "h - 0.15", ["L / max(1, round(L / 0.16)) / 2", 0.1, 0.0325, 0]),   # (nailed to the rails: 5mm into their face, not 2.5mm off it)
+        "repeat": {"count": "max(1, round(L / 0.16))", "step": ["L / max(1, round(L / 0.16))", 0, 0, 0]}, "when": {"style": "picket"}},
+        "wattle posts": {**col(0.06, "h - 0.05", [[0, 0, 0, 0]], sides=6), "repeat": {"count": "max(1, round(L / 1.2)) + 1", "step": ["L / max(1, round(L / 1.2))", 0, 0, 0]}, "when": {"style": "wattle"}},
         "hurdles": {**box("L", 0.06, "h - 0.25", ["L / 2", 0.08, 0, 0]), "when": {"style": "wattle"}},
-        "zig": {**box("bay / 0.9063 + 0.3", 0.1, 0.11, [["bay / 2", 0.25, 0, deg], ["bay / 2", 0.6, 0, deg], ["bay / 2", 0.95, 0, deg]]), "repeat": {"count": "ceil(round(L / bay) / 2)", "step": ["2 * bay", 0, 0, 0]}, "when": {"style": "zigzag"}},
-        "zag": {**box("bay / 0.9063 + 0.3", 0.1, 0.11, [["bay * 1.5", 0.25, 0, "0 - " + str(deg)], ["bay * 1.5", 0.6, 0, "0 - " + str(deg)], ["bay * 1.5", 0.95, 0, "0 - " + str(deg)]]), "repeat": {"count": "floor(round(L / bay) / 2)", "step": ["2 * bay", 0, 0, 0]}, "when": {"style": "zigzag"}},
+        "zig": {**box("bay / 0.9063 + 0.3", 0.1, 0.11, [["bay / 2", 0.25, 0, deg], ["bay / 2", 0.6, 0, deg], ["bay / 2", 0.95, 0, deg]]), "repeat": {"count": "ceil(max(1, round(L / bay)) / 2)", "step": ["2 * bay", 0, 0, 0]}, "when": {"style": "zigzag"}},
+        "zag": {**box("bay / 0.9063 + 0.3", 0.1, 0.11, [["bay * 1.5", 0.25, 0, "0 - " + str(deg)], ["bay * 1.5", 0.6, 0, "0 - " + str(deg)], ["bay * 1.5", 0.95, 0, "0 - " + str(deg)]]), "repeat": {"count": "floor(max(1, round(L / bay)) / 2)", "step": ["2 * bay", 0, 0, 0]}, "when": {"style": "zigzag"}},
         "dyke": {**box("L", 0.45, "h - 0.25", ["L / 2", 0, 0, 0]), "when": {"style": "stone"}},
         "coping": {**box("L", 0.55, 0.12, ["L / 2", "h - 0.25", 0, 0]), "when": {"style": "stone"}},
     }

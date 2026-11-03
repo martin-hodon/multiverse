@@ -28,32 +28,61 @@ add("gallery", {"type": "enclosure", "plan": {"rect": [44, 44], "chamfer": 8.5, 
                 "at": [[0, "podklet", 0, 0]], "_about": "the gallery that runs round the platform and joins the chapels: arcaded, with a door in the middle of each side (the plan's `split`)"})
 add("stairs", {"type": "flight", "width": 3.0, "run": 0.3, "rise": 0.17, "top": "podklet", "landing": 0,
                "at": [[-1.5, 0, -(23 + 32 * 0.3), -1.5707963]], "_about": "the flight up to the platform from Red Square, on the north"})
-# the central tower: a tall tent, and a small domed tower on its tip
-add("central tower", {**tower(sides=8, R=5.5, H=17, cap="trigonal", capRise=15, drumR=4.0, drumH=3.2, capR=4.3, finial=0.1),
-                      "build": ["tower", "kokoshniki", "neck", "drum", "cap"], "at": [[0, "podklet", 0, 0]],
-                      "_about": "the Intercession: the central tower, its tent roof 15m high"})
-add("central lantern", {**tower(sides=8, R=1.3, H=2.4, drumR=0.9, drumH=1.0, bulge=1.45, neck=0.8, capR=1.15, finial=1.4),
-                        "build": ["tower", "drum", "cap", "cap ribs", "finial"], "at": [[0, f"podklet + {17 + 5.5 * 0.5 + 3.2 + tent_y_at(4.3, 15, 1.3):.4f}", 0, 0]],
-                        "_about": "the small onion on the tent's tip: the same component at a quarter the size, set where the tent is its width (tools/archgen/shapes.py)"})
+# the chapels crowd together on the platform (the plan is compact: their towers nearly touch); the central tent reaches 65 m to its cross,
+# the axial onions about two-thirds of that and the diagonal ones less than half. Each tower rises through white string courses and
+# stacked rows of kokoshniki (the pointed gables climbing round its head) to its drum and its onion, narrow-necked, drawn up to a point.
+def bands(nm, R, H, at, sides=8, levels=(.42, .72)):
+    x, y0, z = at[0], at[1], at[2]
+    add(f"{nm} bands", {"type": "prism", "plan": {"sides": sides, "radius": r4(R + .1)}, "height": .32,
+                        "at": [[x, f"podklet + {r4(H * f)}", z, 0] for f in levels], "_about": "the white string courses round the shaft"})
+def kok_row(nm, R, y, at, w=None, pitch=58):
+    x, z = at[0], at[2]
+    add(nm, {"type": "roof", "form": "gable", "width": r4(w or R * .62), "length": .5, "pitch": pitch,
+             "spiral": {"count": 8, "radius": r4(R * .94), "y": f"podklet + {r4(y)}", "x": x, "z": z}})
+r4 = lambda v: round(v, 4)
+CH, CK, CDH, CTR, CTOP = 17.0, 6.6, 3.6, 21.0, 4.4   # central shaft, kokoshnik tiers' height, drum, tent's rise and its foot's radius
+add("central tower", {**tower(sides=8, R=6.4, H=CH, cap="trigonal", capRise=CTR, drumR=4.4, drumH=CDH, capR=CTOP, finial=0.1, kok=CK),
+                      "build": ["tower", "kokoshniki", "neck", "drum", "cornice", "cap"], "at": [[0, "podklet", 0, 0]],
+                      "_about": "the Intercession: the central tower, its tiers of kokoshniki, its drum, its tent"})
+bands("central", 6.4, CH, [0, 0, 0], levels=(.34, .62, .86))
+kok_row("central kokoshniki 2", 5.2, CH + CK * .34, [0, 0, 0], 2.7)
+kok_row("central kokoshniki 3", 4.9, CH + CK * .68, [0, 0, 0], 2.4)
+LY = CH + CK + CDH + tent_y_at(CTOP, CTR, 1.25)
+add("central lantern", {**tower(sides=8, R=1.3, H=2.6, drumR=0.9, drumH=1.1, bulge=1.14, neck=1.15, capR=1.2, finial=1.8),
+                        "build": ["tower", "drum", "cornice", "cap", "cap ribs", "finial"], "at": [[0, f"podklet + {LY:.4f}", 0, 0]],
+                        "_about": "the lantern and gilded onion on the tent's tip: set where the tent is its width (tools/archgen/shapes.py)"})
 # four big chapels on the axes, four smaller ones on the diagonals
 # ...each its own part, so each can have its own colours: no two of St Basil's onions are alike
-axial = [("north", [0, "podklet", -15.5, 3.14159265]), ("east", [15.5, "podklet", 0, 1.5707963]), ("south", [0, "podklet", 15.5, 0]), ("west", [-15.5, "podklet", 0, -1.5707963])]
+AXR, AXH, AXK, AXD = 4.5, 18.0, 3.4, 14.8
+axial = [("north", [0, "podklet", -AXD, 3.14159265]), ("east", [AXD, "podklet", 0, 1.5707963]), ("south", [0, "podklet", AXD, 0]), ("west", [-AXD, "podklet", 0, -1.5707963])]
 for nm, at in axial:
-    add(f"{nm} chapel", {**tower(sides=8, R=4.0, H=15, drumR=2.7, drumH=3.0, bulge=1.4, neck=0.85, capR=3.0, finial=2.2, capRibs=16),
-                         "build": ["tower", "kokoshniki", "neck", "drum", "cap", "cap ribs", "finial"], "at": [at],
-                         "_about": f"the {nm} chapel on the axis, an octagon with its drum and a ribbed onion"})
+    add(f"{nm} chapel", {**tower(sides=8, R=AXR, H=AXH, drumR=3.0, drumH=3.3, bulge=1.14, neck=1.15, capR=3.2, finial=2.0, capRibs=16, kok=AXK),
+                         "build": ["tower", "kokoshniki", "neck", "drum", "cornice", "cap", "cap ribs", "finial"], "at": [at],
+                         "_about": f"the {nm} chapel on the axis: its octagon, two rows of kokoshniki, the drum, the ribbed onion"})
+    bands(f"{nm}", AXR, AXH, [at[0], 0, at[2]])
+    kok_row(f"{nm} kokoshniki 2", AXR * .8, AXH + AXK * .55, [at[0], 0, at[2]], 1.9)
+DGD, DGR, DGH, DGK = 10.8, 3.1, 12.5, 1.8
 for nm, (sx, sz) in (("northeast", (1, 1)), ("southeast", (1, -1)), ("southwest", (-1, -1)), ("northwest", (-1, 1))):
-    add(f"{nm} chapel", {**tower(sides=8, R=2.7, H=10.5, drumR=1.9, drumH=2.4, bulge=1.35, neck=0.9, capR=2.1, finial=1.6, capRibs=12),
-                         "build": ["tower", "kokoshniki", "neck", "drum", "cap", "cap ribs", "finial"], "at": [[sx * 11.2, "podklet", -sz * 11.2, 0]],
+    at = [sx * DGD, "podklet", -sz * DGD, 0]
+    add(f"{nm} chapel", {**tower(sides=8, R=DGR, H=DGH, drumR=2.05, drumH=2.3, bulge=1.14, neck=1.15, capR=2.25, finial=1.5, capRibs=12, kok=DGK),
+                         "build": ["tower", "kokoshniki", "neck", "drum", "cornice", "cap", "cap ribs", "finial"], "at": [at],
                          "_about": f"the smaller {nm} chapel on the diagonal"})
-BX, BZ = 27.0, 2.0                       # the belfry (1680s), on the east
-add("belfry", {**tower(sides=8, R=3.2, H=14, cap="trigonal", capRise=8, drumR=2.4, drumH=3.5, capR=2.6, finial=0.1, glazed=0),
-               "build": ["tower", "neck", "drum", "cap"], "at": [[BX, 0, BZ, 0]], "_about": "the belfry, against the gallery on the east: an octagon with an open drum and a tent"})
-add("belfry onion", {**tower(sides=8, R=0.9, H=1.4, drumR=0.6, drumH=0.8, bulge=1.3, capR=0.75, finial=1.0),
-                     "build": ["tower", "drum", "cap", "finial"], "at": [[BX, round(14 + 3.2 * 0.5 + 3.5 + tent_y_at(2.6, 8, 0.9), 4), BZ, 0]]})
+    bands(f"{nm}", DGR, DGH, [at[0], 0, at[2]], levels=(.6,))
+BX, BZ, BH, BDH, BTR = 21.0, 21.0, 15.0, 4.6, 10.0   # the belfry (1680s), against the gallery's south-east corner
+add("belfry", {**tower(sides=8, R=3.3, H=BH, cap="trigonal", capRise=BTR, drumR=2.7, drumH=BDH, capR=2.95, finial=0.1, glazed=0),
+               "build": ["tower", "neck", "drum", "cornice", "cap"], "at": [[BX, 0, BZ, 0]], "_about": "the belfry, against the gallery's corner: an octagon with an open drum and a green tent"})
+add("belfry onion", {**tower(sides=8, R=0.9, H=1.4, drumR=0.6, drumH=0.8, bulge=1.14, neck=1.15, capR=0.75, finial=1.0),
+                     "build": ["tower", "drum", "cap", "finial"], "at": [[BX, round(BH + 3.3 * 0.5 + BDH + tent_y_at(2.95, BTR, 0.9), 4), BZ, 0]]})
+# the gallery's roof: a band of green sheet round the outer walk, the chapels rising through its inner edge
+add("gallery roof", {"type": "prism", "plan": {"rect": [45.2, 45.2], "chamfer": 8.9, "well": {"rect": [38.8, 38.8]}}, "height": .28, "flatRoof": True,
+                     "at": [[0, "podklet + 4.2", 0, 0]], "_about": "the sheet roof over the outer gallery"})
+# the two tented stair porches on the Red Square side, either side of the stair, at the platform's chamfered corners
+for nm, sx in (("northwest", -1), ("northeast", 1)):
+    add(f"{nm} porch", {"type": "prism", "plan": {"sides": 4, "radius": 2.9}, "height": 8.2, "at": [[sx * 19.2, 0, -19.2, 0]], "_about": "a stair porch, its body a solid"})
+    add(f"{nm} porch tent", {"type": "dome", "radius": 2.5, "thickness": 0, "sides": 4, "head": {"profile": "trigonal", "rise": 6.5}, "at": [[sx * 19.2, 8.2, -19.2, .7853982]],
+                              "_about": "its green tent"})
 
 # ---- RED SQUARE and the KREMLIN ------------------------------------------------------------------------------------
-r4 = lambda v: round(v, 4)
 K = lambda E, N: (E + 4.7, -(N + 2.8))                 # OSM metres (east, north of the middle of the platform) -> (x, z)
 comp = lambda use, params, at, **kw: {"type": "component", "use": use, "params": params, "at": at, **kw}
 def yaw_along(a, b):

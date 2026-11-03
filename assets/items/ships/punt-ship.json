@@ -1,0 +1,608 @@
+{
+ "kind": "item",
+ "name": "Egyptian seagoing ship",
+ "category": "ship",
+ "era": "-2500--1000",
+ "region": "Egypt, the Red Sea",
+ "_about": "the ship of Hatshepsut's expedition to Punt (the Deir el-Bahari reliefs, about -1470): a long keel-less hull held from sagging by a hogging truss -- a great cable from stern to stem over forked crutches -- the deck beams' ends through the sides, the stern rising and curling forward into a papyrus umbel, a broad sail far wider than it is tall between a yard and a boom, fifteen oars a side, two great steering oars on the quarters and a railed platform at either end. (About 21-25 m and 5 m in the beam: the Min of the Desert reconstruction is 20 m; the rest estimated from the reliefs)",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "oars": {
+   "pick": [
+    "out",
+    "shipped"
+   ]
+  },
+  "L": [
+   21,
+   25
+  ],
+  "B": "L * 0.21",
+  "D": "B * 0.36",
+  "mastH": "L * 0.42",
+  "wl": "(D) * 0.55"
+ },
+ "materials": {
+  "planks": "planks-pine",
+  "deck": "deck",
+  "wood": "pine",
+  "cloth": "linen",
+  "rope": "hemp",
+  "metal": "iron",
+  "trim": "#2f6f7a",
+  "band": "#a8452e"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.4,
+   "plan": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.1,
+     0.45
+    ],
+    [
+     0.4,
+     1
+    ],
+    [
+     0.7,
+     0.95
+    ],
+    [
+     0.9,
+     0.45
+    ],
+    [
+     1,
+     0.03
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 1.9"
+    ],
+    [
+     0.1,
+     "D * 0.5"
+    ],
+    [
+     0.28,
+     0
+    ],
+    [
+     0.75,
+     0
+    ],
+    [
+     0.92,
+     "D * 0.6"
+    ],
+    [
+     1,
+     "D * 1.3"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 3.0"
+    ],
+    [
+     0.05,
+     "D * 1.8"
+    ],
+    [
+     0.14,
+     "D * 1.15"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.86,
+     "D * 1.15"
+    ],
+    [
+     0.95,
+     "D * 1.5"
+    ],
+    [
+     1,
+     "D * 1.75"
+    ]
+   ],
+   "deck": [
+    {
+     "y": "D * 0.88",
+     "from": 0.08,
+     "to": 0.92
+    }
+   ],
+   "rail": 0.07
+  },
+  {
+   "id": "band",
+   "type": "box",
+   "material": "band",
+   "size": [
+    "L * 0.66",
+    0.16,
+    0.04
+   ],
+   "at": [
+    "L * 0.5",
+    "D * 0.98",
+    "B * 0.5"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "beam ends",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.22,
+    0.2,
+    0.3
+   ],
+   "along": {
+    "n": 13,
+    "from": [
+     "L * 0.2",
+     "D * 0.8",
+     "B * 0.5"
+    ],
+    "to": [
+     "L * 0.8",
+     "D * 0.8",
+     "B * 0.5"
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "umbel stalk",
+   "type": "sweep",
+   "material": "trim",
+   "path": [
+    [
+     0.0,
+     "D * 2.9",
+     0
+    ],
+    [
+     "-L * 0.01",
+     "D * 3.6",
+     0
+    ],
+    [
+     "L * 0.02",
+     "D * 4.1",
+     0
+    ],
+    [
+     "L * 0.05",
+     "D * 4.2",
+     0
+    ]
+   ],
+   "radii": [
+    0.2,
+    0.17,
+    0.14,
+    0.12
+   ]
+  },
+  {
+   "id": "umbel",
+   "type": "lathe",
+   "material": "trim",
+   "at": [
+    "L * 0.05",
+    "D * 4.2",
+    0,
+    0,
+    0,
+    -70
+   ],
+   "profile": [
+    [
+     0.08,
+     0
+    ],
+    [
+     0.25,
+     0.25
+    ],
+    [
+     0.55,
+     0.6
+    ],
+    [
+     0.6,
+     0.65
+    ]
+   ],
+   "caps": false,
+   "double": true
+  },
+  {
+   "id": "prow",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    "L * 0.05",
+    0.3,
+    "B * 0.12"
+   ],
+   "at": [
+    "L * 1.0",
+    "D * 1.7",
+    0
+   ]
+  },
+  {
+   "id": "truss post",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "D * 2.6",
+    0
+   ],
+   "r": 0.08,
+   "at": [
+    [
+     "L * 0.24",
+     "D * 0.88",
+     0
+    ],
+    [
+     "L * 0.38",
+     "D * 0.88",
+     0
+    ],
+    [
+     "L * 0.66",
+     "D * 0.88",
+     0
+    ],
+    [
+     "L * 0.8",
+     "D * 0.88",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "truss",
+   "type": "sweep",
+   "material": "rope",
+   "r": 0.07,
+   "path": [
+    [
+     "L * 0.06",
+     "D * 2.4",
+     0
+    ],
+    [
+     "L * 0.24",
+     "D * 3.45",
+     0
+    ],
+    [
+     "L * 0.38",
+     "D * 3.5",
+     0
+    ],
+    [
+     "L * 0.66",
+     "D * 3.5",
+     0
+    ],
+    [
+     "L * 0.8",
+     "D * 3.45",
+     0
+    ],
+    [
+     "L * 0.95",
+     "D * 1.6",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "stern platform",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.55",
+    "d": "L * 0.1",
+    "h": "D * 0.9",
+    "rail": 0.8,
+    "crenels": 0,
+    "posts": 1
+   },
+   "at": [
+    "L * 0.07",
+    "D * 0.88",
+    0
+   ]
+  },
+  {
+   "id": "bow platform",
+   "use": "items/components/castle",
+   "params": {
+    "w": "B * 0.5",
+    "d": "L * 0.08",
+    "h": "D * 0.7",
+    "rail": 0.8,
+    "crenels": 0,
+    "posts": 1
+   },
+   "at": [
+    "L * 0.84",
+    "D * 0.88",
+    0
+   ]
+  },
+  {
+   "id": "mast L * 0.5",
+   "use": "items/components/mast",
+   "params": {
+    "h": "mastH",
+    "r": 0.18,
+    "top": "none",
+    "topH": 0.5
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.88",
+    0
+   ]
+  },
+  {
+   "id": "square sail L * 0.5 D * 0.88 + mastH * 0.95",
+   "use": "items/components/square-sail",
+   "params": {
+    "w": "L * 0.68",
+    "h": "mastH * 0.55",
+    "foot": 1.0,
+    "set": "set",
+    "belly": "L * 0.03"
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.88 + mastH * 0.95",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "boom",
+   "use": "items/components/yard",
+   "params": {
+    "l": "L * 0.7",
+    "r": 0.1
+   },
+   "at": [
+    "L * 0.5",
+    "D * 0.88 + mastH * 0.4",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "oars",
+   "use": "items/components/oars",
+   "params": {
+    "n": 15,
+    "from": "L * 0.22",
+    "to": "L * 0.78",
+    "y": "D * 1.0",
+    "z": "B * 0.5",
+    "l": "L * 0.2",
+    "dip": 22,
+    "reach": 0.25,
+    "state": "oars"
+   }
+  },
+  {
+   "id": "steering",
+   "use": "items/components/steering-oar",
+   "params": {
+    "l": "L * 0.3",
+    "bladeW": 0.55
+   },
+   "at": [
+    "L * 0.1",
+    "D * 1.6",
+    "B * 0.32",
+    0,
+    0,
+    -38
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "steering post",
+   "type": "rod",
+   "material": "wood",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "D * 1.3",
+    0
+   ],
+   "r": 0.08,
+   "at": [
+    "L * 0.13",
+    "D * 0.88",
+    "B * 0.3"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "stay L * 0.5-L * 0.96",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.88 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.96",
+    "D * 1.6",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  },
+  {
+   "id": "stay L * 0.5-L * 0.08",
+   "type": "rod",
+   "material": "rope",
+   "from": [
+    "L * 0.5",
+    "D * 0.88 + mastH",
+    0
+   ],
+   "to": [
+    "L * 0.08",
+    "D * 2.4",
+    0
+   ],
+   "r": 0.02,
+   "sides": 4
+  }
+ ],
+ "markers": [
+  {
+   "role": "waterline",
+   "at": [
+    "L * 0.5",
+    "(D) * 0.55",
+    0
+   ],
+   "data": {
+    "draught": "(D) * 0.55"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.92",
+    "D * 1.3833",
+    0
+   ],
+   "data": {
+    "end": "bow"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.08",
+    "D * 1.5833",
+    0
+   ],
+   "data": {
+    "end": "stern"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.45",
+    "D * 1.0208 + 0.06",
+    "(B * 0.5) * 0.9917",
+    -90
+   ],
+   "data": {
+    "side": "starboard",
+    "deck": "D * 0.88"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.45",
+    "D * 1.0208 + 0.06",
+    "((B * 0.5) * 0.9917) * -1",
+    90
+   ],
+   "data": {
+    "side": "port",
+    "deck": "D * 0.88"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.3",
+    "(D) * 0.88",
+    0
+   ],
+   "data": {
+    "i": 0,
+    "w": "B * 0.5",
+    "l": "L * 0.25",
+    "floor": "(D) * 0.88"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.7",
+    "(D) * 0.88",
+    0
+   ],
+   "data": {
+    "i": 1,
+    "w": "B * 0.5",
+    "l": "L * 0.25",
+    "floor": "(D) * 0.88"
+   }
+  },
+  {
+   "role": "helm",
+   "at": [
+    "L * 0.1",
+    "D * 0.88",
+    0
+   ]
+  }
+ ]
+}

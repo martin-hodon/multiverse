@@ -1,19 +1,139 @@
 {
   "name": "Sacre-Coeur",
   "building": "architecture/sacre-coeur",
-  "_about": "Sacre-Coeur: white Chateau-Landon travertine, domes and all; inside, the apse's gold mosaic, pale stone, the floor in grey and white marble.",
+  "_about": "Sacre-Coeur: white Chateau-Landon travertine everywhere outside, the domes and the stone roofs too (it whitens in the rain); the two saints in bronze; inside, pale stone, marble floors, the apse's half dome the great gold and blue mosaic of Christ in Majesty, gold mosaic in the choir's barrel; the windows stained glass, the roses wheels.",
   "stone": {
     "color": "#f1eee6",
     "accent": "#dedad0",
     "pat": "ashlar"
   },
   "rules": [
-    {"parts": "kind:railing", "color": "#2e2f31", "accent": "#1f2022", "_about": "iron railings"},
-    {"parts": ["kind:dome", "kind:vault"], "surface": "roof", "pattern": "stone/ashlar fine", "palette": "carrara"},
-    {"parts": "apse", "side": "in", "pattern": "painted/gold mosaic"},
-    {"surface": "floor", "side": "in", "pattern": "floors/checker diagonal", "palette": "marble-grey"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "limestone"},
-    {"surface": "wall", "side": "in", "pattern": "stone/ashlar fine", "palette": "limestone"},
-    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "carrara", "_about": "Chateau-Landon stone: it whitens as it weathers"}
+    {
+      "parts": "kind:railing",
+      "pattern": "stone/ashlar fine",
+      "palette": "carrara",
+      "_about": "the balustrades in the same white stone"
+    },
+    {
+      "parts": [
+        "saint louis",
+        "joan of arc",
+        "savoyarde",
+        "bell frame",
+        "bell posts"
+      ],
+      "pattern": "materials/metal",
+      "palette": "bronze",
+      "_about": "the bronzes: the saints on their horses, the great bell"
+    },
+    {
+      "parts": [
+        "dome/lantern cross",
+        "dome/lantern cross arm",
+        "dome/lantern ball"
+      ],
+      "pattern": "roofs/gold leaf",
+      "_about": "the gilt cross over the lantern"
+    },
+    {
+      "parts": "apse half dome",
+      "side": "in",
+      "map": "meridian",
+      "count": 2,
+      "scale": 9.67,
+      "offset": [
+        0,
+        -6.28
+      ],
+      "pattern": "mosaic/wall deesis",
+      "_about": "the apse's mosaic, Christ in Majesty with the Virgin and Saint Michael at his sides (Luc-Olivier Merson, 475 m2): the library's Deesis, one picture over the whole half dome (its inner radius 8 m: half round 25.1 m, up the meridian 12.6 m)"
+    },
+    {
+      "parts": [
+        "apse upper wall",
+        "choir barrel"
+      ],
+      "side": "in",
+      "pattern": "mosaic/gold ground",
+      "scale": 3.0,
+      "_about": "gold mosaic round it"
+    },
+    {
+      "parts": "kind:glass",
+      "opening": "round",
+      "map": "opening",
+      "pattern": "glass/rose wheel",
+      "palette": "chartres",
+      "_about": "the transepts' roses"
+    },
+    {
+      "parts": "kind:glass",
+      "below": 22,
+      "map": "opening",
+      "pattern": "glass/saint any",
+      "palette": "chartres",
+      "_about": "stained glass, a saint in each light"
+    },
+    {
+      "parts": "kind:glass",
+      "map": "opening",
+      "pattern": "glass/medallion stack",
+      "palette": "chartres"
+    },
+    {
+      "parts": [
+        "kind:dome",
+        "kind:roof",
+        "kind:ribs"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "carrara",
+      "_about": "the domes and the roofs in the white stone"
+    },
+    {
+      "surface": [
+        "floor",
+        "top",
+        "roof"
+      ],
+      "side": "out",
+      "pattern": "stone/ashlar fine",
+      "palette": "carrara",
+      "_about": "the terraces, the roofs and the parvis: the same white stone"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "below": 1.0,
+      "pattern": "floors/flagstones",
+      "palette": "limestone",
+      "_about": "the crypt's floor"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/opus sectile",
+      "palette": "marble-grey",
+      "_about": "the church's floors in coloured marble"
+    },
+    {
+      "surface": "ceiling",
+      "side": "in",
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone",
+      "_about": "inside, pale dressed stone"
+    },
+    {
+      "surface": "wall",
+      "pattern": "stone/ashlar fine",
+      "palette": "carrara",
+      "_about": "Chateau-Landon travertine: it whitens as it weathers"
+    }
   ]
 }

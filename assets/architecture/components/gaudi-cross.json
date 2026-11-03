@@ -1,0 +1,92 @@
+{
+ "name": "Gaudi's cross",
+ "_about": "GAUDI'S FOUR-ARMED CROSS: an upright and two bars through it at right angles, so that it points to the four quarters and up -- on the administration pavilion's tower at Park Guell (3.8m), on Casa Batllo's turret, on the Bellesguard. Stand it on whatever carries it; h is its height from there.",
+ "params": {
+  "h": 3.8,
+  "arm": 0.9,
+  "t": 0.32,
+  "_h": "its height; arm: each arm's reach from the upright; t: the bars' thickness"
+ },
+ "build": [
+  "shaft",
+  "arms",
+  "tips"
+ ],
+ "parts": {
+  "shaft": {
+   "type": "box",
+   "width": "t",
+   "length": "t",
+   "height": "h",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the upright, the arm that points to the sky"
+  },
+  "arms": {
+   "type": "box",
+   "width": "2 * arm + t",
+   "length": "t",
+   "height": "t",
+   "at": [
+    [
+     0,
+     "h - arm - t",
+     0,
+     0
+    ],
+    [
+     0,
+     "h - arm - t",
+     0,
+     1.5707963
+    ]
+   ],
+   "_about": "the four arms, to the four quarters: two bars crossing at the height of the top arm's length under the top"
+  },
+  "tips": {
+   "type": "box",
+   "width": "t * 1.25",
+   "length": "t * 1.25",
+   "height": "t * 1.25",
+   "at": [
+    [
+     "arm + t / 2",
+     "h - arm - t * 1.125",
+     0,
+     0
+    ],
+    [
+     "0 - arm - t / 2",
+     "h - arm - t * 1.125",
+     0,
+     0
+    ],
+    [
+     0,
+     "h - arm - t * 1.125",
+     "arm + t / 2",
+     0
+    ],
+    [
+     0,
+     "h - arm - t * 1.125",
+     "0 - arm - t / 2",
+     0
+    ],
+    [
+     0,
+     "h - t * 0.25",
+     0,
+     0
+    ]
+   ],
+   "_about": "a knob at every arm's end, the cross's ends thickened as Gaudi's are"
+  }
+ }
+}

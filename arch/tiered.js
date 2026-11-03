@@ -20,13 +20,26 @@
 //   INSIDE: `floors` (true by default) -- a floor on every storey and a steep stair (the ladder-like flights of a keep)
 //     up to each from the one below, along the longer side against alternate long walls, inside the footprint of the
 //     storey above, its floor open over it.
+//   A FACE'S OWN OPENINGS: a storey's `faces` { "0": [...], "1": [...] } -- a list for that face instead of `windows`
+//     (0 the south side, 1 the east, 2 the north, 3 the west, as an enclosure's; `at` along each the way it runs), the
+//     heads kept under the bracket sets as the windows' are: unequal bays, a door in one bay and windows in the next.
+//   A LIFTED BAY of a skirt (the Phoenix Hall's kiri-age): a storey's `lift` { side, at, width, dy, pitch, shell } -- the
+//     skirt over it cut open `width` wide about `at` (x on a north or south side, z on an east or west one) and a roof
+//     of its own over the gap, its eave `dy` higher, at `pitch` (the skirt's by default), on two posts and a beam
+//     ("lift N", "lift N posts").
+//   A RAILING ON A SKIRT (a koran round the storey above): a storey's `rail` { out, h, every, w } -- `out` metres out
+//     from the walls of the storey above, standing on the skirt's slope where it is there ("rail N"); open over a lift.
+//   ORNAMENTS ON THE RIDGE'S ENDS: `top.ridgeEnds` { use, params, inset, lift, face } -- a component (components/phoenix by
+//     default; a shachihoko, a shibi) at each end of the top roof's ridge, `inset` back from it, facing "out" (the
+//     default) or "in" ("ridge ends") -- set from the roof as it is built, so it stays on it whatever the roof does;
+//     on a pyramid, one on its apex (a jewel: components/hoju).
 //   POLYGONAL STOREYS `sides` n: a Chinese pavilion tower (the Foxiang Ge), an octagonal pagoda -- each storey { r, h }
 //     a regular n-gon r to its outer corners (a face on each axis's side: planPoints' `sides` plan), every skirt and the
 //     top a `dome` of n faces on the jujia section (`roof` { lo, hi, overhang, t }: the slopes at the eave and at the
 //     crown, profiles.js), each SEATED on the wall it covers (assemble.js seatLift: its soffit on the wall head), the
 //     skirts cut by an oculus where the storey above rises through them; a door's `side` the face toward it; the
 //     brackets along every face; the finial on the top's point. No gables.
-import { roofLevels, overhang, restLift, planPoints } from "./build.js";
+import { roofLevels, overhang, restLift, planPoints, curveRise } from "./build.js";
 
 const SIDES = { n: [0, -1], s: [0, 1], e: [1, 0], w: [-1, 0] };
 
@@ -75,6 +88,10 @@ export function tieredDefs(def, P) {
     }
     const spec = win === false ? [] : { ...win, sill: Math.max(P(win.sill ?? 1), sill), springing: spring };
     const faces = {};
+    for (const [f, list] of Object.entries(s.faces ?? {})) faces[f] = list.map((q) => {
+      const sp = P(q.springing ?? 1.9);
+      return { ...q, springing: seat(k) !== null ? Math.min(sp, seat(k) - .1) : sp };
+    });
     if (k === 0) for (const d of doors) {
       const [f, sgn] = FACE[d.side ?? "s"], door = { at: sgn * P(d.at, 0), width: P(d.width, 1.6), sill: 0, springing: P(d.height, 2.4), head: { profile: "flat" } };
       if (seat(0) !== null && door.springing > seat(0) - .1) throw new Error(`a door ${door.springing}m high runs into the bracket sets over it (${(seat(0) - .1).toFixed(2)}m at the most)`);
@@ -87,7 +104,46 @@ export function tieredDefs(def, P) {
     const up = S[k + 1];
     if (up && s.roof !== false) {
       if (up.w > s.w - .05 || up.l > s.l - .05) throw new Error(`storey ${k + 2} must be set in from storey ${k + 1} for a skirt between them`);
-      defs[`skirt ${k + 1}`] = { type: "roof", form: "pent", width: s.w, length: s.l, top: [up.w, up.l], pitch, overhang: o, ...curve, rest: true, at: [[0, y + s.h, 0, 0]] };
+      const Lf = s.lift, lf = Lf && { side: Lf.side ?? "s", at: P(Lf.at, 0), width: P(Lf.width, 3), dy: P(Lf.dy, 1) };
+      defs[`skirt ${k + 1}`] = { type: "roof", form: "pent", width: s.w, length: s.l, top: [up.w, up.l], pitch, overhang: o, ...curve, rest: true, at: [[0, y + s.h, 0, 0]],
+                                 ...(lf ? { gaps: [{ side: lf.side, lo: lf.at - lf.width / 2, hi: lf.at + lf.width / 2 }] } : {}) };
+      // THE LIFTED BAY: a roof of its own over the gap, from the skirt's eave line (lifted by dy) back to the wall above,
+      // rising at `pitch`; its eave carried by a beam on two posts standing on the storey's wall head
+      if (lf) {
+        const [nx, nz] = SIDES[lf.side], along = nx !== 0, half = along ? s.w / 2 : s.l / 2, run = half - (along ? up.w : up.l) / 2;
+        const pl = P(Lf.pitch, pitch), Tl = Math.tan(pl * Math.PI / 180), sh = P(Lf.shell, .25);
+        const yE = y + s.h - o * T + skirtLift(k) + lf.dy, depth = run + o, c = half + o - depth / 2;
+        const yaw = { e: Math.PI, w: 0, s: Math.PI / 2, n: -Math.PI / 2 }[lf.side];   // (a shed rises toward its local +x: here toward the wall)
+        defs[`lift ${k + 1}`] = { type: "roof", form: "shed", width: depth, length: lf.width, pitch: pl, overhang: 0, shell: sh,
+                                  at: [[nx * c + (along ? 0 : lf.at), yE, nz * c + (along ? lf.at : 0), yaw]] };
+        const yB = yE + o * Tl - sh, bw = .24;                     // (the beam's top: the roof's underside over the wall line)
+        const posts = [-1, 1].map((e) => (along ? [nx * half, y + s.h, lf.at + e * (lf.width / 2 - bw / 2), 0] : [lf.at + e * (lf.width / 2 - bw / 2), y + s.h, nz * half, 0]));
+        defs[`lift ${k + 1} posts`] = { type: "box", width: bw, length: bw, height: Math.max(.05, yB - .28 - (y + s.h)), at: posts };
+        defs[`lift ${k + 1} beam`] = { type: "box", width: along ? bw : lf.width, length: along ? lf.width : bw, height: .28,
+                                       at: [[along ? nx * half : lf.at, yB - .28, along ? lf.at : nz * half, 0]] };
+      }
+      // THE RAILING on the skirt, round the storey above, `out` from its walls: each side standing on the slope there
+      if (s.rail) {
+        const Rl = s.rail, out = P(Rl.out, .6), rh = P(Rl.h, .75), ev = P(Rl.every, 1.5), rw = P(Rl.w, .07);
+        const hw = up.w / 2 + out, hd = up.l / 2 + out, lines = [];
+        const yAt = (side) => {                                    // (the skirt's top `out` from the wall, as curvedRoof bends it)
+          const along = SIDES[side][0] !== 0, r = along ? (s.w - up.w) / 2 : (s.l - up.l) / 2, H0 = (s.w - up.w) / 2 * T;
+          const sl = r > 1e-6 ? H0 / r : T, oe = o * T / sl, Ht = H0 + o * T, f = Math.max(0, (r + oe - out) / (r + oe));
+          return y + s.h - o * T + Ht * curveRise(curve.lo ?? 1, curve.hi ?? 1, f) + skirtLift(k);
+        };
+        for (const side of ["n", "e", "s", "w"]) {
+          const [nx, nz] = SIDES[side], along = nx !== 0, yb = yAt(side) - .03, y1 = yb + rh, ym = yb + rh * .5, L = along ? hd : hw;
+          const P3 = (u, yy) => (along ? [nx * hw, yy, u] : [u, yy, nz * hd]);
+          const cut = lf && lf.side === side ? [lf.at - lf.width / 2, lf.at + lf.width / 2] : null;
+          const runs = cut ? [[-L, Math.max(-L, cut[0])], [Math.min(L, cut[1]), L]].filter(([a, b]) => b - a > .05) : [[-L, L]];
+          for (const [a, b] of runs) {
+            for (const yy of [y1, ym]) lines.push([...P3(a, yy), ...P3(b, yy)]);
+            const n = Math.max(1, Math.round((b - a) / ev));
+            for (let j = 0; j <= n; j++) { const u = a + (b - a) * j / n; lines.push([...P3(u, yb), ...P3(u, y1)]); }
+          }
+        }
+        defs[`rail ${k + 1}`] = { type: "bars", lines, w: rw, h: rw, caps: false, kind: "moulding" };
+      }
     }
     // FLOORS and the stair up to each: in the storey below, climbing along its longer side against one of the long walls
     // (alternately, storey by storey), centred, inside this one's footprint; the floor open over its whole run
@@ -112,6 +168,18 @@ export function tieredDefs(def, P) {
                overhang: P(Tp.overhang, o), ...(Tp.hipH !== undefined ? { hipH: P(Tp.hipH) } : (Tp.form ?? "gablet") === "gablet" ? { hipH: .55 } : {}),
                ...curve, ...Object.fromEntries(["lo", "hi", "upturn", "flare"].filter((k) => Tp[k] !== undefined).map((k) => [k, P(Tp[k])])),
                rest: true, at: [[0, yTop, 0, long ? Math.PI / 2 : 0]] };
+  // THE ORNAMENTS ON THE RIDGE'S ENDS: the ridge's own level as the roof part builds it (its overhang, its rest lift)
+  if (Tp.ridgeEnds) {
+    const RE = Tp.ridgeEnds, T0 = defs.top, form = T0.form;
+    const lv0 = roofLevels(form, { a: T0.width / 2, b: T0.length / 2, pitch: T0.pitch, ...(T0.hipH !== undefined ? { hipH: T0.hipH } : {}) });
+    const lv = overhang(lv0, T0.overhang), Lr = lv[lv.length - 1];
+    const curved = ["lo", "hi", "upturn", "flare"].some((q) => T0[q] !== undefined);
+    const yR = yTop + Lr.y + (curved ? restLift(lv, lv0[0].y, T0.lo ?? .35, T0.hi ?? 1.2) : 0) + P(RE.lift, 0), inset = P(RE.inset, 0);
+    const flip = RE.face === "in" ? Math.PI : 0;
+    const apex = Lr.z1 - Lr.z0 < 1e-6;                           // (a pyramid's one point: one ornament there -- a jewel, a finial)
+    const at = (apex ? [[0, 0]] : [[Lr.z0 + inset, Math.PI + flip], [Lr.z1 - inset, flip]]).map(([z, yaw]) => (long ? [z, yR, 0, yaw + Math.PI / 2] : [0, yR, z, yaw]));
+    defs["ridge ends"] = { type: "component", use: RE.use ?? "components/phoenix", params: RE.params ?? {}, at };
+  }
   // THE BRACKET SETS under every eave (`brackets` { use, s, every }: a component built facing +z out of the wall, y 0 on
   // its seat -- components/dougong by default, about 1.06m tall and 1.3m out at s 1): a row along each side of every
   // storey that has a roof over it, corner to corner, set low enough that the slope clears its outer tip

@@ -1,24 +1,30 @@
 {
   "name": "Kinkaku-ji",
   "building": "architecture/kinkakuji",
-  "_about": "Kinkaku-ji's surfaces: the upper two storeys covered in gold leaf over black lacquer, the first plain timber and white plaster; the roofs of cypress-bark shingles (hiwadabuki), dark brown; the bracket sets and the phoenix gilt; the island's edge and the bridge granite, the island raked gravel.",
+  "_about": "Kinkaku-ji's surfaces: the upper two storeys covered in gold leaf over black lacquer, the first plain timber and white plaster; the roofs of cypress-bark shingles (hiwadabuki), dark brown; the bracket sets and the phoenix gilt; the first storey's shutters dark, one bay white plaster; the shore's edge and the rocks granite.",
   "stone": {
     "color": "#a39e94",
     "accent": "#857f75",
     "pat": "ashlar"
   },
   "rules": [
-    {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/slate", "palette": "walnut", "_about": "cypress-bark shingles, dark brown"},
+    {"parts": "kind:roof", "surface": "roof", "pattern": "roofs/slate", "palette": "ebony", "_about": "cypress-bark shingles, dark brown"},
     {"parts": "kind:roof", "pattern": "timber/planks", "palette": "walnut", "_about": "the undersides: the rafters and boards"},
-    {"parts": ["finial base", "finial mast", "finial jewel"], "pattern": "roofs/gold leaf", "_about": "the phoenix on the apex, gilt bronze"},
+    {"parts": ["finial base"], "color": "#1c1714", "pat": "wood", "_about": "the black block under the phoenix's base"},
+    {"parts": ["finial mast", "finial jewel", "phoenix", "second rail", "third rail"], "pattern": "roofs/gold leaf", "_about": "the phoenix and its base, the balconies' railings, gilt"},
+    {"parts": ["second balcony", "third balcony"], "pattern": "roofs/gold leaf"},
+    {"parts": ["plaster south", "plaster east"], "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"parts": ["veranda", "veranda rail", "sosei deck", "sosei walk", "sosei piles"], "pattern": "timber/planks", "palette": "ebony"},
+    {"parts": ["sosei"], "surface": "wall", "pattern": "timber/planks", "palette": "ebony"},
+    {"parts": ["islet great", "islet small"], "surface": "floor", "pattern": "stone/sand", "palette": "gravel"},
+    {"parts": ["shore", "islet great", "islet small", "rock 1", "rock 2", "rock 3", "rock 4", "rock 5", "rock 6"], "pattern": "stone/ashlar fine", "palette": "granite"},
     {"parts": ["dou", "arm 1", "tongue 1", "blocks 1", "arm 2", "tongue 2", "blocks 2", "arm 3", "beams"], "pattern": "roofs/gold leaf", "_about": "the bracket sets under the upper eaves, gilt"},
     {"parts": ["storey 2", "storey 3"], "surface": "wall", "side": "out", "pattern": "roofs/gold leaf", "_about": "the Tower of Sound Waves and the Cupola of the Ultimate, gold leaf over lacquer"},
-    {"parts": ["bridge", "bridge steps"], "pattern": "stone/ashlar fine", "palette": "granite"},
     {"parts": "kind:flight", "pattern": "timber/planks", "palette": "pine"},
     {"surface": "floor", "side": "in", "pattern": "timber/planks", "palette": "pine"},
-    {"surface": "floor", "pattern": "stone/sand", "palette": "gravel"},
-    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"surface": "floor", "pattern": "stone/ashlar fine", "palette": "granite", "_about": "the stone edge on the water"},
+    {"surface": "wall", "side": "in", "pattern": "timber/planks", "palette": "ebony", "_about": "seen through the shutters: dark inside"},
     {"parts": "kind:railing", "pattern": "timber/planks", "palette": "walnut"},
-    {"surface": "wall", "pattern": "timber/shinkabe", "palette": "frame-dark", "_about": "the first storey: dark timber, white plaster between"}
+    {"surface": "wall", "pattern": "timber/planks", "palette": "ebony", "_about": "the first storey: dark timber"}
   ]
 }

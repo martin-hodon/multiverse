@@ -80,6 +80,14 @@ export function statueDef(st) {
   //  A standing piece's WAISTBAND stays closed as painted -- `lid`, shell.js: carved, its hem shut with it)
   for (const p of pd.parts) { p.stone = m; p.fur = false; if (p.clip) p.clip = { ...p.clip, solid: !p.open, lid: !p.open && !!p.clip.lid }; }
   for (const p of pd.parts) if (p.covered) Object.assign(p, { bone: true, k: 0 });   // (a piece wholly under another: not carved -- clothes.js `covered`)
+  // (`broken`: an ancient statue fallen from the waist up -- chest, arms, neck, head and what is on them no longer carved: their bones
+  //  stay, as a covered piece's do, the belly and the hips and legs standing alone. Abu Simbel's second colossus)
+  if (st.broken) {
+    const by = new Map(pd.parts.map((d) => [d.id, d]));
+    const gone = (d) => { for (let q = d; q; q = by.get(q.parent)) { if (q.id === "belly" || q.id === "hips" || q.id === "pelvis") return false; if (q.id === "chest") return true; } return false; };
+    for (const p of pd.parts) if (gone(p)) Object.assign(p, { bone: true, k: 0 });
+    pd.face = null;
+  }
   if (pose) fitToPose(pd, pose);
   if (pd.face) pd.face = { ...pd.face, stone: m };
   pd.jewelry = null;   // (no necklace hung painted on a carving: what it wears on its head is carved with the head, heads.js)
@@ -192,6 +200,9 @@ export function placeStatues(herd, sites) {
     const { pd, m, pose } = statueDef(st), p = herd.add(pd);
     p.position.set(s.x + st.x, pose?.seat ? pd.sitAt(st.y) : st.y + .005, s.z + st.z);
     p.rotY = st.h; p.animT = 0;
+    // (SEEN ONLY FROM: `seen`, rectangles [x0, x1, z0, z1] about the statue, where the eye must be for it to be drawn at all -- a statue
+    //  in a sealed room is not worth its shading from outside. The depth test spares only its pixels, not its vertices: the game hides it, statuesSeen)
+    if (st.seen) p.seen = st.seen.map(([a, b, c, d]) => [p.position.x + a, p.position.x + b, p.position.z + c, p.position.z + d]);
     if (pose) p.rig = holdPose(p, pd, pose);
     const sc = st.scale ?? 1;   // (what it holds is as big as it is)
     for (const [k, side] of Object.entries(HANDS)) {
@@ -207,4 +218,9 @@ export function placeStatues(herd, sites) {
     }
   }
   return holders;
+}
+
+// each frame, before the herd is posed: a statue with a `seen` is drawn only with the eye inside one of them
+export function statuesSeen(herd, eye) {
+  for (const a of herd.animals) if (a.seen) a.hidden = !a.seen.some((r) => eye.x > r[0] && eye.x < r[1] && eye.z > r[2] && eye.z < r[3]);
 }

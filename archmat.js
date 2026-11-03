@@ -552,9 +552,10 @@ export function finishTilesOf(finish) { for (const r of finish.rules) if (r.patt
 // on the north side where the sun is short -- a dull green over the tiles, the thatch or the slates; only on the older
 // roofs (a slow noise over the town: one quarter mossy, another clean)
 // GRIME at a wall's foot (finishShade foot): how high the splash reaches (metres) and how dark at the ground
+const BARE_OF_MOSS = /sheet metal|gold leaf|glazed|^(lead|copper)$/;   // (a finish's pattern or palette that keeps no moss: lead, copper, gilding, glazed tile)
 export const GRIME = { h: .8, k: .4, streak: .16 };   // (streak: how dark the rain's runs down a wall get)
 const finishShade = wgslFn(`
-  fn finishShade(c: vec3<f32>, nW: vec3<f32>, pW: vec3<f32>, snow: f32, wet: f32, low: f32, pud: f32, sky: vec3<f32>, t: f32, rain: f32, cam: vec3<f32>, foot: f32) -> vec3<f32> {
+  fn finishShade(c: vec3<f32>, nW: vec3<f32>, pW: vec3<f32>, snow: f32, wet: f32, low: f32, pud: f32, sky: vec3<f32>, t: f32, rain: f32, cam: vec3<f32>, foot: f32, moss: f32) -> vec3<f32> {
     let n = normalize(nW);
     let k = ${SHADE_K};
     var cm = c;
@@ -569,13 +570,13 @@ const finishShade = wgslFn(`
     // stronger lower (the water gathers as it runs) -- from a noise stretched along the wall's height
     if (foot > -0.5 && abs(n.y) < 0.3) {
       let along = pW.x * n.z - pW.z * n.x;
-      let st = valueNoise2(vec2<f32>(along * 7.0, pW.y * 0.35)) * valueNoise2(vec2<f32>(along * 2.3 + 11.0, pW.y * 0.2));
-      cm = cm * (1.0 - smoothstep(0.22, 0.45, st) * ${GRIME.streak} * (0.5 + 0.5 * smoothstep(4.0, 0.5, foot)));
+      let st = valueNoise2(vec2<f32>(along * 3.5, pW.y * 0.3)) * valueNoise2(vec2<f32>(along * 0.7 + 11.0, pW.y * 0.12));   // (the second, wide across: runs in patches, or a plain wall reads as planks)
+      cm = cm * (1.0 - smoothstep(0.34, 0.56, st) * ${GRIME.streak} * (0.5 + 0.5 * smoothstep(4.0, 0.5, foot)));
     }
     if (n.y > 0.25 && n.y < 0.95) {
       let m = valueNoise2(pW.xz * 2.2) * 0.55 + valueNoise2(pW.xz * 7.0 + vec2<f32>(5.0, 2.0)) * 0.45 + 0.14 * n.z;
       let old = smoothstep(0.45, 0.75, valueNoise2(pW.xz * 0.04 + vec2<f32>(3.0, 7.0)));   // (some roofs old and mossy, some clean)
-      cm = mix(cm, mix(cm, vec3<f32>(0.32, 0.4, 0.18), 0.65), smoothstep(0.68, 0.82, m) * 0.38 * old);
+      cm = mix(cm, mix(cm, vec3<f32>(0.32, 0.4, 0.18), 0.65), smoothstep(0.68, 0.82, m) * 0.38 * old * moss);
     }
     // WET after rain (an outside face only: the material says): darker, the roofs most -- they take the rain full on
     cm = cm * (1.0 - wet * mix(0.1, 0.3, smoothstep(0.2, 0.7, n.y)));
@@ -648,8 +649,9 @@ export function finishMaterial(r, side, open = false, geo = null) {   // open: a
     geo.setAttribute("aSlot", new THREE.BufferAttribute(new Float32Array(geo.attributes.position.count).fill(finishSlot(r)), 1));
   }
   const footKnown = outside && !pud && r.align !== "part" && !r.offset && !r.map && !r.turn;   // (finishShade's grime: the pattern's v is the height)
-  const key = TILE_ARRAY ? `array|${side ?? ""}${outside ? "" : "|dry"}${open ? "|open" : ""}${pud ? "|pud" : ""}${footKnown ? "|foot" : ""}`
-                         : finishKey(r) + "|" + (r.scale ?? 1) + "|" + (side ?? "") + (outside ? "" : "|dry") + (open ? "|open" : "") + (pud ? "|pud" : "") + (footKnown ? "|foot" : "");
+  const bare = BARE_OF_MOSS.test(r.pattern ?? "") || BARE_OF_MOSS.test(r.palette ?? "");   // (metal and glaze: nothing roots on them)
+  const key = TILE_ARRAY ? `array|${side ?? ""}${outside ? "" : "|dry"}${open ? "|open" : ""}${pud ? "|pud" : ""}${footKnown ? "|foot" : ""}${bare ? "|bare" : ""}`
+                         : finishKey(r) + "|" + (r.scale ?? 1) + "|" + (side ?? "") + (outside ? "" : "|dry") + (open ? "|open" : "") + (pud ? "|pud" : "") + (footKnown ? "|foot" : "") + (bare ? "|bare" : "");
   let mat = finishMats.get(key);
   if (!mat) {
     const c = finishColour(r);
@@ -659,7 +661,7 @@ export function finishMaterial(r, side, open = false, geo = null) {   // open: a
                                   pud: float(pud ? 1 : 0), sky: PUDDLE.sky, t: PUDDLE.t, rain: PUDDLE.rain, cam: cameraPosition,
                                   // (a wall's height over the building's ground is its pattern's v -- architecture.js face mapping -- unless the
                                   //  pattern is laid from each part's foot, `align: part`, or moved: then not known)
-                                  foot: footKnown ? attribute("aUV", "vec2").y : float(-1) }).mul(landShade());
+                                  foot: footKnown ? attribute("aUV", "vec2").y : float(-1), moss: float(bare ? 0 : 1) }).mul(landShade());
     mat.userData.finish = key;
     finishMats.set(key, mat);
   }

@@ -11,6 +11,7 @@ import { knotNet } from "./ornament/knot.js";
 import { weaveOf, piecesOf, pathsOf, strokeBand, smooth } from "./ornament/weave.js";
 import { latticeOf } from "./ornament/net.js";
 import { scrollPaths, motifPaths } from "./ornament/scroll.js";
+import { shardCells } from "./ornament/shards.js";
 
 export { cellOf };
 const hash = (...k) => { let h = 2166136261; for (const v of k) { h = Math.imul(h ^ (v | 0), 16777619); h ^= h >>> 13; } return ((h >>> 0) % 100003) / 100003; };
@@ -144,5 +145,38 @@ LAYER_KINDS.scroll = {
     });
     if (v.under) level(v.under, { stem: L.under, flower: L.under, heart: L.under });
     level(v.top, L);
+  },
+};
+
+// `shards` (ornament/shards.js): the tile broken into irregular pieces, the pattern's ground showing between them as the joint
+// -- trencadis, crazy paving, field-stone rubble. `n` [nx, ny] pieces across and up, `jitter` (0 a grid of squares, 1 wild),
+// `gap` the joint's width (m), `round` a field stone's corners (m), `fills` the slots drawn from (one picked a piece; name a
+// slot twice to weight it), `vary` each piece's tone, `seed`; `alt` { fills, grid: [gx, gy] }: pieces whose middle falls in
+// the odd squares of a gx x gy chequer over the tile take `alt.fills` (Gaudi's chequers of white and blue); `dots` { fills,
+// share }: that share of pieces are those fills (white spots on an amanita's red); `skip`: that share of the pieces left out,
+// so a layer under shows (big stones laid over a field of small ones); `bed` { w, fill }: a joint that wide drawn round each
+// piece first in that slot, so it sits in its own mortar over whatever lies beneath
+LAYER_KINDS.shards = {
+  draw(g, L0, { P, pal, tile, copy }) {
+    if (copy && (copy[0] || copy[1])) return;
+    const L = numbered(L0, P), n = L.n ?? [8, 8], gap = L.gap ?? .006, r = L.round ?? 0, seed = L.seed ?? 1, vary = L.vary ?? .1;
+    const cells = cached(JSON.stringify(["sh", tile, n, L.jitter, gap, r, seed]), () => shardCells({ W: tile[0], H: tile[1], n, jitter: L.jitter ?? .8, inset: gap / 2 + r, seed }));
+    const fills = L.fills ?? [1, 2, 3], alt = L.alt, dots = L.dots;
+    for (const cl of cells) {
+      let from = fills;
+      if (alt) { const gx = alt.grid?.[0] ?? 2, gy = alt.grid?.[1] ?? 2, a = Math.floor((cl.c[0] / tile[0] + .5) * gx), b = Math.floor((cl.c[1] / tile[1] + .5) * gy); if ((((a + b) % 2) + 2) % 2) from = alt.fills; }
+      if (dots && hash(cl.i, cl.j, seed, 7) < (dots.share ?? .15)) from = dots.fills;
+      if (L.skip && hash(cl.i, cl.j, seed, 9) < L.skip) continue;
+      const slot = from[Math.floor(hash(cl.i, cl.j, seed, 5) * from.length) % from.length];
+      const p = new Path2D();
+      cl.pts.forEach((q, i) => (i ? p.lineTo(q[0], q[1]) : p.moveTo(q[0], q[1]))); p.closePath();
+      const col = cssOf(vary ? shade(hexOf(slot, pal), vary * (2 * hash(cl.i, cl.j, seed, 3) - 1)) : hexOf(slot, pal));
+      const bed = L.bed ? { w: 2 * (r + (L.bed.w ?? gap)), col: cssOf(hexOf(L.bed.fill ?? 0, pal)) } : null;
+      for (const i of [-1, 0, 1]) for (const j of [-1, 0, 1]) {
+        g.save(); g.translate(i * tile[0], j * tile[1]); g.lineJoin = "round";
+        if (bed) { g.strokeStyle = bed.col; g.lineWidth = bed.w; g.stroke(p); }
+        g.fillStyle = col; g.strokeStyle = col; g.lineWidth = 2 * r; g.fill(p); if (r > 0) g.stroke(p); g.restore();
+      }
+    }
   },
 };

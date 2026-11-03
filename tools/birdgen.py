@@ -257,6 +257,64 @@ BIRDS = dict([
          colours={"back": "plumage-chestnut", "breast": "plumage-pink-grey", "head": "plumage-pink-grey", "wing": "plumage-chestnut", "primaries": "wing-dark", "tips": "plumage-white", "tail": "plumage-slate", "beak": "beak-dark", "legs": "leg-pink"}),
 ])
 
+
+# ---- THE STORK'S OWN POSES (2026-11-03: the nest's pair, index.html STORK / storkTick). Besides "folded" (standing) and
+# "spread" (gliding) -- still the pair the `pose` pick draws from -- the stork can be asked for:
+#   on the nest: "bow" (the neck down, the bill to the sticks), "clatter" / "clatter2" (the greeting: the head thrown
+#   back onto the back, the bill straight up -- the two a little apart, swapped quickly they make the bill-clattering
+#   shake), "preen" (the head turned back over its left wing, the bill in the feathers), "sit" (no legs: tucked under,
+#   the game lowers it into the bowl by the hip's height, `sitDrop`);
+#   in the air: "flap-up" / "flap-down" (the spread wings raised / lowered about the body's axis: a wingbeat is the two
+#   in turn, between them "spread"), "landing" (wings raised and spread, the legs let down to stand).
+STORK_STAND = ["folded", "bow", "clatter", "clatter2", "preen"]
+STORK_FLY = ["spread", "flap-up", "flap-down", "landing"]
+
+
+def stork_poses(doc):
+    import math
+    f = lambda v: f"s * {v:.4f}"
+    P = lambda pt: [f(c) if c else 0 for c in pt]
+    parts = doc["parts"]
+    by = {p["id"]: p for p in parts}
+    # the standing head is the "up" one: drawn whenever the neck is not doing something else
+    for k in ("neck", "head", "eye", "beak"): by[k]["when"] = {"pose": ["folded", "sit"] + STORK_FLY}
+    for k in ("thigh", "tarsus", "toes", "hind toe"): by[k]["when"] = {"pose": STORK_STAND + ["landing"]}
+    for k in ("thigh flying", "tarsus flying", "toes flying"): by[k]["when"] = {"pose": ["spread", "flap-up", "flap-down"]}
+    radii, hr, bl = by["neck"]["radii"], 0.05, 0.17
+    # head poses: the neck's three points, the head's centre, the bill's direction (x forward, y up, z the bird's left)
+    HEADS = {
+        "bow": ([(.2, .7945, 0), (.37, .83, 0), (.4, .66, 0)], (.4, .66, 0), (.42, -.9, 0)),
+        "clatter": ([(.2, .7945, 0), (.27, .97, 0), (.16, 1.07, 0)], (.16, 1.07, 0), (-.35, .94, 0)),
+        "clatter2": ([(.2, .7945, 0), (.28, .96, 0), (.19, 1.06, 0)], (.19, 1.06, 0), (-.08, .99, 0)),
+        "preen": ([(.2, .7945, 0), (.27, .93, .03), (.09, .9, .1)], (.08, .89, .11), (-.82, -.45, -.25)),
+    }
+    for name, (path, h, d) in HEADS.items():
+        n = math.sqrt(sum(c * c for c in d)); d = [c / n for c in d]
+        side = [-d[2], 0, d[0]]; sn = math.sqrt(side[0] ** 2 + side[2] ** 2) or 1; side = [c / sn for c in side]   # (the head's left: up x bill)
+        up = [d[1] * side[2] - d[2] * side[1], d[2] * side[0] - d[0] * side[2], d[0] * side[1] - d[1] * side[0]]   # (bill x left: the crown)
+        up = [-c for c in up] if up[1] < 0 and name != "bow" else up
+        w = {"pose": name}
+        parts.append({"id": f"neck {name}", "type": "sweep", "material": "head", "sides": 7, "seg": 2, "radii": radii, "path": [P(p) for p in path], "when": w})
+        parts.append({"id": f"head {name}", "type": "sphere", "material": "head", "r": f(hr), "sides": 8, "at": P(h), "when": w})
+        for sg in (1, -1):   # (the eyes placed each: a turned head is not symmetric about the body's plane)
+            e = [h[i] + d[i] * hr * .45 + up[i] * hr * .25 + side[i] * sg * hr * .8 for i in range(3)]
+            parts.append({"id": f"eye {name} {'L' if sg > 0 else 'R'}", "type": "sphere", "material": "eye", "r": f(hr * .18), "sides": 5, "at": P(e), "when": w})
+        root = [h[i] + d[i] * hr * .75 for i in range(3)]
+        parts.append({"id": f"beak {name}", "type": "rod", "material": "beak", "sides": 4, "r0": by["beak"]["r0"], "r1": by["beak"]["r1"],
+                      "at": P(root), "from": [0, 0, 0], "to": P([d[0] * bl, d[1] * bl, d[2] * bl]), "when": w})
+    # the wings: folded for every pose on the nest, spread in the air -- raised or lowered about the body's axis for a beat
+    wf, ws = by["wing folded"], by["wing spread"]
+    wf["when"] = {"pose": STORK_STAND + ["sit"]}
+    for name, rx, ry in (("flap-up", -42, -8), ("flap-down", 28, -8), ("landing", -30, -22)):
+        w = json.loads(json.dumps(ws)); w["id"] = f"wing {name}"; w["when"] = {"pose": name}; w["at"] = ws["at"][:3] + [rx, ry, 0]
+        parts.append(w)
+    doc["params"]["sitDrop"] = 0.62   # (sitting: how far the game lowers it -- the legs folded under, the belly in the bowl)
+    doc["_about"] += "; poses beyond the pick: bow, clatter, clatter2, preen, sit (on the nest), flap-up, flap-down, landing (in the air)"
+    return doc
+
+
+stork_poses(BIRDS["stork"])
+
 MATERIALS = {
     "wing-brown": "#6a4e30", "wing-dark": "#2a2420", "plumage-brown": "#7a5a38", "plumage-dark-brown": "#4a3420", "plumage-grey": "#9a9a98", "plumage-gull-grey": "#a8adb2",
     "plumage-blue-grey": "#7a8494", "plumage-slate": "#4a5260", "plumage-black": "#1e1c1c", "plumage-blue-black": "#22283e", "plumage-green-black": "#1e3a2e", "plumage-white": "#f0eee8",

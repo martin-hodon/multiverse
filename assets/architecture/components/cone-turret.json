@@ -1,0 +1,4681 @@
+{
+  "name": "Cone turret",
+  "_about": "A ROUND TURRET UNDER A CONE -- the historicist castle's \"pepperpot\" (Drachenburg's terrace and corner turrets): a polygonal shaft (`sides`, R to its corners, H tall, `t` walls) in `storeys` under belt courses, a pointed window in every third face of every storey but the first, a door in face 0 (+z) of the first by `door` yes, a corbel course and a cornice corOut proud and corH deep, a cone `capRise` tall from capR at its eave (the Rhenish slate spike: capR = R + corOut, capRise 3.5 capR; squat: capRise R), an iron finial on the tip. (Its kin: components/stage-tower -- Schwerin's round tower of stages under a tent and lantern -- for a turret that steps back and carries more on top; components/castle-tower for the square tower.)",
+  "params": {
+    "detail": 4,
+    "sides": 12,
+    "R": 2.2,
+    "H": 12.0,
+    "t": "max(0.3, R * 0.2)",
+    "storeys": 4,
+    "door": "yes",
+    "doorW": "min(1.1, R * 0.45)",
+    "doorH": "min(2.3, H / storeys * 0.6)",
+    "winW": "R * 0.24",
+    "corOut": "R * 0.12",
+    "corH": 0.7,
+    "capR": "R + corOut + 0.2",
+    "capRise": "R * 3",
+    "capSides": 16,
+    "finial": "capRise * 0.18",
+    "_door": "yes: a pointed door in face 0 (+z) of the first storey; no: blind (reached from the building behind)",
+    "_storeys": "how many storeys the shaft shows, 1 to 4 (belt courses between, a window in every third face of each but the first)",
+    "_capRise": "the cone's height above its eave: about 3 R for the tall slate spike, R for a squat cap"
+  },
+  "build": [
+    "shaft",
+    "shaft blind",
+    "shaft 3",
+    "shaft blind 3",
+    "shaft 2",
+    "shaft blind 2",
+    "shaft 1",
+    "shaft blind 1",
+    "belts",
+    "corbels",
+    "cornice",
+    "cap",
+    "finial"
+  ],
+  "parts": {
+    "shaft": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorH",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "4": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "7": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "8": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "10": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "12": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "13": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "14": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "16": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "17": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "18": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "19": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "20": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "21": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "22": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "23": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "24": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "25": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "26": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "27": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "28": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "29": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "30": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "31": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "when": {
+        "door": "yes",
+        "storeys": 4
+      },
+      "_about": "the shaft of 4 storeys (each H / storeys tall, the top one what is left), the door in face 0"
+    },
+    "shaft blind": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "4": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "7": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "8": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "10": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "12": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "13": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "14": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "16": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "17": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "18": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "19": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "20": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "21": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "22": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "23": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "24": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "25": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "26": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "27": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "28": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "29": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "30": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "31": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "when": {
+        "door": "no",
+        "storeys": 4
+      },
+      "_about": "the shaft of 4 storeys without a door (a turret reached from the building it stands against)"
+    },
+    "shaft 3": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorH",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "4": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "7": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "8": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "10": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "12": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "13": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "14": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "16": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "17": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "18": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "19": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "20": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "21": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "22": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "23": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "24": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "25": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "26": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "27": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "28": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "29": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "30": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "31": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "when": {
+        "door": "yes",
+        "storeys": 3
+      },
+      "_about": "the shaft of 3 storeys (each H / storeys tall, the top one what is left), the door in face 0"
+    },
+    "shaft blind 3": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "4": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "7": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "8": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "10": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "12": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "13": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "14": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "16": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "17": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "18": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "19": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "20": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "21": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "22": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "23": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "24": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "25": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "26": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "27": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "28": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "29": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "30": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "31": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "when": {
+        "door": "no",
+        "storeys": 3
+      },
+      "_about": "the shaft of 3 storeys without a door (a turret reached from the building it stands against)"
+    },
+    "shaft 2": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "H / storeys",
+            "openings": [
+              {
+                "at": 0,
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorH",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "4": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "7": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "8": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "10": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "12": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "13": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "14": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "16": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "17": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "18": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "19": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "20": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "21": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "22": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "23": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "24": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "25": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "26": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "27": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "28": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "29": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "30": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "31": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "when": {
+        "door": "yes",
+        "storeys": 2
+      },
+      "_about": "the shaft of 2 storeys (each H / storeys tall, the top one what is left), the door in face 0"
+    },
+    "shaft blind 2": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "4": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "7": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "8": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "10": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "12": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "13": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "14": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "16": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "17": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "18": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "19": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "20": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "21": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "22": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "23": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "24": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "25": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "26": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "27": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "28": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "29": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "30": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "H / storeys * 0.3",
+                "springing": "H / storeys * 0.62",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                }
+              }
+            ]
+          }
+        ],
+        "31": [
+          {
+            "h": "H / storeys",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "when": {
+        "door": "no",
+        "storeys": 2
+      },
+      "_about": "the shaft of 2 storeys without a door (a turret reached from the building it stands against)"
+    },
+    "shaft 1": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "doorW",
+                "sill": 0,
+                "springing": "doorH",
+                "head": {
+                  "profile": "pointed",
+                  "spread": 0.55
+                },
+                "glass": false
+              }
+            ]
+          }
+        ],
+        "1": [
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "openings": []
+          }
+        ],
+        "4": [
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "openings": []
+          }
+        ],
+        "7": [
+          {
+            "openings": []
+          }
+        ],
+        "8": [
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "openings": []
+          }
+        ],
+        "10": [
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "openings": []
+          }
+        ],
+        "12": [
+          {
+            "openings": []
+          }
+        ],
+        "13": [
+          {
+            "openings": []
+          }
+        ],
+        "14": [
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "openings": []
+          }
+        ],
+        "16": [
+          {
+            "openings": []
+          }
+        ],
+        "17": [
+          {
+            "openings": []
+          }
+        ],
+        "18": [
+          {
+            "openings": []
+          }
+        ],
+        "19": [
+          {
+            "openings": []
+          }
+        ],
+        "20": [
+          {
+            "openings": []
+          }
+        ],
+        "21": [
+          {
+            "openings": []
+          }
+        ],
+        "22": [
+          {
+            "openings": []
+          }
+        ],
+        "23": [
+          {
+            "openings": []
+          }
+        ],
+        "24": [
+          {
+            "openings": []
+          }
+        ],
+        "25": [
+          {
+            "openings": []
+          }
+        ],
+        "26": [
+          {
+            "openings": []
+          }
+        ],
+        "27": [
+          {
+            "openings": []
+          }
+        ],
+        "28": [
+          {
+            "openings": []
+          }
+        ],
+        "29": [
+          {
+            "openings": []
+          }
+        ],
+        "30": [
+          {
+            "openings": []
+          }
+        ],
+        "31": [
+          {
+            "openings": []
+          }
+        ]
+      },
+      "when": {
+        "door": "yes",
+        "storeys": 1
+      },
+      "_about": "the shaft of 1 storeys (each H / storeys tall, the top one what is left), the door in face 0"
+    },
+    "shaft blind 1": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "faces": {
+        "0": [
+          {
+            "openings": []
+          }
+        ],
+        "1": [
+          {
+            "openings": []
+          }
+        ],
+        "2": [
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "openings": []
+          }
+        ],
+        "4": [
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "openings": []
+          }
+        ],
+        "7": [
+          {
+            "openings": []
+          }
+        ],
+        "8": [
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "openings": []
+          }
+        ],
+        "10": [
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "openings": []
+          }
+        ],
+        "12": [
+          {
+            "openings": []
+          }
+        ],
+        "13": [
+          {
+            "openings": []
+          }
+        ],
+        "14": [
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "openings": []
+          }
+        ],
+        "16": [
+          {
+            "openings": []
+          }
+        ],
+        "17": [
+          {
+            "openings": []
+          }
+        ],
+        "18": [
+          {
+            "openings": []
+          }
+        ],
+        "19": [
+          {
+            "openings": []
+          }
+        ],
+        "20": [
+          {
+            "openings": []
+          }
+        ],
+        "21": [
+          {
+            "openings": []
+          }
+        ],
+        "22": [
+          {
+            "openings": []
+          }
+        ],
+        "23": [
+          {
+            "openings": []
+          }
+        ],
+        "24": [
+          {
+            "openings": []
+          }
+        ],
+        "25": [
+          {
+            "openings": []
+          }
+        ],
+        "26": [
+          {
+            "openings": []
+          }
+        ],
+        "27": [
+          {
+            "openings": []
+          }
+        ],
+        "28": [
+          {
+            "openings": []
+          }
+        ],
+        "29": [
+          {
+            "openings": []
+          }
+        ],
+        "30": [
+          {
+            "openings": []
+          }
+        ],
+        "31": [
+          {
+            "openings": []
+          }
+        ]
+      },
+      "when": {
+        "door": "no",
+        "storeys": 1
+      },
+      "_about": "the shaft of 1 storeys without a door (a turret reached from the building it stands against)"
+    },
+    "belts": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R + 0.08"
+      },
+      "height": 0.2,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H / storeys - 0.1",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "storeys - 1",
+        "step": [
+          0,
+          "H / storeys",
+          0,
+          0
+        ]
+      },
+      "when": {
+        "storeys": [
+          2,
+          3,
+          4
+        ]
+      },
+      "_about": "a belt course at every floor"
+    },
+    "corbels": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R + corOut * 0.5"
+      },
+      "height": "corH * 0.55",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H - corH * 0.55",
+          0,
+          0
+        ]
+      ],
+      "_about": "the corbel course under the cornice"
+    },
+    "cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R + corOut"
+      },
+      "height": "corH * 0.45",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "corbels"
+      ],
+      "_about": "the cornice the cone sits on, corOut proud"
+    },
+    "cap": {
+      "type": "dome",
+      "radius": "capR",
+      "thickness": 0,
+      "sides": "capSides",
+      "head": {
+        "profile": "trigonal",
+        "rise": "capRise"
+      },
+      "at": [
+        [
+          0,
+          "H + corH * 0.45",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "cornice"
+      ],
+      "_about": "the slate cone, its eave overhanging the cornice"
+    },
+    "finial": {
+      "type": "column",
+      "radius": "max(0.05, capR * 0.05)",
+      "height": "finial",
+      "sides": 6,
+      "taper": 0.4,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "cap",
+      "standsOn": [
+        "cap"
+      ],
+      "_about": "the iron finial (a vane's rod) on the tip"
+    }
+  }
+}

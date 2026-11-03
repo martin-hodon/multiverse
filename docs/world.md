@@ -86,6 +86,213 @@ The lab is deterministic on one machine (every pass reads one state and writes a
 land every time there. Different GPUs may round differently, so peers of one session on different hardware can
 grow different maps -- a shared session would have to send the host's.
 
+## Open water: the sea, the big lake (2026-11-03)
+
+A world may have, besides its river, OPEN WATER far bigger than the river's lake (`sea.js`, the look in
+`seawater.js`): a **sea coast** the river runs out into, or a **big lake** the river runs through. `?water=sea|lake|none`;
+unasked, the seed draws it on its own stream (`openWaterKind`: a sixth of the worlds a sea, a sixth a lake, the rest the
+river alone -- the world's other draws are unchanged). The start menu asks it after the land ("Choose the water": the
+river alone, a big lake, a sea coast, as it falls). Both the grown map and a landscape (`?geology=`) take it; the
+old world (`?map=0`) has none.
+
+- **Planned first** (`openWaterPlan`): the water lies east of the town, downstream -- a sea's coast crossing the
+  river 0.3-0.5 R east of the middle, turned up to ~±30° and wandering in bays and headlands (its biggest bay south of
+  the mouth, where the town is); a lake 1.25-1.6 times as long across as along the river, most of it north of it, as
+  big as fits inside the world (moved, then shrunk). mapgen.js's site search is handed `keep(rect)` (shapeMap/growMap/
+  landscapeMap `keep`): the town, its farms and the monument stand `MARGIN` (60 m) clear of the water, and a town site
+  nearer the shore is preferred (`keep.cost`). With no open water `keep` is null and the search is what it was.
+  The monument's façade (`facade`, its width) is guarded from the start where it can stand; the plan is then bound
+  (`P.bind`) to the river's actual line: a sea's coast turned (tilt candidates) and pushed east in 6 m steps until the
+  town, farms and monument are clear (least push wins), a lake moved and shrunk until it fits and the river crosses it.
+- **Shaped** (`addOpenWater`, on the shaped map, before anything is built): the water's level is the river's where
+  it comes in; the bed falls away from the shore (to 22 m in a sea, 13 m in a lake); the land along it is SHORE by
+  what it is and how high it stands -- a BEACH (sand rising 1.5 m to a berm over 20-30 m, a low dune ridge behind, the
+  bed shelving 1:22), a ROCKY shore (ledges and boulders, the bed 1:4.5), a CLIFF (the land cut off sheer, 5-20 m,
+  deep water at its foot). Which: the geology's bias, the land's height behind it as far as the rock is HARD
+  (`SHORE_ROCK.hard`: a grown map's soft beds 0 -- never cliffs, beaches and rocky banks; sandstone, granite, basalt,
+  limestone 0.8-1), bays to beaches and headlands to rock, the river's mouth soft. High land behind a beach or a rocky
+  shore rises from it as a BANK at ~15-22° (no wall: a lake sits in a bowl of slopes, not a quarry).
+  A sea's river widens over its last 90 m into an ESTUARY; past its mouth `riverLevel` is the sea's (a lake's: the
+  lake's across it). Nothing is changed more than 58 m inland -- up to ~110 m where a bank must climb high land, but
+  never inside the town's, farms', monument's rectangles. The map's own grids say so -- ground, water, wet, sd,
+  riverness, and a `surface` (sand, wet sand at the waterline, rock, the bed: bare, no lawn) -- so the terrain, the
+  water sheet, the grass's mask, `waterY` and `waterSD` follow with no change of their own.
+- **Drawn** in the river's water family: the same reflection, Fresnel and glitter, plus (only on such a world: a
+  river-only world's water draws exactly as before) depth colour (the bed through the shallows,
+  turquoise over a sea's sand, brown-green in a lake, deepening to blue and opaque where deep), a swell rolling
+  onshore (a sea's crests ~14 m apart, a lake's chop ~6 m), its OWN chop instead of the river's ripples (four trains at
+  odd angles and lengths over a slowly warped plane, the short ones fading with distance, wide wind patches -- no
+  tiling seen from afar; the glitter, waterShade's `gp`, read off the same warped plane turned 35°), and foam -- the
+  swash at the waterline, surf bands over the last metre of depth, only where the shore shelves (`surf`: none at a
+  cliff's foot). The water sheet carries `open`, `depth` and `surf` attributes for it; a sea's water goes on past the
+  map's edge to the horizon (`farSea`). The willows of the river's banks, the scattered trees and bushes, the forest
+  and the wandering animals (`COUNTRY.inside`) keep out of it (`waterSD`, only when `SEA`).
+
+**The API** (`window.__sea`, `__dbg.sea`; in index.html `SEA`; pure JS, works in node on a shaped map:
+`addOpenWater(M, openWaterPlan(kind, seed, { radius, riverZ, meadow, facade }))`, then `seaAPI(M, { groundH, roads })`). Game
+frame: x east, z SOUTH, y up, metres. `null` on a river-only world.
+
+- `kind` "sea" | "lake"; `level` the water's surface y; `rock` the shore's geology; `mouth` {x, z, hw} (a sea's river
+  mouth), `inlet` / `outlet` {x, z} (a lake's), `center` [x, z] (a lake's), `swell` [x, z] the direction the swell runs.
+- `isOpenWater(x, z)` -> bool (the sea's or the lake's water; not the river or a stream; a sea's past the map edge too).
+- `depth(x, z)` -> metres of water there (any water; 0 on dry land). `waterAt(x, z)` -> the surface y or -Infinity.
+- `shore` { pts, closed, length }: the waterline as a polyline, ordered, a point every ~4 m inside the world (a lake's
+  all round, `closed`); each point { x, z, nx, nz (unit normal INTO the water), u (arc length, m), type ("beach" |
+  "rocky" | "cliff" | "mouth"), landY (ground 12 m inland, over the level), d20 (depth 20 m out) }.
+- `harbourSite(town, { length = 100, draught = 3, roads, avoid })` -> the best `length` m of shore near `town` ([x, z]
+  or {x, z}) for a port: sheltered (rays from 40 m out that meet land), deep enough close in, low gentle dry land
+  behind it, no cliff, not the river's mouth itself, clear of `avoid` (default the town's, farms', meadow's and
+  monument's rectangles, `MAP.areas`), near the town and the roads (default the planned road surfaces). Returns
+  { points [[x, z]...], normals [[nx, nz]...], mid [x, z], normal [nx, nz] (into the water), tangent [tx, tz],
+  heading (rotation.y that turns a component's local +z to face the water: atan2(nx, nz)), length, level,
+  depth { at10, at20, at40 } (m, out from mid), landY (ground y 12 m inland), shelter 0..1 (0.5 a straight coast, 1
+  enclosed), slope, type, score (lower better), dist (to town), road (m to the nearest road), lane { name, at [x, z] }
+  (the nearest lane point) } or null.
+- `route(a, b, { minDepth = 2.5, clear = 12 })` -> [[x, z], ...] from a to b over open water at least minDepth deep and
+  clear m off the shore (A* on an 8 m lattice, pulled straight), or null. `lanes` [{ name, pts [[x, z]...], closed,
+  entries }]: the sailing lane over deep water (6 m+, 35 m off shore) -- a sea's along the coast from the world's edge
+  to the world's edge (`entries`: where it leaves the world, ships come and go over the horizon), a lake's a loop.
+  `entries` also on the API itself.
+- `planeY(x, z, riverLevel)`: the reflection plane's height for a camera there; `roads` (settable): harbourSite's
+  default roads. `why` { tried, outside, built }: harbourSite's last search (windows tried, out of the world, on built
+  ground) -- for when it returns null.
+
+Checked in node on the two cached grown seeds and on landscape seeds (scratch `sea/t1.mjs`): harbourSite returns a
+~90-115 m stretch 185-350 m from the town's middle (the round world's edge rules out the coast beside a town in its
+south-east), 3.4-7 m deep 40 m out, its land 0.5-4 m over the water, in ~15 ms; `addOpenWater` costs 150-290 ms at load.
+
+## The port's layout (port.js, 2026-11-03)
+
+`port.js` is a pure module (no imports; node tests it) that says where a culture's harbour pieces stand along a shore
+stretch -- harbourSite's result passes straight in. `layoutPort({ points, normals, heading, length, level, period,
+dress, seed, table, gate, groundY, maxLength })`: `points` [[x, z]...] in order, `normals` the seaward unit normals
+(or `heading`, atan2(nx, nz)), `level` the water's y, `table` = `assets/world/ports.json`, `gate` [x, z] the town gate
+the street climbs to, `groundY(x, z)` optional. Same inputs and seed, same port. `portCulture(table, period, dress)`:
+the table's entry for the period, else the first dress style it has, else `default` (`like` resolved) -- greek, roman,
+byzantine, egyptian, indian, maya, chinese, japanese, islamic, ottoman, medieval (Hanse), russian, industrial.
+
+Returns { culture, finish, quayTop (level + the culture's F), waterY, quayLine, placements, berths, path, pads, dropped }:
+- `placements` [{ id, role (quay, pier, mole, light, crane, sheds, slip, office, warehouse, market, store), def (a path
+  under assets/architecture: `components/quay`, `components/speicher`, `dwellings/minka` ...), params, finish, x, y, z,
+  yaw, w, d }]. Build each with `archBuilding(def, { params, finish: ASSETS.get(finish), origin: true })` at x, y, z
+  turned by `yaw` (rotation.y; the piece's local +z, its seaward side, ends up along (sin yaw, cos yaw)). Every harbour
+  piece shares one frame: y 0 its quay top, +z the sea, x along the shore, the water at y -F (tools/archgen/harbour.py).
+- `berths` [{ id, kind quay|pier, a, b (the hull's line at the waterline), out (the side the hull lies on), length (the
+  longest hull), depth, moor (bollards [x, z]) }]: quay faces between the piers, cut to <= 45 m, both sides of each pier.
+- `path` [[x, z]...] from the apron through the street gap in the warehouse row to the gate (else 30 m inland).
+- `pads` [{ x, z, yaw, w, d, y }]: rectangles to level the ground to y under (the quay strip; every land plot, at
+  max(quayTop, groundY)). `dropped`: the pieces that found no room.
+
+How: the middle `length` m of the stretch (the culture's, <= the stretch) is resampled and straightened into runs
+(Douglas-Peucker 1.5 m, no run under 10 m); slips and ship sheds from one end (<= 40 % of the quay), piers spread along
+it, the mole from the other end swung 37 deg in over the harbour and shortened until it keeps clear of the piers (the light
+on its head, or on land past the quay's end), the quay run by run (mitred at bends, a water stair on the longest stone run),
+cranes at the longest quay berths, the street where the quay comes nearest the gate, then the office beside the street
+and the warehouses, market and houses out along the row behind the apron (plots square to their run, fanning on a bend,
+set back where a neighbour is in the way; oriented-box overlap test). Each crane is swung over its berth's hold (a
+point 2.5 m out from the hull, along the berth's middle half): `jib` (degrees) and `reach` for the treadwheel and iron
+cranes, `lean` for the polyspastos (ports.json `swing`). On a stepped quay a pier gets `z0` = the steps' reach: its deck
+spans the steps from the top, its bents stand past the ledge, its berths start past it. A stretch under 40 m comes out
+`compact`: one straight quay, one pier if it has 20 m, the smallest store, the light on land -- no mole, slips or cranes. Checked in node (scratch `six/port_test.mjs`) on
+a straight 240 m shore, a 120 m-radius bay and a 38 m stretch for six cultures: deterministic, nothing overlapping; a
+short stretch keeps its quay, a pier and the light and drops what does not fit.
+
+## The harbour in the game (harbour.js, 2026-11-03)
+
+On a world with open water (`SEA` not null) the town gets its port; a river-only world runs none of this (`HARBOUR`
+null, `createFreight` as before). Three steps, called from index.html:
+- `planHarbour` -- before the roads and before the ground is built. `SEA.harbourSite(town middle, { length: the
+  culture's ports.json length (else 140, else sea.js's default), roads: TOWN.routes })`, then `layoutPort` with that
+  stretch, the period/dress and the town seed. The port's street joins the town: its end is the nearest point of the
+  town's streets a straight way reaches clear of buildings and water (`junction`, <= 260 m), and it goes to `planRoads`
+  as `extra` (paths.js: one more route, `w` 3, from just behind the quay through the row's street gap) -- so it is paved,
+  cut into the ground and joined into the path graph like any street, and villagers' walks route over it. THE TERRACE:
+  every pad is taken to the quay's height (port.js asks max(quayTop, ground) for the row's plots) -- ground.js settles
+  a point to its NEAREST zone's y, so a plot at the land's height beside a quay pad metres lower met it in a sheer
+  bank (sand-coloured, the terrain mesh smearing it: the stacks on its lip floated). The pads go into `flatZones` as
+  squares along each turned rectangle (zones are axis-aligned; `y`, `fade` 14 m -- ground.js indexes zones 20 m round,
+  keep under it -- `harbour: true`), and the beach's bare sand (sea.js paints 26 m back from the water) is eased off
+  over them and 10 m round (`MAP.surface.bare`, before the texture's first upload): grass behind the quay.
+  `HARBOUR.inside(x, z, m)` (the pads' and every piece's turned box) is part of `inSites`, so no tree, bush or wild
+  plant stands on the quay or a pier.
+- `buildHarbour` -- with the town's buildings: each placement through `archBuilding(def, { params + yaw in degrees,
+  finish, origin })` (the archgen turns the geometry itself, so the piece stands by translation: `siteGroups` -- the
+  sun's shadow map and the merge -- and `markGroundProp`), its `floorY` into `heightFields` and its `wallField` into
+  `colliderSites`, both offset by the piece's y: quay, piers, mole and the buildings are walkable and solid.
+- `createHarbourLife` -- after the freight. The culture's fleet (ships.json `cultures[period]`, else a dress style,
+  else `default`): 2-4 ships moored at the longest berths that fit them (length range and draught against the berth's
+  length and depth; one berth kept free), each built twice from its item -- `moored` (sails furled, oars shipped) and its
+  going state (`sailing`, `rowing` or `under way` from `drive`) -- and swapped; the gangplank (items/components/
+  gangplank, stretched) from the rail on the quay side to a step inland of the quay face. 1-3 more sail or row the
+  lane (`SEA.lanes[0]`) with a little heel under sail, pitch and roll, and a wake each (wakes.js, the same as swimmers').
+  A sea's ship that has gone over the horizon (an open lane's end) comes back after 25-60 s and -- when the port's timer
+  (45-100 s) is up and a free berth takes it -- comes in: along the lane to the harbour's point, `SEA.route` over water
+  deep enough for its draught to an approach point off the berth, slowing and turning onto the berth's line; a lake's
+  ship on its round turns in the same way. A moored ship lies 60-120 s and leaves once its hold is empty and no hand is
+  aboard: off a quay ahead, off a pier astern, out over deep water to the lane. `PORT_LIFE` holds the numbers.
+- THE FREIGHT is freight.js's own: `createFreight({ port: true })` builds the goods pool (the culture's vessels, 26
+  more pieces) even with no river landing, and `addDock({ ships, stores, posts })` gives the port three dock hands
+  (the same `makeHand` as the barge's: one loaded rig per carrying style -- the amphora on the shoulder, the cask in
+  the arms). A ship that moors comes laden (`loadShip`: up to 8 pieces into `hold` state, `it.ship` the ship, beside
+  each hatch -- the ship's `hold` markers -- at deck height). A hand walks the apron to the plank, up it, to a piece,
+  back down and to the nearest warehouse (else a store, the market or the office) with room on its stack (12 slots
+  in front of the door); stacked pieces are `store` and the pool takes them back after 90 s, as a yard's. The hold's
+  pieces stand, and the hands walk, at the plank marker's `deck` -- an open hull's: its own floor just under the
+  waterline (DRY HULLS, below). port.js stands each crane at its
+  berth's middle, where a hull's plank comes down: planHarbour moves it along the quay by half its width and 3 m (a jib
+  crane's jib turned to keep over the hold). A ship also moors shifted along its berth (as far as the berth has room) so its plank's foot is clear of a crane on the quay behind,
+  and the hands' way over the apron goes round what stands on it: `D.path(pts)` tests each straight stretch against
+  the pieces' own walls (archgen `wallField`, at a walker's height) and goes round by a point beside it, or two.
+- DRY HULLS (pass 3): the one water sheet runs flat through every hull afloat, so an open hull's hold (a gaulos's, a
+  merchantman's) showed the sea's surface inside it, its cargo tinted as if under water. seawater.js `setDryHulls`
+  takes up to 8 hulls (harbour.js, each frame: the ships not gone) as an ellipse each -- its centre, heading, half
+  length .42 L (the item's L, not the bounds: those carry a ram, a bowsprit) and half beam .36 B (the rail's beam: a
+  little inside the waterline plan, so no water is cut outside the planking) -- in four mat4 uniforms; `seaDry`, after
+  `seaFinish`, sets the water's alpha 0 inside them. 8 ellipse tests a water pixel; nothing set, nothing cut. A
+  river-only world never builds the sea nodes, so neither the uniforms nor the test reach its water. Cut out, the
+  water showed what was under it: the sea bed, often higher than the bottom boards (and the far side's planking seen
+  through, single-sided). So an OPEN HULL (its plank marker's deck more than .1 m under the waterline) gets a floor
+  of its own 8 cm OVER the waterline (`OPEN_FLOOR`, above the moored bob and pitch at its ends) -- outlined by the planking's own section at that height (each hull triangle
+  crossing it, the widest |z| in 0.5 m bins), in the deck's material, one more draw a ship -- the cargo and the hands
+  on it (`deck` .08), the planking drawn from both sides (its material's `double` twin); and moored off the berth
+  line by `gap` (0-3 m, in 0.5 m steps: the first where the bed along the hull's quay side lies .15 m under that
+  floor; the plank's foot moves in by as much). What water lies outside the ellipse but inside the hull is a hand's
+  depth of bilge over the floor's edge -- it was, with the floor .1 m under the waterline: a blue band round
+  the hold's rim (2026-11-03: raised over the water, the floor hides what the ellipse does not cut).
+- THE APRON (pass 3): a quay's pad is its paving (a 12 cm slab, its top at quayTop) and the ground was levelled to
+  the same height: coplanar, the lawn z-fought through the flags in patches, and the axis-aligned zone squares left a
+  turned quay's corners to the 14 m ease, the rising land coming up through the paving. Now a quay's zones lie
+  `PORT_LIFE.apron.sink` (7 cm) under the paving's top -- inside the slab, so its back edge into the grass is a clean
+  kerb with no gap under it -- each square grown to cover its turned stretch and `apron.edge` (2 m) round it, and
+  they come first in `flatZones` (ground.js takes the first nearest zone: where a plot's pad overlaps, the quay wins).
+  On a rocky shore the row of ground just behind the quay wall stood up to 13 cm over the top for a metre or two --
+  ground.js never levels where `M.wet` > 0, and the wet grid's interpolation let the natural rock through. Fixed
+  (2026-11-03): a quay's zones carry its turned `pad`, and under it ground.js levels whatever the wet mask says (only
+  under the pad itself: its squares reach past the face, over the berth). Measured: every apron sample 7 cm under the
+  top on seed 353465086 (greek sea, lake) and seed 1.
+- THE BERTHS DREDGED (2026-11-03): the shore's bed rose at the quay's face -- a strip of beach or rock stood out of the
+  water under the wall, and the ships moored up to 3 m off it. Now one more zone before each quay, `dig` (ground.js
+  naturalH): the bed taken down to `PORT_LIFE.berth.depth` (2.4 m) under the water over `reach` (9 m) out from the face
+  along the quay, back up to the bed over `fade` (6 m) -- never behind the face nor under any quay's pad (quays meeting
+  at an angle). The moored ships' `gap` comes out 0 on the worlds above.
+- THE PORT COLLIDES (2026-11-03): walkers went through the warehouses, the lighthouse and the moored hulls. Two causes:
+  a piece's wall-field site was boxed round its origin at `r - 2`, but a piece built with `origin: true` reaches out
+  `extent` from it (a warehouse 23 m one way) -- the site now takes `def.extent`; and the ships were never colliders.
+  Now each shown ship is a mover (index.html `movers`, the same as a cart: a box in its own frame, `top` the deck,
+  `side` the rail over it -- you stand on its deck and are carried) and a moored ship's plank one more, a `ramp`
+  (its top `bedY` along the slope; freight.js puts no piece down on it). Measured on seed 353465086 (greek sea, lake)
+  and the egyptian: blocked at warehouse and lighthouse walls and at a moored hull's side and bow; walk up the plank
+  and stand on the deck (standY the deck's, not swimming); no console errors.
+
+A ship under way slows, down to a stop, behind another going the same way (head-on ones pass). `__dbg.harbour` is
+the life ({ ships, berths, stores, dock, H: the plan }) or the plan. Not done: a ship's deck is one flat floor at
+`top` (no holds, no raised poop) and villagers get no errands to the port (they only walk its street). The harbour's own CPU: 0.2-0.3 ms a
+frame for its update (ships, wakes), 0.15 ms more submitting the ships' meshes. Checked in game on seed 353465086 (sea: greek -- 14 pieces, 5 berths, 3 moored + 2 under
+way; medieval -- 15 pieces, 3 warehouses, 4 moored + 3 under way; lake: greek, ships lapping the lake) and seeds 1
+and 2 (`menu=0`: ottoman dhows and a galley, 13 and 15 pieces): no console errors; quay and pier floors walkable
+(`supportNear` at the quay top, nothing in the way but a bollard); no hand's way over the land through a crane; GPU 6.5-9 ms and 167 draws from the start view, 7 ms and 103 draws looking over the port (the river world of
+the same seed: 9.1 ms, 183 draws).
+
 ## Terrain and layout (the old world, `?map=0`)
 
 Ground height is an analytic function: three layered sines, blended flat
@@ -98,9 +305,12 @@ translucent water sheet at that level covers the whole ground; it shows
 wherever terrain dips below it and hides under the plain elsewhere. The
 rendered ground is a 400x400 plane displaced by the same function (cells
 ~4m in the full town, so the river groove survives sampling),
-vertex-colored by elevation (lush valleys → dry crests) with faint contour
-bands, plus a per-pixel grass overlay (blade flecks + tone patches)
-injected into the toon material. Because mesh interpolation can sit a hair
+vertex-colored by elevation (lush valleys → dry crests) with barely-there contour
+bands, a per-pixel grass overlay (blade flecks + `groundMottle`, smooth noise shared
+with the stalks) and `meadowPatches` over it, drifts of lusher and drier grass at
+three scales (cloudshadow.js), injected into the toon material. The material's toon
+ramp is a soft one (`SLOPE_RAMP`), so a hill turns from the sun without an edge, and
+a shadow on the land leans blue (`landShade` is a vec3): the sky is what lights it. Because mesh interpolation can sit a hair
 above the analytic surface, walkers stand 4cm proud and paths float 12cm.
 
 The **river** meanders in from the west edge (a sine of 12m amplitude) and
@@ -306,12 +516,56 @@ you can always walk out of one that has stepped onto you.
   man), **J** pins the word everyone says (random, then each of the 18 in
   turn -- for testing pronunciation), **H** pins a mood; "random" gives
   each their own. The label shows all four.
-- **The mine** (2026-10-03; `tools/archgen/mine.py` -> assets/architecture/village/mine.json, finishes mine-silver,
-  mine-copper, mine-salt; `?mine=silver|copper|salt` picks, `?mine=0` none): one a world, its ore by the town's seed,
-  placed after the town on open land away from every site and the water (its galleries too), where the ground over
-  the galleries never dips below -6.5 (they lie 10 m down), the higher the better. The surface: the shaft house over the
+- **The mine** (2026-10-03; laid into the land 2026-11-03: **mine.js** makes the definition for the place it is put --
+  `tools/archgen/mine.mjs` (run by `tools/archgen/mine.py`) writes the catalogue's copy on level ground,
+  assets/architecture/village/mine.json, the cart and the finishes mine-silver, mine-copper, mine-salt;
+  `?mine=silver|copper|salt` picks, `?mine=0` none): one a world, its ore by the town's seed. ONLY ITS ENTRANCE NEEDS
+  LEVEL GROUND: the shaft head (shaft house + walking shaft, ~15 x 6 m, `MINE.FLAT`) stands on a small flat spot settled
+  to the ground's own height there (a flat zone with `y`, coming back to the hillside over `fade` 8 m: ground.js); the
+  spoil heap, the bench, the pit timber stand each on the ground under it. Before, the whole yard was levelled to 0 with a
+  20 m fade -- on a hill that cut a pit or a steep valley 40 m deep (volcanic seed 7). `placeMine` tries a grid of sites
+  x four quarter turns: the yard dry (water 8 m off) and clear of the other sites, the flat spot's ground within 4 m of
+  level; the GALLERIES MAY RUN UNDER ANYTHING -- `minePlan` reads the ground over every 4.5 m stretch of them, the shaft
+  bottom and the stopes and keeps `COVER` (4 m) of ground over every head: the shafts go down 10 m or more in steps of
+  5 m (two of the walking shaft's 2.5 m flights), and a gallery whose land above falls away (a hill's flank, a valley)
+  steps DOWN at the end of a stretch -- a flight of 12.5-20 cm steps, at most `DMAX` 2 m, under the higher stretch's
+  own roof -- and never back up; the stope is at its last stretch's floor. Score: below (with the adit). Every y in the
+  game's definition is the world's (the site's `y` = its ground level: GROUND_HOLES and the sites' ground check read
+  it). `window.__mine` = { key, x, z, y, plan, cover() } -- cover(): floor, head, lowest ground over it and the rock
+  between, for the shaft bottom, each stretch and each stope on the finished ground. `?mineat=x,z,dir` puts it there
+  (to look at one on a slope). Checked 2026-11-03 on `?seed=7&geology=volcanic`: placed on the mesa top at 45.6 m
+  (the flat spot's ground 0.05 m off level, galleries level 10 m down, cover >= 6.5 m) where the old placing had sunk it
+  in a pit 40 m deep; with `mineat=-90,22,1` on a slope the main gallery steps down five times from 12.7 to 3.5 m and
+  every part keeps >= 4.2 m of ground over its head.
+  OR AN ADIT (Stollen; `plan.kind`): `placeMine` picks the kind by the site's slope -- where the land rises
+  `ADIT.SLOPE` (2.4 m within 8 m) behind the spot an adit is driven in, on level ground or a hilltop a shaft is sunk;
+  both kinds are planned (the best 40 of each) and scored alike: half the entrance's height, less the distance, the
+  cut and the shafts' depth past 10 m, plus the galleries' descent and 10 for an adit (a hillside beats a hilltop).
+  The adit: a rubble-stone portal (headwall 3.4 m, wing walls, coping; finish `stone/rubble` sandstone-grey) with a
+  timber door set, a cart and a hauler before it; only a level APRON 4.5 x 5.2 m before the portal is settled to the
+  portal's floor (flat zone `fade` 3 m), the slope behind it untouched. The adit runs level into the hill until the
+  ground stands `RISE` 6.1 m (COVER + head) over its floor -- at most `PCMAX` 24 m, else no adit there (`bad: "hill"`)
+  -- then `LIN` 10 m on to the chamber, from which the galleries leave as from a shaft's bottom (the chamber and their
+  first stretches need COVER at the adit's level, else `bad: "rock"`); the main gallery follows its vein down `DIP`
+  0.75 m a stretch besides what the land asks. The portal is SET INTO THE HILL: its headwall is 1.5 m thick and
+  `mineBank` heaps earth behind it -- a ground.js zone with `raise` (the ground lifted to at least its `y`, never
+  lowered, falling back to the land over `fade`, none past its `cut` half-plane) -- up to `ADIT.BANK.H` 3.3 m over the
+  floor, from the headwall back until the hillside itself stands that high, falling away either side over 4 m; the
+  wing walls continue the headwall's line either side, stepping down with that earth. The cut is sheer 1.4 m behind
+  the headwall's face, inside it (the terrain mesh's cells are ~1.3 m: its slope down to the apron stays inside the
+  wall). Over the adit, from 2 m behind the headwall and on while the ground is under 0.7 m over its roof, a hood of
+  rock comes up flush with the ground, and the ground is open only inside the adit: the site's
+  `dig` (the mine's `deep` is 0 -- none of its floors opens the ground, so the yard's heap and bench on a slope cut no
+  slivers; GROUND_HOLES and the walk read `deep`). Its yard (the heap, the bench, the timber) lies before the portal,
+  each thing on the ground under it. `?mineat=x,z,dir,1` makes an adit with its portal at x z. Checked 2026-11-03:
+  of seeds 1-5 and 7, an adit on 1, 3, 5 and a shaft on 2, 4, 7 (gentle or flat land; seed 1's land changed later
+  the same day -- its ground there fell to -9 m -- and it now has a shaft on a hillside); seed 1 (river country): an
+  adit by the river at h0 5.2 m, passage 17 m, the main gallery down from 5.2 to 1.2 m, every head under >= 4.06 m
+  of ground (cover()); seed 5: h0 24.8, main 24.8 -> 20.8, cover >= 4.4; seed 3: h0 36.8, passage 23 m, cover >= 4.0.
+  The faint rectangle round the yard was the wall shade (shadows.js createWallShade, from the site's footprint):
+  the mine is left out of it (index.html, `^mine`). The surface: the shaft house over the
   hauling shaft with its windlass (two men at the cranks) and kibbles, the walking shaft with steep flights (25 cm on
-  25 cm) under a roof, the spoil heap, the dressing bench, pit timber. Ten metres down: the shaft bottom, two galleries
+  25 cm) under a roof, the spoil heap, the dressing bench, pit timber. Down below: the shaft bottom, two galleries
   with door sets every 1.5 m (none in the salt) and a plank track, carts, stopes with the vein and hewers, oil lamps.
   Its CREW (the spots with `crew: "miner"`) is its own: men in the wardrobe's `miner` outfit (linen smock and hood,
   leather apron), at work day and night with the spot's gesture and tool (index.html crewHerd); village-life leaves those
@@ -549,7 +803,9 @@ you can always walk out of one that has stepped onto you.
   ground's material, the grass mask and the water plane all leave it out, so a stairwell opens onto the cellar and not
   onto the lawn, nothing grows indoors, and a cellar dug below the water level stays dry.
   The town's ground is level from the river to past the south wall; every building levels its own plot too
-  (`flatZones` with `level`, which also suppresses the river-bank carve under it) except what reaches over the
+  (`flatZones` with `level`, which also suppresses the river-bank carve under it; a zone with `y` is settled to that
+  height instead of 0 and `fade` shortens the 20 m way back to the land -- the mine's shaft head; one with `raise` heaps the ground up instead: an
+  adit's bank, mine.js mineBank) except what reaches over the
   water -- landing, mill, fisherman's jetty, bridge -- and the wall, whose ends stand by the river. The
   streets are paths.js tracks (`TOWN.routes`: gate to gate, the bridge to the south gate, the lanes, a spur to
   every door, the farm tracks) and the villagers walk them. The town's buildings are drawn in the finish
@@ -603,10 +859,39 @@ you can always walk out of one that has stepped onto you.
   east loop, back west -- halting at the quay to load (a piece every 3s,
   2-5 per cart by size) and at the yards to unload; delivered goods are
   consumed after 90s and return to the pool for the barge's next trip.
-  Goods are one pool of 14 barrels and 14 sacks, two instanced meshes,
+  Goods are one pool of `pool` (28) pieces, one instanced mesh per vessel,
   each piece always somewhere: hold, hands, quay, bed, yard, ground or
   your arms. Cart beds and the barge deck are moving floors. The whole
   chain runs on the deterministic tick.
+  **The culture's ships** (2026-11-03, assets/world/ships.json, keyed the
+  same way; docs/ships.md): its merchant, war and small craft by weight,
+  each ship's crew, drive, burden, length, beam and draught, the poses
+  (`moored`, `sailing`, `rowing`) as item params, and the anchors every
+  ship carries (`waterline`, `moor`, `gangplank`, `hold`, `helm`).
+  **The culture's vessels** (2026-11-03, assets/world/goods.json -- data,
+  read by freight.js `goodsCulture(PERIOD_NAME, PERIOD.dress)`, index.html
+  `GOODS_CULTURE`): keyed by the period, else its dress style, else
+  `default`. `freight` shares the pool out among vessels by weight --
+  Greek and Roman transport amphorae (and sacks), Egyptian jars, baskets
+  and sacks, Chinese tubs, baskets and bales, Japanese tawara rice bales,
+  Islamic/Ottoman bales and jars, Maya jars and baskets, medieval and
+  industrial Europe barrels, sacks and crates (`default`: barrels and
+  sacks). `teams` names the draught beasts a culture put to carts (index.html
+  `teamOf`: a horse team becomes oxen where only oxen pulled -- Egypt,
+  Japan; `[]`: the Maya had none, so no road or freight carts at all, the
+  porters carry everything). Each vessel says how it lies set down (`rest`: an amphora on its
+  belly, a sack across) and how a porter carries it: `carry` styles
+  `arms` (before the belly, pose "carry"), `shoulder` (an amphora or sack on
+  the right shoulder), `head` (jar or basket on the head), `pole` (hung from
+  a carrying pole, items/tools/carrying-pole), `back` (a bale high on the
+  back) and `tumpline` (the Maya mecapal, items/tools/tumpline) -- each a
+  people.js pose, an anchor read off the figure (feet, shoulder, crown) and
+  the piece's frame in it; a culture may override a vessel's style
+  (`carry`). Each dock hand has one loaded rig per style the culture
+  needs (freight.js `placeHands`). `loads` picks the road carts' load
+  variants (carts.js; 6-12 are amphorae in straw, amphorae and sacks, jars
+  and hampers in straw, bales, crates and sacks, tubs and bales, rice
+  bales -- tools/propgen.py `cultural`). Labels use the vessel's `name`.
 - **Flora** (`flora.js`): trees GROWN from a seed by recursive branching
   (after the trees lab): six species -- oak (random forks), birch
   (alternate, drooping twigs), Scots pine (whorled crown on a long bole),
@@ -738,9 +1023,7 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   many strikes as the hour shows, the same moment on every peer's wall
   clock -- and the roofs' pigeons go up at the first strike (checked every frame, sound or no sound).
 - **P** rain → snow → clear; **O** intensity -- which on a clear day also
-  sets the cloud cover: few, half or all of the 28 clouds (flora.js `makeCloud`, since 2026-10-23 cumulus: a flat grey
-  base of two or three thin slabs and a heap of seven to ten round puffs on it, tallest in the middle, brighter the
-  higher; CLOUD_PARTS 13 a cloud); rain and snow always bring them all. Precipitation is three
+  sets the cloud cover (sky.js: a threshold on the clouds' noise, see **The clouds** under the sky below); rain and snow always fill the sky. Precipitation is three
   depth-tested billboard curtains 4/10/22m ahead of the camera, so walls
   occlude it and interiors stay dry (each curtain also hides itself when its
   anchor point is under a roof). Snow raises a shared uniform (foliage.js SNOW) that whitens
@@ -822,6 +1105,14 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   third (the tint pass runs by day then too), the clouds turn grey. In rain every stretch of water is pocked with
   drops: a ring spreading in each cell of two offset 0.6 m grids, each drop at its own moment, more of them the harder
   it rains (waterShade `rain`).
+- **The clouds** (sky.js, since 2026-11-01 in the dome's own shader; the 28 banner heaps are gone, and a draw call with them): a
+  layer 900 m up read from one baked 512 x 512 tile of noise (`bakeCloudNoise`, about 40 ms at the start: r heaped Worley billows, g the same finer,
+  b broad drifts, a smooth wisps), six texture reads a sky pixel and no marching. The ray meets the layer bent a little (`up + .075`) so it never runs
+  out at the horizon, and it starts from the camera, so clouds keep their place as you fly. Above a threshold (`cover`, moved by the drifts) is cloud;
+  a step toward the sun tells a billow's lit side from its shaded one, a thick middle is a shaded belly, thin cloud near the sun takes a silver lining, and low
+  down it all goes into the horizon's haze. Behind it a veil of cirrus, the same tile stretched. Colours by hour: `lit`, `shade` in KEYS (white and blue-grey by day,
+  gold and rose at sunset, moonlit by night, when the clouds thin to let the stars be). Rain and snow: cover to full, greyer and darker the harder it falls.
+  The sky's blues are deeper than the first ones (zenith to horizon by an exponential, and a little deeper away from the sun).
 - **The water and the clouds keep the hour**: away from the mirror (the water reflector works near the water only) the
   surface takes a share of the horizon's colour at grazing angles -- gold at sunset, deep blue at night -- and the
   sun's path, and at night the moon's, glitter on it: only the crests' facets that catch the light, more of them the
@@ -1245,10 +1536,20 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   blocks.js logs in one snowyLit mesh, with a pair of storks (items/birds/stork, `pose: folded`) standing in it -- the
   mate turned well away from the other, and keeping the nest while it flies. A nested
   chimney gets `nest`, and smoke.js passes it over (a cold chimney). The nests are not in the sun-shadow bake.
-  Every `STORK.cycle` seconds (offset per nest) the stork flies for `STORK.flight` s (storkTick): up off the nest
-  along a curve to a circle of `STORK.ring` (radius, height) that passes over the nest, `laps` times round, then
-  down again (by day and dry only: at night and in the rain both keep the nest); in late autumn and in winter (`SNOW`) the nest is empty -- they are away south. The standing item is hidden and a second item in `pose: spread` flies, yawed along its path, pitched
-  with the climb and banked into the turn (eased).
+  WHY THEY LOOKED LIKE STATUES (until 2026-11-03): both birds were rigid items in one pose with nothing animated; only
+  the flier ever changed, 95 s in every 260 s with a per-nest offset, so the first flight came a minute or more after
+  load, and it went 26 m straight up onto a 34 m ring, out of sight from the nest. A visitor saw two fixed birds.
+  NOW (storkTick, storkMood, storkRoute; `STORK`, `STORK_POSES`, `STORK_MOOD`): each bird is a set of hidden item groups,
+  one per pose of items/birds/stork (`storkSet`), the one shown switched. The mate (and the flier while home) lives a
+  small state machine: stands, turns about (the yaw eased), bows, preens, clatters (head thrown back, the bill
+  opening at 7 Hz: `clatter`/`clatter2`) and sits down in the bowl (`sit`, lowered `sitDrop`) -- at night mostly
+  sitting, weights and durations in `STORK_MOOD`. The flier leaves `STORK.first` s after load, then after `rest`
+  s at home, by day and dry only: a centripetal Catmull-Rom route (`storkRoute`) up toward a field, round `laps` times
+  on a circle `field` m out and `high` m up (`clear` m over the ground at least), back in low over the roofs and onto
+  the nest. It glides (`spread`), beats its wings continuously on the climb and in bursts otherwise
+  (`flap-up`/`flap-down`), shows `landing` (legs down, wings braked) in the last metres, banks into its turns, and
+  slows on the climb and the approach. The mate bows it off, and both clatter when it lands. In late autumn and in
+  winter (`SNOW`) the nest is empty -- they are away south. `__dbg.storkNests` exposes them.
 - **Ivy** (ivy.js, 2026-10-24): nearly half the houses' plain doors (`IVY.share` .45) have ivy planted on the side
   away from the woodpile (`d.pile`). From the root its stems wander up the wall and branch to the sides (`IVY.branch`).
   They go round the door and the house's windows on that wall, which are boxes with a margin, and stop where the wall's

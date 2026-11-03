@@ -1,0 +1,106 @@
+{
+ "name": "Gaudi mushroom",
+ "_about": "A MUSHROOM, as Gaudi crowned the Park Guell pavilions and turned their chimneys: a stem and a cap, each its own finish -- the porter's lodge's bell-shaped amanita (red, white-spotted) on its mirador, the administration pavilion's cupola, the chimneys on both roofs. Place it on what carries it.",
+ "params": {
+  "stemR": 0.5,
+  "stemH": 1.2,
+  "capR": 1.1,
+  "capH": 1.4,
+  "lip": 0.92,
+  "bell": 1.0,
+  "foot": 1.15,
+  "sides": 20,
+  "_stemR": "the stem's radius and height; foot: how much wider it is where it stands",
+  "_capR": "the cap's radius at its rim, its height over the stem's top; lip: the underside's reach at the rim; bell 1 a bell, 0 a flatter dome"
+ },
+ "build": [
+  "stem",
+  "cap"
+ ],
+ "parts": {
+  "stem": {
+   "type": "loft",
+   "axis": "y",
+   "sides": "sides",
+   "smooth": 3,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "sections": [
+    {
+     "s": 0,
+     "a": "stemR * foot",
+     "b": "stemR * foot"
+    },
+    {
+     "s": "stemH * 0.35",
+     "a": "stemR",
+     "b": "stemR"
+    },
+    {
+     "s": "stemH * 0.8",
+     "a": "stemR * 0.92",
+     "b": "stemR * 0.92"
+    },
+    {
+     "s": "stemH + capH * 0.08",
+     "a": "stemR",
+     "b": "stemR"
+    }
+   ],
+   "_about": "the stem, a little swollen at its foot"
+  },
+  "cap": {
+   "type": "loft",
+   "axis": "y",
+   "sides": "sides",
+   "smooth": 3,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "sections": [
+    {
+     "s": "stemH",
+     "a": "stemR * 1.05",
+     "b": "stemR * 1.05"
+    },
+    {
+     "s": "stemH + capH * 0.06",
+     "a": "capR * lip",
+     "b": "capR * lip"
+    },
+    {
+     "s": "stemH + capH * 0.22",
+     "a": "capR",
+     "b": "capR"
+    },
+    {
+     "s": "stemH + capH * 0.55",
+     "a": "capR * (0.55 + bell * 0.3)",
+     "b": "capR * (0.55 + bell * 0.3)"
+    },
+    {
+     "s": "stemH + capH * 0.85",
+     "a": "capR * 0.42 * (1 - bell * 0.4)",
+     "b": "capR * 0.42 * (1 - bell * 0.4)"
+    },
+    {
+     "s": "stemH + capH",
+     "a": "capR * 0.04",
+     "b": "capR * 0.04"
+    }
+   ],
+   "_about": "the cap: its underside a lip out from the stem, its rim, then a dome (bell 1: the amanita's bell; 0: a flatter cap)"
+  }
+ }
+}

@@ -18,6 +18,29 @@ export const WLEVEL = -2.2;            // the one water level for the whole worl
 // height along it); over a shoulder of `ROAD_SHOULDER` metres beyond its edge it eases back to the natural ground. The
 // terrain mesh is then cut along the roads' edges (terrain_data.js), the road mesh sharing those points (paths.js).
 export const ROAD_SHOULDER = 3;
+// HOW FAR A POINT IS FROM A MOAT'S ISLAND (a ring) OR INSIDE ITS WATER (a pool): the rectangle hw x hd about its middle, + outside it,
+// - inside. A pool may have a SHORE as well -- `shore`, a closed polygon [[x, z], ...] about the same middle, inside the rectangle,
+// which stays its bound (Kunming Lake): then it is the signed distance to that. Everything that asks whether it is wet asks here.
+// `islands` [[[x, z], ...], ...] as well (with a shore): closed polygons about the same middle that are land, the water all
+// round them (the Phoenix Hall's island) -- the pool is the shore's inside less theirs.
+export function moatSD(m, x, z) {
+  const dr = Math.max(Math.abs(x - m.cx) - m.hw, Math.abs(z - m.cz) - m.hd);
+  if (!m.shore || dr > 0) return dr;
+  let d = polySD(m.shore, x - m.cx, z - m.cz);
+  for (const I of m.islands ?? []) d = Math.max(d, -polySD(I, x - m.cx, z - m.cz));
+  return d;
+}
+// (the signed distance to a closed polygon: - inside)
+function polySD(P, qx, qz) {
+  let d = 1e18, inside = false;
+  for (let i = 0, j = P.length - 1; i < P.length; j = i++) {
+    const [ax, az] = P[i], [bx, bz] = P[j], ex = bx - ax, ez = bz - az, wx = qx - ax, wz = qz - az;
+    const t = Math.min(1, Math.max(0, (wx * ex + wz * ez) / (ex * ex + ez * ez))), hx = wx - ex * t, hz = wz - ez * t;
+    d = Math.min(d, hx * hx + hz * hz);
+    if ((az > qz) !== (bz > qz) && qx < ax + ex * (qz - az) / ez) inside = !inside;
+  }
+  return (inside ? -1 : 1) * Math.sqrt(d);
+}
 export function makeGround({ extent, groundR, flatZones, moats, map = null, roads = [] }) {
   // the lake: a big C -- a water tube of half-width `w` wrapped around a circular arc of radius `rc`, its
   // opening (`gap` radians) facing north toward the meadow, so the path walks into the lagoon's grassy heart
@@ -67,8 +90,10 @@ export function makeGround({ extent, groundR, flatZones, moats, map = null, road
   const waterSD = map ? (x, z) => gridLin(M.sd, x, z) : (x, z) => Math.min(hasLake ? lakeSD(x, z) : 1e9, riverSD(x, z));
   // THE WATER'S SURFACE at a point: the one level everywhere (the old world's sheet hides under the land where there is
   // none), or a grown map's -- a stream's, the river's, a lake's, a moat's -- and -Infinity where it is dry
-  const moatAt = (x, z) => moats.some((m) => { const dr = Math.max(Math.abs(x - m.cx) - m.hw, Math.abs(z - m.cz) - m.hd); return dr > 0 && dr < m.w; });
-  const waterY = map ? (x, z) => { const w = gridNear(M.water, x, z); return w === w ? w : moatAt(x, z) ? WLEVEL : -Infinity; } : () => WLEVEL;
+  const moatAt = (x, z) => moats.some((m) => { const dr = moatSD(m, x, z); return m.pool ? dr < 0 : dr > 0 && dr < m.w; });
+  // (a moat's own `y`, set where it is laid out from its `surface`: a garden's pond, level with its own ground wherever the site stands)
+  const moatLevel = (x, z) => { const m = moats.find((m) => { const dr = moatSD(m, x, z); return m.pool ? dr < 0 : dr > 0 && dr < m.w; }); return m.y ?? WLEVEL; };
+  const waterY = map ? (x, z) => { const w = gridNear(M.water, x, z); return w === w ? w : moatAt(x, z) ? moatLevel(x, z) : -Infinity; } : () => WLEVEL;
 
   // the ROAD INDEX: every centreline segment in 8 m cells (built when the roads are first asked for, rebuilt if the
   // list grows); roadAt(x, z) -> the nearest road's { y, d } there: d the distance beyond its edge (< 0 inside)
@@ -99,16 +124,33 @@ export function makeGround({ extent, groundR, flatZones, moats, map = null, road
     }
     return best;
   };
-  const naturalH = (x, z) => {
+  // (the plots by where they are: one reaches 20 m past its rectangle and no further, and the ground is asked its height
+  // a great many times a frame; flatZones grows while the town is laid out, so the index follows its length)
+  const ZC = 64, zoneIdx = { n: -1, cells: new Map() }, NO_ZONES = [];
+  const indexZones = () => {
+    zoneIdx.n = flatZones.length; zoneIdx.cells.clear();
+    for (const zn of flatZones)
+      for (let cx = Math.floor((zn.x - zn.hx - 20) / ZC); cx <= Math.floor((zn.x + zn.hx + 20) / ZC); cx++)
+        for (let cz = Math.floor((zn.z - zn.hz - 20) / ZC); cz <= Math.floor((zn.z + zn.hz + 20) / ZC); cz++) {
+          const k = cx * 100003 + cz; let l = zoneIdx.cells.get(k); if (!l) zoneIdx.cells.set(k, l = []); l.push(zn);
+        }
+  };
+  const inPad = (q, x, z) => { const ux = x - q.x, uz = z - q.z; return Math.abs(ux * q.c - uz * q.s) <= q.hw && Math.abs(ux * q.s + uz * q.c) <= q.hd; };
+  const levelH = (x, z) => {
     const base = map ? gridLin(M.base, x, z)
                : Math.sin(x * .021 + 1.7) * Math.cos(z * .017 - .8) * 2.1
                + Math.sin(x * .043 - 2.1) * Math.sin(z * .038 + 1.3) * 1.0
                + Math.sin(x * .009 + z * .011) * 1.7;
-    let k = 1, kc = 1;
-    for (const zn of flatZones) {
+    // (a zone with its own `y` is settled to that height, not to 0 -- a mine's shaft head on a hillside -- and `fade`
+    //  brings the land back over fewer metres than 20: the hill keeps its shape round it)
+    let k = 1, kc = 1, ty = 0, onQuay = false;
+    if (zoneIdx.n !== flatZones.length) indexZones();
+    for (const zn of zoneIdx.cells.get(Math.floor(x / ZC) * 100003 + Math.floor(z / ZC)) ?? NO_ZONES) {
+      if (zn.raise || zn.dig) continue;   // (a bank, a berth dredged: below, naturalH)
       const dx = Math.max(0, Math.abs(x - zn.x) - zn.hx), dz = Math.max(0, Math.abs(z - zn.z) - zn.hz);
-      const t = Math.min(1, Math.hypot(dx, dz) / 20);
-      k = Math.min(k, t * t * (3 - 2 * t));
+      const t = Math.min(1, Math.hypot(dx, dz) / (zn.fade ?? 20)), kz = t * t * (3 - 2 * t);
+      if (kz < k) { k = kz; ty = zn.y ?? 0; }
+      if (zn.pad && !onQuay) onQuay = inPad(zn.pad, x, z);   // (inside the quay's pad as it is turned -- its square, grown to hold it, reaches past its front)
       if (zn.level) {   // a building's plot: level right out to 1m past the footprint, the bank carve fading back in over 2.5m
         const ex = Math.max(0, Math.abs(x - zn.x) - (zn.hx - 2)), ez = Math.max(0, Math.abs(z - zn.z) - (zn.hz - 2));
         const u = Math.min(1, Math.hypot(ex, ez) / 2.5);
@@ -120,10 +162,12 @@ export function makeGround({ extent, groundR, flatZones, moats, map = null, road
       // levelled toward 0 under the plots -- but never under water: a plot by the river stops at its edge. (Levelling the
       // land and cutting the channel from it after, as the old plain does, cut it from the wrong height here: the plain
       // is 0 everywhere, a grown map's land is not; and where the land was settled below the river's bed there was no
-      // cut to tell a channel by, only the water.)
-      return (base - gridLin(M.carve, x, z)) * Math.max(k, gridLin(M.wet, x, z)) - moatCut(x, z);
+      // cut to tell a channel by, only the water.) Under a QUAY's own pad (harbour.js zones' `pad`: the quay wall at its
+      // seaward edge) it is levelled all the same: the wet mask, a grid, bled a metre or two in behind the wall, and the
+      // land there stood through the paving under the coping (2026-11-03)
+      return ty + (base - gridLin(M.carve, x, z) - ty) * Math.max(k, onQuay ? 0 : gridLin(M.wet, x, z)) - moatCut(x, z);
     }
-    let y = base * k;
+    let y = ty + (base - ty) * k;
     // ONE shared water level for the whole world: the plain is kept softly above it (a smooth floor at -1.4m,
     // .8m clear of the water), so only what is deliberately carved -- lake, river, moats -- fills with water
     y = -1.4 + Math.log1p(Math.exp(4 * (y + 1.4))) / 4;
@@ -142,6 +186,34 @@ export function makeGround({ extent, groundR, flatZones, moats, map = null, road
     y -= carve * kc;
     return y - moatCut(x, z);
   };
+  // A BANK (a zone with `raise`, 2026-11-03: a mine adit's portal): earth heaped up to at least its `y` over the
+  // rectangle, falling back to the land over `fade` m round it -- never lowering it -- and none past `cut` [nx, nz, c]
+  // (where (x - zn.x) nx + (z - zn.z) nz > c: the face of the wall that holds it, sheer). A BERTH DREDGED (a zone with
+  // `dig`, 2026-11-03: harbour.js, one before each quay): the bed taken down to at most its `y` over the strip `D` m out
+  // from the quay's face along its `hw` either side, coming back up to the bed as it was over `fade` m -- never behind
+  // the face (its local z < 0: the quay's own pad) nor under any quay's pad (two quays meeting at an angle: the one's
+  // strip runs over the other's paving), so the wall drops sheer into water, not onto a shelf of the shore
+  const naturalH = (x, z) => {
+    let y = levelH(x, z);
+    const here = zoneIdx.cells.get(Math.floor(x / ZC) * 100003 + Math.floor(z / ZC)) ?? NO_ZONES;
+    let paved = null;
+    for (const zn of here) {
+      if (zn.dig) {
+        if ((paved ??= here.some((p) => p.pad && inPad(p.pad, x, z)))) continue;
+        const q = zn.dig, ux = x - q.x, uz = z - q.z, lz = ux * q.s + uz * q.c;
+        if (y <= zn.y || lz < 0) continue;
+        const ex = Math.max(0, Math.abs(ux * q.c - uz * q.s) - q.hw), ez = Math.max(0, lz - q.D);
+        const t = Math.min(1, Math.hypot(ex, ez) / (zn.fade ?? 6)), kz = t * t * (3 - 2 * t);
+        y += (zn.y - y) * (1 - kz);
+        continue;
+      }
+      if (!zn.raise || y >= zn.y || (zn.cut && (x - zn.x) * zn.cut[0] + (z - zn.z) * zn.cut[1] > zn.cut[2])) continue;
+      const dx = Math.max(0, Math.abs(x - zn.x) - zn.hx), dz = Math.max(0, Math.abs(z - zn.z) - zn.hz);
+      const t = Math.min(1, Math.hypot(dx, dz) / (zn.fade ?? 20)), kz = t * t * (3 - 2 * t);
+      y += (zn.y - y) * (1 - kz);
+    }
+    return y;
+  };
   // THE GROUND: the natural ground, and the roads in it -- level across, easing back to the land over the shoulder
   const groundH = (x, z) => {
     const g = naturalH(x, z), r = roadAt(x, z);
@@ -154,8 +226,9 @@ export function makeGround({ extent, groundR, flatZones, moats, map = null, road
   const moatCut = (x, z) => {
     let c = 0;
     for (const m of moats) {
-      const dr = Math.max(Math.abs(x - m.cx) - m.hw, Math.abs(z - m.cz) - m.hd);
-      if (dr > 0 && dr < m.w) c += m.depth * Math.min(1, dr / 2.5, (m.w - dr) / 2.5);
+      const dr = moatSD(m, x, z);
+      if (m.pool) { if (dr < 0) c += m.depth * Math.min(1, -dr / 2.5); }   // (`pool`: no island -- a stretch of water hw x hd itself, its banks sloping in: a river under a bridge)
+      else if (dr > 0 && dr < m.w) c += m.depth * Math.min(1, dr / 2.5, (m.w - dr) / 2.5);
     }
     return c;
   };

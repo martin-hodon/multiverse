@@ -1,503 +1,1032 @@
 {
   "name": "Sacre-Coeur",
-  "_about": "THE BASILICA OF SACRE-COEUR, Montmartre (1875-1914), Romano-Byzantine, in white travertine: a Greek cross of four arms round a square crossing where PENDENTIVES carry a drum windowed in every bay and the tall pointed dome with its lantern; a small domed tower in three of the angles between the arms, and in the fourth the stair turret up to the flat roofs, which are walked all the way round the drum; the apse and its half dome; the three-arched porch with its two statues; the square campanile behind the apse; the whole on a terrace up a flight of steps.",
+  "_about": "THE BASILICA OF SACRE-COEUR, Montmartre (Abadie, 1875-1914), Romano-Byzantine in white travertine, on its real plan (OSM building parts, Wikipedia): the Greek cross of four barrel-vaulted, gabled arms round the 16 m crossing, PENDENTIVES carrying the great drum of sixteen windows, the gallery storey with its open arcade and the tall ribbed egg dome with its colonnaded lantern and cross (~87 m); the four corner towers over sail-vaulted bays, each with its octagonal drum, small egg dome and lantern; the low aisles round it under flat roofs; the long choir, the APSE with its half dome (the mosaic of Christ in Majesty), the ambulatory and six half-domed radiating chapels; the square CAMPANILE behind (the axial chapel at its foot, the Savoyarde in its belfry, a small dome and cross); the three-arched PORCH with the bronze equestrian statues of Saint Louis and Joan of Arc, the Sacred Heart on the gable, the parvis and its flight; the CRYPT under all of it. A stair turret in the back west angle climbs to the high terraces, the gutter walks lead to the deck round the drum, and a second turret against the drum to the outer and inner GALLERIES at the dome's foot.",
   "params": {
     "detail": 4
   },
-  "base": {
-    "height": 2.4,
-    "steps": 8,
-    "stepOut": 0.5,
-    "margin": 4
-  },
   "railing": {
-    "type": "iron"
+    "type": "balusters"
   },
   "build": [
-    "crossing",
-    "nave arm",
-    "east transept",
-    "west transept",
-    "choir arm",
-    "apse",
-    "nave roof",
-    "transept roofs",
-    "choir roof",
-    "church interior",
+    "crossing piers",
+    "nave east wall",
+    "choir east wall",
+    "transept south walls",
+    "transept south walls west",
+    "nave west wall",
+    "choir west wall",
+    "transept north walls",
+    "transept north walls west",
+    "front wall",
+    "east transept front",
+    "west transept front",
+    "arm barrels",
+    "choir barrel",
+    "transept barrels",
     "pendentives",
-    "dome",
+    "nave roof",
+    "choir roof",
+    "transept roofs",
+    "front east corner side",
+    "front east corner end",
+    "front west corner side",
+    "front west corner end",
+    "back east corner side",
+    "back east corner end",
+    "back west corner side",
+    "back west corner end",
+    "corner vaults",
+    "corner towers",
     "small domes",
-    "stair tower",
-    "angle terrace",
-    "porch front",
-    "porch sides",
+    "dome",
+    "gallery storey",
+    "gallery storey door",
+    "inner gallery",
+    "outer gallery",
+    "gallery arcade",
+    "gallery roof",
+    "gallery interior",
+    "dome stair",
+    "east front aisle front",
+    "east front aisle side",
+    "east transept aisle front",
+    "east transept aisle south",
+    "east transept aisle north",
+    "east transept aisle back",
+    "east choir aisle side",
+    "east choir aisle back",
+    "east choir aisle end",
+    "east aisle roof 1",
+    "east aisle roof 2",
+    "east aisle roof 3",
+    "east aisle roof 4",
+    "east aisle roof 5",
+    "east choir aisle terrace",
+    "west front aisle front",
+    "west front aisle side",
+    "west transept aisle front",
+    "west transept aisle south",
+    "west transept aisle north",
+    "west transept aisle back",
+    "west choir aisle side",
+    "west choir aisle back",
+    "west choir aisle end",
+    "west aisle roof 1",
+    "west aisle roof 2",
+    "west aisle roof 3",
+    "west aisle roof 4",
+    "west aisle roof 5",
+    "west choir aisle terrace",
+    "apse crypt",
+    "apse arcade",
+    "apse upper wall",
+    "apse half dome",
+    "apse roof",
+    "ambulatory vault",
+    "ambulatory upper",
+    "ambulatory roof",
+    "ambulatory wall",
+    "ambulatory crypt floor",
+    "crypt chapels",
+    "chapels",
+    "chapel floors",
+    "campanile",
+    "campanile chapel ceiling",
+    "campanile floor",
+    "belfry floor",
+    "savoyarde",
+    "bell frame",
+    "bell posts",
+    "campanile buttresses",
+    "campanile cornice",
+    "campanile pinnacles",
+    "campanile stage",
+    "campanile stage cornice",
+    "campanile dome",
+    "campanile interior",
+    "porch floor",
+    "porch arcade",
+    "porch east side",
+    "porch west side",
     "porch roof",
-    "statue Joan",
-    "statue Louis",
-    "campanile"
+    "porch balustrade",
+    "statue piers",
+    "statue piers east",
+    "statue plinths",
+    "saint louis",
+    "joan of arc",
+    "facade turrets",
+    "facade turret domes",
+    "facade turret finials",
+    "sacred heart niche",
+    "sacred heart niche roof",
+    "sacred heart ledge",
+    "sacred heart",
+    "parvis",
+    "porch steps",
+    "great flight",
+    "roof stair",
+    "roof stair bridge",
+    "church floor",
+    "crypt floor",
+    "crypt piers",
+    "crypt interior",
+    "church interior",
+    "nave interior"
   ],
   "parts": {
-    "crossing": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          22.0,
-          22.0
-        ]
-      },
-      "thickness": 1.6,
-      "height": 24.0,
-      "openings": [
-        {
-          "at": 0,
-          "width": 14.0,
-          "sill": 0,
-          "springing": 10.0,
-          "head": {
-            "profile": "semicircular"
-          }
-        }
-      ],
+    "crossing piers": {
+      "type": "box",
+      "width": 2.8499999999999996,
+      "length": 2.8499999999999996,
+      "height": 28.5,
       "at": [
         [
+          -9.425,
           0,
-          0,
-          0,
+          -9.425,
           0
-        ]
-      ],
-      "_about": "the crossing: a great arch into each arm"
-    },
-    "nave arm": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          22.0,
-          26.0
-        ]
-      },
-      "thickness": 1.6,
-      "height": 24.0,
-      "tiers": [
-        {
-          "h": 12,
-          "openings": {
-            "pattern": "2",
-            "width": 2.4,
-            "gap": 5.0,
-            "sill": 3.5,
-            "springing": 9.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        },
-        {
-          "openings": {
-            "pattern": "3",
-            "width": 1.8,
-            "gap": 3.2,
-            "sill": 2.5,
-            "springing": 8.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        }
-      ],
-      "faces": {
-        "2": [
-          {
-            "at": 0,
-            "width": 14.0,
-            "sill": 0,
-            "springing": 10.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
         ],
-        "0": [
-          {
-            "h": 12,
-            "openings": [
-              {
-                "at": 0,
-                "width": 5.0,
-                "sill": 0,
-                "springing": 7.0,
-                "head": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          },
-          {
-            "openings": [
-              {
-                "at": 0,
-                "width": 7.0,
-                "sill": 4.5,
-                "springing": 4.5,
-                "head": {
-                  "profile": "semicircular"
-                },
-                "foot": {
-                  "profile": "semicircular"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "at": [
         [
+          -9.425,
           0,
+          9.425,
+          0
+        ],
+        [
+          9.425,
           0,
-          24.0,
+          -9.425,
+          0
+        ],
+        [
+          9.425,
+          0,
+          9.425,
           0
         ]
       ],
-      "_about": "the nave arm: the portal and a rose in its front"
+      "_about": "the four piers of the crossing, 2.85 m square, from the crypt to the roofs: the great arches and the pendentives stand on them"
     },
-    "east transept": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          16.0,
-          22.0
-        ]
-      },
-      "thickness": 1.6,
-      "height": 24.0,
+    "nave east wall": {
+      "type": "wall",
+      "width": 16.75,
+      "thickness": 2.85,
+      "height": 28.5,
       "tiers": [
         {
-          "h": 12,
-          "openings": {
-            "pattern": "2",
-            "width": 2.4,
-            "gap": 5.0,
-            "sill": 3.5,
-            "springing": 9.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        },
-        {
-          "openings": {
-            "pattern": "3",
-            "width": 1.8,
-            "gap": 3.2,
-            "sill": 2.5,
-            "springing": 8.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        }
-      ],
-      "faces": {
-        "3": [
-          {
-            "at": 0,
-            "width": 14.0,
-            "sill": 0,
-            "springing": 10.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        ]
-      },
-      "at": [
-        [
-          19.0,
-          0,
-          0,
-          0
-        ]
-      ],
-      "_about": "the transept arms"
-    },
-    "west transept": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          16.0,
-          22.0
-        ]
-      },
-      "thickness": 1.6,
-      "height": 24.0,
-      "tiers": [
-        {
-          "h": 12,
-          "openings": {
-            "pattern": "2",
-            "width": 2.4,
-            "gap": 5.0,
-            "sill": 3.5,
-            "springing": 9.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        },
-        {
-          "openings": {
-            "pattern": "3",
-            "width": 1.8,
-            "gap": 3.2,
-            "sill": 2.5,
-            "springing": 8.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        }
-      ],
-      "faces": {
-        "1": [
-          {
-            "at": 0,
-            "width": 14.0,
-            "sill": 0,
-            "springing": 10.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        ]
-      },
-      "at": [
-        [
-          -19.0,
-          0,
-          0,
-          0
-        ]
-      ]
-    },
-    "choir arm": {
-      "type": "enclosure",
-      "plan": {
-        "rect": [
-          22.0,
-          12.0
-        ]
-      },
-      "thickness": 1.6,
-      "height": 24.0,
-      "tiers": [
-        {
-          "h": 12,
+          "h": 5.5,
           "openings": [
             {
-              "at": 0,
-              "width": 2.4,
-              "sill": 3.5,
-              "springing": 9.0,
+              "at": 4.35,
+              "width": 4.0,
+              "sill": 0,
+              "springing": 2.4,
               "head": {
                 "profile": "semicircular"
-              }
+              },
+              "glass": false
+            },
+            {
+              "at": -4.625,
+              "width": 3.4,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
             }
           ]
         },
         {
+          "h": 15.0,
           "openings": [
             {
-              "at": 0,
-              "width": 1.8,
-              "sill": 2.5,
+              "at": 4.35,
+              "width": 6.4,
+              "sill": 0,
+              "springing": 8.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -4.625,
+              "width": 5.6,
+              "sill": 0,
               "springing": 8.0,
               "head": {
                 "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          10.85,
+          0,
+          19.225,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the nave arm's side walls, 2.85 m: an arch into the corner bay under its small dome and one into the aisle beyond; the crypt's arches under them"
+    },
+    "choir east wall": {
+      "type": "wall",
+      "width": 20.75,
+      "thickness": 2.85,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": -6.35,
+              "width": 4.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 4.625,
+              "width": 3.4,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": -6.35,
+              "width": 6.4,
+              "sill": 0,
+              "springing": 8.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 4.625,
+              "width": 5.6,
+              "sill": 0,
+              "springing": 8.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          10.85,
+          0,
+          -21.225,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "transept south walls": {
+      "type": "wall",
+      "width": 12.85,
+      "thickness": 2.85,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": -2.4,
+              "width": 4.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 4.625,
+              "width": 2.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": -2.4,
+              "width": 6.4,
+              "sill": 0,
+              "springing": 8.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 4.625,
+              "width": 2.0,
+              "sill": 0,
+              "springing": 8.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          17.275,
+          0,
+          10.85,
+          0
+        ]
+      ]
+    },
+    "transept south walls west": {
+      "type": "wall",
+      "width": 12.85,
+      "thickness": 2.85,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 2.4,
+              "width": 4.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -4.625,
+              "width": 2.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 2.4,
+              "width": 6.4,
+              "sill": 0,
+              "springing": 8.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -4.625,
+              "width": 2.0,
+              "sill": 0,
+              "springing": 8.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          -17.275,
+          0,
+          10.85,
+          0
+        ]
+      ]
+    },
+    "nave west wall": {
+      "type": "wall",
+      "width": 16.75,
+      "thickness": 2.85,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 4.35,
+              "width": 4.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -4.625,
+              "width": 3.4,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 4.35,
+              "width": 6.4,
+              "sill": 0,
+              "springing": 8.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -4.625,
+              "width": 5.6,
+              "sill": 0,
+              "springing": 8.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          -8.0,
+          0,
+          19.225,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "choir west wall": {
+      "type": "wall",
+      "width": 20.75,
+      "thickness": 2.85,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": -6.35,
+              "width": 4.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 4.625,
+              "width": 3.4,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": -6.35,
+              "width": 6.4,
+              "sill": 0,
+              "springing": 8.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 4.625,
+              "width": 5.6,
+              "sill": 0,
+              "springing": 8.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          -8.0,
+          0,
+          -21.225,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "transept north walls": {
+      "type": "wall",
+      "width": 12.85,
+      "thickness": 2.85,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": -2.4,
+              "width": 4.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 4.625,
+              "width": 2.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": -2.4,
+              "width": 6.4,
+              "sill": 0,
+              "springing": 8.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 4.625,
+              "width": 2.0,
+              "sill": 0,
+              "springing": 8.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          17.275,
+          0,
+          -8.0,
+          0
+        ]
+      ]
+    },
+    "transept north walls west": {
+      "type": "wall",
+      "width": 12.85,
+      "thickness": 2.85,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 2.4,
+              "width": 4.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -4.625,
+              "width": 2.0,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 2.4,
+              "width": 6.4,
+              "sill": 0,
+              "springing": 8.5,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -4.625,
+              "width": 2.0,
+              "sill": 0,
+              "springing": 8.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          -17.275,
+          0,
+          -8.0,
+          0
+        ]
+      ]
+    },
+    "front wall": {
+      "type": "wall",
+      "width": 21.7,
+      "thickness": 1.3,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": []
+        },
+        {
+          "h": 9.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 3.0,
+              "sill": 0,
+              "springing": 4.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -5.3,
+              "width": 2.2,
+              "sill": 0,
+              "springing": 3.6,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 5.3,
+              "width": 2.2,
+              "sill": 0,
+              "springing": 3.6,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 13.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 6.0,
+              "sill": 2.0,
+              "springing": 8.6,
+              "head": {
+                "profile": "semicircular"
               }
             }
           ]
         }
       ],
-      "faces": {
-        "0": [
-          {
-            "at": 0,
-            "width": 14.0,
-            "sill": 0,
-            "springing": 10.0,
-            "head": {
-              "profile": "semicircular"
+      "at": [
+        [
+          0.0,
+          0,
+          28.9,
+          0
+        ]
+      ],
+      "_about": "the front: three doors from the porch into the nave, the great window over the porch's roof, the gable over it all"
+    },
+    "east transept front": {
+      "type": "wall",
+      "width": 21.7,
+      "thickness": 1.3,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 4.5,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -4.5,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
             }
-          }
-        ],
-        "2": [
-          {
-            "at": 0,
-            "width": 17.8,
-            "sill": 0,
-            "springing": 12.0,
-            "head": {
-              "profile": "semicircular"
-            }
-          }
-        ]
-      },
-      "at": [
-        [
-          0,
-          0,
-          -17.0,
-          0
-        ]
-      ],
-      "_about": "the choir arm, open at its end into the apse"
-    },
-    "apse": {
-      "type": "component",
-      "use": "components/apse",
-      "params": {
-        "R": 9.4,
-        "T": 1.6,
-        "H": 12.4,
-        "n": 16,
-        "winW": 2.0,
-        "winSill": 2.5,
-        "winH": 4.5,
-        "domeT": 1.6
-      },
-      "at": [
-        [
-          0,
-          0,
-          -23.0,
-          3.141592653589793
-        ]
-      ],
-      "_about": "the apse, lower than the choir: its half dome rises into the choir's end wall, not above it"
-    },
-    "nave roof": {
-      "walked": true,
-      "type": "box",
-      "width": 22.0,
-      "length": 26.0,
-      "height": 0.4,
-      "at": [
-        [
-          0,
-          24.0,
-          24.0,
-          0
-        ]
-      ],
-      "_about": "the flat roofs over the arms: a walk round the drum"
-    },
-    "transept roofs": {
-      "walked": true,
-      "type": "box",
-      "width": 16.0,
-      "length": 22.0,
-      "height": 0.4,
-      "at": [
-        [
-          -19.0,
-          24.0,
-          0,
-          0
-        ],
-        [
-          19.0,
-          24.0,
-          0,
-          0
-        ]
-      ]
-    },
-    "choir roof": {
-      "walked": true,
-      "type": "box",
-      "width": 22.0,
-      "length": 12.0,
-      "height": 0.4,
-      "at": [
-        [
-          0,
-          24.0,
-          -17.0,
-          0
-        ]
-      ]
-    },
-    "church interior": {
-      "type": "interior",
-      "plan": {
-        "points": [
-          [
-            10.2,
-            36.2
-          ],
-          [
-            -10.2,
-            36.2
-          ],
-          [
-            -10.2,
-            10.2
-          ],
-          [
-            -26.2,
-            10.2
-          ],
-          [
-            -26.2,
-            -10.2
-          ],
-          [
-            -10.2,
-            -10.2
-          ],
-          [
-            -10.2,
-            -23.0
-          ],
-          [
-            10.2,
-            -23.0
-          ],
-          [
-            10.2,
-            -10.2
-          ],
-          [
-            26.2,
-            -10.2
-          ],
-          [
-            26.2,
-            10.2
-          ],
-          [
-            10.2,
-            10.2
           ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 4.5,
+              "width": 2.6,
+              "sill": 3.5,
+              "springing": 10.6,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -4.5,
+              "width": 2.6,
+              "sill": 3.5,
+              "springing": 10.6,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 5.6,
+              "sill": 3.9,
+              "springing": 3.9,
+              "head": {
+                "profile": "semicircular"
+              },
+              "foot": {
+                "profile": "semicircular"
+              },
+              "tracery": true
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          25.0,
+          0,
+          0.0,
+          1.5707963267948966
         ]
+      ],
+      "_about": "the transepts' fronts: two tall windows, and the rose in the lunette under the barrel"
+    },
+    "west transept front": {
+      "type": "wall",
+      "width": 21.7,
+      "thickness": 1.3,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 4.5,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -4.5,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 4.5,
+              "width": 2.6,
+              "sill": 3.5,
+              "springing": 10.6,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -4.5,
+              "width": 2.6,
+              "sill": 3.5,
+              "springing": 10.6,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 5.6,
+              "sill": 3.9,
+              "springing": 3.9,
+              "head": {
+                "profile": "semicircular"
+              },
+              "foot": {
+                "profile": "semicircular"
+              },
+              "tracery": true
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -23.7,
+          0,
+          0.0,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "arm barrels": {
+      "type": "barrel",
+      "width": 16.0,
+      "length": 19.6,
+      "springing": 19.7,
+      "top": 28.5,
+      "head": {
+        "profile": "semicircular"
       },
-      "height": 24.0,
       "at": [
         [
           0,
           0,
-          0,
+          27.6,
           0
         ]
       ],
-      "_about": "the church's space: the Greek cross of the crossing and its four arms, up to the flat roofs"
+      "_about": "the barrel vault over each arm, from the crossing (its first bay the great arch) to the arm's end"
+    },
+    "choir barrel": {
+      "type": "barrel",
+      "width": 16.0,
+      "length": 23.6,
+      "springing": 19.7,
+      "top": 28.5,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          0,
+          -8.0,
+          0
+        ]
+      ]
+    },
+    "transept barrels": {
+      "type": "barrel",
+      "width": 16.0,
+      "length": 15.7,
+      "springing": 19.7,
+      "top": 28.5,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          23.7,
+          0,
+          0,
+          1.5707963267948966
+        ],
+        [
+          -8.0,
+          0,
+          0,
+          1.5707963267948966
+        ]
+      ]
     },
     "pendentives": {
       "walked": true,
       "type": "pendentives",
-      "span": 18.8,
-      "springing": 14.6,
-      "sides": 24,
+      "span": 16.0,
+      "springing": 19.7,
+      "sides": 16,
       "at": [
         [
           0,
@@ -507,33 +1036,621 @@
         ]
       ],
       "deck": {
-        "thickness": 0.4,
-        "out": 1.6
+        "thickness": 0.8,
+        "out": 2.8499999999999996
       },
-      "_about": "the pendentives inside the crossing, turning its square into the drum's circle, and the roof round the drum's foot"
+      "_about": "the pendentives turning the crossing's square into the drum's circle, and the deck round the drum's foot: the roof walk between the four arms' gables"
+    },
+    "nave roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 19.3,
+      "length": 18.050000000000004,
+      "pitch": 43.0,
+      "overhang": 0,
+      "at": [
+        [
+          0,
+          28.5,
+          19.875,
+          0
+        ]
+      ],
+      "_about": "the arms' gabled roofs in stone, from the drum's deck out to the gables; between their eaves and the wall heads' outer edges the gutter walk"
+    },
+    "choir roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 19.3,
+      "length": 20.75,
+      "pitch": 43.0,
+      "overhang": 0,
+      "at": [
+        [
+          0,
+          28.5,
+          -21.225,
+          0
+        ]
+      ]
+    },
+    "transept roofs": {
+      "type": "roof",
+      "form": "gable",
+      "width": 19.3,
+      "length": 14.15,
+      "pitch": 43.0,
+      "overhang": 0,
+      "at": [
+        [
+          -17.925,
+          28.5,
+          0,
+          1.5707963267948966
+        ],
+        [
+          17.925,
+          28.5,
+          0,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "front east corner side": {
+      "type": "wall",
+      "width": 9.25,
+      "thickness": 1.2,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.6,
+              "width": 3.2,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.6,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 8.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          20.1,
+          0,
+          15.475,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "each corner tower's two outer walls: a great arch into the aisle beyond, blind over the aisles' roofs"
+    },
+    "front east corner end": {
+      "type": "wall",
+      "width": 8.05,
+      "thickness": 1.2,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 3.2,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 8.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          14.875,
+          0,
+          20.1,
+          0
+        ]
+      ]
+    },
+    "front west corner side": {
+      "type": "wall",
+      "width": 9.25,
+      "thickness": 1.2,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.6,
+              "width": 3.2,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.6,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 8.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          -18.9,
+          0,
+          15.475,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "front west corner end": {
+      "type": "wall",
+      "width": 8.05,
+      "thickness": 1.2,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 3.2,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 8.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          -14.875,
+          0,
+          20.1,
+          0
+        ]
+      ]
+    },
+    "back east corner side": {
+      "type": "wall",
+      "width": 9.25,
+      "thickness": 1.2,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": -0.6,
+              "width": 3.2,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": -0.6,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 8.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          20.1,
+          0,
+          -15.475,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "back east corner end": {
+      "type": "wall",
+      "width": 8.05,
+      "thickness": 1.2,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 3.2,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 8.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          14.875,
+          0,
+          -18.9,
+          0
+        ]
+      ]
+    },
+    "back west corner side": {
+      "type": "wall",
+      "width": 9.25,
+      "thickness": 1.2,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": -0.6,
+              "width": 3.2,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": -0.6,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 8.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          -18.9,
+          0,
+          -15.475,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "back west corner end": {
+      "type": "wall",
+      "width": 8.05,
+      "thickness": 1.2,
+      "height": 28.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 3.2,
+              "sill": 0,
+              "springing": 2.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 6.0,
+              "sill": 0,
+              "springing": 8.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 8.0,
+          "openings": []
+        }
+      ],
+      "at": [
+        [
+          -14.875,
+          0,
+          -18.9,
+          0
+        ]
+      ]
+    },
+    "corner vaults": {
+      "type": "pendentives",
+      "sail": true,
+      "span": 8.05,
+      "springing": 14.0,
+      "sides": 16,
+      "at": [
+        [
+          -14.875,
+          0,
+          -14.875,
+          0
+        ],
+        [
+          -14.875,
+          0,
+          14.875,
+          0
+        ],
+        [
+          14.875,
+          0,
+          -14.875,
+          0
+        ],
+        [
+          14.875,
+          0,
+          14.875,
+          0
+        ]
+      ],
+      "_about": "the sail vault over each corner bay"
+    },
+    "corner towers": {
+      "flatRoof": true,
+      "type": "box",
+      "width": 9.25,
+      "length": 9.25,
+      "height": 8.5,
+      "at": [
+        [
+          -15.475,
+          20.0,
+          -15.475,
+          0
+        ],
+        [
+          -15.475,
+          20.0,
+          15.475,
+          0
+        ],
+        [
+          15.475,
+          20.0,
+          -15.475,
+          0
+        ],
+        [
+          15.475,
+          20.0,
+          15.475,
+          0
+        ]
+      ],
+      "_about": "the corner towers' masonry over their vaults, up to the terrace the small domes stand on"
+    },
+    "small domes": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 3.9,
+        "dt": 0.6,
+        "H": 9.0,
+        "n": 8,
+        "every": 1,
+        "winW": 1.1,
+        "winSill": 2.6,
+        "winH": 3.8,
+        "profile": "pointed",
+        "spread": 2.3,
+        "domeT": 0.4,
+        "ribsN": 8,
+        "ribW": 0.3,
+        "lanternR": 1.0,
+        "lanternH": 4.2,
+        "lanternSides": 8
+      },
+      "at": [
+        [
+          -15.475,
+          28.5,
+          -15.475,
+          0
+        ],
+        [
+          -15.475,
+          28.5,
+          15.475,
+          0
+        ],
+        [
+          15.475,
+          28.5,
+          -15.475,
+          0
+        ],
+        [
+          15.475,
+          28.5,
+          15.475,
+          0
+        ]
+      ],
+      "build": [
+        "drum",
+        "dome",
+        "ribs",
+        "ribbed lantern",
+        "lantern columns",
+        "lantern spire",
+        "lantern ball",
+        "lantern cross",
+        "lantern cross arm"
+      ],
+      "_about": "the four small domes over the corner towers: an octagonal drum with an arch in every face, the ribbed egg dome, the lantern and its cross (OSM: drums to 33 m, domes to 46 m, lanterns to 53 m)"
     },
     "dome": {
       "type": "component",
       "use": "components/drum-dome",
       "params": {
-        "R": 9.4,
-        "dt": 1.0,
-        "H": 14.0,
-        "n": 24,
+        "R": 8.0,
+        "dt": 1.6,
+        "H": 20.8,
+        "n": 16,
         "every": 1,
-        "winW": 1.4,
-        "winSill": 3.5,
-        "winH": 7.0,
+        "winW": 1.6,
+        "winSill": 10.6,
+        "winH": 6.4,
         "profile": "pointed",
-        "spread": 0.55,
-        "domeT": 1.0,
-        "lanternR": 2.8,
-        "lanternH": 6.0
+        "spread": 2.1,
+        "domeT": 0.9,
+        "ribsN": 16,
+        "ribW": 0.55,
+        "atticH": 5.8,
+        "lanternR": 1.9,
+        "lanternH": 7.2,
+        "lanternSides": 8
       },
       "at": [
         [
           0,
-          24.0,
+          27.7,
           0,
           0
         ]
@@ -541,246 +1658,3640 @@
       "build": [
         "drum",
         "dome",
-        "lantern"
+        "ribs",
+        "ribbed lantern",
+        "lantern columns",
+        "lantern spire",
+        "lantern ball",
+        "lantern cross",
+        "lantern cross arm"
       ],
-      "_about": "the drum, a window in every bay -- a colonnade of light -- the tall pointed dome and its lantern"
+      "_about": "the great drum, sixteen tall windows over the roofs, the egg dome on its gallery storey with sixteen ribs, the colonnaded lantern, ball and cross (OSM: the dome 50-73 m, the lantern to 83 m)"
     },
-    "small domes": {
-      "type": "component",
-      "use": "components/domed-tower",
-      "params": {
-        "sides": 8,
-        "R": 3.6,
-        "H": 30.0,
-        "t": 0.8,
-        "drumR": 2.6,
-        "drumH": 3.0,
-        "cap": "onion",
-        "bulge": 1.05,
-        "neck": 0.9,
-        "capR": 2.8,
-        "kok": 0.5,
-        "finial": 2.0,
-        "doorH": 3.0,
-        "winW": 0.9
-      },
-      "at": [
-        [
-          -14.312000000000001,
-          0,
-          14.312000000000001,
-          0
-        ],
-        [
-          14.312000000000001,
-          0,
-          -14.312000000000001,
-          0
-        ],
-        [
-          14.312000000000001,
-          0,
-          14.312000000000001,
-          0
-        ]
+    "gallery storey": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 9.6,
+      "rInner": 8.0,
+      "height": 5.8,
+      "y": 48.5,
+      "turn": 0.5,
+      "skip": [
+        9
       ],
-      "build": [
-        "tower",
-        "drum",
-        "cap",
-        "finial"
-      ],
-      "_about": "three small domed towers in the angles between the arms (the fourth angle holds the stair turret)"
-    },
-    "stair tower": {
-      "type": "component",
-      "use": "components/round-stair-tower",
-      "params": {
-        "R": 3.0,
-        "H": 24.4,
-        "steps": 126,
-        "doorBay": 7,
-        "stageH": 3.2,
-        "capRise": 4.0
-      },
-      "at": [
-        [
-          -13.95,
-          0,
-          -13.95,
-          0
-        ]
-      ],
-      "_about": "the stair tower in the fourth angle: a spiral from the ground up to the roofs, under its belvedere and cone"
-    },
-    "angle terrace": {
-      "walked": true,
-      "type": "box",
-      "width": 1.9,
-      "length": 1.0,
-      "height": 0.6,
-      "at": [
-        [
-          -11.95,
-          23.8,
-          -11.5,
-          0
-        ]
-      ],
-      "_about": "the little terrace in the angle, level with the roofs, from the stair tower's door to the choir's roof and the transept's"
-    },
-    "porch front": {
-      "type": "wall",
-      "width": 22.0,
-      "height": 13.0,
-      "thickness": 1.4,
-      "at": [
-        [
-          0,
-          0,
-          44.0,
-          0
-        ]
-      ],
-      "openings": {
-        "pattern": "3",
-        "width": 4.4,
-        "gap": 2.6,
-        "sill": 0,
-        "springing": 7.5,
+      "opening": {
+        "width": 1.3,
+        "sill": 1.1,
+        "springing": 3.6,
         "head": {
           "profile": "semicircular"
         }
       },
-      "_about": "the porch: three arches under the rose"
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the drum's gallery storey under the dome: a window in every bay but one"
     },
-    "porch sides": {
+    "gallery storey door": {
+      "type": "ring",
+      "count": 16,
+      "rOuter": 9.6,
+      "rInner": 8.0,
+      "height": 5.8,
+      "y": 48.5,
+      "turn": 0.5,
+      "at": [
+        9
+      ],
+      "glass": false,
+      "opening": {
+        "width": 1.2,
+        "sill": 0,
+        "springing": 2.6,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "...and the door from the outer gallery to the inner one"
+    },
+    "inner gallery": {
+      "walked": true,
+      "type": "ring",
+      "count": 16,
+      "rOuter": 8.0,
+      "rInner": 6.6,
+      "height": 0.6,
+      "y": 47.9,
+      "turn": 0.5,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the inner gallery round the drum's foot of the dome, 54 m over the church's floor"
+    },
+    "outer gallery": {
+      "walked": true,
+      "type": "ring",
+      "count": 24,
+      "rOuter": 12.4,
+      "rInner": 9.6,
+      "height": 0.6,
+      "y": 47.9,
+      "turn": 0,
+      "solid": true,
+      "skip": [
+        15
+      ],
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the outer gallery round the drum, walked behind its arcade (the stair turret stands in one bay of it)"
+    },
+    "gallery arcade": {
+      "type": "ring",
+      "count": 48,
+      "rOuter": 12.4,
+      "rInner": 12.0,
+      "height": 5.4,
+      "y": 48.5,
+      "turn": 0.5,
+      "glass": false,
+      "skip": [
+        29,
+        30
+      ],
+      "opening": {
+        "width": 1.0,
+        "sill": 1.0,
+        "springing": 3.6,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the open arcade round the outer gallery, its sills the parapet"
+    },
+    "gallery roof": {
+      "type": "ring",
+      "count": 24,
+      "rOuter": 13.3,
+      "rInner": 9.6,
+      "height": 0.4,
+      "y": 53.9,
+      "turn": 0,
+      "solid": true,
+      "flatRoof": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the cornice over the arcade, the gallery's ceiling: the dome stands behind it"
+    },
+    "gallery interior": {
+      "type": "interior",
+      "plan": {
+        "sides": 16,
+        "radius": 8.8
+      },
+      "height": 5.8,
+      "at": [
+        [
+          0,
+          48.5,
+          0,
+          0
+        ]
+      ],
+      "_about": "the gallery storey's space, up to the dome's springing"
+    },
+    "dome stair": {
+      "type": "component",
+      "use": "components/round-stair-tower",
+      "params": {
+        "R": 1.9,
+        "wall": 0.35,
+        "H": 20.0,
+        "n": 8,
+        "steps": 99,
+        "doorBay": 5,
+        "stageH": 5.4,
+        "doorW": 1.2,
+        "archW": 1.0,
+        "newel": 0.2
+      },
+      "at": [
+        [
+          -7.99,
+          28.5,
+          -7.99,
+          0
+        ]
+      ],
+      "build": [
+        "shaft",
+        "shaft door",
+        "stair",
+        "belvedere",
+        "belvedere door"
+      ],
+      "_about": "the stair turret against the drum, over the south-west crossing pier: from the deck round the drum's foot up to the outer gallery"
+    },
+    "east front aisle front": {
       "type": "wall",
-      "width": 5.6,
-      "height": 13.0,
-      "thickness": 1.4,
-      "openings": [
+      "width": 9.45,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
         {
-          "at": 2.8,
-          "width": 2.4,
-          "sill": 0,
-          "springing": 6.0,
-          "head": {
-            "profile": "semicircular"
-          }
+          "h": 5.5,
+          "openings": [
+            {
+              "at": -2.363,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": 2.363,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": -2.363,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": 2.363,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
         }
       ],
       "at": [
         [
-          -9.6,
+          15.575,
           0,
-          39.8,
+          25.2,
+          0
+        ]
+      ],
+      "_about": "the aisles' outer walls, from the ground to their flat roofs: tall round-headed windows, the crypt's small lights under them"
+    },
+    "east front aisle side": {
+      "type": "wall",
+      "width": 4.7,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          20.3,
+          0,
+          22.85,
           1.5707963267948966
+        ]
+      ]
+    },
+    "east transept aisle front": {
+      "type": "wall",
+      "width": 4.7,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          22.65,
+          0,
+          20.5,
+          0
+        ]
+      ]
+    },
+    "east transept aisle south": {
+      "type": "wall",
+      "width": 9.65,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 2.412,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -2.413,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 2.412,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -2.413,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          25.0,
+          0,
+          15.675,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "east transept aisle north": {
+      "type": "wall",
+      "width": 9.65,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 2.413,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -2.412,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 2.413,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -2.412,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          25.0,
+          0,
+          -15.675,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "east transept aisle back": {
+      "type": "wall",
+      "width": 3.3,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          23.35,
+          0,
+          -19.2,
+          0
+        ]
+      ]
+    },
+    "east choir aisle side": {
+      "type": "wall",
+      "width": 7.8,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 1.95,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -1.95,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 1.95,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -1.95,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          21.7,
+          0,
+          -24.4,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "east choir aisle back": {
+      "type": "wall",
+      "width": 3.5,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          19.95,
+          0,
+          -28.3,
+          0
+        ]
+      ]
+    },
+    "east choir aisle end": {
+      "type": "wall",
+      "width": 2.0,
+      "thickness": 1.2,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          18.2,
+          0,
+          -30.6,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "east aisle roof 1": {
+      "type": "box",
+      "width": 9.45,
+      "length": 5.1,
+      "height": 0.6,
+      "at": [
+        [
+          15.575,
+          19.9,
+          22.65,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the aisles' flat roofs, over their ceilings"
+    },
+    "east aisle roof 2": {
+      "type": "box",
+      "width": 4.9,
+      "length": 9.65,
+      "height": 0.6,
+      "at": [
+        [
+          22.55,
+          19.9,
+          15.675,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "east aisle roof 3": {
+      "type": "box",
+      "width": 4.9,
+      "length": 9.65,
+      "height": 0.6,
+      "at": [
+        [
+          22.55,
+          19.9,
+          -15.675,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "east aisle roof 4": {
+      "type": "box",
+      "width": 10.85,
+      "length": 8.2,
+      "height": 0.6,
+      "at": [
+        [
+          16.275,
+          19.9,
+          -24.2,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "east aisle roof 5": {
+      "type": "box",
+      "width": 7.35,
+      "length": 3.3,
+      "height": 0.6,
+      "at": [
+        [
+          14.525,
+          19.9,
+          -29.95,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "east choir aisle terrace": {
+      "type": "box",
+      "width": 7.35,
+      "length": 11.5,
+      "height": 8.0,
+      "at": [
+        [
+          14.525,
+          20.5,
+          -25.85,
+          0
+        ]
+      ],
+      "walked": true,
+      "_about": "the choir aisles' upper masonry behind the back corner towers (OSM's 24 m block), its top a terrace walked from the stair turret to the gutter walks and round the apse"
+    },
+    "west front aisle front": {
+      "type": "wall",
+      "width": 9.45,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": -2.363,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": 2.363,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": -2.363,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": 2.363,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -15.575,
+          0,
+          25.2,
+          0
+        ]
+      ]
+    },
+    "west front aisle side": {
+      "type": "wall",
+      "width": 4.7,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -19.0,
+          0,
+          22.85,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "west transept aisle front": {
+      "type": "wall",
+      "width": 4.7,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -22.65,
+          0,
+          20.5,
+          0
+        ]
+      ]
+    },
+    "west transept aisle south": {
+      "type": "wall",
+      "width": 9.65,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 2.412,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -2.413,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 2.412,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -2.413,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -23.7,
+          0,
+          15.675,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "west transept aisle north": {
+      "type": "wall",
+      "width": 9.65,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 2.413,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -2.412,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 2.413,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -2.412,
+              "width": 2.4,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -23.7,
+          0,
+          -15.675,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "west transept aisle back": {
+      "type": "wall",
+      "width": 3.3,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -23.35,
+          0,
+          -19.2,
+          0
+        ]
+      ]
+    },
+    "west choir aisle side": {
+      "type": "wall",
+      "width": 7.8,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.6,
+              "sill": 0,
+              "springing": 2.6,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 1.95,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            {
+              "at": -1.95,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -20.4,
+          0,
+          -24.4,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "west choir aisle back": {
+      "type": "wall",
+      "width": 3.5,
+      "thickness": 1.3,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -19.95,
+          0,
+          -28.3,
+          0
+        ]
+      ]
+    },
+    "west choir aisle end": {
+      "type": "wall",
+      "width": 2.0,
+      "thickness": 1.2,
+      "height": 20.5,
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 15.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.8,
+              "sill": 3.2,
+              "springing": 10.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -17.0,
+          0,
+          -30.6,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "west aisle roof 1": {
+      "type": "box",
+      "width": 9.45,
+      "length": 5.1,
+      "height": 0.6,
+      "at": [
+        [
+          -15.575,
+          19.9,
+          22.65,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "west aisle roof 2": {
+      "type": "box",
+      "width": 4.9,
+      "length": 9.65,
+      "height": 0.6,
+      "at": [
+        [
+          -22.55,
+          19.9,
+          15.675,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "west aisle roof 3": {
+      "type": "box",
+      "width": 4.9,
+      "length": 9.65,
+      "height": 0.6,
+      "at": [
+        [
+          -22.55,
+          19.9,
+          -15.675,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "west aisle roof 4": {
+      "type": "box",
+      "width": 10.85,
+      "length": 8.2,
+      "height": 0.6,
+      "at": [
+        [
+          -16.275,
+          19.9,
+          -24.2,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "west aisle roof 5": {
+      "type": "box",
+      "width": 7.35,
+      "length": 3.3,
+      "height": 0.6,
+      "at": [
+        [
+          -14.525,
+          19.9,
+          -29.95,
+          0
+        ]
+      ],
+      "flatRoof": true
+    },
+    "west choir aisle terrace": {
+      "type": "box",
+      "width": 7.35,
+      "length": 11.5,
+      "height": 8.0,
+      "at": [
+        [
+          -14.525,
+          20.5,
+          -25.85,
+          0
+        ]
+      ],
+      "walked": true
+    },
+    "apse crypt": {
+      "type": "ring",
+      "count": 14,
+      "rOuter": 10.6,
+      "rInner": 8.0,
+      "height": 5.5,
+      "y": 0,
+      "turn": 0,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "place": [
+        [
+          0,
+          0,
+          -31.6,
+          0
+        ]
+      ],
+      "glass": false,
+      "opening": {
+        "width": 2.4,
+        "sill": 0,
+        "springing": 2.4,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "the apse's wall in the crypt, arched into the crypt's ambulatory"
+    },
+    "apse arcade": {
+      "type": "ring",
+      "count": 14,
+      "rOuter": 10.6,
+      "rInner": 8.0,
+      "height": 10.0,
+      "y": 5.5,
+      "turn": 0,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "place": [
+        [
+          0,
+          0,
+          -31.6,
+          0
+        ]
+      ],
+      "glass": false,
+      "opening": {
+        "width": 2.8,
+        "sill": 0,
+        "springing": 7.4,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "the apse's arcade into the ambulatory, an arch a bay"
+    },
+    "apse upper wall": {
+      "type": "ring",
+      "count": 14,
+      "rOuter": 10.6,
+      "rInner": 8.0,
+      "height": 4.2,
+      "y": 15.5,
+      "turn": 0,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "place": [
+        [
+          0,
+          0,
+          -31.6,
+          0
+        ]
+      ],
+      "solid": true,
+      "_about": "the apse's wall over the arcade, up to the half dome"
+    },
+    "apse half dome": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 14,
+      "radius": 10.6,
+      "thickness": 2.6,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        [
+          0,
+          19.7,
+          -31.6,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the apse's half dome, its crown the choir barrel's: inside, the great mosaic of Christ in Majesty"
+    },
+    "apse roof": {
+      "type": "dome",
+      "sweep": 0.5,
+      "sides": 14,
+      "radius": 11.0,
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": 9.0
+      },
+      "at": [
+        [
+          0,
+          28.5,
+          -31.6,
+          3.141592653589793
+        ]
+      ],
+      "_about": "the half-cone stone roof over the apse, to the choir roof's ridge"
+    },
+    "ambulatory vault": {
+      "type": "vault",
+      "count": 14,
+      "rOuter": 17.0,
+      "rInner": 10.6,
+      "springing": 13.0,
+      "top": 17.0,
+      "head": {
+        "profile": "semicircular"
+      },
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "place": [
+        [
+          0,
+          0,
+          -31.6,
+          0
+        ]
+      ],
+      "_about": "the ambulatory's barrel vault, round the apse"
+    },
+    "ambulatory upper": {
+      "type": "ring",
+      "count": 14,
+      "rOuter": 17.0,
+      "rInner": 10.6,
+      "height": 11.1,
+      "y": 17.0,
+      "turn": 0,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "place": [
+        [
+          0,
+          0,
+          -31.6,
+          0
+        ]
+      ],
+      "solid": true,
+      "_about": "the masonry over the ambulatory's vault (the gallery storey of OSM's 24 m ring)"
+    },
+    "ambulatory roof": {
+      "type": "ring",
+      "count": 14,
+      "rOuter": 18.2,
+      "rInner": 10.6,
+      "height": 0.4,
+      "y": 28.1,
+      "turn": 0,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "place": [
+        [
+          0,
+          0,
+          -31.6,
+          0
+        ]
+      ],
+      "solid": true,
+      "walked": true,
+      "_about": "the ambulatory's flat roof, walked round the apse"
+    },
+    "ambulatory wall": {
+      "type": "ring",
+      "count": 14,
+      "rOuter": 18.2,
+      "rInner": 17.0,
+      "height": 28.1,
+      "y": 0,
+      "turn": 0,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "place": [
+        [
+          0,
+          0,
+          -31.6,
+          0
+        ]
+      ],
+      "glass": false,
+      "opening": {
+        "width": 4.0,
+        "sill": 0,
+        "springing": 13.5,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "the ambulatory's outer wall: an arch into each chapel (and in the crypt, into the crypt's chapels under them)"
+    },
+    "ambulatory crypt floor": {
+      "type": "ring",
+      "count": 14,
+      "rOuter": 18.2,
+      "rInner": 8.0,
+      "height": 0.6,
+      "y": 4.9,
+      "turn": 0,
+      "at": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "place": [
+        [
+          0,
+          0,
+          -31.6,
+          0
+        ]
+      ],
+      "solid": true,
+      "walked": true,
+      "_about": "the floor of the ambulatory and the apse over the crypt"
+    },
+    "crypt chapels": {
+      "type": "component",
+      "use": "components/apse",
+      "params": {
+        "R": 3.2,
+        "T": 0.8,
+        "H": 4.9,
+        "n": 12,
+        "winW": 0.8,
+        "winSill": 1.6,
+        "winH": 1.6
+      },
+      "at": [
+        [
+          17.159,
+          0,
+          -35.516,
+          1.795
         ],
         [
-          11.0,
+          13.76,
           0,
-          39.8,
+          -42.573,
+          2.244
+        ],
+        [
+          7.636,
+          0,
+          -47.457,
+          2.693
+        ],
+        [
+          -7.636,
+          0,
+          -47.457,
+          3.59
+        ],
+        [
+          -13.76,
+          0,
+          -42.573,
+          4.039
+        ],
+        [
+          -17.159,
+          0,
+          -35.516,
+          4.488
+        ]
+      ],
+      "build": [
+        "walls"
+      ],
+      "_about": "the crypt's six chapels under the church's"
+    },
+    "chapels": {
+      "type": "component",
+      "use": "components/apse",
+      "params": {
+        "R": 3.2,
+        "T": 0.8,
+        "H": 11.2,
+        "n": 12,
+        "winW": 1.1,
+        "winSill": 3.8,
+        "winH": 4.4,
+        "domeT": 0.8
+      },
+      "at": [
+        [
+          17.159,
+          5.5,
+          -35.516,
+          1.795
+        ],
+        [
+          13.76,
+          5.5,
+          -42.573,
+          2.244
+        ],
+        [
+          7.636,
+          5.5,
+          -47.457,
+          2.693
+        ],
+        [
+          -7.636,
+          5.5,
+          -47.457,
+          3.59
+        ],
+        [
+          -13.76,
+          5.5,
+          -42.573,
+          4.039
+        ],
+        [
+          -17.159,
+          5.5,
+          -35.516,
+          4.488
+        ]
+      ],
+      "build": [
+        "walls",
+        "half dome"
+      ],
+      "_about": "the six radiating chapels round the ambulatory, each a half round of windows under its stone half dome (the seventh, the axial one, is the campanile's foot)"
+    },
+    "chapel floors": {
+      "type": "prism",
+      "walked": true,
+      "plan": {
+        "points": [
+          [
+            -3.6,
+            0.0
+          ],
+          [
+            -3.477,
+            0.932
+          ],
+          [
+            -3.118,
+            1.8
+          ],
+          [
+            -2.546,
+            2.546
+          ],
+          [
+            -1.8,
+            3.118
+          ],
+          [
+            -0.932,
+            3.477
+          ],
+          [
+            0.0,
+            3.6
+          ],
+          [
+            0.932,
+            3.477
+          ],
+          [
+            1.8,
+            3.118
+          ],
+          [
+            2.546,
+            2.546
+          ],
+          [
+            3.118,
+            1.8
+          ],
+          [
+            3.477,
+            0.932
+          ],
+          [
+            3.6,
+            0.0
+          ]
+        ]
+      },
+      "height": 0.6,
+      "at": [
+        [
+          17.159,
+          4.9,
+          -35.516,
+          1.795
+        ],
+        [
+          13.76,
+          4.9,
+          -42.573,
+          2.244
+        ],
+        [
+          7.636,
+          4.9,
+          -47.457,
+          2.693
+        ],
+        [
+          -7.636,
+          4.9,
+          -47.457,
+          3.59
+        ],
+        [
+          -13.76,
+          4.9,
+          -42.573,
+          4.039
+        ],
+        [
+          -17.159,
+          4.9,
+          -35.516,
+          4.488
+        ]
+      ],
+      "_about": "the chapels' floors over the crypt's"
+    },
+    "campanile": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          13.2,
+          12.7
+        ]
+      },
+      "thickness": 1.2,
+      "height": 57.5,
+      "at": [
+        [
+          0,
+          0,
+          -54.35,
+          0
+        ]
+      ],
+      "tiers": [
+        {
+          "h": 5.5,
+          "openings": [
+            {
+              "at": 0,
+              "width": 1.2,
+              "sill": 1.6,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 12.0,
+          "openings": [
+            {
+              "at": 0,
+              "width": 2.4,
+              "sill": 3.0,
+              "springing": 8.6,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          ]
+        },
+        {
+          "h": 26.5,
+          "openings": {
+            "pattern": "2",
+            "width": 1.0,
+            "gap": 2.8,
+            "sill": 8.0,
+            "springing": 19.0,
+            "head": {
+              "profile": "semicircular"
+            }
+          }
+        },
+        {
+          "openings": {
+            "pattern": "3",
+            "width": 2.3,
+            "gap": 1.0,
+            "sill": 1.4,
+            "springing": 9.6,
+            "head": {
+              "profile": "semicircular"
+            }
+          },
+          "glass": false
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": 5.5,
+            "openings": [
+              {
+                "at": 0,
+                "width": 2.2,
+                "sill": 0,
+                "springing": 2.4,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": 12.0,
+            "openings": [
+              {
+                "at": 0,
+                "width": 4.0,
+                "sill": 0,
+                "springing": 8.0,
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": 26.5,
+            "openings": {
+              "pattern": "2",
+              "width": 1.0,
+              "gap": 2.8,
+              "sill": 8.0,
+              "springing": 19.0,
+              "head": {
+                "profile": "semicircular"
+              }
+            }
+          },
+          {
+            "openings": {
+              "pattern": "3",
+              "width": 2.3,
+              "gap": 1.0,
+              "sill": 1.4,
+              "springing": 9.6,
+              "head": {
+                "profile": "semicircular"
+              }
+            },
+            "glass": false
+          }
+        ]
+      },
+      "glass": true,
+      "courses": {
+        "strings": [
+          17.5,
+          44.0
+        ]
+      },
+      "_about": "the campanile's square shaft: the axial chapel at its foot (the arch from the ambulatory), the long shaft of paired lights, the open belfry"
+    },
+    "campanile chapel ceiling": {
+      "type": "box",
+      "width": 10.799999999999999,
+      "length": 10.299999999999999,
+      "height": 0.8,
+      "at": [
+        [
+          0,
+          17.5,
+          -54.35,
+          0
+        ]
+      ],
+      "_about": "the axial chapel's ceiling"
+    },
+    "campanile floor": {
+      "type": "box",
+      "walked": true,
+      "width": 10.799999999999999,
+      "length": 10.299999999999999,
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          4.9,
+          -54.35,
+          0
+        ]
+      ]
+    },
+    "belfry floor": {
+      "type": "box",
+      "flatRoof": true,
+      "width": 10.799999999999999,
+      "length": 10.299999999999999,
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          43.4,
+          -54.35,
+          0
+        ]
+      ],
+      "_about": "the belfry's floor"
+    },
+    "savoyarde": {
+      "type": "dome",
+      "sides": 24,
+      "radius": 1.55,
+      "thickness": 0,
+      "head": {
+        "profile": "bell",
+        "waist": 0.62,
+        "lift": 1.0
+      },
+      "at": [
+        [
+          0,
+          46.2,
+          -54.35,
+          0
+        ]
+      ],
+      "_about": "La Savoyarde, the great bell (18.8 t, 3 m across), hung in the belfry"
+    },
+    "bell frame": {
+      "type": "box",
+      "width": 5.0,
+      "length": 0.6,
+      "height": 0.6,
+      "at": [
+        [
+          0,
+          49.6,
+          -54.35,
+          0
+        ]
+      ]
+    },
+    "bell posts": {
+      "type": "box",
+      "width": 0.5,
+      "length": 0.6,
+      "height": 5.6,
+      "at": [
+        [
+          -2.3,
+          44.0,
+          -54.35,
+          0
+        ],
+        [
+          2.3,
+          44.0,
+          -54.35,
+          0
+        ]
+      ]
+    },
+    "campanile buttresses": {
+      "type": "column",
+      "radius": 1.0,
+      "height": 57.5,
+      "sides": 8,
+      "at": [
+        [
+          -6.449999999999999,
+          0,
+          -60.55,
+          0.393
+        ],
+        [
+          -6.449999999999999,
+          0,
+          -48.15,
+          0.393
+        ],
+        [
+          6.449999999999999,
+          0,
+          -60.55,
+          0.393
+        ],
+        [
+          6.449999999999999,
+          0,
+          -48.15,
+          0.393
+        ]
+      ],
+      "_about": "the buttresses at its corners, running up into pinnacles"
+    },
+    "campanile cornice": {
+      "type": "box",
+      "width": 14.799999999999999,
+      "length": 14.299999999999999,
+      "height": 1.0,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          57.5,
+          -54.35,
+          0
+        ]
+      ],
+      "_about": "the belfry's cornice"
+    },
+    "campanile pinnacles": {
+      "type": "pinnacle",
+      "w": 1.4,
+      "h": 2.0,
+      "s": 4.0,
+      "sides": 8,
+      "at": [
+        [
+          -6.449999999999999,
+          58.5,
+          -60.55,
+          0
+        ],
+        [
+          -6.449999999999999,
+          58.5,
+          -48.15,
+          0
+        ],
+        [
+          6.449999999999999,
+          58.5,
+          -60.55,
+          0
+        ],
+        [
+          6.449999999999999,
+          58.5,
+          -48.15,
+          0
+        ]
+      ]
+    },
+    "campanile stage": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          9.0,
+          9.0
+        ]
+      },
+      "thickness": 0.9,
+      "height": 9.0,
+      "at": [
+        [
+          0,
+          58.5,
+          -54.35,
+          0
+        ]
+      ],
+      "glass": false,
+      "openings": {
+        "pattern": "3",
+        "width": 1.4,
+        "gap": 0.9,
+        "sill": 1.2,
+        "springing": 5.6,
+        "head": {
+          "profile": "semicircular"
+        }
+      },
+      "_about": "the arcaded stage over the belfry"
+    },
+    "campanile stage cornice": {
+      "type": "box",
+      "width": 10.0,
+      "length": 10.0,
+      "height": 0.7,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          67.5,
+          -54.35,
+          0
+        ]
+      ]
+    },
+    "campanile dome": {
+      "type": "component",
+      "use": "components/drum-dome",
+      "params": {
+        "R": 3.2,
+        "dt": 0.5,
+        "H": 3.4,
+        "n": 8,
+        "every": 1,
+        "winW": 0.9,
+        "winSill": 0.6,
+        "winH": 1.8,
+        "profile": "pointed",
+        "spread": 1.4,
+        "domeT": 0.3,
+        "ribsN": 8,
+        "ribW": 0.25,
+        "lanternR": 0.85,
+        "lanternH": 3.4,
+        "lanternSides": 8
+      },
+      "at": [
+        [
+          0,
+          68.2,
+          -54.35,
+          0
+        ]
+      ],
+      "build": [
+        "drum",
+        "dome",
+        "ribs",
+        "ribbed lantern",
+        "lantern columns",
+        "lantern spire",
+        "lantern ball",
+        "lantern cross",
+        "lantern cross arm"
+      ],
+      "_about": "its little drum and egg dome, the lantern and the cross"
+    },
+    "campanile interior": {
+      "type": "interior",
+      "plan": {
+        "rect": [
+          12.0,
+          11.5
+        ]
+      },
+      "height": 12.0,
+      "at": [
+        [
+          0,
+          5.5,
+          -54.35,
+          0
+        ]
+      ],
+      "_about": "the axial chapel in the campanile's foot"
+    },
+    "porch floor": {
+      "type": "box",
+      "width": 19.2,
+      "length": 4.4,
+      "height": 5.5,
+      "at": [
+        [
+          0.0,
+          0,
+          31.1,
+          0
+        ]
+      ],
+      "walked": true,
+      "_about": "the porch's floor, a step over the parvis"
+    },
+    "porch arcade": {
+      "type": "wall",
+      "width": 19.2,
+      "thickness": 1.5,
+      "height": 9.0,
+      "tiers": [
+        {
+          "h": 9.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 3.8,
+              "sill": 0,
+              "springing": 5.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": -5.75,
+              "width": 3.8,
+              "sill": 0,
+              "springing": 5.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            },
+            {
+              "at": 5.75,
+              "width": 3.8,
+              "sill": 0,
+              "springing": 5.0,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          0.0,
+          5.5,
+          33.3,
+          0
+        ]
+      ],
+      "_about": "the porch: three round arches on the parvis (after Saint-Front at Perigueux)"
+    },
+    "porch east side": {
+      "type": "wall",
+      "width": 2.9,
+      "thickness": 1.5,
+      "height": 9.0,
+      "tiers": [
+        {
+          "h": 9.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.6,
+              "sill": 0,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          9.6,
+          5.5,
+          30.35,
+          1.5707963267948966
+        ]
+      ]
+    },
+    "porch west side": {
+      "type": "wall",
+      "width": 2.9,
+      "thickness": 1.5,
+      "height": 9.0,
+      "tiers": [
+        {
+          "h": 9.0,
+          "openings": [
+            {
+              "at": 0.0,
+              "width": 1.6,
+              "sill": 0,
+              "springing": 3.4,
+              "head": {
+                "profile": "semicircular"
+              },
+              "glass": false
+            }
+          ]
+        }
+      ],
+      "at": [
+        [
+          -8.1,
+          5.5,
+          30.35,
           1.5707963267948966
         ]
       ]
     },
     "porch roof": {
       "type": "box",
-      "width": 22.0,
-      "length": 7.0,
+      "width": 19.2,
+      "length": 4.4,
+      "height": 0.8,
+      "at": [
+        [
+          0.0,
+          14.5,
+          31.1,
+          0
+        ]
+      ],
+      "flatRoof": true,
+      "_about": "the porch's roof, a terrace behind its balustrade"
+    },
+    "porch balustrade": {
+      "type": "wall",
+      "width": 19.2,
+      "thickness": 0.4,
+      "height": 1.1,
+      "at": [
+        [
+          0,
+          15.3,
+          33.3,
+          0
+        ]
+      ],
+      "openings": {
+        "pattern": "15",
+        "width": 0.7,
+        "gap": 0.5,
+        "sill": 0.25,
+        "springing": 0.85,
+        "head": {
+          "profile": "flat"
+        }
+      },
+      "glass": false,
+      "_about": "the balustrade along the porch's roof"
+    },
+    "statue piers": {
+      "type": "box",
+      "width": 1.95,
+      "length": 4.4,
+      "height": 12.0,
+      "at": [
+        [
+          -8.625,
+          5.5,
+          31.1,
+          0
+        ]
+      ],
+      "_about": "the porch's corner piers, rising over its roof to carry the two equestrian statues"
+    },
+    "statue piers east": {
+      "type": "box",
+      "width": 1.95,
+      "length": 4.4,
+      "height": 12.0,
+      "at": [
+        [
+          8.625,
+          5.5,
+          31.1,
+          0
+        ]
+      ]
+    },
+    "statue plinths": {
+      "type": "box",
+      "width": 2.4,
+      "length": 3.6,
+      "height": 0.6,
+      "at": [
+        [
+          -8.625,
+          17.5,
+          32.1,
+          0
+        ],
+        [
+          8.625,
+          17.5,
+          32.1,
+          0
+        ]
+      ],
+      "_about": "the statues' plinths, run forward of the piers clear of the turrets behind"
+    },
+    "saint louis": {
+      "type": "component",
+      "use": "components/equestrian",
+      "params": {
+        "S": 1.5,
+        "kind": "man",
+        "seed": 31,
+        "pose": "enthroned",
+        "stone": "bronze",
+        "style": "gothic",
+        "holdR": "items/weapons/sword"
+      },
+      "at": [
+        [
+          -8.625,
+          18.1,
+          32.0,
+          0
+        ]
+      ],
+      "_about": "the bronze equestrian statues by Hippolyte Lefebvre on the porch's corners: Saint Louis to the west (left as one faces the front), sword raised"
+    },
+    "joan of arc": {
+      "type": "component",
+      "use": "components/equestrian",
+      "params": {
+        "S": 1.5,
+        "kind": "woman",
+        "seed": 12,
+        "pose": "enthroned",
+        "stone": "bronze",
+        "style": "gothic",
+        "holdR": "items/weapons/sword"
+      },
+      "at": [
+        [
+          8.625,
+          18.1,
+          32.0,
+          0
+        ]
+      ],
+      "_about": "Joan of Arc to the east, sword raised"
+    },
+    "facade turrets": {
+      "type": "column",
+      "radius": 1.15,
+      "height": 33.0,
+      "sides": 8,
+      "at": [
+        [
+          -9.0,
+          0,
+          29.1,
+          0.393
+        ],
+        [
+          9.0,
+          0,
+          29.1,
+          0.393
+        ]
+      ],
+      "_about": "the slender turrets either side of the gable, their small domes over the roof's eaves (OSM: 33 m)"
+    },
+    "facade turret domes": {
+      "type": "dome",
+      "sides": 8,
+      "radius": 1.35,
+      "thickness": 0,
+      "head": {
+        "profile": "pointed",
+        "spread": 1.2
+      },
+      "at": [
+        [
+          -9.0,
+          33.0,
+          29.1,
+          0
+        ],
+        [
+          9.0,
+          33.0,
+          29.1,
+          0
+        ]
+      ]
+    },
+    "facade turret finials": {
+      "type": "pinnacle",
+      "w": 0.35,
+      "h": 0.4,
+      "s": 1.6,
+      "sides": 8,
+      "at": [
+        [
+          -9.0,
+          36.2,
+          29.1,
+          0
+        ],
+        [
+          9.0,
+          36.2,
+          29.1,
+          0
+        ]
+      ]
+    },
+    "sacred heart niche": {
+      "type": "box",
+      "width": 5.8,
+      "length": 1.3,
+      "height": 8.0,
+      "at": [
+        [
+          0.0,
+          28.9,
+          29.55,
+          0
+        ]
+      ],
+      "_about": "the aedicule on the gable, the Sacred Heart standing before it (OSM: 35.5 m)"
+    },
+    "sacred heart niche roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": 6.4,
+      "length": 1.8,
+      "pitch": 32,
+      "overhang": 0.1,
+      "at": [
+        [
+          0,
+          36.9,
+          29.55,
+          0
+        ]
+      ]
+    },
+    "sacred heart ledge": {
+      "type": "box",
+      "width": 3.2,
+      "length": 0.9,
+      "height": 0.5,
+      "at": [
+        [
+          0.0,
+          28.9,
+          30.65,
+          0
+        ]
+      ]
+    },
+    "sacred heart": {
+      "type": "marker",
+      "role": "statue",
+      "at": [
+        [
+          0,
+          29.4,
+          30.65,
+          0
+        ]
+      ],
+      "data": {
+        "kind": "man",
+        "pose": "blessing",
+        "style": "roman",
+        "stone": "limestone",
+        "scale": 2.4,
+        "seed": 7,
+        "face": -1.5707963
+      },
+      "_about": "Christ of the Sacred Heart blessing, over the front"
+    },
+    "parvis": {
+      "type": "box",
+      "width": 48.0,
+      "length": 14.7,
+      "height": 4.5,
+      "at": [
+        [
+          0.0,
+          0,
+          40.65,
+          0
+        ]
+      ],
+      "walked": true,
+      "_about": "the parvis before the porch, a terrace over the hill on blind arches"
+    },
+    "porch steps": {
+      "type": "flight",
+      "width": 19.2,
+      "run": 0.34,
+      "rise": 0.17,
+      "base": 4.5,
+      "top": 5.5,
+      "landing": 0,
+      "at": [
+        [
+          9.6,
+          0,
+          35.34,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the steps from the parvis up to the porch"
+    },
+    "great flight": {
+      "type": "flight",
+      "width": 14.0,
+      "run": 0.36,
+      "rise": 0.167,
+      "base": 0,
+      "top": 4.5,
+      "landing": 0,
+      "at": [
+        [
+          7.0,
+          0,
+          57.72,
+          1.5707963267948966
+        ]
+      ],
+      "_about": "the broad flight from the hill up to the parvis"
+    },
+    "roof stair": {
+      "type": "component",
+      "use": "components/round-stair-tower",
+      "params": {
+        "R": 2.4,
+        "wall": 0.5,
+        "H": 28.5,
+        "n": 12,
+        "steps": 156,
+        "doorBay": 9,
+        "stageH": 3.2,
+        "capRise": 3.6
+      },
+      "at": [
+        [
+          -24.75,
+          0,
+          -24.4,
+          0
+        ]
+      ],
+      "_about": "the stair turret in the back west angle, its door to the west at the ground: 156 steps up to the high terraces, its belvedere and cone over them"
+    },
+    "roof stair bridge": {
+      "type": "box",
+      "width": 4.35,
+      "length": 1.8,
+      "height": 8.0,
+      "at": [
+        [
+          -20.375,
+          20.5,
+          -24.4,
+          0
+        ]
+      ],
+      "walked": true,
+      "_about": "the bridge from the turret's door over the aisle's roof to the choir aisle terrace"
+    },
+    "church floor": {
+      "type": "prism",
+      "walked": true,
+      "plan": {
+        "points": [
+          [
+            0,
+            28.25
+          ],
+          [
+            10.85,
+            28.25
+          ],
+          [
+            10.85,
+            24.55
+          ],
+          [
+            19.65,
+            24.55
+          ],
+          [
+            19.65,
+            19.85
+          ],
+          [
+            24.35,
+            19.85
+          ],
+          [
+            24.35,
+            -19.85
+          ],
+          [
+            21.05,
+            -19.85
+          ],
+          [
+            21.05,
+            -28.95
+          ],
+          [
+            17.6,
+            -28.95
+          ],
+          [
+            17.6,
+            -31.6
+          ],
+          [
+            17.262,
+            -35.034
+          ],
+          [
+            16.26,
+            -38.335
+          ],
+          [
+            14.634,
+            -41.378
+          ],
+          [
+            12.445,
+            -44.045
+          ],
+          [
+            9.778,
+            -46.234
+          ],
+          [
+            6.735,
+            -47.86
+          ],
+          [
+            3.434,
+            -48.862
+          ],
+          [
+            0.0,
+            -49.2
+          ],
+          [
+            -3.434,
+            -48.862
+          ],
+          [
+            -6.735,
+            -47.86
+          ],
+          [
+            -9.778,
+            -46.234
+          ],
+          [
+            -12.445,
+            -44.045
+          ],
+          [
+            -14.634,
+            -41.378
+          ],
+          [
+            -16.26,
+            -38.335
+          ],
+          [
+            -17.262,
+            -35.034
+          ],
+          [
+            -17.6,
+            -31.6
+          ],
+          [
+            -17.6,
+            -28.95
+          ],
+          [
+            -21.05,
+            -28.95
+          ],
+          [
+            -21.05,
+            -19.85
+          ],
+          [
+            -24.35,
+            -19.85
+          ],
+          [
+            -24.35,
+            19.85
+          ],
+          [
+            -19.65,
+            19.85
+          ],
+          [
+            -19.65,
+            24.55
+          ],
+          [
+            -10.85,
+            24.55
+          ],
+          [
+            -10.85,
+            28.25
+          ]
+        ]
+      },
       "height": 0.6,
       "at": [
         [
           0,
+          4.9,
+          0,
+          0
+        ]
+      ],
+      "_about": "the church's floor over the crypt"
+    },
+    "crypt floor": {
+      "type": "prism",
+      "walked": true,
+      "plan": {
+        "points": [
+          [
+            0,
+            28.25
+          ],
+          [
+            10.85,
+            28.25
+          ],
+          [
+            10.85,
+            24.55
+          ],
+          [
+            19.65,
+            24.55
+          ],
+          [
+            19.65,
+            19.85
+          ],
+          [
+            24.35,
+            19.85
+          ],
+          [
+            24.35,
+            -19.85
+          ],
+          [
+            21.05,
+            -19.85
+          ],
+          [
+            21.05,
+            -28.95
+          ],
+          [
+            17.6,
+            -28.95
+          ],
+          [
+            17.6,
+            -31.6
+          ],
+          [
+            17.262,
+            -35.034
+          ],
+          [
+            16.26,
+            -38.335
+          ],
+          [
+            14.634,
+            -41.378
+          ],
+          [
+            12.445,
+            -44.045
+          ],
+          [
+            9.778,
+            -46.234
+          ],
+          [
+            6.735,
+            -47.86
+          ],
+          [
+            3.434,
+            -48.862
+          ],
+          [
+            0.0,
+            -49.2
+          ],
+          [
+            -3.434,
+            -48.862
+          ],
+          [
+            -6.735,
+            -47.86
+          ],
+          [
+            -9.778,
+            -46.234
+          ],
+          [
+            -12.445,
+            -44.045
+          ],
+          [
+            -14.634,
+            -41.378
+          ],
+          [
+            -16.26,
+            -38.335
+          ],
+          [
+            -17.262,
+            -35.034
+          ],
+          [
+            -17.6,
+            -31.6
+          ],
+          [
+            -17.6,
+            -28.95
+          ],
+          [
+            -21.05,
+            -28.95
+          ],
+          [
+            -21.05,
+            -19.85
+          ],
+          [
+            -24.35,
+            -19.85
+          ],
+          [
+            -24.35,
+            19.85
+          ],
+          [
+            -19.65,
+            19.85
+          ],
+          [
+            -19.65,
+            24.55
+          ],
+          [
+            -10.85,
+            24.55
+          ],
+          [
+            -10.85,
+            28.25
+          ]
+        ]
+      },
+      "height": 0.05,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the crypt's floor"
+    },
+    "crypt piers": {
+      "type": "column",
+      "radius": 0.6,
+      "height": 4.9,
+      "sides": 8,
+      "at": [
+        [
+          -4.0,
+          0,
+          12.5,
+          0.393
+        ],
+        [
+          -4.0,
+          0,
+          18.0,
+          0.393
+        ],
+        [
+          -4.0,
+          0,
+          23.0,
+          0.393
+        ],
+        [
+          -4.0,
+          0,
+          -13.0,
+          0.393
+        ],
+        [
+          -4.0,
+          0,
+          -19.0,
+          0.393
+        ],
+        [
+          -4.0,
+          0,
+          -25.0,
+          0.393
+        ],
+        [
+          4.0,
+          0,
+          12.5,
+          0.393
+        ],
+        [
+          4.0,
+          0,
+          18.0,
+          0.393
+        ],
+        [
+          4.0,
+          0,
+          23.0,
+          0.393
+        ],
+        [
+          4.0,
+          0,
+          -13.0,
+          0.393
+        ],
+        [
+          4.0,
+          0,
+          -19.0,
+          0.393
+        ],
+        [
+          4.0,
+          0,
+          -25.0,
+          0.393
+        ],
+        [
           13.0,
-          40.5,
-          0
-        ]
-      ]
-    },
-    "statue Joan": {
-      "type": "component",
-      "use": "components/pedestal",
-      "params": {
-        "W": 1.6,
-        "L": 2.0,
-        "H": 2.2,
-        "scale": 2.0,
-        "stone": "bronze",
-        "style": "gothic",
-        "holdR": "items/weapons/sword",
-        "kind": "woman",
-        "seed": 12
-      },
-      "at": [
+          0,
+          -4.0,
+          0.393
+        ],
         [
-          -9.4,
-          13.6,
-          42.0,
-          0
+          13.0,
+          0,
+          4.0,
+          0.393
+        ],
+        [
+          18.0,
+          0,
+          -4.0,
+          0.393
+        ],
+        [
+          18.0,
+          0,
+          4.0,
+          0.393
+        ],
+        [
+          -13.0,
+          0,
+          -4.0,
+          0.393
+        ],
+        [
+          -13.0,
+          0,
+          4.0,
+          0.393
+        ],
+        [
+          -18.0,
+          0,
+          -4.0,
+          0.393
+        ],
+        [
+          -18.0,
+          0,
+          4.0,
+          0.393
+        ],
+        [
+          -4.0,
+          0,
+          -4.0,
+          0.393
+        ],
+        [
+          -4.0,
+          0,
+          4.0,
+          0.393
+        ],
+        [
+          4.0,
+          0,
+          -4.0,
+          0.393
+        ],
+        [
+          4.0,
+          0,
+          4.0,
+          0.393
+        ],
+        [
+          -15.0,
+          0,
+          -15.0,
+          0.393
+        ],
+        [
+          -15.0,
+          0,
+          15.0,
+          0.393
+        ],
+        [
+          15.0,
+          0,
+          -15.0,
+          0.393
+        ],
+        [
+          15.0,
+          0,
+          15.0,
+          0.393
         ]
       ],
-      "_about": "the two saints over the porch, Joan of Arc and Saint Louis, in bronze on their pedestals"
+      "_about": "the crypt's piers under the church's floor"
     },
-    "statue Louis": {
-      "type": "component",
-      "use": "components/pedestal",
-      "params": {
-        "W": 1.6,
-        "L": 2.0,
-        "H": 2.2,
-        "scale": 2.0,
-        "stone": "bronze",
-        "style": "gothic",
-        "holdR": "items/weapons/sword",
-        "kind": "man",
-        "seed": 31
-      },
-      "at": [
-        [
-          9.4,
-          13.6,
-          42.0,
-          0
+    "crypt interior": {
+      "type": "interior",
+      "plan": {
+        "points": [
+          [
+            0,
+            28.25
+          ],
+          [
+            10.85,
+            28.25
+          ],
+          [
+            10.85,
+            24.55
+          ],
+          [
+            19.65,
+            24.55
+          ],
+          [
+            19.65,
+            19.85
+          ],
+          [
+            24.35,
+            19.85
+          ],
+          [
+            24.35,
+            -19.85
+          ],
+          [
+            21.05,
+            -19.85
+          ],
+          [
+            21.05,
+            -28.95
+          ],
+          [
+            17.6,
+            -28.95
+          ],
+          [
+            17.6,
+            -31.6
+          ],
+          [
+            17.262,
+            -35.034
+          ],
+          [
+            16.26,
+            -38.335
+          ],
+          [
+            14.634,
+            -41.378
+          ],
+          [
+            12.445,
+            -44.045
+          ],
+          [
+            9.778,
+            -46.234
+          ],
+          [
+            6.735,
+            -47.86
+          ],
+          [
+            3.434,
+            -48.862
+          ],
+          [
+            0.0,
+            -49.2
+          ],
+          [
+            -3.434,
+            -48.862
+          ],
+          [
+            -6.735,
+            -47.86
+          ],
+          [
+            -9.778,
+            -46.234
+          ],
+          [
+            -12.445,
+            -44.045
+          ],
+          [
+            -14.634,
+            -41.378
+          ],
+          [
+            -16.26,
+            -38.335
+          ],
+          [
+            -17.262,
+            -35.034
+          ],
+          [
+            -17.6,
+            -31.6
+          ],
+          [
+            -17.6,
+            -28.95
+          ],
+          [
+            -21.05,
+            -28.95
+          ],
+          [
+            -21.05,
+            -19.85
+          ],
+          [
+            -24.35,
+            -19.85
+          ],
+          [
+            -24.35,
+            19.85
+          ],
+          [
+            -19.65,
+            19.85
+          ],
+          [
+            -19.65,
+            24.55
+          ],
+          [
+            -10.85,
+            24.55
+          ],
+          [
+            -10.85,
+            28.25
+          ]
         ]
-      ]
-    },
-    "campanile": {
-      "type": "component",
-      "use": "components/domed-tower",
-      "params": {
-        "sides": 4,
-        "R": 7.778099999999999,
-        "H": 54.0,
-        "t": 1.2,
-        "drumR": 3.6,
-        "drumH": 5.0,
-        "cap": "onion",
-        "bulge": 1.05,
-        "neck": 0.9,
-        "capR": 4.0,
-        "kok": 0.8,
-        "finial": 4.0,
-        "doorH": 4.0,
-        "winW": 1.4,
-        "glazed": 0
       },
+      "height": 4.9,
       "at": [
         [
           0,
           0,
-          -39.4,
-          1.5707963267948966
+          0,
+          0
         ]
       ],
-      "build": [
-        "tower",
-        "drum",
-        "cap",
-        "finial"
+      "_about": "the crypt: the church's plan a storey down"
+    },
+    "church interior": {
+      "type": "interior",
+      "plan": {
+        "points": [
+          [
+            0,
+            28.25
+          ],
+          [
+            10.85,
+            28.25
+          ],
+          [
+            10.85,
+            24.55
+          ],
+          [
+            19.65,
+            24.55
+          ],
+          [
+            19.65,
+            19.85
+          ],
+          [
+            24.35,
+            19.85
+          ],
+          [
+            24.35,
+            -19.85
+          ],
+          [
+            21.05,
+            -19.85
+          ],
+          [
+            21.05,
+            -28.95
+          ],
+          [
+            17.6,
+            -28.95
+          ],
+          [
+            17.6,
+            -31.6
+          ],
+          [
+            17.262,
+            -35.034
+          ],
+          [
+            16.26,
+            -38.335
+          ],
+          [
+            14.634,
+            -41.378
+          ],
+          [
+            12.445,
+            -44.045
+          ],
+          [
+            9.778,
+            -46.234
+          ],
+          [
+            6.735,
+            -47.86
+          ],
+          [
+            3.434,
+            -48.862
+          ],
+          [
+            0.0,
+            -49.2
+          ],
+          [
+            -3.434,
+            -48.862
+          ],
+          [
+            -6.735,
+            -47.86
+          ],
+          [
+            -9.778,
+            -46.234
+          ],
+          [
+            -12.445,
+            -44.045
+          ],
+          [
+            -14.634,
+            -41.378
+          ],
+          [
+            -16.26,
+            -38.335
+          ],
+          [
+            -17.262,
+            -35.034
+          ],
+          [
+            -17.6,
+            -31.6
+          ],
+          [
+            -17.6,
+            -28.95
+          ],
+          [
+            -21.05,
+            -28.95
+          ],
+          [
+            -21.05,
+            -19.85
+          ],
+          [
+            -24.35,
+            -19.85
+          ],
+          [
+            -24.35,
+            19.85
+          ],
+          [
+            -19.65,
+            19.85
+          ],
+          [
+            -19.65,
+            24.55
+          ],
+          [
+            -10.85,
+            24.55
+          ],
+          [
+            -10.85,
+            28.25
+          ]
+        ]
+      },
+      "height": 15.0,
+      "at": [
+        [
+          0,
+          5.5,
+          0,
+          0
+        ]
       ],
-      "_about": "the campanile behind the apse, the great bell (the Savoyarde) in its open belfry"
+      "_about": "the church up to the aisles' roofs: the cross, the corner bays, the aisles, the choir aisles and the ambulatory (the chapels' and the apse's own above)"
+    },
+    "nave interior": {
+      "type": "interior",
+      "plan": {
+        "points": [
+          [
+            9.425,
+            28.25
+          ],
+          [
+            -9.425,
+            28.25
+          ],
+          [
+            -9.425,
+            9.425
+          ],
+          [
+            -24.35,
+            9.425
+          ],
+          [
+            -24.35,
+            -9.425
+          ],
+          [
+            -9.425,
+            -9.425
+          ],
+          [
+            -9.425,
+            -31.6
+          ],
+          [
+            9.425,
+            -31.6
+          ],
+          [
+            9.425,
+            -9.425
+          ],
+          [
+            24.35,
+            -9.425
+          ],
+          [
+            24.35,
+            9.425
+          ],
+          [
+            9.425,
+            9.425
+          ]
+        ]
+      },
+      "height": 7.2,
+      "at": [
+        [
+          0,
+          20.5,
+          0,
+          0
+        ]
+      ],
+      "_about": "the arms over the aisles' roofs, under their barrels, to the pendentives' ring"
     }
   }
 }

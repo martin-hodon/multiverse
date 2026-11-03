@@ -51,36 +51,36 @@ const lerpC = (a, b, t) => {
 //   cards: { style, density (cards per leafy branch), size (m for a 14m tree; it grows with the tree), levels (leafy levels from the tips), flat (0..1: cards lying level, conifers) }
 //   fruit: { style (atlas cell), color, density (fruit cards per leafy branch), size } -- orchard trees, drawn exactly like the leaves
 const TREES = {
-  oak: { hRange: [16, 26], trunk: 0x5d4a37, leaf: [0x4d6b2e, 0x39561f], autumnC: 0xb0692a,
+  oak: { hRange: [16, 26], trunk: 0x5d4a37, leaf: [0x547a2d, 0x3e621d], autumnC: 0xb0692a,
     mode: "random", depth: 5, branches: 3, angle: 44, jitter: .5, lenRatio: .72, radRatio: .6, curve: -.05, trunkR: .085, wobble: .35, tilt: 4,
     cards: { style: "lobed", density: 6, size: 1.5, levels: 3 } },
-  birch: { hRange: [14, 22], trunk: 0xd6d3c9, bark: "barkH", leaf: [0x71903f, 0x587a30], autumnC: 0xd7a92f,
+  birch: { hRange: [14, 22], trunk: 0xd6d3c9, bark: "barkH", leaf: [0x7da43f, 0x608b2e], autumnC: 0xd7a92f,
     mode: "alternate", depth: 4, branches: 3, angle: 30, jitter: .4, lenRatio: .62, radRatio: .58, curve: .3, trunkR: .03, wobble: .3, tilt: 5,
     cards: { style: "ovate", density: 3, size: 1.2, levels: 2 } },
-  pine: { hRange: [22, 33], trunk: 0xa26b42, leaf: [0x3a5230, 0x2c4226], evergreen: true,
+  pine: { hRange: [22, 33], trunk: 0xa26b42, leaf: [0x3f5d33, 0x304b28], evergreen: true,
     mode: "whorled", depth: 3, branches: 5, angle: 52, jitter: .45, lenRatio: .52, radRatio: .5, curve: .08, trunkR: .025, wobble: .3, tilt: 6,
     cards: { style: "needles", density: 7, size: 1.5, levels: 2, flat: .6 } },
-  spruce: { hRange: [24, 38], trunk: 0x6a5140, leaf: [0x3a5a36, 0x2c4a2e], evergreen: true,
+  spruce: { hRange: [24, 38], trunk: 0x6a5140, leaf: [0x3e6739, 0x2f5431], evergreen: true,
     mode: "spruce", whorls: 14, depth: 3, branches: 3, angle: 35, jitter: .35, lenRatio: .6, radRatio: .55, curve: .12, trunkR: .016, wobble: .2, tilt: 2, twigSegs: 1,
     whorlLen: .16, cards: { style: "needles", density: 2, size: 1.6, levels: 2, flat: .7 } },
-  willow: { hRange: [9, 15], trunk: 0x6b5a45, leaf: [0x8aa25a, 0x6b8a45], autumnC: 0xc9b24a,
+  willow: { hRange: [9, 15], trunk: 0x6b5a45, leaf: [0x9bb95e, 0x769d47], autumnC: 0xc9b24a,
     mode: "weeping", depth: 4, branches: 3, angle: 40, jitter: .45, lenRatio: .72, radRatio: .6, curve: .55, trunkR: .075, wobble: .3, tilt: 7,
     cards: { style: "willow", density: 9, size: 1.7, levels: 2 } },
-  cypress: { hRange: [11, 19], trunk: 0x5e4a3a, leaf: [0x2f4a2c, 0x24402a], evergreen: true,   // the Italian cypress: a dark flame, branches swept up close round the leader
+  cypress: { hRange: [11, 19], trunk: 0x5e4a3a, leaf: [0x33542f, 0x26492d], evergreen: true,   // the Italian cypress: a dark flame, branches swept up close round the leader
     mode: "spruce", whorls: 20, depth: 3, branches: 3, angle: -22, jitter: .3, lenRatio: .45, radRatio: .5, curve: -.15, trunkR: .018, wobble: .12, tilt: 1, twigSegs: 1,
     whorlLen: .075, cards: { style: "needles", density: 3, size: 1.1, levels: 2, flat: .2 } },
-  maple: { hRange: [12, 22], trunk: 0x5a4636, leaf: [0x5f8f3a, 0x3f6e2a], autumnC: 0xc8401e,
+  maple: { hRange: [12, 22], trunk: 0x5a4636, leaf: [0x67a338, 0x427d28], autumnC: 0xc8401e,
     mode: "dichotomous", depth: 5, branches: 2, angle: 30, jitter: .45, lenRatio: .74, radRatio: .66, curve: -.08, trunkR: .065, wobble: .3, tilt: 4,
     cards: { style: "lobed", density: 6, size: 1.3, levels: 3 } },
   // warm species (not in the wild mix: only where a period asks for them, assets/world/periods.json `trees`)
-  palm: { hRange: [9, 16], trunk: 0x8a7458, bark: "barkH", leaf: [0x5f7f36, 0x4a682a], evergreen: true, warm: true,   // the date palm: a bare ringed bole, a crown of arching fronds
+  palm: { hRange: [9, 16], trunk: 0x8a7458, bark: "barkH", leaf: [0x699135, 0x517729], evergreen: true, warm: true,   // the date palm: a bare ringed bole, a crown of arching fronds
     mode: "palm", depth: 2, branches: 18, angle: 58, jitter: .35, lenRatio: .42, radRatio: .12, taper: .75, curve: 1.8, trunkR: .03, wobble: .15, tilt: 9,
     cards: { style: "willow", density: 10, size: 1.5, levels: 1 } },
   // orchard species (the village's orchard; not in the wild mix): low pruned crowns carrying fruit cards
-  apple: { hRange: [4, 6], trunk: 0x5a3d24, leaf: [0x4f8a3a, 0x3f7430], autumnC: 0xc09a3a, blossom: 0xf2d0d8, orchard: true,
+  apple: { hRange: [4, 6], trunk: 0x5a3d24, leaf: [0x539d39, 0x42842f], autumnC: 0xc09a3a, blossom: 0xf2d0d8, orchard: true,
     mode: "dichotomous", depth: 4, branches: 2, angle: 42, jitter: .5, lenRatio: .78, radRatio: .66, curve: .08, trunkR: .1, wobble: .35, tilt: 5,
     cards: { style: "oval", density: 7, size: 1.9, levels: 2 }, fruit: { style: "apples", color: 0xc8302a, density: 3, size: 1.0 } },
-  cherry: { hRange: [5, 7.5], trunk: 0x5e3a2c, bark: "barkH", leaf: [0x467a34, 0x3a6a2c], autumnC: 0xc0502a, blossom: 0xfbf3f5, orchard: true,
+  cherry: { hRange: [5, 7.5], trunk: 0x5e3a2c, bark: "barkH", leaf: [0x4a8b33, 0x3d792b], autumnC: 0xc0502a, blossom: 0xfbf3f5, orchard: true,
     mode: "random", depth: 4, branches: 3, angle: 38, jitter: .45, lenRatio: .72, radRatio: .62, curve: .02, trunkR: .085, wobble: .3, tilt: 4,
     cards: { style: "oval", density: 6, size: 1.7, levels: 2 }, fruit: { style: "cherries", color: 0x8a1020, density: 3, size: .8 } },
 };
@@ -296,28 +296,4 @@ export function makeGrassTuft({ seed = 1 } = {}) {
 }
 
 // A CUMULUS: a flat grey base -- two or three wide, thin slabs where the air turns to cloud at one height -- and on it
-// a heap of round puffs, the tallest in the middle, the bright cauliflower tops (CLOUD_PARTS at most)
-export const CLOUD_PARTS = 13;
-export function makeCloud({ seed = 1 } = {}) {
-  const r = rng(seed * 613 + 5);
-  const tone = r() * r();   // squared: most clouds stay bright, a few hang heavy and grey
-  const top = lerpC(0xf3f6f9, 0xaab4c0, tone);
-  const belly = lerpC(0xdde5ec, 0x8d99a6, tone);
-  const mid = lerpC(top, belly, .7);
-  const parts = [];
-  const spread = 10 + r() * 10, nBase = 2 + Math.floor(r() * 2), nPuff = 7 + Math.floor(r() * 4);
-  for (let i = 0; i < nBase; i++) {   // the base: flat, wide, darker
-    const cx = (i / Math.max(1, nBase - 1) - .5) * spread * .9 + (r() - .5) * 3, cz = (r() - .5) * spread * .3;
-    parts.push({ id: `b${i}`, parent: null, shape: "sphere", size: { r: 6 + r() * 3 },
-      scale: [1.9 + r() * .5, .3 + r() * .08, 1.2 + r() * .4], pos: [cx, 0, cz], color: belly });
-  }
-  for (let i = 0; i < nPuff; i++) {   // the heap: rounder puffs, higher toward the middle, brightest on top
-    const cx = (r() * 2 - 1) * spread * .75, cz = (r() * 2 - 1) * spread * .35, mid0 = 1 - Math.abs(cx) / spread;
-    const rad = 3 + r() * 3.5 * (.4 + mid0), cy = 1 + rad * .45 + mid0 * (2 + r() * 3.5);
-    parts.push({ id: `p${i}`, parent: null, shape: "sphere", size: { r: rad },
-      scale: [1.1 + r() * .3, .85 + r() * .2, 1 + r() * .3], pos: [cx, cy, cz], color: lerpC(mid, top, Math.min(1, Math.max(0, (cy - 2) / 5))) });   // (lit from above: brighter the higher)
-  }
-  return { name: "cloud", parts };
-}
-
 // (the flowers are items now: assets/items/flowers, tools/flowergen.py -- polygons, placed by index.html buildFlora)

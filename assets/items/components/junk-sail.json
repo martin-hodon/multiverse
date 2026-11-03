@@ -2,13 +2,14 @@
  "kind": "item",
  "name": "Junk sail",
  "category": "component",
- "_about": "the Chinese lug sail: a cloth stiffened by battens across it, its head narrower and raked aft, hung from a yard with a boom at its foot; set fore and aft, in the ship's frame as it is",
+ "_about": "the Chinese lug sail: a cloth stiffened by battens across it, its head narrower and raked aft, hung from a yard with a boom at its foot, a quarter of it before the mast (the origin) and the rest abaft; set fore and aft, in the ship's frame as it is. `set` full, or furled: lowered, the battens folded down on the boom in a stack (as a junk's sail comes down)",
  "params": {
   "w": 9,
   "h": 11,
   "battens": 5,
   "belly": "w * 0.05",
-  "r": "w * 0.01"
+  "r": "w * 0.01",
+  "set": "full"
  },
  "materials": {
   "wood": "pine",
@@ -19,13 +20,16 @@
    "id": "yard",
    "type": "rod",
    "material": "wood",
+   "when": {
+    "set": "full"
+   },
    "from": [
-    "-w * 0.42",
+    "-w * 0.64",
     0,
     0
    ],
    "to": [
-    "w * 0.3",
+    "w * 0.12",
     0,
     0
    ],
@@ -34,6 +38,9 @@
   {
    "id": "cloth",
    "type": "sail",
+   "when": {
+    "set": "full"
+   },
    "material": "cloth",
    "belly": "belly",
    "battens": "battens",
@@ -45,19 +52,19 @@
    ],
    "corners": [
     [
-     "-w * 0.4",
+     "-w * 0.62",
      0
     ],
     [
-     "w * 0.28",
+     "w * 0.1",
      0
     ],
     [
-     "w * 0.5",
+     "w * 0.27",
      "-h"
     ],
     [
-     "-w * 0.5",
+     "-w * 0.75",
      "-h"
     ]
    ]
@@ -67,13 +74,83 @@
    "type": "rod",
    "material": "wood",
    "from": [
-    "-w * 0.55",
+    "-w * 0.78",
     "-h - r",
     0
    ],
    "to": [
-    "w * 0.55",
+    "w * 0.3",
     "-h - r",
+    0
+   ],
+   "r": "r"
+  },
+  {
+   "id": "stack",
+   "type": "box",
+   "when": {
+    "set": "furled"
+   },
+   "material": "cloth",
+   "size": [
+    "w * 1.02",
+    "h * 0.012 * battens + r * 3",
+    "r * 4"
+   ],
+   "at": [
+    "-w * 0.24",
+    "-h + h * 0.006 * battens + r * 1.5",
+    0
+   ]
+  },
+  {
+   "id": "stack battens",
+   "type": "rod",
+   "when": {
+    "set": "furled"
+   },
+   "material": "wood",
+   "from": [
+    "-w * 0.76",
+    0,
+    "r * 2.1"
+   ],
+   "to": [
+    "w * 0.28",
+    0,
+    "r * 2.1"
+   ],
+   "r": "r * 0.5",
+   "along": {
+    "n": "battens",
+    "from": [
+     0,
+     "-h + r",
+     0
+    ],
+    "to": [
+     0,
+     "-h + h * 0.012 * battens + r * 2",
+     0
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "stack yard",
+   "type": "rod",
+   "material": "wood",
+   "when": {
+    "set": "furled"
+   },
+   "from": [
+    "-w * 0.64",
+    "-h + h * 0.012 * battens + r * 4",
+    0
+   ],
+   "to": [
+    "w * 0.12",
+    "-h + h * 0.012 * battens + r * 4",
     0
    ],
    "r": "r"

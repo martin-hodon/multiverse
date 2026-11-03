@@ -9,7 +9,7 @@
 <canvas id="c" width="1500" height="900"></canvas>
 <script type="module">
 // A bench for the glass (glass.js, docs/glass.md), no three.js. Each window as the tile lit from behind, and beside it its panes in false colour.
-//   ?name=a,b &cell=340 &w=1500 &res=512 &palette=name &panes=1 &cut=0 (leave out the cuts: the pieces' own leads)
+//   ?name=a,b &seeds=1,2,3 (or a count: &seeds=6, each a window of its own) &cell=340 &cw=(a column's width, for tall windows) &w=1500 &res=512 &palette=name &panes=1 &cut=0 (leave out the cuts: the pieces' own leads)
 // window.__metrics, per pattern: panes, cuts, slivers, bridges; the gates: open (lead ends that go nowhere) 0, tiny (panes too small to cut) 0,
 // gap (share of the opening with no pane) under .004; hash of the pixels: drawn twice, must agree.
 import { registerPatterns, renderPattern, patternOf, paletteOf } from "./patterns.js";
@@ -19,13 +19,14 @@ const Q = new URLSearchParams(location.search), get = async (p) => (await fetch(
 lab.keep = true;
 const doc = await get("assets/patterns/glass.json");
 registerPatterns({ palettes: await get("assets/patterns/palettes.json"), glass: doc });
-const names = (Q.get("name") ?? Object.keys(doc.patterns).join(",")).split(","), cell = +(Q.get("cell") ?? 340), showPanes = Q.get("panes") !== "0";
-const W = +(Q.get("w") ?? 1500), span = showPanes ? cell * 1.5 + 12 : cell + 8, cols = Math.max(1, Math.floor(W / span)), rowH = cell + 24;
+const seedQ = Q.get("seeds"), seeds = seedQ ? (seedQ.includes(",") ? seedQ.split(",").map(Number) : Array.from({ length: +seedQ }, (_, i) => i + 1)) : [null];
+const names = (Q.get("name") ?? Object.keys(doc.patterns).join(",")).split(",").flatMap((n) => seeds.map((s) => s === null ? [n, n, null] : [`${n}#${s}`, n, s])), cell = +(Q.get("cell") ?? 340), showPanes = Q.get("panes") !== "0";
+const W = +(Q.get("w") ?? 1500), span = Q.get("cw") ? +Q.get("cw") : showPanes ? cell * 1.5 + 12 : cell + 8, cols = Math.max(1, Math.floor(W / span)), rowH = cell + 24;
 const cv = document.getElementById("c"); cv.width = W; cv.height = Math.ceil(names.length / cols) * rowH + 8;
 const g = cv.getContext("2d", { willReadFrequently: true }); g.fillStyle = "#0b0b0d"; g.fillRect(0, 0, W, cv.height);
 const metrics = {};
-names.forEach((name, i) => {
-  const x = 6 + (i % cols) * span, y = 6 + Math.floor(i / cols) * rowH, ref = `glass/${name}`, def = patternOf(ref), L = def.layers[0];
+names.forEach(([name, base, seed], i) => {
+  const x = 6 + (i % cols) * span, y = 6 + Math.floor(i / cols) * rowH, def0 = patternOf(`glass/${base}`), L = { ...def0.layers[0], ...(seed !== null ? { seed } : null) }, def = { ...def0, layers: [L] }, ref = def;
   if (Q.get("cut") === "0") { L.maxPane = 1e9; L.depth = 1e9; L.maxAspect = 1e9; }
   g.fillStyle = "#d8d4cc"; g.fillText(name, x, y + 10);
   try {

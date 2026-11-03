@@ -24,6 +24,8 @@
     "nave roof",
     "aisle roofs",
     "flying buttresses",
+    "flank pinnacles 1",
+    "flank pinnacles 2",
     "choir",
     "chancel gable",
     "apse",
@@ -32,16 +34,19 @@
     "south east tower belfry",
     "south east tower octagon",
     "south east tower spire",
+    "south east tower open spire",
     "north east tower foot",
     "north east tower belfry",
     "north east tower octagon",
     "north east tower spire",
+    "north east tower open spire",
     "west tower stage 1",
     "west tower stage 2",
     "west tower stage 3",
     "west tower stage 4",
     "west tower octagon",
     "west tower spire",
+    "west tower open spire",
     "west tower stair",
     "viewing gallery",
     "viewing gallery parapet"
@@ -565,7 +570,119 @@
           0
         ]
       },
+      "build": [
+        "pier",
+        "flyer"
+      ],
       "_about": "a flying buttress at every bay's end, both sides, clearing the double aisles to the clerestory"
+    },
+    "flank pinnacles 1": {
+      "type": "pinnacle",
+      "w": 1.3,
+      "h": 2.6,
+      "s": 4.6,
+      "gablets": 0.5,
+      "crockets": 2,
+      "at": [
+        [
+          -26.9,
+          27.5,
+          -25.5,
+          0
+        ],
+        [
+          -26.9,
+          27.5,
+          -8.5,
+          0
+        ],
+        [
+          -26.9,
+          27.5,
+          8.5,
+          0
+        ],
+        [
+          -26.9,
+          27.5,
+          25.5,
+          0
+        ],
+        [
+          26.9,
+          27.5,
+          -25.5,
+          0
+        ],
+        [
+          26.9,
+          27.5,
+          -8.5,
+          0
+        ],
+        [
+          26.9,
+          27.5,
+          8.5,
+          0
+        ],
+        [
+          26.9,
+          27.5,
+          25.5,
+          0
+        ]
+      ],
+      "_about": "the flank's pinnacles on the flyers' piers"
+    },
+    "flank pinnacles 2": {
+      "type": "pinnacle",
+      "w": 1.3,
+      "sides": 8,
+      "h": 2.2,
+      "s": 5.0,
+      "gablets": 0.45,
+      "crockets": 3,
+      "attendants": 0.25,
+      "at": [
+        [
+          -26.9,
+          27.5,
+          -17.0,
+          0
+        ],
+        [
+          -26.9,
+          27.5,
+          0.0,
+          0
+        ],
+        [
+          -26.9,
+          27.5,
+          17.0,
+          0
+        ],
+        [
+          26.9,
+          27.5,
+          -17.0,
+          0
+        ],
+        [
+          26.9,
+          27.5,
+          0.0,
+          0
+        ],
+        [
+          26.9,
+          27.5,
+          17.0,
+          0
+        ]
+      ],
+      "_about": ""
     },
     "choir": {
       "type": "enclosure",
@@ -815,13 +932,29 @@
         ]
       ],
       "build": [
-        "spire",
-        "ribs",
         "gables",
-        "pinnacles",
-        "finial"
+        "pinnacles"
       ],
-      "_about": "...and the ribbed spire with its gables and pinnacles, to 86m"
+      "_about": "...the spire's gables and pinnacles..."
+    },
+    "south east tower open spire": {
+      "type": "open-spire",
+      "R": 3.4,
+      "rise": 24.5,
+      "topR": 0.35,
+      "rows": 6,
+      "rib": 0.22,
+      "bar": 0.09,
+      "finial": 3.0,
+      "at": [
+        [
+          13.85,
+          60.0,
+          -39.75,
+          0
+        ]
+      ],
+      "_about": "...and the spire itself OPENWORK, as the east towers' are too, to 86m"
     },
     "north east tower foot": {
       "type": "component",
@@ -918,11 +1051,26 @@
         ]
       ],
       "build": [
-        "spire",
-        "ribs",
         "gables",
-        "pinnacles",
-        "finial"
+        "pinnacles"
+      ]
+    },
+    "north east tower open spire": {
+      "type": "open-spire",
+      "R": 3.4,
+      "rise": 24.5,
+      "topR": 0.35,
+      "rows": 6,
+      "rib": 0.22,
+      "bar": 0.09,
+      "finial": 3.0,
+      "at": [
+        [
+          -13.85,
+          60.0,
+          -39.75,
+          0
+        ]
       ]
     },
     "west tower stage 1": {
@@ -1111,7 +1259,30 @@
           0
         ]
       ],
-      "_about": "the openwork SPIRE on the octagon, ribbed, gabled and ringed by pinnacles at its foot (`gothic-spire`), cut off at the viewing gallery"
+      "build": [
+        "gables",
+        "pinnacles"
+      ],
+      "_about": "the SPIRE's foot on the octagon: its gables and the pinnacles round it (`gothic-spire`)"
+    },
+    "west tower open spire": {
+      "type": "open-spire",
+      "R": 6.2,
+      "rise": 42.6,
+      "topR": 3.3,
+      "rows": 8,
+      "rib": 0.45,
+      "bar": 0.16,
+      "finial": 0,
+      "at": [
+        [
+          0,
+          100.0,
+          44.5,
+          0
+        ]
+      ],
+      "_about": "the spire itself, OPENWORK as it is at Ulm: the net of ribs and tracery round the round stair, cut off at the viewing gallery"
     },
     "west tower stair": {
       "type": "component",

@@ -1,0 +1,345 @@
+{
+ "kind": "item",
+ "name": "Maya trading canoe",
+ "category": "ship",
+ "era": "-500-1550",
+ "region": "the Maya coasts: Yucatán, Belize, Honduras",
+ "_about": "the great dugout of the Maya sea trade that Columbus's men met off Honduras in 1502 -- 'as long as a galley and eight feet wide', two dozen paddlers, a palm-thatched shelter amidships over the cargo of cotton cloth, cacao, copper and pottery, the women and children under it; its ends rising square and flat as the Tikal graffiti and the Altun Ha bones draw them. (Its breadth sourced from Ferdinand Columbus's account, about 2.4 m; the length estimated, 14-18 m)",
+ "params": {
+  "set": {
+   "pick": [
+    "full",
+    "full",
+    "furled"
+   ]
+  },
+  "oars": {
+   "pick": [
+    "out",
+    "shipped"
+   ]
+  },
+  "L": [
+   14,
+   18
+  ],
+  "B": [
+   2.2,
+   2.5
+  ],
+  "D": "B * 0.4",
+  "wl": "(D) * 0.45"
+ },
+ "materials": {
+  "planks": "planks",
+  "deck": "deck",
+  "wood": "oak",
+  "cloth": "thatch",
+  "rope": "hemp",
+  "metal": "iron",
+  "paint": "#2e5f6e",
+  "red": "#8e3a26"
+ },
+ "parts": [
+  {
+   "id": "hull",
+   "type": "hull",
+   "material": "planks",
+   "length": "L",
+   "beam": "B",
+   "depth": "D",
+   "fullness": 0.55,
+   "stations": 24,
+   "sides": 6,
+   "plan": [
+    [
+     0,
+     0.35
+    ],
+    [
+     0.1,
+     0.75
+    ],
+    [
+     0.35,
+     1
+    ],
+    [
+     0.65,
+     1
+    ],
+    [
+     0.9,
+     0.75
+    ],
+    [
+     1,
+     0.35
+    ]
+   ],
+   "keel": [
+    [
+     0,
+     "D * 0.9"
+    ],
+    [
+     0.12,
+     "D * 0.1"
+    ],
+    [
+     0.25,
+     0
+    ],
+    [
+     0.75,
+     0
+    ],
+    [
+     0.88,
+     "D * 0.1"
+    ],
+    [
+     1,
+     "D * 0.9"
+    ]
+   ],
+   "sheer": [
+    [
+     0,
+     "D * 1.55"
+    ],
+    [
+     0.1,
+     "D * 1.15"
+    ],
+    [
+     0.5,
+     "D"
+    ],
+    [
+     0.9,
+     "D * 1.15"
+    ],
+    [
+     1,
+     "D * 1.55"
+    ]
+   ],
+   "rail": 0.06,
+   "thwarts": {
+    "n": 6,
+    "y": "D * 0.7",
+    "w": 0.22,
+    "from": 0.18,
+    "to": 0.82
+   }
+  },
+  {
+   "id": "end platform",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    "L * 0.08",
+    0.14,
+    "B * 0.62"
+   ],
+   "at": [
+    [
+     "L * 0.985",
+     "D * 1.55",
+     0
+    ],
+    [
+     "L * 0.015",
+     "D * 1.55",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "band",
+   "type": "box",
+   "material": "red",
+   "size": [
+    "L * 0.7",
+    0.14,
+    0.03
+   ],
+   "at": [
+    "L * 0.5",
+    "D * 0.8",
+    "B * 0.5"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "shelter",
+   "use": "items/components/awning",
+   "params": {
+    "w": "B * 0.8",
+    "d": "L * 0.2",
+    "h": 1.5
+   },
+   "at": [
+    "L * 0.4",
+    "D * 0.2",
+    0
+   ]
+  },
+  {
+   "id": "jars",
+   "use": "items/tools/storage-jar",
+   "at": [
+    [
+     "L * 0.44",
+     "D * 0.15",
+     -0.4
+    ],
+    [
+     "L * 0.47",
+     "D * 0.15",
+     0.35
+    ],
+    [
+     "L * 0.53",
+     "D * 0.15",
+     -0.3
+    ],
+    [
+     "L * 0.56",
+     "D * 0.15",
+     0.4
+    ]
+   ]
+  },
+  {
+   "id": "paddles",
+   "use": "items/components/oars",
+   "params": {
+    "n": 10,
+    "from": "L * 0.18",
+    "to": "L * 0.82",
+    "y": "D * 1.0",
+    "z": "B * 0.5",
+    "l": 1.6,
+    "dip": 50,
+    "reach": 0.1,
+    "state": "oars"
+   }
+  },
+  {
+   "id": "steering paddle",
+   "use": "items/components/oar",
+   "params": {
+    "l": 2.6,
+    "r": 0.04,
+    "bladeW": 0.22
+   },
+   "at": [
+    "L * 0.06",
+    "D * 1.6",
+    0.3,
+    0,
+    0,
+    -130
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "waterline",
+   "at": [
+    "L * 0.5",
+    "(D) * 0.45",
+    0
+   ],
+   "data": {
+    "draught": "(D) * 0.45"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.96",
+    "D * 1.39",
+    0
+   ],
+   "data": {
+    "end": "bow"
+   }
+  },
+  {
+   "role": "moor",
+   "at": [
+    "L * 0.04",
+    "D * 1.39",
+    0
+   ],
+   "data": {
+    "end": "stern"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.5",
+    "D + 0.06",
+    "(B * 0.5) * 1.0",
+    -90
+   ],
+   "data": {
+    "side": "starboard",
+    "deck": "(D) * 0.2"
+   }
+  },
+  {
+   "role": "gangplank",
+   "at": [
+    "L * 0.5",
+    "D + 0.06",
+    "((B * 0.5) * 1.0) * -1",
+    90
+   ],
+   "data": {
+    "side": "port",
+    "deck": "(D) * 0.2"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.45",
+    "(D) * 0.2",
+    0
+   ],
+   "data": {
+    "i": 0,
+    "w": "B * 0.5",
+    "l": "L * 0.25",
+    "floor": "(D) * 0.2"
+   }
+  },
+  {
+   "role": "hold",
+   "at": [
+    "L * 0.55",
+    "(D) * 0.2",
+    0
+   ],
+   "data": {
+    "i": 1,
+    "w": "B * 0.5",
+    "l": "L * 0.25",
+    "floor": "(D) * 0.2"
+   }
+  },
+  {
+   "role": "helm",
+   "at": [
+    "L * 0.07",
+    "(D) * 0.2",
+    0
+   ]
+  }
+ ]
+}

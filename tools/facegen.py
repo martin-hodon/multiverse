@@ -40,12 +40,58 @@ CANON = {"scale": 1, "faceW": 1, "forehead": 1, "occiput": 1, "crown": 1, "earS"
          "browHeight": 0.016, "browArch": 0.003, "browThickness": 0.006, "browRidge": 0.003,
          "noseHeight": 0.052, "noseWidth": 0.034, "noseProjection": 0.020, "nasolabialAngle": 102, "noseBridge": 0.003, "noseHump": 0,
          "mouthWidth": 0.052, "upperLipHeight": 0.021, "upperVermilion": 0.008, "lowerVermilion": 0.009, "lowerLipHeight": 0.019,
-         "chinProjection": 0, "chinHeight": 0.013, "chubby": 1,
+         # chinProjection: the soft-tissue pogonion's place against the subnasale's vertical -- behind it (Legan: -3.5 mm
+         # in men, -4 in women); at 0 every face had a protruding chin (2026-11-03)
+         "chinProjection": -0.0045, "chinHeight": 0.013, "chubby": 1,
          "expression": "neutral", "viseme": "none", "flower": 0, "hairFlower": "items/flowers/blooms/rose", "flowerScale": 0.75,
          "headwear": 0, "earrings": 0, "hairCap": None, "fringe": 0, "beard": "none"}
+# HOW FACES OF ONE KIND DIFFER (2026-11-03, heads.js faceVariety, docs/face.md "Variety"): correlated axes over the
+# kind's ranges, a chin and a nose shape, the body's fullness
+VARIETY = {
+    "_about": "HOW FACES OF A KIND DIFFER (heads.js faceVariety: drawn from the face's seed, so one seed is always one face). Not every attribute on its own: a few AXES move several together -- `robust` the sex's own range from its finer to its stronger end (the jaw and the chin broader, the jaw's angle squarer, the brow ridge and the brows heavier and lower, the nose bigger, the lips thinner, the eyes narrower), `long` a long narrow face against a short broad one, `eyes` big or small eyes, `set` the eyes and the mouth wide or close, `lips` full or thin, `arch` the brows -- each attribute a range of the kind's definition (man.json, woman.json...) gets its place in that range from the axes it names (weights) and `own` of its own draw. Then a CHIN SHAPE and a NOSE SHAPE picked by the kind's weights (`chins`, `noses`: each shape deltas in metres and degrees added to what was drawn) -- the chin receding, neutral, protruding, square or small and pointed; the nose straight, aquiline, snub, broad, long, humped or a button -- and the FULLNESS a stout or fat body's face has, or a thin one's lean face (`full`, by the step people.js draws: body.json build.variety fullBins). `kinds`: how much of the shapes and the fullness each kind takes (a child's chin is a child's).",
+    "own": 0.45,
+    "axes": {
+        "robust": {"lowerWidth": 1, "chinWidth": 0.8, "jawAngle": -0.8, "browRidge": 1, "browThickness": 0.7, "browHeight": -0.6, "noseWidth": 0.6, "noseProjection": 0.6, "noseHeight": 0.4, "foreheadAngle": 0.6, "chinHeight": 0.5, "upperVermilion": -0.5, "lowerVermilion": -0.4, "eyeHeight": -0.5, "chubCheek": -0.4, "earS": 0.4},
+        "long": {"faceHeight": 1, "upperWidth": -0.6, "lowerWidth": -0.4, "noseHeight": 0.6, "upperLipHeight": 0.6, "lowerLipHeight": 0.6, "chinHeight": 0.5},
+        "eyes": {"eyeWidth": 0.7, "eyeHeight": 1},
+        "set": {"eyeDistance": 1, "mouthWidth": 0.4},
+        "lips": {"upperVermilion": 1, "lowerVermilion": 1, "chubLips": 0.6, "mouthWidth": 0.3},
+        "arch": {"browArch": 1, "browHeight": 0.6, "eyeTilt": 0.5},
+    },
+    "chins": {
+        "receding": {"chinProjection": -0.007, "mentolabial": -0.002, "chinHeight": -0.002},
+        "neutral": {},
+        "protruding": {"chinProjection": 0.003, "mentolabial": 0.001, "chinHeight": 0.001},
+        "square": {"chinWidth": 0.007, "chinProjection": -0.001, "lowerWidth": 0.003},
+        "pointed": {"chinWidth": -0.007, "chinProjection": -0.002},
+    },
+    "noses": {
+        "straight": {},
+        "aquiline": {"noseHump": 0.003, "nasolabialAngle": -7, "noseTip": -0.001},
+        "snub": {"nasolabialAngle": 12, "noseProjection": -0.003, "noseHeight": -0.004, "noseTip": 0.002},
+        "broad": {"noseWidth": 0.005, "noseProjection": -0.002, "noseBridge": -0.001},
+        "long": {"noseHeight": 0.005, "noseProjection": 0.003},
+        "humped": {"noseHump": 0.005, "noseBridge": 0.002, "noseProjection": 0.002},
+        "button": {"noseWidth": -0.003, "noseProjection": -0.003, "noseHeight": -0.003, "nasolabialAngle": 6},
+    },
+    "weights": {
+        "man": {"chins": {"receding": 2, "neutral": 4, "protruding": 1.5, "square": 2.5}, "noses": {"straight": 4, "aquiline": 2, "snub": 1, "broad": 2, "long": 1.5, "humped": 1.5}},
+        "woman": {"chins": {"receding": 2.5, "neutral": 5, "protruding": 0.7, "pointed": 2.5}, "noses": {"straight": 5, "aquiline": 1, "snub": 2.5, "broad": 1, "long": 0.5, "button": 2.5}},
+        "elder": {"chins": {"receding": 3, "neutral": 4, "protruding": 1, "square": 1.5}, "noses": {"straight": 3, "aquiline": 2.5, "broad": 2, "long": 2, "humped": 2.5}},
+        "old-woman": {"chins": {"receding": 3, "neutral": 4, "pointed": 2}, "noses": {"straight": 4, "aquiline": 2, "snub": 1, "broad": 1.5, "long": 1, "humped": 1}},
+        "child": {"chins": {"receding": 2, "neutral": 6, "pointed": 1}, "noses": {"straight": 3, "snub": 4, "button": 4, "broad": 1}},
+    },
+    "full": {
+        "-1": {"chubby": -0.35, "chubCheek": -0.55, "chubJaw": -0.3, "chubChin": -0.3, "lowerWidth": -0.002},
+        "1": {"chubby": 0.35, "chubCheek": 0.45, "chubJaw": 0.7, "chubChin": 0.7, "lowerWidth": 0.004, "upperWidth": 0.003, "neckR": 0.003},
+        "2": {"chubby": 0.7, "chubCheek": 0.9, "chubJaw": 1.2, "chubChin": 1.2, "lowerWidth": 0.008, "upperWidth": 0.005, "neckR": 0.006},
+    },
+    "kinds": {"child": 0.5, "beast-man": 0},
+}
 FACES["face"] = {
     "kind": "item", "name": "Face", "category": "face", "era": "everywhere", "region": "everywhere",
     "_about": "the canon head on GUIDE LINES (face.js, docs/face.md): Farkas's adult means as attributes -- face height, upper and lower width, the eyes' distance and width, the nose's height, width and projection, the nasolabial and forehead angles, the mouth's width, the lips' heights -- placing the landmarks, the landmarks the lattice of guide lines (brow, lids, lip borders, jawline...), the skin the lattice subdivided with each region's roundness. expression / viseme (or the actions: smile, jawOpen, blink...) move the lines. The origin is the cranium's centre; +x is where it looks",
+    "variety": VARIETY,
     "params": CANON,
     "materials": {"skin": SKINS, "lip": {"pick": ["lip-rose", "lip-rose", "lip-pink", "lip-brown", "lip-pale", "lip-dark"]}, "mouth": "mouth-dark", "teeth": "teeth-ivory", "eye": "eye-white", "limbus": "iris-limbus", "glint": "eye-glint", "lash": "lash-dark", "iris": IRISES, "pupil": "pupil", "brow": "hairColour", "beard": "brow", "stubble": "brow", "hair": "hairColour", "hairColour": HAIRS, "tie": "leather-dark"},
     "parts": [{"id": "head", "type": "face", "headScale": "scale", "faceW": "faceW", "forehead": "forehead", "occiput": "occiput", "crown": "crown",
@@ -66,21 +112,24 @@ def kind(key, name, about, params, materials=None):
 
 
 # (ranges: a stranger of each kind drawn by the seed; men and women from Farkas's means and spreads)
-kind("man", "Man", "a man's head: the face longer and the jaw wider and squarer (a lower jaw angle), the brow ridge heavier and the brows lower and straighter, the forehead sloping, the nose longer, wider and more projecting with a more acute nasolabial angle, the lips thinner, the hairline drawn by the seed (some receding)",
-     {"faceHeight": [0.118, 0.13], "upperWidth": [0.134, 0.142], "lowerWidth": [0.096, 0.108], "chinWidth": [0.042, 0.05], "jawAngle": [114, 124], "foreheadAngle": [10, 18],
-      "browRidge": [0.004, 0.007], "browHeight": [0.012, 0.016], "browArch": [0.0, 0.002], "browThickness": [0.006, 0.0085],
+kind("man", "Man", "a man's head: the face longer and the jaw wider and squarer (a lower jaw angle), the brow ridge heavier and the brows lower and straighter, the forehead sloping, the nose longer, wider and more projecting with a more acute nasolabial angle, the lips thinner, the hairline drawn by the seed (some receding); the chin's projection a little behind the subnasale's vertical (Legan: the soft-tissue pogonion -3.5 mm), the rest of the chin's shape and the nose's by face.json `variety`",
+     {"faceHeight": [0.118, 0.13], "upperWidth": [0.134, 0.142], "lowerWidth": [0.096, 0.11], "chinWidth": [0.042, 0.052], "jawAngle": [112, 124], "foreheadAngle": [10, 18],
+      "browRidge": [0.0035, 0.0075], "browHeight": [0.012, 0.016], "browArch": [0.0, 0.002], "browThickness": [0.006, 0.0085],
       "noseHeight": [0.052, 0.058], "noseWidth": [0.034, 0.039], "noseProjection": [0.019, 0.024], "nasolabialAngle": [90, 102], "noseHump": [0, 0.004], "noseBridge": [0.003, 0.006],
       "mouthWidth": [0.05, 0.056], "upperVermilion": [0.006, 0.008], "lowerVermilion": [0.008, 0.01], "upperLipHeight": [0.02, 0.024], "lowerLipHeight": [0.018, 0.021],
-      "eyeDistance": [0.031, 0.035], "eyeWidth": [0.029, 0.032], "eyeHeight": [0.009, 0.011], "eyeTilt": [0, 4], "chinProjection": [0.0, 0.004], "chinHeight": [0.013, 0.017],
-      "chubCheek": [0.7, 1.0], "chubby": [0.8, 1.0], "chubJaw": [0.6, 1.0], "earS": [1.0, 1.12], "hairline": {"pick": [0.055, 0.06, 0.065, 0.085, 0.11]},
+      "eyeDistance": [0.031, 0.035], "eyeWidth": [0.029, 0.032], "eyeHeight": [0.009, 0.011], "eyeTilt": [0, 4], "chinProjection": [-0.0055, -0.002], "chinHeight": [0.013, 0.017],
+      "chubCheek": [0.85, 1.15], "chubby": [0.9, 1.05], "chubJaw": [0.7, 1.05], "earS": [1.0, 1.12], "hairline": {"pick": [0.055, 0.06, 0.065, 0.085, 0.11]},
       "beard": {"pick": ["none", "none", "none", "short", "short", "full", "moustache", "goatee"]}})
-kind("woman", "Woman", "a woman's head: the face shorter, the jaw narrower with a more open angle, the chin small, the forehead upright and smooth, the brows higher and arched over the orbit, the eyes a little larger and lifted at the outer corner, the nose shorter and finer with a more obtuse nasolabial angle, the lips fuller, the cheeks rounder",
-     {"faceHeight": [0.108, 0.118], "upperWidth": [0.126, 0.134], "lowerWidth": [0.086, 0.095], "chinWidth": [0.036, 0.042], "jawAngle": [123, 130], "foreheadAngle": [4, 10],
-      "browRidge": [0.0, 0.002], "browHeight": [0.016, 0.02], "browArch": [0.003, 0.006], "browThickness": [0.004, 0.0055],
-      "noseHeight": [0.046, 0.051], "noseWidth": [0.029, 0.033], "noseProjection": [0.017, 0.02], "nasolabialAngle": [100, 112], "noseBridge": [0.002, 0.004],
-      "mouthWidth": [0.047, 0.052], "upperVermilion": [0.008, 0.01], "lowerVermilion": [0.009, 0.011], "upperLipHeight": [0.018, 0.021], "lowerLipHeight": [0.017, 0.019],
-      "eyeDistance": [0.031, 0.034], "eyeWidth": [0.029, 0.032], "eyeHeight": [0.01, 0.012], "eyeTilt": [3, 7], "chinHeight": [0.011, 0.014],
-      "chubCheek": [1.1, 1.4], "chubby": [1.0, 1.15], "chubLips": [1.2, 1.5], "earS": [0.9, 1.0], "hairline": [0.05, 0.06],
+kind("woman", "Woman", "a woman's head: the face shorter, the jaw narrower with a more open angle, the chin small, the forehead upright and smooth, the brows higher and arched over the orbit, the eyes a little larger and lifted at the outer corner, the nose shorter and finer with a more obtuse nasolabial angle, the lips fuller, the cheeks rounder; the chin set back behind the subnasale's vertical (Legan: -4 mm), its shape and the nose's by face.json `variety`",
+     {"faceHeight": [0.1, 0.108], "upperWidth": [0.126, 0.134], "lowerWidth": [0.088, 0.094], "chinWidth": [0.03, 0.036], "jawAngle": [124, 130], "foreheadAngle": [2, 8],
+      "browRidge": [0.0, 0.0015], "browHeight": [0.016, 0.02], "browArch": [0.004, 0.007], "browThickness": [0.003, 0.0042],
+      "noseHeight": [0.046, 0.051], "noseWidth": [0.028, 0.032], "noseProjection": [0.016, 0.019], "nasolabialAngle": [100, 112], "noseBridge": [0.002, 0.004],
+      "mouthWidth": [0.047, 0.052], "upperVermilion": [0.0085, 0.0105], "lowerVermilion": [0.0095, 0.0115], "upperLipHeight": [0.017, 0.02], "lowerLipHeight": [0.016, 0.018],
+      "eyeDistance": [0.031, 0.034], "eyeWidth": [0.029, 0.032], "eyeHeight": [0.0105, 0.0125], "eyeTilt": [3, 7], "chinProjection": [-0.0065, -0.0035], "chinHeight": [0.009, 0.012],
+      # (2026-11-03: the lower third ~.87 of the middle -- the face shorter, the chin lower; the eyes less deep-set, the
+      #  neck under the jaw finer -- at the earlier ranges she read as a man)
+      "eyeDepth": [0.013, 0.015], "neckR": [0.031, 0.034],
+      "chubCheek": [1.15, 1.45], "chubby": [1.0, 1.15], "chubLips": [1.2, 1.5], "earS": [0.9, 1.0], "hairline": [0.05, 0.06],
       "flower": {"pick": [0, 0, 0, 1]}, "hairFlower": {"pick": ["items/flowers/blooms/rose", "items/flowers/blooms/daisy", "items/flowers/blooms/hibiscus", "items/flowers/blooms/frangipani",
                                                                "items/flowers/blooms/poppy", "items/flowers/blooms/cornflower", "items/flowers/blooms/lily"]}})
 kind("child", "Child", "a child's head: the cranium large for the face (the face short and small within it), the forehead high, upright and round, the eyes large and set wide, the nose small, short and turned up, the mouth small, the jaw and chin small with an open angle, everything rounder",

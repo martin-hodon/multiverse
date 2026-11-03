@@ -12,7 +12,8 @@ coloured and painted, and the leads drawn where the panes meet. The family is ge
 | `glass/panes.js` | `partition`: pieces to an arrangement to panes; slivers merged, dead ends pruned, islands bridged |
 | `glass/cuts.js` | `cutPane`: the chords a glazier needs through a pane too big or too concave |
 | `glass/stain.js` | the painting: colour per pane, sheet mottle, paint hidden by what's in front, corrosion, leads, bars, rim |
-| `medieval/figure.js` | `buildFigure`: robed figures as pieces. Constants in code, no rig |
+| `glass/window.js` | what a seed makes of a `plan`: layouts, borders, grounds, diapers, medallion shapes; a rose's theme and rings |
+| `medieval/figure.js`, `story/compose.js` | robed figures and whole scenes as pieces, from the canon shared with mosaic (`docs/story.md`) |
 
 ## Layer keys
 
@@ -38,11 +39,27 @@ A finish names a picture for each CELL of a pane with `map: "opening"` (`arch/fi
 - A rule with `map: "opening"` draws in `glassFinishMaterial` (`archmat.js`): the pane's normal looks out, so the material knows the two sides. From inside by day it's the sky through the glass, a little more with the sun on it; from outside it's dark with the sky glancing off. At night every window glows from outside as if lamps stood within, whether or not any do, and goes nearly black from inside.
 - A rose with `tracery` takes `rose stone N`, where N is the lights its wall gets: `clamp(2*round(pi*R/1.4), 8, 16)`. The transept roses, R 4.7 and 5.6, take 16.
 
+## A window from its seed
+
+A layer with a `plan` says its subject and leaves the rest to `seed`; `glass/window.js` turns it into plain panels before anything is cut. The seed also retunes the palette a little.
+
+| plan | subject | what the seed decides |
+|---|---|---|
+| `{ kind: "story", cycles, scene, layout }` | a run of a cycle, or one scene | the scenes, then `stack` (medallions), `cluster` (one, with four busts round it), `registers` (under arches) or `band` (between grisaille); border, ground, diaper, medallion shape |
+| `{ kind: "saint", who }` | a saint, or anyone in `standing` | who, a donor, a scene or second saint above in a tall light |
+| `{ kind: "tree" }` | the Tree of Jesse | its kings and colours |
+| `{ kind: "rose" }` on `form: "stone"` | a stone rose | a theme: who's in the lights, what's at the hub, the colours |
+| `{ kind: "rings", like }` on `form: "rose"` | a free rose | how many shapes and which, the colours, busts in one ring |
+
+`saint peter` and the rest name their subject. `saint any`, `panel any`, `medallion story`, `window infancy|passion|genesis|lives|jesse|guilds` and `panel months|guild` leave more to the seed. The palette has 14 slots, in the order of the canon's `tints`.
+
+`glass_lab.html` takes `&seeds=1,2,3` or a count, and `&cw=` for the column width, to show a sheet of seeds. In the game `seedFinishes` (architecture.js) gives each planned pattern a seed from the world and the building, one per pattern per building, so rules sharing a pattern share a tile; a named subject stays itself. An override of `seed` in the asset manager reaches the layer, so New seed is a new window.
+
 ## Gates
 
 `glass_lab.html` prints `window.__metrics`: `open` 0 (a lead that ends in glass), `gap` under .004 (share of the opening with no pane), `tiny` 0 (a pane under half of `minPane`, unless it has no other pane to join and is over a quarter of it: a corner the stone leaves). `?twice=1` draws each again past the cache and fails if the pixels differ; a window with no numbers throws rather than passing on nothing. `lab.keep` keeps the panes for the bench's second picture; the game doesn't hold them.
 
-All of them pass.
+All of them pass on the patterns the finishes hold, on stone and free roses at three seeds each, and on the sweep of 100 seeded tiles (seeds 1 to 10 and 21 to 30 of five plans). A sliver with nothing beside it but something kept `whole` goes into that, a hair more of a face, and a face under a square millimetre is no pane. Those tiles take about 0.2 s on average and up to about 1 s (a narrative window, in the asset manager about 1.2 s).
 
 ## Not here
 

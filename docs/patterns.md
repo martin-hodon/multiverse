@@ -51,7 +51,7 @@ A LAYER is one shape (or a group, a field, another pattern) and how many times i
 | `clip` | a shape (with its own `at`, `rot`) the layer is drawn only inside |
 | `layers` | a group: its children in this layer's frame (clip them together) |
 | `use`, `useScale`, `colors`, `palette`, `params` | another pattern, tiled inside this layer's shape, its slots mapped to this one's |
-| `kind` | a layer another module draws (`LAYER_KINDS`): `hieroglyphs` (glyphs.js: a wall of text, docs/glyphs.md); `stars`, `knot`, `scroll` (ornament.js: docs/ornament.md); `mosaic` (mosaic.js: docs/mosaic.md) |
+| `kind` | a layer another module draws (`LAYER_KINDS`): `hieroglyphs` (glyphs.js: a wall of text, docs/glyphs.md); `stars`, `knot`, `scroll` (ornament.js: docs/ornament.md); `mosaic` (mosaic.js: docs/mosaic.md); `shards` (ornament/shards.js: the tile broken into irregular pieces, the ground the joint -- trencadis, crazy paving, field-stone rubble: `n` [nx, ny], `jitter` 0..1, `gap`, `round`, `fills` (a slot twice to weight it), `vary`, `seed`; `alt` { fills, grid } a chequer of pieces, `dots` { fills, share } a share of spots, `skip` a share left out so a layer under shows, `bed` { w, fill } a mortar joint round each piece) |
 | `field` | a function of the point, per texel: `veins` (marble: `freq`, `turns`, `sharp`), `speckle` (granite: `grain`), `cloud` (plaster), `grain` (wood) -- periodic with the tile, so it repeats without a seam |
 
 The tile is drawn with every layer at the tile and its eight neighbours, so whatever crosses an edge carries on into
@@ -63,16 +63,16 @@ as a sheet; `tileSampler` reads a tile at (u, v) metres (the headless checks ren
 | family | patterns |
 |---|---|
 | shapes | the alphabet: one pattern for each shape and each way of multiplying one |
-| stone | ashlar, fine ashlar, rusticated, brick (running and Flemish bond), rubble, marble, book-matched revetment, travertine, granite, plaster, scored stucco, sand, a column's flute |
+| stone | ashlar, fine ashlar, rusticated, brick (running and Flemish bond), rubble, marble, book-matched revetment, travertine, granite, plaster, scored stucco, sand, a column's flute, field rubble (shards) |
 | floors | chequer (square and diagonal), the Pantheon's opus sectile, octagon and dot, star and cross, basketweave, flagstones, terracotta, a Cosmatesque roundel, a compass rose (panel) |
 | carpets | the herati field, a border vine, prayer rows, kilim, and the medallion carpet (a panel of any size: W, H) |
-| tiles | Iznik carnation, rumi and frieze; zellige star; girih; azulejo |
+| tiles | Iznik carnation, rumi and frieze; zellige star; girih; azulejo; trencadis (plain, spotted, chequer, bands: shards) |
 | painted | gold mosaic, starry vault, stained glass, the Chinese painted beam (caihua), cloud scroll, window lattice, coffered ceiling, Russian floral, Ottoman stencil, faux marble |
 | roofs | Chinese tube tiles, coppi, slate, fish scale, sheet metal (lead, copper), gold leaf, glazed chevrons (the Stephansdom), onion stripes, spiral and diamonds, glazed diamonds |
 | panels | Florentine polychrome, pietra dura, jali, a Chinese balustrade's panel, wainscot |
 | timber | (bark is the rough wood's texture -- town woodwork, yards, mills, poles, item materials oak/oak-grey/pine/birch/ash/cedar; plain `wood` grain stays on the fine woods: walnut, mahogany, cherry, ebony, bamboo) a storey of framing, close studding, boards, plain wood (grain); rough planks (`turn: 90` for vertical cladding), weatherboard, round logs (a log house's wall: an izba's, a cabin's), knotty softwood, herringbone and basket-weave parquet, wainscot panelling, a log's end grain, bark. Wood palettes: oak, oak-grey, pine, walnut, mahogany, cherry, birch, ash, chestnut, larch, tarred |
 | fabrics | the tailor's cloth (clothes.js): plain, linen, twill, herringbone, stripes, checks, tartan, damask, brocade, quilted, mail, leather, fur, straw, braid... |
-| materials | what items are made of when it is not wood, stone or cloth: paint, metal (brushed), hammered, lacquer, horn |
+| materials | what items are made of when it is not wood, stone or cloth: paint, metal (brushed), hammered, lacquer, horn; grass (a mown lawn: palette `lawn`) |
 | hieroglyphs | walls of writing (glyphs.js, docs/glyphs.md): sunk relief, painted columns, tomb wall, blue tomb, temple frieze |
 | ornament | geometric ornament, generated (docs/ornament.md): strapwork stars of 6, 8, 10, 12 and 16 points, rosettes, zellige, guilloche, braid, cable, Celtic field, border and panel, Viking interlace, arabesque field, double and border, stars holding a vine |
 | mosaic | tesserae over a drawing, generated (docs/mosaic.md): plain and geometric floors, meander, wave, guilloche, figured emblemata, Byzantine gold grounds |

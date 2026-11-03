@@ -32,7 +32,7 @@ being made at every start, and none was in the cache:
 
 A face's cached SHAPE is everything but its size and its skin's and hair's colours: it is built at the canon's size
 (the copy's matrix scales it to the person's head) in placeholder colours (`paintedGeometry`'s `recolor` paints the
-person's on as it is drawn), keyed by kind, seed (of 5), hairstyle, fringe, stone, headwear and earrings -- and by the
+person's on as it is drawn), keyed by kind, seed (of 16 since 2026-11-03; it was 5), the face's fullness (`full`: the body's fat, heads.js), hairstyle, fringe, stone, headwear and earrings -- and by the
 definitions it is made of (faces, hair, jewelry, the blooms, the materials). The generator draws people AT RANDOM, as
 the world draws them -- every style of dress, every kind, `?faces=N` seeds of each (18) -- and keeps the heads they
 would wear. A person whose exact head is not there gets another of its FAMILY (same kind, hair and what is worn: a
@@ -112,3 +112,14 @@ what changed from scratch, exactly as it did before pregen/ existed, and says so
 
 The folder is generated, not source (`.gitignore`). A distribution build (dist/bannerfield.html, one file) looks for
 `pregen/` beside itself when served over HTTP.
+
+## The statues' smoothing (2026-11-03)
+
+Measured again (seed 353465086, Greek, CDP CPU profile to `window.__ready`): ready at 117 s, 90 of them in the FIRST
+FRAME, and 73 s of those in heads.js `smoothNormals` -- the carved heads' normals (`CARVED_SMOOTH`, docs/arch.md) were
+averaged over every COPY of every vertex (the geometry repeats a vertex in each triangle it is in: some six times as
+many points, some thirty-six times the pairs), and `stoneFaceGeometry` did it again for every statue of a shape. Now it
+works over the surface's own points once each (same position, normal and kind), each weighted by how many copies it
+stands for -- the same sums, to 1e-16 -- and a carved shape's smoothed normals are kept like a living face's. Ready
+at 36 s. Most of what is left is the cache being stale (pattern tiles 8 s, wall fields 5 s, faces 4 s: the sources
+it hashes changed since the last `build/pregen.py`).

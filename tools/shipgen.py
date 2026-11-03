@@ -10,7 +10,7 @@ cloth between corners). Edit this script for the arithmetic, then run it:
 A ship's frame: the stern at x = 0, the bow at +x, y up from the keel's lowest point, z across (starboard +z).
 Every vessel says its `era` and `region`. Materials are roles: planks (the hull), deck, wood (spars, rails), cloth
 (the sails), rope, metal."""
-import json, os, collections
+import json, os, sys, collections
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 ITEMS = os.path.join(ROOT, "assets", "items")
@@ -56,32 +56,38 @@ COMPONENTS["square-sail"] = comp("Square sail", "a yard w wide with its sail hun
     {"id": "furled", "type": "rod", "when": {"set": "furled"}, "material": "cloth", "from": ["-w * 0.5", "-r * 1.5", 0], "to": ["w * 0.5", "-r * 1.5", 0], "r": "h * 0.03", "sides": 8},
 ])
 
-COMPONENTS["lateen-sail"] = comp("Lateen sail", "the triangular sail of the Mediterranean and the Indian Ocean: a long yard slung at `tilt` degrees, its tack low and forward (-x), its peak high and aft; the clew hangs below the peak. In the ship's frame as it is (its x fore and aft), bellied to +z",
+COMPONENTS["lateen-sail"] = comp("Lateen sail", "the triangular sail of the Mediterranean and the Indian Ocean: a long yard slung from the masthead (the origin) at `tilt` degrees, its TACK low and FORWARD (+x, the bow: fixed near the stem or the deck), its PEAK high and aft; the clew hangs below the peak, aft. In the ship's frame as it is (its x fore and aft), bellied to +z; `set` full or furled (the cloth rolled along the yard). (2026-11-03: the tack had been aft and the peak forward -- every lateen in the catalogue flew backwards; and its third corner doubled the first, a degenerate fan drawn black)",
     {"l": 14, "tilt": 52, "drop": 0.55, "belly": "l * 0.07", "r": "l * 0.009", "set": "full"}, {"wood": "pine", "cloth": "canvas"}, [
-    {"id": "yard", "type": "rod", "material": "wood", "from": ["-l * 0.42 * cos(tilt * 0.017453)", "-l * 0.42 * sin(tilt * 0.017453)", 0],
-     "to": ["l * 0.58 * cos(tilt * 0.017453)", "l * 0.58 * sin(tilt * 0.017453)", 0], "r0": "r", "r1": "r * 0.7"},
+    {"id": "yard", "type": "rod", "material": "wood", "from": ["l * 0.42 * cos(tilt * 0.017453)", "-l * 0.42 * sin(tilt * 0.017453)", 0],
+     "to": ["-l * 0.58 * cos(tilt * 0.017453)", "l * 0.58 * sin(tilt * 0.017453)", 0], "r0": "r", "r1": "r * 0.7"},
     {"id": "cloth", "type": "sail", "when": {"set": "full"}, "material": "cloth", "belly": "belly", "at": [0, 0, "-r"],
-     "corners": [["-l * 0.42 * cos(tilt * 0.017453)", "-l * 0.42 * sin(tilt * 0.017453)"], ["l * 0.58 * cos(tilt * 0.017453)", "l * 0.58 * sin(tilt * 0.017453)"],
-                 ["l * 0.58 * cos(tilt * 0.017453) - l * 0.12", "l * 0.58 * sin(tilt * 0.017453) - l * drop"]]},
-    {"id": "furled", "type": "rod", "when": {"set": "furled"}, "material": "cloth", "from": ["-l * 0.4 * cos(tilt * 0.017453)", "-l * 0.4 * sin(tilt * 0.017453) - r * 2", 0],
-     "to": ["l * 0.56 * cos(tilt * 0.017453)", "l * 0.56 * sin(tilt * 0.017453) - r * 2", 0], "r": "l * 0.018", "sides": 8},
+     "corners": [["-l * 0.58 * cos(tilt * 0.017453)", "l * 0.58 * sin(tilt * 0.017453)"], ["l * 0.42 * cos(tilt * 0.017453)", "-l * 0.42 * sin(tilt * 0.017453)"],
+                 ["(l * 0.42 * cos(tilt * 0.017453) - l * 0.58 * cos(tilt * 0.017453) + l * 0.12) / 2", "(l * 0.58 * sin(tilt * 0.017453) - l * drop - l * 0.42 * sin(tilt * 0.017453)) / 2"],
+                 ["-l * 0.58 * cos(tilt * 0.017453) + l * 0.12", "l * 0.58 * sin(tilt * 0.017453) - l * drop"]]},
+    {"id": "furled", "type": "rod", "when": {"set": "furled"}, "material": "cloth", "from": ["l * 0.4 * cos(tilt * 0.017453)", "-l * 0.4 * sin(tilt * 0.017453) - r * 2", 0],
+     "to": ["-l * 0.56 * cos(tilt * 0.017453)", "l * 0.56 * sin(tilt * 0.017453) - r * 2", 0], "r": "l * 0.018", "sides": 8},
 ])
 
-COMPONENTS["junk-sail"] = comp("Junk sail", "the Chinese lug sail: a cloth stiffened by battens across it, its head narrower and raked aft, hung from a yard with a boom at its foot; set fore and aft, in the ship's frame as it is",
-    {"w": 9, "h": 11, "battens": 5, "belly": "w * 0.05", "r": "w * 0.01"}, {"wood": "pine", "cloth": "sail-tan"}, [
-    {"id": "yard", "type": "rod", "material": "wood", "from": ["-w * 0.42", 0, 0], "to": ["w * 0.3", 0, 0], "r": "r"},
-    {"id": "cloth", "type": "sail", "material": "cloth", "belly": "belly", "battens": "battens", "battenR": "r * 0.6", "at": [0, "-r", 0],
-     "corners": [["-w * 0.4", 0], ["w * 0.28", 0], ["w * 0.5", "-h"], ["-w * 0.5", "-h"]]},
-    {"id": "boom", "type": "rod", "material": "wood", "from": ["-w * 0.55", "-h - r", 0], "to": ["w * 0.55", "-h - r", 0], "r": "r"},
+COMPONENTS["junk-sail"] = comp("Junk sail", "the Chinese lug sail: a cloth stiffened by battens across it, its head narrower and raked aft, hung from a yard with a boom at its foot, a quarter of it before the mast (the origin) and the rest abaft; set fore and aft, in the ship's frame as it is. `set` full, or furled: lowered, the battens folded down on the boom in a stack (as a junk's sail comes down)",
+    {"w": 9, "h": 11, "battens": 5, "belly": "w * 0.05", "r": "w * 0.01", "set": "full"}, {"wood": "pine", "cloth": "sail-tan"}, [
+    {"id": "yard", "type": "rod", "material": "wood", "when": {"set": "full"}, "from": ["-w * 0.64", 0, 0], "to": ["w * 0.12", 0, 0], "r": "r"},
+    {"id": "cloth", "type": "sail", "when": {"set": "full"}, "material": "cloth", "belly": "belly", "battens": "battens", "battenR": "r * 0.6", "at": [0, "-r", 0],
+     "corners": [["-w * 0.62", 0], ["w * 0.1", 0], ["w * 0.27", "-h"], ["-w * 0.75", "-h"]]},
+    {"id": "boom", "type": "rod", "material": "wood", "from": ["-w * 0.78", "-h - r", 0], "to": ["w * 0.3", "-h - r", 0], "r": "r"},
+    {"id": "stack", "type": "box", "when": {"set": "furled"}, "material": "cloth", "size": ["w * 1.02", "h * 0.012 * battens + r * 3", "r * 4"], "at": ["-w * 0.24", "-h + h * 0.006 * battens + r * 1.5", 0]},
+    {"id": "stack battens", "type": "rod", "when": {"set": "furled"}, "material": "wood", "from": ["-w * 0.76", 0, "r * 2.1"], "to": ["w * 0.28", 0, "r * 2.1"], "r": "r * 0.5",
+     "along": {"n": "battens", "from": [0, "-h + r", 0], "to": [0, "-h + h * 0.012 * battens + r * 2", 0]}, "mirror": "z"},
+    {"id": "stack yard", "type": "rod", "material": "wood", "when": {"set": "furled"}, "from": ["-w * 0.64", "-h + h * 0.012 * battens + r * 4", 0], "to": ["w * 0.12", "-h + h * 0.012 * battens + r * 4", 0], "r": "r"},
 ])
 
-COMPONENTS["crab-claw-sail"] = comp("Crab-claw sail", "the Oceanic sail: two spars from one tack spreading `spread` degrees apart, the cloth between them; the tack is the origin, the spars rise aft along +x and up",
-    {"l": 6, "lift": 62, "spread": 42, "belly": "l * 0.06", "r": "l * 0.012"}, {"wood": "bamboo", "cloth": "matting"}, [
-    {"id": "upper", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": ["l * cos(lift * 0.017453)", "l * sin(lift * 0.017453)", 0], "r0": "r", "r1": "r * 0.6"},
-    {"id": "lower", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": ["l * cos((lift - spread) * 0.017453)", "l * sin((lift - spread) * 0.017453)", 0], "r0": "r", "r1": "r * 0.6"},
-    {"id": "cloth", "type": "sail", "material": "cloth", "belly": "belly", "at": [0, 0, "-r"],
-     "corners": [[0, 0], ["l * cos(lift * 0.017453)", "l * sin(lift * 0.017453)"], ["l * 0.82 * cos((lift - spread / 2) * 0.017453)", "l * 0.82 * sin((lift - spread / 2) * 0.017453)"],
-                 ["l * cos((lift - spread) * 0.017453)", "l * sin((lift - spread) * 0.017453)"]]},
+COMPONENTS["crab-claw-sail"] = comp("Crab-claw sail", "the Oceanic sail: two spars from one tack (the origin, forward) spreading `spread` degrees apart, rising AFT (-x) and up at `lift` degrees, the cloth between them, the upper spar resting against the mast. `set` full or furled (the spars brought together, the mat rolled between them). (2026-11-03: it had risen forward, away from its mast)",
+    {"l": 6, "lift": 62, "spread": 42, "belly": "l * 0.06", "r": "l * 0.012", "set": "full"}, {"wood": "bamboo", "cloth": "matting"}, [
+    {"id": "upper", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": ["-l * cos(lift * 0.017453)", "l * sin(lift * 0.017453)", 0], "r0": "r", "r1": "r * 0.6"},
+    {"id": "lower", "type": "rod", "material": "wood", "when": {"set": "full"}, "from": [0, 0, 0], "to": ["-l * cos((lift - spread) * 0.017453)", "l * sin((lift - spread) * 0.017453)", 0], "r0": "r", "r1": "r * 0.6"},
+    {"id": "cloth", "type": "sail", "when": {"set": "full"}, "material": "cloth", "belly": "belly", "at": [0, 0, "-r"],
+     "corners": [[0, 0], ["-l * cos(lift * 0.017453)", "l * sin(lift * 0.017453)"], ["-l * 0.82 * cos((lift - spread / 2) * 0.017453)", "l * 0.82 * sin((lift - spread / 2) * 0.017453)"],
+                 ["-l * cos((lift - spread) * 0.017453)", "l * sin((lift - spread) * 0.017453)"]]},
+    {"id": "furled", "type": "rod", "when": {"set": "furled"}, "material": "cloth", "from": [0, 0, "r * 2"], "to": ["-l * 0.95 * cos(lift * 0.017453)", "l * 0.95 * sin(lift * 0.017453)", "r * 2"], "r": "r * 2.4", "sides": 8},
 ])
 
 COMPONENTS["oar"] = comp("Oar", "an oar l long along +x from its handle at the origin: a round loom and a flat blade at its end",
@@ -90,10 +96,12 @@ COMPONENTS["oar"] = comp("Oar", "an oar l long along +x from its handle at the o
     {"id": "blade", "type": "box", "material": "wood", "size": ["bladeL", 0.02, "bladeW"], "at": ["l - bladeL / 2", 0, 0]},
 ])
 
-COMPONENTS["oars"] = comp("Oars", "a bank of n oars a side, from x = from to x = to at the gunwale's height y and half-breadth z, thrust out and down `dip` degrees, on both sides",
-    {"n": 12, "from": 3, "to": 20, "y": 1.6, "z": 2.2, "l": 4.5, "dip": 18, "reach": 0.3}, {"wood": "ash"}, [
-    {"id": "oar", "use": "items/components/oar", "params": {"l": "l"}, "along": {"n": "n", "from": ["from", "y", "z * (1 - reach)"], "to": ["to", "y", "z * (1 - reach)"]},
+COMPONENTS["oars"] = comp("Oars", "a bank of n oars a side, from x = from to x = to at the gunwale's height y and half-breadth z, on both sides; `state` out (thrust out and down `dip` degrees, as rowing) or shipped (run in and laid fore and aft along the inside of the gunwale, the blades forward, as a ship lies at a quay or sails)",
+    {"n": 12, "from": 3, "to": 20, "y": 1.6, "z": 2.2, "l": 4.5, "dip": 18, "reach": 0.3, "state": "out"}, {"wood": "ash"}, [
+    {"id": "oar", "use": "items/components/oar", "when": {"state": "out"}, "params": {"l": "l"}, "along": {"n": "n", "from": ["from", "y", "z * (1 - reach)"], "to": ["to", "y", "z * (1 - reach)"]},
      "at": [0, 0, 0, -90, 0, "-dip"], "mirror": "z"},
+    {"id": "shipped", "use": "items/components/oar", "when": {"state": "shipped"}, "params": {"l": "l"}, "along": {"n": "max(1, round(n / 3))", "from": ["from - l * 0.25", "y + 0.12", "z * 0.72"], "to": ["max(from, to - l * 0.7)", "y + 0.12", "z * 0.72"]},
+     "at": [0, 0, 0, 0, 0, 2], "mirror": "z"},
 ])
 
 COMPONENTS["steering-oar"] = comp("Steering oar", "a side rudder: a broad-bladed oar hung down the starboard quarter, its tiller across the ship",
@@ -208,6 +216,27 @@ COMPONENTS["awning"] = comp("Awning", "a cloth roof on posts over a deck: d long
 ])
 
 
+COMPONENTS["hatch"] = comp("Hatch", "a cargo hatch in a deck: a raised coaming w across and d long round a dark opening (its grating), the origin at its centre on the deck -- the ship's `hold` anchor stands over it",
+    {"w": 2, "d": 2.5, "h": 0.35}, {"wood": "oak", "grate": "#2a2018"}, [
+    {"id": "coaming side", "type": "box", "material": "wood", "size": ["d", "h", 0.14], "at": [0, "h / 2", "w / 2 - 0.07"], "mirror": "z"},
+    {"id": "coaming end", "type": "box", "material": "wood", "size": [0.14, "h", "w"], "at": ["d / 2 - 0.07", "h / 2", 0], "mirror": "x"},
+    {"id": "opening", "type": "box", "material": "grate", "size": ["d - 0.2", 0.04, "w - 0.2"], "at": [0, "h * 0.7", 0]},
+    {"id": "grating", "type": "box", "material": "wood", "size": [0.06, 0.05, "w - 0.22"], "along": {"n": "max(2, round(d / 0.35))", "from": ["-d / 2 + 0.2", "h * 0.75", 0], "to": ["d / 2 - 0.2", "h * 0.75", 0]}},
+])
+
+COMPONENTS["bitts"] = comp("Bitts", "a pair of stout posts with a crosspiece, where the mooring lines and cables are made fast -- the ship's `moor` anchors are at them (s: their height)",
+    {"s": 0.8, "gap": 0.6}, {"wood": "oak"}, [
+    {"id": "post", "type": "box", "material": "wood", "size": ["s * 0.28", "s", "s * 0.28"], "at": [0, "s / 2", "gap / 2"], "mirror": "z"},
+    {"id": "cross", "type": "box", "material": "wood", "size": ["s * 0.18", "s * 0.18", "gap + s * 0.5"], "at": ["s * 0.12", "s * 0.62", 0]},
+])
+
+COMPONENTS["headsail"] = comp("Headsail", "a triangular staysail or jib set on a stay: its head at the origin (high on a mast), its tack at (x, y) forward and down (on the bowsprit or the stem), the clew `aft` back from the tack and `lift` above it; `set` full or furled (stowed along its stay)",
+    {"x": 10, "y": -12, "aft": 6, "lift": 1, "belly": "x * 0.03", "set": "full"}, {"cloth": "canvas", "rope": "hemp"}, [
+    {"id": "cloth", "type": "sail", "when": {"set": "full"}, "material": "cloth", "belly": "belly",
+     "corners": [[0, 0], ["x", "y"], ["x - aft / 2", "y + lift / 2"], ["x - aft", "y + lift"]]},
+    {"id": "furled", "type": "rod", "when": {"set": "furled"}, "material": "cloth", "from": ["x * 0.15", "y * 0.15", 0], "to": ["x * 0.92", "y * 0.92", 0], "r": "abs(y) * 0.012 + 0.04", "sides": 6},
+])
+
 # ---- SHIPS ------------------------------------------------------------------------------------------------------------
 # helpers: the parts a kind of rig adds
 def mast(x, y, h, r=None, top="none", topH=0.5):
@@ -221,8 +250,49 @@ def square(x, y, w, h, belly=None, foot=0.92, set_="set"):
     return {"id": f"square sail {x} {y}", "use": "items/components/square-sail", "params": p, "at": [x, y, 0, 90, 0, 0]}
 
 
-def lateen(x, y, l, tilt=52, drop=0.55, set_="set"):
+def lateen(x, y, l, tilt=52, drop=0.55, set_="set", tack=None):
+    """a lateen slung from the masthead (x, y); `tack` (a height): the yard's tilt follows from it, so its forward end
+    comes down to the stem or the deck there (a lateen's tack is made fast low forward, not flown in the air)"""
+    if tack is not None:
+        v = f"min(0.97, max(0.3, (({y}) - ({tack})) / (({l}) * 0.42)))"
+        tilt = f"atan2({v}, sqrt(1 - {v} * {v})) / 0.017453"
     return {"id": f"lateen {x}", "use": "items/components/lateen-sail", "params": {"l": l, "tilt": tilt, "drop": drop, "set": set_}, "at": [x, y, 0]}
+
+
+def lateen_rig(x, base, h, l, r=0.2, drop=0.55, steep=0.32, tackH=1.2, rake=0, sid=None):
+    """a mast `h` tall standing at (x, base) and its lateen: the yard hoisted no higher than lets its forward end come
+    down to `tackH` above the mast's foot at a slant of about asin(steep / 0.42) (.32 about 50 degrees, a Mediterranean
+    lateen; .25 about 36, a dhow's); `rake` degrees the mast leans forward (a felucca's, a xebec's foremast)"""
+    import math
+    hoist = f"min(({h}) * 0.92, ({l}) * {steep} + {tackH})"
+    h = f"({hoist}) * 1.06"   # (the mast ends just over its yard's sling: a bare pole standing on above it looked a second mast)
+    if rake:
+        sx, cy = round(math.sin(math.radians(rake)), 4), round(math.cos(math.radians(rake)), 4)
+        top = [f"{x} + ({hoist}) * {sx}", f"{base} + ({hoist}) * {cy}"]
+        m = {"id": f"mast {x}", "use": "items/components/mast", "params": {"h": h, "r": r}, "at": [x, base, 0, 0, 0, -rake]}
+    else:
+        top = [x, f"{base} + {hoist}"]
+        m = mast(x, base, h, r=r)
+    lt = lateen(top[0], top[1], l, drop=drop, tack=f"{base} + {tackH}")
+    if sid:
+        lt["id"] = sid
+    return [m, lt]
+
+
+def crab(tx, ty, l, base, lift=62, spread=40, r=0.07, sid="sail"):
+    """a crab-claw sail with its tack at (tx, ty) (forward), its spars rising aft, and the mast from `base` up to where
+    the upper spar rests on it (at .55 of its length)"""
+    import math
+    c, s_ = round(math.cos(math.radians(lift)) * 0.55, 4), round(math.sin(math.radians(lift)) * 0.55, 4)
+    mx, my = f"{tx} - ({l}) * {c}", f"{ty} + ({l}) * {s_}"
+    return [{"id": f"mast {sid}", "type": "rod", "material": "wood", "from": [mx, base, 0], "to": [mx, f"{my} + ({l}) * 0.04", 0], "r0": r, "r1": round(r * 0.65, 3)},
+            {"id": sid, "use": "items/components/crab-claw-sail", "params": {"l": l, "lift": lift, "spread": spread, "set": "set"}, "at": [tx, ty, 0]}]
+
+
+def headsail(head, tack, aft, lift=None, sid="jib"):
+    """a staysail or jib from `head` [x, y] (high on a mast) down to `tack` [x, y] (the bowsprit, the stem)"""
+    dx, dy = f"({tack[0]}) - ({head[0]})", f"({tack[1]}) - ({head[1]})"
+    return {"id": sid, "use": "items/components/headsail", "params": {"x": dx, "y": dy, "aft": aft, "lift": lift or f"abs({dy}) * 0.12", "set": "set"}, "at": [head[0], head[1], 0]}
 
 
 def stay(a, b, r=0.02):
@@ -237,6 +307,17 @@ def ship(name, era, region, about, params, materials, parts, **extra):
     mats = {"planks": "planks", "deck": "deck", "wood": "pine", "cloth": "canvas", "rope": "hemp", "metal": "iron"}
     mats.update(materials)
     ps = {"set": {"pick": ["full", "full", "furled"]}}
+    # STATES (2026-11-03): `set` full | furled -- every sail on board (square, lateen, junk, crab claw, headsails, the
+    # spanker); `oars` out | shipped -- every bank of oars (only a ship that has them). The game passes them as params
+    # (assets/world/ships.json `states`: moored, sailing, rowing); the seed picks them otherwise.
+    banks = [p_ for p_ in parts if p_.get("use") == "items/components/oars"]
+    for b in banks:
+        b["params"].setdefault("state", "oars")
+    if banks:
+        ps["oars"] = {"pick": ["out", "shipped"]}
+    for p_ in parts:   # (a sail drawn straight into the ship -- a spanker, a jib -- comes and goes with `set`)
+        if p_.get("type") == "sail" and "when" not in p_:
+            p_["when"] = {"set": "full"}
     ps.update(params)
     return {"kind": "item", "name": name, "category": "ship", "era": era, "region": region, "_about": about, "params": ps, "materials": mats, "parts": parts, **extra}
 
@@ -268,7 +349,7 @@ SHIPS["egyptian-boat"] = ship("Egyptian river boat", "-2500--500", "Egypt", "the
     square("L * 0.48", "D * 0.88 + mastH * 0.93", "L * 0.55", "mastH * 0.5", foot=1.0),
     {"id": "boom", "use": "items/components/yard", "params": {"l": "L * 0.58", "r": 0.06}, "at": ["L * 0.48", "D * 0.88 + mastH * 0.42", 0, 90, 0, 0]},
     {"id": "cabin", "use": "items/components/cabin", "params": {"w": "B * 0.6", "d": "L * 0.18", "h": 1.5, "windows": 1}, "materials": {"wood": "reed", "roofm": "reed"}, "at": ["L * 0.2", "D * 0.88", 0]},
-    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "L * 0.28", "bladeW": 0.5}, "at": ["L * 0.06", "D * 1.3", "B * 0.4", 0, 0, 12], "mirror": "z"},
+    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "L * 0.28", "bladeW": 0.5}, "at": ["L * 0.08", "D * 1.3", "B * 0.4", 0, 0, -32], "mirror": "z"},
     stay(["L * 0.48", "D * 0.88 + mastH", 0], ["L * 0.95", "D * 1.5", 0]), stay(["L * 0.48", "D * 0.88 + mastH", 0], ["L * 0.06", "D * 1.5", 0]),
 ])
 
@@ -282,8 +363,8 @@ SHIPS["trireme"] = ship("Trireme", "-550--300", "Greece, Phoenicia, Rome", "the 
     {"id": "oars lower", "use": "items/components/oars", "params": {"n": 27, "from": "L * 0.17", "to": "L * 0.85", "y": "D * 0.65", "z": "B * 0.5", "l": "L * 0.11", "dip": 14, "reach": 0.3}},
     {"id": "ram", "use": "items/components/ram", "params": {"l": "L * 0.06", "h": "D * 0.35"}, "materials": {"metal": "bronze"}, "at": ["L * 0.99", "D * 0.3", 0]},
     mast("L * 0.45", "D * 0.9", "mastH", r=0.16),
-    square("L * 0.45", "D * 0.9 + mastH * 0.92", "L * 0.28", "mastH * 0.55", set_="furled"),
-    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 2.6", "bladeW": 0.45}, "at": ["L * 0.06", "D * 1.2", "B * 0.42", 0, 0, 10], "mirror": "z"},
+    square("L * 0.45", "D * 0.9 + mastH * 0.92", "L * 0.28", "mastH * 0.55"),
+    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 2.2", "bladeW": 0.45}, "at": ["L * 0.08", "D * 1.2", "B * 0.42", 0, 0, -35], "mirror": "z"},
     {"id": "eye", "type": "lathe", "material": "gilt", "at": ["L * 0.88", "D * 0.85", "B * 0.44", 0, 0, 0], "profile": [[0, 0], [0.35, 0], [0.35, 0.04]], "sides": 12, "mirror": "z", "double": True},
 ])
 
@@ -298,7 +379,7 @@ SHIPS["roman-merchant"] = ship("Roman merchantman", "-100-400", "the Mediterrane
     square("L * 0.9 + mastH * 0.25", "D * 1.0 + mastH * 0.3", "L * 0.18", "mastH * 0.25"),
     {"id": "swan", "use": "items/components/figurehead", "params": {"style": "swan", "s": "D * 0.45"}, "at": [0.3, "D * 1.3", 0, 180, 0, 0]},
     {"id": "cabin", "use": "items/components/cabin", "params": {"w": "B * 0.6", "d": "L * 0.16", "h": 2.0, "windows": 2}, "at": ["L * 0.08", "D * 0.9", 0]},
-    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 1.6", "bladeW": 0.5}, "at": ["L * 0.12", "D * 1.15", "B * 0.45", 0, 0, 10], "mirror": "z"},
+    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 1.6", "bladeW": 0.5}, "at": ["L * 0.12", "D * 1.15", "B * 0.45", 0, 0, -30], "mirror": "z"},
     stay(["L * 0.5", "D * 0.9 + mastH", 0], ["L * 0.96", "D * 1.3", 0]), stay(["L * 0.5", "D * 0.9 + mastH", 0], ["L * 0.05", "D * 1.35", 0]),
 ])
 
@@ -314,7 +395,7 @@ SHIPS["longship"] = ship("Longship", "800-1100", "Scandinavia", "the Viking long
     {"id": "oars", "use": "items/components/oars", "params": {"n": "oarsN", "from": "L * 0.17", "to": "L * 0.83", "y": "D * 0.82", "z": "B * 0.5", "l": "L * 0.2", "dip": 16, "reach": 0.28}},
     mast("L * 0.48", "D * 0.15", "mastH + D * 0.15", r=0.18),
     square("L * 0.48", "D * 0.3 + mastH * 0.94", "L * 0.42", "mastH * 0.62", belly="L * 0.05"),
-    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 2.2", "bladeW": 0.5}, "at": ["L * 0.1", "D * 1.05", "B * 0.5", 0, 0, 8]},
+    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 2.2", "bladeW": 0.5}, "at": ["L * 0.1", "D * 1.05", "B * 0.5", 0, 0, -25]},
     stay(["L * 0.48", "D * 0.3 + mastH", 0], ["L * 0.96", "D * 1.6", 0]), stay(["L * 0.48", "D * 0.3 + mastH", 0], ["L * 0.05", "D * 1.6", 0]),
 ])
 
@@ -327,7 +408,7 @@ SHIPS["knarr"] = ship("Knarr", "800-1200", "Scandinavia, the North Atlantic", "t
     {"id": "cargo", "type": "lathe", "material": "oak", "at": ["L * 0.5", "D * 0.15", 0], "profile": [[0.3, 0], [0.4, 0.5], [0.3, 1.0]], "sides": 12, "along": {"n": 4, "from": ["-L * 0.12", 0, "-B * 0.18"], "to": ["L * 0.12", 0, "B * 0.18"]}},
     mast("L * 0.45", "D * 0.15", "mastH", r=0.17),
     square("L * 0.45", "D * 0.15 + mastH * 0.94", "L * 0.55", "mastH * 0.6", belly="L * 0.06"),
-    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 2", "bladeW": 0.5}, "at": ["L * 0.1", "D * 1.1", "B * 0.5", 0, 0, 8]},
+    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 2", "bladeW": 0.5}, "at": ["L * 0.1", "D * 1.1", "B * 0.5", 0, 0, -25]},
     stay(["L * 0.45", "D * 0.15 + mastH", 0], ["L * 0.96", "D * 1.5", 0]), stay(["L * 0.45", "D * 0.15 + mastH", 0], ["L * 0.05", "D * 1.5", 0]),
 ])
 
@@ -363,8 +444,7 @@ SHIPS["carrack"] = ship("Carrack", "1450-1600", "Portugal, Spain, Genoa, England
     square("L * 0.5", "D * 0.82 + mastH * 1.4", "L * 0.28", "mastH * 0.3", belly="L * 0.03"),
     mast("L * 0.85", "D * 1.3", "mastH * 0.65", r=0.22, top="topmast", topH=0.4),
     square("L * 0.85", "D * 1.3 + mastH * 0.58", "L * 0.38", "mastH * 0.36", belly="L * 0.05"),
-    mast("L * 0.15", "D * 1.67", "mastH * 0.5", r=0.18),
-    lateen("L * 0.15", "D * 1.67 + mastH * 0.4", "L * 0.42", tilt=48, drop=0.5),
+    *lateen_rig("L * 0.15", "D * 1.67", "mastH * 0.5", "L * 0.42", r=0.18, drop=0.5),
     {"id": "bowsprit", "use": "items/components/bowsprit", "params": {"l": "L * 0.35", "r": 0.2, "steeve": 28}, "at": ["L * 0.97", "D * 1.3", 0]},
     {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.45"}, "at": ["L * 0.85", "D * 1.0", "B * 0.5"]},
     stay(["L * 0.5", "D * 0.82 + mastH * 1.45", 0], ["L * 0.97", "D * 1.35", 0]), stay(["L * 0.85", "D * 1.3 + mastH * 0.65", 0], ["L * 1.25", "D * 1.45", 0]),
@@ -380,12 +460,9 @@ SHIPS["caravel"] = ship("Caravel", "1440-1550", "Portugal, Spain", "the caravel 
     {"id": "aftcastle wall", "type": "box", "material": "planks", "size": ["L * 0.25", "D * 0.35", 0.08], "at": ["L * 0.145", "D * 1.0", "B * 0.42"], "mirror": "z"},
     {"id": "stern wall", "type": "box", "material": "planks", "size": [0.08, "D * 0.35", "B * 0.85"], "at": ["L * 0.02", "D * 1.0", 0]},
     {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 0.95", "w": "B * 0.08", "tiller": "L * 0.1"}, "at": [0, "D * 0.85", 0]},
-    mast("L * 0.55", "D * 0.82", "mastH", r=0.22),
-    lateen("L * 0.55", "D * 0.82 + mastH * 0.9", "L * 0.8", tilt=50, drop=0.55),
-    mast("L * 0.22", "D * 1.17", "mastH * 0.7", r=0.16),
-    lateen("L * 0.22", "D * 1.17 + mastH * 0.62", "L * 0.55", tilt=52, drop=0.5),
-    {"id": "foremast", "use": "items/components/mast", "when": {"masts": 3}, "params": {"h": "mastH * 0.5", "r": 0.13}, "at": ["L * 0.85", "D * 0.82", 0]},
-    {"id": "fore lateen", "use": "items/components/lateen-sail", "when": {"masts": 3}, "params": {"l": "L * 0.4", "tilt": 52, "drop": 0.5, "set": "set"}, "at": ["L * 0.85", "D * 0.82 + mastH * 0.45", 0]},
+    *lateen_rig("L * 0.55", "D * 0.82", "mastH", "L * 0.8", r=0.22, drop=0.55),
+    *lateen_rig("L * 0.22", "D * 1.17", "mastH * 0.7", "L * 0.55", r=0.16, drop=0.5),
+    *[{**p_, "when": {"masts": 3}} for p_ in lateen_rig("L * 0.8", "D * 0.82", "mastH * 0.5", "L * 0.4", r=0.13, drop=0.5)],
     stay(["L * 0.55", "D * 0.82 + mastH", 0], ["L * 0.97", "D * 1.3", 0]),
 ])
 
@@ -403,7 +480,8 @@ SHIPS["galleon"] = ship("Galleon", "1550-1650", "Spain, England, the Netherlands
     {"id": "stern", "use": "items/components/cabin", "params": {"w": "B * 0.7", "d": "L * 0.04", "h": "D * 0.75", "windows": 4}, "at": ["L * 0.0", "D * 0.85", 0]},
     {"id": "stern trim", "type": "box", "material": "trim", "size": [0.08, 0.2, "B * 0.7"], "along": {"n": 3, "from": [0.0, "D * 1.0", 0], "to": [0.0, "D * 1.55", 0]}},
     {"id": "forecastle", "use": "items/components/castle", "params": {"w": "B * 0.7", "d": "L * 0.14", "h": "D * 0.3", "rail": 0.9, "crenels": 0, "posts": 0}, "at": ["L * 0.8", "D * 0.9", 0]},
-    {"id": "beakhead", "type": "plate", "material": "planks", "thick": "B * 0.12", "at": ["L", "D * 0.75", 0, 90, 0, 0], "outline": [[0, 0], ["L * 0.1", "D * 0.12"], ["L * 0.1", "D * 0.2"], [0, "D * 0.45"]]},
+    {"id": "beakhead", "type": "plate", "material": "planks", "thick": "B * 0.12", "at": ["L * 0.99", "D * 0.75", 0], "outline": [[0, 0], ["L * 0.1", "D * 0.12"], ["L * 0.1", "D * 0.2"], [0, "D * 0.45"]]},   # (2026-11-03: it had stood across the bow, yawed 90)
+    {"id": "beakhead rails", "type": "rod", "material": "trim", "from": ["L * 0.99", "D * 1.15", "B * 0.2"], "to": ["L * 1.09", "D * 0.95", 0.1], "r": 0.08, "mirror": "z"},
     {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.0", "w": "B * 0.07", "tiller": 0}, "at": [0, "D * 0.85", 0]},
     mast("L * 0.48", "D * 0.85", "mastH", r=0.34, top="topmast", topH=0.5),
     square("L * 0.48", "D * 0.85 + mastH * 0.85", "L * 0.5", "mastH * 0.45", belly="L * 0.06"),
@@ -411,12 +489,14 @@ SHIPS["galleon"] = ship("Galleon", "1550-1650", "Spain, England, the Netherlands
     mast("L * 0.78", "D * 1.2", "mastH * 0.75", r=0.26, top="topmast", topH=0.5),
     square("L * 0.78", "D * 1.2 + mastH * 0.64", "L * 0.38", "mastH * 0.34", belly="L * 0.05"),
     square("L * 0.78", "D * 1.2 + mastH * 1.05", "L * 0.2", "mastH * 0.24", belly="L * 0.02"),
-    mast("L * 0.22", "D * 1.63", "mastH * 0.5", r=0.2),
-    lateen("L * 0.22", "D * 1.63 + mastH * 0.4", "L * 0.38", tilt=50, drop=0.5),
-    mast("L * 0.07", "D * 1.63", "mastH * 0.35", r=0.15),
-    lateen("L * 0.07", "D * 1.63 + mastH * 0.28", "L * 0.25", tilt=50, drop=0.5),
+    *lateen_rig("L * 0.22", "D * 1.63", "mastH * 0.5", "L * 0.38", r=0.2, drop=0.5),
+    *lateen_rig("L * 0.07", "D * 1.63", "mastH * 0.35", "L * 0.25", r=0.15, drop=0.5),
     {"id": "bowsprit", "use": "items/components/bowsprit", "params": {"l": "L * 0.35", "r": 0.22, "steeve": 25}, "at": ["L * 0.98", "D * 1.15", 0]},
-    square("L * 0.98 + L * 0.2", "D * 1.15 + L * 0.09", "L * 0.2", "mastH * 0.18", belly="L * 0.02"),
+    # THE SPRITSAIL (2026-11-03: it hung off the bowsprit like a flag): slung a little under the bowsprit by its yard,
+    # its clews sheeted back to the beakhead
+    square("L * 0.98 + L * 0.17", "D * 1.15 + L * 0.075 - 0.5", "L * 0.22", "mastH * 0.16", belly="L * 0.025", foot=0.85),
+    {"id": "spritsail slings", "type": "rod", "material": "rope", "from": ["L * 1.15", "D * 1.15 + L * 0.075 - 0.5", 0], "to": ["L * 1.15", "D * 1.15 + L * 0.079", 0], "r": 0.04, "sides": 4},
+    {"id": "spritsail sheets", "type": "rod", "material": "rope", "when": {"set": "full"}, "from": ["L * 1.15", "D * 1.15 + L * 0.075 - 0.5 - mastH * 0.16", "L * 0.093"], "to": ["L * 1.0", "D * 1.1", "B * 0.3"], "r": 0.03, "sides": 4, "mirror": "z"},
     {"id": "lantern", "type": "lathe", "material": "trim", "at": ["L * 0.01", "D * 1.63 + 0.9", 0], "profile": [[0.2, 0], [0.32, 0.2], [0.32, 0.7], [0.15, 0.95], [0, 1.05]]},
     stay(["L * 0.48", "D * 0.85 + mastH * 1.5", 0], ["L * 0.98", "D * 1.25", 0]), stay(["L * 0.78", "D * 1.2 + mastH * 1.12", 0], ["L * 1.3", "D * 1.28", 0]),
     stay(["L * 0.48", "D * 0.85 + mastH", 0], ["L * 0.1", "D * 2.0", 0]),
@@ -432,10 +512,8 @@ SHIPS["galley"] = ship("Galley", "1300-1750", "the Mediterranean", "the war gall
     {"id": "spur", "type": "rod", "material": "wood", "from": ["L * 0.97", "D * 1.1", 0], "to": ["L * 1.12", "D * 1.25", 0], "r0": 0.18, "r1": 0.08},
     {"id": "bow gun", "use": "items/components/cannon", "params": {"l": 2.6, "bore": 0.13}, "materials": {"metal": "bronze"}, "at": ["L * 0.9", "D * 0.9", 0]},
     {"id": "awning", "use": "items/components/awning", "params": {"w": "B * 0.9", "d": "L * 0.18", "h": 2.2}, "at": ["L * 0.03", "D * 0.9", 0]},
-    mast("L * 0.55", "D * 0.9", "mastH", r=0.24),
-    lateen("L * 0.55", "D * 0.9 + mastH * 0.9", "L * 0.75", tilt=55, drop=0.5),
-    mast("L * 0.25", "D * 0.9", "mastH * 0.75", r=0.18),
-    lateen("L * 0.25", "D * 0.9 + mastH * 0.66", "L * 0.5", tilt=55, drop=0.5),
+    *lateen_rig("L * 0.55", "D * 0.9", "mastH", "L * 0.75", r=0.24, drop=0.5, steep=0.34),
+    *lateen_rig("L * 0.8", "D * 0.9", "mastH * 0.7", "L * 0.45", r=0.18, drop=0.5, steep=0.34),
     {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.1", "w": "B * 0.1", "tiller": "L * 0.06"}, "at": [0, "D * 1.0", 0]},
 ])
 
@@ -445,10 +523,8 @@ SHIPS["dhow"] = ship("Dhow", "800-1900", "Arabia, the Persian Gulf, East Africa,
          keel=[[0, "D * 0.2"], [0.1, 0], [0.85, 0], [1, "D * 0.7"]], sheer=[[0, "D * 1.15"], [0.5, "D"], [1, "D * 1.35"]],
          deck=[{"y": "D * 0.85", "from": 0.03, "to": 0.97}], rail=0.08, keelBeam=[0.28, 0.3]),
     {"id": "cabin", "use": "items/components/cabin", "params": {"w": "B * 0.85", "d": "L * 0.18", "h": 1.8, "windows": 2}, "at": ["L * 0.02", "D * 0.85", 0]},
-    mast("L * 0.55", "D * 0.85", "mastH", r=0.24),
-    lateen("L * 0.55", "D * 0.85 + mastH * 0.92", "L * 0.95", tilt=45, drop=0.5),
-    mast("L * 0.2", "D * 0.85", "mastH * 0.6", r=0.16),
-    lateen("L * 0.2", "D * 0.85 + mastH * 0.55", "L * 0.5", tilt=48, drop=0.5),
+    *lateen_rig("L * 0.58", "D * 0.85", "mastH", "L * 0.95", r=0.24, drop=0.5, steep=0.26, rake=8),
+    *lateen_rig("L * 0.24", "D * 0.85", "mastH * 0.6", "L * 0.5", r=0.16, drop=0.5, steep=0.28, rake=4),
     {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.1", "w": "B * 0.1", "tiller": "L * 0.1"}, "at": [0, "D * 1.0", 0]},
     stay(["L * 0.55", "D * 0.85 + mastH", 0], ["L * 0.97", "D * 1.4", 0]),
 ])
@@ -461,11 +537,11 @@ SHIPS["junk"] = ship("Junk", "1200-1900", "China, South-East Asia", "the sea-goi
     {"id": "poop", "use": "items/components/cabin", "params": {"w": "B * 0.9", "d": "L * 0.22", "h": "D * 0.55", "windows": 3}, "materials": {"wood": "planks", "roofm": "trim"}, "at": ["L * 0.02", "D * 0.85", 0]},
     {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.4", "w": "B * 0.16", "tiller": "L * 0.15", "thick": 0.12}, "at": [0, "D * 1.2", 0]},
     mast("L * 0.55", "D * 0.85", "mastH", r=0.3),
-    {"id": "main sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.3", "h": "mastH * 0.8", "battens": 6}, "at": ["L * 0.55", "D * 0.85 + mastH * 0.92", 0]},
+    {"id": "main sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.3", "h": "mastH * 0.8", "battens": 6, "set": "set"}, "at": ["L * 0.55", "D * 0.85 + mastH * 0.92", 0]},
     mast("L * 0.82", "D * 0.85", "mastH * 0.6", r=0.2),
-    {"id": "fore sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.2", "h": "mastH * 0.48", "battens": 4}, "at": ["L * 0.82", "D * 0.85 + mastH * 0.56", 0]},
+    {"id": "fore sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.2", "h": "mastH * 0.48", "battens": 4, "set": "set"}, "at": ["L * 0.82", "D * 0.85 + mastH * 0.56", 0]},
     mast("L * 0.2", "D * 0.85 + D * 0.55", "mastH * 0.45", r=0.16),
-    {"id": "mizzen sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.14", "h": "mastH * 0.34", "battens": 3}, "at": ["L * 0.2", "D * 1.4 + mastH * 0.42", 0]},
+    {"id": "mizzen sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.14", "h": "mastH * 0.34", "battens": 3, "set": "set"}, "at": ["L * 0.2", "D * 1.4 + mastH * 0.42", 0]},
     {"id": "eye", "type": "lathe", "material": "trim", "at": ["L * 0.9", "D * 0.9", "B * 0.46", 0, 0, 0], "profile": [[0, 0], [0.3, 0], [0.3, 0.04]], "sides": 12, "mirror": "z", "double": True},
 ])
 
@@ -486,8 +562,7 @@ SHIPS["outrigger-canoe"] = ship("Outrigger canoe", "-1000-1900", "Polynesia, Mic
          keel=[[0, "D * 0.5"], [0.12, 0], [0.88, 0], [1, "D * 0.5"]], sheer=[[0, "D * 1.5"], [0.15, "D * 1.05"], [0.5, "D"], [0.85, "D * 1.05"], [1, "D * 1.5"]],
          rail=0.04, thwarts={"n": 3, "y": "D * 0.7", "w": 0.15, "from": 0.25, "to": 0.75}),
     {"id": "outrigger", "use": "items/components/outrigger", "params": {"l": "L * 0.6", "r": "B * 0.3", "out": "L * 0.3", "span": "L * 0.35"}, "at": ["L * 0.5", "D * 0.85", 0]},
-    {"id": "mast", "type": "rod", "material": "wood", "from": ["L * 0.55", "D * 0.3", 0], "to": ["L * 0.62", "D * 0.3 + mastH", 0], "r0": 0.06, "r1": 0.04},
-    {"id": "sail", "use": "items/components/crab-claw-sail", "params": {"l": "mastH * 1.15", "lift": 65, "spread": 40}, "at": ["L * 0.62", "D * 0.4", 0]},
+    *crab("L * 0.88", "D * 1.05", "mastH * 1.15", "D * 0.3", r=0.06),
 ])
 
 SHIPS["voyaging-canoe"] = ship("Voyaging canoe", "800-1800", "Polynesia", "the double-hulled canoe that settled the Pacific: two hulls under one platform with a shelter on it, two crab-claw sails, steered with a great paddle",
@@ -498,11 +573,9 @@ SHIPS["voyaging-canoe"] = ship("Voyaging canoe", "800-1800", "Polynesia", "the d
     {"id": "platform", "type": "box", "material": "deck", "size": ["L * 0.5", 0.08, "gap + B * 0.6"], "at": ["L * 0.5", "D * 1.0", 0]},
     {"id": "beam", "type": "rod", "material": "wood", "from": [0, 0, "-gap / 2 - B * 0.3"], "to": [0, 0, "gap / 2 + B * 0.3"], "r": 0.07, "along": {"n": 4, "from": ["L * 0.28", "D * 0.95", 0], "to": ["L * 0.72", "D * 0.95", 0]}},
     {"id": "shelter", "use": "items/components/cabin", "params": {"w": "gap * 0.5", "d": "L * 0.16", "h": 1.4, "roof": "pitched", "windows": 0}, "materials": {"wood": "matting", "roofm": "matting"}, "at": ["L * 0.42", "D * 1.04", 0]},
-    {"id": "mast", "type": "rod", "material": "wood", "from": ["L * 0.66", "D * 1.04", 0], "to": ["L * 0.7", "D * 1.04 + mastH", 0], "r0": 0.08, "r1": 0.05},
-    {"id": "sail", "use": "items/components/crab-claw-sail", "params": {"l": "mastH * 1.1", "lift": 66, "spread": 40}, "at": ["L * 0.7", "D * 1.1", 0]},
-    {"id": "mast aft", "type": "rod", "material": "wood", "from": ["L * 0.3", "D * 1.04", 0], "to": ["L * 0.34", "D * 1.04 + mastH * 0.8", 0], "r0": 0.07, "r1": 0.045},
-    {"id": "sail aft", "use": "items/components/crab-claw-sail", "params": {"l": "mastH * 0.9", "lift": 66, "spread": 40}, "at": ["L * 0.34", "D * 1.1", 0]},
-    {"id": "steering paddle", "use": "items/components/steering-oar", "params": {"l": "D * 2.5", "bladeW": 0.4}, "at": ["L * 0.05", "D * 1.1", "gap / 2", 0, 0, 15]},
+    *crab("L * 0.84", "D * 1.1", "mastH * 1.1", "D * 1.04", r=0.08),
+    *crab("L * 0.5", "D * 1.1", "mastH * 0.9", "D * 1.04", r=0.07, sid="sail aft"),
+    {"id": "steering paddle", "use": "items/components/steering-oar", "params": {"l": "D * 2.5", "bladeW": 0.4}, "at": ["L * 0.06", "D * 1.1", "gap / 2", 0, 0, -35]},
 ])
 
 SHIPS["gondola"] = ship("Gondola", "1500-1900", "Venice", "the gondola: long, narrow and black, its keel rockered so it turns on a point, the iron ferro at the prow and the curl at the stern, rowed standing by one oar on a forcola on the starboard quarter, a felze cabin for the passengers",
@@ -581,8 +654,7 @@ SHIPS["fluyt"] = ship("Fluyt", "1600-1750", "the Netherlands", "the Dutch fluyt 
     mast("L * 0.82", "D * 0.85", "mastH * 0.8", r=0.24, top="topmast", topH=0.5),
     square("L * 0.82", "D * 0.85 + mastH * 0.68", "L * 0.36", "mastH * 0.36", belly="L * 0.04"),
     square("L * 0.82", "D * 0.85 + mastH * 1.14", "L * 0.2", "mastH * 0.25", belly="L * 0.02"),
-    mast("L * 0.18", "D * 1.2", "mastH * 0.55", r=0.18),
-    lateen("L * 0.18", "D * 1.2 + mastH * 0.45", "L * 0.35", tilt=48, drop=0.5),
+    *lateen_rig("L * 0.18", "D * 1.2", "mastH * 0.55", "L * 0.35", r=0.18, drop=0.5),
     {"id": "bowsprit", "use": "items/components/bowsprit", "params": {"l": "L * 0.3", "r": 0.2, "steeve": 28}, "at": ["L * 0.98", "D * 1.05", 0]},
     stay(["L * 0.5", "D * 0.85 + mastH * 1.5", 0], ["L * 0.98", "D * 1.1", 0]), stay(["L * 0.82", "D * 0.85 + mastH * 1.2", 0], ["L * 1.25", "D * 1.19", 0]),
 ])
@@ -592,14 +664,19 @@ SHIPS["xebec"] = ship("Xebec", "1650-1800", "the Barbary coast, Spain, France", 
     hull("L", "B", "D", fullness=0.4, plan=[[0, 0.15], [0.12, 0.65], [0.4, 1], [0.7, 0.9], [0.95, 0.35], [1, 0.03]],
          keel=[[0, "D * 0.4"], [0.1, 0], [0.9, 0], [1, "D * 0.35"]], sheer=[[0, "D * 1.3"], [0.4, "D"], [1, "D * 1.15"]],
          deck=[{"y": "D * 0.85", "from": 0.03, "to": 0.97}], rail=0.08, keelBeam=[0.3, 0.3]),
-    {"id": "stern overhang", "type": "box", "material": "planks", "size": ["L * 0.1", 0.15, "B * 0.7"], "at": ["-L * 0.04", "D * 1.28", 0]},
+    # THE OVERHANGING STERN (2026-11-03: it had been a board floating behind the transom): a platform carried aft over
+    # the rudder on the hull's counter -- a wedge rising from the quarters, wider than the narrow stern below it,
+    # its underside sweeping up aft, two knees under it, a rail round it
+    {"id": "stern overhang", "type": "plate", "material": "planks", "taper": ["B * 0.56", "B * 0.44"], "at": [0, 0, 0],
+     "outline": [["-L * 0.085", "D * 1.24"], ["-L * 0.04", "D * 1.12"], [0, "D * 1.02"], ["L * 0.05", "D * 0.92"], ["L * 0.11", "D * 0.9"], ["L * 0.11", "D * 1.28"], [0, "D * 1.33"], ["-L * 0.085", "D * 1.38"]]},
+    {"id": "overhang knees", "type": "rod", "material": "wood", "from": ["L * 0.02", "D * 0.8", "B * 0.12"], "to": ["-L * 0.07", "D * 1.24", "B * 0.24"], "r": 0.12, "mirror": "z"},
+    {"id": "overhang rail", "type": "rod", "material": "wood", "from": ["L * 0.08", "D * 1.3 + 0.9", "B * 0.24"], "to": ["-L * 0.083", "D * 1.38 + 0.9", "B * 0.27"], "r": 0.05, "mirror": "z"},
+    {"id": "overhang stanchions", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": [0, 0.9, 0], "r": 0.04, "at": [["-L * 0.08", "D * 1.38", "B * 0.27"], ["-L * 0.04", "D * 1.36", "B * 0.26"], [0, "D * 1.33", "B * 0.25"], ["-L * 0.08", "D * 1.38", "-B * 0.27"], ["-L * 0.04", "D * 1.36", "-B * 0.26"], [0, "D * 1.33", "-B * 0.25"]]},
+    {"id": "taffrail", "type": "rod", "material": "wood", "from": ["-L * 0.084", "D * 1.38 + 0.9", "B * 0.27"], "to": ["-L * 0.084", "D * 1.38 + 0.9", "-B * 0.27"], "r": 0.05},
     {"id": "guns", "use": "items/components/gun-row", "params": {"n": 9, "from": "L * 0.2", "to": "L * 0.8", "y": "D * 0.95", "z": "B * 0.48", "bore": 0.08, "reach": 0.4}},
-    mast("L * 0.5", "D * 0.85", "mastH", r=0.26),
-    lateen("L * 0.5", "D * 0.85 + mastH * 0.92", "L * 0.85", tilt=50, drop=0.55),
-    {"id": "foremast", "use": "items/components/mast", "params": {"h": "mastH * 0.8", "r": 0.2}, "at": ["L * 0.82", "D * 0.85", 0, 0, 0, -15]},
-    lateen("L * 0.82 + mastH * 0.2", "D * 0.85 + mastH * 0.72", "L * 0.6", tilt=50, drop=0.55),
-    mast("L * 0.15", "D * 0.85", "mastH * 0.6", r=0.16),
-    lateen("L * 0.15", "D * 0.85 + mastH * 0.55", "L * 0.4", tilt=50, drop=0.5),
+    *lateen_rig("L * 0.5", "D * 0.85", "mastH", "L * 0.8", r=0.26, drop=0.55),
+    *lateen_rig("L * 0.84", "D * 0.85", "mastH * 0.8", "L * 0.55", r=0.2, drop=0.55, rake=15),
+    *lateen_rig("L * 0.15", "D * 0.85", "mastH * 0.6", "L * 0.4", r=0.16, drop=0.5),
     {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.0", "w": "B * 0.08", "tiller": "L * 0.08"}, "at": [0, "D * 0.9", 0]},
 ])
 
@@ -608,14 +685,13 @@ SHIPS["felucca"] = ship("Felucca", "1500-1900", "Egypt, the Levant", "the Nile's
     hull("L", "B", "D", fullness=0.5, plan=[[0, 0.35], [0.15, 0.8], [0.45, 1], [0.8, 0.7], [1, 0.03]],
          keel=[[0, "D * 0.25"], [0.1, 0], [0.9, 0], [1, "D * 0.5"]], sheer=[[0, "D * 1.1"], [0.5, "D"], [1, "D * 1.4"]],
          deck=[{"y": "D * 0.8", "from": 0.03, "to": 0.97}], rail=0.06),
-    {"id": "mast", "use": "items/components/mast", "params": {"h": "mastH", "r": 0.15}, "at": ["L * 0.6", "D * 0.8", 0, 0, 0, -12]},
-    lateen("L * 0.6 + mastH * 0.19", "D * 0.8 + mastH * 0.9", "L * 1.1", tilt=58, drop=0.55),
+    *lateen_rig("L * 0.62", "D * 0.8", "mastH", "L * 1.1", r=0.15, drop=0.55, steep=0.34, tackH=0.6, rake=10),
     {"id": "awning", "use": "items/components/awning", "params": {"w": "B * 0.9", "d": "L * 0.25", "h": 1.8}, "at": ["L * 0.03", "D * 0.8", 0]},
     {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.1", "w": "B * 0.12", "tiller": "L * 0.12", "thick": 0.06}, "at": [0, "D * 0.95", 0]},
 ])
 
 SHIPS["ship-of-the-line"] = ship("Ship of the line", "1700-1800", "England, France, Spain", "a 74-gun ship of the line: two full gun decks and a quarterdeck, the stern galleries with their windows, a lion at the head, three masts in three tiers of square sails, a bowsprit with its jibs",
-    {"L": [50, 58], "B": "L * 0.26", "D": "B * 0.65", "mastH": "L * 0.7"}, {"planks": "planks", "wood": "pine", "trim": "gilt", "band": "#e0c46a"}, [
+    {"L": [50, 58], "B": "L * 0.26", "D": "B * 0.65", "mastH": "L * 0.58"}, {"planks": "planks", "wood": "pine", "trim": "gilt", "band": "#e0c46a"}, [
     hull("L", "B", "D", fullness=0.6, tumblehome=0.3, plan=[[0, 0.35], [0.1, 0.72], [0.35, 1], [0.65, 1], [0.88, 0.6], [1, 0.05]],
          keel=[[0, "D * 0.2"], [0.08, 0], [0.92, 0], [1, "D * 0.25"]], sheer=[[0, "D * 1.08"], [0.5, "D"], [1, "D * 1.05"]],
          deck=[{"y": "D * 0.9", "from": 0.03, "to": 0.97}], rail=0.12, keelBeam=[0.45, 0.45]),
@@ -650,7 +726,8 @@ SHIPS["ship-of-the-line"] = ship("Ship of the line", "1700-1800", "England, Fran
     {"id": "spanker gaff", "type": "rod", "material": "wood", "from": ["L * 0.17", "D * 1.45 + mastH * 0.5", 0], "to": ["L * 0.02", "D * 1.45 + mastH * 0.62", 0], "r": 0.1},
     {"id": "spanker", "type": "sail", "material": "cloth", "belly": "L * 0.02", "at": ["L * 0.17", "D * 1.45 + mastH * 0.5", 0], "corners": [[0, 0], ["-L * 0.15", "mastH * 0.12"], ["-L * 0.2", "-mastH * 0.22"], [0, "-mastH * 0.28"]]},
     {"id": "bowsprit", "use": "items/components/bowsprit", "params": {"l": "L * 0.4", "r": 0.3, "steeve": 20}, "at": ["L * 0.98", "D * 1.1", 0]},
-    {"id": "jib", "type": "sail", "material": "cloth", "belly": "L * 0.02", "at": ["L * 0.8", "D * 1.2 + mastH * 1.15", 0], "corners": [[0, 0], ["L * 0.5", "-mastH * 0.95"], ["L * 0.12", "-mastH * 1.0"]]},
+    headsail(["L * 0.8", "D * 1.2 + mastH * 1.33"], ["L * 1.33", "D * 1.1 + L * 0.13"], "L * 0.13", sid="jib"),
+    headsail(["L * 0.8", "D * 1.2 + mastH * 0.82"], ["L * 1.1", "D * 1.1 + L * 0.045"], "L * 0.1", sid="fore staysail"),
     stay(["L * 0.5", "D * 0.9 + mastH * 1.85", 0], ["L * 0.8", "D * 1.2 + mastH * 1.3", 0]), stay(["L * 0.8", "D * 1.2 + mastH * 1.62", 0], ["L * 1.35", "D * 1.24", 0]),
     stay(["L * 0.5", "D * 0.9 + mastH * 1.5", 0], ["L * 0.17", "D * 1.45 + mastH * 1.0", 0]),
     {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.5"}, "at": ["L * 0.86", "D * 0.95", "B * 0.5"], "mirror": "z"},
@@ -658,7 +735,7 @@ SHIPS["ship-of-the-line"] = ship("Ship of the line", "1700-1800", "England, Fran
 ])
 
 SHIPS["frigate"] = ship("Frigate", "1750-1800", "England, France, America", "a frigate: one gun deck, fast and weatherly, a full ship rig in three tiers, the eyes of the fleet",
-    {"L": [42, 48], "B": "L * 0.25", "D": "B * 0.55", "mastH": "L * 0.7"}, {"planks": "planks", "wood": "pine", "band": "#e0c46a", "trim": "gilt"}, [
+    {"L": [42, 48], "B": "L * 0.25", "D": "B * 0.55", "mastH": "L * 0.58"}, {"planks": "planks", "wood": "pine", "band": "#e0c46a", "trim": "gilt"}, [
     hull("L", "B", "D", fullness=0.5, tumblehome=0.22, plan=[[0, 0.3], [0.1, 0.65], [0.35, 1], [0.65, 0.97], [0.9, 0.55], [1, 0.04]],
          keel=[[0, "D * 0.2"], [0.08, 0], [0.92, 0], [1, "D * 0.25"]], sheer=[[0, "D * 1.08"], [0.5, "D"], [1, "D * 1.05"]],
          deck=[{"y": "D * 0.9", "from": 0.03, "to": 0.97}], rail=0.1, keelBeam=[0.4, 0.4]),
@@ -687,14 +764,15 @@ SHIPS["frigate"] = ship("Frigate", "1750-1800", "England, France, America", "a f
     {"id": "spanker gaff", "type": "rod", "material": "wood", "from": ["L * 0.18", "D * 1.18 + mastH * 0.5", 0], "to": ["L * 0.02", "D * 1.18 + mastH * 0.62", 0], "r": 0.09},
     {"id": "spanker", "type": "sail", "material": "cloth", "belly": "L * 0.02", "at": ["L * 0.18", "D * 1.18 + mastH * 0.5", 0], "corners": [[0, 0], ["-L * 0.16", "mastH * 0.12"], ["-L * 0.21", "-mastH * 0.22"], [0, "-mastH * 0.3"]]},
     {"id": "bowsprit", "use": "items/components/bowsprit", "params": {"l": "L * 0.4", "r": 0.26, "steeve": 20}, "at": ["L * 0.98", "D * 1.05", 0]},
-    {"id": "jib", "type": "sail", "material": "cloth", "belly": "L * 0.02", "at": ["L * 0.8", "D * 1.18 + mastH * 1.15", 0], "corners": [[0, 0], ["L * 0.5", "-mastH * 0.95"], ["L * 0.12", "-mastH * 1.0"]]},
+    headsail(["L * 0.8", "D * 1.18 + mastH * 1.33"], ["L * 1.33", "D * 1.1 + L * 0.13"], "L * 0.13", sid="jib"),
+    headsail(["L * 0.8", "D * 1.18 + mastH * 0.82"], ["L * 1.1", "D * 1.1 + L * 0.045"], "L * 0.1", sid="fore staysail"),
     stay(["L * 0.5", "D * 0.9 + mastH * 1.85", 0], ["L * 0.8", "D * 1.18 + mastH * 1.3", 0]), stay(["L * 0.8", "D * 1.18 + mastH * 1.62", 0], ["L * 1.35", "D * 1.19", 0]),
     stay(["L * 0.5", "D * 0.9 + mastH * 1.5", 0], ["L * 0.18", "D * 1.18 + mastH * 1.0", 0]),
     {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.5"}, "at": ["L * 0.86", "D * 0.95", "B * 0.5"], "mirror": "z"},
 ])
 
 SHIPS["east-indiaman"] = ship("East Indiaman", "1700-1800", "England, the Netherlands, France, Sweden", "an East India Company ship: as big as a ship of the line and armed like a frigate, a merchant's hull with a high stern and galleries, a full ship rig",
-    {"L": [46, 54], "B": "L * 0.26", "D": "B * 0.65", "mastH": "L * 0.68"}, {"planks": "planks", "wood": "pine", "band": "#d8c890", "trim": "gilt"}, [
+    {"L": [46, 54], "B": "L * 0.26", "D": "B * 0.65", "mastH": "L * 0.57"}, {"planks": "planks", "wood": "pine", "band": "#d8c890", "trim": "gilt"}, [
     hull("L", "B", "D", fullness=0.62, tumblehome=0.25, plan=[[0, 0.35], [0.1, 0.72], [0.35, 1], [0.65, 1], [0.88, 0.6], [1, 0.05]],
          keel=[[0, "D * 0.2"], [0.08, 0], [0.92, 0], [1, "D * 0.25"]], sheer=[[0, "D * 1.12"], [0.5, "D"], [1, "D * 1.05"]],
          deck=[{"y": "D * 0.9", "from": 0.03, "to": 0.97}], rail=0.12, keelBeam=[0.45, 0.45]),
@@ -725,12 +803,486 @@ SHIPS["east-indiaman"] = ship("East Indiaman", "1700-1800", "England, the Nether
     {"id": "spanker gaff", "type": "rod", "material": "wood", "from": ["L * 0.17", "D * 1.45 + mastH * 0.5", 0], "to": ["L * 0.02", "D * 1.45 + mastH * 0.62", 0], "r": 0.1},
     {"id": "spanker", "type": "sail", "material": "cloth", "belly": "L * 0.02", "at": ["L * 0.17", "D * 1.45 + mastH * 0.5", 0], "corners": [[0, 0], ["-L * 0.15", "mastH * 0.12"], ["-L * 0.2", "-mastH * 0.22"], [0, "-mastH * 0.28"]]},
     {"id": "bowsprit", "use": "items/components/bowsprit", "params": {"l": "L * 0.4", "r": 0.3, "steeve": 20}, "at": ["L * 0.98", "D * 1.1", 0]},
-    {"id": "jib", "type": "sail", "material": "cloth", "belly": "L * 0.02", "at": ["L * 0.8", "D * 1.2 + mastH * 1.15", 0], "corners": [[0, 0], ["L * 0.5", "-mastH * 0.95"], ["L * 0.12", "-mastH * 1.0"]]},
+    headsail(["L * 0.8", "D * 1.2 + mastH * 1.33"], ["L * 1.33", "D * 1.1 + L * 0.13"], "L * 0.13", sid="jib"),
+    headsail(["L * 0.8", "D * 1.2 + mastH * 0.82"], ["L * 1.1", "D * 1.1 + L * 0.045"], "L * 0.1", sid="fore staysail"),
     stay(["L * 0.5", "D * 0.9 + mastH * 1.85", 0], ["L * 0.8", "D * 1.2 + mastH * 1.3", 0]), stay(["L * 0.8", "D * 1.2 + mastH * 1.62", 0], ["L * 1.35", "D * 1.24", 0]),
     stay(["L * 0.5", "D * 0.9 + mastH * 1.5", 0], ["L * 0.17", "D * 1.45 + mastH * 1.0", 0]),
     {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.5"}, "at": ["L * 0.86", "D * 0.95", "B * 0.5"], "mirror": "z"},
 ])
 
+
+# ---- FITTING OUT (2026-11-03): what the game needs of a ship, and the rigging every masted one lacked ------------------
+# Read off each ship's own hull LINES (so the anchors follow the hull as L, B, D are drawn by the seed), per ship from
+# FIT below:
+#   MARKERS (items.js `markers`, resolved at the drawn size, in the ship's frame: stern x = 0, bow +x, keel y = 0):
+#     waterline  [L/2, the waterline, 0]       data {draught}: float the ship so this marker sits on the water
+#     moor       at the bow and the stern      data {end: bow|stern}: where the lines are made fast (bitts drawn there on a decked ship)
+#     gangplank  on each side at the waist     data {side: starboard|port}: the gunwale's top, yaw turned outboard (+x of the marker points off the ship)
+#     hold       over each hatch (or the open waist's floor)  data {i, w, l, floor}: where cargo goes in and out; `floor` the hold's bottom
+#     helm       where the steersman stands
+#   SHROUDS: every upright mast gets its standing rigging, lower shrouds to the rail and, on a mast with a topmast, the
+#   topmast's to its top.
+import re
+
+
+def _num(v):
+    return isinstance(v, (int, float))
+
+
+def line_at(line, t):
+    """a hull line's value at t, as an expression (the lines are lists of [t, value], value a number or an expression)"""
+    if line is None:
+        return None
+    for k in range(1, len(line)):
+        if t <= line[k][0] + 1e-9:
+            t0, a = line[k - 1]; t1, b = line[k]
+            f = 0 if t1 == t0 else max(0, min(1, (t - t0) / (t1 - t0)))
+            return lerp(a, b, f)
+    return line[-1][1]
+
+
+def coef(v):
+    """an expression `D * k` / `D` / a number -> (name, k) where it can be read so"""
+    if _num(v):
+        return (None, float(v))
+    m = re.fullmatch(r"\s*([A-Za-z]+)\s*\*\s*([\d.]+)\s*", str(v))
+    if m:
+        return (m.group(1), float(m.group(2)))
+    if re.fullmatch(r"\s*[A-Za-z]+\s*", str(v)):
+        return (str(v).strip(), 1.0)
+    return None
+
+
+def lerp(a, b, f):
+    if f <= 1e-9:
+        return a
+    if f >= 1 - 1e-9:
+        return b
+    ca, cb = coef(a), coef(b)
+    if ca and cb and (ca[0] == cb[0] or ca[1] == 0 or cb[1] == 0):
+        name = ca[0] or cb[0]
+        k = round(ca[1] + (cb[1] - ca[1]) * f, 4)
+        return k if name is None else f"{name} * {k}"
+    return f"(({a}) + (({b}) - ({a})) * {round(f, 4)})"
+
+
+def ex(*xs):
+    """join expressions with + (numbers folded)"""
+    num, terms = 0.0, []
+    for x in xs:
+        if _num(x):
+            num += x
+        elif x not in (None, ""):
+            terms.append(f"({x})" if any(c in str(x) for c in "+-") and not str(x).startswith("(") else str(x))
+    if num or not terms:
+        terms.append(str(round(num, 4)))
+    return " + ".join(terms)
+
+
+def mul(a, k):
+    return round(a * k, 4) if _num(a) else f"({a}) * {k}"
+
+
+def tfrom(x):
+    """the t (share of L) a mast or a part stands at, read off its x (`L * k`, or a number over L's middle)"""
+    c = coef(x)
+    if c and c[0] == "L":
+        return c[1]
+    m = re.match(r"\s*L\s*\*\s*([\d.]+)", str(x))
+    return float(m.group(1)) if m else None
+
+
+class Lines:
+    def __init__(self, h):
+        self.h = h
+        D = "D"
+        self.sheer = h.get("sheer") or [[0, "D * 1.12"], [0.5, "D"], [1, "D * 1.2"]]
+        self.keel = h.get("keel") or [[0, "D * 0.35"], [0.12, 0], [0.88, 0], [1, "D * 0.4"]]
+        self.plan = h.get("plan") or [[0, 0], [0.08, 0.38], [0.3, 0.9], [0.55, 1], [0.8, 0.7], [0.95, 0.25], [1, 0]]
+        self.tumble = h.get("tumblehome", 0) or 0
+        self.decks = h.get("deck") or []
+        self.L, self.B = h.get("length", "L"), h.get("beam", "B")
+
+    def sheer_at(self, t):
+        return line_at(self.sheer, t)
+
+    def hb_top(self, t):
+        """the half-breadth at the gunwale (its tumblehome taken off)"""
+        k = line_at(self.plan, t)
+        k = k if _num(k) else 1
+        return mul(f"{self.B} * 0.5", round(k * (1 - self.tumble), 4))
+
+    def hb_at_height(self, t, frac):
+        """the half-breadth at a share `frac` of the side's height (0 the keel .. 1 the sheer), as the hull's section draws it"""
+        k = line_at(self.plan, t); k = k if _num(k) else 1
+        return mul(f"{self.B} * 0.5", round(k * (1 - self.tumble * max(0, frac - 0.55) / 0.45), 4))
+
+    def deck_at(self, t):
+        for d in self.decks:
+            if d.get("from", 0) - 1e-6 <= t <= d.get("to", 1) + 1e-6:
+                return d["y"]
+        return None
+
+
+# per ship: wl the waterline (a share of D); hold [t...] the hatches (or the open hold's middle), hatch [w (share of
+# B), l (share of L)] or None for an open hold, floor the hold's bottom (share of D); plank t of the gangway; helm t;
+# bow / stern t of the mooring bitts; shrouds n a side (0: none -- a lateen's mast has a few, a canoe's none);
+# deck an expression where the ship has no deck line; ratio of the hull this all reads: `hull` (the part's id)
+FIT = {
+    "dugout":         dict(wl=0.45, hold=[0.5], hatch=None, floor=0.2, plank=0.5, helm=0.12, bow=0.95, stern=0.05, shrouds=0),
+    "reed-boat":      dict(wl=0.45, hold=[0.5], hatch=None, floor=0.6, plank=0.5, helm=0.15, bow=0.92, stern=0.08, shrouds=0),
+    "egyptian-boat":  dict(wl=0.5, hold=[0.6, 0.75], hatch=None, floor=0.88, plank=0.55, helm=0.08, bow=0.94, stern=0.06, shrouds=0),
+    "trireme":        dict(wl=0.55, hold=[0.3], hatch=None, floor=0.9, plank=0.5, helm=0.1, bow=0.94, stern=0.06, shrouds=0),
+    "roman-merchant": dict(wl=0.6, hold=[0.42, 0.62], hatch=[0.35, 0.09], floor=0.2, plank=0.5, helm=0.14, bow=0.93, stern=0.06, shrouds=3),
+    "longship":       dict(wl=0.5, hold=[0.5], hatch=None, floor=0.25, plank=0.5, helm=0.1, bow=0.93, stern=0.07, shrouds=2),
+    "knarr":          dict(wl=0.55, hold=[0.42, 0.58], hatch=None, floor=0.2, plank=0.5, helm=0.1, bow=0.93, stern=0.07, shrouds=2),
+    "cog":            dict(wl=0.6, hold=[0.38, 0.66], hatch=[0.4, 0.09], floor=0.15, plank=0.5, helm=0.12, bow=0.9, stern=0.06, shrouds=4),
+    "carrack":        dict(wl=0.6, hold=[0.38, 0.65], hatch=[0.32, 0.07], floor=0.15, plank=0.55, helm=0.25, bow=0.88, stern=0.06, shrouds=5),
+    "caravel":        dict(wl=0.58, hold=[0.4, 0.7], hatch=[0.3, 0.07], floor=0.15, plank=0.45, helm=0.15, bow=0.92, stern=0.06, shrouds=3),
+    "galleon":        dict(wl=0.6, hold=[0.4, 0.65], hatch=[0.3, 0.06], floor=0.12, plank=0.52, helm=0.3, bow=0.86, stern=0.05, shrouds=6),
+    "galley":         dict(wl=0.5, hold=[0.4], hatch=[0.3, 0.04], floor=0.2, plank=0.45, helm=0.08, bow=0.92, stern=0.05, shrouds=2),
+    "dhow":           dict(wl=0.58, hold=[0.4, 0.68], hatch=[0.35, 0.08], floor=0.15, plank=0.5, helm=0.08, bow=0.92, stern=0.25, shrouds=2),
+    "junk":           dict(wl=0.6, hold=[0.4, 0.68], hatch=[0.35, 0.07], floor=0.15, plank=0.45, helm=0.08, bow=0.95, stern=0.27, shrouds=0),
+    "sampan":         dict(wl=0.4, hold=[0.3], hatch=None, floor=0.35, plank=0.3, helm=0.08, bow=0.94, stern=0.06, shrouds=0),
+    "outrigger-canoe": dict(wl=0.45, hold=[0.4], hatch=None, floor=0.3, plank=0.4, helm=0.1, bow=0.94, stern=0.06, shrouds=0),
+    "voyaging-canoe": dict(wl=0.5, hold=[0.5], hatch=None, floor=1.04, plank=0.6, helm=0.08, bow=0.92, stern=0.08, shrouds=0, deck="D * 1.04"),
+    "gondola":        dict(wl=0.4, hold=[0.45], hatch=None, floor=0.45, plank=0.5, helm=0.18, bow=0.9, stern=0.1, shrouds=0),
+    "birchbark-canoe": dict(wl=0.4, hold=[0.5], hatch=None, floor=0.2, plank=0.5, helm=0.12, bow=0.94, stern=0.06, shrouds=0),
+    "kayak":          dict(wl=0.5, hold=[0.45], hatch=None, floor=0.3, plank=0.45, helm=0.45, bow=0.96, stern=0.04, shrouds=0),
+    "umiak":          dict(wl=0.42, hold=[0.5], hatch=None, floor=0.2, plank=0.5, helm=0.1, bow=0.94, stern=0.06, shrouds=0),
+    "coracle":        dict(wl=0.4, hold=[0.5], hatch=None, floor=0.2, plank=0.5, helm=0.7, bow=0.95, stern=0.05, shrouds=0),
+    "fishing-boat":   dict(wl=0.45, hold=[0.4], hatch=None, floor=0.2, plank=0.5, helm=0.08, bow=0.94, stern=0.04, shrouds=1),
+    "skiff":          dict(wl=0.42, hold=[0.5], hatch=None, floor=0.2, plank=0.5, helm=0.12, bow=0.95, stern=0.04, shrouds=0),
+    "fluyt":          dict(wl=0.62, hold=[0.4, 0.66], hatch=[0.28, 0.07], floor=0.12, plank=0.55, helm=0.22, bow=0.9, stern=0.06, shrouds=5),
+    "xebec":          dict(wl=0.55, hold=[0.4], hatch=[0.3, 0.06], floor=0.15, plank=0.45, helm=0.08, bow=0.92, stern=0.05, shrouds=2),
+    "felucca":        dict(wl=0.45, hold=[0.45], hatch=None, floor=0.8, plank=0.45, helm=0.1, bow=0.94, stern=0.05, shrouds=0),
+    "ship-of-the-line": dict(wl=0.62, hold=[0.36, 0.64], hatch=[0.22, 0.05], floor=0.12, plank=0.58, helm=0.3, bow=0.88, stern=0.06, shrouds=7),
+    "frigate":        dict(wl=0.6, hold=[0.36, 0.64], hatch=[0.22, 0.05], floor=0.12, plank=0.58, helm=0.3, bow=0.88, stern=0.06, shrouds=6),
+    "east-indiaman":  dict(wl=0.62, hold=[0.36, 0.64], hatch=[0.24, 0.06], floor=0.12, plank=0.58, helm=0.3, bow=0.88, stern=0.06, shrouds=7),
+}
+
+
+def fit_out(name, sh):
+    f = FIT.get(name)
+    if not f:
+        return
+    hp = next((p for p in sh["parts"] if p.get("type") == "hull" and p.get("id") == "hull"), None)
+    if not hp:
+        return
+    Ln = Lines(hp)
+    zoff = hp.get("at", [0, 0, 0])[2] if hp.get("at") else 0
+    wl = mul("D", f["wl"])
+    deckY = lambda t: f.get("deck") or Ln.deck_at(t)
+    mk, parts = [], []
+    mk.append({"role": "waterline", "at": ["L * 0.5", wl, 0], "data": {"draught": wl}})
+    # MOORING: at the bitts on a decked ship, else at the stem- and sternhead
+    for end, t in (("bow", f["bow"]), ("stern", f["stern"])):
+        d = deckY(t)
+        if d is not None and f.get("hatch"):
+            s_ = 0.7 if "L" else 0
+            parts.append({"id": f"bitts {end}", "use": "items/components/bitts", "params": {"s": "max(0.45, min(1.0, B * 0.07))", "gap": "max(0.35, B * 0.06)"}, "at": [f"L * {t}", d, 0]})
+            mk.append({"role": "moor", "at": [f"L * {t}", ex(d, "max(0.45, min(1.0, B * 0.07))"), 0], "data": {"end": end}})
+        else:
+            mk.append({"role": "moor", "at": [f"L * {t}", Ln.sheer_at(t), 0], "data": {"end": end}})
+    # THE GANGPLANK: the gunwale's top at the waist, both sides, turned outboard
+    t = f["plank"]
+    for side, sg, yaw in (("starboard", 1, -90), ("port", -1, 90)):
+        z = f.get("plankZ") or Ln.hb_top(t)   # (plankY / plankZ / plankDeck: a gate in a wall rather than the rail)
+        zz = ex(zoff, z) if zoff else z   # (a twin hull's outer side)
+        py = f.get("plankY") or ex(Ln.sheer_at(t), 0.06)
+        pdeck = f.get("plankDeck") or (deckY(t) if deckY(t) is not None else mul("D", f["floor"]))
+        mk.append({"role": "gangplank", "at": [f"L * {t}", py, zz if sg > 0 else mul(zz, -1), yaw], "data": {"side": side, "deck": pdeck}})
+    # THE HOLD: over each hatch (drawn), or the open hold's floor
+    for i, t in enumerate(f["hold"]):
+        d = deckY(t)
+        if f.get("hatch") and d is not None:
+            w, l = f["hatch"]
+            parts.append({"id": f"hatch {i}", "use": "items/components/hatch", "params": {"w": f"B * {w}", "d": f"L * {l}", "h": "min(0.45, D * 0.08)"}, "at": [f"L * {t}", d, 0]})
+            mk.append({"role": "hold", "at": [f"L * {t}", ex(d, "min(0.45, D * 0.08)"), 0], "data": {"i": i, "w": f"B * {w}", "l": f"L * {l}", "floor": mul("D", f["floor"])}})
+        else:
+            y = mul("D", f["floor"]) if d is None or not f.get("hatch") else d
+            mk.append({"role": "hold", "at": [f"L * {t}", y, 0 if f.get("deck") else zoff], "data": {"i": i, "w": f"B * 0.5", "l": f"L * {round(0.5 / max(1, len(f['hold'])), 3)}", "floor": y}})
+    # THE HELM
+    t = f["helm"]; d = deckY(t)
+    mk.append({"role": "helm", "at": [f"L * {t}", d if d is not None else mul("D", f["floor"]), zoff]})
+    # SHROUDS for every upright mast (a raked one -- an artemon, a felucca's -- keeps its stays)
+    n = f.get("shrouds", 0)
+    if n:
+        for p in list(sh["parts"]):
+            if p.get("use") != "items/components/mast" or len(p.get("at", [])) > 3 and any(p["at"][3:]):
+                continue
+            t = tfrom(p["at"][0])
+            if t is None:
+                continue
+            x, y, h, r = p["at"][0], p["at"][1], p["params"]["h"], p["params"].get("r", 0.2)
+            top = ex(y, mul(h, 0.97))
+            foot = Ln.sheer_at(t)
+            z = Ln.hb_top(t)
+            rise = f"(({top}) - ({foot}))"
+            for i in range(n):
+                k = -0.2 + 0.3 * i / max(1, n - 1)   # (from abaft the mast to a little before it)
+                parts.append({"id": f"shroud {x} {i}", "type": "rod", "material": "rope", "from": [x, top, 0],
+                              "to": [ex(x, f"{rise} * {round(k, 3)}"), foot, z if not zoff else ex(zoff, z)], "r": round(max(0.015, min(0.05, (r if _num(r) else 0.2) * 0.12)), 3), "sides": 4, "mirror": "z"})
+            if n >= 3:   # RATLINES (a hint): five rungs across the shrouds a side, from the aftmost to the foremost
+                k0, k1 = -0.2, 0.1
+                for j, fr in enumerate((0.14, 0.28, 0.42, 0.56, 0.7)):
+                    yy = f"({foot}) + {rise} * {fr}"
+                    zr = mul(z if not zoff else ex(zoff, z), round(1 - fr, 3))
+                    parts.append({"id": f"ratline {x} {j}", "type": "rod", "material": "rope", "r": 0.012, "sides": 3, "mirror": "z",
+                                  "from": [ex(x, f"{rise} * {round(k0 * (1 - fr), 3)}"), yy, zr], "to": [ex(x, f"{rise} * {round(k1 * (1 - fr), 3)}"), yy, zr]})
+            if p["params"].get("top") == "topmast":
+                tH = p["params"].get("topH", 0.5)
+                ttop = ex(y, mul(h, round(0.97 * (1 + tH), 3)))
+                tfoot = ex(y, mul(h, 0.9))
+                for i in range(3):
+                    parts.append({"id": f"topshroud {x} {i}", "type": "rod", "material": "rope", "from": [x, ttop, 0],
+                                  "to": [ex(x, f"{r} * {round(-3 + 2.5 * i, 2)}"), tfoot, f"{r} * 4.4"], "r": 0.02, "sides": 4, "mirror": "z"})
+    sh["parts"].extend(parts)
+    sh["markers"] = mk + sh.get("markers", [])
+    sh["params"].setdefault("wl", wl)
+
+
+# ---- THE LARGE SHIPS EACH PERIOD LACKED (2026-11-03) ---------------------------------------------------------------
+# Sizes: sourced where a find or a record gives them (said so), else estimates from the pictures (said so).
+
+SHIPS["punt-ship"] = ship("Egyptian seagoing ship", "-2500--1000", "Egypt, the Red Sea", "the ship of Hatshepsut's expedition to Punt (the Deir el-Bahari reliefs, about -1470): a long keel-less hull held from sagging by a hogging truss -- a great cable from stern to stem over forked crutches -- the deck beams' ends through the sides, the stern rising and curling forward into a papyrus umbel, a broad sail far wider than it is tall between a yard and a boom, fifteen oars a side, two great steering oars on the quarters and a railed platform at either end. (About 21-25 m and 5 m in the beam: the Min of the Desert reconstruction is 20 m; the rest estimated from the reliefs)",
+    {"L": [21, 25], "B": "L * 0.21", "D": "B * 0.36", "mastH": "L * 0.42"}, {"planks": "planks-pine", "wood": "pine", "cloth": "linen", "trim": "#2f6f7a", "band": "#a8452e"}, [
+    hull("L", "B", "D", fullness=0.4, plan=[[0, 0.02], [0.1, 0.45], [0.4, 1], [0.7, 0.95], [0.9, 0.45], [1, 0.03]],
+         keel=[[0, "D * 1.9"], [0.1, "D * 0.5"], [0.28, 0], [0.75, 0], [0.92, "D * 0.6"], [1, "D * 1.3"]],
+         sheer=[[0, "D * 3.0"], [0.05, "D * 1.8"], [0.14, "D * 1.15"], [0.5, "D"], [0.86, "D * 1.15"], [0.95, "D * 1.5"], [1, "D * 1.75"]],
+         deck=[{"y": "D * 0.88", "from": 0.08, "to": 0.92}], rail=0.07),
+    {"id": "band", "type": "box", "material": "band", "size": ["L * 0.66", 0.16, 0.04], "at": ["L * 0.5", "D * 0.98", "B * 0.5"], "mirror": "z"},
+    {"id": "beam ends", "type": "box", "material": "wood", "size": [0.22, 0.2, 0.3], "along": {"n": 13, "from": ["L * 0.2", "D * 0.8", "B * 0.5"], "to": ["L * 0.8", "D * 0.8", "B * 0.5"]}, "mirror": "z"},
+    {"id": "umbel stalk", "type": "sweep", "material": "trim", "path": [[0.0, "D * 2.9", 0], ["-L * 0.01", "D * 3.6", 0], ["L * 0.02", "D * 4.1", 0], ["L * 0.05", "D * 4.2", 0]], "radii": [0.2, 0.17, 0.14, 0.12]},
+    {"id": "umbel", "type": "lathe", "material": "trim", "at": ["L * 0.05", "D * 4.2", 0, 0, 0, -70], "profile": [[0.08, 0], [0.25, 0.25], [0.55, 0.6], [0.6, 0.65]], "caps": False, "double": True},
+    {"id": "prow", "type": "box", "material": "planks", "size": ["L * 0.05", 0.3, "B * 0.12"], "at": ["L * 1.0", "D * 1.7", 0]},
+    {"id": "truss post", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": [0, "D * 2.6", 0], "r": 0.08,
+     "at": [["L * 0.24", "D * 0.88", 0], ["L * 0.38", "D * 0.88", 0], ["L * 0.66", "D * 0.88", 0], ["L * 0.8", "D * 0.88", 0]]},
+    {"id": "truss", "type": "sweep", "material": "rope", "r": 0.07, "path": [["L * 0.06", "D * 2.4", 0], ["L * 0.24", "D * 3.45", 0], ["L * 0.38", "D * 3.5", 0], ["L * 0.66", "D * 3.5", 0], ["L * 0.8", "D * 3.45", 0], ["L * 0.95", "D * 1.6", 0]]},
+    {"id": "stern platform", "use": "items/components/castle", "params": {"w": "B * 0.55", "d": "L * 0.1", "h": "D * 0.9", "rail": 0.8, "crenels": 0, "posts": 1}, "at": ["L * 0.07", "D * 0.88", 0]},
+    {"id": "bow platform", "use": "items/components/castle", "params": {"w": "B * 0.5", "d": "L * 0.08", "h": "D * 0.7", "rail": 0.8, "crenels": 0, "posts": 1}, "at": ["L * 0.84", "D * 0.88", 0]},
+    mast("L * 0.5", "D * 0.88", "mastH", r=0.18),
+    square("L * 0.5", "D * 0.88 + mastH * 0.95", "L * 0.68", "mastH * 0.55", belly="L * 0.03", foot=1.0),
+    {"id": "boom", "use": "items/components/yard", "params": {"l": "L * 0.7", "r": 0.1}, "at": ["L * 0.5", "D * 0.88 + mastH * 0.4", 0, 90, 0, 0]},
+    {"id": "oars", "use": "items/components/oars", "params": {"n": 15, "from": "L * 0.22", "to": "L * 0.78", "y": "D * 1.0", "z": "B * 0.5", "l": "L * 0.2", "dip": 22, "reach": 0.25}},
+    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "L * 0.3", "bladeW": 0.55}, "at": ["L * 0.1", "D * 1.6", "B * 0.32", 0, 0, -38], "mirror": "z"},
+    {"id": "steering post", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": [0, "D * 1.3", 0], "r": 0.08, "at": ["L * 0.13", "D * 0.88", "B * 0.3"], "mirror": "z"},
+    stay(["L * 0.5", "D * 0.88 + mastH", 0], ["L * 0.96", "D * 1.6", 0]), stay(["L * 0.5", "D * 0.88 + mastH", 0], ["L * 0.08", "D * 2.4", 0]),
+])
+
+SHIPS["gaulos"] = ship("Phoenician merchantman", "-1100--300", "Phoenicia, Carthage, the Greek and Punic Mediterranean", "the gaulos -- the 'tub' the Greeks named the Phoenicians' round merchant ship: a beamy, deep hull with its stem and sternpost rising alike, a horse's head on the stem, a wicker fence round the open hold heaped with amphorae, one broad square sail brailed up to its yard and a crow's nest on the mast, two steering oars. (About 18-25 m; the Uluburun and Kyrenia wrecks are 15 m and smaller, the Ma'agan Michael 13 m -- the size estimated from the texts' cargoes of 100-400 t)",
+    {"L": [18, 24], "B": "L * 0.32", "D": "B * 0.48", "mastH": "L * 0.55"}, {"planks": "planks", "wood": "pine", "cloth": {"pick": ["canvas", "sail-tan"]}, "wicker": "reed", "trim": "#7a2a24"}, [
+    hull("L", "B", "D", fullness=0.5, plan=[[0, 0.03], [0.12, 0.6], [0.4, 1], [0.6, 1], [0.88, 0.6], [1, 0.03]],
+         keel=[[0, "D * 0.6"], [0.12, "D * 0.05"], [0.3, 0], [0.7, 0], [0.88, "D * 0.05"], [1, "D * 0.6"]],
+         sheer=[[0, "D * 1.75"], [0.1, "D * 1.2"], [0.5, "D"], [0.9, "D * 1.2"], [1, "D * 1.75"]],
+         deck=[{"y": "D * 0.82", "from": 0.04, "to": 0.2}, {"y": "D * 0.82", "from": 0.8, "to": 0.96}, {"y": "D * 0.3", "from": 0.2, "to": 0.8}], rail=0.08, keelBeam=[0.25, 0.3], postRise="D * 0.25"),
+    {"id": "wicker fence", "type": "box", "material": "wicker", "size": ["L * 0.6", 0.7, 0.06], "at": ["L * 0.5", "D + 0.35", "B * 0.49"], "mirror": "z"},
+    {"id": "horse neck", "type": "sweep", "material": "trim", "path": [["L * 0.995", "D * 1.95", 0], ["L * 1.02", "D * 2.2", 0], ["L * 1.035", "D * 2.4", 0]], "radii": [0.22, 0.18, 0.15]},
+    {"id": "horse head", "type": "box", "material": "trim", "size": [0.7, 0.3, 0.26], "round": 0.08, "at": ["L * 1.035 + 0.25", "D * 2.45", 0, 0, 0, -25]},
+    {"id": "horse ears", "type": "box", "material": "trim", "size": [0.08, 0.2, 0.05], "at": ["L * 1.035 - 0.02", "D * 2.62", 0.07], "mirror": "z"},
+    {"id": "amphorae", "use": "items/tools/transport-amphora", "along": {"n": 5, "from": ["L * 0.28", "D * 0.3", "-B * 0.22"], "to": ["L * 0.72", "D * 0.3", "-B * 0.22"]}, "at": [0, 0.3, 0, 0, 0, 0]},
+    {"id": "amphorae 2", "use": "items/tools/transport-amphora", "along": {"n": 5, "from": ["L * 0.3", "D * 0.3", "B * 0.22"], "to": ["L * 0.7", "D * 0.3", "B * 0.22"]}, "at": [0, 0.3, 0, 0, 0, 0]},
+    {"id": "amphorae 3", "use": "items/tools/transport-amphora", "along": {"n": 4, "from": ["L * 0.34", "D * 0.3", 0], "to": ["L * 0.68", "D * 0.3", 0]}, "at": [0, 0.3, 0, 0, 0, 0]},
+    mast("L * 0.48", "D * 0.3", "mastH + D * 0.5", r=0.22, top="crowsnest"),
+    square("L * 0.48", "D * 0.8 + mastH * 0.9", "L * 0.55", "mastH * 0.55", belly="L * 0.05"),
+    {"id": "steering", "use": "items/components/steering-oar", "params": {"l": "D * 1.8", "bladeW": 0.5}, "at": ["L * 0.1", "D * 1.3", "B * 0.38", 0, 0, -32], "mirror": "z"},
+    stay(["L * 0.48", "D * 0.8 + mastH", 0], ["L * 0.97", "D * 1.7", 0]), stay(["L * 0.48", "D * 0.8 + mastH", 0], ["L * 0.04", "D * 1.7", 0]),
+])
+
+
+def galley_parts(oars_n=25, masts=2, banks=1, sail_l=0.72):
+    """the hull, outrigger, spur and rig a Mediterranean war galley shares (the galley, the dromon, the kadirga)"""
+    ps = [
+        hull("L", "B", "D", fullness=0.4, plan=[[0, 0.15], [0.1, 0.6], [0.35, 1], [0.7, 0.95], [0.93, 0.4], [1, 0.03]],
+             keel=[[0, "D * 0.35"], [0.08, 0], [0.92, 0], [1, "D * 0.2"]], sheer=[[0, "D * 1.3"], [0.15, "D * 1.05"], [0.5, "D"], [0.9, "D * 1.05"], [1, "D * 1.15"]],
+             deck=[{"y": "D * 0.9", "from": 0.04, "to": 0.96}], rail=0.06, keelBeam=[0.25, 0.3]),
+        {"id": "outrigger", "type": "box", "material": "wood", "size": ["L * 0.7", 0.18, 0.5], "at": ["L * 0.5", "D * 0.95", "B * 0.62"], "mirror": "z"},
+        {"id": "oars", "use": "items/components/oars", "params": {"n": oars_n, "from": "L * 0.16", "to": "L * 0.85", "y": "D * 0.98", "z": "B * 0.75", "l": "L * 0.23", "dip": 20, "reach": 0.3}},
+        {"id": "spur", "type": "rod", "material": "wood", "from": ["L * 0.97", "D * 1.1", 0], "to": ["L * 1.12", "D * 1.25", 0], "r0": 0.18, "r1": 0.08},
+        *lateen_rig("L * 0.55", "D * 0.9", "mastH", f"L * {sail_l}", r=0.24, drop=0.5, steep=0.34),
+        {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.1", "w": "B * 0.1", "tiller": "L * 0.06"}, "at": [0, "D * 1.0", 0]},
+    ]
+    if masts > 1:
+        ps += lateen_rig("L * 0.8", "D * 0.9", "mastH * 0.7", "L * 0.45", r=0.18, drop=0.5, steep=0.34)
+    if banks > 1:
+        ps.append({"id": "oars lower", "use": "items/components/oars", "params": {"n": oars_n, "from": "L * 0.17", "to": "L * 0.84", "y": "D * 0.62", "z": "B * 0.5", "l": "L * 0.2", "dip": 14, "reach": 0.3}})
+    return ps
+
+
+SHIPS["dromon"] = ship("Dromon", "500-1200", "Byzantium", "the Byzantine war galley of the Taktika of Leo VI: two banks of twenty-five oars a side, the lower worked from below the deck, a spur (not a ram) over the waterline, two lateen masts, the siphon for the Greek fire in the prow under its little forecastle, a wooden castle by the mainmast and the commander's tent at the stern, shields along the bulwarks. (Its length sourced from the reconstructions after the Taktika, about 31-32 m by 4.5 m)",
+    {"L": [30, 34], "B": "L * 0.145", "D": "B * 0.45", "mastH": "L * 0.42"}, {"planks": {"pick": ["planks", "planks-tarred"]}, "wood": "pine", "cloth": {"pick": ["canvas", "sail-striped"]}}, [
+    *galley_parts(oars_n=25, masts=2, banks=2, sail_l=0.66),
+    {"id": "forecastle", "use": "items/components/castle", "params": {"w": "B * 0.7", "d": "L * 0.06", "h": 1.3, "rail": 0.9, "crenels": 1, "posts": 1}, "at": ["L * 0.88", "D * 0.9", 0]},
+    {"id": "siphon", "type": "rod", "material": "bronze", "from": ["L * 0.92", "D * 0.9 + 0.6", 0], "to": ["L * 0.99", "D * 0.9 + 0.75", 0], "r0": 0.14, "r1": 0.09},
+    {"id": "xylokastron", "use": "items/components/castle", "params": {"w": "B * 0.6", "d": "L * 0.07", "h": 2.6, "rail": 1.0, "crenels": 1, "posts": 1}, "at": ["L * 0.6", "D * 0.9", 0]},
+    {"id": "tent", "use": "items/components/awning", "params": {"w": "B * 0.8", "d": "L * 0.12", "h": 2.2}, "materials": {"cloth": "sail-striped"}, "at": ["L * 0.04", "D * 0.9", 0]},
+    {"id": "shields", "use": "items/components/shield-row", "params": {"n": 10, "from": "L * 0.25", "to": "L * 0.75", "y": "D * 1.05", "z": "B * 0.52", "w": 0.8}},
+])
+
+SHIPS["kadirga"] = ship("Kadırga", "1450-1800", "the Ottoman Empire", "the Ottoman war galley of Preveze and Lepanto: long and low on twenty-five oars a side, three great guns over the spur, a lateen main and foremast, the stern's pavilion (köşk) under a red canopy, gilded, with its three lanterns on the poop. (About 40-46 m by 5.5-6 m, from the arsenal's records of a standard kadırga; the flagship baştarda was larger)",
+    {"L": [40, 46], "B": "L * 0.13", "D": "B * 0.42", "mastH": "L * 0.42"}, {"planks": "planks", "wood": "pine", "cloth": {"pick": ["canvas", "sail-striped"]}, "trim": "gilt", "red": "lacquer-red"}, [
+    *galley_parts(oars_n=25, masts=2, banks=1, sail_l=0.72),
+    {"id": "bow guns", "use": "items/components/cannon", "params": {"l": 2.8, "bore": 0.14}, "materials": {"metal": "bronze"}, "at": [["L * 0.9", "D * 0.9", 0], ["L * 0.9", "D * 0.9", -1.1], ["L * 0.9", "D * 0.9", 1.1]]},
+    {"id": "kosk", "use": "items/components/cabin", "params": {"w": "B * 0.85", "d": "L * 0.1", "h": 1.9, "roof": "flat", "windows": 2}, "materials": {"wood": "red", "roofm": "trim"}, "at": ["L * 0.03", "D * 0.9", 0]},
+    {"id": "canopy", "use": "items/components/awning", "params": {"w": "B * 0.95", "d": "L * 0.14", "h": 2.6}, "materials": {"cloth": "red"}, "at": ["L * 0.02", "D * 0.9", 0]},
+    {"id": "lantern post", "type": "rod", "material": "trim", "from": [0, 0, 0], "to": [0, 2.2, 0], "r": 0.05, "at": [["L * 0.01", "D * 1.3", 0], ["L * 0.02", "D * 1.3", "B * 0.3"], ["L * 0.02", "D * 1.3", "-B * 0.3"]]},
+    {"id": "lantern", "type": "lathe", "material": "trim", "profile": [[0.15, 0], [0.3, 0.2], [0.3, 0.75], [0.12, 1.0], [0, 1.15]], "at": [["L * 0.01", "D * 1.3 + 2.2", 0], ["L * 0.02", "D * 1.3 + 2.2", "B * 0.3"], ["L * 0.02", "D * 1.3 + 2.2", "-B * 0.3"]]},
+    {"id": "gilt band", "type": "box", "material": "trim", "size": ["L * 0.8", 0.14, 0.04], "at": ["L * 0.5", "D * 0.9", "B * 0.5"], "mirror": "z"},
+])
+
+SHIPS["hulk"] = ship("Hulk", "1300-1550", "the Hanseatic north, England, the Low Countries", "the hulk (holk) that took over the Hansa's trade from the cog: a banana-shaped hull without stem or sternpost, its planks running up into the ends, very full and deep, a castle over the stern and a forecastle jutting over the bow, a main square sail with a topsail, a small foremast and a lateen mizzen (the later fifteenth century's rig). (About 28-34 m by 9-10 m, estimated from the seals of New Shoreham and Danzig and the town views; the Utrecht ship of the type is smaller)",
+    {"L": [28, 34], "B": "L * 0.3", "D": "B * 0.58", "mastH": "L * 0.72"}, {"planks": {"pick": ["planks", "planks-tarred"]}, "wood": "pine"}, [
+    hull("L", "B", "D", fullness=0.6, tumblehome=0.1, plan=[[0, 0.12], [0.12, 0.65], [0.35, 1], [0.65, 1], [0.88, 0.65], [1, 0.1]],
+         keel=[[0, "D * 0.95"], [0.12, "D * 0.25"], [0.3, 0], [0.7, 0], [0.88, "D * 0.25"], [1, "D * 1.0"]],
+         sheer=[[0, "D * 1.5"], [0.12, "D * 1.15"], [0.5, "D"], [0.88, "D * 1.15"], [1, "D * 1.55"]],
+         deck=[{"y": "D * 0.86", "from": 0.06, "to": 0.94}], rail=0.1),
+    {"id": "aftcastle", "use": "items/components/castle", "params": {"w": "B * 0.85", "d": "L * 0.24", "h": "D * 0.48", "rail": 1.1, "crenels": 1, "posts": 0}, "at": ["L * 0.03", "D * 0.86", 0]},
+    {"id": "aftcastle wall", "type": "box", "material": "planks", "size": ["L * 0.24", "D * 0.48", 0.1], "at": ["L * 0.15", "D * 1.1", "B * 0.42"], "mirror": "z"},
+    {"id": "stern wall", "type": "box", "material": "planks", "size": [0.1, "D * 0.6", "B * 0.85"], "at": ["L * 0.03", "D * 1.16", 0]},
+    {"id": "forecastle", "use": "items/components/castle", "params": {"w": "B * 0.7", "d": "L * 0.16", "h": "D * 0.4", "rail": 1.0, "crenels": 1, "posts": 1}, "at": ["L * 0.84", "D * 0.95", 0]},
+    {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.2", "w": "B * 0.09", "tiller": "L * 0.1"}, "at": ["L * 0.005", "D * 1.15", 0, 0, 0, -12]},
+    mast("L * 0.5", "D * 0.86", "mastH", r=0.32, top="topmast", topH=0.35),
+    square("L * 0.5", "D * 0.86 + mastH * 0.86", "L * 0.55", "mastH * 0.55", belly="L * 0.06"),
+    square("L * 0.5", "D * 0.86 + mastH * 1.28", "L * 0.24", "mastH * 0.22", belly="L * 0.02"),
+    mast("L * 0.84", "D * 1.35", "mastH * 0.45", r=0.18),
+    square("L * 0.84", "D * 1.35 + mastH * 0.42", "L * 0.26", "mastH * 0.3", belly="L * 0.03"),
+    *lateen_rig("L * 0.16", "D * 1.34", "mastH * 0.45", "L * 0.36", r=0.16, drop=0.5),
+    {"id": "bowsprit", "use": "items/components/bowsprit", "params": {"l": "L * 0.25", "r": 0.2, "steeve": 30}, "at": ["L * 0.97", "D * 1.45", 0]},
+    {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.45"}, "at": ["L * 0.88", "D * 1.05", "B * 0.48"]},
+    stay(["L * 0.5", "D * 0.86 + mastH", 0], ["L * 0.97", "D * 1.5", 0]), stay(["L * 0.5", "D * 0.86 + mastH * 1.3", 0], ["L * 1.15", "D * 1.5 + L * 0.1", 0]),
+])
+
+SHIPS["treasure-ship"] = ship("Treasure ship", "1400-1500", "Ming China", "a baochuan of Zheng He's fleets (1405-1433): a great flat-bottomed junk with a broad transom bow and a towering stern of two storeys of cabins, the rudder hung deep in its well, six masts with battened red-brown sails -- the foremost raked over the bow, the after ones stepped off the centre line -- painted eyes at the bow, a gallery round the stern. (Sized as the 2000-liao ships the Longjiang shipyard's rudderposts suggest and the Nanjing reconstruction follows, about 60 m by 14 m; the chronicles' 125 m is doubted)",
+    {"L": [55, 64], "B": "L * 0.23", "D": "B * 0.48", "mastH": "L * 0.55"}, {"planks": "planks", "wood": "pine", "cloth": "sail-red", "trim": "lacquer-red", "gilt": "gilt", "white": "#e0dccc", "dark": "#1e1a16"}, [
+    hull("L", "B", "D", fullness=0.82, plan=[[0, 0.62], [0.1, 0.86], [0.4, 1], [0.75, 0.95], [0.95, 0.68], [1, 0.55]],
+         keel=[[0, "D * 0.55"], [0.15, 0], [0.82, 0], [1, "D * 0.45"]], sheer=[[0, "D * 1.9"], [0.15, "D * 1.3"], [0.4, "D"], [0.8, "D * 1.02"], [1, "D * 1.3"]],
+         deck=[{"y": "D * 0.9", "from": 0.02, "to": 0.99}], rail=0.12),
+    {"id": "wale", "type": "box", "material": "trim", "size": ["L * 0.9", 0.3, 0.06], "at": ["L * 0.5", "D * 0.72", "B * 0.5"], "mirror": "z"},
+    {"id": "bulwark", "type": "box", "material": "trim", "size": ["L * 0.6", 0.9, 0.08], "at": ["L * 0.57", "D * 1.0 + 0.45", "B * 0.49"], "mirror": "z"},
+    {"id": "stern cabins", "use": "items/components/cabin", "params": {"w": "B * 0.92", "d": "L * 0.2", "h": "D * 0.55", "windows": 4}, "materials": {"wood": "trim", "roofm": "planks-tarred"}, "at": ["L * 0.02", "D * 0.9", 0]},
+    {"id": "upper cabin", "use": "items/components/cabin", "params": {"w": "B * 0.7", "d": "L * 0.12", "h": "D * 0.45", "roof": "pitched", "windows": 3}, "materials": {"wood": "trim", "roofm": "planks-tarred"}, "at": ["L * 0.03", "D * 1.47", 0]},
+    {"id": "stern gallery", "type": "box", "material": "wood", "size": ["L * 0.03", 0.12, "B * 0.95"], "at": ["L * 0.005", "D * 1.47", 0]},
+    {"id": "transom bow", "type": "box", "material": "trim", "size": [0.12, "D * 0.6", "B * 0.5"], "at": ["L * 0.999", "D * 1.0", 0]},
+    {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.7", "w": "B * 0.18", "tiller": "L * 0.12", "thick": 0.16}, "at": ["L * 0.005", "D * 1.5", 0]},
+    {"id": "eye", "type": "box", "material": "white", "size": [1.3, 0.8, 0.06], "round": 0.25, "at": ["L * 0.955", "D * 1.0", "B * 0.3"], "mirror": "z"},
+    {"id": "pupil", "type": "box", "material": "dark", "size": [0.55, 0.55, 0.08], "round": 0.2, "at": ["L * 0.958", "D * 1.0", "B * 0.3 + 0.02"], "mirror": "z"},
+    mast("L * 0.55", "D * 0.9", "mastH", r=0.55),
+    {"id": "main sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.24", "h": "mastH * 0.82", "battens": 9, "set": "set"}, "at": ["L * 0.55", "D * 0.9 + mastH * 0.94", 0]},
+    mast("L * 0.72", "D * 0.9", "mastH * 0.85", r=0.45),
+    {"id": "fore main sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.2", "h": "mastH * 0.7", "battens": 8, "set": "set"}, "at": ["L * 0.72", "D * 0.9 + mastH * 0.8", 0]},
+    {"id": "foremast", "use": "items/components/mast", "params": {"h": "mastH * 0.6", "r": 0.35}, "at": ["L * 0.9", "D * 0.9", 0, 0, 0, -10]},
+    {"id": "fore sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.14", "h": "mastH * 0.48", "battens": 6, "set": "set"}, "at": ["L * 0.9 + mastH * 0.09", "D * 0.9 + mastH * 0.56", 0, 0, 0, -10]},
+    {"id": "mizzen mast", "use": "items/components/mast", "params": {"h": "mastH * 0.7", "r": 0.38}, "at": ["L * 0.36", "D * 0.9", "B * 0.12"]},
+    {"id": "mizzen sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.16", "h": "mastH * 0.56", "battens": 7, "set": "set"}, "at": ["L * 0.36", "D * 0.9 + mastH * 0.66", "B * 0.12"]},
+    {"id": "after mast", "use": "items/components/mast", "params": {"h": "mastH * 0.5", "r": 0.3}, "at": ["L * 0.25", "D * 1.45", "-B * 0.14"]},
+    {"id": "after sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.11", "h": "mastH * 0.4", "battens": 5, "set": "set"}, "at": ["L * 0.25", "D * 1.45 + mastH * 0.47", "-B * 0.14"]},
+    {"id": "jigger mast", "use": "items/components/mast", "params": {"h": "mastH * 0.36", "r": 0.24}, "at": ["L * 0.08", "D * 1.9", 0]},
+    {"id": "jigger sail", "use": "items/components/junk-sail", "params": {"w": "L * 0.08", "h": "mastH * 0.28", "battens": 4, "set": "set"}, "at": ["L * 0.08", "D * 1.9 + mastH * 0.34", 0]},
+    {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.5"}, "at": ["L * 0.93", "D * 1.1", "B * 0.4"], "mirror": "z"},
+])
+
+SHIPS["bezaisen"] = ship("Bezaisen", "1650-1870", "Edo Japan", "the sengoku-bune of the Edo coastal trade (the higaki and taru-kaisen of the Osaka-Edo run, the kitamae-bune of the Sea of Japan): a slab-sided, flat-bottomed hull with a long raked stem, an open transom stern carrying a huge rudder, the cargo walled in amidships by removable side boards, one great square sail of cotton strips on a single mast. (A 1000-koku ship about 29 m overall and 7.5 m in the beam, from the Naniwa-maru reconstruction (Osaka Maritime Museum); the sail about 18 x 20 m)",
+    {"L": [24, 30], "B": "L * 0.26", "D": "B * 0.42", "mastH": "L * 0.8"}, {"planks": "planks-pine", "deck": "deck", "wood": "pine", "cloth": "sail-cotton", "dark": "planks-tarred", "copper": "#7a5a3a"}, [
+    hull("L", "B", "D", fullness=0.85, plan=[[0, 0.62], [0.12, 0.92], [0.45, 1], [0.75, 0.85], [0.93, 0.4], [1, 0.04]],
+         keel=[[0, "D * 0.6"], [0.12, "D * 0.05"], [0.2, 0], [0.7, 0], [0.88, "D * 0.35"], [1, "D * 1.2"]],
+         sheer=[[0, "D * 1.85"], [0.12, "D * 1.3"], [0.45, "D"], [0.8, "D * 1.08"], [1, "D * 1.9"]],
+         deck=[{"y": "D * 0.88", "from": 0.03, "to": 0.95}], rail=0.1),
+    {"id": "stem", "type": "box", "material": "dark", "size": ["L * 0.12", 0.35, 0.3], "at": ["L * 1.0", "D * 1.8", 0, 0, 0, 18]},
+    {"id": "kakoi", "type": "box", "material": "planks", "size": ["L * 0.5", 1.3, 0.08], "at": ["L * 0.47", "D * 1.0 + 0.65", "B * 0.48"], "mirror": "z"},
+    {"id": "kakoi post", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": [0, 1.4, 0], "r": 0.06, "along": {"n": 7, "from": ["L * 0.22", "D * 1.0", "B * 0.48"], "to": ["L * 0.72", "D * 1.0", "B * 0.48"]}, "mirror": "z"},
+    {"id": "transom", "type": "box", "material": "dark", "size": [0.15, "D * 1.0", "B * 0.62"], "at": ["L * 0.005", "D * 1.35", 0]},
+    {"id": "stern house", "use": "items/components/cabin", "params": {"w": "B * 0.6", "d": "L * 0.1", "h": 1.6, "roof": "pitched", "windows": 1}, "materials": {"wood": "planks-pine", "roofm": "dark"}, "at": ["L * 0.04", "D * 0.88", 0]},
+    {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 2.0", "w": "B * 0.3", "tiller": "L * 0.12", "thick": 0.14}, "at": ["L * 0.0", "D * 1.6", 0]},
+    mast("L * 0.52", "D * 0.88", "mastH", r=0.32),
+    square("L * 0.52", "D * 0.88 + mastH * 0.95", "L * 0.6", "mastH * 0.78", belly="L * 0.04", foot=1.0),
+    {"id": "boom", "use": "items/components/yard", "params": {"l": "L * 0.6", "r": 0.08}, "when": {"set": "full"}, "at": ["L * 0.52", "D * 0.88 + mastH * 0.16", 0, 90, 0, 0]},
+    {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.6"}, "materials": {"wood": "dark"}, "at": ["L * 0.9", "D * 1.3", "B * 0.35"], "mirror": "z"},
+    stay(["L * 0.52", "D * 0.88 + mastH", 0], ["L * 0.99", "D * 1.9", 0], r=0.04), stay(["L * 0.52", "D * 0.88 + mastH", 0], ["L * 0.02", "D * 1.85", 0], r=0.03),
+])
+
+SHIPS["atakebune"] = ship("Atakebune", "1550-1640", "Sengoku and early Edo Japan", "the warship of the warring states and of the Korean war: a broad flat hull carrying a fortress -- a box of planked shields (tatebita) the length of the ship, black-beamed, pierced by two rows of loopholes for the arquebuses and bows and by the ports the oars run out through, a gate in each side; its roof a fighting deck behind a loopholed parapet, and on it the yagura, a castle keep of three white-walled storeys under dark tiled eaves with gilt finials; one square sail of matting on a mast that can be lowered, banners along the parapet. (About 30-45 m: the Atake-maru of 1635 was about 47 m, most were smaller -- estimated from the screens and the Kaiyō records)",
+    {"L": [30, 42], "B": "L * 0.3", "D": "B * 0.32", "mastH": "L * 0.42", "wallH": 2.6}, {"planks": "planks-tarred", "deck": "deck", "wood": "planks-tarred", "wall": "planks", "cloth": "matting", "white": "#e2dccb", "roofm": "#34383c", "dark": "#141210", "beam": "#1e1a16", "gilt": "gilt"}, [
+    hull("L", "B", "D", fullness=0.8, plan=[[0, 0.6], [0.1, 0.9], [0.4, 1], [0.75, 0.9], [0.93, 0.45], [1, 0.12]],
+         keel=[[0, "D * 0.5"], [0.12, 0], [0.8, 0], [1, "D * 0.7"]], sheer=[[0, "D * 1.35"], [0.4, "D"], [1, "D * 1.5"]],
+         deck=[{"y": "D * 0.92", "from": 0.02, "to": 0.97}], rail=0.08),
+    # THE SHIELD BOX (tatebita): the length of the ship, a little outboard of the hull
+    {"id": "box side", "type": "box", "material": "wall", "size": ["L * 0.88", "wallH", 0.14], "at": ["L * 0.5", "D + wallH / 2", "B * 0.5 + 0.12"], "mirror": "z"},
+    {"id": "box end", "type": "box", "material": "wall", "size": [0.14, "wallH", "B + 0.38"], "at": [["L * 0.06", "D + wallH / 2", 0], ["L * 0.94", "D + wallH / 2", 0]]},
+    {"id": "box sill", "type": "box", "material": "beam", "size": ["L * 0.88 + 0.3", 0.3, 0.2], "at": ["L * 0.5", "D + 0.12", "B * 0.5 + 0.16"], "mirror": "z"},
+    {"id": "box cap", "type": "box", "material": "beam", "size": ["L * 0.88 + 0.3", 0.24, "B + 0.56"], "at": ["L * 0.5", "D + wallH", 0]},
+    {"id": "box posts", "type": "box", "material": "beam", "size": [0.16, "wallH", 0.06], "along": {"n": 15, "from": ["L * 0.07", "D + wallH / 2", "B * 0.5 + 0.21"], "to": ["L * 0.93", "D + wallH / 2", "B * 0.5 + 0.21"]}, "mirror": "z"},
+    {"id": "loopholes", "type": "box", "material": "dark", "size": [0.2, 0.26, 0.04], "along": {"n": 26, "from": ["L * 0.09", "D + wallH * 0.72", "B * 0.5 + 0.2"], "to": ["L * 0.91", "D + wallH * 0.72", "B * 0.5 + 0.2"]}, "mirror": "z"},
+    {"id": "oar ports aft", "type": "box", "material": "dark", "size": [0.3, 0.3, 0.04], "along": {"n": 13, "from": ["L * 0.12", "D + 0.5", "B * 0.5 + 0.2"], "to": ["L * 0.44", "D + 0.5", "B * 0.5 + 0.2"]}, "mirror": "z"},
+    {"id": "oar ports fore", "type": "box", "material": "dark", "size": [0.3, 0.3, 0.04], "along": {"n": 13, "from": ["L * 0.56", "D + 0.5", "B * 0.5 + 0.2"], "to": ["L * 0.88", "D + 0.5", "B * 0.5 + 0.2"]}, "mirror": "z"},
+    {"id": "gate", "type": "box", "material": "dark", "size": [1.4, 1.9, 0.05], "at": ["L * 0.5", "D + 0.95", "B * 0.5 + 0.2"], "mirror": "z"},
+    {"id": "gate posts", "type": "box", "material": "beam", "size": [0.18, "wallH", 0.1], "at": [["L * 0.5 - 0.8", "D + wallH / 2", "B * 0.5 + 0.22"], ["L * 0.5 + 0.8", "D + wallH / 2", "B * 0.5 + 0.22"]], "mirror": "z"},
+    {"id": "oars aft", "use": "items/components/oars", "params": {"n": 13, "from": "L * 0.12", "to": "L * 0.44", "y": "D + 0.5", "z": "B * 0.5 + 0.2", "l": "L * 0.17", "dip": 26, "reach": 0.25}},
+    {"id": "oars fore", "use": "items/components/oars", "params": {"n": 13, "from": "L * 0.56", "to": "L * 0.88", "y": "D + 0.5", "z": "B * 0.5 + 0.2", "l": "L * 0.17", "dip": 26, "reach": 0.25}},
+    # THE FIGHTING DECK on the box's roof, behind a loopholed parapet
+    {"id": "roof deck", "type": "box", "material": "deck", "size": ["L * 0.88", 0.1, "B + 0.3"], "at": ["L * 0.5", "D + wallH + 0.16", 0]},
+    {"id": "parapet", "type": "box", "material": "wall", "size": ["L * 0.88", 0.9, 0.1], "at": ["L * 0.5", "D + wallH + 0.66", "B * 0.5 + 0.1"], "mirror": "z"},
+    {"id": "parapet end", "type": "box", "material": "wall", "size": [0.1, 0.9, "B + 0.3"], "at": [["L * 0.065", "D + wallH + 0.66", 0], ["L * 0.935", "D + wallH + 0.66", 0]]},
+    {"id": "parapet cap", "type": "box", "material": "beam", "size": ["L * 0.88", 0.1, 0.16], "at": ["L * 0.5", "D + wallH + 1.14", "B * 0.5 + 0.1"], "mirror": "z"},
+    {"id": "parapet loopholes", "type": "box", "material": "dark", "size": [0.18, 0.2, 0.04], "along": {"n": 20, "from": ["L * 0.1", "D + wallH + 0.72", "B * 0.5 + 0.16"], "to": ["L * 0.9", "D + wallH + 0.72", "B * 0.5 + 0.16"]}, "mirror": "z"},
+    # THE YAGURA: a keep of three storeys, white walls over black boards, each under tiled eaves
+    {"id": "yagura 1", "use": "items/components/cabin", "params": {"w": "B * 0.66", "d": "L * 0.28", "h": 2.5, "roof": "flat", "windows": 5}, "materials": {"wood": "white", "roofm": "roofm", "glass": "dark"}, "at": ["L * 0.12", "D + wallH + 0.21", 0]},
+    {"id": "yagura 1 boards", "type": "box", "material": "beam", "size": ["L * 0.28 + 0.06", 1.0, "B * 0.66 + 0.06"], "at": ["L * 0.26", "D + wallH + 0.71", 0]},
+    {"id": "eaves 1", "type": "plate", "material": "roofm", "thick": "L * 0.28 + 1.4", "at": ["L * 0.26", "D + wallH + 2.71", 0, 90, 0, 0], "outline": [["-B * 0.33 - 0.9", 0], ["B * 0.33 + 0.9", 0], ["B * 0.24", 0.75], ["-B * 0.24", 0.75]]},
+    {"id": "yagura 2", "use": "items/components/cabin", "params": {"w": "B * 0.46", "d": "L * 0.18", "h": 2.1, "roof": "flat", "windows": 3}, "materials": {"wood": "white", "roofm": "roofm", "glass": "dark"}, "at": ["L * 0.17", "D + wallH + 3.4", 0]},
+    {"id": "yagura 2 boards", "type": "box", "material": "beam", "size": ["L * 0.18 + 0.06", 0.8, "B * 0.46 + 0.06"], "at": ["L * 0.26", "D + wallH + 3.8", 0]},
+    {"id": "eaves 2", "type": "plate", "material": "roofm", "thick": "L * 0.18 + 1.2", "at": ["L * 0.26", "D + wallH + 5.5", 0, 90, 0, 0], "outline": [["-B * 0.23 - 0.8", 0], ["B * 0.23 + 0.8", 0], ["B * 0.15", 0.65], ["-B * 0.15", 0.65]]},
+    {"id": "yagura 3", "use": "items/components/cabin", "params": {"w": "B * 0.3", "d": "L * 0.11", "h": 1.8, "roof": "pitched", "windows": 2}, "materials": {"wood": "white", "roofm": "roofm", "glass": "dark"}, "at": ["L * 0.205", "D + wallH + 6.1", 0]},
+    {"id": "finial", "type": "box", "material": "gilt", "size": [0.35, 0.55, 0.18], "at": [["L * 0.205 - 0.1", "D + wallH + 7.9 + B * 0.105 + 0.2", 0], ["L * 0.315 + 0.1", "D + wallH + 7.9 + B * 0.105 + 0.2", 0]]},
+    # THE RIG: one square sail of matting
+    mast("L * 0.62", "D + wallH + 0.21", "mastH", r=0.3),
+    square("L * 0.62", "D + wallH + 0.21 + mastH * 0.95", "L * 0.36", "mastH * 0.66", belly="L * 0.03", foot=1.0),
+    {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 2.0", "w": "B * 0.2", "tiller": 0, "thick": 0.14}, "at": ["L * 0.0", "D * 1.3", 0]},
+    {"id": "banner pole", "type": "rod", "material": "beam", "from": [0, 0, 0], "to": [0, 4.2, 0], "r": 0.04, "at": [["L * 0.5", "D + wallH + 1.2", "B * 0.5"], ["L * 0.7", "D + wallH + 1.2", "B * 0.5"], ["L * 0.85", "D + wallH + 1.2", "B * 0.5"], ["L * 0.5", "D + wallH + 1.2", "-B * 0.5"], ["L * 0.7", "D + wallH + 1.2", "-B * 0.5"], ["L * 0.85", "D + wallH + 1.2", "-B * 0.5"]]},
+    {"id": "banner", "type": "box", "material": "white", "size": [0.6, 2.6, 0.03], "at": [["L * 0.5 - 0.32", "D + wallH + 4.0", "B * 0.5"], ["L * 0.7 - 0.32", "D + wallH + 4.0", "B * 0.5"], ["L * 0.85 - 0.32", "D + wallH + 4.0", "B * 0.5"], ["L * 0.5 - 0.32", "D + wallH + 4.0", "-B * 0.5"], ["L * 0.7 - 0.32", "D + wallH + 4.0", "-B * 0.5"], ["L * 0.85 - 0.32", "D + wallH + 4.0", "-B * 0.5"]]},
+])
+
+SHIPS["maya-canoe"] = ship("Maya trading canoe", "-500-1550", "the Maya coasts: Yucatán, Belize, Honduras", "the great dugout of the Maya sea trade that Columbus's men met off Honduras in 1502 -- 'as long as a galley and eight feet wide', two dozen paddlers, a palm-thatched shelter amidships over the cargo of cotton cloth, cacao, copper and pottery, the women and children under it; its ends rising square and flat as the Tikal graffiti and the Altun Ha bones draw them. (Its breadth sourced from Ferdinand Columbus's account, about 2.4 m; the length estimated, 14-18 m)",
+    {"L": [14, 18], "B": [2.2, 2.5], "D": "B * 0.4"}, {"planks": "planks", "wood": "oak", "cloth": "thatch", "paint": "#2e5f6e", "red": "#8e3a26"}, [
+    hull("L", "B", "D", fullness=0.55, stations=24, sides=6, plan=[[0, 0.35], [0.1, 0.75], [0.35, 1], [0.65, 1], [0.9, 0.75], [1, 0.35]],
+         keel=[[0, "D * 0.9"], [0.12, "D * 0.1"], [0.25, 0], [0.75, 0], [0.88, "D * 0.1"], [1, "D * 0.9"]], sheer=[[0, "D * 1.55"], [0.1, "D * 1.15"], [0.5, "D"], [0.9, "D * 1.15"], [1, "D * 1.55"]],
+         rail=0.06, thwarts={"n": 6, "y": "D * 0.7", "w": 0.22, "from": 0.18, "to": 0.82}),
+    {"id": "end platform", "type": "box", "material": "planks", "size": ["L * 0.08", 0.14, "B * 0.62"], "at": [["L * 0.985", "D * 1.55", 0], ["L * 0.015", "D * 1.55", 0]]},
+    {"id": "band", "type": "box", "material": "red", "size": ["L * 0.7", 0.14, 0.03], "at": ["L * 0.5", "D * 0.8", "B * 0.5"], "mirror": "z"},
+    {"id": "shelter", "use": "items/components/awning", "params": {"w": "B * 0.8", "d": "L * 0.2", "h": 1.5}, "at": ["L * 0.4", "D * 0.2", 0]},
+    {"id": "jars", "use": "items/tools/storage-jar", "at": [["L * 0.44", "D * 0.15", -0.4], ["L * 0.47", "D * 0.15", 0.35], ["L * 0.53", "D * 0.15", -0.3], ["L * 0.56", "D * 0.15", 0.4]]},
+    {"id": "paddles", "use": "items/components/oars", "params": {"n": 10, "from": "L * 0.18", "to": "L * 0.82", "y": "D * 1.0", "z": "B * 0.5", "l": 1.6, "dip": 50, "reach": 0.1}},
+    {"id": "steering paddle", "use": "items/components/oar", "params": {"l": 2.6, "r": 0.04, "bladeW": 0.22}, "at": ["L * 0.06", "D * 1.6", 0.3, 0, 0, -130]},
+])
+
+SHIPS["koch"] = ship("Koch", "1400-1800", "the Russian north: the Pomors of the White Sea, Mangazeya, Siberia's rivers", "the Pomor koch: a stout single-decked ship with a rounded 'nutshell' hull sheathed with an ice belt of planks at the waterline so the ice squeezes it up instead of crushing it, one mast with a square sail of hide or canvas (a small foremast often), a stern rudder, a deckhouse aft. (About 18-24 m by 5-8 m, sourced from the Mangazeya finds and the Arctic expeditions' descriptions)",
+    {"L": [18, 24], "B": "L * 0.3", "D": "B * 0.5", "mastH": "L * 0.65"}, {"planks": {"pick": ["planks-grey", "planks-tarred"]}, "wood": "pine", "cloth": {"pick": ["canvas", "hide"]}}, [
+    hull("L", "B", "D", fullness=0.38, tumblehome=0.18, plan=[[0, 0.15], [0.12, 0.65], [0.4, 1], [0.65, 1], [0.88, 0.6], [1, 0.04]],
+         keel=[[0, "D * 0.3"], [0.1, 0], [0.88, 0], [1, "D * 0.45"]], sheer=[[0, "D * 1.2"], [0.5, "D"], [1, "D * 1.25"]],
+         deck=[{"y": "D * 0.86", "from": 0.03, "to": 0.97}], rail=0.08, keelBeam=[0.28, 0.3], postRise="D * 0.1"),
+    {"id": "ice belt", "type": "box", "material": "wood", "size": ["L * 0.46", "D * 0.22", 0.1], "at": ["L * 0.52", "D * 0.55", "B * 0.5 - 0.06"], "mirror": "z"},
+    {"id": "deckhouse", "use": "items/components/cabin", "params": {"w": "B * 0.5", "d": "L * 0.13", "h": 1.7, "roof": "pitched", "windows": 1}, "materials": {"wood": "planks", "roofm": "planks-tarred"}, "at": ["L * 0.05", "D * 0.86", 0]},
+    {"id": "rudder", "use": "items/components/rudder", "params": {"h": "D * 1.05", "w": "B * 0.1", "tiller": "L * 0.12"}, "at": [0, "D * 1.0", 0]},
+    mast("L * 0.5", "D * 0.86", "mastH", r=0.24),
+    square("L * 0.5", "D * 0.86 + mastH * 0.92", "L * 0.5", "mastH * 0.62", belly="L * 0.06"),
+    mast("L * 0.86", "D * 0.86", "mastH * 0.45", r=0.14),
+    square("L * 0.86", "D * 0.86 + mastH * 0.42", "L * 0.2", "mastH * 0.28", belly="L * 0.02"),
+    {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.5"}, "at": ["L * 0.9", "D * 1.05", "B * 0.45"]},
+    stay(["L * 0.5", "D * 0.86 + mastH", 0], ["L * 0.97", "D * 1.3", 0]), stay(["L * 0.5", "D * 0.86 + mastH", 0], ["L * 0.03", "D * 1.25", 0]),
+])
+
+FIT.update({
+    "punt-ship":     dict(wl=0.55, hold=[0.3, 0.7], hatch=None, floor=0.88, plank=0.45, helm=0.1, bow=0.92, stern=0.08, shrouds=0),
+    "gaulos":        dict(wl=0.6, hold=[0.4, 0.6], hatch=None, floor=0.3, plank=0.5, helm=0.12, bow=0.92, stern=0.08, shrouds=3),
+    "dromon":        dict(wl=0.5, hold=[0.4], hatch=[0.3, 0.04], floor=0.2, plank=0.45, helm=0.08, bow=0.92, stern=0.05, shrouds=2),
+    "kadirga":       dict(wl=0.5, hold=[0.4], hatch=[0.3, 0.04], floor=0.2, plank=0.45, helm=0.12, bow=0.92, stern=0.05, shrouds=2),
+    "hulk":          dict(wl=0.6, hold=[0.38, 0.64], hatch=[0.32, 0.07], floor=0.15, plank=0.5, helm=0.2, bow=0.82, stern=0.08, shrouds=5),
+    "treasure-ship": dict(wl=0.6, hold=[0.42, 0.62, 0.8], hatch=[0.3, 0.05], floor=0.15, plank=0.48, helm=0.1, bow=0.96, stern=0.24, shrouds=0),
+    "bezaisen":      dict(wl=0.55, hold=[0.4, 0.6], hatch=[0.45, 0.08], floor=0.15, plank=0.48, helm=0.08, bow=0.9, stern=0.16, shrouds=0),
+    "atakebune":     dict(wl=0.55, hold=[0.7], hatch=None, floor=0.2, plank=0.5, helm=0.08, bow=0.96, stern=0.03, shrouds=0, deck="D + wallH + 0.21",
+                          plankY="D", plankZ="B * 0.5 + 0.24", plankDeck="D * 0.92"),   # (at the gates in the shield box)
+    "maya-canoe":    dict(wl=0.45, hold=[0.45, 0.55], hatch=None, floor=0.2, plank=0.5, helm=0.07, bow=0.96, stern=0.04, shrouds=0),
+    "koch":          dict(wl=0.58, hold=[0.38, 0.66], hatch=[0.35, 0.08], floor=0.15, plank=0.5, helm=0.12, bow=0.9, stern=0.06, shrouds=3),
+})
 
 # ---- MATERIALS the ships add to the library -----------------------------------------------------------------------
 MATERIALS = {
@@ -746,14 +1298,171 @@ MATERIALS = {
     "bamboo": {"pattern": "timber/wood", "palette": ["#7a6a3a", "#c8b070", "#a89050", "#d8c890"]},
     "cedar": {"pattern": "timber/bark", "palette": ["#5a3a26", "#a87050", "#8a5a3c", "#c08868"]},
     "hide": {"pattern": "fabrics/leather", "palette": ["#7a5a3a", "#a88060", "#8e6a48", "#c09a78"], "scale": 2},
+    "sail-cotton": {"pattern": "fabrics/stripes", "palette": ["#e6dfcc", "#ebe5d3", "#6e665a", "#d8d0bc"], "scale": 12},
+    "sail-red": {"pattern": "fabrics/linen", "palette": ["#8a4a30", "#7a3e28", "#9a5838", "#6a3422"]},
+    "thatch": {"pattern": "fabrics/straw", "palette": ["#a8935a", "#8e7a46", "#c0a86c", "#6e5c34"], "scale": 4},
 }
+
+
+
+# ---- THE WORLD'S SHIPS: assets/world/ships.json (2026-11-03) ----------------------------------------------------------
+# What a world sails, keyed like assets/world/goods.json (the world's period, else its dress's first style, else
+# "default"): per culture its merchant, war and small craft by weight; per ship its kind of work, its drive, its crew,
+# its burden and the sizes the game needs to float it (the draught is from the keel to the `waterline` marker).
+# type: merchant | war | small; drive: sail | oar | paddle | pole | sail+oar | sail+paddle; crew [min, max] (rowers and
+# soldiers counted); cargo tons (an estimate of the burden), holds (its `hold` markers)
+WORLD_SHIPS = {
+    # name                type        drive          crew          tons
+    "dugout":           ("small",    "paddle",      [1, 3],       0.3),
+    "reed-boat":        ("small",    "paddle",      [1, 3],       0.3),
+    "egyptian-boat":    ("merchant", "sail+oar",    [6, 14],      10),
+    "trireme":          ("war",      "sail+oar",    [170, 200],   5),
+    "roman-merchant":   ("merchant", "sail",        [10, 20],     150),
+    "longship":         ("war",      "sail+oar",    [30, 70],     5),
+    "knarr":            ("merchant", "sail+oar",    [6, 12],      25),
+    "cog":              ("merchant", "sail",        [8, 20],      100),
+    "carrack":          ("merchant", "sail",        [40, 100],    400),
+    "caravel":          ("merchant", "sail",        [15, 25],     60),
+    "galleon":          ("war",      "sail",        [100, 250],   500),
+    "galley":           ("war",      "sail+oar",    [200, 350],   20),
+    "dhow":             ("merchant", "sail",        [12, 30],     100),
+    "junk":             ("merchant", "sail",        [20, 60],     200),
+    "sampan":           ("small",    "oar",         [1, 4],       1),
+    "outrigger-canoe":  ("small",    "sail+paddle", [1, 4],       0.3),
+    "voyaging-canoe":   ("merchant", "sail+paddle", [12, 30],     5),
+    "gondola":          ("small",    "oar",         [1, 2],       0.5),
+    "birchbark-canoe":  ("small",    "paddle",      [1, 4],       0.3),
+    "kayak":            ("small",    "paddle",      [1, 1],       0.05),
+    "umiak":            ("small",    "oar",         [4, 12],      1.5),
+    "coracle":          ("small",    "paddle",      [1, 1],       0.1),
+    "fishing-boat":     ("small",    "sail+oar",    [2, 6],       2),
+    "skiff":            ("small",    "oar",         [1, 3],       0.5),
+    "fluyt":            ("merchant", "sail",        [12, 20],     300),
+    "xebec":            ("war",      "sail+oar",    [100, 300],   30),
+    "felucca":          ("small",    "sail",        [2, 5],       6),
+    "ship-of-the-line": ("war",      "sail",        [550, 750],   300),
+    "frigate":          ("war",      "sail",        [220, 300],   150),
+    "east-indiaman":    ("merchant", "sail",        [100, 150],   800),
+    "punt-ship":        ("merchant", "sail+oar",    [30, 40],     40),
+    "gaulos":           ("merchant", "sail",        [6, 15],      150),
+    "dromon":           ("war",      "sail+oar",    [150, 230],   15),
+    "kadirga":          ("war",      "sail+oar",    [250, 400],   20),
+    "hulk":             ("merchant", "sail",        [20, 40],     300),
+    "treasure-ship":    ("merchant", "sail",        [300, 600],   1500),
+    "bezaisen":         ("merchant", "sail",        [12, 18],     150),
+    "atakebune":        ("war",      "sail+oar",    [100, 200],   20),
+    "maya-canoe":       ("merchant", "paddle",      [20, 30],     3),
+    "koch":             ("merchant", "sail",        [10, 15],     30),
+    # (propgen.py's two, not fitted here: their origin is the waterline's centre, their markers `hold` and `plank`)
+    "barge":            ("merchant", "pole",        [2, 4],       30),
+    "fisher-boat":      ("small",    "oar",         [1, 3],       0.5),
+}
+
+CULTURE_SHIPS = {   # merchant / war / small, [ship, weight]
+    "greek":      ([["gaulos", 2], ["roman-merchant", 1]], [["trireme", 1]], [["fishing-boat", 2], ["skiff", 1]]),
+    "roman":      ([["roman-merchant", 3], ["gaulos", 1]], [["trireme", 1]], [["fishing-boat", 2], ["skiff", 1]]),
+    "egyptian":   ([["punt-ship", 1], ["egyptian-boat", 2]], [["punt-ship", 1]], [["reed-boat", 2], ["dugout", 1]]),
+    "chinese":    ([["junk", 3], ["treasure-ship", 1]], [["treasure-ship", 1], ["junk", 1]], [["sampan", 1]]),
+    "japanese":   ([["bezaisen", 1]], [["atakebune", 1]], [["sampan", 1], ["fisher-boat", 1]]),
+    "indian":     ([["dhow", 1]], [["dhow", 1]], [["fishing-boat", 1], ["outrigger-canoe", 1]]),
+    "maya":       ([["maya-canoe", 1]], [["maya-canoe", 1]], [["dugout", 1]]),
+    "medieval":   ([["cog", 3], ["hulk", 2], ["knarr", 1], ["carrack", 1]], [["cog", 1], ["longship", 1]], [["fishing-boat", 2], ["skiff", 1]]),
+    "byzantine":  ([["roman-merchant", 1]], [["dromon", 1]], [["fishing-boat", 1]]),
+    "ottoman":    ([["galleon", 1], ["xebec", 1], ["dhow", 1]], [["kadirga", 2], ["galley", 1]], [["felucca", 1], ["skiff", 1]]),
+    "islamic":    ([["dhow", 1]], [["galley", 1], ["dhow", 1]], [["felucca", 1], ["fishing-boat", 1]]),
+    "russian":    ([["koch", 1]], [["longship", 1]], [["dugout", 1], ["skiff", 1]]),
+    "industrial": ([["east-indiaman", 1], ["fluyt", 2]], [["ship-of-the-line", 1], ["frigate", 2]], [["fishing-boat", 2], ["skiff", 1]]),
+    "default":    ([["cog", 1], ["fluyt", 1]], [["frigate", 1]], [["fishing-boat", 2], ["skiff", 1]]),
+}
+
+
+def resolve(params):
+    """the ship's sizes at their middle: ranges at their mean, picks at their first, expressions evaluated in order"""
+    env, todo = {"min": min, "max": max, "abs": abs, "round": round}, dict(params)
+    for _ in range(6):
+        for k, v in list(todo.items()):
+            if isinstance(v, list) and len(v) == 2 and all(isinstance(q, (int, float)) for q in v):
+                env[k] = (v[0] + v[1]) / 2
+            elif isinstance(v, (int, float)):
+                env[k] = v
+            elif isinstance(v, dict) and "pick" in v:
+                env[k] = v["pick"][0]
+            elif isinstance(v, str):
+                try:
+                    env[k] = eval(v, {"__builtins__": {}}, env)
+                except Exception:
+                    continue
+            else:
+                continue
+            del todo[k]
+    return env
+
+
+def world_ships():
+    ships = {}
+    for k, (typ, drive, crew, tons) in WORLD_SHIPS.items():
+        path = os.path.join(ITEMS, "ships", k + ".json")
+        d = SHIPS.get(k) or json.load(open(path))
+        P = d["params"]
+        e = {"item": "items/ships/" + k, "name": d.get("name", k), "type": typ, "drive": drive, "crew": crew}
+        if k in SHIPS:
+            env = resolve(P)
+            Lr = P["L"] if isinstance(P["L"], list) else [env["L"], env["L"]]
+            e["length"] = [round(Lr[0], 1), round(Lr[1], 1)]
+            e["beam"] = round(env["B"], 2)
+            e["draught"] = round(env["D"] * FIT[k]["wl"], 2) if k in FIT else None
+            e["cargo"] = {"tons": tons, "holds": len(FIT[k]["hold"]) if k in FIT else 0}
+            e["era"], e["region"] = d.get("era"), d.get("region")
+            e["frame"] = "stern"
+            states = []
+            if any(p_.get("use") in ("items/components/square-sail", "items/components/lateen-sail", "items/components/junk-sail", "items/components/crab-claw-sail", "items/components/headsail") for p_ in d["parts"]):
+                states.append("set")
+            if "oars" in P:
+                states.append("oars")
+            e["params"] = states
+        else:   # (propgen's: a waterline-centred frame)
+            e["length"] = [round(P.get("halfL", 2) * 2, 1)] * 2
+            e["beam"] = round(P.get("halfW", 0.7) * 2, 2)
+            e["draught"] = next((m["data"]["draught"] for m in d.get("markers") or [] if m.get("role") == "waterline"), None)
+            e["cargo"] = {"tons": tons, "holds": sum(1 for m in d.get("markers") or [] if m.get("role") == "hold")}
+            e["era"], e["region"] = d.get("era"), d.get("region")
+            e["frame"] = "centre"
+            e["params"] = []
+        ships[k] = e
+    cultures = {c: {"merchant": m, "war": w, "small": sm} for c, (m, w, sm) in CULTURE_SHIPS.items()}
+    for c in cultures.values():
+        for lst in c.values():
+            for n, _ in lst:
+                assert n in ships, n
+    return {
+        "name": "Ships", "kind": "ships",
+        "_about": "the world's ships (written by tools/shipgen.py; see docs/ships.md). `cultures` keyed like goods.json -- the world's period, else its dress's first style, else default -- each listing its merchant, war and small craft as [ship, weight]. `ships`: per ship its item, type (merchant|war|small), drive (sail|oar|paddle|pole|sail+oar|sail+paddle), crew [min, max], hull length [min, max] m, beam m, draught m (keel to the waterline marker, at the middle size; for the centre-framed boats the waterline is their origin), cargo {tons, holds: its hold markers}, `params` the state params it takes, `frame` stern (x = 0 the stern, +x the bow, y up from the keel, +z starboard) or centre (the origin at the waterline amidships). `states`: the params a pose passes to buildItem. `anchors`: the marker roles every shipgen ship carries.",
+        "states": {
+            "moored":  {"set": "furled", "oars": "shipped"},
+            "sailing": {"set": "full", "oars": "shipped"},
+            "rowing":  {"set": "furled", "oars": "out"},
+            "under way": {"set": "full", "oars": "out"},
+        },
+        "anchors": {
+            "waterline": "one, amidships on the centre line at the load waterline; data {draught}: sink the ship until it sits at the water's surface",
+            "moor": "two, data {end: bow|stern}: on the bitts (a decked ship) or the stem- and sternpost heads -- where the lines run to the quay's bollards",
+            "gangplank": "two, data {side: starboard|port, deck}: on the rail amidships, its yaw outboard -- the plank's inboard end; people board here",
+            "hold": "one per hatch (data {i, w, l, floor}) or per stowage place on an open boat: where cargo is lowered and stowed",
+            "helm": "one: where the steersman stands (at the tiller, the wheel, the steering oar)",
+        },
+        "ships": ships,
+        "cultures": cultures,
+    }
 
 
 def main():
     for k, v in COMPONENTS.items():
         write("components/" + k, v)
     for k, v in SHIPS.items():
+        fit_out(k, v)
         write("ships/" + k, v)
+    wpath = os.path.join(ROOT, "assets", "world", "ships.json")
+    json.dump(world_ships(), open(wpath, "w"), indent=1, ensure_ascii=False)
     # the materials, added to the library where the library has none of that name
     mpath = os.path.join(ITEMS, "materials.json")
     lib = json.load(open(mpath))
@@ -761,21 +1470,25 @@ def main():
     for k, v in MATERIALS.items():
         if k not in lib["materials"]:
             lib["materials"][k] = v; added += 1
-    json.dump(lib, open(mpath, "w"), indent=1, ensure_ascii=False)
-    # the catalogue: the ships' own category, the components in theirs
+    if added:   # (the library is shared: written only when something is new, the rest left as it is)
+        json.dump(lib, open(mpath, "w"), indent=1, ensure_ascii=False)
+    # the catalogue (assets/index.json) is SHARED -- other tools and people edit it at the same time, and it once listed
+    # the barge and the fisher's boat (propgen.py) that this script does not write: it is never rewritten here. What it
+    # lacks is printed, to be added by hand (or with --index, which only appends the missing paths).
     ipath = os.path.join(ROOT, "assets", "index.json")
     index = json.load(open(ipath))
     cats = {c["name"]: c for c in index["categories"]}
-    comps = cats["Items: components"]
-    for k in COMPONENTS:
-        if "items/components/" + k not in comps["paths"]:
-            comps["paths"].append("items/components/" + k)
-    if "Items: ships" not in cats:
-        pos = index["categories"].index(cats["Items: furniture"]) + 1
-        index["categories"].insert(pos, {"name": "Items: ships", "kind": "item", "paths": []})
-        cats = {c["name"]: c for c in index["categories"]}
-    cats["Items: ships"]["paths"] = ["items/ships/" + k for k in SHIPS]
-    json.dump(index, open(ipath, "w"), indent=2, ensure_ascii=False)
+    missing = [("Items: components", "items/components/" + k) for k in COMPONENTS if "items/components/" + k not in cats["Items: components"]["paths"]]
+    missing += [("Items: ships", "items/ships/" + k) for k in SHIPS if "items/ships/" + k not in cats.get("Items: ships", {"paths": []})["paths"]]
+    if missing and "--index" in sys.argv:
+        for cat, p in missing:
+            cats[cat]["paths"].append(p)
+        json.dump(index, open(ipath, "w"), indent=2, ensure_ascii=False)
+        print("index: appended", len(missing))
+    elif missing:
+        print("index.json lacks (add them):", ", ".join(p for _, p in missing))
+    if "world/ships" not in [q for c in index["categories"] for q in c["paths"]]:
+        print("index.json lacks world/ships (the World category)")
     print(len(COMPONENTS), "components,", len(SHIPS), "ships,", added, "materials added")
 
 

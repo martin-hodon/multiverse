@@ -36,10 +36,16 @@ const segsOf = (net) => net.edges.map((e) => [[net.nodes[e.a].x, net.nodes[e.a].
 // one panel of a window: its pieces, inside `clip`
 export function partition(pieces0, { clip = null, minArea = 0, cut = {} } = {}) {
   const t0 = performance.now(), pieces = pieces0.map((p, i) => ({ ...p, label: p.label ?? i, box: boxOf(p.pts) })), clipBox = clip && boxOf(clip);
+  // (which pieces might lie at a point, in the order they were stacked: a window asks this of every edge, several times over, and most pieces are nowhere near)
+  let lo0 = Infinity, lo1 = Infinity, hi0 = -Infinity, hi1 = -Infinity; for (const p of pieces) { lo0 = Math.min(lo0, p.box[0]); lo1 = Math.min(lo1, p.box[1]); hi0 = Math.max(hi0, p.box[2]); hi1 = Math.max(hi1, p.box[3]); }
+  const GRID = 48, gx = GRID / (hi0 - lo0 || 1), gy = GRID / (hi1 - lo1 || 1), cellsOf = Array.from({ length: GRID * GRID }, () => []);
+  const file = (p) => { const b = p.box, a0 = Math.floor((b[0] - lo0) * gx), a1 = Math.floor((b[2] - lo0) * gx), c0 = Math.floor((b[1] - lo1) * gy), c1 = Math.floor((b[3] - lo1) * gy); for (let v = Math.max(0, c0); v <= Math.min(GRID - 1, c1); v++) for (let u = Math.max(0, a0); u <= Math.min(GRID - 1, a1); u++) cellsOf[v * GRID + u].push(p); };
+  const cellAt = (x, y) => { const u = Math.floor((x - lo0) * gx), v = Math.floor((y - lo1) * gy); return u < 0 || v < 0 || u >= GRID || v >= GRID ? null : cellsOf[v * GRID + u]; };
+  pieces.forEach(file);
   // (the topmost piece at a point; nothing outside the clip)
   const at = (x, y) => {
     if (clip && (x < clipBox[0] || x > clipBox[2] || y < clipBox[1] || y > clipBox[3] || !inPoly(x, y, clip))) return null;
-    for (let i = pieces.length - 1; i >= 0; i--) { const p = pieces[i], b = p.box; if (x >= b[0] && x <= b[2] && y >= b[1] && y <= b[3] && inPoly(x, y, p.pts)) return p.hole ? null : p; }
+    const list = cellAt(x, y) ?? pieces; for (let i = list.length - 1; i >= 0; i--) { const p = list[i], b = p.box; if (x >= b[0] && x <= b[2] && y >= b[1] && y <= b[3] && inPoly(x, y, p.pts) && !(p.within && !inPoly(x, y, p.within))) return p.hole ? null : p; }   // (`within`: a scene's piece goes no further than its frame)
     return null;
   };
   const all = [];
@@ -64,9 +70,10 @@ export function partition(pieces0, { clip = null, minArea = 0, cut = {} } = {}) 
       if (!own || own.whole) continue;
       const score = new Map();
       f.raw.forEach((a, i) => { const b = f.raw[(i + 1) % f.raw.length], o = side.get(keyOf(a, b))?.find((q) => q !== f); if (o) score.set(o, (score.get(o) ?? 0) + Math.hypot(b[0] - a[0], b[1] - a[1])); });
-      let best = null, most = 0;
-      for (const [o, s] of score) { const w = at(...pointIn(o.raw)); if (w && !w.whole && s > most) { most = s; best = w; } }
-      if (best) { pieces.push({ ...best, pts: f.raw, box: boxOf(f.raw), paint: null }); changed++; slivers++; }
+      let best = null, most = 0, whole = null, wm = 0;
+      for (const [o, s] of score) { const w = at(...pointIn(o.raw)); if (w && !w.whole && s > most) { most = s; best = w; } else if (w && w.whole && w !== own && s > wm) { wm = s; whole = w; } }
+      best ??= whole;                                          // (with nothing else beside it, it goes to what's kept whole: a hair more of a face beats a pane no glazier could cut)
+      if (best) { const q = { ...best, pts: f.raw, box: boxOf(f.raw), paint: null }; pieces.push(q); file(q); changed++; slivers++; }
     }
     if (!changed) break;
     segs = leadsNow();
@@ -96,16 +103,17 @@ export function partition(pieces0, { clip = null, minArea = 0, cut = {} } = {}) 
     let lo = Infinity, hi = -Infinity, bot = Infinity, top = -Infinity;
     for (const i of mine) { const n = base.nodes[i]; lo = Math.min(lo, n.x); hi = Math.max(hi, n.x); bot = Math.min(bot, n.y); top = Math.max(top, n.y); }
     const nearest = (reach) => {                               // (what's within a window of it first: what's nearest there is nearest anywhere, if it's closer than the window)
-      let best = null, D = Infinity;
-      const others = base.edges.filter((e) => { const a = base.nodes[e.a], b = base.nodes[e.b]; return find(e.a) !== c && Math.max(a.x, b.x) >= lo - reach && Math.min(a.x, b.x) <= hi + reach && Math.max(a.y, b.y) >= bot - reach && Math.min(a.y, b.y) <= top + reach; });
+      let D2 = Infinity, bn = null, bx = 0, by = 0, bt = 0; const R0 = lo - reach, R1 = hi + reach, R2 = bot - reach, R3 = top + reach, others = [], nodes = base.nodes;
+      for (const e of base.edges) { const a = nodes[e.a], b = nodes[e.b]; if ((a.x > b.x ? a.x : b.x) >= R0 && (a.x < b.x ? a.x : b.x) <= R1 && (a.y > b.y ? a.y : b.y) >= R2 && (a.y < b.y ? a.y : b.y) <= R3 && find(e.a) !== c) others.push(e); }
       for (const i of mine) {
-        const n = base.nodes[i];
-        for (const e of others) {
-          const a = base.nodes[e.a], b = base.nodes[e.b], dx = b.x - a.x, dy = b.y - a.y, t = Math.max(0, Math.min(1, ((n.x - a.x) * dx + (n.y - a.y) * dy) / (dx * dx + dy * dy || 1)));
-          const qx = a.x + dx * t, qy = a.y + dy * t, d = Math.hypot(qx - n.x, qy - n.y);
-          if (d < D) { D = d; best = { seg: [[n.x, n.y], [qx, qy]], to: e.a }; }
+        const n = nodes[i], nx = n.x, ny = n.y;
+        for (let k = 0; k < others.length; k++) {
+          const e = others[k], a = nodes[e.a], b = nodes[e.b], ax = a.x, ay = a.y, dx = b.x - ax, dy = b.y - ay, u = ((nx - ax) * dx + (ny - ay) * dy) / (dx * dx + dy * dy || 1), t = u < 0 ? 0 : u > 1 ? 1 : u;
+          const qx = ax + dx * t, qy = ay + dy * t, ex = qx - nx, ey = qy - ny, d = ex * ex + ey * ey;
+          if (d < D2) { D2 = d; bn = n; bx = qx; by = qy; bt = e.a; }
         }
       }
+      const D = Math.sqrt(D2), best = bn && { seg: [[bn.x, bn.y], [bx, by]], to: bt };
       return D <= reach ? best : null;
     };
     const best = nearest((hi - lo + top - bot) * .25 + 1e-3) ?? nearest(Infinity);
@@ -140,13 +148,13 @@ export function partition(pieces0, { clip = null, minArea = 0, cut = {} } = {}) 
     }
     if (!gone.size) break;
     const kept = segsOf(net).filter(([a, b]) => !gone.has(keyOf(a, b)));
-    for (const f of faces) if (f.area < minArea * .5) { const w = at(...pointIn(f.raw)); if (w && !w.whole) { const q = f.raw.map((a, i) => keyOf(a, f.raw[(i + 1) % f.raw.length])).find((k) => gone.has(k)); if (q) { const o = side.get(q).find((g) => g !== f), other = at(...pointIn(o.raw)); if (other && other.label !== w.label) pieces.push({ ...other, pts: f.raw, box: boxOf(f.raw), paint: null }); } } }
+    for (const f of faces) if (f.area < minArea * .5) { const w = at(...pointIn(f.raw)); if (w && !w.whole) { const q = f.raw.map((a, i) => keyOf(a, f.raw[(i + 1) % f.raw.length])).find((k) => gone.has(k)); if (q) { const o = side.get(q).find((g) => g !== f), other = at(...pointIn(o.raw)); if (other && other.label !== w.label) { const n = { ...other, pts: f.raw, box: boxOf(f.raw), paint: null }; pieces.push(n); file(n); } } } }
     net = prune(buildNet(kept, null));
   }
   const panes = [];
   for (const f of facesOf(net)) {
     const own = at(...pointIn(f.raw)) ?? at(f.c[0], f.c[1]);          // (a point on a line of the arrangement can fall through it)
-    if (own) panes.push({ pts: f.raw, area: f.area, c: f.c, fill: own.fill, label: own.label, role: own.role, whole: !!own.whole, sheet: own.sheet });
+    if (own && f.area > 1e-6) panes.push({ pts: f.raw, area: f.area, c: f.c, fill: own.fill, label: own.label, role: own.role, whole: !!own.whole, sheet: own.sheet });
   }
   // the leads, those with a pane on either side
   const paneKeys = new Set(); for (const p of panes) p.pts.forEach((a, i) => paneKeys.add(keyOf(a, p.pts[(i + 1) % p.pts.length])));

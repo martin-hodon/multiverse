@@ -169,7 +169,7 @@
 // Saving needs a server that takes a PUT (tools/serve.py does); without one the page offers the file to
 // download, which is the same JSON.
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { createNav } from "./cursornav.js";   // the view turns and zooms about the point under the pointer, as the atlas's
 import { createComposite, figureDetail, figureGrids } from "./composite.js";
 import { buildCreature, loadCatalogue, fetchAsset, ASSET_BASE } from "./creatures.js";
 import { makePerson } from "./people.js";
@@ -181,9 +181,11 @@ import { faceGeometry, faceMaterial, hairFaceParams, SHADE, HAIR_SHEEN } from ".
 import { buildForm } from "./assetform.js";   // the definition as a FORM, beside its JSON
 import { createManes } from "./manes.js";     // a creature's mane of thorns (a lion's), as the game draws it
 import { placeStatues } from "./statues.js";  // a building's STATUES, carved, as the game stands them
+import { doorGroup } from "./doors.js";        // its DOORS, shut, as the game hangs them (assets/doors)
+import { woodMaterial, archMaterial } from "./archmat.js";
 import { createHeads } from "./heads.js";
 import { createJewels } from "./jewels.js";
-import { lifeOf } from "./architecture.js";   // FACES: shown as the game draws them (half-Lambert under the sun), with sliders
+import { lifeOf, doorsOf } from "./architecture.js";   // FACES: shown as the game draws them (half-Lambert under the sun), with sliders
 import { LIGHT } from "./light.js";
 import CONFIG from "./config.json" with { type: "json" };
 import { showPick, asked, drawPicked } from "./assetpick.js";   // ONE OF A FAMILY: listed, and only the one picked generated
@@ -191,6 +193,7 @@ import { registerPatterns, drawSheet, renderPattern, patternNames, PALETTES } fr
 import { bakeTiles } from "./textures.js";   // the older tiles (ashlar, marble, the orders' ornament...) a finish may still name as `pat`
 import { loadUses } from "./arch/assemble.js";   // a building's COMPONENTS (other definitions it `use`s), fetched before it is built
 import { gaitBase } from "./species.js";
+import { createArchView } from "./archview.js";   // CUTS through what is shown; a building's PARTS picked, framed, isolated, hidden; its LAYERS faded
 import { EXPRESSIONS, VISEMES } from "./face.js";
 import { drawSpecimen } from "./butterflies.js";
 import { TECHNIQUES } from "./greek/paint.js";
@@ -213,17 +216,26 @@ $("view").appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x2a2f36);
 const camera = new THREE.PerspectiveCamera(42, 1, .02, 600);
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
+// THE VIEW (cursornav.js, as the atlas's): drag turns it about the point of the asset under the pointer, the wheel
+// zooms about that point, right/middle/Shift+drag pans, two fingers pinch -- the point is picked by standOn below
+const nav = createNav(camera, renderer.domElement, { pick: (ray) => standOn(ray) });
+const controls = nav;   // (the old name, for anything driving the page)
 // the ground: a metre grid, so every asset is read at its real size
 const grid = new THREE.GridHelper(40, 40, 0x4a5058, 0x343a41);
 grid.material.transparent = true; grid.material.opacity = .55;
 scene.add(grid);
+// THE STAND: everything shown stands in it -- a clipping group, so the section cuts (archview.js) cut all of it and not the grid
+const stand = new THREE.ClippingGroup();
+scene.add(stand);
 const resize = () => {
   const w = $("view").clientWidth, h = $("view").clientHeight;
+  if (!w || !h) return;   // (hidden: a 2D sheet shown)
   renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
 };
 addEventListener("resize", resize);
+// (the view's box also changes without the window's -- the panels fill in after the first frame: without this the
+// picture stayed stretched, and a pan or a picked point was off by the stretch)
+new ResizeObserver(resize).observe($("view"));
 
 // ---- the catalogue ------------------------------------------------------------------------------------------
 const { index, bank } = await loadCatalogue();
@@ -244,7 +256,7 @@ const glyphModes = () => ["", ...Object.keys(JSON.parse(source.get("glyphs/color
 // open is remembered (localStorage; the page works without it).
 const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem("assets." + k)) ?? d; } catch { return d; } },
                 set: (k, v) => { try { localStorage.setItem("assets." + k, JSON.stringify(v)); } catch {} } };
-const GROUPS = [["Recent", []], ["Creatures", ["creature"]], ["Buildings", ["building"]], ["People & clothes", ["body", "motion", "garment", "wardrobe"]],
+const GROUPS = [["Recent", []], ["Creatures", ["creature"]], ["Buildings", ["building", "doors"]], ["People & clothes", ["body", "motion", "garment", "wardrobe"]],
                 ["Items", ["item", "item-kit", "item-materials"]], ["Surfaces", ["pattern", "finish"]], ["Hieroglyphs", glyphKinds], ["Butterflies", ["butterfly", "butterfly-shapes"]], ["Murals", ["mural"]], ["Greek paintings", ["greek"]]];
 const openSet = new Set(store.get("open", ["Recent"]));
 const remember = (d, key) => { d.open = openSet.has(key); d.addEventListener("toggle", () => { if ($("q").value) return; d.open ? openSet.add(key) : openSet.delete(key); store.set("open", [...openSet]); }); };
@@ -321,7 +333,8 @@ function addRecent(path) {
 buildTree();
 
 // ---- what is on the stand ------------------------------------------------------------------------------------
-let current = null, herd = null, mesh = null, person = null, gait = 1, tPose = 0, front = false, itemSeed = 1, tools = null, held = null, glyphMode = 0;
+let current = null, herd = null, mesh = null, doorsOn = null, person = null, gait = 1, tPose = 0, front = false, itemSeed = 1, tools = null, held = null, glyphMode = 0;
+let shownArch = null;   // (a building shown: its assembly and definition, for archview.js)
 let motions = null, motionStatsAt = 0, motionBox = null;   // the figures in motion (motion.js players), and when their line was last written
 // the faces' shade (heads.js faceMaterial): the config's values to start, the sliders change them and redraw -- the
 // light's direction is the WORLD's sun (config.json light.dir; the face looks along +x here: orbit to see it turn)
@@ -374,14 +387,14 @@ shade.hair = { ...HAIR_SHEEN, ...(CONFIG.people?.faceShade?.hair ?? {}) };   // 
 // cut, both multiplied (shell.js setDetail).
 let archDetail = 4, figDetail = 1, itemDetail = 1;
 function detail(step) {
-  if (["building", "finish"].includes(kindOf.get(current))) archDetail = Math.max(1, Math.min(32, step > 0 ? archDetail * 2 : archDetail / 2));
+  if (["building", "finish", "doors"].includes(kindOf.get(current))) archDetail = Math.max(1, Math.min(32, step > 0 ? archDetail * 2 : archDetail / 2));
   else if (kindOf.get(current) === "item") itemDetail = Math.max(.25, Math.min(4, step > 0 ? itemDetail * 1.5 : itemDetail / 1.5));
   else { figDetail = Math.max(.25, Math.min(4, step > 0 ? figDetail * 1.5 : figDetail / 1.5)); figureDetail(figDetail); }
   showDetail();
   apply(current, $("json").value);
 }
 function showDetail() {
-  $("det").textContent = ["building", "finish"].includes(kindOf.get(current))
+  $("det").textContent = ["building", "finish", "doors"].includes(kindOf.get(current))
     ? `detail ${archDetail} (+/-)`
     : kindOf.get(current) === "item" ? `detail x${itemDetail.toFixed(2)} (+/-)  seed ${itemSeed} (S: another)`
     : kindOf.get(current) === "item-kit" ? `seed ${itemSeed} (S: another watch)`
@@ -389,11 +402,12 @@ function showDetail() {
     : `grid x${figDetail.toFixed(2)} (+/-)  ${figureGrids()}`;
 }
 function clearStand() {
-  if (herd) { herd.dispose(); scene.remove(herd.mesh); herd = null; }
+  if (herd) { herd.dispose(); stand.remove(herd.mesh); herd = null; }
   motions = null; motionBox = null; reachMark.visible = false;
-  if (mesh) { scene.remove(mesh); mesh.traverse((o) => o.geometry?.dispose?.()); mesh = null; }   // (a finished building is a group)
+  if (mesh) { stand.remove(mesh); mesh.traverse((o) => o.geometry?.dispose?.()); mesh = null; }   // (a finished building is a group)
+  if (doorsOn) { stand.remove(doorsOn); doorsOn = null; }   // (its doors: their leaves are doors.js's, cached and shared -- not disposed)
   if (tools) { tools.dispose(); tools = held = null; }
-  person = null;
+  person = null; shownArch = null;
   manes?.place([]);   // (no figure: no mane left standing)
   heads?.place([]);   // (nor its head)
 }
@@ -419,7 +433,7 @@ function buildMotion(path, def) {
   sel.value = picks.includes(was) ? was : picks[0];
   const pick = sel.value, who = MOTION_WHO[$("motionWho").value] ?? MOTION_WHO.bare;
   const names = pick === "all" ? lib.positions : [pick], cols = Math.ceil(Math.sqrt(names.length * 1.6));
-  herd = createComposite(Math.max(400, names.length * 260)); scene.add(herd.mesh);
+  herd = createComposite(Math.max(400, names.length * 260)); stand.add(herd.mesh);
   const made = names.map((nm, i) => {
     const d = makePerson({ ...who, still: true, body: bank.get("people/body") });
     const an = herd.add(d);
@@ -571,35 +585,49 @@ function build(path, text) {
     const n = Object.keys(def.patterns ?? def.palettes ?? {}).length;
     return { label: def.name ?? path, stats: `${n} ${def.patterns ? "patterns" : "palettes"}` };
   }
-  if (kind === "building" || kind === "finish") {
+  if (kind === "doors" && def.styles) {
+    // THE DOOR STYLES: one doorway of each, shut, in rows of nine read as a page (the file's order, top row first)
+    const names = Object.keys(def.styles), cols = 9, rows = Math.ceil(names.length / cols);
+    const spec = { doors: names.map((k, i) => ({ at: [(i % cols - (cols - 1) / 2) * 3.4, (rows - 1 - Math.floor(i / cols)) * 5.6, 0, 0], w: 2.4, h: 4.4, spring: 3.2, head: { profile: "semicircular" }, style: k })) };
+    doorsOn = doorGroup(doorsOf("", { doors: [], doorways: [] }, 0, 0, { spec, styles: def }), doorMats()); stand.add(doorsOn);
+    return { label: def.name ?? path, stats: `${names.length} styles, in rows of ${cols} from the top left: ${names.join(", ")}` };
+  }
+  if (kind === "building" || kind === "finish" || kind === "doors") {
     // a FINISH is shown on its building; a building in its finish if it has one (and the box is ticked), else in the
-    // lab's plain stone -- the shape alone
-    const fin = kind === "finish" ? def : $("finish").checked ? finishOf(path) : null;
-    const bdef = kind === "finish" ? bank.get(def.building) : def;
-    if (!bdef) throw new Error(`the finish names no building in the catalogue ("building": "${def.building}")`);
+    // lab's plain stone -- the shape alone. Its DOORS always (assets/doors/<its name>, shut as the game hangs them); a
+    // DOORS file is shown on its building, the doors as the editor has them
+    const bpath = kind === "building" ? path : kind === "finish" ? def.building : "architecture/" + def.building;
+    const fin = kind === "finish" ? def : $("finish").checked ? finishOf(bpath) : null;
+    const bdef = kind === "building" ? def : bank.get(bpath);
+    if (!bdef) throw new Error(`the ${kind} names no building in the catalogue ("building": "${def.building}")`);
     const m = archMesh(bdef, { params: { detail: archDetail }, side: "double", finish: fin });
     if (!fin) m.material = plainStone();
-    mesh = m; scene.add(m);
+    mesh = new THREE.Group(); mesh.add(m); stand.add(mesh);   // (in a group of its own: archview.js puts the building's parts beside its meshes)
     const asm = archAssembly(bdef, { detail: archDetail });
+    shownArch = { asm, def: bdef };
     let tris = 0; for (const p of asm.parts) tris += (p.geometry.index.length / 3) * p.instances.length;
+    const life = lifeOf(asm, 0, 0), dname = bpath.split("/").pop();
+    life.doors.push(...doorsOf(dname, life, 0, 0, { spec: kind === "doors" ? def : editedDoc("doors/" + dname), styles: editedDoc("doors/styles") }));
+    doorsOn = doorGroup(life.doors, doorMats()); stand.add(doorsOn);
+    const leaves = doorsOn.children.length;
     // its STATUES (the `statue` markers, read as the game reads them: architecture.js lifeOf): carved figures, their heads,
     // what they hold -- the building is drawn in its own frame, so they stand where the definition put them
-    const sts = lifeOf(asm, 0, 0).statues;
+    const sts = life.statues;
     if (sts.length) {
-      herd = createComposite(sts.length * 48 + 8); scene.add(herd.mesh);
+      herd = createComposite(sts.length * 48 + 8); stand.add(herd.mesh);
       held = placeStatues(herd, [{ x: 0, z: 0, statues: sts }]);
-      tools = createTools(scene, { bank, lib: bank.get("items/materials")?.materials ?? {}, cap: 64 });
+      tools = createTools(stand, { bank, lib: bank.get("items/materials")?.materials ?? {}, cap: 64 });
       tools.prepare(held.map((h) => h.tool));
       person = [];
     }
-    return { label: (bdef.name ?? path) + (fin ? " · finished" : ""), stats: `${asm.parts.length} parts · ${asm.parts.reduce((a, p) => a + p.instances.length, 0)} instances · ${tris.toLocaleString()} triangles` + (sts.length ? ` · ${sts.length} statues` : "") };
+    return { label: (bdef.name ?? path) + (fin ? " · finished" : ""), stats: `${asm.parts.length} parts · ${asm.parts.reduce((a, p) => a + p.instances.length, 0)} instances · ${tris.toLocaleString()} triangles` + (sts.length ? ` · ${sts.length} statues` : "") + (leaves ? ` · ${leaves} door leaves` : "") };
   }
   if (kind === "garment" || kind === "wardrobe") {
     // A GARMENT on the canon's own body and nothing else (a skirted one on a woman) -- or a COMPONENT, worn as a
     // garment of its own in its first fabric; the WARDROBE as a row of villagers dressed from it. The text in the
     // editor is what is shown: the tailor is handed this definition, not the one on disk.
     setClothesNow(path, def);
-    herd = createComposite(4000); scene.add(herd.mesh);
+    herd = createComposite(4000); stand.add(herd.mesh);
     const comp = path.includes("/components/");
     if (comp) setClothesNow("clothes/__component", { name: def.name, layer: 2, fabrics: { main: { pattern: "fabrics/plain", palette: "woad" }, trim: { pattern: "fabrics/braid", palette: "gold-braid" },
                                                     lacing: { pattern: "fabrics/lacing" }, buckle: { pattern: "fabrics/buckle", palette: "brass" } }, use: [{ use: path }] });
@@ -621,7 +649,7 @@ function build(path, text) {
     // THE CANON ITSELF, on one body and nothing else: no clothes, no hair, no hat -- what is being edited here
     // is the shape of a person, and a dress hides exactly the measures you are changing. (?who=woman|child10
     // for the other two the canon describes.)
-    herd = createComposite(200); scene.add(herd.mesh);
+    herd = createComposite(200); stand.add(herd.mesh);
     const d = makePerson({ kind: qp.get("who") ?? "man", seed: 12, body: def, still: true,
                            outfit: { bare: true, hair: "shaved" } });
     const an = herd.add(d);
@@ -642,7 +670,7 @@ function build(path, text) {
     //  edited is what is drawn; a headpiece or earrings on a head, laid on its skull and its haircut's cap)
     if (site === "neck" && $("hairHead").checked) {
       jewels.setBank(local);
-      herd = createComposite(400); scene.add(herd.mesh);
+      herd = createComposite(400); stand.add(herd.mesh);
       const d = makePerson({ kind: qp.get("who") ?? "woman", seed: 12, still: true, body: bank.get("people/body"),
                              outfit: { hat: "none", hair: "bun", wear: [{ garment: "chemise" }, { garment: "kirtle" }], jewelry: { neck: [path], head: null, ears: null } } });
       const an = herd.add(d);
@@ -698,7 +726,7 @@ function build(path, text) {
       const lines = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(seg), new THREE.LineBasicMaterial({ color: 0xff2a2a }));
       lines.renderOrder = 5; mesh.add(lines);
     }
-    scene.add(mesh);
+    stand.add(mesh);
     const missing = [...new Set(built.groups.filter((g) => g.material.missing).map((g) => g.material.missing))];
     return { label: built.name + (built.era ? ` · ${built.era}` : ""),
              stats: `${built.tris.toLocaleString()} triangles · ${built.groups.length} materials${missing.length ? " · NO MATERIAL " + missing.join(", ") : ""} · ${built.bounds.hi.map((v, i) => (v - built.bounds.lo[i]).toFixed(2)).join(" x ")} m` +
@@ -709,8 +737,8 @@ function build(path, text) {
     // put in the hand by its own hold, through the same tools.js the game places them with
     const local = new Map(bank); local.set(path, def);
     const lib = JSON.parse(source.get("items/materials") ?? "{}").materials ?? bank.get("items/materials")?.materials ?? {};
-    herd = createComposite(2000); scene.add(herd.mesh);
-    tools = createTools(scene, { bank: local, lib, cap: 16 });
+    herd = createComposite(2000); stand.add(herd.mesh);
+    tools = createTools(stand, { bank: local, lib, cap: 16 });
     person = []; held = [];
     const outs = [];
     for (let i = 0; i < 8; i++) {
@@ -736,13 +764,13 @@ function build(path, text) {
       o.position.set((i % cols) * .32 - cols * .16, 0, Math.floor(i / cols) * .32 - cols * .16);
       mesh.add(o);
     });
-    scene.add(mesh);
+    stand.add(mesh);
     return { label: "item materials", stats: `${names.length} materials: ` + names.join(", ") };
   }
   // a creature: the definition, on whatever frame it stands on, through the engine the world uses
   const local = new Map(bank); local.set(path, def);
   const made = buildCreature(def, local);
-  herd = createComposite(200); scene.add(herd.mesh);
+  herd = createComposite(200); stand.add(herd.mesh);
   const an = herd.add(made);
   an.rotY = -Math.PI / 2;
   herd.update(0);
@@ -750,6 +778,14 @@ function build(path, text) {
   return { label: made.name ?? path, stats: `${made.parts.length} parts` };
 }
 
+// a document as the editor has it (unsaved changes and all), or undefined if the catalogue has none
+function editedDoc(p) {
+  if (!kindOf.has(p)) return undefined;
+  try { return JSON.parse(source.get(p)); } catch { return bank.get(p); }
+}
+// what doors are drawn in: the wood's grain, or a colour alone (lacquer, bronze) -- the game's two (index.html)
+let doorMatsMade = null;
+const doorMats = () => (doorMatsMade ??= { wood: woodMaterial(), plain: archMaterial(undefined, undefined) });
 // a building's finish, if the catalogue has one for it (finishes/<its name>), as the editor has it
 function finishOf(path) {
   const f = "finishes/" + path.split("/").pop();
@@ -762,10 +798,30 @@ function flat(on) {
   renderer.domElement.style.display = on ? "none" : "block";
   $("view").classList.toggle("flat", on);
 }
-function frame() {
+// THE POINT UNDER THE POINTER (for the view, cursornav.js): the nearest of the asset's own triangles (a building, an
+// item, the doors) and the figures' parts -- whose triangles are made in the vertex shader, so they are taken as their
+// capsules (each part's two ends and its radius, as frame() grows its box by); null off the asset
+// (what is shown only: not cut away, not hidden, not a faded-out layer -- archview.js)
+const meshOn = (ray) => view.hit(ray, [mesh, doorsOn])?.point ?? null;
+const segA = new THREE.Vector3(), segB = new THREE.Vector3(), onRay = new THREE.Vector3();
+function standOn(ray) {
+  const m = meshOn(ray);
+  let best = m ? m.distanceTo(ray.ray.origin) : Infinity, at = m;
+  if (person && herd) for (const p of person) for (let i = 0; i < p.an.parts.length; i++) {
+    const pt = p.an.parts[i], r = pt.reach ?? Math.max(pt.r1, pt.r2 > 0 ? pt.r2 : pt.r1) ?? .05, [A, B] = herd.ends(p.an, i);
+    const d2 = ray.ray.distanceSqToSegment(segA.fromArray(A), segB.fromArray(B), onRay);
+    if (!(d2 < r * r)) continue;
+    const t = onRay.distanceTo(ray.ray.origin) - Math.sqrt(r * r - d2);   // (in by the radius: on its skin)
+    if (t > 0 && t < best) { best = t; at = ray.ray.at(t, new THREE.Vector3()); }
+  }
+  return at;
+}
+// the asset's box: what frame() frames, and what the section cuts slide across
+function assetBox() {
   const box = new THREE.Box3();
   if (motionBox) box.copy(motionBox);   // (a figure in motion: everywhere its positions take it -- buildMotion)
   else if (mesh) box.setFromObject(mesh);
+  else if (doorsOn) box.setFromObject(doorsOn);   // (the door styles: their row alone)
   else if (person && herd) for (const p of person) {         // every part's two ends, grown by its own radius
     for (let i = 0; i < p.an.parts.length; i++) {
       const pt = p.an.parts[i], r = (pt.reach ?? Math.max(pt.r1, pt.r2 > 0 ? pt.r2 : pt.r1) ?? .05) + .02;
@@ -775,15 +831,18 @@ function frame() {
       }
     }
   }
+  return box;
+}
+function frame(fly = false) {
+  const box = assetBox();
   if (box.isEmpty()) box.set(new THREE.Vector3(-1, 0, -1), new THREE.Vector3(1, 2, 1));
   const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
   const d = Math.max(size.x, size.y, size.z) * 1.5 + 1;
-  controls.target.copy(c);
   // a definition may ask to be seen SQUARE ON ("_view": "front"): a row of arch profiles is a drawing, and a
   // three-quarter view of it is a row of edges
-  if (front) camera.position.set(c.x, c.y + d * .12, c.z + d * 1.15);
-  else camera.position.set(c.x + d * .8, c.y + d * .45, c.z + d * .8);
-  camera.near = Math.max(.02, d / 200); camera.far = d * 20; camera.updateProjectionMatrix();
+  const from = front ? new THREE.Vector3(c.x, c.y + d * .12, c.z + d * 1.15) : new THREE.Vector3(c.x + d * .8, c.y + d * .45, c.z + d * .8);
+  // (a new asset: there at once; F: flown to, as the atlas flies -- near and far follow the distance, cursornav.js)
+  if (fly) nav.fly(nav.poseOf(from, c)); else nav.lookAt(from, c);
   grid.position.set(0, 0, 0);
   const g = Math.max(4, Math.ceil(d));
   grid.scale.setScalar(g / 20);
@@ -794,6 +853,7 @@ async function apply(path, text, { refit = false } = {}) {
   try {
     if (kindOf.get(path) === "building") await loadUses(JSON.parse(text), (p) => fetchAsset("architecture/" + p));
     if (kindOf.get(path) === "finish") { const b = bank.get(JSON.parse(text).building); if (b) await loadUses(b, (p) => fetchAsset("architecture/" + p)); }
+    if (kindOf.get(path) === "doors") { const b = bank.get("architecture/" + JSON.parse(text).building); if (b) await loadUses(b, (p) => fetchAsset("architecture/" + p)); }
     const out = build(path, text);
     $("what").innerHTML = `<b>${out.label}</b> <span style="color:var(--dim)">${path}.json</span>`;
     $("stats").textContent = out.stats;
@@ -801,6 +861,7 @@ async function apply(path, text, { refit = false } = {}) {
     $("err").textContent = "";
     if (refit) frame();
     if ($("edges").checked) edges(true);      // (a new mesh: give it the wireframe the view is in)
+    view.attach(renderer.domElement.style.display === "none" ? null : { path, root: mesh ?? doorsOn, doors: doorsOn, ...(shownArch ?? {}) });
     return true;
   } catch (e) {
     $("err").textContent = String(e.message ?? e);
@@ -856,7 +917,7 @@ function setTab(t) {
 }
 $("tabForm").onclick = () => setTab("form"); $("tabJson").onclick = () => setTab("json");
 setTab(tab);
-$("fit").onclick = frame;
+$("fit").onclick = () => frame(true);
 $("revert").onclick = async () => {
   const fresh = await fetchAsset(current);
   bank.set(current, fresh);
@@ -898,16 +959,25 @@ addEventListener("keydown", (e) => {
   if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
   if (e.key === "/") { e.preventDefault(); $("q").focus(); $("q").select(); return; }
   if (e.code === "KeyT") { $("edges").checked = !$("edges").checked; $("edges").onchange(); }
-  if (e.code === "KeyF") frame();
+  if (e.code === "KeyF") frame(true);
   if (e.key === "+" || e.key === "=" || e.code === "NumpadAdd") detail(1);
   if (e.key === "-" || e.key === "_" || e.code === "NumpadSubtract") detail(-1);
   if (e.code === "KeyM" && glyphKinds.includes(kindOf.get(current))) { glyphMode = (glyphMode + 1) % glyphModes().length; showDetail(); apply(current, $("json").value); }
   if (e.code === "KeyS" && ["item", "item-kit", "glyph-texture"].includes(kindOf.get(current))) { itemSeed++; showDetail(); apply(current, $("json").value); }   // (another of its kind: its ranges and picks drawn again)
 });
 
-const manes = createManes(scene, { shade: CONFIG.people?.faceShade ?? {} });
-const heads = createHeads(scene, { shade: CONFIG.people?.faceShade ?? {} });   // (every figure's mesh head: a person's, a winged one's, a statue's carved one)
-const jewels = createJewels(scene);   // (and what hangs round their necks: jewels.js)
+// CUTS, PARTS, LAYERS (archview.js): the panel at the view's top right
+const view = createArchView({ stand, camera, nav, canvas: renderer.domElement, host: $("view"), boxOf: assetBox,
+  reveal: (name) => {   // (a part's definition, selected in the JSON)
+    setTab("json");
+    const t = $("json"), key = JSON.stringify(name) + ":", i = t.value.indexOf(key);
+    if (i < 0) return;
+    t.focus(); t.setSelectionRange(i, i + key.length - 1);
+    t.scrollTop = Math.max(0, (t.value.slice(0, i).split("\n").length - 4) * 17.4);
+  } });
+const manes = createManes(stand, { shade: CONFIG.people?.faceShade ?? {} });
+const heads = createHeads(stand, { shade: CONFIG.people?.faceShade ?? {} });   // (every figure's mesh head: a person's, a winged one's, a statue's carved one)
+const jewels = createJewels(stand);   // (and what hangs round their necks: jewels.js)
 const clock = new THREE.Clock();
 renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), .1);
@@ -930,12 +1000,12 @@ renderer.setAnimationLoop(() => {
   }
   // the shell adds a mesh whenever a figure first needs a coarser or finer bucket, so the wireframe is put
   // back on now and then rather than once
-  controls.update();
+  nav.update(dt);
   renderer.render(scene, camera);
 });
 resize();
 show(qp.get("a") ?? index.categories.find((c) => c.kind === "creature").paths[0]);
-window.__assets = { show, build, bank, source, index, renderer, scene, camera, controls };
+window.__assets = { show, build, bank, source, index, renderer, scene, camera, controls, nav, frame, standOn, view };
 </script>
 </body>
 </html>

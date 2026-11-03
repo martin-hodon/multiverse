@@ -33,7 +33,7 @@
 // hairstyle and pose in rows, plus a random crowd walking in circles. Headless checks drive it
 // through window.__dbg (herd, people, camera) after window.__ready.
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { navControls, columnPick } from "./cursornav.js";   // (the view turns and zooms about the point under the pointer, as the atlas's)
 import { createComposite, PIPE, setPipe, pipeFromQuery } from "./composite.js";
 import { makePerson, HAIRS, GARMENTS } from "./people.js";
 import { WARDROBE, garmentDef } from "./clothes.js";
@@ -63,7 +63,8 @@ scene.add(ground);
 const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .05, 400);
 const cam = (qp.get("cam") ?? "0,2.2,9.5,0,1,2").split(",").map(Number);
 camera.position.set(cam[0], cam[1], cam[2]);
-const controls = new OrbitControls(camera, renderer.domElement);
+// (picked: a column round each one, the rows and the crowd -- the figures are drawn in a shader, no triangles to meet)
+const controls = navControls(camera, renderer.domElement, { pick: columnPick(() => [...people, ...crowd].map(({ an }) => ({ x: an.position.x, z: an.position.z, r: .3, y0: an.position.y, y1: an.position.y + 1.85 }))) });
 controls.target.set(cam[3], cam[4], cam[5]);
 controls.update();
 
@@ -149,6 +150,7 @@ addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); ca
 let last = performance.now(), acc = 0, n = 0, t = 0;
 function frame(now) {
   const dt = Math.min(now - last, 50) / 1000; last = now;
+  controls.update(dt);
   t = freeze ?? t + dt;
   for (const p of people) if (p.walker) { p.an.animT = walk ? t * p.speed / p.base : 0; p.an.ampT = walk ? 1 : 0; }
   for (const c of crowd) {   // walking a circle: speed w m/s along the arc

@@ -142,6 +142,7 @@ export function createVillageLife(world) {
                 keeper: job === keeperSpot, homeStand: { s: house, x: hd.inn[0], y: .16, z: hd.inn[1], h: 0, pose: "stand", via: [], goal: hd.inn, door: hd, by: null, shared: true },
                 pos: [0, 0, 0], h: 0, animT: r() * 10, at: null, lane: null, s: 0, goal: null, until: 0, night: null };
     if (v.work && typeof job !== "string" && job !== "farm") v.work.by = v;
+    if (!v.work) v.work = v.homeStand;   // no fields to farm (a volcanic island's village): the day spent at the own door
     // Stand him in his own doorway, in one pose, BEFORE the first tick. Until his routine first ran, all four
     // of his poses were drawn and all of them sat at the origin -- so the opening frames of every session put
     // every villager in the world (four figures each) in one pile on one spot: the wrong picture, and the

@@ -36,8 +36,10 @@ apo = R * math.cos(math.pi / 16) - T        # its walls' inner face
 add("roof ring", {"type": "ring", "count": 16, "rOuter": round(apo / math.cos(math.pi / 16), 4), "rInner": DR, "height": 0.6, "y": BH - 0.6, "turn": 0.5,
                   "solid": True, "place": [[0, 0, 0, 0]], "_about": "the flat roof round the drum, from the church's walls in to it"})
 add("dome", comp("components/drum-dome", {"R": DR, "dt": DT, "H": DH, "n": 16, "every": 2, "winW": 2.0, "winSill": 2.0, "winH": 4.4,
-                                          "profile": "pointed", "spread": 0.8, "domeT": DT, "lanternR": 2.2, "lanternH": 5.0},
-                 [[0, BH, 0, 0]], _about="the drum with eight windows, the dome -- taller than a hemisphere, a steep pointed section -- and its lantern"))
+                                          "profile": "pointed", "spread": 0.8, "domeT": DT, "lanternR": 2.2, "lanternH": 5.0, "ribsN": 8, "ribW": 0.32,
+                                          "colN": 16, "colR": 0.32, "colH": DH * 0.86, "pw": 0.3},
+                 [[0, BH, 0, 0]], build=["drum", "drum piers", "dome", "ribs", "lantern", "peristyle"],
+                 _about="the drum with eight windows between its pilasters (slim columns hard against it), the dome -- taller than a hemisphere, a steep pointed section -- with its eight ribs, and its lantern"))
 
 # ---- the portico
 PW, PD, CH, PZ = 22.0, 10.0, 13.0, R - 1.0     # portico width, depth, column height, where it meets the church
@@ -76,8 +78,8 @@ for sx, nm in ((-1, "west"), (1, "east")):
     add(f"{nm} column", {"type": "column", "radius": 2.0, "height": 30.0, "sides": 16, "taper": 0.92, "at": [[X, 6.0, Z, 0]]})
     # (a CONTINUOUS band: 9 turns of 1.2m tall slabs overlapping along it, 20cm proud of the shaft as it tapers -- the
     #  160 short blocks it had been, 4.5m apart up the shaft, read as a stair wound round it)
-    add(f"{nm} column band", {"type": "box", "width": 0.4, "length": 0.75, "height": 1.2,
-                              "spiral": {"count": 504, "turns": 9, "radius": 2.0, "x": X, "z": Z, "y": 7.2, "dy": 27.0 / 504, "dr": -0.15 / 504},
+    add(f"{nm} column band", {"type": "box", "width": 0.54, "length": 0.32, "height": 1.2,   # (a low relief on the shaft, not a stair round it)
+                              "spiral": {"count": 252, "turns": 9, "radius": 2.0, "x": X, "z": Z, "y": 7.2, "dy": 27.0 / 252, "dr": -0.15 / 252},
                               "_about": "the relief band wound round the shaft"})
     add(f"{nm} column capital", {"type": "box", "width": 5.0, "length": 5.0, "height": 1.2, "at": [[X, 36.0, Z, 0]]})
     add(f"{nm} column lantern", comp("components/domed-tower", {"sides": 8, "R": 1.7, "H": 3.0, "t": 0.3, "drumR": 1.1, "drumH": 0.8, "cap": "bell",

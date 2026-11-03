@@ -1,0 +1,177 @@
+{
+ "name": "Thai palace wall",
+ "_about": "A STRETCH OF THAI PALACE WALL `L` long: whitewashed brick `H` high and `t` thick on its plinth, the coping `cap` deep, and the merlons in a row on its outer (+z) edge -- each a BAI SEMA, the leaf-shaped boundary stone, `mw` x `mh`, `ms` apart (`inner` yes: a row on the inner edge too). Centred on its middle, along x. Written by tools/archgen/thai.py.",
+ "params": {
+  "detail": 4,
+  "L": 20.0,
+  "H": 4.6,
+  "t": 1.4,
+  "cap": 0.3,
+  "mw": 0.75,
+  "mh": 1.05,
+  "ms": 1.5,
+  "mt": 0.32,
+  "nm": "max(1, floor((L - 0.8) / ms) + 1)",
+  "inner": "no"
+ },
+ "build": [
+  "wall",
+  "coping",
+  "plinth",
+  "merlons",
+  "walk merlons"
+ ],
+ "parts": {
+  "wall": {
+   "type": "box",
+   "width": "L",
+   "length": "t",
+   "height": "H",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the wall: whitewashed brick"
+  },
+  "coping": {
+   "type": "box",
+   "width": "L",
+   "length": "t + 0.24",
+   "height": "cap",
+   "at": [
+    [
+     0,
+     "H",
+     0,
+     0
+    ]
+   ],
+   "_about": "its coping, moulded"
+  },
+  "plinth": {
+   "type": "box",
+   "width": "L",
+   "length": "t + 0.3",
+   "height": 0.5,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  "merlons": {
+   "type": "screen",
+   "outline": [
+    [
+     "-0.5 * mw",
+     "0 * mh"
+    ],
+    [
+     "0.5 * mw",
+     "0 * mh"
+    ],
+    [
+     "0.5 * mw",
+     "0.3 * mh"
+    ],
+    [
+     "0.34 * mw",
+     "0.64 * mh"
+    ],
+    [
+     "0 * mw",
+     "1.0 * mh"
+    ],
+    [
+     "-0.34 * mw",
+     "0.64 * mh"
+    ],
+    [
+     "-0.5 * mw",
+     "0.3 * mh"
+    ]
+   ],
+   "t": "mt",
+   "at": [
+    [
+     "-(nm - 1) * ms / 2",
+     "H + cap",
+     "t / 2 + 0.06",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "nm",
+    "step": [
+     "ms",
+     0,
+     0,
+     0
+    ]
+   },
+   "_about": "the merlons, each a bai sema -- the boundary stone's leaf -- in a row on the outer edge"
+  },
+  "walk merlons": {
+   "type": "screen",
+   "outline": [
+    [
+     "-0.5 * mw * 0.8",
+     "0 * mh * 0.8"
+    ],
+    [
+     "0.5 * mw * 0.8",
+     "0 * mh * 0.8"
+    ],
+    [
+     "0.5 * mw * 0.8",
+     "0.3 * mh * 0.8"
+    ],
+    [
+     "0.34 * mw * 0.8",
+     "0.64 * mh * 0.8"
+    ],
+    [
+     "0 * mw * 0.8",
+     "1.0 * mh * 0.8"
+    ],
+    [
+     "-0.34 * mw * 0.8",
+     "0.64 * mh * 0.8"
+    ],
+    [
+     "-0.5 * mw * 0.8",
+     "0.3 * mh * 0.8"
+    ]
+   ],
+   "t": "mt",
+   "at": [
+    [
+     "-(nm - 1) * ms / 2",
+     "H + cap",
+     "-t / 2 + mt - 0.06",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "nm",
+    "step": [
+     "ms",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "inner": "yes"
+   },
+   "_about": "and on the inner edge, smaller"
+  }
+ }
+}

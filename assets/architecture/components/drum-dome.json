@@ -27,14 +27,60 @@
     "colH": "H * 0.82",
     "pw": "H * 0.35",
     "colN": "n",
+    "entH": "H - colH",
+    "attic": "no",
+    "atticH": 0,
+    "atticWin": 1.4,
+    "atticSill": "atticH * 0.28",
+    "atticWinH": "atticWin * 1.1",
+    "domeR": "R + dt",
+    "domePlinth": 0,
+    "plinth": "no",
+    "tholosN": 12,
+    "tholosGlobe": "no",
+    "tholosGlobeR": "lanternR * 0.18",
+    "_tholosGlobeR": "the tholos's globe (tholosGlobe: yes): its radius -- the Capitol's is about a third of her height across",
+    "atticHead": "semicircular",
+    "_atticHead": "the attic windows' head (semicircular; flat: the Capitol's). NOTE the dome stands at H + atticH + domePlinth whatever `attic` and `plinth` say: leave atticH and domePlinth 0 when those are not built",
+    "winHead": "semicircular",
+    "pedA": "triangular",
+    "pedB": "segmental",
+    "butW": "R * 0.16",
+    "butD": "R * 0.12",
+    "pairS": "colR * 3.4",
+    "pairA": "pairS / 2 / (R + dt + butD)",
+    "ribPair": "pairS",
+    "_ribPair": "`rib pairs` + `rib pairs 2` (build them by name, instead of `ribs`): DOUBLE ribs, each pair ribPair apart at the dome's foot, rising from a column pair; `attic strips` + `attic strips 2`: the paired pilaster strips on the attic over each pair (St Peter's)",
+    "lucN": "ribsN",
+    "lucR1": 0.97,
+    "lucR2": 0.87,
+    "lucR3": 0.68,
+    "lucW1": "domeR * 0.08",
+    "lucW2": "domeR * 0.063",
+    "lucW3": "domeR * 0.046",
+    "_lucN": "`lucarnes 1..3` + `lucarne roofs 1..3` (build them by name): rows of lucN dormers between the ribs, each row standing on the dome where it has narrowed to domeR * lucRk, lucWk wide (the rows smaller as they climb: St Peter's)",
+    "lanternSides": 8,
+    "lanternCap": "pointed",
+    "lanternCapR": "lanternR * 0.74",
+    "lanternDrumH": "lanternH * 0.22",
+    "lanternTop": "lanternH + lanternR * 0.09 + lanternDrumH + lanternCapR * 1.732 - lanternR * 0.1",
+    "_lanternSides": "`ribbed lantern` + `lantern columns` + `lantern spire` + `lantern ball` + `lantern cross` + `lantern cross arm` (build them by name, instead of `lantern`): a round temple of lanternSides faces with paired columns at its corners, its ribbed cap (lanternCap, lanternCapR), a candelabra spire, the ball and the cross, all standing `atop` the dome where it has narrowed to lanternR; lanternTop is the cap's tip over that point",
+    "_winHead": "`drum a` + `drum b` (build them by name, instead of `drum` and `drum piers`): a window in EVERY bay, its head winHead, under a pediment -- pedA over the even bays, pedB over the odd (Michelangelo's drum: triangular and segmental in turn)",
+    "_butW": "`buttresses` + `paired columns` + `buttress entablature` (build them by name): a wall spur butW wide standing butD out of the drum between each two bays, a PAIR of columns (colR, colH; pairS apart) half sunk in its face, the entablature breaking forward over them -- St Peter's drum",
+    "_domeR": "the dome's own radius (the drum's outside unless said): narrower, it stands back on a `dome plinth` (plinth: yes -- built before the dome, in the default build too) domePlinth high, the ring from the drum's outside in to it -- the Capitol's iron dome on its attic",
+    "_tholosN": "`tholos` (build it by name, instead of `lantern`): a round temple of tholosN columns, lanternR to their line and lanternH to its cap (components/tholos) -- the Capitol's, St Peter's",
     "_R": "the drum's inside radius -- a crossing's pendentives' circle; dt its wall, H its height, n its bays (a window every `every`th)",
     "_profile": "the dome's section, any profile (semicircular, pointed + spread, segmental + rise, onion + bulge/neck, bell + waist/lift)",
     "_lanternR": "the lantern: it stands on the dome where the dome has narrowed to its radius",
-    "_pw": "the peristyle (build it by name): a ring of columns round the drum, pw out from it, and the deck they carry"
+    "_pw": "the peristyle (build it by name): a ring of columns round the drum, pw out from it, and the deck they carry",
+    "_atticH": "the attic (attic: yes): a second windowed storey of the drum over the peristyle's deck, atticH high, the dome on it -- St Isaac's, the Berliner Dom. entH: the peristyle's entablature and deck"
   },
   "build": [
     "drum",
     "drum piers",
+    "attic",
+    "attic piers",
+    "dome plinth",
     "dome",
     "lantern"
   ],
@@ -85,11 +131,141 @@
       ],
       "_about": "...and the piers between (leave them out when every bay has its window: `every` 1)"
     },
+    "peristyle": {
+      "type": "colonnade",
+      "plan": "round",
+      "count": "colN",
+      "radius": "R + dt + pw",
+      "order": "corinthian",
+      "columnR": "colR",
+      "height": "colH",
+      "taper": 0.86,
+      "entablature": {
+        "h": "entH",
+        "depth": "colR * 2.6"
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "a ring of columns round the drum, carrying a deck -- St Paul's, the Pantheon in Paris (build it by name)"
+    },
+    "peristyle deck": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R + dt + pw",
+      "rInner": "R + dt",
+      "height": "entH",
+      "y": "colH",
+      "turn": 0.5,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "peristyle"
+      ],
+      "_about": "the deck over the colonnade, from the drum out to the columns' line (the entablature caps only the columns: no broad ring overhangs them)"
+    },
+    "attic": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R + dt",
+      "rInner": "R",
+      "height": "atticH",
+      "y": "H",
+      "turn": 0.5,
+      "every": "every",
+      "only": "every",
+      "opening": {
+        "width": "atticWin",
+        "sill": "atticSill",
+        "springing": "atticSill + atticWinH",
+        "head": {
+          "profile": "atticHead"
+        }
+      },
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "drum"
+      ],
+      "_about": "the attic: the drum's second storey over the deck, a small window every `every`th bay...",
+      "when": {
+        "attic": "yes"
+      }
+    },
+    "attic piers": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R + dt",
+      "rInner": "R",
+      "height": "atticH",
+      "y": "H",
+      "turn": 0.5,
+      "every": "every",
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "drum"
+      ],
+      "_about": "...and its piers",
+      "when": {
+        "attic": "yes"
+      }
+    },
+    "dome plinth": {
+      "type": "ring",
+      "count": "n",
+      "rOuter": "R + dt",
+      "rInner": "domeR - domeT",
+      "height": "domePlinth",
+      "y": "H + atticH",
+      "turn": 0.5,
+      "solid": true,
+      "place": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "drum"
+      ],
+      "when": {
+        "plinth": "yes"
+      },
+      "_about": "the ring a narrower dome stands back on, from the drum's outside in to the dome's foot (plinth: yes; listed before the dome, which is raised on it)"
+    },
     "dome": {
       "type": "dome",
       "sides": "n",
       "turn": -0.5,
-      "radius": "R + dt",
+      "radius": "domeR",
       "thickness": "domeT",
       "head": {
         "profile": "profile",
@@ -103,7 +279,7 @@
       "at": [
         [
           0,
-          "H",
+          "H + atticH + domePlinth",
           0,
           0
         ]
@@ -164,56 +340,156 @@
       ],
       "_about": "the lantern, standing on the dome where it has narrowed to the lantern's width"
     },
-    "peristyle": {
-      "type": "colonnade",
-      "plan": "round",
-      "count": "colN",
-      "radius": "R + dt + pw",
-      "order": "corinthian",
-      "columnR": "colR",
-      "height": "colH",
-      "taper": 0.86,
-      "entablature": {
-        "h": "H - colH",
-        "depth": "colR * 2.6"
+    "tholos": {
+      "type": "component",
+      "use": "components/tholos",
+      "params": {
+        "R": "lanternR",
+        "H": "lanternH",
+        "n": "tholosN",
+        "globe": "tholosGlobe",
+        "globeR": "tholosGlobeR"
       },
       "at": [
         [
           0,
-          0,
-          0,
-          0
-        ]
-      ],
-      "_about": "a ring of columns round the drum, carrying a deck -- St Paul's, the Pantheon in Paris (build it by name)"
-    },
-    "peristyle deck": {
-      "type": "ring",
-      "count": "n",
-      "rOuter": "R + dt + pw",
-      "rInner": "R + dt",
-      "height": "H - colH",
-      "y": "colH",
-      "turn": 0.5,
-      "solid": true,
-      "place": [
-        [
-          0,
-          0,
+          "0 - lanternR * 0.1",
           0,
           0
         ]
       ],
+      "atop": "dome",
+      "atopR": "lanternR * 1.25",
       "standsOn": [
-        "peristyle"
+        "dome"
       ],
-      "_about": "the deck over the colonnade, from the drum out to the columns' line (the entablature caps only the columns: no broad ring overhangs them)"
+      "_about": "or a round temple for a lantern, standing where the dome has narrowed to its plinth (build it by name)"
+    },
+    "drum a": {
+      "type": "ring", "count": "n", "rOuter": "R + dt", "rInner": "R", "height": "H", "turn": 0.5, "every": 2, "offset": 0, "only": "every",
+      "opening": {"width": "winW", "sill": "winSill", "springing": "winSill + winH", "head": {"profile": "winHead"}, "surround": {"head": "pediment", "pediment": "pedA"}},
+      "place": [[0, 0, 0, 0]],
+      "_about": "the drum with a window in every bay under alternating pediments: the even bays (build it by name, with `drum b`)"
+    },
+    "drum b": {
+      "type": "ring", "count": "n", "rOuter": "R + dt", "rInner": "R", "height": "H", "turn": 0.5, "every": 2, "offset": 1, "only": "every",
+      "opening": {"width": "winW", "sill": "winSill", "springing": "winSill + winH", "head": {"profile": "winHead"}, "surround": {"head": "pediment", "pediment": "pedB"}},
+      "place": [[0, 0, 0, 0]],
+      "_about": "...and the odd bays"
+    },
+    "buttresses": {
+      "type": "box", "width": "butW", "length": "butD + 0.3", "height": "H",
+      "spiral": {"count": "n", "radius": "R + dt + butD / 2 - 0.15"},
+      "_about": "a wall spur between each two bays, standing butD out of the drum (build it by name)"
+    },
+    "paired columns": {
+      "type": "colonnade", "plan": "round", "count": "n", "radius": "R + dt + butD + colR * 0.4", "order": "corinthian", "columnR": "colR", "height": "colH", "taper": 0.88,
+      "at": [[0, 0, 0, "pairA"], [0, 0, 0, "0 - pairA"]], "standsOn": ["buttresses"],
+      "_about": "two columns side by side half sunk in each spur's face (build it by name)"
+    },
+    "buttress entablature": {
+      "type": "box", "width": "butW + colR * 0.8", "length": "butD + colR * 2 + 0.3", "height": "entH * 0.62",
+      "spiral": {"count": "n", "radius": "R + dt + (butD + colR * 2) / 2 - 0.15", "y": "colH"}, "standsOn": ["buttresses"],
+      "_about": "the entablature breaking forward over each pair, architrave and frieze (build it by name, with `buttress cornice`)"
+    },
+    "buttress cornice": {
+      "type": "box", "width": "butW + colR * 0.8 + 0.8", "length": "butD + colR * 2 + 0.7", "height": "entH * 0.38",
+      "spiral": {"count": "n", "radius": "R + dt + (butD + colR * 2) / 2 + 0.05", "y": "colH + entH * 0.62"}, "standsOn": ["buttress entablature"],
+      "_about": "...its cornice standing out over it, level with the drum's (build it by name)"
+    },
+    "drum entablature": {
+      "type": "ring", "count": "n", "rOuter": "R + dt + 0.5", "rInner": "R + dt - 0.05", "height": "entH", "y": "colH", "turn": 0.5, "solid": true,
+      "place": [[0, 0, 0, 0]], "standsOn": ["drum a"],
+      "_about": "the entablature round the drum between the spurs, over the windows (build it by name)"
+    },
+    "drum cornice": {
+      "type": "ring", "count": "n", "rOuter": "R + dt + 0.9", "rInner": "R + dt", "height": "entH * 0.38", "y": "colH + entH * 0.62", "turn": 0.5, "solid": true,
+      "place": [[0, 0, 0, 0]], "standsOn": ["drum entablature"],
+      "_about": "the cornice of the drum's entablature standing out between the spurs (build it by name)"
+    },
+    "attic strips": {
+      "type": "box", "width": "colR * 1.5", "length": 0.5, "height": "atticH",
+      "spiral": {"count": "n", "radius": "R + dt + 0.2", "turn": "pairS / 2 / (R + dt)", "y": "H"}, "standsOn": ["attic piers"],
+      "_about": "the paired pilaster strips on the attic over each pair of columns (build it by name, with `attic strips 2`)"
+    },
+    "attic strips 2": {
+      "type": "box", "width": "colR * 1.5", "length": 0.5, "height": "atticH",
+      "spiral": {"count": "n", "radius": "R + dt + 0.2", "turn": "0 - pairS / 2 / (R + dt)", "y": "H"}, "standsOn": ["attic piers"]
+    },
+    "rib pairs": {
+      "type": "ribs", "on": "dome", "count": "ribsN", "width": "ribW", "depth": "ribW * 0.7", "turn": "ribPair * ribsN / 12.566371 / domeR", "standsOn": ["dome"],
+      "_about": "double ribs up the dome, a pair over each pair of columns (build it by name, with `rib pairs 2`)"
+    },
+    "rib pairs 2": {
+      "type": "ribs", "on": "dome", "count": "ribsN", "width": "ribW", "depth": "ribW * 0.7", "turn": "0 - ribPair * ribsN / 12.566371 / domeR", "standsOn": ["dome"]
+    },
+    "lucarnes 1": {
+      "type": "box", "width": "lucW1", "length": "lucW1 * 1.2", "height": "lucW1 * 1.45",
+      "spiral": {"count": "lucN", "radius": "domeR * lucR1 - 0.2", "turn": "3.1415927 / lucN"}, "atop": "dome", "atopR": "domeR * lucR1", "standsOn": ["dome"],
+      "_about": "the dome's lucarnes, row by row between the ribs (build them by name)"
+    },
+    "lucarne roofs 1": {
+      "type": "roof", "form": "gable", "width": "lucW1 + 0.3", "length": "lucW1 * 1.2 + 0.2", "pitch": 35, "overhang": 0.1,
+      "spiral": {"count": "lucN", "radius": "domeR * lucR1 - 0.2", "turn": "3.1415927 / lucN", "y": "lucW1 * 1.45"}, "atop": "dome", "atopR": "domeR * lucR1", "standsOn": ["lucarnes 1"]
+    },
+    "lucarnes 2": {
+      "type": "box", "width": "lucW2", "length": "lucW2 * 1.2", "height": "lucW2 * 1.45",
+      "spiral": {"count": "lucN", "radius": "domeR * lucR2 - 0.2", "turn": "3.1415927 / lucN"}, "atop": "dome", "atopR": "domeR * lucR2", "standsOn": ["dome"]
+    },
+    "lucarne roofs 2": {
+      "type": "roof", "form": "gable", "width": "lucW2 + 0.3", "length": "lucW2 * 1.2 + 0.2", "pitch": 35, "overhang": 0.1,
+      "spiral": {"count": "lucN", "radius": "domeR * lucR2 - 0.2", "turn": "3.1415927 / lucN", "y": "lucW2 * 1.45"}, "atop": "dome", "atopR": "domeR * lucR2", "standsOn": ["lucarnes 2"]
+    },
+    "lucarnes 3": {
+      "type": "box", "width": "lucW3", "length": "lucW3 * 1.2", "height": "lucW3 * 1.45",
+      "spiral": {"count": "lucN", "radius": "domeR * lucR3 - 0.2", "turn": "3.1415927 / lucN"}, "atop": "dome", "atopR": "domeR * lucR3", "standsOn": ["dome"]
+    },
+    "lucarne roofs 3": {
+      "type": "roof", "form": "gable", "width": "lucW3 + 0.3", "length": "lucW3 * 1.2 + 0.2", "pitch": 35, "overhang": 0.1,
+      "spiral": {"count": "lucN", "radius": "domeR * lucR3 - 0.2", "turn": "3.1415927 / lucN", "y": "lucW3 * 1.45"}, "atop": "dome", "atopR": "domeR * lucR3", "standsOn": ["lucarnes 3"]
+    },
+    "ribbed lantern": {
+      "type": "component", "use": "components/domed-tower",
+      "params": {"sides": "lanternSides", "R": "lanternR", "H": "lanternH", "t": "lanternR * 0.13", "drumR": "lanternR * 0.7", "drumH": "lanternDrumH", "cap": "lanternCap",
+                 "capR": "lanternCapR", "kok": "lanternR * 0.09", "finial": "lanternR * 0.13", "winW": "lanternR * 0.28", "doorH": "lanternH * 0.3", "capRibs": "lanternSides"},
+      "build": ["tower", "head", "neck", "drum", "cornice", "cap", "cap ribs"],
+      "at": [[0, "0 - lanternR * 0.1", 0, 0]], "atop": "dome", "atopR": "lanternR", "standsOn": ["dome"],
+      "_about": "a round temple of lanternSides faces for a lantern, its ribbed cap (build it by name, with the lantern's columns, spire, ball and cross)"
+    },
+    "lantern columns": {
+      "type": "colonnade", "plan": "round", "count": "lanternSides", "radius": "lanternR * 1.08", "order": "corinthian", "columnR": "lanternR * 0.065", "height": "lanternH * 0.88",
+      "sides": 8, "at": [[0, "0 - lanternR * 0.1", 0, "3.1415927 / lanternSides + 0.075"], [0, "0 - lanternR * 0.1", 0, "3.1415927 / lanternSides - 0.075"]],
+      "atop": "dome", "atopR": "lanternR", "standsOn": ["ribbed lantern"],
+      "_about": "a pair of columns at each of the lantern's corners"
+    },
+    "lantern spire": {
+      "type": "column", "radius": "lanternR * 0.11", "height": "lanternR * 0.6", "sides": 12, "taper": 0.55,
+      "at": [[0, "lanternTop - 0.3", 0, 0]], "atop": "dome", "atopR": "lanternR", "standsOn": ["ribbed lantern"],
+      "_about": "the candelabra spire from the cap's tip to the ball"
+    },
+    "lantern ball": {
+      "type": "loft", "axis": "y", "sides": 16, "smooth": 3, "atop": "dome", "atopR": "lanternR", "standsOn": ["lantern spire"],
+      "at": [[0, "lanternTop + lanternR * 0.45", 0, 0]],
+      "sections": [{"s": 0, "a": "lanternR * 0.054", "b": "lanternR * 0.054"}, {"s": "lanternR * 0.11", "a": "lanternR * 0.23", "b": "lanternR * 0.23"},
+                   {"s": "lanternR * 0.27", "a": "lanternR * 0.27", "b": "lanternR * 0.27"}, {"s": "lanternR * 0.43", "a": "lanternR * 0.23", "b": "lanternR * 0.23"},
+                   {"s": "lanternR * 0.54", "a": "lanternR * 0.043", "b": "lanternR * 0.043"}],
+      "_about": "the ball over the spire"
+    },
+    "lantern cross": {
+      "type": "box", "width": "lanternR * 0.1", "length": "lanternR * 0.1", "height": "lanternR * 0.98",
+      "at": [[0, "lanternTop + lanternR * 0.95", 0, 0]], "atop": "dome", "atopR": "lanternR", "standsOn": ["lantern ball"],
+      "_about": "and the cross over it"
+    },
+    "lantern cross arm": {
+      "type": "box", "width": "lanternR * 0.65", "length": "lanternR * 0.1", "height": "lanternR * 0.1",
+      "at": [[0, "lanternTop + lanternR * 1.55", 0, 0]], "atop": "dome", "atopR": "lanternR", "standsOn": ["lantern cross"]
     },
     "interior": {
       "type": "interior",
       "of": [
         "drum",
-        "drum piers"
+        "drum piers",
+        "drum a"
       ],
       "plan": {
         "sides": "n",
@@ -221,6 +497,30 @@
       },
       "height": "H",
       "_about": "the drum's space, up to the dome's springing (the dome's inside is its own)"
+    },
+    "attic interior": {
+      "type": "interior",
+      "of": [
+        "attic",
+        "attic piers"
+      ],
+      "plan": {
+        "sides": "n",
+        "radius": "R + dt / 2"
+      },
+      "height": "atticH",
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "_about": "the attic's space, on up to the dome's springing",
+      "when": {
+        "attic": "yes"
+      }
     }
   }
 }

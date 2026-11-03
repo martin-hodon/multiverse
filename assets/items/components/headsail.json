@@ -1,0 +1,67 @@
+{
+ "kind": "item",
+ "name": "Headsail",
+ "category": "component",
+ "_about": "a triangular staysail or jib set on a stay: its head at the origin (high on a mast), its tack at (x, y) forward and down (on the bowsprit or the stem), the clew `aft` back from the tack and `lift` above it; `set` full or furled (stowed along its stay)",
+ "params": {
+  "x": 10,
+  "y": -12,
+  "aft": 6,
+  "lift": 1,
+  "belly": "x * 0.03",
+  "set": "full"
+ },
+ "materials": {
+  "cloth": "canvas",
+  "rope": "hemp"
+ },
+ "parts": [
+  {
+   "id": "cloth",
+   "type": "sail",
+   "when": {
+    "set": "full"
+   },
+   "material": "cloth",
+   "belly": "belly",
+   "corners": [
+    [
+     0,
+     0
+    ],
+    [
+     "x",
+     "y"
+    ],
+    [
+     "x - aft / 2",
+     "y + lift / 2"
+    ],
+    [
+     "x - aft",
+     "y + lift"
+    ]
+   ]
+  },
+  {
+   "id": "furled",
+   "type": "rod",
+   "when": {
+    "set": "furled"
+   },
+   "material": "cloth",
+   "from": [
+    "x * 0.15",
+    "y * 0.15",
+    0
+   ],
+   "to": [
+    "x * 0.92",
+    "y * 0.92",
+    0
+   ],
+   "r": "abs(y) * 0.012 + 0.04",
+   "sides": 6
+  }
+ ]
+}

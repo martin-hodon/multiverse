@@ -33,7 +33,7 @@
 // (the bed a wall shows, scree, soil, grass, forest), the water, the boulders.
 //   ?geology= ?climate= ?seed= ?size= ?relief= ?view=0..15 (a camera), 16.. (each cave, bridge) ?no=lake,cave,... (features left out) ?with=coast (made, not by chance) ?hud=0
 import * as THREE from "three/webgpu";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { navControls, meshPick } from "./cursornav.js";   // (the view turns and zooms about the point under the pointer, as the atlas's)
 import { makeLandscape, GEOLOGY, CLIMATES, DEFAULT_FEATURES } from "./landscape.js";
 import { surfaceColours } from "./landscape/colour.js";
 
@@ -47,8 +47,9 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xa9c4dc);
 scene.fog = new THREE.Fog(0xa9c4dc, 400, 1100);
 const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, .5, 3000);
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
+// (picked: the land's own meshes -- not the trees' instanced sets, thousands of copies a ray would test one by one; its
+//  own near and far kept: the fog is set for them)
+const controls = navControls(camera, canvas, { pick: meshPick(() => group ? group.children.filter((o) => !o.isInstancedMesh) : []), ground: null, clip: false });
 const sun = new THREE.DirectionalLight(0xfff1dc, 2.6); sun.position.set(-200, 260, 120);
 scene.add(sun, new THREE.HemisphereLight(0xcfe2ff, 0x6b5a45, 1.1));
 addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
@@ -417,6 +418,7 @@ if (qp.get("hud") === "0") hud.style.display = panel.style.display = "none";   /
 let frames = 0;
 renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); if (++frames === 5) window.__ready = true; });
 window.__L = L;
+window.__dbg = { camera, controls, renderer, scene };   // (checks: the view)
 </script>
 </body>
 </html>

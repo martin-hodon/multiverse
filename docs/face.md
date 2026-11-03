@@ -197,3 +197,49 @@ lips take the light as the skin does). The params are the attributes; the form e
   the skin's colour drawn toward a red-brown (more on pale skin, less on dark) and darkened -- worked in sRGB, as the
   colours are written (three's Color mixes in linear light and washed them out). A pink picked at random sat on dark
   skin like paint.
+
+## Variety: faces that differ, women's faces a woman's (2026-11-03)
+
+People had almost one face: every kind drew each ranged attribute uniformly and on its own (so the extremes cancelled
+into an average face), heads.js told only 5 seeds of a kind apart (`SEEDS`), the woman's ranges sat close to the
+man's (a broad jaw, a brow ridge, a big nose on a woman), and the canon's chin stood 1.3 mm IN FRONT of the subnasale's
+vertical -- every profile a protruding chin, where the soft-tissue norm (Legan) is the pogonion ~3.5 mm (men) to
+~4 mm (women) BEHIND it.
+
+- **The chin set back**: canon `chinProjection` -4.5 mm (was 0), the man's range [-5.5, -2] mm, the woman's [-6.5, -3.5].
+- **Dimorphism in the ranges** (tools/facegen.py, man.json / woman.json): the woman's lower face narrower (`lowerWidth`
+  .088-.094 against .096-.11: about .7 of her cheekbones' breadth against his .74 -- at .08 it was .65, a gaunt V with the
+  neck as wide behind it), her chin narrower, the jaw angle more open (124-130 against 112-124), almost no brow
+  ridge (0-1.5 mm against 3.5-7.5), thinner, more arched brows, shallower-set eyes, a smaller, finer nose, fuller lips,
+  rounder cheeks, an upright forehead and a SHORTER LOWER FACE: `faceHeight` .100-.108, `chinHeight` 9-12 mm, lips
+  16-20 mm -- her lower third (subnasale to menton) about .87 of the middle one, stomion to menton ~37 mm against his
+  ~47 (it was as long as a man's: the lower face read male).
+- **The loft follows the face's jaw** (face.js headGrid): the skull's loft behind the face lattice took the canon's jaw --
+  its breadth, and its angle at -.09 -- whatever the face, so behind a woman's narrower, higher jaw (the lattice's gonion
+  at -.055) it made a second, broad, square angle reaching down from the ears. Now, unless `jawW`/`jawY` are given, the
+  loft's jaw breadth follows the face's `lowerWidth` (`JAW_FOLLOW` 1 times its share of the canon's) and its angle sits at
+  the lattice's own gonion (the same formula from `jawAngle`, `faceHeight`, `eyeLevel`). The hair's and the jewels' loft
+  still take the canon's jaw.
+- **Smooth living faces** (heads.js `LIVING_SMOOTH`, r 13 mm, cos .5): each built shape's normals are averaged once over
+  coincident and nearby vertices of the skin (cached per shape), before the cavity shade -- the cheek and jaw planes
+  showed as facets.
+- The body's neck under a woman's mesh face is thinner (body.json `head.neckRadius.female` .38; docs/clothes.md).
+- **Correlated AXES** (face.json `variety.axes`, heads.js `faceVariety`): each face draws a few bell-shaped numbers --
+  `robust` (from the sex's finer end to its stronger: jaw, chin, brow ridge, brows, nose, thinner lips, narrower eyes),
+  `long` (long and narrow against short and broad), `eyes`, `set` (wide or close), `lips`, `arch` -- and each ranged
+  attribute takes its place in its range from the axes that name it plus `own` (.45) of its own draw, reaching a little
+  past the range (-15 %..115 %). A robust woman is still a woman: the axis moves within HER kind's range.
+- **Chin and nose SHAPES** (`variety.chins`, `variety.noses`, picked by the kind's `weights`): receding, neutral,
+  protruding, square, small and pointed; straight, aquiline, snub, broad, long, humped, button -- deltas added to the
+  drawn attributes (square chins mostly men, pointed ones women and old women, button and snub noses women and children).
+- **Fullness from the body** (`variety.full`): people.js draws the body's FAT (body.json `build.variety`, docs/clothes.md)
+  and steps it (`fullBins`) into the face's `full`: -1 a lean face (hollower cheeks, a narrower jaw), 1 stout, 2 fat
+  (fuller cheeks, a jowl and a double chin, a wider lower face, a thicker neck). It is part of the head's cache key
+  (`faceShape`, `faceFamily`), so only four shapes of fullness exist per face seed.
+- `kinds`: a child takes half the shapes and fullness, a beast-man none; carved heads (`stone`) none -- the sculptor's ideal.
+- **16 seeds a kind** (`SEEDS`, was 5). The pregen faces section (docs/pregen.md) is keyed by these and its code hash
+  covers heads.js and face.js: run build/pregen.py again for the cache to hold the new faces (until then they are built
+  at startup). Beware when judging a face change by eye: while the section is current, a face whose key the cache lacks
+  takes a cached face of its FAMILY (heads.js shapeOf) -- an edit to a face's JSON alone shows nothing.
+- Seen (wardrobe.html with `?specs`, 8 men and 8 women, front and profile): men's faces from narrow to broad-jawed,
+  noses straight to hooked, chins behind the lips in profile; women's faces finer, narrower-jawed, fuller-lipped.

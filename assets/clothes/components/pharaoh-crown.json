@@ -1,0 +1,103 @@
+{
+  "name": "Pharaoh's crown",
+  "kind": "component",
+  "_about": "THE KING'S HEAD as Egypt carved it: the NEMES (a striped headcloth drawn tight over the skull, its wings falling over the shoulders -- a cowl and a shallow cape), the DOUBLE CROWN on it (the red crown's cylinder and the white crown's tall bulb standing out of it), the cobra at the brow and the long false beard (head radii).",
+  "params": {},
+  "pieces": [
+    {
+      "name": "cloth",
+      "kind": "cowl",
+      "centre": [
+        -0.15,
+        0.1
+      ],
+      "radius": 1.26,
+      "axis": [
+        -0.4,
+        0.92,
+        0
+      ],
+      "cut": [
+        1.0,
+        0.6
+      ],
+      "fabric": "main",
+      "open": true
+    },
+    {
+      "name": "wings",
+      "kind": "hang",
+      "on": "torso",
+      "from": "collar - 0.04",
+      "to": "armtop + 0.02",
+      "flare": 0.1,
+      "arms": true,
+      "swing": false,
+      "lid": false,
+      "open": true,
+      "fabric": "main",
+      "pleats": 12
+    },
+    {
+      "name": "red crown",
+      "kind": "crown",
+      "top": 2.2,
+      "bottom": 0.92,
+      "rTop": 0.92,
+      "rBottom": 0.98,
+      "x": -0.12,
+      "fabric": "main"
+    },
+    {
+      "name": "white crown",
+      "kind": "cone",
+      "at": [
+        -0.12,
+        2.0
+      ],
+      "dir": [
+        -0.05,
+        1,
+        0
+      ],
+      "length": 1.7,
+      "radius": 0.62,
+      "tip": 0.26,
+      "fabric": "main"
+    },
+    {
+      "name": "cobra",
+      "kind": "cone",
+      "at": [
+        1.0,
+        0.62
+      ],
+      "dir": [
+        0.25,
+        1,
+        0
+      ],
+      "length": 0.6,
+      "radius": 0.12,
+      "tip": 0.09,
+      "fabric": "main"
+    },
+    {
+      "name": "beard",
+      "kind": "cone",
+      "at": [
+        0.86,
+        -0.96
+      ],
+      "dir": [
+        0.08,
+        -1,
+        0
+      ],
+      "length": 0.85,
+      "radius": 0.16,
+      "tip": 0.14,
+      "fabric": "main"
+    }
+  ]
+}

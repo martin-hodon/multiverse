@@ -1,0 +1,828 @@
+{
+  "name": "Wendelstein",
+  "_about": "THE WENDELSTEIN, the open stair tower of the late-Gothic Residenz (the Albrechtsburg's Grosser Wendelstein, 1471-1524; Torgau's after it): a 8-sided tower `R` to its corners standing out from a wing's front, a SPIRAL inside round an open eye (`eye`) from the door at its foot (the face toward +z) up to `H`, the floor it arrives at, in `turns` turns. Its fronts are nearly all opening: the foot an open arcade (`footH`), then 3 storeys of great `arch`-headed arches `winW` wide on piers `pier` wide, a balustrade band (`parapet`) under each; over `H` the loggia (`stageH`), a cornice, a GABLE (`gableH`) over every open face with PINNACLES at its corners, and the slate NEEDLE (`capRise`) with a finial. `climb` lifts each face's storeys by its share of a storey round the tower, so the openings climb with the stair (0: level, as at Meissen). The back faces are blind: set the tower so they stand in the wing's wall (its middle `a` = R cos(180/n) out from the wall's face, less `t`). Place it at its middle, yawed so +z faces out. Written by tools/archgen/late_gothic.py.",
+  "params": {
+    "detail": 4,
+    "R": 3.9,
+    "t": 0.45,
+    "H": 17.0,
+    "footH": 3.6,
+    "stageH": 3.8,
+    "capRise": 13.0,
+    "finial": 1.4,
+    "eye": 0.6,
+    "pier": 0.35,
+    "arch": "pointed",
+    "spread": 0.5,
+    "rise": 0.42,
+    "parapet": 1.0,
+    "band": 0.45,
+    "footSill": 0.5,
+    "climb": 0,
+    "turns": 4,
+    "stepRise": 0.18,
+    "gableH": 2.8,
+    "pinW": 0.36,
+    "pinS": 1.2,
+    "_R": "the tower's corner radius; `t` its shell (thin: the piers between the arches are the structure); H the floor the stair arrives at",
+    "_arch": "the arches' head (a profile word: pointed, curtain, ...); `spread` a pointed head's sharpness, `rise` a curtain head's",
+    "_climb": "0: the storeys level all round; 1: each face's a share of a storey higher than the last, round the tower with the stair",
+    "_parapet": "the balustrade under each storey's arches; `band` the solid over them; `footSill` the arcade's parapet (the door's face has none)",
+    "_stepRise": "the steps' rise wanted (12-22cm); their number follows from H",
+    "a": "R * 0.9239",
+    "side": "R * 0.7654",
+    "winW": "side - 2 * pier",
+    "archRise": "winW / 2 * sqrt(1 + 2 * spread)",
+    "rowH": "(H - footH - band) / (3 + climb)",
+    "sr": "a - t - 0.08",
+    "steps": "round(H / stepRise)",
+    "turn": "360 * turns / steps",
+    "_a": "the faces' distance from the middle; `side` a face's width",
+    "_archRise": "the arches' rise (a pointed head's; give `rise` for a curtain head)",
+    "_rowH": "a storey of arches",
+    "_turn": "the spiral's turn per step: `turns` whole turns from the door to the floor at H"
+  },
+  "build": [
+    "shaft",
+    "stair",
+    "crown",
+    "cornice",
+    "gables",
+    "pinnacles",
+    "cap",
+    "finial"
+  ],
+  "parts": {
+    "shaft": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": false,
+      "faces": {
+        "0": [
+          {
+            "h": "footH + climb * 0.125 * rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "footSill",
+                "springing": "footH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ],
+        "1": [
+          {
+            "h": "footH + climb * 0.25 * rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "footSill",
+                "springing": "footH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ],
+        "2": [],
+        "3": [],
+        "4": [],
+        "5": [
+          {
+            "h": "footH + climb * 0.75 * rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "footSill",
+                "springing": "footH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ],
+        "6": [
+          {
+            "h": "footH + climb * 0.875 * rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "footSill",
+                "springing": "footH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ],
+        "7": [
+          {
+            "h": "footH + climb * 0.0 * rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": 0,
+                "springing": "footH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "rowH",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "parapet",
+                "springing": "rowH - band - archRise",
+                "head": {
+                  "profile": "arch",
+                  "spread": "spread",
+                  "rise": "rise",
+                  "lobes": 1,
+                  "sag": 0.55,
+                  "seg": 6
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "openings": []
+          }
+        ]
+      },
+      "courses": {
+        "plinth": 0.5,
+        "strings": [
+          "footH + 0 * rowH",
+          "footH + 0 * rowH + parapet",
+          "footH + 1 * rowH",
+          "footH + 1 * rowH + parapet",
+          "footH + 2 * rowH",
+          "footH + 2 * rowH + parapet"
+        ],
+        "cornice": false
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the shell: the open arcade at the foot, storeys of great arches over balustrade bands; the back faces blind"
+    },
+    "stair": {
+      "type": "spiral-stair",
+      "radius": "sr",
+      "newel": "eye",
+      "post": false,
+      "turn": "turn",
+      "top": "H",
+      "steps": "steps",
+      "soffit": 0.22,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the spiral round its open eye, from the door to the floor at H"
+    },
+    "crown": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "stageH",
+      "glass": false,
+      "faces": {
+        "0": [
+          {
+            "at": 0,
+            "width": "winW",
+            "sill": "parapet",
+            "springing": "stageH - band - archRise",
+            "head": {
+              "profile": "arch",
+              "spread": "spread",
+              "rise": "rise",
+              "lobes": 1,
+              "sag": 0.55,
+              "seg": 6
+            },
+            "glass": false
+          }
+        ],
+        "1": [
+          {
+            "at": 0,
+            "width": "winW",
+            "sill": "parapet",
+            "springing": "stageH - band - archRise",
+            "head": {
+              "profile": "arch",
+              "spread": "spread",
+              "rise": "rise",
+              "lobes": 1,
+              "sag": 0.55,
+              "seg": 6
+            },
+            "glass": false
+          }
+        ],
+        "2": [],
+        "3": [],
+        "4": [],
+        "5": [
+          {
+            "at": 0,
+            "width": "winW",
+            "sill": "parapet",
+            "springing": "stageH - band - archRise",
+            "head": {
+              "profile": "arch",
+              "spread": "spread",
+              "rise": "rise",
+              "lobes": 1,
+              "sag": 0.55,
+              "seg": 6
+            },
+            "glass": false
+          }
+        ],
+        "6": [
+          {
+            "at": 0,
+            "width": "winW",
+            "sill": "parapet",
+            "springing": "stageH - band - archRise",
+            "head": {
+              "profile": "arch",
+              "spread": "spread",
+              "rise": "rise",
+              "lobes": 1,
+              "sag": 0.55,
+              "seg": 6
+            },
+            "glass": false
+          }
+        ],
+        "7": [
+          {
+            "at": 0,
+            "width": "winW",
+            "sill": "parapet",
+            "springing": "stageH - band - archRise",
+            "head": {
+              "profile": "arch",
+              "spread": "spread",
+              "rise": "rise",
+              "lobes": 1,
+              "sag": 0.55,
+              "seg": 6
+            },
+            "glass": false
+          }
+        ]
+      },
+      "courses": {
+        "plinth": false,
+        "strings": [
+          "parapet"
+        ],
+        "cornice": false
+      },
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "_about": "the loggia the stair arrives in, an arch in every front face"
+    },
+    "cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": 8,
+        "radius": "R + 0.18"
+      },
+      "height": 0.3,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H + stageH",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "crown"
+      ],
+      "_about": "the cornice and the ceiling under the needle"
+    },
+    "gables": {
+      "type": "screen",
+      "outline": [
+        [
+          "0 - side / 2",
+          0
+        ],
+        [
+          "side / 2",
+          0
+        ],
+        [
+          0,
+          "gableH"
+        ]
+      ],
+      "t": 0.3,
+      "at": [
+        [
+          "a * 0.7071",
+          "H + stageH + 0.3",
+          "a * 0.7071",
+          0.7854
+        ],
+        [
+          "a * 1.0",
+          "H + stageH + 0.3",
+          "a * 0.0",
+          1.5708
+        ],
+        [
+          "a * -1.0",
+          "H + stageH + 0.3",
+          "a * -0.0",
+          4.7124
+        ],
+        [
+          "a * -0.7071",
+          "H + stageH + 0.3",
+          "a * 0.7071",
+          5.4978
+        ],
+        [
+          "a * -0.0",
+          "H + stageH + 0.3",
+          "a * 1.0",
+          6.2832
+        ]
+      ],
+      "standsOn": [
+        "cornice"
+      ],
+      "_about": "a gable over every open face"
+    },
+    "pinnacles": {
+      "type": "pinnacle",
+      "w": "pinW",
+      "h": "gableH + 1.0",
+      "s": "pinS",
+      "at": [
+        [
+          "R * 0.3827",
+          "H + stageH + 0.3",
+          "R * 0.9239",
+          0
+        ],
+        [
+          "R * 0.9239",
+          "H + stageH + 0.3",
+          "R * 0.3827",
+          0
+        ],
+        [
+          "R * 0.9239",
+          "H + stageH + 0.3",
+          "R * -0.3827",
+          0
+        ],
+        [
+          "R * -0.9239",
+          "H + stageH + 0.3",
+          "R * -0.3827",
+          0
+        ],
+        [
+          "R * -0.9239",
+          "H + stageH + 0.3",
+          "R * 0.3827",
+          0
+        ],
+        [
+          "R * -0.3827",
+          "H + stageH + 0.3",
+          "R * 0.9239",
+          0
+        ]
+      ],
+      "standsOn": [
+        "cornice"
+      ],
+      "_about": "a pinnacle at every corner between the gables"
+    },
+    "cap": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "R - 0.35",
+      "thickness": 0,
+      "head": {
+        "profile": "trigonal",
+        "rise": "capRise"
+      },
+      "at": [
+        [
+          0,
+          "H + stageH + 0.3",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "cornice"
+      ],
+      "_about": "the slender slate needle"
+    },
+    "finial": {
+      "type": "column",
+      "radius": 0.1,
+      "height": "finial",
+      "sides": 6,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "cap",
+      "standsOn": [
+        "cap"
+      ]
+    },
+    "interior": {
+      "type": "interior",
+      "of": [
+        "shaft"
+      ],
+      "plan": {
+        "sides": 8,
+        "radius": "a - t"
+      },
+      "height": "H",
+      "_about": "the stair's well (open: the air's)"
+    }
+  }
+}

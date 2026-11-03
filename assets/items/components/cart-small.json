@@ -4,7 +4,7 @@
  "category": "components",
  "era": "-500-1900",
  "region": "everywhere",
- "_about": "the body of a cart (1.6 m bed on 1 axle(s)): bed, sides, head- and tailboards, the driver's board, footboard, axles and bolsters -- its wheels apart (components/cart-wheel), and its LOAD by `load` (0..4: casks lying in chocked pyramids, standing casks, kegs, sacks in two courses; 5 sheaves heaped, the harvest's, never on the road; -1 empty)",
+ "_about": "the body of a cart (1.6 m bed on 1 axle(s)): bed, sides, head- and tailboards, the driver's board, footboard, axles and bolsters -- its wheels apart (components/cart-wheel), and its LOAD by `load` (0..4: casks lying in chocked pyramids, standing casks, kegs, sacks in two courses; 5 sheaves heaped, the harvest's, never on the road; 6..12 the other cultures' -- amphorae in straw, amphorae and sacks, jars and hampers, bales, crates and sacks, tubs and bales, rice bales, as assets/world/goods.json picks them; -1 empty)",
  "params": {
   "load": 0,
   "seatTop": 1.265,
@@ -25,7 +25,8 @@
     "#6a4a2c"
    ]
   },
-  "dark": "#4e3a24"
+  "dark": "#4e3a24",
+  "straw": "straw"
  },
  "parts": [
   {
@@ -626,6 +627,305 @@
    "when": {
     "load": 5
    }
+  },
+  {
+   "id": "load 6 straw",
+   "type": "box",
+   "material": "straw",
+   "size": [
+    1.03,
+    0.12,
+    1.01
+   ],
+   "at": [
+    -0.235,
+    0.86,
+    0
+   ],
+   "when": {
+    "load": 6
+   }
+  },
+  {
+   "id": "load 6 transport-amphora 2",
+   "use": "items/tools/transport-amphora",
+   "at": [
+    -0.415,
+    1.07,
+    0.37,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 6
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 6 transport-amphora 3",
+   "use": "items/tools/transport-amphora",
+   "at": [
+    -0.055,
+    1.07,
+    -0.37,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 6
+   },
+   "seed": 2
+  },
+  {
+   "id": "load 6 transport-amphora 4",
+   "use": "items/tools/transport-amphora",
+   "at": [
+    -0.235,
+    1.36,
+    -0.37,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 6
+   },
+   "seed": 3
+  },
+  {
+   "id": "load 7 straw",
+   "type": "box",
+   "material": "straw",
+   "size": [
+    1.03,
+    0.12,
+    1.01
+   ],
+   "at": [
+    -0.235,
+    0.86,
+    0
+   ],
+   "when": {
+    "load": 7
+   }
+  },
+  {
+   "id": "load 7 transport-amphora 2",
+   "use": "items/tools/transport-amphora",
+   "at": [
+    -0.0143,
+    1.07,
+    0.37,
+    -90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 7
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 7 sack 3",
+   "use": "items/tools/sack",
+   "at": [
+    -0.5543,
+    0.8,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 7
+   }
+  },
+  {
+   "id": "load 8 straw",
+   "type": "box",
+   "material": "straw",
+   "size": [
+    1.03,
+    0.18,
+    1.01
+   ],
+   "at": [
+    -0.235,
+    0.89,
+    0
+   ],
+   "when": {
+    "load": 8
+   }
+  },
+  {
+   "id": "load 8 storage-jar 2",
+   "use": "items/tools/storage-jar",
+   "at": [
+    -0.475,
+    0.82,
+    0
+   ],
+   "when": {
+    "load": 8
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 8 storage-jar 3",
+   "use": "items/tools/storage-jar",
+   "at": [
+    0.005,
+    0.82,
+    0
+   ],
+   "when": {
+    "load": 8
+   },
+   "seed": 2
+  },
+  {
+   "id": "load 9 bale 1",
+   "use": "items/tools/bale",
+   "at": [
+    -0.235,
+    0.8,
+    0,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 9
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 9 bale 2",
+   "use": "items/tools/bale",
+   "at": [
+    -0.135,
+    1.3,
+    0,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 9
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 10 crate 1",
+   "use": "items/tools/crate",
+   "at": [
+    -0.3895,
+    0.8,
+    0,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 10
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 10 sack 2",
+   "use": "items/tools/sack",
+   "at": [
+    0.1358,
+    0.8,
+    0,
+    90,
+    0,
+    0
+   ],
+   "when": {
+    "load": 10
+   }
+  },
+  {
+   "id": "load 11 tub 1",
+   "use": "items/tools/tub",
+   "at": [
+    -0.441,
+    0.8,
+    0
+   ],
+   "when": {
+    "load": 11
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 11 bale 2",
+   "use": "items/tools/bale",
+   "at": [
+    0.0843,
+    0.8,
+    0,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 11
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 12 straw-bale 1",
+   "use": "items/tools/straw-bale",
+   "at": [
+    -0.46,
+    0.8,
+    0,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 12
+   },
+   "seed": 0
+  },
+  {
+   "id": "load 12 straw-bale 2",
+   "use": "items/tools/straw-bale",
+   "at": [
+    -0.01,
+    0.8,
+    0,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 12
+   },
+   "seed": 1
+  },
+  {
+   "id": "load 12 straw-bale 3",
+   "use": "items/tools/straw-bale",
+   "at": [
+    -0.235,
+    1.19,
+    0,
+    0,
+    90,
+    0
+   ],
+   "when": {
+    "load": 12
+   },
+   "seed": 2
   }
  ]
 }

@@ -1,0 +1,6103 @@
+{
+ "name": "Candi",
+ "_about": "A CENTRAL JAVANESE TEMPLE (candi), 8th-10th century, Prambanan's type: three worlds stacked. The BASE (kaki) a redented square `w` across and `bh` high, moulded; a GALLERY on it (`gallery` yes|no) inside a balustrade `bah` high and `bt` thick, ratnas `rb` high on its top, a gate (`gH` clear) where each stair arrives; STAIRS `sw` wide and steep (`stairs` four|two|one|none: one on the front, +z, two the front and +x), a makara either side of each foot. The BODY (tubuh) a square `bw` across and `bH` high under a slab `cs` thick: the cella's walls `wt` thick with its door (`dw` x `dh`) at the back of the front porch (`cella` open), or a solid with false doors (`cella` solid); a PORCH `pw` x `pd`, `pH` high, on every stair's side, each under a stepped roof and a ratna. The ROOF (atap): `tiers` three|four|five, the first `tw` across and `t1` high, each next one `k` of the last, every ledge ringed with ratnas (`ratnas` corners|three|five|seven a side, `rr` high on the first), the crowning ratna `ch` high on top. `ratna`/`crownform` vajra|bell|spike pick the ratnas' form, `mould` yes|no the mouldings (no: plain blocks, the cheap one for a temple seen by the hundred). y 0 on the ground. Written by tools/archgen/javanese.py; its candi() works the sizes out from a temple's width and height, finish_rules() its reliefs.",
+ "params": {
+  "detail": 4,
+  "w": 20,
+  "bh": 3.0,
+  "bt": 0.7,
+  "bah": 1.5,
+  "rb": 1.0,
+  "gH": 2.6,
+  "sw": 2.6,
+  "rise": 0.28,
+  "run": 0.26,
+  "stairN": "max(1, round(bh / rise))",
+  "stairL": "stairN * run",
+  "bw": 10.0,
+  "bH": 8.0,
+  "wt": 1.4,
+  "dw": 1.6,
+  "dh": 2.9,
+  "cs": 0.5,
+  "pw": 5.0,
+  "pd": 2.6,
+  "pH": 5.0,
+  "pt": 0.7,
+  "tw": "bw * 0.92",
+  "t1": 3.6,
+  "k": 0.7,
+  "rr": 1.5,
+  "ch": 4.5,
+  "tw1": "tw",
+  "tw2": "tw * k",
+  "tw3": "tw2 * k",
+  "tw4": "tw3 * k",
+  "tw5": "tw4 * k",
+  "t2": "t1 * k",
+  "t3": "t2 * k",
+  "t4": "t3 * k",
+  "t5": "t4 * k",
+  "y0": "bh + bH + cs",
+  "y1": "y0 + t1",
+  "y2": "y1 + t2",
+  "y3": "y2 + t3",
+  "y4": "y3 + t4",
+  "y5": "y4 + t5",
+  "stairs": "one",
+  "gallery": "yes",
+  "cella": "open",
+  "tiers": "three",
+  "ratnas": "five",
+  "ratna": "vajra",
+  "crownform": "vajra",
+  "mould": "yes"
+ },
+ "build": [
+  "base",
+  "base two",
+  "base one",
+  "base none",
+  "base plain",
+  "balustrade",
+  "balustrade two",
+  "balustrade one",
+  "balustrade none",
+  "balustrade ratnas",
+  "stair",
+  "stair plain",
+  "makaras",
+  "gate piers",
+  "gate lintel",
+  "gate cap",
+  "gate ratna",
+  "porch",
+  "porch floor",
+  "porch block",
+  "false door",
+  "porch roof",
+  "porch step",
+  "porch top",
+  "porch ratna",
+  "porch ratna low",
+  "stair 2",
+  "stair plain 2",
+  "makaras 2",
+  "gate piers 2",
+  "gate lintel 2",
+  "gate cap 2",
+  "gate ratna 2",
+  "side porch 2",
+  "porch floor 2",
+  "porch block 2",
+  "porch roof 2",
+  "porch step 2",
+  "porch top 2",
+  "porch ratna 2",
+  "porch ratna 2 low",
+  "stair 3",
+  "stair plain 3",
+  "makaras 3",
+  "gate piers 3",
+  "gate lintel 3",
+  "gate cap 3",
+  "gate ratna 3",
+  "side porch 3",
+  "porch floor 3",
+  "porch block 3",
+  "porch roof 3",
+  "porch step 3",
+  "porch top 3",
+  "porch ratna 3",
+  "porch ratna 3 low",
+  "stair 4",
+  "stair plain 4",
+  "makaras 4",
+  "gate piers 4",
+  "gate lintel 4",
+  "gate cap 4",
+  "gate ratna 4",
+  "side porch 4",
+  "porch floor 4",
+  "porch block 4",
+  "porch roof 4",
+  "porch step 4",
+  "porch top 4",
+  "porch ratna 4",
+  "porch ratna 4 low",
+  "blind false door",
+  "cella",
+  "cella plain",
+  "body",
+  "body plain",
+  "cella floor",
+  "ceiling",
+  "ceiling open",
+  "roof 1",
+  "roof 1 plain",
+  "roof 1 ratnas corners",
+  "roof 1 ratnas mid",
+  "roof 1 ratnas quarter",
+  "roof 1 ratnas sixth",
+  "roof 2",
+  "roof 2 plain",
+  "roof 2 ratnas corners",
+  "roof 2 ratnas mid",
+  "roof 2 ratnas quarter",
+  "roof 2 ratnas sixth",
+  "roof 3",
+  "roof 3 plain",
+  "roof 3 ratnas corners",
+  "roof 3 ratnas mid",
+  "roof 3 ratnas quarter",
+  "roof 3 ratnas sixth",
+  "roof 4",
+  "roof 4 plain",
+  "roof 4 ratnas corners",
+  "roof 4 ratnas mid",
+  "roof 4 ratnas quarter",
+  "roof 4 ratnas sixth",
+  "roof 5",
+  "roof 5 plain",
+  "roof 5 ratnas corners",
+  "roof 5 ratnas mid",
+  "roof 5 ratnas quarter",
+  "roof 5 ratnas sixth",
+  "crown three",
+  "crown four",
+  "crown five"
+ ],
+ "parts": {
+  "base": {
+   "type": "prism",
+   "plan": {
+    "points": [
+     [
+      "-0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.86 * w / 2"
+     ]
+    ]
+   },
+   "height": "bh",
+   "walked": true,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the base (kaki): a redented square, its top the gallery's floor",
+   "courses": {
+    "list": [
+     {
+      "y": 0,
+      "h": "min(0.5, bh * 0.2)",
+      "out": "min(0.3, bh * 0.12)",
+      "profile": "torus"
+     },
+     {
+      "y": "min(0.5, bh * 0.2)",
+      "h": "min(0.3, bh * 0.1)",
+      "out": "min(0.15, bh * 0.06)",
+      "profile": "band"
+     },
+     {
+      "y": "bh - min(0.7, bh * 0.25)",
+      "h": "min(0.7, bh * 0.25)",
+      "out": "min(0.35, bh * 0.14)",
+      "profile": "cornice"
+     }
+    ],
+    "clear": {
+     "3": [
+      [
+       "0.4 * w / 2 - sw / 2 - 0.2",
+       "0.4 * w / 2 + sw / 2 + 0.2"
+      ]
+     ],
+     "12": [
+      [
+       "0.4 * w / 2 - sw / 2 - 0.2",
+       "0.4 * w / 2 + sw / 2 + 0.2"
+      ]
+     ],
+     "21": [
+      [
+       "0.4 * w / 2 - sw / 2 - 0.2",
+       "0.4 * w / 2 + sw / 2 + 0.2"
+      ]
+     ],
+     "30": [
+      [
+       "0.4 * w / 2 - sw / 2 - 0.2",
+       "0.4 * w / 2 + sw / 2 + 0.2"
+      ]
+     ]
+    }
+   },
+   "when": {
+    "stairs": "four",
+    "mould": "yes"
+   }
+  },
+  "base two": {
+   "type": "prism",
+   "plan": {
+    "points": [
+     [
+      "-0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.86 * w / 2"
+     ]
+    ]
+   },
+   "height": "bh",
+   "walked": true,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the base (kaki): a redented square, its top the gallery's floor",
+   "courses": {
+    "list": [
+     {
+      "y": 0,
+      "h": "min(0.5, bh * 0.2)",
+      "out": "min(0.3, bh * 0.12)",
+      "profile": "torus"
+     },
+     {
+      "y": "min(0.5, bh * 0.2)",
+      "h": "min(0.3, bh * 0.1)",
+      "out": "min(0.15, bh * 0.06)",
+      "profile": "band"
+     },
+     {
+      "y": "bh - min(0.7, bh * 0.25)",
+      "h": "min(0.7, bh * 0.25)",
+      "out": "min(0.35, bh * 0.14)",
+      "profile": "cornice"
+     }
+    ],
+    "clear": {
+     "3": [
+      [
+       "0.4 * w / 2 - sw / 2 - 0.2",
+       "0.4 * w / 2 + sw / 2 + 0.2"
+      ]
+     ],
+     "12": [
+      [
+       "0.4 * w / 2 - sw / 2 - 0.2",
+       "0.4 * w / 2 + sw / 2 + 0.2"
+      ]
+     ]
+    }
+   },
+   "when": {
+    "stairs": "two",
+    "mould": "yes"
+   }
+  },
+  "base one": {
+   "type": "prism",
+   "plan": {
+    "points": [
+     [
+      "-0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.86 * w / 2"
+     ]
+    ]
+   },
+   "height": "bh",
+   "walked": true,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the base (kaki): a redented square, its top the gallery's floor",
+   "courses": {
+    "list": [
+     {
+      "y": 0,
+      "h": "min(0.5, bh * 0.2)",
+      "out": "min(0.3, bh * 0.12)",
+      "profile": "torus"
+     },
+     {
+      "y": "min(0.5, bh * 0.2)",
+      "h": "min(0.3, bh * 0.1)",
+      "out": "min(0.15, bh * 0.06)",
+      "profile": "band"
+     },
+     {
+      "y": "bh - min(0.7, bh * 0.25)",
+      "h": "min(0.7, bh * 0.25)",
+      "out": "min(0.35, bh * 0.14)",
+      "profile": "cornice"
+     }
+    ],
+    "clear": {
+     "3": [
+      [
+       "0.4 * w / 2 - sw / 2 - 0.2",
+       "0.4 * w / 2 + sw / 2 + 0.2"
+      ]
+     ]
+    }
+   },
+   "when": {
+    "stairs": "one",
+    "mould": "yes"
+   }
+  },
+  "base none": {
+   "type": "prism",
+   "plan": {
+    "points": [
+     [
+      "-0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.86 * w / 2"
+     ]
+    ]
+   },
+   "height": "bh",
+   "walked": true,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the base (kaki): a redented square, its top the gallery's floor",
+   "courses": [
+    {
+     "y": 0,
+     "h": "min(0.5, bh * 0.2)",
+     "out": "min(0.3, bh * 0.12)",
+     "profile": "torus"
+    },
+    {
+     "y": "min(0.5, bh * 0.2)",
+     "h": "min(0.3, bh * 0.1)",
+     "out": "min(0.15, bh * 0.06)",
+     "profile": "band"
+    },
+    {
+     "y": "bh - min(0.7, bh * 0.25)",
+     "h": "min(0.7, bh * 0.25)",
+     "out": "min(0.35, bh * 0.14)",
+     "profile": "cornice"
+    }
+   ],
+   "when": {
+    "stairs": "none",
+    "mould": "yes"
+   }
+  },
+  "base plain": {
+   "type": "box",
+   "width": "w",
+   "length": "w",
+   "height": "bh",
+   "walked": true,
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "mould": "no"
+   },
+   "_about": "the base as a plain block: the cheap one"
+  },
+  "balustrade": {
+   "type": "enclosure",
+   "plan": {
+    "points": [
+     [
+      "-0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.86 * w / 2"
+     ]
+    ]
+   },
+   "thickness": "bt",
+   "height": "bah",
+   "glass": false,
+   "openings": [],
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "courses": {
+    "list": [
+     {
+      "y": "bah - 0.25",
+      "h": 0.25,
+      "out": 0.08,
+      "profile": "band"
+     }
+    ]
+   },
+   "_about": "the balustrade round the gallery: the reliefs on its inner face, broken where the stairs come up",
+   "faces": {
+    "3": [
+     {
+      "at": 0,
+      "width": "sw + 0.2",
+      "sill": 0,
+      "springing": "bah",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ],
+    "12": [
+     {
+      "at": 0,
+      "width": "sw + 0.2",
+      "sill": 0,
+      "springing": "bah",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ],
+    "21": [
+     {
+      "at": 0,
+      "width": "sw + 0.2",
+      "sill": 0,
+      "springing": "bah",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ],
+    "30": [
+     {
+      "at": 0,
+      "width": "sw + 0.2",
+      "sill": 0,
+      "springing": "bah",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "when": {
+    "gallery": "yes",
+    "stairs": "four"
+   }
+  },
+  "balustrade two": {
+   "type": "enclosure",
+   "plan": {
+    "points": [
+     [
+      "-0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.86 * w / 2"
+     ]
+    ]
+   },
+   "thickness": "bt",
+   "height": "bah",
+   "glass": false,
+   "openings": [],
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "courses": {
+    "list": [
+     {
+      "y": "bah - 0.25",
+      "h": 0.25,
+      "out": 0.08,
+      "profile": "band"
+     }
+    ]
+   },
+   "_about": "the balustrade round the gallery: the reliefs on its inner face, broken where the stairs come up",
+   "faces": {
+    "3": [
+     {
+      "at": 0,
+      "width": "sw + 0.2",
+      "sill": 0,
+      "springing": "bah",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ],
+    "12": [
+     {
+      "at": 0,
+      "width": "sw + 0.2",
+      "sill": 0,
+      "springing": "bah",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "when": {
+    "gallery": "yes",
+    "stairs": "two"
+   }
+  },
+  "balustrade one": {
+   "type": "enclosure",
+   "plan": {
+    "points": [
+     [
+      "-0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.86 * w / 2"
+     ]
+    ]
+   },
+   "thickness": "bt",
+   "height": "bah",
+   "glass": false,
+   "openings": [],
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "courses": {
+    "list": [
+     {
+      "y": "bah - 0.25",
+      "h": 0.25,
+      "out": 0.08,
+      "profile": "band"
+     }
+    ]
+   },
+   "_about": "the balustrade round the gallery: the reliefs on its inner face, broken where the stairs come up",
+   "faces": {
+    "3": [
+     {
+      "at": 0,
+      "width": "sw + 0.2",
+      "sill": 0,
+      "springing": "bah",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "when": {
+    "gallery": "yes",
+    "stairs": "one"
+   }
+  },
+  "balustrade none": {
+   "type": "enclosure",
+   "plan": {
+    "points": [
+     [
+      "-0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "-0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.94 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.86 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-(w / 2)"
+     ],
+     [
+      "-0.4 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.94 * w / 2"
+     ],
+     [
+      "-0.7 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.86 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.7 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "-0.4 * w / 2"
+     ],
+     [
+      "-(w / 2)",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.4 * w / 2"
+     ],
+     [
+      "-0.94 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.7 * w / 2"
+     ],
+     [
+      "-0.86 * w / 2",
+      "0.86 * w / 2"
+     ]
+    ]
+   },
+   "thickness": "bt",
+   "height": "bah",
+   "glass": false,
+   "openings": [],
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "courses": {
+    "list": [
+     {
+      "y": "bah - 0.25",
+      "h": 0.25,
+      "out": 0.08,
+      "profile": "band"
+     }
+    ]
+   },
+   "_about": "the balustrade round the gallery: the reliefs on its inner face, broken where the stairs come up",
+   "faces": {},
+   "when": {
+    "gallery": "yes",
+    "stairs": "none"
+   }
+  },
+  "balustrade ratnas": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "rb * 0.22",
+    "h": "rb",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "-0.7 * w / 2 + 1.0 * bt / 2",
+     "bh + bah",
+     "0.94 * w / 2",
+     0
+    ],
+    [
+     "-0.4 * w / 2 + 1.0 * bt / 2",
+     "bh + bah",
+     "w / 2",
+     0
+    ],
+    [
+     "-0.288 * w / 2",
+     "bh + bah",
+     "w / 2 - 1.0 * bt / 2",
+     0
+    ],
+    [
+     "0.288 * w / 2",
+     "bh + bah",
+     "w / 2 - 1.0 * bt / 2",
+     0
+    ],
+    [
+     "0.4 * w / 2",
+     "bh + bah",
+     "w / 2 - 1.0 * bt / 2",
+     0
+    ],
+    [
+     "0.7 * w / 2",
+     "bh + bah",
+     "0.94 * w / 2 - 1.0 * bt / 2",
+     0
+    ],
+    [
+     "0.86 * w / 2",
+     "bh + bah",
+     "0.86 * w / 2 - 1.0 * bt / 2",
+     0
+    ],
+    [
+     "0.94 * w / 2",
+     "bh + bah",
+     "0.7 * w / 2 - 1.0 * bt / 2",
+     0
+    ],
+    [
+     "w / 2",
+     "bh + bah",
+     "0.4 * w / 2 - 1.0 * bt / 2",
+     0
+    ],
+    [
+     "w / 2 - 1.0 * bt / 2",
+     "bh + bah",
+     "0.288 * w / 2",
+     0
+    ],
+    [
+     "w / 2 - 1.0 * bt / 2",
+     "bh + bah",
+     "-0.288 * w / 2",
+     0
+    ],
+    [
+     "w / 2 - 1.0 * bt / 2",
+     "bh + bah",
+     "-0.4 * w / 2",
+     0
+    ],
+    [
+     "0.94 * w / 2 - 1.0 * bt / 2",
+     "bh + bah",
+     "-0.7 * w / 2",
+     0
+    ],
+    [
+     "0.86 * w / 2 - 1.0 * bt / 2",
+     "bh + bah",
+     "-0.86 * w / 2",
+     0
+    ],
+    [
+     "0.7 * w / 2 - 1.0 * bt / 2",
+     "bh + bah",
+     "-0.94 * w / 2",
+     0
+    ],
+    [
+     "0.4 * w / 2 - 1.0 * bt / 2",
+     "bh + bah",
+     "-(w / 2)",
+     0
+    ],
+    [
+     "0.288 * w / 2",
+     "bh + bah",
+     "-(w / 2) + 1.0 * bt / 2",
+     0
+    ],
+    [
+     "-0.288 * w / 2",
+     "bh + bah",
+     "-(w / 2) + 1.0 * bt / 2",
+     0
+    ],
+    [
+     "-0.4 * w / 2",
+     "bh + bah",
+     "-(w / 2) + 1.0 * bt / 2",
+     0
+    ],
+    [
+     "-0.7 * w / 2",
+     "bh + bah",
+     "-0.94 * w / 2 + 1.0 * bt / 2",
+     0
+    ],
+    [
+     "-0.86 * w / 2",
+     "bh + bah",
+     "-0.86 * w / 2 + 1.0 * bt / 2",
+     0
+    ],
+    [
+     "-0.94 * w / 2",
+     "bh + bah",
+     "-0.7 * w / 2 + 1.0 * bt / 2",
+     0
+    ],
+    [
+     "-(w / 2)",
+     "bh + bah",
+     "-0.4 * w / 2 + 1.0 * bt / 2",
+     0
+    ],
+    [
+     "-(w / 2) + 1.0 * bt / 2",
+     "bh + bah",
+     "-0.288 * w / 2",
+     0
+    ],
+    [
+     "-(w / 2) + 1.0 * bt / 2",
+     "bh + bah",
+     "0.288 * w / 2",
+     0
+    ],
+    [
+     "-(w / 2) + 1.0 * bt / 2",
+     "bh + bah",
+     "0.4 * w / 2",
+     0
+    ],
+    [
+     "-0.94 * w / 2 + 1.0 * bt / 2",
+     "bh + bah",
+     "0.7 * w / 2",
+     0
+    ],
+    [
+     "-0.86 * w / 2 + 1.0 * bt / 2",
+     "bh + bah",
+     "0.86 * w / 2",
+     0
+    ]
+   ],
+   "when": {
+    "gallery": "yes"
+   },
+   "_about": "the ratnas crowning the balustrade"
+  },
+  "stair": {
+   "type": "flight",
+   "width": "sw",
+   "run": "run",
+   "rise": "bh / stairN",
+   "base": 0,
+   "top": "bh",
+   "landing": 0,
+   "steep": true,
+   "at": [
+    [
+     "sw / 2",
+     0,
+     "w / 2 + stairL",
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "mould": "yes"
+   },
+   "_about": "the stair up the base, steep, its cheeks the building's stone railing"
+  },
+  "stair plain": {
+   "type": "flight",
+   "width": "sw",
+   "run": "run",
+   "rise": "bh / stairN",
+   "base": 0,
+   "top": "bh",
+   "landing": 0,
+   "steep": true,
+   "at": [
+    [
+     "sw / 2",
+     0,
+     "w / 2 + stairL",
+     1.5708
+    ]
+   ],
+   "railing": false,
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "mould": "no"
+   },
+   "_about": "the stair, no cheeks: the cheap one"
+  },
+  "makaras": {
+   "type": "box",
+   "width": "0.5 + bh * 0.08",
+   "length": "0.9 + bh * 0.1",
+   "height": "0.9 + bh * 0.08",
+   "_about": "the makara at the stair's foot, either side: the sea monster whose jaws the balustrade comes out of",
+   "at": [
+    [
+     "sw / 2 + 0.25 + bh * 0.04",
+     0,
+     "w / 2 + stairL - 0.45 - bh * 0.05",
+     0.0
+    ],
+    [
+     "-(sw / 2 + 0.25 + bh * 0.04)",
+     0,
+     "w / 2 + stairL - 0.45 - bh * 0.05",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "gate piers": {
+   "type": "box",
+   "width": 0.9,
+   "length": "bt + 0.4",
+   "height": "gH + 0.6",
+   "_about": "the gate's piers",
+   "at": [
+    [
+     "sw / 2 + 0.55",
+     "bh",
+     "w / 2 - bt / 2",
+     0.0
+    ],
+    [
+     "-(sw / 2 + 0.55)",
+     "bh",
+     "w / 2 - bt / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate lintel": {
+   "type": "box",
+   "width": "sw + 2",
+   "length": "bt + 0.4",
+   "height": 0.6,
+   "_about": "the lintel over the stair's head, a kala's face on it",
+   "at": [
+    [
+     0,
+     "bh + gH",
+     "w / 2 - bt / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate cap": {
+   "type": "box",
+   "width": "sw + 1.2",
+   "length": "bt + 0.1",
+   "height": 0.7,
+   "at": [
+    [
+     0,
+     "bh + gH + 0.6",
+     "w / 2 - bt / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate ratna": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "rb * 0.35",
+    "h": "rb * 1.6",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     0,
+     "bh + gH + 1.3",
+     "w / 2 - bt / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "porch": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "pw",
+     "pd"
+    ]
+   },
+   "thickness": "pt",
+   "height": "pH",
+   "glass": false,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": "dw",
+      "sill": 0,
+      "springing": "dh",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ],
+    "2": [
+     {
+      "at": 0,
+      "width": "dw",
+      "sill": 0,
+      "springing": "dh",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     "bh",
+     "bw / 2 + pd / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "cella": "open"
+   },
+   "_about": "the porch: the vestibule before the cella, its gate the kala-makara arch"
+  },
+  "porch floor": {
+   "type": "box",
+   "width": "pw - 2 * pt",
+   "length": "pd - 2 * pt",
+   "height": 0.15,
+   "walked": true,
+   "at": [
+    [
+     0,
+     "bh",
+     "bw / 2 + pd / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "cella": "open"
+   }
+  },
+  "porch block": {
+   "type": "box",
+   "width": "pw",
+   "length": "pd",
+   "height": "pH",
+   "at": [
+    [
+     0,
+     "bh",
+     "bw / 2 + pd / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "cella": "solid"
+   },
+   "_about": "the porch, solid: its false door on its face"
+  },
+  "false door": {
+   "type": "box",
+   "width": "dw",
+   "length": 0.12,
+   "height": "dh",
+   "at": [
+    [
+     0,
+     "bh",
+     "bw / 2 + pd",
+     0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "cella": "solid",
+    "mould": "yes"
+   },
+   "_about": "the false door, a dark panel (left off the cheap one)"
+  },
+  "porch roof": {
+   "type": "box",
+   "width": "pw + 0.4",
+   "length": "pd + 0.2",
+   "height": "min(0.4, pH * 0.08)",
+   "at": [
+    [
+     0,
+     "bh + pH",
+     "bw / 2 + pd / 2 + 0.1",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ]
+   }
+  },
+  "porch step": {
+   "type": "box",
+   "width": "pw * 0.74",
+   "length": "pd * 0.76",
+   "height": "pH * 0.16",
+   "at": [
+    [
+     0,
+     "bh + pH + min(0.4, pH * 0.08)",
+     "bw / 2 + pd / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ]
+   }
+  },
+  "porch top": {
+   "type": "box",
+   "width": "pw * 0.46",
+   "length": "pd * 0.5",
+   "height": "pH * 0.12",
+   "at": [
+    [
+     0,
+     "bh + pH * 1.16 + min(0.4, pH * 0.08)",
+     "bw / 2 + pd / 2",
+     0.0
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "porch ratna": {
+   "type": "component",
+   "use": "components/ratna",
+   "at": [
+    [
+     0,
+     "bh + pH * 1.28 + min(0.4, pH * 0.08)",
+     "bw / 2 + pd / 2",
+     0.0
+    ]
+   ],
+   "params": {
+    "r": "min(pw, pd) * 0.12",
+    "h": "pH * 0.5",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "porch ratna low": {
+   "type": "component",
+   "use": "components/ratna",
+   "at": [
+    [
+     0,
+     "bh + pH * 1.16 + min(0.4, pH * 0.08)",
+     "bw / 2 + pd / 2",
+     0.0
+    ]
+   ],
+   "params": {
+    "r": "min(pw, pd) * 0.12",
+    "h": "pH * 0.5",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "when": {
+    "stairs": [
+     "one",
+     "two",
+     "four"
+    ],
+    "mould": "no"
+   }
+  },
+  "stair 2": {
+   "type": "flight",
+   "width": "sw",
+   "run": "run",
+   "rise": "bh / stairN",
+   "base": 0,
+   "top": "bh",
+   "landing": 0,
+   "steep": true,
+   "at": [
+    [
+     "w / 2 + stairL",
+     0,
+     "-(sw / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "mould": "yes"
+   },
+   "_about": "the stair up the base, steep, its cheeks the building's stone railing"
+  },
+  "stair plain 2": {
+   "type": "flight",
+   "width": "sw",
+   "run": "run",
+   "rise": "bh / stairN",
+   "base": 0,
+   "top": "bh",
+   "landing": 0,
+   "steep": true,
+   "at": [
+    [
+     "w / 2 + stairL",
+     0,
+     "-(sw / 2)",
+     3.1416
+    ]
+   ],
+   "railing": false,
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "mould": "no"
+   },
+   "_about": "the stair, no cheeks: the cheap one"
+  },
+  "makaras 2": {
+   "type": "box",
+   "width": "0.5 + bh * 0.08",
+   "length": "0.9 + bh * 0.1",
+   "height": "0.9 + bh * 0.08",
+   "_about": "the makara at the stair's foot, either side: the sea monster whose jaws the balustrade comes out of",
+   "at": [
+    [
+     "w / 2 + stairL - 0.45 - bh * 0.05",
+     0,
+     "-(sw / 2 + 0.25 + bh * 0.04)",
+     1.5708
+    ],
+    [
+     "w / 2 + stairL - 0.45 - bh * 0.05",
+     0,
+     "-(-(sw / 2 + 0.25 + bh * 0.04))",
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "gate piers 2": {
+   "type": "box",
+   "width": 0.9,
+   "length": "bt + 0.4",
+   "height": "gH + 0.6",
+   "_about": "the gate's piers",
+   "at": [
+    [
+     "w / 2 - bt / 2",
+     "bh",
+     "-(sw / 2 + 0.55)",
+     1.5708
+    ],
+    [
+     "w / 2 - bt / 2",
+     "bh",
+     "-(-(sw / 2 + 0.55))",
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate lintel 2": {
+   "type": "box",
+   "width": "sw + 2",
+   "length": "bt + 0.4",
+   "height": 0.6,
+   "_about": "the lintel over the stair's head, a kala's face on it",
+   "at": [
+    [
+     "w / 2 - bt / 2",
+     "bh + gH",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate cap 2": {
+   "type": "box",
+   "width": "sw + 1.2",
+   "length": "bt + 0.1",
+   "height": 0.7,
+   "at": [
+    [
+     "w / 2 - bt / 2",
+     "bh + gH + 0.6",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate ratna 2": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "rb * 0.35",
+    "h": "rb * 1.6",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "w / 2 - bt / 2",
+     "bh + gH + 1.3",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "side porch 2": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "pw",
+     "pd"
+    ]
+   },
+   "thickness": "pt",
+   "height": "pH",
+   "glass": false,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": "dw",
+      "sill": 0,
+      "springing": "dh",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     "bw / 2 + pd / 2",
+     "bh",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "cella": "open"
+   },
+   "_about": "a side chamber, entered from its own stair only (Agastya's, Ganesha's, Durga's at Prambanan)"
+  },
+  "porch floor 2": {
+   "type": "box",
+   "width": "pw - 2 * pt",
+   "length": "pd - 2 * pt",
+   "height": 0.15,
+   "walked": true,
+   "at": [
+    [
+     "bw / 2 + pd / 2",
+     "bh",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "cella": "open"
+   }
+  },
+  "porch block 2": {
+   "type": "box",
+   "width": "pw",
+   "length": "pd",
+   "height": "pH",
+   "at": [
+    [
+     "bw / 2 + pd / 2",
+     "bh",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "cella": "solid"
+   },
+   "_about": "the porch, solid: its false door on its face"
+  },
+  "porch roof 2": {
+   "type": "box",
+   "width": "pw + 0.4",
+   "length": "pd + 0.2",
+   "height": "min(0.4, pH * 0.08)",
+   "at": [
+    [
+     "bw / 2 + pd / 2 + 0.1",
+     "bh + pH",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ]
+   }
+  },
+  "porch step 2": {
+   "type": "box",
+   "width": "pw * 0.74",
+   "length": "pd * 0.76",
+   "height": "pH * 0.16",
+   "at": [
+    [
+     "bw / 2 + pd / 2",
+     "bh + pH + min(0.4, pH * 0.08)",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ]
+   }
+  },
+  "porch top 2": {
+   "type": "box",
+   "width": "pw * 0.46",
+   "length": "pd * 0.5",
+   "height": "pH * 0.12",
+   "at": [
+    [
+     "bw / 2 + pd / 2",
+     "bh + pH * 1.16 + min(0.4, pH * 0.08)",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "porch ratna 2": {
+   "type": "component",
+   "use": "components/ratna",
+   "at": [
+    [
+     "bw / 2 + pd / 2",
+     "bh + pH * 1.28 + min(0.4, pH * 0.08)",
+     0,
+     1.5708
+    ]
+   ],
+   "params": {
+    "r": "min(pw, pd) * 0.12",
+    "h": "pH * 0.5",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "porch ratna 2 low": {
+   "type": "component",
+   "use": "components/ratna",
+   "at": [
+    [
+     "bw / 2 + pd / 2",
+     "bh + pH * 1.16 + min(0.4, pH * 0.08)",
+     0,
+     1.5708
+    ]
+   ],
+   "params": {
+    "r": "min(pw, pd) * 0.12",
+    "h": "pH * 0.5",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "when": {
+    "stairs": [
+     "two",
+     "four"
+    ],
+    "mould": "no"
+   }
+  },
+  "stair 3": {
+   "type": "flight",
+   "width": "sw",
+   "run": "run",
+   "rise": "bh / stairN",
+   "base": 0,
+   "top": "bh",
+   "landing": 0,
+   "steep": true,
+   "at": [
+    [
+     "-(sw / 2)",
+     0,
+     "-(w / 2 + stairL)",
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "yes"
+   },
+   "_about": "the stair up the base, steep, its cheeks the building's stone railing"
+  },
+  "stair plain 3": {
+   "type": "flight",
+   "width": "sw",
+   "run": "run",
+   "rise": "bh / stairN",
+   "base": 0,
+   "top": "bh",
+   "landing": 0,
+   "steep": true,
+   "at": [
+    [
+     "-(sw / 2)",
+     0,
+     "-(w / 2 + stairL)",
+     4.7124
+    ]
+   ],
+   "railing": false,
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "no"
+   },
+   "_about": "the stair, no cheeks: the cheap one"
+  },
+  "makaras 3": {
+   "type": "box",
+   "width": "0.5 + bh * 0.08",
+   "length": "0.9 + bh * 0.1",
+   "height": "0.9 + bh * 0.08",
+   "_about": "the makara at the stair's foot, either side: the sea monster whose jaws the balustrade comes out of",
+   "at": [
+    [
+     "-(sw / 2 + 0.25 + bh * 0.04)",
+     0,
+     "-(w / 2 + stairL - 0.45 - bh * 0.05)",
+     3.1416
+    ],
+    [
+     "-(-(sw / 2 + 0.25 + bh * 0.04))",
+     0,
+     "-(w / 2 + stairL - 0.45 - bh * 0.05)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "gate piers 3": {
+   "type": "box",
+   "width": 0.9,
+   "length": "bt + 0.4",
+   "height": "gH + 0.6",
+   "_about": "the gate's piers",
+   "at": [
+    [
+     "-(sw / 2 + 0.55)",
+     "bh",
+     "-(w / 2 - bt / 2)",
+     3.1416
+    ],
+    [
+     "-(-(sw / 2 + 0.55))",
+     "bh",
+     "-(w / 2 - bt / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate lintel 3": {
+   "type": "box",
+   "width": "sw + 2",
+   "length": "bt + 0.4",
+   "height": 0.6,
+   "_about": "the lintel over the stair's head, a kala's face on it",
+   "at": [
+    [
+     0,
+     "bh + gH",
+     "-(w / 2 - bt / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate cap 3": {
+   "type": "box",
+   "width": "sw + 1.2",
+   "length": "bt + 0.1",
+   "height": 0.7,
+   "at": [
+    [
+     0,
+     "bh + gH + 0.6",
+     "-(w / 2 - bt / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate ratna 3": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "rb * 0.35",
+    "h": "rb * 1.6",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     0,
+     "bh + gH + 1.3",
+     "-(w / 2 - bt / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "side porch 3": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "pw",
+     "pd"
+    ]
+   },
+   "thickness": "pt",
+   "height": "pH",
+   "glass": false,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": "dw",
+      "sill": 0,
+      "springing": "dh",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     "bh",
+     "-(bw / 2 + pd / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "cella": "open"
+   },
+   "_about": "a side chamber, entered from its own stair only (Agastya's, Ganesha's, Durga's at Prambanan)"
+  },
+  "porch floor 3": {
+   "type": "box",
+   "width": "pw - 2 * pt",
+   "length": "pd - 2 * pt",
+   "height": 0.15,
+   "walked": true,
+   "at": [
+    [
+     0,
+     "bh",
+     "-(bw / 2 + pd / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "cella": "open"
+   }
+  },
+  "porch block 3": {
+   "type": "box",
+   "width": "pw",
+   "length": "pd",
+   "height": "pH",
+   "at": [
+    [
+     0,
+     "bh",
+     "-(bw / 2 + pd / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "cella": "solid"
+   },
+   "_about": "the porch, solid: its false door on its face"
+  },
+  "porch roof 3": {
+   "type": "box",
+   "width": "pw + 0.4",
+   "length": "pd + 0.2",
+   "height": "min(0.4, pH * 0.08)",
+   "at": [
+    [
+     0,
+     "bh + pH",
+     "-(bw / 2 + pd / 2 + 0.1)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ]
+   }
+  },
+  "porch step 3": {
+   "type": "box",
+   "width": "pw * 0.74",
+   "length": "pd * 0.76",
+   "height": "pH * 0.16",
+   "at": [
+    [
+     0,
+     "bh + pH + min(0.4, pH * 0.08)",
+     "-(bw / 2 + pd / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ]
+   }
+  },
+  "porch top 3": {
+   "type": "box",
+   "width": "pw * 0.46",
+   "length": "pd * 0.5",
+   "height": "pH * 0.12",
+   "at": [
+    [
+     0,
+     "bh + pH * 1.16 + min(0.4, pH * 0.08)",
+     "-(bw / 2 + pd / 2)",
+     3.1416
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "porch ratna 3": {
+   "type": "component",
+   "use": "components/ratna",
+   "at": [
+    [
+     0,
+     "bh + pH * 1.28 + min(0.4, pH * 0.08)",
+     "-(bw / 2 + pd / 2)",
+     3.1416
+    ]
+   ],
+   "params": {
+    "r": "min(pw, pd) * 0.12",
+    "h": "pH * 0.5",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "porch ratna 3 low": {
+   "type": "component",
+   "use": "components/ratna",
+   "at": [
+    [
+     0,
+     "bh + pH * 1.16 + min(0.4, pH * 0.08)",
+     "-(bw / 2 + pd / 2)",
+     3.1416
+    ]
+   ],
+   "params": {
+    "r": "min(pw, pd) * 0.12",
+    "h": "pH * 0.5",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "no"
+   }
+  },
+  "stair 4": {
+   "type": "flight",
+   "width": "sw",
+   "run": "run",
+   "rise": "bh / stairN",
+   "base": 0,
+   "top": "bh",
+   "landing": 0,
+   "steep": true,
+   "at": [
+    [
+     "-(w / 2 + stairL)",
+     0,
+     "-(-(sw / 2))",
+     6.2832
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "yes"
+   },
+   "_about": "the stair up the base, steep, its cheeks the building's stone railing"
+  },
+  "stair plain 4": {
+   "type": "flight",
+   "width": "sw",
+   "run": "run",
+   "rise": "bh / stairN",
+   "base": 0,
+   "top": "bh",
+   "landing": 0,
+   "steep": true,
+   "at": [
+    [
+     "-(w / 2 + stairL)",
+     0,
+     "-(-(sw / 2))",
+     6.2832
+    ]
+   ],
+   "railing": false,
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "no"
+   },
+   "_about": "the stair, no cheeks: the cheap one"
+  },
+  "makaras 4": {
+   "type": "box",
+   "width": "0.5 + bh * 0.08",
+   "length": "0.9 + bh * 0.1",
+   "height": "0.9 + bh * 0.08",
+   "_about": "the makara at the stair's foot, either side: the sea monster whose jaws the balustrade comes out of",
+   "at": [
+    [
+     "-(w / 2 + stairL - 0.45 - bh * 0.05)",
+     0,
+     "-(-(sw / 2 + 0.25 + bh * 0.04))",
+     4.7124
+    ],
+    [
+     "-(w / 2 + stairL - 0.45 - bh * 0.05)",
+     0,
+     "-(-(-(sw / 2 + 0.25 + bh * 0.04)))",
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "gate piers 4": {
+   "type": "box",
+   "width": 0.9,
+   "length": "bt + 0.4",
+   "height": "gH + 0.6",
+   "_about": "the gate's piers",
+   "at": [
+    [
+     "-(w / 2 - bt / 2)",
+     "bh",
+     "-(-(sw / 2 + 0.55))",
+     4.7124
+    ],
+    [
+     "-(w / 2 - bt / 2)",
+     "bh",
+     "-(-(-(sw / 2 + 0.55)))",
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate lintel 4": {
+   "type": "box",
+   "width": "sw + 2",
+   "length": "bt + 0.4",
+   "height": 0.6,
+   "_about": "the lintel over the stair's head, a kala's face on it",
+   "at": [
+    [
+     "-(w / 2 - bt / 2)",
+     "bh + gH",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate cap 4": {
+   "type": "box",
+   "width": "sw + 1.2",
+   "length": "bt + 0.1",
+   "height": 0.7,
+   "at": [
+    [
+     "-(w / 2 - bt / 2)",
+     "bh + gH + 0.6",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "gate ratna 4": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "rb * 0.35",
+    "h": "rb * 1.6",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "-(w / 2 - bt / 2)",
+     "bh + gH + 1.3",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "gallery": "yes"
+   }
+  },
+  "side porch 4": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "pw",
+     "pd"
+    ]
+   },
+   "thickness": "pt",
+   "height": "pH",
+   "glass": false,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": "dw",
+      "sill": 0,
+      "springing": "dh",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     "-(bw / 2 + pd / 2)",
+     "bh",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "cella": "open"
+   },
+   "_about": "a side chamber, entered from its own stair only (Agastya's, Ganesha's, Durga's at Prambanan)"
+  },
+  "porch floor 4": {
+   "type": "box",
+   "width": "pw - 2 * pt",
+   "length": "pd - 2 * pt",
+   "height": 0.15,
+   "walked": true,
+   "at": [
+    [
+     "-(bw / 2 + pd / 2)",
+     "bh",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "cella": "open"
+   }
+  },
+  "porch block 4": {
+   "type": "box",
+   "width": "pw",
+   "length": "pd",
+   "height": "pH",
+   "at": [
+    [
+     "-(bw / 2 + pd / 2)",
+     "bh",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "cella": "solid"
+   },
+   "_about": "the porch, solid: its false door on its face"
+  },
+  "porch roof 4": {
+   "type": "box",
+   "width": "pw + 0.4",
+   "length": "pd + 0.2",
+   "height": "min(0.4, pH * 0.08)",
+   "at": [
+    [
+     "-(bw / 2 + pd / 2 + 0.1)",
+     "bh + pH",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ]
+   }
+  },
+  "porch step 4": {
+   "type": "box",
+   "width": "pw * 0.74",
+   "length": "pd * 0.76",
+   "height": "pH * 0.16",
+   "at": [
+    [
+     "-(bw / 2 + pd / 2)",
+     "bh + pH + min(0.4, pH * 0.08)",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ]
+   }
+  },
+  "porch top 4": {
+   "type": "box",
+   "width": "pw * 0.46",
+   "length": "pd * 0.5",
+   "height": "pH * 0.12",
+   "at": [
+    [
+     "-(bw / 2 + pd / 2)",
+     "bh + pH * 1.16 + min(0.4, pH * 0.08)",
+     0,
+     4.7124
+    ]
+   ],
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "porch ratna 4": {
+   "type": "component",
+   "use": "components/ratna",
+   "at": [
+    [
+     "-(bw / 2 + pd / 2)",
+     "bh + pH * 1.28 + min(0.4, pH * 0.08)",
+     0,
+     4.7124
+    ]
+   ],
+   "params": {
+    "r": "min(pw, pd) * 0.12",
+    "h": "pH * 0.5",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "yes"
+   }
+  },
+  "porch ratna 4 low": {
+   "type": "component",
+   "use": "components/ratna",
+   "at": [
+    [
+     "-(bw / 2 + pd / 2)",
+     "bh + pH * 1.16 + min(0.4, pH * 0.08)",
+     0,
+     4.7124
+    ]
+   ],
+   "params": {
+    "r": "min(pw, pd) * 0.12",
+    "h": "pH * 0.5",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "when": {
+    "stairs": [
+     "four"
+    ],
+    "mould": "no"
+   }
+  },
+  "blind false door": {
+   "type": "box",
+   "width": "dw",
+   "length": 0.12,
+   "height": "dh",
+   "at": [
+    [
+     0,
+     "bh",
+     "bw / 2",
+     0
+    ]
+   ],
+   "when": {
+    "stairs": "none"
+   }
+  },
+  "cella": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "bw",
+     "bw"
+    ]
+   },
+   "thickness": "wt",
+   "height": "bH",
+   "glass": false,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": "dw",
+      "sill": 0,
+      "springing": "dh",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "_about": "the body (tubuh): the cella's thick walls, its door at the back of the front porch",
+   "courses": {
+    "list": [
+     {
+      "y": 0,
+      "h": "min(0.6, bH * 0.06)",
+      "out": "min(0.25, bH * 0.03)",
+      "profile": "torus"
+     },
+     {
+      "y": "bH - min(0.8, bH * 0.08)",
+      "h": "min(0.8, bH * 0.08)",
+      "out": "min(0.45, bH * 0.045)",
+      "profile": "cornice"
+     }
+    ]
+   },
+   "when": {
+    "cella": "open",
+    "mould": "yes"
+   }
+  },
+  "cella plain": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "bw",
+     "bw"
+    ]
+   },
+   "thickness": "wt",
+   "height": "bH",
+   "glass": false,
+   "openings": [],
+   "faces": {
+    "0": [
+     {
+      "at": 0,
+      "width": "dw",
+      "sill": 0,
+      "springing": "dh",
+      "head": {
+       "profile": "flat"
+      }
+     }
+    ]
+   },
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "_about": "the body (tubuh): the cella's thick walls, its door at the back of the front porch",
+   "when": {
+    "cella": "open",
+    "mould": "no"
+   }
+  },
+  "body": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "bw",
+     "bw"
+    ]
+   },
+   "height": "bH",
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "_about": "the body: solid, its doors false ones",
+   "courses": {
+    "list": [
+     {
+      "y": 0,
+      "h": "min(0.6, bH * 0.06)",
+      "out": "min(0.25, bH * 0.03)",
+      "profile": "torus"
+     },
+     {
+      "y": "bH - min(0.8, bH * 0.08)",
+      "h": "min(0.8, bH * 0.08)",
+      "out": "min(0.45, bH * 0.045)",
+      "profile": "cornice"
+     }
+    ]
+   },
+   "when": {
+    "cella": "solid",
+    "mould": "yes"
+   }
+  },
+  "body plain": {
+   "type": "box",
+   "width": "bw",
+   "length": "bw",
+   "height": "bH + cs",
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "cella": "solid",
+    "mould": "no"
+   },
+   "_about": "the body as a plain block, up to the roof (no slab)"
+  },
+  "cella floor": {
+   "type": "box",
+   "width": "bw - 2 * wt",
+   "length": "bw - 2 * wt",
+   "height": 0.15,
+   "walked": true,
+   "at": [
+    [
+     0,
+     "bh",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "cella": "open"
+   },
+   "_about": "the cella's floor"
+  },
+  "ceiling": {
+   "type": "box",
+   "width": "bw + 0.6",
+   "length": "bw + 0.6",
+   "height": "cs",
+   "at": [
+    [
+     0,
+     "bh + bH",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "mould": "yes"
+   },
+   "_about": "the slab over the body, its cornice's top: the roof stands on it"
+  },
+  "ceiling open": {
+   "type": "box",
+   "width": "bw",
+   "length": "bw",
+   "height": "cs",
+   "at": [
+    [
+     0,
+     "bh + bH",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "cella": "open",
+    "mould": "no"
+   },
+   "_about": "the slab over a plain cella"
+  },
+  "roof 1": {
+   "type": "prism",
+   "height": "t1",
+   "at": [
+    [
+     0,
+     "y0",
+     0,
+     0
+    ]
+   ],
+   "plan": {
+    "points": [
+     [
+      "-0.78 * tw1 / 2",
+      "0.88 * tw1 / 2"
+     ],
+     [
+      "-0.78 * tw1 / 2",
+      "0.93 * tw1 / 2"
+     ],
+     [
+      "-0.48 * tw1 / 2",
+      "0.93 * tw1 / 2"
+     ],
+     [
+      "-0.48 * tw1 / 2",
+      "tw1 / 2"
+     ],
+     [
+      "0.48 * tw1 / 2",
+      "tw1 / 2"
+     ],
+     [
+      "0.48 * tw1 / 2",
+      "0.93 * tw1 / 2"
+     ],
+     [
+      "0.78 * tw1 / 2",
+      "0.93 * tw1 / 2"
+     ],
+     [
+      "0.78 * tw1 / 2",
+      "0.88 * tw1 / 2"
+     ],
+     [
+      "0.88 * tw1 / 2",
+      "0.88 * tw1 / 2"
+     ],
+     [
+      "0.88 * tw1 / 2",
+      "0.78 * tw1 / 2"
+     ],
+     [
+      "0.93 * tw1 / 2",
+      "0.78 * tw1 / 2"
+     ],
+     [
+      "0.93 * tw1 / 2",
+      "0.48 * tw1 / 2"
+     ],
+     [
+      "tw1 / 2",
+      "0.48 * tw1 / 2"
+     ],
+     [
+      "tw1 / 2",
+      "-0.48 * tw1 / 2"
+     ],
+     [
+      "0.93 * tw1 / 2",
+      "-0.48 * tw1 / 2"
+     ],
+     [
+      "0.93 * tw1 / 2",
+      "-0.78 * tw1 / 2"
+     ],
+     [
+      "0.88 * tw1 / 2",
+      "-0.78 * tw1 / 2"
+     ],
+     [
+      "0.88 * tw1 / 2",
+      "-0.88 * tw1 / 2"
+     ],
+     [
+      "0.78 * tw1 / 2",
+      "-0.88 * tw1 / 2"
+     ],
+     [
+      "0.78 * tw1 / 2",
+      "-0.93 * tw1 / 2"
+     ],
+     [
+      "0.48 * tw1 / 2",
+      "-0.93 * tw1 / 2"
+     ],
+     [
+      "0.48 * tw1 / 2",
+      "-(tw1 / 2)"
+     ],
+     [
+      "-0.48 * tw1 / 2",
+      "-(tw1 / 2)"
+     ],
+     [
+      "-0.48 * tw1 / 2",
+      "-0.93 * tw1 / 2"
+     ],
+     [
+      "-0.78 * tw1 / 2",
+      "-0.93 * tw1 / 2"
+     ],
+     [
+      "-0.78 * tw1 / 2",
+      "-0.88 * tw1 / 2"
+     ],
+     [
+      "-0.88 * tw1 / 2",
+      "-0.88 * tw1 / 2"
+     ],
+     [
+      "-0.88 * tw1 / 2",
+      "-0.78 * tw1 / 2"
+     ],
+     [
+      "-0.93 * tw1 / 2",
+      "-0.78 * tw1 / 2"
+     ],
+     [
+      "-0.93 * tw1 / 2",
+      "-0.48 * tw1 / 2"
+     ],
+     [
+      "-(tw1 / 2)",
+      "-0.48 * tw1 / 2"
+     ],
+     [
+      "-(tw1 / 2)",
+      "0.48 * tw1 / 2"
+     ],
+     [
+      "-0.93 * tw1 / 2",
+      "0.48 * tw1 / 2"
+     ],
+     [
+      "-0.93 * tw1 / 2",
+      "0.78 * tw1 / 2"
+     ],
+     [
+      "-0.88 * tw1 / 2",
+      "0.78 * tw1 / 2"
+     ],
+     [
+      "-0.88 * tw1 / 2",
+      "0.88 * tw1 / 2"
+     ]
+    ]
+   },
+   "courses": {
+    "list": [
+     {
+      "y": "t1 * 0.82",
+      "h": "t1 * 0.18",
+      "out": "tw1 * 0.02",
+      "profile": "cornice"
+     }
+    ]
+   },
+   "when": {
+    "mould": "yes"
+   },
+   "_about": "the roof's first tier: the body again, smaller"
+  },
+  "roof 1 plain": {
+   "type": "box",
+   "width": "tw1 * 0.9",
+   "length": "tw1 * 0.9",
+   "height": "t1",
+   "at": [
+    [
+     0,
+     "y0",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "mould": "no"
+   },
+   "_about": "the tier as a plain block: the cheap one"
+  },
+  "roof 1 ratnas corners": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw1 * 0.035",
+    "h": "rr * 1.0",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.8 * tw1 / 2",
+     "y1",
+     "0.8 * tw1 / 2",
+     0
+    ],
+    [
+     "0.8 * tw1 / 2",
+     "y1",
+     "-(0.8 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw1 / 2)",
+     "y1",
+     "-(0.8 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw1 / 2)",
+     "y1",
+     "-(-(0.8 * tw1 / 2))",
+     0
+    ]
+   ],
+   "when": {}
+  },
+  "roof 1 ratnas mid": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw1 * 0.035",
+    "h": "rr * 1.0",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     0,
+     "y1",
+     "0.86 * tw1 / 2",
+     0
+    ],
+    [
+     "0.86 * tw1 / 2",
+     "y1",
+     0,
+     0
+    ],
+    [
+     0,
+     "y1",
+     "-(0.86 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw1 / 2)",
+     "y1",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "three",
+     "five",
+     "seven"
+    ]
+   }
+  },
+  "roof 1 ratnas quarter": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw1 * 0.035",
+    "h": "rr * 1.0",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.4 * tw1 / 2",
+     "y1",
+     "0.86 * tw1 / 2",
+     0
+    ],
+    [
+     "0.86 * tw1 / 2",
+     "y1",
+     "-(0.4 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.4 * tw1 / 2)",
+     "y1",
+     "-(0.86 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw1 / 2)",
+     "y1",
+     "-(-(0.4 * tw1 / 2))",
+     0
+    ],
+    [
+     "-0.4 * tw1 / 2",
+     "y1",
+     "0.86 * tw1 / 2",
+     0
+    ],
+    [
+     "0.86 * tw1 / 2",
+     "y1",
+     "-(-0.4 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(-0.4 * tw1 / 2)",
+     "y1",
+     "-(0.86 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw1 / 2)",
+     "y1",
+     "-(-(-0.4 * tw1 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "five"
+    ]
+   }
+  },
+  "roof 1 ratnas sixth": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw1 * 0.035",
+    "h": "rr * 1.0",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.2667 * tw1 / 2",
+     "y1",
+     "0.86 * tw1 / 2",
+     0
+    ],
+    [
+     "0.86 * tw1 / 2",
+     "y1",
+     "-(0.2667 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.2667 * tw1 / 2)",
+     "y1",
+     "-(0.86 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw1 / 2)",
+     "y1",
+     "-(-(0.2667 * tw1 / 2))",
+     0
+    ],
+    [
+     "-0.2667 * tw1 / 2",
+     "y1",
+     "0.86 * tw1 / 2",
+     0
+    ],
+    [
+     "0.86 * tw1 / 2",
+     "y1",
+     "-(-0.2667 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(-0.2667 * tw1 / 2)",
+     "y1",
+     "-(0.86 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw1 / 2)",
+     "y1",
+     "-(-(-0.2667 * tw1 / 2))",
+     0
+    ],
+    [
+     "0.5333 * tw1 / 2",
+     "y1",
+     "0.86 * tw1 / 2",
+     0
+    ],
+    [
+     "0.86 * tw1 / 2",
+     "y1",
+     "-(0.5333 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.5333 * tw1 / 2)",
+     "y1",
+     "-(0.86 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw1 / 2)",
+     "y1",
+     "-(-(0.5333 * tw1 / 2))",
+     0
+    ],
+    [
+     "-0.5333 * tw1 / 2",
+     "y1",
+     "0.86 * tw1 / 2",
+     0
+    ],
+    [
+     "0.86 * tw1 / 2",
+     "y1",
+     "-(-0.5333 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(-0.5333 * tw1 / 2)",
+     "y1",
+     "-(0.86 * tw1 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw1 / 2)",
+     "y1",
+     "-(-(-0.5333 * tw1 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "seven"
+    ]
+   }
+  },
+  "roof 2": {
+   "type": "prism",
+   "height": "t2",
+   "at": [
+    [
+     0,
+     "y1",
+     0,
+     0
+    ]
+   ],
+   "plan": {
+    "points": [
+     [
+      "-0.78 * tw2 / 2",
+      "0.88 * tw2 / 2"
+     ],
+     [
+      "-0.78 * tw2 / 2",
+      "0.93 * tw2 / 2"
+     ],
+     [
+      "-0.48 * tw2 / 2",
+      "0.93 * tw2 / 2"
+     ],
+     [
+      "-0.48 * tw2 / 2",
+      "tw2 / 2"
+     ],
+     [
+      "0.48 * tw2 / 2",
+      "tw2 / 2"
+     ],
+     [
+      "0.48 * tw2 / 2",
+      "0.93 * tw2 / 2"
+     ],
+     [
+      "0.78 * tw2 / 2",
+      "0.93 * tw2 / 2"
+     ],
+     [
+      "0.78 * tw2 / 2",
+      "0.88 * tw2 / 2"
+     ],
+     [
+      "0.88 * tw2 / 2",
+      "0.88 * tw2 / 2"
+     ],
+     [
+      "0.88 * tw2 / 2",
+      "0.78 * tw2 / 2"
+     ],
+     [
+      "0.93 * tw2 / 2",
+      "0.78 * tw2 / 2"
+     ],
+     [
+      "0.93 * tw2 / 2",
+      "0.48 * tw2 / 2"
+     ],
+     [
+      "tw2 / 2",
+      "0.48 * tw2 / 2"
+     ],
+     [
+      "tw2 / 2",
+      "-0.48 * tw2 / 2"
+     ],
+     [
+      "0.93 * tw2 / 2",
+      "-0.48 * tw2 / 2"
+     ],
+     [
+      "0.93 * tw2 / 2",
+      "-0.78 * tw2 / 2"
+     ],
+     [
+      "0.88 * tw2 / 2",
+      "-0.78 * tw2 / 2"
+     ],
+     [
+      "0.88 * tw2 / 2",
+      "-0.88 * tw2 / 2"
+     ],
+     [
+      "0.78 * tw2 / 2",
+      "-0.88 * tw2 / 2"
+     ],
+     [
+      "0.78 * tw2 / 2",
+      "-0.93 * tw2 / 2"
+     ],
+     [
+      "0.48 * tw2 / 2",
+      "-0.93 * tw2 / 2"
+     ],
+     [
+      "0.48 * tw2 / 2",
+      "-(tw2 / 2)"
+     ],
+     [
+      "-0.48 * tw2 / 2",
+      "-(tw2 / 2)"
+     ],
+     [
+      "-0.48 * tw2 / 2",
+      "-0.93 * tw2 / 2"
+     ],
+     [
+      "-0.78 * tw2 / 2",
+      "-0.93 * tw2 / 2"
+     ],
+     [
+      "-0.78 * tw2 / 2",
+      "-0.88 * tw2 / 2"
+     ],
+     [
+      "-0.88 * tw2 / 2",
+      "-0.88 * tw2 / 2"
+     ],
+     [
+      "-0.88 * tw2 / 2",
+      "-0.78 * tw2 / 2"
+     ],
+     [
+      "-0.93 * tw2 / 2",
+      "-0.78 * tw2 / 2"
+     ],
+     [
+      "-0.93 * tw2 / 2",
+      "-0.48 * tw2 / 2"
+     ],
+     [
+      "-(tw2 / 2)",
+      "-0.48 * tw2 / 2"
+     ],
+     [
+      "-(tw2 / 2)",
+      "0.48 * tw2 / 2"
+     ],
+     [
+      "-0.93 * tw2 / 2",
+      "0.48 * tw2 / 2"
+     ],
+     [
+      "-0.93 * tw2 / 2",
+      "0.78 * tw2 / 2"
+     ],
+     [
+      "-0.88 * tw2 / 2",
+      "0.78 * tw2 / 2"
+     ],
+     [
+      "-0.88 * tw2 / 2",
+      "0.88 * tw2 / 2"
+     ]
+    ]
+   },
+   "courses": {
+    "list": [
+     {
+      "y": "t2 * 0.82",
+      "h": "t2 * 0.18",
+      "out": "tw2 * 0.02",
+      "profile": "plinth"
+     }
+    ]
+   },
+   "when": {
+    "mould": "yes"
+   },
+   "_about": "the roof's second tier: the body again, smaller"
+  },
+  "roof 2 plain": {
+   "type": "box",
+   "width": "tw2 * 0.9",
+   "length": "tw2 * 0.9",
+   "height": "t2",
+   "at": [
+    [
+     0,
+     "y1",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "mould": "no"
+   },
+   "_about": "the tier as a plain block: the cheap one"
+  },
+  "roof 2 ratnas corners": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw2 * 0.035",
+    "h": "rr * 0.8",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.8 * tw2 / 2",
+     "y2",
+     "0.8 * tw2 / 2",
+     0
+    ],
+    [
+     "0.8 * tw2 / 2",
+     "y2",
+     "-(0.8 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw2 / 2)",
+     "y2",
+     "-(0.8 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw2 / 2)",
+     "y2",
+     "-(-(0.8 * tw2 / 2))",
+     0
+    ]
+   ],
+   "when": {}
+  },
+  "roof 2 ratnas mid": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw2 * 0.035",
+    "h": "rr * 0.8",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     0,
+     "y2",
+     "0.86 * tw2 / 2",
+     0
+    ],
+    [
+     "0.86 * tw2 / 2",
+     "y2",
+     0,
+     0
+    ],
+    [
+     0,
+     "y2",
+     "-(0.86 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw2 / 2)",
+     "y2",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "three",
+     "five",
+     "seven"
+    ]
+   }
+  },
+  "roof 2 ratnas quarter": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw2 * 0.035",
+    "h": "rr * 0.8",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.4 * tw2 / 2",
+     "y2",
+     "0.86 * tw2 / 2",
+     0
+    ],
+    [
+     "0.86 * tw2 / 2",
+     "y2",
+     "-(0.4 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.4 * tw2 / 2)",
+     "y2",
+     "-(0.86 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw2 / 2)",
+     "y2",
+     "-(-(0.4 * tw2 / 2))",
+     0
+    ],
+    [
+     "-0.4 * tw2 / 2",
+     "y2",
+     "0.86 * tw2 / 2",
+     0
+    ],
+    [
+     "0.86 * tw2 / 2",
+     "y2",
+     "-(-0.4 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(-0.4 * tw2 / 2)",
+     "y2",
+     "-(0.86 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw2 / 2)",
+     "y2",
+     "-(-(-0.4 * tw2 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "five"
+    ]
+   }
+  },
+  "roof 2 ratnas sixth": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw2 * 0.035",
+    "h": "rr * 0.8",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.2667 * tw2 / 2",
+     "y2",
+     "0.86 * tw2 / 2",
+     0
+    ],
+    [
+     "0.86 * tw2 / 2",
+     "y2",
+     "-(0.2667 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.2667 * tw2 / 2)",
+     "y2",
+     "-(0.86 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw2 / 2)",
+     "y2",
+     "-(-(0.2667 * tw2 / 2))",
+     0
+    ],
+    [
+     "-0.2667 * tw2 / 2",
+     "y2",
+     "0.86 * tw2 / 2",
+     0
+    ],
+    [
+     "0.86 * tw2 / 2",
+     "y2",
+     "-(-0.2667 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(-0.2667 * tw2 / 2)",
+     "y2",
+     "-(0.86 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw2 / 2)",
+     "y2",
+     "-(-(-0.2667 * tw2 / 2))",
+     0
+    ],
+    [
+     "0.5333 * tw2 / 2",
+     "y2",
+     "0.86 * tw2 / 2",
+     0
+    ],
+    [
+     "0.86 * tw2 / 2",
+     "y2",
+     "-(0.5333 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.5333 * tw2 / 2)",
+     "y2",
+     "-(0.86 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw2 / 2)",
+     "y2",
+     "-(-(0.5333 * tw2 / 2))",
+     0
+    ],
+    [
+     "-0.5333 * tw2 / 2",
+     "y2",
+     "0.86 * tw2 / 2",
+     0
+    ],
+    [
+     "0.86 * tw2 / 2",
+     "y2",
+     "-(-0.5333 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(-0.5333 * tw2 / 2)",
+     "y2",
+     "-(0.86 * tw2 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw2 / 2)",
+     "y2",
+     "-(-(-0.5333 * tw2 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "seven"
+    ]
+   }
+  },
+  "roof 3": {
+   "type": "prism",
+   "height": "t3",
+   "at": [
+    [
+     0,
+     "y2",
+     0,
+     0
+    ]
+   ],
+   "plan": {
+    "points": [
+     [
+      "-0.78 * tw3 / 2",
+      "0.88 * tw3 / 2"
+     ],
+     [
+      "-0.78 * tw3 / 2",
+      "0.93 * tw3 / 2"
+     ],
+     [
+      "-0.48 * tw3 / 2",
+      "0.93 * tw3 / 2"
+     ],
+     [
+      "-0.48 * tw3 / 2",
+      "tw3 / 2"
+     ],
+     [
+      "0.48 * tw3 / 2",
+      "tw3 / 2"
+     ],
+     [
+      "0.48 * tw3 / 2",
+      "0.93 * tw3 / 2"
+     ],
+     [
+      "0.78 * tw3 / 2",
+      "0.93 * tw3 / 2"
+     ],
+     [
+      "0.78 * tw3 / 2",
+      "0.88 * tw3 / 2"
+     ],
+     [
+      "0.88 * tw3 / 2",
+      "0.88 * tw3 / 2"
+     ],
+     [
+      "0.88 * tw3 / 2",
+      "0.78 * tw3 / 2"
+     ],
+     [
+      "0.93 * tw3 / 2",
+      "0.78 * tw3 / 2"
+     ],
+     [
+      "0.93 * tw3 / 2",
+      "0.48 * tw3 / 2"
+     ],
+     [
+      "tw3 / 2",
+      "0.48 * tw3 / 2"
+     ],
+     [
+      "tw3 / 2",
+      "-0.48 * tw3 / 2"
+     ],
+     [
+      "0.93 * tw3 / 2",
+      "-0.48 * tw3 / 2"
+     ],
+     [
+      "0.93 * tw3 / 2",
+      "-0.78 * tw3 / 2"
+     ],
+     [
+      "0.88 * tw3 / 2",
+      "-0.78 * tw3 / 2"
+     ],
+     [
+      "0.88 * tw3 / 2",
+      "-0.88 * tw3 / 2"
+     ],
+     [
+      "0.78 * tw3 / 2",
+      "-0.88 * tw3 / 2"
+     ],
+     [
+      "0.78 * tw3 / 2",
+      "-0.93 * tw3 / 2"
+     ],
+     [
+      "0.48 * tw3 / 2",
+      "-0.93 * tw3 / 2"
+     ],
+     [
+      "0.48 * tw3 / 2",
+      "-(tw3 / 2)"
+     ],
+     [
+      "-0.48 * tw3 / 2",
+      "-(tw3 / 2)"
+     ],
+     [
+      "-0.48 * tw3 / 2",
+      "-0.93 * tw3 / 2"
+     ],
+     [
+      "-0.78 * tw3 / 2",
+      "-0.93 * tw3 / 2"
+     ],
+     [
+      "-0.78 * tw3 / 2",
+      "-0.88 * tw3 / 2"
+     ],
+     [
+      "-0.88 * tw3 / 2",
+      "-0.88 * tw3 / 2"
+     ],
+     [
+      "-0.88 * tw3 / 2",
+      "-0.78 * tw3 / 2"
+     ],
+     [
+      "-0.93 * tw3 / 2",
+      "-0.78 * tw3 / 2"
+     ],
+     [
+      "-0.93 * tw3 / 2",
+      "-0.48 * tw3 / 2"
+     ],
+     [
+      "-(tw3 / 2)",
+      "-0.48 * tw3 / 2"
+     ],
+     [
+      "-(tw3 / 2)",
+      "0.48 * tw3 / 2"
+     ],
+     [
+      "-0.93 * tw3 / 2",
+      "0.48 * tw3 / 2"
+     ],
+     [
+      "-0.93 * tw3 / 2",
+      "0.78 * tw3 / 2"
+     ],
+     [
+      "-0.88 * tw3 / 2",
+      "0.78 * tw3 / 2"
+     ],
+     [
+      "-0.88 * tw3 / 2",
+      "0.88 * tw3 / 2"
+     ]
+    ]
+   },
+   "courses": {
+    "list": [
+     {
+      "y": "t3 * 0.82",
+      "h": "t3 * 0.18",
+      "out": "tw3 * 0.02",
+      "profile": "plinth"
+     }
+    ]
+   },
+   "when": {
+    "mould": "yes"
+   },
+   "_about": "the roof's third tier: the body again, smaller"
+  },
+  "roof 3 plain": {
+   "type": "box",
+   "width": "tw3 * 0.9",
+   "length": "tw3 * 0.9",
+   "height": "t3",
+   "at": [
+    [
+     0,
+     "y2",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "mould": "no"
+   },
+   "_about": "the tier as a plain block: the cheap one"
+  },
+  "roof 3 ratnas corners": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw3 * 0.035",
+    "h": "rr * 0.64",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.8 * tw3 / 2",
+     "y3",
+     "0.8 * tw3 / 2",
+     0
+    ],
+    [
+     "0.8 * tw3 / 2",
+     "y3",
+     "-(0.8 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw3 / 2)",
+     "y3",
+     "-(0.8 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw3 / 2)",
+     "y3",
+     "-(-(0.8 * tw3 / 2))",
+     0
+    ]
+   ],
+   "when": {}
+  },
+  "roof 3 ratnas mid": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw3 * 0.035",
+    "h": "rr * 0.64",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     0,
+     "y3",
+     "0.86 * tw3 / 2",
+     0
+    ],
+    [
+     "0.86 * tw3 / 2",
+     "y3",
+     0,
+     0
+    ],
+    [
+     0,
+     "y3",
+     "-(0.86 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw3 / 2)",
+     "y3",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "three",
+     "five",
+     "seven"
+    ]
+   }
+  },
+  "roof 3 ratnas quarter": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw3 * 0.035",
+    "h": "rr * 0.64",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.4 * tw3 / 2",
+     "y3",
+     "0.86 * tw3 / 2",
+     0
+    ],
+    [
+     "0.86 * tw3 / 2",
+     "y3",
+     "-(0.4 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.4 * tw3 / 2)",
+     "y3",
+     "-(0.86 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw3 / 2)",
+     "y3",
+     "-(-(0.4 * tw3 / 2))",
+     0
+    ],
+    [
+     "-0.4 * tw3 / 2",
+     "y3",
+     "0.86 * tw3 / 2",
+     0
+    ],
+    [
+     "0.86 * tw3 / 2",
+     "y3",
+     "-(-0.4 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(-0.4 * tw3 / 2)",
+     "y3",
+     "-(0.86 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw3 / 2)",
+     "y3",
+     "-(-(-0.4 * tw3 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "five"
+    ]
+   }
+  },
+  "roof 3 ratnas sixth": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw3 * 0.035",
+    "h": "rr * 0.64",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.2667 * tw3 / 2",
+     "y3",
+     "0.86 * tw3 / 2",
+     0
+    ],
+    [
+     "0.86 * tw3 / 2",
+     "y3",
+     "-(0.2667 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.2667 * tw3 / 2)",
+     "y3",
+     "-(0.86 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw3 / 2)",
+     "y3",
+     "-(-(0.2667 * tw3 / 2))",
+     0
+    ],
+    [
+     "-0.2667 * tw3 / 2",
+     "y3",
+     "0.86 * tw3 / 2",
+     0
+    ],
+    [
+     "0.86 * tw3 / 2",
+     "y3",
+     "-(-0.2667 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(-0.2667 * tw3 / 2)",
+     "y3",
+     "-(0.86 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw3 / 2)",
+     "y3",
+     "-(-(-0.2667 * tw3 / 2))",
+     0
+    ],
+    [
+     "0.5333 * tw3 / 2",
+     "y3",
+     "0.86 * tw3 / 2",
+     0
+    ],
+    [
+     "0.86 * tw3 / 2",
+     "y3",
+     "-(0.5333 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.5333 * tw3 / 2)",
+     "y3",
+     "-(0.86 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw3 / 2)",
+     "y3",
+     "-(-(0.5333 * tw3 / 2))",
+     0
+    ],
+    [
+     "-0.5333 * tw3 / 2",
+     "y3",
+     "0.86 * tw3 / 2",
+     0
+    ],
+    [
+     "0.86 * tw3 / 2",
+     "y3",
+     "-(-0.5333 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(-0.5333 * tw3 / 2)",
+     "y3",
+     "-(0.86 * tw3 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw3 / 2)",
+     "y3",
+     "-(-(-0.5333 * tw3 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "ratnas": [
+     "seven"
+    ]
+   }
+  },
+  "roof 4": {
+   "type": "prism",
+   "height": "t4",
+   "at": [
+    [
+     0,
+     "y3",
+     0,
+     0
+    ]
+   ],
+   "plan": {
+    "points": [
+     [
+      "-0.78 * tw4 / 2",
+      "0.88 * tw4 / 2"
+     ],
+     [
+      "-0.78 * tw4 / 2",
+      "0.93 * tw4 / 2"
+     ],
+     [
+      "-0.48 * tw4 / 2",
+      "0.93 * tw4 / 2"
+     ],
+     [
+      "-0.48 * tw4 / 2",
+      "tw4 / 2"
+     ],
+     [
+      "0.48 * tw4 / 2",
+      "tw4 / 2"
+     ],
+     [
+      "0.48 * tw4 / 2",
+      "0.93 * tw4 / 2"
+     ],
+     [
+      "0.78 * tw4 / 2",
+      "0.93 * tw4 / 2"
+     ],
+     [
+      "0.78 * tw4 / 2",
+      "0.88 * tw4 / 2"
+     ],
+     [
+      "0.88 * tw4 / 2",
+      "0.88 * tw4 / 2"
+     ],
+     [
+      "0.88 * tw4 / 2",
+      "0.78 * tw4 / 2"
+     ],
+     [
+      "0.93 * tw4 / 2",
+      "0.78 * tw4 / 2"
+     ],
+     [
+      "0.93 * tw4 / 2",
+      "0.48 * tw4 / 2"
+     ],
+     [
+      "tw4 / 2",
+      "0.48 * tw4 / 2"
+     ],
+     [
+      "tw4 / 2",
+      "-0.48 * tw4 / 2"
+     ],
+     [
+      "0.93 * tw4 / 2",
+      "-0.48 * tw4 / 2"
+     ],
+     [
+      "0.93 * tw4 / 2",
+      "-0.78 * tw4 / 2"
+     ],
+     [
+      "0.88 * tw4 / 2",
+      "-0.78 * tw4 / 2"
+     ],
+     [
+      "0.88 * tw4 / 2",
+      "-0.88 * tw4 / 2"
+     ],
+     [
+      "0.78 * tw4 / 2",
+      "-0.88 * tw4 / 2"
+     ],
+     [
+      "0.78 * tw4 / 2",
+      "-0.93 * tw4 / 2"
+     ],
+     [
+      "0.48 * tw4 / 2",
+      "-0.93 * tw4 / 2"
+     ],
+     [
+      "0.48 * tw4 / 2",
+      "-(tw4 / 2)"
+     ],
+     [
+      "-0.48 * tw4 / 2",
+      "-(tw4 / 2)"
+     ],
+     [
+      "-0.48 * tw4 / 2",
+      "-0.93 * tw4 / 2"
+     ],
+     [
+      "-0.78 * tw4 / 2",
+      "-0.93 * tw4 / 2"
+     ],
+     [
+      "-0.78 * tw4 / 2",
+      "-0.88 * tw4 / 2"
+     ],
+     [
+      "-0.88 * tw4 / 2",
+      "-0.88 * tw4 / 2"
+     ],
+     [
+      "-0.88 * tw4 / 2",
+      "-0.78 * tw4 / 2"
+     ],
+     [
+      "-0.93 * tw4 / 2",
+      "-0.78 * tw4 / 2"
+     ],
+     [
+      "-0.93 * tw4 / 2",
+      "-0.48 * tw4 / 2"
+     ],
+     [
+      "-(tw4 / 2)",
+      "-0.48 * tw4 / 2"
+     ],
+     [
+      "-(tw4 / 2)",
+      "0.48 * tw4 / 2"
+     ],
+     [
+      "-0.93 * tw4 / 2",
+      "0.48 * tw4 / 2"
+     ],
+     [
+      "-0.93 * tw4 / 2",
+      "0.78 * tw4 / 2"
+     ],
+     [
+      "-0.88 * tw4 / 2",
+      "0.78 * tw4 / 2"
+     ],
+     [
+      "-0.88 * tw4 / 2",
+      "0.88 * tw4 / 2"
+     ]
+    ]
+   },
+   "courses": {
+    "list": [
+     {
+      "y": "t4 * 0.82",
+      "h": "t4 * 0.18",
+      "out": "tw4 * 0.02",
+      "profile": "plinth"
+     }
+    ]
+   },
+   "when": {
+    "tiers": [
+     "four",
+     "five"
+    ],
+    "mould": "yes"
+   },
+   "_about": "the roof's fourth tier: the body again, smaller"
+  },
+  "roof 4 plain": {
+   "type": "box",
+   "width": "tw4 * 0.9",
+   "length": "tw4 * 0.9",
+   "height": "t4",
+   "at": [
+    [
+     0,
+     "y3",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "four",
+     "five"
+    ],
+    "mould": "no"
+   },
+   "_about": "the tier as a plain block: the cheap one"
+  },
+  "roof 4 ratnas corners": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw4 * 0.035",
+    "h": "rr * 0.512",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.8 * tw4 / 2",
+     "y4",
+     "0.8 * tw4 / 2",
+     0
+    ],
+    [
+     "0.8 * tw4 / 2",
+     "y4",
+     "-(0.8 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw4 / 2)",
+     "y4",
+     "-(0.8 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw4 / 2)",
+     "y4",
+     "-(-(0.8 * tw4 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "four",
+     "five"
+    ]
+   }
+  },
+  "roof 4 ratnas mid": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw4 * 0.035",
+    "h": "rr * 0.512",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     0,
+     "y4",
+     "0.86 * tw4 / 2",
+     0
+    ],
+    [
+     "0.86 * tw4 / 2",
+     "y4",
+     0,
+     0
+    ],
+    [
+     0,
+     "y4",
+     "-(0.86 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw4 / 2)",
+     "y4",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "four",
+     "five"
+    ],
+    "ratnas": [
+     "three",
+     "five",
+     "seven"
+    ]
+   }
+  },
+  "roof 4 ratnas quarter": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw4 * 0.035",
+    "h": "rr * 0.512",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.4 * tw4 / 2",
+     "y4",
+     "0.86 * tw4 / 2",
+     0
+    ],
+    [
+     "0.86 * tw4 / 2",
+     "y4",
+     "-(0.4 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.4 * tw4 / 2)",
+     "y4",
+     "-(0.86 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw4 / 2)",
+     "y4",
+     "-(-(0.4 * tw4 / 2))",
+     0
+    ],
+    [
+     "-0.4 * tw4 / 2",
+     "y4",
+     "0.86 * tw4 / 2",
+     0
+    ],
+    [
+     "0.86 * tw4 / 2",
+     "y4",
+     "-(-0.4 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(-0.4 * tw4 / 2)",
+     "y4",
+     "-(0.86 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw4 / 2)",
+     "y4",
+     "-(-(-0.4 * tw4 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "four",
+     "five"
+    ],
+    "ratnas": [
+     "five"
+    ]
+   }
+  },
+  "roof 4 ratnas sixth": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw4 * 0.035",
+    "h": "rr * 0.512",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.2667 * tw4 / 2",
+     "y4",
+     "0.86 * tw4 / 2",
+     0
+    ],
+    [
+     "0.86 * tw4 / 2",
+     "y4",
+     "-(0.2667 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.2667 * tw4 / 2)",
+     "y4",
+     "-(0.86 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw4 / 2)",
+     "y4",
+     "-(-(0.2667 * tw4 / 2))",
+     0
+    ],
+    [
+     "-0.2667 * tw4 / 2",
+     "y4",
+     "0.86 * tw4 / 2",
+     0
+    ],
+    [
+     "0.86 * tw4 / 2",
+     "y4",
+     "-(-0.2667 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(-0.2667 * tw4 / 2)",
+     "y4",
+     "-(0.86 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw4 / 2)",
+     "y4",
+     "-(-(-0.2667 * tw4 / 2))",
+     0
+    ],
+    [
+     "0.5333 * tw4 / 2",
+     "y4",
+     "0.86 * tw4 / 2",
+     0
+    ],
+    [
+     "0.86 * tw4 / 2",
+     "y4",
+     "-(0.5333 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.5333 * tw4 / 2)",
+     "y4",
+     "-(0.86 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw4 / 2)",
+     "y4",
+     "-(-(0.5333 * tw4 / 2))",
+     0
+    ],
+    [
+     "-0.5333 * tw4 / 2",
+     "y4",
+     "0.86 * tw4 / 2",
+     0
+    ],
+    [
+     "0.86 * tw4 / 2",
+     "y4",
+     "-(-0.5333 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(-0.5333 * tw4 / 2)",
+     "y4",
+     "-(0.86 * tw4 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw4 / 2)",
+     "y4",
+     "-(-(-0.5333 * tw4 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "four",
+     "five"
+    ],
+    "ratnas": [
+     "seven"
+    ]
+   }
+  },
+  "roof 5": {
+   "type": "prism",
+   "height": "t5",
+   "at": [
+    [
+     0,
+     "y4",
+     0,
+     0
+    ]
+   ],
+   "plan": {
+    "points": [
+     [
+      "-0.78 * tw5 / 2",
+      "0.88 * tw5 / 2"
+     ],
+     [
+      "-0.78 * tw5 / 2",
+      "0.93 * tw5 / 2"
+     ],
+     [
+      "-0.48 * tw5 / 2",
+      "0.93 * tw5 / 2"
+     ],
+     [
+      "-0.48 * tw5 / 2",
+      "tw5 / 2"
+     ],
+     [
+      "0.48 * tw5 / 2",
+      "tw5 / 2"
+     ],
+     [
+      "0.48 * tw5 / 2",
+      "0.93 * tw5 / 2"
+     ],
+     [
+      "0.78 * tw5 / 2",
+      "0.93 * tw5 / 2"
+     ],
+     [
+      "0.78 * tw5 / 2",
+      "0.88 * tw5 / 2"
+     ],
+     [
+      "0.88 * tw5 / 2",
+      "0.88 * tw5 / 2"
+     ],
+     [
+      "0.88 * tw5 / 2",
+      "0.78 * tw5 / 2"
+     ],
+     [
+      "0.93 * tw5 / 2",
+      "0.78 * tw5 / 2"
+     ],
+     [
+      "0.93 * tw5 / 2",
+      "0.48 * tw5 / 2"
+     ],
+     [
+      "tw5 / 2",
+      "0.48 * tw5 / 2"
+     ],
+     [
+      "tw5 / 2",
+      "-0.48 * tw5 / 2"
+     ],
+     [
+      "0.93 * tw5 / 2",
+      "-0.48 * tw5 / 2"
+     ],
+     [
+      "0.93 * tw5 / 2",
+      "-0.78 * tw5 / 2"
+     ],
+     [
+      "0.88 * tw5 / 2",
+      "-0.78 * tw5 / 2"
+     ],
+     [
+      "0.88 * tw5 / 2",
+      "-0.88 * tw5 / 2"
+     ],
+     [
+      "0.78 * tw5 / 2",
+      "-0.88 * tw5 / 2"
+     ],
+     [
+      "0.78 * tw5 / 2",
+      "-0.93 * tw5 / 2"
+     ],
+     [
+      "0.48 * tw5 / 2",
+      "-0.93 * tw5 / 2"
+     ],
+     [
+      "0.48 * tw5 / 2",
+      "-(tw5 / 2)"
+     ],
+     [
+      "-0.48 * tw5 / 2",
+      "-(tw5 / 2)"
+     ],
+     [
+      "-0.48 * tw5 / 2",
+      "-0.93 * tw5 / 2"
+     ],
+     [
+      "-0.78 * tw5 / 2",
+      "-0.93 * tw5 / 2"
+     ],
+     [
+      "-0.78 * tw5 / 2",
+      "-0.88 * tw5 / 2"
+     ],
+     [
+      "-0.88 * tw5 / 2",
+      "-0.88 * tw5 / 2"
+     ],
+     [
+      "-0.88 * tw5 / 2",
+      "-0.78 * tw5 / 2"
+     ],
+     [
+      "-0.93 * tw5 / 2",
+      "-0.78 * tw5 / 2"
+     ],
+     [
+      "-0.93 * tw5 / 2",
+      "-0.48 * tw5 / 2"
+     ],
+     [
+      "-(tw5 / 2)",
+      "-0.48 * tw5 / 2"
+     ],
+     [
+      "-(tw5 / 2)",
+      "0.48 * tw5 / 2"
+     ],
+     [
+      "-0.93 * tw5 / 2",
+      "0.48 * tw5 / 2"
+     ],
+     [
+      "-0.93 * tw5 / 2",
+      "0.78 * tw5 / 2"
+     ],
+     [
+      "-0.88 * tw5 / 2",
+      "0.78 * tw5 / 2"
+     ],
+     [
+      "-0.88 * tw5 / 2",
+      "0.88 * tw5 / 2"
+     ]
+    ]
+   },
+   "courses": {
+    "list": [
+     {
+      "y": "t5 * 0.82",
+      "h": "t5 * 0.18",
+      "out": "tw5 * 0.02",
+      "profile": "plinth"
+     }
+    ]
+   },
+   "when": {
+    "tiers": [
+     "five"
+    ],
+    "mould": "yes"
+   },
+   "_about": "the roof's fifth tier: the body again, smaller"
+  },
+  "roof 5 plain": {
+   "type": "box",
+   "width": "tw5 * 0.9",
+   "length": "tw5 * 0.9",
+   "height": "t5",
+   "at": [
+    [
+     0,
+     "y4",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "five"
+    ],
+    "mould": "no"
+   },
+   "_about": "the tier as a plain block: the cheap one"
+  },
+  "roof 5 ratnas corners": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw5 * 0.035",
+    "h": "rr * 0.4096",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.8 * tw5 / 2",
+     "y5",
+     "0.8 * tw5 / 2",
+     0
+    ],
+    [
+     "0.8 * tw5 / 2",
+     "y5",
+     "-(0.8 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw5 / 2)",
+     "y5",
+     "-(0.8 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.8 * tw5 / 2)",
+     "y5",
+     "-(-(0.8 * tw5 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "five"
+    ]
+   }
+  },
+  "roof 5 ratnas mid": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw5 * 0.035",
+    "h": "rr * 0.4096",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     0,
+     "y5",
+     "0.86 * tw5 / 2",
+     0
+    ],
+    [
+     "0.86 * tw5 / 2",
+     "y5",
+     0,
+     0
+    ],
+    [
+     0,
+     "y5",
+     "-(0.86 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw5 / 2)",
+     "y5",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "five"
+    ],
+    "ratnas": [
+     "three",
+     "five",
+     "seven"
+    ]
+   }
+  },
+  "roof 5 ratnas quarter": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw5 * 0.035",
+    "h": "rr * 0.4096",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.4 * tw5 / 2",
+     "y5",
+     "0.86 * tw5 / 2",
+     0
+    ],
+    [
+     "0.86 * tw5 / 2",
+     "y5",
+     "-(0.4 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.4 * tw5 / 2)",
+     "y5",
+     "-(0.86 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw5 / 2)",
+     "y5",
+     "-(-(0.4 * tw5 / 2))",
+     0
+    ],
+    [
+     "-0.4 * tw5 / 2",
+     "y5",
+     "0.86 * tw5 / 2",
+     0
+    ],
+    [
+     "0.86 * tw5 / 2",
+     "y5",
+     "-(-0.4 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(-0.4 * tw5 / 2)",
+     "y5",
+     "-(0.86 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw5 / 2)",
+     "y5",
+     "-(-(-0.4 * tw5 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "five"
+    ],
+    "ratnas": [
+     "five"
+    ]
+   }
+  },
+  "roof 5 ratnas sixth": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw5 * 0.035",
+    "h": "rr * 0.4096",
+    "n": 6,
+    "form": "ratna",
+    "detail": 2
+   },
+   "at": [
+    [
+     "0.2667 * tw5 / 2",
+     "y5",
+     "0.86 * tw5 / 2",
+     0
+    ],
+    [
+     "0.86 * tw5 / 2",
+     "y5",
+     "-(0.2667 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.2667 * tw5 / 2)",
+     "y5",
+     "-(0.86 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw5 / 2)",
+     "y5",
+     "-(-(0.2667 * tw5 / 2))",
+     0
+    ],
+    [
+     "-0.2667 * tw5 / 2",
+     "y5",
+     "0.86 * tw5 / 2",
+     0
+    ],
+    [
+     "0.86 * tw5 / 2",
+     "y5",
+     "-(-0.2667 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(-0.2667 * tw5 / 2)",
+     "y5",
+     "-(0.86 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw5 / 2)",
+     "y5",
+     "-(-(-0.2667 * tw5 / 2))",
+     0
+    ],
+    [
+     "0.5333 * tw5 / 2",
+     "y5",
+     "0.86 * tw5 / 2",
+     0
+    ],
+    [
+     "0.86 * tw5 / 2",
+     "y5",
+     "-(0.5333 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.5333 * tw5 / 2)",
+     "y5",
+     "-(0.86 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw5 / 2)",
+     "y5",
+     "-(-(0.5333 * tw5 / 2))",
+     0
+    ],
+    [
+     "-0.5333 * tw5 / 2",
+     "y5",
+     "0.86 * tw5 / 2",
+     0
+    ],
+    [
+     "0.86 * tw5 / 2",
+     "y5",
+     "-(-0.5333 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(-0.5333 * tw5 / 2)",
+     "y5",
+     "-(0.86 * tw5 / 2)",
+     0
+    ],
+    [
+     "-(0.86 * tw5 / 2)",
+     "y5",
+     "-(-(-0.5333 * tw5 / 2))",
+     0
+    ]
+   ],
+   "when": {
+    "tiers": [
+     "five"
+    ],
+    "ratnas": [
+     "seven"
+    ]
+   }
+  },
+  "crown three": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw3 * 0.14",
+    "h": "ch",
+    "n": 6,
+    "form": "crownform"
+   },
+   "at": [
+    [
+     0,
+     "y3",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "tiers": "three"
+   },
+   "_about": "the crowning ratna: the vajra"
+  },
+  "crown four": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw4 * 0.14",
+    "h": "ch",
+    "n": 6,
+    "form": "crownform"
+   },
+   "at": [
+    [
+     0,
+     "y4",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "tiers": "four"
+   },
+   "_about": "the crowning ratna: the vajra"
+  },
+  "crown five": {
+   "type": "component",
+   "use": "components/ratna",
+   "params": {
+    "r": "tw5 * 0.14",
+    "h": "ch",
+    "n": 6,
+    "form": "crownform"
+   },
+   "at": [
+    [
+     0,
+     "y5",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "tiers": "five"
+   },
+   "_about": "the crowning ratna: the vajra"
+  }
+ }
+}

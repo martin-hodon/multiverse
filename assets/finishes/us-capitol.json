@@ -1,0 +1,29 @@
+{
+  "name": "United States Capitol",
+  "building": "architecture/us-capitol",
+  "_about": "The Capitol: white marble (the extensions' Massachusetts marble, the central block's sandstone painted to match), the ground storey rusticated under the giant order; the cast-iron dome and its tholos painted white to look like the stone, its windows dark; the roofs behind the balustrades copper sheet, grey; the east plaza paved in granite, the lawns round the hill mown, Olmsted's terrace in grey granite; inside, the floors in Minton-like tile.",
+  "stone": {"color": "#ece8df", "accent": "#d6d0c3", "pat": "ashlar"},
+  "rules": [
+    {"parts": ["dome windows frames"], "pattern": "materials/paint", "palette": "iron-white", "_about": "the windows' frames"},
+    {"parts": ["dome windows"], "color": "#2b3138", "accent": "#20252b", "pat": "ashlar", "_about": "the dome's windows: dark glass in the white iron"},
+    {"parts": ["dome"], "surface": "roof", "pattern": "materials/paint", "palette": "iron-white", "_about": "the iron dome, painted"},
+    {"parts": ["dome"], "surface": "floor", "pattern": "roofs/sheet metal", "palette": "lead", "_about": "the decks round the drum and the attic"},
+    {"parts": ["dome"], "pattern": "materials/paint", "palette": "iron-white", "_about": "the drum, its peristyle, the attic, the tholos: cast iron painted white"},
+    {"parts": ["hill"], "surface": "floor", "within": [-125, 20, 125, 125], "pattern": "floors/flagstones", "palette": "granite", "scale": 1.4, "_about": "the east plaza"},
+    {"parts": ["hill"], "pattern": "materials/grass", "palette": "lawn", "scale": 2, "_about": "the lawns and the slopes of the hill"},
+    {"parts": ["west terrace"], "surface": "floor", "within": [-9, -77, 9, -40], "pattern": "floors/flagstones", "palette": "granite", "_about": "the walks to the stairs' heads..."},
+    {"parts": ["west terrace"], "surface": "floor", "within": [-58, -77, -46, -40], "pattern": "floors/flagstones", "palette": "granite"},
+    {"parts": ["west terrace"], "surface": "floor", "within": [46, -77, 58, -40], "pattern": "floors/flagstones", "palette": "granite"},
+    {"parts": ["west terrace"], "surface": "floor", "within": [-121, -77, 121, -70], "pattern": "materials/grass", "palette": "lawn", "scale": 2, "_about": "...between them a band of lawn along the terrace's rim"},
+    {"parts": ["west terrace", "terrace landing", "terrace landing south", "terrace landing north"], "surface": "floor", "pattern": "floors/flagstones", "palette": "granite", "_about": "Olmsted's terrace, paved"},
+    {"parts": ["west terrace", "terrace landing", "terrace landing south", "terrace landing north", "terrace piers"], "pattern": "stone/ashlar", "palette": "granite", "_about": "its walls and their piers, grey granite"},
+    {"parts": ["kind:roof", "kind:prism"], "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead", "_about": "the roofs behind the balustrades"},
+    {"parts": ["kind:prism", "kind:box"], "surface": "floor", "side": "out", "pattern": "roofs/sheet metal", "palette": "lead", "above": 25, "_about": "the flat roofs and the colonnades' tops"},
+    {"surface": "floor", "side": "in", "above": 12.4, "pattern": "floors/octagon and dot", "palette": "terracotta", "_about": "inside, on the principal floor and over: Minton's encaustic tiles (the ground storey's floors marble, as the next rule)"},
+    {"surface": "floor", "pattern": "stone/marble", "palette": "capitol-marble", "_about": "the porticoes' floors, the stairs"},
+    {"parts": ["balustrade plinths", "balustrade balusters", "balustrade rails"], "pattern": "stone/ashlar fine", "palette": "capitol-marble"},
+    {"surface": "wall", "side": "out", "below": 12.5, "pattern": "stone/rusticated", "palette": "capitol-marble", "_about": "the ground storey (and the podiums), rusticated"},
+    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
+    {"pattern": "stone/ashlar fine", "palette": "capitol-marble", "_about": "the marble above: the giant order, the walls"}
+  ]
+}

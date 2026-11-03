@@ -33,13 +33,13 @@ const VARIANTS = {
 const WORLD_FEATURES = { coast: false, meanders: { amp: .55 }, lake: { r: .085, islands: 1 } };
 
 export function landscapeMap({ seed = 1, radius = 300, riverZ = 150, res = 2, meadow, facade, geology = "canyon", climate = "temperate",
-                               scale = null, relief = null, variant = null } = {}) {
+                               scale = null, relief = null, variant = null, keep = null } = {}) {
   const order = variant ? [variant] : seed % 2 ? ["upland", "lowland"] : ["lowland", "upland"];
   let best = null;
   let err = null;
   for (const v of order) {
     let M;
-    try { M = attempt({ seed, radius, riverZ, res, meadow, facade, geology, climate, scale, relief, variant: v }); } catch (e) { err = e; continue; }
+    try { M = attempt({ seed, radius, riverZ, res, meadow, facade, geology, climate, scale, relief, variant: v, keep }); } catch (e) { err = e; continue; }
     if (!best || M.earthwork < best.earthwork) best = M;
     if (best.earthwork <= 4) break;
   }
@@ -47,7 +47,7 @@ export function landscapeMap({ seed = 1, radius = 300, riverZ = 150, res = 2, me
   return best;
 }
 
-function attempt({ seed, radius, riverZ, res, meadow, facade, geology, climate, scale, relief, variant }) {
+function attempt({ seed, radius, riverZ, res, meadow, facade, geology, climate, scale, relief, variant, keep = null }) {
   const SIZE = 320, half = SIZE / 2, R = radius + 24;
   // ---- GROW: the room the world wants each side of the river, and the stream put where the scene shares out its own
   // in the same proportion
@@ -114,7 +114,7 @@ function attempt({ seed, radius, riverZ, res, meadow, facade, geology, climate, 
     // (the town's and the farms' own ground: mapgen's roughness and bank terms judge it -- but not a lake over it)
     return away(at, wet, townH) + 120 * wetIn(wet, xb - 70, xb + 125, zb + 14, zb + 122) + 80 * wetIn(wet, xb - 65, xb + 105, zb - 82, zb - 12);
   };
-  const M = shapeMap(grown, { seed, radius, riverZ, res, meadow, facade, score, siteCost, detail: .45, round: true, main });
+  const M = shapeMap(grown, { seed, radius, riverZ, res, meadow, facade, score, siteCost, detail: .45, round: true, main, keep });   // (keep: sea.js)
   // (where the scene's own features came to lie in the world: the fall, the lake)
   const toGame = (x, y) => { const du = x * hs - M.window.O[0], dv = y * hs - M.window.O[1]; return [du * M.window.e[0] + dv * M.window.e[1], du * M.window.f[0] + dv * M.window.f[1]]; };
   const [fx, fy] = plan.toXY(plan.fallU, plan.streamV(plan.fallU)), [fallX, fallZ] = toGame(fx, fy);

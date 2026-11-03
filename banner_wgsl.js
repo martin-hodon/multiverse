@@ -311,11 +311,11 @@ export const barkHeight = wgslFn(`
   fn barkHeight(pat: f32, s: vec2<f32>, r: f32) -> f32 {
     let C = 6.2832 * max(r, 0.01);
     if (pat > 19.5) {
-      let row = floor(s.x / 0.035);
-      let fv = fract(s.x / 0.035) - 0.5;
-      let n = max(3.0, floor(C / 0.06 + 0.5));
-      let dash = step(0.45, fract(s.y / C * n + row * 0.37 + 0.1 * sin(row * 3.1)));
-      return 1.0 - 0.8 * smoothstep(0.2, 0.07, abs(fv)) * dash;
+      let row = floor(s.x / 0.06);
+      let fv = fract(s.x / 0.06) - 0.5;
+      let n = max(3.0, floor(C / 0.1 + 0.5));
+      let dash = smoothstep(0.62, 0.7, fract(s.y / C * n + row * 0.37 + 0.13 * sin(row * 3.1))) * step(0.3, fract(row * 0.618));
+      return 1.0 - 0.3 * smoothstep(0.13, 0.04, abs(fv)) * dash;   // (a fine lenticel, no slot)
     }
     let n = max(3.0, floor(C / clamp(r * 0.5, 0.025, 0.09) + 0.5));
     let w = C / n;

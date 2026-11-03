@@ -1,0 +1,164 @@
+{
+  "name": "Fulda Cathedral",
+  "building": "architecture/fulda",
+  "_about": "Fulda Cathedral (written by tools/archgen/fulda.py): the whole outside in sandstone ashlar of mixed beds -- buff and grey blocks with rose-red ones among them (stone/ashlar two stones, palette fulda), as the front shows; the helms, the chapels' domes, the crossing dome and every roof in slate; the helms' lanterns slated too; the balls and crosses gilt, the clocks gilt on copper; inside, the white walls, vaults and stucco (plaster) over a light grey stone floor, as the church's white interior with its black and gold.",
+  "stone": {
+    "color": "#bfae94",
+    "accent": "#a2876e",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {
+      "parts": "kind:glass",
+      "pattern": "glass/quarries",
+      "palette": "grisaille",
+      "_about": "clear leaded glass in small quarries"
+    },
+    {
+      "parts": [
+        "front/helms/ball",
+        "front/helms/cross",
+        "chapel domes/lantern/finial",
+        "dome/lantern/finial"
+      ],
+      "pattern": "roofs/gold leaf",
+      "palette": "gold",
+      "_about": "the gilt balls (pineapples), crosses and finials"
+    },
+    {
+      "parts": [
+        "front/helms/lantern",
+        "front/helms/lantern head",
+        "front/helms/lantern 2",
+        "front/helms/lantern 2 head",
+        "front/helms/foot",
+        "chapel domes/lantern/tower",
+        "chapel domes/lantern/drum"
+      ],
+      "side": "out",
+      "pattern": "roofs/slate",
+      "palette": "slate",
+      "_about": "the helms' lanterns and the chapels' lanterns hung with slate like their bulbs"
+    },
+    {
+      "parts": [
+        "chapel domes/drum"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "fulda",
+      "_about": "the chapels' low drums: sandstone"
+    },
+    {
+      "parts": "chapel decks",
+      "surface": "floor",
+      "pattern": "roofs/sheet metal",
+      "palette": "lead",
+      "_about": "the flat roofs round the chapels' domes: lead"
+    },
+    {
+      "parts": [
+        "front/clocks/ring",
+        "front/clocks/marks",
+        "front/clocks/hub",
+        "front/clocks/hands"
+      ],
+      "pattern": "roofs/gold leaf",
+      "palette": "gold",
+      "_about": "the clocks: gilt ring, marks and hands..."
+    },
+    {
+      "parts": "front/clocks/dial",
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "...on a copper plate"
+    },
+    {
+      "parts": "kind:pendentives",
+      "surface": "roof",
+      "pattern": "roofs/sheet metal",
+      "palette": "lead",
+      "_about": "the deck round the drum's foot: lead"
+    },
+    {
+      "parts": [
+        "kind:barrel",
+        "kind:groin",
+        "kind:pendentives"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "the vaults, arches and pendentives: white stucco"
+    },
+    {
+      "parts": [
+        "front/centre",
+        "transept",
+        "nave aisles",
+        "choir aisles",
+        "high choir",
+        "nave clerestory",
+        "choir clerestory"
+      ],
+      "surface": "ceiling",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "the arches' soffits inside"
+    },
+    {
+      "parts": "kind:column",
+      "pattern": "stone/ashlar fine",
+      "palette": "fulda",
+      "_about": "the engaged columns and the obelisks: finer dressed"
+    },
+    {
+      "parts": "kind:dome",
+      "surface": "roof",
+      "pattern": "roofs/slate",
+      "palette": "slate",
+      "_about": "the helms, the chapels' domes and the crossing dome: slate"
+    },
+    {
+      "parts": "kind:roof",
+      "surface": "roof",
+      "pattern": "roofs/slate",
+      "palette": "slate",
+      "_about": "the roofs: slate"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/flagstones",
+      "palette": "marble-grey",
+      "_about": "inside: light grey stone flags"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "sandstone-grey",
+      "_about": "the Domplatz: sandstone flags"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "inside: the white walls and stucco"
+    },
+    {
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white"
+    },
+    {
+      "parts": "kind:moulding",
+      "pattern": "stone/ashlar fine",
+      "palette": "fulda",
+      "_about": "the orders, cornices and surrounds: the same sandstone, finer dressed"
+    },
+    {
+      "pattern": "stone/ashlar two stones",
+      "palette": "fulda",
+      "_about": "outside: sandstone ashlar, buff and grey with rose-red blocks among them"
+    }
+  ]
+}

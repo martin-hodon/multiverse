@@ -1,0 +1,87 @@
+{
+ "kind": "item",
+ "name": "Hatch",
+ "category": "component",
+ "_about": "a cargo hatch in a deck: a raised coaming w across and d long round a dark opening (its grating), the origin at its centre on the deck -- the ship's `hold` anchor stands over it",
+ "params": {
+  "w": 2,
+  "d": 2.5,
+  "h": 0.35
+ },
+ "materials": {
+  "wood": "oak",
+  "grate": "#2a2018"
+ },
+ "parts": [
+  {
+   "id": "coaming side",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "d",
+    "h",
+    0.14
+   ],
+   "at": [
+    0,
+    "h / 2",
+    "w / 2 - 0.07"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "coaming end",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.14,
+    "h",
+    "w"
+   ],
+   "at": [
+    "d / 2 - 0.07",
+    "h / 2",
+    0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "opening",
+   "type": "box",
+   "material": "grate",
+   "size": [
+    "d - 0.2",
+    0.04,
+    "w - 0.2"
+   ],
+   "at": [
+    0,
+    "h * 0.7",
+    0
+   ]
+  },
+  {
+   "id": "grating",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.05,
+    "w - 0.22"
+   ],
+   "along": {
+    "n": "max(2, round(d / 0.35))",
+    "from": [
+     "-d / 2 + 0.2",
+     "h * 0.75",
+     0
+    ],
+    "to": [
+     "d / 2 - 0.2",
+     "h * 0.75",
+     0
+    ]
+   }
+  }
+ ]
+}

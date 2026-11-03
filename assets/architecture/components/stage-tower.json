@@ -1,0 +1,1149 @@
+{
+  "name": "Stage tower",
+  "_about": "A ROUND TOWER OF STAGES (Schwerin's, and Chambord's before it): a shaft in `storeys` under belt courses, a corbelled cornice at `H`, an upper stage `Ru` wide and `Hu` tall set back behind it, the tent `tent` tall with four gablets and four little octagonal turrets at its foot, an open lantern `Lr` wide, `Lh` tall, with a small cap and a spike `tip`. `turrets` 1 puts a ring of eight small turrets round the cornice's head, a keep's.",
+  "params": {
+    "detail": 4,
+    "R": 6,
+    "H": 25,
+    "Ru": 5,
+    "Hu": 5,
+    "tent": 8,
+    "Lr": 1.1,
+    "Lh": 2.4,
+    "tip": 2.2,
+    "storeys": 6,
+    "turrets": 0,
+    "t": "max(0.3, R * 0.14)"
+  },
+  "build": [
+    "shaft",
+    "belts",
+    "corbels",
+    "cornice",
+    "upper",
+    "upper belt",
+    "head",
+    "gablets",
+    "turrets",
+    "tent",
+    "lantern",
+    "lantern cap",
+    "spike"
+  ],
+  "parts": {
+    "shaft": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 16,
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": true,
+      "tiers": [
+        {
+          "h": "H / storeys",
+          "openings": []
+        },
+        {
+          "openings": []
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "1": [
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.3",
+                "sill": 0,
+                "springing": "H / 6 * 0.55",
+                "head": {
+                  "profile": "semicircular"
+                },
+                "glass": false
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          }
+        ],
+        "2": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "3": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          }
+        ],
+        "4": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "5": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          }
+        ],
+        "6": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "7": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          }
+        ],
+        "8": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "9": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          }
+        ],
+        "10": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "11": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          }
+        ],
+        "12": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "13": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          }
+        ],
+        "14": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "openings": []
+          }
+        ],
+        "15": [
+          {
+            "h": "H / 6",
+            "openings": []
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "h": "H / 6",
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "R * 0.2",
+                "sill": "H / 6 * 0.25",
+                "springing": "H / 6 * 0.72",
+                "head": {
+                  "profile": "segmental",
+                  "seg": 0.35
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "belts": {
+      "type": "prism",
+      "plan": {
+        "sides": 16,
+        "radius": "R + 0.1"
+      },
+      "height": 0.28,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H / storeys - 0.14",
+          0,
+          0
+        ]
+      ],
+      "repeat": {
+        "count": "storeys - 1",
+        "step": [
+          0,
+          "H / storeys",
+          0,
+          0
+        ]
+      }
+    },
+    "corbels": {
+      "type": "prism",
+      "plan": {
+        "sides": 16,
+        "radius": "R + 0.22"
+      },
+      "height": 0.5,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H - 0.5",
+          0,
+          0
+        ]
+      ]
+    },
+    "cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": 16,
+        "radius": "R + 0.42"
+      },
+      "height": 0.45,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ]
+    },
+    "upper": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 16,
+        "radius": "Ru"
+      },
+      "thickness": "t * 0.7",
+      "height": "Hu",
+      "glass": true,
+      "interior": true,
+      "at": [
+        [
+          0,
+          "H + 0.45",
+          0,
+          0
+        ]
+      ],
+      "openings": {
+        "pattern": "1",
+        "width": "Ru * 0.17",
+        "gap": 0.05,
+        "sill": "Hu * 0.25",
+        "springing": "Hu * 0.68",
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "upper belt": {
+      "type": "prism",
+      "plan": {
+        "sides": 16,
+        "radius": "Ru + 0.25"
+      },
+      "height": 0.35,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H + 0.45 + Hu - 0.05",
+          0,
+          0
+        ]
+      ]
+    },
+    "head": {
+      "type": "prism",
+      "plan": {
+        "sides": 16,
+        "radius": "Ru - 0.1"
+      },
+      "height": 0.2,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H + 0.45 + Hu - 0.2",
+          0,
+          0
+        ]
+      ]
+    },
+    "gablets": {
+      "type": "roof",
+      "form": "gable",
+      "width": "Ru * 0.8",
+      "length": "Ru * 0.5",
+      "pitch": 62,
+      "overhang": 0.05,
+      "spiral": {
+        "count": 4,
+        "radius": "Ru * 0.82",
+        "y": "H + 0.45 + Hu + 0.3",
+        "turn": 0.7853982
+      }
+    },
+    "turrets": {
+      "type": "pinnacle",
+      "w": "Ru * 0.26",
+      "h": "Hu * 0.55",
+      "s": "Hu * 0.5",
+      "sides": 8,
+      "spiral": {
+        "count": 4,
+        "radius": "Ru + 0.05",
+        "y": "H + 0.45"
+      }
+    },
+    "tent": {
+      "type": "component",
+      "use": "components/gothic-spire",
+      "params": {
+        "sides": 16,
+        "R": "Ru + 0.1",
+        "rise": "tent / (1 - Lr * 0.8 / (Ru + 0.1))",
+        "topR": "Lr * 0.8",
+        "finial": 0
+      },
+      "at": [
+        [
+          0,
+          "H + 0.8 + Hu",
+          0,
+          0
+        ]
+      ],
+      "build": [
+        "spire"
+      ]
+    },
+    "lantern": {
+      "type": "enclosure",
+      "plan": {
+        "sides": 8,
+        "radius": "Lr"
+      },
+      "thickness": "Lr * 0.22",
+      "height": "Lh",
+      "glass": false,
+      "at": [
+        [
+          0,
+          "H + 0.8 + Hu + tent - 0.1",
+          0,
+          0
+        ]
+      ],
+      "openings": {
+        "pattern": "1",
+        "width": "Lr * 0.45",
+        "gap": 0.02,
+        "sill": "Lh * 0.2",
+        "springing": "Lh * 0.62",
+        "head": {
+          "profile": "semicircular"
+        }
+      }
+    },
+    "lantern cap": {
+      "type": "dome",
+      "radius": "Lr * 1.1",
+      "thickness": 0,
+      "head": {
+        "profile": "bell",
+        "waist": 0.7,
+        "lift": 1.0,
+        "rise": "Lr * 1.25"
+      },
+      "at": [
+        [
+          0,
+          "H + 0.8 + Hu + tent + Lh - 0.1",
+          0,
+          0
+        ]
+      ],
+      "sides": 8
+    },
+    "spike": {
+      "type": "column",
+      "radius": "max(Lr * 0.08, 0.05)",
+      "height": "tip",
+      "sides": 6,
+      "at": [
+        [
+          0,
+          "H + 0.8 + Hu + tent + Lh + Lr * 1.25 - 0.3",
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}

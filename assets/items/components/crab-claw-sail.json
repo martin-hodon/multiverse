@@ -2,13 +2,14 @@
  "kind": "item",
  "name": "Crab-claw sail",
  "category": "component",
- "_about": "the Oceanic sail: two spars from one tack spreading `spread` degrees apart, the cloth between them; the tack is the origin, the spars rise aft along +x and up",
+ "_about": "the Oceanic sail: two spars from one tack (the origin, forward) spreading `spread` degrees apart, rising AFT (-x) and up at `lift` degrees, the cloth between them, the upper spar resting against the mast. `set` full or furled (the spars brought together, the mat rolled between them). (2026-11-03: it had risen forward, away from its mast)",
  "params": {
   "l": 6,
   "lift": 62,
   "spread": 42,
   "belly": "l * 0.06",
-  "r": "l * 0.012"
+  "r": "l * 0.012",
+  "set": "full"
  },
  "materials": {
   "wood": "bamboo",
@@ -25,7 +26,7 @@
     0
    ],
    "to": [
-    "l * cos(lift * 0.017453)",
+    "-l * cos(lift * 0.017453)",
     "l * sin(lift * 0.017453)",
     0
    ],
@@ -36,13 +37,16 @@
    "id": "lower",
    "type": "rod",
    "material": "wood",
+   "when": {
+    "set": "full"
+   },
    "from": [
     0,
     0,
     0
    ],
    "to": [
-    "l * cos((lift - spread) * 0.017453)",
+    "-l * cos((lift - spread) * 0.017453)",
     "l * sin((lift - spread) * 0.017453)",
     0
    ],
@@ -52,6 +56,9 @@
   {
    "id": "cloth",
    "type": "sail",
+   "when": {
+    "set": "full"
+   },
    "material": "cloth",
    "belly": "belly",
    "at": [
@@ -65,18 +72,38 @@
      0
     ],
     [
-     "l * cos(lift * 0.017453)",
+     "-l * cos(lift * 0.017453)",
      "l * sin(lift * 0.017453)"
     ],
     [
-     "l * 0.82 * cos((lift - spread / 2) * 0.017453)",
+     "-l * 0.82 * cos((lift - spread / 2) * 0.017453)",
      "l * 0.82 * sin((lift - spread / 2) * 0.017453)"
     ],
     [
-     "l * cos((lift - spread) * 0.017453)",
+     "-l * cos((lift - spread) * 0.017453)",
      "l * sin((lift - spread) * 0.017453)"
     ]
    ]
+  },
+  {
+   "id": "furled",
+   "type": "rod",
+   "when": {
+    "set": "furled"
+   },
+   "material": "cloth",
+   "from": [
+    0,
+    0,
+    "r * 2"
+   ],
+   "to": [
+    "-l * 0.95 * cos(lift * 0.017453)",
+    "l * 0.95 * sin(lift * 0.017453)",
+    "r * 2"
+   ],
+   "r": "r * 2.4",
+   "sides": 8
   }
  ]
 }

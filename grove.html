@@ -29,7 +29,7 @@
 // A test bench for the trees: each species twice in a row, the wood in one
 // instanced herd, the leaves in one foliage mesh -- as the world draws them.
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { navControls } from "./cursornav.js";   // (the view turns and zooms about the point under the pointer, as the atlas's: here the ground's)
 import { createHerd } from "./instanced.js";
 import { makeTree, TREE_SPECIES, WARM_TREES, FRUIT_TREES, makeBush, BUSH_FRUITS } from "./flora.js";
 import { buildFoliage, FOLIAGE_T, FOLIAGE_BB } from "./foliage.js";
@@ -53,7 +53,7 @@ scene.add(ground);
 const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .3, 2000);
 const cam = (qp.get("cam") ?? "0,14,95,0,13,0").split(",").map(Number);
 camera.position.set(cam[0], cam[1], cam[2]);
-const controls = new OrbitControls(camera, renderer.domElement);
+const controls = navControls(camera, renderer.domElement);
 controls.target.set(cam[3], cam[4], cam[5]);
 controls.update();
 document.getElementById("species").textContent = [...TREE_SPECIES, ...WARM_TREES, ...FRUIT_TREES].join(", ");
@@ -92,6 +92,7 @@ addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); ca
 let t = 0, last = performance.now();
 (function frame(now) {
   t = freeze ?? t + Math.min(now - last, 50) / 1000; last = now;
+  controls.update();
   FOLIAGE_T.value = t;
   renderer.render(scene, camera);
   window.__ready = true;

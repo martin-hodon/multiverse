@@ -7,7 +7,7 @@ Nothing in `items.js` touches three. Out come plain arrays, one set per **materi
 (oak, walnut, iron, leather, rush, damask...) and textured from the pattern library (docs/patterns.md).
 
 Everything is up to about 1800: no upholstered sofas, no revolvers. The catalogue has 56 weapons, 12 shields,
-28 tools, 48 pieces of furniture, 30 ships, 43 components, one kit and 63 materials, and every one is seen in `assets.html`.
+28 tools, 48 pieces of furniture, 40 ships, 46 components, one kit and 63 materials, and every one is seen in `assets.html`.
 
 | folder | what |
 |---|---|
@@ -16,7 +16,7 @@ Everything is up to about 1800: no upholstered sofas, no revolvers. The catalogu
 | `tools/` | the village's tools (scythe, spade, hoe, hammer, saw, cleaver, fishing rod, lute...) and things carried (lantern, torch, book, bucket, basket, pitcher, candlestick) |
 | `furniture/` | seats (stools, benches, settle, divan, chairs from the klismos and curule to the Windsor and the fauteuil, thrones), tables (and the brass tray on its stand), beds (pallet, bedstead, box bed, four-poster, Chinese bed, Roman couch, Egyptian bed, charpai, hammock, cradle), storage (chests, cassone, cask, cupboard, armoire, dresser, bureau, bookcase), and the rest (lectern, harpsichord, spinning wheel, longcase clock, screen, mirror) |
 | `components/` | the reusable pieces: grip, pommel, crossguard, boss, axe head, spearhead, polearm head, blunt head, turned / square / cabriole leg, bun and bracket feet, finial, knob, ring pull, drawer, panel door, spindle, cushion, strap, rocker |
-| `ships/` | 30 vessels up to 1800 (`tools/shipgen.py` writes them): dugout, reed boat, Egyptian river boat, trireme, Roman merchantman, longship, knarr, cog, carrack, caravel, galleon, galley, dhow, junk, sampan, outrigger canoe, voyaging canoe, gondola, birchbark canoe, kayak, umiak, coracle, fishing boat, skiff, fluyt, xebec, felucca, ship of the line, frigate, East Indiaman |
+| `ships/` | 40 vessels up to 1800 (`tools/shipgen.py` writes them; docs/ships.md): punt ship, gaulos, dromon, kadirga, hulk, treasure ship, bezaisen, atakebune, Maya canoe, koch, dugout, reed boat, Egyptian river boat, trireme, Roman merchantman, longship, knarr, cog, carrack, caravel, galleon, galley, dhow, junk, sampan, outrigger canoe, voyaging canoe, gondola, birchbark canoe, kayak, umiak, coracle, fishing boat, skiff, fluyt, xebec, felucca, ship of the line, frigate, East Indiaman |
 | `faces/` | the parametric head (`tools/facegen.py`): the canon `face`, and `man`, `woman`, `child`, `elder`, `beast-man` drawn from it |
 | `hair/` | 25 hairstyles grown from the head's vertices (`tools/hairgen.py`): none, crop, short, flat (under a hat), bowl, bob, Egyptian bob, long, long wavy, curly, ponytail, bun, braid, plaits, two locks, viking side plaits, topknot, tonsure, shoulder length; and as zig-zag sheets: long, bob and short in drawn locks; in thorns: spiky back, up, wild |
 | `jewelry/` | worn on top, on guides from the layers under it (`tools/jewelgen.py`, docs/jewelry.md): 13 necklaces (wesekh, pectoral, torc, gold chain with medallion, Hellenistic fringe, pearls, choker, livery collar, cross on a cord, Norse brooches and festoons, jade bi, bulla, lunula), 8 headpieces (uraeus diadem, seshed circlet, laurel wreath, circlet, coronet, flower chaplet, hairpins, woven headband), 4 earrings (hoops, pearl drops, disc studs, crescents), each in colourways; `wear.json` who wears what |
@@ -90,7 +90,9 @@ along the gunwales), `bowsprit`. A stay is a thin `rod`. The materials added: `p
 `planks-grey`, `planks-tarred`, `deck`, `sail-striped`, `sail-tan`, `matting`, `reed`, `bamboo`, `cedar`, `hide`.
 
 Every vessel has a range of sizes (`L`), its era and region, and a `set` drawn by its seed (most sails full, some
-furled). They were checked as flat paintings from the side, above and the quarter, all thirty at once, every
+furled). 2026-11-03: docs/ships.md -- the states (`set`, `oars`), the anchors every ship carries (`waterline`,
+`moor`, `gangplank`, `hold`, `helm`), the components `hatch`, `bitts`, `headsail`, the ten large period ships added,
+the lateen and crab-claw sails turned the right way round, and `assets/world/ships.json` (which ships a culture sails). They were checked as flat paintings from the side, above and the quarter, all thirty at once, every
 material found. Not there yet: rigging beyond a few stays, crews at the oars, a vessel placed on the water in the
 game (a boat is an item -- `arch` can place one as it places furniture).
 
@@ -288,7 +290,11 @@ heron, stork, flamingo, crane), the head a sphere, the beak a cone rod (`flat` s
 or comb another feather fan, a train (peacock, pheasant, the rooster's sickles) a second longer fan in the tail.
 ~1100-1400 triangles a bird; the wing shapes: pointed (swallow, gull, falcon, pigeon), rounded (crow, hen,
 buzzard), broad (eagle, stork, swan). Not there yet: on the game's flying birds (creatures/birds are SDF parts),
-flapping, barring and eye spots as patterns rather than paint.
+flapping, barring and eye spots as patterns rather than paint. The STORK (2026-11-03, birdgen.py `stork_poses`) has
+the poses the nest's pair live by (index.html storkTick): `folded` (standing), `bow`, `clatter` / `clatter2` (head
+thrown back on the shoulders, the bill shut / open), `preen` (bill in the breast), `sit` (in the bowl; `sitDrop` its
+drop), and in flight `spread` (gliding), `flap-up` / `flap-down` (the beat's two ends) and `landing` (legs down,
+wings braked forward).
 
 ## Props (2026-10-02)
 
@@ -298,10 +304,18 @@ windmill-sails` (four `windmill-arm`s, turned by the wind), `ships/barge` (its t
 gangplank's foot a `plank` marker; `deckY`, `halfL`, `halfW` its params) and `components/gangplank`, `components/
 cart-wheel` (r, n spokes) and the three cart bodies `components/cart-small|medium|large` (their `load` 0..4: casks
 lying in chocked pyramids, standing casks, kegs, sacks in two courses; 5 the harvest's sheaves heaped, `tools/sheaf`,
-never drawn on the road -- index.html CHORES; their bed, floor and axles in their params,
+never drawn on the road -- index.html CHORES; 6-12, 2026-11-03, `cultural`: amphorae lying in straw, amphorae and
+sacks, jars and hampers in straw, bales, crates and sacks, tubs and bales, a pyramid of rice bales -- which a world
+draws is assets/world/goods.json `loads`; their bed, floor and axles in their params,
 which carts.js reads its sizes from), `weapons/arrow`, and `food/fish` for the fisherman's catch -- and for the
 season's chores (2026-10-23) `furniture/woodpile` (a chopping block with a round on it, the split billets stacked beside
-at +x) and `components/ice-hole` (dark water in a round cut, slush and broken ice about it). Not generated:
+at +x) and `components/ice-hole` (dark water in a round cut, slush and broken ice about it). The CULTURES' VESSELS
+(2026-11-03, the freight's goods by period: assets/world/goods.json, docs/world.md "Freight"): `tools/transport-amphora`
+(0.74 m, pointed toe, two handles), `tools/pithos` (1.35 m storage jar, rope bands), `tools/storage-jar` (cloth-covered,
+tied), `tools/hamper` (lidded basket), `tools/bale` (corded cloth bale), `tools/straw-bale` (Japanese tawara, lying along
+x), `tools/crate`, `tools/tub` (with rope ears), and what porters carry with them: `tools/carrying-pole` (on the
+shoulder, cords down to the load at `reach` ahead, the porter's own basket behind) and `tools/tumpline` (the strap
+from the brow, `hy`, down to a load at `ly`/`lx` behind). Not generated:
 `furniture/stall-season`, the market's greengrocer's and fruiterer's wares by `wares` and `season` (index.html builds
 each season's once and shows the world's). The game builds
 them through `architecture.js itemGroup` (one group) and `itemInstanced` (copies: the same root / set / commit API

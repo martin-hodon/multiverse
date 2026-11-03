@@ -12,7 +12,11 @@
    "#2a211a",
    "#d0a27a",
    "#4d6b4a",
-   "#9c6e4e"
+   "#9c6e4e",
+   "#5b2a6e",
+   "#5f7fa6",
+   "#6a4a2c",
+   "#8b8676"
   ],
   "opus-bw": [
    "#e8e1d2",
@@ -159,7 +163,41 @@
        ],
        "fill": 1
       }
-     ]
+     ],
+     "plan": {
+      "kind": "field",
+      "keep": 3,
+      "fields": [
+       "chequer",
+       "chequer",
+       "lozenges",
+       "chevrons",
+       "triangles",
+       "basket"
+      ],
+      "stone": 0.015,
+      "set": {
+       "wander": 0.35,
+       "thin": 0.3
+      },
+      "sets": {
+       "chequer": {
+        "stone": 0.02,
+        "set": {
+         "wander": 0.35
+        }
+       }
+      },
+      "schemes": [
+       [
+        1,
+        1,
+        2,
+        1,
+        0
+       ]
+      ]
+     }
     }
    ]
   },
@@ -302,7 +340,27 @@
        "stroke": 1,
        "line": 0.042
       }
-     ]
+     ],
+     "plan": {
+      "kind": "strip",
+      "keep": 3,
+      "strips": [
+       "meander",
+       "tkey",
+       "wave",
+       "lozenges",
+       "dentil"
+      ],
+      "schemes": [
+       [
+        1,
+        1,
+        2,
+        1,
+        0
+       ]
+      ]
+     }
     }
    ]
   },
@@ -349,7 +407,26 @@
        ],
        "fill": 1
       }
-     ]
+     ],
+     "plan": {
+      "kind": "strip",
+      "keep": 3,
+      "strips": [
+       "wave",
+       "saw",
+       "dentil",
+       "beads"
+      ],
+      "schemes": [
+       [
+        1,
+        1,
+        2,
+        1,
+        0
+       ]
+      ]
+     }
     }
    ]
   },
@@ -387,7 +464,22 @@
        "stroke": 1,
        "line": 0.024
       }
-     ]
+     ],
+     "plan": {
+      "kind": "field",
+      "field": "hexagons",
+      "keep": 3,
+      "n": 3,
+      "schemes": [
+       [
+        1,
+        1,
+        2,
+        1,
+        0
+       ]
+      ]
+     }
     }
    ]
   },
@@ -425,7 +517,21 @@
        "stroke": 1,
        "line": 0.018
       }
-     ]
+     ],
+     "plan": {
+      "kind": "field",
+      "field": "scales",
+      "keep": 3,
+      "schemes": [
+       [
+        1,
+        1,
+        2,
+        1,
+        0
+       ]
+      ]
+     }
     }
    ]
   },
@@ -470,7 +576,28 @@
        "strap": 1,
        "weave": false
       }
-     ]
+     ],
+     "plan": {
+      "kind": "field",
+      "keep": 3,
+      "fields": [
+       "octagons",
+       "stars",
+       "rosettes",
+       "petals"
+      ],
+      "n": 3,
+      "stone": 0.0075,
+      "schemes": [
+       [
+        1,
+        1,
+        2,
+        1,
+        0
+       ]
+      ]
+     }
     }
    ]
   },
@@ -507,7 +634,26 @@
        "eye": 1,
        "eyeSize": 0.14
       }
-     ]
+     ],
+     "plan": {
+      "kind": "strip",
+      "keep": 3,
+      "stone": 0.0062,
+      "strips": [
+       "guilloche",
+       "plait",
+       "ivy"
+      ],
+      "schemes": [
+       [
+        1,
+        2,
+        0,
+        1,
+        0
+       ]
+      ]
+     }
     }
    ]
   },
@@ -611,7 +757,50 @@
        ],
        "fill": 6
       }
-     ]
+     ],
+     "plan": {
+      "kind": "strip",
+      "keep": 5,
+      "stone": 0.0085,
+      "strips": [
+       "plait",
+       "guilloche",
+       "lozenges",
+       "beads",
+       "chequer",
+       "saw"
+      ],
+      "schemes": [
+       [
+        3,
+        4,
+        5,
+        6,
+        0
+       ],
+       [
+        4,
+        3,
+        1,
+        6,
+        0
+       ],
+       [
+        3,
+        8,
+        5,
+        6,
+        0
+       ],
+       [
+        5,
+        3,
+        1,
+        6,
+        4
+       ]
+      ]
+     }
     }
    ]
   },
@@ -664,7 +853,35 @@
        "stroke": 3,
        "line": 0.014
       }
-     ]
+     ],
+     "plan": {
+      "kind": "field",
+      "field": "scales",
+      "keep": 5,
+      "schemes": [
+       [
+        1,
+        3,
+        5,
+        3,
+        0
+       ],
+       [
+        4,
+        3,
+        1,
+        6,
+        0
+       ],
+       [
+        3,
+        1,
+        5,
+        6,
+        0
+       ]
+      ]
+     }
     }
    ]
   },
@@ -811,9 +1028,28 @@
         "beard": 6
        }
       }
-     ]
+     ],
+     "plan": {
+      "kind": "wall",
+      "subject": "fathers",
+      "keep": 5,
+      "bands": false,
+      "ground": "gold",
+      "piers": [
+       -1,
+       0,
+       1
+      ],
+      "h": 1.56,
+      "foot": -1.035,
+      "sill": [
+       -1.15,
+       0.15
+      ]
+     }
     }
-   ]
+   ],
+   "pinned": true
   },
   "gold virgin": {
    "size": [
@@ -944,7 +1180,14 @@
         "crossNimbus": true
        }
       }
-     ]
+     ],
+     "plan": {
+      "kind": "wall",
+      "subject": "virgin",
+      "keep": 5,
+      "bands": false,
+      "reach": 0.74
+     }
     }
    ],
    "across": 2
@@ -1160,7 +1403,8 @@
        "t": 0.014,
        "fill": 1
       }
-     ]
+     ],
+     "follow": -3
     }
    ]
   },
@@ -1350,7 +1594,8 @@
        "t": 0.014,
        "fill": 1
       }
-     ]
+     ],
+     "follow": -3
     }
    ]
   },
@@ -1540,7 +1785,8 @@
        "t": 0.014,
        "fill": 1
       }
-     ]
+     ],
+     "follow": -3
     }
    ]
   },
@@ -1730,7 +1976,8 @@
        "t": 0.014,
        "fill": 1
       }
-     ]
+     ],
+     "follow": -3
     }
    ]
   },
@@ -1920,7 +2167,8 @@
        "t": 0.014,
        "fill": 1
       }
-     ]
+     ],
+     "follow": -3
     }
    ]
   },
@@ -2110,7 +2358,1963 @@
        "t": 0.014,
        "fill": 1
       }
-     ]
+     ],
+     "follow": -3
+    }
+   ]
+  },
+  "floor any": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "a Roman floor: its frame, its layout, what's in it, all the seed's",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "any"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor wide": {
+   "size": [
+    2.4,
+    1.2
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "a floor twice as long as it's wide: an emblema or two panels",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "any"
+     },
+     "layers": []
+    }
+   ],
+   "across": 2
+  },
+  "floor hunt": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "hunters after the boar, the stag, the lion, the hare",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "hunt"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor arena": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "gladiators, net-fighters, beast fights, a victor",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "arena"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor neptune": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "Neptune's triumph: frontal, drawn by sea horses, or among his creatures",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "neptune"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor dionysus": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "Dionysus: in his chariot, on his panther, or the vintage",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "dionysus"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor orpheus": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "Orpheus and the beasts, a wheel of compartments",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "orpheus"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor seasons": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "a story at the heart, the four seasons' heads at the corners",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "any",
+      "layout": "seasons"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor sea": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "the sea: fish, dolphins, an octopus",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "sea"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor xenia": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "xenia: what a host sets out, in compartments",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "xenia"
+     },
+     "layers": []
+    }
+   ]
+  },
+  "floor ostia": {
+   "size": [
+    1.6,
+    1.6
+   ],
+   "repeat": false,
+   "palette": "opus-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "Ostia's black and white: figures in black silhouette on white, their lines picked out",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0115,
+     "joint": 0.11,
+     "groutColor": "#5a5448",
+     "seed": 3,
+     "halo": 2,
+     "flow": [
+      4,
+      10
+     ],
+     "fine": {
+      "4": 0.9,
+      "10": 0.9
+     },
+     "thin": 0.45,
+     "tone": 0.06,
+     "ground": 0,
+     "model": {
+      "2": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "3": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "4": [
+       -0.14,
+       -0.03,
+       0.06,
+       0.1
+      ],
+      "5": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "6": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "7": [
+       -0.14,
+       -0.04,
+       0.05
+      ],
+      "8": [
+       -0.1,
+       -0.02,
+       0.05
+      ],
+      "9": [
+       -0.12,
+       -0.03,
+       0.05
+      ]
+     },
+     "plan": {
+      "kind": "floor",
+      "subject": "any",
+      "bw": true
+     },
+     "layers": []
+    }
+   ]
+  },
+  "wall any": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "a wall of a Byzantine church: what it shows, gold or night, its bands, the seed's",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "any"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall pantocrator": {
+   "size": [
+    1.5,
+    1.5
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "Christ Pantocrator: the bust, the book, the blessing",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0125,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "bust"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false
+  },
+  "wall virgin": {
+   "size": [
+    1.5,
+    1.5
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "the Virgin and Child enthroned",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0125,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "virgin"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false
+  },
+  "wall deesis": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "the Deesis: Christ between his Mother and the Baptist",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "deesis"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall emperor": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "an emperor with his court",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "court"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall empress": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "an empress with her ladies",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "empress"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall apostles": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "the apostles in a row",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "apostles"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall fathers": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "church fathers, frontal, hieratic",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "fathers"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall shepherd": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "the Good Shepherd among his sheep",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "shepherd"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall lambs": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "twelve lambs and the Lamb",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "lambs"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall cross": {
+   "size": [
+    1.5,
+    1.5
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 512,
+   "_about": "an apse's jewelled cross in a starry heaven",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0125,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "cross",
+      "ground": "blue"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false
+  },
+  "wall roundels": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "busts in roundels, jewelled",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "roundels"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "wall arcade": {
+   "size": [
+    2.6,
+    1.3
+   ],
+   "palette": "gold-stone",
+   "ground": 0,
+   "res": 1024,
+   "_about": "saints under arches",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0135,
+     "joint": 0.13,
+     "groutColor": "#54422a",
+     "seed": 5,
+     "tone": 0.05,
+     "gleam": 0.34,
+     "wander": 0.3,
+     "jitter": [
+      0.4
+     ],
+     "halo": 1,
+     "mix": {
+      "0": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       2
+      ]
+     },
+     "model": {
+      "3": [
+       -0.12,
+       -0.03,
+       0.05
+      ],
+      "4": [
+       -0.12,
+       -0.03,
+       0.06
+      ],
+      "5": [
+       -0.1,
+       -0.02,
+       0.03
+      ],
+      "7": [
+       -0.12,
+       -0.04,
+       0.05,
+       0.08
+      ]
+     },
+     "plan": {
+      "kind": "wall",
+      "subject": "arcade"
+     },
+     "layers": []
+    }
+   ],
+   "repeat": false,
+   "across": 2
+  },
+  "field bw": {
+   "size": [
+    1.2,
+    1.2
+   ],
+   "palette": "opus-bw",
+   "palettes": [
+    "opus-stone"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "a Roman geometric field in black and white; the seed picks which",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.013,
+     "joint": 0.11,
+     "groutColor": "#6e685b",
+     "seed": 3,
+     "plan": {
+      "kind": "field",
+      "schemes": [
+       [
+        1,
+        1,
+        2,
+        1,
+        0
+       ]
+      ]
+     },
+     "layers": []
+    }
+   ]
+  },
+  "field colour": {
+   "size": [
+    1.2,
+    1.2
+   ],
+   "palette": "opus-stone",
+   "palettes": [
+    "opus-stone"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "a geometric field in the floor's stones; which and in which colours, the seed's",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.013,
+     "joint": 0.11,
+     "groutColor": "#6e685b",
+     "seed": 3,
+     "plan": {
+      "kind": "field",
+      "schemes": [
+       [
+        1,
+        3,
+        8,
+        1,
+        0
+       ],
+       [
+        6,
+        3,
+        8,
+        1,
+        0
+       ],
+       [
+        9,
+        5,
+        8,
+        1,
+        0
+       ],
+       [
+        7,
+        1,
+        8,
+        5,
+        2
+       ],
+       [
+        3,
+        6,
+        0,
+        1,
+        2
+       ],
+       [
+        5,
+        7,
+        8,
+        1,
+        0
+       ],
+       [
+        1,
+        9,
+        2,
+        1,
+        0
+       ],
+       [
+        6,
+        1,
+        2,
+        1,
+        15
+       ]
+      ]
+     },
+     "layers": []
+    }
+   ]
+  },
+  "strip any": {
+   "size": [
+    0.72,
+    0.24
+   ],
+   "palette": "opus-stone",
+   "palettes": [
+    "opus-stone"
+   ],
+   "ground": 0,
+   "res": 512,
+   "_about": "a border's band, tiling along: guilloche, key, wave, dentils, chequer...",
+   "layers": [
+    {
+     "kind": "mosaic",
+     "stone": 0.0075,
+     "joint": 0.11,
+     "groutColor": "#6e685b",
+     "seed": 3,
+     "plan": {
+      "kind": "strip",
+      "schemes": [
+       [
+        1,
+        3,
+        8,
+        1,
+        0
+       ],
+       [
+        6,
+        3,
+        8,
+        1,
+        0
+       ],
+       [
+        9,
+        5,
+        8,
+        1,
+        0
+       ],
+       [
+        7,
+        1,
+        8,
+        5,
+        2
+       ],
+       [
+        3,
+        6,
+        0,
+        1,
+        2
+       ],
+       [
+        5,
+        7,
+        8,
+        1,
+        0
+       ],
+       [
+        1,
+        9,
+        2,
+        1,
+        0
+       ],
+       [
+        6,
+        1,
+        2,
+        1,
+        15
+       ]
+      ]
+     },
+     "layers": []
     }
    ]
   }

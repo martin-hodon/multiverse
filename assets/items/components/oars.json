@@ -2,7 +2,7 @@
  "kind": "item",
  "name": "Oars",
  "category": "component",
- "_about": "a bank of n oars a side, from x = from to x = to at the gunwale's height y and half-breadth z, thrust out and down `dip` degrees, on both sides",
+ "_about": "a bank of n oars a side, from x = from to x = to at the gunwale's height y and half-breadth z, on both sides; `state` out (thrust out and down `dip` degrees, as rowing) or shipped (run in and laid fore and aft along the inside of the gunwale, the blades forward, as a ship lies at a quay or sails)",
  "params": {
   "n": 12,
   "from": 3,
@@ -11,7 +11,8 @@
   "z": 2.2,
   "l": 4.5,
   "dip": 18,
-  "reach": 0.3
+  "reach": 0.3,
+  "state": "out"
  },
  "materials": {
   "wood": "ash"
@@ -20,6 +21,9 @@
   {
    "id": "oar",
    "use": "items/components/oar",
+   "when": {
+    "state": "out"
+   },
    "params": {
     "l": "l"
    },
@@ -43,6 +47,38 @@
     -90,
     0,
     "-dip"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "shipped",
+   "use": "items/components/oar",
+   "when": {
+    "state": "shipped"
+   },
+   "params": {
+    "l": "l"
+   },
+   "along": {
+    "n": "max(1, round(n / 3))",
+    "from": [
+     "from - l * 0.25",
+     "y + 0.12",
+     "z * 0.72"
+    ],
+    "to": [
+     "max(from, to - l * 0.7)",
+     "y + 0.12",
+     "z * 0.72"
+    ]
+   },
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    2
    ],
    "mirror": "z"
   }

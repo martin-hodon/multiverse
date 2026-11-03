@@ -5,6 +5,8 @@ black-figure, red-figure, white-ground, polychrome and painted relief -- `greek.
 `assets/greek/canon.json` (`tools/greekgen.py`). Unlike the Egyptian murals (`docs/murals.md`), a figure is not a pose
 from a table: bodies are solved, overlap, and aim at each other. Bench: `greek_lab.html`.
 
+The seed's streams and the dealing of roles live in `story/seed.js` and `story/roles.js`, shared with stained glass and mosaic (`docs/story.md`); `greek/rig.js`, `scene.js` and `field.js` import them. Pictures didn't change with the move: `stream` must stay as it is.
+
 ## What makes it Greek, and where each thing lives
 
 | Layer | File | What it decides |
@@ -73,6 +75,8 @@ Seeds run in streams by label (`stream(seed, "actor", id)`): changing the gear l
 - A group retries (further apart, then another draw) and keeps the try with the fewest faults: a shield over a head or someone down, a near forearm or held cup or own shaft across a face, a near fist on his own head, one's feet planted inside another's (`tangle`), a shaft from an arm lost behind its body, two shafts lying as one, a head, chest, belly or shield under a horse's near body or legs not his own, a spear running on to another's head (a shaft carried at an angle is at no one), a held cup in another's face, one fallen with his hips or chest inside another's stride, two points meeting in the air, a point run through a shield (a link aimed past a shield in the way lands on the shield instead): `faults(data, actors, why)` in `greek/scene.js` (`why`, an array, collects `what:action` to tally causes over seeds); bodies tangling otherwise are only kept apart by each scene's `at`, so someone fallen goes where a gap is (behind the fight, before the horses): in black silhouette he would merge with the legs over him.
 - Long paintings stay on a square layer of the tile array by running over several (`across` on a pattern, `archmat.js finishTexel`): 2048 wide over 4 layers on a 9.16 m wall is 224 pixels a metre, against 56 on one. Each layer costs 1.33 MB; the Acropolis's painted finishes take 26 or so.
 - Tiles on the Parthenon are repeated: 8 metopes a side, not 92 different ones.
+
+Roman floors use this same rig with their own beasts and scenes, merged over this data at use (`docs/story.md`, "The Roman rig"). A beast with no `hind` ends in a fish's tail.
 
 A pot's painting is fitted to its shape: `tools/potshapes.py` says its zones in heights on the pot, and `fit` turns them into shares of the painting, so a picture sits where the body is near its full width and isn't pinched at the feet. Its `aspect` is the picture's round over the profile's length; `wrap: [-W, 1]` covers the tile exactly once, right way up, the seam under a handle. A band's `squeeze` (its radius over the picture's) gives a narrow neck fewer cells; a panel's `at` places it (.25 is a one-sided pot's front, +z). A band may be `{ of: [names] }`, picked by seed, so ornament differs from pot to pot. A zone's `deal` gives a pot's few paintings each their own scenes by seed, not by a draw that may repeat; a scene's `rigid` keeps its spacing however tight the panel (a team yoked to its car). The inside of a pot is a separate lathe of glaze, except a kylix's: `disc: R` maps a unit tile from above, and a painting's `round: { r, w, band }` bends its ornament into a ring round the tondo.
 

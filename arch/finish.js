@@ -630,9 +630,11 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1], sun = null } 
   // interiors whose stretch it reaches
   const cutByInteriors = (polys, a, b, d) => {
     const x0 = Math.min(a[0], b[0], d[0]), x1 = Math.max(a[0], b[0], d[0]), z0 = Math.min(a[2], b[2], d[2]), z1 = Math.max(a[2], b[2], d[2]);
-    const y0 = Math.min(a[1], b[1], d[1]), y1 = Math.max(a[1], b[1], d[1]), E = 1e-6;
+    // (N: within PROBE of a plane's stretch, not only on it -- a wall's face just behind an oriel's interior, that sets
+    //  in from it by the oriel's wall, probes into it: uncut, all of a long triangle reaching out past the oriel went in)
+    const y0 = Math.min(a[1], b[1], d[1]), y1 = Math.max(a[1], b[1], d[1]), E = 1e-6, N = PROBE + E;
     for (const q of planes) {
-      if (x1 < q.box[0] - E || x0 > q.box[2] + E || z1 < q.box[1] - E || z0 > q.box[3] + E || y1 < q.y0 - E || y0 > q.y1 + E) continue;
+      if (x1 < q.box[0] - N || x0 > q.box[2] + N || z1 < q.box[1] - N || z0 > q.box[3] + N || y1 < q.y0 - N || y0 > q.y1 + N) continue;
       polys = polys.flatMap((poly) => {
         let mn = Infinity, mx = -Infinity;
         for (const v of poly) { const t = q.axis === 1 ? v[1] - q.c : v[0] * q.n[0] + v[2] * q.n[2] - q.d; if (t < mn) mn = t; if (t > mx) mx = t; }

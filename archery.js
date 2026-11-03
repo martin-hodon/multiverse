@@ -215,7 +215,9 @@ export function createArchery(scene, world) {
       if (Math.abs(e[12] - (p.x + q.x) / 2) > 2 || Math.abs(e[14] - (p.z + q.z) / 2) > 2) continue;
       _gi.copy(it.m).invert();
       const a = _ga.copy(p).applyMatrix4(_gi), b = _gb.copy(q).applyMatrix4(_gi);
-      take(it.kind === "barrel" ? vcyl(a.x, a.y, a.z, b.x, b.y, b.z, 0, 0, .35, 0, .95) : slab(a.x, a.y, a.z, b.x, b.y, b.z, -.5, .5, 0, .48, -.25, .25), { kind: "goods", item: it });
+      const B = it.box;   // (any other vessel -- amphora, jar, bale, crate: the box of its item, assets/world/goods.json)
+      take(it.cyl || it.kind === "barrel" ? vcyl(a.x, a.y, a.z, b.x, b.y, b.z, 0, 0, .35, 0, .95)
+        : B && it.kind !== "sack" ? slab(a.x, a.y, a.z, b.x, b.y, b.z, B[0][0], B[1][0], B[0][1], B[1][1], B[0][2], B[1][2]) : slab(a.x, a.y, a.z, b.x, b.y, b.z, -.5, .5, 0, .48, -.25, .25), { kind: "goods", item: it });
     }
     // figures: combat.js's test (a bounding sphere, then each part as a capsule)
     const fh = combat.hitFigure(p, q);

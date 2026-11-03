@@ -1,0 +1,223 @@
+{
+  "name": "welsche haube",
+  "_about": "THE WELSCHE HAUBE, the Renaissance cap of a German tower (the Frauenkirche's in Munich, 1525): a copper BULB on an eave ring set on the tower's head -- an onion struck from two radii (bulge, neck), rising without a drum, ribbed up its corners -- then a neck, a little knob, the rod, the gilt ball and the cross. Place it at the middle of the tower's head; `sides` faces to it (8 over an octagon), its faces on the axes like the tower's (`turn` -0.5: corners on them). Build without 'bulb ribs' for a smooth one. For a helm with open lanterns and a second bulb, use `baroque-helm`.",
+  "params": {
+    "detail": 4,
+    "sides": 8,
+    "R": 7.0,
+    "footH": 0.6,
+    "footOut": 0.3,
+    "turn": 0,
+    "bulge": 1.0,
+    "neck": 0.32,
+    "ribW": "R * 0.035",
+    "ribD": "R * 0.02",
+    "knobR": "R * 0.06",
+    "knobBulge": 1.3,
+    "knobNeck": 0.8,
+    "rodR": "R * 0.012",
+    "rodH": "R * 0.03",
+    "ballR": "R * 0.03",
+    "crossH": "R * 0.07",
+    "crossW": "R * 0.012",
+    "_R": "the bulb's radius at its eave (to its corners); the eave ring footH tall, its skirt flaring footOut past it at the foot",
+    "_bulge": "the bulb's two radii in half-widths (profiles.js onion): bulge 1 rises vertical from the eave, more swells out past it; neck the concave draw to the point -- small, a short sharp point (height R * sqrt(1 + 2 neck) at bulge 1)",
+    "_knobR": "the neck (knobR / 2 across, 0.7 knobR tall) and the little knob on it (an onion of knobBulge, knobNeck)",
+    "_rodH": "the rod (rodR, rodH), the ball (ballR in radius, a drop 2.1 ballR tall) and the cross (crossH, its bars crossW); haube_height() in tools/archgen/frauenkirche_munich.py adds it all up"
+  },
+  "build": [
+    "foot",
+    "bulb",
+    "bulb ribs",
+    "neck",
+    "knob",
+    "rod",
+    "ball",
+    "cross"
+  ],
+  "parts": {
+    "foot": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R + 0.05"
+      },
+      "height": "footH",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "courses": [
+        {
+          "y": 0,
+          "h": "footH",
+          "out": "footOut",
+          "profile": "batter"
+        }
+      ],
+      "_about": "the eave ring the bulb stands on, its copper skirt flaring footOut past it at the foot"
+    },
+    "bulb": {
+      "type": "dome",
+      "sides": "sides",
+      "radius": "R",
+      "thickness": 0,
+      "turn": "turn",
+      "at": [
+        [
+          0,
+          "footH",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "foot"
+      ],
+      "head": {
+        "profile": "onion",
+        "bulge": "bulge",
+        "neck": "neck"
+      },
+      "_about": "the bulb: an onion (bulge 1: rising vertical from its eave and not swelling past it, as Munich's; more: an onion) drawn in to its point (neck)"
+    },
+    "bulb ribs": {
+      "type": "ribs",
+      "on": "bulb",
+      "count": "sides",
+      "width": "ribW",
+      "depth": "ribD",
+      "standsOn": [
+        "bulb"
+      ],
+      "_about": "the standing ribs up its corners"
+    },
+    "neck": {
+      "type": "column",
+      "radius": "knobR * 0.5",
+      "height": "knobR * 1.4",
+      "sides": 8,
+      "at": [
+        [
+          0,
+          "0 - knobR * 0.3",
+          0,
+          0
+        ]
+      ],
+      "atop": "bulb",
+      "standsOn": [
+        "bulb"
+      ],
+      "_about": "the neck out of the bulb's point"
+    },
+    "knob": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "knobR",
+      "thickness": 0,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "neck",
+      "standsOn": [
+        "neck"
+      ],
+      "head": {
+        "profile": "onion",
+        "bulge": "knobBulge",
+        "neck": "knobNeck"
+      },
+      "_about": "the little knob on it"
+    },
+    "rod": {
+      "type": "column",
+      "radius": "rodR",
+      "height": "rodH",
+      "sides": 6,
+      "at": [
+        [
+          0,
+          "0 - knobR * 0.2",
+          0,
+          0
+        ]
+      ],
+      "atop": "knob",
+      "standsOn": [
+        "knob"
+      ],
+      "_about": "the rod"
+    },
+    "ball": {
+      "type": "dome",
+      "sides": 8,
+      "radius": "ballR * 0.4",
+      "thickness": 0,
+      "at": [
+        [
+          0,
+          "0 - ballR * 0.6",
+          0,
+          0
+        ]
+      ],
+      "atop": "rod",
+      "standsOn": [
+        "rod"
+      ],
+      "head": {
+        "profile": "onion",
+        "bulge": 2.5,
+        "neck": 0.45
+      },
+      "_about": "the gilt ball"
+    },
+    "cross": {
+      "type": "bars",
+      "w": "crossW",
+      "h": "crossW",
+      "lines": [
+        [
+          0,
+          0,
+          0,
+          0,
+          "crossH",
+          0
+        ],
+        [
+          "0 - crossH * 0.3",
+          "crossH * 0.68",
+          0,
+          "crossH * 0.3",
+          "crossH * 0.68",
+          0
+        ]
+      ],
+      "at": [
+        [
+          0,
+          "0 - ballR * 0.3",
+          0,
+          0
+        ]
+      ],
+      "atop": "ball",
+      "standsOn": [
+        "ball"
+      ],
+      "_about": "the cross on the ball"
+    }
+  }
+}

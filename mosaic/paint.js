@@ -25,8 +25,8 @@ export function colourStones({ stones: st, cover, mortar, W, H }, map, pal, grou
 }
 
 // the texels: stones and grout at the map's grid, boxed down to the tile's in linear light, as the lift reckoned. { rgba, W, H }
-export function paintStones(layout, colours, groutRGB, px) {
-  const { cover, mortar, W, H } = layout, [w, h] = px, rgba = new Uint8ClampedArray(w * h * 4), fx = W / w, fy = H / h, G = groutRGB.map(lin), out = new Uint8Array(4097).map((_, i) => srgb(i / 4096) + .5);
+export function paintStones(layout, colours, groutRGB, px, thick = 1) {
+  const { cover, mortar, W, H } = layout, [w, h] = px, rgba = new Uint8ClampedArray(w * h * 4), fx = W / w, fy = H / h, G = groutRGB.map(lin), gm = .5 * thick, sm = 1 - gm, out = new Uint8Array(4097).map((_, i) => srgb(i / 4096) + .5);
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     let r = 0, g = 0, b = 0, c = 0;
     const y0 = Math.floor(y * fy), y1 = Math.max(y0 + 1, Math.floor((y + 1) * fy)), x0 = Math.floor(x * fx), x1 = Math.max(x0 + 1, Math.floor((x + 1) * fx));
@@ -34,7 +34,7 @@ export function paintStones(layout, colours, groutRGB, px) {
       const k = cover[Y * W + X];
       const s = (k - 1) * 3;
       if (!mortar[Y * W + X]) { r += colours[s]; g += colours[s + 1]; b += colours[s + 2]; }
-      else { r += (G[0] + colours[s]) / 2; g += (G[1] + colours[s + 1]) / 2; b += (G[2] + colours[s + 2]) / 2; }
+      else { r += G[0] * gm + colours[s] * sm; g += G[1] * gm + colours[s + 1] * sm; b += G[2] * gm + colours[s + 2] * sm; }
       c++;
     }
     const i = (y * w + x) * 4;
