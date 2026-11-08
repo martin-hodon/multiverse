@@ -82,6 +82,21 @@ const PARTS = {
     }
     log(`faces: ${n} heads for ${people} people in ${ms(t)}`);
   },
+  // THE CREATURES' SHAPES (bodies.js "BAKED SHAPES"): every look the world makes of every definition (species.js
+  // allLooks), each body's shape built as a load builds it (shared within its family, in the workers) and written to
+  // shapes/ with an index under the mesher's hash -- so no player builds them. A look that fails is said and skipped.
+  async bodies() {
+    const t = performance.now(), { allLooks } = await import("./species.js"), { sculptOf } = await import("./bodyspec.js"), B = await import("./bodies.js");
+    const bodies = [];
+    for (const d of allLooks((p, e) => log(`${p}: a look FAILED ${e.message}`))) { try { const s = sculptOf(d); if (s?.sculpted) bodies.push(s.sculpted); } catch (e) { log(`${d.name}: FAILED ${e.message}`); } }
+    const made = new Map();
+    await Promise.all(bodies.map((b) => B.shapeOf(b).then(({ key, shape }) => made.set(key, shape), (e) => log(`${b.name}: FAILED ${e.message}`))));
+    const index = { code: await B.mesherCode(), made: new Date().toISOString(), shapes: {} };
+    let bytes = 0;
+    for (const [k, S] of made) { const z = await gzip(B.packShape(S)); bytes += z.byteLength; await put(`shapes/${k}.bin`, z); index.shapes[k] = `${k}.bin`; }
+    await put("shapes/index.json", JSON.stringify(index));
+    log(`bodies: ${made.size} shapes for ${bodies.length} looks, ${(bytes / 1e6).toFixed(1)} MB, in ${ms(t)}`);
+  },
   // every fabric the tailor can dress anyone in (clothes.js registers the family and the dyes)
   async fabrics() {
     const t = performance.now();

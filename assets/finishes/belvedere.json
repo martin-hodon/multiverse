@@ -1,0 +1,501 @@
+{
+  "name": "Belvedere",
+  "building": "architecture/belvedere",
+  "_about": "The Belvedere (written by tools/archgen/belvedere.py): pale cream stucco with every order, cornice, window surround and balustrade in white, the ground storey banded; the roofs, domes and lanterns green copper with gilt finials and the gilt arms in the pediment; inside, the Sala Terrena's white stucco, the Prunkstiege's white walls under a painted ceiling, the Marmorsaal's marbled walls and red-brown marble pilasters under Carlone's fresco, the chapel's rose marbling, the state rooms' damask and parquet; outside, the pale gravel, the lawns, the box and yew, the water.",
+  "stone": {
+    "color": "#e9e0c8",
+    "accent": "#d8cdb0",
+    "pat": "ashlar"
+  },
+  "rules": [
+    {
+      "parts": "kind:glass",
+      "pattern": "glass/quarries",
+      "palette": "grisaille",
+      "_about": "clear glass in small panes"
+    },
+    {
+      "parts": [
+        "north-east dome/finial",
+        "south-east dome/finial",
+        "north-west dome/finial",
+        "south-west dome/finial",
+        "cartouche arms",
+        "cartouche crown"
+      ],
+      "pattern": "roofs/gold leaf",
+      "palette": "gold",
+      "_about": "the finials and the Savoy arms gilt"
+    },
+    {
+      "parts": [
+        "roof dormers/roof"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the dormers' hoods"
+    },
+    {
+      "parts": [
+        "roof dormers"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "...their white fronts"
+    },
+    {
+      "parts": [
+        "centre roof",
+        "east block roof",
+        "west block roof",
+        "east wing roof",
+        "west wing roof"
+      ],
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the mansards: green copper"
+    },
+    {
+      "parts": [
+        "north-east dome",
+        "south-east dome",
+        "north-west dome",
+        "south-west dome"
+      ],
+      "side": "out",
+      "pattern": "roofs/sheet metal",
+      "palette": "copper",
+      "_about": "the pavilions' domes and lanterns: green copper"
+    },
+    {
+      "parts": [
+        "projection roof"
+      ],
+      "surface": "roof",
+      "pattern": "roofs/sheet metal",
+      "palette": "copper"
+    },
+    {
+      "parts": [
+        "chimneys"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "ivory"
+    },
+    {
+      "parts": [
+        "box hedges",
+        "yew cones",
+        "allee yews",
+        "east allee hedge",
+        "west allee hedge"
+      ],
+      "color": "#33502b",
+      "accent": "#294322",
+      "_about": "clipped box and yew"
+    },
+    {
+      "parts": [
+        "lawn 1",
+        "lawn 2",
+        "lawn 3",
+        "lawn 4",
+        "pool lawn east",
+        "pool lawn west"
+      ],
+      "surface": "floor",
+      "pattern": "materials/grass",
+      "palette": "lawn",
+      "_about": "the lawns"
+    },
+    {
+      "parts": [
+        "lawn 1",
+        "lawn 2",
+        "lawn 3",
+        "lawn 4",
+        "pool lawn east",
+        "pool lawn west"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone",
+      "_about": "their stone edging"
+    },
+    {
+      "parts": [
+        "parterre gravel",
+        "forecourt",
+        "pool walk east",
+        "pool walk west",
+        "pool walk south",
+        "court floor"
+      ],
+      "surface": "floor",
+      "pattern": "stone/sand",
+      "palette": "loire-gravel",
+      "_about": "the pale gravel of the walks and the court"
+    },
+    {
+      "parts": [
+        "fountain 1 water",
+        "fountain 2 water",
+        "upper basin water",
+        "lower basin water",
+        "cascade water 1",
+        "cascade water 2",
+        "cascade water 3"
+      ],
+      "color": "#5b7f88",
+      "accent": "#4b6d76",
+      "_about": "the basins' water"
+    },
+    {
+      "parts": [
+        "fountain 1 basin",
+        "fountain 2 basin",
+        "upper basin",
+        "lower basin",
+        "cascade step 1",
+        "cascade step 2",
+        "cascade step 3",
+        "cascade cheek east",
+        "cascade cheek west",
+        "court south wall",
+        "court north wall",
+        "court east wall",
+        "court west wall",
+        "pool kerb",
+        "stair cheeks",
+        "lower basin rocks",
+        "fountain 1 pedestal",
+        "fountain 2 pedestal",
+        "upper basin group pedestal"
+      ],
+      "pattern": "stone/ashlar",
+      "palette": "limestone",
+      "_about": "the basins, the cascade, the court's walls and the kerbs: grey-white stone"
+    },
+    {
+      "parts": [
+        "sphinxes"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone",
+      "_about": "the sphinxes"
+    },
+    {
+      "parts": [
+        "east horse group",
+        "west horse group"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone"
+    },
+    {
+      "parts": [
+        "marmorsaal pilasters"
+      ],
+      "pattern": "stone/marble",
+      "palette": "granite-red",
+      "_about": "the Marmorsaal's pilasters: red-brown Adnet marble"
+    },
+    {
+      "parts": [
+        "marmorsaal capitals",
+        "marmorsaal cornice",
+        "marmorsaal gallery band",
+        "furniture chandelier"
+      ],
+      "pattern": "roofs/gold leaf",
+      "palette": "gold",
+      "_about": "their gilt capitals, the gilt cornice and band"
+    },
+    {
+      "within": [
+        -11.2,
+        -15.5,
+        11.2,
+        1.6
+      ],
+      "side": "in",
+      "surface": "ceiling",
+      "above": 7.9,
+      "pattern": "stone/plaster",
+      "palette": "pilar-fresco",
+      "_about": "Carlone's ceiling"
+    },
+    {
+      "within": [
+        -11.2,
+        -15.5,
+        11.2,
+        1.6
+      ],
+      "side": "in",
+      "surface": "wall",
+      "above": 16.55,
+      "pattern": "stone/plaster",
+      "palette": "alabaster",
+      "_about": "the Marmorsaal's upper storey: white stucco round the oculi, Chiarini's painted architecture"
+    },
+    {
+      "within": [
+        -11.2,
+        -15.5,
+        11.2,
+        1.6
+      ],
+      "side": "in",
+      "surface": "wall",
+      "above": 6.800000000000001,
+      "pattern": "painted/faux marble",
+      "palette": "marble-rose",
+      "_about": "...its lower storey: red marble"
+    },
+    {
+      "within": [
+        -11.2,
+        -15.5,
+        11.2,
+        1.6
+      ],
+      "side": "in",
+      "surface": "floor",
+      "above": 6.4,
+      "pattern": "floors/checker diagonal",
+      "palette": "marble-rose",
+      "_about": "...its marble floor"
+    },
+    {
+      "parts": [
+        "atlas pedestals",
+        "atlas pedestal caps",
+        "atlas pedestal bases",
+        "atlas imposts",
+        "atlas abaci"
+      ],
+      "pattern": "stone/ashlar fine",
+      "palette": "limestone"
+    },
+    {
+      "parts": [
+        "sala terrena vault 1",
+        "sala terrena vault 2",
+        "sala terrena vault 3",
+        "sala terrena vault 4",
+        "sala terrena vault 5",
+        "sala terrena vault 6",
+        "sala terrena vault 7",
+        "sala terrena vault 8",
+        "sala terrena vault 9"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "the Sala Terrena's white stucco vaults"
+    },
+    {
+      "within": [
+        -11.2,
+        -15.5,
+        11.2,
+        1.6
+      ],
+      "side": "in",
+      "surface": "floor",
+      "pattern": "floors/checker",
+      "palette": "marble-grey",
+      "_about": "...its stone floor"
+    },
+    {
+      "within": [
+        -11.2,
+        -15.5,
+        11.2,
+        1.6
+      ],
+      "side": "in",
+      "surface": "wall",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white"
+    },
+    {
+      "parts": [
+        "prunkstiege down",
+        "prunkstiege east flight",
+        "prunkstiege west flight",
+        "prunkstiege east upper flight",
+        "prunkstiege west upper flight",
+        "vestibule floor"
+      ],
+      "pattern": "floors/flagstones",
+      "palette": "limestone",
+      "_about": "the stairs and the vestibule: stone"
+    },
+    {
+      "within": [
+        -8.3,
+        1.5,
+        8.3,
+        18.5
+      ],
+      "side": "in",
+      "surface": "ceiling",
+      "above": 13.0,
+      "pattern": "stone/plaster",
+      "palette": "pilar-fresco",
+      "_about": "the stair hall's painted ceiling"
+    },
+    {
+      "within": [
+        -8.3,
+        1.5,
+        8.3,
+        18.5
+      ],
+      "side": "in",
+      "surface": "wall",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "its white stucco walls"
+    },
+    {
+      "parts": [
+        "chapel retable",
+        "chapel retable columns",
+        "chapel altar"
+      ],
+      "pattern": "painted/faux marble",
+      "palette": "marble-grey"
+    },
+    {
+      "within": [
+        49.8,
+        8.3,
+        61.0,
+        18.1
+      ],
+      "side": "in",
+      "surface": "wall",
+      "above": 6.800000000000001,
+      "pattern": "painted/faux marble",
+      "palette": "baroque-rose",
+      "_about": "the chapel's marbling"
+    },
+    {
+      "parts": [
+        "chapel cupola"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "pilar-fresco",
+      "_about": "its painted cupola"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "above": 6.800000000000001,
+      "below": 14.3,
+      "pattern": "fabrics/damask",
+      "palette": "damask-red",
+      "_about": "the state rooms' damask"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "above": 6.4,
+      "pattern": "timber/herringbone",
+      "palette": "oak",
+      "_about": "the upper floors' parquet"
+    },
+    {
+      "surface": "floor",
+      "side": "in",
+      "pattern": "floors/checker",
+      "palette": "marble-grey",
+      "_about": "the ground floor's stone"
+    },
+    {
+      "surface": "ceiling",
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white"
+    },
+    {
+      "surface": "wall",
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white"
+    },
+    {
+      "side": "in",
+      "pattern": "stone/plaster",
+      "palette": "plaster-white"
+    },
+    {
+      "parts": [
+        "platform",
+        "perron",
+        "link"
+      ],
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "limestone",
+      "_about": "the terrace's and the perron's flags"
+    },
+    {
+      "parts": [
+        "east link terrace",
+        "west link terrace"
+      ],
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "limestone"
+    },
+    {
+      "surface": "floor",
+      "pattern": "floors/flagstones",
+      "palette": "limestone",
+      "_about": "the ramps, the flights and the roofs' decks"
+    },
+    {
+      "parts": [
+        "kind:moulding",
+        "kind:column",
+        "kind:colonnade",
+        "kind:bars",
+        "pediment east",
+        "pediment west",
+        "garden pediment",
+        "cartouche",
+        "cartouche frame",
+        "pediment base cornice",
+        "roofline piers"
+      ],
+      "pattern": "stone/plaster",
+      "palette": "plaster-white",
+      "_about": "every order, cornice, band, window surround, balustrade and the pediments: white"
+    },
+    {
+      "parts": [
+        "platform",
+        "perron",
+        "stair cheeks"
+      ],
+      "surface": "wall",
+      "pattern": "stone/rusticated",
+      "palette": "limestone",
+      "_about": "the platform's rusticated stone"
+    },
+    {
+      "surface": "wall",
+      "below": 6.9,
+      "pattern": "stone/stucco lines",
+      "palette": "ivory",
+      "_about": "the ground storey: banded stucco"
+    },
+    {
+      "pattern": "stone/plaster",
+      "palette": "ivory",
+      "_about": "the facades: pale cream stucco"
+    }
+  ]
+}

@@ -82,7 +82,20 @@ export const SHELL = {
   chain: 1,                                  // 0: one lathe per part again, to see what the chains are worth
   seam: 1,                                   // ?shellseam=0: the joints as before -- rings spread by fractions, handed over, not mitred, no limb roots
   debug: 0,                                  // ?shelldebug=1: print how each species was split into chains
+  detail: 250,                               // a `detail` part (a brow, a cheekbone) is left out past this many times its own girth
+  // a SPIKE -- a quill, a claw, a tooth: one small straight part coming to a point -- is a spindle and nothing more: the
+  // root's pole (inside what it grows from), ONE ring halfway, the tip's pole -- 2 rings, `spike[1]` points round, 16
+  // triangles at every distance. Through the lathe's bands a hedgehog's 126 quills cost 126 full chains (320 triangles
+  // each near by, 56 far). spike[0]: the largest girth (radius, metres) that counts, spike[1]: points round;
+  // ?shellspike=0 sweeps them as any other chain
+  spike: [.012, 4],
 };
+
+// FACET: how much of a creature's light falls on its triangles' own planes (0 smooth .. 1 hard facets; shellShade)
+// ...and how much coarser its sweep is: its chains go to the detail band they would at this many times their distance;
+// contrast: how many times its planes' light differs from the smooth shape's under them (?facetcontrast=); fur: how
+// much of the coat's strand noise is taken off a faceted hide (it blurred the planes)
+export const FACET = { mix: 1, coarse: 2, contrast: 2.2, fur: .7 };
 
 // FLEECE: a woolly part's lumps -- how wide (metres: a few of the near band's points across one, or they would alias
 // into a jagged ring) and how far proud of the part at most
@@ -97,6 +110,10 @@ export function shellFromQuery(qp) {
   if (qp.has("shellmark")) SHELL.mark = +qp.get("shellmark");
   if (qp.has("shellskin")) SHELL.skin = +qp.get("shellskin");
   if (qp.has("shelldebug")) SHELL.debug = 1;
+  if (qp.has("shellspike")) SHELL.spike = +qp.get("shellspike") ? SHELL.spike : null;
+  if (qp.has("facet")) FACET.mix = +qp.get("facet");
+  if (qp.has("facetcoarse")) FACET.coarse = +qp.get("facetcoarse");
+  if (qp.has("facetcontrast")) FACET.contrast = +qp.get("facetcontrast");
   return SHELL;
 }
 
@@ -264,6 +281,14 @@ function shellChains(parts, at) {
     }
     return bend;
   });
+  // ...and which chains are SPIKES (SHELL.spike): one part, round and straight, narrowing to under a third of its base, no
+  // thicker than spike[0] and no longer than ten times that -- a quill, a claw; not a beak (thicker), not a horn (longer)
+  const spike = chains.map((c) => {
+    if (!SHELL.spike || c.length !== 1) return false;
+    const p = parts[c[0]];
+    return solidPart(p) && !isTube(p) && !p.flat && !p.clip && !p.cling && !p.stone && p.pat !== PAT_TWIST
+      && p.r1 <= SHELL.spike[0] && endR(p) <= p.r1 / 3 && len[c[0]] <= 10 * SHELL.spike[0];
+  });
   const nbOf = shellNeighbours(parts, of, seg);
   if (SHELL.debug) {                                 // ?shelldebug=1: what this species was split into
     console.log("shell cut parts: " + parts.map((p, i) => [p, i]).filter(([p]) => p.clip)
@@ -274,7 +299,7 @@ function shellChains(parts, at) {
       `  [${ci}] ` + c.map((i) => `#${i} r ${parts[i].r1.toFixed(3)}/${(parts[i].r2 < 0 ? parts[i].r2 : parts[i].r2).toFixed(3)}` +
         ` len ${len[i].toFixed(3)} k ${parts[i].k.toFixed(3)} at ${seg[i][0].map((v) => v.toFixed(2)).join(",")}`).join("  +  ")).join("\n"));
   }
-  const out = { chains, of, size, curve, nb: nbOf };
+  const out = { chains, of, size, curve, spike, nb: nbOf };
   Object.defineProperty(parts, "_shellCh", { value: out, enumerable: false });
   return out;
 }
@@ -1015,7 +1040,15 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
       let kR = floor(uv.x * nr + 0.5);
       let capR = max(1.0, floor(nr * capF + 0.5));
       let spanR = nr - 2.0 * capR;
-      if (spanR >= f32(cnt) && ${SHELL.seam ? "true" : "false"}) {
+      // A LONE BALL (a head, a joint blob: one part of no length) has no span to walk, and the share of rings a span
+      // would get all landed on its equator -- the sphere was drawn from the poles and two latitudes either side, 45
+      // degrees apart, its faces sunk up to 8% of its radius inside the true one (an eye painted on that sphere stood
+      // off the drawn head in the air). Every ring goes to its two caps instead, evenly by latitude: the same grid,
+      // a rounder ball.
+      let d0 = CB[0].xyz - CA[0].xyz;
+      let ball = cnt == 1 && !tube && dot(d0, d0) < 0.0025 * CK[0].x * CK[0].x;
+      if (ball) { let f = kR / nr * 2.0 - 1.0; x = select(f32(cnt) + f * 0.5, f * 0.5, f < 0.0); }
+      else if (spanR >= f32(cnt) && ${SHELL.seam ? "true" : "false"}) {
         if (kR < capR) { x = (kR / capR - 1.0) * 0.5; }
         else if (kR > nr - capR) { x = f32(cnt) + (kR - (nr - capR)) / capR * 0.5; }
         else {
@@ -1641,21 +1674,49 @@ const shellPoint = (W, ST, viewSpace) => wgslFn(`
     // inside the head and never seen (which is why they were missing). Each vertex climbs out along the
     // surface it is buried in and stands SHELL.mark millimetres proud of it, which is where a painted mark
     // looks like it is.
-    if (mark) {
-      for (var j: i32 = 0; j < 4; j = j + 1) {
-        if (nb[j] < -0.5 && nb[j] > -1.5) { continue; }
-        let sj = i32(select(nb[j], -nb[j] - 2.0, nb[j] < -1.5) + 0.5);
-        let QA = texel(tex, sj * 3);
-        let QB = texel(tex, sj * 3 + 1);
-        let qua = unpackAw(QA.w);
-        if (QB.w < 0.0) { continue; }
-        // it must clear that neighbour's SHELL, not its distance field: the shell is bulged outward by up to
-        // a quarter of its own blend radius wherever it fillets into something, and a mark lifted by less than
-        // that is still buried -- which is exactly why 2 mm was not enough and the faces stayed blank.
-        let eps = qua.y * 0.25 + lift * 0.001;
-        let d = sdRoundCone(P, QA.xyz, QB.xyz, abs(qua.x), QB.w);
-        if (d < eps) {
-          P = P - capsuleNormal(P, QA.xyz, QB.xyz) * (d - eps);
+    // ON THE SURFACE, NOT OVER IT (2026-11-04). It used to clear the parent by a quarter of its blend radius everywhere --
+    // the most its shell can bulge where it fillets into a neighbour -- which on a beast's head (a blend of 8 cm) stood
+    // every eye 2 cm off the face, floating beside it when seen from the front. The parent's shell is its own surface
+    // except near a neighbour, so the mark is laid ON that: every vertex of it put at the parent's own distance plus the
+    // fillet the sweep gives the parent there (the same rule: its neighbours ride in the mark's other three slots), plus
+    // SHELL.mark -- the plate bends round the head as the head does, an eye in the face rather than a disc stuck by it.
+    // Where a neighbour's own shell stands over the spot (a brow, a cheek), it climbs out of that too.
+    if (mark && nb[0] > -0.5) {
+      let sp = i32(nb[0] + 0.5);
+      let PA = texel(tex, sp * 3);
+      let PB = texel(tex, sp * 3 + 1);
+      let pua = unpackAw(PA.w);
+      if (PB.w >= 0.0) {
+        let pr = abs(pua.x);
+        var bulge = 0.0;
+        for (var j: i32 = 1; j < 4; j = j + 1) {
+          if (nb[j] < -0.5) { continue; }
+          let sj = i32(nb[j] + 0.5);
+          let QA = texel(tex, sj * 3);
+          let QB = texel(tex, sj * 3 + 1);
+          let qua = unpackAw(QA.w);
+          var qrA = abs(qua.x);
+          var qrB = QB.w;
+          if (QB.w < -1.5) { let g = tubeUnpack(QB.w); let m = (qrA + g.x) * 0.5 + g.y * 0.7; qrA = m; qrB = m; }
+          else if (QB.w < 0.0) { continue; }
+          var kk = max(pua.y, 0.004);
+          if (qrA > pr * 1.5) { kk = max(kk, qua.y * 0.5); }
+          let d = sdRoundCone(P, QA.xyz, QB.xyz, qrA, qrB);
+          if (d > kk) { continue; }
+          let hh = max(kk - max(d, 0.0), 0.0) / kk;
+          if (d >= 0.0) { bulge = max(bulge, hh * hh * kk * 0.25); }
+        }
+        let dP = sdRoundCone(P, PA.xyz, PB.xyz, pr, PB.w);
+        P = P - capsuleNormal(P, PA.xyz, PB.xyz) * (dP - bulge - lift * 0.001);
+        for (var j: i32 = 1; j < 4; j = j + 1) {
+          if (nb[j] < -0.5) { continue; }
+          let sj = i32(nb[j] + 0.5);
+          let QA = texel(tex, sj * 3);
+          let QB = texel(tex, sj * 3 + 1);
+          let qua = unpackAw(QA.w);
+          if (QB.w < 0.0) { continue; }
+          let d = sdRoundCone(P, QA.xyz, QB.xyz, abs(qua.x), QB.w);
+          if (d < lift * 0.001) { P = P - capsuleNormal(P, QA.xyz, QB.xyz) * (d - lift * 0.001); }
         }
       }
     }
@@ -2379,6 +2440,22 @@ const shellShade = (W, ST, viewSpace) => wgslFn(`
     let r = max(max(abs(ua.x), B.w), girth);
     var c = col;
     var nn = normalize(n);
+    var n0 = nn;
+    var faceted = false;
+    // FACETED (a creature's part: 16384 in its flags where it is not stone -- mammals.js facet): the light falls on
+    // each TRIANGLE's own plane instead of the smooth normal, the stylised low-poly look -- the swept rings and their
+    // points round read as flat facets, a hide of planes rather than a pill. FACET.mix of the flat normal (the rest the
+    // smooth one, so a facet is never a cliff of light); ?facet=0 draws them smooth again
+    if (${FACET.mix > 0 ? "true" : "false"} && flags >= 16384.0 && floor(flags / 2048.0) - 8.0 * floor(flags / 16384.0) < 0.5) {
+      var fN = cross(dpdx(pw), dpdy(pw));
+      let fl = length(fN);
+      if (fl > 1e-12) {
+        fN = fN / fl;
+        if (dot(fN, nn) < 0.0) { fN = -fN; }
+        nn = normalize(mix(nn, fN, ${sf(FACET.mix)}));
+        faceted = true;
+      }
+    }
     // a flat HAND (its radius negative, C.y its palm flag: shell.js above): its fingers' grooves, the normal's tilt and the darkness
     var fing = vec4<f32>(0.0);
     if (ua.x < 0.0 && C.y > 0.5) {
@@ -2515,7 +2592,7 @@ const shellShade = (W, ST, viewSpace) => wgslFn(`
       } else if (pat > 0.5) {
         c = patternAt(c, pat, pl, r, patPx, patAx);
       }
-      if (furry) { c = furAt(c, pl0, patPx); }
+      if (furry) { c = mix(furAt(c, pl0, patPx), c, select(0.0, ${sf(FACET.fur)}, faceted)); }   // (faceted: the planes read, not the strands)
       if (fleecy) {   // (FLEECE's small lumps, in the light: dark crevices between the locks -- finer than the vertices can heap)
         let lq = pl0 * ${(6.2832 / FLEECE.lock).toFixed(3)};
         let b = sin(lq.x + 0.9 * sin(lq.z * 0.6)) * sin(lq.y + 0.9 * sin(lq.x * 0.7)) * sin(lq.z + 0.9 * sin(lq.y * 0.8));
@@ -2523,6 +2600,9 @@ const shellShade = (W, ST, viewSpace) => wgslFn(`
         c = c * (1.0 - ${FLEECE.crease} * fade * (1.0 - smoothstep(-0.6, 0.4, b)));
       }
     }
+    // (faceted: each plane's light apart from the smooth body's under it, FACET.contrast times -- the world's ambient
+    //  is high, so the planes alone were only a few percent apart; the shape's own light and shade stay as they were)
+    if (faceted) { let s0 = shadeOf(n0); return c * max(s0 + (shadeOf(nn) - s0) * ${sf(FACET.contrast)}, 0.05); }
     return c * shadeOf(nn);
   }
 `, [texelFor(W), unpackAw, LIB.partLocal, LIB.patternAt, strandsAt, furAt, LIB.shadeOf, dressFns(W, ST).dressAt, dressFns(W, ST).dressOpen, dressFns(W, ST).dressEdge, clothFrame, stoneAt, fingersAt, anatomyAt, limbAt, selfShade(W, ST, viewSpace)]);
@@ -2596,6 +2676,16 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
     b.mesh.visible = false;
     buckets.push(b);
   }
+  // (and the SPIKES' one grid, last: no band and no class, so the search by distance below never lands on it)
+  if (SHELL.spike) {
+    const b = { far: Infinity, cls: -1, spike: true, rings: 2, divs: SHELL.spike[1], carved: false, n: 0, want: 0 };
+    b.geo = shellGrid(b.rings, b.divs);
+    setArrays(b, SHELL_ROOM);
+    b.mesh = new THREE.Mesh(b.geo, material);
+    b.mesh.frustumCulled = false; b.mesh.renderOrder = 1; b.mesh.userData.sdf = true; b.mesh.visible = false;
+    buckets.push(b);
+  }
+  const farB = (SHELL.lod.length - 1) * LENGTHS.length;   // the coarsest band's first bucket: where a chain past every band goes
 
   return {
     meshes: buckets.map((b) => b.mesh),
@@ -2608,7 +2698,7 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
       // to be drawn, and the chains worked out from those zeros would then be cached and wrong for every
       // figure of that species from then on. It waits a frame.
       if (!an._posed) return;
-      const parts = an.parts, { chains, of, size, curve, nb } = shellChains(parts, (i) => ends(an, i));
+      const parts = an.parts, { chains, of, size, curve, spike, nb } = shellChains(parts, (i) => ends(an, i));
       for (let ci = 0; ci < chains.length; ci++) {
         const c = chains[ci];
         // (a CARVED chain -- a statue's -- a class finer: its muscles swell it and its joints want rings to bend
@@ -2616,10 +2706,16 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
         const cls = Math.min(LENGTHS.length - 1, classOf(curve[ci], c.length) + (parts[c[0]]?.stone ? 1 : 0));
         // the bucket is picked by distance in CHAIN LENGTHS, so a muzzle or an ear falls to the coarse grid
         // while a body a hundred times its size keeps the fine one at the same distance
-        const far = dist / Math.max(size[ci], .04);
+        // (a FACETED chain -- a creature's -- as if FACET.coarse times further: its facets are the look, broad planes and
+        //  not a fine lathe; and what that saves on the body pays for the brow, the cheeks and the jaw)
+        const far = dist / Math.max(size[ci], .04) * (parts[c[0]].facet ? FACET.coarse : 1);
+        // (a DETAIL -- a brow, a cheekbone, the inside of an ear: mammals.js faceParts -- is not drawn at all once it is
+        //  smaller on screen than a few pixels; what it shapes is lost in the distance anyway)
+        if (parts[c[0]].detail && dist > SHELL.detail * size[ci]) continue;
         const carved = !!parts[c[0]]?.stone && !!parts[c[0]].clip && c.length === 1 && far <= SHELL.lod[0][0];
-        let b = buckets[buckets.length - 2 * LENGTHS.length + cls];
-        for (const q of buckets) if (far <= q.far && q.cls === cls && q.carved === carved) { b = q; break; }
+        let b = buckets[farB + cls];
+        if (spike[ci]) b = buckets[buckets.length - 1];
+        else for (const q of buckets) if (far <= q.far && q.cls === cls && q.carved === carved) { b = q; break; }
         // A BUCKET THAT IS FULL WAITS. push() runs inside the render (the herd syncs in onBeforeRender), and
         // swapping a geometry's attributes there hands three a buffer it has already bound for this frame --
         // which is a GPU validation error and a lost device a moment later. The bucket asks for room instead,
@@ -2651,9 +2747,13 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
         // off the face (and the mouth with it).
         const mine = c[0];
         if (isMark(parts[mine])) {
-          const par = parts[mine].parentIdx;
+          // (...and the parent's own neighbours after it: the fillet its shell has where the mark lies, shellPoint)
+          // (a creature's -- faceted -- its OWN nearest instead, the parent left out: a head has a brow, cheeks, a jaw and
+          //  ears all nearer to its middle than the neck, and a pig's small head half inside its neck hid the eyes under it;
+          //  a person's keeps its head's, which do not reach a hat's ball over the brow)
+          const par = parts[mine].parentIdx, pl = par >= 0 ? (parts[par].facet ? nb[mine].filter((o) => o !== par).concat([-1]) : nb[par]) : null;
           put(b.nb, w, par >= 0 ? an.base + par : -1);
-          for (let j = 1; j < 4; j++) put(b.nb, w + j, -1);
+          for (let j = 1; j < 4; j++) put(b.nb, w + j, pl && pl[j - 1] >= 0 && j - 1 < SHELL.near ? an.base + pl[j - 1] : -1);
         } else {
           const list = nb[mine];
           for (let j = 0; j < 4; j++) {
@@ -2689,6 +2789,7 @@ export function createShell({ nDyn, nStat, W, ST, viewSpace, cap, touch, ends })
     setDetail(k) {
       const m = Math.max(.25, Math.min(6, k));
       for (const b of buckets) {
+        if (b.spike) continue;                   // (a cone is a cone at any detail)
         const base = SHELL.lod.find(([far]) => far === b.far) ?? SHELL.lod[SHELL.lod.length - 1];
         const rings = Math.max(4, Math.round(base[1] * m * LENGTHS[b.cls])), divs = Math.max(3, Math.round(base[2] * m * (b.carved ? STONE.divs : 1)));
         if (rings === b.rings && divs === b.divs) continue;

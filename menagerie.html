@@ -14,7 +14,7 @@
 <div id="bar">
   <b>Menagerie</b>: species on the composite engine, in a row -- by default the ones built from curved
   tubes (swan, snake, crocodile, fish, dolphin, shark). Drag to orbit · <b>X</b> parts-per-pixel heat map ·
-  <code>?only=cow,swan</code> (<code>cat1</code>..: a coat) <code>?t=</code> (freeze) <code>?cam=x,y,z,tx,ty,tz</code> <code>?scale=N</code> (small ones enlarged)
+  <code>?only=cow,swan</code> (<code>cat1</code>..: a coat) <code>?t=</code> (freeze) <code>?cam=x,y,z,tx,ty,tz</code> <code>?scale=N</code> (small ones enlarged) <code>?nobar</code> <code>?slope=deg</code> <code>?tilt=deg</code> (a hillside)
 </div>
 <script type="importmap">
 { "imports": {
@@ -31,10 +31,13 @@ import * as THREE from "three";
 import { navControls } from "./cursornav.js";   // (the view turns and zooms about the point under the pointer, as the atlas's: here the ground's)
 import { createComposite, PIPE, setPipe, pipeFromQuery } from "./composite.js";
 import { SPECIES, makeFish, makeDolphin, makeShark, makeCat, partExtent } from "./species.js";
+import { createBodies } from "./bodies.js";   // (a sculpted creature -- the hedgehog: one skinned surface, bodies.js)
+import { createManes } from "./manes.js";   // (a lion's mane of thorns: its own mesh, placed on the neck every frame as in the game)
 
 const qp = new URLSearchParams(location.search);
 pipeFromQuery(qp);   // the same switches as the game: ?shelllod= ?shellblend=0 ?shelldebug=1 ?viewspace=0
-const freeze = qp.has("t") ? +qp.get("t") : null;
+let freeze = qp.has("t") ? +qp.get("t") : null;
+window.__freeze = (v) => { freeze = v; };   // (a headless check: the clock set from outside, frame by frame)
 const names = (qp.get("only") ?? "swan,snake,crocodile,fish,dolphin,shark").split(",");
 const defOf = (n) => /^cat\d+$/.test(n) ? makeCat({ seed: +n.slice(3) }) : n === "fish" ? makeFish({ seed: 3 }) : n === "dolphin" ? makeDolphin() : n === "shark" ? makeShark() : SPECIES.find((s) => s.name === n);
 
@@ -48,6 +51,15 @@ scene.background = new THREE.Color(0xc7ddee);
 const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial({ color: 0x9aad6a }));
 ground.rotation.x = -Math.PI / 2;
 scene.add(ground);
+// ?slope=deg (rising toward +x, the animals' forward) ?tilt=deg (rising toward -z): a sloped ground, the four-legged stood
+// on it (skeleton.js fitGround) -- a hillside test
+const slope = Math.tan((+qp.get("slope") || 0) * Math.PI / 180), tilt = Math.tan((+qp.get("tilt") || 0) * Math.PI / 180);
+const groundAt = (x, z) => x * slope - z * tilt;
+if (slope || tilt) {
+  ground.rotation.set(0, 0, 0); ground.geometry.rotateX(-Math.PI / 2);
+  const P = ground.geometry.attributes.position;
+  for (let i = 0; i < P.count; i++) P.setY(i, groundAt(P.getX(i), P.getZ(i)));
+}
 const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, .05, 500);
 const cam = (qp.get("cam") ?? "0,2.2,9,0,.6,0").split(",").map(Number);
 camera.position.set(cam[0], cam[1], cam[2]);
@@ -57,6 +69,9 @@ controls.update();
 
 const herd = createComposite(4000);
 scene.add(herd.mesh);
+const manes = createManes(scene);
+const bodies = createBodies(scene);
+if (slope || tilt) herd.ground = groundAt;
 // side by side by body length; a small one (the fish) scaled up to be seen (?scale)
 const defs = names.map(defOf).filter(Boolean);
 const lens = defs.map((d) => { const b = d.parts.find((p) => p.id === "body") ?? d.parts[0], e = partExtent(b); return Math.max(.6, e.len + 2 * e.r + .6, d.probe ? 2 * d.probe + 1.2 : 0); });   // (a rig's probe: half its nose-to-tail length)
@@ -64,7 +79,7 @@ let x = -lens.reduce((a, b) => a + b, 0) / 2;
 defs.forEach((def, i) => {
   const an = herd.add(def);
   x += lens[i] / 2;
-  an.position.set(x, def.fly || def.swim ? .4 : 0, 0);
+  an.position.set(x, (def.fly || def.swim ? .4 : 0) + groundAt(x, 0), 0);
   an.rotY = 0;
   x += lens[i] / 2;
 });
@@ -75,11 +90,14 @@ let t = 0, last = performance.now();
   controls.update();
   for (const an of herd.animals) an.animT = t;
   herd.update(t);
+  bodies.place([herd], camera.position);
+  if (!qp.has("nomane")) manes.place([herd]);   // (?nomane: without them, to see the neck and head under)
   renderer.render(scene, camera);
   window.__ready = true;
   requestAnimationFrame(frame);
 })(last);
-window.__dbg = { herd, camera, scene, renderer };
+window.__dbg = { herd, camera, scene, renderer, controls, bodies, names: defs.map((d) => d.name) };
+if (qp.has("nobar")) document.getElementById("bar").style.display = "none";
 </script>
 </body>
 </html>

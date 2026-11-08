@@ -29,7 +29,8 @@
 //         skull to the nose (a horse's head is a wedge: deep at the jaw, narrow at the nose -- an ellipsoid is a box on it)   ears: [ax, ay, az, bx, by, bz, rBase, rTip] (the left; mirrored)
 //   eyes: [x, y, z, r] (mirrored)   nose: [x, y, z, r] or null
 //   legs: { front: [hipX, hipY, hipZ, upper], hind: [...], radii: [hip, knee, foot], foot: [sx, sy, sz], kneeF, kneeH, thigh }
-//         thigh (default 1.35) widens the hind hip; kneeF/kneeH (+1 forward, -1 back) say which way each pair folds
+//         thigh (default 1.35) widens the hind hip, shoulder (default 1) the fore one; kneeF/kneeH (+1 forward, -1 back) say which way each pair folds
+//         ankle: the ankle joint's height over the foot's centre (default .02; a weasel's a few millimetres)
 //         toe: how far the foot's centre sits forward of the ankle (default .02: a hoof or pillar right under it;
 //         a theropod's long three-toed foot reaches forward, the ankle at its heel)
 //         toes: { n, len, r: [base, tip], spread (radians between toes), color } -- tapered toes fanning forward
@@ -48,6 +49,7 @@
 //   c: colours { body, front, neck, head, muzzle, ear, eye, nose, leg, foot, tail, tuft }   pat / patOn: shader pattern + which pieces
 //   k: { body, limb } blend radii (default from the rump's height)   headTurn: idle head yaw in degrees
 //   gaits: { walk: { offsets, stride, lift, bob }, run: {...} } overrides (leg order FL, FR, HL, HR)
+//   flex: degrees -- the back humping up and lying out again once a stride (a weasel's bound; flexPh its phase)
 //   biped: true -- the hind pair only (a theropod: arms are extras); the legs alternate at a walk and a run alike
 
 import { aim, vSub } from "./geom.js";
@@ -162,14 +164,104 @@ function tubeChain(id, parent, origin, segs, { r1, r2, tuft = 0, tuftOut = 0, tu
   }
   for (const q of end ?? []) out.push({ ...q, parent: par, pos: [q.pos[0], lastLen + q.pos[1], q.pos[2]] });
   if (tuft) out.push({ id: `${id}Tuft`, parent: par, shape: "sphere", size: { r: tuft }, pos: [0, lastLen + tuftOut, 0], color: tuftColor ?? color, k, edge: 0 });   // (tuftOut: past the end -- a full brush's white tip, not buried in it)
+  for (const q of out) q.detail = true;   // (left out in the distance: shell.js SHELL.detail)
   return out;
 }
 
-const FURRY = /^(body|front|neck|head|snout|ear[LR]|leg(FL|FR|HL|HR)[ul]|tail\d*|tailTuft|mane[LR]?)$/;
+const FURRY = /^(body|front|neck|head|snout|ear[LR]|leg(FL|FR|HL|HR)[ul]|tail\d*|tailTuft|mane[LR]?|brow[LR]?|cheeks|poll|jaw|bridge|pads)$/;
+
+// ---- THE FACE (2026-11-04): what turns a ball and a muzzle into a head ----------------------------------------
+// A skull drawn as one sphere and a muzzle as one pill reads as a blob with a snout stuck on it: no brow for the eyes
+// to sit under, no cheekbones, no jaw, no bridge to the nose. A few more pieces, each a pill laid ACROSS or ALONG
+// the head and sunk into it so only its ridge stands out of the skull, give it the planes a sculptor (or a low-poly
+// modeller) blocks a head in with -- the eye then sits in a socket between brow and cheek instead of on a ball:
+//   brow    one pill from over the left eye to over the right, through the forehead: its two ends ride out over the
+//           eyes as the brow ridges, its middle is buried in the skull (eyes on the SIDES of the head: a short ridge
+//           over each instead, browL and browR). [size (1: a sixth of the head's radius, or the
+//           eye's own if that is more), how much of its radius stands out of the skull]
+//   cheeks  one pill across the head below and behind the eyes, its ends the cheekbones (a cat's broad cheeks, a
+//           horse's round jowl): [forward, up, out, radius] in head radii from the skull's centre
+//   jaw     a pill under the muzzle from the throat to the chin: the jaw line [radius at the throat x the head, at the
+//           chin x the muzzle's own, how far below the muzzle]; in `chin` colour (the muzzle's, else the head's)
+//   bridge  a pill from between the eyes down the top of the muzzle to the nose: the nose bridge [radius at the brow x
+//           the head, at the nose x the muzzle]; in `bridge` colour (the head's)
+//   pads    one pill across the muzzle's front, its ends the whisker pads (a cat's; a cow's broad wet muzzle) [radius x the muzzle]
+//   poll    one pill across the top of the face, in front of the ears: a broad FLAT FOREHEAD that squares the skull's
+//           upper corners (a cow's head is a box from the front, not a ball) [forward, up, out, radius] like cheeks
+// (A horse's or a deer's head is a WEDGE: a small skull and a long tapered muzzle from inside it -- their JSON -- with
+//  narrow jowls, so head-on it is long and narrow at the nose, not round.)
+// Each is one more chain for the shell engine -- four or five on a head, small ones, on its coarser grids.
+// `headForm`: a family's preset by name ("cat", "canid", "horse", "cervid", "bovid", "cattle", "bear", "pig", "rodent", "reptile", "dragon"),
+// or { style, ...any of the above (false: none) }; omitted: "plain" (a brow, cheeks and a jaw); false: no face at all.
+const FACES = {
+  plain:   { brow: [1, .5], cheeks: [.05, -.3, .72, .36], jaw: [.3, .5, .25], bridge: false, pads: false },
+  cat:     { brow: [1.05, .55], cheeks: [.12, -.32, .74, .42], jaw: [.3, .55, .3], bridge: [.26, .55], pads: [.6] },
+  canid:   { brow: [1.1, .6], cheeks: [.12, -.28, .7, .38], jaw: [.3, .5, .3], bridge: [.24, .5], pads: false },
+  horse:   { brow: [1.1, .55], cheeks: [-.22, -.48, .5, .44], jaw: false, bridge: [.22, .55], pads: false },
+  cervid:  { brow: [1.1, .55], cheeks: [-.15, -.42, .52, .4], jaw: false, bridge: [.22, .5], pads: false },
+  bovid:   { brow: [1.1, .55], cheeks: [-.08, -.38, .64, .46], jaw: false, bridge: [.24, .55], pads: false },
+  cattle:  { brow: [1.1, .55], cheeks: [-.05, -.42, .66, .44], jaw: false, bridge: [.24, .55], pads: [.85], poll: [.3, .5, .62, .44] },
+  bear:    { brow: [1.2, .6], cheeks: [.1, -.25, .74, .42], jaw: [.32, .55, .3], bridge: [.26, .5], pads: false },
+  pig:     { brow: [1.1, .55], cheeks: [.1, -.3, .72, .44], jaw: [.3, .5, .3], bridge: false, pads: false },
+  rodent:  { brow: [.9, .45], cheeks: [.18, -.25, .74, .45], jaw: false, bridge: false, pads: [.55] },
+  reptile: { brow: [1.35, .75], cheeks: [-.1, -.3, .68, .42], jaw: [.3, .55, .35], bridge: false, pads: false },
+  dragon:  { brow: [1.45, .85], cheeks: [-.12, -.32, .68, .44], jaw: [.32, .6, .35], bridge: [.2, .45], pads: false },
+};
+function faceParts(face = "plain", { H, hr, muzzle, taper, eyes, nose, cols, c, kB, pat }) {
+  const F = typeof face === "string" ? { ...FACES[face] } : { ...FACES[face?.style ?? "plain"], ...(face ?? {}) };
+  const add = (a, b, k = 1) => a.map((v, i) => v + b[i] * k), len = (v) => Math.hypot(...v), nrm = (v) => { const l = len(v) || 1; return v.map((x) => x / l); };
+  // the head's own frame: forward toward the muzzle's tip (in the xy plane), up square to it, z out to the left
+  let M0, M1, mr0, mr1;                       // the muzzle as a segment and its radii (an ellipsoid: through its length)
+  if (muzzle && taper) { M0 = muzzle.slice(0, 3); M1 = muzzle.slice(3, 6); mr0 = muzzle[6]; mr1 = muzzle[7]; }
+  else if (muzzle) { M0 = [muzzle[0] - muzzle[3] * .5, muzzle[1], 0]; M1 = [muzzle[0] + muzzle[3] * .55, muzzle[1], 0]; mr0 = mr1 = (muzzle[4] + muzzle[5]) / 2; }
+  else { M1 = add(H, [hr * .7, -hr * .1, 0]); M0 = H; mr0 = mr1 = hr * .4; }
+  const tip = add(M1, nrm([M1[0] - H[0], M1[1] - H[1], 0]), mr1);
+  const f = nrm([tip[0] - H[0], tip[1] - H[1], 0]), u = [-f[1], f[0], 0], z = [0, 0, 1];
+  const at = (a, b, cz = 0) => [H[0] + (f[0] * a + u[0] * b) * hr, H[1] + (f[1] * a + u[1] * b) * hr, H[2] + cz * hr];
+  const k = Math.min(.05, hr * .22, kB * .4), out = [];
+  const tone = (hex, t) => mixC(hex, darken(hex, .82), t);
+  if (F.brow && eyes) {
+    // over the eye: up the face from it, on the skull's sphere, then sunk so that only `stand` of its radius stands
+    // out -- its lower edge just at the eye's upper lid (where the brow's bulge comes out of the skull: .9 of its radius
+    // sunk to .55, a little less for one sunk deeper), never over the eye itself
+    const er = eyes[3], rb = Math.max(er * 1.1, hr * .16) * F.brow[0], E = [eyes[0], eyes[1], Math.abs(eyes[2])];
+    const lid = Math.sqrt(Math.max(0, 1 - (1 - F.brow[1]) ** 2)) * rb;
+    const B0 = add(add(E, u, er * .9 + lid * .85), f, -rb * .15), d = nrm(B0.map((v, i) => v - H[i]));
+    const sunk = hr + rb * (F.brow[1] - 1), B = add(H, d, sunk);
+    // (eyes set on the SIDES of the head -- a horse's, a cow's, a pig's -- look out sideways: a ridge across the forehead
+    //  from one to the other would be a band over the face; each gets its own short ridge instead, along the face over it)
+    if (Math.abs(nrm(E.map((v, i) => v - H[i]))[2]) > .6) for (const s of [1, -1]) {
+      const end = (a) => { const q = add(B, f, a * rb), e = nrm(q.map((v, i) => v - H[i])); return add(H, [e[0], e[1], e[2] * s], sunk); };
+      out.push(pillPart(s > 0 ? "browL" : "browR", "head", end(-1.2), end(.9), rb * .62, rb * .5, H, tone(cols.head, .5), { k: k * .6, pat }));
+    }
+    else out.push(pillPart("brow", "head", B, [B[0], B[1], -B[2]], rb, rb, H, tone(cols.head, .5), { k: k * .6, pat }));
+  }
+  if (F.cheeks) {
+    const [a, b, cz, r] = F.cheeks, C = at(a, b, cz);
+    out.push(pillPart("cheeks", "head", C, [C[0], C[1], -C[2]], r * hr, r * hr, H, cols.head, { k, pat }));
+  }
+  if (F.poll) {
+    const [a, b, cz, r] = F.poll, C = at(a, b, cz);
+    out.push(pillPart("poll", "head", C, [C[0], C[1], -C[2]], r * hr, r * hr, H, cols.head, { k, pat }));
+  }
+  if (F.jaw) {
+    const [r0, r1, drop] = F.jaw, J0 = at(-.1, -.5), J1 = add(add(M1, u, -mr1 * (.35 + drop)), f, -mr1 * .2);
+    out.push(pillPart("jaw", "head", J0, J1, r0 * hr, r1 * mr1, H, c.chin ?? cols.muzzle, { k }));
+  }
+  if (F.bridge && muzzle) {
+    const [r0, r1] = F.bridge, Q0 = at(.5, .45), Q1 = add(add(M1, u, mr1 * .45), f, -mr1 * .35);
+    out.push(pillPart("bridge", "head", Q0, Q1, r0 * hr, r1 * mr1, H, c.bridge ?? cols.head, { k: k * .8, pat: c.bridge ? undefined : pat }));
+  }
+  if (F.pads && muzzle) {
+    const r = F.pads[0] * mr1, P0 = add(add(M1, f, -mr1 * .1), u, -mr1 * .25);
+    out.push(pillPart("pads", "head", [P0[0], P0[1], mr1 * .5], [P0[0], P0[1], -mr1 * .5], r, r, H, c.pads ?? cols.muzzle, { k: k * .6 }));
+  }
+  return out;
+}
 
 export function mammal(o) {
   const { name, rear, front, neck = null, head: head0 = null, muzzle: muzzle0 = null, ears: ears0 = null, eyes: eyes0 = null, nose: nose0 = null, legs, tail = null,
-          extras = [], c, pat, patOn = ["body", "front", "neck", "leg"], gaits = {}, k = {}, headTurn = 14, pupil = "round", fur = !o.dinosaur, headScale = 1, ...flags } = o;
+          extras = [], c, pat, patOn = ["body", "front", "neck", "leg"], gaits = {}, k = {}, headTurn = 14, pupil = "round", fur = !o.dinosaur, headScale = 1, headForm, ...flags } = o;
   const R = [rear[0], rear[1], rear[2]];
   // HEAD SIZE. A skull is a sphere plus a muzzle, and both are easy to draw a little large -- measured against
   // real animals most of these heads came out a third to three quarters too long (ref/prop.html). `headScale`
@@ -235,12 +327,22 @@ export function mammal(o) {
     // became a spine and `front` became its last segment, everything on it moved with the segment's origin. A
     // tyrannosaur's arms ended up on its back. The origin children are measured from follows the part.
     origins.front = R;   // (extras on the chest hang on the ROOT: see the extras loop)
+    // THE WAIST (`waist`, 2026-11-04): a cat, a dog, a deer is not a barrel -- deep at the chest, full at the haunch, and
+    // TUCKED UP between them at the loin. The cut behind the middle loses that share of its girth (the next half of it),
+    // and rises by most of what it lost, so the back keeps its line and the belly draws up toward the hind legs.
+    const tuck = [0, 1, .5, 0], wst = Math.max(0, Math.min(.4, flags.waist ?? 0));
+    const gAt = (i, P0) => girth(P0[0]) * (1 - wst * tuck[i]);
+    const atW = (i) => { const p = at(i); p[1] += girth(p[0]) * wst * tuck[i] * .85; return p; };
     for (let i = 0; i < N; i++) {
-      const A = at(i), B = at(i + 1), f = (i + 1) / N;
+      const A = atW(i), B = atW(i + 1), f = (i + 1) / N;
       // (B first: a pillPart's posed axis runs from its second point to its first, and the spine has to run the
       //  same way as the rump capsule it continues, or the two will not read as one chain)
-      parts.push(pillPart(ids[i], "body", B, A, girth(B[0]), girth(A[0]), R, mixC(cBody, cols.front, f),
-                          { k: kB, pat: patFor(i === N - 1 ? "front" : "body"), frame: "body", spine: true }));
+      parts.push(pillPart(ids[i], "body", B, A, gAt(i + 1, B), gAt(i, A), R, mixC(cBody, cols.front, f),
+                          { k: kB, pat: patFor(i === N - 1 ? "front" : "body"), frame: "body", spine: true,
+                            // (FLEX, `flex`: degrees -- the two cuts behind the chest tip nose down together once a stride, so the
+                            //  back between rump and chest humps up as the hind feet come up to the fore and lies out again: a
+                            //  weasel's bound. `flexPh` its phase against the legs'; it fades with the stride, skeleton.js)
+                            ...(flags.flex && i < N - 1 ? { anim: { axis: "z", deg: -flags.flex, speed: .8, phase: flags.flexPh ?? Math.PI, amp: 1 } } : {}) }));
     }
   }
   if (neck) parts.push(pillPart("neck", "body", neck.slice(0, 3), neck.slice(3, 6), neck[6], neck[7], R, cols.neck, { k: kB * .8, pat: patFor("neck"), frame: "body" }));
@@ -256,15 +358,29 @@ export function mammal(o) {
     if (ears) for (const s of [1, -1]) {
       const a = [ears[0], ears[1], ears[2] * s], b = [ears[3], ears[4], ears[5] * s];
       // (an ear FLICKS back now and then, the two on their own beats -- skeleton.js a.flick)
-      parts.push(pillPart(s > 0 ? "earL" : "earR", "head", a, b, ears[6], ears[7], H, cols.ear, { k: kL * .5, anim: { axis: "z", deg: -28, speed: .21 + .05 * s, phase: 1.1 * s, flick: 14 } }));
+      const id = s > 0 ? "earL" : "earR", anim = { axis: "z", deg: -28, speed: .21 + .05 * s, phase: 1.1 * s, flick: 14 };
+      // A POINTED EAR IS A PLATE (2026-11-04), not a cone: a triangle as wide at its base as the cone was, turned to face
+      // forward and out, a little thick and round-rimmed -- and in it a smaller plate in the ear's INSIDE colour (`earIn`,
+      // else the ear's own darkened), the hollow of the ear. A round ear (a bear's, its tip half its base or more) stays
+      // the round stub it was; `earPlate: false` keeps the cones.
+      if (flags.earPlate !== false && ears[7] < ears[6] * .5) {
+        const d = vSub(b, a), n0 = [1, .2, s * .75], dl = Math.hypot(...d) || 1, dn = d.map((v) => v / dl);
+        const nd = n0[0] * dn[0] + n0[1] * dn[1] + n0[2] * dn[2], n = (() => { const q = n0.map((v, i) => v - dn[i] * nd), l = Math.hypot(...q) || 1; return q.map((v) => v / l); })();
+        const side = [dn[1] * n[2] - dn[2] * n[1], dn[2] * n[0] - dn[0] * n[2], dn[0] * n[1] - dn[1] * n[0]], w = ears[6] * 1.15;
+        const L0 = side.map((v) => v * w), R0 = side.map((v) => -v * w), T0 = d, th = Math.max(ears[6] * .22, .004);
+        parts.push({ id, parent: "head", shape: "tri", pos: P(a, H), size: { a: L0, b: R0, c: T0, r: th }, color: cols.ear, k: kL * .5, edge: 0, anim });
+        const g = [0, 1, 2].map((i) => (L0[i] + R0[i] + T0[i]) / 3 - dn[i] * dl * .08), sh = (q) => q.map((v, i) => g[i] + (v - g[i]) * .62 + n[i] * th * 1.05);
+        parts.push({ id: id + "In", parent: id, shape: "tri", pos: [0, 0, 0], size: { a: sh(L0), b: sh(R0), c: sh(T0), r: th * .45 }, color: c.earIn ?? darken(cols.ear, .62), k: 0, edge: 0, detail: true });
+      } else parts.push(pillPart(id, "head", a, b, ears[6], ears[7], H, cols.ear, { k: kL * .5, anim }));
     }
     if (eyes) for (const s of [1, -1])   // face marks (painted on the head, no SDF): round, the species' pupil
       parts.push(eyeMark(s > 0 ? "eyeL" : "eyeR", "head", H, head[3], [eyes[0], eyes[1], eyes[2] * s], eyes[3], cols.eye, { pupil }));
     if (nose) parts.push({ id: "nose", parent: "head", shape: "sphere", size: { r: nose[3] }, pos: P(nose, H), color: cols.nose, edge: 0 });
+    if (headForm !== false) parts.push(...faceParts(headForm, { H, hr: head[3], muzzle, taper, eyes, nose, cols, c, kB, pat: patFor("head") }));
   }
 
   // ---- legs: upper bone (IK driver), lower bone (follows), foot
-  const L = legs, footY = legs.foot[1] + .02;
+  const L = legs, footY = legs.foot[1] + (legs.ankle ?? .02);   // (ankle: the ankle joint this high over the sole -- a weasel's, a few millimetres)
   // WHAT IT STANDS ON (its `print`). A hoof is the widest thing on the leg, a horn cone flaring from the pastern to a flat
   // tread (its round end under the ground, its sole cut by it, and kept level as the leg swings) -- an ellipsoid that size
   // came out a small diamond under a column. A paw is longer than it is wide, the toes forward of the wrist.
@@ -275,12 +391,13 @@ export function mammal(o) {
   // (legLen stays the reach itself: the gaits' strides do not change). `bend`: [front, hind], 1 straight.
   const bend = L.bend ?? (hoofed ? [1.004, 1.025] : pawed ? [1.008, 1.032] : [1, 1]);
   const [rHip0, rKnee, rFoot] = L.radii, thigh = L.thigh ?? 1.35;   // the hind upper bone is the thigh: wider at the hip
+  const shoulder = L.shoulder ?? 1;   // ...and the fore one the upper arm under the shoulder blade: a big cat's is heavy (`shoulder`)
   // (a leg a shade off the coat is that shade from the knee: its top melts into the flank, not a patch sewn on it -- a colour's edge cuts the sweep)
   const off = [16, 8, 0].reduce((n, sh) => n + Math.abs(((cLeg >> sh) & 255) - ((cBody >> sh) & 255)), 0), near = off && off < 150, cThigh = near ? mixC(cLeg, cBody, .7) : cLeg, cShin = near ? mixC(cLeg, cBody, .3) : cLeg;
   let legLen = 0;
   [["FL", L.front, 1, L.kneeF ?? 1], ["FR", L.front, -1, L.kneeF ?? 1], ["HL", L.hind, 1, L.kneeH ?? -1], ["HR", L.hind, -1, L.kneeH ?? -1]].forEach(([tag, d, sz, side], i) => {
     if (flags.biped && i < 2) return;   // two legs: the hind pair carries it
-    const [hx, hy, hz0, upper0] = d, lower0 = hy - upper0 - footY, rHip = i < 2 ? rHip0 : rHip0 * thigh;
+    const [hx, hy, hz0, upper0] = d, lower0 = hy - upper0 - footY, rHip = i < 2 ? rHip0 * shoulder : rHip0 * thigh;
     if (lower0 <= .01) throw new Error(`${name}: leg ${tag}: upper bone ${upper0} leaves no lower bone (hip ${hy}, foot ${footY})`);
     if (i === (flags.biped ? 2 : 0)) legLen = upper0 + lower0;
     const fold = bend[i < 2 ? 0 : 1], upper = upper0 * fold, lower = lower0 * fold;
@@ -293,7 +410,7 @@ export function mammal(o) {
         pivot: [0, -lower / 2, 0], color: col("sock", cShin), pat: patFor("leg"), k: kL, edge: 0, ik: { leg: i, follow: true } },   // (sock: a white lower leg -- a coat's)
       hoofed ? { id: `foot${tag}`, parent: `leg${tag}l`, shape: "capsule", size: { r: rFoot * 1.05, r2: Math.max(foot[0], foot[2]) * 1.15, len: footY * .85 + rFoot }, pos: [0, -lower + rFoot, 0],
                  pivot: [0, -(footY * .85 + rFoot) / 2, 0], level: true, color: cols.foot, k: kL * .25, edge: 0 }
-             : ellPart(`foot${tag}`, `leg${tag}l`, [L.toe ?? (pawed ? foot[0] * .45 : .02), -lower - .02, 0, foot[0], foot[1], foot[2]], [0, 0, 0], cols.foot, { k: kL * .5, ...(pawed ? { level: true } : {}) }));
+             : ellPart(`foot${tag}`, `leg${tag}l`, [L.toe ?? (pawed ? foot[0] * .45 : .02), -lower - (L.ankle ?? .02), 0, foot[0], foot[1], foot[2]], [0, 0, 0], cols.foot, { k: kL * .5, ...(pawed ? { level: true } : {}) }));
     if (L.toes) {   // in the foot's frame: origin at its centre, the sole at -foot[1]
       const { n = 3, len, r: [r0, r1] = [.08, .04], spread = .45, color } = L.toes, x0 = -foot[0] * .4, mid = (n - 1) / 2;
       for (let j = 0; j < n; j++) {
@@ -339,7 +456,9 @@ export function mammal(o) {
         const side = s > 0 ? {} : { z: -(x.arc?.z ?? 0), zEnd: -(x.arc?.zEnd ?? x.arc?.z ?? 0), sway: -(x.arc?.sway ?? x.path?.sway ?? 12),
                                      ...(x.path ? { path: x.path.path.map((q) => [q[0], q[1], -(q[2] ?? 0)]) } : {}) };
         // (pat: null -- a horn, a whisker: bare, not in the tail's pattern)
-        parts.push(...(x.path ? pathChain : arcChain)(id, par, origin, { ...(x.arc ?? x.path), ...side, color: x.color, k: x.k ?? kL, pat: x.pat === null ? undefined : x.pat ?? patFor("tail"), tuftColor: (x.arc ?? x.path).tuftColor ?? x.color }));
+        const ch = (x.path ? pathChain : arcChain)(id, par, origin, { ...(x.arc ?? x.path), ...side, color: x.color, k: x.k ?? kL, pat: x.pat === null ? undefined : x.pat ?? patFor("tail"), tuftColor: (x.arc ?? x.path).tuftColor ?? x.color });
+        if (x.nod && ch[0]) ch[0].nod = true;   // (2026-11-07: a lock of a dragon's mane rides the neck down too -- its links follow their root)
+        parts.push(...ch);
       }
       else if (x.ell) { const e = x.ell.slice(); e[2] *= s; parts.push(ellPart(id, par, e, origin, x.color, extra)); }
       else parts.push(pillPart(id, par, s > 0 ? x.from : mirrorZ(x.from), s > 0 ? x.to : mirrorZ(x.to), x.r1, x.r2 ?? x.r1, origin, x.color, extra));
@@ -354,6 +473,8 @@ export function mammal(o) {
   // FLEECE (`fleece`: the ids of the pieces its wool covers -- a sheep's trunk, neck and cap): heaped in lumps, so it
   // reads as wool and not a smooth pill (shell.js FLEECE)
   for (const p of parts) if ((flags.fleece ?? []).some((id) => p.id === id || p.id.startsWith(id + "_"))) p.fleece = true;
+  // FACETED: every piece lit by its triangles' own planes, the stylised low-poly look (shell.js FACET); `facet: false` smooth
+  if (flags.facet !== false) for (const p of parts) p.facet = true;
   const two = !!flags.biped;   // a biped's body dips over each stride, and its run is still left-right
   const walk = { offsets: [Math.PI / 2, 3 * Math.PI / 2, 0, Math.PI], stride: .32 * Lg, lift: .12 * Lg, bob: two ? .03 * Lg : 0, ...(gaits.walk ?? {}) };
   const run = { offsets: two ? [0, 0, 0, Math.PI] : [0, .6, Math.PI + .4, Math.PI + 1.0], stride: .48 * Lg, lift: .3 * Lg, bob: .06 * Lg, ...(gaits.run ?? {}) };
@@ -498,21 +619,12 @@ export const COMPONENTS = {
   birdWing: (o) => [1, -1].flatMap((s) => birdWing(s, o).map((p, i) => (i === 0 && o.at ? { raw: p, at: [o.at[0], o.at[1], s * o.at[2]] } : { raw: p }))),
 };
 
-export const CAT_COATS = [
-  { body: 0xc77b3a, muzzle: 0xdba573, ear: 0xb06f34, leg: 0xb06f34, tail: 0xb06f34, eye: 0x8fa03a, nose: 0xd67c88 },   // ginger
-  { body: 0x232020, muzzle: 0x2c2727, ear: 0x1b1818, leg: 0x1b1818, tail: 0x1b1818, eye: 0xc9b23a, nose: 0x3a2e2e },   // black
-  { body: 0xece8e0, muzzle: 0xf5f2eb, ear: 0xdcc4c0, leg: 0xe4e0d8, tail: 0xe4e0d8, eye: 0x6fa0c8, nose: 0xe39aa6 },   // white
-  { body: 0x8a8580, muzzle: 0xb5b0a8, ear: 0x6a6662, leg: 0x7a7570, tail: 0x6a6662, eye: 0x9fb04a, nose: 0x5a4a4a },   // grey
-  { body: 0x222020, muzzle: 0xf0ece4, ear: 0x1c1a1a, leg: 0xf0ece4, tail: 0x1c1a1a, eye: 0xa8b848, nose: 0xd89aa0 },   // tuxedo: white face and socks
-  { body: 0xe2c9a0, muzzle: 0xefe0c4, ear: 0xd4b58a, leg: 0xd4b58a, tail: 0xd4b58a, eye: 0xc99a3a, nose: 0xd8909a },   // cream
-  { body: 0x6e5238, muzzle: 0xa88a6a, ear: 0x55402c, leg: 0x5e4630, tail: 0x55402c, eye: 0x8fa03a, nose: 0x5a3a30 },   // brown
-  { body: 0xf0ebe2, head: 0xc77b3a, front: 0x2a2424, muzzle: 0xf0ebe2, ear: 0x2a2424, leg: 0xf0ebe2, tail: 0xc77b3a, eye: 0xb0a040, nose: 0xe39aa6 },   // calico patches
-];
-export const catRig = (c = CAT_COATS[0]) => mammal({ name: "cat",   // back ~.3m, curled-up tail
+// (the house cat's coats, CAT_COATS until 2026-11-06, are its asset's now: assets/creatures/mammals/cat.json `coats`)
+export const catRig = (c = { body: 0xc77b3a, muzzle: 0xdba573, ear: 0xb06f34, leg: 0xb06f34, tail: 0xb06f34, eye: 0x8fa03a, nose: 0xd67c88 }) => mammal({ name: "cat",   // back ~.3m, curled-up tail
       rear: [-.12, .2, 0, .14, .09, .085], front: [.08, .2, 0, .13, .09, .08],
       neck: [.18, .24, 0, .26, .3, 0, .05, .042], head: [.3, .32, 0, .08], muzzle: [.36, .29, 0, .05, .035, .045], nose: [.405, .3, 0, .012],
       ears: [.28, .38, .04, .27, .46, .055, .025, .006], eyes: [.35, .34, .04, .015],
       legs: { front: [.12, .2, .05, .08], hind: [-.12, .2, .055, .085], radii: [.03, .025, .02], foot: [.03, .02, .028] },
       tail: { c: [-.38, .3], R: .13, a0: -.43, a1: 1.9, r1: .022, r2: .015, n: 6, sway: 20, speed: .9 },
-      c, headTurn: 22, pupil: "slit", headScale: .54 });
+      c, headTurn: 22, pupil: "slit", headScale: .54, headForm: "cat", waist: .12 });
 

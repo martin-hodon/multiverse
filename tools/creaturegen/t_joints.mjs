@@ -1,0 +1,14 @@
+import { readFileSync } from "fs";
+const R = "/home/martin/store/apps/multiverse/";
+globalThis.fetch = async (u) => ({ json: async () => JSON.parse(readFileSync(new URL(u))) });
+const { buildCreature } = await import(R + "creatures.js");
+await import(R + "dragons.js");
+const { markSculpt, sculptOf } = await import(R + "bodyspec.js");
+const index = JSON.parse(readFileSync(R + "assets/index.json"));
+const bank = new Map();
+for (const c of index.categories) for (const p of c.paths) bank.set(p, JSON.parse(readFileSync(R + "assets/" + p + ".json")));
+const d = [...bank.values()].find((x) => x?.name === process.argv[2]);
+const def = buildCreature(d, bank);
+const s = sculptOf(markSculpt(def)).sculpted;
+const f = (v) => v.map((x) => +x.toFixed(3));
+s.bones.forEach((b, i) => console.log(b.padEnd(10), f(s.rest[i])));

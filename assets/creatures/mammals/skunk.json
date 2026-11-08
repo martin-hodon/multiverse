@@ -1,0 +1,93 @@
+{
+  "name": "skunk",
+  "kind": "mammal",
+  "headForm": "canid",
+  "shy": 4,
+  "graze": 0.5,
+  "print": "paw",
+  "headTurn": 18,
+  "rear": [-0.07, 0.17, 0, 0.15, 0.095, 0.095],
+  "front": [0.08, 0.125, 0, 0.11, 0.065, 0.065],
+  "neck": [0.14, 0.135, 0, 0.19, 0.138, 0, 0.05, 0.045],
+  "head": [0.2, 0.137, 0, 0.042],
+  "muzzle": [0.218, 0.132, 0, 0.25, 0.121, 0, 0.026, 0.012],
+  "nose": [0.254, 0.121, 0, 0.007],
+  "ears": [0.19, 0.16, 0.028, 0.19, 0.168, 0.034, 0.011, 0.01],
+  "eyes": [0.222, 0.146, 0.022, 0.0045],
+  "legs": {
+    "front": [0.11, 0.1, 0.05, 0.05],
+    "hind": [-0.12, 0.12, 0.055, 0.06],
+    "radii": [0.03, 0.022, 0.016],
+    "foot": [0.024, 0.009, 0.016],
+    "kneeH": -1
+  },
+  "tail": {
+    "c": [-0.0884, 0.3282],
+    "R": 0.152,
+    "a0": -2.3951,
+    "a1": -4.7678,
+    "r1": 0.03,
+    "r2": 0.045,
+    "n": 6,
+    "sway": 10,
+    "speed": 0.5
+  },
+  "c": {
+    "body": "#141212",
+    "muzzle": "#161414",
+    "ear": "#121010",
+    "leg": "#121010",
+    "tail": "#141212",
+    "eye": "#140c08",
+    "nose": "#2a2020",
+    "white": "#ecebe6",
+    "paw": "#0e0c0c",
+    "lid": "#0a0808",
+    "claw": "#3a3430"
+  },
+  "_about": "a striped skunk SCULPTED on its rig (2026-11-05, gen: scratchpad sc/new6/skunk.py): small, stocky and low, the back arched highest over the hips, short legs, a small pointed head; long coarse black fur, a thin white stripe up the forehead, a white cap on the crown and nape that splits at the shoulders into two broad white bands along the upper flanks to the rump -- painted per pixel (the `skunk` pattern) on the trunk and head; a long round plume of a tail carried up and arched over the back, black with a white streak along its top and a white tip SHARP PASS 2 (2026-11-08): the pointed parts -- claw (3 in all) -- are the engine's sharp `horn`s (sharp.js), made from the field shapes they replaced by tools/creaturegen/sharp/ (claws.py, teeth.py, spikes.py, antlers.py, bills.py): rooted in the body, tips pointed; RE-RUN those after this species' generator. (2026-11-08, review.py: claws) The claws RE-ROOTED (review.py): each a sheath as wide as the claw where it leaves the toe, sunk in it, the join faired (horn `fair`: grown out of the skin in its paint), darker at the base fading to its own colour at the point -- no pale cut edge where it leaves the fur. (2026-11-08, ears2.py) The EARS (ears2.py): small round cupped sheets (sharp.js `fin`); the roots faired.",
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [6400, 2200],
+      "cell": 0.0045,
+      "focus": {
+        "head": 6
+      }
+    },
+    "shape": [
+      {"id": "chest", "type": "ell", "c": [0.07, 0.12, 0], "r": [0.085, 0.058, 0.058], "rot": [0, 0, 10], "k": 0.03, "color": "@body", "hair": 0.15, "pat": "skunk"},
+      {"id": "barrel", "type": "ell", "c": [-0.03, 0.15, 0], "r": [0.13, 0.08, 0.084], "rot": [0, 0, -9], "k": 0.035, "color": "@body", "hair": 0.15, "pat": "skunk"},
+      {"id": "rump", "type": "ell", "c": [-0.125, 0.175, 0], "r": [0.088, 0.09, 0.098], "rot": [0, 0, -12], "k": 0.032, "color": "@body", "hair": 0.15, "pat": "skunk"},
+      {"id": "hips", "type": "ell", "c": [-0.15, 0.16, 0.035], "r": [0.06, 0.07, 0.055], "k": 0.03, "color": "@body", "hair": 0.15, "pat": "skunk", "mirror": true},
+      {"id": "belly", "type": "ell", "c": [-0.02, 0.105, 0], "r": [0.12, 0.05, 0.07], "k": 0.03, "color": "@body", "hair": 0.15, "pat": "skunk"},
+      {"id": "neck", "type": "ell", "bone": "neck", "c": [0.148, 0.133, 0], "r": [0.058, 0.047, 0.047], "rot": [0, 0, -4], "k": 0.025, "color": "@body", "hair": 0.15, "pat": "skunk"},
+      {"id": "cranium", "type": "ell", "bone": "head", "c": [0.196, 0.143, 0], "r": [0.038, 0.035, 0.037], "rot": [0, 0, -10], "k": 0.018, "color": "@body", "hair": 0.15, "pat": "skunk"},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [0.203, 0.13, 0.018], "r": [0.027, 0.023, 0.02], "k": 0.012, "color": "@body", "mirror": true, "hair": 0.15, "pat": "skunk"},
+      {"id": "snout", "type": "cone", "bone": "head", "a": [0.214, 0.137, 0], "b": [0.249, 0.123, 0], "ra": 0.025, "rb": 0.0105, "k": 0.012, "color": "@body", "hair": 0.15, "pat": "skunk"},
+      {"id": "nose", "type": "ell", "bone": "head", "c": [0.253, 0.122, 0], "r": [0.0062, 0.0072, 0.0085], "k": 0.004, "kc": 0.002, "color": "@nose", "wet": 0.5},
+      {"id": "ear", "type": "fin", "bone": "earL", "root": [[0.1879, 0.1582, 0.0318], [0.1915, 0.1649, 0.0263]], "edge": [[0.1867, 0.1562, 0.034], [0.1858, 0.1569, 0.039], [0.1853, 0.1573, 0.0402], [0.1852, 0.1582, 0.041], [0.1852, 0.1593, 0.0415], [0.1853, 0.1605, 0.0418], [0.1855, 0.162, 0.0419], [0.1859, 0.1637, 0.0417], [0.1865, 0.1659, 0.0411], [0.1883, 0.1703, 0.0385], [0.1904, 0.1734, 0.0346], [0.1913, 0.1743, 0.0326], [0.192, 0.1747, 0.031], [0.1926, 0.1747, 0.0296], [0.193, 0.1745, 0.0284], [0.1933, 0.174, 0.0274], [0.1936, 0.1733, 0.0265], [0.1935, 0.172, 0.026], [0.1927, 0.1675, 0.0248]], "thick": 0.0006, "slope": 0.3, "face": [0.9171, -0.1584, 0.3658], "cup": 0.5, "color": "@body", "inner": "@ear", "innerRim": 0.0017, "mirror": true, "fair": {"r": 0.0034, "sink": 3}},
+      {"id": "arm", "type": "cone", "bone": "legFLu", "a": [0.105, 0.13, 0.0402], "b": [0.11, 0.0496, 0.0402], "ra": 0.026, "rb": 0.019, "k": 0.018, "color": "@body", "mirror": true, "hair": 0.15, "pat": "skunk"},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.11, 0.0496, 0.0402], "b": [0.1168, 0.016, 0.0402], "ra": 0.018, "rb": 0.014, "k": 0.012, "color": "@leg", "mirror": true, "hair": 0.15, "pat": "skunk"},
+      {"id": "paw", "type": "ell", "bone": "footFL", "c": [0.1248, 0.009, 0.0402], "r": [0.018, 0.009, 0.014], "k": 0.008, "color": "@paw", "mirror": true},
+      {"id": "claw0", "type": "horn", "bone": "footFL", "pts": [[0.1335, 0.0079, 0.0332, 0.0019], [0.1366, 0.0079, 0.0332, 0.0021], [0.1388, 0.008, 0.0332, 0.0022], [0.143, 0.0081, 0.0332, 0.0018], [0.1469, 0.0074, 0.0332, 0.0013], [0.1505, 0.0057, 0.0332, 0.0007], [0.1538, 0.0031, 0.0332, 0.0]], "color": "#1f1c1a", "mirror": true, "up": [0.4472, 0.8944, 0.0], "aspect": 1.3, "fair": {"r": 0.0008, "skin": 0.15}, "tip": "@claw", "tipAt": 0.244},
+      {"id": "claw1", "type": "horn", "bone": "footFL", "pts": [[0.1371, 0.008, 0.0402, 0.0016], [0.1398, 0.008, 0.0402, 0.0019], [0.1417, 0.0081, 0.0402, 0.0019], [0.143, 0.0081, 0.0402, 0.0018], [0.1469, 0.0074, 0.0402, 0.0013], [0.1505, 0.0057, 0.0402, 0.0007], [0.1538, 0.0031, 0.0402, 0.0]], "color": "#1f1c1a", "mirror": true, "up": [0.4472, 0.8944, 0.0], "aspect": 1.3, "fair": {"r": 0.0007, "skin": 0.15}, "tip": "@claw", "tipAt": 0.256},
+      {"id": "claw2", "type": "horn", "bone": "footFL", "pts": [[0.1335, 0.0079, 0.0472, 0.0019], [0.1366, 0.0079, 0.0472, 0.0021], [0.1388, 0.008, 0.0472, 0.0022], [0.143, 0.0081, 0.0472, 0.0018], [0.1469, 0.0074, 0.0472, 0.0013], [0.1505, 0.0057, 0.0472, 0.0007], [0.1538, 0.0031, 0.0472, 0.0]], "color": "#1f1c1a", "mirror": true, "up": [0.4472, 0.8944, 0.0], "aspect": 1.3, "fair": {"r": 0.0008, "skin": 0.15}, "tip": "@claw", "tipAt": 0.244},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-0.115, 0.125, 0.06], "r": [0.045, 0.055, 0.03], "rot": [0, 0, 10], "k": 0.02, "color": "@body", "mirror": true, "hair": 0.15, "pat": "skunk"},
+      {"id": "shank", "type": "cone", "bone": "legHLl", "a": [-0.116, 0.0641, 0.055], "b": [-0.1152, 0.014, 0.055], "ra": 0.02, "rb": 0.014, "k": 0.012, "color": "@leg", "mirror": true, "hair": 0.15, "pat": "skunk"},
+      {"id": "foot", "type": "ell", "bone": "footHL", "c": [-0.0992, 0.008, 0.055], "r": [0.026, 0.008, 0.015], "k": 0.008, "color": "@paw", "mirror": true},
+      {"id": "tail", "type": "tube", "bone": "tail", "pts": [[-0.2, 0.225, 0, 0.024], [-0.214, 0.2426, 0, 0.0264], [-0.2253, 0.2621, 0, 0.0323], [-0.2335, 0.283, 0, 0.0403], [-0.2386, 0.305, 0, 0.0486], [-0.2404, 0.3274, 0, 0.0556], [-0.2388, 0.3499, 0, 0.0596], [-0.234, 0.3719, 0, 0.06], [-0.2259, 0.3929, 0, 0.06]], "k": 0.03, "kc": 0.004, "color": "@tail", "hair": 0.12, "pat": "skunk", "fleece": {"amp": 0.003, "size": 0.011}},
+      {"id": "tail1", "type": "tube", "bone": "tail1", "pts": [[-0.234, 0.3719, 0, 0.06], [-0.2259, 0.3929, 0, 0.06], [-0.2149, 0.4125, 0, 0.06], [-0.201, 0.4303, 0, 0.06], [-0.1847, 0.4458, 0, 0.06], [-0.1663, 0.4587, 0, 0.0585], [-0.1461, 0.4688, 0, 0.0537], [-0.1247, 0.4758, 0, 0.0475], [-0.1025, 0.4795, 0, 0.0422], [-0.08, 0.48, 0, 0.04]], "k": 0.03, "kc": 0.004, "color": "@tail", "hair": 0.12, "pat": "skunk", "fleece": {"amp": 0.003, "size": 0.011}}
+    ],
+    "eyes": {
+      "at": [0.22, 0.147, 0.0225],
+      "from": [0.196, 0.142, 0],
+      "r": 0.004,
+      "iris": "@eye",
+      "pupil": "round",
+      "lid": "@lid",
+      "sink": 0.68,
+      "socket": 1.0
+    }
+  }
+}

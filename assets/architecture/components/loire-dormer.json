@@ -1,0 +1,220 @@
+{
+  "name": "Loire dormer",
+  "_about": "A LOIRE LUCARNE (Chenonceau's, Blois', Azay's): a stone frontispiece standing on the cornice -- the wall carried up H over it, W wide and D back into the roof, a cross window in it between two pilasters, an entablature, and a crowning gable GH tall (a stepped pediment, its niche, a candelabrum on each foot and the apex) -- before its own steep slate HIP (RW wide, RL long, P degrees, `back` behind the front) that runs back into the great roof. Place it on the cornice, its front over the wall's face, yawed so +z looks out.",
+  "params": {
+    "detail": 4,
+    "W": 3.2,
+    "H": 4.2,
+    "GH": 2.4,
+    "D": 2.4,
+    "t": 0.35,
+    "winW": 1.5,
+    "sill": 0.45,
+    "pw": 0.3,
+    "pinW": 0.3,
+    "RW": "W + 2.8",
+    "RL": 8.4,
+    "P": 72,
+    "back": 0.3,
+    "_RW": "the slate hip's width (wider than the stone: its slopes show either side)",
+    "_P": "the hip's pitch: the Loire's steep 70-odd degrees"
+  },
+  "build": [
+    "body",
+    "pilasters",
+    "entablature",
+    "gable",
+    "niche",
+    "candelabra",
+    "roof"
+  ],
+  "parts": {
+    "body": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "D"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": false,
+      "faces": {
+        "0": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": "sill",
+                "springing": "H - 0.45",
+                "head": {
+                  "profile": "flat"
+                },
+                "tracery": {
+                  "style": "bars",
+                  "cols": 2,
+                  "rows": 2,
+                  "bar": 0.14
+                }
+              }
+            ]
+          }
+        ],
+        "1": [],
+        "2": [],
+        "3": []
+      },
+      "at": [
+        [
+          0,
+          0,
+          "0 - D / 2",
+          0
+        ]
+      ],
+      "_about": "the stone front carried up over the cornice, a cross window in it"
+    },
+    "pilasters": {
+      "type": "box",
+      "width": "pw",
+      "length": 0.14,
+      "height": "H",
+      "at": [
+        [
+          "pw / 2 - W / 2 - 0.02",
+          0,
+          0.07,
+          0
+        ],
+        [
+          "W / 2 - pw / 2 + 0.02",
+          0,
+          0.07,
+          0
+        ]
+      ],
+      "_about": "a pilaster each side of the window"
+    },
+    "entablature": {
+      "type": "box",
+      "width": "W + 0.3",
+      "length": 0.42,
+      "height": 0.34,
+      "at": [
+        [
+          0,
+          "H",
+          -0.06,
+          0
+        ]
+      ],
+      "_about": "the entablature over the window"
+    },
+    "gable": {
+      "type": "screen",
+      "outline": [
+        [
+          "0 - W / 2 + 0.05",
+          0
+        ],
+        [
+          "W / 2 - 0.05",
+          0
+        ],
+        [
+          "W / 2 - 0.05",
+          "GH * 0.22"
+        ],
+        [
+          "W * 0.22",
+          "GH * 0.62"
+        ],
+        [
+          0,
+          "GH"
+        ],
+        [
+          "0 - W * 0.22",
+          "GH * 0.62"
+        ],
+        [
+          "0 - W / 2 + 0.05",
+          "GH * 0.22"
+        ]
+      ],
+      "t": 0.3,
+      "at": [
+        [
+          0,
+          "H + 0.34",
+          0.08,
+          0
+        ]
+      ],
+      "_about": "the crowning gable: a stepped pediment of carved stone"
+    },
+    "niche": {
+      "type": "box",
+      "width": "W * 0.3",
+      "length": 0.08,
+      "height": "GH * 0.42",
+      "at": [
+        [
+          0,
+          "H + 0.34 + GH * 0.12",
+          0.12,
+          0
+        ]
+      ],
+      "_about": "the little niche (a shell) in the gable"
+    },
+    "candelabra": {
+      "type": "pinnacle",
+      "w": "pinW",
+      "h": "GH * 0.3",
+      "s": "GH * 0.42",
+      "sides": 4,
+      "at": [
+        [
+          "pinW / 2 - W / 2 - 0.1",
+          "H + 0.34",
+          -0.07,
+          0
+        ],
+        [
+          "W / 2 - pinW / 2 + 0.1",
+          "H + 0.34",
+          -0.07,
+          0
+        ],
+        [
+          0,
+          "H + 0.34 + GH - 0.1",
+          -0.07,
+          0
+        ]
+      ],
+      "_about": "the candelabra (carved finials) on the gable's feet and apex"
+    },
+    "roof": {
+      "type": "roof",
+      "form": "hip",
+      "width": "RW",
+      "length": "RL",
+      "pitch": "P",
+      "overhang": 0.08,
+      "at": [
+        [
+          0,
+          0,
+          "0 - back - RL / 2",
+          0
+        ]
+      ],
+      "_about": "the dormer's own steep slate hip behind the stone, its ridge running back into the great roof"
+    }
+  }
+}

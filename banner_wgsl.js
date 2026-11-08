@@ -394,7 +394,8 @@ export const patternAt = wgslFn(`
       return mix(col, mix(inner, vec3<f32>(0.08, 0.06, 0.05), ring * blob * 0.92), detail);
     }
     if (pat > 16.5) {          // 17 SCALES (the dinosaurs): each a small dome, a dark seam round it, its own tone
-      let sz = clamp(r * 0.07, 0.012, 0.05);
+      // (no floor above 3 mm: a 4 cm snake's girth takes ~14 scales round -- the detail fade, not the floor, keeps it from aliasing)
+      let sz = clamp(r * 0.07, 0.003, 0.05);
       let q = p / sz;
       let blot = sin(p.x * 2.1 + sin(p.z * 3.3)) * sin(p.y * 2.7 + p.z * 1.9);
       var c = scaleCells3(q);

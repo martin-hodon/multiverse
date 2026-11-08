@@ -1,326 +1,157 @@
 {
   "name": "hare",
+  "_about": "a brown hare SCULPTED on its rig (2026-11-05, gen: scratchpad sc/carn/gen/small.py): 55 cm head-body, the back arched to the high haunches over long hind legs and longer hind feet; a blunt face, big amber eyes set high on the sides, long black-tipped ears; tawny grizzled, the belly and chin white, the tail black above, white below; it bounds (its gait the fore pair and the hind pair each together) (2026-11-08, ears2.py) The EARS (ears2.py): very long round-tipped cupped sheets (sharp.js `fin`), pale in the hollow, the tips black; the roots faired. WHISKERS (2026-11-08, tools/creaturegen/sharp/whiskers.py): 12 pale whiskers a side, 4 rows on the whisker pad (50-75 mm) -- `whiskers` shapes (bodyspec.js whiskerStrands: thin pointed strands, mirrored, on the head, near mesh only; details, so every coat and variant still shares one mesh).",
+  "kind": "mammal",
+  "headForm": "rodent",
   "shy": 9,
-  "kind": "parts",
-  "flags": {
-    "print": "paw"
+  "print": "paw",
+  "headTurn": 24,
+  "rear": [-0.12, 0.21, 0, 0.14, 0.1, 0.09],
+  "front": [0.08, 0.19, 0, 0.12, 0.08, 0.075],
+  "neck": [0.16, 0.21, 0, 0.215, 0.255, 0, 0.05, 0.045],
+  "head": [0.25, 0.275, 0, 0.05],
+  "muzzle": [0.3, 0.26, 0, 0.035, 0.03, 0.03],
+  "nose": [0.334, 0.262, 0, 0.009],
+  "ears": [0.23, 0.315, 0.022, 0.185, 0.43, 0.04, 0.02, 0.008],
+  "eyes": [0.282, 0.29, 0.034, 0.011],
+  "legs": {
+    "front": [0.12, 0.13, 0.04, 0.06],
+    "hind": [-0.13, 0.15, 0.05, 0.085],
+    "radii": [0.03, 0.017, 0.012],
+    "foot": [0.03, 0.012, 0.018]
   },
-  "parts": [
-    {
-      "id": "body",
-      "parent": null,
-      "shape": "capsule",
-      "size": {
-        "r": 0.1,
-        "len": 0.18
-      },
-      "geomRot": [
-        0,
-        0,
-        90
-      ],
-      "pos": [
-        0,
-        0.16,
-        0
-      ],
-      "color": "#9b8468"
+  "tail": {
+    "c": [-0.265, 0.235],
+    "R": 0.035,
+    "a0": -1.25,
+    "a1": 0.4,
+    "r1": 0.024,
+    "r2": 0.02,
+    "n": 2,
+    "sway": 8,
+    "speed": 0.8
+  },
+  "gaits": {
+    "walk": {
+      "offsets": [0, 0.4, 3.1416, 3.4416]
     },
-    {
-      "id": "head",
-      "parent": "body",
-      "shape": "sphere",
-      "size": {
-        "r": 0.08
-      },
-      "pos": [
-        0.17,
-        0.08,
-        0
-      ],
-      "color": "#9b8468",
-      "anim": {
-        "axis": "y",
-        "deg": 16,
-        "speed": 0.5,
-        "phase": 0
+    "run": {
+      "offsets": [0, 0.3, 3.1416, 3.3416]
+    }
+  },
+  "c": {
+    "body": "#9c7f60",
+    "muzzle": "#a68e72",
+    "ear": "#937a5c",
+    "leg": "#a08668",
+    "foot": "#b8a488",
+    "tail": "#f0eae0",
+    "eye": "#c08a30",
+    "nose": "#6a4a3a",
+    "front": "#a27c58",
+    "head": "#9a8064",
+    "cheek": "#a99070",
+    "belly": "#e8e0d2",
+    "pad": "#c4b098",
+    "chin": "#e4dccd",
+    "tooth": "#efe6d2",
+    "earIn": "#c9b49a",
+    "earTip": "#1e1a16",
+    "tailTop": "#1e1a16",
+    "lid": "#4a3826",
+    "ring": "#d9ccb4"
+  },
+  "variants": {
+    "mountain": {
+      "scale": 0.9,
+      "colors": {
+        "body": "#efebe4",
+        "front": "#ece8e0",
+        "head": "#eeeae2",
+        "cheek": "#f0ece5",
+        "belly": "#f4f2ec",
+        "muzzle": "#ece8e0",
+        "pad": "#e8e2d8",
+        "chin": "#f4f2ec",
+        "ear": "#e8e4dc",
+        "earIn": "#e2dcd2",
+        "leg": "#ece8e0",
+        "foot": "#f0ece4",
+        "tail": "#f4f2ec",
+        "tailTop": "#f0ece4",
+        "ring": "#f4f2ec",
+        "nose": "#7a6058"
       }
     },
-    {
-      "id": "snout",
-      "parent": "head",
-      "shape": "sphere",
-      "size": {
-        "r": 0.035
-      },
-      "pos": [
-        0.06,
-        -0.01,
-        0
-      ],
-      "color": "#b59f85"
-    },
-    {
-      "id": "earL",
-      "parent": "head",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          -0.075,
-          0
-        ],
-        "b": [
-          0.005,
-          0.02,
-          0.032
-        ],
-        "c": [
-          -0.005,
-          0.088,
-          -0.006
-        ],
-        "r": 0.014
-      },
-      "color": "#7d6950",
-      "pos": [
-        -0.03,
-        0.06,
-        0.035
-      ],
-      "rot": [
-        10,
-        0,
-        -15
-      ],
-      "pivot": [
-        0,
-        0.075,
-        0
-      ]
-    },
-    {
-      "id": "earR",
-      "parent": "head",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          -0.075,
-          0
-        ],
-        "b": [
-          0.005,
-          0.02,
-          -0.032
-        ],
-        "c": [
-          -0.005,
-          0.088,
-          0.006
-        ],
-        "r": 0.014
-      },
-      "color": "#7d6950",
-      "pos": [
-        -0.03,
-        0.06,
-        -0.035
-      ],
-      "rot": [
-        -10,
-        0,
-        -15
-      ],
-      "pivot": [
-        0,
-        0.075,
-        0
-      ]
-    },
-    {
-      "id": "eyeL",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.015,
-        "r2": 0.015,
-        "len": 0.027007258291214035
-      },
-      "pos": [
-        0.06401273361356923,
-        0.03394112549695427,
-        0.03391710387574719
-      ],
-      "rot": [
-        90,
-        0,
-        38.65980825409009
-      ],
-      "pivot": [
-        0,
-        0.013503629145607017,
-        0
-      ],
-      "color": "#0f0a06",
-      "edge": 0,
-      "dot": {
-        "iris": "#2c1c12",
-        "pupil": "round",
-        "round": true,
-        "role": "eye"
-      }
-    },
-    {
-      "id": "eyeR",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.015,
-        "r2": 0.015,
-        "len": 0.027007258291214035
-      },
-      "pos": [
-        0.04714143311102466,
-        0.03394112549695427,
-        -0.0550062295039279
-      ],
-      "rot": [
-        90,
-        0,
-        -38.65980825409009
-      ],
-      "pivot": [
-        0,
-        0.013503629145607017,
-        0
-      ],
-      "color": "#0f0a06",
-      "edge": 0,
-      "dot": {
-        "iris": "#2c1c12",
-        "pupil": "round",
-        "round": true,
-        "role": "eye"
-      }
-    },
-    {
-      "id": "tail",
-      "parent": "body",
-      "shape": "sphere",
-      "size": {
-        "r": 0.04
-      },
-      "pos": [
-        -0.17,
-        0.03,
-        0
-      ],
-      "color": "#e8e0d5"
-    },
-    {
-      "id": "legFL",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.025,
-        "len": 0.08
-      },
-      "pos": [
-        0.1,
-        -0.055,
-        0.05
-      ],
-      "pivot": [
-        0,
-        -0.04,
-        0
-      ],
-      "color": "#7d6950",
-      "anim": {
-        "axis": "z",
-        "deg": 24,
-        "speed": 0.8,
-        "phase": 0
-      }
-    },
-    {
-      "id": "legFR",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.025,
-        "len": 0.08
-      },
-      "pos": [
-        0.1,
-        -0.055,
-        -0.05
-      ],
-      "pivot": [
-        0,
-        -0.04,
-        0
-      ],
-      "color": "#7d6950",
-      "anim": {
-        "axis": "z",
-        "deg": 24,
-        "speed": 0.8,
-        "phase": 3.141592653589793
-      }
-    },
-    {
-      "id": "legBL",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.025,
-        "len": 0.08
-      },
-      "pos": [
-        -0.1,
-        -0.055,
-        0.05
-      ],
-      "pivot": [
-        0,
-        -0.04,
-        0
-      ],
-      "color": "#7d6950",
-      "anim": {
-        "axis": "z",
-        "deg": 24,
-        "speed": 0.8,
-        "phase": 3.141592653589793
-      }
-    },
-    {
-      "id": "legBR",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.025,
-        "len": 0.08
-      },
-      "pos": [
-        -0.1,
-        -0.055,
-        -0.05
-      ],
-      "pivot": [
-        0,
-        -0.04,
-        0
-      ],
-      "color": "#7d6950",
-      "anim": {
-        "axis": "z",
-        "deg": 24,
-        "speed": 0.8,
-        "phase": 0
+    "mountain summer": {
+      "scale": 0.9,
+      "colors": {
+        "body": "#7e7262",
+        "front": "#837562",
+        "head": "#7c7060",
+        "cheek": "#86796a",
+        "belly": "#e2dcd0",
+        "muzzle": "#8a7e6e",
+        "ear": "#786c5c",
+        "leg": "#867a6a",
+        "foot": "#a49a8a",
+        "tail": "#ece8e0",
+        "tailTop": "#e2ded4"
       }
     }
-  ]
+  },
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [5600, 1800],
+      "focus": {
+        "head": 5,
+        "earL": 3,
+        "footHL": 2
+      }
+    },
+    "shape": [
+      {"id": "rump", "type": "ell", "c": [-0.1212, 0.215, 0], "r": [0.112, 0.086, 0.07], "k": 0.035, "color": "@body", "hair": 0, "pat": "agouti"},
+      {"id": "chest", "type": "ell", "c": [0.088, 0.197, 0], "r": [0.082, 0.074, 0.06], "k": 0.035, "color": "@front", "hair": 0, "pat": "agouti"},
+      {"id": "loin", "type": "ell", "c": [-0.02, 0.217, 0], "r": [0.1, 0.06, 0.056], "k": 0.035, "color": "@body", "hair": 0, "pat": "agouti"},
+      {"id": "belly", "type": "ell", "c": [-0.01, 0.16, 0], "r": [0.095, 0.024, 0.028], "k": 0.0245, "kc": 0.0105, "color": "@belly"},
+      {"id": "arm", "type": "cone", "bone": "legFLu", "a": [0.129, 0.148, 0.04], "b": [0.12, 0.07, 0.04], "ra": 0.0269, "rb": 0.0139, "k": 0.0136, "color": "@front", "mirror": true, "pat": "agouti"},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.12, 0.07, 0.04], "b": [0.134, 0.0302, 0.04], "ra": 0.0133, "rb": 0.0084, "k": 0.006, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "paw", "type": "ell", "bone": "footFL", "c": [0.1475, 0.0126, 0.04], "r": [0.024, 0.012, 0.018], "k": 0.0048, "color": "@foot", "mirror": true},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-0.1348, 0.128, 0.05], "r": [0.0665, 0.0808, 0.034], "rot": [0, 0, 20], "k": 0.028, "color": "@body", "mirror": true, "hair": 0, "pat": "agouti"},
+      {"id": "shin", "type": "cone", "bone": "legHLl", "a": [-0.1291, 0.0664, 0.05], "b": [-0.129, 0.0248, 0.05], "ra": 0.0187, "rb": 0.012, "k": 0.006, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "neck", "type": "ell", "bone": "neck", "c": [0.196, 0.236, 0.0], "r": [0.055, 0.0475, 0.0475], "k": 0.02, "color": "@body", "pat": "agouti"},
+      {"id": "throat", "type": "ell", "bone": "neck", "c": [0.2095, 0.2233, 0.0], "r": [0.04, 0.0275, 0.035], "k": 0.015, "kc": 0.0075, "color": "@belly"},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.2475, 0.279, 0.0], "r": [0.0525, 0.044, 0.04], "k": 0.015, "color": "@head", "pat": "agouti"},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [0.261, 0.26, 0.024], "r": [0.031, 0.0275, 0.021], "k": 0.0125, "color": "@cheek", "mirror": true, "pat": "agouti"},
+      {"id": "muzzle", "type": "ell", "bone": "head", "c": [0.2965, 0.2615, 0], "r": [0.035, 0.0285, 0.0285], "k": 0.0125, "color": "@muzzle", "pat": "agouti"},
+      {"id": "pad", "type": "ell", "bone": "head", "c": [0.3148, 0.2485, 0.0135], "r": [0.0175, 0.0165, 0.0144], "k": 0.006, "kc": 0.0025, "color": "@pad", "mirror": true},
+      {"id": "whiskers", "type": "whiskers", "bone": "head", "at": [0.31236, 0.24789, 0.02568], "dir": [-0.2, -0.05, 1], "rows": 4, "per": 3, "gap": [0.004, 0.0035], "fan": [20, -16], "sweep": [-8, 30], "len": [0.05, 0.075], "rowLen": [1, 0.75], "droop": 0.1, "curl": 0.04, "r": 0.00045, "color": "#ece8e0", "seed": 7, "tip": "#b8b2a8", "normal": [-0.096, -0.071, 0.993]},
+      {"id": "chin", "type": "ell", "bone": "head", "c": [0.299, 0.232, 0], "r": [0.021, 0.012, 0.015], "k": 0.005, "kc": 0.0025, "color": "@chin"},
+      {"id": "nose", "type": "ell", "bone": "head", "c": [0.3313, 0.262, 0.0], "r": [0.0072, 0.0067, 0.0099], "k": 0.0036, "kc": 0.0018, "color": "@nose", "wet": 0.45},
+      {"id": "tooth", "type": "ell", "bone": "head", "c": [0.3205, 0.2408, 0.0017], "r": [0.0013, 0.0052, 0.0012], "rot": [0, 0, -8], "k": 0.0004, "kc": 0.0002, "color": "@tooth", "mirror": true},
+      {"id": "ear", "type": "fin", "bone": "earL", "root": [[0.2302, 0.3067, 0.0166], [0.2342, 0.3106, 0.0125]], "edge": [[0.2285, 0.3066, 0.019], [0.2166, 0.3293, 0.0305], [0.2099, 0.3435, 0.0348], [0.2042, 0.3569, 0.0381], [0.1992, 0.37, 0.0408], [0.1946, 0.3827, 0.043], [0.1905, 0.3953, 0.0447], [0.1869, 0.4078, 0.046], [0.184, 0.4204, 0.0464], [0.1833, 0.4343, 0.0441], [0.1915, 0.4254, 0.037], [0.1976, 0.4149, 0.0325], [0.2033, 0.4037, 0.0287], [0.2087, 0.392, 0.0253], [0.214, 0.3797, 0.0222], [0.2192, 0.3668, 0.0194], [0.2242, 0.3529, 0.0169], [0.229, 0.3375, 0.0149], [0.2352, 0.3134, 0.0117]], "thick": 0.0039, "slope": 0.3, "face": [0.7333, 0.1467, 0.6639], "cup": 0.6, "color": "@ear", "inner": "@earIn", "tip": "@earTip", "tipAt": 0.86, "innerRim": 0.0019, "mirror": true, "fair": {"r": 0.0039, "sink": 3}},
+      {"id": "scut", "type": "ell", "bone": "tail", "c": [-0.252, 0.214, 0.0], "r": [0.026, 0.026, 0.024], "k": 0.008, "color": "@tail", "hair": 1},
+      {"id": "scutTop", "type": "ell", "bone": "tail", "c": [-0.256, 0.232, 0.0], "r": [0.022, 0.012, 0.02], "k": 0.004, "kc": 0.0015, "color": "@tailTop", "hair": 1},
+      {"id": "heel", "type": "cone", "bone": "footHL", "a": [-0.147, 0.034, 0.05], "b": [-0.062, 0.017, 0.05], "ra": 0.016, "rb": 0.0105, "k": 0.006, "kc": 0.002, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "toesH", "type": "ell", "bone": "footHL", "c": [-0.057, 0.0165, 0.05], "r": [0.028, 0.0085, 0.0135], "k": 0.004, "kc": 0.0015, "color": "@foot", "mirror": true},
+      {"id": "eyeRing", "type": "sphere", "bone": "head", "c": [0.289, 0.29, 0.027], "r": 0.0147, "k": 0.002, "kc": 0.0008, "color": "@ring", "mirror": true, "seat": {"from": [0.25, 0.277, 0.0], "out": -0.62}}
+    ],
+    "eyes": {
+      "at": [0.289, 0.29, 0.027],
+      "from": [0.25, 0.28, 0.0],
+      "r": 0.0101,
+      "iris": "@eye",
+      "pupil": "round",
+      "lid": "@lid",
+      "sink": 0.66,
+      "socket": 1.12,
+      "color": "#0a0706"
+    },
+    "shade": {
+      "back": 0.9,
+      "belly": 1.08,
+      "on": "@body"
+    }
+  }
 }

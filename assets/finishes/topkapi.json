@@ -1,29 +1,477 @@
 {
-  "name": "Topkapı Palace",
-  "building": "architecture/topkapi",
-  "_about": "Topkapı's Second Court: pale limestone for the Middle Gate's wall and towers; white marble for the porticoes' arcades and columns and the Tower of Justice's lantern, read against the darker stone of the walls behind them; Ottoman alternating stone-and-brick (almaşık) on the kitchens and the treasury; lead on every dome, cap, roof and pendentive deck, the alems gilt; the painted soffit (saçak, green and white with gold) only under the porticoes, the Gate of Felicity's canopy and the Audience Chamber's eaves, the plain ranges' eaves plastered; marble revetment on the Audience Chamber's outer walls; Iznik tiles and stencilled kalemişi inside the Divan and the Audience Chamber.",
-  "stone": {"color": "#c4b89c", "accent": "#aea286", "pat": "ashlar"},
-  "rules": [
-    {"parts": ["alem", "dome alem"], "pattern": "roofs/gold leaf", "palette": "gold"},
-    {"parts": "kind:dome", "surface": "roof", "pattern": "roofs/sheet metal", "palette": "lead"},
-    {"parts": ["divan/pendentives deck", "treasury/pendentives deck", "treasury rear/pendentives deck", "kitchens/pendentives deck", "kitchens rear/pendentives deck"], "pattern": "roofs/sheet metal", "palette": "lead", "_about": "the flat leads between the domes"},
-    {"parts": ["roof", "roof hipped"], "surface": "ceiling", "pattern": "painted/sachak", "palette": "divan-green", "_about": "the painted soffits: only a portico's, the Felicity canopy's and the Audience Chamber's roof (the plain ranges' roofs are top-level parts named '... roof')"},
-    {"parts": "kind:roof", "surface": "ceiling", "pattern": "stone/plaster", "palette": "plaster-white"},
-    {"parts": "kind:roof", "pattern": "roofs/sheet metal", "palette": "lead"},
-    {"parts": "fascia", "pattern": "painted/sachak", "palette": "divan-green", "scale": 0.4},
-    {"parts": "ceiling", "surface": "ceiling", "pattern": "painted/caisson", "palette": "divan-green"},
-    {"parts": "tower of justice", "above": 21.0, "pattern": "stone/marble", "palette": "carrara", "_about": "the lantern stage, its paired columns and pediments: white marble over the limestone shaft"},
-    {"parts": ["columns shafts", "columns bases", "columns capitals", "colonnade shafts", "colonnade bases", "colonnade capitals", "colonnade entablature"], "pattern": "stone/marble", "palette": "marble-grey"},
-    {"parts": ["arcade", "beam"], "pattern": "stone/marble", "palette": "carrara", "_about": "the porticoes' arches, white against the darker walls behind"},
-    {"parts": ["divan", "audience chamber"], "surface": "wall", "side": "in", "below": 3.2, "pattern": "tiles/iznik carnation", "palette": "iznik"},
-    {"parts": ["divan", "audience chamber"], "side": "in", "pattern": "painted/kalemisi", "palette": "iznik"},
-    {"parts": "audience chamber/room", "surface": "wall", "side": "out", "pattern": "stone/revetment", "palette": "carrara"},
-    {"parts": ["kitchens", "kitchens rear", "treasury", "treasury rear", "kitchen range"], "surface": "wall", "side": "out", "pattern": "stone/almasik", "palette": "almasik"},
-    {"parts": ["chimneys"], "pattern": "stone/almasik", "palette": "almasik"},
-    {"parts": ["gate towers", "tower of justice", "gate wall", "gate crenellation"], "surface": "wall", "pattern": "stone/ashlar", "palette": "limestone"},
-    {"parts": "platform", "pattern": "floors/flagstones", "palette": "marble-grey"},
-    {"surface": "floor", "pattern": "floors/flagstones", "palette": "marble-grey"},
-    {"surface": "wall", "side": "in", "pattern": "stone/plaster", "palette": "plaster-white"},
-    {"surface": "wall", "pattern": "stone/ashlar fine", "palette": "sandstone-grey", "_about": "the walls behind the porticoes, the Divan, the ranges: a darker stone than the marble arcades before them"}
-  ]
+ "name": "Topkap\u0131 Palace",
+ "building": "architecture/topkapi",
+ "_about": "Topkap\u0131: pale limestone for the gates, towers, walls and the ranges; white marble for the porticoes' columns and arcades, the Tower of Justice's lantern, the Baghdad and Revan kiosks and the terrace; Ottoman stone-and-brick (alma\u015f\u0131k) on the kitchens and the treasury; lead on every dome, cap and roof, the alems gilt, the Iftariye's canopy gilt; the painted soffits (sa\u00e7ak) under the porticoes and the kiosks' eaves; Iznik tiles inside the Divan and the Audience Chamber; the Sofa Kiosk's timber; the Mecidiye's white plaster; Hagia Irene's brick; the courts' lawns, paths and plane trees and cypresses.",
+ "stone": {
+  "color": "#c4b89c",
+  "accent": "#aea286",
+  "pat": "ashlar"
+ },
+ "rules": [
+  {
+   "parts": [
+    "alem",
+    "dome alem",
+    "harem dome 3 alems",
+    "harem dome 5 alems",
+    "harem dome 7 alems",
+    "harem domes 1.6 alems",
+    "harem domes 2.2 alems",
+    "harem domes 2.9 alems",
+    "library dome alems",
+    "treasury pavilion domes alems",
+    "holy mantle domes alems",
+    "iftariye canopy",
+    "iftariye columns"
+   ],
+   "pattern": "roofs/gold leaf",
+   "palette": "gold",
+   "_about": "the alems and the Iftariye gilt"
+  },
+  {
+   "parts": [
+    "tree trunks",
+    "cypress trunks"
+   ],
+   "pattern": "timber/bark",
+   "palette": "oak"
+  },
+  {
+   "parts": [
+    "tree crowns"
+   ],
+   "color": "#5a7a3a",
+   "accent": "#45622c",
+   "_about": "the plane trees"
+  },
+  {
+   "parts": [
+    "cypresses"
+   ],
+   "color": "#2f4a2c",
+   "accent": "#233a21",
+   "_about": "the cypresses, dark"
+  },
+  {
+   "parts": [
+    "pool water",
+    "garden pool 1",
+    "garden pool 2",
+    "garden pool 3",
+    "garden pool 4",
+    "garden pool 5"
+   ],
+   "color": "#4f7f8c",
+   "accent": "#3f6c78",
+   "_about": "the pools' water"
+  },
+  {
+   "parts": "kind:dome",
+   "surface": "roof",
+   "pattern": "roofs/sheet metal",
+   "palette": "lead"
+  },
+  {
+   "parts": [
+    "divan/pendentives deck",
+    "treasury/pendentives deck",
+    "treasury rear/pendentives deck",
+    "kitchens/pendentives deck",
+    "kitchens rear/pendentives deck",
+    "confectionery/pendentives deck"
+   ],
+   "pattern": "roofs/sheet metal",
+   "palette": "lead",
+   "_about": "the flat leads between the domes"
+  },
+  {
+   "parts": [
+    "gate hall roof",
+    "guard rooms north roof",
+    "guard rooms south roof",
+    "gate wall north roof",
+    "gate wall south roof",
+    "kitchen range roof",
+    "larders roof",
+    "harem upper room 1 roof",
+    "harem upper room 2 roof",
+    "harem tower roof",
+    "felicity range roof",
+    "felicity north roof",
+    "felicity south roof",
+    "agas mosque roof",
+    "has oda dorm roof",
+    "dorm ne1 roof",
+    "dorm ne2 roof",
+    "seferli roof",
+    "dorm se roof",
+    "iftariye canopy",
+    "sofa kiosk roof",
+    "mecidiye kiosk roof",
+    "sofa mosque roof",
+    "wardrobe roof"
+   ],
+   "surface": "roof",
+   "pattern": "roofs/sheet metal",
+   "palette": "lead",
+   "_about": "the lead roofs"
+  },
+  {
+   "parts": [
+    "imperial gate roof",
+    "irene atrium roofs",
+    "irene roof",
+    "kimyahane roof",
+    "firincilar roof",
+    "halberdiers roof",
+    "library arm north roof",
+    "library arm south roof",
+    "library arm east roof",
+    "treasury pavilion roof",
+    "holy mantle roof"
+   ],
+   "pattern": "roofs/sheet metal",
+   "palette": "lead",
+   "_about": "the flat leads over the ranges, their eaves' edges"
+  },
+  {
+   "parts": [
+    "harem eunuchs",
+    "harem concubines",
+    "harem mosque range",
+    "harem valide",
+    "harem imperial hall",
+    "harem privy",
+    "harem road range",
+    "harem upper room 1",
+    "harem upper room 2",
+    "harem tower",
+    "halberdiers",
+    "kimyahane",
+    "firincilar"
+   ],
+   "surface": "floor",
+   "pattern": "roofs/sheet metal",
+   "palette": "lead"
+  },
+  {
+   "parts": [
+    "roof",
+    "roof hipped"
+   ],
+   "surface": "ceiling",
+   "pattern": "painted/sachak",
+   "palette": "divan-green",
+   "_about": "the painted soffits of the porticoes' and kiosks' eaves"
+  },
+  {
+   "parts": "kind:roof",
+   "surface": "ceiling",
+   "pattern": "stone/plaster",
+   "palette": "plaster-white"
+  },
+  {
+   "parts": "kind:roof",
+   "pattern": "roofs/sheet metal",
+   "palette": "lead"
+  },
+  {
+   "parts": "fascia",
+   "pattern": "painted/sachak",
+   "palette": "divan-green",
+   "scale": 0.4
+  },
+  {
+   "parts": "ceiling",
+   "surface": "ceiling",
+   "pattern": "painted/caisson",
+   "palette": "divan-green"
+  },
+  {
+   "parts": "tower of justice",
+   "above": 33.0,
+   "pattern": "stone/marble",
+   "palette": "carrara",
+   "_about": "the lantern stage: white marble over the limestone shaft"
+  },
+  {
+   "parts": [
+    "columns shafts",
+    "columns bases",
+    "columns capitals",
+    "colonnade shafts",
+    "colonnade bases",
+    "colonnade capitals",
+    "colonnade entablature"
+   ],
+   "pattern": "stone/marble",
+   "palette": "marble-grey"
+  },
+  {
+   "parts": [
+    "arcade",
+    "beam"
+   ],
+   "pattern": "stone/marble",
+   "palette": "carrara",
+   "_about": "the porticoes' arches, white against the walls behind"
+  },
+  {
+   "parts": [
+    "divan",
+    "audience chamber",
+    "baghdad kiosk",
+    "revan kiosk",
+    "circumcision room"
+   ],
+   "surface": "wall",
+   "side": "in",
+   "below": 11.2,
+   "pattern": "tiles/iznik carnation",
+   "palette": "iznik"
+  },
+  {
+   "parts": [
+    "divan",
+    "audience chamber",
+    "baghdad kiosk",
+    "revan kiosk",
+    "circumcision room"
+   ],
+   "side": "in",
+   "pattern": "painted/kalemisi",
+   "palette": "iznik"
+  },
+  {
+   "parts": [
+    "audience chamber/room",
+    "baghdad kiosk/room",
+    "revan kiosk/room",
+    "circumcision room/room",
+    "library",
+    "library arm north",
+    "library arm south",
+    "library arm east"
+   ],
+   "surface": "wall",
+   "side": "out",
+   "pattern": "stone/revetment",
+   "palette": "carrara",
+   "_about": "the kiosks' and the library's marble-faced walls"
+  },
+  {
+   "parts": [
+    "kitchens",
+    "kitchens rear",
+    "confectionery",
+    "treasury",
+    "treasury rear",
+    "kitchen range",
+    "larders"
+   ],
+   "surface": "wall",
+   "side": "out",
+   "pattern": "stone/almasik",
+   "palette": "almasik",
+   "_about": "stone and brick on the kitchens and the treasury"
+  },
+  {
+   "parts": [
+    "chimneys",
+    "harem chimneys"
+   ],
+   "pattern": "stone/almasik",
+   "palette": "almasik"
+  },
+  {
+   "parts": [
+    "sofa kiosk"
+   ],
+   "surface": "wall",
+   "side": "out",
+   "pattern": "timber/boards",
+   "palette": "walnut",
+   "_about": "the Sofa Kiosk's timber"
+  },
+  {
+   "parts": [
+    "mecidiye kiosk"
+   ],
+   "surface": "wall",
+   "side": "out",
+   "pattern": "stone/plaster",
+   "palette": "plaster-white",
+   "_about": "the Mecidiye's white plaster"
+  },
+  {
+   "parts": [
+    "irene yard",
+    "irene atrium",
+    "irene atrium roofs",
+    "irene",
+    "irene roof",
+    "irene apse",
+    "irene apse dome",
+    "irene main tower",
+    "irene main drum",
+    "irene main dome",
+    "irene west tower",
+    "irene west drum",
+    "irene west dome"
+   ],
+   "surface": "wall",
+   "pattern": "stone/brick",
+   "palette": "roman-brick",
+   "_about": "Hagia Irene's brick"
+  },
+  {
+   "parts": [
+    "kimyahane windows",
+    "firincilar windows",
+    "halberdiers windows",
+    "harem windows",
+    "carriage gate"
+   ],
+   "color": "#2c2f31",
+   "accent": "#1f2224",
+   "_about": "the windows' dark panes"
+  },
+  {
+   "parts": [
+    "first court",
+    "hillside",
+    "lower garden 1",
+    "lower garden 2",
+    "lower garden 3"
+   ],
+   "surface": "floor",
+   "pattern": "materials/grass",
+   "palette": "lawn",
+   "_about": "the First Court's and the gardens' lawns"
+  },
+  {
+   "parts": [
+    "plateau"
+   ],
+   "surface": "floor",
+   "within": [
+    27.0,
+    -46.0,
+    158.0,
+    57.0
+   ],
+   "pattern": "materials/grass",
+   "palette": "lawn",
+   "_about": "the Second Court's lawn"
+  },
+  {
+   "parts": [
+    "plateau"
+   ],
+   "surface": "floor",
+   "within": [
+    214.0,
+    -4.0,
+    262.0,
+    68.0
+   ],
+   "pattern": "materials/grass",
+   "palette": "lawn",
+   "_about": "the Third Court's"
+  },
+  {
+   "parts": [
+    "first court road",
+    "court path felicity",
+    "court path divan",
+    "court path kitchens"
+   ],
+   "pattern": "floors/flagstones",
+   "palette": "marble-grey",
+   "_about": "the paved ways"
+  },
+  {
+   "parts": [
+    "marble terrace",
+    "irene yard",
+    "pool rim",
+    "pool fountain",
+    "library basement",
+    "terrace parapet 1",
+    "terrace parapet 2",
+    "terrace parapet 3",
+    "terrace parapet 4",
+    "terrace parapet 5",
+    "terrace parapet 6",
+    "terrace parapet 7",
+    "terrace parapet 8",
+    "terrace parapet 9",
+    "terrace parapet 9b"
+   ],
+   "pattern": "stone/marble",
+   "palette": "carrara",
+   "_about": "the marble terrace, the pool, the library's basement"
+  },
+  {
+   "parts": [
+    "plateau",
+    "plateau east",
+    "plateau north",
+    "first court",
+    "mint yard",
+    "lower garden 1",
+    "lower garden 2",
+    "lower garden 3"
+   ],
+   "surface": "wall",
+   "pattern": "stone/ashlar",
+   "palette": "limestone",
+   "_about": "the terrace walls over the slopes"
+  },
+  {
+   "parts": "platform",
+   "pattern": "floors/flagstones",
+   "palette": "marble-grey"
+  },
+  {
+   "surface": "floor",
+   "pattern": "floors/flagstones",
+   "palette": "marble-grey"
+  },
+  {
+   "surface": "wall",
+   "side": "in",
+   "pattern": "stone/plaster",
+   "palette": "plaster-white"
+  },
+  {
+   "parts": [
+    "gate towers",
+    "tower of justice",
+    "gate wall",
+    "gate crenellation",
+    "imperial gate",
+    "imperial gate niche",
+    "sur-i sultani north 1",
+    "sur-i sultani north 1 merlons",
+    "sur-i sultani north 2",
+    "sur-i sultani north 2 merlons",
+    "sur-i sultani north 3",
+    "sur-i sultani north 3 merlons",
+    "sur-i sultani north 4",
+    "sur-i sultani north 4 merlons",
+    "sur-i sultani south 1",
+    "sur-i sultani south 1 merlons"
+   ],
+   "surface": "wall",
+   "pattern": "stone/ashlar",
+   "palette": "limestone"
+  },
+  {
+   "surface": "wall",
+   "pattern": "stone/ashlar fine",
+   "palette": "sandstone-grey",
+   "_about": "the ranges' walls: a darker stone than the marble arcades before them"
+  }
+ ]
 }

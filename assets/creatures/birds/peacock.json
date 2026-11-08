@@ -1,503 +1,179 @@
 {
   "name": "peacock",
   "kind": "parts",
-  "flags": {
-    "shy": 6,
-    "print": "bird"
-  },
+  "flags": {"shy": 6, "print": "bird"},
   "parts": [
-    {
-      "id": "body",
-      "parent": null,
-      "shape": "capsule",
-      "size": {
-        "r": 0.13,
-        "len": 0.3
-      },
-      "geomRot": [
-        0,
-        0,
-        90
-      ],
-      "pos": [
-        0,
-        0.38,
-        0
-      ],
-      "color": "#1f7a4a"
-    },
-    {
-      "id": "neck",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.045,
-        "len": 0.3
-      },
-      "pos": [
-        0.15,
-        0.1,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        -18
-      ],
-      "pivot": [
-        0,
-        0.15,
-        0
-      ],
-      "color": "#1c3f9a",
-      "anim": {
-        "axis": "z",
-        "deg": 5,
-        "speed": 0.4,
-        "phase": 0
+    {"id": "body", "parent": null, "shape": "capsule", "size": {"r": 0.1, "len": 0.26}, "geomRot": [0, 0, 90], "pos": [0, 0.435, 0], "color": "@blue"},
+    {"id": "neck", "parent": "body", "shape": "capsule", "size": {"r": 0.045, "len": 0.3}, "pos": [0.15, 0.08, 0], "rot": [0, 0, -14], "pivot": [0, 0.15, 0], "color": "#1c3f9a", "anim": {"axis": "z", "deg": 5, "speed": 0.4, "phase": 0}},
+    {"id": "head", "parent": "neck", "shape": "sphere", "size": {"r": 0.05}, "pos": [0.011, 0.224, 0], "color": "#1c3f9a", "anim": {"axis": "y", "deg": 22, "speed": 0.5, "phase": 0}},
+    {"id": "beak", "parent": "head", "shape": "cone", "size": {"r": 0.018, "h": 0.05}, "pos": [0.06, -0.01, 0], "rot": [0, 0, -90], "color": "#9a9080"},
+    {"id": "crestStalk", "parent": "head", "shape": "capsule", "size": {"r": 0.004, "len": 0.06}, "pos": [0, 0.06, 0], "color": "#1c3f9a"},
+    {"id": "crest", "parent": "crestStalk", "shape": "sphere", "size": {"r": 0.022}, "scale": [1.4, 0.6, 1], "pos": [0, 0.045, 0], "color": "#2a6fd0"},
+    {"id": "eyeL", "parent": "head", "shape": "capsule", "size": {"r": 0.012, "r2": 0.012, "len": 0.0226}, "pos": [0.0336, 0.0153, 0.0337], "rot": [90, 0, 58.7938], "pivot": [0, 0.0113, 0], "color": "#090606", "edge": 0, "dot": {"iris": "#1a1210", "pupil": "round", "round": true, "role": "eye"}},
+    {"id": "eyeR", "parent": "head", "shape": "capsule", "size": {"r": 0.012, "r2": 0.012, "len": 0.0226}, "pos": [0.0143, 0.0153, -0.0454], "rot": [90, 0, -58.7938], "pivot": [0, 0.0113, 0], "color": "#090606", "edge": 0, "dot": {"iris": "#1a1210", "pupil": "round", "round": true, "role": "eye"}},
+    {"id": "legL", "parent": "body", "shape": "capsule", "size": {"r": 0.012, "len": 0.335}, "pos": [0.02, -0.09, 0.05], "pivot": [0, -0.1675, 0], "color": "@leg", "anim": {"axis": "z", "deg": 20, "speed": 0.8, "phase": 0}},
+    {"id": "legR", "parent": "body", "shape": "capsule", "size": {"r": 0.012, "len": 0.335}, "pos": [0.02, -0.09, -0.05], "pivot": [0, -0.1675, 0], "color": "@leg", "anim": {"axis": "z", "deg": 20, "speed": 0.8, "phase": 3.14}},
+    {"id": "tail", "parent": "body", "shape": "sphere", "size": {"r": 0.02}, "pos": [-0.19, 0.08, 0], "color": "@train", "anim": {"axis": "y", "deg": 2, "speed": 0.22, "phase": 0}},
+    {"id": "tarsL", "parent": "legL", "shape": "sphere", "size": {"r": 0.008}, "pos": [0, -0.209, 0], "color": "@leg", "anim": {"axis": "z", "deg": -24, "speed": 0.8, "phase": 1.571, "flick": 1}},
+    {"id": "footL", "parent": "tarsL", "shape": "sphere", "size": {"r": 0.008}, "pos": [0, -0.124, 0], "color": "@leg", "anim": {"axis": "z", "deg": -20, "speed": 0.8, "phase": 0}},
+    {"id": "tarsR", "parent": "legR", "shape": "sphere", "size": {"r": 0.008}, "pos": [0, -0.209, 0], "color": "@leg", "anim": {"axis": "z", "deg": -24, "speed": 0.8, "phase": 4.711, "flick": 1}},
+    {"id": "footR", "parent": "tarsR", "shape": "sphere", "size": {"r": 0.008}, "pos": [0, -0.124, 0], "color": "@leg", "anim": {"axis": "z", "deg": -20, "speed": 0.8, "phase": 3.14}}
+  ],
+  "_about": "an Indian peacock walking with his train: a pheasant's body on grey-brown legs -- cobalt-blue neck and breast, the back bronze-green and scaled, the folded wing barred buff and black over dark secondaries -- a small blue head with the white face stripes and the fan of blue-tipped crest shafts; over the rump the domed mass of the train's bases, and the TRAIN itself: tiers of bronze-green feathers each ending in its eye and fringe, sloping down from the rump to the ground and trailing along it for half its length, the eyes scattered over it like scales (each tier its own length, the shorter laid over the longer); `display` (variants.display) raises it into the upright fan, a wall of eyes",
+  "colors": {
+    "blue": "#1a46b0",
+    "deep": "#14307e",
+    "bronze": "#4f6e26",
+    "green": "#2e5a2a",
+    "buff": "#c2ad80",
+    "chestnut": "#5a3418",
+    "dark": "#1b2430",
+    "face": "#f2f0ea",
+    "beak": "#a89a88",
+    "leg": "#8f8579",
+    "train": "#34501c",
+    "trainTip": "#587a26",
+    "eye": "#1a1210",
+    "grey": "#6a6258",
+    "belly": "#1c2a1e",
+    "black": "#1a1814",
+    "base": "#2f4a1c",
+    "stripe": "#3a3024",
+    "crestTip": "#1a46b0",
+    "hgreen": "#25705a",
+    "hbreast": "#86725a"
+  },
+  "params": {
+    "display": false,
+    "walking": true,
+    "cock": true,
+    "hen": false
+  },
+  "variants": {
+    "display": {
+      "params": {
+        "display": true,
+        "walking": false
       }
     },
-    {
-      "id": "head",
-      "parent": "neck",
-      "shape": "sphere",
-      "size": {
-        "r": 0.05
+    "peahen": {
+      "params": {
+        "display": false,
+        "walking": false,
+        "cock": false,
+        "hen": true
       },
-      "scale": [
-        1.3,
-        0.9,
-        0.9
-      ],
-      "pos": [
-        0.02,
-        0.32,
-        0
-      ],
-      "color": "#1c3f9a",
-      "anim": {
-        "axis": "y",
-        "deg": 22,
-        "speed": 0.5,
-        "phase": 0
-      }
-    },
-    {
-      "id": "beak",
-      "parent": "head",
-      "shape": "cone",
-      "size": {
-        "r": 0.018,
-        "h": 0.05
-      },
-      "pos": [
-        0.06,
-        -0.01,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        -90
-      ],
-      "color": "#9a9080"
-    },
-    {
-      "id": "crestStalk",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.004,
-        "len": 0.06
-      },
-      "pos": [
-        0,
-        0.06,
-        0
-      ],
-      "color": "#1c3f9a"
-    },
-    {
-      "id": "crest",
-      "parent": "crestStalk",
-      "shape": "sphere",
-      "size": {
-        "r": 0.022
-      },
-      "scale": [
-        1.4,
-        0.6,
-        1
-      ],
-      "pos": [
-        0,
-        0.045,
-        0
-      ],
-      "color": "#2a6fd0"
-    },
-    {
-      "id": "eyeL",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.012,
-        "r2": 0.012,
-        "len": 0.022634501068777554
-      },
-      "pos": [
-        0.03364086294611251,
-        0.015270768462476407,
-        0.033691185357691285
-      ],
-      "rot": [
-        90,
-        0,
-        58.79380861217656
-      ],
-      "pivot": [
-        0,
-        0.011317250534388777,
-        0
-      ],
-      "color": "#090606",
-      "edge": 0,
-      "dot": {
-        "iris": "#1a1210",
-        "pupil": "round",
-        "round": true,
-        "role": "eye"
-      }
-    },
-    {
-      "id": "eyeR",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.012,
-        "r2": 0.012,
-        "len": 0.022634501068777554
-      },
-      "pos": [
-        0.014281386833625585,
-        0.015270768462476407,
-        -0.04541856031044778
-      ],
-      "rot": [
-        90,
-        0,
-        -58.79380861217656
-      ],
-      "pivot": [
-        0,
-        0.011317250534388777,
-        0
-      ],
-      "color": "#090606",
-      "edge": 0,
-      "dot": {
-        "iris": "#1a1210",
-        "pupil": "round",
-        "round": true,
-        "role": "eye"
-      }
-    },
-    {
-      "id": "plume0",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          0,
-          0
-        ],
-        "b": [
-          -0.35,
-          1.15,
-          0.16
-        ],
-        "c": [
-          -0.35,
-          1.15,
-          -0.16
-        ],
-        "r": 0.025
-      },
-      "pos": [
-        -0.22,
-        0.02,
-        0
-      ],
-      "rot": [
-        -72,
-        0,
-        32
-      ],
-      "color": "#1f7a4a",
-      "pat": "wingspots"
-    },
-    {
-      "id": "plume1",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          0,
-          0
-        ],
-        "b": [
-          -0.35,
-          1.15,
-          0.16
-        ],
-        "c": [
-          -0.35,
-          1.15,
-          -0.16
-        ],
-        "r": 0.025
-      },
-      "pos": [
-        -0.22,
-        0.02,
-        0
-      ],
-      "rot": [
-        -48,
-        0,
-        32
-      ],
-      "color": "#2a8a52",
-      "pat": "wingspots"
-    },
-    {
-      "id": "plume2",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          0,
-          0
-        ],
-        "b": [
-          -0.35,
-          1.15,
-          0.16
-        ],
-        "c": [
-          -0.35,
-          1.15,
-          -0.16
-        ],
-        "r": 0.025
-      },
-      "pos": [
-        -0.22,
-        0.02,
-        0
-      ],
-      "rot": [
-        -24,
-        0,
-        32
-      ],
-      "color": "#1f7a4a",
-      "pat": "wingspots"
-    },
-    {
-      "id": "plume3",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          0,
-          0
-        ],
-        "b": [
-          -0.35,
-          1.15,
-          0.16
-        ],
-        "c": [
-          -0.35,
-          1.15,
-          -0.16
-        ],
-        "r": 0.025
-      },
-      "pos": [
-        -0.22,
-        0.02,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        32
-      ],
-      "color": "#2a8a52",
-      "pat": "wingspots"
-    },
-    {
-      "id": "plume4",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          0,
-          0
-        ],
-        "b": [
-          -0.35,
-          1.15,
-          0.16
-        ],
-        "c": [
-          -0.35,
-          1.15,
-          -0.16
-        ],
-        "r": 0.025
-      },
-      "pos": [
-        -0.22,
-        0.02,
-        0
-      ],
-      "rot": [
-        24,
-        0,
-        32
-      ],
-      "color": "#1f7a4a",
-      "pat": "wingspots"
-    },
-    {
-      "id": "plume5",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          0,
-          0
-        ],
-        "b": [
-          -0.35,
-          1.15,
-          0.16
-        ],
-        "c": [
-          -0.35,
-          1.15,
-          -0.16
-        ],
-        "r": 0.025
-      },
-      "pos": [
-        -0.22,
-        0.02,
-        0
-      ],
-      "rot": [
-        48,
-        0,
-        32
-      ],
-      "color": "#2a8a52",
-      "pat": "wingspots"
-    },
-    {
-      "id": "plume6",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0,
-          0,
-          0
-        ],
-        "b": [
-          -0.35,
-          1.15,
-          0.16
-        ],
-        "c": [
-          -0.35,
-          1.15,
-          -0.16
-        ],
-        "r": 0.025
-      },
-      "pos": [
-        -0.22,
-        0.02,
-        0
-      ],
-      "rot": [
-        72,
-        0,
-        32
-      ],
-      "color": "#1f7a4a",
-      "pat": "wingspots"
-    },
-    {
-      "id": "legL",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.012,
-        "len": 0.24
-      },
-      "pos": [
-        0.02,
-        -0.125,
-        0.05
-      ],
-      "pivot": [
-        0,
-        -0.12,
-        0
-      ],
-      "color": "#8a8070",
-      "anim": {
-        "axis": "z",
-        "deg": 26,
-        "speed": 0.8,
-        "phase": 0
-      }
-    },
-    {
-      "id": "legR",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.012,
-        "len": 0.24
-      },
-      "pos": [
-        0.02,
-        -0.125,
-        -0.05
-      ],
-      "pivot": [
-        0,
-        -0.12,
-        0
-      ],
-      "color": "#8a8070",
-      "anim": {
-        "axis": "z",
-        "deg": 26,
-        "speed": 0.8,
-        "phase": 3.14
+      "colors": {
+        "blue": "#7a6650",
+        "crestTip": "#2c7a58",
+        "beak": "#8c8a84",
+        "deep": "#5a4636",
+        "bronze": "#7a6a56",
+        "green": "#5e5444",
+        "buff": "#8a7458",
+        "dark": "#4a3e32",
+        "belly": "#ece6da",
+        "grey": "#6a6258",
+        "base": "#6e604e",
+        "train": "#6e604e",
+        "trainTip": "#5a4e40",
+        "stripe": "#3a3024"
       }
     }
-  ]
+  },
+  "sculpt": {
+    "_about": "x forward, y up, z left, metres SHARP PASS 2 (2026-11-08): the pointed parts -- beak, lowerBill (2 in all) -- are the engine's sharp `horn`s (sharp.js), made from the field shapes they replaced by tools/creaturegen/sharp/ (claws.py, teeth.py, spikes.py, antlers.py, bills.py): rooted in the body, tips pointed; RE-RUN those after this species' generator.",
+    "mesh": {"tris": [2800, 1200], "cell": 0.0045},
+    "eyes": {"at": [0.232, 0.733, 0.022], "from": [0.215, 0.73, 0], "r": 0.0065, "iris": "@eye", "pupil": "round"},
+    "shape": [
+      {"id": "breast", "type": "ell", "c": [0.14, 0.455, 0.0], "r": [0.105, 0.11, 0.09], "k": 0.05, "kc": 0.012, "color": "@blue"},
+      {"id": "trunk", "type": "ell", "c": [-0.02, 0.445, 0.0], "r": [0.21, 0.11, 0.108], "k": 0.05, "kc": 0.02, "color": "@bronze"},
+      {"id": "back", "type": "ell", "c": [-0.05, 0.515, 0.0], "r": [0.18, 0.05, 0.085], "k": 0.04, "pat": "scales", "frame": "body", "color": "@bronze"},
+      {"id": "belly", "type": "ell", "c": [0.02, 0.365, 0.0], "r": [0.16, 0.065, 0.085], "k": 0.05, "kc": 0.02, "color": "@belly"},
+      {"when": "hen", "id": "henBreast", "type": "ell", "c": [0.142, 0.45, 0.0], "r": [0.108, 0.112, 0.093], "k": 0.04, "kc": 0.02, "pat": "scales", "frame": "body", "color": "@hbreast"},
+      {"when": "cock", "id": "mass", "type": "ell", "c": [-0.24, 0.5, 0.0], "r": [0.17, 0.075, 0.1], "rot": [0, 0, -22], "k": 0.06, "kc": 0.04, "pat": "scales", "frame": "body", "color": "@bronze"},
+      {"id": "neck", "type": "tube", "bone": "neck", "pts": [[0.12, 0.495, 0.0, 0.052], [0.17, 0.575, 0.0, 0.04], [0.2, 0.655, 0.0, 0.032], [0.21, 0.715, 0.0, 0.028]], "k": 0.03, "kc": 0.008, "color": "@blue"},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.215, 0.73, 0.0], "r": [0.04, 0.03, 0.027], "rot": [0, 0, -8], "k": 0.016, "color": "@blue"},
+      {"id": "brow", "type": "ell", "bone": "head", "c": [0.226, 0.741, 0.02], "r": [0.024, 0.006, 0.006], "rot": [0, 0, -4], "k": 0.004, "kc": 0.0015, "color": "@face", "mirror": true},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [0.23, 0.721, 0.02], "r": [0.018, 0.008, 0.006], "rot": [0, 0, -10], "k": 0.004, "kc": 0.0015, "color": "@face", "mirror": true},
+      {"id": "beak", "type": "horn", "bone": "head", "pts": [[0.2475, 0.7285, 0.0, 0.0095, 1.2], [0.2655, 0.723, 0.0, 0.0068, 1.2], [0.2787, 0.7147, 0.0, 0.0035, 1.2], [0.2821, 0.709, 0.0, 0.0012, 1.2], [0.2825, 0.7079, 0.0, 0.0, 1.2]], "color": "@beak", "up": [0.2885, 0.9575, 0.0], "flat": 1, "keel": 0.06, "sides": 14},
+      {"id": "lowerBill", "type": "horn", "bone": "head", "pts": [[0.2473, 0.7279, 0.0, 0.0087, 0.87], [0.2653, 0.7225, 0.0, 0.0063, 0.87], [0.278, 0.7144, 0.0, 0.0, 0.87]], "color": "@beak", "up": [-0.2881, -0.9576, -0.0], "flat": 1, "sides": 14},
+      {"id": "wing", "type": "ell", "c": [-0.01, 0.48, 0.075], "r": [0.15, 0.06, 0.035], "rot": [-14, 0, -4], "k": 0.03, "color": "@bronze", "mirror": true},
+      {"when": "hen", "id": "henStripe", "type": "ell", "bone": "head", "c": [0.236, 0.733, 0.021], "r": [0.028, 0.0045, 0.006], "rot": [0, 0, -6], "k": 0.002, "kc": 0.0015, "color": "@stripe", "mirror": true},
+      {"when": "hen", "id": "henNeckG", "type": "ell", "bone": "neck", "c": [0.152, 0.547, 0.0], "r": [0.06, 0.056, 0.056], "rot": [0, 0, 58], "k": 0.016, "kc": 0.004, "color": "@hgreen"},
+      {"when": "hen", "id": "henThroat", "type": "ell", "bone": "head", "c": [0.226, 0.71, 0.0], "r": [0.02, 0.014, 0.018], "k": 0.008, "kc": 0.003, "color": "@face"},
+      {"when": "hen", "id": "henRump", "type": "ell", "c": [-0.2, 0.485, 0.0], "r": [0.08, 0.05, 0.07], "rot": [0, 0, -14], "k": 0.04, "kc": 0.02, "pat": "scales", "frame": "body", "color": "@bronze"},
+      {"when": "hen", "id": "henTail", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.21, 0.49, 0.0], "to": [-0.3933, 0.512, 0.077], "w": 0.032}, {"at": [-0.21, 0.49, 0.0], "to": [-0.4371, 0.5263, 0.0], "w": 0.032}, {"at": [-0.21, 0.49, 0.0], "to": [-0.3933, 0.512, -0.077], "w": 0.032}], "n": 9, "outline": "round", "up": [0, 1, 0], "camber": 0.12, "curve": 0.02, "seed": 71, "color": "@bronze", "tip": "@dark"},
+      {"id": "crest0", "type": "cone", "bone": "head", "a": [0.224, 0.751, -0.006], "b": [0.2411, 0.7979, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip0", "type": "ell", "bone": "head", "c": [0.2417, 0.7998, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, -20.0], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest1", "type": "cone", "bone": "head", "a": [0.2228, 0.7512, 0.006], "b": [0.2371, 0.7997, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip1", "type": "ell", "bone": "head", "c": [0.2377, 0.8016, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, -16.4211], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest2", "type": "cone", "bone": "head", "a": [0.2217, 0.7514, -0.006], "b": [0.2331, 0.8013, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip2", "type": "ell", "bone": "head", "c": [0.2335, 0.8033, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, -12.8421], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest3", "type": "cone", "bone": "head", "a": [0.2205, 0.7516, 0.006], "b": [0.2289, 0.8028, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip3", "type": "ell", "bone": "head", "c": [0.2292, 0.8047, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, -9.2632], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest4", "type": "cone", "bone": "head", "a": [0.2194, 0.7518, -0.006], "b": [0.2246, 0.804, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip4", "type": "ell", "bone": "head", "c": [0.2248, 0.806, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, -5.6842], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest5", "type": "cone", "bone": "head", "a": [0.2182, 0.7521, 0.006], "b": [0.2202, 0.8051, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip5", "type": "ell", "bone": "head", "c": [0.2202, 0.8071, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, -2.1053], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest6", "type": "cone", "bone": "head", "a": [0.2171, 0.7523, -0.006], "b": [0.2157, 0.806, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip6", "type": "ell", "bone": "head", "c": [0.2156, 0.808, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 1.4737], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest7", "type": "cone", "bone": "head", "a": [0.2159, 0.7525, 0.006], "b": [0.2111, 0.8067, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip7", "type": "ell", "bone": "head", "c": [0.2109, 0.8086, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 5.0526], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest8", "type": "cone", "bone": "head", "a": [0.2147, 0.7527, -0.006], "b": [0.2065, 0.8071, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip8", "type": "ell", "bone": "head", "c": [0.2062, 0.8091, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 8.6316], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest9", "type": "cone", "bone": "head", "a": [0.2136, 0.7529, 0.006], "b": [0.2018, 0.8073, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip9", "type": "ell", "bone": "head", "c": [0.2014, 0.8093, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 12.2105], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest10", "type": "cone", "bone": "head", "a": [0.2124, 0.7529, -0.006], "b": [0.1973, 0.8065, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip10", "type": "ell", "bone": "head", "c": [0.1967, 0.8084, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 15.7895], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest11", "type": "cone", "bone": "head", "a": [0.2113, 0.7527, 0.006], "b": [0.193, 0.8046, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip11", "type": "ell", "bone": "head", "c": [0.1923, 0.8065, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 19.3684], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest12", "type": "cone", "bone": "head", "a": [0.2101, 0.7525, -0.006], "b": [0.1889, 0.8026, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip12", "type": "ell", "bone": "head", "c": [0.1881, 0.8044, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 22.9474], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest13", "type": "cone", "bone": "head", "a": [0.2089, 0.7523, 0.006], "b": [0.1849, 0.8004, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip13", "type": "ell", "bone": "head", "c": [0.1841, 0.8021, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 26.5263], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest14", "type": "cone", "bone": "head", "a": [0.2078, 0.7521, -0.006], "b": [0.1812, 0.798, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip14", "type": "ell", "bone": "head", "c": [0.1802, 0.7997, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 30.1053], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest15", "type": "cone", "bone": "head", "a": [0.2066, 0.7518, 0.006], "b": [0.1775, 0.7955, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip15", "type": "ell", "bone": "head", "c": [0.1764, 0.7972, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 33.6842], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest16", "type": "cone", "bone": "head", "a": [0.2055, 0.7516, -0.006], "b": [0.1741, 0.7929, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip16", "type": "ell", "bone": "head", "c": [0.1729, 0.7945, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 37.2632], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest17", "type": "cone", "bone": "head", "a": [0.2043, 0.7514, 0.006], "b": [0.1709, 0.7901, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip17", "type": "ell", "bone": "head", "c": [0.1695, 0.7916, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 40.8421], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest18", "type": "cone", "bone": "head", "a": [0.2032, 0.7512, -0.006], "b": [0.1678, 0.7873, -0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip18", "type": "ell", "bone": "head", "c": [0.1664, 0.7887, -0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 44.4211], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "crest19", "type": "cone", "bone": "head", "a": [0.202, 0.751, 0.006], "b": [0.1649, 0.7844, 0.006], "ra": 0.0011, "rb": 0.0008, "k": 0.0006, "color": "@deep"},
+      {"id": "crestTip19", "type": "ell", "bone": "head", "c": [0.1634, 0.7857, 0.006], "r": [0.006, 0.0048, 0.0018], "rot": [0, 0, 48.0], "k": 0.001, "kc": 0.0006, "color": "@crestTip"},
+      {"id": "prim", "type": "feathers", "rows": [{"at": [0.006, 0.4713, 0.1136], "to": [-0.1504, 0.5013, 0.1113], "w": 0.0234, "up": [0.0172, 0.153, 0.9881]}, {"at": [-0.0127, 0.4542, 0.1201], "to": [-0.1391, 0.4852, 0.1141], "w": 0.0234, "up": [-0.0151, 0.0272, 0.9995]}, {"at": [-0.0308, 0.4386, 0.1109], "to": [-0.1276, 0.4696, 0.1155], "w": 0.0234, "up": [-0.0429, -0.074, 0.9963]}], "n": 2, "outline": "flight", "up": [0.0, 0.2425, 0.9701], "camber": 0.14, "curve": -0.02, "stagger": 0.0012, "seed": 31, "color": "@dark", "tip": "@black", "mirror": true},
+      {"id": "sec", "type": "feathers", "rows": [{"at": [0.0261, 0.5121, 0.1005], "to": [-0.0807, 0.5339, 0.1021], "w": 0.026, "up": [0.0158, 0.4811, 0.8765]}, {"at": [0.0085, 0.4679, 0.114], "to": [-0.0983, 0.4996, 0.1159], "w": 0.026, "up": [0.0009, 0.1421, 0.9899]}, {"at": [-0.0099, 0.4242, 0.1073], "to": [-0.1146, 0.4579, 0.1184], "w": 0.026, "up": [-0.0354, -0.1469, 0.9885]}], "n": 4, "outline": "round", "up": [0.0, 0.2425, 0.9701], "camber": 0.14, "curve": -0.02, "stagger": 0.0012, "seed": 32, "color": "@dark", "tip": "@black", "mirror": true},
+      {"id": "gcov", "type": "feathers", "rows": [{"at": [0.0645, 0.5147, 0.0937], "to": [-0.0088, 0.5304, 0.108], "w": 0.0198, "up": [0.0524, 0.4819, 0.8747]}, {"at": [0.0492, 0.48, 0.1078], "to": [-0.0283, 0.4896, 0.1218], "w": 0.0198, "up": [0.0297, 0.1546, 0.9875]}, {"at": [0.0323, 0.4408, 0.1112], "to": [-0.0474, 0.443, 0.123], "w": 0.0198, "up": [0.0145, -0.0899, 0.9958]}], "n": 5, "outline": "round", "up": [0.0, 0.2425, 0.9701], "camber": 0.14, "curve": -0.02, "stagger": 0.0012, "seed": 33, "color": "@buff", "tip": "@black", "mirror": true, "bars": {"n": 5, "dark": 0.45}},
+      {"id": "cov", "type": "feathers", "rows": [{"at": [0.0975, 0.5125, 0.0883], "to": [0.0429, 0.5249, 0.1096], "w": 0.0177, "up": [0.0671, 0.4636, 0.8835]}, {"at": [0.0818, 0.4837, 0.1024], "to": [0.0259, 0.4884, 0.1225], "w": 0.0177, "up": [0.0523, 0.1846, 0.9814]}, {"at": [0.0657, 0.4484, 0.1091], "to": [0.0067, 0.4443, 0.125], "w": 0.0177, "up": [0.0301, -0.0477, 0.9984]}], "n": 5, "outline": "round", "up": [0.0, 0.2425, 0.9701], "camber": 0.14, "curve": -0.02, "stagger": 0.0012, "seed": 34, "color": "@buff", "tip": "@buff", "mirror": true, "bars": {"n": 5, "dark": 0.45}},
+      {"id": "thigh", "type": "ell", "bone": "legL", "c": [0.02, 0.355, 0.05], "r": [0.05, 0.06, 0.042], "k": 0.0336, "color": "@dark", "mirror": true},
+      {"id": "tibia", "type": "cone", "bone": "legL", "a": [0.02, 0.325, 0.05], "b": [0.02, 0.136, 0.05], "ra": 0.011, "rb": 0.011, "k": 0.004, "color": "@leg", "mirror": true},
+      {"id": "ankle", "type": "sphere", "bone": "tarsL", "c": [0.02, 0.136, 0.05], "r": 0.013, "k": 0.004, "color": "@leg", "mirror": true},
+      {"id": "tarsus", "type": "cone", "bone": "tarsL", "a": [0.02, 0.136, 0.05], "b": [0.025, 0.02, 0.05], "ra": 0.0095, "rb": 0.0081, "k": 0.003, "pat": "scales", "frame": {"o": "$tarsL", "u": [0, -1, 0], "r": 0.02}, "color": "@leg", "mirror": true},
+      {"id": "toeM", "type": "cone", "bone": "footL", "a": [0.025, 0.015, 0.05], "b": [0.0846, 0.0079, 0.05], "ra": 0.0066, "rb": 0.0033, "k": 0.003, "color": "@leg", "mirror": true},
+      {"id": "toeO", "type": "cone", "bone": "footL", "a": [0.025, 0.015, 0.05], "b": [0.0704, 0.0096, 0.0727], "ra": 0.0066, "rb": 0.0033, "k": 0.003, "color": "@leg", "mirror": true},
+      {"id": "toeI", "type": "cone", "bone": "footL", "a": [0.025, 0.015, 0.05], "b": [0.0677, 0.0099, 0.0287], "ra": 0.0066, "rb": 0.0033, "k": 0.003, "color": "@leg", "mirror": true},
+      {"id": "hallux", "type": "cone", "bone": "footL", "a": [0.025, 0.015, 0.05], "b": [-0.005, 0.009, 0.05], "ra": 0.0047, "rb": 0.0028, "k": 0.002, "color": "@leg", "mirror": true},
+      {"when": "cock", "id": "spur", "type": "cone", "bone": "tarsL", "a": [0.025, 0.085, 0.05], "b": [0.005, 0.08, 0.05], "ra": 0.004, "rb": 0.0012, "k": 0.002, "color": "@grey", "mirror": true},
+      {"when": "walking", "id": "bedR", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.8784, 0.0698, 0.2], "to": [-0.7077, 0.01, 0.2], "w": 0.12}, {"at": [-0.8716, 0.0621, 0.1], "to": [-0.7227, 0.01, 0.1], "w": 0.12}, {"at": [-0.8747, 0.058, 0.0], "to": [-0.7377, 0.01, 0.0], "w": 0.12}, {"at": [-0.8693, 0.0613, -0.1], "to": [-0.7227, 0.01, -0.1], "w": 0.12}, {"at": [-0.8761, 0.069, -0.2], "to": [-0.7077, 0.01, -0.2], "w": 0.12}], "n": 5, "outline": "round", "up": [0.3304, 0.9439, 0.0], "camber": 0.02, "stagger": 0.0012, "seed": 38, "reach": true, "color": "@base", "tip": "@train", "layer": true},
+      {"when": "walking", "id": "bedG", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.7334, 0.021, 0.18], "to": [-1.42, 0.02, 0.3], "w": 0.13}, {"at": [-0.7634, 0.021, 0.0], "to": [-1.42, 0.02, 0.0], "w": 0.13}, {"at": [-0.7334, 0.021, -0.18], "to": [-1.42, 0.02, -0.3], "w": 0.13}], "n": 5, "outline": "round", "up": [0, 1, 0], "camber": 0.03, "lift": -0.004, "seed": 39, "layer": true, "color": "@base", "tip": "@train"},
+      {"when": "walking", "id": "bedS", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.3158, 0.4772, 0.0617], "to": [-0.672, -0.0893, 0.3719], "w": 0.09}, {"at": [-0.3214, 0.4707, -0.0143], "to": [-0.704, -0.1406, 0.0], "w": 0.09}, {"at": [-0.3158, 0.4772, -0.0617], "to": [-0.672, -0.0893, -0.3719], "w": 0.09}], "n": 7, "outline": "round", "up": [-0.848, 0.5299, 0], "camber": 0.03, "lift": -0.006, "seed": 40, "curve": 0.4531, "color": "@base", "tip": "@train", "layer": true},
+      {"when": "walking", "id": "groundA", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.7534, 0.026, 0.2], "to": [-1.41, 0.0203, 0.36], "w": 0.061}, {"at": [-0.7684, 0.026, 0.1], "to": [-1.4475, 0.0203, 0.18], "w": 0.061}, {"at": [-0.7834, 0.026, 0.0], "to": [-1.46, 0.0203, 0.0], "w": 0.061}, {"at": [-0.7684, 0.026, -0.1], "to": [-1.4475, 0.0203, -0.18], "w": 0.061}, {"at": [-0.7534, 0.026, -0.2], "to": [-1.41, 0.0203, -0.36], "w": 0.061}], "n": 7, "outline": "train", "up": [0, 1, 0], "camber": 0.05, "curve": 0.0, "vary": 0.12, "jitter": 0.05, "stagger": 0.002, "ocellus": {"at": 0.829, "r": 0.8}, "seed": 41, "layer": true, "color": "@train", "tip": "@trainTip"},
+      {"when": "walking", "id": "groundB", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.7734, 0.033, 0.2], "to": [-1.25, 0.0224, 0.33], "w": 0.068}, {"at": [-0.7884, 0.033, 0.1], "to": [-1.2875, 0.0224, 0.165], "w": 0.068}, {"at": [-0.8034, 0.033, 0.0], "to": [-1.3, 0.0224, 0.0], "w": 0.068}, {"at": [-0.7884, 0.033, -0.1], "to": [-1.2875, 0.0224, -0.165], "w": 0.068}, {"at": [-0.7734, 0.033, -0.2], "to": [-1.25, 0.0224, -0.33], "w": 0.068}], "n": 6, "outline": "train", "up": [0, 1, 0], "camber": 0.05, "curve": 0.0, "vary": 0.12, "jitter": 0.05, "stagger": 0.002, "ocellus": {"at": 0.781, "r": 0.8}, "seed": 42, "layer": true, "color": "@train", "tip": "@trainTip"},
+      {"when": "walking", "id": "groundC", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.7934, 0.04, 0.19], "to": [-1.09, 0.0245, 0.29], "w": 0.069}, {"at": [-0.8084, 0.04, 0.095], "to": [-1.1275, 0.0245, 0.145], "w": 0.069}, {"at": [-0.8234, 0.04, 0.0], "to": [-1.14, 0.0245, 0.0], "w": 0.069}, {"at": [-0.8084, 0.04, -0.095], "to": [-1.1275, 0.0245, -0.145], "w": 0.069}, {"at": [-0.7934, 0.04, -0.19], "to": [-1.09, 0.0245, -0.29], "w": 0.069}], "n": 5, "outline": "train", "up": [0, 1, 0], "camber": 0.05, "curve": 0.0, "vary": 0.12, "jitter": 0.05, "stagger": 0.002, "ocellus": {"at": 0.699, "r": 0.8}, "seed": 43, "layer": true, "color": "@train", "tip": "@trainTip"},
+      {"when": "walking", "id": "slopeA", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.3098, 0.4666, 0.0517], "to": [-0.6512, -0.0791, 0.3348], "w": 0.065}, {"at": [-0.3274, 0.469, 0.0259], "to": [-0.6875, -0.1056, 0.1761], "w": 0.0585}, {"at": [-0.343, 0.4741, 0.0028], "to": [-0.7105, -0.111, 0.0], "w": 0.052}, {"at": [-0.3277, 0.469, -0.026], "to": [-0.6875, -0.1056, -0.1761], "w": 0.0585}, {"at": [-0.3096, 0.4664, -0.0516], "to": [-0.6512, -0.0791, -0.3348], "w": 0.065}], "n": 6, "outline": "train", "up": [-0.848, 0.5299, 0], "camber": 0.06, "curve": 0.4363, "lift": 0.0, "vary": 0.14, "jitter": 0.06, "stagger": 0.003, "ocellus": {"at": 0.825, "r": 0.74}, "seed": 44, "color": "@train", "tip": "@trainTip", "layer": true},
+      {"when": "walking", "id": "slopeB", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.3093, 0.4662, 0.0515], "to": [-0.5856, 0.0259, 0.2321], "w": 0.065}, {"at": [-0.3271, 0.468, 0.0275], "to": [-0.6109, 0.0169, 0.1193], "w": 0.0585}, {"at": [-0.3416, 0.4744, 0.0], "to": [-0.6297, 0.0185, 0.0], "w": 0.052}, {"at": [-0.3271, 0.468, -0.0275], "to": [-0.6109, 0.0169, -0.1193], "w": 0.0585}, {"at": [-0.3093, 0.4662, -0.0515], "to": [-0.5856, 0.0259, -0.2321], "w": 0.065}], "n": 5, "outline": "train", "up": [-0.848, 0.5299, 0], "camber": 0.06, "curve": 0.3356, "lift": 0.007, "vary": 0.14, "jitter": 0.06, "stagger": 0.003, "ocellus": {"at": 0.797, "r": 0.74}, "seed": 45, "color": "@train", "tip": "@trainTip", "layer": true},
+      {"when": "walking", "id": "slopeC", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.3088, 0.466, 0.0512], "to": [-0.5199, 0.131, 0.1573], "w": 0.054}, {"at": [-0.3263, 0.468, 0.0273], "to": [-0.5391, 0.1319, 0.0796], "w": 0.049}, {"at": [-0.3405, 0.4746, 0.0], "to": [-0.5555, 0.1371, 0.0], "w": 0.044}, {"at": [-0.3263, 0.468, -0.0273], "to": [-0.5391, 0.1319, -0.0796], "w": 0.049}, {"at": [-0.3088, 0.466, -0.0512], "to": [-0.5199, 0.131, -0.1573], "w": 0.054}], "n": 5, "outline": "train", "up": [-0.848, 0.5299, 0], "camber": 0.06, "curve": 0.2433, "lift": 0.014, "vary": 0.14, "jitter": 0.06, "stagger": 0.003, "ocellus": {"at": 0.779, "r": 0.74}, "seed": 46, "color": "@train", "tip": "@trainTip", "layer": true},
+      {"when": "walking", "id": "slopeD", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.3081, 0.4658, 0.0509], "to": [-0.4565, 0.2326, 0.1081], "w": 0.06}, {"at": [-0.345, 0.4425, 0.035], "to": [-0.4727, 0.2382, 0.0542], "w": 0.055}, {"at": [-0.3387, 0.4749, 0.0], "to": [-0.4881, 0.245, 0.0], "w": 0.05}, {"at": [-0.345, 0.4425, -0.035], "to": [-0.4727, 0.2382, -0.0542], "w": 0.055}, {"at": [-0.3081, 0.4658, -0.0509], "to": [-0.4565, 0.2326, -0.1081], "w": 0.06}], "n": 3, "outline": "train", "up": [-0.848, 0.5299, 0], "camber": 0.06, "curve": 0.1594, "lift": 0.021, "vary": 0.14, "jitter": 0.06, "stagger": 0.003, "ocellus": {"at": 0.681, "r": 0.74}, "seed": 47, "color": "@train", "tip": "@trainTip", "layer": true},
+      {"when": "walking", "id": "coverA", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.2736, 0.4959, 0.0922], "to": [-0.5395, 0.2292, 0.3159], "w": 0.053}, {"at": [-0.3135, 0.5626, 0.0555], "to": [-0.5737, 0.2044, 0.1671], "w": 0.053}, {"at": [-0.3282, 0.578, 0.0049], "to": [-0.5934, 0.1945, 0.0], "w": 0.053}, {"at": [-0.313, 0.5607, -0.0551], "to": [-0.5737, 0.2044, -0.1671], "w": 0.053}, {"at": [-0.2734, 0.4954, -0.0919], "to": [-0.5395, 0.2292, -0.3159], "w": 0.053}], "n": 6, "outline": "train", "up": [-0.5936, 0.5299, 0], "camber": 0.06, "curve": 0.02, "lift": 0.028, "vary": 0.12, "jitter": 0.06, "stagger": 0.003, "ocellus": {"at": 0.822, "r": 0.6}, "seed": 61, "color": "@train", "tip": "@trainTip", "layer": true},
+      {"when": "walking", "id": "coverB", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.2417, 0.5119, 0.0906], "to": [-0.4254, 0.3271, 0.2499], "w": 0.058}, {"at": [-0.2714, 0.5598, 0.0446], "to": [-0.4527, 0.3094, 0.1315], "w": 0.058}, {"at": [-0.2851, 0.5733, 0.0], "to": [-0.4696, 0.3023, 0.0], "w": 0.058}, {"at": [-0.2714, 0.5598, -0.0446], "to": [-0.4527, 0.3094, -0.1315], "w": 0.058}, {"at": [-0.2417, 0.5119, -0.0906], "to": [-0.4254, 0.3271, -0.2499], "w": 0.058}], "n": 5, "outline": "train", "up": [-0.5936, 0.5299, 0], "camber": 0.06, "curve": 0.02, "lift": 0.034, "vary": 0.12, "jitter": 0.06, "stagger": 0.003, "ocellus": {"at": 0.769, "r": 0.6}, "seed": 62, "color": "@train", "tip": "@trainTip", "layer": true},
+      {"when": "walking", "id": "coverC", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.2036, 0.5188, 0.0779], "to": [-0.3174, 0.4187, 0.1886], "w": 0.058}, {"at": [-0.2252, 0.5525, 0.0445], "to": [-0.3383, 0.4075, 0.0984], "w": 0.058}, {"at": [-0.2387, 0.564, -0.0056], "to": [-0.3527, 0.4031, 0.0], "w": 0.058}, {"at": [-0.2251, 0.5536, -0.0447], "to": [-0.3383, 0.4075, -0.0984], "w": 0.058}, {"at": [-0.2037, 0.5178, -0.0774], "to": [-0.3174, 0.4187, -0.1886], "w": 0.058}], "n": 4, "outline": "train", "up": [-0.5936, 0.5299, 0], "camber": 0.06, "curve": 0.02, "lift": 0.04, "vary": 0.12, "jitter": 0.06, "stagger": 0.003, "ocellus": {"at": 0.682, "r": 0.6}, "seed": 63, "color": "@train", "tip": "@trainTip", "layer": true},
+      {"when": "display", "id": "fanA", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.2, 0.535, -0.0394], "to": [-0.2945, 0.6991, -0.9703], "w": 0.058, "up": [1, 0.0174, 0]}, {"at": [-0.2, 0.535, -0.0257], "to": [-0.2945, 1.2591, -0.6333], "w": 0.058, "up": [1, 0.0766, 0]}, {"at": [-0.2, 0.535, 0.0], "to": [-0.2945, 1.4803, 0.0], "w": 0.058, "up": [1, 0.1, 0]}, {"at": [-0.2, 0.535, 0.0257], "to": [-0.2945, 1.2591, 0.6333], "w": 0.058, "up": [1, 0.0766, 0]}, {"at": [-0.2, 0.535, 0.0394], "to": [-0.2945, 0.6991, 0.9703], "w": 0.058, "up": [1, 0.0174, 0]}], "n": 30, "outline": "train", "camber": 0.05, "curve": 0.03, "lift": 0, "vary": 0.05, "stagger": 0.003, "ocellus": {"at": 0.858, "r": 0.78}, "seed": 51, "color": "@train", "tip": "@trainTip"},
+      {"when": "display", "id": "fanB", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.21, 0.535, -0.0391], "to": [-0.2876, 0.6964, -0.7983], "w": 0.054, "up": [1, 0.0208, 0]}, {"at": [-0.21, 0.535, -0.0252], "to": [-0.2876, 1.1382, -0.5136], "w": 0.054, "up": [1, 0.0777, 0]}, {"at": [-0.21, 0.535, 0.0], "to": [-0.2876, 1.3111, 0.0], "w": 0.054, "up": [1, 0.1, 0]}, {"at": [-0.21, 0.535, 0.0252], "to": [-0.2876, 1.1382, 0.5136], "w": 0.054, "up": [1, 0.0777, 0]}, {"at": [-0.21, 0.535, 0.0391], "to": [-0.2876, 0.6964, 0.7983], "w": 0.054, "up": [1, 0.0208, 0]}], "n": 28, "outline": "train", "camber": 0.05, "curve": 0.03, "lift": 0.01, "vary": 0.05, "stagger": 0.003, "ocellus": {"at": 0.85, "r": 0.78}, "seed": 52, "color": "@train", "tip": "@trainTip"},
+      {"when": "display", "id": "fanC", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.22, 0.535, -0.0388], "to": [-0.2797, 0.6794, -0.6181], "w": 0.05, "up": [1, 0.0242, 0]}, {"at": [-0.22, 0.535, -0.0246], "to": [-0.2797, 1.0055, -0.3922], "w": 0.05, "up": [1, 0.0788, 0]}, {"at": [-0.22, 0.535, 0.0], "to": [-0.2797, 1.132, 0.0], "w": 0.05, "up": [1, 0.1, 0]}, {"at": [-0.22, 0.535, 0.0246], "to": [-0.2797, 1.0055, 0.3922], "w": 0.05, "up": [1, 0.0788, 0]}, {"at": [-0.22, 0.535, 0.0388], "to": [-0.2797, 0.6794, 0.6181], "w": 0.05, "up": [1, 0.0242, 0]}], "n": 24, "outline": "train", "camber": 0.05, "curve": 0.03, "lift": 0.02, "vary": 0.05, "stagger": 0.003, "ocellus": {"at": 0.836, "r": 0.78}, "seed": 53, "color": "@train", "tip": "@trainTip"},
+      {"when": "display", "id": "fanD", "type": "feathers", "bone": "tail", "rows": [{"at": [-0.23, 0.535, -0.038], "to": [-0.2718, 0.6641, -0.4355], "w": 0.045, "up": [1, 0.0309, 0]}, {"at": [-0.23, 0.535, -0.0235], "to": [-0.2718, 0.8731, -0.2692], "w": 0.045, "up": [1, 0.0809, 0]}, {"at": [-0.23, 0.535, 0.0], "to": [-0.2718, 0.9529, 0.0], "w": 0.045, "up": [1, 0.1, 0]}, {"at": [-0.23, 0.535, 0.0235], "to": [-0.2718, 0.8731, 0.2692], "w": 0.045, "up": [1, 0.0809, 0]}, {"at": [-0.23, 0.535, 0.038], "to": [-0.2718, 0.6641, 0.4355], "w": 0.045, "up": [1, 0.0309, 0]}], "n": 20, "outline": "train", "camber": 0.05, "curve": 0.03, "lift": 0.03, "vary": 0.05, "stagger": 0.003, "ocellus": {"at": 0.811, "r": 0.78}, "seed": 54, "color": "@train", "tip": "@trainTip"}
+    ]
+  }
 }

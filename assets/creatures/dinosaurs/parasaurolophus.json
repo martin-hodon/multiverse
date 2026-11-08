@@ -1,4 +1,5 @@
 {
+  "headForm": "reptile",
   "name": "parasaurolophus",
   "kind": "mammal",
   "headTurn": 12,
@@ -6,156 +7,117 @@
     "h": 3.1,
     "speed": 1.4
   },
-  "rear": [
-    -1.2,
-    2.15,
-    0,
-    1.6,
-    0.98,
-    0.84
-  ],
-  "front": [
-    0.7,
-    2.05,
-    0,
-    1.4,
-    0.84,
-    0.74
-  ],
-  "neck": [
-    1.45,
-    2.2,
-    0,
-    2.15,
-    2.75,
-    0,
-    0.4,
-    0.3
-  ],
-  "head": [
-    2.5,
-    2.98,
-    0,
-    0.3
-  ],
-  "eyes": [
-    2.66,
-    3.1,
-    0.22,
-    0.045
-  ],
+  "rear": [-1.0, 2.4, 0, 1.2, 0.6, 0.7],
+  "front": [0.5, 1.95, 0, 1.0, 0.6, 0.68],
+  "neck": [1.2, 2.1, 0, 2.2, 3.2, 0, 0.4, 0.3],
+  "head": [2.45, 3.3, 0, 0.28],
+  "eyes": [2.62, 3.38, 0.17, 0.04],
   "legs": {
-    "front": [
-      0.95,
-      1.25,
-      0.5,
-      0.62
-    ],
-    "hind": [
-      -1.35,
-      1.6,
-      0.58,
-      1.05
-    ],
-    "radii": [
-      0.3,
-      0.23,
-      0.18
-    ],
-    "foot": [
-      0.3,
-      0.11,
-      0.28
-    ],
-    "kneeH": 1
+    "front": [0.85, 1.15, 0.45, 0.53],
+    "hind": [-1.3, 2.2, 0.46, 1.05],
+    "radii": [0.22, 0.17, 0.14],
+    "foot": [0.26, 0.09, 0.24],
+    "kneeH": 1,
+    "kneeF": -1
   },
   "tail": {
-    "c": [
-      -2.3,
-      25
-    ],
-    "R": 22.6,
-    "a0": -1.5707963267948966,
-    "a1": -1.8107963267948965,
-    "r1": 0.66,
-    "r2": 0.07,
+    "c": [-1.8, -17.4],
+    "R": 20,
+    "a0": 1.5708,
+    "a1": 1.7773,
+    "r1": 0.5,
+    "r2": 0.06,
     "n": 6,
     "sway": 8,
     "speed": 0.35
   },
-  "extras": [
-    {
-      "id": "bill",
-      "parent": "head",
-      "ell": [
-        2.95,
-        2.88,
-        0,
-        0.42,
-        0.16,
-        0.3
-      ],
-      "color": "#a8ab86",
-      "k": 0.07,
-      "pat": "scales"
-    },
-    {
-      "id": "jaw",
-      "parent": "head",
-      "ell": [
-        2.8,
-        2.72,
-        0,
-        0.3,
-        0.12,
-        0.22
-      ],
-      "color": "#8e9270",
-      "k": 0.05
-    },
-    {
-      "id": "crest",
-      "parent": "head",
-      "color": "#a9613a",
-      "k": 0.05,
-      "pat": "scales",
-      "arc": {
-        "c": [
-          0.248,
-          0.876
-        ],
-        "R": 3.115,
-        "a0": 0.852,
-        "a1": 1.409,
-        "r1": 0.18,
-        "r2": 0.075,
-        "n": 4,
-        "sway": 0,
-        "speed": 0,
-        "axis": "y"
-      }
-    }
-  ],
-  "pat": "scales",
-  "patOn": [
-    "body",
-    "front",
-    "neck",
-    "head",
-    "leg",
-    "tail"
-  ],
+  "extras": [],
   "dinosaur": true,
   "c": {
-    "body": "#6b7a4e",
+    "body": "#6c6e4e",
     "front": "#6b7a4e",
     "neck": "#6b7a4e",
-    "head": "#71804f",
+    "head": "#71714f",
     "muzzle": "#a8ab86",
-    "leg": "#5d6a43",
-    "foot": "#3e4430",
+    "leg": "#5c5e43",
+    "foot": "#3e3e30",
     "tail": "#6b7a4e",
-    "eye": "#2a2014"
+    "eye": "#2a2014",
+    "back": "#55573c",
+    "belly": "#bdb38e",
+    "hoof": "#2e2c24",
+    "bill": "#4a4032",
+    "crest": "#a9613a",
+    "crestTop": "#7e4428",
+    "lid": "#3a4030",
+    "mouth": "#3a2e26"
   },
-  "print": "bird"
+  "print": "bird",
+  "_about": "PARASAUROLOPHUS WALKERI (sculpt overlay, 2026-11-05, after Hartman's skeletal): 8.5 m, the hips 2.2 m up -- a hadrosaur walking on all fours or on its hind legs, the back level and high over the hips (tall neural spines), a deep, flattened tail held out level; a curved neck; a long downturned duck-billed face and the metre-long tubular crest sweeping back from the snout over the neck; slender hoofed forelimbs, the hind legs digitigrade on three hoofed toes. Countershaded olive, pale below, the crest rust.",
+  "sculpt": {
+    "_about": "x forward, y up, z left, metres; each shape rides the bone it names; `mirror` makes the right one from the left",
+    "keep": [],
+    "mesh": {
+      "cell": 0.055,
+      "tris": [9000, 2800]
+    },
+    "shape": [
+      {"id": "torso", "type": "ell", "c": [-0.3, 2.22, 0], "r": [1.4, 0.6, 0.58], "rot": [0, 0, -9], "k": 0.16, "color": "@body", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "hips", "type": "ell", "c": [-1.05, 2.55, 0], "r": [0.8, 0.45, 0.48], "k": 0.16, "kc": 0.12, "color": "@back", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "chest", "type": "ell", "c": [0.6, 1.78, 0], "r": [0.7, 0.58, 0.5], "k": 0.14, "color": "@body", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "spine", "type": "ell", "c": [-0.5, 2.74, 0], "r": [1.4, 0.22, 0.28], "rot": [0, 0, -10], "k": 0.14, "kc": 0.12, "color": "@back", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "sacral", "type": "ell", "c": [-1.0, 2.95, 0], "r": [0.95, 0.2, 0.13], "k": 0.14, "kc": 0.1, "color": "@back", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "belly", "type": "ell", "c": [-0.1, 1.7, 0], "r": [1.1, 0.28, 0.46], "rot": [0, 0, -9], "k": 0.12, "kc": 0.1, "color": "@belly", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "tail", "type": "tube", "bone": "tail", "pts": [[-1.6, 2.599, 0, 0.48], [-2.6, 2.584, 0, 0.36], [-3.6, 2.5188, 0, 0.25], [-4.7, 2.3886, 0, 0.14], [-5.9, 2.1752, 0, 0.05]], "k": 0.12, "color": "@body", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "tailDeep", "type": "ell", "bone": "tail", "c": [-2.5, 2.5677, 0], "r": [1.3, 0.55, 0.26], "k": 0.14, "color": "@body", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "tailTop", "type": "tube", "bone": "tail", "pts": [[-1.6, 2.887, 0, 0.216], [-2.6, 2.8, 0, 0.162], [-3.6, 2.6688, 0, 0.1125], [-4.7, 2.4726, 0, 0.063]], "k": 0.12, "kc": 0.1, "color": "@back", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "tailBelly", "type": "tube", "bone": "tail", "pts": [[-1.6, 2.311, 0, 0.24], [-2.6, 2.368, 0, 0.18], [-3.6, 2.3688, 0, 0.125], [-4.7, 2.3046, 0, 0.07]], "k": 0.12, "kc": 0.1, "color": "@belly", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "neck", "type": "tube", "bone": "neck", "pts": [[0.95, 2.05, 0, 0.46], [1.45, 2.36, 0, 0.34], [1.85, 2.84, 0, 0.28], [2.12, 3.2, 0, 0.25], [2.38, 3.28, 0, 0.24]], "k": 0.14, "color": "@body", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "throat", "type": "tube", "bone": "neck", "pts": [[1.0, 1.86, 0, 0.32], [1.5, 2.16, 0, 0.23], [1.95, 2.7, 0, 0.17], [2.2, 3.05, 0, 0.15]], "k": 0.12, "kc": 0.1, "color": "@belly", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [2.5, 3.32, 0], "r": [0.3, 0.2, 0.18], "k": 0.08, "color": "@head", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "face", "type": "ell", "bone": "head", "c": [2.85, 3.2, 0], "r": [0.34, 0.13, 0.15], "rot": [0, 0, -18], "k": 0.08, "color": "@head", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "bill", "type": "ell", "bone": "head", "c": [3.12, 3.07, 0], "r": [0.1, 0.065, 0.15], "k": 0.04, "kc": 0.02, "color": "@bill"},
+      {"id": "jaw", "type": "ell", "bone": "head", "c": [2.78, 3.09, 0], "r": [0.3, 0.09, 0.14], "rot": [0, 0, -12], "k": 0.06, "kc": 0.03, "color": "@belly", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [2.56, 3.22, 0.13], "r": [0.14, 0.1, 0.07], "k": 0.05, "color": "@head", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "nostril", "type": "ell", "bone": "head", "c": [3.08, 3.14, 0.09], "r": [0.05, 0.02, 0.025], "k": 0.008, "color": "@bill", "mirror": true},
+      {"id": "crest", "type": "tube", "bone": "head", "pts": [[2.82, 3.28, 0, 0.09], [2.5, 3.5, 0, 0.1], [2.1, 3.66, 0, 0.09], [1.75, 3.73, 0, 0.075], [1.55, 3.72, 0, 0.06]], "k": 0.05, "kc": 0.02, "color": "@crest", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}},
+      {"id": "crestTop", "type": "tube", "bone": "head", "pts": [[2.45, 3.57, 0, 0.05], [2.05, 3.72, 0, 0.05], [1.65, 3.77, 0, 0.035]], "k": 0.03, "kc": 0.02, "color": "@crestTop"},
+      {"id": "scapula", "type": "ell", "bone": "legFLu", "c": [0.75, 1.58, 0.4], "r": [0.24, 0.42, 0.15], "rot": [0, 0, 30], "k": 0.1, "color": "@body", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "humerus", "type": "cone", "bone": "legFLu", "a": [0.85, 1.15, 0.45], "b": [0.74, 0.6333, 0.47], "ra": 0.14, "rb": 0.08, "k": 0.07, "color": "@leg", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.74, 0.6333, 0.47], "b": [0.88, 0.1, 0.46], "ra": 0.07, "rb": 0.055, "k": 0.04, "color": "@leg", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "hand", "type": "ell", "bone": "footFL", "c": [0.92, 0.06, 0.46], "r": [0.08, 0.06, 0.07], "k": 0.03, "color": "@hoof", "mirror": true},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-1.25, 1.72, 0.43], "r": [0.46, 0.62, 0.27], "rot": [0, 0, 10], "k": 0.22, "color": "@body", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "knee", "type": "ell", "bone": "legHLu", "c": [-1.25, 1.18, 0.46], "r": [0.18, 0.16, 0.17], "k": 0.07, "color": "@leg", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "shin", "type": "cone", "bone": "legHLl", "a": [-1.3, 1.15, 0.46], "b": [-1.38, 0.5, 0.46], "ra": 0.17, "rb": 0.1, "k": 0.06, "color": "@leg", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "calf", "type": "ell", "bone": "legHLl", "c": [-1.4, 0.92, 0.46], "r": [0.14, 0.24, 0.13], "k": 0.06, "color": "@leg", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "metatarsus", "type": "cone", "bone": "legHLl", "a": [-1.38, 0.5, 0.46], "b": [-1.16, 0.13, 0.46], "ra": 0.1, "rb": 0.085, "k": 0.05, "color": "@leg", "pat": "scales", "frame": {"o": [0, 0, 0], "u": [1, 0, 0], "v": [0, 1, 0], "r": 0.5}, "mirror": true},
+      {"id": "toe0", "type": "tube", "bone": "footHL", "pts": [[-1.15, 0.1, 0.46, 0.08], [-0.79, 0.05, 0.46, 0.05]], "k": 0.04, "color": "@foot", "mirror": true},
+      {"id": "hoof0", "type": "ell", "bone": "footHL", "c": [-0.75, 0.04, 0.46], "r": [0.07, 0.04, 0.06], "k": 0.01, "color": "@hoof", "mirror": true},
+      {"id": "toe1", "type": "tube", "bone": "footHL", "pts": [[-1.15, 0.1, 0.46, 0.08], [-0.8942, 0.05, 0.5739, 0.05]], "k": 0.04, "color": "@foot", "mirror": true},
+      {"id": "hoof1", "type": "ell", "bone": "footHL", "c": [-0.8577, 0.04, 0.5902], "r": [0.07, 0.04, 0.06], "k": 0.01, "color": "@hoof", "mirror": true},
+      {"id": "toe2", "type": "tube", "bone": "footHL", "pts": [[-1.15, 0.1, 0.46, 0.08], [-0.8942, 0.05, 0.3461, 0.05]], "k": 0.04, "color": "@foot", "mirror": true},
+      {"id": "hoof2", "type": "ell", "bone": "footHL", "c": [-0.8577, 0.04, 0.3298], "r": [0.07, 0.04, 0.06], "k": 0.01, "color": "@hoof", "mirror": true}
+    ],
+    "eyes": {
+      "at": [2.62, 3.38, 0.16],
+      "from": [2.5, 3.34, 0],
+      "r": 0.04,
+      "iris": "@eye",
+      "pupil": "round",
+      "lid": "@lid"
+    },
+    "shade": {
+      "back": 0.8,
+      "belly": 1.12,
+      "low": 0.96,
+      "on": "@body"
+    }
+  },
+  "coats": [
+    {"name": "green"},
+    {"name": "tan", "body": "#7b7257", "front": "#898057", "neck": "#898057", "head": "#7f7458", "muzzle": "#bab29c", "leg": "#69614b", "tail": "#898057", "back": "#615a43", "belly": "#c4b69b", "crest": "#b0703a", "crestTop": "#804a2a"},
+    {"name": "russet", "body": "#665843", "front": "#726342", "neck": "#726342", "head": "#695944", "muzzle": "#a38e70", "leg": "#574b3a", "tail": "#726342", "back": "#514534", "belly": "#bc9c7e", "crest": "#c8a040", "crestTop": "#8a6a2a"},
+    {"name": "deep green", "body": "#485538", "front": "#485f37", "neck": "#485f37", "head": "#4b5739", "muzzle": "#748b5a", "leg": "#3d4930", "tail": "#485f37", "back": "#38432b", "belly": "#9eb46e", "crest": "#c04a30", "crestTop": "#8a2a1c"}
+  ],
+  "young": {"s": 0.3, "n": 1, "side": 2.0, "hop": 0.05, "name": "parasaurolophus juvenile"}
 }

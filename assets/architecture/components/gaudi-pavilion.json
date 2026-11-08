@@ -13,8 +13,11 @@
   "surBand": 0.2,
   "doorW": 1.4,
   "doorH": 2.0,
-  "doorAt": 0,
+  "doorAt": 2.0,
   "plaqueW": 2.4,
+  "stairN": 15,
+  "stairX": 2.8,
+  "stairW": 1.5,
   "eave": 0.35,
   "eaveH": 0.55,
   "terr": 0.8,
@@ -43,7 +46,8 @@
   "crossH": 3.8,
   "_w": "the plan: w along the street (x), l deep, ch the corners cut; t the walls, h to the eave in `storeys` floors (the attic is in the roof)",
   "_winW": "the windows: winW wide, the street face's lower pair winGap either side of the middle; surBand their trencadis frames",
-  "_doorW": "the door on the back face: doorW wide, springing at doorH, doorAt along the face; plaqueW the street plaque",
+  "_doorW": "the door on the back face: doorW wide, springing at doorH, doorAt along the face (which runs toward -x: 2 puts it at x -2, clear of the stair); plaqueW the street plaque",
+  "_stairN": "the stair inside: stairN steps on 25 cm treads rising from the ground floor's +0.2 to the upper floor, along the back wall toward -x from x = stairX, stairW wide (1.5: the walker, 0.3 m round, clears its sides on any grid)",
   "_eave": "the eave: eave out from the wall, eaveH thick; terr the terrace between it and the roof; merlonR the merlons on it",
   "_roofH": "the roof's crest over the eave; wave: how deep its troughs fall (0 a plain mound)",
   "_towerH": "the tower's top (from the ground) where the mushroom sits; lookH its mirador; capR/capH/bell the mushroom",
@@ -55,6 +59,7 @@
   "walls",
   "plaques",
   "floors",
+  "stair",
   "ceiling",
   "cornice",
   "merlons",
@@ -255,7 +260,8 @@
         "surround": {
          "band": "surBand",
          "depth": 0.07
-        }
+        },
+        "glass": false
        }
       ]
      },
@@ -304,9 +310,20 @@
      "w - 2 * t",
      "l - 2 * t"
     ],
-    "chamfer": "max(0.1, ch - t * 0.6)"
+    "chamfer": "max(0.1, ch - t * 0.6)",
+    "well": {
+     "rect": [
+      "stairN * 0.25 + 0.15",
+      "stairW + 0.05"
+     ],
+     "at": [
+      "stairX - stairN * 0.125 + 0.075",
+      "0 - (l / 2 - t) + stairW / 2 + 0.1"
+     ]
+    }
    },
    "height": 0.25,
+   "railing": false,
    "at": [
     [
      0,
@@ -315,7 +332,26 @@
      0
     ]
    ],
-   "_about": "the upper floor"
+   "_about": "the upper floor, its stairwell along the back wall"
+  },
+  "stair": {
+   "type": "flight",
+   "width": "stairW",
+   "run": 0.25,
+   "steps": "stairN",
+   "base": 0.2,
+   "top": "(h / storeys)",
+   "landing": 0,
+   "railing": false,
+   "at": [
+    [
+     "stairX",
+     0,
+     "0 - (l / 2 - t)",
+     3.14159
+    ]
+   ],
+   "_about": "the stair up to the upper floor, along the back wall beside the door (rising toward -x from stairX)"
   },
   "ceiling": {
    "type": "prism",
@@ -458,6 +494,7 @@
    "sides": 16,
    "smooth": 3,
    "half": true,
+   "shell": true,
    "at": [
     [
      0,
@@ -518,6 +555,7 @@
    "sides": 12,
    "smooth": 3,
    "half": true,
+   "shell": true,
    "at": [
     [
      "0 - w / 4",

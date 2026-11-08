@@ -1,0 +1,111 @@
+{
+ "kind": "item",
+ "name": "Cep",
+ "category": "nature/mushrooms",
+ "era": "everywhere",
+ "region": "everywhere",
+ "_about": "a fat pale stem swelling low under a brown bun of a cap, its underside a pale yellow sponge of pores",
+ "params": {
+  "s": [
+   0.8,
+   1.3
+  ]
+ },
+ "materials": {
+  "stem": {
+   "pick": [
+    "#cfbf98",
+    "#c9b58c",
+    "#d6c7a2"
+   ]
+  },
+  "pores": "#d9c868",
+  "cap": {
+   "pick": [
+    "#6e4423",
+    "#5e3a1e",
+    "#7a4f2a",
+    "#8a5a30"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "type": "lathe",
+   "material": "stem",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     "s * 0.018",
+     "s * 0.002"
+    ],
+    [
+     "s * 0.022",
+     "s * 0.025"
+    ],
+    [
+     "s * 0.02",
+     "s * 0.055"
+    ],
+    [
+     "s * 0.015",
+     "s * 0.075"
+    ],
+    [
+     "s * 0.014",
+     "s * 0.08"
+    ]
+   ],
+   "sides": 9
+  },
+  {
+   "type": "lathe",
+   "material": "pores",
+   "profile": [
+    [
+     "s * 0.014",
+     "s * 0.08"
+    ],
+    [
+     "s * 0.05",
+     "s * 0.086"
+    ]
+   ],
+   "sides": 12,
+   "caps": false,
+   "double": true
+  },
+  {
+   "type": "lathe",
+   "material": "cap",
+   "profile": [
+    [
+     "s * 0.05",
+     "s * 0.086"
+    ],
+    [
+     "s * 0.05",
+     "s * 0.094"
+    ],
+    [
+     "s * 0.044",
+     "s * 0.11"
+    ],
+    [
+     "s * 0.03",
+     "s * 0.125"
+    ],
+    [
+     0,
+     "s * 0.132"
+    ]
+   ],
+   "sides": 12,
+   "caps": false,
+   "double": true
+  }
+ ]
+}

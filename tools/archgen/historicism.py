@@ -308,6 +308,80 @@ def flight(foot, d, w, base, top, run=0.3, rise=0.17, **kw):
     return {"type": "flight", "width": w, "run": run, "rise": r4((top - base) / n), "base": base, "top": top, "landing": 0, "at": [[r4(px), 0, r4(pz), r4(yaw)]], **kw}
 
 
+
+# ---------------------------------------------------------------------------------------------------------------- L1 (2026-11-04)
+def round_keep():
+    """components/round-keep.json -- Burg Hohenzollern's round towers (Stüler's Markgrafen- and Kaiserturm) and their kin"""
+    parts, build = {}, []
+    def add(n, d): parts[n] = d; build.append(n)
+    # (the shaft's storeys as cone_turret's: a window in every `every`-th face of each storey above the first, the
+    #  door by name in face 0; one shaft per count of storeys, 2 to 5, drawn by `when`)
+    shaft = {"type": "enclosure", "plan": {"sides": "sides", "radius": "R"}, "thickness": "t", "height": "H", "glass": True, "interior": True, "courses": True, "at": [[0, 0, 0, 0]]}
+    def storeys_faces(door, n, every):
+        F = {}
+        for k in range(32):
+            win = [{"at": 0, "width": "winW", "sill": "H / storeys * 0.3", "springing": "H / storeys * 0.72", "head": {"profile": "semicircular"},
+                    "surround": {"band": "winW * 0.16", "depth": 0.1}}] if k % every == 0 else []
+            low = [{"at": 0, "width": "doorW", "sill": 0, "springing": "doorH", "head": POINTED, "glass": False}] if (door and k == 0) else []
+            F[str(k)] = [{"h": "H / storeys", "openings": low}] + [{"h": "H / storeys", "openings": win}] * (n - 2) + [{"openings": win}]
+        return F
+    for n in (5, 4, 3, 2):
+        for every in (2, 4):
+            sfx = f" {n}" + ("" if every == 4 else " dense")
+            add(f"shaft{sfx}", {**shaft, "faces": storeys_faces(True, n, every), "when": {"door": "yes", "storeys": n, "windows": "dense" if every == 2 else "sparse"},
+                                "_about": f"the shaft of {n} storeys, a round-headed window in every {every}th face above the first, the door in face 0"})
+            add(f"shaft blind{sfx}", {**shaft, "faces": storeys_faces(False, n, every), "when": {"door": "no", "storeys": n, "windows": "dense" if every == 2 else "sparse"},
+                                      "_about": f"the same without a door (a tower reached from the building it stands in)"})
+    add("belts", {"type": "prism", "plan": {"sides": "sides", "radius": "R + 0.1"}, "height": 0.25, "flatRoof": True, "at": [[0, "H / storeys - 0.12", 0, 0]],
+                  "repeat": {"count": "storeys - 1", "step": [0, "H / storeys", 0, 0]}, "_about": "a string course at every floor"})
+    # THE GALLERY STOREY: corbelled out gOut on three courses of corbels, a ring of small round-arched windows (an arcade
+    # under the eaves) -- the Kaiserturm's and the Markgrafenturm's top band
+    for k, f in enumerate((0.35, 0.7, 1.0)):
+        add(f"corbel {k + 1}", {"type": "prism", "plan": {"sides": "sides", "radius": f"R + gOut * {f}"}, "height": "corH / 3", "flatRoof": True,
+                                "at": [[0, f"H - corH + corH / 3 * {k}", 0, 0]], "_about": "the corbel table the gallery storey is carried out on, in three steps"})
+    add("gallery", {"type": "enclosure", "plan": {"sides": "sides", "radius": "R + gOut"}, "thickness": "t * 0.7", "height": "Hg", "glass": True, "interior": True,
+                    "openings": [{"at": 0, "width": "gW", "sill": "Hg * 0.28", "springing": "Hg * 0.72", "head": {"profile": "semicircular"}}],
+                    "at": [[0, "H", 0, 0]], "standsOn": ["corbel 3"], "_about": "the gallery storey, gOut proud: a small round-arched window in every face"})
+    add("cornice", {"type": "prism", "plan": {"sides": "sides", "radius": "R + gOut + 0.25"}, "height": 0.45, "flatRoof": True, "at": [[0, "H + Hg", 0, 0]], "standsOn": ["gallery"],
+                    "_about": "the cornice the roof stands on"})
+    # THE HEAD by `crown`: "cone" -- a tall slate cone from the cornice; "battlement" -- crenellations round the cornice
+    # and a drum set back behind them under a smaller cone (a keep's lookout)
+    add("cone", {"type": "dome", "radius": "capR", "thickness": 0, "sides": "capSides", "head": {"profile": "trigonal", "rise": "capRise"},
+                 "at": [[0, "H + Hg + 0.45", 0, 0]], "when": {"crown": "cone"}, "standsOn": ["cornice"], "_about": "crown cone: the tall slate cone, capRise high from capR at its eave"})
+    add("battlements", comp("crenellation", {"L": "2 * (R + gOut + 0.2) * sin(3.14159265 / sides) + 0.25", "t": 0.4, "h": "pH", "step": 1.1, "mh": "pH * 0.6", "merlon": "square"},
+                            [], spiral={"count": "sides", "radius": "(R + gOut + 0.2) * cos(3.14159265 / sides) - 0.2", "y": "H + Hg + 0.45"}, when={"crown": ["battlement", "platform"]},
+                            standsOn=["cornice"], _about="crown battlement or platform: a crenellated parapet round the cornice (whose top is the deck)"))
+    add("drum", {"type": "enclosure", "plan": {"sides": "sides", "radius": "dR"}, "thickness": 0.4, "height": "dH", "glass": True, "interior": True,
+                 "openings": [{"at": 0, "width": 0.5, "sill": "dH * 0.3", "springing": "dH * 0.7", "head": {"profile": "semicircular"}}],
+                 "at": [[0, "H + Hg + 0.45", 0, 0]], "when": {"crown": "battlement"}, "standsOn": ["cornice"], "_about": "the drum set back behind the battlements"})
+    add("drum cone", {"type": "dome", "radius": "dR + 0.3", "thickness": 0, "sides": "capSides", "head": {"profile": "trigonal", "rise": "dRise"},
+                      "at": [[0, "H + Hg + 0.45 + dH", 0, 0]], "when": {"crown": "battlement"}, "standsOn": ["drum"]})
+    add("finial", {"type": "column", "radius": "max(0.06, capR * 0.03)", "height": "finial", "sides": 6, "taper": 0.4, "at": [[0, "H + Hg + 0.45 + capRise - 0.05", 0, 0]],
+                   "when": {"crown": "cone"}, "standsOn": ["cone"], "_about": "the vane's rod on the cone's tip"})
+    add("drum finial", {"type": "column", "radius": 0.06, "height": "finial", "sides": 6, "taper": 0.4, "at": [[0, "H + Hg + 0.45 + dH + dRise - 0.05", 0, 0]],
+                        "when": {"crown": "battlement"}, "standsOn": ["drum cone"]})
+    add("flagpole", {"type": "column", "radius": 0.07, "height": "R * 2.2", "sides": 6, "taper": 0.6, "at": [[0, "H + Hg + 0.45", 0, 0]], "when": {"crown": "platform", "flag": "yes"},
+                     "standsOn": ["cornice"], "_about": "crown platform, flag yes: a flagpole in the middle of the deck"})
+    return {"name": "Round keep",
+            "_about": "A ROUND TOWER OF THE GOTHIC REVIVAL CASTLE -- Burg Hohenzollern's Markgrafenturm and Kaiserturm (Stüler, 1850-67): a polygonal (`sides`) shaft R to its corners and "
+                      "H tall in `storeys` under string courses, a round-headed window in a sandstone surround in every 4th face (`windows` dense: every 2nd) of each storey but the first, "
+                      "a door in face 0 (+z) by `door` yes; at its head a GALLERY STOREY Hg tall carried gOut out on a three-stepped corbel table corH deep, a small round-arched window "
+                      "(gW) in every face; a cornice; and by `crown`: \"cone\" -- a tall slate cone capRise high from capR at the eave, a vane's rod `finial`; \"battlement\" -- crenellations "
+                      "pH high round the cornice and a drum dR, dH tall set back behind them under a cone dRise; \"platform\" -- the crenellations alone round the flat deck (a flagpole by `flag` yes), for a stage to stand on or a lookout. (Smaller and corbelled: components/cone-turret; square: castle-tower.)",
+            "params": {"detail": 4, "sides": 16, "R": 4.5, "H": 24.0, "t": "max(0.5, R * 0.18)", "storeys": 4, "windows": "sparse", "door": "no", "doorW": "min(1.4, R * 0.35)",
+                       "doorH": "min(2.8, H / storeys * 0.6)", "winW": "R * 0.2", "Hg": 3.2, "gOut": "R * 0.12", "corH": 1.2, "gW": "R * 0.13",
+                       "crown": "cone", "capR": "R + gOut + 0.35", "capRise": "R * 3", "capSides": 24, "finial": "R * 0.5",
+                       "pH": 1.1, "dR": "R * 0.62", "dH": 3.0, "dRise": "dR * 2.2", "flag": "no",
+                       "_storeys": "2 to 5: the shaft's storeys under string courses",
+                       "_windows": "sparse: a window in every 4th face above the first storey; dense: every 2nd",
+                       "_crown": "cone: the tall slate cone; battlement: crenellations, a set-back drum and a smaller cone; platform: crenellations round the flat deck"},
+            "build": build, "parts": parts}
+
+
+def write_castle_components():
+    OUT("components/round-keep.json", round_keep())
+
+
 if __name__ == "__main__":
     write_components()
     print("historicism: cone-turret, oriel, castle-tower")

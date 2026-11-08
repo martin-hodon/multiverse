@@ -86,18 +86,39 @@ add("bosses 2", {"type": "box", "width": 0.7, "length": 4.3, "height": 0.45, "at
 # ---- the hillsides: each tier runs into its slope. Layers of rock, each one set back as it rises, all as deep as each other
 HALF = 24.0                                # the slopes' half-depth along the river
 XEND = 158.0
-LAYERS = [(0.0, 3.0, 69.0), (3.0, 9.0, 80.0), (9.0, 15.0, 88.0), (15.0, 21.0, 96.0), (21.0, 27.0, 104.0), (27.0, 33.0, 113.0), (33.0, 39.0, 121.0), (39.0, 45.0, 130.0), (45.0, TOPY, 137.5)]
+BEDS = [(0.0, 3.0), (3.0, 9.0), (9.0, 15.0), (15.0, 21.0), (21.0, 27.0), (27.0, 33.0), (33.0, 39.0), (39.0, 45.0), (45.0, TOPY)]
+BATTER, BANK = 1.6, 24.0
+# Where each bed of rock begins, side by side (the bridge is not symmetric about the river: the lower tier reaches 83m west and 59m east, the middle
+# 123 and 119): the ground rises from the river's bank to the lower tier's end at its top (H1), to the middle tier's end at ITS top (Y3), and to the
+# upper tier's end at the conduit's roof. Every pier then stands on rock -- the middle tier's outer bays on the hillside past the lower tier, the upper
+# tier's past the middle -- and none hangs over a gap (a bed that reaches over a tier's foot starts inside the tier's end, by its batter and a margin:
+# the rock buries the arches' feet there, as the hillside does)
+def beds(xl, xm):
+    def at(y):                             # (the riverbed's floor runs from the bank under all six arches -- they keep their mouths -- and the valley's side rises at the tier's end)
+        if y <= 0: return BANK
+        if y <= H1: return xl - 1.0 - 4.0 * (1 - y / H1)
+        return xl + (xm - xl) * min(1.0, (y - H1) / (Y3 - H1))
+    return [(y0, y1, L3 / 2 if i == len(BEDS) - 1 else at(y0) - (BATTER + 0.5 if y1 > H1 else 0)) for i, (y0, y1) in enumerate(BEDS)]
+SIDES = {"west": beds(-X1[0], -XW), "east": beds(X1E, XE)}
+LAYERS = SIDES["east"]
 for s, nm in ((-1, "west"), (1, "east")):
-    for i, (y0, y1, xi) in enumerate(LAYERS):
+    for i, (y0, y1, xi) in enumerate(SIDES[nm]):
         x0 = xi
         ww = XEND - x0
         add(f"{nm} slope {i + 1}", {"type": "prism", "plan": {"rect": [r4(ww), HALF * 2]}, "height": r4(y1 - y0), "batter": {"out": 1.6}, "at": [[r4(s * (x0 + ww / 2)), r4(y0), 1.5, 0]],
                                     **({"walked": True} if i == len(LAYERS) - 1 else {}),
                                     **({"_about": "the valley's side, rising in beds of rock to the conduit's roof at the bridge's end"} if i == 0 else {})})
 # the water's road, on foot: short steep flights up the east slope's beds, one between each bed and the next, to the conduit's roof
+# (where the beds rise as one cliff at the lower tier's end -- each set back only by its batter, no ledge to stand on -- one long flight climbs
+#  the cliff from the first bed to the first ledge, cut into the rock; above that a flight from each ledge to the next)
 STAIR_Z, FW = 17.0, 2.6
-for i in range(len(LAYERS) - 1):
-    y0, y1, xn = LAYERS[i][1], LAYERS[i + 1][1], LAYERS[i + 1][2]
+LEDGE = 4.0                                # a bed's top this deep or more is a ledge one can stand on
+flights, i = [], 0
+while i < len(LAYERS) - 1:
+    j = i + 1
+    while j < len(LAYERS) - 1 and LAYERS[j + 1][2] - LAYERS[j][2] < LEDGE: j += 1
+    flights.append((LAYERS[i][1], LAYERS[j][1], LAYERS[j][2])); i = j
+for i, (y0, y1, xn) in enumerate(flights):
     n = max(2, round((y1 - y0) / 0.26)); run = 0.22
     add(f"slope stair {i + 1}", {"type": "flight", "width": FW, "steep": True, "run": run, "rise": r4((y1 - y0) / n), "base": r4(y0), "top": r4(y1), "landing": 0,
                                  "at": [[r4(xn - n * run - 0.02), 0, r4(STAIR_Z + FW / 2), 0]],
@@ -115,7 +136,9 @@ open(os.path.join(ROOT, "assets/architecture/pont-du-gard.json"), "w").write(jso
 fin = {"name": "Pont du Gard", "building": "architecture/pont-du-gard",
        "_about": "Honey Vers limestone in big dry-laid blocks; the slopes bare rock.",
        "stone": {"color": "#d8c79d", "accent": "#b9a678", "pat": "ashlar"},
-       "rules": [{"parts": ["west slope", "east slope", "bank rocks", "stair head"], "pattern": "stone/rock face", "palette": "limestone"},
+       "rules": [{"parts": ["west slope", "east slope"], "surface": ["floor", "top"], "color": "#5d6a3e", "accent": "#4c5833", "pat": "marble",
+                  "_about": "the garrigue on the valley sides: scrub over the rock"},
+                 {"parts": ["west slope", "east slope", "bank rocks", "stair head"], "pattern": "stone/rock face", "palette": "limestone"},
                  {"parts": ["cutwater"], "pattern": "stone/rusticated", "palette": "travertine"},
                  {"surface": "floor", "pattern": "stone/ashlar", "palette": "limestone"},
                  {"surface": "wall", "pattern": "stone/rusticated", "palette": "travertine"}]}

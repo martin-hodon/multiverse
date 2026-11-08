@@ -1,0 +1,38 @@
+{
+ "name": "Kasaya",
+ "kind": "garment",
+ "layer": 5,
+ "_about": "the kasaya: a Buddha's upper robe as it is carved (2026-11-04, the Yunding Temple's Buddhas): the himation's cut over the left shoulder, the right bare, but ending at the waist -- the under-robe (trousers) carved round the crossed legs -- so it lies on the shoulder and the upper arm as a short fall, where the himation, down to the calves, stood a pleated wall off the hanging arm beside a seated figure",
+ "fabrics": {
+  "main": {
+   "pattern": "fabrics/plain",
+   "palette": "saffron"
+  },
+  "trim": {
+   "pattern": "fabrics/plain",
+   "palette": "saffron"
+  }
+ },
+ "params": {
+  "hem": 0.02
+ },
+ "use": [
+  {
+   "use": "clothes/components/mantle",
+   "params": {
+    "to": "waist",
+    "centre": 160,
+    "span": 330,
+    "flare": 0.03,
+    "hem": "hem",
+    "over": "left",
+    "drop": "waist - armtop",
+    "capeCentre": 95,
+    "capeSpan": 110,
+    "pleats": 30,
+    "cascade": 0.05,
+    "cascadeStep": 0.07
+   }
+  }
+ ]
+}

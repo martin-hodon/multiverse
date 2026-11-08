@@ -27,8 +27,9 @@
 // geometry and no part; the same field that tilts the normal also shades the colour, so the two cannot drift.
 import * as THREE from "three";
 import { texture } from "three/tsl";
-import { compileDef, writeAnimal, easeGait } from "./skeleton.js";
+import { compileDef, writeAnimal, easeGait, fitGround } from "./skeleton.js";
 import { createShell, shellFromQuery } from "./shell.js";
+import { sculptOf } from "./bodyspec.js";   // (a creature marked for it is drawn as one sculpted surface: its parts become bones, bodies.js draws it)
 
 const W = 1024;      // texels per texture row
 const MAXP = 160;    // parts per animal the shader loops over at most
@@ -352,14 +353,16 @@ export function createComposite(capacity = 256) {
     mesh,
     animals,
     add(def) {
+      def = sculptOf(def);
       const parts = compileDef(def);
       const slots = parts.length + 2 * layerCount(parts);   // (its parts, then two slots for every layer a part wears)
       const used = P.take(slots);   // the slots come from the world's one pool, not from this herd
       const dyn = P.dyn, stat = P.stat, sdyn = P.sdyn;
-      if (parts.length > MAXP) console.warn(`composite: ${def.name} has ${parts.length} parts, only ${MAXP} are drawn`);
+      if (parts.length > MAXP && !def.sculpted && !def.sculpts) console.warn(   // (a sculpted body is a skinned mesh, bodies.js: every part a bone, posed whatever the count)
+        `composite: ${def.name} has ${parts.length} parts, only ${MAXP} are drawn`);
       const upPart = def.parts.findIndex((q) => q.id === "chest" || q.id === "r_chest"), upRow = upPart >= 0 ? used + upPart + 1 : 0;   // (the def keeps the ids; a rider's is r_chest)
       const animal = { parts, base: used, slots, idx: animals.length, position: new THREE.Vector3(), rotY: 0, dots: parts.flatMap((p, i) => p.dot ? [i] : []), expr: def.expr ?? null,   // expr: the face it shows (faces.js; its def's resting face)
-                       face: def.face ?? null, mane: def.mane ?? null, jewelry: def.jewelry ?? null, print: def.print ?? null };   // (print: the track its feet leave -- footprints.js PRINTS; a species' `print`)   // face: a mesh head to stand on its head part (heads.js), or none; mane: a mane of thorns on its mane (manes.js)
+                       face: def.face ?? null, mane: def.mane ?? null, sculpted: def.sculpted ?? null, sculpts: def.sculpts ?? null, jewelry: def.jewelry ?? null, print: def.print ?? null };   // (print: the track its feet leave -- footprints.js PRINTS; a species' `print`)   // face: a mesh head to stand on its head part (heads.js), or none; mane: a mane of thorns on its mane (manes.js)
       let nextLayer = parts.length;
       for (let i = 0; i < parts.length; i++) {
         const p = parts[i], t = (used + i) * 3;
@@ -367,7 +370,7 @@ export function createComposite(capacity = 256) {
         // C: a garment's cut -- or a flat part's squash (and a hand's palm flag, a torso's place on the trunk: shell.js ANATOMY), a painted band's colour and place
         if (p.r2 >= 0) { const c = p.flat ? [p.flat, p.palm ? 1 : -Math.min(.99, (p.pot ?? 0) / 2), p.anat ?? 0]   /* (a torso's belly, halved, as a negative C.y: shell.js TRUNK.pot) */ : p.clip ?? (p.limb ? [p.limb, 0, 0] : [0, 0, 0]); dyn[(t + 2) * 4] = c[0]; dyn[(t + 2) * 4 + 1] = c[1]; dyn[(t + 2) * 4 + 2] = c[2]; }
         const s = (used + i) * ST * 4, cl = p.cloth;
-        stat[s] = p.color.r; stat[s + 1] = p.color.g; stat[s + 2] = p.color.b; stat[s + 3] = p.pat * 8 + p.body * 4 + p.edge * 2 + p.seam + (p.fur ? 256 : 0) + (p.fleece ? 512 : 0) + (p.stone ?? 0) * 2048 + (p.stone ? 16384 * Math.min(parts.length, MAXP) : 0);   // (stone: a statue's material, statues.js; and how many parts the figure has -- shell.js selfShade)
+        stat[s] = p.color.r; stat[s + 1] = p.color.g; stat[s + 2] = p.color.b; stat[s + 3] = p.pat * 8 + p.body * 4 + p.edge * 2 + p.seam + (p.fur ? 256 : 0) + (p.fleece ? 512 : 0) + (p.stone ?? 0) * 2048 + (p.stone ? 16384 * Math.min(parts.length, MAXP) : p.facet ? 16384 : 0);   // (stone: a statue's material, statues.js; and how many parts the figure has -- shell.js selfShade; not stone, 16384 alone: a creature's FACETED part, shell.js FACET)
         stat[s + 4] = p.color2.r; stat[s + 5] = p.color2.g; stat[s + 6] = p.color2.b;
         stat[s + 7] = cl ? Math.min(255, Math.round(cl.scale ?? 0)) : 0;   // (the strands' scale: hair, a braid)
         stat[s + 8] = stat[s + 9] = stat[s + 10] = stat[s + 11] = 0;
@@ -422,6 +425,7 @@ export function createComposite(capacity = 256) {
           const d = Math.hypot(an.position.x - eye.x, an.position.z - eye.z), k = d > LOD.far ? 4 : d > LOD.near ? 2 : 1;
           if (k > 1 && (frameN + an.idx) % k) continue;
         }
+        if (herd.ground) fitGround(an, herd.ground, dt * (an._posed ? 1 : 0));   // (four legs on a slope: skeleton.js fitGround)
         writeRows(an, t); if (an.dots.length) markRows(an, t); an._posed = true; POSE.figures++; POSE.parts += an.parts.length;
       }
       shell.grow();  // (a shell bucket that ran out of room gets it HERE, between frames, never mid-render)

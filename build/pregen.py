@@ -12,6 +12,7 @@ run this again -- until then the game simply builds those from scratch, as it al
     python3 build/pregen.py              # all of it: the parts, then the worlds
     python3 build/pregen.py --resume     # carry on a run that stopped (its finished parts are kept in pregen.new/)
     python3 build/pregen.py --worlds-only [--worlds N]   # only record worlds, into the cache as it is
+    python3 build/pregen.py --bodies     # only bake the creatures' shapes, into pregen/shapes/ (bodies.js "BAKED SHAPES")
 
 Before each browser it checks the memory free (a part needs ~NEED["part"] MB, a world ~NEED["world"]) and stops,
 saying so, if there is not enough -- free some and run it again with --resume (or --worlds-only).
@@ -147,12 +148,35 @@ def worlds(n):
         merge_fragments()
 
 
+def bodies():
+    """THE CREATURES' SHAPES alone (pregen.html's part "bodies"), written into pregen/shapes/ as it is -- after an edit to
+    the mesher (bodymesh.js, sculpt.js, sharp.js) or to a species, without making the rest of the cache again."""
+    room(NEED["part"], "part bodies", "python3 build/pregen.py --bodies")
+    shutil.rmtree(os.path.join(OUT, "shapes"), ignore_errors=True)
+    stats = {}
+    done = json.loads(run_page("pregen.html?part=bodies", ready="!!window.__pregenDone", result="JSON.stringify(window.__pregenDone)",
+                               writes={"pregen/": write_live}, timeout=3600, log=True, stats=stats))
+    if done.get("error"):
+        sys.exit("pregen.html?part=bodies failed: " + done["error"])
+    part = os.path.join(OUT, "parts", "bodies.json")   # (its manifest part says nothing the manifest needs: shapes/index.json is its own)
+    if os.path.exists(part):
+        os.remove(part)
+        try:
+            os.rmdir(os.path.dirname(part))
+        except OSError:
+            pass
+    print(f"bodies: {done} -- browser peak {stats['peak_mb']} MB", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description="Pregenerate the startup cache, pregen/ (docs/pregen.md).")
     ap.add_argument("--resume", action="store_true", help="carry on a run that stopped: keep pregen.new/ and the parts it has")
     ap.add_argument("--worlds-only", action="store_true", help="only record worlds, into pregen/ as it is")
+    ap.add_argument("--bodies", action="store_true", help="only bake the creatures' shapes into pregen/shapes/")
     ap.add_argument("--worlds", type=int, default=int(os.environ.get("WORLDS", "4")), help="worlds the cache keeps (default 4)")
     a = ap.parse_args()
+    if a.bodies:
+        return bodies()
     if not a.worlds_only:
         first_pass(a.resume)
     worlds(a.worlds)

@@ -1,28 +1,183 @@
 {
   "name": "leopard",
+  "_about": "the leopard SCULPTED on the cat frame (2026-11-05, gen: scratchpad sc/carn/gen/leopard.py from the tiger's shapes): long and low on short strong legs, a big broad head; true rosettes on the trunk and upper limbs, solid spots on the head, the lower legs and the white belly; white chin, throat and underparts; round ears black behind with a white spot (2026-11-08, ears2.py) The EARS (ears2.py): round cupped sheets (sharp.js `fin`), black behind round a white spot (the back's edge band `rim`), pale in the hollow; the roots faired. WHISKERS (2026-11-08, tools/creaturegen/sharp/whiskers.py): 16 white whiskers a side, 4 rows on the whisker pad (99-148 mm); 3 white whiskers a side, a brow tuft (36-49 mm) -- `whiskers` shapes (bodyspec.js whiskerStrands: thin pointed strands, mirrored, on the head, near mesh only; details, so every coat and variant still shares one mesh).",
   "use": "creatures/frames/cat",
   "params": {
     "s": 0.66,
-    "tuft": 0.06,
+    "tuft": 0.0,
     "tailSway": 14
   },
-  "colors": {
-    "body": "#d9a44a",
-    "muzzle": "#eedcb4",
-    "ear": "#b88a3a",
-    "leg": "#d09a44",
-    "eye": "#c9b23a",
-    "nose": "#c27a6a",
-    "tuft": "#d9a44a"
+  "rear": [-0.2998, 0.4875, 0.0, 0.3126, 0.1596, 0.1841],
+  "front": [0.2051, 0.4957, 0.0, 0.3126, 0.1657, 0.1903],
+  "neck": [0.4092, 0.5346, 0.0, 0.5544, 0.6138, 0.0, 0.1386, 0.1188],
+  "head": [0.6204, 0.6468, 0.0, 0.1684],
+  "muzzle": [0.7595, 0.5866, 0.0, 0.1302, 0.0919, 0.1148],
+  "nose": [0.8823, 0.6242, 0.0, 0.0306],
+  "ears": [0.5713, 0.7898, 0.0726, 0.5549, 0.88, 0.1089, 0.0536, 0.023],
+  "eyes": [0.735, 0.6995, 0.0726, 0.0253],
+  "legs": {
+    "front": [0.2772, 0.3762, 0.1254, 0.1763],
+    "hind": [-0.396, 0.396, 0.1505, 0.192],
+    "radii": [0.0924, 0.0647, 0.0517],
+    "foot": [0.0647, 0.0356, 0.0582]
   },
-  "pat": "patches",
-  "patOn": [
-    "body",
-    "front",
-    "neck",
-    "head",
-    "leg",
-    "tail"
+  "tail": {
+    "c": [-1.0425, 0.8102],
+    "R": 0.5016,
+    "a0": -0.62,
+    "a1": -2.55,
+    "r1": 0.0422,
+    "r2": 0.033
+  },
+  "colors": {
+    "body": "#c49a5c",
+    "muzzle": "#eedcb4",
+    "ear": "#231a12",
+    "leg": "#be955a",
+    "eye": "#c9b23a",
+    "nose": "#a8705e",
+    "back": "#b0884c",
+    "tuft": "#c29a58",
+    "tail": "#be955a",
+    "white": "#f2ede3",
+    "cream": "#e6d2a8",
+    "pale": "#dcbc84",
+    "black": "#1a1410",
+    "tear": "#5a3c22"
+  },
+  "pat": "rosettes",
+  "patOn": ["body", "front", "neck", "head", "leg", "tail"],
+  "print": "paw",
+  "sculpt": {
+    "patScale": 0.39,
+    "keep": ["tail\\d*"],
+    "mesh": {
+      "tris": [10000, 3000],
+      "cell": 0.0095
+    },
+    "shape": [
+      {"id": "chest", "type": "ell", "c": [0.181, 0.4629, 0.0], "r": [0.3005, 0.1596, 0.1105], "k": 0.0792, "color": "@body", "pat": 18, "frame": "body"},
+      {"id": "keel", "type": "ell", "c": [0.2532, 0.35, 0.0], "r": [0.1563, 0.0798, 0.0921], "k": 0.066, "color": "@white", "kc": 0.05},
+      {"id": "withers", "type": "ell", "c": [0.2772, 0.561, 0.0], "r": [0.1716, 0.0798, 0.0982], "k": 0.066, "color": "@back", "pat": 18, "frame": "body"},
+      {"id": "loin", "type": "ell", "c": [-0.1916, 0.4798, 0.0], "r": [0.2765, 0.1043, 0.1043], "k": 0.0792, "color": "@body", "pat": 18, "frame": "body"},
+      {"id": "rump", "type": "ell", "c": [-0.4165, 0.5082, 0.0], "r": [0.198, 0.1166, 0.1105], "k": 0.066, "color": "@body", "pat": 18, "frame": "body"},
+      {"id": "belly", "type": "ell", "c": [0.0007, 0.3525, 0.0], "r": [0.2705, 0.053, 0.0918], "k": 0.066, "color": "@white", "kc": 0.06},
+      {"id": "pouch", "type": "ell", "c": [-0.2998, 0.3819, 0.0], "r": [0.1322, 0.043, 0.0798], "k": 0.0528, "color": "@white", "kc": 0.05},
+      {"id": "scapula", "type": "ell", "c": [0.3036, 0.5082, 0.0798], "r": [0.0614, 0.1166, 0.0491], "rot": [0, 0, 28], "k": 0.0528, "color": "@body", "pat": 18, "frame": "body", "mirror": true},
+      {"id": "arm", "type": "tube", "bone": "legFLu", "pts": [[0.33, 0.4554, 0.094, 0.0759], [0.3036, 0.3527, 0.0972, 0.0726], [0.2652, 0.2586, 0.1003, 0.0561]], "k": 0.0462, "color": "@body", "pat": 18, "frame": "body", "mirror": true},
+      {"id": "triceps", "type": "ell", "bone": "legFLu", "c": [0.2532, 0.3292, 0.094], "r": [0.066, 0.0858, 0.0561], "rot": [0, 0, -12], "k": 0.0396, "color": "@body", "pat": 18, "frame": "body", "mirror": true},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.2652, 0.2469, 0.1035], "b": [0.2904, 0.0764, 0.1035], "ra": 0.0561, "rb": 0.0383, "k": 0.033, "color": "@body", "pat": 21, "frame": {"o": "$legFLu", "u": [0, -1, 0], "r": 0.033}, "mirror": true},
+      {"id": "flexor", "type": "ell", "bone": "legFLl", "c": [0.2742, 0.1999, 0.1035], "r": [0.0495, 0.0588, 0.0462], "k": 0.033, "color": "@body", "pat": 21, "frame": {"o": "$legFLu", "u": [0, -1, 0], "r": 0.033}, "mirror": true},
+      {"id": "pastern", "type": "cone", "bone": "footFL", "a": [0.2904, 0.0823, 0.1035], "b": [0.3168, 0.0353, 0.1035], "ra": 0.0383, "rb": 0.0396, "k": 0.0198, "color": "@body", "mirror": true, "pat": 21, "frame": {"o": "$legFLu", "u": [0, -1, 0], "r": 0.033}},
+      {"id": "paw", "type": "ell", "bone": "footFL", "c": [0.3366, 0.0265, 0.1035], "r": [0.0627, 0.0282, 0.0515], "k": 0.0198, "color": "@leg", "mirror": true, "pat": 21, "frame": {"o": "$legFLu", "u": [0, -1, 0], "r": 0.033}},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-0.4175, 0.36, 0.0815], "r": [0.1077, 0.1584, 0.0697], "rot": [0, 0, 22], "k": 0.0528, "color": "@body", "pat": 18, "frame": "body", "mirror": true},
+      {"id": "gaskin", "type": "cone", "bone": "legHLu", "a": [-0.3479, 0.27, 0.0815], "b": [-0.4224, 0.162, 0.0815], "ra": 0.0539, "rb": 0.0317, "k": 0.033, "color": "@body", "pat": 21, "frame": {"o": "$legHLu", "u": [0, -1, 0], "r": 0.033}, "mirror": true},
+      {"id": "hock", "type": "cone", "bone": "legHLl", "a": [-0.4257, 0.168, 0.0815], "b": [-0.39, 0.048, 0.0815], "ra": 0.0317, "rb": 0.0291, "k": 0.0198, "color": "@body", "pat": 21, "frame": {"o": "$legHLu", "u": [0, -1, 0], "r": 0.033}, "mirror": true},
+      {"id": "hpaw", "type": "ell", "bone": "footHL", "c": [-0.3599, 0.024, 0.0803], "r": [0.0558, 0.0264, 0.0444], "k": 0.0198, "color": "@leg", "mirror": true, "pat": 21, "frame": {"o": "$legHLu", "u": [0, -1, 0], "r": 0.033}},
+      {"id": "neck", "type": "ell", "bone": "neck", "c": [0.4752, 0.5478, 0.0], "r": [0.1452, 0.132, 0.099], "rot": [0, 0, 32], "k": 0.066, "color": "@body", "pat": 21, "frame": "body"},
+      {"id": "throat", "type": "ell", "bone": "neck", "c": [0.4884, 0.505, 0], "r": [0.101, 0.0495, 0.0634], "k": 0.0528, "color": "@white", "kc": 0.02},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.6006, 0.6541, 0.0], "r": [0.135, 0.0838, 0.109], "k": 0.0421, "color": "@body", "pat": 21, "frame": {"o": "$head", "u": [0, 1, 0], "v": [1, 0, 0], "r": 0.033}},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [0.6096, 0.5997, 0.074], "r": [0.09, 0.0703, 0.0716], "k": 0.0337, "color": "@body", "pat": 21, "frame": {"o": "$head", "u": [0, 1, 0], "v": [1, 0, 0], "r": 0.033}, "mirror": true},
+      {"id": "ruff", "type": "ell", "bone": "head", "c": [0.5466, 0.5831, 0.0958], "r": [0.0432, 0.0528, 0.027], "rot": [0, -20, 10], "k": 0.0337, "color": "@body", "pat": 21, "frame": {"o": "$head", "u": [0, 1, 0], "v": [1, 0, 0], "r": 0.033}, "mirror": true},
+      {"id": "bridge", "type": "cone", "bone": "head", "a": [0.6456, 0.6783, 0.0], "b": [0.7942, 0.6328, 0], "ra": 0.048, "rb": 0.0262, "k": 0.0337, "color": "@body", "pat": 21, "frame": {"o": "$head", "u": [0, 1, 0], "v": [1, 0, 0], "r": 0.033}},
+      {"id": "muzzle", "type": "ell", "bone": "head", "c": [0.7266, 0.5997, 0.0], "r": [0.0644, 0.0447, 0.0566], "k": 0.0337, "color": "@body", "pat": 21, "frame": {"o": "$head", "u": [0, 1, 0], "v": [1, 0, 0], "r": 0.033}},
+      {"id": "pad", "type": "ell", "bone": "head", "c": [0.7642, 0.5765, 0.0366], "r": [0.0373, 0.0256, 0.0332], "k": 0.0211, "color": "@cream", "mirror": true},
+      {"id": "whiskers", "type": "whiskers", "bone": "head", "at": [0.75978, 0.57503, 0.06606], "dir": [-0.15, -0.05, 1], "rows": 4, "per": 4, "gap": [0.005985, 0.00608], "fan": [18, -14], "sweep": [-12, 28], "len": [0.0988, 0.1482], "rowLen": [1, 0.72], "droop": 0.08, "curl": 0.1, "r": 0.001048, "color": "#f4f2ea", "tip": "#e8e2d2", "seed": 3, "normal": [-0.118, -0.083, 0.99]},
+      {"id": "chin", "type": "ell", "bone": "head", "c": [0.704, 0.5489, 0.0], "r": [0.0486, 0.0212, 0.0339], "k": 0.0253, "color": "@white"},
+      {"id": "jowl", "type": "ell", "bone": "head", "c": [0.6006, 0.5583, 0.0], "r": [0.108, 0.0497, 0.0719], "k": 0.0421, "color": "@body", "pat": 21, "frame": {"o": "$head", "u": [0, 1, 0], "v": [1, 0, 0], "r": 0.033}},
+      {"id": "nose", "type": "ell", "bone": "head", "c": [0.8081, 0.6251, 0.0], "r": [0.0162, 0.0122, 0.0196], "k": 0.0101, "kc": 0.0034, "color": "@nose", "wet": 0.45},
+      {"id": "brow", "type": "ell", "bone": "head", "c": [0.6816, 0.7031, 0.0439], "r": [0.0315, 0.0166, 0.0256], "k": 0.0168, "color": "@body", "mirror": true, "pat": 21, "frame": {"o": "$head", "u": [0, 1, 0], "v": [1, 0, 0], "r": 0.033}},
+      {"id": "ear", "type": "fin", "bone": "earL", "root": [[0.5514, 0.7004, 0.0712], [0.5635, 0.7141, 0.0563]], "edge": [[0.5472, 0.6968, 0.0767], [0.5412, 0.7076, 0.0925], [0.5403, 0.7128, 0.0977], [0.5405, 0.7185, 0.1013], [0.541, 0.7242, 0.1042], [0.542, 0.7302, 0.1063], [0.5434, 0.7364, 0.1078], [0.5455, 0.7431, 0.1084], [0.5484, 0.7505, 0.1077], [0.5556, 0.7617, 0.1013], [0.5628, 0.7636, 0.0885], [0.5657, 0.7616, 0.0814], [0.5678, 0.7587, 0.0754], [0.5692, 0.7551, 0.0701], [0.5702, 0.7509, 0.0653], [0.5707, 0.7461, 0.061], [0.5709, 0.7407, 0.057], [0.57, 0.7339, 0.054], [0.5675, 0.7199, 0.0515]], "thick": 0.0026, "slope": 0.3, "face": [0.8504, -0.2974, 0.434], "cup": 0.6, "color": "@white", "inner": "@pale", "rim": 0.0174, "rimColor": "@ear", "innerRim": 0.0035, "mirror": true, "fair": {"r": 0.0087, "sink": 3}},
+      {"id": "spine", "type": "ell", "c": [-0.0895, 0.5712, 0.0], "r": [0.396, 0.0231, 0.066], "k": 0.033, "kc": 0.0264, "color": "@back", "pat": 18, "frame": "body"},
+      {"id": "bspot0", "type": "ell", "c": [-0.3128, 0.2951, 0.0242], "r": [0.0147, 0.0116, 0.0116], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.3, 0.47, 0], "out": -0.4732}, "rot": [0, -13.4311, 0], "mirror": true},
+      {"id": "bspot1", "type": "ell", "c": [-0.2612, 0.2921, 0.0181], "r": [0.0101, 0.0096, 0.0096], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.2483, 0.47, 0], "out": -0.574}, "rot": [0, -7.5481, 0], "mirror": true},
+      {"id": "bspot2", "type": "ell", "c": [-0.16, 0.2948, 0.0236], "r": [0.0165, 0.0128, 0.0128], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.1735, 0.47, 0], "out": -0.4656}, "rot": [0, -10.332, 0], "mirror": true},
+      {"id": "bspot3", "type": "ell", "c": [-0.1048, 0.2901, 0.0141], "r": [0.025, 0.0236, 0.0236], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.0942, 0.47, 0], "out": -0.5666}, "rot": [0, -19.1518, 0], "mirror": true},
+      {"id": "bspot4", "type": "ell", "c": [-0.0235, 0.2949, 0.0239], "r": [0.0241, 0.0189, 0.0189], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.0197, 0.47, 0], "out": -0.471}, "rot": [0, -43.7211, 0], "mirror": true},
+      {"id": "bspot5", "type": "ell", "c": [0.0265, 0.292, 0.018], "r": [0.0266, 0.0206, 0.0206], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [0.0321, 0.47, 0], "out": -0.4641}, "rot": [0, -4.6816, 0], "mirror": true},
+      {"id": "bspot6", "type": "ell", "c": [0.0933, 0.2894, 0.0128], "r": [0.0264, 0.0209, 0.0209], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [0.0911, 0.47, 0], "out": -0.4752}, "rot": [0, 37.5137, 0], "mirror": true},
+      {"id": "bspot7", "type": "ell", "c": [0.1605, 0.2877, 0.0093], "r": [0.0354, 0.0257, 0.0257], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [0.163, 0.47, 0], "out": -0.4352}, "rot": [0, -34.8015, 0], "mirror": true},
+      {"id": "bspot8", "type": "ell", "c": [-0.2758, 0.3137, 0.0694], "r": [0.0293, 0.0204, 0.0204], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.278, 0.47, 0], "out": -0.4173}, "rot": [0, -18.6252, 0], "mirror": true},
+      {"id": "bspot9", "type": "ell", "c": [-0.1969, 0.3094, 0.0608], "r": [0.0278, 0.0189, 0.0189], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.2071, 0.47, 0], "out": -0.4075}, "rot": [0, -2.5902, 0], "mirror": true},
+      {"id": "bspot10", "type": "ell", "c": [-0.1224, 0.3121, 0.0661], "r": [0.0295, 0.0209, 0.0209], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.1372, 0.47, 0], "out": -0.4252}, "rot": [0, -21.5404, 0], "mirror": true},
+      {"id": "bspot11", "type": "ell", "c": [-0.0856, 0.3095, 0.0609], "r": [0.0099, 0.0094, 0.0094], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.0756, 0.47, 0], "out": -0.5668}, "rot": [0, -44.1046, 0], "mirror": true},
+      {"id": "bspot12", "type": "ell", "c": [0.0085, 0.3085, 0.0589], "r": [0.0137, 0.0132, 0.0132], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.0026, 0.47, 0], "out": -0.5768}, "rot": [0, -5.0813, 0], "mirror": true},
+      {"id": "bspot13", "type": "ell", "c": [0.2106, 0.3154, 0.0728], "r": [0.0162, 0.0151, 0.0151], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [0.1968, 0.47, 0], "out": -0.5579}, "rot": [0, -32.3782, 0], "mirror": true},
+      {"id": "bspot14", "type": "ell", "c": [-0.2631, 0.3392, 0.1065], "r": [0.0138, 0.0138, 0.0138], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.256, 0.47, 0], "out": -0.5988}, "rot": [0, -8.1053, 0], "mirror": true},
+      {"id": "bspot15", "type": "ell", "c": [-0.1945, 0.3407, 0.1093], "r": [0.0264, 0.0202, 0.0202], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [-0.1949, 0.47, 0], "out": -0.4584}, "rot": [0, 17.62, 0], "mirror": true},
+      {"id": "bspot16", "type": "ell", "c": [0.0081, 0.3324, 0.0929], "r": [0.013, 0.0126, 0.0126], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [0.004, 0.47, 0], "out": -0.5819}, "rot": [0, -43.2652, 0], "mirror": true},
+      {"id": "bspot17", "type": "ell", "c": [0.0453, 0.3317, 0.0915], "r": [0.0127, 0.0118, 0.0118], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [0.0603, 0.47, 0], "out": -0.5578}, "rot": [0, -39.8536, 0], "mirror": true},
+      {"id": "bspot18", "type": "ell", "c": [0.1107, 0.3396, 0.1072], "r": [0.0215, 0.0191, 0.0191], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [0.1212, 0.47, 0], "out": -0.5328}, "rot": [0, -15.261, 0], "mirror": true},
+      {"id": "bspot19", "type": "ell", "c": [0.1811, 0.3449, 0.1178], "r": [0.0233, 0.0187, 0.0187], "k": 0.003, "kc": 0.0045, "color": "@black", "seat": {"from": [0.1821, 0.47, 0], "out": -0.4831}, "rot": [0, -41.4115, 0], "mirror": true},
+      {"id": "browR", "type": "ell", "bone": "head", "c": [0.6972, 0.6993, 0.0523], "r": [0.0276, 0.0122, 0.023], "rot": [12, -18, -10], "k": 0.0107, "kc": 0.0077, "color": "@body", "mirror": true},
+      {"id": "brows", "type": "whiskers", "bone": "head", "at": [0.68951, 0.71085, 0.06578], "dir": [-0.4, 0.6, 0.7], "along": [1, 0.5, -0.8], "rows": 1, "per": 3, "gap": [0.0057, 0], "fan": [0, 0], "bury": 0.0114, "sweep": [-10, 18], "len": [0.0361, 0.0494], "droop": 0.18, "curl": -0.05, "r": 0.000668, "color": "#f4f2ea", "tip": "#e8e2d2", "seed": 5, "normal": [0.126, 0.733, 0.668]},
+      {"id": "eyeIn", "type": "ell", "bone": "head", "c": [0.7184, 0.6632, 0.045], "r": [0.0122, 0.0042, 0.0061], "rot": [0, -30, -38], "k": 0.0015, "kc": 0.0009, "color": "@black", "mirror": true, "seat": {"from": [0.6006, 0.6557, 0.0], "out": -0.1719}},
+      {"id": "eyeOut", "type": "ell", "bone": "head", "c": [0.6808, 0.6813, 0.0675], "r": [0.0092, 0.0038, 0.0054], "rot": [0, -60, -15], "k": 0.0015, "kc": 0.0009, "color": "@black", "mirror": true, "seat": {"from": [0.6006, 0.6557, 0.0], "out": -0.2083}},
+      {"id": "tear0", "type": "ell", "bone": "head", "c": [0.7293, 0.6444, 0.0407], "r": [0.0028, 0.0159, 0.0028], "rot": [0, 0.0, 25.641], "k": 0.0015, "kc": 0.0009, "color": "@tear", "mirror": true, "seat": {"from": [0.6006, 0.6557, 0.0], "out": -0.078}},
+      {"id": "tear1", "type": "ell", "bone": "head", "c": [0.74, 0.6219, 0.045], "r": [0.0028, 0.0158, 0.0028], "rot": [0, 0.0, 21.4714], "k": 0.0015, "kc": 0.0009, "color": "@tear", "mirror": true, "seat": {"from": [0.6006, 0.6557, 0.0], "out": -0.0787}},
+      {"id": "tear2", "type": "ell", "bone": "head", "c": [0.7472, 0.6, 0.0523], "r": [0.0028, 0.0147, 0.0028], "rot": [0, 0.0, 11.7029], "k": 0.0015, "kc": 0.0009, "color": "@tear", "mirror": true, "seat": {"from": [0.6006, 0.6557, 0.0], "out": -0.0843}},
+      {"id": "lipL0", "type": "ell", "bone": "head", "c": [0.7757, 0.5564, 0.0218], "r": [0.013, 0.0034, 0.0046], "rot": [0, -8, 0.0], "k": 0.0015, "kc": 0.0009, "color": "@black", "mirror": true, "seat": {"from": [0.707, 0.5729, 0.0], "out": -0.1059}},
+      {"id": "lipL1", "type": "ell", "bone": "head", "c": [0.7512, 0.5564, 0.0421], "r": [0.013, 0.0034, 0.0046], "rot": [0, -30, 0.0], "k": 0.0015, "kc": 0.0009, "color": "@black", "mirror": true, "seat": {"from": [0.707, 0.5729, 0.0], "out": -0.1059}},
+      {"id": "lipL2", "type": "ell", "bone": "head", "c": [0.7242, 0.5609, 0.0537], "r": [0.013, 0.0034, 0.0046], "rot": [0, -55, 0.0], "k": 0.0015, "kc": 0.0009, "color": "@black", "mirror": true, "seat": {"from": [0.707, 0.5729, 0.0], "out": -0.1059}}
+    ],
+    "eyes": {
+      "at": [0.6996, 0.6741, 0.0575],
+      "from": [0.6006, 0.6557, 0.0],
+      "r": 0.0148,
+      "iris": "@eye",
+      "pupil": "round",
+      "lid": "@black",
+      "sink": 0.56,
+      "socket": 1.04,
+      "color": "#6a5014"
+    }
+  },
+  "coats": [
+    {
+      "name": "spotted"
+    },
+    {
+      "name": "spotted"
+    },
+    {
+      "name": "spotted"
+    },
+    {
+      "name": "black panther",
+      "body": "#221d18",
+      "back": "#1c1814",
+      "leg": "#201b16",
+      "tail": "#201b16",
+      "tuft": "#221d18",
+      "muzzle": "#2c2620",
+      "cream": "#2a241e",
+      "pale": "#26201b",
+      "white": "#302a24",
+      "ear": "#100d0b",
+      "black": "#0c0a08",
+      "nose": "#2a2220",
+      "tear": "#141110"
+    }
   ],
-  "print": "paw"
+  "variants": {
+    "snow": {
+      "scale": 0.85,
+      "colors": {
+        "body": "#d6d2c8",
+        "back": "#cac5ba",
+        "leg": "#d0ccc2",
+        "tail": "#d2cec4",
+        "tuft": "#d6d2c8",
+        "muzzle": "#ebe8e2",
+        "cream": "#e2ded6",
+        "pale": "#dad6ce",
+        "white": "#f2f0ec",
+        "ear": "#3c3836",
+        "black": "#3a3634",
+        "eye": "#a4aea0",
+        "nose": "#a08078",
+        "tear": "#5a5654"
+      }
+    }
+  }
 }

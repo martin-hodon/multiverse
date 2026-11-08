@@ -45,5 +45,7 @@ export function scalePart(p, f) {
 export function scaleDef(def, f) {
   const g = def.gaits && Object.fromEntries(Object.entries(def.gaits).map(([k, v]) => [k, v && { ...v, stride: v.stride * f, lift: v.lift * f, bob: v.bob * f }]));
   return { ...def, parts: def.parts.map((p) => scalePart(p, f)), ...(g ? { gaits: g } : {}),
-           ...(def.legLen !== undefined ? { legLen: def.legLen * f } : {}), ...(def.probe !== undefined ? { probe: def.probe * f } : {}) };
+           ...(def.legLen !== undefined ? { legLen: def.legLen * f } : {}), ...(def.probe !== undefined ? { probe: def.probe * f } : {}),
+           ...(def.saddle ? { saddle: { x: def.saddle.x * f, y: def.saddle.y * f } } : {}),   // (species.js saddle: an outright seat)
+           ...(def.sculpt ? { sculptScale: (def.sculptScale ?? 1) * f } : {}) };   // (a sculpt overlay's shapes scale with it: bodyspec.js)
 }

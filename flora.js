@@ -1,5 +1,5 @@
 // Flora for the banner engines: trees (grown by recursive branching, with
-// leaf cards drawn by foliage.js), mushrooms, bushes, grass and clouds
+// leaf cards drawn by foliage.js), bushes, grass and clouds
 // (the flowers are polygon items: assets/items/flowers) -- the same part vocabulary as the animals (capsules, spheres,
 // cones), so the instanced herd renders a whole forest's wood in one call.
 // A seed varies every individual; deciduous species take an `autumn` blend
@@ -196,37 +196,16 @@ export function makeTree(species, { seed = 1, height, autumn = 0, spring = 0, le
   const trunk = branches.filter((b) => b.level === 1).map((b) => ({ a: vSc(b.a, S), b: vSc(b.b, S), r0: Math.max(.012, b.r0 * S), r1: Math.max(.012, b.r1 * S) }));
   // its crown's reach over the ground (metres from the trunk, nine leaves in ten within it): the shade it casts (shadows.js)
   const reach = leaves.map((L) => Math.hypot(L.c[0], L.c[2])).sort((a, b) => a - b), crown = reach.length ? reach[Math.floor(reach.length * .9)] : h * .25;
-  return { name: species, parts, leaves, trunkR: Math.max(.012, P.trunkR * S), height: h, trunk, crown, evergreen: !!P.evergreen, autumnC: P.autumnC };
+  // its BOUGHS a bird can sit on (index.html PERCHERS): the limbs off the trunk and the next ones out, near level (rising or
+  // falling at most 1 in 2) and still a hand's breadth thick, in tree space -- not a palm's fronds
+  const boughs = P.mode === "palm" ? [] : branches.filter((b) => b.level >= 2 && b.level <= 3 && Math.abs(b.b[1] - b.a[1]) * 2 < Math.hypot(b.b[0] - b.a[0], b.b[2] - b.a[2]) && (b.r0 + b.r1) / 2 * S > .03)
+    .map((b) => ({ a: vSc(b.a, S), b: vSc(b.b, S), r0: b.r0 * S, r1: b.r1 * S }));
+  return { name: species, parts, leaves, trunkR: Math.max(.012, P.trunkR * S), height: h, trunk, boughs, crown, evergreen: !!P.evergreen, autumnC: P.autumnC };
 }
 
-// mushrooms: tiny understory props (real sizes, 8-20cm), same vocabulary.
-// amanita = fly agaric with white spots on the red cap; boletus = fat pale
-// stem under a brown bun; chanterelle = low golden button.
+// mushrooms: the three kinds the woods grow -- items now (assets/items/mushrooms/<kind>, tools/mushroomgen.py), drawn by the
+// game with the flowers; amanita = fly agaric, boletus = cep, chanterelle = the golden funnel
 export const MUSHROOMS = ["amanita", "boletus", "chanterelle"];
-
-export function makeMushroom(kind, { seed = 1 } = {}) {
-  const r = rng(seed * 337 + 5);
-  const parts = [];
-  if (kind === "amanita") {
-    const h = .13 + r() * .08, capR = h * .42;
-    parts.push({ id: "s", parent: null, shape: "capsule", size: { r: h * .09, len: h * .55 }, pos: [0, h * .3, 0], color: 0xe8e2d6 });
-    parts.push({ id: "c", parent: null, shape: "sphere", size: { r: capR }, scale: [1, .62, 1], pos: [0, h * .68, 0], color: 0xc03325 });
-    for (let i = 0; i < 5; i++) {
-      const a = r() * Math.PI * 2, d = capR * (.3 + r() * .55);
-      parts.push({ id: "d" + i, parent: "c", shape: "sphere", size: { r: capR * .13 },
-        pos: [Math.cos(a) * d, Math.sqrt(Math.max(0, capR * capR - d * d)) * .85, Math.sin(a) * d], color: 0xf2ede2 });
-    }
-  } else if (kind === "boletus") {
-    const h = .1 + r() * .06;
-    parts.push({ id: "s", parent: null, shape: "capsule", size: { r: h * .16, len: h * .45 }, pos: [0, h * .28, 0], color: 0xd9cbaa });
-    parts.push({ id: "c", parent: null, shape: "sphere", size: { r: h * .45 }, scale: [1, .55, 1], pos: [0, h * .62, 0], color: 0x7a4e26 });
-  } else {
-    const h = .07 + r() * .04;
-    parts.push({ id: "s", parent: null, shape: "capsule", size: { r: h * .12, len: h * .5 }, pos: [0, h * .3, 0], color: 0xe0a82c });
-    parts.push({ id: "c", parent: null, shape: "sphere", size: { r: h * .42 }, scale: [1, .4, 1], pos: [0, h * .62, 0], color: 0xe8a825 });
-  }
-  return { name: kind, parts };
-}
 
 // ---- undergrowth & sky ------------------------------------------------------
 

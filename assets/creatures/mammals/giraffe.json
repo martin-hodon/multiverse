@@ -1,4 +1,5 @@
 {
+  "headForm": "bovid",
   "name": "giraffe",
   "kind": "mammal",
   "headTurn": 12,
@@ -87,22 +88,7 @@
       0.09
     ]
   },
-  "tail": {
-    "c": [
-      -2.33,
-      2.5
-    ],
-    "R": 1.2,
-    "a0": 0,
-    "a1": -0.75,
-    "r1": 0.04,
-    "r2": 0.03,
-    "n": 4,
-    "tuft": 0.08,
-    "tuftColor": "#3a2a18",
-    "sway": 10,
-    "speed": 0.6
-  },
+  "tail": {"path": [[-0.78, 2.56], [-0.99, 2.45], [-0.95, 1.9], [-0.9, 1.3]], "r1": 0.05, "r2": 0.027, "tuft": 0, "sway": 10, "speed": 0.6},
   "extras": [
     {
       "id": "ossicone",
@@ -113,13 +99,13 @@
         0.07
       ],
       "to": [
-        1.97,
-        4.9799999999999995,
-        0.09
+        1.975,
+        4.87,
+        0.085
       ],
-      "r1": 0.035,
-      "r2": 0.045,
-      "color": "#9c6b28",
+      "r1": 0.034,
+      "r2": 0.04,
+      "color": "#6a4a2a",
       "mirror": true
     },
     {
@@ -160,13 +146,77 @@
     }
   },
   "c": {
-    "body": "#d2a04a",
-    "muzzle": "#c0913f",
-    "ear": "#c0913f",
-    "leg": "#c0913f",
-    "foot": "#3a2c22",
-    "tail": "#c0913f",
-    "eye": "#241812"
+    "body": "#eadbb8",
+    "muzzle": "#c9ad84",
+    "ear": "#d8c49c",
+    "leg": "#e6d8ba",
+    "foot": "#2e241c",
+    "tail": "#d8c49c",
+    "eye": "#241812",
+    "mane": "#7a5634",
+    "nose": "#3a2a20",
+    "maneTip": "#4e3420",
+    "tuft": "#1c1410",
+    "ossi": "#8a6a44"
   },
-  "print": "cloven"
+  "print": "cloven",
+  "sculpt": {
+    "_about": "THE GIRAFFE (2026-11-05, 2nd pass: a longer head with its boss, thick tufted ossicones, the patches down to the knees and hocks and on the jaw, a dark brush of a mane, the long tail with its black tassel, broad hooves): a short trunk falling steeply from high withers and massive shoulders to the rump, the belly tucked; the neck thick out of the shoulders and tapering to a slim throat, a short upright dark mane along it; a long tapering head, the median ossicone's boss on the brow, long mobile lips, ears out sideways under the kept ossicones; long slim legs, the forearm and gaskin patched, knobby knees and hocks, plain pale cannons to two-toed hooves; the coat the giraffe network (spots) on a pale ground, liver patches (2026-11-08) The EARS are `fin` sheets (sharp.js): leaf-shaped, cupped, the base buried in an earBase fillet.",
+    "keep": [],
+    "mesh": {"tris": [7000, 2200], "focus": {"head": 4, "tail": 4}},
+    "patScale": 1.25,
+    "shape": [
+      {"id": "chest", "type": "ell", "c": [0.42, 2.4, 0], "r": [0.48, 0.44, 0.34], "k": 0.1, "color": "@body", "pat": "spots"},
+      {"id": "withers", "type": "ell", "c": [0.36, 2.66, 0], "r": [0.48, 0.2, 0.22], "rot": [0, 0, -16], "k": 0.16, "color": "@body", "pat": "spots"},
+      {"id": "barrel", "type": "ell", "c": [-0.12, 2.34, 0], "r": [0.58, 0.37, 0.35], "rot": [0, 0, 9], "k": 0.1, "color": "@body", "pat": "spots"},
+      {"id": "rump", "type": "ell", "c": [-0.62, 2.32, 0], "r": [0.34, 0.3, 0.28], "rot": [0, 0, 16], "k": 0.09, "color": "@body", "pat": "spots"},
+      {"id": "haunch", "type": "ell", "c": [-0.6, 2.14, 0.15], "r": [0.28, 0.34, 0.13], "rot": [0, 0, 8], "k": 0.06, "color": "@body", "mirror": true, "pat": "spots"},
+      {"id": "belly", "type": "ell", "c": [-0.06, 2.04, 0], "r": [0.48, 0.14, 0.3], "rot": [0, 0, 6], "k": 0.08, "color": "@body", "pat": "spots"},
+      {"id": "scapula", "type": "ell", "c": [0.55, 2.42, 0.22], "r": [0.13, 0.42, 0.11], "rot": [0, 0, 24], "k": 0.06, "color": "@body", "mirror": true, "pat": "spots"},
+      {"id": "breast", "type": "ell", "c": [0.74, 2.28, 0], "r": [0.18, 0.28, 0.24], "rot": [0, 0, 15], "k": 0.12, "color": "@body", "pat": "spots"},
+      {"id": "neck", "type": "tube", "bone": "neck", "pts": [[0.74, 2.58, 0, 0.3], [0.858, 2.778, 0, 0.2672], [0.976, 2.976, 0, 0.2371], [1.094, 3.174, 0, 0.21], [1.212, 3.372, 0, 0.1858], [1.33, 3.57, 0, 0.1646], [1.448, 3.768, 0, 0.1465], [1.566, 3.966, 0, 0.1318], [1.684, 4.164, 0, 0.1205], [1.802, 4.362, 0, 0.113], [1.92, 4.56, 0, 0.11]], "k": 0.1, "color": "@body", "pat": "spots"},
+      {"id": "neckV", "type": "tube", "bone": "neck", "pts": [[0.78, 2.53, 0, 0.255], [0.9225, 2.7837, 0, 0.2205], [1.065, 3.0375, 0, 0.1897], [1.2075, 3.2912, 0, 0.1628], [1.35, 3.545, 0, 0.1399], [1.4925, 3.7988, 0, 0.1211], [1.635, 4.0525, 0, 0.1068]], "k": 0.1, "color": "@body", "pat": "spots"},
+      {"id": "mane", "type": "tube", "bone": "neck", "pts": [[0.9, 3.3135, 0, 0.058], [1.02, 3.4748, 0, 0.056], [1.14, 3.6422, 0, 0.054], [1.26, 3.8115, 0, 0.052], [1.38, 3.9869, 0, 0.05], [1.5, 4.1703, 0, 0.048], [1.62, 4.3336, 0, 0.046], [1.74, 4.523, 0, 0.044], [1.86, 4.6983, 0, 0.042]], "k": 0.012, "kc": 0.004, "color": "@mane", "hair": 0.6},
+      {"id": "maneCrest", "type": "tube", "bone": "neck", "pts": [[0.888, 3.3535, 0, 0.0319], [1.008, 3.5148, 0, 0.0308], [1.128, 3.6822, 0, 0.0297], [1.248, 3.8515, 0, 0.0286], [1.368, 4.0269, 0, 0.0275], [1.488, 4.2103, 0, 0.0264], [1.608, 4.3736, 0, 0.0253], [1.728, 4.563, 0, 0.0242], [1.848, 4.7383, 0, 0.0231]], "k": 0.01, "kc": 0.004, "color": "@maneTip", "hair": 0.6},
+      {"id": "cranium", "type": "ell", "bone": "head", "c": [2.0273, 4.5262, 0.0], "r": [0.1299, 0.1558, 0.1364], "rot": [0, 0, -23.85], "k": 0.04, "color": "@body", "pat": "spots"},
+      {"id": "boss", "type": "ell", "bone": "head", "c": [2.1881, 4.5687, 0.0], "r": [0.0649, 0.039, 0.039], "rot": [0, 0, -23.85], "k": 0.04, "color": "@body"},
+      {"id": "face", "type": "cone", "bone": "head", "a": [2.0853, 4.529, 0.0], "b": [2.4007, 4.3753, 0.0], "ra": 0.1104, "rb": 0.0649, "k": 0.04, "color": "@muzzle"},
+      {"id": "faceUp", "type": "cone", "bone": "head", "a": [2.0787, 4.5461, 0.0], "b": [2.2635, 4.4502, 0.0], "ra": 0.1117, "rb": 0.0727, "k": 0.04, "color": "@body", "pat": "spots"},
+      {"id": "jaw", "type": "ell", "bone": "head", "c": [2.0644, 4.4175, 0.0519], "r": [0.1429, 0.0714, 0.039], "rot": [0, 0, -29.85], "k": 0.03, "color": "@body", "mirror": true, "pat": "spots"},
+      {"id": "muzzle", "type": "ell", "bone": "head", "c": [2.443, 4.3424, 0.0], "r": [0.0714, 0.0779, 0.0649], "rot": [0, 0, -23.85], "k": 0.03, "color": "@muzzle"},
+      {"id": "lipL", "type": "ell", "bone": "head", "c": [2.3759, 4.2869, 0.0], "r": [0.0714, 0.0325, 0.0455], "rot": [0, 0, -29.85], "k": 0.02, "color": "@muzzle"},
+      {"id": "nostril", "type": "ell", "bone": "head", "c": [2.4844, 4.388, 0.0422], "r": [0.039, 0.0091, 0.0156], "rot": [0, 0, 16.15], "k": 0.004, "kc": 0.002, "color": "@nose", "mirror": true},
+      {"id": "ear", "type": "fin", "bone": "earL", "root": [[1.9915, 4.5928, 0.0905], [2.0119, 4.6524, 0.107]], "edge": [[1.9848, 4.5826, 0.096], [1.9807, 4.58, 0.1037], [1.9668, 4.5654, 0.1224], [1.9527, 4.5547, 0.1461], [1.9403, 4.5485, 0.1711], [1.9294, 4.5472, 0.1975], [1.9215, 4.5522, 0.2236], [1.9165, 4.5613, 0.2471], [1.9137, 4.5726, 0.2674], [1.9125, 4.5841, 0.2839], [1.9126, 4.5975, 0.2991], [1.9226, 4.6138, 0.2921], [1.9329, 4.6285, 0.283], [1.9448, 4.6438, 0.27], [1.9578, 4.6581, 0.253], [1.9712, 4.669, 0.2313], [1.9833, 4.6742, 0.206], [1.9938, 4.6744, 0.1794], [2.0027, 4.6701, 0.1515], [2.0085, 4.661, 0.1261], [2.0114, 4.6604, 0.1176]], "corners": [10], "thick": 0.017, "slope": 0.4, "face": [0.8594, -0.3873, 0.3339], "cup": 0.75, "color": "@ear", "inner": "@body", "innerRim": 0.006, "mirror": true, "rim": 0.006, "rimColor": "@maneTip", "rimAt": 0.55, "tip": "@mane", "tipAt": 0.8, "fair": 0.015},
+      {"id": "arm", "type": "ell", "bone": "legFLu", "c": [0.52, 1.95, 0.195], "r": [0.15, 0.3, 0.12], "rot": [0, 0, -12], "k": 0.07, "color": "@body", "mirror": true, "pat": "spots"},
+      {"id": "forearm", "type": "cone", "bone": "legFLu", "a": [0.5, 1.75, 0.26], "b": [0.5, 0.956, 0.26], "ra": 0.1, "rb": 0.055, "k": 0.04, "color": "@body", "mirror": true, "pat": "spots", "frame": {"u": [0, 1, 0], "r": 0.07}},
+      {"id": "knee", "type": "ell", "bone": "legFLl", "c": [0.505, 0.896, 0.26], "r": [0.065, 0.075, 0.06], "k": 0.02, "color": "@leg", "mirror": true, "pat": "spots", "frame": {"u": [0, 1, 0], "r": 0.07}},
+      {"id": "cannon", "type": "cone", "bone": "legFLl", "a": [0.5, 0.846, 0.26], "b": [0.5, 0.19, 0.26], "ra": 0.05, "rb": 0.042, "k": 0.015, "color": "@leg", "mirror": true},
+      {"id": "fetlock", "type": "ell", "bone": "legFLl", "c": [0.5, 0.17, 0.26], "r": [0.055, 0.05, 0.05], "k": 0.015, "color": "@leg", "mirror": true},
+      {"id": "pastern", "type": "cone", "bone": "legFLl", "a": [0.505, 0.16, 0.26], "b": [0.54, 0.08, 0.26], "ra": 0.045, "rb": 0.05, "k": 0.012, "color": "@leg", "mirror": true},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-0.53, 1.95, 0.203], "r": [0.22, 0.32, 0.12], "rot": [0, 0, -8], "k": 0.07, "color": "@body", "mirror": true, "pat": "spots"},
+      {"id": "gaskin", "type": "cone", "bone": "legHLu", "a": [-0.53, 1.7, 0.2538], "b": [-0.59, 0.905, 0.2538], "ra": 0.1, "rb": 0.055, "k": 0.04, "color": "@body", "mirror": true, "pat": "spots", "frame": {"u": [0, 1, 0], "r": 0.07}},
+      {"id": "ham", "type": "tube", "bone": "legHLu", "pts": [[-0.7815, 1.9525, 0.2157, 0.12], [-0.7233, 1.6621, 0.2157, 0.095], [-0.665, 1.3717, 0.2157, 0.07], [-0.6068, 1.0813, 0.2157, 0.045]], "k": 0.05, "color": "@body", "mirror": true, "pat": "spots", "frame": {"u": [0, 1, 0], "r": 0.07}},
+      {"id": "hock", "type": "ell", "bone": "legHLl", "c": [-0.57, 0.825, 0.2538], "r": [0.06, 0.07, 0.05], "k": 0.02, "color": "@leg", "mirror": true, "pat": "spots", "frame": {"u": [0, 1, 0], "r": 0.07}},
+      {"id": "hockPt", "type": "sphere", "bone": "legHLl", "c": [-0.63, 0.865, 0.2538], "r": 0.035, "k": 0.02, "color": "@leg", "mirror": true},
+      {"id": "hcannon", "type": "cone", "bone": "legHLl", "a": [-0.57, 0.775, 0.2538], "b": [-0.55, 0.15, 0.2538], "ra": 0.05, "rb": 0.042, "k": 0.015, "color": "@leg", "mirror": true},
+      {"id": "hfetlock", "type": "ell", "bone": "legHLl", "c": [-0.55, 0.13, 0.2538], "r": [0.055, 0.05, 0.05], "k": 0.015, "color": "@leg", "mirror": true},
+      {"id": "hpastern", "type": "cone", "bone": "legHLl", "a": [-0.545, 0.12, 0.2538], "b": [-0.51, 0.05, 0.2538], "ra": 0.045, "rb": 0.05, "k": 0.012, "color": "@leg", "mirror": true},
+      {"id": "toeo", "type": "cone", "bone": "footFL", "a": [0.52, 0.085, 0.288], "b": [0.61, 0.028, 0.296], "ra": 0.042, "rb": 0.03, "k": 0.008, "kc": 0.003, "color": "@foot", "mirror": true},
+      {"id": "toei", "type": "cone", "bone": "footFL", "a": [0.52, 0.085, 0.232], "b": [0.61, 0.028, 0.224], "ra": 0.042, "rb": 0.03, "k": 0.008, "kc": 0.003, "color": "@foot", "mirror": true},
+      {"id": "htoeo", "type": "cone", "bone": "footHL", "a": [-0.53, 0.045, 0.2818], "b": [-0.44, -0.012, 0.2898], "ra": 0.042, "rb": 0.03, "k": 0.008, "kc": 0.003, "color": "@foot", "mirror": true},
+      {"id": "htoei", "type": "cone", "bone": "footHL", "a": [-0.53, 0.045, 0.2258], "b": [-0.44, -0.012, 0.2178], "ra": 0.042, "rb": 0.03, "k": 0.008, "kc": 0.003, "color": "@foot", "mirror": true},
+      {"id": "ossicone", "type": "cone", "bone": "head", "a": [2.0231, 4.6242, 0.0649], "b": [1.9884, 4.7824, 0.0966], "ra": 0.05, "rb": 0.034, "k": 0.04, "color": "@ossi", "mirror": true},
+      {"id": "ossiTuft", "type": "ell", "bone": "head", "c": [1.9842, 4.8014, 0.1004], "r": [0.04, 0.035, 0.04], "k": 0.015, "kc": 0.004, "color": "@tuft", "hair": 0.9, "mirror": true},
+      {"id": "tailDock", "type": "ell", "c": [-0.84, 2.53, 0], "r": [0.08, 0.055, 0.06], "rot": [0, 0, 25], "k": 0.05, "color": "@body"},
+      {"id": "tail", "type": "tube", "bone": "tail", "pts": [[-0.78, 2.56, 0, 0.05], [-0.88, 2.53, 0, 0.047], [-0.975, 2.42, 0, 0.042], [-1.0, 2.28, 0, 0.038], [-0.955, 2.1, 0, 0.033], [-0.93, 1.9, 0, 0.03], [-0.915, 1.7, 0, 0.028], [-0.905, 1.6, 0, 0.027]], "k": 0.02, "color": "@tail"},
+      {"id": "tailBrush", "type": "tube", "bone": "tail", "pts": [[-0.905, 1.72, 0, 0.045], [-0.9024, 1.5792, 0.0, 0.06], [-0.8996, 1.432, 0.0, 0.0528], [-0.8966, 1.272, 0.0, 0.0336], [-0.893, 1.08, 0, 0.012]], "k": 0.02, "color": "@tuft", "hair": 1},
+      {"id": "tailLock0", "type": "tube", "bone": "tail", "pts": [[-0.8835, 1.6688, 0.0042, 0.025], [-0.8569, 1.4768, 0.0088, 0.025], [-0.8658, 1.2592, 0.0062, 0.018], [-0.8702, 1.0544, 0.0045, 0.008]], "k": 0.013, "color": "@tuft", "hair": 1},
+      {"id": "tailLock1", "type": "tube", "bone": "tail", "pts": [[-0.8974, 1.6688, 0.0199, 0.025], [-0.8863, 1.4768, 0.0421, 0.025], [-0.8864, 1.2592, 0.0296, 0.018], [-0.885, 1.0416, 0.0216, 0.008]], "k": 0.013, "color": "@tuft", "hair": 1},
+      {"id": "tailLock2", "type": "tube", "bone": "tail", "pts": [[-0.9179, 1.6688, 0.0157, 0.025], [-0.9298, 1.4768, 0.0333, 0.025], [-0.917, 1.2592, 0.0234, 0.018], [-0.9071, 1.0288, 0.0171, 0.008]], "k": 0.013, "color": "@tuft", "hair": 1},
+      {"id": "tailLock3", "type": "tube", "bone": "tail", "pts": [[-0.9246, 1.6688, -0.0042, 0.025], [-0.944, 1.4768, -0.0088, 0.025], [-0.9269, 1.2592, -0.0062, 0.018], [-0.9149, 1.0544, -0.0045, 0.008]], "k": 0.013, "color": "@tuft", "hair": 1},
+      {"id": "tailLock4", "type": "tube", "bone": "tail", "pts": [[-0.9107, 1.6688, -0.0199, 0.025], [-0.9146, 1.4768, -0.0421, 0.025], [-0.9063, 1.2592, -0.0296, 0.018], [-0.8995, 1.0416, -0.0216, 0.008]], "k": 0.013, "color": "@tuft", "hair": 1},
+      {"id": "tailLock5", "type": "tube", "bone": "tail", "pts": [[-0.8901, 1.6688, -0.0157, 0.025], [-0.871, 1.4768, -0.0333, 0.025], [-0.8757, 1.2592, -0.0234, 0.018], [-0.8769, 1.0288, -0.0171, 0.008]], "k": 0.013, "color": "@tuft", "hair": 1}
+    ],
+    "eyes": {"at": [2.1129, 4.5594, 0.1234], "from": [2.105, 4.5415, 0.0], "r": 0.03, "iris": "@eye", "pupil": "bar", "lid": "#2a1c12", "sink": 0.62}
+  }
 }

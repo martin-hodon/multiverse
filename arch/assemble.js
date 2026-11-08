@@ -1989,11 +1989,48 @@ function buildPart_(name, defs, params) {
   if (def.type === "sweep") {
     // A SWEEP (arch/sweep.js): `profile` [[u, v], ...] (u right of the way the path runs, v up) carried along `path` [[x, z] |
     // [x, y, z], ...] on a smooth curve, `step` metres a ring, `closed`, `wave` { amp, length, phase }, `round`, `caps`. Kind
-    // "prism" (a solid) unless the part says
+    // "prism" (a solid) unless the part says. `paths` in place of `path`: the one profile along each (a park's footways
+    // as one part, 2026-11-05)
     const pt = (q) => q.map((v) => P(v));
-    const m = sweepMesh(mesh(), { path: def.path.map(pt), profile: def.profile.map(pt), closed: !!def.closed, step: P(def.step, .5), round: !!def.round, caps: def.caps !== false,
+    const m = mesh();
+    for (const path of def.paths ?? [def.path]) sweepMesh(m, { path: path.map(pt), profile: def.profile.map(pt), closed: !!def.closed, step: P(def.step, .5), round: !!def.round, caps: def.caps !== false,
                                   wave: def.wave ? { amp: P(def.wave.amp), length: P(def.wave.length), phase: P(def.wave.phase, 0) } : null });
     return { name, geometry: m.arrays(), instances: def.at ? placements(def, P, params) : [[0, 0, 0, 0]], kind: def.kind ?? "prism" };
+  }
+
+  if (def.type === "terrain") {
+    // GROUND FROM A HEIGHT MAP (2026-11-04, Park Guell's hill from the IGN's 5 m model): `heights` a row a line along +x,
+    // the rows along +z, `cell` metres apart from `origin` [x, z] (the first row's first point); a row is a string of
+    // numbers split by spaces (or an array), `scale` multiplies them (heights in decimetres: 0.1), "-" or null leaves the
+    // point out -- and every cell with a corner left out is no ground at all (a hole: a building fills it). Skinned as a
+    // closed solid down to `base`: the top split along each cell's shorter diagonal, a skirt down every edge of the land,
+    // the underside flat (`bottom: false` leaves it off: ground that stands on the world's own, never seen from below).
+    // Kind prism (the ground's finish rules take it); walked only if it says so.
+    const cell = P(def.cell, 5), [ox, oz] = (def.origin ?? [0, 0]).map((v) => P(v)), sc = P(def.scale, 1), base = P(def.base, 0);
+    const H = def.heights.map((row) => (typeof row === "string" ? row.trim().split(/\s+/) : row).map((v) => v === null || v === "-" ? null : Number(v) * sc));
+    const nz = H.length, nx = Math.max(...H.map((r) => r.length));
+    const at = (i, j) => H[j]?.[i] ?? null, land = (i, j) => i >= 0 && j >= 0 && i < nx - 1 && j < nz - 1 && [at(i, j), at(i + 1, j), at(i, j + 1), at(i + 1, j + 1)].every((v) => v !== null);
+    const m = mesh(), X = (i) => ox + i * cell, Z = (j) => oz + j * cell;
+    const face = (A, B, C, want) => {   // (wound so its normal goes `want`)
+      const ux = B[0] - A[0], uy = B[1] - A[1], uz = B[2] - A[2], vx = C[0] - A[0], vy = C[1] - A[1], vz = C[2] - A[2];
+      const nx_ = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz_ = ux * vy - uy * vx, [a, b, c] = [A, B, C].map((p) => m.vert(...p));
+      if (nx_ * want[0] + ny * want[1] + nz_ * want[2] >= 0) m.tri(a, b, c); else m.tri(a, c, b);
+    };
+    for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) {
+      if (!land(i, j)) continue;
+      const p = (di, dj) => [X(i + di), at(i + di, j + dj), Z(j + dj)], q = (di, dj) => [X(i + di), base, Z(j + dj)];
+      const [a, b, c, d] = [p(0, 0), p(1, 0), p(1, 1), p(0, 1)];
+      if (Math.abs(a[1] - c[1]) <= Math.abs(b[1] - d[1])) { face(a, b, c, [0, 1, 0]); face(a, c, d, [0, 1, 0]); }
+      else { face(a, b, d, [0, 1, 0]); face(b, c, d, [0, 1, 0]); }
+      if (def.bottom !== false) { face(q(0, 0), q(1, 0), q(1, 1), [0, -1, 0]); face(q(0, 0), q(1, 1), q(0, 1), [0, -1, 0]); }
+      for (const [di, dj, ei, ej, ni, nj, w] of [[0, 0, 1, 0, 0, -1, [0, 0, -1]], [1, 0, 1, 1, 1, 0, [1, 0, 0]], [1, 1, 0, 1, 0, 1, [0, 0, 1]], [0, 1, 0, 0, -1, 0, [-1, 0, 0]]]) {
+        if (land(i + ni, j + nj)) continue;   // (an edge between two cells of land is inside the solid)
+        const A = p(di, dj), B = p(ei, ej);
+        if (A[1] - base < 1e-6 && B[1] - base < 1e-6) continue;   // (land that comes down to its base there has no skirt)
+        face(A, B, q(ei, ej), w); face(A, q(ei, ej), q(di, dj), w);
+      }
+    }
+    return { name, geometry: m.arrays(), instances: def.at ? placements(def, P, params) : [[0, 0, 0, 0]], kind: def.kind ?? "prism", ...(def.walked ? { walked: true } : {}) };
   }
 
   if (def.type === "loft") {
@@ -2003,6 +2040,8 @@ function buildPart_(name, defs, params) {
     // b, b2 (the same up +v and -v), n (2 an ellipse, more a rounded box, less a diamond) }. Between them it runs on a
     // Catmull-Rom curve, `smooth` rings to a span. `sides` round. `half: true` skins only the +v half, standing on v's
     // line (a mound on the ground: the rest would be buried); `hill` makes that half a bell. The ends close in a fan, unless their section comes to nothing.
+    // (`shell: true`: a half open underneath over a room -- a roof's vaults -- is a skin, no solid: the checks then do not
+    //  call what is under it "inside")
     const ax = def.axis ?? "z", sides = Math.max(4, Math.round(P(def.sides, 16))), half = !!def.half, kS = Math.max(1, Math.round(P(def.smooth, 1)));
     const to3 = ax === "y" ? (s, u, v) => [u, s, v] : ax === "x" ? (s, u, v) => [s, v, u] : (s, u, v) => [u, v, s];
     const secs = def.sections.map((q) => { const a = P(q.a), b = P(q.b); return { s: P(q.s), u: P(q.u, 0), v: P(q.v, 0), a, a2: P(q.a2, a), b, b2: P(q.b2, b), n: P(q.n, 2) }; });
@@ -2040,7 +2079,7 @@ function buildPart_(name, defs, params) {
       const c = m.vert(...ctr[i]), want = to3(sgn, 0, 0);
       for (let k = 0; k < steps; k++) { const k2 = closed ? (k + 1) % steps : k + 1; face(ctr[i], P3[i][k], P3[i][k2], c, V[i][k], V[i][k2], want); }
     }
-    return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "prism", ...(def.walked ? { walked: true } : {}) };
+    return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "prism", ...(def.walked ? { walked: true } : {}), ...(def.shell ? { shell: true } : {}) };
   }
 
   if (def.type === "prism") {

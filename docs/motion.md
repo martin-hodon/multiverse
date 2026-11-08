@@ -213,3 +213,97 @@ picks what is shown and on whom (a bare man, a dressed man, a woman in kirtle an
 A person standing about is never still: `people.js IDLE_SWAY` (.022 rad) on a standing or carrying figure that is not a
 bench's still one, `skeleton.js` rocks its root slowly to the side (.55 rad/s) and less to and fro (.37), each figure on
 its own beat (`an.idx`), fading out as the stride comes in. Statues (any stone part) never sway.
+
+## In flight (2026-11-04)
+
+A beast that flies -- a mount with `"fly": true`, the dragons and the manticore -- used to keep the pose it stands
+in once it was in the air. Its neck stayed reared up, its legs stood on nothing, its tail hung down to a ground that
+was not there, and only the wings beat: it looked like an animal standing in the sky. Now `an.fly`, eased from 0
+on the ground to 1 aloft toward `an.flyT` (easeGait, at `FLIGHT.ease` per second), takes it into a flight pose that
+`skeleton.js` works out from each rest pose (`flightPose`), so every body plan gets one without writing it down:
+
+- **the neck** swings about its root, together with the head and everything that nods with it, until it reaches
+  forward `FLIGHT.neck` degrees above level. The head turns back by `head` of that swing so it looks ahead, not
+  at the sky. This is the grazing nod's own pivot: a mammal's head hangs off the body, not the neck, and both
+  turn about that pivot.
+- **the tail**: its root is aimed straight back (`tail`: 180 is level, less is rising) and each link is
+  straightened by `straight` of its droop, so the tail streams out behind.
+- **the legs** fold out of the way, toward `[upper, lower, foot]` angles in their parents. The forelegs are drawn
+  up under the chest (`front`: the elbow back, the forearm forward). The hind legs trail back along the tail
+  (`hind`). The feet are no longer held level to the ground: their orientation is slerped from levelled to hanging
+  with the leg. `splay: [front, hind]` (degrees, 2026-11-05) swings each upper leg out from the body, or in when
+  the value is negative. A lung spreads its legs out to the sides ([24, 20]), its forearms trailing back (`front` [-82, 18, 20]); a western dragon draws its thighs in under its
+  flanks ([-6, -12]).
+- **the wings** spread out (`arm`, `hand`: degrees out from the body's vertical plane). The arm beats `beat` times
+  as deep as a folded wing's flutter, and the hand `1 + (beat - 1) * handK` times, so the tip is not folded
+  straight up. A wing part is a HAND when any part above it is a wing part, so other parts may sit between them
+  (a dragon's forearm between its arm and hand). A wing part's `anim.side` (+-1) says which way it spreads when its rest pose cannot tell (an arm laid
+  flat back along the flank). Any part's `flyRot` [x, y, z] (degrees) is added aloft: a dragon's wing is folded
+  like a bat's at rest, the humerus laid back along the flank, the forearm doubled forward against it, the fingers
+  run back toward the hip, nearly closed, every wedge of skin turned onto its bone. `flyRot` opens it all out.
+  The body rises and sinks by `bob` (per metre of leg) against the downstroke.
+- **the upstroke fold** (2026-11-05): a part's `flyUp` [x, y, z] (degrees) is added on the upstroke only, on the
+  wing's own clock. None of it applies through the downstroke, all of it at mid-upstroke, eased in and out. A
+  dragon's bat hand uses it to flex at the wrist (12 degrees) and draw its fingers 45% of the way back onto the last
+  one, so it half-folds as the wing rises and spreads again to beat down. The feathered wing's hand sweeps back
+  38 degrees. The last finger does not move, so the skin between it and the arm never tears.
+- **a wave** (`wave: { deg, lag, speed, trunk, trunkLag, taper }`, off by default) runs back down the tail links,
+  each turned up and down `deg` degrees, the next `lag` radians behind: a wingless lung swimming through the air.
+  Since 2026-11-05 it starts in the trunk. A part with `waveAt` -k (k links ahead of the tail's root) rides it too,
+  by `trunk` degrees and `trunkLag` apart. dragons.js splits a serpent's trunk into three bone links, `vert1..3`,
+  and puts the chest, the forelegs, the neck and the head on the last one. With three links 2.09 radians apart,
+  their turns sum to nothing, so the head holds its line while the trunk undulates. Down the tail the wave loses
+  `taper` of its depth toward the tip (the last link turns `1 - taper` as far), so the tip does not whip into a
+  kink.
+
+The defaults (2026-11-05): `neck 22, head .9, tail 174, straight .55, front [-75, 140, 70], hind [-95, 25, -65],
+arm 74, hand 8, beat 1.9, handK .25`. This gives a shallow S-curved neck with the head level, a tail that droops a
+little and keeps some curve, forelegs tucked tight and hind legs pointed back. A species overrides any of them in its
+`flight` block. dragons.js writes one per body plan: the bat- and feather-winged plans have `beat 7` with
+`handK .6`, because their folded flutter is only 3 degrees, and `neck 26`. The wyvern trails its legs further back.
+The lung has `neck 30, tail 176, straight 0` and a wave of `deg 13, trunk 8, taper .55`, so its body keeps its
+curves. Its tail's first link rises 34 degrees at rest, and 176 is the aim that keeps the tail's chord level over a
+wave; the old 186 hung the tail down to the ground. Its legs trail back (`hind [-105, 25, -60]`). The feathered
+serpent flies rather than swims: `neck 18, tail 177` and a gentler wave (`deg 7, trunk 4`), so it stays near level.
+
+In the game a dragon's `flyT` is 1 while you fly it (`mounted.flying`) and 0 once it lands or you get off. A
+peer's mount does the same while it is above the ground. The asset viewer's **fly** box (or `?fly=1`) shows the pose.
+
+**A sky steed ridden** (2026-11-08): the pegasus and the griffin can be ridden too (`mount: { fly: true }`), and
+they say `"flight": false` -- no FLIGHT pose is made for them (skeleton.js compiles one for any flying mount unless the
+definition says so), because their wings fold by PERCH on the ground and must go on doing so. Ridden, they are posed
+as skysteeds.js poses them in the air on their own: `steedRide` (index.html) eases `an.perch` from 1 to 0 as you take
+off (the wings unfolding, the beat coming in) and holds the legs by `tuckLegs` -- the forelegs folded under the chest,
+the hind legs trailing -- and back as you land. A peer's steed the same from its ops. Mounting one sets its own flights
+down (`skysteed.ground`): it will take off on its own again a while after you get off.
+
+## Looking round (2026-11-08)
+
+`an.look` turns a figure's head toward something (a villager greeting you, index.html greetTick; an owl on its
+branch). It is shared: `LOOK.head` (.6) of it is the head's own turn about its centre; `LOOK.neck` (.4) is a turn of the
+neck about the VERTICAL through the neck's root, in the body's frame -- and the head rides that turn, the way the
+grazing nod carries it (a mammal's head hangs beside the neck on the body, so it is swung about that same root; a
+person's or a bird's head hangs on the neck and follows it anyway; a mane along the neck goes with it). Before, the
+neck's share was added to its own y rotation -- a pill spun about its length, which shows nothing -- so the head turned
+alone as if on a pin and the neck stood still.
+
+## Tail sway (2026-11-08)
+
+A tail's root link carries the sway (`anim` axis x, `deg`, `speed`: mammals.js tubeChain); the later links are
+chained to it and go with it. Swinging it about its own x was right for a tail that HANGS -- x is across such a tail,
+so it swings from side to side -- and wrong for one carried back or up (a cat's, a dog's, a dinosaur's): there x runs
+along the tail, so the tail rolled about its own length and its tip stayed where it was (the cat's long tail turned
+visibly in place). The sway's axis is now worked out in compileDef (`p.sway`) as the one across the tail's rest chord
+-- root to tip, over every link -- and the figure's sideways, in the parent's frame: a hanging tail keeps x, a tail
+held level behind swings about the vertical, and either way the whole tail sweeps left and right about where it
+starts. A tail laid out sideways (the chord along z) keeps the old axis. writeAnimal applies it as a turn about that
+axis at the root link's origin (`swayA`), as the nod and the flight pose are applied, instead of an Euler term.
+
+## A ridden mount does not bob (2026-11-08)
+
+The gait's body bob (`gaits.walk.bob`, twice a stride) is skipped for a figure with `an.ridden` (the mount you ride,
+or a peer's: index.html `rideOn`). Your eye does not bob with the saddle, so under a level view the whole beast
+jumped up and down -- aloft it was smooth, on the ground it hopped. The legs still step (their IK runs with a bob of
+0, so the feet stay planted). With it the eye and the mount both stand at `rideY`, eased toward the ground under them
+(index.html), so a bumpy track no longer jolts either; before, both stood at the ground's exact height step by step.
+

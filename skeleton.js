@@ -33,7 +33,115 @@ const nodPivot = (def, part) => {
   if (part !== neck && !((part.id === "head" || part.nod) && part.parent === neck.parent)) return null;   // (part.nod: a mane along the neck)
   return new THREE.Vector3(...(neck.pos ?? [0, 0, 0]));
 };
-const PUPILS = { round: 0, bar: 1, slit: 2 };   // a face mark's pupil (composite FACE MARKS)
+const PUPILS = { round: 0, bar: 1, slit: 2 };
+// IN FLIGHT (2026-11-04): a beast that flies (a mount's `fly`: the dragons, the manticore) held the pose it stands in
+// -- neck reared up, legs planted on nothing, tail hanging to the ground that was not there -- and only beat its wings.
+// an.fly (0 on the ground .. 1 aloft, eased toward an.flyT by easeGait) takes it into a pose of its own, worked out
+// here from its rest pose so every body plan gets one:
+//   neck   swung about its root (with the head and all that nods with it) until it reaches forward this many degrees
+//          above level, the head turned back by `head` of that so it looks ahead, not at the sky
+//   tail   its root aimed straight back, `tail` degrees (180 = level; less: rising), each link straightened by `straight`
+//   legs   folded out of the way, [upper, lower, foot] degrees in their parents: the forelegs drawn up under the chest
+//          (`front`), the hind legs trailing back along the tail (`hind`); the feet no longer kept level to the ground
+//   wings  spread out (`arm`, `hand`: degrees out from the body's vertical plane, the arm and the parts hung on it), each
+//          beat `beat` times as deep as a folded wing's flutter; the body rising and sinking `bob` m (per metre of
+//          its leg length) against the downstroke
+//   handK  the hand's beat: 1 + (beat - 1) * handK times its flutter (2026-11-05: .45 -> .25, the tip no longer
+//          swinging under the belly on the downstroke nor standing up over the back on the upstroke)
+//   wave   { deg, lag, speed, trunk, taper }: a wave travelling back down the tail, each link turned up and down by deg,
+//          the next `lag` radians behind (speed: waves a second) -- a wingless lung swimming through the air. 0: none.
+//          (2026-11-05) It starts in the trunk: a part with `waveAt` -k (k links ahead of the tail's root) rides it
+//          too, by `trunk` degrees (default deg), `trunkLag` apart (2.09 for three links: a third of a wave each, their
+//          turns summing to nothing, so the head holds its line); and the tail's links lose `taper` of it toward the tip (the last
+//          link 1 - taper), so the tip no longer whips into a kink
+// A species may write its own: `"flight": { "straight": .3, ... }` (any of these keys) in its definition -- a lung's
+// body keeps its waves -- and any part a `flyRot` [x, y, z] (degrees, added aloft: a wing folded at rest, spread in flight).
+// A wing part's `anim.side` (+-1) says which way it reaches when its rest pose cannot tell (a hand folded flat in the
+// arm's plane, an arm tilted in at rest). THE UPSTROKE FOLD (2026-11-05): a part's `flyUp` [x, y, z] (degrees) is added
+// aloft on the upstroke only, on the wing's own clock -- nothing through the downstroke, all of it at mid-upstroke
+// (smoothly) -- a bat's hand flexed at the wrist and its fingers drawn together, so the wing is not a board both ways.
+// (2026-11-05: neck 12 -> 22 with the head pitched back level, a shallow S rather than a ruler; the tail drooping a
+//  little and keeping more of its curve; the forelegs tucked tight under the chest, the hind legs pointed back; the
+//  wings at a 16-degree dihedral, beating shallower)
+// PERCHED (2026-11-06): a bird whose model is drawn ALOFT -- its wings' rest the glide, no flight pose of its own (the eagle-owl,
+// the macaw, the golden eagle: assets/creatures/birds) -- sitting on a branch or a ridge. an.perch (0 aloft .. 1 sat; the
+// game sets it, index.html PERCHERS) folds each wing along its flank -- `fold`: [x, y, z] degrees added to the arm (row 0), the
+// wrist (1) and the hand (2) of each wing chain, x and y mirrored for the right wing -- and stills its beat, droops the
+// tail `tail` degrees, and keeps the head level however far the caller tips the body up (an.pitch): the head turned
+// about the plumb line by an.look, not about the tipped body's axis -- an owl looking round on its branch. A rigid wing
+// cannot lie on a flank half its depth (a real one folds its forearm and slides its feathers under each other), so the
+// arm's frame is also `squeeze`d -- [chord, thickness, span] -- and the hand with it: the feathers stacked, the span shortened
+// (the figures' own: an.perchFold { fold, squeeze } in place of these -- PERCHERS gives each species its fit)
+// (2026-11-06: the wing hung down the flank about its own chord -- the feathers still pointing back -- the span squeezed
+//  to a third, the hand turned back so the primaries reach over the tail: searched against each model's body)
+// PERCH LEGS (2026-11-06): a part with `tuck` (degrees about z) or `curl` ({ len, r0, dir }) is a leg's bone, its rest the
+// leg STANDING on the perch (tools: scratchpad perchlegs.py) -- aloft (1 - an.perch) it is turned by its tuck, the leg swung
+// back under the tail, and a toe (`curl`) opened `open` of its drawn half-arc, lying back along the underside rather
+// than hooked down below it (an.legs in place of an.perch where the caller
+// lets them down sooner: the flare); sat, a toe drawn curled round a bough of
+// radius r0 turns about its root by the difference of its half-arc (len / 2r, at most `curlMax`) on a perch of an.perchR
+export const PERCH = { fold: [[80, -15, 10], [0, 0, 0], [15, -50, 0]], squeeze: [.7, 1, .35], tail: 15, open: .9, curlMax: 1.1 };
+// LOOKING ROUND (2026-11-08): an.look turns the head toward something. The head's share (`head`) is its own turn about its
+// centre; the neck's share (`neck`) is a turn about the VERTICAL through the neck's root, in the body's frame -- and the
+// head rides it (a mammal's head hangs beside the neck on the body: it is swung about that same root, as the grazing nod
+// swings it). Before, the neck's share was a turn about the neck's own axis -- a pill spun about its length, which shows
+// nothing -- so the head turned alone, as if on a pin, and the neck never followed
+export const LOOK = { head: .6, neck: .4 };
+export const FLIGHT = { neck: 22, head: .9, tail: 174, straight: .55, front: [-75, 140, 70], hind: [-95, 25, -65],
+                        arm: 74, hand: 8, beat: 1.9, handK: .25, wave: 0, bob: .06, ease: 1.2 };
+function flightPose(def, parts, index) {
+  const F = def.flight && typeof def.flight === "object" ? { ...FLIGHT, ...def.flight } : FLIGHT;   // (a species' own numbers: `flight` in its definition)
+  const deg = Math.PI / 180, wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
+  const dirOf = (p) => new THREE.Vector3(0, 1, 0).applyEuler(new THREE.Euler(...p.baseRot));
+  const neckI = index.get("neck");
+  let neck = 0;
+  if (neckI !== undefined) { const d = dirOf(parts[neckI]); if (d.x > .05) neck = wrap(F.neck * deg - Math.atan2(d.y, d.x)); }
+  const legs = parts.filter((p) => p.ik && !p.ik.follow);
+  const isFront = (p) => legs.length >= 4 && p.ik.leg < 2;
+  let speed = 0;
+  parts.forEach((p, i) => {
+    const id = def.parts[i].id, f = {};
+    if (p.nod && neck) f.neck = neck;
+    if (id === "head" && neck) f.rz = -neck * F.head;
+    if (id === "tail" && p.parentIdx >= 0) {
+      const d = dirOf(p);
+      if (d.x < 0) f.pre = { c: new THREE.Vector3(...p.pos), a: wrap(F.tail * deg - Math.atan2(d.y, d.x)) };
+    }
+    if (/^tail\d+$/.test(id)) f.rz = -p.baseRot[2] * F.straight;
+    const wk = /^tail\d*$/.test(id) ? (+id.slice(4) || 0) : def.parts[i].waveAt;
+    if (F.wave && wk !== undefined) {
+      const W = F.wave, nT = def.parts.filter((q) => /^tail\d*$/.test(q.id)).length, tp = wk > 0 && nT > 1 ? 1 - (W.taper ?? 0) * wk / (nT - 1) : 1;
+      f.wave = { a: (wk < 0 ? W.trunk ?? W.deg ?? 15 : (W.deg ?? 15) * tp) * deg, ph: -wk * (wk < 0 ? W.trunkLag ?? W.lag ?? .9 : W.lag ?? .9), w: (W.speed ?? .3) * Math.PI * 2 };
+    }
+    if (p.ik) {
+      const up = p.ik.follow ? parts[p.parentIdx] : p, T = isFront(up) ? F.front : F.hind;
+      f.to = (p.ik.follow ? T[1] : T[0]) * deg;
+      // (splay [front, hind]: degrees each upper leg swings out from the body -- a lung's legs spread wide; or, less
+      //  than 0, in -- a dragon's thighs drawn in flush under its flanks as the legs tuck)
+      if (!p.ik.follow && F.splay) f.rx = -(Math.sign(p.pos[2]) || 1) * (isFront(p) ? F.splay[0] : F.splay[1]) * deg;
+    }
+    if (p.level && p.parentIdx >= 0 && parts[p.parentIdx].ik?.follow) {
+      const T = isFront(parts[parts[p.parentIdx].parentIdx]) ? F.front : F.hind;
+      f.to = T[2] * deg; f.free = true;
+    }
+    if (p.anim?.wing) {
+      let hand = false;   // (a wing part with a wing part anywhere above it -- a dragon's hand beyond its forearm)
+      for (let q = p.parentIdx; q >= 0 && !hand; q = parts[q].parentIdx) hand = !!parts[q].anim?.wing;
+      const sg = p.anim.side ?? (Math.sign(p.baseRot[0]) || p.side);
+      f.rx = sg * (hand ? F.hand : F.arm) * deg - p.baseRot[0];
+      f.beat = hand ? 1 + (F.beat - 1) * F.handK : F.beat;   // (the hand follows the arm: a deeper beat of its own folds the tip straight up)
+      if (!hand) speed = p.anim.speed;
+    }
+    // (and any part's own turn aloft, `flyRot` [x, y, z] degrees added as it takes off: a wing folded along the flank at
+    //  rest swept out to its spread, a dragon's fingers fanned)
+    const fr = def.parts[i].flyRot;
+    if (fr) { f.rx = (f.rx ?? 0) + fr[0] * deg; f.ry = (f.ry ?? 0) + fr[1] * deg; f.rz = (f.rz ?? 0) + fr[2] * deg; }
+    const fu = def.parts[i].flyUp;
+    if (fu) f.up = fu.map((v) => v * deg);
+    p.fl = Object.keys(f).length ? f : null;
+  });
+  return { speed, bob: F.bob * Math.max(.3, parts.legLen || 1) };
+}   // a face mark's pupil (composite FACE MARKS)
 export function compileDef(def) {
   if (compiledCache.has(def)) return compiledCache.get(def);
   const index = new Map(), drapes = new Set(def.motion?.skirts ?? []);
@@ -70,7 +178,9 @@ export function compileDef(def) {
       // flies with its legs hanging still. Swimmers and fliers keep
       // everything on the gait clock: their tails and wings ARE the locomotion
       idle: !def.fly && /^(head|neck|tail|ear|mane|trunk|snout|hair)/.test(part.id.replace(/^(r_|L_|R_)/, "")),
-      look: part.id === "head" ? .6 : part.id === "neck" ? .4 : 0,   // its share of an.look (the head turned to look at something)
+      tailRoot: /^tail/.test(part.id) && part.parent != null && def.parts[index.get(part.parent)]?.parent == null,   // (a tail hung on the root: UPRIGHT)
+      headish: /^(head|neck)/.test(part.id.replace(/^(r_|L_|R_)/, "")),   // (head and every neck link: aloft they hold their line)
+      look: part.id === "head" ? LOOK.head : 0,   // the head's own share of an.look (the neck's is taken about the neck's root: LOOK)
       // an.nod: the head lowered (- down) on its neck -- a grazer cropping the grass. The neck turns about its root, and
       // a head hung beside it on the body (a mammal's) swings about that same root with it: the pivot, in the parent's frame
       nod: nodPivot(def, part),
@@ -83,6 +193,8 @@ export function compileDef(def) {
       // composite paints onto its parent's surface (eyes, a mouth): { iris, pupil: round|bar|slit, round }
       fur: !!part.fur,          // composite: a strand texture laid over its colour or pattern (mammals' coats)
       fleece: !!part.fleece,    // composite: its surface heaped in lumps (a sheep's wool: shell.js FLEECE)
+      facet: !!part.facet,      // composite: lit by its triangles' own planes -- a creature's stylised low-poly look (shell.js FACET)
+      detail: !!part.detail,    // shell: a small piece of modelling (a brow, a cheekbone) left out in the distance (SHELL.detail)
       stone: part.stone ?? 0,   // composite: carved -- a statue's material (1 marble, 2 bronze, 3 gold, 4 limestone): shell.js stoneAt
       flat: part.flat ?? 0,     // composite: a capsule squashed along the figure's forward to this share of its width (a flat torso)
       palm: !!part.palm,        // ...squashed across its own axis and the figure's forward instead (a hand: palm in as it hangs, shell.js)
@@ -154,8 +266,21 @@ export function compileDef(def) {
   parts.gaits = def.gaits ?? null;
   parts.crouch = def.crouch ?? null;   // (a gesture done down low: its share of the legs' length -- people.js CROUCH)
   parts.walkNod = (def.walkNod ?? 0) * Math.PI / 180;   // (the head's nod with each step: mammals.js walkNod, degrees)
+  parts.upright = def.upright ? { a: (def.upright.deg ?? 70) * Math.PI / 180, fold: def.upright.fold ?? .45 } : null;   // (standing up on its hind legs: UPRIGHT)
   parts.idleSway = parts.some((p) => p.stone) ? 0 : def.idleSway ?? 0;   // (a figure standing about: its weight shifting -- people.js IDLE_SWAY; never a statue)
   parts.legLen = Math.max(0, ...parts.filter((p) => p.ik?.foot != null).map((p) => p.pos[1] - p.ik.foot));
+  // A FOUR-LEGGED FIGURE'S HIPS, for standing it on the ground it is on (fitGround): each leg's hip in the root's frame
+  // (its parents' offsets summed -- a rig's legs hang unturned off the body), and how much further than at rest the leg
+  // reaches (its slack: a foot can go that much lower before the body has to come down to it)
+  const legs = parts.flatMap((p, i) => p.ik && !p.ik.follow && p.ik.foot != null ? [i] : []);
+  if (legs.length === 4 && !def.biped && !def.fly && !def.swim) {
+    parts.hips = legs.map((i) => {
+      const p = parts[i], at = [...p.pos];
+      for (let q = p.parentIdx; q >= 0; q = parts[q].parentIdx) for (let k = 0; k < 3; k++) at[k] += parts[q].pos[k];
+      return { i, leg: p.ik.leg, x: at[0], y: at[1], z: at[2], slack: Math.max(0, p.ik.upper + p.ik.lower - .005 - Math.abs(p.pos[1] - p.ik.foot)) };
+    });
+  }
+  if (parts.upright) { const H = parts.hips?.filter((q) => q.leg >= 2) ?? []; parts.upright.x = H.length ? (H[0].x + H[1].x) / 2 : 0; parts.upright.y = H.length ? (H[0].y + H[1].y) / 2 : 0; }
   parts.trails = parts.some((p) => p.trail);   // (a cloak that trails: writeAnimal keeps its spring -- TRAIL)
   parts.follows = parts.some((p, i) => p.follow >= 0 && p.follow < i);   // (a panel lifted by its arm, posed after it -- LIFT)
   for (const [i, p] of parts.entries()) if (p.follow >= i) p.follow = -1;
@@ -163,6 +288,38 @@ export function compileDef(def) {
   // their frame from it); `forwardFrom` names the part whose frame turns it instead -- a person's chest, so a trunk
   // turned at the waist faces where it turns (that frame is the root's own at rest)
   parts.forwardFrom = def.forwardFrom ? index.get(def.forwardFrom) ?? -1 : -1;
+  parts.flight = def.flight !== false && (def.mount?.fly || def.flight) ? flightPose(def, parts, index) : null;   // (`flight: false`: a flying mount with no FLIGHT pose -- a sky steed, folding its wings by PERCH and tucking its legs by skysteeds.js tuckLegs)
+  // (PERCHED: each wing part's place in its chain -- 0 the arm on the body, 1, 2 out along it -- and its side, the arm's)
+  if (!parts.flight) for (const [i, p] of parts.entries()) {
+    const id = def.parts[i].id, dp = def.parts[i];
+    if (dp.tuck !== undefined || dp.curl) p.leg = { tuck: (dp.tuck ?? 0) * Math.PI / 180, curl: dp.curl ?? null };   // (PERCH LEGS)
+    else if (p.anim?.wing) {
+      let k = 0, q = p;
+      while (q.parentIdx >= 0 && parts[q.parentIdx].anim?.wing) { q = parts[q.parentIdx]; k++; }
+      p.perch = { k, side: Math.sign(q.pos[2]) || p.side };
+      parts.perchable = true;
+    } else if (id === "head") p.perch = { head: true };
+    else if (id === "tail" && p.parentIdx >= 0 && parts[p.parentIdx].parentIdx < 0) p.perch = { tail: true };
+  }
+  // TAIL SWAY (2026-11-08): a tail's root link swung about its own x -- right for a tail that HANGS (it swings from side to
+  // side), wrong for one carried back or up (a cat's, a dog's, a dinosaur's): there x runs along the tail, so the tail
+  // rolled about its own length and its tip stayed put. The sway's axis is now the one across the tail's rest chord (root
+  // to tip) and the figure's sideways, in the parent's frame: a hanging tail swings about x as before, a tail held back
+  // swings about the vertical -- the whole of it sweeping left and right about where it starts
+  for (const [i, p] of parts.entries()) if (p.tailRoot && p.anim?.axis === "x") {
+    const M = new Map(), at = (q) => new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...q.baseRot)).setPosition(q.pos[0], q.pos[1], q.pos[2]).scale(new THREE.Vector3(...(q.scale ?? [1, 1, 1])));
+    const o = new THREE.Vector3(p.pos[0], p.pos[1], p.pos[2]), tip = o.clone();
+    let best = 0;
+    for (let j = i; j < parts.length; j++) {
+      const q = parts[j], pm = j === i ? null : M.get(q.parentIdx);
+      if (j !== i && !pm) continue;
+      const m = pm ? at(q).premultiply(pm) : at(q);
+      M.set(j, m);
+      for (const v of [new THREE.Vector3(), q.pB.clone()]) { v.applyMatrix4(m); const d = v.distanceTo(o); if (d > best) { best = d; tip.copy(v); } }
+    }
+    const d = tip.sub(o), ax = new THREE.Vector3(0, 0, 1).cross(d);
+    if (ax.length() > d.length() * .2) p.sway = ax.normalize();   // (a tail laid out sideways keeps its old axis)
+  }
   compiledCache.set(def, parts);
   return parts;
 }
@@ -173,9 +330,11 @@ export function compileDef(def) {
 //   ik: { upper, lower, side (+1 knee bends forward, -1 backward), foot (foot joint y below the body origin) }
 //   g: { stride, lift }  ph: this leg's phase  amp: stride amplitude 0..1  bob: the body's current bob
 //   hipY: the hip's y in body space
-export function legPose(ik, g, ph, amp, bob, hipY) {
+export function legPose(ik, g, ph, amp, bob, hipY, tip = 0, draw = 0) {
   const stride = g.stride * amp, lift = Math.max(0, Math.cos(ph)) * g.lift * amp;
   let dx = stride * Math.sin(ph), dy = ik.foot - hipY + lift - bob;
+  if (draw) { const L0 = ik.upper + ik.lower; dx = dx * (1 - draw) + L0 * .18 * draw; dy = dy * (1 - draw) - L0 * .5 * draw; }   // (UPRIGHT: a foreleg drawn up off the ground, its paw hanging below the chest)
+  if (tip) { const c = Math.cos(tip), s = Math.sin(tip); [dx, dy] = [dx * c + dy * s, -dx * s + dy * c]; }   // (UPRIGHT: the body tipped up about the hips -- the foot's place turned back into its frame)
   let d = Math.hypot(dx, dy);
   const upper = ik.upper, lower = ik.lower, reach = upper + lower - .005, fold = Math.abs(upper - lower) + .02;
   if (d > reach) { dx *= reach / d; dy *= reach / d; d = reach; }
@@ -189,8 +348,44 @@ export function legPose(ik, g, ph, amp, bob, hipY) {
   return [t1, t2];
 }
 
+// STANDING ON A SLOPE (display only, like the rest of the pose): a four-legged figure was posed level whatever it stood
+// on, its origin on the ground under its middle -- on a hillside the uphill feet went into the ground and the downhill
+// ones hung in the air. `ground(x, z)` is the terrain's height; fitGround reads it under the four hips and sets an._fit:
+//   pitch -- the body tipped (+ nose up) to the line from the hind feet's ground to the front feet's, at most `max`
+//   dy[leg] -- each foot raised (+) or lowered off the plane that pitch lays through the origin, to the ground under it
+//   (a side slope, a bump), the body coming down `drop` where a foot has to reach further than its leg's slack
+// Only for a figure standing on that ground (within `near` of it at its origin: not one on a sill, a floor, a cart);
+// recomputed when it has moved or turned, eased toward so it never snaps.
+export const FIT = { max: .45, near: .3, ease: 8, moved: .02 };
+export function fitGround(an, ground, dt) {
+  const hips = an.parts.hips;
+  if (!hips || an.down || an.hidden) { an._fit = null; return; }
+  const p = an.position, c = Math.cos(an.rotY), s = Math.sin(an.rotY);
+  let w = an._fitW;
+  if (!w || Math.abs(w.x - p.x) + Math.abs(w.z - p.z) > FIT.moved || Math.abs(w.rotY - an.rotY) > .02 || Math.abs(w.y - p.y) > FIT.moved) {
+    const g0 = ground(p.x, p.z);
+    w = an._fitW = { x: p.x, y: p.y, z: p.z, rotY: an.rotY, on: Math.abs(g0 - p.y) < FIT.near, pitch: 0, dy: [0, 0, 0, 0], drop: 0 };
+    if (w.on) {
+      // the ground under each hip (the root's frame turned by rotY: x' = x cos + z sin, z' = -x sin + z cos), off the origin's
+      const h = hips.map((q) => ground(p.x + q.x * c + q.z * s, p.z - q.x * s + q.z * c) - g0);
+      const F = hips.filter((q) => q.leg < 2), H = hips.filter((q) => q.leg >= 2), mean = (L, f) => L.reduce((a, q) => a + f(q), 0) / L.length;
+      const xF = mean(F, (q) => q.x), xH = mean(H, (q) => q.x), hF = mean(F, (q) => h[hips.indexOf(q)]), hH = mean(H, (q) => h[hips.indexOf(q)]);
+      const pitch = Math.max(-FIT.max, Math.min(FIT.max, Math.atan2(hF - hH, xF - xH))), tn = Math.tan(pitch), cs = Math.cos(pitch);
+      // (the plane through the origin at that pitch, and each foot's ground off it, measured along the tipped body's up --
+      //  heights off the ground at the origin, not off the origin: one set a little into the ground stays so)
+      const r = hips.map((q, k) => (h[k] - q.x * tn) * cs);
+      const drop = Math.max(0, ...hips.map((q, k) => -r[k] - q.slack));
+      w.pitch = pitch; w.drop = drop;
+      hips.forEach((q, k) => { w.dy[q.leg] = r[k] + drop; });
+    }
+  }
+  const f = an._fit ??= { pitch: 0, dy: [0, 0, 0, 0], drop: 0 }, e = dt > 0 ? 1 - Math.exp(-FIT.ease * dt) : 1;
+  f.pitch += (w.pitch - f.pitch) * e; f.drop += (w.drop - f.drop) * e;
+  for (let k = 0; k < 4; k++) f.dy[k] += (w.dy[k] - f.dy[k]) * e;
+}
+
 // the gait parameter set for a run factor 0..1: walk, run, or a blend
-const _g = { offsets: [0, 0, 0, 0], stride: 0, lift: 0, bob: 0, bobPh: undefined };
+const _g = { offsets: [0, 0, 0, 0], stride: 0, lift: 0, bob: 0, bobPh: undefined, roll: 0, rollPh: undefined, pitch: 0, pitchPh: undefined };
 export function gaitFor(gaits, run) {
   if (!gaits) return null;
   const w = gaits.walk, r = gaits.run ?? w;
@@ -201,6 +396,8 @@ export function gaitFor(gaits, run) {
   _g.lift = w.lift + (r.lift - w.lift) * run;
   _g.bob = w.bob + (r.bob - w.bob) * run;
   _g.bobPh = w.bobPh;
+  _g.roll = (w.roll ?? 0) + ((r.roll ?? 0) - (w.roll ?? 0)) * run; _g.rollPh = w.rollPh;
+  _g.pitch = (w.pitch ?? 0) + ((r.pitch ?? 0) - (w.pitch ?? 0)) * run; _g.pitchPh = r.pitchPh ?? w.pitchPh;
   return _g;
 }
 
@@ -252,6 +449,8 @@ export function writeAnimal(an, t, fA, fB, fC) {
   const tt = an.animT !== undefined ? an.animT : t;   // per-animal gait clock (stops when standing)
   const tw = an.wingT !== undefined ? an.wingT : tt;   // wing clock (a flying mount beats wings, not legs)
   const parts = an.parts, g = gaitFor(parts.gaits, an.run ?? 0), amp = an.amp ?? 1;
+  const fly = parts.flight && !an.down ? an.fly ?? 0 : 0;   // (aloft: FLIGHT)
+  const perch = parts.perchable && !an.down ? an.perch ?? 0 : 0;   // (sat on a branch: PERCH)
   // the gait clock counts distance (animT = metres / the walk's stride base);
   // a run covers more ground per stride, so its cycles stretch by the stride
   // ratio -- feet stay planted instead of pedalling at a walker's speed
@@ -272,9 +471,11 @@ export function writeAnimal(an, t, fA, fB, fC) {
   // A WALKER'S HEAD NODS with each step (parts.walkNod: a horse's, a cow's -- twice a stride, down as a forefoot lands),
   // fading with the stride as the walker stops and halving at a run
   const stepNod = parts.walkNod && g ? parts.walkNod * amp * (1 - .5 * (an.run ?? 0)) * Math.sin(phase * 2 + (g.offsets?.[0] ?? 0) * 2 + .6) : 0;
-  nodNow += stepNod;
-  const bob = g ? g.bob * amp * Math.sin(phase * 2 + (g.bobPh ?? .5)) : 0;
+  nodNow += stepNod * (1 - fly);   // (2026-11-08: aloft no step nods the head -- a pegasus, a griffin; it fades out with an.fly)
+  const bob = g && !an.ridden ? g.bob * amp * Math.sin(phase * 2 + (g.bobPh ?? .5)) : 0;   // (2026-11-08: a RIDDEN mount does not bob -- its rider's eye does not, so the whole beast jumped up and down under a level view; the legs still step)
   _root.makeRotationY(an.rotY);
+  const fit = an._fit;   // (stood on a slope: fitGround)
+  if (fit) _root.multiply(_pitch.makeRotationZ(fit.pitch));
   if (an.pitch || dip) _root.multiply(_pitch.makeRotationZ((an.pitch ?? 0) - dip * .5));   // an.pitch: the body tipped about its own left axis (+ nose up) -- a squirrel on a trunk
   if (an.roll) _root.multiply(_roll.makeRotationX(an.roll));
   // STANDING ABOUT: the weight shifting -- a slow rock to the side and a slower one to and fro, each figure on its own
@@ -283,7 +484,19 @@ export function writeAnimal(an, t, fA, fB, fC) {
     const k = parts.idleSway * Math.max(0, 1 - amp * 1.5), ph = (an.idx ?? 0) * 2.17;
     if (k > 1e-4) _root.multiply(_roll.makeRotationX(k * Math.sin(t * .55 + ph))).multiply(_pitch.makeRotationZ(k * .45 * Math.sin(t * .37 + ph * 1.3)));
   }   // an.roll: turned about its own forward axis (+ toward its +z) -- a figure struck down lying on its side (combat.js)
-  _root.setPosition(an.position.x, an.position.y - rest, an.position.z);   // (an.rest: lying down, the body this much lower)
+  // A GAIT'S ROCK (gaits: roll, pitch -- radians, once a stride, rollPh / pitchPh its phase): a badger's rolling waddle side
+  // to side; a bounding weasel tipping nose up as its forefeet leave the ground and down as they land. Fades with the stride
+  if (g && !an.down && !fly) {
+    if (g.roll) _root.multiply(_roll.makeRotationX(g.roll * amp * Math.sin(phase + (g.rollPh ?? 0))));
+    if (g.pitch) _root.multiply(_pitch.makeRotationZ(g.pitch * amp * Math.sin(phase + (g.pitchPh ?? 0))));
+  }
+  // UPRIGHT (a species' `upright`: { deg, fold }; an.upright 0..1, eased toward an.uprightT): a weasel's look-out, standing
+  // up on its hind legs -- the body tipped nose up about its hind hips by deg, the hind feet kept on the ground under them,
+  // the forelegs drawn up to the chest by `fold`, the tail laid back along the ground. The root's frame is untouched (the
+  // feet stay level): the tip is the body part's own
+  const U = parts.upright, up = U && an.upright > 1e-3 && !an.down && !fly ? U.a * an.upright : 0;
+  _root.setPosition(an.position.x, an.position.y - rest - (fit ? fit.drop : 0), an.position.z);   // (an.rest: lying down, the body this much lower)
+  if (fly) _root.elements[13] -= fly * parts.flight.bob * Math.sin(tw * parts.flight.speed * Math.PI * 2 + .6);   // (rising on the downstroke: FLIGHT)
   let thighs = 0, nThighs = 0;   // (the legs' swing forward, summed: a skirt over them follows -- DRAPE)
   const swing = parts.follows ? (_swing.length < parts.length ? (_swing = new Float32Array(parts.length * 2)) : _swing) : null;   // (each part's forward swing: a panel follows its arm's -- LIFT)
   let trailK = 0, twist = 0;
@@ -299,7 +512,7 @@ export function writeAnimal(an, t, fA, fB, fC) {
   if (an.hidden) _root.setPosition(an.position.x, -100, an.position.z);   // parked out of sight, position untouched
   for (let i = 0; i < parts.length; i++) {
     const p = parts[i];
-    let [rx, ry, rz] = p.baseRot;
+    let [rx, ry, rz] = p.baseRot, swayA = 0;   // (swayA: a tail root's sway, taken about its own axis below -- TAIL SWAY)
     if (an.down) {   // struck down: a part's fold, or a wing folded back and laid flat against the flank (Euler XYZ: the sweep back
       // about y, then turned down about x -- the span along the side, the wing's flat facing out; on its side, it lies over the body)
       if (p.fold) { rx += p.fold[0]; ry += p.fold[1]; rz += p.fold[2]; }
@@ -307,15 +520,30 @@ export function writeAnimal(an, t, fA, fB, fC) {
     }
     // an.look: the head turned to look at something (radians about the vertical, + to its left), shared between the
     // neck (two fifths) and the head (the rest) -- a villager looking at you as it greets you (index.html greetTick)
-    if (an.look && p.look) ry += an.look * p.look;
+    const pk = perch && p.perch;
+    if (pk) {   // (PERCH: the wing folded along the flank, the tail drooped; the head is turned below, once its matrix is made)
+      if (pk.k !== undefined) { const FF = (an.perchFold ?? PERCH).fold, F = FF[Math.min(pk.k, FF.length - 1)], d2r = Math.PI / 180 * perch; rx += pk.side * F[0] * d2r; ry += pk.side * F[1] * d2r; rz += F[2] * d2r; }
+      else if (pk.tail) rz += PERCH.tail * Math.PI / 180 * perch;
+    }
+    if (p.leg) {   // (PERCH LEGS: drawn standing on the perch; aloft swung back under the tail and the toes laid back; sat, each toe
+      //  turned to lie round a perch of radius an.perchR from the r0 it is drawn round)
+      const L = p.leg, u = 1 - (parts.perchable && !an.down ? an.legs ?? perch : 0);   // (an.legs: let down ahead of the wings' fold -- the flare)
+      rz += L.tuck * u;
+      if (L.curl) { const C = L.curl, A = (r) => Math.min(PERCH.curlMax, C.len / (2 * r)); rz -= C.dir * ((A(an.perchR ?? C.r0) - A(C.r0)) * (1 - u) - PERCH.open * A(C.r0) * u); }
+    }
+    if (an.look && p.look && !(pk && pk.head)) ry += an.look * p.look;
     if (p.anim) {
       const a = p.anim;
       // a.amp: the swing belongs to the gait (a person's arms, a skirt) and fades with the stride when standing
       // (the idle parts each animal on its own beat -- a herd does not look about in step -- and a.flick: that power of
       //  the sine's crest only, a quick twitch now and then -- an ear)
       const ph = (a.wing ? tw : p.idle ? tm : a.amp ? tg : tt) * a.speed * Math.PI * 2 + (a.phase || 0) + (p.idle ? (an.idx ?? 0) * 2.39 : 0);
-      const d = an.down && a.wing ? 0 : (a.deg * Math.PI / 180) * (a.flick ? Math.pow(Math.max(0, Math.sin(ph)), a.flick) : Math.sin(ph)) * (a.amp ? amp : 1);
-      if (a.axis === "x") rx += d; else if (a.axis === "y") ry += d; else rz += d;
+      const d = an.down && a.wing ? 0 : (a.deg * Math.PI / 180) * (a.flick ? Math.pow(Math.max(0, Math.sin(ph)), a.flick) : Math.sin(ph)) * (a.amp ? amp : 1) * (a.wing && perch ? 1 - perch : 1)
+        * (fly && p.fl?.beat ? 1 + fly * (p.fl.beat - 1) : 1);
+      // (2026-11-08) ALOFT THE HEAD HOLDS ITS LINE: the head's and neck's up-and-down swing (about z) fades out with an.fly --
+      //  a pegasus or a griffin no longer nods as it flies; it still looks left and right (about y)
+      const dz = fly && !a.wing && p.headish ? d * (1 - fly) : d;
+      if (p.sway) swayA = d; else if (a.axis === "x") rx += d; else if (a.axis === "y") ry += d; else rz += dz;
       // a.sway: side to side (about x) once a stride, with the legs -- a skirt swinging as the hips carry it from one
       // foot to the other (degrees; fades with the stride as the swing does)
       if (a.sway) rx += a.sway * Math.PI / 180 * Math.sin(phase + 1.2) * amp;
@@ -331,8 +559,20 @@ export function writeAnimal(an, t, fA, fB, fC) {
     if (p.ik && g) {
       if (p.ik.follow) rz += _lower[p.parentIdx] ?? 0;
       else {
-        const [t1, t2] = legPose(p.ik, g, phase + g.offsets[p.ik.leg] + (p.ik.phase || 0), amp, bob, p.pos[1] - rest);   // (resting: the feet aimed as much higher as the body lies lower -- the legs fold under it)
+        const [t1, t2] = legPose(p.ik, g, phase + g.offsets[p.ik.leg] + (p.ik.phase || 0), amp, bob, p.pos[1] - rest - (fit ? fit.dy[p.ik.leg] : 0), up, up && p.ik.leg < 2 ? U.fold * an.upright : 0);   // (resting: the feet aimed as much higher as the body lies lower -- the legs fold under it)
         rz += t1; _lower[i] = t2; thighs += t1; nThighs++;
+      }
+    }
+    if (fly && p.fl) {   // aloft (FLIGHT): the pose's own turns, the legs drawn toward their folded angles
+      const f = p.fl;
+      if (f.rz) rz += f.rz * fly;
+      if (f.rx) rx += f.rx * fly;
+      if (f.ry) ry += f.ry * fly;
+      if (f.to !== undefined) rz += (f.to - rz) * fly;
+      if (f.wave) rz += f.wave.a * Math.sin(t * f.wave.w + f.wave.ph) * fly;   // (the travelling wave: FLIGHT.wave)
+      if (f.up) {   // (the upstroke fold: flyUp, on the wing's clock -- 0 through the downstroke, all of it at mid-upstroke)
+        const c = Math.max(0, -Math.cos(tw * parts.flight.speed * Math.PI * 2 - .25)), u = c * c * (3 - 2 * c) * fly;
+        rx += f.up[0] * u; ry += f.up[1] * u; rz += f.up[2] * u;
       }
     }
     if (p.drape && nThighs) rz += Math.min(DRAPE.max * Math.PI / 180, DRAPE.k * Math.max(0, thighs / nThighs));
@@ -359,7 +599,7 @@ export function writeAnimal(an, t, fA, fB, fC) {
       if (held.c) { _v.copy(held.c).applyQuaternion(held.q); _local.setPosition(p.pos[0] + held.c.x - _v.x, p.pos[1] + dy + held.c.y - _v.y, p.pos[2] + held.c.z - _v.z); }
       else _local.setPosition(p.pos[0], p.pos[1] + dy, p.pos[2]);
       if (p.scale) _local.scale(_v.set(p.scale[0], p.scale[1], p.scale[2]));
-    } else if (!p.anim && !(p.ik && g) && !(an.down && p.fold) && !(p.drape && nThighs) && !p.trail && p.follow < 0) {   // a part that never moves in its parent: its local transform built once, cached (only the bob added)
+    } else if (!p.anim && !(p.ik && g) && !(an.down && p.fold) && !(p.drape && nThighs) && !p.trail && p.follow < 0 && !(fly && p.fl) && !pk && !p.leg) {   // a part that never moves in its parent: its local transform built once, cached (only the bob added)
       _local.copy(p._lm ?? (p._lm = new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(rx, ry, rz)).setPosition(p.pos[0], p.pos[1], p.pos[2])
         .scale(new THREE.Vector3(...(p.scale ?? [1, 1, 1])))));
       _local.elements[13] += dy;
@@ -368,15 +608,46 @@ export function writeAnimal(an, t, fA, fB, fC) {
       _local.setPosition(p.pos[0], p.pos[1] + dy, p.pos[2]);
       if (p.scale) _local.scale(_v.set(p.scale[0], p.scale[1], p.scale[2]));
     }
-    if (nodNow && p.nod && !held) {   // lowered with the neck: about the neck's root, in the parent's frame
-      _nod.makeTranslation(p.nod.x, p.nod.y, p.nod.z).multiply(_nodT.makeRotationZ(nodNow)).multiply(_nodT.makeTranslation(-p.nod.x, -p.nod.y, -p.nod.z));
+    if (swayA) {   // (TAIL SWAY: the whole tail swung about the axis across it, at its root)
+      _nod.makeTranslation(p.pos[0], p.pos[1] + dy, p.pos[2]).multiply(_nodT.makeRotationAxis(p.sway, swayA)).multiply(_nodT.makeTranslation(-p.pos[0], -p.pos[1] - dy, -p.pos[2]));
+      _local.premultiply(_nod);
+    }
+    if (pk && pk.k === 0) { const Q = (an.perchFold ?? PERCH).squeeze; _local.scale(_v.set(1 + (Q[0] - 1) * perch, 1 + (Q[1] - 1) * perch, 1 + (Q[2] - 1) * perch)); }   // (PERCH: the folded wing's feathers stacked)
+    if (pk && pk.head) {   // (PERCH: the head kept level on the tipped body, and turned about the plumb line by an.look)
+      _nod.makeTranslation(p.pos[0], p.pos[1] + dy, p.pos[2]).multiply(_nodT.makeRotationZ(-(an.pitch ?? 0) * perch)).multiply(_nodT.makeRotationY((an.look ?? 0) * p.look))
+        .multiply(_nodT.makeTranslation(-p.pos[0], -p.pos[1] - dy, -p.pos[2]));
+      _local.premultiply(_nod);
+    }
+    if (up && p.parentIdx < 0) {   // (UPRIGHT: the body tipped about the hind hips)
+      _nod.makeTranslation(U.x, U.y, 0).multiply(_nodT.makeRotationZ(up)).multiply(_nodT.makeTranslation(-U.x, -U.y, 0));
+      _local.premultiply(_nod);
+    }
+    if (up && p.tailRoot) { const c = _v.setFromMatrixPosition(_local); _nod.makeTranslation(c.x, c.y, c.z).multiply(_nodT.makeRotationZ(-up * .9)).multiply(_nodT.makeTranslation(-c.x, -c.y, -c.z)); _local.premultiply(_nod); }   // (its tail laid back)
+    const nodA = nodNow + (fly && p.fl?.neck ? p.fl.neck * fly : 0);
+    if (nodA && p.nod && !held) {   // lowered with the neck: about the neck's root, in the parent's frame
+      _nod.makeTranslation(p.nod.x, p.nod.y, p.nod.z).multiply(_nodT.makeRotationZ(nodA)).multiply(_nodT.makeTranslation(-p.nod.x, -p.nod.y, -p.nod.z));
+      _local.premultiply(_nod);
+    }
+    if (an.look && p.nod && !held && !(pk && pk.head)) {   // LOOK: the neck's share of the turn, about the vertical through the neck's root -- the neck, the head beside it, a mane along it
+      _nod.makeTranslation(p.nod.x, p.nod.y, p.nod.z).multiply(_nodT.makeRotationY(an.look * LOOK.neck)).multiply(_nodT.makeTranslation(-p.nod.x, -p.nod.y, -p.nod.z));
+      _local.premultiply(_nod);
+    }
+    if (fly && p.fl?.pre && !held) {   // (aloft: the tail's root swung straight back about where it joins)
+      const c = p.fl.pre.c;
+      _nod.makeTranslation(c.x, c.y, c.z).multiply(_nodT.makeRotationZ(p.fl.pre.a * fly)).multiply(_nodT.makeTranslation(-c.x, -c.y, -c.z));
       _local.premultiply(_nod);
     }
     const world = _mats[i] ?? (_mats[i] = new THREE.Matrix4());
     world.multiplyMatrices(p.parentIdx < 0 ? _root : _mats[p.parentIdx], _local);
-    if (p.level && !held) {   // placed by the chain, oriented by the root alone
-      _v.setFromMatrixPosition(world);
-      world.multiplyMatrices(_root, _local).setPosition(_v);
+    if (p.level && !held && !(fly >= 1 && p.fl?.free)) {   // placed by the chain, oriented by the root alone
+      if (fly && p.fl?.free) {   // (aloft: the foot hangs with its leg -- the two orientations slerped by how far up it is)
+        world.decompose(_gp, _gq, _gs);
+        _gm.multiplyMatrices(_root, _local).decompose(_v, _gl, _v);
+        world.compose(_gp, _gl.slerp(_gq, fly), _gs);
+      } else {
+        _v.setFromMatrixPosition(world);
+        world.multiplyMatrices(_root, _local).setPosition(_v);
+      }
     }
     // A HAND THAT HOLDS SOMETHING (2026-10-24; tools.js sets an.grip[i] = the item's `follow`): the wrist turns it between
     // the figure's own upright frame (0: a spear, a shield stay upright however the arm moves) and the forearm's (1: held
@@ -440,6 +711,10 @@ export function writeAnimal(an, t, fA, fB, fC) {
       fC[j] = _v.x; fC[j + 1] = _v.y; fC[j + 2] = _v.z;
     }
   }
+  if (an.sculpted || an.sculpts) {   // a SCULPTED body (bodies.js) is skinned to these frames: kept on the animal, the next figure overwrites _mats (sculpts: the bodies inside a bigger figure -- a mount under its rider)
+    const bm = an._bm?.length === parts.length * 16 ? an._bm : (an._bm = new Float32Array(parts.length * 16));
+    for (let i = 0; i < parts.length; i++) bm.set(_mats[i].elements, i * 16);
+  }
   if (parts.forwardFrom > 0) {   // the root's axis, turned by the frame that names the figure's forward
     const j = an.base * 3, m = _mats[parts.forwardFrom];
     _v.copy(parts[0].pA).applyMatrix4(m); fA[j] = _v.x; fA[j + 1] = _v.y; fA[j + 2] = _v.z;
@@ -459,5 +734,7 @@ export function easeGait(an, dt) {
   if (an.ampT !== undefined) an.amp = (an.amp ?? 1) + (an.ampT - (an.amp ?? 1)) * Math.min(1, dt * 5);
   if (an.runT !== undefined) an.run = (an.run ?? 0) + (an.runT - (an.run ?? 0)) * Math.min(1, dt * 3);
   if (an.nodT !== undefined) an.nod = (an.nod ?? 0) + (an.nodT - (an.nod ?? 0)) * Math.min(1, dt * 1.6);   // (the head goes down slowly, comes up a little quicker: the same ease)
+  if (an.flyT !== undefined) an.fly = (an.fly ?? 0) + Math.max(-dt * FLIGHT.ease, Math.min(dt * FLIGHT.ease, an.flyT - (an.fly ?? 0)));   // (taking off, landing: FLIGHT)
+  if (an.uprightT !== undefined) an.upright = (an.upright ?? 0) + Math.max(-dt * 2.5, Math.min(dt * 2.5, an.uprightT - (an.upright ?? 0)));   // (UPRIGHT: up in under half a second)
   if (an.restT !== undefined) an.rest = (an.rest ?? 0) + Math.max(-dt * 1.1, Math.min(dt * .35, an.restT - (an.rest ?? 0)));   // (lying down slowly; getting up quicker)
 }

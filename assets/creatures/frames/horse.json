@@ -1,4 +1,6 @@
 {
+  "waist": 0.05,
+  "headForm": "horse",
   "_about": "THE HORSE FRAME: one body plan at one metre-scale, which every horse-shaped animal stands on. `s` is the whole animal's size (1 = a 1.6m horse at the withers), so a zebra is this frame at .85 and a pony at .75. Everything below is written in terms of it, which is what makes the frame a frame.",
   "kind": "mammal",
   "params": {
@@ -45,20 +47,20 @@
       "1.45*s",
       "2.0*s",
       0,
-      "0.205*s"
+      "0.17*s"
     ]
   },
   "muzzle": {
     "when": "head",
     "v": [
-      "1.4*s",
-      "1.97*s",
+      "1.42*s",
+      "1.99*s",
       0,
-      "1.74*s",
-      "1.62*s",
+      "1.76*s",
+      "1.6*s",
       0,
-      "0.155*s",
-      "0.09*s"
+      "0.165*s",
+      "0.088*s"
     ]
   },
   "ears": {
@@ -106,7 +108,8 @@
       "0.065*s",
       "0.07*s"
     ],
-    "thigh": 1.5
+    "thigh": 1.5,
+    "shoulder": 1.25
   },
   "tail": {
     "c": [
@@ -145,27 +148,80 @@
         "0.08*s"
       ],
       "thorns": {
-        "arc": [
-          -0.75,
-          0.75
+        "tufts": [
+          [
+            0.04,
+            2,
+            0.42,
+            -0.55,
+            0.3
+          ],
+          [
+            0.175,
+            2,
+            0.42,
+            -0.55,
+            0.3
+          ],
+          [
+            0.31,
+            2,
+            0.42,
+            -0.55,
+            0.3
+          ],
+          [
+            0.445,
+            2,
+            0.42,
+            -0.55,
+            0.3
+          ],
+          [
+            0.58,
+            2,
+            0.42,
+            -0.55,
+            0.3
+          ],
+          [
+            0.715,
+            2,
+            0.42,
+            -0.55,
+            0.3
+          ],
+          [
+            0.85,
+            2,
+            0.42,
+            -0.55,
+            0.3
+          ],
+          [
+            0.985,
+            2,
+            0.36,
+            -0.55,
+            0.3
+          ]
         ],
-        "rows": 16,
-        "cols": 7,
-        "every": 2,
-        "along": [
-          0.0,
-          1.12
+        "shape": [
+          1.5,
+          0.85,
+          0.5
         ],
-        "length": 0.75,
         "comb": [
           -0.6,
           0.3,
           0.3
         ],
         "blend": 0.6,
-        "vary": 0.6,
-        "inset": 1.06,
-        "_about": "the mane in thorns (manes.js): a CREST of locks along the top of the neck to the poll, falling back and to one side"
+        "vary": 0.35,
+        "tone": 0.14,
+        "sink": 0.45,
+        "inset": 1.0,
+        "_about": "the mane in LUMPS (manes.js tufts): a CREST of sixteen flat faceted locks in pairs along the top of the neck to the poll, falling back and to one side"
       }
     }
   ],

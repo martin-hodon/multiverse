@@ -93,6 +93,14 @@ import FIN_PARK_GUELL from "./assets/finishes/park-guell.json" with { type: "jso
 import FIN_PRAMBANAN from "./assets/finishes/prambanan.json" with { type: "json" };
 import FIN_DRACHENBURG from "./assets/finishes/drachenburg.json" with { type: "json" };
 import FIN_GRAND_PALACE from "./assets/finishes/grand-palace.json" with { type: "json" };
+import FIN_YUNDING from "./assets/finishes/yunding.json" with { type: "json" };
+import FIN_QASR_AL_NUR from "./assets/finishes/qasr-al-nur.json" with { type: "json" };
+import FIN_AUREA from "./assets/finishes/aurea.json" with { type: "json" };
+import FIN_CHENONCEAU from "./assets/finishes/chenonceau.json" with { type: "json" };
+import FIN_NOTRE_DAME_GARDE from "./assets/finishes/notre-dame-garde.json" with { type: "json" };
+import FIN_ALEXANDER_NEVSKY from "./assets/finishes/alexander-nevsky.json" with { type: "json" };
+import FIN_HOHENZOLLERN from "./assets/finishes/hohenzollern.json" with { type: "json" };
+import FIN_BELVEDERE from "./assets/finishes/belvedere.json" with { type: "json" };
 import FIN_US_CAPITOL from "./assets/finishes/us-capitol.json" with { type: "json" };
 import FIN_FULDA from "./assets/finishes/fulda.json" with { type: "json" };
 import FIN_FRAUENKIRCHE_MUNICH from "./assets/finishes/frauenkirche-munich.json" with { type: "json" };
@@ -212,6 +220,14 @@ import PARK_GUELL_DOC from "./assets/architecture/park-guell.json" with { type: 
 import PRAMBANAN_DOC from "./assets/architecture/prambanan.json" with { type: "json" };
 import DRACHENBURG_DOC from "./assets/architecture/drachenburg.json" with { type: "json" };
 import GRAND_PALACE_DOC from "./assets/architecture/grand-palace.json" with { type: "json" };
+import YUNDING_DOC from "./assets/architecture/yunding.json" with { type: "json" };
+import QASR_AL_NUR_DOC from "./assets/architecture/qasr-al-nur.json" with { type: "json" };
+import AUREA_DOC from "./assets/architecture/aurea.json" with { type: "json" };
+import CHENONCEAU_DOC from "./assets/architecture/chenonceau.json" with { type: "json" };
+import NOTRE_DAME_GARDE_DOC from "./assets/architecture/notre-dame-garde.json" with { type: "json" };
+import ALEXANDER_NEVSKY_DOC from "./assets/architecture/alexander-nevsky.json" with { type: "json" };
+import HOHENZOLLERN_DOC from "./assets/architecture/hohenzollern.json" with { type: "json" };
+import BELVEDERE_DOC from "./assets/architecture/belvedere.json" with { type: "json" };
 import US_CAPITOL_DOC from "./assets/architecture/us-capitol.json" with { type: "json" };
 import FULDA_DOC from "./assets/architecture/fulda.json" with { type: "json" };
 import FRAUENKIRCHE_MUNICH_DOC from "./assets/architecture/frauenkirche-munich.json" with { type: "json" };
@@ -296,7 +312,7 @@ registerGlyphs(PATTERN_LIBRARY.glyphs);
 registerMurals(PATTERN_LIBRARY.murals);
 registerGreek(PATTERN_LIBRARY.greek);
 // every building's finish, by its document (archBuilding finds its own; Florence and the arena are built by code and ask)
-export const FINISHES = { "regensburg": FIN_REGENSBURG, "byodo-in": FIN_BYODO_IN, "topkapi": FIN_TOPKAPI, "jeronimos": FIN_JERONIMOS, "park-guell": FIN_PARK_GUELL, "prambanan": FIN_PRAMBANAN, "drachenburg": FIN_DRACHENBURG, "grand-palace": FIN_GRAND_PALACE, "us-capitol": FIN_US_CAPITOL, "fulda": FIN_FULDA, "frauenkirche-munich": FIN_FRAUENKIRCHE_MUNICH, "st-peters": FIN_ST_PETERS, "albrechtsburg": FIN_ALBRECHTSBURG, "forbidden-city": FIN_FORBIDDEN_CITY, "st-marks": FIN_ST_MARKS, "dome-of-the-rock": FIN_DOME_OF_THE_ROCK, "eiffel-tower": FIN_EIFFEL_TOWER, "arena": FIN_ARENA, "colosseum": FIN_COLOSSEUM, "pont-du-gard": FIN_PONT_DU_GARD, "abu-simbel": FIN_ABU_SIMBEL, "tikal": FIN_TIKAL, "pisa": FIN_PISA, "berliner-dom": FIN_BERLINER_DOM, "blue-mosque": FIN_BLUE_MOSQUE, "chichen-itza": FIN_CHICHEN_ITZA, "cologne": FIN_COLOGNE, "dendera": FIN_DENDERA, "giza": FIN_GIZA, "didyma": FIN_DIDYMA, "windmill": FIN_WINDMILL, "el-pilar": FIN_EL_PILAR, "fishermans-bastion": FIN_FISHERMANS_BASTION, "florence": FIN_FLORENCE, "frauenkirche": FIN_FRAUENKIRCHE, "hagia-sophia": FIN_HAGIA_SOPHIA, "hephaestus": FIN_HEPHAESTUS, "kandariya": FIN_KANDARIYA, "karlskirche": FIN_KARLSKIRCHE, "mainz": FIN_MAINZ, "maria-laach": FIN_MARIA_LAACH, "melk": FIN_MELK, "milan": FIN_MILAN, "moritzburg": FIN_MORITZBURG, "notre-dame": FIN_NOTRE_DAME, "pantheon": FIN_PANTHEON, "parliament": FIN_PARLIAMENT, "parthenon": FIN_PARTHENON, "sacre-coeur": FIN_SACRE_COEUR, "schwerin": FIN_SCHWERIN, "st-basil": FIN_ST_BASIL, "st-isaacs": FIN_ST_ISAACS, "st-pauls": FIN_ST_PAULS, "stephansdom": FIN_STEPHANSDOM, "sultan-qaboos": FIN_SULTAN_QABOOS, "taj-mahal": FIN_TAJ_MAHAL, "temple-of-heaven": FIN_TEMPLE_OF_HEAVEN, "sheikh-zayed": FIN_SHEIKH_ZAYED, "imam-mosque": FIN_IMAM_MOSQUE, "summer-palace": FIN_SUMMER_PALACE, "angkor-wat": FIN_ANGKOR_WAT, "borobudur": FIN_BOROBUDUR, "himeji": FIN_HIMEJI, "horyuji": FIN_HORYUJI, "kinkakuji": FIN_KINKAKUJI, "fushimi-inari": FIN_FUSHIMI_INARI, "ulm": FIN_ULM, "zwinger": FIN_ZWINGER };
+export const FINISHES = { "regensburg": FIN_REGENSBURG, "byodo-in": FIN_BYODO_IN, "topkapi": FIN_TOPKAPI, "jeronimos": FIN_JERONIMOS, "park-guell": FIN_PARK_GUELL, "prambanan": FIN_PRAMBANAN, "drachenburg": FIN_DRACHENBURG, "grand-palace": FIN_GRAND_PALACE, "yunding": FIN_YUNDING, "qasr-al-nur": FIN_QASR_AL_NUR, "aurea": FIN_AUREA, "chenonceau": FIN_CHENONCEAU, "notre-dame-garde": FIN_NOTRE_DAME_GARDE, "alexander-nevsky": FIN_ALEXANDER_NEVSKY, "hohenzollern": FIN_HOHENZOLLERN, "belvedere": FIN_BELVEDERE, "us-capitol": FIN_US_CAPITOL, "fulda": FIN_FULDA, "frauenkirche-munich": FIN_FRAUENKIRCHE_MUNICH, "st-peters": FIN_ST_PETERS, "albrechtsburg": FIN_ALBRECHTSBURG, "forbidden-city": FIN_FORBIDDEN_CITY, "st-marks": FIN_ST_MARKS, "dome-of-the-rock": FIN_DOME_OF_THE_ROCK, "eiffel-tower": FIN_EIFFEL_TOWER, "arena": FIN_ARENA, "colosseum": FIN_COLOSSEUM, "pont-du-gard": FIN_PONT_DU_GARD, "abu-simbel": FIN_ABU_SIMBEL, "tikal": FIN_TIKAL, "pisa": FIN_PISA, "berliner-dom": FIN_BERLINER_DOM, "blue-mosque": FIN_BLUE_MOSQUE, "chichen-itza": FIN_CHICHEN_ITZA, "cologne": FIN_COLOGNE, "dendera": FIN_DENDERA, "giza": FIN_GIZA, "didyma": FIN_DIDYMA, "windmill": FIN_WINDMILL, "el-pilar": FIN_EL_PILAR, "fishermans-bastion": FIN_FISHERMANS_BASTION, "florence": FIN_FLORENCE, "frauenkirche": FIN_FRAUENKIRCHE, "hagia-sophia": FIN_HAGIA_SOPHIA, "hephaestus": FIN_HEPHAESTUS, "kandariya": FIN_KANDARIYA, "karlskirche": FIN_KARLSKIRCHE, "mainz": FIN_MAINZ, "maria-laach": FIN_MARIA_LAACH, "melk": FIN_MELK, "milan": FIN_MILAN, "moritzburg": FIN_MORITZBURG, "notre-dame": FIN_NOTRE_DAME, "pantheon": FIN_PANTHEON, "parliament": FIN_PARLIAMENT, "parthenon": FIN_PARTHENON, "sacre-coeur": FIN_SACRE_COEUR, "schwerin": FIN_SCHWERIN, "st-basil": FIN_ST_BASIL, "st-isaacs": FIN_ST_ISAACS, "st-pauls": FIN_ST_PAULS, "stephansdom": FIN_STEPHANSDOM, "sultan-qaboos": FIN_SULTAN_QABOOS, "taj-mahal": FIN_TAJ_MAHAL, "temple-of-heaven": FIN_TEMPLE_OF_HEAVEN, "sheikh-zayed": FIN_SHEIKH_ZAYED, "imam-mosque": FIN_IMAM_MOSQUE, "summer-palace": FIN_SUMMER_PALACE, "angkor-wat": FIN_ANGKOR_WAT, "borobudur": FIN_BOROBUDUR, "himeji": FIN_HIMEJI, "horyuji": FIN_HORYUJI, "kinkakuji": FIN_KINKAKUJI, "fushimi-inari": FIN_FUSHIMI_INARI, "ulm": FIN_ULM, "zwinger": FIN_ZWINGER };
 // the finishes these landmarks (built already: index.html placed them by their footprints) and the village's land will
 // be built with -- every village/ finish (the fields, the riverside, the three mines) and the windmill's -- and, as a
 // finish of their own, the materials of the items a landmark is furnished with (index.html: their tiles drawn while the
@@ -550,7 +566,7 @@ function geoFor(shape, size, inflate = 0) {
 // the village draws a static building as a single mesh and merges it with its neighbours. Flat normals come
 // from the triangles themselves (the engine welds its vertices, which is what makes the pieces MEET, so there
 // are no per-corner normals to average and none are wanted: architecture is flat faces and sharp arrises).
-const ARCH_DOCS = { "regensburg": REGENSBURG_DOC, "byodo-in": BYODO_IN_DOC, "topkapi": TOPKAPI_DOC, "jeronimos": JERONIMOS_DOC, "park-guell": PARK_GUELL_DOC, "prambanan": PRAMBANAN_DOC, "drachenburg": DRACHENBURG_DOC, "grand-palace": GRAND_PALACE_DOC, "us-capitol": US_CAPITOL_DOC, "fulda": FULDA_DOC, "frauenkirche-munich": FRAUENKIRCHE_MUNICH_DOC, "st-peters": ST_PETERS_DOC, "albrechtsburg": ALBRECHTSBURG_DOC, "forbidden-city": FORBIDDEN_CITY_DOC, "st-marks": ST_MARKS_DOC, "dome-of-the-rock": DOME_OF_THE_ROCK_DOC, "eiffel-tower": EIFFEL_TOWER_DOC, arena: ARENA_DOC, colosseum: COLOSSEUM_DOC, "pont-du-gard": PONT_DU_GARD_DOC, "abu-simbel": ABU_SIMBEL_DOC, "tikal": TIKAL_DOC, "pisa": PISA_DOC, basilica: BASILICA_DOC, florence: FLORENCE_DOC, "pantheon": PANTHEON_DOC, "parthenon": PARTHENON_DOC, "hephaestus": HEPHAESTUS_DOC, "taj-mahal": TAJ_DOC, "st-basil": STBASIL_DOC, "frauenkirche": FRAUENKIRCHE_DOC, "zwinger": ZWINGER_DOC, "notre-dame": NOTREDAME_DOC, "milan": MILAN_DOC, "cologne": COLOGNE_DOC, "dendera": DENDERA_DOC, "giza": GIZA_DOC, "didyma": DIDYMA_DOC, "windmill": WINDMILL_DOC, "hagia-sophia": HAGIA_DOC, "melk": MELK_DOC, "schwerin": SCHWERIN_DOC, "karlskirche": KARLSKIRCHE_DOC, "chichen-itza": CHICHEN_DOC, "sacre-coeur": SACRE_DOC, "stephansdom": STEPHAN_DOC, "st-pauls": STPAULS_DOC, "parliament": PARLIAMENT_DOC, "st-isaacs": STISAACS_DOC, "berliner-dom": BERLINERDOM_DOC, "moritzburg": MORITZBURG_DOC, "fishermans-bastion": FISHERMANS_DOC, "mainz": MAINZ_DOC, "maria-laach": MARIA_LAACH_DOC, "kandariya": KANDARIYA_DOC, "el-pilar": EL_PILAR_DOC, "sultan-qaboos": SULTAN_QABOOS_DOC, "ulm": ULM_DOC, "blue-mosque": BLUE_MOSQUE_DOC, "temple-of-heaven": TEMPLE_OF_HEAVEN_DOC, "sheikh-zayed": SHEIKH_ZAYED_DOC, "imam-mosque": IMAM_MOSQUE_DOC, "summer-palace": SUMMER_PALACE_DOC, "angkor-wat": ANGKOR_WAT_DOC, "borobudur": BOROBUDUR_DOC, "himeji": HIMEJI_DOC, "horyuji": HORYUJI_DOC, "kinkakuji": KINKAKUJI_DOC, "fushimi-inari": FUSHIMI_INARI_DOC,
+const ARCH_DOCS = { "regensburg": REGENSBURG_DOC, "byodo-in": BYODO_IN_DOC, "topkapi": TOPKAPI_DOC, "jeronimos": JERONIMOS_DOC, "park-guell": PARK_GUELL_DOC, "prambanan": PRAMBANAN_DOC, "drachenburg": DRACHENBURG_DOC, "grand-palace": GRAND_PALACE_DOC, "yunding": YUNDING_DOC, "qasr-al-nur": QASR_AL_NUR_DOC, "aurea": AUREA_DOC, "chenonceau": CHENONCEAU_DOC, "notre-dame-garde": NOTRE_DAME_GARDE_DOC, "alexander-nevsky": ALEXANDER_NEVSKY_DOC, "hohenzollern": HOHENZOLLERN_DOC, "belvedere": BELVEDERE_DOC, "us-capitol": US_CAPITOL_DOC, "fulda": FULDA_DOC, "frauenkirche-munich": FRAUENKIRCHE_MUNICH_DOC, "st-peters": ST_PETERS_DOC, "albrechtsburg": ALBRECHTSBURG_DOC, "forbidden-city": FORBIDDEN_CITY_DOC, "st-marks": ST_MARKS_DOC, "dome-of-the-rock": DOME_OF_THE_ROCK_DOC, "eiffel-tower": EIFFEL_TOWER_DOC, arena: ARENA_DOC, colosseum: COLOSSEUM_DOC, "pont-du-gard": PONT_DU_GARD_DOC, "abu-simbel": ABU_SIMBEL_DOC, "tikal": TIKAL_DOC, "pisa": PISA_DOC, basilica: BASILICA_DOC, florence: FLORENCE_DOC, "pantheon": PANTHEON_DOC, "parthenon": PARTHENON_DOC, "hephaestus": HEPHAESTUS_DOC, "taj-mahal": TAJ_DOC, "st-basil": STBASIL_DOC, "frauenkirche": FRAUENKIRCHE_DOC, "zwinger": ZWINGER_DOC, "notre-dame": NOTREDAME_DOC, "milan": MILAN_DOC, "cologne": COLOGNE_DOC, "dendera": DENDERA_DOC, "giza": GIZA_DOC, "didyma": DIDYMA_DOC, "windmill": WINDMILL_DOC, "hagia-sophia": HAGIA_DOC, "melk": MELK_DOC, "schwerin": SCHWERIN_DOC, "karlskirche": KARLSKIRCHE_DOC, "chichen-itza": CHICHEN_DOC, "sacre-coeur": SACRE_DOC, "stephansdom": STEPHAN_DOC, "st-pauls": STPAULS_DOC, "parliament": PARLIAMENT_DOC, "st-isaacs": STISAACS_DOC, "berliner-dom": BERLINERDOM_DOC, "moritzburg": MORITZBURG_DOC, "fishermans-bastion": FISHERMANS_DOC, "mainz": MAINZ_DOC, "maria-laach": MARIA_LAACH_DOC, "kandariya": KANDARIYA_DOC, "el-pilar": EL_PILAR_DOC, "sultan-qaboos": SULTAN_QABOOS_DOC, "ulm": ULM_DOC, "blue-mosque": BLUE_MOSQUE_DOC, "temple-of-heaven": TEMPLE_OF_HEAVEN_DOC, "sheikh-zayed": SHEIKH_ZAYED_DOC, "imam-mosque": IMAM_MOSQUE_DOC, "summer-palace": SUMMER_PALACE_DOC, "angkor-wat": ANGKOR_WAT_DOC, "borobudur": BOROBUDUR_DOC, "himeji": HIMEJI_DOC, "horyuji": HORYUJI_DOC, "kinkakuji": KINKAKUJI_DOC, "fushimi-inari": FUSHIMI_INARI_DOC,
                     "village/church": V_CHURCH, "village/eaves-house": V_EAVES_HOUSE, "village/gable-house": V_GABLE_HOUSE, "village/gatehouse": V_GATEHOUSE, "village/jettied-house": V_JETTIED_HOUSE, "village/longhouse": V_LONGHOUSE, "village/stone-house": V_STONE_HOUSE, "village/wall": V_WALL, "village/wall-tower": V_WALL_TOWER };
 // the COMPONENTS those buildings use (a definition `use`d by another: Florence's tribune morte are `iwan`s, the
 // Taj Mahal's minarets carry `chhatri`s, Notre-Dame's nave is the `basilica`)
@@ -1412,7 +1428,8 @@ export function archBuilding(doc, { name, params = {}, color = 0xdcd4c2, accent 
 //        (arch/build.js extrude: lifeOf's `doorways`), every one of them or the one nearest each point (the
 //        definition's own frame); the door hangs at the wall's INNER face and swings inward -- the face nearer the
 //        building's middle, or the other with `flip` (a door between two rooms); `below` a height keeps only the
-//        doorways whose sill is lower (a tower's door, not the belfry opening over it); `set` metres deeper in
+//        doorways whose sill is lower (a tower's door, not the belfry opening over it), `above` one those whose sill
+//        is that high or higher (an upper storey's door onto a terrace, not the one under it); `set` metres deeper in
 //   { at: [x, y, z, yaw], w, h, spring, head, style, ... }                           a doorway the walls do not cut
 //        (a gap between two piers): the marker's own placement, its +z the outside
 //   { markers: true, near?, style, ... }                                              the definition's own door markers,
@@ -1444,7 +1461,8 @@ export function doorsOf(docName, life, cx = 0, cz = 0, { spec = ASSETS.get(`door
       continue;
     }
     const names = [].concat(e.part), ways = life.doorways.filter((q) => names.includes(q.part)   // (a part, or a list of them;
-      && (e.below === undefined || Math.min(q.front[0][1], q.front[1][1]) < e.below));             //  `below` a height: its doors that low)
+      && (e.below === undefined || Math.min(q.front[0][1], q.front[1][1]) < e.below)              //  `below` a height: its doors that low)
+      && (e.above === undefined || Math.min(q.front[0][1], q.front[1][1]) >= e.above));
     if (!ways.length) { console.warn(`doors/${docName}: no doorway in "${e.part}"`); continue; }
     const mid = (q, s) => [(q[s][0][0] + q[s][1][0]) / 2, (q[s][0][2] + q[s][1][2]) / 2];
     const centre = (q) => { const a = mid(q, "front"), b = mid(q, "back"); return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; };
@@ -2250,6 +2268,14 @@ const BUILD_FACTORIES = {
   prambanan: () => archBuilding("prambanan", { name: "Prambanan" }),
   drachenburg: () => archBuilding("drachenburg", { name: "Schloss Drachenburg" }),
   grandpalace: () => archBuilding("grand-palace", { name: "Grand Palace" }),
+  yunding: () => archBuilding("yunding", { name: "Yunding Temple" }),
+  qasralnur: () => archBuilding("qasr-al-nur", { name: "Qasr al-Nur" }),
+  aurea: () => archBuilding("aurea", { name: "Bibliotheca Aurea" }),
+  chenonceau: () => archBuilding("chenonceau", { name: "Chateau de Chenonceau" }),
+  notredamegarde: () => archBuilding("notre-dame-garde", { name: "Notre-Dame de la Garde" }),
+  alexandernevsky: () => archBuilding("alexander-nevsky", { name: "Alexander Nevsky Cathedral" }),
+  hohenzollern: () => archBuilding("hohenzollern", { name: "Burg Hohenzollern" }),
+  belvedere: () => archBuilding("belvedere", { name: "Belvedere" }),
   uscapitol: () => archBuilding("us-capitol", { name: "United States Capitol" }),
   fulda: () => archBuilding("fulda", { name: "Fulda Cathedral" }),
   frauenkirchemunich: () => archBuilding("frauenkirche-munich", { name: "Frauenkirche (Munich)" }),
@@ -2285,7 +2311,7 @@ for (const [k, make] of Object.entries(BUILD_FACTORIES)) {
 }
 // the DRESS of a landmark's people (clothes: the wardrobe's `styles`): its congregation wears it, and so does a share of
 // the world's wanderers when the landmark stands (index.html)
-export const DRESS = { regensburg: "gothic", byodoin: "japanese", topkapi: "ottoman", jeronimos: "gothic", parkguell: "industrial", prambanan: "indian", frauenkirchemunich: "gothic", albrechtsburg: "gothic", forbiddencity: "chinese", domeoftherock: "islamic", pontdugard: "roman", abusimbel: "egyptian", tikal: "maya", pisa: "gothic", hephaestus: "greek", parthenon: "greek", acropolis: "greek", didyma: "greek", colosseum: "roman", pantheon: "roman", templeofheaven: "chinese", sheikhzayed: "islamic", imammosque: "islamic", summerpalace: "chinese", angkorwat: "indian", grandpalace: "indian", borobudur: "indian", himeji: "japanese", horyuji: "japanese", kinkakuji: "japanese", fushimiinari: "japanese",
+export const DRESS = { regensburg: "gothic", byodoin: "japanese", topkapi: "ottoman", jeronimos: "gothic", parkguell: "industrial", prambanan: "indian", frauenkirchemunich: "gothic", albrechtsburg: "gothic", forbiddencity: "chinese", domeoftherock: "islamic", pontdugard: "roman", abusimbel: "egyptian", tikal: "maya", pisa: "gothic", hephaestus: "greek", parthenon: "greek", acropolis: "greek", didyma: "greek", colosseum: "roman", pantheon: "roman", templeofheaven: "chinese", sheikhzayed: "islamic", imammosque: "islamic", summerpalace: "chinese", angkorwat: "indian", grandpalace: "indian", yunding: "chinese", qasralnur: "islamic", aurea: "industrial", chenonceau: "gothic", notredamegarde: "industrial", alexandernevsky: "russian", hohenzollern: "industrial", borobudur: "indian", himeji: "japanese", horyuji: "japanese", kinkakuji: "japanese", fushimiinari: "japanese",
                        giza: "egyptian", notredame: "gothic", cologne: "gothic", milan: "gothic", ulm: "gothic", stephansdom: "gothic", florence: "gothic", mainz: "gothic", marialaach: "gothic", caerphilly: "gothic",
                        kandariya: "indian", chichenitza: "maya", stbasil: "russian" };
 // THE VILLAGE'S LAND AND ITS RIVERSIDE: definitions in their own finishes, the same in every world -- pregen caches them
@@ -2295,7 +2321,7 @@ export const LAND = ["watermill", "windmill", "landing", "fisherHut", "fountain"
 export const LANDMARKS = ["florence", "dendera", "giza", "didyma", "milan", "notredame", "cologne", "hephaestus", "parthenon", "colosseum",
                           "versailles", "caerphilly", "pantheon", "tajmahal", "stbasil", "frauenkirche", "zwinger", "hagiasophia", "melk", "schwerin", "karlskirche", "chichenitza", "sacrecoeur", "stephansdom", "stpauls", "parliament", "stisaacs", "berlinerdom", "moritzburg", "fishermansbastion", "mainz", "elpilar", "sultanqaboos", "ulm", "bluemosque", "templeofheaven", "sheikhzayed", "imammosque", "pontdugard", "abusimbel", "tikal", "pisa", "summerpalace", "borobudur", "angkorwat", "grandpalace", "himeji", "horyuji", "kinkakuji", "fushimiinari", "marialaach", "kandariya", "acropolis", "forbiddencity", "stmarks", "domeoftherock", "eiffeltower",
                           "regensburg", "byodoin", "topkapi", "jeronimos", "parkguell", "prambanan",
-                          "drachenburg", "uscapitol", "fulda", "frauenkirchemunich", "stpeters", "albrechtsburg"];
+                          "drachenburg", "uscapitol", "fulda", "frauenkirchemunich", "stpeters", "albrechtsburg", "hohenzollern", "alexandernevsky", "notredamegarde", "chenonceau", "aurea", "qasralnur", "yunding", "belvedere"];
 // (a landmark that is a site holding another: the two never stand in one world -- index.html townKeys)
 export const LANDMARK_HOLDS = { acropolis: ["parthenon"] };
 // what each landmark is called, for the start menu (index.html chooseSetup) -- read from its factory's own `name`, so

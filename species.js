@@ -21,10 +21,12 @@
 // Ordering: SPECIES is sorted small -> large so the demo's grid puts small
 // animals in the front rows.
 
-import { catRig, CAT_COATS, eyeMark } from "./mammals.js";
+import { eyeMark } from "./mammals.js";
 import "./winged.js";   // (registers the winged people's kind with creatures.js: assets/creatures/monsters/angel.json)
 import "./dragons.js";  // (...and the dragons', one rule for many: assets/creatures/dragons/*.json)
-import { buildCreature } from "./creatures.js";
+import { markSculpt, lookFamily, sculptPart, trimOverlay } from "./bodyspec.js"; // (...and the sculpted creatures': one surface skinned to its bones -- bodies.js draws them;
+                                            //  every creature built here is marked for it -- a person or a hybrid is not)
+import { buildCreature, dressed, bareCoat } from "./creatures.js";
 import { CATALOGUE, ASSETS } from "./catalogue.js";
 import { makePerson } from "./people.js";
 import { scalePart, scaleDef } from "./geom.js";
@@ -85,107 +87,6 @@ export { batWing, birdWing } from "./mammals.js";   // (the wing lives with the 
 
 // (the butterflies are assets now: assets/butterflies, drawn by butterflies.js)
 
-// Generative dragonflies, 7-8cm long with a 10cm span: a long thin abdomen,
-// big eyes, four narrow glassy wings beating fast. They dart low and only
-// over water (the demo keeps them to the lake shore and the river).
-const DFLY = [
-  { b: 0x2f6fd8, t: 0x1f4fa8 },   // blue emperor
-  { b: 0x3aa07a, t: 0x2a7a5a },   // green darner
-  { b: 0xc83028, t: 0x8a2018 },   // ruddy darter
-  { b: 0x9a8a2a, t: 0x6a5a1a },   // brown hawker
-];
-export function makeDragonfly({ seed = 1 } = {}) {
-  let s = (seed * 2246822519) >>> 0 || 1;
-  const r = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
-  const v = DFLY[Math.floor(r() * DFLY.length)], k = .9 + r() * .3;
-  const wing = 0xdfe8ee, dark = 0x1a1a20;
-  const parts = [
-    { id: "body", parent: null, shape: "capsule", size: { r: .006 * k, len: .05 * k }, geomRot: [0, 0, 90], pos: [0, 0, 0], color: v.b },       // abdomen
-    { id: "thorax", parent: "body", shape: "sphere", size: { r: .009 * k }, scale: [1.4, 1, 1], pos: [.03 * k, .001, 0], color: v.t },
-    { id: "head", parent: "thorax", shape: "sphere", size: { r: .007 * k }, pos: [.014 * k, .001, 0], color: v.t },
-    { id: "eyeL", parent: "head", shape: "sphere", size: { r: .005 * k }, pos: [.002 * k, .002 * k, .005 * k], color: dark },
-    { id: "eyeR", parent: "head", shape: "sphere", size: { r: .005 * k }, pos: [.002 * k, .002 * k, -.005 * k], color: dark },
-    { id: "tail", parent: "body", shape: "capsule", size: { r: .004 * k, len: .03 * k }, geomRot: [0, 0, 90], pos: [-.038 * k, 0, 0], color: v.t },
-  ];
-  for (const sd of [1, -1]) {
-    const S = sd > 0 ? "L" : "R", m = (p) => [p[0] * k, p[1] * k, p[2] * k * sd];
-    const anim = { axis: "x", deg: 22 * sd, speed: 7, phase: 0, wing: true };
-    parts.push(
-      { id: `foreW${S}`, parent: "thorax", shape: "tri", pos: [.004 * k, .006 * k, 0],
-        size: { a: m([.004, 0, .004]), b: m([.012, .002, .052]), c: m([-.006, 0, .05]), r: .004 * k }, color: wing, anim },
-      { id: `hindW${S}`, parent: "thorax", shape: "tri", pos: [-.006 * k, .005 * k, 0],
-        size: { a: m([.004, 0, .004]), b: m([.006, .002, .05]), c: m([-.012, 0, .046]), r: .0045 * k }, color: wing, anim: { ...anim, phase: .5 } },
-    );
-  }
-  return { name: "dragonfly", parts, fly: { alt: [.3, 2.2], speed: [1.6, 3.6], hz: 7 } };
-}
-
-// Generative pond fish, ~0.25-0.45m: capsule body, flat triangle tail and
-// dorsal fin, tail wiggling as they cruise. Swimmers ride the flier
-// plumbing: constant motion, `alt` = height above the lake floor.
-const FISHC = [
-  { b: 0x8a9aa6, t: 0x6d7d8a },     // silver
-  { b: 0x5c6e4e, t: 0x49583e },     // olive carp
-  { b: 0xc9702e, t: 0xa85a20 },     // koi orange
-  { b: 0x4e5d78, t: 0x3c4a63 },     // blue-grey
-];
-export function makeFish({ seed = 1 } = {}) {
-  let s = (seed * 2246822519) >>> 0 || 1;
-  const r = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
-  const v = FISHC[Math.floor(r() * FISHC.length)];
-  const k = .8 + r() * .7;
-  return { name: "fish", fly: { alt: [.3, 1.1], speed: [.4, 1.2], hz: 3 }, parts: [
-    // the body: one straight tube with a bulge -- a spindle, pointed at both ends (tail end first: its forward runs a -> b)
-    { id: "body", parent: null, shape: "tube", size: { a: [-.1 * k, 0, 0], c: [0, .004 * k, 0], b: [.1 * k, 0, 0], r1: .014 * k, r2: .012 * k, bulge: .04 * k }, pos: [0, 0, 0], color: v.b },
-    { id: "tail", parent: "body", shape: "tri", pos: [-.11 * k, 0, 0],
-      size: { a: [0, 0, 0], b: [-.09 * k, .06 * k, 0], c: [-.09 * k, -.05 * k, 0], r: .012 * k }, color: v.t,
-      anim: { axis: "y", deg: 28, speed: 3, phase: 0 } },
-    { id: "fin", parent: "body", shape: "tri", pos: [0, .05 * k, 0],
-      size: { a: [-.05 * k, 0, 0], b: [.04 * k, 0, 0], c: [-.05 * k, .05 * k, 0], r: .008 * k }, color: v.t },
-    { id: "eyeL", parent: "body", shape: "sphere", size: { r: .009 * k }, pos: [.07 * k, .012 * k, .026 * k], color: 0x101418 },
-    { id: "eyeR", parent: "body", shape: "sphere", size: { r: .009 * k }, pos: [.07 * k, .012 * k, -.026 * k], color: 0x101418 },
-  ] };
-}
-
-// The lake's big swimmers. Same swimmer plumbing as the fish; real sizes
-// (dolphin ~2.4m, shark ~3.2m). The dolphin's tail pitches (axis z), the
-// shark's sweeps sideways (axis y) -- true to how each actually swims.
-export function makeDolphin() {
-  const c = 0x728696, dark = 0x64788a;
-  return { name: "dolphin", fly: { alt: [.6, 1.8], speed: [1.5, 3.2], hz: 1.1 }, parts: [
-    // a spindle body (a bulged tube, fattest just ahead of the middle), the melon, a tapering beak
-    { id: "body", parent: null, shape: "tube", size: { a: [-.95, .02, 0], c: [-.1, .04, 0], b: [.8, 0, 0], r1: .09, r2: .17, bulge: .14 }, pos: [0, 0, 0], color: c },
-    { id: "melon", parent: "body", shape: "sphere", size: { r: .18 }, pos: [.8, .05, 0], color: c },
-    { id: "snout", parent: "body", shape: "tube", size: { a: [0, 0, 0], c: [.15, 0, 0], b: [.32, -.03, 0], r1: .09, r2: .045 }, pos: [.9, -.02, 0], color: 0x82929f },
-    { id: "dorsal", parent: "body", shape: "tri", size: { a: [-.18, .2, 0], b: [.18, .22, 0], c: [-.3, .6, 0], r: .03 }, pos: [.05, 0, 0], color: dark },
-    { id: "pectL", parent: "body", shape: "tri", size: { a: [0, 0, 0], b: [-.3, -.24, .3], c: [-.05, -.26, .12], r: .02 }, pos: [.45, -.14, .16], color: dark },
-    { id: "pectR", parent: "body", shape: "tri", size: { a: [0, 0, 0], b: [-.3, -.24, -.3], c: [-.05, -.26, -.12], r: .02 }, pos: [.45, -.14, -.16], color: dark },
-    { id: "tailStock", parent: "body", shape: "tube", size: { a: [0, 0, 0], c: [-.28, .03, 0], b: [-.55, .04, 0], r1: .1, r2: .045 }, pos: [-.9, .02, 0], color: c,
-      anim: { axis: "z", deg: 15, speed: 1.1, phase: 0 } },   // pitches: the flukes beat up and down
-    { id: "flukeL", parent: "tailStock", shape: "tri", size: { a: [-.46, .04, .02], b: [-.82, .07, .46], c: [-.64, .05, .1], r: .02 }, pos: [0, 0, 0], color: dark },
-    { id: "flukeR", parent: "tailStock", shape: "tri", size: { a: [-.46, .04, -.02], b: [-.82, .07, -.46], c: [-.64, .05, -.1], r: .02 }, pos: [0, 0, 0], color: dark },
-    { id: "eyeL", parent: "body", shape: "sphere", size: { r: .03 }, pos: [.82, .08, .16], color: 0x14181c },
-    { id: "eyeR", parent: "body", shape: "sphere", size: { r: .03 }, pos: [.82, .08, -.16], color: 0x14181c },
-  ] };
-}
-export function makeShark() {
-  const c = 0x74828c, dark = 0x5d6a74;
-  return { name: "shark", fly: { alt: [.4, 1.4], speed: [1.2, 2.4], hz: .7 }, parts: [
-    // a spindle body and a pointed snout: two tubes where a pill and a cone were
-    { id: "body", parent: null, shape: "tube", size: { a: [-1.2, .02, 0], c: [0, .05, 0], b: [1.0, 0, 0], r1: .11, r2: .2, bulge: .17 }, pos: [0, 0, 0], color: c },
-    { id: "snout", parent: "body", shape: "tube", size: { a: [0, 0, 0], c: [.28, .01, 0], b: [.55, -.05, 0], r1: .2, r2: .04 }, pos: [1.0, -.02, 0], color: c },
-    { id: "dorsal", parent: "body", shape: "tri", size: { a: [-.22, .28, 0], b: [.26, .3, 0], c: [-.14, .88, 0], r: .03 }, pos: [-.05, 0, 0], color: dark },
-    { id: "pectL", parent: "body", shape: "tri", size: { a: [0, 0, 0], b: [-.42, -.3, .42], c: [-.08, -.32, .14], r: .02 }, pos: [.5, -.18, .22], color: dark },
-    { id: "pectR", parent: "body", shape: "tri", size: { a: [0, 0, 0], b: [-.42, -.3, -.42], c: [-.08, -.32, -.14], r: .02 }, pos: [.5, -.18, -.22], color: dark },
-    { id: "tailStock", parent: "body", shape: "tube", size: { a: [0, 0, 0], c: [-.3, .02, 0], b: [-.6, .03, 0], r1: .12, r2: .05 }, pos: [-1.15, 0, 0], color: c,
-      anim: { axis: "y", deg: 18, speed: .7, phase: 0 } },   // sweeps: the tail beats side to side
-    { id: "tailUp", parent: "tailStock", shape: "tri", size: { a: [-.42, .03, 0], b: [-.85, .56, 0], c: [-.68, .12, 0], r: .02 }, pos: [0, 0, 0], color: dark },
-    { id: "tailDn", parent: "tailStock", shape: "tri", size: { a: [-.44, 0, 0], b: [-.7, -.3, 0], c: [-.6, -.05, 0], r: .02 }, pos: [0, 0, 0], color: dark },
-    { id: "eyeL", parent: "body", shape: "sphere", size: { r: .032 }, pos: [1.05, .1, .17], color: 0x14181c },
-    { id: "eyeR", parent: "body", shape: "sphere", size: { r: .032 }, pos: [1.05, .1, -.17], color: 0x14181c },
-  ] };
-}
-
 // ---- THE DEFINITIONS (assets/creatures/**.json, creatures.js). Everything that is an animal is written out
 // there -- a frame it stands on, its size, its colours, what it carries -- and built here into the part lists
 // the engines draw. The catalogue (catalogue.js) is loaded before this module runs, so every importer of SPECIES
@@ -193,18 +94,102 @@ export function makeShark() {
 const built = new Map();
 // (by the NAME the definition gives itself, not by its file: a frame is called horse too, and is not a horse)
 const byName = new Map([...ASSETS.values()].filter((d) => d?.name).map((d) => [d.name, d]));
+// (a creature, not a person: drawn sculpted -- composite.js converts it when it joins a herd. The winged people are people.)
+export const beast = (d, def) => (d?.kind === "winged" ? def : markSculpt(def));   // (assets.html marks what it builds the same way)
+// THE LOOKS OF A SPECIES (bodyspec.js lookFamily): its base, each coat, each variant and its young, made as the world
+// makes them (and kept) -- told to every one of them, so bodies.js builds ONE shape for the looks that share it
+const FAMILY = new Map();
+const looksOf = (name) => () => {
+  if (!FAMILY.has(name)) {
+    const d = byName.get(name), out = [], add = (f) => { try { const x = f(); if (x && !out.includes(x)) out.push(x); } catch { /* (a look that cannot be built is no look) */ } };
+    FAMILY.set(name, out);
+    add(() => A(name));
+    (d?.coats ?? []).forEach((_, i) => add(() => coatDef(name, i)));
+    for (const v of Object.keys(d?.variants ?? {})) add(() => variantDef(name, v));
+    if (d?.young) add(() => makeYoung(name));
+  }
+  return FAMILY.get(name);
+};
 export const A = (name) => {          // a species by name, built once
   if (built.has(name)) return built.get(name);
   const def = byName.get(name);
   if (!def) throw new Error(`species: no definition for "${name}" (assets/index.json)`);
-  const made = buildCreature(def, ASSETS);
+  const made = lookFamily(beast(def, buildCreature(def, ASSETS)), looksOf(name));
   built.set(name, made);
   return made;
 };
 export const assetCatalogue = () => ({ index: CATALOGUE, bank: ASSETS });
 const RIG = new Proxy({}, { get: (_, k) => A(String(k)) });   // (RIG.horse, as it always was)
-// a house cat in one of the coats (mammals.js CAT_COATS), picked by seed
-export const makeCat = ({ seed = 1 } = {}) => catRig(CAT_COATS[((seed * 2654435761) >>> 0) % CAT_COATS.length]);
+// a house cat in one of its coats (assets/creatures/mammals/cat.json `coats`: ginger, black, white, grey, tuxedo, cream,
+// brown, calico), picked by seed
+// (one definition a coat, kept: a sculpted cat's mesh is built once for its coat, not once for every cat in town)
+// (2026-11-06: the coats moved out of mammals.js CAT_COATS into the asset, each written out whole -- what makeCat used to
+//  work out, a coat's head and chest from its body, the tail's darker rings, is in the coat now -- and a plain one, the
+//  black, the white, the tuxedo, the calico, says `"params": { "tabby": false }`: its stripes are gated on that param)
+const cats = new Map();
+export const makeCat = ({ seed = 1 } = {}) => {
+  const d = byName.get("cat"), n = d.coats?.length || 1;
+  const i = ((seed * 2654435761) >>> 0) % n;
+  if (!cats.has(i)) cats.set(i, lookFamily(beast(d, buildCreature(dressed(d, { coat: d.coats?.length ? i : null }), ASSETS)), looksOf("cat")));
+  return cats.get(i);
+};
+// THE WATER'S CREATURES (2026-11-05: definitions now -- assets/creatures/sea/{fish,dolphin,shark}.json, the "Sea life" of
+// the catalogue, and assets/creatures/others/dragonfly.json). The swimmers ride the flier plumbing: constant motion, `fly`'s
+// `alt` their depth under the surface (index.html addSwimmer). A fish and a dragonfly are drawn from their definition in
+// one of its `coats` and at a size `k` (its param: every length of it written over k), both picked by the seed:
+const seeded = (seed) => { let s = (seed * 2246822519) >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; };
+const inCoat = (d, i, params) => { const o = dressed(d, { coat: i }); return { ...o, params: { ...o.params, ...params } }; };   // (creatures.js dressed)
+// a pond fish, ~0.25-0.45 m: three sizes, not any (k = .8, 1.15, 1.5; its sculpt overlay, written at k = 1, scaled by
+// k through `sculptScale`) -- each a sculpted body, built once for its coat and its size
+const FISH = new Map();
+const fishOf = (vi, ks) => {
+  const d = byName.get("fish"), key = vi * 3 + ks;
+  if (!FISH.has(key)) FISH.set(key, lookFamily(beast(d, buildCreature(inCoat(d, vi, { k: .8 + ks * .35 }), ASSETS)), fishLooks));
+  return FISH.get(key);
+};
+const fishLooks = () => byName.get("fish").coats.flatMap((_, vi) => [0, 1, 2].map((ks) => fishOf(vi, ks)));   // (its looks: every coat at every size)
+export function makeFish({ seed = 1 } = {}) {
+  const r = seeded(seed), d = byName.get("fish");
+  const vi = Math.floor(r() * d.coats.length);
+  return fishOf(vi, Math.min(2, Math.floor(r() * 3)));
+}
+// a dragonfly, 7-8 cm long: its own size (k .9-1.2) and colours. Not sculpted (its definition's `sculpt: false`): the
+// game draws it as its parts, in an instanced herd -- built afresh for each, as it always was
+// EVERY LOOK THE WORLD MAKES of every creature definition (2026-11-08, for the bake of their shapes: build/pregen.py
+// --bodies, pregen.html's part "bodies", bodies.js "BAKED SHAPES") -- each definition's base, coats, variants and young,
+// and the fish in every coat at every size: the very definitions the world builds (and keeps), so their bodies' shape
+// keys are the ones a load asks for. `onError(path, e)` hears of a look that cannot be made (none: it is skipped)
+export function allLooks(onError = () => {}) {
+  const out = [], add = (path, f) => { try { const x = f(); if (x && !out.includes(x)) out.push(x); } catch (e) { onError(path, e); } };
+  for (const [path, d] of ASSETS) {
+    if (!path.startsWith("creatures/") || path.includes("/frames/") || !d?.name || d.kind === "winged" || byName.get(d.name) !== d) continue;
+    if (d.name === "fish") { add(path, () => (fishLooks(), null)); for (const f of FISH.values()) add(path, () => f); continue; }
+    add(path, () => A(d.name));
+    (d.coats ?? []).forEach((_, i) => add(path, () => coatDef(d.name, i)));
+    for (const v of Object.keys(d.variants ?? {})) add(path, () => variantDef(d.name, v));
+    if (d.young) add(path, () => makeYoung(d.name));
+  }
+  return out;
+}
+export function makeDragonfly({ seed = 1 } = {}) {
+  const r = seeded(seed), d = byName.get("dragonfly");
+  const vi = Math.floor(r() * d.coats.length), k = .9 + r() * .3;
+  return beast(d, buildCreature(inCoat(d, vi, { k }), ASSETS));
+}
+// the lake's big swimmers, at their real sizes (dolphin ~2.6 m, shark ~3.2 m): the dolphin's tail pitches, the shark's sweeps
+export const makeDolphin = () => A("dolphin");
+export const makeShark = () => A("shark");
+// the open water's giants (2026-11-06: assets/creatures/sea/{orca,humpback,plesiosaurus}.json): a 7 m bull orca, a 14 m
+// humpback, a 3.3 m plesiosaur -- not wanderers: sealife.js swims them on loops of their own, a pure function of the clock
+export const makeOrca = () => A("orca");
+export const makeHumpback = () => A("humpback");
+export const makePlesiosaurus = () => A("plesiosaurus");
+// (2026-11-07: assets/creatures/sea/narwhal.json) a 4.5 m tusked bull narwhal -- its pod (a cow, a calf, an old pale bull:
+// the asset's variants) swum by sealife.js in a cold sea, on a loop of its own like the orcas'
+export const makeNarwhal = () => A("narwhal");
+// the pteranodon (2026-11-06: assets/creatures/dinosaurs/pteranodon.json), 6 m across the wings -- not a wanderer either:
+// pterosaurs.js soars it in circles over the open water, a pure function of the clock
+export const makePteranodon = () => A("pteranodon");
 export const SQUIRREL = RIG.squirrel;   // not a wanderer: it lives in the trees (squirrels.js)
 // A COAT of a species that declares several (its asset's `coats`: colour tables over its own -- a herd of horses bay,
 // chestnut, black, grey, dun, some with white socks; a black sheep in the flock): the k-th, built once
@@ -213,8 +198,9 @@ export const coatDef = (species, k) => {
   const d = byName.get(species), cs = d?.coats;
   if (!cs?.length) return A(species);
   const i = ((k % cs.length) + cs.length) % cs.length, key = species + "|" + i;
-  const table = d.colors ? "colors" : "c";   // (the asset's own colour table, by either name: creatures.js)
-  if (!coatCache.has(key)) coatCache.set(key, Object.keys(cs[i]).length ? buildCreature({ ...d, [table]: { ...(d[table] ?? {}), ...cs[i] }, coats: undefined }, ASSETS) : A(species));
+  // (creatures.js dressed: its colours over the asset's own table, its `params` over its params -- a coat's `name` is
+  //  not a colour; a coat that changes nothing is the species itself)
+  if (!coatCache.has(key)) coatCache.set(key, bareCoat(cs[i]) ? A(species) : lookFamily(beast(d, buildCreature(dressed(d, { coat: i }), ASSETS)), looksOf(species)));
   return coatCache.get(key);
 };
 // A VARIANT a species declares (its asset's `variants`: { name: { params, colors } } -- the hen yard's rooster is the
@@ -223,17 +209,22 @@ const variantCache = new Map();
 export const variantDef = (species, name) => {
   const d = byName.get(species), v = d?.variants?.[name];
   if (!v) return null;
-  const key = species + "|" + name, table = d.colors ? "colors" : "c";
-  if (!variantCache.has(key)) variantCache.set(key, buildCreature({ ...d, name, params: { ...(d.params ?? {}), ...(v.params ?? {}) }, [table]: { ...(d[table] ?? {}), ...(v.colors ?? {}) }, coats: undefined, variants: undefined }, ASSETS));
+  const key = species + "|" + name;
+  if (!variantCache.has(key)) variantCache.set(key, lookFamily(beast(d, buildCreature({ ...dressed(d, { variant: name }), name }, ASSETS)), looksOf(species)));
   return variantCache.get(key);
 };
+// THE SHORE'S SEALS AND WALRUSES (2026-11-06: assets/creatures/sea/{seal,walrus}.json): not wanderers -- haulout.js lays
+// them out on the shore and moves them, a pure function of the clock. A seal in one of its coats (its `coats`: 0-3
+// harbour seals silver grey, dark, brown; 4 a grey seal bull at 1.25x, 5 a grey seal cow at 1.1x), by `coat` or by seed
+export const makeSeal = ({ seed = 1, coat = null } = {}) => coatDef("seal", coat ?? ((seed * 2654435761) >>> 0));
+export const makeWalrus = () => A("walrus");
 // THE YOUNG of a species that declares them (its asset's `young`: { s, n, side, hop, name } -- a lamb, a foal, a calf):
 // the species at `s` of its size (geom.js scaleDef), no grazing, resting or coming to you of its own -- it
 // follows its mother (index.html, in spring). null for a species without young.
 export const makeYoung = (species) => {
   const d = byName.get(species), y = d?.young;
   // (built with its `grown` param false: what only the grown have -- an udder, antlers -- says `"when": "grown"`)
-  return y ? scaleDef(buildCreature({ ...d, params: { ...(d.params ?? {}), grown: false }, name: y.name ?? species, graze: undefined, rest: undefined, beg: undefined, young: undefined }, ASSETS), y.s) : null;
+  return y ? lookFamily(beast(d, scaleDef(buildCreature({ ...d, params: { ...(d.params ?? {}), grown: false }, name: y.name ?? species, graze: undefined, rest: undefined, beg: undefined, young: undefined }, ASSETS), y.s)), looksOf(species)) : null;
 };
 
 // natural travel speed for a body: one unit of the gait clock per this many
@@ -246,8 +237,11 @@ export function gaitBase(def) {
   // skeleton.js) cycles, so 4 x .8 x stride metres per unit keep it planted
   if (def.gaits?.walk?.stride) return Math.max(.08, 3.2 * def.gaits.walk.stride);
   if (def.legLen) return Math.max(.1, .8 * def.legLen);
-  const lg = def.parts.find((q) => q.id.startsWith("leg"));
-  return lg ? Math.max(.15, 1.3 * (lg.size.len + lg.size.r)) : 1;
+  // (a leg's length from its shape: a capsule's len, a tube's or a cone's ends -- a tube leg has no len, and NaN froze the walk)
+  const lg = def.parts.find((q) => q.id.startsWith("leg")), z = lg?.size;
+  const d = (a, b) => (a && b ? Math.hypot(b[0] - a[0], b[1] - a[1], (b[2] ?? 0) - (a[2] ?? 0)) : 0);
+  const L = !z ? 0 : (z.len ?? z.h ?? d(z.a, z.b)) + (z.r ?? z.r1 ?? 0);
+  return L > 0 ? Math.max(.15, 1.3 * L) : 1;
 }
 // walk or run at this speed? Legged animals change gait at a Froude number
 // v^2 / (g L) of about .5 whatever their size (a cat trots where a horse
@@ -258,9 +252,15 @@ export const runs = (speed, base) => speed * speed > 4.8 * base;
 // from the rump lobe to the chest lobe, just behind the withers, on the
 // back. rootX in the animal's root space (x forward); bodyX/bodyY in the
 // body part's own frame, where fused riders' parts hang.
+// `def.saddle` { x, y } (opt-in, 2026-11-05): the seat given outright, in root space -- x forward, y the height of the
+// back's surface there (the rider's hips sit 5cm above it, as the lobes' seat does). For a body whose rig lobes no
+// longer say where its back is: a sculpted dragon's chest and back are drawn over them (dragons.js PLANS seat: at the
+// neck's base, ahead of the wings). Its body part must not be turned (bodyX/bodyY are in its frame); geom.js scaleDef scales it.
 export function saddle(def) {
   const body = def.parts.find((q) => q.id === "body") ?? def.parts[0], front = def.parts.find((q) => q.id === "front" && q.parent === "body");
-  const bx = body.pos?.[0] ?? 0, rootX = front ? bx + front.pos[0] * 2 / 3 : bx + .08;
+  const bx = body.pos?.[0] ?? 0;
+  if (def.saddle) return { rootX: def.saddle.x, bodyX: def.saddle.x - bx, bodyY: def.saddle.y - (body.pos?.[1] ?? 0) + .05 };
+  const rootX = front ? bx + front.pos[0] * 2 / 3 : bx + .08;
   return { rootX, bodyX: rootX - bx, bodyY: (partExtent(body).r || .4) + .05 };
 }
 // a part's girth and length, whatever its shape -- the ONE reader of body sizes (probes, colliders,
@@ -335,7 +335,13 @@ function tauric(name, base, { scale = 1, at, drop = [], call, ...person }) {
   // (its HEAD is the person's mesh face, heads.js -- found by part index: the person's indices moved past the animal's,
   //  as a fused rider's are; without it the man had no head at all)
   const face = man.face ? { ...man.face, head: parts.length + man.face.head, gaze: parts.length + man.face.gaze } : null;
-  return { ...rest, name, monster: true, call, parts: [...parts, ...human], ...(face ? { face } : {}) };
+  // (2026-11-08) the animal's trunk SCULPTED as the animal itself is: what is left of its parts converted as a body of
+  // its own (its overlay without the shapes on the bones dropped -- the horse's neck and head -- and without their eyes:
+  // bodyspec.js trimOverlay), carried in `sculpts` with its parts as bones; the person's upper body stays the composite's.
+  // Put together as parts it was drawn as plain pills, the horse beside it a skinned body
+  const trunk = sculptPart(markSculpt({ ...rest, name: `${name} trunk`, parts, ...(base.sculpt ? { sculpt: trimOverlay(base.sculpt, new Set(parts.map((p) => p.id))) } : {}) }));
+  return { ...rest, name, monster: true, call, parts: [...(trunk ? trunk.parts : parts), ...human], ...(face ? { face } : {}),
+           ...(trunk ? { sculpts: [{ body: trunk.body, base: 0 }] } : {}) };
 }
 
 // ---- beast-men: the human rig (people.js makePerson) with an animal's head -- the species' own rig head (its
@@ -357,12 +363,22 @@ function beastman(name, rig, { seed, height, build = 1.2, hoof = false, headScal
 // person and an animal put together and so are built from both.
 export const SPECIES = [
   A("chicken"),
+  A("rooster"),
+  A("cockatiel"),
+  A("woodpecker"),
+  A("hoopoe"),
+  A("puffin"),
   A("parrot"),
+  A("cockatoo"),
+  A("toucan"),
+  A("hornbill"),
+  A("tawny owl"),
   A("owl"),
   A("hare"),
   A("cat"),
   A("fox"),
   A("eagle"),
+  A("vulture"),
   A("dog"),
   A("sheep"),
   A("ram"),
@@ -391,10 +407,19 @@ export const SPECIES = [
   A("swan"),
   A("flamingo"),
   A("heron"),
+  A("ibis"),
+  A("spoonbill"),
+  A("crowned crane"),
+  A("penguin"),
+  A("pelican"),
   A("duck"),
   A("peacock"),
+  A("turkey"),
+  A("ostrich"),
+  A("cassowary"),
   A("crocodile"),
   A("frog"),
+  A("wall lizard"),
   A("turtle"),
   A("hedgehog"),
   A("scorpion"),
@@ -402,8 +427,31 @@ export const SPECIES = [
   A("beaver"),
   A("camel"),
   A("bactrian"),
+  A("hyena"),
+  A("impala"),
+  A("anteater"),
+  A("pangolin"),
+  A("skunk"),
+  A("capybara"),
+  A("badger"),
+  A("weasel"),
+  A("lynx"),
+  A("chamois"),
+  A("moose"),
+  A("bison"),
+  A("ibex"),
+  A("giantpanda"),
+  A("redpanda"),
+  A("porcupine"),
   A("bat"),
+  A("lemur"),
+  A("baboon"),
+  A("kangaroo"),
+  A("orangutan"),
+  A("gorilla"),
   A("unicorn"),
+  A("pegasus"),
+  A("griffin"),
   tauric("centaur", A("horse"), { at: [.5, 1.45, 0], drop: ["mane"], seed: 11, kind: "man", height: 2.2, outfit: { bare: true, hair: "long" } }),
   tauric("drider", A("spider"), { scale: 25, at: [.28, .95, 0], seed: 31, kind: "woman", height: 1.8, outfit: { named: "drider", hair: "long" } }),
   tauric("sphinx", A("lion"), { at: [.5, 1.0, 0], drop: ["mane"], call: "lion", seed: 41, kind: "man", height: 1.9, outfit: { bare: true, hair: "bob" } }),
@@ -418,6 +466,7 @@ export const SPECIES = [
   beastman("ramman", A("ram"), { seed: 26, height: 2.0, build: 1.15, hoof: true, outfit: { named: "ramman" } }),
   beastman("smilodonman", A("smilodon"), { seed: 27, height: 2.2, build: 1.25, outfit: { named: "smilodonman" } }),
   A("manticore"),
+  A("cerberus"),
   A("dragon"),
   A("red dragon"),
   A("black dragon"),
@@ -432,8 +481,13 @@ export const SPECIES = [
   A("feathered serpent"),
   A("hydra"),
   A("tyrannosaur"),
+  A("carnotaurus"),
+  A("allosaurus"),
+  A("dilophosaurus"),
+  A("pachycephalosaurus"),
   A("triceratops"),
   A("styracosaurus"),
+  A("diabloceratops"),
   A("stegosaurus"),
   A("ankylosaurus"),
   A("diplodocus"),

@@ -261,6 +261,61 @@ export const CALLS = {
   rat:      mammal(.4, SQUEAK),
   // a bat's audible social squeaks: higher and faster than the rat's, a thin tiny tract
   bat:      mammal(.3, { dur: .035, formantScale: 3.5, harmonics: 3, breath: .05, jitter: 1, chaos: .05, repeat: 5, gap: .06, f0: [[0, 8000], [.3, 10500], [1, 7000]], amp: [[0, 0], [.2, 1], [1, 0]] }),
+  // a spotted hyena (2026-11-05): mostly the WHOOP -- a smooth, hollow "whoo-OOP" sliding up an octave and more, carried far
+  // -- and now and then the GIGGLE, a fast run of harsh high "hee-hee-hee" yelps
+  hyena:    mammal(1.9, [
+    { dur: 1.5, formantScale: .8, harmonics: 4, Fc: [330, 800, 2200, 3200], Fo: [520, 1000, 2400, 3300], Bw: [60, 90, 150, 200], breath: .15, jitter: .6, shimmer: 2, chaos: .02,
+      f0: [[0, 170], [.45, 300], [.8, 560], [1, 380]], amp: [[0, 0], [.2, .55], [.78, 1], [1, 0]], mouth: [[0, .15], [.6, .55], [.85, .9], [1, .3]] },
+    { dur: 1.3, formantScale: .78, harmonics: 4, Fc: [330, 800, 2200, 3200], Fo: [520, 1000, 2400, 3300], Bw: [60, 90, 150, 200], breath: .15, jitter: .6, shimmer: 2, chaos: .02,
+      f0: [[0, 190], [.5, 340], [.85, 620], [1, 420]], amp: [[0, 0], [.2, .6], [.8, 1], [1, 0]], mouth: [[0, .15], [.6, .6], [.85, .9], [1, .3]] },
+    { dur: .1, formantScale: 1.25, harmonics: 12, breath: .3, jitter: 3, shimmer: 10, subharm: .25, chaos: .35, roar: .2, roarFreq: 1500, repeat: 9, gap: .045,
+      f0: [[0, 720], [.4, 980], [1, 640]], amp: [[0, 0], [.15, 1], [.7, .6], [1, 0]], mouth: [[0, .4], [.35, 1], [1, .35]] }]),
+  // an impala's alarm SNORT -- breath only, a sharp burst through the nose -- and the ram's rutting bark, a rough grunting cough
+  impala:   mammal(1.3, [
+    { voice: 0, breath: 1, formantScale: .9, roar: .7, roarFreq: 1400, roarBw: 1800, dur: .16, repeat: 1, f0: [[0, 40], [1, 30]], amp: [[0, 0], [.04, 1], [.4, .55], [1, 0]], mouth: [[0, .9], [1, .4]] },
+    { voice: 0, breath: 1, formantScale: .9, roar: .7, roarFreq: 1300, roarBw: 1800, dur: .13, repeat: 2, gap: .22, f0: [[0, 40], [1, 30]], amp: [[0, 0], [.04, 1], [.4, .5], [1, 0]], mouth: [[0, .9], [1, .4]] },
+    { ...ROE, dur: .2, formantScale: .85, roar: .45, repeat: 4, gap: .3, f0: [[0, 170], [.3, 230], [1, 120]] }]),
+  // a capybara: chattering CLICKS of the teeth (short dry bursts), a high thin WHISTLE, a low purring grunt
+  capybara: mammal(1, [
+    { voice: 0, breath: 1, formantScale: 2.2, roar: .8, roarFreq: 3200, roarBw: 2500, dur: .018, repeat: 9, gap: .075, f0: [[0, 30], [1, 30]], amp: [[0, 0], [.1, 1], [1, 0]], mouth: [[0, .5], [1, .5]] },
+    { dur: .55, formantScale: 2.6, harmonics: 2, breath: .08, jitter: .5, shimmer: 1, chaos: .01, f0: [[0, 1500], [.4, 2100], [1, 1650]], amp: [[0, 0], [.15, 1], [.8, .8], [1, 0]], mouth: [[0, .6], [1, .6]] },
+    { ...GRUNTS, formantScale: .9, nasal: .7, roar: .2, dur: .16, repeat: 6, gap: .09, f0: [[0, 110], [.5, 140], [1, 100]] }]),
+  // a skunk: hisses and huffs, the forefeet stamping -- breath only; a pangolin hisses and snuffles; a giant anteater
+  // keeps quiet but for a snorting huff (and a bellow when cornered)
+  skunk:    mammal(.4, { voice: 0, breath: 1, formantScale: 2.4, roar: .7, roarFreq: 3500, roarBw: 3000, dur: .35, repeat: 2, gap: .25, f0: [[0, 30], [1, 30]], amp: [[0, 0], [.1, 1], [.7, .6], [1, 0]], mouth: [[0, .6], [1, .4]] }),
+  pangolin: mammal(.4, { voice: 0, breath: 1, formantScale: 2.2, roar: .7, roarFreq: 2800, roarBw: 2500, dur: .5, repeat: 1, f0: [[0, 25], [1, 25]], amp: [[0, 0], [.2, 1], [.8, .7], [1, 0]], mouth: [[0, .3], [1, .3]] }),
+  // a badger (2026-11-06): quiet mostly -- low rough GRUNTS as it snuffles about, and the soft rapid PURR (a throaty
+  // trill, pulsed some 24 times a second); a least weasel: a short high TRILL, a quick run of chirps, or a harsh CHITTER
+  badger:   mammal(.8, [
+    { ...GRUNTS, formantScale: 1, nasal: .5, roar: .35, dur: .14, repeat: 5, gap: .12, f0: [[0, 140], [.4, 170], [1, 120]] },
+    { dur: .9, formantScale: 1.1, harmonics: 10, breath: .3, jitter: 3, shimmer: 8, subharm: .3, chaos: .3, nasal: .4, amRate: 24, am: [[0, .6], [1, .6]],
+      f0: [[0, 110], [.5, 130], [1, 100]], amp: [[0, 0], [.1, .8], [.8, .7], [1, 0]], mouth: [[0, .2], [1, .2]] }]),
+  weasel:   mammal(.3, [
+    { ...SQUEAK, dur: .04, formantScale: 3.6, repeat: 7, gap: .03, f0: [[0, 4200], [.5, 5000], [1, 3900]] },
+    { ...SQUEAK, dur: .07, formantScale: 3.4, chaos: .3, breath: .3, repeat: 4, gap: .05, f0: [[0, 3000], [.4, 3800], [1, 2600]] }]),
+  // (2026-11-06) a lynx: mostly silent -- a spitting HISS when cornered, and in the rut a long low moaning YOWL, far
+  // deeper and rougher than a house cat's; a chamois: the alarm WHISTLE, a sharp hissing whistle through the nose;
+  // a red panda: high SQUEAKS and a soft twittering "huff-quack" run; a giant panda: a goat-like BLEAT, and a low honk;
+  // a porcupine: grunts, and the dry RATTLE of its quills shaken in warning (breath only)
+  lynx:     mammal(1, [
+    { voice: 0, breath: 1, formantScale: 1.6, roar: .7, roarFreq: 3000, roarBw: 3500, dur: .6, repeat: 1, f0: [[0, 30], [1, 30]], amp: [[0, 0], [.05, 1], [.7, .7], [1, 0]], mouth: [[0, .7], [1, .5]] },
+    { ...MEOW, dur: 1.8, formantScale: 1.15, harmonics: 14, breath: .3, jitter: 3, shimmer: 9, subharm: .35, chaos: .3, nasal: .25, vibRate: 5, vibDepth: 1.2,
+      f0: [[0, 240], [.25, 380], [.6, 330], [1, 200]], amp: [[0, 0], [.15, .9], [.8, 1], [1, 0]], mouth: [[0, .1], [.3, .9], [.8, .7], [1, .1]] }]),
+  chamois:  mammal(1, [
+    { voice: 0, breath: 1, formantScale: 1.8, roar: .8, roarFreq: 3200, roarBw: 900, dur: .55, repeat: 1, f0: [[0, 40], [1, 30]], amp: [[0, 0], [.05, 1], [.6, .6], [1, 0]], mouth: [[0, .2], [1, .2]] },
+    { dur: .5, formantScale: 2.4, harmonics: 2, breath: .5, jitter: .5, shimmer: 2, chaos: .02, repeat: 2, gap: .5, f0: [[0, 2600], [.3, 2900], [1, 2300]], amp: [[0, 0], [.05, 1], [.7, .6], [1, 0]], mouth: [[0, .3], [1, .3]] }]),
+  redpanda: mammal(.4, [
+    { ...SQUEAK, dur: .09, formantScale: 3, repeat: 5, gap: .07, f0: [[0, 2600], [.4, 3400], [1, 2400]] },
+    { ...SQUEAK, dur: .05, formantScale: 2.8, chaos: .2, breath: .35, repeat: 8, gap: .04, f0: [[0, 1900], [.5, 2400], [1, 1800]] }]),
+  giantpanda: mammal(1.4, [
+    { ...BLEAT, dur: .8, formantScale: .9, f0: [[0, 260], [.4, 340], [1, 220]] },
+    { ...BLEAT, dur: .4, formantScale: .8, amRate: 0, nasal: .8, repeat: 2, gap: .3, f0: [[0, 180], [.5, 210], [1, 160]] }]),
+  porcupine: mammal(.6, [
+    { ...GRUNTS, formantScale: 1.4, nasal: .5, dur: .1, repeat: 4, gap: .14, f0: [[0, 220], [.5, 260], [1, 200]] },
+    { voice: 0, breath: 1, formantScale: 2, roar: .9, roarFreq: 4500, roarBw: 4000, amRate: 30, am: [[0, .9], [1, .9]], dur: .9, repeat: 1, f0: [[0, 30], [1, 30]], amp: [[0, 0], [.1, 1], [.8, .8], [1, 0]], mouth: [[0, .5], [1, .5]] }]),
+  anteater: mammal(.7, [
+    { voice: 0, breath: 1, formantScale: 1, roar: .7, roarFreq: 1100, roarBw: 1500, dur: .25, repeat: 2, gap: .3, f0: [[0, 30], [1, 30]], amp: [[0, 0], [.08, 1], [.5, .6], [1, 0]], mouth: [[0, .6], [1, .3]] },
+    { dur: .9, formantScale: .75, harmonics: 18, breath: .4, jitter: 4, shimmer: 12, subharm: .5, chaos: .5, roar: .45, roarFreq: 700, nasal: .4, f0: [[0, 120], [.3, 170], [1, 90]], mouth: [[0, .2], [.4, .7], [1, .2]] }]),
   // ---- savanna ----
   lion:     mammal(2.2, ROAR),
   // a tiger: one continuous rough "aaunngh" -- the lion's tract, a touch smaller, no staccato pulsing
@@ -292,12 +347,33 @@ export const CALLS = {
   tyrannosaur: mammal(2.4, { dur: 2.6, formantScale: .3, harmonics: 30, ...LION_TRACT, Bw: [110, 170, 260, 320], breath: .3, jitter: 6, shimmer: 16, subharm: .9, chaos: .7,
     roar: .55, roarFreq: 350, roarBw: 700, nasal: .35, amRate: 8, am: [[0, .3], [1, .5]], f0: [[0, 34], [.3, 58], [.7, 50], [1, 28]],
     amp: [[0, 0], [.12, 1], [.8, .9], [1, 0]], mouth: [[0, .15], [.4, .5], [1, .1]] }),
+  // a carnotaurus: the tyrannosaur's closed-mouth boom, smaller and rougher -- a shorter, deeper-pulsed growl from a
+  // short deep head
+  carnotaurus: mammal(2.1, { dur: 1.9, formantScale: .38, harmonics: 26, ...LION_TRACT, Bw: [110, 170, 260, 320], breath: .32, jitter: 7, shimmer: 18, subharm: .8, chaos: .75,
+    roar: .5, roarFreq: 420, roarBw: 750, nasal: .3, amRate: 13, am: [[0, .35], [1, .55]], f0: [[0, 44], [.3, 74], [.7, 62], [1, 36]],
+    amp: [[0, 0], [.1, 1], [.75, .85], [1, 0]], mouth: [[0, .15], [.4, .55], [1, .1]] }),
+  // an allosaurus: a boom between the two, longer and smoother than the carnotaur's
+  allosaurus: mammal(2.2, { dur: 2.2, formantScale: .35, harmonics: 28, ...LION_TRACT, Bw: [110, 170, 260, 320], breath: .3, jitter: 5, shimmer: 14, subharm: .75, chaos: .6,
+    roar: .5, roarFreq: 380, roarBw: 700, nasal: .35, amRate: 9, am: [[0, .3], [1, .45]], f0: [[0, 40], [.3, 68], [.7, 58], [1, 32]],
+    amp: [[0, 0], [.12, 1], [.8, .9], [1, 0]], mouth: [[0, .15], [.4, .5], [1, .1]] }),
+  // a dilophosaurus: higher and lighter -- a hollow, gular hoot rising and breaking, from a slim throat (crested heads
+  // likely resonated; kept closed-mouthed like its kin)
+  dilophosaurus: mammal(1.7, { dur: 1.3, formantScale: .55, harmonics: 22, ...LION_TRACT, Bw: [100, 150, 230, 300], breath: .3, jitter: 5, shimmer: 12, subharm: .5, chaos: .45,
+    roar: .35, roarFreq: 700, roarBw: 900, nasal: .45, amRate: 7, am: [[0, .2], [1, .4]], f0: [[0, 80], [.25, 150], [.6, 170], [1, 90]],
+    amp: [[0, 0], [.1, 1], [.7, .85], [1, 0]], mouth: [[0, .2], [.4, .6], [1, .15]] }),
+  // a pachycephalosaurus: a honk-grunt -- a short nasal honk (the ceratopsians' moo tract, smaller) ending in a
+  // rough grunt, two or three in a run
+  pachycephalosaurus: mammal(1.6, { ...MOO, dur: .55, repeat: 3, gap: .22, formantScale: .62, harmonics: 16, subharm: .5, chaos: .5, roar: .38, roarFreq: 560, nasal: .6,
+    f0: [[0, 95], [.25, 150], [.6, 120], [1, 70]], amp: [[0, 0], [.08, 1], [.55, .9], [.75, .6], [1, 0]], mouth: [[0, .3], [.3, .9], [1, .3]] }),
   // a triceratops: a deep nasal honking bellow (the moo's tract, far bigger), closed-mouthed like its kin
   triceratops: mammal(2.2, { ...MOO, dur: 2.2, formantScale: .4, harmonics: 18, subharm: .55, chaos: .35, roar: .25, roarFreq: 420, nasal: .55,
     f0: [[0, 48], [.35, 82], [.7, 76], [1, 44]] }),
   // a styracosaurus: the ceratopsian honk, smaller and higher
   styracosaurus: mammal(1.8, { ...MOO, dur: 1.6, formantScale: .55, harmonics: 16, subharm: .45, chaos: .3, roar: .2, roarFreq: 520, nasal: .6,
     f0: [[0, 70], [.35, 120], [.7, 110], [1, 64]] }),
+  // a diabloceratops: the styracosaurus' honk, a shade lower and rougher (a deeper, shorter face)
+  diabloceratops: mammal(1.9, { ...MOO, dur: 1.7, formantScale: .5, harmonics: 16, subharm: .5, chaos: .38, roar: .24, roarFreq: 480, nasal: .55,
+    f0: [[0, 62], [.35, 108], [.7, 98], [1, 56]] }),
   // a stegosaurus: a low, breathy moan
   stegosaurus: mammal(2.2, { ...MOO, dur: 2.4, formantScale: .38, harmonics: 14, breath: .35, subharm: .6, chaos: .4, roar: .3, roarFreq: 380, nasal: .4,
     f0: [[0, 40], [.4, 62], [.8, 55], [1, 36]] }),
@@ -313,6 +389,24 @@ export const CALLS = {
   oryx:     mammal(1.4, { ...MOO, dur: .6, repeat: 2, gap: .3, formantScale: .7, f0: [[0, 90], [.4, 110], [1, 80]] }),
   reindeer: mammal(1.3, { ...MOO, dur: .3, repeat: 4, gap: .2, formantScale: .75, roar: .4, f0: [[0, 70], [.5, 85], [1, 60]] }),
   rhinoceros: mammal(2, { ...MOO, dur: 1.2, formantScale: .45, roar: .45, subharm: .6, f0: [[0, 50], [.3, 75], [1, 45]] }),
+  // ---- the primates and the kangaroo (2026-11-05) ----
+  // a silverback: a run of soft rising hoots -- or the CHEST-BEAT, a fast patter of hollow pops off cupped hands (no voice)
+  gorilla:  mammal(2, [{ dur: .2, formantScale: .5, harmonics: 6, Bw: [70, 110, 170, 220], breath: .15, jitter: 1, shimmer: 4, chaos: .05, nasal: .35, repeat: 6, gap: .12,
+                         f0: [[0, 170], [.5, 215], [1, 185]], amp: [[0, 0], [.2, 1], [1, 0]], mouth: [[0, .15], [.5, .35], [1, .15]] },
+                       { voice: 0, breath: 1, formantScale: .35, roar: .85, roarFreq: 240, roarBw: 320, dur: .055, repeat: 11, gap: .05,
+                         f0: [[0, 30], [1, 30]], amp: [[0, 0], [.08, 1], [1, 0]], mouth: [[0, .9], [1, .5]] }]),
+  // an olive baboon: the male's two-syllable bark, "wa-HOO"
+  baboon:   mammal(1.6, { dur: .38, formantScale: .8, harmonics: 16, breath: .3, jitter: 3, shimmer: 10, subharm: .3, chaos: .35, roar: .3, roarFreq: 900, roarBw: 1200, repeat: 2, gap: .55,
+                          f0: [[0, 240], [.3, 400], [.55, 290], [.7, 330], [1, 190]], amp: [[0, 0], [.08, 1], [.45, .45], [.6, .9], [1, 0]], mouth: [[0, .3], [.3, 1], [.55, .35], [1, .7]] }),
+  // a ring-tailed lemur: the plaintive, cat-like wail
+  lemur:    mammal(.8, { dur: .85, formantScale: 1.5, harmonics: 10, breath: .2, jitter: 1.5, shimmer: 5, chaos: .1, nasal: .5, vibRate: 6, vibDepth: .4,
+                         f0: [[0, 480], [.3, 780], [.8, 690], [1, 430]], amp: [[0, 0], [.15, 1], [.8, .7], [1, 0]], mouth: [[0, .3], [.3, .8], [1, .3]] }),
+  // an orangutan's LONG CALL (the throat sac's): deep bellowing pulses that rise, then grumble away
+  orangutan: mammal(1.6, { dur: .5, formantScale: .45, harmonics: 20, breath: .3, jitter: 4, shimmer: 10, subharm: .6, chaos: .4, roar: .35, roarFreq: 450, roarBw: 700, nasal: .4, repeat: 5, gap: .32,
+                           f0: [[0, 90], [.4, 140], [1, 85]], amp: [[0, 0], [.15, 1], [.7, .8], [1, 0]], mouth: [[0, .3], [.4, .8], [1, .3]] }),
+  // a red kangaroo: soft guttural clucks and grunts
+  kangaroo: mammal(.9, { dur: .1, formantScale: .9, harmonics: 10, breath: .4, jitter: 3, shimmer: 10, subharm: .3, chaos: .4, roar: .3, roarFreq: 700, roarBw: 900, nasal: .4, repeat: 4, gap: .26,
+                         f0: [[0, 125], [1, 100]], amp: [[0, 0], [.1, 1], [1, 0]], mouth: [[0, .2], [.3, .5], [1, .15]] }),
   // a flamingo: a honking, goose-like gabble
   flamingo: bird(1.1, { h2: .8, h3: .5, noise: .25, voice2: .3, voice2Ratio: 1.4, vib: .3, vibRate: 25,
     syllables: [{ type: "sweep", dur: .12, f0: [[0, 700], [1, 600]], gap: .08 }, { type: "sweep", dur: .14, f0: [[0, 760], [1, 640]], gap: .09 }, { type: "sweep", dur: .12, f0: [[0, 720], [1, 620]], gap: .4 }] }),
@@ -322,6 +416,40 @@ export const CALLS = {
   // a dolphin surfacing: a signature whistle (a wide, wavering FM sweep) and a click train
   dolphin:  bird(.9, { h2: .1, h3: 0, vib: 1.5, vibRate: 8, noise: .03,
     syllables: [{ type: "sweep", dur: .6, f0: [[0, 6000], [.4, 11000], [1, 8000]], gap: .1 }, { type: "noise", dur: .4, f0: [[0, 4000], [1, 4000]], bw: 5000, amRate: 150, level: .6, gap: .3 }] }),
+  // a humpback's song, a phrase of it: long low moans sliding up and down (slow FM, a hollow second voice), a groan, a
+  // rising whoop
+  humpback: bird(1.6, { h2: .45, h3: .2, vib: .5, vibRate: 2.5, noise: .05, voice2: .25, voice2Ratio: 1.5,
+    syllables: [{ type: "sweep", dur: 1.9, f0: [[0, 150], [.45, 235], [1, 125]], gap: .45 }, { type: "sweep", dur: 1.3, f0: [[0, 95], [.6, 80], [1, 70]], gap: .5 },
+                { type: "sweep", dur: 1.1, f0: [[0, 260], [.8, 520], [1, 480]], gap: .9 }] }),
+  // an orca: a PULSED CALL (a buzzing two-tone squeal: narrow-band noise pulsed 260 times a second, gliding up and
+  // down) and a high whistle
+  orca:     bird(1.1, { h2: .4, h3: .15, vib: .3, vibRate: 6, noise: .04,
+    syllables: [{ type: "noise", dur: .55, f0: [[0, 1300], [.35, 2400], [1, 1700]], bw: 350, amRate: 260, gap: .12 }, { type: "noise", dur: .3, f0: [[0, 1900], [1, 1500]], bw: 300, amRate: 300, level: .8, gap: .35 },
+                { type: "sweep", dur: .8, f0: [[0, 5500], [.5, 8500], [1, 6500]], level: .6, gap: .5 }] }),
+  // a seal on the shore (haulout.js): mostly a long wavering MOAN through the nose (a grey seal's "singing", a harbour
+  // seal's growling moan), sometimes a hoarse double BARK, or a short throaty growl
+  seal:     mammal(1.1, [
+    { dur: 1.9, formantScale: .8, harmonics: 9, Fc: [300, 900, 2100, 3000], Fo: [520, 1150, 2300, 3200], breath: .2, jitter: 1.5, shimmer: 5, subharm: .25, chaos: .12,
+      nasal: .55, vibRate: 5, vibDepth: 1.4, f0: [[0, 170], [.25, 290], [.6, 270], [1, 150]], amp: [[0, 0], [.15, .9], [.6, 1], [1, 0]], mouth: [[0, .15], [.3, .6], [.8, .4], [1, .1]] },
+    { dur: 1.4, formantScale: .8, harmonics: 9, Fc: [300, 900, 2100, 3000], Fo: [520, 1150, 2300, 3200], breath: .25, jitter: 2, shimmer: 6, subharm: .35, chaos: .15,
+      nasal: .6, vibRate: 4, vibDepth: 1, f0: [[0, 240], [.4, 210], [1, 130]], amp: [[0, 0], [.1, 1], [.7, .8], [1, 0]], mouth: [[0, .3], [.4, .5], [1, .1]] },
+    { dur: .26, formantScale: .9, harmonics: 18, Fc: [320, 950, 2200, 3200], Fo: [700, 1300, 2400, 3300], roarFreq: 900, roarBw: 1200, breath: .3, jitter: 3, shimmer: 10, subharm: .45, chaos: .5,
+      nasal: .2, roar: .35, repeat: 2, gap: .32, f0: [[0, 220], [.2, 380], [.5, 330], [1, 190]], amp: [[0, 0], [.06, 1], [.5, .7], [1, 0]], mouth: [[0, .3], [.2, 1], [1, .4]] },
+    { dur: .7, formantScale: .75, harmonics: 20, breath: .3, jitter: 4, shimmer: 12, subharm: .5, chaos: .5, nasal: .4, roar: .45, roarFreq: 600, roarBw: 900, amRate: 18,
+      f0: [[0, 110], [.4, 140], [1, 95]], amp: [[0, 0], [.1, 1], [.7, .8], [1, 0]], mouth: [[0, .1], [.4, .4], [1, .1]], am: [[0, .3], [1, .4]] }]),
+  // a walrus bull: a deep rough BELLOW out of the huge chest, or a run of short GRUNTS
+  walrus:   mammal(1.6, [
+    { dur: 1.7, formantScale: .45, harmonics: 26, Fc: [200, 520, 1250, 2100], Fo: [480, 900, 1550, 2300], Bw: [90, 140, 220, 280], roarFreq: 500, roarBw: 900, breath: .25, jitter: 5, shimmer: 14,
+      subharm: .65, chaos: .55, nasal: .3, roar: .7, amRate: 9, f0: [[0, 70], [.3, 118], [.75, 100], [1, 58]], amp: [[0, 0], [.12, 1], [.75, .85], [1, 0]], mouth: [[0, .2], [.3, .9], [.85, .6], [1, .2]],
+      am: [[0, .15], [.5, .3], [1, .25]] },
+    { dur: .3, formantScale: .55, harmonics: 20, breath: .2, jitter: 4, shimmer: 12, subharm: .55, chaos: .45, nasal: .5, roar: .5, roarFreq: 500, roarBw: 800, repeat: 4, gap: .3,
+      Fc: [220, 650, 1500, 2400], Fo: [450, 950, 1700, 2500], f0: [[0, 85], [.3, 115], [1, 80]], amp: [[0, 0], [.1, 1], [.6, .8], [1, 0]], mouth: [[0, .1], [.3, .5], [1, .1]] }]),
+  // and its BELL: a walrus bull's ringing knocks -- a run of pure tones struck and dying away, an inharmonic partial over
+  // each (a bell's, 2.76 times up), the run slowing, then a softer pair
+  walrusBell: bird(1.2, { h2: .12, h3: .05, vib: 0, noise: .01, voice2: .35, voice2Ratio: 2.76,
+    syllables: [{ type: "sweep", dur: .32, f0: [[0, 455], [1, 440]], gap: .22 }, { type: "sweep", dur: .32, f0: [[0, 455], [1, 438]], gap: .26 },
+                { type: "sweep", dur: .34, f0: [[0, 450], [1, 436]], gap: .32 }, { type: "sweep", dur: .36, f0: [[0, 448], [1, 432]], level: .8, gap: .42 },
+                { type: "sweep", dur: .5, f0: [[0, 452], [1, 430]], level: .55, gap: .8 }, { type: "sweep", dur: .5, f0: [[0, 452], [1, 430]], level: .4, gap: .5 }] }),
   // ---- birds ----
   // a whooper swan: trumpeting "whoop-whoop", strongly harmonic with a second voice
   swan:     bird(.9, { motifs: 2, h2: .8, h3: .6, noise: .25, voice2: .3, vib: .3, vibRate: 20,
@@ -340,6 +468,56 @@ export const CALLS = {
   // a parrot: a harsh squawk -- noise and a biphonic voice fighting each other
   parrot:   bird(1.1, { motifs: 2, h2: .7, h3: .5, noise: .6, voice2: .5, voice2Ratio: 1.41, vib: .8, vibRate: 45,
     syllables: [{ type: "noise", dur: .18, f0: [[0, 1800], [.5, 2400], [1, 1600]], bw: 1400, amRate: 110, gap: .04 }, { type: "sweep", dur: .22, f0: [[0, 1400], [.4, 2300], [1, 1200]], gap: .3 }] }),
+  // a king penguin's trumpet: a short pick-up note, then the long brassy call -- two voices a hair apart, beating
+  penguin:  bird(1.3, { h2: .85, h3: .6, noise: .2, voice2: .5, voice2Ratio: 1.06, vib: .6, vibRate: 22,
+    syllables: [{ type: "sweep", dur: .12, f0: [[0, 520], [1, 640]], gap: .05 }, { type: "sweep", dur: .9, f0: [[0, 700], [.2, 820], [.8, 760], [1, 560]], gap: .6 }] }),
+  // an ostrich booms with its bill shut, like a crocodile: a low, hollow "boo-boo-boooom", the neck puffed out
+  ostrich:  mammal(1.6, { dur: .7, formantScale: .5, harmonics: 8, breath: .2, jitter: 3, shimmer: 8, subharm: .6, chaos: .3, nasal: .5, repeat: 3, gap: .35,
+    f0: [[0, 70], [.3, 92], [1, 58]], amp: [[0, 0], [.15, 1], [.8, .8], [1, 0]], mouth: [[0, .1], [.5, .25], [1, .1]] }),
+  // a keel-billed toucan: a dry croaking "krrrek, krrrek", frog-like, over and over
+  toucan:   bird(1, { motifs: 3, h2: .5, h3: .3, noise: .7, syllables: [{ type: "noise", dur: .16, f0: [[0, 900], [1, 780]], bw: 600, amRate: 60, gap: .25 }] }),
+  // an ibis: mostly quiet -- a few low nasal honks, "hunk-hunk-hunk"
+  ibis:     bird(.8, { h2: .7, h3: .5, noise: .4, voice2: .2, voice2Ratio: 1.3,
+    syllables: [{ type: "sweep", dur: .09, f0: [[0, 460], [1, 380]], gap: .1 }, { type: "sweep", dur: .09, f0: [[0, 450], [1, 370]], gap: .1 }, { type: "sweep", dur: .1, f0: [[0, 440], [1, 360]], gap: .5 }] }),
+  // a pelican: nearly silent away from the colony -- a low hoarse grunt or two
+  pelican:  mammal(.8, { dur: .25, formantScale: .7, harmonics: 12, breath: .5, jitter: 3, shimmer: 10, subharm: .4, chaos: .4, roar: .3, roarFreq: 600, nasal: .3, repeat: 2, gap: .3,
+    f0: [[0, 110], [.4, 140], [1, 95]], amp: [[0, 0], [.1, 1], [.7, .7], [1, 0]], mouth: [[0, .2], [.4, .6], [1, .2]] }),
+  // a griffon vulture: no song at all -- a breathy hiss and a guttural grunt over a carcass
+  vulture:  mammal(.9, { dur: .45, formantScale: .6, harmonics: 10, breath: .8, jitter: 4, shimmer: 12, subharm: .5, chaos: .6, roar: .2, roarFreq: 500, nasal: .2, repeat: 2, gap: .4,
+    f0: [[0, 120], [.3, 150], [1, 90]], amp: [[0, 0], [.1, 1], [.7, .6], [1, 0]], mouth: [[0, .3], [.4, .7], [1, .2]] }),
+  // a tawny owl's other call: the female's sharp "ke-WICK", then the male's hoot
+  "tawny owl": bird(1, { h2: .3, h3: .1, noise: .15, vib: .4, vibRate: 20,
+    syllables: [{ type: "sweep", dur: .12, f0: [[0, 1200], [1, 1800]], gap: .1 }, { type: "sweep", dur: .2, f0: [[0, 1600], [.3, 1700], [1, 1100]], gap: 1.2 },
+      { type: "sweep", dur: .5, f0: [[0, 420], [.2, 470], [1, 400]], gap: .8 }, { type: "trill", dur: .9, f0: [[0, 480], [.3, 460], [1, 400]], trillRate: 7, trillDepth: .1, gap: 1 }] }),
+  // a hoopoe: its name -- a soft, low, hollow "oop-oop-oop"
+  hoopoe:   bird(.7, { h2: .15, h3: .03, noise: .05,
+    syllables: [0, 1, 2].map((k) => ({ type: "sweep", dur: .1, f0: [[0, 520], [.3, 540], [1, 480]], gap: k < 2 ? .13 : .9 })) }),
+  // a great spotted woodpecker: a sharp "kik!" (its drumming is the bill on wood, not a call)
+  woodpecker: bird(1, { h2: .4, h3: .2, noise: .3, syllables: [{ type: "sweep", dur: .04, f0: [[0, 3000], [1, 2500]], gap: .7 }] }),
+  // a sulphur-crested cockatoo: an ear-splitting raucous screech
+  cockatoo: bird(1.6, { h2: .8, h3: .6, noise: .8, voice2: .6, voice2Ratio: 1.37, vib: 1, vibRate: 50,
+    syllables: [{ type: "noise", dur: .5, f0: [[0, 1600], [.2, 2300], [1, 1500]], bw: 2200, amRate: 90, gap: .6 }] }),
+  // a cockatiel: a rising whistled "queel", again and again
+  cockatiel: bird(.9, { motifs: 2, h2: .2, h3: .05, noise: .05, vib: .3, vibRate: 25,
+    syllables: [{ type: "sweep", dur: .3, f0: [[0, 2200], [.6, 3000], [1, 3200]], gap: .45 }] }),
+  // (2026-11-07) an Atlantic puffin: nearly silent but at the burrow -- a low, droning groan, "arr-arr-arrr"
+  puffin:   mammal(.5, { dur: .5, formantScale: .9, harmonics: 10, breath: .4, jitter: 3, shimmer: 8, subharm: .3, chaos: .2, nasal: .4, repeat: 3, gap: .15,
+    f0: [[0, 180], [.5, 200], [1, 150]], amp: [[0, 0], [.15, 1], [.8, .8], [1, 0]], mouth: [[0, .2], [.5, .5], [1, .2]] }),
+  // a grey crowned crane: a honking two-note "ka-wonk", and a deep booming in display
+  "crowned crane": bird(1.1, { h2: .7, h3: .45, noise: .3, voice2: .3, voice2Ratio: 1.26,
+    syllables: [{ type: "sweep", dur: .12, f0: [[0, 520], [1, 600]], gap: .06 }, { type: "sweep", dur: .3, f0: [[0, 700], [.3, 760], [1, 520]], gap: 1.4 }] }),
+  // a spoonbill: all but silent -- a soft grunting
+  spoonbill: mammal(.5, { dur: .2, formantScale: .8, harmonics: 8, breath: .5, jitter: 3, shimmer: 8, subharm: .3, chaos: .2, nasal: .3, repeat: 2, gap: .25,
+    f0: [[0, 160], [1, 130]], amp: [[0, 0], [.2, 1], [1, 0]], mouth: [[0, .2], [.5, .4], [1, .2]] }),
+  // a southern cassowary: a booming rumble, felt more than heard
+  cassowary: mammal(1.4, { dur: 1.1, formantScale: .55, harmonics: 14, breath: .3, jitter: 2, shimmer: 6, subharm: .6, chaos: .2, roar: .2, roarFreq: 300, nasal: .1,
+    f0: [[0, 48], [.3, 56], [1, 40]], amp: [[0, 0], [.2, 1], [.8, .8], [1, 0]], mouth: [[0, .1], [.4, .3], [1, .1]] }),
+  // a turkey tom: the gobble -- a fast throaty rattle falling away
+  turkey:   bird(1.2, { h2: .8, h3: .6, noise: .4, voice2: .3, voice2Ratio: 1.33,
+    syllables: [{ type: "trill", dur: .7, f0: [[0, 900], [.3, 1000], [1, 620]], trillRate: 22, trillDepth: .35, gap: 1.5 }] }),
+  // a great hornbill: a loud, barking "kok" -- in pairs and bursts, from the canopy
+  hornbill: bird(1.4, { motifs: 2, h2: .7, h3: .5, noise: .5, voice2: .3, voice2Ratio: 1.41,
+    syllables: [{ type: "noise", dur: .14, f0: [[0, 700], [1, 560]], bw: 700, amRate: 50, gap: .12 }, { type: "noise", dur: .16, f0: [[0, 680], [1, 520]], bw: 700, amRate: 50, gap: .9 }] }),
   // ---- insects ----
   // a dragonfly's wings: a soft clattering rustle (~35 beats a second), passing by
   dragonfly:insect(.25, { dur: 2.5, clickRate: 35, clickJitter: 5, resFreq: 900, resBw: 1500, noise: .6, wander: 10, wanderRate: 1.5, flyby: .8 }),
@@ -362,7 +540,10 @@ export const CALLS = {
   // a snake's hiss: breath only, through a small open mouth
   snake:    mammal(.5, { voice: 0, breath: 1, formantScale: 2.6, Fc: [400, 1200, 2600, 3500], Fo: [700, 1500, 2800, 3600], dur: 1.3, f0: [[0, 100], [1, 100]], amp: [[0, 0], [.15, 1], [.75, .9], [1, 0]], mouth: [[0, .5], [1, .8]] }),
 };
-// silent (absent from the table on purpose): hare, butterfly, fish, shark, turtle, scorpion, spider, drider
+// silent (absent from the table on purpose): hare, butterfly, fish, shark, turtle, scorpion, spider, drider, and the
+// sea's and the rivers' others (trout, carp, pike, swordfish, clownfish, lionfish, ray, eel, octopus, crab, plesiosaurus
+// -- whatever a plesiosaur sounded like, nobody knows), and the pteranodon (soaring far overhead; a pterosaur's voice is
+// as unknown, and it has no syrinx to borrow a bird's from)
 
 // Unseen wildlife for the ambience (environment.js): `when` it sings (day,
 // night, dusk) and `kind`. Same recipes, same engine, never a game species.
@@ -454,9 +635,12 @@ const pool = new Map(), VARIANTS = 4;
 // the mammals' loudness on top of the renders' common calibration: they were
 // all as soft as a songbird. Two to three times louder, by how loud the real
 // animal is (a lion's roar or a cow's moo carries; a cat or a rat stays small)
-const LOUDER = { smilodon: 3, rhinoceros: 3, leopard: 2.5, oryx: 2.5, reindeer: 2.5, ram: 2, cervicapra: 2, tyrannosaur: 3, triceratops: 3, styracosaurus: 3, stegosaurus: 3, ankylosaurus: 3, cow: 3, ox: 3, lion: 3, tiger: 3, elephant: 3, hippo: 3, minotaur: 3, manticore: 3,
+const LOUDER = { smilodon: 3, rhinoceros: 3, leopard: 2.5, oryx: 2.5, reindeer: 2.5, ram: 2, cervicapra: 2, tyrannosaur: 3, carnotaurus: 3, allosaurus: 3, dilophosaurus: 2.5, pachycephalosaurus: 2.5, triceratops: 3, styracosaurus: 3, diabloceratops: 3, stegosaurus: 3, ankylosaurus: 3, cow: 3, ox: 3, lion: 3, tiger: 3, elephant: 3, hippo: 3, minotaur: 3, manticore: 3,
   bear: 2.5, horse: 2.5, wolf: 2.5, pig: 2.5, camel: 2.5, bactrian: 2.5, unicorn: 2.5, centaur: 2.5,
-  rooster: 2.5, dog: 2, sheep: 2, deer: 2, boar: 2, zebra: 2, giraffe: 2, fox: 2, cat: 2, rat: 2, beaver: 2, hedgehog: 2, bat: 2 };
+  rooster: 2.5, dog: 2, sheep: 2, deer: 2, boar: 2, zebra: 2, giraffe: 2, fox: 2, cat: 2, rat: 2, beaver: 2, hedgehog: 2, bat: 2,
+  gorilla: 3, orangutan: 2.5, baboon: 2.5, lemur: 2, kangaroo: 2,
+  hyena: 2.5, impala: 2, capybara: 2, anteater: 2, skunk: 2, pangolin: 2, badger: 2, weasel: 2,
+  lynx: 2.5, chamois: 2.5, redpanda: 2, giantpanda: 2.5, porcupine: 2 };
 for (const [n, l] of Object.entries(LOUDER)) CALLS[n].level = l;
 
 export function animalCall(ctx, name, { dest, at, pitch = 1, volume = .5 } = {}) {

@@ -69,9 +69,33 @@ export const MASK_MODE = { value: 0 };
 // grass mask's ground pass ask groundHole, so what is cut from the one is cut from the other.
 // ...and `rects`: up to 16 OPEN RECTANGLES anywhere in the world (a texture of RGBA floats, one rectangle a texel: x0, z0,
 // x1, z1; a texel with x1 <= x0 is none) -- the landmarks' `site.dig`: a pyramid's passage going down under the ground
-export const DIG_RECTS = new Float32Array(16 * 4);
-const rectTex = new THREE.DataTexture(DIG_RECTS, 16, 1, THREE.RGBAFormat, THREE.FloatType);
+// ...and (2026-11-08) up to PITS.max OPEN OVALS: the burrows' mouths (burrows.js) -- the ground cut where a den's tunnel
+// comes up through it. The same texture: texel 16 the box round them all (x0, z0, x1, z1: nothing outside it pays for the
+// loop), then two texels an oval -- its middle, a radius round it and its bare earth, and its heap's length (cx, cz, R,
+// HL), then its long axis (into the hill) and its half-lengths along and across (cos, sin, a, b); a pixel farther than R
+// from an oval's middle reads only the first -- a texel with R <= 0 ends the list. The oval is a D: its near half (where
+// the tunnel's flat floor comes up) squarer, |u|^PITS.d for u^2. Round each, BARE EARTH (groundEarth): an apron of
+// trodden soil round the mouth and the ground under its spoil heap, a ragged edge into the grass -- the ground's colour
+// goes to earth there (earthOver) and the grass mask counts it bare (no stalks)
+const HOLE_TEXELS = new Float32Array(64 * 4);
+export const DIG_RECTS = HOLE_TEXELS.subarray(0, 16 * 4);
+export const PITS = { max: 23, d: 3.2, box: HOLE_TEXELS.subarray(16 * 4, 17 * 4), list: HOLE_TEXELS.subarray(17 * 4) };
+PITS.box.set([1, 1, 0, 0]);
+const rectTex = new THREE.DataTexture(HOLE_TEXELS, 64, 1, THREE.RGBAFormat, THREE.FloatType);
 rectTex.needsUpdate = true;
+// set the ovals (burrows.js): [{ x, z, ca, sa, a, b, hl }] -- the box round them and the list, the texture renewed
+export function setPits(pits) {
+  PITS.list.fill(0);
+  const n = Math.min(PITS.max, pits.length);
+  let x0 = 1e9, z0 = 1e9, x1 = -1e9, z1 = -1e9;
+  for (let i = 0; i < n; i++) {
+    const p = pits[i], hl = p.hl ?? 0, R = Math.max(p.a, p.b) * 1.6 + .35 + (hl ? hl + .3 : 0);
+    PITS.list.set([p.x, p.z, R, hl, p.ca, p.sa, p.a, p.b], i * 8);
+    x0 = Math.min(x0, p.x - R); x1 = Math.max(x1, p.x + R); z0 = Math.min(z0, p.z - R); z1 = Math.max(z1, p.z + R);
+  }
+  PITS.box.set(n ? [x0, z0, x1, z1] : [1, 1, 0, 0]);
+  rectTex.needsUpdate = true;
+}
 export const GROUND_HOLES = { tex: texture(blankMask()), box: uniform(new THREE.Vector4(0, 0, 1, 1)), rects: texture(rectTex), rectTex };
 
 // THE WATER'S SURFACE, where grass must not grow under it: a grown map's water is no one level (a river falls, a stream
@@ -119,12 +143,88 @@ export const groundHole = wgslFn(`
       if (r.z <= r.x) { break; }
       if (wp.x > r.x && wp.x < r.z && wp.z > r.y && wp.z < r.w) { return 1.0; }
     }
+    let pb = textureLoad(rects, vec2<i32>(16, 0), 0);
+    if (wp.x > pb.x && wp.x < pb.z && wp.z > pb.y && wp.z < pb.w) {
+      for (var i: i32 = 0; i < ${PITS.max}; i = i + 1) {
+        let o = textureLoad(rects, vec2<i32>(17 + i * 2, 0), 0);
+        if (o.z <= 0.0) { break; }
+        let d = wp.xz - o.xy;
+        if (dot(d, d) < o.z * o.z) {
+          let e = textureLoad(rects, vec2<i32>(18 + i * 2, 0), 0);
+          let u = (d.x * e.x + d.y * e.y) / e.z;
+          let v = (d.y * e.x - d.x * e.y) / e.w;
+          let uu = select(u * u, pow(abs(u), ${PITS.d.toFixed(2)}), u < 0.0);
+          if (uu + v * v < 1.0) { return 1.0; }
+        }
+      }
+    }
     let u = (wp.xz - box.xy) / (box.zw - box.xy);
     if (u.x < 0.0 || u.y < 0.0 || u.x >= 1.0 || u.y >= 1.0) { return 0.0; }
     let dim = vec2<f32>(textureDimensions(holes));
     return textureLoad(holes, vec2<i32>(u * dim), 0).r;
   }
 `);
+
+// THE BARE EARTH round the burrows' mouths (PITS, above): 0 grass .. 1 earth -- an apron round each mouth (wider for a
+// bigger one), the ground under its heap and a little past it, the edge broken by noise at two scales so it frays into
+// the lawn. `earthOver` lays the earth's colour on the lit ground (lit as the ground there is: its lit colour over its
+// vertex colour), crumbly, with a few pebbles; the grass mask counts it bare
+const earthHash = wgslFn(`fn earthHash(p: vec2<f32>) -> f32 { return fract(sin(dot(p, vec2<f32>(127.1, 311.7))) * 43758.5453); }`);
+const earthNoise = wgslFn(`
+  fn earthNoise(p: vec2<f32>) -> f32 {
+    let i = floor(p); let f = fract(p); let s = f * f * (3.0 - 2.0 * f);
+    return mix(mix(earthHash(i), earthHash(i + vec2<f32>(1.0, 0.0)), s.x), mix(earthHash(i + vec2<f32>(0.0, 1.0)), earthHash(i + vec2<f32>(1.0, 1.0)), s.x), s.y);
+  }`, [earthHash]);
+export const groundEarth = wgslFn(`
+  fn groundEarth(wp: vec3<f32>, rects: texture_2d<f32>) -> f32 {
+    let pb = textureLoad(rects, vec2<i32>(16, 0), 0);
+    if (!(wp.x > pb.x && wp.x < pb.z && wp.z > pb.y && wp.z < pb.w)) { return 0.0; }
+    let n = earthNoise(wp.xz * 7.0) * 0.6 + earthNoise(wp.xz * 26.0 + 3.7) * 0.4 - 0.5;
+    var k = 0.0;
+    for (var i: i32 = 0; i < ${PITS.max}; i = i + 1) {
+      let o = textureLoad(rects, vec2<i32>(17 + i * 2, 0), 0);
+      if (o.z <= 0.0) { break; }
+      let d = wp.xz - o.xy;
+      if (dot(d, d) >= o.z * o.z) { continue; }
+      let e = textureLoad(rects, vec2<i32>(18 + i * 2, 0), 0);
+      let u = d.x * e.x + d.y * e.y;
+      let v = d.y * e.x - d.x * e.y;
+      // the apron: metres out from the mouth's edge, against its width
+      let dh = (length(vec2<f32>(u / e.z, v / e.w)) - 1.0) * min(e.z, e.w);
+      let ap = 0.1 + 0.7 * e.w;
+      k = max(k, 1.0 - smoothstep(ap * 0.6, ap * 1.4, dh + n * ap * 0.7));
+      // under the heap (o.w its length; it lies out of the mouth, -u) and its run
+      if (o.w > 0.0) {
+        let hl = o.w * 0.5;
+        let qh = length(vec2<f32>((u + e.z + hl) / (hl + 0.15), v / (hl * 0.8 + 0.15)));
+        k = max(k, 1.0 - smoothstep(0.78, 1.0, qh + n * 0.3));
+      }
+    }
+    return k;
+  }
+`, [earthNoise]);
+export const earthOver = wgslFn(`
+  fn earthOver(rgb: vec3<f32>, lit: vec3<f32>, vcol: vec3<f32>, k: f32, snow: f32, wp: vec3<f32>) -> vec3<f32> {
+    let kk = k * (1.0 - snow);
+    if (kk <= 0.0) { return rgb; }
+    let L = dot(lit, vec3<f32>(1.0)) / max(dot(vcol, vec3<f32>(1.0)), 0.001);
+    let g = earthNoise(wp.xz * 19.0) * 0.6 + earthNoise(wp.xz * 63.0 + 1.3) * 0.4;
+    var c = vec3<f32>(0.3, 0.19, 0.095) * (0.72 + 0.5 * g);
+    let cell = floor(wp.xz * 34.0);
+    let pf = fract(wp.xz * 34.0) - 0.5;
+    let po = pf - (vec2<f32>(earthHash(cell + 2.3), earthHash(cell + 7.9)) - 0.5) * 0.5;   // (each in its cell somewhere, of its own size)
+    if (kk > 0.7 && earthHash(cell + 5.1) > 0.93 && dot(po, po) < 0.015 + 0.06 * earthHash(cell + 3.3)) { c = vec3<f32>(0.4, 0.32, 0.22) * (0.8 + 0.4 * earthHash(cell)); }   // (grit: only on the bare earth itself, never speckling the grass at its edge)
+    return mix(rgb, c * L, kk);
+  }
+`, [earthHash, earthNoise]);
+// THE SOIL'S GRAIN for what is made of earth (the tunnels' walls, the spoil heaps: nature.js): a crumbly tone, 0.7..1.2
+export const soilGrain = wgslFn(`
+  fn soilGrain(wp: vec3<f32>) -> f32 {
+    let p = wp.xz + wp.y * vec2<f32>(0.7, -0.6);
+    let g = earthNoise(p * 21.0) * 0.55 + earthNoise(p * 67.0 + 2.1) * 0.45;
+    return 0.72 + 0.5 * g;
+  }
+`, [earthNoise]);
 
 // Anything SOLID that stands on the ground opts in with this: its depth hides the ground under it from the
 // mask (so nothing grows through a floor or a deck), and its own local Y -- the height above its base, since
@@ -354,7 +454,7 @@ export function createGrassFringe() {
     const out = maskFrag({ wp: positionWorld, dist: positionView.z.negate(), far: uFar,
                            water: waterHere({ wp: positionWorld, lv: WATER_LEVEL.tex, box: WATER_LEVEL.box, flat: uWater }),
                            hole: groundHole({ wp: positionWorld, holes: GROUND_HOLES.tex, box: GROUND_HOLES.box, rects: GROUND_HOLES.rects }),
-                           bare: bareHere({ wp: positionWorld, bt: GROUND_BARE.tex, box: GROUND_BARE.box }) });
+                           bare: bareHere({ wp: positionWorld, bt: GROUND_BARE.tex, box: GROUND_BARE.box }).max(groundEarth({ wp: positionWorld, rects: GROUND_HOLES.rects }).mul(1.4).min(1)) });   // (the burrows' bare earth: no stalks)
     maskMat.colorNode = out.xyz;
     maskMat.opacityNode = out.w;
     maskMat.transparent = true;

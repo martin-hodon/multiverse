@@ -1,0 +1,282 @@
+{
+  "name": "Loire turret",
+  "_about": "A LOIRE CORNER TURRET (Chenonceau's, Azay-le-Rideau's): a round shaft (`sides`, R, H tall, `t` walls) standing on a cul-de-lampe `cor` deep under its foot (three rings narrowing down -- corbelled out from a corner), belt courses at the house's floors (h1, h1 + h2 over its foot), a small window with a moulded frame in face 0 (+z: yaw it to look out) on each floor, a corbelled cornice corOut proud, a tall slate cone capRise high from capR at its eave, a lead finial. Place its foot at the house's ground floor, its +z out along the corner's diagonal.",
+  "params": {
+    "detail": 4,
+    "sides": 12,
+    "R": 1.5,
+    "H": 12.0,
+    "t": 0.35,
+    "h1": 5.0,
+    "h2": 4.8,
+    "winW": "min(0.75, R * 0.36)",
+    "cor": 2.0,
+    "corOut": 0.22,
+    "corH": 0.6,
+    "capR": "R + corOut + 0.12",
+    "capRise": "capR * 3.4",
+    "capSides": 16,
+    "fin": "capRise * 0.2",
+    "_cor": "the cul-de-lampe's depth under the foot (hidden in a pier where the turret stands on one)",
+    "_h1": "the first belt over the foot (the house's first floor); h2 the second storey"
+  },
+  "build": [
+    "corbel",
+    "corbel 2",
+    "corbel 3",
+    "shaft",
+    "belts",
+    "corbels",
+    "cornice",
+    "cap",
+    "finial"
+  ],
+  "parts": {
+    "corbel": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "height": "cor * 0.34",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "0 - cor * 0.34",
+          0,
+          0
+        ]
+      ],
+      "_about": "the cul-de-lampe: rings narrowing down under the turret's foot"
+    },
+    "corbel 2": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R * 0.72"
+      },
+      "height": "cor * 0.33",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "0 - cor * 0.67",
+          0,
+          0
+        ]
+      ]
+    },
+    "corbel 3": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R * 0.42"
+      },
+      "height": "cor * 0.33",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "0 - cor",
+          0,
+          0
+        ]
+      ]
+    },
+    "shaft": {
+      "type": "enclosure",
+      "plan": {
+        "sides": "sides",
+        "radius": "R"
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": false,
+      "tiers": [
+        {
+          "h": "h1",
+          "openings": []
+        },
+        {
+          "h": "h2",
+          "openings": []
+        },
+        {
+          "openings": []
+        }
+      ],
+      "faces": {
+        "0": [
+          {
+            "h": "h1",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": 1.2,
+                "springing": "h1 - 1.4",
+                "head": {
+                  "profile": "flat"
+                },
+                "surround": {
+                  "head": "cornice",
+                  "band": 0.1
+                }
+              }
+            ]
+          },
+          {
+            "h": "h2",
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": 1.0,
+                "springing": "h2 - 1.3",
+                "head": {
+                  "profile": "flat"
+                },
+                "surround": {
+                  "head": "cornice",
+                  "band": 0.1
+                }
+              }
+            ]
+          },
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "winW",
+                "sill": 0.5,
+                "springing": "max(1.1, H - h1 - h2 - 0.7)",
+                "head": {
+                  "profile": "flat"
+                },
+                "surround": {
+                  "head": "cornice",
+                  "band": 0.1
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "_about": "the round shaft, a window in face 0 (looking out, +z) on each floor"
+    },
+    "belts": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R + 0.07"
+      },
+      "height": 0.22,
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "h1 - 0.11",
+          0,
+          0
+        ],
+        [
+          0,
+          "h1 + h2 - 0.11",
+          0,
+          0
+        ]
+      ],
+      "_about": "belt courses at the house's floors"
+    },
+    "corbels": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R + corOut * 0.5"
+      },
+      "height": "corH * 0.5",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H - corH * 0.5",
+          0,
+          0
+        ]
+      ],
+      "_about": "the corbel course under the cornice"
+    },
+    "cornice": {
+      "type": "prism",
+      "plan": {
+        "sides": "sides",
+        "radius": "R + corOut"
+      },
+      "height": "corH * 0.5",
+      "flatRoof": true,
+      "at": [
+        [
+          0,
+          "H",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "corbels"
+      ]
+    },
+    "cap": {
+      "type": "dome",
+      "radius": "capR",
+      "thickness": 0,
+      "sides": "capSides",
+      "head": {
+        "profile": "trigonal",
+        "rise": "capRise"
+      },
+      "at": [
+        [
+          0,
+          "H + corH * 0.5",
+          0,
+          0
+        ]
+      ],
+      "standsOn": [
+        "cornice"
+      ],
+      "_about": "the slate cone"
+    },
+    "finial": {
+      "type": "column",
+      "radius": "max(0.05, capR * 0.045)",
+      "height": "fin",
+      "sides": 6,
+      "taper": 0.35,
+      "at": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "atop": "cap",
+      "standsOn": [
+        "cap"
+      ],
+      "_about": "the lead finial (an epi) on the tip"
+    }
+  }
+}

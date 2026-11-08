@@ -6,76 +6,295 @@
   "use": "creatures/frames/deer",
   "params": {
     "s": 1,
-    "bulk": 1
+    "bulk": 1,
+    "antlers": true
   },
   "colors": {
-    "body": "#a5713d",
-    "muzzle": "#8a5c30",
-    "ear": "#8a5c30",
-    "leg": "#8a5c30",
+    "body": "#93603a",
+    "muzzle": "#7a5230",
+    "ear": "#86583a",
+    "leg": "#7a5234",
     "foot": "#2b211a",
     "tail": "#e0d6c6",
-    "eye": "#241812"
+    "eye": "#241812",
+    "belly": "#cfae84",
+    "throat": "#80522f",
+    "patch": "#e6dcc8",
+    "head": "#8a5c38",
+    "nose": "#1c1612",
+    "chin": "#e6dcc8",
+    "gland": "#241a12",
+    "earIn": "#a88878",
+    "upleg": "#84563a",
+    "back": "#76492b",
+    "tailc": "#5a3c24",
+    "fspot": "#f2eee6"
   },
   "mount": {
     "h": 1.95,
     "speed": 1.7
   },
-  "extras": [
-    {
-      "id": "antlerA",
-      "parent": "head",
-      "from": [
-        0.9,
-        1.75,
-        0.07
-      ],
-      "to": [
-        0.78,
-        2.15,
-        0.2
-      ],
-      "r1": 0.03,
-      "r2": 0.02,
-      "color": "#8a7a64",
-      "mirror": true
-    },
-    {
-      "id": "antlerB",
-      "parent": "head",
-      "from": [
-        0.83,
-        1.95,
-        0.13
-      ],
-      "to": [
-        0.98,
-        2.15,
-        0.17
-      ],
-      "r1": 0.022,
-      "r2": 0.015,
-      "color": "#8a7a64",
-      "mirror": true
-    },
-    {
-      "id": "antlerC",
-      "parent": "head",
-      "from": [
-        0.8,
-        2.08,
-        0.18
-      ],
-      "to": [
-        0.66,
-        2.28,
-        0.3
-      ],
-      "r1": 0.02,
-      "r2": 0.012,
-      "color": "#8a7a64",
-      "mirror": true
-    }
+  "extras": [],
+  "print": "cloven",
+  "legs": {
+    "front": [
+      "0.350*s",
+      "0.820*s",
+      "0.13*s",
+      "0.100*s"
+    ],
+    "hind": [
+      "-0.720*s",
+      "0.850*s",
+      "0.14*s",
+      "0.48*s"
+    ]
+  },
+  "sculpt": {
+    "_about": "THE RED DEER (2026-11-05, 2nd pass): a narrow chest under the withers, the barrel tucked up high on long legs, a round rump with its flat pale patch and the short dark tail on it; countershaded, the back and neck darker, the flank paler to the belly; a slim wedge of a head to a dark wet nose, a pale chin, the dark gland line before the lateral eye; long tapering ears; slender legs on cloven hooves; the antlers built here as tapered beams -- back, then up and forward -- with brow, bez and trez tines, a crown, ivory points SHARP PASS 2 (2026-11-08): the pointed parts -- beam, bez, brow, crownA, crownC, trez (6 in all) -- are the engine's sharp `horn`s (sharp.js), made from the field shapes they replaced by tools/creaturegen/sharp/ (claws.py, teeth.py, spikes.py, antlers.py, bills.py): rooted in the body, tips pointed; RE-RUN those after this species' generator. (2026-11-08, ears2.py) The EARS (ears2.py): big LEAVES held up and out (sharp.js `fin`), cupped forward and out, pale in the hollow; the roots faired.",
+    "keep": [],
+    "mesh": {"tris": [5900, 2000]},
+    "shape": [
+      {"id": "chest", "type": "ell", "c": [0.28, 1.0, 0.0], "r": [0.36, 0.22, 0.19], "k": 0.08, "color": "@body", "pat": "agouti"},
+      {"id": "withers", "type": "ell", "c": [0.24, 1.15, 0.0], "r": [0.3, 0.1, 0.1], "rot": [0, 0, -12], "k": 0.07, "color": "@back", "pat": "agouti"},
+      {"id": "barrel", "type": "ell", "c": [-0.1667, 1.02, 0.0], "r": [0.6, 0.18, 0.21], "rot": [0, 0, -4], "k": 0.08, "color": "@body", "pat": "agouti"},
+      {"id": "loin", "type": "ell", "c": [-0.5933, 1.08, 0.0], "r": [0.3, 0.13, 0.17], "k": 0.08, "color": "@back", "pat": "agouti"},
+      {"id": "rump", "type": "ell", "c": [-0.78, 1.07, 0.0], "r": [0.22, 0.135, 0.155], "rot": [0, 0, -10], "k": 0.1, "color": "@body", "pat": "agouti"},
+      {"id": "haunch", "type": "ell", "c": [-0.76, 0.93, 0.085], "r": [0.2, 0.17, 0.095], "rot": [0, 0, -8], "k": 0.07, "color": "@body", "mirror": true, "pat": "agouti"},
+      {"id": "scapula", "type": "ell", "c": [0.38, 1.04, 0.11], "r": [0.07, 0.19, 0.06], "rot": [0, 0, 30], "k": 0.05, "color": "@body", "mirror": true, "pat": "agouti"},
+      {"id": "breast", "type": "ell", "c": [0.55, 0.92, 0.06], "r": [0.1, 0.13, 0.085], "rot": [0, 0, 12], "k": 0.05, "color": "@body", "mirror": true, "pat": "agouti"},
+      {"id": "belly", "type": "ell", "c": [-0.0867, 0.9, 0.0], "r": [0.48, 0.08, 0.16], "rot": [0, 0, -6], "k": 0.07, "kc": 0.05, "color": "@belly"},
+      {"id": "girth", "type": "ell", "c": [0.3, 0.84, 0.0], "r": [0.22, 0.07, 0.14], "k": 0.06, "kc": 0.05, "color": "@belly"},
+      {"id": "rumpPatch", "type": "ell", "c": [-0.95, 1.01, 0.0], "r": [0.06, 0.17, 0.14], "k": 0.01, "kc": 0.025, "color": "@patch"},
+      {"id": "dock", "type": "cone", "a": [-1.0, 1.1, 0.0], "b": [-1.08, 1.07, 0.0], "ra": 0.04, "rb": 0.035, "k": 0.03, "color": "@body", "pat": "agouti"},
+      {"id": "neckBase", "type": "ell", "c": [0.55, 1.1, 0.0], "r": [0.22, 0.19, 0.14], "rot": [0, 0, 50], "k": 0.08, "color": "@back", "pat": "agouti"},
+      {"id": "neck", "type": "ell", "bone": "neck", "c": [0.8085, 1.3245, 0.0], "r": [0.3914, 0.115, 0.085], "rot": [0, 0, 43.41], "k": 0.07, "color": "@body", "pat": "agouti"},
+      {"id": "throat", "type": "ell", "bone": "neck", "c": [0.9222, 1.4521, 0.0], "r": [0.12, 0.07, 0.065], "rot": [0, 0, 58.41], "k": 0.05, "color": "@throat", "pat": "agouti"},
+      {"id": "cranium", "type": "ell", "bone": "head", "c": [1.13, 1.5359, 0.0], "r": [0.088, 0.08, 0.076], "rot": [0, 0, -26.12], "k": 0.03, "color": "@head", "pat": "agouti"},
+      {"id": "jaw", "type": "ell", "bone": "head", "c": [1.1986, 1.4488, 0.028], "r": [0.1, 0.048, 0.024], "rot": [0, 0, -32.12], "k": 0.03, "color": "@head", "mirror": true, "pat": "agouti"},
+      {"id": "face", "type": "cone", "bone": "head", "a": [1.1658, 1.5361, 0.0], "b": [1.3687, 1.4233, 0.0], "ra": 0.06, "rb": 0.034, "k": 0.03, "color": "@head", "pat": "agouti"},
+      {"id": "muzzle", "type": "ell", "bone": "head", "c": [1.376, 1.4019, 0.0], "r": [0.044, 0.044, 0.036], "rot": [0, 0, -26.12], "k": 0.025, "color": "@muzzle"},
+      {"id": "nose", "type": "ell", "bone": "head", "c": [1.4135, 1.4058, 0.0], "r": [0.014, 0.024, 0.028], "rot": [0, 0, -26.12], "k": 0.008, "kc": 0.003, "color": "@nose", "wet": 0.4},
+      {"id": "chin", "type": "ell", "bone": "head", "c": [1.3333, 1.3783, 0.0], "r": [0.036, 0.016, 0.024], "rot": [0, 0, -26.12], "k": 0.02, "kc": 0.008, "color": "@chin"},
+      {"id": "gland", "type": "ell", "bone": "head", "c": [1.2357, 1.5063, 0.054], "r": [0.032, 0.0072, 0.008], "rot": [0, 0, -54.12], "k": 0.006, "kc": 0.002, "color": "@gland", "mirror": true},
+      {"id": "ear", "type": "fin", "bone": "earL", "root": [[1.0542, 1.5426, 0.0255], [1.0609, 1.5615, 0.0213]], "edge": [[1.0506, 1.5364, 0.0324], [1.0238, 1.5386, 0.0935], [1.005, 1.5433, 0.1241], [0.9882, 1.5515, 0.1513], [0.9728, 1.5629, 0.1762], [0.9584, 1.576, 0.1996], [0.9446, 1.5906, 0.2218], [0.9316, 1.6068, 0.2429], [0.9191, 1.6248, 0.263], [0.9076, 1.6465, 0.2816], [0.9235, 1.6517, 0.2557], [0.9391, 1.6529, 0.2304], [0.9546, 1.6519, 0.2052], [0.9702, 1.649, 0.1799], [0.986, 1.6439, 0.1543], [1.002, 1.6364, 0.1283], [1.0182, 1.6249, 0.102], [1.0351, 1.6081, 0.0747], [1.0613, 1.5704, 0.0243]], "corners": [9], "thick": 0.0129, "slope": 0.3, "face": [0.8515, 0.0036, 0.5243], "cup": 0.6, "color": "@ear", "inner": "@earIn", "rim": 0.0045, "rimColor": "@head", "patFace": "back", "innerRim": 0.0067, "mirror": true, "pat": "agouti", "fair": {"r": 0.0134, "sink": 3}},
+      {"id": "arm", "type": "ell", "bone": "legFLu", "c": [0.35, 0.77, 0.104], "r": [0.09, 0.13, 0.065], "rot": [0, 0, -22], "k": 0.05, "color": "@body", "mirror": true, "pat": "agouti"},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.33, 0.7, 0.13], "b": [0.35, 0.39, 0.13], "ra": 0.05, "rb": 0.028, "k": 0.03, "color": "@upleg", "mirror": true, "pat": "agouti"},
+      {"id": "knee", "type": "ell", "bone": "legFLl", "c": [0.353, 0.36, 0.13], "r": [0.03, 0.033, 0.027], "k": 0.015, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "cannon", "type": "cone", "bone": "legFLl", "a": [0.35, 0.34, 0.13], "b": [0.354, 0.14, 0.13], "ra": 0.02, "rb": 0.018, "k": 0.012, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "tendon", "type": "cone", "bone": "legFLl", "a": [0.334, 0.32, 0.13], "b": [0.338, 0.15, 0.13], "ra": 0.012, "rb": 0.013, "k": 0.01, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "fetlock", "type": "ell", "bone": "legFLl", "c": [0.35, 0.13, 0.13], "r": [0.027, 0.027, 0.024], "k": 0.012, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "pastern", "type": "cone", "bone": "legFLl", "a": [0.35, 0.12, 0.13], "b": [0.372, 0.055, 0.13], "ra": 0.02, "rb": 0.02, "k": 0.01, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "toeo", "type": "ell", "bone": "footFL", "c": [0.385, 0.022, 0.143], "r": [0.032, 0.022, 0.013], "rot": [0, 0, -18], "k": 0.004, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "htoeo", "type": "ell", "bone": "footHL", "c": [-0.685, 0.022, 0.153], "r": [0.031, 0.021, 0.013], "rot": [0, 0, -18], "k": 0.004, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "toei", "type": "ell", "bone": "footFL", "c": [0.385, 0.022, 0.117], "r": [0.032, 0.022, 0.013], "rot": [0, 0, -18], "k": 0.004, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "htoei", "type": "ell", "bone": "footHL", "c": [-0.685, 0.022, 0.127], "r": [0.031, 0.021, 0.013], "rot": [0, 0, -18], "k": 0.004, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-0.71, 0.83, 0.126], "r": [0.14, 0.19, 0.085], "rot": [0, 0, -12], "k": 0.05, "color": "@body", "mirror": true, "pat": "agouti"},
+      {"id": "stifle", "type": "ell", "bone": "legHLu", "c": [-0.6, 0.8, 0.126], "r": [0.06, 0.075, 0.055], "rot": [0, 0, -15], "k": 0.04, "color": "@body", "mirror": true, "pat": "agouti"},
+      {"id": "gaskin", "type": "cone", "bone": "legHLu", "a": [-0.67, 0.7, 0.14], "b": [-0.755, 0.393, 0.14], "ra": 0.065, "rb": 0.03, "k": 0.03, "color": "@upleg", "mirror": true, "pat": "agouti"},
+      {"id": "ham", "type": "tube", "bone": "legHLu", "pts": [[-0.89, 0.85, 0.119, 0.085], [-0.8488, 0.727, 0.119, 0.0667], [-0.8077, 0.604, 0.119, 0.0483], [-0.7665, 0.481, 0.119, 0.03]], "k": 0.05, "color": "@body", "mirror": true, "pat": "agouti"},
+      {"id": "hock", "type": "ell", "bone": "legHLl", "c": [-0.74, 0.353, 0.14], "r": [0.035, 0.036, 0.026], "k": 0.015, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "hockPt", "type": "sphere", "bone": "legHLl", "c": [-0.775, 0.383, 0.14], "r": 0.022, "k": 0.015, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "hcannon", "type": "cone", "bone": "legHLl", "a": [-0.738, 0.328, 0.14], "b": [-0.72, 0.14, 0.14], "ra": 0.022, "rb": 0.019, "k": 0.012, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "htendon", "type": "cone", "bone": "legHLl", "a": [-0.76, 0.308, 0.14], "b": [-0.734, 0.15, 0.14], "ra": 0.012, "rb": 0.013, "k": 0.01, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "hfetlock", "type": "ell", "bone": "legHLl", "c": [-0.72, 0.13, 0.14], "r": [0.027, 0.027, 0.024], "k": 0.012, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "hpastern", "type": "cone", "bone": "legHLl", "a": [-0.72, 0.12, 0.14], "b": [-0.698, 0.055, 0.14], "ra": 0.02, "rb": 0.02, "k": 0.01, "color": "@leg", "mirror": true, "pat": "agouti"},
+      {"id": "tail", "type": "ell", "bone": "tail", "c": [-1.09, 0.99, 0], "r": [0.03, 0.075, 0.035], "rot": [0, 0, -20], "k": 0.02, "color": "@tailc"},
+      {"id": "beam", "type": "horn", "bone": "head", "pts": [[1.1497, 1.558, 0.0176, 0.038], [1.1349, 1.5803, 0.032, 0.038], [1.1075, 1.6217, 0.0587, 0.0363], [1.0689, 1.681, 0.0964, 0.0347], [1.0349, 1.7403, 0.132, 0.033], [1.0089, 1.7936, 0.1607, 0.0313], [0.9875, 1.8469, 0.1872, 0.0297], [0.9749, 1.9003, 0.212, 0.028], [0.9741, 1.9543, 0.2361, 0.0267], [0.9823, 2.0084, 0.2585, 0.0253], [0.9949, 2.0603, 0.277, 0.024], [1.0141, 2.1136, 0.2907, 0.0227], [1.0378, 2.1647, 0.3005, 0.0213], [1.0549, 2.2003, 0.307, 0.02], [1.08, 2.2404, 0.3023, 0.0127], [1.1097, 2.2923, 0.2967, 0.0083], [1.1349, 2.3403, 0.292, 0.0]], "color": "#7e6c56", "mirror": true, "when": "antlers", "up": [0, 1, 0], "aspect": 0.92, "tip": "#cfc2a8", "tipAt": 0.86},
+      {"id": "crownA", "type": "horn", "bone": "head", "pts": [[1.0378, 2.1647, 0.3005, 0.0149], [1.0309, 2.1867, 0.3089, 0.0119], [1.0207, 2.219, 0.3212, 0.0107], [0.9974, 2.2803, 0.344, 0.0073], [0.9749, 2.3303, 0.362, 0.0]], "color": "#7e6c56", "mirror": true, "when": "antlers", "tip": "#cfc2a8", "tipAt": 0.45, "up": [0, 1, 0], "aspect": 0.9},
+      {"id": "crownC", "type": "horn", "bone": "head", "pts": [[1.0141, 2.1136, 0.2907, 0.0159], [1.0227, 2.1342, 0.3042, 0.0127], [1.0367, 2.1679, 0.3262, 0.0107], [1.0629, 2.2333, 0.3675, 0.0073], [1.0849, 2.2903, 0.402, 0.0]], "color": "#7e6c56", "mirror": true, "when": "antlers", "tip": "#cfc2a8", "tipAt": 0.45, "up": [0, 1, 0], "aspect": 0.9},
+      {"id": "brow", "type": "horn", "bone": "head", "pts": [[1.1075, 1.6217, 0.0587, 0.0254], [1.1383, 1.6483, 0.0678, 0.0203], [1.1819, 1.6859, 0.0806, 0.0137], [1.2661, 1.7483, 0.1004, 0.0093], [1.3349, 1.7903, 0.112, 0.0]], "color": "#7e6c56", "mirror": true, "when": "antlers", "tip": "#cfc2a8", "tipAt": 0.45, "up": [0, 1, 0], "aspect": 0.9},
+      {"id": "bez", "type": "horn", "bone": "head", "pts": [[1.0689, 1.681, 0.0964, 0.0243], [1.1002, 1.7038, 0.106, 0.0194], [1.1392, 1.7323, 0.118, 0.0123], [1.2192, 1.7839, 0.1386, 0.0087], [1.2849, 1.8203, 0.152, 0.0]], "color": "#7e6c56", "mirror": true, "when": "antlers", "tip": "#cfc2a8", "tipAt": 0.45, "up": [0, 1, 0], "aspect": 0.9},
+      {"id": "trez", "type": "horn", "bone": "head", "pts": [[0.9749, 1.9003, 0.212, 0.0196], [1.0031, 1.9157, 0.214, 0.0157], [1.0366, 1.9341, 0.2164, 0.0113], [1.107, 1.9786, 0.2238, 0.0077], [1.1649, 2.0203, 0.232, 0.0]], "color": "#7e6c56", "mirror": true, "when": "antlers", "tip": "#cfc2a8", "tipAt": 0.45, "up": [0, 1, 0], "aspect": 0.9},
+      {"id": "fspot0", "type": "sphere", "c": [0.2854, 1.1825, 0.1454], "r": 0.0144, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot1", "type": "sphere", "c": [0.246, 1.1851, 0.1265], "r": 0.0132, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot2", "type": "sphere", "c": [0.2069, 1.1825, 0.1208], "r": 0.0118, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot3", "type": "sphere", "c": [0.1618, 1.173, 0.1236], "r": 0.0121, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot4", "type": "sphere", "c": [0.1169, 1.1862, 0.1095], "r": 0.0122, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot5", "type": "sphere", "c": [0.0751, 1.1807, 0.1076], "r": 0.0156, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot6", "type": "sphere", "c": [0.0278, 1.1742, 0.1048], "r": 0.0158, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot7", "type": "sphere", "c": [-0.0112, 1.1806, 0.0916], "r": 0.0129, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot8", "type": "sphere", "c": [-0.0518, 1.1682, 0.1067], "r": 0.013, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot9", "type": "sphere", "c": [-0.1029, 1.17, 0.1076], "r": 0.0141, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot10", "type": "sphere", "c": [-0.1512, 1.1746, 0.1076], "r": 0.014, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot11", "type": "sphere", "c": [-0.1904, 1.1707, 0.118], "r": 0.0125, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot12", "type": "sphere", "c": [-0.2394, 1.1769, 0.1104], "r": 0.013, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot13", "type": "sphere", "c": [-0.2868, 1.1775, 0.1104], "r": 0.013, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot14", "type": "sphere", "c": [-0.3376, 1.1818, 0.1057], "r": 0.0128, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot15", "type": "sphere", "c": [-0.3849, 1.1802, 0.1133], "r": 0.0154, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot16", "type": "sphere", "c": [-0.4346, 1.1779, 0.1227], "r": 0.0158, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot17", "type": "sphere", "c": [-0.4748, 1.1807, 0.1218], "r": 0.0148, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot18", "type": "sphere", "c": [-0.5154, 1.1824, 0.1218], "r": 0.0118, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot19", "type": "sphere", "c": [-0.5642, 1.1863, 0.1142], "r": 0.0141, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot20", "type": "sphere", "c": [-0.6162, 1.1791, 0.1246], "r": 0.0146, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot21", "type": "sphere", "c": [-0.6638, 1.1839, 0.1199], "r": 0.0136, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot22", "type": "sphere", "c": [-0.7153, 1.19, 0.1123], "r": 0.0137, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot23", "type": "sphere", "c": [-0.764, 1.1747, 0.1293], "r": 0.0146, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot24", "type": "sphere", "c": [0.2454, 1.0977, 0.173], "r": 0.014, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot25", "type": "sphere", "c": [0.1912, 1.094, 0.175], "r": 0.0128, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot26", "type": "sphere", "c": [0.1356, 1.082, 0.181], "r": 0.0132, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot27", "type": "sphere", "c": [0.0877, 1.0964, 0.173], "r": 0.0133, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot28", "type": "sphere", "c": [0.0362, 1.0874, 0.179], "r": 0.0166, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot29", "type": "sphere", "c": [-0.0121, 1.0888, 0.182], "r": 0.0152, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot30", "type": "sphere", "c": [-0.0759, 1.0977, 0.184], "r": 0.0166, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot31", "type": "sphere", "c": [-0.128, 1.088, 0.193], "r": 0.0143, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot32", "type": "sphere", "c": [-0.1918, 1.101, 0.189], "r": 0.0133, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot33", "type": "sphere", "c": [-0.2419, 1.0836, 0.197], "r": 0.0138, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot34", "type": "sphere", "c": [-0.298, 1.0921, 0.191], "r": 0.0139, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot35", "type": "sphere", "c": [-0.3448, 1.0881, 0.19], "r": 0.0144, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot36", "type": "sphere", "c": [-0.4025, 1.1009, 0.182], "r": 0.0158, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot37", "type": "sphere", "c": [-0.4592, 1.0928, 0.185], "r": 0.0158, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot38", "type": "sphere", "c": [-0.5069, 1.0996, 0.182], "r": 0.0162, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot39", "type": "sphere", "c": [-0.5705, 1.0971, 0.18], "r": 0.0145, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot40", "type": "sphere", "c": [-0.625, 1.0805, 0.181], "r": 0.0155, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot41", "type": "sphere", "c": [-0.6729, 1.0796, 0.182], "r": 0.0137, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot42", "type": "sphere", "c": [-0.7228, 1.0862, 0.181], "r": 0.013, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot43", "type": "sphere", "c": [-0.7695, 1.0816, 0.179], "r": 0.0131, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot44", "type": "sphere", "c": [0.2985, 1.039, 0.19], "r": 0.0154, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot45", "type": "sphere", "c": [0.2444, 1.0241, 0.195], "r": 0.0143, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot46", "type": "sphere", "c": [0.1857, 1.0209, 0.197], "r": 0.0166, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot47", "type": "sphere", "c": [0.1138, 1.0292, 0.197], "r": 0.0148, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot48", "type": "sphere", "c": [0.061, 1.0205, 0.199], "r": 0.0143, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot49", "type": "sphere", "c": [0.0045, 1.0379, 0.199], "r": 0.0135, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot50", "type": "sphere", "c": [-0.047, 1.0408, 0.204], "r": 0.0151, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot51", "type": "sphere", "c": [-0.1011, 1.031, 0.208], "r": 0.0129, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot52", "type": "sphere", "c": [-0.1632, 1.0415, 0.209], "r": 0.0166, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot53", "type": "sphere", "c": [-0.2288, 1.0243, 0.209], "r": 0.0144, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot54", "type": "sphere", "c": [-0.2833, 1.0365, 0.206], "r": 0.0151, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot55", "type": "sphere", "c": [-0.3507, 1.0259, 0.2], "r": 0.0137, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot56", "type": "sphere", "c": [-0.4187, 1.0416, 0.193], "r": 0.0166, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot57", "type": "sphere", "c": [-0.4866, 1.0376, 0.188], "r": 0.016, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot58", "type": "sphere", "c": [-0.5424, 1.0304, 0.181], "r": 0.0143, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot59", "type": "sphere", "c": [-0.594, 1.0187, 0.176], "r": 0.0139, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot60", "type": "sphere", "c": [-0.6504, 1.0346, 0.182], "r": 0.017, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot61", "type": "sphere", "c": [-0.7108, 1.0405, 0.186], "r": 0.0171, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot62", "type": "sphere", "c": [0.2763, 0.9633, 0.192], "r": 0.0126, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot63", "type": "sphere", "c": [0.2166, 0.9629, 0.195], "r": 0.0143, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot64", "type": "sphere", "c": [0.1408, 0.9782, 0.198], "r": 0.0137, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot65", "type": "sphere", "c": [0.0707, 0.9772, 0.197], "r": 0.0121, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot66", "type": "sphere", "c": [0.0005, 0.9798, 0.2], "r": 0.0149, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot67", "type": "sphere", "c": [-0.0719, 0.9695, 0.202], "r": 0.0124, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot68", "type": "sphere", "c": [-0.1451, 0.966, 0.202], "r": 0.0151, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot69", "type": "sphere", "c": [-0.2224, 0.9675, 0.2], "r": 0.0133, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot70", "type": "sphere", "c": [-0.2992, 0.9754, 0.196], "r": 0.0124, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot71", "type": "sphere", "c": [-0.3573, 0.9616, 0.183], "r": 0.0155, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot72", "type": "sphere", "c": [-0.4309, 0.9615, 0.169], "r": 0.0152, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot73", "type": "sphere", "c": [-0.5085, 0.9738, 0.161], "r": 0.0132, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot74", "type": "sphere", "c": [-0.5762, 0.9611, 0.154], "r": 0.0118, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot75", "type": "sphere", "c": [-0.6536, 0.9736, 0.175], "r": 0.0139, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"},
+      {"id": "fspot76", "type": "sphere", "c": [-0.7301, 0.9684, 0.183], "r": 0.0153, "op": "paint", "kc": 0.004, "color": "@fspot", "mirror": true, "when": "fallow"}
+    ],
+    "eyes": {"at": [1.2031, 1.5579, 0.068], "from": [1.2213, 1.5223, 0.0], "r": 0.012, "iris": "@eye", "pupil": "bar", "lid": "@nose", "sink": 0.45}
+  },
+  "rear": [
+    "-0.620*s",
+    "0.87*s",
+    0,
+    "0.46*s",
+    "0.36*s*bulk",
+    "0.29*s*bulk"
   ],
-  "print": "cloven"
+  "tail": {
+    "c": [
+      "-1.310*s",
+      "1.05*s"
+    ],
+    "R": "0.25*s",
+    "a0": 0,
+    "a1": -0.7,
+    "r1": "0.045*s",
+    "r2": "0.03*s",
+    "n": 3,
+    "sway": 12,
+    "speed": 0.8
+  },
+  "neck": [
+    "0.65*s",
+    "1.05*s",
+    0,
+    "1.060*s",
+    "1.450*s",
+    0,
+    "0.15*s*bulk",
+    "0.11*s*bulk"
+  ],
+  "head": [
+    "1.120*s",
+    "1.520*s",
+    0,
+    "0.15*s"
+  ],
+  "muzzle": [
+    "1.120*s",
+    "1.500*s",
+    0,
+    "1.490*s",
+    "1.410*s",
+    0,
+    "0.12*s",
+    "0.062*s"
+  ],
+  "nose": [
+    "1.540*s",
+    "1.440*s",
+    0,
+    "0.035*s"
+  ],
+  "ears": [
+    "1.035*s",
+    "1.615*s",
+    "0.090*s",
+    "0.878*s",
+    "1.709*s",
+    "0.344*s",
+    "0.06*s",
+    "0.018*s"
+  ],
+  "eyes": [
+    "1.240*s",
+    "1.580*s",
+    "0.13*s",
+    "0.03*s"
+  ],
+  "variants": {
+    "hind": {
+      "params": {
+        "antlers": false
+      },
+      "scale": 0.86
+    },
+    "fallow doe": {
+      "params": {
+        "antlers": false,
+        "fallow": true
+      },
+      "scale": 0.74,
+      "colors": {
+        "body": "#b8763c",
+        "back": "#94582a",
+        "upleg": "#a86a36",
+        "head": "#a26a38",
+        "ear": "#a06836",
+        "throat": "#a46a38",
+        "leg": "#9a6232"
+      }
+    },
+    "roe doe": {
+      "params": {
+        "antlers": false
+      },
+      "scale": 0.58,
+      "colors": {
+        "body": "#b0642e",
+        "back": "#965226",
+        "upleg": "#9e5a2a",
+        "head": "#8a5e3a",
+        "ear": "#7e5636",
+        "throat": "#9a5e30",
+        "leg": "#8a5430",
+        "muzzle": "#3a2a1e",
+        "chin": "#efe8dc"
+      }
+    }
+  }
 }

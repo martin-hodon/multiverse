@@ -1,242 +1,128 @@
 {
   "name": "eagle",
   "kind": "parts",
-  "flags": {
-    "fly": {
-      "alt": [
-        20,
-        155
-      ],
-      "speed": [
-        4,
-        8
-      ],
-      "hz": 0.4
-    },
-    "active": "day",
-    "print": "bird"
-  },
+  "flags": {"fly": {"alt": [20, 155], "speed": [4, 8], "hz": 0.4}, "active": "day", "print": "bird"},
   "parts": [
+    {"id": "body", "parent": null, "shape": "capsule", "size": {"r": 0.1, "len": 0.36}, "geomRot": [0, 0, 90], "pos": [0, 0.4, 0], "color": "@brown"},
+    {"id": "head", "parent": "body", "shape": "sphere", "size": {"r": 0.095}, "pos": [0.29, 0.07, 0], "color": "#9a7a42"},
+    {"id": "beak", "parent": "head", "shape": "cone", "size": {"r": 0.03, "h": 0.085}, "pos": [0.09, -0.01, 0], "rot": [0, 0, -105], "color": "#d9b04a"},
+    {"id": "eyeL", "parent": "head", "shape": "capsule", "size": {"r": 0.02, "r2": 0.02, "len": 0.0371}, "pos": [0.0785, 0.0341, 0.0413], "rot": [90, 0, 39.8056], "pivot": [0, 0.0185, 0], "color": "#4c3a0b", "edge": 0, "dot": {"iris": "#d9a520", "pupil": "round", "round": true, "role": "eye"}},
+    {"id": "eyeR", "parent": "head", "shape": "capsule", "size": {"r": 0.02, "r2": 0.02, "len": 0.0371}, "pos": [0.0548, 0.0341, -0.0698], "rot": [90, 0, -39.8056], "pivot": [0, 0.0185, 0], "color": "#4c3a0b", "edge": 0, "dot": {"iris": "#d9a520", "pupil": "round", "round": true, "role": "eye"}},
+    {"id": "tail", "parent": "body", "shape": "tri", "size": {"a": [-0.12, 0, 0.14], "b": [-0.12, 0, -0.14], "c": [-0.58, 0.02, 0], "r": 0.022}, "pos": [0, 0, 0], "color": "#5a4128"},
+    {"id": "wingL", "parent": "body", "shape": "tri", "size": {"a": [0.24, 0.05, 0.06], "b": [-0.3, 0.05, 0.12], "c": [-0.04, 0.05, 0.72], "r": 0.025}, "color": "#5a4128", "anim": {"axis": "x", "deg": 30, "speed": 0.4, "phase": 0, "wing": true}, "pos": [0.03, 0.04, 0.07]},
+    {"id": "wristL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.01}, "color": "#5a4128", "fold": [0, 0, 0], "pos": [0, 0.0246, 0.41], "anim": {"axis": "y", "deg": -28, "speed": 0.4, "phase": -1.891, "flick": 1, "wing": true}},
+    {"id": "handL", "parent": "wristL", "shape": "sphere", "size": {"r": 0.01}, "color": "#5a4128", "fold": [0, 0, 0], "pos": [0, 0, 0], "anim": {"axis": "x", "deg": 16, "speed": 0.4, "phase": -0.8, "wing": true}},
+    {"id": "wingR", "parent": "body", "shape": "tri", "size": {"a": [0.24, 0.05, -0.06], "b": [-0.3, 0.05, -0.12], "c": [-0.04, 0.05, -0.72], "r": 0.025}, "color": "#5a4128", "anim": {"axis": "x", "deg": -30, "speed": 0.4, "phase": 0, "wing": true}, "pos": [0.03, 0.04, -0.07]},
+    {"id": "wristR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.01}, "color": "#5a4128", "fold": [0, 0, 0], "pos": [0, 0.0246, -0.41], "anim": {"axis": "y", "deg": 28, "speed": 0.4, "phase": -1.891, "flick": 1, "wing": true}},
+    {"id": "handR", "parent": "wristR", "shape": "sphere", "size": {"r": 0.01}, "color": "#5a4128", "fold": [0, 0, 0], "pos": [0, 0, 0], "anim": {"axis": "x", "deg": -16, "speed": 0.4, "phase": -0.8, "wing": true}},
+    {"id": "legL", "parent": "body", "shape": "sphere", "size": {"r": 0.025}, "color": "@warm", "pos": [-0.05, -0.055, 0.055], "tuck": -11.9},
+    {"id": "shinL", "parent": "legL", "shape": "sphere", "size": {"r": 0.019}, "color": "@warm", "pos": [-0.1248, -0.048, 0], "tuck": -25.4},
+    {"id": "footL", "parent": "shinL", "shape": "sphere", "size": {"r": 0.013}, "color": "@foot", "pos": [-0.0638, -0.0571, 0], "tuck": 77.3, "perchPitch": 55},
+    {"id": "legR", "parent": "body", "shape": "sphere", "size": {"r": 0.025}, "color": "@warm", "pos": [-0.05, -0.055, -0.055], "tuck": -11.9},
+    {"id": "shinR", "parent": "legR", "shape": "sphere", "size": {"r": 0.019}, "color": "@warm", "pos": [-0.1248, -0.048, 0], "tuck": -25.4},
+    {"id": "footR", "parent": "shinR", "shape": "sphere", "size": {"r": 0.013}, "color": "@foot", "pos": [-0.0638, -0.0571, 0], "tuck": 77.3, "perchPitch": 55},
+    {"id": "toeL0", "parent": "footL", "shape": "sphere", "size": {"r": 0.0104}, "color": "@foot", "pos": [0, 0, 0.0], "curl": {"len": 0.082, "r0": 0.08, "dir": 1}},
+    {"id": "toeR0", "parent": "footR", "shape": "sphere", "size": {"r": 0.0104}, "color": "@foot", "pos": [0, 0, -0.0], "curl": {"len": 0.082, "r0": 0.08, "dir": 1}},
+    {"id": "toeL1", "parent": "footL", "shape": "sphere", "size": {"r": 0.0104}, "color": "@foot", "pos": [0, 0, 0.0022], "curl": {"len": 0.074, "r0": 0.08, "dir": 1}},
+    {"id": "toeR1", "parent": "footR", "shape": "sphere", "size": {"r": 0.0104}, "color": "@foot", "pos": [0, 0, -0.0022], "curl": {"len": 0.074, "r0": 0.08, "dir": 1}},
+    {"id": "toeL2", "parent": "footL", "shape": "sphere", "size": {"r": 0.0104}, "color": "@foot", "pos": [0, 0, -0.0021], "curl": {"len": 0.07, "r0": 0.08, "dir": 1}},
+    {"id": "toeR2", "parent": "footR", "shape": "sphere", "size": {"r": 0.0104}, "color": "@foot", "pos": [0, 0, 0.0021], "curl": {"len": 0.07, "r0": 0.08, "dir": 1}},
+    {"id": "toeL3", "parent": "footL", "shape": "sphere", "size": {"r": 0.014}, "color": "@foot", "pos": [0, 0, 0.0004], "curl": {"len": 0.062, "r0": 0.08, "dir": -1}},
+    {"id": "toeR3", "parent": "footR", "shape": "sphere", "size": {"r": 0.014}, "color": "@foot", "pos": [0, 0, -0.0004], "curl": {"len": 0.062, "r0": 0.08, "dir": -1}}
+  ],
+  "_about": "a golden eagle soaring: wings spread flat in a shallow V -- a broad arm of secondaries under their coverts, the hand's seven slotted primaries spread like fingers -- the tail fanned; a deep chest, the head with its flat crown, the brow over the eye, the golden nape and the hooked beak with its yellow cere; feathered legs drawn up under the tail, the yellow toes and black talons closed (2026-11-08, review.py: claws) The claws RE-ROOTED (review.py): each a sheath as wide as the claw where it leaves the toe, sunk in it, the join faired (horn `fair`: grown out of the skin in its paint), darker at the base fading to its own colour at the point -- no pale cut edge where it leaves the fur.",
+  "colors": {
+    "brown": "#3f2b1b",
+    "dark": "#2c1f15",
+    "warm": "#56402a",
+    "gold": "#c99a52",
+    "beak": "#3a3430",
+    "cere": "#e0b030",
+    "remex": "#4a3a2c",
+    "tip": "#1e1610",
+    "tail": "#5a4a3a",
+    "foot": "#e0b030",
+    "talon": "#151210",
+    "eye": "#8a5a1a",
+    "pale": "#7a6448",
+    "head": "#3f2b1b",
+    "face": "#2c1f15",
+    "tailTip": "#2c1f15"
+  },
+  "sculpt": {
+    "_about": "x forward, y up, z left, metres; aloft (the wings' rest is the glide) SHARP PASS 2 (2026-11-08): the pointed parts -- claw, lower, upper (6 in all) -- are the engine's sharp `horn`s (sharp.js), made from the field shapes they replaced by tools/creaturegen/sharp/ (claws.py, teeth.py, spikes.py, antlers.py, bills.py): rooted in the body, tips pointed; RE-RUN those after this species' generator.",
+    "mesh": {"tris": [2800, 950]},
+    "eyes": {"at": [0.34, 0.478, 0.036], "from": [0.3, 0.47, 0], "r": 0.011, "iris": "@eye", "pupil": "round", "sink": 0.7, "socket": 1.08},
+    "shape": [
+      {"id": "chest", "type": "ell", "c": [0.1, 0.4, 0], "r": [0.2, 0.1, 0.1], "k": 0.05, "color": "@brown"},
+      {"id": "belly", "type": "ell", "c": [-0.06, 0.37, 0], "r": [0.2, 0.085, 0.085], "k": 0.05, "color": "@dark"},
+      {"id": "back", "type": "ell", "c": [-0.02, 0.435, 0], "r": [0.22, 0.05, 0.085], "k": 0.04, "color": "@brown"},
+      {"id": "rump", "type": "ell", "c": [-0.2, 0.405, 0], "r": [0.1, 0.055, 0.065], "k": 0.04, "color": "@brown"},
+      {"id": "nape", "type": "ell", "bone": "head", "c": [0.24, 0.47, 0], "r": [0.075, 0.055, 0.058], "k": 0.03, "kc": 0.035, "color": "@gold"},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.3, 0.468, 0], "r": [0.07, 0.05, 0.047], "k": 0.025, "kc": 0.01, "color": "@head"},
+      {"id": "crown", "type": "ell", "bone": "head", "c": [0.28, 0.5, 0], "r": [0.06, 0.025, 0.035], "k": 0.015, "kc": 0.025, "color": "@gold"},
+      {"id": "face", "type": "ell", "bone": "head", "c": [0.325, 0.45, 0], "r": [0.045, 0.035, 0.04], "k": 0.02, "kc": 0.008, "color": "@face"},
+      {"id": "brow", "type": "ell", "bone": "head", "c": [0.33, 0.49, 0.028], "r": [0.028, 0.01, 0.016], "rot": [0, 0, -8], "k": 0.008, "kc": 0.004, "color": "@head", "mirror": true},
+      {"id": "shelf", "type": "ell", "bone": "head", "c": [0.337, 0.491, 0.034], "r": [0.022, 0.0055, 0.012], "rot": [0, 0, -10], "k": 0.004, "kc": 0.002, "color": "@head", "mirror": true},
+      {"id": "cere", "type": "ell", "bone": "head", "c": [0.363, 0.476, 0], "r": [0.017, 0.017, 0.021], "k": 0.005, "kc": 0.001, "color": "@cere"},
+      {"id": "gape", "type": "ell", "bone": "head", "c": [0.348, 0.456, 0.014], "r": [0.016, 0.005, 0.006], "k": 0.004, "kc": 0.0015, "color": "@cere", "mirror": true},
+      {"id": "upper", "type": "horn", "bone": "head", "pts": [[0.3625, 0.4591, 0.0, 0.018, 1.744], [0.387, 0.4542, 0.0, 0.015, 1.873], [0.4074, 0.447, 0.0, 0.01, 1.75], [0.418, 0.4336, 0.0, 0.006, 1.5], [0.4165, 0.4212, 0.0, 0.002, 1.25], [0.4164, 0.4191, 0.0, 0.0, 1.25]], "color": "@beak", "up": [0.1972, 0.9804, 0.0], "flat": 1, "keel": 0.06, "sides": 14},
+      {"id": "lower", "type": "horn", "bone": "head", "pts": [[0.3616, 0.4588, 0.0, 0.012, 1.608], [0.3841, 0.4543, 0.0, 0.009, 1.747], [0.3999, 0.4489, 0.0, 0.005, 1.643], [0.4049, 0.4452, 0.0, 0.0, 1.643]], "color": "@beak", "up": [-0.1957, -0.9807, -0.0], "flat": 1, "sides": 14},
+      {"id": "arm0", "type": "ell", "bone": "wingL", "c": [0.0803, 0.4432, 0.1227], "r": [0.0792, 0.0129, 0.076], "k": 0.0106, "color": "@brown", "mirror": true},
+      {"id": "arm1", "type": "ell", "bone": "wingL", "c": [0.106, 0.4495, 0.2283], "r": [0.0792, 0.0124, 0.076], "k": 0.0106, "color": "@brown", "mirror": true},
+      {"id": "arm2", "type": "ell", "bone": "wingL", "c": [0.1317, 0.4558, 0.3337], "r": [0.0792, 0.0119, 0.076], "k": 0.0106, "color": "@brown", "mirror": true},
+      {"id": "arm3", "type": "ell", "bone": "wingL", "c": [0.1575, 0.4622, 0.4392], "r": [0.0792, 0.0114, 0.076], "k": 0.0106, "color": "@brown", "mirror": true},
+      {"id": "hand0", "type": "ell", "bone": "handL", "c": [0.1566, 0.4666, 0.5133], "r": [0.0753, 0.0088, 0.0653], "k": 0.0106, "color": "@brown", "mirror": true},
+      {"id": "hand1", "type": "ell", "bone": "handL", "c": [0.1273, 0.472, 0.604], "r": [0.0648, 0.0085, 0.0653], "k": 0.0106, "color": "@brown", "mirror": true},
+      {"id": "hand2", "type": "ell", "bone": "handL", "c": [0.098, 0.4775, 0.6947], "r": [0.0544, 0.0081, 0.0653], "k": 0.0106, "color": "@brown", "mirror": true},
+      {"id": "under0_0", "type": "ell", "bone": "wingL", "c": [0.1079, 0.4378, 0.155], "r": [0.0396, 0.0055, 0.1025], "k": 0.004, "kc": 0.0033, "color": "@dark", "mirror": true},
+      {"id": "under0_1", "type": "ell", "bone": "wingL", "c": [0.1396, 0.4456, 0.285], "r": [0.0396, 0.0055, 0.1025], "k": 0.004, "kc": 0.0033, "color": "@dark", "mirror": true},
+      {"id": "under0_2", "type": "ell", "bone": "wingL", "c": [0.1713, 0.4534, 0.415], "r": [0.0396, 0.0055, 0.1025], "k": 0.004, "kc": 0.0033, "color": "@dark", "mirror": true},
+      {"id": "under1_0", "type": "ell", "bone": "wingL", "c": [0.0287, 0.4378, 0.155], "r": [0.0242, 0.0055, 0.1025], "k": 0.004, "kc": 0.0033, "color": "@pale", "mirror": true},
+      {"id": "under1_1", "type": "ell", "bone": "wingL", "c": [0.0604, 0.4456, 0.285], "r": [0.0242, 0.0055, 0.1025], "k": 0.004, "kc": 0.0033, "color": "@pale", "mirror": true},
+      {"id": "under1_2", "type": "ell", "bone": "wingL", "c": [0.0921, 0.4534, 0.415], "r": [0.0242, 0.0055, 0.1025], "k": 0.004, "kc": 0.0033, "color": "@pale", "mirror": true},
+      {"id": "edge", "type": "tube", "bone": "wingL", "pts": [[0.1365, 0.4412, 0.09, 0.0132], [0.2316, 0.4646, 0.48, 0.0066]], "k": 0.0079, "color": "@brown", "mirror": true},
+      {"id": "edgeH", "type": "tube", "bone": "handL", "pts": [[0.2316, 0.4646, 0.48, 0.0066], [0.1216, 0.4802, 0.74, 0.004]], "k": 0.0066, "color": "@brown", "mirror": true},
+      {"id": "sec", "type": "feathers", "rows": [{"at": [0.0148, 0.4406, 0.08], "to": [-0.235, 0.4406, 0.09], "w": 0.046, "bone": "wingL"}, {"at": [0.0398, 0.4467, 0.1825], "to": [-0.2596, 0.4467, 0.2005], "w": 0.046, "bone": "wingL"}, {"at": [0.0648, 0.4529, 0.285], "to": [-0.2641, 0.4529, 0.3113], "w": 0.046, "bone": "wingL"}, {"at": [0.0898, 0.4591, 0.3875], "to": [-0.2236, 0.4591, 0.4188], "w": 0.046, "bone": "wingL"}, {"at": [0.1082, 0.4652, 0.49], "to": [-0.1599, 0.4652, 0.5222], "w": 0.046, "bone": "wingL"}], "n": 10, "outline": "round", "up": [0, 1, 0], "camber": 0.1, "curve": -0.01, "stagger": 0.0015, "seed": 11, "bars": {"n": 5, "dark": 0.72}, "color": "@remex", "tip": "@dark", "mirror": true},
+      {"id": "prim", "type": "feathers", "rows": [{"at": [0.1204, 0.4658, 0.5], "to": [-0.178, 0.4598, 0.5314], "w": 0.046, "bone": "handL"}, {"at": [0.1075, 0.4694, 0.56], "to": [-0.249, 0.462, 0.6589], "w": 0.046, "bone": "handL"}, {"at": [0.0941, 0.473, 0.62], "to": [-0.2775, 0.4648, 0.7933], "w": 0.046, "bone": "handL"}, {"at": [0.0801, 0.4766, 0.68], "to": [-0.266, 0.4682, 0.9179], "w": 0.046, "bone": "handL"}, {"at": [0.0656, 0.4802, 0.74], "to": [-0.215, 0.4724, 1.0109], "w": 0.046, "bone": "handL"}], "n": 7, "outline": "flight", "up": [0, 1, 0], "camber": 0.1, "curve": 0.04, "lift": -0.002, "stagger": 0.0015, "seed": 12, "bars": {"n": 4, "dark": 0.75}, "color": "@remex", "tip": "@tip", "mirror": true},
+      {"id": "lesser", "type": "feathers", "rows": [{"at": [0.1217, 0.4511, 0.085], "to": [0.0219, 0.4471, 0.09], "w": 0.041, "bone": "wingL"}, {"at": [0.168, 0.4625, 0.275], "to": [0.0682, 0.4585, 0.28], "w": 0.041, "bone": "wingL"}, {"at": [0.2168, 0.4745, 0.475], "to": [0.117, 0.4705, 0.48], "w": 0.041, "bone": "wingL"}], "n": 3, "outline": "round", "up": [0, 1, 0], "camber": 0.12, "curve": -0.02, "lift": 0.003, "stagger": 0.001, "seed": 13, "color": "@brown", "tip": "@warm", "mirror": true},
+      {"id": "greater", "type": "feathers", "rows": [{"at": [0.0733, 0.4538, 0.085], "to": [-0.0764, 0.4478, 0.0925], "w": 0.043, "bone": "wingL"}, {"at": [0.1197, 0.4586, 0.2756], "to": [-0.0301, 0.4592, 0.2825], "w": 0.043, "bone": "wingL"}, {"at": [0.1685, 0.4706, 0.4755], "to": [0.0187, 0.4712, 0.4825], "w": 0.043, "bone": "wingL"}], "n": 5, "outline": "round", "up": [0, 1, 0], "camber": 0.12, "curve": -0.02, "lift": 0.0015, "stagger": 0.001, "seed": 14, "color": "@warm", "tip": "@brown", "mirror": true},
+      {"id": "ulesser", "type": "feathers", "rows": [{"at": [0.1085, 0.4287, 0.085], "to": [0.0086, 0.4277, 0.09], "w": 0.04, "bone": "wingL"}, {"at": [0.1398, 0.4364, 0.2135], "to": [0.0399, 0.4354, 0.2185], "w": 0.04, "bone": "wingL"}, {"at": [0.1748, 0.445, 0.357], "to": [0.0749, 0.444, 0.362], "w": 0.04, "bone": "wingL"}, {"at": [0.2036, 0.4521, 0.475], "to": [0.1037, 0.4511, 0.48], "w": 0.04, "bone": "wingL"}], "n": 6, "outline": "round", "up": [0, -1, 0], "camber": 0.05, "curve": 0, "lift": 0.0024, "stagger": 0.001, "seed": 17, "color": "@dark", "tip": "@brown", "mirror": true},
+      {"id": "ugreater", "type": "feathers", "rows": [{"at": [0.0689, 0.4287, 0.085], "to": [-0.0809, 0.4272, 0.0925], "w": 0.044, "bone": "wingL"}, {"at": [0.1002, 0.4364, 0.2135], "to": [-0.0496, 0.4349, 0.221], "w": 0.044, "bone": "wingL"}, {"at": [0.1352, 0.445, 0.357], "to": [-0.0146, 0.4435, 0.3645], "w": 0.044, "bone": "wingL"}, {"at": [0.164, 0.4521, 0.475], "to": [0.0142, 0.4506, 0.4825], "w": 0.044, "bone": "wingL"}], "n": 8, "outline": "round", "up": [0, -1, 0], "camber": 0.05, "curve": 0, "lift": 0.0012, "stagger": 0.001, "seed": 18, "color": "@brown", "tip": "@warm", "mirror": true},
+      {"id": "pcov", "type": "feathers", "rows": [{"at": [0.162, 0.4754, 0.49], "to": [0.0327, 0.4715, 0.5036], "w": 0.042, "bone": "handL"}, {"at": [0.1236, 0.4826, 0.61], "to": [0.0024, 0.4787, 0.657], "w": 0.042, "bone": "handL"}, {"at": [0.0854, 0.481, 0.7295], "to": [-0.0195, 0.4859, 0.8071], "w": 0.042, "bone": "handL"}], "n": 2, "outline": "round", "up": [0, 1, 0], "camber": 0.12, "lift": 0.001, "seed": 14, "color": "@warm", "tip": "@brown", "mirror": true},
+      {"id": "tail", "type": "feathers", "rows": [{"at": [-0.26, 0.41, 0.0552], "to": [-0.5027, 0.41, 0.1736], "w": 0.046}, {"at": [-0.26, 0.41, 0.0276], "to": [-0.5523, 0.41, 0.0951], "w": 0.046}, {"at": [-0.26, 0.41, 0.0], "to": [-0.57, 0.41, 0.0], "w": 0.046}, {"at": [-0.26, 0.41, -0.0276], "to": [-0.5523, 0.41, -0.0951], "w": 0.046}, {"at": [-0.26, 0.41, -0.0552], "to": [-0.5027, 0.41, -0.1736], "w": 0.046}], "n": 7, "outline": "round", "up": [0, 1, 0], "camber": 0.1, "curve": 0.02, "stagger": 0.0015, "seed": 21, "bars": {"n": 4, "dark": 0.7}, "color": "@tail", "tip": "@tailTip"},
+      {"id": "trouser", "type": "ell", "bone": "legL", "c": [-0.1124, 0.321, 0.055], "r": [0.0829, 0.05, 0.0425], "k": 0.045, "color": "@warm", "mirror": true, "tag": "perchleg", "rot": [0, 0, -158.96]},
+      {"id": "cuff", "type": "ell", "bone": "legL", "c": [-0.1551, 0.3059, 0.055], "r": [0.0375, 0.045, 0.04], "k": 0.03, "color": "@warm", "mirror": true, "tag": "perchleg"},
+      {"id": "tarsus", "type": "tube", "bone": "shinL", "pts": [[-0.1748, 0.297, 0.055, 0.019], [-0.2235, 0.248, 0.055, 0.0181]], "k": 0.0152, "color": "@warm", "mirror": true, "tag": "perchleg"},
+      {"id": "toe0", "type": "tube", "bone": "toeL0", "pts": [[-0.229, 0.2466, 0.055, 0.013], [-0.2192, 0.2287, 0.055, 0.0122], [-0.2136, 0.209, 0.055, 0.0114], [-0.2125, 0.1885, 0.055, 0.0106], [-0.216, 0.1684, 0.055, 0.0097]], "k": 0.0078, "color": "@foot", "mirror": true, "tag": "perchleg"},
+      {"id": "claw0", "type": "horn", "bone": "toeL0", "pts": [[-0.2113, 0.1778, 0.055, 0.0059], [-0.2157, 0.1691, 0.055, 0.0068], [-0.2188, 0.1629, 0.055, 0.007], [-0.2217, 0.1571, 0.055, 0.0058], [-0.2311, 0.1487, 0.055, 0.0034], [-0.2429, 0.1443, 0.055, 0.0]], "color": "@talon", "mirror": true, "up": [0.6673, -0.7448, 0.0], "aspect": 1.3, "fair": {"r": 0.0024, "skin": 0.15}},
+      {"id": "claw1", "type": "horn", "bone": "toeL1", "pts": [[-0.2129, 0.1892, 0.0812, 0.006], [-0.2166, 0.1808, 0.0847, 0.0068], [-0.2192, 0.1748, 0.0872, 0.007], [-0.2219, 0.1688, 0.0897, 0.0058], [-0.2306, 0.1598, 0.0945, 0.0034], [-0.2418, 0.1542, 0.0992, 0.0]], "color": "@talon", "mirror": true, "up": [0.7188, -0.6952, -0.0075], "aspect": 1.3, "fair": {"r": 0.0025, "skin": 0.15}},
+      {"id": "claw2", "type": "horn", "bone": "toeL2", "pts": [[-0.2119, 0.1925, 0.0325, 0.006], [-0.2153, 0.1839, 0.0293, 0.0068], [-0.2177, 0.1778, 0.027, 0.007], [-0.2201, 0.1717, 0.0247, 0.0058], [-0.2283, 0.1623, 0.0203, 0.0034], [-0.2394, 0.1563, 0.016, 0.0]], "color": "@talon", "mirror": true, "up": [0.7484, -0.6633, 0.0023], "aspect": 1.3, "fair": {"r": 0.0025, "skin": 0.15}},
+      {"id": "claw3", "type": "horn", "bone": "toeL3", "pts": [[-0.2606, 0.2834, 0.0521, 0.008], [-0.2736, 0.285, 0.0512, 0.0091], [-0.2829, 0.2861, 0.0505, 0.0094], [-0.2914, 0.2872, 0.0499, 0.0078], [-0.3079, 0.2831, 0.0487, 0.0045], [-0.3218, 0.2733, 0.0475, 0.0]], "color": "@talon", "mirror": true, "up": [-0.2424, 0.9702, 0.0047], "aspect": 1.3, "fair": {"r": 0.0033, "skin": 0.15}},
+      {"id": "toe1", "type": "tube", "bone": "toeL1", "pts": [[-0.229, 0.2466, 0.0572, 0.013], [-0.2207, 0.2316, 0.0642, 0.0122], [-0.2158, 0.215, 0.0711, 0.0114], [-0.2145, 0.1976, 0.078, 0.0106], [-0.2169, 0.1801, 0.085, 0.0097]], "k": 0.0078, "color": "@foot", "mirror": true, "tag": "perchleg"},
+      {"id": "toe2", "type": "tube", "bone": "toeL2", "pts": [[-0.229, 0.2466, 0.0529, 0.013], [-0.2209, 0.2323, 0.047, 0.0122], [-0.2159, 0.2165, 0.041, 0.0114], [-0.2142, 0.2, 0.035, 0.0106], [-0.2156, 0.1832, 0.029, 0.0097]], "k": 0.0078, "color": "@foot", "mirror": true, "tag": "perchleg"},
+      {"id": "toe3", "type": "tube", "bone": "toeL3", "pts": [[-0.2256, 0.249, 0.0554, 0.0175], [-0.2355, 0.2609, 0.0543, 0.0165], [-0.2471, 0.271, 0.0533, 0.0154], [-0.2602, 0.2791, 0.0522, 0.0143], [-0.2745, 0.2851, 0.0511, 0.0132]], "k": 0.0105, "color": "@foot", "mirror": true, "tag": "perchleg"},
+      {"id": "spat", "type": "ell", "bone": "footL", "c": [-0.2198, 0.2494, 0.055], "r": [0.0218, 0.0169, 0.0209], "k": 0.0104, "color": "@warm", "mirror": true, "tag": "perchleg"}
+    ]
+  },
+  "coats": [
     {
-      "id": "body",
-      "parent": null,
-      "shape": "capsule",
-      "size": {
-        "r": 0.11,
-        "len": 0.4
-      },
-      "geomRot": [
-        0,
-        0,
-        90
-      ],
-      "pos": [
-        0,
-        0.4,
-        0
-      ],
-      "color": "#4b3520"
+      "name": "golden eagle"
     },
     {
-      "id": "head",
-      "parent": "body",
-      "shape": "sphere",
-      "size": {
-        "r": 0.095
-      },
-      "pos": [
-        0.28,
-        0.08,
-        0
-      ],
-      "color": "#9a7a42"
-    },
-    {
-      "id": "beak",
-      "parent": "head",
-      "shape": "cone",
-      "size": {
-        "r": 0.03,
-        "h": 0.085
-      },
-      "pos": [
-        0.09,
-        -0.01,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        -105
-      ],
-      "color": "#d9b04a"
-    },
-    {
-      "id": "eyeL",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.02,
-        "r2": 0.02,
-        "len": 0.0370649186334225
-      },
-      "pos": [
-        0.07848802761175187,
-        0.03406401536603021,
-        0.04128283394777702
-      ],
-      "rot": [
-        90,
-        0,
-        39.80557109226522
-      ],
-      "pivot": [
-        0,
-        0.01853245931671125,
-        0
-      ],
-      "color": "#4c3a0b",
-      "edge": 0,
-      "dot": {
-        "iris": "#d9a520",
-        "pupil": "round",
-        "round": true,
-        "role": "eye"
-      }
-    },
-    {
-      "id": "eyeR",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.02,
-        "r2": 0.02,
-        "len": 0.0370649186334225
-      },
-      "pos": [
-        0.054759644927801485,
-        0.03406401536603021,
-        -0.06975689316851746
-      ],
-      "rot": [
-        90,
-        0,
-        -39.80557109226522
-      ],
-      "pivot": [
-        0,
-        0.01853245931671125,
-        0
-      ],
-      "color": "#4c3a0b",
-      "edge": 0,
-      "dot": {
-        "iris": "#d9a520",
-        "pupil": "round",
-        "round": true,
-        "role": "eye"
-      }
-    },
-    {
-      "id": "tail",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          -0.12,
-          0,
-          0.14
-        ],
-        "b": [
-          -0.12,
-          0,
-          -0.14
-        ],
-        "c": [
-          -0.58,
-          0.02,
-          0
-        ],
-        "r": 0.022
-      },
-      "pos": [
-        0,
-        0,
-        0
-      ],
-      "color": "#5a4128"
-    },
-    {
-      "id": "wingL",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0.24,
-          0.05,
-          0.06
-        ],
-        "b": [
-          -0.3,
-          0.05,
-          0.12
-        ],
-        "c": [
-          -0.04,
-          0.05,
-          0.72
-        ],
-        "r": 0.025
-      },
-      "pivot": [
-        0,
-        0,
-        0
-      ],
-      "color": "#5a4128",
-      "anim": {
-        "axis": "x",
-        "deg": 35,
-        "speed": 0.4,
-        "phase": 0,
-        "wing": true
-      }
-    },
-    {
-      "id": "wingR",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0.24,
-          0.05,
-          -0.06
-        ],
-        "b": [
-          -0.3,
-          0.05,
-          -0.12
-        ],
-        "c": [
-          -0.04,
-          0.05,
-          -0.72
-        ],
-        "r": 0.025
-      },
-      "pivot": [
-        0,
-        0,
-        0
-      ],
-      "color": "#5a4128",
-      "anim": {
-        "axis": "x",
-        "deg": -35,
-        "speed": 0.4,
-        "phase": 0,
-        "wing": true
-      }
+      "name": "bald eagle",
+      "head": "#f2f0ea",
+      "face": "#eeece6",
+      "gold": "#f2f0ea",
+      "beak": "#e8b830",
+      "cere": "#e8c040",
+      "tail": "#f0eee8",
+      "tailTip": "#e8e6e0",
+      "eye": "#e8d890",
+      "brown": "#3a2616",
+      "warm": "#46301e",
+      "pale": "#4a3a2c",
+      "dark": "#2a1c12"
     }
   ]
 }

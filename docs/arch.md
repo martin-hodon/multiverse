@@ -2862,9 +2862,9 @@ and `spire=` (octagon, gables, pinnacles and open spire in one); `shapes.py` gai
 |---|---|---|
 | Regensburg | 99.0k | 85.4 m long, 34.8 m wide, vault 32.8 m, spires 105 m; three choirs without ambulatory, the triangle porch, Eselsturm, tile roofs, copper Dachreiter |
 | Byodo-in | 22.5k | the Phoenix Hall facing east on its island: core 3x2 bays under its mokoshi, raised front bay, phoenixes, folded wings with towers, tail corridor on posts |
-| Topkapi | 57.5k | the ceremonial core: Middle Gate, Second Court porticoes, Divan, Tower of Justice, kitchens, Gate of Felicity, Audience Chamber |
+| Topkapi | 57.5k | the ceremonial core: Middle Gate, Second Court porticoes, Divan, Tower of Justice, kitchens, Gate of Felicity, Audience Chamber (rebuilt 2026-11-04 on OSM's plan, the whole palace: 161.7k, see "TOPKAPI PALACE REBUILT") |
 | Jeronimos | 106.5k | hall church, south portal (tabernacle of tapering niches), west portal, bell tower, two-storey chamfered vaulted cloister, the south front, the west tower |
-| Park Guell | 66.3k | the entrance pavilions, dragon stair, hypostyle (vaults and medallions), Nature Square and bench, the portico up the hill |
+| Park Guell | 66.3k | the entrance pavilions, dragon stair, hypostyle (vaults and medallions), Nature Square and bench, the portico up the hill (rebuilt 2026-11-04 on OSM's plan and the IGN's ground, with the viaducts, the wall and the hill: 163.3k; with its paths, the Calvary and the trees' kinds 2026-11-05: 188.1k, see "PARK GUELL REBUILT") |
 | Prambanan | 114.4k | Shiva 47 m, Vishnu and Brahma 33 m, the vahana temples, apit, kelir, patok; 224 perwara in four rows (cheap variant); gates and walls |
 
 Left open:
@@ -2873,11 +2873,12 @@ Left open:
 - Byodo-in: the walled back of the skirt is red, not white earth wall. The window behind the raised bay is round-headed, not fan-shaped. One of the two
   north bridges is built. The tower doors are holes, not hung doors.
 - Topkapi: no Baghdad Kiosk (the kiosk component can build it), no trees or court paths. The kitchens are 24.9 m deep against 21 m. The Divan's marble and
-  porphyry are not modelled.
+  porphyry are not modelled. (All but the last answered by the 2026-11-04 rebuild, "TOPKAPI PALACE REBUILT" below.)
 - Jeronimos: the Manueline carving is patterns, not relief geometry, so it reads flat close up. The 19th-century range is simplified to its rhythm.
 - Park Guell: the columns are plain Doric (no flutes or octagonal abacus: that would mean changing the shared order engine). No side grottos at the
   vestibule. The vault trencadis streaks seen straight up (UV of a stretched dome). Downhill, the portico shows up to 7 m of rubble terrace. The square's
-  back edge stands as a drop above the hill.
+  back edge stands as a drop above the hill. (The last two answered by the 2026-11-04 rebuild, "PARK GUELL REBUILT" below: the portico and the square
+  stand on the real hill now.)
 - Prambanan: the gods are limestone (statue stones are shader ids). The upper tiers carry a simpler moulding. The perwara are coarse by design.
   `borobudur.py`'s `square_outline` cuts each corner on the diagonal; Prambanan doesn't share it, and it isn't fixed.
 - `pregen/` was not rerun.
@@ -2981,6 +2982,198 @@ Left open:
     strips beside it already were. A straight map is linear in x and comes back to the bit, so flat walls are untouched;
     the face's top and bottom edges keep the map's points, which the parts above and below share. What is left is the
     reveal's own warp (outer and inner chords differ in width: ~2 degrees in a soffit).
+- BURG HOHENZOLLERN (2026-11-04; new, tools/archgen/hohenzollern.py writes hohenzollern.json, its finish and doors;
+  key hohenzollern, period industrial). The plan is OpenStreetMap's (ways 93612350 the bastion ring, 296628895/-898/-900
+  the main building, 282888746/-748/296628901/282888749/296628896 the Markgrafen-, Kaiser-, Bischofs-, Wart- and
+  Michaelsturm, 282888752 the Christuskapelle, 282887645 St Michael's, 275154208/-209 Adler- and Torturm, 54228 the
+  Rampenturm's ring, the service roads 275154210-218 for the approach), heights from Commons photographs (aerials, the
+  views from the south and south-west, the Adlertor, the court) and de/en.wikipedia. THREE LEVELS OF BAILEY on prisms
+  of their own (the lower Zwinger yA 9, the Rampenturm's yard HV ~20, the inner castle G 32.6 over a battered summit
+  and hilltop, the hill never showing in a lower yard), every bastion crenellated with bartizans on its salients. THE
+  ROAD is a chain of sweeps whose heights follow from where it crosses itself: up the hillside to the ADLERTOR, through it,
+  round the Wilhelmsturm (components/round-keep) and BACK THROUGH THE ADLERTOR on a deck over the first passage, along
+  the inner wall and round the Zwinger loop, over a bridge across its own ramp into the Rampenturm's yard, ONE TURN IN
+  THE TUNNEL inside the Rampenturm's ring under the open turn above it, out over its own portal, along the viaduct and
+  the bridge into the TORTURM (machicolated, four corner turrets). THE CASTLE: the four ranges round the court mitred
+  where they meet, each cut round the round tower in its angle by `bite()` (the tower's own faces become the range's,
+  so one call cuts a doorway through both walls); three storeys (5.0 / 6.5 / 6.0 m), windows filled by rule round
+  every face that looks out, clear of towers, of what stands before a front and of doorways; corbel tables and
+  battlements on every outer face, hipped slate roofs, slender corbelled corner turrets and two stair turrets on the
+  court front. Towers: Kaiser- and Markgrafenturm (round-keep: gallery storey on a corbel table, tall cone), the
+  Bischofsturm (round-keep platform carrying a castle-tower belfry and the tallest spire), the Michaelsturm (cone-turret
+  head, copper cap), the Wartturm (platform and flag). INSIDE: the Freitreppe and its porch to the STAMMBAUMHALLE on
+  the principal floor, the GRAFENSAAL (six rib-vaulted bays: groin + ribs on two marble columns), the library
+  (bookcases), the king's and the queen's rooms, doorways through the mitres and into every tower on every storey,
+  slabs, the STATE STAIR (a dog-leg pair of flights a storey, each pair its own part, the well cut in the slab in the
+  wing's own frame), the WARTTURM's spiral (two spiral-stairs with landings at the doors to the west range) and the
+  gatehouse's newel stair (its start angle worked back from where it must come out). Walk check: the courts, terraces
+  and ramps are prisms with flatRoof false (a flatRoof top is a roof, never a floor, to archAccess), the roof decks a
+  part of their own with it true; a `screen` is solid, so the Adlertor's arch frame is a pointed U outline (a closed
+  arch outline first shut the gate to the walk). The
+  CHRISTUSKAPELLE (nave and three-sided apse, tall two-light windows in coloured glass, buttresses and pinnacles, steep
+  roof and copper flèche, a flat painted ceiling -- not the real rib vault, whose crown would not clear the roof's
+  tie level here) and ST MICHAEL'S (plastered, lancets, chancel, apse, ridge turret), three bronze
+  kings on the south terrace. THE STATE ROOMS' SCHEME (finish rules banded by height on the principal floor): the
+  Grafensaal's webs and lunettes blue with gold stars, brass-gilt ribs and capitals on dark green marble columns, red
+  damask over a walnut dado, a star-and-cross marble floor; the Stammbaumhalle red over an oak dado under a gilt
+  tracery frieze, a panelled ceiling between its beams, an opus sectile floor; the library green silk, the king's rooms
+  red, the Blue Salon blue brocade, herringbone parquet and panelled ceilings; gilt chandeliers (items, `solid: false`
+  -- a solid hanging item is taken out by the furnishing check). THE BASTIONS: a battered rusticated plinth a few metres
+  over the ground before each face (a part per height, copies every 3 m), a string course under the parapet, pilaster
+  strips and keyhole gun loops, all kept clear of the road, the gate towers and the Rampenturm; their faces in larger,
+  darker blocks than the palace's (palettes hohenzollern-bastion / -plinth). Additive library bits: historicism.py `round_keep()` / `write_castle_components()` ->
+  components/round-keep.json (listed in assets/index.json), palettes `hohenzollern` (buff-grey limestone), `hohenzollern-bastion`, `hohenzollern-plinth`. The stone is
+  the photographs' muted buff, not the "grey-white" of the descriptions. Not built: the cellars and casemates, the
+  treasury's vault, the Wartturm's exact position (~4 m east of OSM's, clear of the court front), the rooms' real
+  divisions on the upper floor.
+- BIBLIOTHECA AUREA (2026-11-04; NEW ORIGINAL design, tools/archgen/aurea.py writes aurea.json, its finish and doors;
+  key aurea, period industrial; the docstring is the design document). The library and observatory of a learned academy,
+  Palladian/neoclassical, on a terraced hill: a water parterre and canal, the cascade stair between twin flights, the
+  Court of the Muses (Ionic colonnades with the nine Muses and nine philosophers, the fountain of Urania with a gilt
+  armillary), the cube of the core (giant Corinthian order, hexastyle portico) round the domed ROTUNDA reading room --
+  27 m across, sixteen giant marble columns, three storeys of walnut stacks with two walnut galleries reached by four
+  spirals in the corner stair rooms, a coffered inner dome open at its eye, the great globe on a compass-rose floor --
+  under the copper dome on its peristyled drum with tholos and gilt globe 62 m up. East and west the barrel-vaulted
+  library galleries (galleries on two spirals each, globes, tables, chandeliers), ending in two small domed pavilions:
+  the Cabinet of Globes under a lantern and the Observatory (slit dome, refractor on its pier, spiral up). The upper
+  garden behind with a basin and a philosophers' exedra. One module M = 4.5 m: rotunda 27 : core 45 : court 72 = 3:5:8
+  (Fibonacci, so ~phi), front 144 = 2 x 72, storeys 5.4, the rotunda's cylinder as high as wide, columns 10 D. Additive
+  library bits: palettes aurea-honey / aurea-books / aurea-globe, timber.json pattern "books" (leather spines on
+  walnut shelves, gilt bands).
+- CHATEAU DE CHENONCEAU (2026-11-04; new, tools/archgen/chenonceau.py writes chenonceau.json, its finish and doors;
+  key chenonceau, period medieval). The plan from OSM (the logis 304289430 and its parts, the chapel/library 304292286,
+  the corner turrets 304289418/421/432/434, the gallery on the bridge 222468703 / 304289408 and its pier cutwaters
+  222468979 ..., the Tour des Marques 222468693, the forecourt island 119209245, the river 363823721, Diane's canal
+  200236124, the parterres 200129081-097 / 379358420 / 200073915-930), turned so the gallery runs along -z (+x west,
+  downstream); heights from Commons photos (aerials from the west, the north front, the Tour des Marques, the gallery
+  inside) and fr.wikipedia. THE LOGIS on its two mill piers with the mill-race barrel between, two storeys (5.0 + 4.8 m)
+  of cross windows between pilaster strips to the cornice at 15.2, the door under its balcony on columns, the bridge and
+  a broad flight north to the forecourt; four corbelled corner turrets (new components/loire-turret: a cul-de-lampe of
+  narrowing rings, belts at the floors, a slate cone and lead finial), the steep mansard (62 degrees to a flat top) with
+  eight Loire lucarnes (new components/loire-dormer: a stone frontispiece -- cross window, pilasters, entablature, stepped
+  gable with niche and candelabra -- before its own 72-degree slate hip, whose sides read as the dark triangles of the
+  photographs), tall chimneys; the chapel (apse, pointed traceried windows, rib vault, bell lantern) and the library on
+  corbels on the east front with the little terrace between at the upper floor. INSIDE: the vestibule through the
+  middle under four rib-vaulted bays (groin + ribs, flagged), the rooms either side on both floors (walls with
+  doorways per storey, slabs, timber ceilings, terracotta), the straight rampe-sur-rampe stair (staircase with a
+  landing and a returning flight beside a spine wall; the well left open over the second flight). THE GALLERY: two
+  storeys 66 m across the river, nine windows a side (round-headed over the piers), the chequered marble floor below
+  (a 4 cm paving prism: the bridge wall's top is not a "floor" to the finish), oak herringbone above, the chimneypiece
+  and its stack at the south end, oculus dormers (new components/oculus-dormer) on the hip; under it the five-arch
+  bridge (a wall as thick as the gallery, crowns 6.8 m over the water) with pointed cutwaters downstream and rounded
+  bastions upstream, the abutment and flight to the south bank. THE TOUR DES MARQUES on the forecourt island: grey
+  older masonry, machicolation ring, white top storey, slate cone with a lucarne, lantern and chimney, its stair turret
+  (loire-turret). THE GARDENS as flat parterres: Diane's walled terrace (eight lawns from OSM, the fountain with its
+  jet) and Catherine's (five lawns, round basin), each with a flight up from the bank. THE WATER: `site.moat` as a
+  pool 363 x 242 m round the definition's point (-63.5, 29), its shore OSM's river with Diane's canal spliced in and
+  clipped to the rectangle (Sutherland-Hodgman), the forecourt and the river's wooded island as islands, the surface
+  at the world's water level; where the site's rectangle cuts the river and the canal, the bank is bowed round
+  (round_cuts) so the river ends rounded, not square. The setting: pale gravel walks (palette loire-gravel), box
+  hedges round every lawn (a `bars` part), yew cones at the lawns' sharp corners, box balls round the fountains,
+  lawn strips and a double row of clipped limes (column trunks, loft crowns) on the forecourt. New palettes tuffeau,
+  chenonceau-slate and loire-gravel (added, none changed). No engine change.
+- NOTRE-DAME DE LA GARDE (2026-11-04; new, tools/archgen/notre_dame_garde.py writes notre-dame-garde.json, its finish
+  and doors; key notredamegarde, period industrial). Espérandieu's Romanesque-Byzantine basilica (1853-64) on the fort
+  of the Garde, from fr/en Wikipedia (fr.wikipedia.org/wiki/Basilique_Notre-Dame-de-la-Garde,
+  en.wikipedia.org/wiki/Notre-Dame_de_la_Garde) and OSM (the church way 69137913, height 13; its building:parts 1324841042
+  the 41 m tower, 1558275295 the dome at 45 m, 1558275296 the campanile to 64.7 m; the terrace walk 103879962; the
+  fort's building 69131508 and retaining walls 178027585/588/589); Commons photos for the
+  elevations and the interior. Levels: the drawbridge and crypt at +7.3, the upper church and summit terrace at +13.3.
+  THE FORT: the porch terrace on the bastion, the drawbridge over the ditch from the gate platform (bartizans, chains),
+  the double approach stair down to a landing, the bridge to the LIFT TOWER (a `lift` marker down to the road), the road
+  flights; the terrace walk round the church (solid parapets), the lower east terrace with its two flights, casemates
+  and the west range with tiled hip roofs. THE CRYPT in the rock: a low segmental barrel on arcades, side chapels and
+  transepts, the apse with the Vierge au Bouquet, Mazenod and Pius IX in the narthex, the two stairs up by the
+  sacristies. THE UPPER CHURCH, 8.2 m half width: three bays with cupolas on pendentives (gold mosaic, roundel
+  pendentives, blue starry lunettes), side chapels, the crossing on four great arches with the octagonal drum-dome
+  (`components/drum-dome`, pointed, gabled windows, ribs, its own interior box for the drum), barrel-vaulted transepts
+  and choir, the apse of blind arcades on red granite columns under a half dome of vines on gold, the high altar and the
+  silver Virgin; outside, twin windows, transept gables with roses, the pierced frieze hiding low stone roofs. THE TOWER
+  (9 m square, 41 m to its terrace): the porch with the bronze door over the crypt's arch, two arcaded stages, the open
+  belfry on columns (bourdon), the balustrade with four angels, the campanile on 16 red columns and the 11.2 m gilt
+  Virgin and Child (statuary.py `madonna`, new: two markers, the Child on her held-out left forearm); the round stair
+  turret to the belvedere. New stone patterns "striped courses" (white Calissanne / green Golfolina) and "striped
+  marble" (Carrara / La Celle red) with palettes garde-stripes, garde-marble, garde-vine -- added, none changed. No
+  engine change. About 67k triangles.
+- ALEXANDER NEVSKY CATHEDRAL, Sofia (NEW 2026-11-04; tools/archgen/alexander_nevsky.py writes alexander-nevsky.json, its
+  finish and doors; key alexandernevsky). Pomerantsev's neo-Byzantine cathedral (1882 / 1904-12) on its real plan: OSM way
+  155447771 (73.5 x 52.2 m, read in the building's own frame, turned 10 degrees), en/bg Wikipedia (dome 45 m, bell tower
+  50.5 + 2.5 m cross, 1.4 m granite plinth, the five-aisled cross-domed plan, the three iconostases, the 2.5 t chandelier),
+  cathedral.bg/en/architecture and Commons photos. The byz kit at full size: the 17 m square on four piers, great arches,
+  `pendentives`, a square deck with the arches' half-round gables (zakomary) and their short barrel roofs, the gilded
+  `drum-dome` (twenty windows between colonnettes, a sweep hood over each: the arched cornice), the ball and Orthodox
+  cross. North and south the arms' half rings (arcade, gallery, windows) under green semidomes, the arms' end walls with
+  portals and great half-round gables; east the bema's barrel and the apse (two storeys of windows, semidome); west the
+  nave's barrel to the tympanum. A barrel vault with its own roof is ONE `sweep` of a half annulus, `kind: "vault"`, placed
+  on its axis: finish.js then takes its underside and the flanks turned to its axis as inside, its back as the roof (a
+  `sweep` hood/gable is `kind: "roof"`: copper on the curve, stone on its face). A `dome` with `sweep` .25 is a quarter
+  dome, its middle on the placement's +z (the round east corners). Five aisles: the inner ones with galleries (west),
+  reached by a dog-leg `staircase` in each (two flights of 28, landing, `from: back`), the arms' galleries round their
+  half rings and the choir across the nave's west end through doors; the outer aisles and the east chapels single storey,
+  the east corners round under low quarter-domes. The narthex with its corner chapels under small green domes, arcaded
+  porches before its wings; the frontispiece with its great gable over the three-arched west porch and three doors; the
+  bell tower (shaft with triple window, the mosaic icon of St Alexander, belfry of three arches a side, gilded dome, cross
+  at ~53 m). Inside: the central iconostasis (white marble lower tier of icons on green marble columns, light red upper
+  tier, the royal doors), the Russian (north) and Bulgarian (south) ones, solea, the royal and patriarchal thrones under
+  canopies with little gilded onion domes, the altar's baldachin, the great chandelier (gilt hoops of `bars` hung with
+  `items/furniture/chandelier`) and eleven lesser ones; finish: Vratsa limestone with darker cornices and hoods, granite
+  plinth, green copper (semidomes, vault backs, gables, flat and lean-to roofs), gold leaf (the two great domes, finials),
+  chequered marble floor, marble lower walls, the saints on gold only as ONE band (piers at 3-8 m, the drum), deep blue
+  dotted walls above, muted ochre painted vaults, arches and pendentives, the Deesis in the arm semidomes and the Virgin
+  in the apse (their own registers, not the piers' pattern), the Pantocrator in the dome. archAccess: the floor and all galleries and the choir reached (gallery level
+  456 of 521 m2; the rest is cornice tops). No engine or shared-library change. About 49k triangles at detail 4.
+- THE BELVEDERE, Vienna (2026-11-04; new, tools/archgen/belvedere.py writes belvedere.json, its finish and doors; key
+  belvedere, period industrial). Hildebrandt's Upper Belvedere for Prince Eugene (1717-23) on OSM's plan (way 5887599 and
+  its building:parts 807860296-311, the pool 5887597, the cascade 98116794), turned so the palace runs along x, the pool
+  south (+z), the garden north. Every block is ONE `enclosure` on its OSM outline with its own storeys (a `block()` helper:
+  faces counted from the south-west corner, windows chosen by the face's outward normal -- arched to the garden, square to
+  the court, pedimented on the bel etage, oculi in the Marmorsaal's upper tier and the pavilions' attics; per-face tiers
+  where a face needs them: the projection's back wall splits at the bel etage for the Marmorsaal's door). Blocks standing
+  face to face keep their own walls with a `party()` strip between (no windows there, the courses cleared up to the lower
+  one, doorways through both). The silhouette: the Marmorsaal's chamfered centre under the tallest roof (a chamfered
+  `mansard`), the three-storey blocks and the two-storey wings each under its own copper mansard with oval dormers
+  (`oculus-dormer`), the four octagonal corner pavilions under `baroque-helm` bell domes, the links' roofs as terraces;
+  balustrades with urns and statues on every roofline; the south projection with three glazed arches between Ionic
+  pilasters, oval windows, the BROKEN CURVED PEDIMENT (two `screen` halves, the cartouche with the gilt arms and crown),
+  the perron, its flight and the two curved carriage ramps (sloped prism segments) with the horse groups (`equestrian`).
+  The POOL is real water (`site.moat`, pool: true, 56 x 62 m: compressed from 112 m long). Inside: the SALA TERRENA's nine
+  `groin` bays, the middle one on four ATLANTES -- bearded giants carved bare (girt with a loincloth) on tall pedestals, each
+  bowed under his impost block, the block on his shoulders and nape behind his bent head, both arms raised to it; no
+  pier stands with them, the figure is the support (new statue pose `atlas`: positions.json, statuary.json `poses` and
+  its `dress` table, body.json physique `titan`); the PRUNKSTIEGE (a flight down from
+  the vestibule to the lower hall and the Sala Terrena, two flights up the side walls turning in along the north wall to
+  meet before the Marmorsaal's door); the MARMORSAAL through two storeys (red marble lower zone, Adnet-red pilasters with
+  gilt capitals, white upper zone round the oculi, painted ceiling, chandeliers, battle pieces); the state rooms of the
+  bel etage in enfilade (damask, parquet, furnished: audience room, bedchamber, cabinet, the wings' picture gallery); the
+  CHAPEL in the south-east pavilion (rose marbling, retable with the altarpiece, painted cupola, pews); spiral stairs to
+  the top storeys. The garden (compressed: the site is ~123 x 252 m): the terrace with its flights, the new
+  `components/sphinx` (tools/archgen/sphinx.py) on the stair cheeks and at the cascade, the upper parterre (lawn panels
+  with box broderie and yew cones, vases, side allees between tall hedges, two round fountains), the upper cascade falling
+  in steps into the lower basin's SUNKEN COURT (3.6 m deep, `site.dig`), its balustraded rim the garden's end and lookout;
+  the Lower Belvedere is left out. archAccess: nothing unreached (bel etage 1702 m2 reached, top storeys 770 of 786).
+  The bel etage's doors onto the links' terraces are French doors (doors/styles.json `french`, glazed, the windows' width
+  and segmental pediment): a doors entry may now say `above` a height (architecture.js doorsOf, additive: the upper
+  storey's door, not the one under it). About 190k triangles at detail 4.
+- YUNDING TEMPLE, "Cloud-summit Temple" (2026-11-04; NEW ORIGINAL design, tools/archgen/yunding.py writes yunding.json,
+  its finish and doors; key yunding, period chinese; the docstring is the design document). A Chan monastery climbing
+  the cove of a hill in three granite terraces -- a mountain monastery, not a flat palace: one axis climbs 108 steps
+  (4 flights of 27 with three landings and lanterns) from a forecourt with a three-bay pailou and a pair of guardian
+  lions to the Hall of Heavenly Kings (Maitreya, Weituo, the four kings), flanked by bell and drum towers; the court
+  of ginkgos (cloisters, side halls, steles on turtles, incense burner) and the double-eaved, yellow-glazed Mahavira
+  Hall on its white platform and moon terrace (Buddha triad on lotus thrones before mandorlas, Guanyin on her rock
+  behind the screen, eighteen arhats, coffered ceiling, walls painted with gold xiangyun clouds); side stairs to the
+  second terrace and the DOMINANT: a seven-storey octagonal pagoda, 54 m from plinth to finial tip, every storey a
+  room with a balcony walked round, timber stairs inside to the top (Buddha in the ground storey under a mantle
+  gallery); top terrace: the two-storey sutra library and the Kanyun Ting pavilion. East, off-axis (the deliberate
+  break), a walled garden: moon gate, pond with islet pavilion and zig-zag bridge (site pool, carved in the game),
+  taihu rocks, the Tingyu Xuan. Module M = 6 m: hall 32.4 x 19.2 (~phi), columns M high, court 44 x 40, pagoda taper
+  4.3/7.0 ~ 0.614. New component architecture/components/shishi (a seated guardian lion on its plinth, lofts). About
+  257k triangles. No engine or shared-library change. Additive data for its Buddhas: position and statue pose
+  `lotus meditation` (dhyana: the arms set by joints, forearms turned in level over the lap -- the `lap` reach crossed
+  the two hands in an X) and `lotus earth close`, both in the new dress `monastic close` = outfit `buddha close`
+  (wardrobe, chinese) in the new garment clothes/kasaya (the himation's cut ending at the waist: the himation to the
+  calves stood a pleated box off the hanging left arm of a seated figure); index: items/hair/ushnisha was missing
+  (every Buddha statue threw in the game).
 - EL PILAR REWORKED (2026-11-03; tools/archgen/el_pilar.py rewritten, writes el-pilar.json, its finish and doors; new
   palettes el-pilar-white, pilar-glaze-grey, pilar-tile, pilar-brick, alabaster, pilar-fresco, pilar-jasper -- added,
   none changed). The plan from OSM (relation 1352311, its building:part ways for the domes and towers) and the Commons
@@ -3190,6 +3383,41 @@ Left open:
   - NOT BUILT: the dome's double shell and the stair between them, the real climb's route (the turrets are a plausible
     one), the aisle roofs as walks, the mosaic's own figures, the organ, the Joan/Louis statues' real poses (both ride
     with a raised sword).
+- QASR AL-NUR, "Palace of Light" (2026-11-04, ORIGINAL; tools/archgen/qasr_al_nur.py -- its docstring is the design
+  document; writes architecture/, finishes/ and doors/qasr-al-nur.json; new palette `persian-buff` in
+  patterns/palettes.json). A Persian/Moorish garden palace on one 245 m axis, organised by water and light, on a 1.2 m
+  platform; module the bay B = 4.5 m (courts 7x12, 7x7 and 14x14 bays), storeys 5.6 + 4.6, iwans ~1:2, pishtaq frames
+  ~1:sqrt2, the great dome's crown = 1.618 x its pishtaq's 30 m. Frame: +z the front (south), origin the pavilion.
+  - SEQUENCE: street flight -> entrance pishtaq (18 x 25.5, muqarnas hood) -> domed vestibule with two-storey porters'
+    lodges (dog-leg stairs to the galleries and roofs) -> Court of Water (two-storey riwaqs, jali galleries, walked
+    roofs, the 7 x 40 m reflecting pool mirroring the gate pishtaq, two wind-catchers) -> four-iwan court (octagonal
+    fountain, plane trees; the hammam -- lantern hall, hot room, two cells, glass-light bulbs, chimney -- off the east
+    iwan, the tall-drummed library off the west: the deliberate symmetry break) -> chahar bagh (sunken parterres, cypress
+    rows, four channels, the domed octagonal pavilion on its island, talar walks, round corner towers) -> terrace and
+    minarets -> audience hall: cross of barrel arms round a 32-rib onion dome on a jali drum (crown ~51 m), inner
+    pointed dome, four corner rooms with spiral stairs to the upper rooms and roof, throne dais, divans, carpets.
+  - FINISH: buff brick outside, turquoise and cobalt domes, zellige dadoes and stucco inside, marble floors and copings,
+    gold on finials and the throne. The tile in a HIERARCHY (2026-11-04 second round): every pishtaq front is a banna'i
+    field on the piers (new `tiles/bannai`: brick with glazed lozenges), a cobalt girih border inside the corner shafts
+    and under the top, a large haft-rangi panel in the spandrels, a white-on-cobalt kufic band across the top and round
+    the sides (new `tiles/kufic band`), the recess within tiled; frames' sides and backs brick. The four-iwan court: large
+    arabesque field, niches lined in girih, a kufic frieze, a storey band, marble dado; its outer faces brick under a
+    frieze. Minarets banna'i with kufic and girih bands; wind-catchers brick/banna'i with bands; hall fronts tiled in
+    the middle, banna'i wings. The hierarchy is built as THIN SKIN PARTS (section 6b of the generator: 4 cm panels a few
+    cm proud -- each pishtaq's spandrel, field, border, border head, inscription and its returns, flanks and cap; the
+    hall fronts' piers and band; ring bands on the minarets; a band box on each wind-catcher), matched by name: a band
+    or region done with above/below/within puts a cut line through EVERY triangle of the building at that height
+    (finish.js), and the first version of this hierarchy so made took the finished mesh from 365 k to 840 k triangles;
+    as skins it is 377 k. The court bands reuse the Court of Water's heights for the same reason.
+  - PERFORMANCE: in game the palace adds 29 draw calls (475 -> 446 with its meshes hidden, the view over the hall; the
+    rest is the world in that view): its finish merges into a handful of material meshes; the rest are the 9 water
+    jets (each flow jet is its own mesh in index.html -- cut from 17 to 9). Compare the Imam Mosque 19, the Grand
+    Palace 102.
+  - CHECKED: asm 685 parts, 110 k triangles (377 k finished); doors 13 (26 leaves), no warns; archAccess: every floor, gallery, walk
+    and roof terrace reached (the court ranges' walks through a gap in their breastwork from the arcade roofs; the
+    lodges' upper stair runs to the walk's top) -- left only the minarets' corbelling (ornament, 8.5 m2 at 39 m).
+  - NOT BUILT: the double dome's interstitial stair, the town, service courts; trees are simple masses; the hall's
+    muqarnas are the pishtaq component's, no stalactite vaults inside.
 - US Capitol: bronze has no patina option (shell.js STONES). (Freedom's globe was fixed 2026-11-03: the tholos's `globe`
   is now a full sphere of `globeR` -- `lanternR * 0.18` in drum-dome.json, 1.0 m on the Capitol -- on a collar, sunk 0.165 R
   into it, with a band at 0.715 R; `tholos_heights` counts it, so Freedom still stands on its top.)
@@ -3273,6 +3501,185 @@ Left open:
     needs a tier of its own.
   - NOT BUILT: the light wells and the D-shaped sunken courts of the terrace; the curved stairs are straight flights;
     the causeway stops after 35 m; the upper storeys' room plans are inferred; the Federzimmer's place is assumed.
+- TOPKAPI PALACE REBUILT (2026-11-04, tools/archgen/topkapi.py, which now writes its finish and assets/doors/topkapi.json
+  too; the old model was the ceremonial core only, placed by eye): the plan is OpenStreetMap's (Overpass 2026-11-04)
+  turned into the palace's own frame: +x along its axis, azimuth 27.3 deg (Imperial Gate -> Sarayburnu, measured off the
+  kitchens', the Divan's and the gates' edges), +z azimuth 117.3 (the Marmara, the kitchens: the front the game turns to
+  the meadow), origin the Gate of Salutation's outer face on its passage (41.011320 N, 28.983128 E). Ways: 335415778
+  palace outline, 335402649 Gate of Salutation, 32396096 kitchens, 103907772 Divan, 335402671 its portico, 335402653
+  Tower of Justice, 335402652 Outer Treasury, 1396051571 NW portico, 32396154 halberdiers, relation 4743322 Harem (and
+  its courts 335402648/645/686), 32396111 Gate of Felicity, 103907818 Audience Chamber, 32396231 Library of Ahmed III,
+  32396236 Mosque of the Agas, 335402654 Conqueror's Pavilion, 32396205 Holy Mantle, 32396296 Baghdad, 969327995 Revan,
+  335415776 Circumcision Room, 1272157518 Iftariye, 194486642 Sofa Kiosk, 32396254 Mecidiye, 335364925 Imperial Gate,
+  relation 4742554 Hagia Irene, 335364924 the mint's wall, 103339336 Sur-i Sultani (all ids in the generator's `OSM`).
+  Ground from SRTM 30 m (opentopodata): Imperial Gate 44 m, courts 52-55, the lower Fourth Court and Mecidiye 40-44.
+  Sourced from en/tr.wikipedia (Topkapı Sarayı, Adalet Kulesi, Bağdat Köşkü): the Divan's three domes, the treasury's
+  eight, the kitchens' ten halls with twenty chimneys, the Audience Chamber's 22 columns, the library's Greek cross on a
+  basement with twin stairs, the Baghdad Kiosk's domed octagon in its colonnade. Heights estimated from Commons photos
+  against OSM's widths (no source gives them): Tower of Justice 44 m over the court (shaft 25, marble stage 7.5, cap
+  10), the Gate of Salutation's towers 25 (shaft 14.5, cap 10.5) on a 10.5 m crenellated wall, Imperial Gate 16.5,
+  porticoes' columns 4.6, ranges 8-11, Harem 12, Hagia Irene's main dome 15 m across, 35 m up.
+  - SITE 704 x 242 m (x -329..375, z -135..107; bbox-centred, no `site.origin`). THE GROUND in three levels: y 0 the
+    Imperial Gate's (the game's); the FIRST COURT a sloped prism (`slope`, walked) rising 8 m over the 330 m to the Gate
+    of Salutation, with the road (a ribbon kept north of the mint's wall, which reaches z -1.4 at x -121), 60 plane trees
+    and Hagia Irene in its own yard at y 0 behind a retaining wall (the court's outline notched round it); the PLATEAU
+    PT 8 on OSM's palace outline (Second and Third Courts, the Harem), its faces the terrace walls; the MARBLE TERRACE
+    at PT (Baghdad, Revan, Circumcision Room, Iftariye, the pool) and the LOWER GARDEN PL 3 (tulip garden, Sofa Kiosk,
+    Mecidiye, Sofa Mosque, everything east of the Fourth Court's wall line) -- all clipped from the one outline by
+    half-planes (Sutherland-Hodgman in the generator), two stairs down (from the terrace by the Sofa Kiosk, from the
+    Third Court's corner).
+  - BUILDINGS at their OSM places and sizes: the Imperial Gate (41 x 15 m block, the deep arched niche) in the
+    crenellated Sur-i Sultani; the Gate of Salutation's two octagonal `conical-tower`s 18.35 m apart, its hall, guard
+    rooms and court portico; the Second Court's porticoes (kitchen side 30 bays, Felicity side, the NW portico turned
+    5.6 deg as OSM's roof, the Divan's with its wing before the tower), two paths, cypresses and planes; the kitchens
+    as two back-to-back `domed-arcade` rows of ten (B 9.85: 99.3 x 22.0 m against OSM's 105.6 x 21.4) behind the court
+    range and the kitchen street, the confectionery's five domes, the larders; the Divan (3 domes, B 8.9 in OSM's 26.6 x
+    11.8), the Outer Treasury (2 x 4 domes, B 8.1), the halberdiers' range; the HAREM as massing: three prisms split
+    at its courts (each court a `well`), two storeys of windows, ten great and small lead domes, chimneys, a tower; the
+    Gate of Felicity's range and domed canopy; the Audience Chamber (`ottoman-kiosk` 19.5 x 17.4, gallery 3.5 + eave
+    2.4 = OSM's 31.3 x 29.2 outline as its eaves); the Library (cross, basement 1.6, dome, porch and two flights); the
+    Mosque of the Agas turned to Mecca as OSM has it, with its minaret; five dormitories with porticoes; the
+    Conqueror's Pavilion with its 14-arch loggia over the Marmara and four domes; the Holy Mantle's four domes and
+    porch; the Baghdad Kiosk (kiosk with dome, turned 10.3 deg, 25.8 x 24.8 against OSM 26.3 x 24.9), Revan, the
+    Circumcision Room, the gilt Iftariye; Sofa Kiosk (two timber storeys), Mecidiye (two storeys of round-headed
+    windows), the Sofa Mosque and minaret; pools from OSM.
+  - FINISH (style kept): lead on every dome, cap, roof and flat; painted sachak soffits; almasik on the kitchens and
+    treasury; limestone gates and towers, the Tower of Justice's stage marble above 25 m; marble columns, arcades,
+    terrace and kiosk walls; Iznik and kalemisi inside the Divan and the kiosks; Hagia Irene brick; lawns per court by
+    `within` rects on the one plateau prism.
+  - CHECKED: 195 parts (543 assembled, 3454 instances), 161.7k triangles (old 57.5k), 70 door leaves; archcheck (with
+    finish) no findings; archAccess (cell 0.5) nothing unreached, every probe reached: Imperial Gate, road, Hagia
+    Irene and its atrium, gate hall, Second Court and paths, Divan and portico, kitchen portico, range, street, both
+    kitchen rows, confectionery, both treasury rows, the Felicity passage and canopy, Audience Chamber and gallery
+    (8.45), library (9.6) and porch, Third Court, Holy Mantle porch, Conqueror's Pavilion and loggia, marble terrace,
+    Baghdad (8.6), Revan (8.5), Circumcision (8.4), Iftariye, lower garden (3.0), Sofa Kiosk, Mecidiye, both stairs,
+    dormitories. index.html?monument=topkapi boots (ready, no error); views from four sides clean.
+  - LESSONS: a `wall`'s openings are measured from its START, not its middle (an enclosure face's are from the
+    middle) -- the gate wall's passage at -0.1 threw "runs past the end of the wall". A `ring` with `place` is N bays
+    round each place, not one drum per place (cheap enough for drums under domes, but each bay is a part instance in
+    the float check). A flat prism's top is `floor` to the finish, never `roof`: lead slabs need a rule without
+    `surface` (or surface floor). A prism `well` comes with a landing railing unless `railing: false` (4k triangles
+    each round the Harem's courts). Closed courts (the Harem's, the tops under Hagia Irene's domes) are flagged
+    unreached unless covered by a `flatRoof` slab -- a 10 cm paving slab marks them seen-not-walked. Build order
+    matters for the float check: a portico on a base prism must come after it.
+  - ROUND 2 (after the 2026-11-05 review, plan fidelity 8/10): (1) the MARBLE TERRACE is one L-shaped prism on the line
+    its buildings give (OSM draws no outline): the Golden Horn edge at z -54.6 just behind the Circumcision Room and
+    the Iftariye (which now stands on the edge), round the Baghdad Kiosk's iwans on its corner, down to the Sofa
+    Kiosk's front and round the Revan Kiosk's platform; parapets on its edges, the lower garden now one prism under it
+    and the north garden (the 1272157519 pool) at PL. (2) The FIRST COURT's outline follows OSM's lines: the Sur-i
+    Sultani's inner face to its corner, Hagia Irene's yard (now ground at y 0, its own prism), the precinct wall
+    335402638, the Archaeology Museum's south front 319020883, the palace's west wall, the mint's wall; the mint's
+    precinct is its own sloped prism (`mint yard`) out to its outermost buildings (103907779, 103907800). (3) The HAREM
+    is seven ranges of 8.5-15 m split where the plans' blocks meet, the Black Eunuchs', Concubines' and Valide
+    Sultan's courts as wells (OSM's inner ways, unnamed there: named from the published plans), the Golden Road a 3 m
+    lane between the body and the range along the Third Court, 7 great domes, 55 small ones, 42 chimneys, four raised
+    rooms and the tower, placed by a seeded scatter clear of the courts, the lane and the ranges' edges. (4) The
+    HILLSIDE, a `terrain` height map (5 m cells), falls from 1.6 m under the plateau's edge (0.8 m under the First
+    Court's) to the ground over 20 m on every side: the terrace walls now stand on a slope, 28 trees on it. Checked
+    again: 190k triangles; archcheck with finish clean; archAccess nothing unreached (lesson: a court the Harem's
+    ranges close against the outer wall, outside OSM's Harem, needed its paving slab too).
+  - NOT BUILT: the Harem's interior (massing only, its courts closed); the stables and the Golden Horn slopes'
+    gardens (Gülhane) outside the outline; the Imperial Mint's buildings beyond two; the First Court's real fall is
+    not uniform (one slope); the dormitories' and the Holy Mantle's room plans; the Divan's marble and porphyry; all
+    heights estimated. The hillside stops at the game's ground 20 m out: the real fall to the shore is 40 m. The
+    Archaeology Museum, the Çinili Köşk and the Imperial Stables are not built.
+- PARK GUELL REBUILT (2026-11-04, tools/archgen/park_guell.py, which now writes its finish too; the old model was the
+  monumental core placed by eye on flat ground): the plan is OpenStreetMap's (api 0.6, 2026-11-04) turned into the
+  park's frame: origin the main gate on Carrer d'Olot (node 402883145, 41.413488 N 2.1530954 E, 131.0 m above the
+  sea), +z down the axis to the street (bearing 138.3, SE: the square's prow to the gate; 228.3 here until 2026-11-05 was
+  a slip in the text, the geometry always used 138.3), +x along the street north-east (48.3);
+  the stair, dragon and hall on x = -0.5. Ways: 1105836977 the square (2701 m2; sources 2694), 1105836969/65/70 the
+  bench, relation 14718228 + way 1105836971 the hypostyle room (a pentagon of 1503 m2, 42 x 43.7 m; sources 1500 m2, 43
+  m deep), 451140323..333 the stair's eight flights, 295826465 the dragon, 672895475 the porter's lodge, 672895651 the
+  administration, 672895744 the coach house, 1430523772/73 the street wall, 460419313 the washerwoman's retaining wall,
+  61942877 / 61942853 / 629678545 the viaducts de Baix, del Mig and de Dalt, 126856515 the Casa-Museu, 672896040 the
+  Casa Larrard (all in the generator's header). Ground from the IGN's MDT05 (5 m model, servicios.idee.es WCS):
+  square +17.9 (17.0-18.3 sampled), vestibule +0..+1.0, the stair's head about +8.5, the street climbing 11 m west, the
+  hill to +50. Sourced from es/ca.wikipedia and parkguell.barcelona: the wall 2-4 m with 15 medallions 1.4 m across;
+  the lodge 14.80 x 7.66 m, 21 m; the administration 12.60 x 6.60 m, 29 m, its cross 3.8 m; the stair's 45 steps and
+  three fountains, the dragon 2.4 m; the hall's 86 Doric columns 6.16 m by 1.20, trencadis to 1.8 m, the outer ones
+  leaning, 90 planned and 4 left out for Jujol's rosettes 3 m across, 14 medallions; the lower viaduct two files of
+  columns, the upper two three.
+  - SITE: the hill a `terrain` part (new, below), 85 x 52 points 5 m apart (x -170..250, z -230..25), heights in
+    decimetres; under the stair it is held below the flights' own level (the DTM's 5 m cells put the slope through the
+    steps), faded to 0 over 35 m at the sides, 60 m behind and 16 m to the street.
+  - THE ENTRANCE: the rubble wall along Carrer d'Olot on OSM's two lines (103 + 66 m), its crest 2.8 m over the street
+    side and at least 1 m over the garden side, the 15 medallions on its face; the porter's lodge (x 4.2..19.9) and the
+    administration (x -18.2..-4.9) 9.1 m apart, the gate between; the coach house on its plan, sunk in the slope.
+  - THE STAIR: vestibule +1.0, four pairs of flights (11, 11, 11, 12 steps; 45 risers of 16.9 cm on 32 cm treads)
+    round the spines from z -17.6 to -41 on OSM's lines, rectangular landings between, the grotto, the arms with the
+    snake, the dragon at z -33.6, the odeon's bench in a niche bulging forward on the last spine; side walls with
+    merlons following OSM's offsets and their planters.
+  - THE HALL: the pentagon from OSM, floor +8.6 (45 risers from +1.0; DTM +8..+9.9 there), 86 columns on a 3.8 m
+    square grid on the axis (73 upright, 7 west and 6 east leaning 5 deg; the grid's step the one that drops 90 places in
+    the pentagon with the front pair and the axis column where the 1909 photograph has them), the 4 rosettes, the 14
+    medallions; the square over it at +17.9 on OSM's outline, the entablature and the bench above it waving with the
+    bench's loops (seen in the photographs), gargoyles and triglyphs.
+  - PORTICOES: the washerwoman's along its retaining wall (78.5 m traced), two files of 29 leaning columns, the
+    washerwoman, its deck level with the square; the viaducts on OSM's lines (Baix 56 m, Mig 63, Dalt 74), each
+    turned so the hill is on its left, the deck straight between the heights where its ends meet the ground, a gallery
+    under it where the clear height reaches 2.5 m (H 4.5 / 5.0 / 6.2), its floor eased toward the hillside so it meets
+    the ground; Baix two files of 13, Mig and Dalt three of 17 and 16, planters and agaves on Baix and Dalt.
+  - HOUSES: the two pavilions from gaudi.py's component (two floors and the stair between them now -- 1.5 m wide,
+    `stairW`; the door unglazed), the Casa-Museu and the Casa Larrard as massing on their plans; 570 trees (one
+    generic kind in three sizes) where the World Imagery tiles show crowns, kept 5 m clear of the porticoes, standing on the triangulated
+    ground.
+  - FINISH (style kept): trencadis on the pavilions' roofs and the dragon, the bench and the medallions, rubble on the
+    walls and porticoes, the stair's treads, landings, vestibule and hall floor in stone, white trencadis on the vaults,
+    the bench and the lower shafts, gravel on the square and the decks, earth on the hill.
+  - CHECKED: 114 parts, 163.3k triangles (old 66.3k), 86 hall columns; archcheck no findings; archAccess (cell 0.5)
+    nothing unreached, every probe reached: street, gate, vestibule (1.0), every landing (2.85, 4.70, 6.55), odeon
+    (8.6), both terraces, hall front, middle and back (8.6), the square (17.9) at prow, middle and back, the bench's
+    loop, the washerwoman's gallery (13.55) and deck (18.55), Baix (16.5), Mig gallery (24.4) and deck (29.45), Dalt
+    gallery (30.4) and deck (36.6), the lodge's floors (0.2, 3.5), the administration's (0.2, 3.0), the hill (39.4).
+    index.html?monument=parkguell boots without errors; assets/doors/park-guell.json's parts resolve.
+  - L0: `terrain` (arch/assemble.js): ground from a height map -- `heights` rows along +x (strings of numbers or
+    arrays), `cell`, `origin` [x, z], `scale`, `base`; "-" or null leaves a point out and every cell touching it is a
+    hole; skinned as a closed solid (each cell split along its shorter diagonal, skirts on open edges, `bottom: false`
+    leaves the underside off); kind prism. `loft` `shell: true`: a half open underneath (a roof of lobes) is a skin, so
+    the checks do not call what is under it "inside".
+  - LESSONS: anything sampled off the ground in the generator must use the TRIANGLES' height, not a bilinear one --
+    the two differ by tens of centimetres on a slope (a trunk stood on its crown; the walk's floors moved). A 5 m
+    terrain cell under a stair puts the slope through the steps: clamp each node to the stair's level a cell further
+    down. Null at the edge of the height map cuts cells away and leaves cliffs: write a low value instead. A `sweep`'s
+    Catmull-Rom curve wanders between sparse points (medallions hung off a 20 m wall segment): densify straight runs.
+    A duplicated point in a prism's polygon breaks it (the odeon bench floated). A half `loft` is open underneath, so
+    the "inside" parity test calls the room under it solid: `shell`. A part-level `glass: true` glazes every opening,
+    the door too -- the walk stops at the pane: give the door `glass: false`. A steep flight (27.5 cm on 22 cm) fails
+    the walk at cell 0.5, and a 1.0 m flight passes or not by the grid's luck (the walker's 0.3 m rim meets a side): 1.5
+    m. On an enclosure's face 6 "along the face" runs toward -x. check.js wants about 1.9 m of floor before a flight's
+    first riser (the vestibule prism).
+  - NOT BUILT: interiors except the pavilions' two floors; the Casa-Museu and the Casa Larrard as massing only; the
+    side grottos at the vestibule; the columns' flutes; the viaducts' sections and the decks' heights estimated.
+    (The Calvary, the paths and the trees' kinds: added 2026-11-05, below.)
+  - ROUND 2 (2026-11-05, after a second review that rated the plan 8/10 and found its frame right):
+    - THE PATHS: every OSM footway, steps, path and track inside the park's outline (way 66713401) and the height map,
+      split where it meets something built -- 137 runs, 5.0 km -- laid as two `sweep` parts (`paths` new on sweep: one
+      profile along many paths) on the ground's TRIANGULATED height at their middle and edges; the ground within 2.5 m
+      of each let down to the way (the cut), the way a bank of rubble 2.2 m deep, so across a slope its downhill side
+      stands as a retaining wall. They run up to the viaducts' causeways, the square's back, the Casa-Museu and the
+      Calvary's ring; trees keep 2.5 m off them.
+    - THE CALVARY: the height map now runs from x -290 (109 x 52 points), the Turo de les Tres Creus (OSM peak
+      6286148116, 185 m) at x -201, z -19 inside it: a round battered mound of rough stone (radius 3.6 at its top,
+      4.4 at its foot, its top 3.2 m over the highest ground round it: estimated) inside OSM's ring path 61942870, two
+      flights tangent to its side (16 and 26 steps, put where the ground stands highest) on levelled feet, and the three
+      crosses (es.wikipedia: 1.7 and 1.5 m) -- the tallest Gaudi's four-armed one, the two lower ones' bars north-south
+      and east-west (the frame turned by 48.3 deg).
+    - THE TREES: 1054 crowns found in the World Imagery tiles over the wider map, then kept clear of the paths, the
+      Calvary and a slow field of glades (about a fifth of the hill); 511 stand, of seven kinds: Aleppo pines in three
+      sizes on the upper hill (tall bare trunks, flat open crowns), carobs in two low on the terraces, Canary palms in
+      two heights about the square and the entrance (crowns of fronds: a loft of `n` 0.5, two stars turned on each
+      other).
+    - EL DRAC: re-carved on OSM's outline (295826465, z -32.5..-34.7) as a salamander on a bed of rough stone that rises
+      behind it: body (hips high, belly low), a broad flat head with the upper jaw lifted and the lower dropped (the
+      mouth open over the basin), bulging eyes, four splayed legs with their toes on the stone, the tail curling round
+      to its side and up at the tip (a loft along x, so it can turn back), the ridge of plates on its back.
+    - CHECKED: 135 parts, 188.1k triangles; archcheck no findings; archAccess (cell 0.5) see the report; renders top,
+      q and close-ups of the dragon, the Calvary and the Dalt viaduct.
+    - LESSONS: a lizard's tail that curls back on itself cannot be one loft along the body's axis (its stations must
+      advance): carry it on in a second loft along the axis across. A flight laid tangent to a mound on a slope gets
+      long on the falling side -- try the places round it and keep the shortest. Paths taken from OSM cross what the
+      model builds (a flight's foot, a gallery): clip them against the built things AFTER those are placed.
 
 ## The harbour's pieces (2026-11-03)
 

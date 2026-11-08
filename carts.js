@@ -11,6 +11,7 @@
 // dimension is meters from period sources: a two-wheel cart on 1.5m wheels,
 // a farm wagon, a heavy freight wagon behind up to three pairs.
 import { SPECIES, gaitBase, bodyProbe } from "./species.js";
+import { sculptPart } from "./bodyspec.js";   // (the beasts in harness drawn sculpted, as the loose ones are)
 import { makePerson } from "./people.js";
 import "./architecture.js";   // (it registers the catalogue's items with the assembler: before the sizes are read below)
 import { itemOf } from "./arch/assemble.js";   // (the bodies and wheels are items: assets/items/components/cart-*)
@@ -54,17 +55,22 @@ export function teamDef(kind, { pair = false, index = 0 } = {}) {
   const sp = SPECIES.find((s) => s.name === kind), D = sp.draft;
   const gait = gaitBase(sp);
   const bodyR = sp.parts[0].size.r;
+  // (2026-11-08: each beast SCULPTED as a loose one is -- its parts bones, its body in the team's `sculpts` with the
+  //  index of its first bone: bodyspec.js sculptPart. As parts alone a team was drawn as plain pills)
+  const sc = sculptPart(sp), sparts = sc ? sc.parts : sp.parts, sculpts = [];
   let parts, back;
   if (!pair) {
     back = D.single;
     const len = back + 1.0;
-    parts = [...sp.parts];
+    parts = [...sparts];
+    if (sc) sculpts.push({ body: sc.body, base: 0 });
     for (const s of [1, -1])   // shafts along the flanks, from the breast back to the cart
       parts.push({ id: "shaft" + s, parent: null, shape: "capsule", size: { r: .035, len }, geomRot: [0, 0, 90],
                    pos: [(1.0 - back) / 2, D.shaftY, s * (bodyR + .14)], color: DARK });
   } else {
     back = index ? D.spacing : D.back;
-    parts = [...prefixed(sp.parts, "L_", D.zSp, 0), ...prefixed(sp.parts, "R_", -D.zSp, 1.1)];
+    parts = [...prefixed(sparts, "L_", D.zSp, 0), ...prefixed(sparts, "R_", -D.zSp, 1.1)];
+    if (sc) sculpts.push({ body: sc.body, base: 0 }, { body: sc.body, base: sparts.length });
     parts.push({ id: "yoke", parent: null, shape: "capsule", size: { r: kind === "ox" ? .06 : .04, len: 2 * D.zSp + .8 },
                  geomRot: [90, 0, 0], pos: [D.yokeX, D.yokeY, 0], color: DARK });
     if (kind === "ox")   // ox bows: the U under each neck, seen as its two uprights outside the body
@@ -76,7 +82,7 @@ export function teamDef(kind, { pair = false, index = 0 } = {}) {
                       pos: [D.yokeX - back / 2, D.yokeY - .4, 0], color: IRON });
   }
   return { name: pair ? `pair-${kind}` : `single-${kind}`, parts, gait, gaits: sp.gaits, legLen: sp.legLen, back, speed: D.speed,
-           halfLen: bodyProbe(sp) };
+           halfLen: bodyProbe(sp), ...(sculpts.length ? { sculpts } : {}) };
 }
 
 // a whole cart: body def, wheel placements, team defs (nearest the cart

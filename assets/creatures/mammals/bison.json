@@ -1,0 +1,392 @@
+{
+  "name": "bison",
+  "mount": { "h": 2.5, "speed": 1.6 },
+  "kind": "mammal",
+  "headForm": "cattle",
+  "shy": 4,
+  "graze": 1.0,
+  "rest": 0.75,
+  "print": "cloven",
+  "headScale": 1,
+  "headTurn": 8,
+  "pupil": "bar",
+  "params": {
+    "bull": true,
+    "cow": false,
+    "adult": true
+  },
+  "rear": [-0.5, 1.02, 0, 0.5, 0.42, 0.36],
+  "front": [0.45, 1.15, 0, 0.65, 0.6, 0.45],
+  "neck": [0.86, 1.25, 0, 1.08, 1.05, 0, 0.38, 0.3],
+  "head": [1.18, 0.98, 0, 0.3],
+  "muzzle": [1.24, 0.9, 0, 1.46, 0.64, 0, 0.2, 0.15],
+  "ears": [1.12, 1.05, 0.2, 1.1, 1.04, 0.32, 0.05, 0.03],
+  "eyes": [1.3, 0.98, 0.19, 0.025],
+  "legs": {
+    "front": [0.64, 1.02, 0.32, 0.32],
+    "hind": [-0.76, 0.72, 0.32, 0.34],
+    "radii": [0.17, 0.115, 0.085],
+    "foot": [0.1, 0.055, 0.09],
+    "thigh": 1.5
+  },
+  "tail": {
+    "path": [
+      [-0.96, 1.3],
+      [-1.03, 1.22],
+      [-1.04, 1.05],
+      [-1.02, 0.88]
+    ],
+    "r1": 0.04,
+    "r2": 0.025,
+    "tuft": 0,
+    "sway": 12,
+    "speed": 0.7
+  },
+  "extras": [],
+  "c": {
+    "body": "#4a3522",
+    "cape": "#2a1e16",
+    "fore": "#2a1e16",
+    "head": "#251a13",
+    "muzzle": "#1f1915",
+    "nose": "#141110",
+    "ear": "#2a1e16",
+    "earIn": "#2a201a",
+    "leg": "#2a1f18",
+    "foot": "#1a1512",
+    "tail": "#46321f",
+    "tuft": "#211812",
+    "eye": "#120c08",
+    "horn": "#1d1916",
+    "hornTip": "#0e0c0b",
+    "beard": "#1e1610",
+    "mat": "#33251b",
+    "belly": "#3a2a1c"
+  },
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [9000, 2700],
+      "focus": {
+        "head": 4,
+        "tail": 4
+      },
+      "symmetric": true
+    },
+    "shade": {
+      "on": "@body",
+      "back": 0.88,
+      "belly": 1.06
+    },
+    "shape": [
+      {"id": "chest", "type": "ell", "c": [0.45, 1.12, 0], "r": [0.5, 0.47, 0.44], "kc": 0.2, "pat": "coarse", "hair": 0.06, "k": 0.15, "color": "@cape"},
+      {"id": "hump", "type": "ell", "c": [0.42, 1.48, 0], "r": [0.52, 0.37, 0.33], "rot": [0, 0, -16], "kc": 0.2, "pat": "coarse", "hair": 0.06, "k": 0.18, "color": "@cape"},
+      {"id": "humpTop", "type": "ell", "c": [0.5, 1.7, 0], "r": [0.34, 0.18, 0.21], "rot": [0, 0, -22], "kc": 0.2, "pat": "coarse", "hair": 0.06, "k": 0.16, "color": "@cape"},
+      {"id": "slope", "type": "ell", "c": [-0.12, 1.39, 0], "r": [0.62, 0.17, 0.31], "rot": [0, 0, 13], "kc": 0.2, "pat": "coarse", "hair": 0.1, "k": 0.2, "color": "@body"},
+      {"id": "barrel", "type": "ell", "c": [-0.3, 1.04, 0], "r": [0.52, 0.3, 0.36], "kc": 0.2, "pat": "coarse", "hair": 0.1, "k": 0.16, "color": "@body"},
+      {"id": "rump", "type": "ell", "c": [-0.76, 1.2, 0], "r": [0.27, 0.19, 0.26], "pat": "coarse", "hair": 0.1, "k": 0.16, "color": "@body"},
+      {"id": "hook", "type": "ell", "c": [-0.6, 1.27, 0.2], "r": [0.08, 0.05, 0.06], "mirror": true, "pat": "coarse", "hair": 0.1, "k": 0.1, "color": "@body"},
+      {"id": "tailhead", "type": "ell", "c": [-0.94, 1.29, 0], "r": [0.08, 0.06, 0.07], "pat": "coarse", "hair": 0.1, "k": 0.06, "color": "@body"},
+      {"id": "quarter", "type": "ell", "c": [-0.78, 0.98, 0.18], "r": [0.2, 0.27, 0.15], "rot": [0, 0, -12], "mirror": true, "pat": "coarse", "hair": 0.1, "k": 0.13, "color": "@body"},
+      {"id": "belly", "type": "ell", "c": [-0.22, 0.9, 0], "r": [0.5, 0.16, 0.36], "pat": "coarse", "hair": 0.1, "k": 0.12, "color": "@belly"},
+      {"id": "scapula", "type": "ell", "c": [0.5, 1.22, 0.32], "r": [0.14, 0.3, 0.13], "rot": [0, 0, 24], "mirror": true, "pat": "coarse", "hair": 0.06, "k": 0.1, "color": "@cape"},
+      {"id": "brisket", "type": "ell", "c": [0.7, 0.86, 0], "r": [0.2, 0.17, 0.21], "pat": "coarse", "hair": 0.06, "k": 0.1, "color": "@cape"},
+      {"id": "neckBase", "type": "ell", "c": [0.8, 1.22, 0], "r": [0.36, 0.44, 0.37], "rot": [0, 0, -30], "pat": "coarse", "hair": 0.06, "k": 0.16, "color": "@cape"},
+      {"id": "neck", "type": "ell", "bone": "neck", "c": [1.0, 1.1, 0], "r": [0.3, 0.34, 0.31], "rot": [0, 0, -40], "pat": "coarse", "hair": 0.06, "k": 0.14, "color": "@cape"},
+      {"id": "crest", "type": "ell", "bone": "neck", "c": [0.82, 1.5, 0], "r": [0.36, 0.18, 0.24], "rot": [0, 0, -38], "pat": "coarse", "hair": 0.06, "k": 0.15, "color": "@cape"},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [1.16, 1.03, 0], "r": [0.24, 0.23, 0.23], "pat": "coarse", "hair": 0.06, "k": 0.06, "color": "@head"},
+      {"id": "poll", "type": "ell", "bone": "head", "c": [1.1, 1.18, 0], "r": [0.14, 0.1, 0.18], "pat": "coarse", "hair": 0.06, "k": 0.06, "color": "@cape"},
+      {"id": "forehead", "type": "ell", "bone": "head", "c": [1.3, 0.98, 0], "r": [0.1, 0.22, 0.2], "rot": [0, 0, -8], "pat": "coarse", "hair": 0.06, "k": 0.06, "color": "@cape"},
+      {"id": "face", "type": "cone", "bone": "head", "a": [1.3, 0.9, 0], "b": [1.42, 0.67, 0], "ra": 0.13, "rb": 0.105, "pat": "coarse", "hair": 0.06, "k": 0.05, "color": "@head"},
+      {"id": "muzzle", "type": "ell", "bone": "head", "c": [1.43, 0.64, 0], "r": [0.085, 0.095, 0.11], "rot": [0, 0, -65], "k": 0.04, "color": "@muzzle"},
+      {"id": "nose", "type": "ell", "bone": "head", "c": [1.495, 0.625, 0], "r": [0.018, 0.07, 0.09], "rot": [0, 0, -65], "wet": 0.45, "k": 0.013, "color": "@nose"},
+      {"id": "lip", "type": "ell", "bone": "head", "c": [1.38, 0.58, 0], "r": [0.06, 0.035, 0.075], "rot": [0, 0, -65], "k": 0.03, "color": "@muzzle"},
+      {"id": "nostril", "type": "ell", "bone": "head", "c": [1.505, 0.635, 0.045], "r": [0.012, 0.024, 0.015], "rot": [0, 0, -90], "op": "sub", "mirror": true, "k": 0.006, "color": "@nose"},
+      {"id": "jaw", "type": "ell", "bone": "head", "c": [1.22, 0.86, 0.09], "r": [0.18, 0.13, 0.07], "rot": [0, 0, -60], "mirror": true, "pat": "coarse", "hair": 0.06, "k": 0.05, "color": "@head"},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [1.17, 0.97, 0.17], "r": [0.11, 0.15, 0.09], "mirror": true, "pat": "coarse", "hair": 0.06, "k": 0.05, "color": "@cape"},
+      {"id": "arm", "type": "ell", "bone": "legFLu", "c": [0.5868, 0.7455, 0.2482], "r": [0.2274, 0.2274, 0.1981], "rot": [0, 0, -15], "k": 0.0746, "color": "@cape", "mirror": true, "pat": "coarse", "hair": 0.06, "kc": 0.06},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.6187, 0.6816, 0.292], "b": [0.64, 0.4119, 0.292], "ra": 0.1811, "rb": 0.1003, "k": 0.0426, "color": "@cape", "mirror": true, "pat": "coarse", "hair": 0.06, "kc": 0.06},
+      {"id": "knee", "type": "ell", "bone": "legFLl", "c": [0.6432, 0.3693, 0.292], "r": [0.0844, 0.0893, 0.0991], "k": 0.0266, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "cannon", "type": "cone", "bone": "legFLl", "a": [0.64, 0.348, 0.292], "b": [0.6443, 0.1598, 0.292], "ra": 0.0731, "rb": 0.0682, "k": 0.0213, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "fetlock", "type": "ell", "bone": "legFLl", "c": [0.6357, 0.1438, 0.292], "r": [0.0893, 0.0813, 0.0991], "k": 0.0213, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "dewclaw", "type": "sphere", "bone": "legFLl", "c": [0.5868, 0.1172, 0.292], "r": 0.0181, "k": 0.0064, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "pastern", "type": "cone", "bone": "legFLl", "a": [0.64, 0.1331, 0.292], "b": [0.6634, 0.0746, 0.292], "ra": 0.0731, "rb": 0.0747, "k": 0.016, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "toeo", "type": "ell", "bone": "footFL", "c": [0.6826, 0.0362, 0.3253], "r": [0.0655, 0.0362, 0.0319], "rot": [0, 0, -15], "k": 0.0053, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "htoeo", "type": "ell", "bone": "footHL", "c": [-0.7174, 0.0362, 0.2553], "r": [0.0643, 0.0351, 0.0319], "rot": [0, 0, -15], "k": 0.0053, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "toei", "type": "ell", "bone": "footFL", "c": [0.6826, 0.0362, 0.2587], "r": [0.0655, 0.0362, 0.0319], "rot": [0, 0, -15], "k": 0.0053, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "htoei", "type": "ell", "bone": "footHL", "c": [-0.7174, 0.0362, 0.1887], "r": [0.0643, 0.0351, 0.0319], "rot": [0, 0, -15], "k": 0.0053, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "stifle", "type": "ell", "bone": "legHLu", "c": [-0.6322, 0.7881, 0.2109], "r": [0.1531, 0.1991, 0.1868], "rot": [0, 0, -15], "k": 0.0639, "color": "@body", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "gaskin", "type": "cone", "bone": "legHLu", "a": [-0.7174, 0.7668, 0.222], "b": [-0.8133, 0.4141, 0.222], "ra": 0.1531, "rb": 0.0766, "k": 0.0426, "color": "@body", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "ham", "type": "tube", "bone": "legHLu", "pts": [[-0.8162, 0.7897, 0.1776, 0.1838], [-0.8161, 0.6735, 0.1776, 0.148], [-0.816, 0.5574, 0.1776, 0.1122], [-0.8158, 0.4412, 0.1776, 0.0766]], "k": 0.0746, "color": "@body", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "hock", "type": "ell", "bone": "legHLl", "c": [-0.7866, 0.3662, 0.222], "r": [0.0888, 0.0888, 0.0841], "k": 0.0266, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "hockPt", "type": "sphere", "bone": "legHLl", "c": [-0.8452, 0.4034, 0.222], "r": 0.049, "k": 0.0266, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "hcannon", "type": "cone", "bone": "legHLl", "a": [-0.7813, 0.3396, 0.222], "b": [-0.76, 0.1598, 0.222], "ra": 0.0704, "rb": 0.0643, "k": 0.0213, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "hfetlock", "type": "ell", "bone": "legHLl", "c": [-0.7643, 0.1438, 0.222], "r": [0.0842, 0.0766, 0.0934], "k": 0.0213, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "hdewclaw", "type": "sphere", "bone": "legHLl", "c": [-0.8133, 0.1172, 0.222], "r": 0.0181, "k": 0.0064, "kc": 0.002, "color": "@foot", "mirror": true},
+      {"id": "hpastern", "type": "cone", "bone": "legHLl", "a": [-0.76, 0.1331, 0.222], "b": [-0.7366, 0.0746, 0.222], "ra": 0.0689, "rb": 0.0704, "k": 0.016, "color": "@leg", "mirror": true, "pat": "coarse", "hair": 0.1},
+      {"id": "tail", "type": "sweep", "bones": ["tail", "tail1"], "color": "@tail", "k": 0.02, "pts": [[-0.955, 1.3, 0, 0.05], [-0.99, 1.28, 0, 0.044], [-1.025, 1.24, 0, 0.038], [-1.04, 1.18, 0, 0.034], [-1.045, 1.11, 0, 0.031], [-1.042, 1.04, 0, 0.029], [-1.036, 0.97, 0, 0.027], [-1.03, 0.91, 0, 0.026]], "pat": "coarse", "hair": 0.1},
+      {"id": "tailTuft", "type": "tube", "bone": "tail1", "pts": [[-1.035, 0.97, 0, 0.032], [-1.03, 0.89, 0, 0.05], [-1.025, 0.81, 0, 0.042], [-1.02, 0.73, 0, 0.012]], "pat": "coarse", "hair": 0.1, "k": 0.02, "color": "@tuft"},
+      {"id": "lock0", "type": "ell", "c": [-0.02, 1.6881, 0], "r": [0.104, 0.08, 0.08], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06},
+      {"id": "lock1", "type": "ell", "c": [0.12, 1.787, 0], "r": [0.13, 0.1, 0.1], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06},
+      {"id": "lock2", "type": "ell", "c": [0.26, 1.8539, 0], "r": [0.143, 0.11, 0.11], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06},
+      {"id": "lock3", "type": "ell", "c": [0.4, 1.8619, 0], "r": [0.143, 0.11, 0.11], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06},
+      {"id": "lock4", "type": "ell", "c": [0.54, 1.8333, 0], "r": [0.143, 0.11, 0.11], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06},
+      {"id": "lock5", "type": "ell", "c": [0.67, 1.7926, 0], "r": [0.13, 0.1, 0.1], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06},
+      {"id": "lock6", "type": "ell", "c": [0.2, 1.7209, 0.2], "r": [0.13, 0.1, 0.1], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true},
+      {"id": "lock7", "type": "ell", "c": [0.4, 1.7514, 0.22], "r": [0.143, 0.11, 0.11], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true},
+      {"id": "lock8", "type": "ell", "c": [0.6, 1.7239, 0.21], "r": [0.13, 0.1, 0.1], "k": 0.09, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true},
+      {"id": "skirt0", "type": "ell", "c": [0.2338, 0.6847, 0.0], "r": [0.057, 0.0861, 0.0544], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt1", "type": "ell", "c": [0.2326, 0.7078, 0.13], "r": [0.055, 0.0826, 0.0526], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt2", "type": "ell", "c": [0.2315, 0.7711, 0.25], "r": [0.088, 0.1392, 0.0509], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt3", "type": "ell", "c": [0.2954, 0.6566, 0.0], "r": [0.086, 0.1358, 0.0792], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt4", "type": "ell", "c": [0.3142, 0.6789, 0.13], "r": [0.084, 0.1324, 0.0775], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt5", "type": "ell", "c": [0.3131, 0.7431, 0.25], "r": [0.082, 0.1289, 0.0758], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt6", "type": "ell", "c": [0.3769, 0.6435, 0.0], "r": [0.08, 0.1255, 0.0741], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt7", "type": "ell", "c": [0.3758, 0.6584, 0.13], "r": [0.078, 0.1221, 0.0724], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt8", "type": "ell", "c": [0.3746, 0.6606, 0.25], "r": [0.076, 0.1186, 0.0706], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt9", "type": "ell", "c": [0.4385, 0.6387, 0.0], "r": [0.074, 0.1152, 0.0689], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt10", "type": "ell", "c": [0.4374, 0.6197, 0.13], "r": [0.072, 0.1118, 0.0672], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt11", "type": "ell", "c": [0.4362, 0.5646, 0.25], "r": [0.07, 0.1083, 0.0655], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt12", "type": "ell", "c": [0.5001, 0.6419, 0.0], "r": [0.068, 0.1049, 0.0638], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt13", "type": "ell", "c": [0.4989, 0.5748, 0.13], "r": [0.066, 0.1015, 0.0621], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt14", "type": "ell", "c": [0.4978, 0.4946, 0.25], "r": [0.064, 0.0981, 0.0604], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt15", "type": "ell", "c": [0.5616, 0.648, 0.0], "r": [0.062, 0.0946, 0.0586], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt16", "type": "ell", "c": [0.5605, 0.5497, 0.13], "r": [0.06, 0.0912, 0.0569], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt17", "type": "ell", "c": [0.5594, 0.1708, 0.25], "r": [0.058, 0.0878, 0.0552], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt18", "type": "ell", "c": [0.6232, 0.6543, 0.0], "r": [0.056, 0.0843, 0.0535], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt19", "type": "ell", "c": [0.6221, 0.547, 0.13], "r": [0.089, 0.0809, 0.0518], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt20", "type": "ell", "c": [0.6209, 1.7006, 0.25], "r": [0.087, 0.1375, 0.0501], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt21", "type": "ell", "c": [0.7048, 0.6573, 0.0], "r": [0.085, 0.134, 0.0783], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt22", "type": "ell", "c": [0.7036, 0.5756, 0.13], "r": [0.083, 0.1306, 0.0766], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt23", "type": "ell", "c": [0.7025, 1.6732, 0.25], "r": [0.081, 0.1272, 0.0749], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt24", "type": "ell", "c": [0.7663, 0.6727, 0.0], "r": [0.079, 0.1238, 0.0732], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt25", "type": "ell", "c": [0.7652, 0.6553, 0.13], "r": [0.077, 0.1203, 0.0715], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt26", "type": "ell", "c": [0.7641, 0.504, 0.25], "r": [0.075, 0.1169, 0.0698], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt27", "type": "ell", "c": [0.8279, 0.6955, 0.0], "r": [0.073, 0.1135, 0.0681], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "when": "adult"},
+      {"id": "skirt28", "type": "ell", "c": [0.8268, 0.7221, 0.13], "r": [0.071, 0.11, 0.0663], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt29", "type": "ell", "c": [0.8256, 0.7895, 0.25], "r": [0.069, 0.1066, 0.0646], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "skirt30", "type": "ell", "c": [0.8895, 0.72, 0.0], "r": [0.067, 0.1032, 0.0629], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "neck", "when": "adult"},
+      {"id": "skirt31", "type": "ell", "c": [0.8883, 0.751, 0.13], "r": [0.065, 0.0997, 0.0612], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "neck", "mirror": true, "when": "adult"},
+      {"id": "skirt32", "type": "ell", "c": [0.9522, 0.7423, 0.0], "r": [0.063, 0.0963, 0.0595], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "neck", "when": "adult"},
+      {"id": "skirt33", "type": "ell", "c": [0.9511, 0.7722, 0.13], "r": [0.061, 0.0929, 0.0578], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "neck", "mirror": true, "when": "adult"},
+      {"id": "skirt34", "type": "ell", "c": [1.0149, 0.7643, 0.0], "r": [0.059, 0.0894, 0.056], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "neck", "when": "adult"},
+      {"id": "skirt35", "type": "ell", "c": [1.0138, 0.794, 0.13], "r": [0.057, 0.086, 0.0543], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "neck", "mirror": true, "when": "adult"},
+      {"id": "skirt36", "type": "ell", "c": [1.0776, 0.7804, 0.0], "r": [0.09, 0.0826, 0.0526], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "neck", "when": "adult"},
+      {"id": "skirt37", "type": "ell", "c": [1.0765, 0.8013, 0.13], "r": [0.088, 0.1392, 0.0509], "k": 0.05, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "neck", "mirror": true, "when": "adult"},
+      {"id": "flank0", "type": "ell", "c": [0.2, 1.12, 0.3431], "r": [0.0827, 0.0689, 0.0551], "k": 0.06, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "flank1", "type": "ell", "c": [0.2, 1.26, 0.3299], "r": [0.0809, 0.0674, 0.0539], "k": 0.06, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "flank2", "type": "ell", "c": [0.2, 1.4, 0.3229], "r": [0.0791, 0.0659, 0.0527], "k": 0.06, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "flank3", "type": "ell", "c": [0.1, 0.98, 0.2935], "r": [0.0667, 0.0556, 0.0445], "k": 0.06, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "flank4", "type": "ell", "c": [0.1, 1.12, 0.2981], "r": [0.0652, 0.0543, 0.0435], "k": 0.06, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "flank5", "type": "ell", "c": [0.1, 1.26, 0.2783], "r": [0.091, 0.0758, 0.0607], "k": 0.06, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "flank6", "type": "ell", "c": [0.1, 1.4, 0.2993], "r": [0.0894, 0.0745, 0.0596], "k": 0.06, "color": "@cape", "pat": "coarse", "hair": 0.06, "mirror": true, "when": "adult"},
+      {"id": "capeEdge0", "type": "ell", "op": "paint", "c": [0.05, 1.05, 0.3178], "r": [0.1061, 0.0883, 0.08], "kc": 0.07, "color": "@cape", "mirror": true},
+      {"id": "capeEdge1", "type": "ell", "op": "paint", "c": [-0.08, 1.2, 0.2968], "r": [0.1032, 0.0854, 0.08], "kc": 0.07, "color": "@cape", "mirror": true},
+      {"id": "capeEdge2", "type": "ell", "op": "paint", "c": [-0.02, 1.4, 0.3226], "r": [0.1004, 0.0826, 0.08], "kc": 0.07, "color": "@cape", "mirror": true},
+      {"id": "capeEdge3", "type": "ell", "op": "paint", "c": [-0.14, 1.33, 0.3029], "r": [0.0975, 0.0797, 0.08], "kc": 0.07, "color": "@cape", "mirror": true},
+      {"id": "capeEdge4", "type": "ell", "op": "paint", "c": [0.08, 0.95, 0.3224], "r": [0.0947, 0.0769, 0.08], "kc": 0.07, "color": "@cape", "mirror": true},
+      {"id": "capeEdge5", "type": "ell", "op": "paint", "c": [-0.12, 1.1, 0.3319], "r": [0.0918, 0.074, 0.08], "kc": 0.07, "color": "@cape", "mirror": true},
+      {"id": "chap0", "type": "ell", "c": [0.515, 0.7, 0.292], "r": [0.0753, 0.1016, 0.0753], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap1", "type": "ell", "c": [0.5525, 0.7, 0.3644], "r": [0.0738, 0.0997, 0.0738], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap2", "type": "ell", "c": [0.5525, 0.7, 0.2196], "r": [0.0724, 0.0977, 0.0724], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap3", "type": "ell", "c": [0.62, 0.7, 0.3865], "r": [0.071, 0.0958, 0.071], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap4", "type": "ell", "c": [0.6382, 0.7, 0.1989], "r": [0.0695, 0.0939, 0.0695], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap5", "type": "ell", "c": [0.534, 0.6, 0.292], "r": [0.0681, 0.0919, 0.0681], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap6", "type": "ell", "c": [0.5661, 0.6, 0.354], "r": [0.0667, 0.09, 0.0667], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap7", "type": "ell", "c": [0.5661, 0.6, 0.23], "r": [0.0653, 0.0881, 0.0653], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap8", "type": "ell", "c": [0.624, 0.6, 0.373], "r": [0.0888, 0.1199, 0.0888], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap9", "type": "ell", "c": [0.6396, 0.6, 0.2122], "r": [0.0874, 0.118, 0.0874], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap10", "type": "ell", "c": [0.553, 0.5, 0.292], "r": [0.086, 0.116, 0.086], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap11", "type": "ell", "c": [0.5798, 0.5, 0.3437], "r": [0.0845, 0.1141, 0.0845], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap12", "type": "ell", "c": [0.5798, 0.5, 0.2403], "r": [0.0831, 0.1122, 0.0831], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap13", "type": "ell", "c": [0.628, 0.5, 0.3595], "r": [0.0817, 0.1103, 0.0817], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap14", "type": "ell", "c": [0.641, 0.5, 0.2255], "r": [0.0802, 0.1083, 0.0802], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap15", "type": "ell", "c": [0.5712, 0.42, 0.292], "r": [0.0788, 0.1064, 0.0788], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap16", "type": "ell", "c": [0.5926, 0.42, 0.3334], "r": [0.0774, 0.1045, 0.0774], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "chap17", "type": "ell", "c": [0.5926, 0.42, 0.2506], "r": [0.076, 0.1025, 0.076], "k": 0.04, "color": "@cape", "pat": "coarse", "hair": 0.06, "bone": "legFLl", "mirror": true, "when": "adult"},
+      {"id": "beard0", "type": "ell", "c": [1.12, 0.763, 0.0], "r": [0.0691, 0.1105, 0.0622], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "when": "adult"},
+      {"id": "beard1", "type": "ell", "c": [1.1, 0.643, 0.0], "r": [0.0587, 0.1036, 0.0518], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "when": "bull"},
+      {"id": "beard2", "type": "ell", "c": [1.12, 0.763, 0.07], "r": [0.0668, 0.1069, 0.0601], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true, "when": "adult"},
+      {"id": "beard3", "type": "ell", "c": [1.1, 0.643, 0.049], "r": [0.0568, 0.1002, 0.0501], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true, "when": "bull"},
+      {"id": "beard4", "type": "ell", "c": [1.19, 0.7516, 0.0], "r": [0.0645, 0.1032, 0.0581], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "when": "adult"},
+      {"id": "beard5", "type": "ell", "c": [1.17, 0.6316, 0.0], "r": [0.0548, 0.0968, 0.0484], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "when": "bull"},
+      {"id": "beard6", "type": "ell", "c": [1.19, 0.7516, 0.07], "r": [0.0622, 0.0996, 0.056], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true, "when": "adult"},
+      {"id": "beard7", "type": "ell", "c": [1.17, 0.6316, 0.049], "r": [0.0529, 0.0933, 0.0467], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true, "when": "bull"},
+      {"id": "beard8", "type": "ell", "c": [1.26, 0.6912, 0.0], "r": [0.0799, 0.1279, 0.0719], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "when": "adult"},
+      {"id": "beard9", "type": "ell", "c": [1.24, 0.5712, 0.0], "r": [0.0679, 0.1199, 0.06], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "when": "bull"},
+      {"id": "beard10", "type": "ell", "c": [1.26, 0.6912, 0.07], "r": [0.0777, 0.1242, 0.0699], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true, "when": "adult"},
+      {"id": "beard11", "type": "ell", "c": [1.24, 0.5712, 0.049], "r": [0.066, 0.1165, 0.0582], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true, "when": "bull"},
+      {"id": "beard12", "type": "ell", "c": [1.33, 0.5614, 0.0], "r": [0.0754, 0.1206, 0.0678], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "when": "adult"},
+      {"id": "beard13", "type": "ell", "c": [1.33, 0.5614, 0.07], "r": [0.0742, 0.1188, 0.0668], "k": 0.04, "color": "@beard", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true, "when": "adult"},
+      {"id": "mat0", "type": "ell", "c": [1.4189, 0.9039, 0.0017], "r": [0.05, 0.05, 0.05], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head"},
+      {"id": "mat1", "type": "ell", "c": [1.3897, 0.9022, 0.0856], "r": [0.0482, 0.0482, 0.0482], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat2", "type": "ell", "c": [1.3161, 0.9005, 0.1694], "r": [0.0465, 0.0465, 0.0465], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat3", "type": "ell", "c": [1.4023, 0.9688, 0.0383], "r": [0.0448, 0.0448, 0.0448], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat4", "type": "ell", "c": [1.3698, 0.9671, 0.1222], "r": [0.0431, 0.0431, 0.0431], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat5", "type": "ell", "c": [1.4003, 1.0354, 0.0], "r": [0.0414, 0.0414, 0.0414], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head"},
+      {"id": "mat6", "type": "ell", "c": [1.3903, 1.0336, 0.0799], "r": [0.0397, 0.0397, 0.0397], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat7", "type": "ell", "c": [1.3513, 1.0319, 0.1637], "r": [0.0379, 0.0379, 0.0379], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat8", "type": "ell", "c": [1.3926, 1.1002, 0.0326], "r": [0.0362, 0.0362, 0.0362], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat9", "type": "ell", "c": [1.3578, 1.0985, 0.1164], "r": [0.0645, 0.0645, 0.0645], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat10", "type": "ell", "c": [1.3578, 1.1668, 0.0], "r": [0.0628, 0.0628, 0.0628], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head"},
+      {"id": "mat11", "type": "ell", "c": [1.3374, 1.1651, 0.0942], "r": [0.0611, 0.0611, 0.0611], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat12", "type": "ell", "c": [1.2366, 1.1933, 0.178], "r": [0.0594, 0.0594, 0.0594], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat13", "type": "ell", "c": [1.2694, 1.2616, 0.0469], "r": [0.0577, 0.0577, 0.0577], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat14", "type": "ell", "c": [1.2406, 1.2599, 0.1307], "r": [0.0559, 0.0559, 0.0559], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat15", "type": "ell", "c": [1.0063, 1.628, 0.0], "r": [0.0606, 0.0606, 0.0606], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head"},
+      {"id": "mat16", "type": "ell", "c": [1.0052, 1.6138, 0.09], "r": [0.0588, 0.0588, 0.0588], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat17", "type": "ell", "c": [1.0741, 1.5661, 0.045], "r": [0.0571, 0.0571, 0.0571], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat18", "type": "ell", "c": [1.0729, 1.5317, 0.135], "r": [0.0554, 0.0554, 0.0554], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat19", "type": "ell", "c": [1.1418, 1.4942, 0.0], "r": [0.0537, 0.0537, 0.0537], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head"},
+      {"id": "mat20", "type": "ell", "c": [1.1406, 1.475, 0.09], "r": [0.052, 0.052, 0.052], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat21", "type": "ell", "c": [1.2095, 1.3908, 0.045], "r": [0.0503, 0.0503, 0.0503], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "mat22", "type": "ell", "c": [1.2083, 1.3391, 0.135], "r": [0.0485, 0.0485, 0.0485], "k": 0.015, "color": "@mat", "pat": "coarse", "hair": 0.06, "bone": "head", "mirror": true},
+      {"id": "hornB", "type": "horn", "bone": "head", "pts": [[1.14, 1.12, 0.14, 0.06], [1.14, 1.13, 0.24, 0.054], [1.14, 1.16, 0.31, 0.046], [1.13, 1.22, 0.35, 0.036], [1.11, 1.29, 0.35, 0.025], [1.09, 1.34, 0.32, 0.013], [1.075, 1.365, 0.29, 0.0]], "color": "@horn", "mirror": true, "tip": "@hornTip", "tipAt": 0.6, "when": "bull"},
+      {"id": "hornC", "type": "horn", "bone": "head", "pts": [[1.14, 1.12, 0.14, 0.045], [1.14, 1.13, 0.23, 0.04], [1.14, 1.16, 0.29, 0.033], [1.13, 1.21, 0.32, 0.025], [1.11, 1.27, 0.31, 0.015], [1.09, 1.3, 0.28, 0.0]], "color": "@horn", "mirror": true, "tip": "@hornTip", "tipAt": 0.6, "when": "cow"},
+      {"id": "ear", "type": "fin", "bone": "earL", "root": [[1.1124, 1.0318, 0.2304], [1.1076, 1.0482, 0.2436]], "edge": [[1.1149, 1.0196, 0.2264], [1.1149, 0.9926, 0.2546], [1.1125, 0.98, 0.2672], [1.1098, 0.9713, 0.2799], [1.1066, 0.9662, 0.293], [1.103, 0.9638, 0.3065], [1.0991, 0.964, 0.3204], [1.0949, 0.9669, 0.3349], [1.09, 0.9731, 0.3503], [1.0838, 0.9875, 0.3681], [1.0831, 1.0107, 0.363], [1.084, 1.0258, 0.3549], [1.0856, 1.0378, 0.3454], [1.0877, 1.0473, 0.3348], [1.0903, 1.0545, 0.323], [1.0936, 1.0594, 0.3098], [1.0976, 1.0612, 0.2947], [1.1025, 1.06, 0.2774], [1.1069, 1.0534, 0.2478]], "corners": [9], "thick": 0.0064, "slope": 0.3, "face": [0.9673, 0.0998, 0.2334], "cup": 0.55, "color": "@ear", "inner": "@earIn", "innerRim": 0.0086, "mirror": true, "fair": {"r": 0.0143, "sink": 3}}
+    ],
+    "eyes": {
+      "at": [1.3, 0.98, 0.2117],
+      "from": [1.15, 0.98, 0],
+      "r": 0.022,
+      "iris": "@eye",
+      "pupil": "bar",
+      "lid": "#1a120c",
+      "sink": 0.5
+    },
+    "_about": "THE AMERICAN BISON (Bison bison; 2026-11-08, generator tools/creaturegen/ungulates/gen.py, a cattle rig): a bull of about 1.9 m at the hump, ONE MASS -- the huge head carried low, its forehead almost upright, rising through the crest into the HUMP that peaks over the forelegs, the back sloping evenly down to small, low, round hindquarters in short paler hair (big blends, no step). The dark CAPE is matte coarse wool (`coarse`, `hair`), its colour fading into the body's over ~20 cm (`kc`) with scattered patches of it (paints) past an irregular edge of thinning lumps over the ribs; its SHAGGY OUTLINE is field lumps of many sizes -- along the hump, the SKIRT hanging under the throat, chest and elbows, the CHAPS round the forearms down to the knees, a thick BEARD of rounded locks (longer on the bull), a big curly FORELOCK mat over the brow. Thick forelegs, sturdy hind legs (the ox's, thickened). The HORNS short, sharp and black (`horn`s) from the sides of the head under the mat, out, up and curving in; small ears (the ox's leaf) mostly hidden; small eyes in the wool; a short `sweep` tail with a dark tuft."
+  },
+  "variants": {
+    "cow": {
+      "params": {
+        "bull": false,
+        "cow": true,
+        "adult": true
+      },
+      "scale": 0.82,
+      "sculpt": {
+        "shape": [
+          {
+            "id": "humpTop",
+            "c": [0.5, 1.6, 0],
+            "r": [0.32, 0.13, 0.19]
+          },
+          {
+            "id": "hump",
+            "c": [0.42, 1.43, 0],
+            "r": [0.5, 0.31, 0.31]
+          },
+          {
+            "id": "lock0",
+            "c": [-0.02, 1.6267, 0]
+          },
+          {
+            "id": "lock1",
+            "c": [0.12, 1.6896, 0]
+          },
+          {
+            "id": "lock2",
+            "c": [0.26, 1.7362, 0]
+          },
+          {
+            "id": "lock3",
+            "c": [0.4, 1.7329, 0]
+          },
+          {
+            "id": "lock4",
+            "c": [0.54, 1.7274, 0]
+          },
+          {
+            "id": "lock5",
+            "c": [0.67, 1.7232, 0]
+          },
+          {
+            "id": "lock6",
+            "c": [0.2, 1.6346, 0.2]
+          },
+          {
+            "id": "lock7",
+            "c": [0.4, 1.6418, 0.22]
+          },
+          {
+            "id": "lock8",
+            "c": [0.6, 1.6357, 0.21]
+          }
+        ]
+      }
+    },
+    "calf": {
+      "params": {
+        "bull": false,
+        "cow": false,
+        "adult": false
+      },
+      "scale": 0.45,
+      "sculpt": {
+        "shape": [
+          {
+            "id": "humpTop",
+            "c": [0.5, 1.6, 0],
+            "r": [0.32, 0.13, 0.19]
+          },
+          {
+            "id": "hump",
+            "c": [0.42, 1.43, 0],
+            "r": [0.5, 0.31, 0.31]
+          },
+          {
+            "id": "lock0",
+            "c": [-0.02, 1.6267, 0]
+          },
+          {
+            "id": "lock1",
+            "c": [0.12, 1.6896, 0]
+          },
+          {
+            "id": "lock2",
+            "c": [0.26, 1.7362, 0]
+          },
+          {
+            "id": "lock3",
+            "c": [0.4, 1.7329, 0]
+          },
+          {
+            "id": "lock4",
+            "c": [0.54, 1.7274, 0]
+          },
+          {
+            "id": "lock5",
+            "c": [0.67, 1.7232, 0]
+          },
+          {
+            "id": "lock6",
+            "c": [0.2, 1.6346, 0.2]
+          },
+          {
+            "id": "lock7",
+            "c": [0.4, 1.6418, 0.22]
+          },
+          {
+            "id": "lock8",
+            "c": [0.6, 1.6357, 0.21]
+          }
+        ]
+      },
+      "colors": {
+        "body": "#b2642e",
+        "cape": "#a85a28",
+        "fore": "#a85a28",
+        "head": "#9a5226",
+        "muzzle": "#4a3020",
+        "ear": "#a85a28",
+        "leg": "#8a4a22",
+        "tail": "#a85a28",
+        "tuft": "#6a3a1c",
+        "mat": "#a05426",
+        "belly": "#a05a2c",
+        "beard": "#8a4a22"
+      }
+    }
+  },
+  "_variants": "VARIANTS (species.js variantDef): `cow` -- .82 the bull's size, a lower hump, thinner horns curving in more, a short beard; `calf` -- .45, the orange-red 'red dog' coat of its first months, no horns, no beard, skirt or chaps, a low hump"
+}

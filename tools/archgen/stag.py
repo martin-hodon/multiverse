@@ -35,7 +35,9 @@ add("head", loft("z", [sec(.54, 0, 1.68, .075, .09), sec(.64, 0, 1.7, .08, .09),
                        sec(.89, 0, 1.575, .03, .035), sec(.91, 0, 1.57, .01, .01)], sides=12,
                  about="the head, the long face, the muzzle"))
 for side, sx in (("right", 1), ("left", -1)):
-    ear = [sec(.05, .6, 1.76, .035, .02), sec(.15, .58, 1.81, .035, .018), sec(.21, .56, 1.84, .012, .008)]
+    # (the ear behind and below the antler's root, at the back corner of the skull, held out to the side and a little up
+    #  and back -- it stood on the beam's own line before, the beam running up through it)
+    ear = [sec(.05, .55, 1.72, .035, .02), sec(.15, .52, 1.75, .035, .018), sec(.21, .5, 1.77, .012, .008)]
     add(f"ear {side}", loft("x", ear if sx > 0 else [dict(q, s=S(-float(q["s"].split(" ")[0]))) for q in reversed(ear)], sides=8,
                             about="an ear, out and up"))
     add(f"foreleg {side}", loft("y", [sec(0, sx * .11, .34, .03, .035), sec(.1, sx * .11, .34, .025, .03), sec(.3, sx * .11, .34, .028, .03),

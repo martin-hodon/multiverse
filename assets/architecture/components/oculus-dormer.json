@@ -1,0 +1,167 @@
+{
+  "name": "Oculus dormer",
+  "_about": "AN OCULUS DORMER (Chenonceau's gallery): a small stone front W wide and H tall standing on the eave, a round window (r) in it between two pilasters, an entablature and a triangular pediment GH tall with a finial, its own little slate gable roof running D back into the great roof. Place it on the cornice, +z out.",
+  "params": {
+    "detail": 4,
+    "W": 2.1,
+    "H": 2.1,
+    "GH": 1.0,
+    "D": 2.8,
+    "t": 0.3,
+    "r": 0.46
+  },
+  "build": [
+    "body",
+    "pilasters",
+    "entablature",
+    "pediment",
+    "finial",
+    "roof"
+  ],
+  "parts": {
+    "body": {
+      "type": "enclosure",
+      "plan": {
+        "rect": [
+          "W",
+          "D"
+        ]
+      },
+      "thickness": "t",
+      "height": "H",
+      "glass": true,
+      "interior": false,
+      "faces": {
+        "0": [
+          {
+            "openings": [
+              {
+                "at": 0,
+                "width": "r * 2",
+                "sill": "H * 0.48",
+                "springing": "H * 0.48",
+                "head": {
+                  "profile": "semicircular"
+                },
+                "foot": {
+                  "profile": "semicircular"
+                },
+                "surround": {
+                  "band": 0.12,
+                  "depth": 0.06,
+                  "head": false,
+                  "sill": false
+                }
+              }
+            ]
+          }
+        ],
+        "1": [],
+        "2": [],
+        "3": []
+      },
+      "at": [
+        [
+          0,
+          0,
+          "0 - D / 2",
+          0
+        ]
+      ],
+      "_about": "the stone front with its round window (an oculus)"
+    },
+    "pilasters": {
+      "type": "box",
+      "width": 0.22,
+      "length": 0.12,
+      "height": "H",
+      "at": [
+        [
+          "0.11 - W / 2",
+          0,
+          0.06,
+          0
+        ],
+        [
+          "W / 2 - 0.11",
+          0,
+          0.06,
+          0
+        ]
+      ]
+    },
+    "entablature": {
+      "type": "box",
+      "width": "W + 0.24",
+      "length": 0.36,
+      "height": 0.24,
+      "at": [
+        [
+          0,
+          "H",
+          -0.06,
+          0
+        ]
+      ]
+    },
+    "pediment": {
+      "type": "screen",
+      "outline": [
+        [
+          "0 - W / 2 - 0.1",
+          0
+        ],
+        [
+          "W / 2 + 0.1",
+          0
+        ],
+        [
+          0,
+          "GH"
+        ]
+      ],
+      "t": 0.28,
+      "at": [
+        [
+          0,
+          "H + 0.24",
+          0.1,
+          0
+        ]
+      ],
+      "_about": "the triangular pediment"
+    },
+    "finial": {
+      "type": "pinnacle",
+      "w": 0.2,
+      "h": 0.25,
+      "s": 0.45,
+      "sides": 4,
+      "at": [
+        [
+          0,
+          "H + 0.24 + GH - 0.1",
+          -0.04,
+          0
+        ]
+      ]
+    },
+    "roof": {
+      "type": "roof",
+      "form": "gable",
+      "width": "W + 0.1",
+      "length": "D",
+      "pitch": "atan2(GH * 0.92, W / 2 + 0.05) * 57.29578",
+      "overhang": 0.06,
+      "at": [
+        [
+          0,
+          "H + 0.24",
+          "0 - D / 2 - 0.05",
+          0
+        ]
+      ],
+      "_about": "its little slate gable running back into the great roof"
+    }
+  }
+}

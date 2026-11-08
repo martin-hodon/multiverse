@@ -43,6 +43,8 @@ scripts write those JSON files under `assets/architecture/`:
                                             (was architecture.js baroquePalace)
     hagia_sophia.py hagia-sophia.json       the Byzantine kit at full size, galleries and their stairs
     melk.py       melk.json                 Stift Melk on OSM's plan: Altane, Library + Marble Hall, Kolomanihof, church (twin-tower front, Emporen, drum-dome), Praelatenhof, Kaiserstiege + Kaisergang, bastions; walkable, own finish
+    belvedere.py  belvedere.json            the Upper Belvedere, Vienna, on OSM's plan: stepped blocks each under its own copper mansard, octagonal corner pavilions (bell domes), south projection (arches, broken curved pediment, ramps), pool (site.moat); Sala Terrena on 4 Atlantes, Prunkstiege, Marmorsaal, chapel, state rooms; terrace, parterre, sphinxes, cascade into a sunken court (site.dig); writes its finish and doors
+    sphinx.py     components/sphinx.json    a baroque garden sphinx (couchant lion's lofts + a woman's bust) on its plinth, `S` long, faces +z (the Belvedere's)
     schwerin.py   schwerin.json             on its OSM plan, irregular: one seven-sided `court` (per-face `depths`, no roofs of its own), differing
                                             wing roofs, town towers, the great tower, gilded dome, copper dome and slender turrets (`stage-tower`:
                                             writes it), portal block, loggia, chapel choir, forecourt, bridge
@@ -66,6 +68,12 @@ scripts write those JSON files under `assets/architecture/`:
                                             walk at 43 m (flight from the roof), `drum-dome` (24-column peristyle, attic, ribbed lantern), 40 bronze
                                             statues; inside three naves, crossing on pendentives, iconostasis (malachite/lapis); writes its finish
     berliner_dom.py berliner-dom.json       square church, `drum-dome` with peristyle, corner domes, portal front, roof walk
+    alexander_nevsky.py alexander-nevsky.json  Sofia, on OSM's 73x52m plan: cross-in-square on piers/arches/pendentives, gilded
+                                            `drum-dome` (20 windows, colonnettes, arched cornice), green semidomes on half rings
+                                            (arms, apse), barrel vaults west/bema, five aisles with west galleries + dog-leg
+                                            stairs, round east corners, narthex with domed chapels, arcaded porches, bell tower
+                                            (belfry, gilded dome, 53 m); three iconostases, thrones, baldachin, chandeliers;
+                                            writes its finish and doors
     fishermans_bastion.py fishermans-bastion.json  on its OSM plan: folded arcaded `range`s walked behind battlements,
                                             the Schulek stair, seven towers on their feet, St Stephen's court; the Matthias
                                             Church on the hill (hall `basilica`, its two towers), the Holy Trinity Column
@@ -176,9 +184,15 @@ scripts write those JSON files under `assets/architecture/`:
                                             perwara in four rows (corner ones with two stairs), gates, the court walls
     historicism.py (a library)              19th-c. castle-villa kit: `cone-turret` (1-4 storeys, up to 32 sides, conical cap), `oriel`,
                                             `castle-tower` (stages, bartizans, clock via `clock-dial`); `gable()`/`gabled()` (pointed or
-                                            stepped gable screens with their roof), `storey_row`, `block`, `crest_rect`, `parapets` (writes those)
+                                            stepped gable screens with their roof), `storey_row`, `block`, `crest_rect`, `parapets`,
+                                            `round-keep` (Hohenzollern's round towers: storeys, corbelled gallery, cone | battlement |
+                                            platform crown) (writes those)
     drachenburg.py drachenburg.json         the villa on its terrace and mound, Nordturm, Kunsthalle, round bastion with flank flights and
                                             gatehouse, garden and fountain, the Vorburg
+    hohenzollern.py hohenzollern.json       Burg Hohenzollern on OSM's plan: the bastion ring, the serpentine road (Adlertor twice,
+                                            Wilhelmsturm loop, Zwinger loop, the Rampenturm's helix), the Torturm, the four ranges round
+                                            the court (Grafensaal rib vaults, Stammbaumhalle, library, royal rooms; state stair, Wartturm
+                                            spiral), the round towers (components/round-keep, written by historicism.py), both chapels
     neoclassical.py (a library)             `block` (storeys, pilasters, balustrade via `Balusters`), `temple_front` (portico + pediment),
                                             `grand_stair`, `dome_on_drum` (peristyle drum, attic, windowed ribbed dome), `tholos` (writes it)
     us_capitol.py us-capitol.json           Bulfinch's centre, the cast-iron dome and tholos, the Senate and House extensions, the west terraces
@@ -211,6 +225,37 @@ scripts write those JSON files under `assets/architecture/`:
                                             mondop, Thep Bidon, Angkor model), 8 prangs, the cloister with gates and 12 yakshas, Chakri,
                                             Dusit, Maha Monthien, Boromphiman, the outer court's offices as windowed wings and courts
                                             (OSM outlines cut into oblongs), walls, forts, lawns (writes its finish and doors too)
+    qasr_al_nur.py qasr-al-nur.json         Qasr al-Nur, an ORIGINAL Persian garden palace (design document in its docstring): entrance
+                                            pishtaq + domed vestibule, the Court of Water (two-storey jali arcades, reflecting pool, wind-
+                                            catchers), the four-iwan court with fountain, hammam + library wings, the chahar bagh (sunken
+                                            parterres, channels, cypresses, domed pavilion, talar walks), the audience hall (four vaulted arms,
+                                            double-shelled ribbed onion on a jali drum, minarets, throne); writes its finish and doors too
+    aurea.py      aurea.json                Bibliotheca Aurea, an ORIGINAL neoclassical library + observatory (design document in its
+                                            docstring; module 4.5 m, plan 3:5:8): water parterre, cascade stair, Court of the Muses
+                                            (colonnades, 18 statues, Urania fountain), core cube + hexastyle portico round the domed ROTUNDA
+                                            (giant columns, 2 galleries, stacks, coffered inner dome + painted sky, corner spirals to the roof
+                                            kiosks), peristyled drum-dome; barrel-vaulted gallery halls with spirals; Cabinet of Globes and
+                                            Observatory pavilions; upper garden + exedra; writes its finish and doors too
+    yunding.py    yunding.json              Yunding Temple, an ORIGINAL Chan mountain monastery (design document in its docstring; module
+                                            6 m, main hall phi-rectangle, pagoda taper 1/phi): pailou + 108 steps, four terraces on one axis --
+                                            Hall of Heavenly Kings between bell + drum towers, cloistered court with side halls, double-eaved
+                                            Mahavira Hall (triad, arhats, coffers), 7-storey octagonal PAGODA (balconies, stairs to the top),
+                                            sutra library + pavilion; side garden with moon gate, pond (site.moat), zig-zag bridge; hills.
+                                            Writes its finish, doors and the new components/shishi.json (seated guardian lion)
+    notre_dame_garde.py notre-dame-garde.json  Notre-Dame de la Garde, Marseille (OSM + Wikipedia): the fort's bastion terraces
+                                            (drawbridge, double approach stair, lift tower and its bridge, east terrace, casemates), the
+                                            crypt in the rock (segmental barrel, chapels, the Vierge au Bouquet), the upper church in green
+                                            and white courses (three cupola bays, crossing on pendentives, octagonal drum-dome, apse on red
+                                            granite columns, gold mosaics, marble), the square tower (porch, arcaded stages, belfry,
+                                            angels, campanile) with the 11 m gilt Virgin and Child (statuary.py `madonna`); finish + doors
+    chenonceau.py chenonceau.json           Chateau de Chenonceau on the Cher (OSM plan, photo heights): the logis on its two mill piers
+                                            (mill-race vault, bridge + flight to the forecourt), corbelled corner turrets, the steep slate
+                                            roof with Loire lucarnes and chimneys, chapel with apse + rib vault, library on corbels; inside
+                                            the rib-vaulted vestibule, rooms on both floors, the rampe-sur-rampe stair; Bullant's 2-storey
+                                            gallery on de l'Orme's 5-arch bridge (cutwaters, bastions, oculus dormers, chequered floor);
+                                            Tour des Marques on the forecourt island; Diane's + Catherine's parterres; the Cher as a
+                                            site.moat pool (OSM river + canal shore, islands). Writes its finish, doors and the new
+                                            components/loire-turret, loire-dormer, oculus-dormer
 
 To look at a building's statues in the lab, `arch_lab.html?statues=1` draws its `statue` markers (without them it leaves them out).
 

@@ -1,7 +1,7 @@
 {
  "name": "Park Guell",
  "building": "architecture/park-guell",
- "_about": "Park Guell: the hill's own stone laid rough (Montjuic-brown rubble), and everything Gaudi wanted seen dressed in trencadis -- broken glazed tile -- white on the vaults and the bench's foot, the bench and the dragon in every colour, the pavilions' roofs cream and brown, the lodge's amanita red with white spots, the tower white and blue in a chequer, the wall's crest white and red in bands.",
+ "_about": "Park Guell: the hill's own stone laid rough (Montjuic-brown rubble), and everything Gaudi wanted seen dressed in trencadis -- broken glazed tile -- white on the vaults and the bench's foot, the bench and the dragon in every colour, the pavilions' roofs cream and brown, the lodge's amanita red with white spots, the tower white and blue in a chequer, the wall's crest white and red in bands; the hill's sandy earth under the pines.",
  "stone": {
   "color": "#9b7c57",
   "accent": "#7f6549",
@@ -43,7 +43,8 @@
   {
    "parts": [
     "spire/shaft",
-    "spire/crown"
+    "spire/crown",
+    "casa-museu tower"
    ],
    "pattern": "tiles/trencadis chequer",
    "palette": "trencadis-blue"
@@ -71,7 +72,8 @@
     "walls surrounds",
     "plaques",
     "planter west",
-    "planter east"
+    "planter east",
+    "odeon niche"
    ],
    "pattern": "tiles/trencadis",
    "palette": "trencadis"
@@ -79,7 +81,8 @@
   {
    "parts": [
     "west wall crest",
-    "east wall crest"
+    "east wall crest",
+    "coach house crest"
    ],
    "pattern": "tiles/trencadis bands",
    "palette": "trencadis-amanita"
@@ -105,11 +108,26 @@
     "dragon head",
     "dragon jaw",
     "dragon legs",
+    "dragon tail",
     "rosettes",
     "medallions in the vaults"
    ],
    "pattern": "tiles/trencadis",
    "palette": "trencadis"
+  },
+  {
+   "parts": [
+    "dragon eyes"
+   ],
+   "pattern": "tiles/trencadis",
+   "palette": "trencadis-blue"
+  },
+  {
+   "parts": [
+    "dragon bed"
+   ],
+   "pattern": "stone/field rubble",
+   "palette": "montjuic"
   },
   {
    "parts": [
@@ -133,14 +151,13 @@
    ],
    "pattern": "tiles/trencadis",
    "palette": "trencadis",
-   "above": 15.25
+   "above": 18.35
   },
   {
    "parts": [
     "bench",
     "odeon bench",
     "vaults",
-    "ceiling",
     "basins"
    ],
    "pattern": "tiles/trencadis",
@@ -149,34 +166,39 @@
   {
    "parts": [
     "columns shafts",
-    "front columns shafts",
     "west columns shafts",
     "east columns shafts"
    ],
    "pattern": "tiles/trencadis",
    "palette": "trencadis-white",
-   "below": 8.8
+   "below": 10.4
   },
   {
    "parts": [
     "columns shafts",
     "columns capitals",
     "columns abaci",
-    "front columns shafts",
-    "front columns capitals",
-    "front columns abaci",
     "west columns shafts",
     "west columns capitals",
     "west columns abaci",
     "east columns shafts",
     "east columns capitals",
     "east columns abaci",
-    "architrave",
+    "entablature",
     "triglyphs",
-    "gargoyles"
+    "gargoyles",
+    "washerwoman"
    ],
    "pattern": "stone/plaster",
    "palette": "plaster-white"
+  },
+  {
+   "parts": [
+    "square over the hall"
+   ],
+   "pattern": "stone/plaster",
+   "palette": "plaster-white",
+   "surface": "ceiling"
   },
   {
    "parts": [
@@ -194,11 +216,12 @@
     "landing east 1",
     "landing east 2",
     "landing east 3",
+    "hall floor",
+    "vestibule",
     "spine 1",
     "spine 2",
     "spine 3",
-    "spine 4",
-    "vestibule"
+    "spine 4"
    ],
    "pattern": "floors/flagstones",
    "palette": "granite",
@@ -213,24 +236,151 @@
   },
   {
    "parts": [
+    "square",
+    "square over the hall",
+    "bugadera deck",
+    "baix deck",
+    "mig deck",
+    "dalt deck",
+    "bugadera ground",
+    "baix ground",
+    "mig ground",
+    "dalt ground",
+    "baix causeway start",
+    "baix causeway end",
+    "mig causeway start",
+    "mig causeway end",
+    "dalt causeway start",
+    "dalt causeway end"
+   ],
+   "pattern": "stone/sand",
+   "palette": "gravel",
+   "surface": "floor"
+  },
+  {
+   "parts": [
     "hill",
-    "west slope",
-    "east slope",
-    "portico bank",
     "planter soil west",
-    "planter soil east"
+    "planter soil east",
+    "bugadera bank",
+    "baix bank",
+    "mig bank",
+    "dalt bank"
    ],
    "pattern": "stone/sand",
    "palette": "earth"
   },
   {
    "parts": [
-    "bed west",
-    "bed east"
+    "pine small trunks",
+    "pine trunks",
+    "pine tall trunks"
+   ],
+   "pattern": "timber/bark",
+   "palette": "pine"
+  },
+  {
+   "parts": [
+    "carob small trunks",
+    "carob trunks"
+   ],
+   "pattern": "timber/bark",
+   "palette": "oak"
+  },
+  {
+   "parts": [
+    "palm trunks",
+    "palm tall trunks"
+   ],
+   "pattern": "timber/bark",
+   "palette": "oak-grey"
+  },
+  {
+   "parts": [
+    "pine small crowns",
+    "pine crowns",
+    "pine tall crowns"
+   ],
+   "color": "#55703a",
+   "accent": "#3b5229"
+  },
+  {
+   "parts": [
+    "carob small crowns",
+    "carob crowns"
+   ],
+   "color": "#3d5a2c",
+   "accent": "#2c4320"
+  },
+  {
+   "parts": [
+    "palm fronds",
+    "palm tall fronds"
+   ],
+   "color": "#6d8a3e",
+   "accent": "#4d6a2c"
+  },
+  {
+   "parts": [
+    "paths 1.8m",
+    "paths 3m",
+    "path steps"
    ],
    "pattern": "stone/sand",
-   "palette": "earth",
+   "palette": "gravel",
    "surface": "floor"
+  },
+  {
+   "parts": [
+    "calvary",
+    "calvary flight 1",
+    "calvary flight 2",
+    "calvary foot"
+   ],
+   "pattern": "stone/field rubble",
+   "palette": "montjuic"
+  },
+  {
+   "parts": [
+    "calvary cross/shaft",
+    "calvary cross/arms",
+    "calvary cross/tips",
+    "calvary crosses",
+    "calvary cross bars"
+   ],
+   "pattern": "stone/ashlar",
+   "palette": "granite"
+  },
+  {
+   "parts": [
+    "baix agaves",
+    "dalt agaves"
+   ],
+   "color": "#6f8a5a",
+   "accent": "#55704a"
+  },
+  {
+   "parts": [
+    "baix planters",
+    "dalt planters"
+   ],
+   "pattern": "stone/field rubble",
+   "palette": "montjuic"
+  },
+  {
+   "parts": [
+    "casa-museu",
+    "casa-museu roof"
+   ],
+   "pattern": "stone/plaster",
+   "palette": "plaster-rose"
+  },
+  {
+   "parts": [
+    "casa larrard"
+   ],
+   "pattern": "stone/plaster",
+   "palette": "plaster-ochre"
   },
   {
    "surface": "floor",

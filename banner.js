@@ -234,7 +234,9 @@ export function segmentFor(part) {
   const b = a.map((v) => -v);
   // a capsule may taper: size.r is its +y end, size.r2 (optional) its -y end
   return shape === "cone"
-    ? { a: b, b: a, r1: size.r * rMul, r2: Math.max(size.r * .12, .008) * rMul }  // round base -> near-point apex
+    // (the apex's floor is 8 mm, but never more than 30% of the base: a cone thinner than that -- a hedgehog's quill, 6 mm --
+    //  came out a blunt rod thicker at its tip than at its root)
+    ? { a: b, b: a, r1: size.r * rMul, r2: Math.max(size.r * .12, Math.min(.008, size.r * .3)) * rMul }  // round base -> near-point apex
     : { a, b, r1: size.r * rMul, r2: (size.r2 ?? size.r) * rMul };
 }
 

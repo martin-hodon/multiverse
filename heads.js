@@ -242,7 +242,8 @@ export function faceMaterial(shade = SHADE) {
   const L = vec3(d[0] / dl, d[1] / dl, d[2] / dl), K = { ...HAIR_SHEEN, ...(SH.hair ?? {}) };
   const lam = halfLambert({ n: normalWorld, l: L, ramp: texture(ramp), samp: texture(ramp) });
   // (the paint is the vertex colour; on the hair -- its mask -- the sheen goes on over it)
-  const sheen = hairSheen({ n: normalWorld, p: positionWorld, tv: uv(), l: L, cam: cameraPosition, mask: attribute("hairMask", "float"), base0: attribute("color", "vec3"), lam,
+  // (SH.base: the paint as a node instead -- bodies.js paints its creatures' patterns over the vertex colour)
+  const sheen = hairSheen({ n: normalWorld, p: positionWorld, tv: uv(), l: L, cam: cameraPosition, mask: attribute("hairMask", "float"), base0: SH.base ?? attribute("color", "vec3"), lam,
                             k: vec4(K.shift1, K.shift2, K.s1, K.s2), e: vec4(K.exp1, K.exp2, K.jitter, 0), fb: vec4(K.fibre, K.freq, 0, 0) });
   m.colorNode = wetShine({ c: sheen, n: normalWorld, p: positionWorld, l: L, cam: cameraPosition, wet: attribute("wetMask", "float") });
   m.userData.ramp = ramp;

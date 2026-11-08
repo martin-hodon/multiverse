@@ -1,277 +1,239 @@
 {
   "name": "duck",
   "kind": "parts",
-  "flags": {
-    "beg": 16,
-    "shy": 6,
-    "swim": {
-      "depth": 0.07
-    },
-    "print": "bird"
-  },
+  "flags": {"beg": 16, "shy": 6, "swim": {"depth": 0.07}, "print": "bird", "flight": {"arm": 0, "hand": 0, "beat": 44, "bob": 0.03, "hind": [-80, 10, -40], "neck": 12, "head": 0.8}},
   "parts": [
+    {"id": "body", "parent": null, "shape": "capsule", "size": {"r": 0.1, "len": 0.22}, "geomRot": [0, 0, 90], "pos": [0, 0.09, 0], "color": "@flank"},
+    {"id": "breast", "parent": "body", "shape": "sphere", "size": {"r": 0.09}, "scale": [0.8, 0.9, 1], "pos": [0.1, -0.01, 0], "color": "#5a3d2e"},
+    {"id": "wingL", "parent": "body", "shape": "tri", "size": {"a": [0.13, 0.05, 0], "b": [-0.16, 0.02, 0], "c": [0.013, -0.07, 0], "r": 0.018}, "color": "#6f665a", "pos": [0.06, 0.061, 0.0717], "anim": {"axis": "x", "deg": 0.5, "speed": 1.4, "phase": 0, "wing": true}, "fold": [0, 0, 0], "flyRot": [-5, 0, 0]},
+    {"id": "wssec0yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0228, 0.0016, -0.035], "flyRot": [0, -157.95, 0], "fold": [0, 0, 0]},
+    {"id": "wssec0xL", "parent": "wssec0yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0224, -0.0243, -0.0124], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec1yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0236, 0.0016, -0.0244], "flyRot": [0, -156.8, 0], "fold": [0, 0, 0]},
+    {"id": "wssec1xL", "parent": "wssec1yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0239, -0.0242, -0.0231], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec2yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0247, 0.0016, -0.0138], "flyRot": [0, -155.66, 0], "fold": [0, 0, 0]},
+    {"id": "wssec2xL", "parent": "wssec2yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0257, -0.024, -0.0338], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec3yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0259, 0.0016, -0.0032], "flyRot": [0, -154.52, 0], "fold": [0, 0, 0]},
+    {"id": "wssec3xL", "parent": "wssec3yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0277, -0.0239, -0.0446], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec4yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0275, 0.0016, 0.0074], "flyRot": [0, -153.38, 0], "fold": [0, 0, 0]},
+    {"id": "wssec4xL", "parent": "wssec4yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.03, -0.0238, -0.0553], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec5yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0292, 0.0016, 0.0181], "flyRot": [0, -152.23, 0], "fold": [0, 0, 0]},
+    {"id": "wssec5xL", "parent": "wssec5yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0324, -0.0236, -0.0661], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec6yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0311, 0.0016, 0.0288], "flyRot": [0, -151.09, 0], "fold": [0, 0, 0]},
+    {"id": "wssec6xL", "parent": "wssec6yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0351, -0.0235, -0.0769], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec7yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0331, 0.0016, 0.0389], "flyRot": [0, -149.95, 0], "fold": [0, 0, 0]},
+    {"id": "wssec7xL", "parent": "wssec7yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.04, -0.023, -0.0876], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wscov8yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0831, 0.0048, -0.0031], "flyRot": [0, -94.0, 0], "fold": [0, 0, 0]},
+    {"id": "wscov8xL", "parent": "wscov8yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0165, -0.0234, -0.0452], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wscov9yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0945, 0.0048, 0.0105], "flyRot": [0, -94.0, 0], "fold": [0, 0, 0]},
+    {"id": "wscov9xL", "parent": "wscov9yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.005, -0.0234, -0.0588], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov10yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0076, 0.0032, -0.0345], "flyRot": [0, 87.0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov10xL", "parent": "wsgcov10yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0217, -0.0226, -0.0146], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov11yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0274, 0.0032, -0.0183], "flyRot": [0, 87.0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov11xL", "parent": "wsgcov11yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0415, -0.0226, -0.0308], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov12yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0482, 0.0032, -0.0031], "flyRot": [0, 87.0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov12xL", "parent": "wsgcov12yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0623, -0.0226, -0.0459], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim13yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.2573, 0.0, 0.1517], "flyRot": [0, 50.28, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim13xL", "parent": "wsprim13yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1703, -0.0157, -0.2077], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim14yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1014, 0.0, 0.0382], "flyRot": [0, -106.58, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim14xL", "parent": "wsprim14yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0966, -0.0243, -0.0855], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim15yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1242, 0.0, 0.0487], "flyRot": [0, -101.3, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim15xL", "parent": "wsprim15yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.1141, -0.0253, -0.0951], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim16yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.21, 0.0, 0.1131], "flyRot": [0, -95.97, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim16xL", "parent": "wsprim16yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0744, -0.0317, -0.1531], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim17yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1939, 0.0, 0.0857], "flyRot": [0, -91.29, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim17xL", "parent": "wsprim17yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.1392, -0.0325, -0.1249], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim18yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.23, 0.0, 0.1676], "flyRot": [0, 72.9, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim18xL", "parent": "wsprim18yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1603, -0.021, -0.2183], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wspcov19yL", "parent": "wingL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.1995, 0.0048, 0.0938], "flyRot": [0, 68.2, 0], "fold": [0, 0, 0]},
+    {"id": "wspcov19xL", "parent": "wspcov19yL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1159, -0.0234, -0.1421], "flyRot": [90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wfprimyL", "parent": "body", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0, 0.0834, 0.018], "flyRot": [0, 180, 0], "fold": [0, 0, 0]},
+    {"id": "wfprimzL", "parent": "wfprimyL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.072, 0, -0.018], "flyRot": [0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wfsecyL", "parent": "body", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.017, 0.0809, 0.036], "flyRot": [0, 180, 0], "fold": [0, 0, 0]},
+    {"id": "wfseczL", "parent": "wfsecyL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0917, 0, -0.036], "flyRot": [0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wfgcovyL", "parent": "body", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.051, 0.0816, 0.042], "flyRot": [0, 180, 0], "fold": [0, 0, 0]},
+    {"id": "wfgcovzL", "parent": "wfgcovyL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0754, 0, -0.042], "flyRot": [0, 0, -60], "fold": [0, 0, 0]},
+    {"id": "wfcovyL", "parent": "body", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.068, 0.083, 0.048], "flyRot": [0, 180, 0], "fold": [0, 0, 0]},
+    {"id": "wfcovzL", "parent": "wfcovyL", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0525, 0, -0.048], "flyRot": [0, 0, -40], "fold": [0, 0, 0]},
+    {"id": "wingR", "parent": "body", "shape": "tri", "size": {"a": [0.13, 0.05, 0], "b": [-0.16, 0.02, 0], "c": [0.013, -0.07, 0], "r": 0.018}, "color": "#6f665a", "pos": [0.06, 0.061, -0.0717], "anim": {"axis": "x", "deg": -0.5, "speed": 1.4, "phase": 0, "wing": true}, "fold": [0, 0, 0], "flyRot": [5, 0, 0]},
+    {"id": "wssec0yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0228, 0.0016, 0.035], "flyRot": [0, 157.95, 0], "fold": [0, 0, 0]},
+    {"id": "wssec0xR", "parent": "wssec0yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0224, -0.0243, 0.0124], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec1yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0236, 0.0016, 0.0244], "flyRot": [0, 156.8, 0], "fold": [0, 0, 0]},
+    {"id": "wssec1xR", "parent": "wssec1yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0239, -0.0242, 0.0231], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec2yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0247, 0.0016, 0.0138], "flyRot": [0, 155.66, 0], "fold": [0, 0, 0]},
+    {"id": "wssec2xR", "parent": "wssec2yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0257, -0.024, 0.0338], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec3yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0259, 0.0016, 0.0032], "flyRot": [0, 154.52, 0], "fold": [0, 0, 0]},
+    {"id": "wssec3xR", "parent": "wssec3yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0277, -0.0239, 0.0446], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec4yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0275, 0.0016, -0.0074], "flyRot": [0, 153.38, 0], "fold": [0, 0, 0]},
+    {"id": "wssec4xR", "parent": "wssec4yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.03, -0.0238, 0.0553], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec5yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0292, 0.0016, -0.0181], "flyRot": [0, 152.23, 0], "fold": [0, 0, 0]},
+    {"id": "wssec5xR", "parent": "wssec5yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0324, -0.0236, 0.0661], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec6yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0311, 0.0016, -0.0288], "flyRot": [0, 151.09, 0], "fold": [0, 0, 0]},
+    {"id": "wssec6xR", "parent": "wssec6yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0351, -0.0235, 0.0769], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wssec7yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0331, 0.0016, -0.0389], "flyRot": [0, 149.95, 0], "fold": [0, 0, 0]},
+    {"id": "wssec7xR", "parent": "wssec7yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.04, -0.023, 0.0876], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wscov8yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0831, 0.0048, 0.0031], "flyRot": [0, 94.0, 0], "fold": [0, 0, 0]},
+    {"id": "wscov8xR", "parent": "wscov8yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0165, -0.0234, 0.0452], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wscov9yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0945, 0.0048, -0.0105], "flyRot": [0, 94.0, 0], "fold": [0, 0, 0]},
+    {"id": "wscov9xR", "parent": "wscov9yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.005, -0.0234, 0.0588], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov10yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0076, 0.0032, 0.0345], "flyRot": [0, -87.0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov10xR", "parent": "wsgcov10yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0217, -0.0226, 0.0146], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov11yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0274, 0.0032, 0.0183], "flyRot": [0, -87.0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov11xR", "parent": "wsgcov11yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0415, -0.0226, 0.0308], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov12yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0482, 0.0032, 0.0031], "flyRot": [0, -87.0, 0], "fold": [0, 0, 0]},
+    {"id": "wsgcov12xR", "parent": "wsgcov12yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0623, -0.0226, 0.0459], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim13yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.2573, 0.0, -0.1517], "flyRot": [0, -50.28, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim13xR", "parent": "wsprim13yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1703, -0.0157, 0.2077], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim14yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1014, 0.0, -0.0382], "flyRot": [0, 106.58, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim14xR", "parent": "wsprim14yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0966, -0.0243, 0.0855], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim15yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1242, 0.0, -0.0487], "flyRot": [0, 101.3, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim15xR", "parent": "wsprim15yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.1141, -0.0253, 0.0951], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim16yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.21, 0.0, -0.1131], "flyRot": [0, 95.97, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim16xR", "parent": "wsprim16yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0744, -0.0317, 0.1531], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim17yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1939, 0.0, -0.0857], "flyRot": [0, 91.29, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim17xR", "parent": "wsprim17yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.1392, -0.0325, 0.1249], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim18yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.23, 0.0, -0.1676], "flyRot": [0, -72.9, 0], "fold": [0, 0, 0]},
+    {"id": "wsprim18xR", "parent": "wsprim18yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1603, -0.021, 0.2183], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wspcov19yR", "parent": "wingR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.1995, 0.0048, -0.0938], "flyRot": [0, -68.2, 0], "fold": [0, 0, 0]},
+    {"id": "wspcov19xR", "parent": "wspcov19yR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.1159, -0.0234, 0.1421], "flyRot": [-90.0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wfprimyR", "parent": "body", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.0, 0.0834, -0.018], "flyRot": [0, -180, 0], "fold": [0, 0, 0]},
+    {"id": "wfprimzR", "parent": "wfprimyR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.072, 0, 0.018], "flyRot": [0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wfsecyR", "parent": "body", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.017, 0.0809, -0.036], "flyRot": [0, -180, 0], "fold": [0, 0, 0]},
+    {"id": "wfseczR", "parent": "wfsecyR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0917, 0, 0.036], "flyRot": [0, 0, 0], "fold": [0, 0, 0]},
+    {"id": "wfgcovyR", "parent": "body", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.051, 0.0816, -0.042], "flyRot": [0, -180, 0], "fold": [0, 0, 0]},
+    {"id": "wfgcovzR", "parent": "wfgcovyR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0754, 0, 0.042], "flyRot": [0, 0, -60], "fold": [0, 0, 0]},
+    {"id": "wfcovyR", "parent": "body", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [0.068, 0.083, -0.048], "flyRot": [0, -180, 0], "fold": [0, 0, 0]},
+    {"id": "wfcovzR", "parent": "wfcovyR", "shape": "sphere", "size": {"r": 0.004}, "color": "@cov", "pos": [-0.0525, 0, 0.048], "flyRot": [0, 0, -40], "fold": [0, 0, 0]},
+    {"id": "tail", "parent": "body", "shape": "cone", "size": {"r": 0.035, "h": 0.1}, "pos": [-0.17, 0.05, 0], "rot": [0, 0, 125], "color": "#2a2622"},
+    {"id": "neck", "parent": "body", "shape": "capsule", "size": {"r": 0.035, "len": 0.06}, "pos": [0.15, 0.08, 0], "rot": [0, 0, -25], "pivot": [0, 0.03, 0], "color": "#f0ede4"},
+    {"id": "head", "parent": "neck", "shape": "sphere", "size": {"r": 0.055}, "scale": [1.2, 1, 0.9], "pos": [0.01, 0.09, 0], "color": "#2e6b3a", "anim": {"axis": "y", "deg": 18, "speed": 0.5, "phase": 0}},
+    {"id": "beak", "parent": "head", "shape": "cone", "size": {"r": 0.022, "h": 0.06}, "pos": [0.065, -0.01, 0], "rot": [0, 0, -90], "color": "#d9b83c"},
+    {"id": "eyeL", "parent": "head", "shape": "capsule", "size": {"r": 0.012, "r2": 0.012, "len": 0.023}, "pos": [0.0361, 0.0138, 0.0391], "rot": [90, 0, 59.7436], "pivot": [0, 0.0115, 0], "color": "#090606", "edge": 0, "dot": {"iris": "#1a1210", "pupil": "round", "round": true, "role": "eye"}},
+    {"id": "eyeR", "parent": "head", "shape": "capsule", "size": {"r": 0.012, "r2": 0.012, "len": 0.023}, "pos": [0.0162, 0.0138, -0.0507], "rot": [90, 0, -59.7436], "pivot": [0, 0.0115, 0], "color": "#090606", "edge": 0, "dot": {"iris": "#1a1210", "pupil": "round", "round": true, "role": "eye"}}
+  ],
+  "_about": "a mallard (coats: the drake, the hen) afloat (swim.depth: the waterline at y = .07 in its rest frame): a long boat of a body -- chestnut breast, vermiculated grey flanks, grey-brown back under the folded wings, black rump and curled tail coverts, white tail -- short neck with the white ring, glossy green head, flat yellow bill with its black nail; the hen (coat 1) mottled brown and buff all over, the dark crown and eye stripe, the orange bill with its dark saddle, the same blue speculum between white bars -- aloft (the viewer's fly) the folded wings turn into the body and a spread wing of its own swings out feather by feather (duck.py, nbwing.aloft): grey-brown coverts, the white bar, the blue speculum along the trailing edge, the long grey-brown primaries, pale beneath (2026-11-08, review.py) The bill-yellow `culmen` ell under the bill's root removed (it smeared yellow over the face round the horn bill).",
+  "colors": {
+    "flank": "#b4b0a6",
+    "back": "#80776a",
+    "breast": "#6a3626",
+    "head": "#1d5636",
+    "ring": "#f0eee8",
+    "rump": "#141414",
+    "tail": "#d6d3cc",
+    "wing": "#8c847a",
+    "tert": "#a39684",
+    "prim": "#5f584f",
+    "spec": "#2c46b0",
+    "bar": "#f4f2ee",
+    "bill": "#d2b838",
+    "nail": "#262620",
+    "eye": "#3a2410",
+    "belly": "#d8d4cc",
+    "stripe": "#3a2a1c",
+    "saddle": "#3a2e26"
+  },
+  "coats": [
     {
-      "id": "body",
-      "parent": null,
-      "shape": "capsule",
-      "size": {
-        "r": 0.1,
-        "len": 0.22
-      },
-      "geomRot": [
-        0,
-        0,
-        90
-      ],
-      "pos": [
-        0,
-        0.09,
-        0
-      ],
-      "color": "#8a7f6e"
+      "name": "mallard drake"
     },
     {
-      "id": "breast",
-      "parent": "body",
-      "shape": "sphere",
-      "size": {
-        "r": 0.09
+      "name": "mallard hen",
+      "params": {
+        "drake": false,
+        "hen": true
       },
-      "scale": [
-        0.8,
-        0.9,
-        1
-      ],
-      "pos": [
-        0.1,
-        -0.01,
-        0
-      ],
-      "color": "#5a3d2e"
+      "flank": "#9a7a52",
+      "back": "#6a5034",
+      "breast": "#a3845c",
+      "head": "#a08864",
+      "ring": "#a08864",
+      "rump": "#6e5638",
+      "tail": "#a88c68",
+      "wing": "#76624c",
+      "tert": "#8a7258",
+      "prim": "#5a4a3a",
+      "bill": "#dc7e2a",
+      "belly": "#b49870",
+      "stripe": "#3e2c1c",
+      "saddle": "#3a2c22",
+      "nail": "#2a2018"
     },
     {
-      "id": "wingL",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0.13,
-          0.05,
-          0
-        ],
-        "b": [
-          -0.16,
-          0.020000000000000004,
-          0
-        ],
-        "c": [
-          0.013000000000000001,
-          -0.07,
-          0
-        ],
-        "r": 0.018
+      "name": "Pekin duck",
+      "params": {
+        "pekin": true
       },
-      "color": "#6f665a",
-      "pos": [
-        -0.02,
-        0.06,
-        0.075
-      ],
-      "rot": [
-        0,
-        0,
-        0
-      ]
-    },
-    {
-      "id": "wingR",
-      "parent": "body",
-      "shape": "tri",
-      "size": {
-        "a": [
-          0.13,
-          0.05,
-          0
-        ],
-        "b": [
-          -0.16,
-          0.020000000000000004,
-          0
-        ],
-        "c": [
-          0.013000000000000001,
-          -0.07,
-          0
-        ],
-        "r": 0.018
-      },
-      "color": "#6f665a",
-      "pos": [
-        -0.02,
-        0.06,
-        -0.075
-      ],
-      "rot": [
-        0,
-        0,
-        0
-      ]
-    },
-    {
-      "id": "tail",
-      "parent": "body",
-      "shape": "cone",
-      "size": {
-        "r": 0.035,
-        "h": 0.1
-      },
-      "pos": [
-        -0.17,
-        0.05,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        125
-      ],
-      "color": "#2a2622"
-    },
-    {
-      "id": "neck",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.035,
-        "len": 0.06
-      },
-      "pos": [
-        0.15,
-        0.08,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        -25
-      ],
-      "pivot": [
-        0,
-        0.03,
-        0
-      ],
-      "color": "#f0ede4"
-    },
-    {
-      "id": "head",
-      "parent": "neck",
-      "shape": "sphere",
-      "size": {
-        "r": 0.055
-      },
-      "scale": [
-        1.2,
-        1,
-        0.9
-      ],
-      "pos": [
-        0.01,
-        0.09,
-        0
-      ],
-      "color": "#2e6b3a",
-      "anim": {
-        "axis": "y",
-        "deg": 18,
-        "speed": 0.5,
-        "phase": 0
-      }
-    },
-    {
-      "id": "beak",
-      "parent": "head",
-      "shape": "cone",
-      "size": {
-        "r": 0.022,
-        "h": 0.06
-      },
-      "pos": [
-        0.065,
-        -0.01,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        -90
-      ],
-      "color": "#d9b83c"
-    },
-    {
-      "id": "eyeL",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.012,
-        "r2": 0.012,
-        "len": 0.0230487474043873
-      },
-      "pos": [
-        0.03614534274594014,
-        0.013796653228899699,
-        0.03909177096858115
-      ],
-      "rot": [
-        90,
-        0,
-        59.74356283647074
-      ],
-      "pivot": [
-        0,
-        0.01152437370219365,
-        0
-      ],
-      "color": "#090606",
-      "edge": 0,
-      "dot": {
-        "iris": "#1a1210",
-        "pupil": "round",
-        "round": true,
-        "role": "eye"
-      }
-    },
-    {
-      "id": "eyeR",
-      "parent": "head",
-      "shape": "capsule",
-      "size": {
-        "r": 0.012,
-        "r2": 0.012,
-        "len": 0.0230487474043873
-      },
-      "pos": [
-        0.016236321045892857,
-        0.013796653228899699,
-        -0.050705366960275396
-      ],
-      "rot": [
-        90,
-        0,
-        -59.74356283647074
-      ],
-      "pivot": [
-        0,
-        0.01152437370219365,
-        0
-      ],
-      "color": "#090606",
-      "edge": 0,
-      "dot": {
-        "iris": "#1a1210",
-        "pupil": "round",
-        "round": true,
-        "role": "eye"
-      }
+      "flank": "#ece4ce",
+      "back": "#e2d9c3",
+      "breast": "#efe7d2",
+      "head": "#efe5c8",
+      "ring": "#efe5c8",
+      "rump": "#e0d7c2",
+      "tail": "#e9e1cc",
+      "wing": "#e0d7c1",
+      "tert": "#d3c9b2",
+      "prim": "#c9bfa8",
+      "spec": "#dad1bb",
+      "bar": "#eee7d5",
+      "bill": "#f2a02a",
+      "nail": "#e8b468",
+      "belly": "#f1ebdb",
+      "stripe": "#efe5c8",
+      "fedge": "#d8ceb6",
+      "saddle": "#f2a02a",
+      "eye": "#2a3a5a"
     }
-  ]
+  ],
+  "sculpt": {
+    "_about": "x forward, y up, z left, metres; afloat at the waterline y = .07 SHARP PASS 2 (2026-11-08): the pointed parts -- bill, lowerBill, nail (3 in all) -- are the engine's sharp `horn`s (sharp.js), made from the field shapes they replaced by tools/creaturegen/sharp/ (claws.py, teeth.py, spikes.py, antlers.py, bills.py): rooted in the body, tips pointed; RE-RUN those after this species' generator.",
+    "mesh": {"tris": [4400, 1300], "cell": 0.003},
+    "shade": {
+      "when": "pekin",
+      "v": {
+        "back": 1.0,
+        "belly": 0.88,
+        "k": 0.05
+      }
+    },
+    "eyes": {"at": [0.234, 0.276, 0.0245], "from": [0.212, 0.266, 0], "r": 0.0065, "iris": "@eye", "pupil": "round"},
+    "shape": [
+      {"id": "hull", "type": "ell", "c": [0.0, 0.105, 0], "r": [0.17, 0.07, 0.11], "k": 0.035, "pat": {"when": "hen", "v": "scales"}, "frame": "body", "color": "@flank"},
+      {"id": "stern", "type": "ell", "c": [-0.13, 0.118, 0], "r": [0.07, 0.055, 0.07], "k": 0.035, "color": "@flank"},
+      {"id": "belly", "type": "ell", "c": [-0.01, 0.072, 0], "r": [0.18, 0.045, 0.095], "k": 0.03, "color": "@belly"},
+      {"id": "breast", "type": "ell", "c": [0.11, 0.12, 0], "r": [0.09, 0.078, 0.09], "k": 0.03, "kc": 0.008, "pat": {"when": "hen", "v": "scales"}, "frame": "body", "color": "@breast"},
+      {"id": "back", "type": "ell", "c": [-0.02, 0.162, 0], "r": [0.15, 0.042, 0.072], "rot": [0, 0, 2], "k": 0.035, "pat": {"when": "hen", "v": "scales"}, "frame": "body", "color": "@back"},
+      {"id": "rump", "type": "ell", "c": [-0.175, 0.15, 0], "r": [0.06, 0.04, 0.045], "rot": [0, 0, -12], "k": 0.025, "kc": 0.004, "color": "@rump"},
+      {"id": "vent", "type": "ell", "c": [-0.185, 0.12, 0], "r": [0.05, 0.038, 0.045], "rot": [0, 0, 15], "k": 0.02, "kc": 0.004, "color": "@rump"},
+      {"id": "neck", "type": "tube", "bone": "neck", "pts": [[0.13, 0.16, 0, 0.038], [0.165, 0.2, 0, 0.031], [0.195, 0.24, 0, 0.03]], "k": 0.02, "kc": 0.005, "color": "@head"},
+      {"when": "drake", "id": "ring", "type": "ell", "bone": "neck", "c": [0.153, 0.186, 0], "r": [0.005, 0.0365, 0.0365], "rot": [0, 0, 49], "k": 0.002, "kc": 0.0015, "color": "@ring"},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.212, 0.268, 0], "r": [0.046, 0.041, 0.033], "k": 0.02, "color": "@head"},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [0.205, 0.252, 0.012], "r": [0.036, 0.03, 0.024], "k": 0.015, "color": "@head", "mirror": true},
+      {"id": "crown", "type": "ell", "bone": "head", "c": [0.208, 0.286, 0], "r": [0.04, 0.024, 0.027], "k": 0.018, "color": "@head"},
+      {"id": "bill", "type": "horn", "bone": "head", "pts": [[0.2431, 0.2515, 0.0, 0.0116, 0.894], [0.2545, 0.249, 0.0, 0.0116, 0.894], [0.2709, 0.2455, 0.0, 0.0145, 0.81], [0.2978, 0.2395, 0.0, 0.0178, 0.504], [0.307, 0.2372, 0.0, 0.0149, 0.592], [0.3113, 0.2385, 0.0, 0.0112, 0.592], [0.3141, 0.2394, 0.0, 0.0, 0.592]], "color": "@bill", "up": [0.2115, 0.9774, 0.0], "flat": 1, "keel": 0.06, "sides": 14},
+      {"id": "lowerBill", "type": "horn", "bone": "head", "pts": [[0.2447, 0.2503, 0.0, 0.0108, 0.608], [0.2553, 0.2482, 0.0, 0.0108, 0.608], [0.2753, 0.2441, 0.0, 0.0135, 0.516], [0.2936, 0.2403, 0.0, 0.0113, 0.495], [0.3028, 0.2379, 0.0, 0.0113, 0.495], [0.306, 0.237, 0.0, 0.0085, 0.495], [0.3082, 0.2364, 0.0, 0.0, 0.495]], "color": "@bill", "up": [-0.1976, -0.9803, -0.0], "flat": 1, "sides": 14},
+      {"id": "nail", "type": "horn", "bone": "head", "pts": [[0.3087, 0.2421, 0.0, 0.0045, 0.6], [0.3175, 0.2402, 0.0, 0.0067, 0.6], [0.3193, 0.2399, 0.0, 0.0051, 0.6], [0.3205, 0.2396, 0.0, 0.0, 0.6]], "color": "@nail", "up": [0.2079, 0.9781, 0], "flat": 0.8, "sides": 12},
+      {"id": "tail", "type": "feathers", "rows": [{"at": [-0.2, 0.148, 0], "to": [-0.2282, 0.1536, 0.0141], "w": 0.032}, {"at": [-0.2, 0.148, 0], "to": [-0.2342, 0.1555, 0.0085], "w": 0.032}, {"at": [-0.2, 0.148, 0], "to": [-0.237, 0.1569, 0.0], "w": 0.032}, {"at": [-0.2, 0.148, 0], "to": [-0.2342, 0.1555, -0.0085], "w": 0.032}, {"at": [-0.2, 0.148, 0], "to": [-0.2282, 0.1536, -0.0141], "w": 0.032}], "n": 7, "outline": "round", "up": [0, 1, 0], "camber": 0.22, "curve": 0.04, "seed": 7, "color": "@tail", "tip": "@tail"},
+      {"id": "tailBase", "type": "ell", "c": [-0.214, 0.152, 0], "r": [0.024, 0.008, 0.028], "rot": [0, 0, -12], "k": 0.005, "kc": 0.002, "color": "@tail"},
+      {"when": "drake", "id": "curl", "type": "tube", "pts": [[-0.19, 0.172, 0.004, 0.0065], [-0.215, 0.19, 0.004, 0.0055], [-0.207, 0.212, 0.004, 0.0045], [-0.192, 0.203, 0.004, 0.0035]], "k": 0.003, "kc": 0.001, "color": "@rump"},
+      {"when": "hen", "id": "henCrown", "type": "ell", "bone": "head", "c": [0.216, 0.3, 0], "r": [0.046, 0.015, 0.025], "rot": [0, 0, -6], "k": 0.006, "kc": 0.003, "color": "@stripe"},
+      {"when": "hen", "id": "eyeStripe", "type": "ell", "bone": "head", "c": [0.226, 0.274, 0.022], "r": [0.034, 0.0045, 0.008], "rot": [0, 0, -8], "k": 0.002, "kc": 0.0015, "color": "@stripe", "mirror": true},
+      {"when": "hen", "id": "saddle", "type": "ell", "bone": "head", "c": [0.262, 0.26, 0], "r": [0.022, 0.006, 0.0105], "rot": [0, 0, -14], "k": 0.002, "kc": 0.0015, "color": "@saddle"},
+      {"id": "prim", "type": "feathers", "rows": [{"at": [0.0318, 0.1633, 0.0893], "to": [-0.175, 0.194, 0.03], "w": 0.0153}, {"at": [0.0154, 0.1586, 0.0939], "to": [-0.16, 0.1877, 0.0368], "w": 0.0153}, {"at": [-0.0011, 0.1535, 0.0975], "to": [-0.145, 0.1835, 0.0481], "w": 0.0153}], "n": 3, "outline": "flight", "up": [0.0, 0.4104, 0.9119], "camber": 0.14, "curve": -0.02, "stagger": 0.0012, "seed": 31, "color": "@prim", "tip": "@prim", "mirror": true, "bone": "wfprimzL"},
+      {"id": "sec", "type": "feathers", "rows": [{"at": [-0.0101, 0.1708, 0.0703], "to": [-0.1082, 0.1857, 0.0642], "w": 0.017}, {"at": [-0.0253, 0.1556, 0.0794], "to": [-0.1231, 0.1777, 0.0689], "w": 0.017}, {"at": [-0.0418, 0.1398, 0.0877], "to": [-0.1371, 0.1691, 0.0736], "w": 0.017}], "n": 5, "outline": "round", "up": [0.0, 0.4104, 0.9119], "camber": 0.14, "curve": -0.02, "stagger": 0.0012, "seed": 32, "color": "@spec", "tip": "@spec", "mirror": true, "bone": "wfseczL"},
+      {"id": "gcov", "type": "feathers", "rows": [{"at": [0.0255, 0.1713, 0.0672], "to": [-0.0432, 0.1854, 0.0794], "w": 0.0162}, {"at": [0.0091, 0.1593, 0.0781], "to": [-0.0597, 0.1734, 0.0904], "w": 0.0162}, {"at": [-0.0058, 0.1461, 0.0863], "to": [-0.0761, 0.1596, 0.0977], "w": 0.0162}], "n": 4, "outline": "round", "up": [0.0, 0.4104, 0.9119], "camber": 0.14, "curve": -0.02, "stagger": 0.0012, "seed": 33, "color": "@wing", "tip": "@bar", "mirror": true, "bone": "wfgcovzL"},
+      {"id": "cov", "type": "feathers", "rows": [{"at": [0.059, 0.171, 0.0645], "to": [0.0037, 0.1838, 0.0883], "w": 0.0145}, {"at": [0.0425, 0.16, 0.0746], "to": [-0.0127, 0.1732, 0.0993], "w": 0.0145}, {"at": [0.0248, 0.1478, 0.0831], "to": [-0.0292, 0.161, 0.1066], "w": 0.0145}], "n": 4, "outline": "round", "up": [0.0, 0.4104, 0.9119], "camber": 0.14, "curve": -0.02, "stagger": 0.0012, "seed": 34, "color": "@wing", "tip": "@wing", "mirror": true, "bone": "wfcovzL"},
+      {"id": "spsec", "type": "feathers", "rows": [{"at": [0.0596, 0.104, 0], "to": [0.1444, 0.135, 0.0], "w": 0.0201, "bone": "wssec0xL", "up": [0, 0, -1]}, {"at": [0.0603, 0.1043, 0], "to": [0.1437, 0.1347, 0.0], "w": 0.0201, "bone": "wssec1xL", "up": [0, 0, -1]}, {"at": [0.061, 0.1046, 0], "to": [0.143, 0.1344, 0.0], "w": 0.0201, "bone": "wssec2xL", "up": [0, 0, -1]}, {"at": [0.0618, 0.1048, 0], "to": [0.1422, 0.1342, 0.0], "w": 0.0201, "bone": "wssec3xL", "up": [0, 0, -1]}, {"at": [0.0625, 0.1051, 0], "to": [0.1415, 0.1339, 0.0], "w": 0.0201, "bone": "wssec4xL", "up": [0, 0, -1]}, {"at": [0.0632, 0.1054, 0], "to": [0.1408, 0.1336, 0.0], "w": 0.0201, "bone": "wssec5xL", "up": [0, 0, -1]}, {"at": [0.064, 0.1056, 0], "to": [0.14, 0.1334, 0.0], "w": 0.0201, "bone": "wssec6xL", "up": [0, 0, -1]}, {"at": [0.0669, 0.1067, 0], "to": [0.1371, 0.1323, 0.0], "w": 0.0201, "bone": "wssec7xL", "up": [0, 0, -1]}], "n": 8, "outline": "round", "up": [0, 0, -1], "camber": 0, "curve": 0, "stagger": 0.0007, "seed": 52, "color": "@spec", "tip": "@spec", "mirror": true},
+      {"id": "spcov", "type": "feathers", "rows": [{"at": [-0.0396, 0.109, 0], "to": [0.1076, 0.109, 0.0], "w": 0.0172, "bone": "wscov8xL", "up": [0, 0, -1]}, {"at": [-0.0396, 0.109, 0], "to": [0.1076, 0.109, 0.0], "w": 0.0172, "bone": "wscov9xL", "up": [0, 0, -1]}], "n": 2, "outline": "round", "up": [0, 0, -1], "camber": 0, "curve": 0, "stagger": 0.0007, "seed": 54, "color": "@wing", "tip": "@wing", "mirror": true},
+      {"id": "spgcov", "type": "feathers", "rows": [{"at": [0.0459, 0.109, 0], "to": [-0.0459, 0.109, 0.0], "w": 0.016, "bone": "wsgcov10xL", "up": [0, 0, -1]}, {"at": [0.0459, 0.109, 0], "to": [-0.0459, 0.109, 0.0], "w": 0.016, "bone": "wsgcov11xL", "up": [0, 0, -1]}, {"at": [0.0459, 0.109, 0], "to": [-0.0459, 0.109, 0.0], "w": 0.016, "bone": "wsgcov12xL", "up": [0, 0, -1]}], "n": 3, "outline": "round", "up": [0, 0, -1], "camber": 0, "curve": 0, "stagger": 0.0007, "seed": 53, "color": "@bar", "tip": "@bar", "mirror": true},
+      {"id": "spgcovB0", "type": "feathers", "rows": [{"at": [0.0459, 0.109, 0], "to": [-0.0275, 0.109, 0.0], "w": 0.0155, "bone": "wsgcov10xL", "up": [0, 0, -1]}, {"at": [0.0459, 0.109, 0], "to": [-0.0275, 0.109, 0.0], "w": 0.0155, "bone": "wsgcov11xL", "up": [0, 0, -1]}, {"at": [0.0459, 0.109, 0], "to": [-0.0275, 0.109, 0.0], "w": 0.0155, "bone": "wsgcov12xL", "up": [0, 0, -1]}], "n": 3, "outline": "round", "up": [0, 0, -1], "camber": 0, "curve": 0.0, "stagger": 0.0007, "seed": 53, "color": "@wing", "tip": "@wing", "mirror": true, "lift": 0.0005},
+      {"id": "spprim", "type": "feathers", "rows": [{"at": [0.147, 0.1195, 0], "to": [0.057, 0.1195, 0.0], "w": 0.027, "bone": "wsprim13xL", "up": [0, 0, -1]}, {"at": [0.0552, 0.1024, 0], "to": [0.1488, 0.1366, 0.0], "w": 0.0299, "bone": "wsprim14xL", "up": [0, 0, -1]}, {"at": [0.0499, 0.1005, 0], "to": [0.1541, 0.1385, 0.0], "w": 0.0333, "bone": "wsprim15xL", "up": [0, 0, -1]}, {"at": [-0.0756, 0.0876, 0], "to": [0.0416, 0.1304, 0.0], "w": 0.0374, "bone": "wsprim16xL", "up": [0, 0, -1]}, {"at": [0.0053, 0.0861, 0], "to": [0.1307, 0.1319, 0.0], "w": 0.0327, "bone": "wsprim17xL", "up": [0, 0, -1]}, {"at": [0.1297, 0.109, 0], "to": [0.0063, 0.109, 0.0], "w": 0.0215, "bone": "wsprim18xL", "up": [0, 0, -1]}], "n": 6, "outline": "flight", "up": [0, 0, -1], "camber": 0, "curve": 0, "stagger": 0.0007, "seed": 51, "color": "@prim", "tip": "@prim", "mirror": true},
+      {"id": "sppcov", "type": "feathers", "rows": [{"at": [0.1436, 0.109, 0], "to": [-0.0756, 0.109, 0.0], "w": 0.016, "bone": "wspcov19xL", "up": [0, 0, -1]}], "n": 1, "outline": "round", "up": [0, 0, -1], "camber": 0, "curve": 0, "stagger": 0.0007, "seed": 54, "color": "@wing", "tip": "@wing", "mirror": true},
+      {"id": "tert", "type": "feathers", "rows": [{"at": [-0.0198, 0.1919, 0.047], "to": [-0.15, 0.2, 0.03], "w": 0.02}, {"at": [-0.0494, 0.193, 0.0399], "to": [-0.17, 0.196, 0.0203], "w": 0.018}], "n": 3, "outline": "round", "up": [0, 1, 0.5], "camber": 0.14, "curve": -0.03, "seed": 5, "color": "@tert", "tip": "@back", "mirror": true},
+      {"when": "drake", "id": "flankF", "type": "feathers", "rows": [{"at": [0.0901, 0.1526, 0.0904], "to": [-0.03, 0.14, 0.1], "w": 0.028, "up": [-0.0272, 0.4296, 0.9026]}, {"at": [0.0405, 0.1263, 0.103], "to": [-0.09, 0.125, 0.1], "w": 0.028, "up": [-0.0277, 0.3458, 0.9379]}, {"at": [-0.0204, 0.1018, 0.106], "to": [-0.15, 0.11, 0.085], "w": 0.026, "up": [-0.23, 0.1753, 0.9573]}], "n": 8, "outline": "round", "up": [0, 0.2, 1], "camber": 0.08, "curve": -0.02, "stagger": 0.001, "vary": 0.3, "jitter": 0.16, "seed": 8, "color": "@flank", "tip": ["@fedge", "@flank"], "mirror": true},
+      {"when": "hen", "id": "flankH", "type": "feathers", "rows": [{"at": [0.0901, 0.1526, 0.0904], "to": [-0.03, 0.14, 0.1], "w": 0.028, "up": [-0.0272, 0.4296, 0.9026]}, {"at": [0.0405, 0.1263, 0.103], "to": [-0.09, 0.125, 0.1], "w": 0.028, "up": [-0.0277, 0.3458, 0.9379]}, {"at": [-0.021, 0.1019, 0.1139], "to": [-0.15, 0.11, 0.085], "w": 0.026, "up": [-0.23, 0.1753, 0.9573]}], "n": 10, "outline": "round", "up": [0, 0.2, 1], "camber": 0.08, "curve": -0.02, "stagger": 0.001, "jitter": 0.04, "seed": 8, "color": "@back", "tip": "@flank", "mirror": true}
+    ]
+  },
+  "params": {
+    "drake": true,
+    "hen": false
+  }
 }

@@ -9,7 +9,10 @@
 #   oval(cx, cz, a, b, t0, t1, n)            points on an ellipse's arc
 #   bench_profile(h, d)                      the serpentine bench's section (the sweep's profile, outward to the right)
 #   leaning_portico(add, name, path, ...)    a portico of rubble columns along a curve, its inner file leaning against a
-#                                            battered wall, its outer file upright, a walked deck on top (the viaducts)
+#                                            battered wall, its outer file upright or leaning in, a walked deck on top
+#                                            (the washerwoman's portico, the viaducts)
+#   hypostyle(add, outline=..., ...)         the market hall: a Doric grid set into a convex plan, the open fronts' columns
+#                                            leaning, cupolas over the bays
 import json, math, os
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 C = os.path.join(ROOT, "assets/architecture/components/")
@@ -109,19 +112,23 @@ def pavilion():
         "walls": {"type": "enclosure", "plan": {"rect": ["w", "l"], "chamfer": "ch"}, "thickness": "t", "height": "h", "glass": True,
                   "tiers": [{"h": T1, "openings": [win1("0 - winGap"), win1("winGap")]}, {"h": T2, "openings": [win2(0)]}],
                   "faces": {"1": [], "3": [], "5": [], "7": [], "0": end, "4": end,
-                            "6": [{"h": T1, "openings": [_op("doorAt", "doorW", 0, "doorH")]}, {"h": T2, "openings": [win2(0)]}]},
+                            "6": [{"h": T1, "openings": [{**_op("doorAt", "doorW", 0, "doorH"), "glass": False}]}, {"h": T2, "openings": [win2(0)]}]},
                   "_about": "the walls of the place's own stone, laid rough, round a plan whose corners are cut so far it reads oval; parabolic windows and door framed in trencadis (the door on the back, face 6, away from the street)"},
         "plaques": {"type": "box", "width": "plaqueW", "length": 0.1, "height": "plaqueW * 0.3", "at": [[0, f"{T1} * 0.42", "l / 2 + 0.03", 0]],
                     "_about": "the plaque with 'Park Guell' in trencadis on the street face, between the windows"},
-        "floors": {"type": "prism", "plan": {"rect": ["w - 2 * t", "l - 2 * t"], "chamfer": "max(0.1, ch - t * 0.6)"}, "height": 0.25,
-                   "at": [[0, f"{T1} - 0.25", 0, 0]], "_about": "the upper floor"},
+        "floors": {"type": "prism", "plan": {"rect": ["w - 2 * t", "l - 2 * t"], "chamfer": "max(0.1, ch - t * 0.6)",
+                                             "well": {"rect": ["stairN * 0.25 + 0.15", "stairW + 0.05"], "at": ["stairX - stairN * 0.125 + 0.075", "0 - (l / 2 - t) + stairW / 2 + 0.1"]}},
+                   "height": 0.25, "railing": False, "at": [[0, f"{T1} - 0.25", 0, 0]], "_about": "the upper floor, its stairwell along the back wall"},
+        "stair": {"type": "flight", "width": "stairW", "run": 0.25, "steps": "stairN", "base": 0.2, "top": T1, "landing": 0, "railing": False,
+                  "at": [["stairX", 0, "0 - (l / 2 - t)", 3.14159]],
+                  "_about": "the stair up to the upper floor, along the back wall beside the door (rising toward -x from stairX)"},
         "ceiling": {"type": "prism", "plan": {"rect": ["w - 2 * t + 0.02", "l - 2 * t + 0.02"], "chamfer": "max(0.1, ch - t * 0.6)"}, "height": 0.3,
                     "at": [[0, "h - 0.3", 0, 0]], "_about": "the vault over the top floor, the roof's bed"},
         "cornice": {"type": "prism", "plan": {"rect": ["w + 2 * eave", "l + 2 * eave"], "chamfer": "ch + eave"}, "height": "eaveH", "at": [[0, "h", 0, 0]],
                     "_about": "the eave: a thick rolled lip all round, its top the terraces round the roof, dressed in trencadis"},
         "merlons": {"type": "prism", "plan": {"sides": 8, "radius": "merlonR"}, "height": "merlonR * 2.6", "at": merl,
                     "_about": "the almenas: rounded merlons on the eave round the attic terraces, white trencadis"},
-        "roof": {"type": "loft", "axis": "x", "sides": 16, "smooth": 3, "half": True, "at": [[0, "h + eaveH * 0.5", 0, 0]],
+        "roof": {"type": "loft", "axis": "x", "sides": 16, "smooth": 3, "half": True, "shell": True, "at": [[0, "h + eaveH * 0.5", 0, 0]],
                  "sections": [{"s": "0 - w / 2 + terr * 0.5", "a": "l / 2 - ch * 0.6", "b": "roofH * 0.3", "n": 2.2},
                               {"s": "0 - w / 2 + ch * 0.5", "a": "l / 2 - terr", "b": "roofH * (1 - wave)", "n": 2.2},
                               {"s": "0 - w / 4", "a": "l / 2 - terr", "b": "roofH", "n": 2.2},
@@ -130,7 +137,7 @@ def pavilion():
                               {"s": "w / 2 - ch * 0.5", "a": "l / 2 - terr", "b": "roofH * (1 - wave)", "n": 2.2},
                               {"s": "w / 2 - terr * 0.5", "a": "l / 2 - ch * 0.6", "b": "roofH * 0.3", "n": 2.2}],
                  "_about": "the roof: no plane in it -- the hyperbolic vaults of the attic as a mound rising and falling along the house in lobes (wave: how deep the troughs are), the 'sugar icing' of the gingerbread house, in trencadis; terr in from the eave, the terrace"},
-        "roof lobes": {"type": "loft", "axis": "z", "sides": 12, "smooth": 3, "half": True, "at": [["0 - w / 4", "h + eaveH * 0.5", 0, 0], ["w / 4", "h + eaveH * 0.5", 0, 0]],
+        "roof lobes": {"type": "loft", "axis": "z", "sides": 12, "smooth": 3, "half": True, "shell": True, "at": [["0 - w / 4", "h + eaveH * 0.5", 0, 0], ["w / 4", "h + eaveH * 0.5", 0, 0]],
                        "sections": lobe, "_about": "a lobe across the roof over each crest, so it swells both ways like a mushroom's gills"},
         "tower": {"type": "prism", "plan": {"sides": 10, "radius": "towerR"}, "height": "towerH - lookH - (h + eaveH)", "at": [["towerX", "h + eaveH", "towerZ", 0]],
                   "batter": {"out": "towerR * 0.18", "power": 1.6},
@@ -151,14 +158,15 @@ def pavilion():
     }
     save("gaudi-pavilion.json", {"name": "Gaudi pavilion", "_about": "THE PARK GUELL PAVILION, a gingerbread house of 1901: low walls of the hill's own rubble round a plan whose corners are cut so far it reads as an oval, parabolic windows and door framed in trencadis, a 'Park Guell' plaque, a thick eave carrying the attic's terraces behind rounded merlons, a tall roof of lobes rising and falling both ways dressed in trencadis, a rubble tower out of it with a mirador and a mushroom on top, mushroom chimneys on the crests -- and, asked for, a hyperboloid tower at one end carrying Gaudi's cross. The door is on the back face (away from the street, +z the front).",
                                   "params": {"w": 14.8, "l": 7.66, "ch": 2.2, "t": 0.6, "h": 7.0, "storeys": 2, "winW": 1.0, "winGap": 2.6, "surBand": 0.2,
-                                             "doorW": 1.4, "doorH": 2.0, "doorAt": 0, "plaqueW": 2.4,
+                                             "doorW": 1.4, "doorH": 2.0, "doorAt": 2.0, "plaqueW": 2.4, "stairN": 15, "stairX": 2.8, "stairW": 1.5,
                                              "eave": 0.35, "eaveH": 0.55, "terr": 0.8, "merlonR": 0.24, "roofH": 5.5, "wave": 0.4,
                                              "towerR": 1.8, "towerX": 2.0, "towerZ": 0.4, "towerH": 17.5, "lookH": 2.4, "capR": 2.3, "capH": 3.4, "bell": 1.0,
                                              "chimneys": "yes", "chimR": 0.32, "chimH": 2.2, "chimX": "w / 4", "chimY": "h + eaveH * 0.5 + roofH * 0.9",
                                              "spire": "no", "spireX": 5.5, "spireY": 0, "spireZ": 0, "spireH": 18.0, "spireR": 1.6, "crossH": 3.8,
                                              "_w": "the plan: w along the street (x), l deep, ch the corners cut; t the walls, h to the eave in `storeys` floors (the attic is in the roof)",
                                              "_winW": "the windows: winW wide, the street face's lower pair winGap either side of the middle; surBand their trencadis frames",
-                                             "_doorW": "the door on the back face: doorW wide, springing at doorH, doorAt along the face; plaqueW the street plaque",
+                                             "_doorW": "the door on the back face: doorW wide, springing at doorH, doorAt along the face (which runs toward -x: 2 puts it at x -2, clear of the stair); plaqueW the street plaque",
+                                             "_stairN": "the stair inside: stairN steps on 25 cm treads rising from the ground floor's +0.2 to the upper floor, along the back wall toward -x from x = stairX, stairW wide (1.5: the walker, 0.3 m round, clears its sides on any grid)",
                                              "_eave": "the eave: eave out from the wall, eaveH thick; terr the terrace between it and the roof; merlonR the merlons on it",
                                              "_roofH": "the roof's crest over the eave; wave: how deep its troughs fall (0 a plain mound)",
                                              "_towerH": "the tower's top (from the ground) where the mushroom sits; lookH its mirador; capR/capH/bell the mushroom",
@@ -196,76 +204,105 @@ def resample(path, step):
     return out
 
 
-def leaning_portico(add, name, path, H, width, step=3.2, lean=12, colR=0.42, deckT=0.6, bank=6.0, ground=12.0):
+def leaning_portico(add, name, path, H, width, step=3.2, lean=12, colR=0.42, deckT=0.6, bank=6.0, ground=12.0, middle=False, outer_lean=0.0,
+                    about=None):
     """THE WASHERWOMAN'S PORTICO / A VIADUCT: along `path` ([x, y, z], y its floor, climbing as the hill does; the wall on
     its LEFT, the open side on its right): a battered rubble wall `H` high holding back an earth `bank` (metres wide) behind
-    it, a file of columns upright on the open side, a file leaning in (lean deg) toward the wall between, a deck `width`
-    wide over both, walked, a parapet; under the floor its own terrace `ground` deep. Sweeps and columns only."""
+    it, a file of columns on the open side (upright, or leaning `outer_lean` deg in toward the wall: a viaduct's outer
+    file, its thrust line a parabola), a file leaning in (lean deg) toward the wall between, and (`middle`) a third file
+    upright between those -- the upper viaducts' three rows; a deck `width` wide over all, walked, a parapet; under the
+    floor its own terrace `ground` deep. Sweeps and columns only. `about`: what it is, for the parts' notes."""
     pts = resample(path, step); P = [[r3(x), r3(y), r3(z)] for x, y, z in path]
     sw = lambda prof, **k: {"type": "sweep", "path": P, "step": 0.6, "profile": [[r3(u), r3(v)] for u, v in prof], **k}
     add(f"{name} ground", sw([[-bank - 0.6, -ground], [width + 0.3, -ground], [width + 0.3, 0], [-0.6, 0], [-bank - 0.6, 0]], walked=True,
-                             _about=f"{name}: the terrace it stands on"))
+                             _about=f"{about or name}: the terrace it stands on, faced in the hill's rubble where the slope falls away"))
     add(f"{name} wall", sw([[-0.6, 0], [0.9, 0], [0.25, H], [-0.6, H]], _about="the retaining wall, its open face battered back as it rises, rubble"))
     add(f"{name} bank", sw([[-bank - 0.6, 0], [-0.6, 0], [-0.6, H + 0.4], [-bank * 0.5, H + 1.2], [-bank - 0.6, H + 2.0]],
                            _about="the hillside the wall holds back"))
-    outer, inner = [], []
+    outer, inner, mid = [], [], []
+    ho = H - deckT + 0.15; so = ho * math.sin(math.radians(outer_lean))
     for x, y, z, hd in pts[1:-1]:
         rx, rz = -math.cos(hd), math.sin(hd)     # right of travel, (-tz, tx) with t = (sin hd, cos hd)
-        outer.append([r3(x + rx * (width - colR - 0.2)), r3(y), r3(z + rz * (width - colR - 0.2)), r3(hd)])
+        uo = width - colR - 0.2 + so             # (a leaning outer column's foot set out so its head stays under the deck's edge)
+        y -= 0.1                                 # (set into the floor a little: the path's curve and the columns' points differ on a bend)
+        outer.append([r3(x + rx * uo), r3(y), r3(z + rz * uo), r3(hd)])
         inner.append([r3(x + rx * (width * 0.45)), r3(y), r3(z + rz * (width * 0.45)), r3(hd)])
-    add(f"{name} outer columns", {"type": "column", "radius": colR, "height": H - deckT, "sides": 9, "at": outer,
-                                  "_about": "the outer file: upright, rough-hewn, swelling at the foot like palms"})
-    add(f"{name} inner columns", {"type": "column", "radius": colR * 0.9, "height": H - deckT, "sides": 9, "at": inner,
+        if middle: mid.append([r3(x + rx * (width * 0.72)), r3(y), r3(z + rz * (width * 0.72)), r3(hd)])
+    add(f"{name} outer columns", {"type": "column", "radius": colR, "height": r3(ho / math.cos(math.radians(outer_lean))), "sides": 9, "at": outer,
+                                  **({"lean": {"deg": outer_lean, "toward": [1, 0], "each": True, "local": True}} if outer_lean else {}),
+                                  "_about": "the outer file, rough-hewn, swelling at the foot like palms" + (": leaning in, so the thrust runs down it to the ground" if outer_lean else ": upright")})
+    if middle:
+        add(f"{name} middle columns", {"type": "column", "radius": colR * 0.9, "height": r3(ho), "sides": 9, "at": mid,
+                                       "_about": "the middle file, upright under the deck's crown"})
+    add(f"{name} inner columns", {"type": "column", "radius": colR * 0.9, "height": r3(ho / math.cos(math.radians(lean))), "sides": 9, "at": inner,
                                   "lean": {"deg": lean, "toward": [1, 0], "each": True, "local": True},
                                   "_about": "the inner file, leaning back toward the wall: Gaudi's columns take the push of the earth on their slant"})
     add(f"{name} deck", sw([[-0.6, H - deckT], [width, H - deckT], [width, H], [-0.6, H]], walked=True, _about="the path over the portico"))
     add(f"{name} parapet", sw([[width - 0.45, H], [width, H], [width - 0.05, H + 0.75], [width - 0.4, H + 0.75]], _about="a low parapet along the open edge"))
+    return pts
 
 
-def hypostyle(add, *, files, rows, dx, dz, z0, floor, colH, colR, gone=(), lean=4.0, rise=0.8, vaultT=0.15, margin=2.6, front=None,
-              chamfer=2.6, medallions=14):
-    """A GAUDI HYPOSTYLE (Park Guell's market hall): `files` x `rows` Doric columns at dx x dz, the front row at z0 (rows go
-    -z), its floor at `floor`; the columns at `gone` [(i, j)] left out for ceiling rosettes; the outer columns (front row,
-    side files) inclined `lean` deg with their feet out so their capitals stay on the grid; a shallow vault (rise) over
-    every bay, the ceiling a band round them out to the walls `margin` past the outer files, the front corners chamfered.
-    Returns the levels (spring, slab) and the grid."""
-    xs = [r3((i - (files - 1) / 2) * dx) for i in range(files)]; zs = [r3(z0 - j * dz) for j in range(rows)]
-    spring = floor + colH; slab = spring + rise; W = xs[-1] + margin; zb = zs[-1] - margin; zf = front if front is not None else z0 + 1.2
-    off = r3(colH * math.sin(math.radians(lean))); groups = {"columns": [], "front columns": [], "west columns": [], "east columns": []}
-    for i, x in enumerate(xs):
-        for j, z in enumerate(zs):
-            if (i, j) in gone: continue
-            g, p = (("front columns", [x, floor, r3(z + off), 0]) if j == 0 else ("west columns", [r3(x - off), floor, z, 0]) if i == 0
-                    else ("east columns", [r3(x + off), floor, z, 0]) if i == files - 1 else ("columns", [x, floor, z, 0]))
-            groups[g].append(p)
+def _inside(poly, x, z, m):
+    """(x, z) at least m inside every edge of the convex outline `poly` (either winding)"""
+    n = len(poly); area = sum(poly[i][0] * poly[(i + 1) % n][1] - poly[(i + 1) % n][0] * poly[i][1] for i in range(n))
+    sg = 1 if area < 0 else -1
+    for i in range(n):
+        (ax, az), (bx, bz) = poly[i], poly[(i + 1) % n]; L = math.hypot(bx - ax, bz - az)
+        if sg * ((x - ax) * (bz - az) - (z - az) * (bx - ax)) / L < m: return False
+    return True
+
+
+def _inward(poly, i):
+    """edge i's inward unit normal [nx, nz]"""
+    n = len(poly); area = sum(poly[k][0] * poly[(k + 1) % n][1] - poly[(k + 1) % n][0] * poly[k][1] for k in range(n))
+    (ax, az), (bx, bz) = poly[i], poly[(i + 1) % n]; L = math.hypot(bx - ax, bz - az); tx, tz = (bx - ax) / L, (bz - az) / L
+    return [-tz, tx] if area > 0 else [tz, -tx]
+
+
+def hypostyle(add, *, outline, x0, z0, dx, dz, margin, floor, colH, colR, omit=(), rosettes=(), open_edges=None, lean=5.0, rise=0.7,
+              vaultT=0.15, medallions=14):
+    """A GAUDI HYPOSTYLE (Park Guell's market hall, 2026-11-04 as built: a square grid set into the plan it has). Doric
+    columns on a grid x0 + k dx (files k), z0 - j dz (rows j >= 0) wherever a column stands `margin` inside every edge of
+    the convex `outline` [[x, z]] (the hall's own plan); `omit` [(k, j)] left out and nothing put there (the stair's
+    head), `rosettes` [(k, j)] left out for a ceiling rosette each; `open_edges` {edge index: name} the outline's edges
+    the hall is open along -- every column within a grid step of one leans `lean` deg, feet out across it, its capital
+    on the grid. Over every bay with all four corners standing (a column or a rosette) a shallow cupola (rise), its crown
+    the ceiling's level; elsewhere the ceiling is flat at the crowns (the slab the caller lays). Returns the levels and
+    the grid: {"spring", "crown", "pos": {(k, j): (x, z)}, "count"}."""
+    spring = floor + colH; crown = spring + rise
+    pos = {}
+    for j in range(0, 40):
+        for k in range(-20, 21):
+            x, z = x0 + k * dx, z0 - j * dz
+            if (k, j) not in omit and _inside(outline, x, z, margin): pos[(k, j)] = (r3(x), r3(z))
+    groups = {"columns": []}; toward = {"columns": None}
+    off = colH * math.sin(math.radians(lean)); n = len(outline)
+    for kj, (x, z) in sorted(pos.items(), key=lambda q: (q[0][1], q[0][0])):
+        if kj in rosettes: continue
+        g = "columns"
+        for e, nm in (open_edges or {}).items():
+            (ax, az), (bx, bz) = outline[e], outline[(e + 1) % n]; L = math.hypot(bx - ax, bz - az)
+            d = abs((x - ax) * (bz - az) - (z - az) * (bx - ax)) / L
+            if d < margin + min(dx, dz) * 0.95: g = f"{nm} columns"; toward[g] = _inward(outline, e); break
+        nx, nz = toward.get(g) or (0, 0)
+        groups.setdefault(g, []).append([r3(x - nx * off), r3(floor), r3(z - nz * off), 0])
     col = {"type": "colonnade", "order": "doric", "count": 1, "spacing": 1, "columnR": colR, "height": colH, "sides": 20}
-    toward = {"columns": None, "front columns": [0, -1], "west columns": [1, 0], "east columns": [-1, 0]}
     for g, at in groups.items():
-        add(g, {**col, "at": at, **({"lean": {"deg": lean, "toward": toward[g], "each": True}} if toward[g] else {}),
-                "_about": "the hypostyle's Doric columns" if g == "columns" else f"the {g.split()[0]} {'row' if g.startswith('front') else 'file'}: inclined, feet out, along the line of the vaults' push"})
-    plan = [[-W + chamfer, zf], [W - chamfer, zf], [W, zf - chamfer], [W, zb], [-W, zb], [-W, zf - chamfer]]
-    add("hypostyle fill", {"type": "prism", "plan": {"points": plan}, "height": r3(floor - 0.3), "at": [[0, 0, 0, 0]], "_about": "the ground under the hall's floor"})
-    add("floor", {"type": "prism", "plan": {"points": plan}, "height": 0.3, "at": [[0, r3(floor - 0.3), 0, 0]], "walked": True, "_about": "the hall's floor, where the market was to be"})
-    bays = [[r3((xs[i] + xs[i + 1]) / 2), r3(spring), r3((zs[j] + zs[j + 1]) / 2), 0] for i in range(files - 1) for j in range(rows - 1)]
-    add("vaults", {"type": "dome", "sides": 4, "turn": 0, "radius": r3(dz / math.sqrt(2)), "stretch": [r3(dx / dz), 1, 1], "thickness": vaultT, "head": {"profile": "segmental", "rise": rise, "seg": 6},
-                   "at": bays, "_about": "the ceiling: a shallow cupola over every bay, column to column, in white trencadis"})
-    gw, gl, gz = r3(xs[-1] - xs[0]), r3(zs[0] - zs[-1]), r3((zs[0] + zs[-1]) / 2)
-    add("ceiling", {"type": "prism", "plan": {"points": plan, "well": {"rect": [gw, gl], "at": [0, gz]}}, "height": r3(rise), "at": [[0, r3(spring), 0, 0]],
-                    "_about": "the band of ceiling round the vaults, from the outer columns to the walls"})
-    add("rosettes", {"type": "column", "radius": 1.5, "height": 0.1, "sides": 20, "at": [[xs[i], r3(spring - 0.1), zs[j], 0] for i, j in sorted(gone)],
-                     "_about": "Jujol's rosettes, 3 m across, where columns were left out: suns of twenty points, the seasons"})
+        add(g, {**col, "at": at, **({"lean": {"deg": lean, "toward": [r3(v) for v in toward[g]], "each": True}} if toward[g] else {}),
+                "_about": "the hypostyle's Doric columns, 6.16 m, the plaza's rain running down inside them to a cistern" if g == "columns"
+                          else f"the {g.split(' columns')[0]} front: the outer columns inclined, feet out, along the line of the vaults' push"})
+    full = set(pos)
+    bays = [[r3(x0 + (k + 0.5) * dx), r3(spring), r3(z0 - (j + 0.5) * dz), 0] for (k, j) in sorted(full)
+            if {(k + 1, j), (k, j + 1), (k + 1, j + 1)} <= full]
+    add("vaults", {"type": "dome", "sides": 4, "turn": 0, "radius": r3(dz / math.sqrt(2)), "stretch": [r3(dx / dz), 1, 1], "thickness": vaultT,
+                   "head": {"profile": "segmental", "rise": rise, "seg": 6}, "at": bays,
+                   "_about": "the ceiling: a shallow cupola over every bay, column to column, in white trencadis"})
+    add("rosettes", {"type": "column", "radius": 1.5, "height": 0.1, "sides": 20, "at": [[pos[kj][0], r3(spring - 0.1), pos[kj][1], 0] for kj in sorted(rosettes)],
+                     "_about": "Jujol's four rosettes, 3 m across, where four columns were left out: suns of many points, the seasons"})
     step = max(1, len(bays) // medallions)
-    add("medallions in the vaults", {"type": "column", "radius": 0.5, "height": 0.12, "sides": 16, "at": [[b[0], r3(slab - vaultT - 0.05), b[2], 0] for b in bays[step // 2::step][:medallions]],
+    add("medallions in the vaults", {"type": "column", "radius": 0.5, "height": 0.12, "sides": 16, "at": [[b[0], r3(crown - vaultT - 0.08), b[2], 0] for b in bays[step // 2::step][:medallions]],
                                      "_about": "smaller medallions, 1 m across, at the vaults' crowns: the moon's cycle"})
-    wl = r3(zf - chamfer - zb)
-    add("side walls", {"type": "box", "width": 0.9, "length": wl, "height": r3(colH + rise), "at": [[r3(-W - 0.45), floor, r3(zb + wl / 2), 0], [r3(W + 0.45), floor, r3(zb + wl / 2), 0]],
-                       "_about": "the side walls of rubble against the earth"})
-    add("back wall", {"type": "box", "width": r3(2 * W + 1.8), "length": 0.9, "height": r3(colH + rise), "at": [[0, floor, r3(zb - 0.45), 0]], "_about": "the back wall against the hill"})
-    cl = r3(chamfer * math.sqrt(2))
-    add("corner walls", {"type": "box", "width": 0.9, "length": cl, "height": r3(colH + rise),
-                         "at": [[r3(s * (W - chamfer / 2 + 0.32)), floor, r3(zf - chamfer / 2 - 0.32), r3(s * math.pi / 4)] for s in (-1, 1)],
-                         "_about": "the front corners cut on the diagonal: the hall is square but for its chamfers on the stair side"})
-    return {"xs": xs, "zs": zs, "spring": spring, "slab": slab, "W": W, "zb": zb, "zf": zf}
+    return {"spring": spring, "crown": crown, "pos": pos, "count": sum(len(v) for v in groups.values()), "groups": list(groups)}
 
 
 if __name__ == "__main__":

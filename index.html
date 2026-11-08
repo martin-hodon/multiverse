@@ -65,7 +65,7 @@
 <script type="module">
 import * as THREE from "three";
 import { wgslFn, uniform, texture, attribute, varying, uv, float, vec2, vec3, vec4, output, positionGeometry,
-         positionWorld, modelViewMatrix, cameraProjectionMatrix, cameraPosition, reflector } from "three/tsl";
+         positionWorld, modelViewMatrix, cameraProjectionMatrix, cameraPosition, reflector, vertexColor } from "three/tsl";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";   // (the hearth fires, merged into one mesh)
 import { SPECIES, makeDragonfly, makeFish, makeShark, makeDolphin, makeCat, gaitBase, bodyProbe, runs, saddle, partExtent, SQUIRREL, makeYoung, A as speciesDef, coatDef, variantDef } from "./species.js";
@@ -74,10 +74,10 @@ import { pickKit, buildItem } from "./items.js";
 import { buildSpecies as buildBanner } from "./banner.js";
 import { OUTLINE_PX, setOutline, outlineOn, setQuads, quadsOn } from "./outline.js";
 import { createHerd } from "./instanced.js";
-import { legLength } from "./skeleton.js";
+import { legLength, CYCLES } from "./skeleton.js";
 import { createComposite, occluderScene, OCC_LAYER, PIPE, setPipe, pipeFromQuery, LOD, POSE, beginSecondaryView, endSecondaryView, herds } from "./composite.js";
 import { SHELL } from "./shell.js";   // the figures as polygons: its LOD and its switches
-import { createGrassFringe, grassWind, grassBlade, groundMottle, GRADE, GRASS_LAYER, FRINGE, markGroundProp, GROUND_HOLES, DIG_RECTS, groundHole, GROUND_BARE, bareHere, WATER_LEVEL, WIND, WIND_DIR, GROUND_SNOW } from "./grass.js";
+import { createGrassFringe, grassWind, grassBlade, groundMottle, GRADE, GRASS_LAYER, FRINGE, markGroundProp, GROUND_HOLES, DIG_RECTS, groundHole, groundEarth, earthOver, GROUND_BARE, bareHere, WATER_LEVEL, WIND, WIND_DIR, GROUND_SNOW } from "./grass.js";
 import { terrainMeshes, gradeColor } from "./terrain.js";
 import { buildTerrainData } from "./terrain_data.js";
 import { makeGround, moatSD, WLEVEL } from "./ground.js";
@@ -91,7 +91,7 @@ import { animateSpecies } from "./anim.js";
 import { seedFinishes, BUILDINGS, LANDMARKS, LANDMARK_NAMES, LANDMARK_HOLDS, LAND, DRESS, PATTERN_LIBRARY, finishesAhead, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
 import { planTown, townStyle, townFinishes, doorNormal } from "./town.js";
 import { makeCart, wheelParams, FLEET, LOAD_VARIANTS, CART_SIZES } from "./carts.js";
-import { makeTree, TREE_SPECIES, WARM_TREES, makeMushroom, MUSHROOMS, makeBush, rng } from "./flora.js";
+import { makeTree, TREE_SPECIES, WARM_TREES, MUSHROOMS, makeBush, rng } from "./flora.js";
 import { makePerson, personKind, PEOPLE, SOLDIER, setPeriodDress } from "./people.js";
 import { laneFrom, buildPathNetwork, planRoads, routeGraph, wanderLoop, ROAD_WET } from "./paths.js";
 import { createVillageLife } from "./village-life.js";
@@ -101,6 +101,7 @@ import { createHeads, DETAIL as HEAD_DETAIL } from "./heads.js";
 import { createJewels } from "./jewels.js";
 import { createButterflies } from "./butterflies.js";   // the butterflies: species of assets/butterflies, flapping flat wings
 import { createManes } from "./manes.js";
+import { createBodies } from "./bodies.js";   // (the sculpted creatures -- a hedgehog: one skinned surface each)
 import { placeStatues, statuesSeen } from "./statues.js";   // carved figures at the buildings' `statue` markers   // manes of thorns on the creatures whose mane has `thorns` (a lion's)
 import { createFaces, VOCAL_FACES } from "./faces.js";
 import { createArchery } from "./archery.js";
@@ -108,6 +109,9 @@ import { createTableware } from "./tableware.js";
 import { createCombat } from "./combat.js";
 import { createSword } from "./sword.js";
 import { createSquirrels } from "./squirrels.js";
+import { PERCHERS, perchSites, makePercher } from "./perchers.js";
+import { sculptPart } from "./bodyspec.js";   // (a mount under its rider drawn sculpted, as it is on its own)
+import { SKYSTEEDS, makeSkysteed, tuckLegs } from "./skysteeds.js";   // the pegasus and the griffin: on the ground, and now and then up, circling, and down
 import { createMirrors, MIRRORS } from "./mirrors.js";
 import { mergeStatic, mergeAcross } from "./merge.js";
 import { updateFarHide, FARHIDE } from "./farhide.js";
@@ -138,6 +142,7 @@ import { createTag, TAG } from "./tag.js";
 import { createMist } from "./mist.js";
 import { createSwallows } from "./swallows.js";
 import { createBees } from "./bees.js";
+import { placeNature } from "./nature.js";   // (2026-11-08) the burrows, anthills and nests: burrows.js, ants.js, nests.js
 import { createFootsteps } from "./footsteps.js";
 import { createFishing } from "./fishing.js";
 import { createRainSplashes } from "./rainsplash.js";
@@ -163,6 +168,9 @@ import { SR, toBuffer, play } from "./dsp.js";
 import { createFootprints, FOOTPRINTS, printOf } from "./footprints.js";
 import { createFlags } from "./flags.js";
 import { createBreath, createPuffs } from "./breath.js";
+import { createSeaLife } from "./sealife.js";   // the open water's giants: humpbacks, orcas, a plesiosaur
+import { createHaulout } from "./haulout.js";   // seals and walruses hauled out on the shore
+import { createPterosaurs } from "./pterosaurs.js";   // pteranodons soaring over the open water
 import { createFreight, goodsCulture } from "./freight.js";
 import { planHarbour, buildHarbour, createHarbourLife } from "./harbour.js";
 import { TEXTURES, PARALLAX, bakeTiles, tileTexture } from "./textures.js";
@@ -759,8 +767,7 @@ const trunkWorld = (td, t) => {
   const c = Math.cos(t.rotY), s = Math.sin(t.rotY), p = t.position, W = (q) => [p.x + q[0] * c + q[2] * s, p.y + q[1], p.z - q[0] * s + q[2] * c];
   return (td.trunk ?? []).map((g) => ({ a: W(g.a), b: W(g.b), r0: g.r0, r1: g.r1 }));
 };
-const pickables = [];  // flowers and mushrooms you can pick, from buildFlora
-let mushroomsUnder = false;   // (whether the mushrooms are hidden under the snow now: the tick)
+const pickables = [];  // flowers and mushrooms you can pick, from buildFlora: { x, z, kind, hide(), picked }
 const perches = [];    // flower heads a butterfly can sit on: { x, y, z, taken (its butterfly), gone (picked) } -- buildFlora
 let pickedCount = 0;
 const pickedKinds = new Map();   // your basket: kind -> count, shown bottom-left
@@ -1071,6 +1078,7 @@ class GroundMaterial extends THREE.MeshToonNodeMaterial {
       rgb = groundFlecks({ lit: outputNode.rgb, wp: positionWorld, snow: groundSnow, bare: groundBare,
                            textured: float(tiled ? 1 : 0), g: tg, gs: tg });
     }
+    rgb = earthOver({ rgb, lit: outputNode.rgb, vcol: vertexColor(), k: groundEarth({ wp: positionWorld, rects: GROUND_HOLES.rects }), snow: groundSnow, wp: positionWorld });   // the trodden earth round the burrows' mouths and under their heaps (grass.js groundEarth)
     rgb = rgb.mul(meadowPatches({ p: positionWorld.xz }).sub(1).mul(groundSnow.oneMinus()).add(1));   // drier and lusher drifts over the lawn (cloudshadow.js) -- not on snow
     rgb = rgb.mul(landShade());   // the clouds' shadows (cloudshadow.js)
     rgb = groundCut({ rgb, hole: groundHole({ wp: positionWorld, holes: GROUND_HOLES.tex, box: GROUND_HOLES.box, rects: GROUND_HOLES.rects }) });
@@ -2068,7 +2076,96 @@ const BATS = !roosts.length ? SKY : {
   home: (x, z) => { let b = roosts[0], bd = 1e9; for (const r of roosts) { const d = (x - r[0]) ** 2 + (z - r[1]) ** 2; if (d < bd) { bd = d; b = r; } } return b; },
   spawn: () => { const r = roosts[Math.floor(wrand() * roosts.length)], a = wrand() * Math.PI * 2, d = 3 + wrand() * 22; return [r[0] + Math.cos(a) * d, r[1] + Math.sin(a) * d]; },
 };
-const fenceFor = (def) => def.monster || def.dinosaur ? MFENCE : def.swim ? (hasLake ? LAKEF : RIVER_FLOAT ?? FENCE) : def.shore ? SHORE : def.name === "bat" ? BATS : def.fly ? SKY : FENCE;
+// A WEASEL'S BEAT (2026-11-06): a hedge bank -- a box 14 m across round a spot 2.5 m off a hedged country lane (the lanes
+// buildFlora hedges: outside the town, on dry ground clear of the sites), each weasel its own; without one, the meadow
+const hedgeBeat = () => {
+  const F = TOWN?.frame, inTown = (x, z) => F && x > F.XW - 4 && x < F.XE + 4 && z > Math.min(F.footS, F.ZS) - 4 && z < Math.max(F.footS, F.ZS) + 4;
+  const dry = (x, z, m) => riverSD(x, z) > m && !(hasLake && lakeSD(x, z) < m) && waterY(x, z) < groundH(x, z) - .2 && !inSites(x, z, m * .5);
+  const rts = qp.get("hedges") === "0" ? [] : ROADPLAN.pathRoutes.filter((rt) => rt.w >= 1.4 && rt.pts.length <= 30);
+  for (let k = 0; k < 40 && rts.length; k++) {
+    const rt = rts[Math.floor(wrand() * rts.length)], i = 1 + Math.floor(wrand() * (rt.pts.length - 1)), [ax, az] = rt.pts[i - 1], [bx, bz] = rt.pts[i];
+    const L = Math.hypot(bx - ax, bz - az); if (L < 2) continue;
+    const t = wrand(), sd = wrand() < .5 ? -1 : 1, off = rt.w / 2 + 2.5, x = ax + (bx - ax) * t - (bz - az) / L * sd * off, z = az + (bz - az) * t + (bx - ax) / L * sd * off;
+    if (x * x + z * z > groundR * groundR * .7 || inTown(x, z) || !dry(x, z, 3)) continue;
+    const H = 7, inside = (px, pz) => Math.abs(px - x) < H && Math.abs(pz - z) < H && px * px + pz * pz < groundR * groundR * .75 && dry(px, pz, 1.5);
+    return { x0: x - H, x1: x + H, z0: z - H, z1: z + H, inside, home: () => [x, z], spawn: () => [x, z] };
+  }
+  return FENCE;
+};
+// THE WOODS' AND THE CRAGS' RANGES (2026-11-06): the forest's spot -- found here, so the cast can be spawned in it
+// before buildFlora grows it there (the same search: forestSpot), the woods themselves (the pandas), their edge (the
+// lynx: in the trees' shade by day, out onto the open ground) and the crags (the chamois: the steepest, barest ground of
+// a grown landscape -- its rock and scree -- a box round it); without them, the meadow
+const forestOpen = (x, z, m) => x * x + z * z < groundR * groundR * .8 && !(Math.abs(x) < extent + 8 && z < 10 && z > -(rows * gap + 12))
+  && !(hasLake && lakeSD(x, z) < m) && riverSD(x, z) > m && !(SEA && waterSD(x, z) < m) && !inSites(x, z, 10 + m);
+let forestMemo;
+const forestSpot = () => {
+  if (forestMemo !== undefined) return forestMemo;
+  const fc = CONFIG.forest ?? {}, trees = qp.has("forest") ? Math.max(0, num("forest", 0)) : (fc.trees ?? 0), R = fc.radius ?? 46;
+  let best = null;
+  if (trees && nTreesReq !== 0) for (let gx = -groundR * .8; gx <= groundR * .8; gx += 12) for (let gz = -groundR * .8; gz <= groundR * .8; gz += 12) {
+    const ok = forestOpen(gx, gz, 6) && [.5, 1].every((k) => Array.from({ length: 12 }, (_, i) => i * Math.PI / 6).every((a) => forestOpen(gx + Math.cos(a) * R * k, gz + Math.sin(a) * R * k, 4)));
+    if (ok && (!best || gx * gx + gz * gz < best[0] * best[0] + best[1] * best[1])) best = [gx, gz];
+  }
+  return (forestMemo = best);
+};
+const ringRange = (cx, cz, r0, r1, ok) => {   // a ring (or a disc: r0 0) round (cx, cz), where ok(x, z)
+  const inside = (x, z) => { const d = Math.hypot(x - cx, z - cz); return d >= r0 && d <= r1 && ok(x, z); }, rm = (r0 + r1) / 2;
+  const home = (x = cx + rm, z = cz) => { const a = Math.atan2(z - cz, x - cx); return r0 ? [cx + Math.cos(a) * rm, cz + Math.sin(a) * rm] : [cx, cz]; };
+  return { x0: cx - r1, x1: cx + r1, z0: cz - r1, z1: cz + r1, inside, home,
+           spawn: () => { for (let k = 0; k < 60; k++) { const a = wrand() * Math.PI * 2, d = Math.sqrt(r0 * r0 + wrand() * (r1 * r1 - r0 * r0)), x = cx + Math.cos(a) * d, z = cz + Math.sin(a) * d; if (inside(x, z)) return [x, z]; } return home(); } };
+};
+const woodsRange = (edge) => {
+  const f = forestSpot(), R = CONFIG.forest?.radius ?? 46; if (!f) return FENCE;
+  return edge ? ringRange(f[0], f[1], R * .7, R * 1.15, (x, z) => forestOpen(x, z, 2)) : ringRange(f[0], f[1], 0, R * .7, (x, z) => forestOpen(x, z, 2));
+};
+let cragMemo;
+const cragRange = () => {
+  if (cragMemo === undefined) {
+    const sf = MAP?.surface, bareAt = (x, z) => { if (!sf) return 0; const i = Math.round((x - sf.x0) / sf.res), j = Math.round((z - sf.z0) / sf.res); return i >= 0 && j >= 0 && i < sf.n && j < sf.n ? sf.bare[j * sf.n + i] : 0; };
+    const steep = (x, z) => Math.hypot(groundH(x + 1, z) - groundH(x - 1, z), groundH(x, z + 1) - groundH(x, z - 1)) / 2;
+    const dry = (x, z, m) => forestOpen(x, z, m) && waterY(x, z) < groundH(x, z) - .2;
+    let best = null, bs = .45;   // (~24 degrees, or bare rock less steep)
+    for (let gx = -groundR * .8; gx <= groundR * .8; gx += 6) for (let gz = -groundR * .8; gz <= groundR * .8; gz += 6) {
+      if (!dry(gx, gz, 4)) continue;
+      const s = steep(gx, gz) + .5 * bareAt(gx, gz);
+      if (s > bs) { bs = s; best = [gx, gz]; }
+    }
+    cragMemo = best;
+  }
+  return cragMemo ? ringRange(cragMemo[0], cragMemo[1], 0, 14, (x, z) => forestOpen(x, z, 1.5) && waterY(x, z) < groundH(x, z) - .2) : FENCE;
+};
+let cliffMemo;
+const seaCliff = () => {   // (2026-11-07) the PUFFINS' colony: the steepest dry ground within a few metres of the sea (its cliffs, a rocky shore) -- else the lake's or the river's shore
+  if (!SEA) return SHORE;
+  if (cliffMemo === undefined) {
+    const steep = (x, z) => Math.hypot(groundH(x + 1, z) - groundH(x - 1, z), groundH(x, z + 1) - groundH(x, z - 1)) / 2;
+    let best = null, bs = -1;
+    for (let gx = -groundR * .85; gx <= groundR * .85; gx += 4) for (let gz = -groundR * .85; gz <= groundR * .85; gz += 4) {
+      const sd = waterSD(gx, gz); if (!(sd > 1 && sd < 9) || gx * gx + gz * gz > groundR * groundR * .8 || waterY(gx, gz) > groundH(gx, gz) - .2 || !forestOpen(gx, gz, 1.5)) continue;
+      const st = steep(gx, gz); if (st > bs) { bs = st; best = [gx, gz]; }
+    }
+    cliffMemo = best;
+  }
+  return cliffMemo ? ringRange(cliffMemo[0], cliffMemo[1], 0, 12, (x, z) => { const sd = waterSD(x, z); return sd > .8 && sd < 12 && waterY(x, z) < groundH(x, z) - .2 && forestOpen(x, z, 1); }) : SHORE;
+};
+const wallRange = () => {   // (2026-11-07) a WALL LIZARD's: the foot of one building's walls -- a band from a hand's breadth to 2.5 m out, dry -- its sunny stone
+  const ss = sites.filter((s) => BUILDINGS[s.key] && !["landing", "watermill", "fisherHut", "bridge"].includes(s.key));
+  for (let k = 0; k < 12 && ss.length; k++) {
+    const s = ss[Math.floor(wrand() * ss.length)], R = siteRects(s, 2.5);
+    const inside = (x, z) => R.some((r) => x > r.x0 && x < r.x1 && z > r.z0 && z < r.z1) && !inSites(x, z, .15) && waterY(x, z) < groundH(x, z) - .2 && x * x + z * z < groundR * groundR * .9;
+    const x0 = Math.min(...R.map((r) => r.x0)), x1 = Math.max(...R.map((r) => r.x1)), z0 = Math.min(...R.map((r) => r.z0)), z1 = Math.max(...R.map((r) => r.z1)), pts = [];
+    for (let j = 0; j < 160 && pts.length < 24; j++) { const x = x0 + wrand() * (x1 - x0), z = z0 + wrand() * (z1 - z0); if (inside(x, z)) pts.push([x, z]); }
+    if (pts.length < 6) continue;
+    const home = (x, z) => pts.reduce((b, q) => (Math.hypot(q[0] - x, q[1] - z) < Math.hypot(b[0] - x, b[1] - z) ? q : b), pts[0]);
+    return { x0, x1, z0, z1, inside, home, spawn: () => pts[Math.floor(wrand() * pts.length)] };
+  }
+  return FENCE;
+};
+const NEW_RANGES = { lynx: () => woodsRange(true), giantpanda: () => woodsRange(false), redpanda: () => woodsRange(false), chamois: cragRange, moose: () => woodsRange(true), ibex: cragRange,
+                     puffin: seaCliff, cassowary: () => woodsRange(false), turkey: () => woodsRange(true),
+                     griffin: cragRange, "wall lizard": wallRange };   // (2026-11-07: the griffin on the crags, landing there -- skysteeds.js) (2026-11-07 birds: the puffins on the sea cliffs, the cassowary deep in the forest, the wild turkeys at its edge)
+const fenceFor = (def) => NEW_RANGES[def.name] ? NEW_RANGES[def.name]() : def.name === "weasel" ? hedgeBeat() : def.monster || def.dinosaur ? MFENCE : def.swim ? (hasLake ? LAKEF : RIVER_FLOAT ?? FENCE) : def.shore ? SHORE : def.name === "bat" ? BATS : def.fly ? SKY : FENCE;
 const spawnIn = (f) => f.spawn ? f.spawn() : [f.x0 + 5 + wrand() * (f.x1 - f.x0 - 10), f.z0 + 5 + wrand() * (f.z1 - f.z0 - 10)];
 bootMark("smooth drawing between sim ticks");
 // ---- smooth drawing between sim ticks --------------------------------------
@@ -2145,13 +2242,17 @@ function simTicks(target) {   // run ticks up to this one; the tracks see the la
   tracksSnap("cur");
 }
 // hoppers travel in bursts: airborne on a little parabola for the first 60% of each hop period, sitting still for the
-// rest -- the distance this tick at `speed` (all of it in the air), and w.lift the height of the hop now
+// rest -- the distance this tick at `speed` (all of it in the air), and w.lift the height of the hop now.
+// A BOUNDER (`hop.sync`: the kangaroo) is not a frog: it moves on over its feet while they are down, the bound's clock
+// runs with its speed (a fleeing one bounds faster), and its legs' cycle is locked to the bound -- one stride a hop
+// (w.base: wanderer setup), so the feet push off behind, tuck up in the air and land reaching forward
 function hopStep(w, dt, speed) {
   w.lift = 0;
   if (!w.hop) return speed * dt;
-  w.hopT = (w.hopT ?? 0) + dt;
+  w.hopT = (w.hopT ?? 0) + dt * (w.hop.sync ? speed / w.speed : 1);
   const u = (w.hopT % w.hop.period) / w.hop.period, air = u < .6, v = u / .6;
   w.lift = air ? 4 * w.hop.h * v * (1 - v) : 0;
+  if (w.hop.sync) return speed * dt;
   return air ? speed * dt / .6 : 0;
 }
 function wanderStep(t) {
@@ -2165,7 +2266,10 @@ function wanderStep(t) {
   }
   for (const w of wanderers) {
     if (w.frozen) continue;   // e.g. a horse a player is riding (synced by ops)
-    if (w.active) {   // owls and bats fly by night, the other birds by day; the rest of the time they roost, hidden
+    if (w.den && w.den.step(t, dt)) continue;   // (2026-11-08) a digger going home to its burrow, at its mouth, in it, coming out (burrows.js makeDen: nature.js)
+    if (w.percher && w.percher.step(t, dt, w.active === "night" ? night : w.active ? !night : true)) continue;   // (an owl, a macaw, an eagle coming down to a perch, sat on one, off it: perchers.js)
+    if (w.skysteed && w.skysteed.step(t, dt)) continue;   // (a pegasus, a griffin taking off, aloft, coming down: skysteeds.js)
+    if (w.active) {   // owls and bats fly by night, the other birds by day; the rest of the time they roost, hidden (or, the PERCHERS, sit on a perch)
       const out = w.active === "night" ? night : !night;
       w.hide(!out);
       if (!out) continue;
@@ -2181,7 +2285,7 @@ function wanderStep(t) {
       else {
         w.moving = !w.moving;
         w.until = t + (w.moving ? 3 + w.rng() * 9 : 1.5 + w.rng() * 5);
-        if (w.hop) { w.hopT = 0; w.lift = 0; }
+        if (w.hop) { w.hopT = 0; w.lift = 0; if (w.hop.sync) w.animT = Math.ceil(w.animT * CYCLES) / CYCLES; }   // (a bounder: its stride starts with the bound)
       }
     }
     const p = w.p;
@@ -2206,7 +2310,10 @@ function wanderStep(t) {
     // standing walkers settle legs straight; "standing" fliers level their wings and glide.
     // Terrain is sampled under nose, center, and tail -- the body rides the
     // HIGHEST, so walking into rising ground never buries the front half
-    p.y = routeY(w) + (w.lift ?? 0);
+    const ry = routeY(w);
+    if (w.yFrom !== undefined) { w.yOff = w.yFrom - ry; w.yFrom = undefined; }   // (a bird just off its perch, climbing back to its height at CLIMB m/s: perchers.js)
+    if (w.yOff) w.yOff -= Math.sign(w.yOff) * Math.min(Math.abs(w.yOff), 1.6 * dt);
+    p.y = ry + (w.yOff ?? 0) + (w.lift ?? 0);
     w.setT(w.animT, undefined, undefined, w.moving, w.moving && runs(w.speed, w.base));   // rig animals fade their stride out when standing, run when fast for their size
   }
   moveRiders(dt);   // riders and carts tick on the same deterministic clock
@@ -2297,7 +2404,7 @@ function huntTick(t, dt) {
     nextHunt = t + HUNT.every[0] + Math.random() * (HUNT.every[1] - HUNT.every[0]);
     const cam = camera.position;
     for (const e of herd.animals) {
-      if (e.name !== "eagle" || e.hidden || !e.w || e.w.frozen || Math.hypot(e.position.x - cam.x, e.position.z - cam.z) > HUNT.near) continue;
+      if (e.name !== "eagle" || e.hidden || !e.w || e.w.frozen || e.w.percher?.R.st || Math.hypot(e.position.x - cam.x, e.position.z - cam.z) > HUNT.near) continue;
       const q = herd.animals.find((a) => HUNT.kinds.includes(a.name) && !a.hidden && !a.down && Math.hypot(a.position.x - e.position.x, a.position.z - e.position.z) < HUNT.prey);
       if (!q) continue;
       hunt = { e, q, t0: t, from: e.position.clone(), alt: e.position.y, pitch: 0 }; e.w.frozen = true;
@@ -2432,6 +2539,7 @@ const faceCam = THREE.MathUtils.degToRad(-30);   // angle each animal 3/4 toward
 const placeX = (i) => (i % cols - (cols - 1) / 2) * gap;   // grid, small species in front rows
 const placeZ = (i) => -Math.floor(i / cols) * gap;
 let herd = null;
+let perchSitesBuilt = null;   // (where the PERCHERS sit: built at their first step -- perchers.js perchSites)
 if (mode === "instanced" && n) {
   // the cast: one of each species (or ?n= of them), and -- when the lake is
   // there -- two more swans and ducks, so three of each float on it
@@ -2440,7 +2548,90 @@ if (mode === "instanced" && n) {
   if ((hasLake || RIVER_FLOAT) && !qp.has("n")) for (const nm of hasLake ? ["swan", "swan", "duck", "duck", "heron", "heron"] : ["swan", "duck", "duck", "duck", "duck", "heron", "heron", "heron"]) { const d = CAST.find((s) => s.name === nm); if (d) castList.push([d]); }   // (on the river: a pair of swans, a flotilla of ducks, herons along the banks)
   if (!qp.has("n")) for (const [nm, cnt] of [["parrot", 20], ["owl", 50], ["eagle", 20], ["bat", 100], ["flamingo", 10]]) {   // flocks over the whole sky (one of each is in the cast already)
     const d = CAST.find((s) => s.name === nm); if (d) for (let k = 1; k < cnt; k++) castList.push([d]); }
+  if (!qp.has("n")) {   // (2026-11-06) two more badgers in the meadow, out only from dusk and by night (`active`: in the sett by day -- the cast's
+                        // own one is about at any hour), and two more weasels, each on a hedge bank of its own (fenceFor: hedgeBeat)
+    const b = CAST.find((s) => s.name === "badger"), wz = CAST.find((s) => s.name === "weasel"), bn = b && { ...b, active: "night" };
+    if (b) castList.push([bn], [bn]);
+    if (wz) castList.push([wz], [wz]);
+  }
+  if (!qp.has("n")) {   // (2026-11-06) the new mammals' company: a herd of four chamois on the crags and a second giant panda and red panda in the
+                        // woods (each in a coat the town's seed picks: the chamois' summer or winter, the lynx's grey, red or plain), and two more
+                        // porcupines in the meadow, out only by night (`active`); the lynx alone at the forest's edge
+    for (const [nm, cnt] of [["chamois", 4], ["giantpanda", 2], ["redpanda", 2], ["lynx", 1]]) { const at = castList.findIndex((e) => e[0].name === nm); if (at < 0) continue;
+      for (let k = 0; k < cnt; k++) { const d = coatDef(nm, townSeed + k); if (k) castList.push([d]); else castList[at] = [d]; } }
+    const pq = CAST.find((s) => s.name === "porcupine"); if (pq) castList.push([{ ...pq, active: "night" }], [{ ...pq, active: "night" }]);
+  }
+  if (!qp.has("n")) {   // (2026-11-07) the mammals' COATS and VARIANTS (species.js coatDef / variantDef; each asset's `coats`, `variants`), picked
+                        // by the town's seed: each bear, fox, dog, leopard, cow, baboon, kangaroo, camel and bactrian in a coat of its own (a grizzly,
+                        // a silver fox, a black panther, a Jersey or a polled Angus, a hamadryas, an eastern grey ...); with the boar three striped
+                        // PIGLETS, with the red stag two HINDS and a fallow or a roe doe, two blackbuck DOES, a gorilla FEMALE, a hippo CALF
+    const k = {}, coated = new Set(["bear", "fox", "dog", "leopard", "cow", "baboon", "kangaroo", "camel", "bactrian"]);
+    for (const e of castList) { const nm = e[0].name; if (coated.has(nm) && e[0] === CAST.find((q) => q.name === nm)) e[0] = coatDef(nm, (k[nm] = (k[nm] ?? 0) + 1) + townSeed); }
+    const kin = (nm, v, n) => { if (!CAST.some((q) => q.name === nm)) return; const d = variantDef(nm, v); if (!d) return; d.name = nm; for (let i = 0; i < n; i++) castList.push([d]); };
+    kin("boar", "piglet", 3); kin("deer", "hind", 2); kin("deer", townSeed % 2 ? "fallow doe" : "roe doe", 1);
+    kin("cervicapra", "doe", 2); kin("gorilla", "female", 1); kin("hippo", "calf", 1); kin("impala", "ewe", 2);
+    // (2026-11-08) the northern ungulates' herds: with the bull MOOSE (at the forest's edge, as the lynx) a cow and her
+    // reddish calf; with the bull BISON (the meadow) three cows and an orange-red calf; with the IBEX billy (on the crags,
+    // as the chamois) two nannies and a kid -- each where its species ranges (fenceFor: NEW_RANGES by name)
+    kin("moose", "cow", 1); kin("moose", "calf", 1); kin("bison", "cow", 3); kin("bison", "calf", 1); kin("ibex", "nanny", 2); kin("ibex", "kid", 1);
+    // (2026-11-08) the FENNEC, the fox's `fennec` variant (small, the huge ears): a pair in an arid world (MAP.climate),
+    // elsewhere now and then a stray one (a fifth of the worlds, by the town's seed)
+    if (MAP?.climate === "arid") kin("fox", "fennec", 2); else if (townSeed % 5 === 0) kin("fox", "fennec", 1);
+  }
+  if (!qp.has("n")) { const d = CAST.find((s) => s.name === "peacock"); if (d) castList.push([d], [d]); }   // (three peacocks: a third of them, by the town's seed, in DISPLAY -- the train raised in its fan, the peacock's `display` variant)
+  { const fan = variantDef("peacock", "display"); let k = 0; if (fan) fan.name = "peacock";   // (still a peacock to his calls and the rest: the variant is named after itself)
+    if (fan) for (const e of castList) if (e[0].name === "peacock" && (k++ + townSeed) % 3 === 0) e[0] = fan; }
+  if (!qp.has("n")) { const hen = variantDef("peacock", "peahen"); if (hen) { hen.name = "peacock"; castList.push([hen], [hen]); } }   // (and two PEAHENS among them: the peacock's `peahen` variant -- no train, brown, the green neck; a peacock still to her calls)
+  if (!qp.has("n")) {   // (2026-11-07) the new birds' company: a puffin colony on the sea cliffs (a sea world only); a pair of crowned cranes; two more spoonbills, each in a coat the town's seed picks (the Eurasian, the roseate); a turkey tom in DISPLAY (the fan raised: his `display` variant) and two HENS (smaller, duller); three great hornbills over the forest (they perch on its boughs: perchers.js)
+    const sp = (nm) => CAST.find((q) => q.name === nm), more = (nm, k) => { const d = sp(nm); if (d) for (let i = 0; i < k; i++) castList.push([d]); };
+    if (SEA) more("puffin", 5);
+    more("crowned crane", 1); more("hornbill", 2);
+    if (sp("spoonbill")) for (let k = 0; k < 2; k++) castList.push([coatDef("spoonbill", townSeed + k)]);
+    if (sp("turkey")) { const fan = variantDef("turkey", "display"), hen = variantDef("turkey", "hen");
+      if (fan) { fan.name = "turkey"; castList.push([fan]); } if (hen) { hen.name = "turkey"; castList.push([hen], [hen]); } }
+  }
+  { const k = {}; for (const e of castList) if (e[0].name === "parrot" || e[0].name === "toucan" || e[0].name === "duck") { const nm = e[0].name, i = (k[nm] = (k[nm] ?? 0) + 1) + townSeed; e[0] = coatDef(nm, nm === "duck" ? i % 2 : i); if (nm === "duck" && i % 2) e[0].hen = true; } }   // (the macaws, the toucan and the mallards each in a coat of the asset's own -- scarlet, blue-and-yellow, green-winged, hyacinth; keel-billed, toco, channel-billed, chestnut-mandibled; the duck's two, the drake and (every other one) the HEN, coat 1 -- picked by the town's seed: species.js coatDef)
+  if (!qp.has("n")) {   // (2026-11-07) the birds' other coats (species.js coatDef; each asset's `coats`), picked by the town's seed: a white Pekin duck among the mallards; a juvenile among every four flamingos; a bald eagle among every five eagles; among the owls a barn owl in five and a snowy owl in ten; in a town in three the river's swans a pair of black swans; the woodpecker a green woodpecker in every other town, the penguin an emperor; an ostrich HEN with the cock (her `hen` variant)
+    if (CAST.some((q) => q.name === "duck") && (hasLake || RIVER_FLOAT)) castList.push([coatDef("duck", 2)]);
+    const k = {}, pick = { flamingo: (i) => i % 4 === 2 ? 1 : 0, eagle: (i) => i % 5 === 3 ? 1 : 0, owl: (i) => i % 10 === 7 ? 1 : i % 5 === 1 ? 2 : 0, swan: () => townSeed % 3 === 0 ? 1 : 0,
+                           woodpecker: () => townSeed % 2, penguin: () => townSeed % 2,
+                           // (and the rest: the pigeons' morphs mixed in a flock; the gulls' four kinds; a hooded crow's town in three; the geese greylag, white and Canada; the buzzards' pale and dark morphs; a kestrel among the falcons; the sparrows' and blackbirds' hens; a black stork in four; a sacred ibis' town in two; the cockatiels' lutino and whiteface; a white dove in three; a great egret among the herons)
+                           pigeon: (i) => [0, 0, 1, 0, 2, 1, 3, 0, 4, 5][i % 10], gull: (i) => [0, 0, 1, 0, 2, 3][i % 6], crow: () => townSeed % 3 === 1 ? 1 : 0, goose: (i) => [0, 0, 2, 0, 1][i % 5],
+                           buzzard: (i) => [0, 1, 0, 2][i % 4], falcon: (i) => i % 3 === 1 ? 1 : 0, sparrow: (i) => i % 2, blackbird: (i) => i % 2, stork: (i) => i % 4 === 3 ? 1 : 0,
+                           ibis: () => townSeed % 2, cockatiel: (i) => [0, 0, 1, 2][i % 4], dove: (i) => i % 3 === 2 ? 1 : 0, heron: (i) => i % 3 === 1 ? 1 : 0 };
+    for (const e of castList) { const nm = e[0].name, f = pick[nm]; if (!f) continue; const c = f((k[nm] = (k[nm] ?? 0) + 1) + townSeed); if (c) e[0] = coatDef(nm, c); }
+    const oh = variantDef("ostrich", "hen"); if (oh && CAST.some((q) => q.name === "ostrich")) { oh.name = "ostrich"; castList.push([oh]); }
+    const ph = variantDef("pheasant", "hen"); if (ph && CAST.some((q) => q.name === "pheasant")) { ph.name = "pheasant"; castList.push([ph], [ph]); }   // (two pheasant HENS with the cock: his `hen` variant -- brown, the short tail)
+  }
   if (!qp.has("n") && CAST.some((s) => s.name === "cat")) for (let k = 1; k < 10; k++) castList.push([makeCat({ seed: k })]);   // more cats, each its own coat
+  if (!qp.has("n") && townSeed % 2 && CAST.some((s) => s.name === "pegasus")) castList.push([coatDef("pegasus", 1 + townSeed % 3)]);   // (2026-11-07) in half the worlds a second PEGASUS with the white one, in a coat the town's seed picks: the dapple grey, the black or the palomino
+  if (!qp.has("n")) { const at = castList.findIndex((e) => e[0].name === "griffin"); if (at >= 0) castList[at] = [coatDef("griffin", townSeed)]; }   // (2026-11-07) the one GRIFFIN, on the crags, in a coat the town's seed picks: golden, white-headed or dark
+  if (!qp.has("n") && CAST.some((s) => s.name === "lion")) { const f = variantDef("lion", "lioness"); if (f) { f.call ??= "lion"; for (let k = 0; k < 3; k++) castList.push([f]); } }   // (2026-11-06) the lion's PRIDE: three lionesses with him (his `lioness` variant: no mane, .8 his size), roaring as he does
+  if (!qp.has("n")) for (const [nm, cnt] of [["frog", 3], ["snake", 2], ["wall lizard", 4]]) { const at = castList.findIndex((e) => e[0].name === nm); if (at < 0) continue; for (let k = 0; k < cnt; k++) { const d = coatDef(nm, townSeed + k); if (k) castList.push([d]); else castList[at] = [d]; } }   // (2026-11-06) three frogs by the water and two snakes, each in a coat the town's seed picks: the frog's are the European ones (common frog olive and brown, pool frog, tree frog), the snake's the grass snake, the adder (male, female) and the smooth snake -- the exotic ones (dart frogs, bullfrog, red-eyed tree frog; corn and coral snake, green tree snake, python) are variants, for the asset manager
+  if (!qp.has("n")) { let k = 0; for (const e of castList) if (e[0].dinosaur && e[0].name !== "pteranodon" && speciesDef(e[0].name)?.coats) e[0] = coatDef(e[0].name, townSeed + k++); }   // (2026-11-07) the dinosaurs each in a coat of its asset's own the town's seed picks -- the base, a forest/dark, a sand/ochre and a grey/slate scheme (their frills, crests and plates with them); their young (a triceratops calf, a parasaurolophus and a stegosaurus juvenile: `young`, YOUNG.kinds) keep the base
+  if (!qp.has("n")) for (const [k, nm] of ["uintatherium", "brontotherium", "elasmotherium"].entries()) if (!qp.has("species") || qp.get("species").split(",").includes(nm)) castList.push([coatDef(nm, townSeed + 5 + k), MFENCE]);   // (2026-11-08) the PREHISTORIC MAMMALS -- a uintatherium, a brontotherium (Megacerops) and an elasmotherium (assets/creatures/mammals, generator tools/creaturegen/prehistoric/gen.py) -- live with the dinosaurs in the monster pen (MFENCE), the world's prehistoric corner, each in a coat of its asset the town's seed picks; one of each (not in species.js SPECIES: catalogue species built by coatDef)
+  if (!qp.has("n")) for (const [k, nm] of ["dimetrodon", "desmatosuchus"].entries()) if (!qp.has("species") || qp.get("species").split(",").includes(nm)) castList.push([coatDef(nm, townSeed + 8 + k), MFENCE]);   // (2026-11-08) the PREHISTORIC REPTILES -- a dimetrodon (Permian sail-backed synapsid) and a desmatosuchus (Triassic aetosaur, plated and shoulder-spiked; assets/creatures/dinosaurs, generator tools/creaturegen/prehistoric/dimetrodon.py, desmatosuchus.py) -- in the monster pen (MFENCE) with the dinosaurs, each in a coat of its asset the town's seed picks; one of each (catalogue species built by coatDef, not in species.js SPECIES)
+  if (!qp.has("n")) {   // (2026-11-08) the HERPS (assets/creatures/others, generators tools/creaturegen/herps/; catalogue species built by coatDef, not in species.js SPECIES), placed by the world's climate (MAP.climate) as the fennec is:
+                        // AGAMAS (Agama agama) in a warm world (arid, tropical, mediterranean) a dominant male in his orange-and-indigo dress and two brown females (coats 0 and 2) on the rocks (the crags in an arid land) or at the foot of a building's sunny walls, elsewhere a stray male in a town in three;
+                        // FIRE SALAMANDERS in a cool or temperate one (not arid nor tropical) two, each in a coat the town's seed picks (spotted, striped, now and then the orange-red), in the damp woods (the forest's heart) or, without woods, on the water's shore;
+                        // GILA MONSTERS in an arid world two (banded, reticulated) on the open dry ground, elsewhere a stray one in a town in five
+                        // GREEN IGUANAS in a tropical world two (green; in a town in three the second the orange breeding male), one by the water, one in the woods (the forest's heart, else the shore too), elsewhere a stray green one on the shore in a town in six
+    const has = (nm) => !qp.has("species") || qp.get("species").split(",").includes(nm), cl = MAP?.climate ?? null;
+    const warm = cl === "arid" || cl === "tropical" || cl === "mediterranean";
+    const nA = has("agama") ? (warm ? 3 : townSeed % 3 === 1 ? 1 : 0) : 0;
+    if (nA) { const crag = cl === "arid" ? cragRange() : FENCE, rocks = crag !== FENCE ? crag : wallRange(); for (let k = 0; k < nA; k++) castList.push([coatDef("agama", k ? 2 : 0), rocks]); }
+    if (has("fire salamander") && cl !== "arid" && cl !== "tropical") { const damp = forestSpot() ? woodsRange(false) : SHORE; for (let k = 0; k < 2; k++) castList.push([coatDef("fire salamander", townSeed + k), damp]); }
+    const nG = has("gila monster") ? (cl === "arid" ? 2 : townSeed % 5 === 2 ? 1 : 0) : 0;
+    for (let k = 0; k < nG; k++) castList.push([coatDef("gila monster", townSeed + k), FENCE]);
+    const nI = has("green iguana") ? (cl === "tropical" ? 2 : townSeed % 6 === 4 ? 1 : 0) : 0;
+    for (let k = 0; k < nI; k++) castList.push([coatDef("green iguana", k && townSeed % 3 === 2 ? 2 : 0), k && forestSpot() ? woodsRange(false) : SHORE]);
+  }
+  if (!qp.has("n")) for (const [k, nm] of ["unicorn", "manticore", "cerberus"].entries()) { const at = castList.findIndex((e) => e[0].name === nm); if (at >= 0 && speciesDef(nm)?.coats) castList[at] = [coatDef(nm, townSeed + 11 + k), ...castList[at].slice(1)]; }   // (2026-11-07) the unicorn white, silver or black the manticore red, tawny, black or ash and the cerberus black, bronze or ashen (each asset's `coats`, the town's seed picks)
+  if (!qp.has("n")) for (const nm of ["crocodile", "turtle", "spider", "scorpion"]) { const at = castList.findIndex((e) => e[0].name === nm); if (at >= 0) castList[at] = [coatDef(nm, townSeed), ...castList[at].slice(1)]; }   // (2026-11-07) the crocodile, the turtle, the spider and the scorpion each in a coat the town's seed picks: Nile or saltwater crocodile; red-eared or yellow-bellied slider, European pond turtle; wolf spider, brown or grey; brown scorpion or deathstalker -- the alligator, the tarantula, the cross spider and the emperor scorpion are variants, for the asset manager
+  if (!qp.has("n")) {   // (2026-11-07) the mammals' coats, each picked by the town's seed (species.js coatDef; each asset's `coats`): the wolf grey, arctic, black or red; the tiger a Bengal, a Siberian or a white one; a plains or a Grevy's zebra; the brown rat or the black; the ox brown, red (a Devon's), steppe grey or black; the ram white, a brown Soay or black; in a town in six a white lion (his lionesses stay tawny); the reindeer's wild grey-brown or (one in four) white -- and with the bull a COW, his `cow` variant: smaller, slender antlers
+    for (const nm of ["wolf", "tiger", "zebra", "rat", "ox", "ram", "lion", "reindeer"]) { const at = castList.findIndex((e) => e[0].name === nm); if (at >= 0) castList[at] = [coatDef(nm, townSeed), ...castList[at].slice(1)]; }
+    const cow = CAST.some((q) => q.name === "reindeer") && variantDef("reindeer", "cow"); if (cow) { cow.name = "reindeer"; castList.push([cow]); }
+  }
   // the farmyards' stock: pigs in the pig yard, hens in the hen yard, each kept by its own fence
   // (the yard inside the rails, minus the shed they would otherwise walk through)
   if (!qp.has("n")) for (const s of RIVERSIDE) {
@@ -2452,18 +2643,24 @@ if (mode === "instanced" && n) {
                 spawn: () => { for (let k = 0; k < 50; k++) { const x = s.x + pen.x0 + .5 + wrand() * (pen.x1 - pen.x0 - 1), z = s.z + pen.z0 + .5 + wrand() * (pen.z1 - pen.z0 - 1); if (inside(x, z)) return [x, z]; } return f.home(); } };
     for (let k = 0; k < cnt; k++) castList.push([coatDef(nm, k * 2 + 1 + (townSeed % 2)), f]);   // (each in a coat of its own, where the species has several: every other one, from a place the town's seed picks)
     if (d.kind === "hens") { const cock = variantDef("chicken", "rooster"); if (cock) castList.push([cock, f]); }   // (and the cock that crows at dawn: the chicken's `rooster` variant)
+    if (d.kind === "hens" && CAST.some((q) => q.name === "turkey")) castList.push([coatDef("turkey", 1), f]);   // (2026-11-07: and a white domestic turkey among the hens -- the turkey's coat 1)
     if (d.kind === "hens") f.roost = true;   // (they go in for the night: roostTick)
     f.yard = s.key;   // (a chore with `lure` names it: its animals come to the worker -- choreLureTick)
   }
   let cap = 0;   // exact banner count of the cast about to be added
   for (const [d] of castList) cap += d.parts.length;
   herd = createComposite(cap);   // one quad per animal: metaball silhouettes for the rigged mammals
+  herd.ground = groundH;   // (four legs stood on the slope they are on: skeleton.js fitGround)
   scene.add(herd.mesh);
+  let prideF = null;   // the lion's PRIDE keeps together: a range ~28m across round where the first of them (the male) spawned, shared by him and his lionesses
   for (const [def, own] of castList) {
-    const a = herd.add(def); a.name = def.name;
+    const a = herd.add(def); a.name = def.name; if (def.hen) a.hen = true;   // (hen: a mallard hen -- the ducklings' mother)
     if (own?.roost) roosting.push(a);
-    const fence = own ?? fenceFor(def);
+    let fence = own ?? fenceFor(def);
+    const pride = !own && (def.name === "lion" || def.name === "lioness") && fence === FENCE;
+    if (pride && prideF) fence = prideF;
     const [sx2, sz2] = spawnIn(fence);
+    if (pride && !prideF) fence = prideF = { x0: Math.max(FENCE.x0, sx2 - 14), x1: Math.min(FENCE.x1, sx2 + 14), z0: Math.max(FENCE.z0, sz2 - 14), z1: Math.min(FENCE.z1, sz2 + 14) };   // (from his own spawn draw: no extra random draws, so the rest of the cast lands where it did)
     a.position.set(sx2, 0, sz2);
     a.rotY = faceCam;
     // (standing, a grazer lowers its head to the grass: its species' `graze`, radians -- skeleton.js an.nod; and one that
@@ -2475,14 +2672,23 @@ if (mode === "instanced" && n) {
       a._mv = mv;
       const lie = !mv && a._lie;
       a.restT = lie ? legL * def.rest : 0;
-      a.ampT = mv ? 1 : 0; a.runT = run ? 1 : 0; a.nodT = !mv && !lie && def.graze ? -def.graze : 0; a.peck = !mv && def.peck ? def.peck : 0; } },
+      a.ampT = mv ? 1 : 0; a.runT = run ? 1 : 0; a.nodT = !mv && !lie && def.graze ? -def.graze : 0; a.peck = !mv && def.peck ? def.peck : 0;
+      if (def.upright) { a.uprightT = !mv && !lie && Math.random() < .5 ? 1 : 0; if (a.uprightT) a.nodT = -(def.upright.deg ?? 70) * Math.PI / 180 * .8; } } },   // (a weasel stopping: half the time it stands up on its hind legs to look about -- skeleton.js UPRIGHT)
       ...(([sp, b, alt, hz]) => [sp, faceCam, b, alt, hz, fence, bodyProbe(def)])(wanderParams(def)));
     a.w = w;   // (combat.js: a figure struck down freezes its wanderer)
     if (def.shy && !def.fly) w.shy = def.shy;   // (shy: it runs from you -- shyStep)
     if (def.beg) { w.beg = def.beg; w.call = def.name; }   // (beg: comes over to you when you stand still near -- begStep)
     if (def.swim && (hasLake || RIVER_FLOAT)) w.surface = def.swim.depth;   // rides the water level, this deep in -- the lake's, or the river's
-    if (def.hop) { w.hop = def.hop; w.base = w.speed * def.hop.period; }   // hoppers: one leg cycle per hop
+    if (def.hop) { w.hop = def.hop; w.base = w.speed * def.hop.period * (def.hop.sync ? CYCLES : 1); }   // hoppers: one leg cycle per hop (a bounder's exactly: hopStep)
     if (def.active) { w.active = def.active; w.hide = (on) => { a.hidden = on; }; }   // day birds / night fliers: roost out of sight the rest of the time
+    if (def.fly && PERCHERS[def.name]) {   // ...or come down to a perch: the owls, the macaws, the eagles (perchers.js) -- the pose's numbers drawn smooth between ticks
+      w.percher = makePercher(w, a, PERCHERS[def.name], () => (perchSitesBuilt ??= perchSites({ trees: treeCols, ridges: ridgeLines, groundH })), def);
+      track(() => [a.pitch ?? 0, a.perch ?? 0, a.look ?? 0, a.legs ?? 0], (v) => { a.pitch = v[0]; a.perch = v[1]; a.look = v[2]; a.legs = v[3]; }, { jump: 0, live: () => !w.frozen });   // (legs: let down for the perch -- PERCH LEGS)
+    }
+    if (SKYSTEEDS[def.name]) {   // (2026-11-07) ...or takes to the air now and then: the pegasus, the griffin (skysteeds.js) -- landing on open ground in its range
+      w.skysteed = makeSkysteed(w, a, SKYSTEEDS[def.name], { fence, groundH, open: (x, z) => forestOpen(x, z, 3) && clearOfStands(x, z, 3) });
+      track(() => [a.wingT ?? 0, a.perch ?? 1, a.pitch ?? 0, a.roll ?? 0], (v) => { a.wingT = v[0]; a.perch = v[1]; a.pitch = v[2]; a.roll = v[3]; }, { jump: 0, live: () => !w.frozen });
+    }
     if (CALLS[def.call ?? def.name]) callers.push({ name: def.call ?? def.name, p: a.position, an: a, pitch: .9 + wrand() * .2 });
     if (def.mount) mountables.push({ w, def, a });   // (a: its figure -- an arrow passes the one you ride)
     if (def.mount || partExtent(def.parts[0]).r > .35) solids.push({ p: a.position, w, a, r: bodyRadius(def), h: def.parts[0].pos[1] + partExtent(def.parts[0]).r * (def.parts[0].scale?.[1] ?? 1) });
@@ -2502,7 +2708,7 @@ if (mode === "instanced" && n) {
 }
 
 // DUCKLINGS (ducklings.js): a brood paddling in each duck's wake
-const ducklings = createDucklings(scene, (herd?.animals ?? []).filter((a) => a.name === "duck"), { seed: townSeed });
+const ducklings = createDucklings(scene, (herd?.animals ?? []).filter((a) => a.name === "duck" && (a.hen || !herd.animals.some((b) => b.hen))), { seed: townSeed });   // (behind the HENS: the drakes swim alone)
 // WAKES (wakes.js): the V of ripples behind a duck or a swan under way
 const wakes = createWakes(scene, (herd?.animals ?? []).filter((a) => a.name === "duck" || a.name === "swan")
   .map((a) => ({ position: a.position, get rotY() { return a.rotY; }, get hidden() { return a.hidden; }, size: a.name === "swan" ? 1.1 : .5 })));
@@ -2626,7 +2832,7 @@ const CHURCHYARD = { near: 2.5, far: 12, along: 1.7, rows: 2.4, max: 46, door: 7
 }
 const treeShade = createShadeBlobs(scene, "tree shade");
 // a tree as the world keeps it (treeCols: what walking bumps into, the leaves fall from, the shade lies under)
-const treeCol = (x, z, td, an, extra = {}) => ({ x, z, r: td.trunkR, h: td.height, crown: td.crown, evergreen: td.evergreen, leafC: td.autumnC, trunk: trunkWorld(td, an), ...extra });
+const treeCol = (x, z, td, an, extra = {}) => ({ x, z, r: td.trunkR, h: td.height, crown: td.crown, evergreen: td.evergreen, leafC: td.autumnC, trunk: trunkWorld(td, an), boughs: trunkWorld({ trunk: td.boughs }, an), ...extra });   // (boughs: where a bird sits -- PERCHERS)
 const LITTER = { r: .85, s: 1, dark: 1, brown: .3 };   // fallen leaves under a broadleaf crown in autumn: its reach, strength (by autumn), how dark, how far browned from its autumn colour
 const _russet = new THREE.Color(0x7a4a22);
 const buildFlora = (autumnNow, springNow = 0) => {
@@ -2644,13 +2850,13 @@ const buildFlora = (autumnNow, springNow = 0) => {
   };
   treeCols.length = 0;
   pickables.length = 0;   // the season rebuild regrows what was picked
-  mushroomsUnder = false;   // (the new ones start shown: the tick hides them again if the snow lies)
+  const mspots = [];   // the mushrooms to grow -- [kind, x, z, seed, yaw] -- drawn with the flowers below (items/mushrooms, in the flowers' pool)
   for (const pr of perches) if (pr.taken) pr.taken.perch = null;   // (a butterfly on a flower of the old meadow flies on)
   perches.length = 0;
   // plants a building site grows (the village's orchard and currant rows): the same trees and bushes as the woods
   const sitePlants = sites.flatMap((s) => (BUILDINGS[s.key].plants ?? []).map((p) => ({ ...p, x: s.x + p.x, z: siteZ(s) + p.z })));
   if (!nTrees && !sitePlants.length) return;
-  treeHerd = createHerd((nTrees + 24 + FOREST.trees) * 260 + (nBush + FOREST.trees) * 14 + sitePlants.length * 120, { pixelDepth });   // (+24: the riverbank willows)   // grown trees up to ~200 segments (spruce), plus mushrooms, bushes, flowers
+  treeHerd = createHerd((nTrees + 24 + FOREST.trees) * 260 + (nBush + FOREST.trees) * 14 + sitePlants.length * 120, { pixelDepth });   // (+24: the riverbank willows)   // grown trees up to ~200 segments (spruce), plus bushes
   scene.add(treeHerd.mesh);
   const rand = rng(7);
   const spots = [];
@@ -2674,10 +2880,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
       for (let m = 0, mn = 1 + Math.floor(rand() * 3); m < mn; m++) {
         const mx = x + (rand() * 2 - 1) * 5, mz = z + (rand() * 2 - 1) * 5;
         const mKind = MUSHROOMS[Math.floor(rand() * MUSHROOMS.length)];
-        const mm = treeHerd.add(makeMushroom(mKind, { seed: placed * 31 + m }));
-        mm.position.set(mx, groundH(mx, mz), mz);
-        mm.rotY = rand() * Math.PI * 2;
-        pickables.push({ an: mm, x: mx, z: mz, kind: mKind });
+        mspots.push([mKind, mx, mz, placed * 31 + m, rand() * Math.PI * 2]);
       }
     placed++;
   }
@@ -2688,13 +2891,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
   // woods round it stay put)
   if (FOREST.trees && nTreesReq !== 0) {
     const fr = rng(4242), R = FOREST.radius ?? 46, sp = FOREST.spacing ?? 4.4, kinds = PERIOD.trees ? WILD : FOREST.species ?? TREE_SPECIES;
-    const open = (x, z, m) => x * x + z * z < groundR * groundR * .8 && !(Math.abs(x) < extent + 8 && z < 10 && z > -(rows * gap + 12))
-      && !(hasLake && lakeSD(x, z) < m) && riverSD(x, z) > m && !(SEA && waterSD(x, z) < m) && !inSites(x, z, 10 + m);
-    let best = null;
-    for (let gx = -groundR * .8; gx <= groundR * .8; gx += 12) for (let gz = -groundR * .8; gz <= groundR * .8; gz += 12) {
-      const ok = open(gx, gz, 6) && [.5, 1].every((k) => Array.from({ length: 12 }, (_, i) => i * Math.PI / 6).every((a) => open(gx + Math.cos(a) * R * k, gz + Math.sin(a) * R * k, 4)));
-      if (ok && (!best || gx * gx + gz * gz < best[0] * best[0] + best[1] * best[1])) best = [gx, gz];
-    }
+    const open = forestOpen, best = forestSpot();   // (the spot: found before the cast was spawned -- the pandas and the lynx live in it)
     if (best) {
       const [cx, cz] = best, ph = [fr() * 6.28, fr() * 6.28];
       const edge = (a) => R * (.82 + .12 * Math.sin(3 * a + ph[0]) + .06 * Math.sin(5 * a + ph[1]));   // the outline, not a circle
@@ -2713,9 +2910,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
         }
         if (fr() < .35) {
           const mx = x + (fr() * 2 - 1) * 2, mz = z + (fr() * 2 - 1) * 2, mKind = MUSHROOMS[Math.floor(fr() * MUSHROOMS.length)];
-          const mm = treeHerd.add(makeMushroom(mKind, { seed: 9800 + placed }));
-          mm.position.set(mx, groundH(mx, mz), mz); mm.rotY = fr() * Math.PI * 2;
-          pickables.push({ an: mm, x: mx, z: mz, kind: mKind });
+          mspots.push([mKind, mx, mz, 9800 + placed, fr() * Math.PI * 2]);
         }
         placed++;
       }
@@ -2829,7 +3024,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
   // (every kind and colouring in ONE batched pool, one material -- each flower culled on its own: they were a draw a
   //  kind and colouring, twenty-odd, every frame wherever you looked)
   const fm = new THREE.Matrix4(), fq = new THREE.Quaternion(), fs = new THREE.Vector3(), fp = new THREE.Vector3(), fy = new THREE.Vector3(0, 1, 0);
-  const pool = batchPool(flowerRoot, flowerMat ??= litMaterial(), { name: "flowers", copies: Math.max(16, [...fspots.values()].reduce((a, l) => a + l.length, 0)) });
+  const pool = batchPool(flowerRoot, flowerMat ??= litMaterial(), { name: "flowers", copies: Math.max(16, [...fspots.values()].reduce((a, l) => a + l.length, 0) + mspots.length) });
   for (const [key, list] of fspots) {
     const [kind, variant] = key.split("|"), geo = paintedItemGeometry("items/flowers/" + kind, { seed: 1 + +variant * 7 }), shape = pool.add(geo);
     geo.computeBoundingBox();
@@ -2840,6 +3035,16 @@ const buildFlora = (autumnNow, springNow = 0) => {
       perches.push(perch);
       pickables.push({ x, z, kind, hide: () => { pool.hide(id); perch.gone = true; } });
     });
+  }
+  // THE MUSHROOMS (2026-11-08): items now -- assets/items/mushrooms, written by tools/mushroomgen.py: lathes, as the flowers
+  // are -- in the flowers' pool, each kind in three growths by its seed; a pick hides its copy; under the snow with the
+  // flowers. (They were figures of the tree herd in the old part vocabulary, a pill and a squashed sphere: the last of it)
+  const mgeo = new Map();
+  for (const [kind, x, z, seed, yaw] of mspots) {
+    const v = seed % 3, key = kind + v;
+    if (!mgeo.has(key)) mgeo.set(key, pool.add(paintedItemGeometry("items/mushrooms/" + kind, { seed: 1 + v * 13 })));
+    const id = pool.fix(mgeo.get(key), fm.compose(fp.set(x, groundH(x, z), z), fq.setFromAxisAngle(fy, yaw), fs.setScalar(1)));
+    pickables.push({ x, z, kind, hide: () => pool.hide(id) });
   }
   scene.add(flowerRoot);
   for (const P of sitePlants) {   // the site plants: grown like the woods, drawn in the same herd and foliage
@@ -2871,7 +3076,8 @@ bootMark("flora done");
 // squirrels (squirrels.js): they live in the groves -- the trunks with a neighbour close by -- running,
 // climbing up and down; the list is copied (a flora rebuild refills treeCols with the same trees)
 let squirrels = null;
-if (herd && treeCols.length) squirrels = createSquirrels({ def: SQUIRREL, herd, trees: treeCols.slice(), groundH, gaitBase, track, count: Math.max(0, num("squirrels", CONFIG.crowds.squirrels)), TICK });
+if (herd && treeCols.length) squirrels = createSquirrels({ def: townSeed % 3 === 1 ? coatDef("squirrel", 1) : SQUIRREL,   // (2026-11-07: in a town in three the GREY squirrel -- squirrel.json coat 1; the reds and the greys do not share a wood)
+                                                                 herd, trees: treeCols.slice(), groundH, gaitBase, track, count: Math.max(0, num("squirrels", CONFIG.crowds.squirrels)), TICK });
 
 // clouds are the sky's now (sky.js): how many follows the weather -- rain and snow bring a full sky, a clear day few, half or many by the intensity key (O)
 const cloudTint = uniform(new THREE.Color(1, 1, 1));   // (the hour's colour on the smoke and the mist: sky.js `cloud`)
@@ -3122,7 +3328,8 @@ if (nFolk) {
 // catches laughs. Their own composite herd (one more draw); talkers, so they chatter and can be greeted.
 // (THE TOWNSFOLK AT PLAY -- the children at tag, the juggler and his crowd, the bonfire's sitters -- share one composite
 //  herd: one draw for them all, their heads and jewels with it)
-const extrasHerd = createComposite((Math.max(0, num("kids", 6)) + 1 + 5 + 5 + 2 + 2 + 8 + 1 + 9 + 3 + 2 + 10 + 1 + 2 + 3 + 4 + 3 + 3) * 48);   // (children, juggler, his crowd, the fire's sitters, its dancers, the watchman and the sentry, the young (lambs, foals, calves), the washerwoman, the shepherd's flock, the kite flyers and the bubble child, the swing's two, the wedding, the season's chores)
+const extrasHerd = createComposite((Math.max(0, num("kids", 6)) + 1 + 5 + 5 + 2 + 2 + 8 + 1 + 9 + 3 + 2 + 10 + 1 + 2 + 3 + 4 + 3 + 3 + 3) * 48);   /* (+3 2026-11-08: the prehistoric mammals' calves) */   // (children, juggler, his crowd, the fire's sitters, its dancers, the watchman and the sentry, the young (lambs, foals, calves), the washerwoman, the shepherd's flock, the kite flyers and the bubble child, the swing's two, the wedding, the season's chores)
+extrasHerd.ground = groundH;   // (the young, the flock: on the slope they stand on)
 // A CAT ASLEEP ON A WINDOW SILL or two: a ground-floor window with shutters and no flower box, the cat lying along
 // the sill on the outside (makeCat, its coat by the seed; lying -- an.rest -- and still)
 const SILL_CATS = { n: 2, lie: .75, at: [], ans: [] };
@@ -3154,7 +3361,7 @@ let tagGame = null, tagGreen = null, maypole = null, mayDancing = false;
 // sides, `n` to a mother (twin lambs, one foal, one calf), trotting with her, now and then gambolling a quick circle
 // round her, springing up off all four feet (by the species' `hop`); lying down by her when she lies down; gone in the
 // other seasons. YOUNG.mothers: how many mothers of a species have them.
-const YOUNG = { mothers: 2, gambol: [6, 14], spring: [2.5, 6], kinds: ["sheep", "horse", "cow"] };
+const YOUNG = { mothers: 2, gambol: [6, 14], spring: [2.5, 6], kinds: ["sheep", "horse", "cow", "pig", "triceratops", "parasaurolophus", "stegosaurus", "uintatherium", "brontotherium", "elasmotherium"] };   // (2026-11-08: and a calf with each prehistoric mammal)   // (2026-11-07: and the piglets, two at a sow's side in the pig yard -- pig.json `young`)
 const lambs = [];   // (all the young, whatever their kind)
 
 // SNOWBALLS: in snow the children at tag lob snowballs at each other now and then -- an arc to where the other is
@@ -4412,9 +4619,57 @@ if (SWIMF) {
     w.under = { r: Math.max(.03, (partExtent(fd.parts[0]).r || .1) * 1.6) };
     f.leap = fd.name === "dolphin" ? LEAP.dolphin : fd.name === "shark" ? null : LEAP.fish;   // (a shark keeps under)
   };
-  for (let i = 0; i < nFish; i++) addSwimmer(makeFish({ seed: i + 5 }));
-  if (hasLake) { addSwimmer(makeShark(), 1.3); addSwimmer(makeDolphin(), 1); }   // (the big ones only in the lake)
+  // (every tenth a fish of fresh water of its own -- a carp, a pike, a trout (assets/creatures/sea): the same draws, so
+  //  the rest swim where they did. The sea's own -- the swordfish, the reef fish, the ray, the octopus -- stay out)
+  const FRESH = [["carp", .3], ["pike", .4], ["trout", .2]];
+  for (let i = 0; i < nFish; i++) {
+    const own = i % 10 === 9 && FRESH[(i / 10) | 0];
+    if (own) addSwimmer(coatDef(own[0], townSeed + i), own[1]); else addSwimmer(makeFish({ seed: i + 5 }));   // (2026-11-07: each in a coat of its own -- a brown or a rainbow trout, a common carp bronze or dark: species.js coatDef)
+  }
+  if (hasLake) { addSwimmer(coatDef("shark", townSeed), 1.3); addSwimmer(coatDef("dolphin", townSeed), 1); }   // (the big ones only in the lake -- 2026-11-07: in a coat the town's seed picks, a great white or a blue shark, a bottlenose or a common dolphin)
 }
+// KOI IN THE GARDEN POOLS (2026-11-07): a pool moat's water (Kinkaku-ji's pond, the Phoenix Hall's, Kunming Lake) holds a
+// few KOI -- the carp's `koi` variants (kohaku, yamabuki ogon: assets/creatures/sea/carp.json), slow and near the surface.
+// They join the fish's herd (made here if the world has none); their speeds from a stream of their own
+{
+  const KOI = qp.has("n") ? [] : ["koi (kohaku)", "koi (kohaku)", "koi (yamabuki ogon)"].map((v) => variantDef("carp", v)).filter(Boolean);
+  const kr = rng(7717);
+  for (const m of KOI.length ? moats.filter((q) => q.pool) : []) {
+    const wetAt = (x, z) => moatSD(m, x, z) < -1.5 && surfaceAt(x, z) > groundH(x, z) + .6, wet = [];
+    for (let x = m.cx - m.hw + 1; x < m.cx + m.hw; x += 2) for (let z = m.cz - m.hd + 1; z < m.cz + m.hd; z += 2) if (wetAt(x, z)) wet.push([x, z]);
+    if (wet.length < 6) continue;
+    const F = { x0: m.cx - m.hw, x1: m.cx + m.hw, z0: m.cz - m.hd, z1: m.cz + m.hd, inside: wetAt,
+                home: (x, z) => wet.reduce((b, q) => (Math.hypot(q[0] - x, q[1] - z) < Math.hypot(b[0] - x, b[1] - z) ? q : b), wet[0]),
+                spawn: () => wet[Math.floor(kr() * wet.length)] };
+    if (!fishHerd) { fishHerd = createComposite(64); scene.add(fishHerd.mesh); }
+    for (let i = 0, n = Math.min(7, 3 + (wet.length >> 6)); i < n; i++) {
+      const fd = KOI[i % KOI.length], f = fishHerd.add(fd), [x, z] = F.spawn(), sp = .18 + kr() * .25;
+      f.position.set(x, surfaceAt(x, z) - .4, z);
+      f.rotY = kr() * Math.PI * 2;
+      const w = addWanderer(f.position, (h) => f.rotY = h, (v) => f.animT = v, sp, f.rotY, sp, .2 + kr() * .4, fd.fly?.hz ?? 1.4, F, .3);
+      f.w = w; f.leap = null;
+      w.under = { r: Math.max(.03, (partExtent(fd.parts[0]).r || .1) * 1.6) };
+    }
+  }
+}
+// THE OPEN WATER'S GIANTS (sealife.js): a sea's humpbacks and orca pod far offshore, a plesiosaur in the sea or the big
+// lake -- each on a deep-water loop of its own, where it is and when it blows a pure function of the shared clock
+// (2026-11-07: and a sea's mantas offshore, stingrays in a beach's shallows and crabs scuttling on its wet sand -- the
+//  crabs stand on the ground, clear of the sites, the stands and the port)
+const seaLife = createSeaLife(scene, { SEA, seed: townSeed, ring: (x, y, z, k) => stones.ring(x, y, z, k), ground: groundH,
+                                      blocked: (x, z) => inSites(x, z, 3) || !clearOfStands(x, z, 1.2), harbour: HARBOUR?.site?.points ?? null,
+                                      climate: MAP?.climate ?? null });   // (the narwhals': a pod in a cold sea)
+if (seaLife) for (const c of seaLife.callers) callers.push(c);
+// THE SHORE'S SEALS AND WALRUSES (haulout.js): groups of seals hauled out on a sea's or a big lake's beaches and low
+// rocks, a walrus herd on a cold sea's rocky shore (a lone vagrant now and then where it is temperate) -- lying, sliding
+// in, swimming, bottling and hauling out again, a pure function of the shared clock. ?walrus=N: N walruses whatever the climate
+const haulout = createHaulout(scene, { SEA, ground: groundH, seed: townSeed, climate: MAP?.climate ?? null, force: qp.get("walrus"),
+                                      blocked: (x, z) => inSites(x, z, 3) || !clearOfStands(x, z, 1.2), harbour: HARBOUR?.site?.points ?? null,
+                                      ring: (x, y, z, k) => stones.ring(x, y, z, k) });
+if (haulout) for (const c of haulout.callers) callers.push(c);
+// PTERANODONS (pterosaurs.js): two or three soaring in slow circles over the sea or the lake (else the land), now and then
+// a swoop down to skim the water -- where each is a pure function of the shared clock, the floor ahead never clipped
+const pterosaurs = createPterosaurs(scene, { SEA, hasLake, lakeSD, waterY, groundH, groundR, seed: townSeed });
 
 // the path network (paths.js): the town's highway and the carts' lane loop,
 // every track kept out of the water, the track mesh
@@ -4446,7 +4701,8 @@ terrainReady.then(() => { paintingsMayStart = true; });
 const HIVES = sites.filter((s) => s.key === "apiary").map((s) => [s.x, siteZ(s)]);
 // the ROOSTER in the hen yard, crowing as the night turns to morning -- three times over the next minute (calls.js)
 const ROOSTER = (() => { const s = sites.find((q) => BUILDINGS[q.key]?.kind === "hens"); return s ? { name: "rooster", p: { x: s.x, z: siteZ(s) }, pitch: 1 } : null; })();
-{ const cock = herd?.animals.find((a) => a.name === "rooster"); if (ROOSTER && cock) ROOSTER.p = cock.position; }   // (the crow from the cock himself, wherever he is in the yard: the chicken's `rooster` variant)
+{ const cocks = herd?.animals.filter((a) => a.name === "rooster") ?? [], d2 = (a) => (a.position.x - ROOSTER.p.x) ** 2 + (a.position.z - ROOSTER.p.z) ** 2;
+  const cock = ROOSTER && cocks.sort((a, b) => d2(a) - d2(b))[0]; if (cock) ROOSTER.p = cock.position; }   // (the crow from the cock himself, wherever he is in the yard: the chicken's `rooster` variant -- the one nearest the hen house, not a meadow rooster, assets/creatures/birds/rooster)
 let crowAt = [], prevDark = null, fogFrom = null;
 const FOG0 = { near: scene.fog.near, far: scene.fog.far };   // (the clear day's fog: past everything on the lawn)
 const farOff = (m, at, d) => { if (m?.visible && at && Math.hypot(camera.position.x - at.x, camera.position.z - at.z) > d) m.visible = false; };
@@ -4454,6 +4710,19 @@ const farOff = (m, at, d) => { if (m?.visible && at && Math.hypot(camera.positio
 const bees = createBees(scene, sites.filter((s) => s.key === "apiary").flatMap((s) => (ASSETS.get("architecture/village/apiary")?.parts?.skeps?.at ?? [])
   .map(([x, , z]) => ({ x: s.x + x, y: groundH(s.x + x, siteZ(s) + z) + .32, z: siteZ(s) + z }))), { seed: townSeed });
 const BEE_AT = HIVES.length ? { x: HIVES[0][0], z: HIVES[0][1] } : null;
+// BURROWS, ANTHILLS AND NESTS (2026-11-08, nature.js): the diggers' holes in the ground with their tunnels and spoil
+// (burrows.js: the ground really cut -- grass.js PITS), the wood ants' mounds at the forest's edge and their ants
+// (ants.js), the birds' nests in the trees and by the water (nests.js) -- placed once the drawn ground has come, as they
+// must meet it; the animals that dig go home to their burrows (w.den). ?nature=0: none.
+let nature = null;
+if (qp.get("nature") !== "0") terrainReady.then(() => {
+  const F = forestSpot();
+  nature = placeNature({ scene, ground, groundH, waterSD, herd, PERCHERS, ASSETS, seed: townSeed, trees: treeCols,
+    defOf: (nm) => CAST.find((s) => s.name === nm),
+    ok: (x, z, m) => forestOpen(x, z, m) && clearOfStands(x, z, m) && offRoad(x, z, m + .5) && waterSD(x, z) > m + 1,
+    clear: (x, z, m) => x * x + z * z < groundR * groundR * .8 && !inSites(x, z, m + 2) && clearOfStands(x, z, m) && offRoad(x, z, m + .5),
+    forest: F ? { x: F[0], z: F[1], R: CONFIG.forest?.radius ?? 46 } : null, you: () => camera.position, night: () => night });
+});
 // the palace's Hall of Mirrors (mirrors.js): planar reflections, the nearest few only
 const mirrorSet = createMirrors(scene, sites.flatMap((s) => (BUILDINGS[s.key].mirrors ?? []).map((m) => ({ ...m, x: s.x + m.x, y: m.y + .01, z: siteZ(s) + m.z,
   room: m.room && [s.x + m.room[0], s.x + m.room[1], m.room[2] + .01, m.room[3] + .01, siteZ(s) + m.room[4], siteZ(s) + m.room[5]] }))), renderer);
@@ -4461,6 +4730,7 @@ const bellHour = () => { const d = new Date(); return d.getMinutes() === 0 && d.
 // the villagers' day (village-life.js): homes and beds, jobs, the inn, church at the bell, sacks to the mill
 const tools = createTools(scene);   // tools and arms in people's hands: items (assets/items), low-poly meshes, one draw per kind and material
 tools.prepare(["lantern", "items/tools/staff", ...CARRY.kinds.map((k) => "items/tools/" + k)]);   // (the lanterns carried after dark, the old folk's staffs, what the walkers carry: built now, not on first sight)
+const bodies = createBodies(scene, { shade: CONFIG.people?.faceShade ?? {} });   // (the sculpted creatures: bodies.js)
 const manes = createManes(scene, { shade: CONFIG.people?.faceShade ?? {} });   // (the lions' manes: thorns.js on the mane, placed every frame like the heads)
 if (CONFIG.people?.faceDetail !== undefined) HEAD_DETAIL.face = CONFIG.people.faceDetail;   // (how finely the heads are subdivided: face.js)
 const heads = createHeads(scene, { shade: CONFIG.people?.faceShade ?? {} });   // people's faces: mesh heads (face.js) placed at the head part every frame (heads.js)
@@ -4541,14 +4811,16 @@ let statueHerd = null, statueHolders = [];
 let riderHerd = null, spareHerd = null, riderSplit = null;   // spareHerd, riderSplit: riders parted by a blow (combat.js)
 // a person FUSED onto a mount as one figure: the mount's parts, then the person's renamed r_... and hung from its body
 // at the saddle -- and the person's mesh face, its part indices moved past the mount's (heads.js reads them)
+// (2026-11-08: the mount SCULPTED as the loose one is -- its body carried in `sculpts`, its parts bones: bodyspec.js sculptPart.
+//  Fused as parts it was drawn as plain pills, far below the horse grazing beside it)
 function fuseRider(md, pd) {
   const sd = saddle(md), dy = pd.rideAt(sd.bodyY);   // hips onto the mount's back at the saddle (body-local)
-  const n = md.parts.length;
+  const sc = sculptPart(md), mp = sc ? sc.parts : md.parts, n = mp.length;
   return { parts: [
-      ...md.parts,
+      ...mp,
       ...pd.parts.map((p) => ({ ...p, id: "r_" + p.id, parent: p.parent ? "r_" + p.parent : "body",
         pos: p.parent ? p.pos : [p.pos[0] + sd.bodyX, p.pos[1] + dy, p.pos[2]] })),
-    ], face: pd.face ? { ...pd.face, head: n + pd.face.head, gaze: n + pd.face.gaze } : null };
+    ], face: pd.face ? { ...pd.face, head: n + pd.face.head, gaze: n + pd.face.gaze } : null, ...(sc ? { sculpts: [{ body: sc.body, base: 0 }] } : {}) };
 }
 bootMark("WHERE A RIDER SITS on a mount, from the sa");
 // WHERE A RIDER SITS on a mount, from the same saddle fuseRider hangs it at: its origin above the ground under the mount
@@ -4559,13 +4831,14 @@ const riderEye = (md, pd) => riderOrigin(md, pd) + pd.eyeAt[1];
 const riders = [], looseHorses = [];
 if (pathRoutes.length && nFolk) {
   const horseDef = SPECIES.find((s) => s.name === "horse");
-  const makeRider = (seed) => {
+  const makeRider = (seed, md = horseDef) => {   // (md: the horse in one of its coats -- species.js coatDef)
     const pd = makePerson({ seed, pose: "ride", still: true, adult: true });
-    return { name: "rider", gaits: horseDef.gaits, legLen: horseDef.legLen, probe: horseDef.probe, ...fuseRider(horseDef, pd) };
+    return { name: "rider", gaits: horseDef.gaits, legLen: horseDef.legLen, probe: horseDef.probe, ...fuseRider(md, pd) };
   };
   riderHerd = createComposite(3 * 60 + 4 * 40);
+  riderHerd.ground = groundH;
   scene.add(riderHerd.mesh);
-  spareHerd = createComposite(3 * (60 + 45));   // riders and horses parted by a blow (combat.js): the horse alone, the man on his own
+  spareHerd = createComposite(3 * (60 + 45)); spareHerd.ground = groundH;   // riders and horses parted by a blow (combat.js): the horse alone, the man on his own
   scene.add(spareHerd.mesh);
   // a rider struck: the fused figure parts -- the struck one falls, the other goes on along the tour (the horse riderless,
   // or the man on foot); side: the fall's side (a peer's, or worked out here)
@@ -4573,7 +4846,7 @@ if (pathRoutes.length && nFolk) {
     const old = r.an, pd = makePerson({ seed: r.seed, adult: true });
     old.hidden = true;
     r.fused = null;   // parted: whichever of the two walks on is a figure of its own now
-    const horse = spareHerd.add(horseDef), man = spareHerd.add(pd);
+    const horse = spareHerd.add(r.md ?? horseDef), man = spareHerd.add(pd);
     for (const f of [horse, man]) { f.position.copy(old.position); f.rotY = old.rotY; f.animT = old.animT; }
     horse.runT = old.runT; horse.ampT = man.ampT = 1;
     if (part === "rider") {   // thrown from the saddle; the horse goes on
@@ -4602,7 +4875,7 @@ if (pathRoutes.length && nFolk) {
   // carts -- no path stepping of their own
   const tourLane = laneFrom([...tour, ...tour.slice(0, -1).reverse()]);
   for (let i = 0; i < 3; i++) {
-    const an = riderHerd.add(makeRider(i * 7 + 31));
+    const md = coatDef("horse", i * 5), an = riderHerd.add(makeRider(i * 7 + 31, md));   // (each horse in a coat of its own: assets/creatures/mammals/horse.json `coats`)
     const talker = { p: an, seed: i * 7 + 31, kind: "man" };
     talkers.push(talker);   // riders talk too (from the saddle)
     const u = wrand(); wrand();   // (where on the tour; the second draw keeps the world's random stream as it was)
@@ -4611,7 +4884,7 @@ if (pathRoutes.length && nFolk) {
     // been (r.an is then the horse alone, or the man on foot), this stays behind as the mark that it was --
     // the count of parts is no test, since a man in a hat with a braid has more parts than a horse, and
     // shooting him after his horse then split him again and conjured a second horse out of the saddle.
-    const r = { an, fused: an, lane: tourLane, s: out ? s0 : tourLane.total - s0, speed: 1.7 + wrand() * .9, base: hBase, seed: i * 7 + 31, talker, nHorse: horseDef.parts.length };
+    const r = { an, fused: an, lane: tourLane, s: out ? s0 : tourLane.total - s0, speed: 1.7 + wrand() * .9, base: hBase, seed: i * 7 + 31, talker, nHorse: horseDef.parts.length, md };
     riders.push(r);
     { const [x, z] = tourLane.at(r.s); an.position.set(x, 0, z); an.rotY = tourLane.heading(r.s); }
     an.animT = wrand() * 5;
@@ -4619,13 +4892,13 @@ if (pathRoutes.length && nFolk) {
     track(() => [r.an.position.x, r.an.position.y, r.an.position.z, r.an.rotY, r.an.animT], (v) => { r.an.position.set(v[0], v[1], v[2]); r.an.rotY = v[3]; r.an.animT = v[4]; }, { angles: [3] });   // (r.an: the horse alone or the man on foot once they part, combat.js)
   }
   for (let i = 0; i < 4; i++) {   // loose horses: wanderers, and mountable by clicking
-    const an = riderHerd.add(horseDef);
+    const md = coatDef("horse", 9 + i), an = riderHerd.add(md);   // (in coats of their own, past the paddocks' and the riders')
     const [x, z] = spawnIn(FENCE);
     an.position.set(x, 0, z);
     an.rotY = wrand() * Math.PI * 2;
     const w = addWanderer(an.position, (h) => an.rotY = h, (v, wt, mt, mv, run) => { an.animT = v; if (mv !== undefined) { an.ampT = mv ? 1 : 0; an.runT = run ? 1 : 0; } },
-      ...(([sp, b, alt, hz]) => [sp, an.rotY, b, alt, hz, FENCE, bodyProbe(horseDef)])(wanderParams(horseDef)));
-    an.w = w; mountables.push({ w, def: horseDef, a: an });
+      ...(([sp, b, alt, hz]) => [sp, an.rotY, b, alt, hz, FENCE, bodyProbe(md)])(wanderParams(md)));
+    an.w = w; mountables.push({ w, def: md, a: an });
     callers.push({ name: "horse", p: an.position, an, pitch: .9 + wrand() * .2 });
   }
 }
@@ -4918,7 +5191,8 @@ if (n) for (const s of town) {
   const ah = createComposite(12 * 40);
   scene.add(ah.mesh);
   const lion = SPECIES.find((d) => d.name === "lion"), tiger = SPECIES.find((d) => d.name === "tiger");
-  const cast = [lion, lion, lion, lion, tiger, tiger, tiger, tiger,
+  const lioness = variantDef("lion", "lioness"); if (lioness) lioness.call ??= "lion";
+  const cast = [lion, lioness ?? lion, lioness ?? lion, lioness ?? lion, tiger, tiger, tiger, tiger,   // (a pride: one male, three lionesses)
                 makePerson({ seed: 71, adult: true }), makePerson({ seed: 72, adult: true }), makePerson({ seed: 73, adult: true }), makePerson({ seed: 74, adult: true })];
   for (const cd of cast) {
     const an = ah.add(cd);
@@ -4937,7 +5211,26 @@ if (n) for (const s of town) {
 
 // riding: click a nearby horse to mount -- the camera sits at the rider's
 // head, movement drives the horse at double speed; click again to dismount
-let mounted = null, resting = null, swimming = false, swimTop = 0, swimRing = 0, moveSpeed2D = 0, lastXZ = [0, 0], feetWet = false;   // swimming: afloat in water deeper than you stand (E up, Q dive)   // resting = { x, z, y, lie } while seated or lying
+let mounted = null, resting = null, swimming = false, swimTop = 0, swimRing = 0, moveSpeed2D = 0, lastXZ = [0, 0], feetWet = false;
+// RIDING SMOOTHLY (2026-11-08): the mount and the eye on it stand at `rideY`, eased toward the ground under them, not at the
+// ground itself step by step -- a bumpy track jolted both; and a ridden mount's gait does not bob it (skeleton.js an.ridden):
+// the eye did not bob with it, so the whole beast jumped up and down under a level view. Aloft it was smooth; now it is on the ground too
+let rideY = null;
+// a SKY STEED ridden (the pegasus, the griffin: skysteeds.js): it has no FLIGHT pose of its own (its definition says
+// `flight: false`) -- as when it flies on its own, its wings fold by PERCH and its legs are held by tuckLegs, eased in as
+// it takes off and out as it lands. aloft: whether it is in the air now; dt: the step
+const steedRide = (a, spec, aloft, dt) => {
+  a.tuckU = (a.tuckU ?? 0) + Math.max(-dt * 1.6, Math.min(dt * 1.2, (aloft ? 1 : 0) - (a.tuckU ?? 0)));
+  const u = a.tuckU * a.tuckU * (3 - 2 * a.tuckU);
+  a.perch = 1 - u; a.perchFold ??= { fold: spec.fold, squeeze: spec.squeeze }; tuckLegs(a, u, spec.tuck);
+};
+// what a mount's figure does as you get on or off it (and a peer's, setPeerMount): no bob while ridden; a sky steed set
+// down where it stands, its own flights put off
+const rideOn = (m, on) => {
+  if (!m.a) return;
+  m.a.ridden = on;
+  if (m.w.skysteed) { m.w.skysteed.ground(simTick * TICK); if (!on) { m.a.perch = 1; m.a.pose = null; m.a.tuckU = 0; } }
+};   // swimming: afloat in water deeper than you stand (E up, Q dive)   // resting = { x, z, y, lie } while seated or lying
 let eyeH = EYE;
 // what a click would do right now (at most ONE action): drives both the
 // click itself and the bottom-center hint text
@@ -5058,7 +5351,7 @@ function weddingTick(t, dt) {
 function findInteraction() {
   if (mounted?.flying) return { label: "hold Q to land first", act: () => {} };
   if (mounted) return { label: "click to dismount",
-    act: () => { mounted.w.frozen = false; mounted = null; eyeH = EYE; } };
+    act: () => { mounted.w.frozen = false; if (mounted.a) mounted.a.flyT = 0; rideOn(mounted, false); mounted = null; rideY = null; eyeH = EYE; } };
   if (swing && swingSeat && !resting && Math.hypot(swingSeat[0] - camera.position.x, swingSeat[2] - camera.position.z) < 1.4 && Math.abs(swingSeat[1] - standY) < 1.2)
     return { label: "click to sit on the swing", act: () => { resting = { lie: false, swing: true, x: swingSeat[0], y: swingSeat[1], z: swingSeat[2] }; eyeH = .8; } };   // (the child on it hops off: swingTick)
   if (hideSeek && !hideSeek.mode && !resting && !night && weather === 0 && leapKids.every((k) => !k.an.hidden)
@@ -5100,9 +5393,10 @@ function findInteraction() {
     const dx = m.w.p.x - camera.position.x, dz = m.w.p.z - camera.position.z;
     const d = Math.hypot(dx, dz);
     if (d > 1.2 + bodyProbe(m.def)) continue;                   // ~1m from the animal's flank
+    if (Math.abs(m.w.p.y - standY) > 1.6) continue;              // (and on your level: not a pegasus circling overhead)
     if ((dx * fx + dz * fz) / Math.max(d, .01) < .4) continue;  // must be looking at it
     return { label: `click to ride the ${m.def.name}`,
-      act: () => { mounted = { ...m, animT: m.w.animT, wingT: 0, flying: false, idx: mountables.indexOf(m) }; m.w.frozen = true; if (m.a) m.a.nodT = 0; eyeH = riderEye(m.def, selfRider()); rouse(m.w.p); } };   // (its head up: you are on it)
+      act: () => { mounted = { ...m, animT: m.w.animT, wingT: 0, flying: false, idx: mountables.indexOf(m) }; m.w.frozen = true; if (m.a) m.a.nodT = 0; rideOn(m, true); rideY = standY; eyeH = riderEye(m.def, selfRider()); rouse(m.w.p); } };   // (its head up: you are on it)
   }
   for (const c of callers) {   // any creature with a voice that you cannot ride: stand close, look at it, click -- it calls (mounts call when mounted)
     if (c.an?.down) continue;   // (struck down: silent)
@@ -5152,8 +5446,8 @@ function findInteraction() {
   }
   for (let i = 0; i < pickables.length; i++) {   // pick a flower or a mushroom
     const pk = pickables[i];
-    if ((pk.hide && flowerRoot && !flowerRoot.visible) || pk.an?.hidden) continue;   // (a flower or a mushroom under the snow: not there to pick)
-    if (pk.picked || (pk.an && pk.an.position.y < -50)) continue;   // already picked
+    if (flowerRoot && !flowerRoot.visible) continue;   // (a flower or a mushroom under the snow: not there to pick)
+    if (pk.picked) continue;   // already picked
     const d = Math.hypot(pk.x - camera.position.x, pk.z - camera.position.z);
     if (d > 1.5 || Math.abs(standY - groundH(pk.x, pk.z)) > 1.5) continue;
     return { label: `click to pick the ${pk.kind}`,
@@ -5184,11 +5478,9 @@ function findInteraction() {
 function interact() { findInteraction()?.act(); }
 function doPick(i) {   // hide the picked plant's instance (shared with peers via the pick op)
   const pk = pickables[i];
-  if (!pk || pk.picked || (pk.an && pk.an.position.y < -50)) return;
+  if (!pk || pk.picked) return;
   pk.picked = true;
-  if (pk.hide) { pk.hide(); return; }   // (a flower: its instance scaled to nothing)
-  pk.an.position.y = -100;
-  if (treeHerd) treeHerd.update(0);
+  pk.hide();   // (its copy in the flowers' pool hidden)
 }
 const hintEl = document.getElementById("hint");
 function moveRiders(dt) {   // on their tour lane, like a cart on its lane
@@ -5230,9 +5522,9 @@ function ensureAvatar(id, kind, person = {}) {   // person: more makePerson opti
 }
 function setPeerMount(av, mi) {
   if (av.mi === mi) return;
-  if (av.mi >= 0 && mountables[av.mi]) mountables[av.mi].w.frozen = false;   // their old mount roams again
+  if (av.mi >= 0 && mountables[av.mi]) { mountables[av.mi].w.frozen = false; rideOn(mountables[av.mi], false); }   // their old mount roams again
   av.mi = mi;
-  if (mi >= 0 && mountables[mi]) mountables[mi].w.frozen = true;
+  if (mi >= 0 && mountables[mi]) { mountables[mi].w.frozen = true; rideOn(mountables[mi], true); }
 }
 function applyNetOp(op) {
   if (op.k === "pose") {
@@ -5251,6 +5543,8 @@ function applyNetOp(op) {
         mw.wingT = (mw.wingT ?? 0) + .28;
       } else if (op.m) mw.animT += .5;
       mw.setT(mw.animT, mw.wingT ?? 0, undefined, !!op.m && !aloft, !!op.m);
+      const ma = mountables[av.mi].a, mn = mountables[av.mi].def.name;
+      if (ma) { if (SKYSTEEDS[mn]) steedRide(ma, SKYSTEEDS[mn], aloft, .125); else ma.flyT = aloft ? 1 : 0; }   // (8Hz ops)
     }
   } else if (op.k === "door") {
     if (doors[op.i]) doors[op.i].open = !!op.open;
@@ -6189,7 +6483,9 @@ function fpsStep(dt) {
   // (on foot the eye eases to its height -- a step up is not a jolt; RIDING it does not: the mount stands at its floor
   //  this very step, and an eye easing after it lagged behind -- the mount moved first and the camera followed)
   // (nor on a moving floor: the bed rises and dips under the feet this very step -- the eye goes with it)
-  if (mounted || onFloor) camera.position.y = standY + (crouch || wedged ? Math.min(eyeH, .85) : eyeH);
+  // (RIDING: the mount and the eye both stand at rideY, eased toward the ground -- in step with each other, and not jolted by it)
+  if (mounted) { rideY = rideY === null ? standY : rideY + (standY - rideY) * Math.min(1, dt * 8); camera.position.y = rideY + (crouch || wedged ? Math.min(eyeH, .85) : eyeH); }
+  else if (onFloor) camera.position.y = standY + (crouch || wedged ? Math.min(eyeH, .85) : eyeH);
   else camera.position.y += (standY + (crouch || wedged ? Math.min(eyeH, .85) : eyeH) - camera.position.y) * Math.min(1, dt * 10);
   // THE MOUNT, where the camera has ended up this step -- after the walk, the jump, the fall, the dash: placed before
   // them it stood where the camera had been, a step behind it
@@ -6197,7 +6493,7 @@ function fpsStep(dt) {
     const mw = mounted.w;
     if (l) mw.apply(mw.heading = Math.atan2(-mz, mx));
     const sx = saddle(mounted.def).rootX;   // the saddle under the rider: the body sits back by its offset
-    mw.p.x = camera.position.x - Math.cos(mw.heading) * sx; mw.p.z = camera.position.z + Math.sin(mw.heading) * sx; mw.p.y = standY + .04;
+    mw.p.x = camera.position.x - Math.cos(mw.heading) * sx; mw.p.z = camera.position.z + Math.sin(mw.heading) * sx; mw.p.y = rideY + .04;
     const settle = (v, hz) => v + (Math.round(v * 2 * hz) / (2 * hz) - v) * Math.min(1, dt * 10);   // ease to a neutral pose
     const ws = mounted.def.parts.find((q) => q.anim?.wing)?.anim.speed ?? .5;
     const pace = dt * vel / mw.base;   // the gait clock's rate at this speed
@@ -6210,6 +6506,10 @@ function fpsStep(dt) {
       mounted.wingT = settle(mounted.wingT, ws);   // folded wings rest at a beat's neutral
     }
     mw.setT(mounted.animT, mounted.wingT, undefined, !!l && !mounted.flying, !!l && runs(vel, mw.base));   // walk or run by the one rule every animal follows
+    if (mounted.a) {   // (aloft: neck out, legs drawn up, tail streaming -- skeleton.js FLIGHT; a sky steed: its wings unfolded and its legs tucked, steedRide)
+      if (SKYSTEEDS[mounted.def.name]) steedRide(mounted.a, SKYSTEEDS[mounted.def.name], mounted.flying, dt);
+      else mounted.a.flyT = mounted.flying ? 1 : 0;
+    }
   }
 }
 
@@ -6381,6 +6681,7 @@ function poseAll(ta) {
   tools.place([folk && folkHold.length && [folk, folkHold], fireHold.length && [extrasHerd, fireHold], shepherdHold.length && [extrasHerd, shepherdHold], choreHold.length && [extrasHerd, choreHold], watchman && !watchman.an.hidden && [extrasHerd, watchman.hold], sentry && !sentry.an.hidden && [extrasHerd, sentry.hold], lifeHerd && [lifeHerd, lifeHold], guardHerd && [guardHerd, guards], crewHerd && [crewHerd, crew], statueHerd && [statueHerd, statueHolders], selfHolders()].filter(Boolean));
   heads.place([...combatNames().map(([, h]) => h), ...[...avatars.values()].map((a) => a.herd), statueHerd, extrasHerd].filter(Boolean));
   jewels.place([...combatNames().map(([, h]) => h), ...[...avatars.values()].map((a) => a.herd), extrasHerd].filter(Boolean));
+  bodies.place(herds, camera.position);   // (the sculpted creatures' skins on their posed bones: every composite herd -- the pastures' extras and the trees' too)
   manes.place(combatNames().map(([, h]) => h));   // (and the manes on whatever in those herds has one: the lions)   // every herd with people: the village's, the arena's, the player's own and the duplicates (Ctrl+N)
   mark("tools");
   // (butterflies by day, in fair weather, not over snow -- they flew in all of it; the gate here, not in butterflies.js:
@@ -6388,6 +6689,9 @@ function poseAll(ta) {
   if (bflies && stir()) { if (weather === 0 && SNOW.value < .5 && dark < .35) bflies.update(ta); else for (const b of bflies.all) b.k.mesh.visible = false; }
   if (dflies && stir()) dflies.update(ta);
   if (fishHerd) { leapFish(); fishHerd.update(ta); }
+  if (seaLife) seaLife.update(simTick * TICK, ta);   // (the whales, the orcas, the plesiosaur: sealife.js)
+  if (haulout) haulout.update(simTick * TICK, ta);   // (the seals and walruses on the shore: haulout.js)
+  if (pterosaurs) pterosaurs.update(simTick * TICK, ta);   // (the pteranodons: pterosaurs.js)
   if (riderHerd) riderHerd.update(ta);   // riders advance in the sim ticks
   if (spareHerd) spareHerd.update(ta);   // riders and horses parted by a blow (combat.js)
   if (cartSpare) cartSpare.update(ta);   // ...and pairs under a yoke
@@ -6573,11 +6877,8 @@ function frameBody() {
   flock.update(t, { dark });
   // (the wash taken in for rain, snow and the night)
   laundry.update(t, weather === 0 && dark < .4); ivy?.update(t); storkTick(t); roostTick(); choreLureTick(); grainTick(t); icicles?.update();
-  if (flowerRoot) flowerRoot.visible = SNOW.value < .5;   // (no flowers through the snow: the meadow's and the cottage beds' -- they bloomed in it)
-  {   // ...nor mushrooms (the woods' pickables: figures of the tree herd) -- flipped only when the snow comes or goes
-    const under = SNOW.value >= .5;
-    if (under !== mushroomsUnder) { mushroomsUnder = under; for (const pk of pickables) if (pk.an && !pk.picked) pk.an.hidden = under; }
-  } windowBoxes.update(t); fireworks.update(t);
+  if (flowerRoot) flowerRoot.visible = SNOW.value < .5;   // (no flowers nor mushrooms through the snow: the meadow's, the cottage beds', the woods' -- they bloomed in it)
+  windowBoxes.update(t); fireworks.update(t);
   ducklings.update(t, dt, { surface: surfaceAt, camera });
   wakes.update(t, dt, { surface: surfaceAt, camera });
   showTick(t, dt);
@@ -6619,6 +6920,7 @@ function frameBody() {
     mist.update(t, { amount: mistAmt, light: cloudTint.value });
   }
   bees.update(t, { out: weather || SNOW.value >= .5 ? 0 : Math.min(1, Math.max(0, (.45 - dark) / .15)) });   // (by day, in fair weather, not while snow lies)
+  nature?.update(t, { out: weather || SNOW.value >= .5 || frostK > .2 ? 0 : Math.min(1, Math.max(0, (.4 - dark) / .15)) * (autumnLvl === 2 ? .4 : 1) });   // (the ants: out by day in fair weather, in at night, in the rain, in the frost and the snow; fewer in late autumn)
   geese.update(t, { camera, way: geeseWay() });
   rooks.update(t, { camera, way: rookWay() });
   swallows.update(t, { amount: weather || dark > .5 || SNOW.value >= .5 || autumnLvl === 2 ? 0 :   // (and gone south in late autumn and while snow lies)
@@ -6854,7 +7156,7 @@ tick();
 if (HEADLESS) {   // the self-check: one more frame, into a render target, posted as ASCII (see ?probe above)
   await terrainReady;   // the ground comes from a worker: photograph the world with it in
   // (what a headless test reads and drives: the simulation, the flowers, the movers; standing the walker somewhere)
-  window.__dbg = { simTo, wanderers, perches, carts, movers, frameBody, camera, renderer, scene, bedY, siteZ, period: PERIOD_NAME, town, TOWN, BUILDINGS, smoke, glow, stones, flock, laundry, ivy, icicles, CHURCHYARD, SHRINES, SILL_CATS, SHOP_BARRELS, storkNests, storkTick, roosting, roostTick, choreLureTick, windowBoxes, fireworks, wallLamps, lightning, leaves, reeds, sparks, pigeons, prints, flags, breath, flagPeaks, ridgeLines, treeCols, tick, get swimming() { return swimming; }, get feetWet() { return feetWet; }, setAutumn: (k) => { autumnLvl = k; buildFlora(autumnK(), springK()); }, LEAP, poseAll, waterRain, setWeather: (w, i = 1) => { weather = w; wxInt = i; SNOW.value = w === 2 ? 1 : 0; applyClouds(); applyHour(); }, initAudio, greetTick, idleTick, talkers, GREET, get fishHerd() { return fishHerd; }, chimneyTops, glowWins, nightScene, nightCam, sky, waterEye, setNight: (v) => { dark = darkTo = v ? 1 : 0; night = v; applyNight(); applyHour(); }, setDark: (k) => { dark = darkTo = k; night = k > .5; applyNight(); applyHour(); }, get dark() { return dark; }, get tagGame() { return tagGame; }, get juggler() { return juggler; }, showCrowd, CLOUD, swallows, dancers, bees, squarePigeons, crows, spray, waterWheels, fishing, splashes, WIND, moths, setFog: (t) => { fogFrom = t; }, get pasture() { return pasture; }, pastureFolk, pastureTick, get washer() { return washer; }, startTour, tourTick, get tour() { return tour; }, lambs, lambTick, snowballTick, snowballs, huntTick, get hunt() { return hunt; }, HARVEST, dust, supportAt, groundH, ringBell, CHURCH_DOOR, get watchman() { return watchman; }, get sentry() { return sentry; }, watchTick, get maypole() { return maypole; }, maypoleTick, get kites() { return kites; }, kiteFlyers, kiteTick, bubbles, get bubbleKid() { return bubbleKid; }, geese, rooks, ICE, hitsBuildings, claims, lintPlaces, get simT() { return simTick * TICK; }, unseen, fpsMove: (dt) => fpsMove(dt), setYaw: (v) => { yaw = v; }, get yaw() { return yaw; }, placePane: (dr) => placePane(dr), setFrost: (k) => { frostK = k; }, skaters, skateTick, lureBirds, get sledding() { return sledding; }, sledTick, setSled: (v) => { sledOn = v; }, bathers, get bathePatch() { return bathePatch; }, batheTick, get leapfrog() { return leapfrog; }, leapKids, leapTick, get hideSeek() { return hideSeek; }, hideSpots, chores, choreTick, choreWhy: (name) => CHORES[name].find().map((c) => [c.at.map(Math.round), choreMiss(CHORES[name], c)]), stallSeasons, stallSeasonTick, crierTick, marketStalls, seenFrom, wakes, surfaceAt, wallShade, get skimmer() { return skimmer; }, skimTick, get haycocks() { return haycocks; }, shadows, treeShade, updateShadows: () => shadows.update([herd, folk, extrasHerd, lifeHerd, guardHerd, crewHerd, riderHerd, spareHerd, cartHerd, cartSpare], camera, floorUnder, carts), tools, folkHold, findInteraction, setStill: (v) => { youStill = v; }, hedgeSpots, wedding, weddingTick, petals, get swing() { return swing; }, swingKids, swingTick, get boatSt() { return boatSt; }, get snowman() { return snowman; }, ROAD_WET, ducklings, get bonfire() { return bonfire; }, fireSitters, companion, callDog, get herd() { return herd; }, mist, grassFringe, extrasHerd, get folkHerd() { return folk; }, setBow: (k) => { bow = k; applyHour(); }, setAurora: (k, t = 0) => { aurora = k; auroraOn = k > 0; skyT = t; applyHour(); },
+  window.__dbg = { simTo, wanderers, perches, carts, movers, frameBody, camera, renderer, scene, bedY, siteZ, period: PERIOD_NAME, town, TOWN, BUILDINGS, smoke, glow, stones, flock, laundry, ivy, icicles, CHURCHYARD, SHRINES, SILL_CATS, SHOP_BARRELS, storkNests, get nature() { return nature; }, storkTick, roosting, roostTick, choreLureTick, windowBoxes, fireworks, wallLamps, lightning, leaves, reeds, sparks, pigeons, prints, flags, breath, flagPeaks, ridgeLines, treeCols, tick, get swimming() { return swimming; }, get feetWet() { return feetWet; }, setAutumn: (k) => { autumnLvl = k; buildFlora(autumnK(), springK()); }, LEAP, poseAll, waterRain, setWeather: (w, i = 1) => { weather = w; wxInt = i; SNOW.value = w === 2 ? 1 : 0; applyClouds(); applyHour(); }, initAudio, greetTick, idleTick, talkers, GREET, get fishHerd() { return fishHerd; }, chimneyTops, glowWins, nightScene, nightCam, sky, waterEye, setNight: (v) => { dark = darkTo = v ? 1 : 0; night = v; applyNight(); applyHour(); }, setDark: (k) => { dark = darkTo = k; night = k > .5; applyNight(); applyHour(); }, get dark() { return dark; }, get tagGame() { return tagGame; }, get juggler() { return juggler; }, showCrowd, CLOUD, swallows, dancers, bees, squarePigeons, crows, spray, waterWheels, fishing, splashes, WIND, moths, setFog: (t) => { fogFrom = t; }, get pasture() { return pasture; }, pastureFolk, pastureTick, get washer() { return washer; }, startTour, tourTick, get tour() { return tour; }, lambs, lambTick, snowballTick, snowballs, huntTick, get hunt() { return hunt; }, HARVEST, dust, supportAt, groundH, ringBell, CHURCH_DOOR, get watchman() { return watchman; }, get sentry() { return sentry; }, watchTick, get maypole() { return maypole; }, maypoleTick, get kites() { return kites; }, kiteFlyers, kiteTick, bubbles, get bubbleKid() { return bubbleKid; }, geese, rooks, ICE, hitsBuildings, claims, lintPlaces, get simT() { return simTick * TICK; }, unseen, fpsMove: (dt) => fpsMove(dt), setYaw: (v) => { yaw = v; }, get yaw() { return yaw; }, setPitch: (v) => { pitch = v; }, placePane: (dr) => placePane(dr), setFrost: (k) => { frostK = k; }, skaters, skateTick, lureBirds, get sledding() { return sledding; }, sledTick, setSled: (v) => { sledOn = v; }, bathers, get bathePatch() { return bathePatch; }, batheTick, get leapfrog() { return leapfrog; }, leapKids, leapTick, get hideSeek() { return hideSeek; }, hideSpots, chores, choreTick, choreWhy: (name) => CHORES[name].find().map((c) => [c.at.map(Math.round), choreMiss(CHORES[name], c)]), stallSeasons, stallSeasonTick, crierTick, marketStalls, seenFrom, wakes, surfaceAt, wallShade, get skimmer() { return skimmer; }, skimTick, get haycocks() { return haycocks; }, shadows, treeShade, updateShadows: () => shadows.update([herd, folk, extrasHerd, lifeHerd, guardHerd, crewHerd, riderHerd, spareHerd, cartHerd, cartSpare], camera, floorUnder, carts), tools, folkHold, findInteraction, setStill: (v) => { youStill = v; }, hedgeSpots, wedding, weddingTick, petals, get swing() { return swing; }, swingKids, swingTick, get boatSt() { return boatSt; }, get snowman() { return snowman; }, ROAD_WET, ducklings, get bonfire() { return bonfire; }, fireSitters, companion, callDog, get herd() { return herd; }, mist, grassFringe, extrasHerd, get folkHerd() { return folk; }, setBow: (k) => { bow = k; applyHour(); }, setAurora: (k, t = 0) => { aurora = k; auroraOn = k > 0; skyT = t; applyHour(); },
     stand: (x, z, y) => { camera.position.set(x, 0, z); standY = y ?? supportNear(x, z, 1e9); airborne = false; vy = 0; camera.position.y = standY + eyeH; } };
   const { probe } = await import("./wgprobe.js");
   const post = (t) => fetch("/report", { method: "POST", body: t }).catch(() => {});
@@ -7104,13 +7406,13 @@ addEventListener("resize", () => {
 
 window.__scene = scene; window.__THREE = THREE; window.__camera = camera;   // debug hooks for the headless harness
 window.__simStep = () => simTicks(simTick + 1);
-window.__dbg = Object.defineProperties({ ground: GROUND, sea: SEA, get harbour() { return HARBOUR_LIFE ?? HARBOUR; },get bflies() { return bflies; }, get pathRoutes() { return pathRoutes; }, pickables, forest: FOREST, supportNear, storkNests, period: PERIOD_NAME, get standY() { return standY; }, get controls() { return controls; }, get jumpState() { return { airborne, vy, jumpHeld, swimming, resting: !!resting, mounted: !!mounted }; }, buildings: BUILDINGS, map: MAP, riverZ, riverLevel, waterY, VILLAGE_X, scene, camera, renderer, poolMat, jetMat, herds, combat, combatNames, sword, setWeapon, archery, tableware, guards, mountables, keys, findInteraction, herd, talkers, callers, doors, carts, collides, colliderSites, goods, hands, get barge() { return bargeSt; }, get boat() { return boatSt; }, get life() { return life; }, sites, groundH, bargePose, yards, callNow: () => { for (const c of callers) c.next = 0; }, speech: () => ({ spoken, langMode, toneMode, wordMode, moodMode }),
+window.__dbg = Object.defineProperties({ ground: GROUND, sea: SEA, get seaLife() { return seaLife; }, get haulout() { return haulout; }, get pterosaurs() { return pterosaurs; }, get harbour() { return HARBOUR_LIFE ?? HARBOUR; },get bflies() { return bflies; }, get nature() { return nature; }, get pathRoutes() { return pathRoutes; }, pickables, forest: FOREST, supportNear, storkNests, period: PERIOD_NAME, get standY() { return standY; }, get controls() { return controls; }, get jumpState() { return { airborne, vy, jumpHeld, swimming, resting: !!resting, mounted: !!mounted }; }, buildings: BUILDINGS, map: MAP, riverZ, riverLevel, waterY, VILLAGE_X, scene, camera, renderer, poolMat, jetMat, herds, combat, combatNames, sword, setWeapon, archery, tableware, guards, mountables, keys, findInteraction, herd, talkers, callers, doors, carts, collides, colliderSites, goods, hands, get barge() { return bargeSt; }, get boat() { return boatSt; }, get life() { return life; }, sites, groundH, bargePose, yards, callNow: () => { for (const c of callers) c.next = 0; }, speech: () => ({ spoken, langMode, toneMode, wordMode, moodMode }),
   talkNow: () => { for (const t of talkers) t.next = 0; },
   look: (x, z, down = 0) => { yaw = Math.atan2(-(x - camera.position.x), -(z - camera.position.z)); pitch = -down; },   // (down: radians below level, for checks)
   pitch: (p) => { if (p !== undefined) pitch = p; return pitch; },
   PIPE, setPipe, FRAME, setFps, FRINGE, profile,   // profile(): where the frame's CPU time goes, printed after a second   // setFps(90) changes the budget the readout judges against; setFps("max") uncaps the loop
 
-  wanderers, pathRoutes, waterSD, dryKeep, putDown, WLEVEL, waterY, riders,   // (checks: swimmers' depth, dry tracks, goods riding the barge)
+  wanderers, pathRoutes, waterSD, dryKeep, putDown, WLEVEL, waterY, riders, looseHorses, bodies,   // (checks: swimmers' depth, dry tracks, goods riding the barge)
   tracks, tracksDraw, renderer,   // the between-ticks drawing (see simTicks)
   // A GPU bench, from the console: renders the CURRENT view n times back to back and waits for the GPU
   // (no swap between them, so the answer is GPU work per frame, not the 16.7ms vsync interval), with the
@@ -7131,6 +7433,7 @@ window.__dbg = Object.defineProperties({ ground: GROUND, sea: SEA, get harbour()
     return +ms.toFixed(2);
   },
   get squirrels() { return squirrels; }, mirrors: () => mirrorSet, paintings: () => ({ count: paintingSet.count, pictures: paintingSet.pictures.length, views: paintingViews, frames: paintingSet.frames, mesh: paintingSet.mesh, atlas: paintingSet.atlas }), get env() { return env; },
+  setYaw: (v) => { yaw = v; }, setPitch: (v) => { pitch = v; },   // (checks: the view turned)
   placeAt: (x, y, z) => { camera.position.x = x; camera.position.z = z; standY = y; camera.position.y = y + eyeH; airborne = false; },   // (checks: stand on a given floor)
   get life() { return life; }, get lifeHerd() { return lifeHerd; },   // the villagers: census(), bell(hour), places
   // why is this spot "under a roof"? (the weather curtains hide there): floors overhead, roofed footprints

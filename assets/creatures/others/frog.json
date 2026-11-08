@@ -1,246 +1,79 @@
 {
   "name": "frog",
+  "_about": "SCULPTED (2026-11-05, docs/engines.md 'the sculpt overlay'): a common frog sitting, 10 cm snout to vent -- the trunk tilted up at the shoulders over a sacral hump, a wide flat head with the mouth line running back under a dark mask to the tympanum, bulging gold eyes with horizontal pupils, pale dorsolateral ridges, short forelegs with the hands turned in, the hind legs folded in a Z (thigh forward, shank back, the long foot forward again) on splayed webbed toes; dark spots over an olive-green back, a cream belly || COATS AND VARIANTS (2026-11-06): params spots (the dark patches), ridges (the pale dorsolateral ridges and the lid line), mask (the dark mask behind the eye), stripe (a tree frog's dark side stripe, edged pale), midline (a pool frog's pale line down the spine), bands (a dart frog's yellow bands), flankBars (a red-eyed tree frog's pale bars on its blue flanks), pupilBar / pupilSlit (horizontal, vertical; neither: round), tympS (the eardrum's size); colours limb (arms and feet, else side), leg (thighs and shanks, else back), toe (fingers and toes, else limb), stripe, stripeEdge, midline, band, bar. The markings are PAINTS (op paint: colour only). Coats: the European ones the game picks from; variants: the exotic ones (asset manager only)",
   "kind": "parts",
-  "flags": {
-    "shy": 3,
-    "shore": true,
-    "hop": {
-      "period": 0.9,
-      "h": 0.16
-    },
-    "print": "paw"
+  "params": {"spots": true, "ridges": true, "mask": true, "stripe": false, "midline": false, "bands": false, "flankBars": false, "pupilBar": true, "pupilSlit": false, "tympS": 1},
+  "flags": {"shy": 3, "shore": true, "hop": {"period": 0.9, "h": 0.16}, "print": "paw"},
+  "colors": {"back": "#5e8a3c", "side": "#7a9448", "belly": "#e6dfbc", "ridge": "#a8a466", "tymp": "#5c4426", "mask": "#4a3a22", "mouth": "#2a2216", "web": "#8a9a58", "eye": "#c89a3a", "eyeDark": "#6a5020", "stripe": "#3a2a1a", "stripeEdge": "#e8e0b0", "midline": "#c4d474", "band": "#f0c020", "bar": "#efe6c0"},
+  "coats": [
+    {"name": "common frog (olive)"},
+    {"name": "common frog (brown)", "back": "#8a6a40", "side": "#9c7c4e", "belly": "#e8dcc0", "ridge": "#b89a64", "tymp": "#5a3e22", "mask": "#3e2a18", "web": "#8e7a54", "eye": "#c09040"},
+    {"name": "pool frog", "scale": 0.9, "params": {"mask": false, "midline": true}, "back": "#6aa23a", "side": "#88aa48", "belly": "#eee8ca", "ridge": "#b8b45a", "midline": "#bcd46c", "tymp": "#6a7a34", "web": "#8aa050", "eye": "#c8a43a"},
+    {"name": "European tree frog", "scale": 0.45, "params": {"spots": false, "ridges": false, "mask": false, "stripe": true}, "back": "#4caa2c", "side": "#4caa2c", "belly": "#f0ead2", "limb": "#4caa2c", "leg": "#4caa2c", "toe": "#bcae6a", "web": "#78ae48", "tymp": "#4a9e2c", "stripe": "#4a3420", "stripeEdge": "#eee6b8", "eye": "#c8a43a"}
+  ],
+  "variants": {
+    "bullfrog": {"scale": 1.7, "params": {"ridges": false, "mask": false, "tympS": 1.7}, "colors": {"back": "#5a6c38", "side": "#6e7a44", "belly": "#ece4c0", "tymp": "#585a32", "web": "#6a7444", "eye": "#b88a30"}},
+    "blue poison dart frog": {"scale": 0.45, "params": {"ridges": false, "mask": false, "pupilBar": false}, "colors": {"back": "#2c66c8", "side": "#2a5cba", "belly": "#2450a8", "limb": "#1d4296", "leg": "#2454b4", "toe": "#1d4296", "web": "#1d4296", "tymp": "#2a5cba", "ridge": "#2c66c8", "mouth": "#141820", "eye": "#0e0e12", "eyeDark": "#060608"}},
+    "yellow-banded dart frog": {"scale": 0.38, "params": {"ridges": false, "mask": false, "pupilBar": false, "bands": true}, "colors": {"back": "#171614", "side": "#171614", "belly": "#171614", "limb": "#e8b818", "leg": "#e8b818", "toe": "#171614", "web": "#171614", "band": "#f0c018", "tymp": "#171614", "ridge": "#171614", "eye": "#0e0e12", "eyeDark": "#060608"}},
+    "red-eyed tree frog": {"scale": 0.6, "params": {"spots": false, "ridges": false, "mask": false, "flankBars": true, "pupilBar": false, "pupilSlit": true}, "colors": {"back": "#52b03c", "side": "#2c5cb4", "belly": "#f2ecd6", "limb": "#52b03c", "leg": "#52b03c", "toe": "#f08c2a", "web": "#f08c2a", "tymp": "#52b03c", "bar": "#f0e6b4", "eye": "#d8241a", "eyeDark": "#6a0c0c"}}
   },
   "parts": [
-    {
-      "id": "body",
-      "parent": null,
-      "shape": "sphere",
-      "size": {
-        "r": 0.05
-      },
-      "scale": [
-        1.35,
-        0.8,
-        1
-      ],
-      "pos": [
-        0,
-        0.045,
-        0
-      ],
-      "color": "#5a9a3a"
-    },
-    {
-      "id": "stripe",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.008,
-        "len": 0.09
-      },
-      "geomRot": [
-        0,
-        0,
-        90
-      ],
-      "pos": [
-        0,
-        0.038,
-        0
-      ],
-      "color": "#a8d060"
-    },
-    {
-      "id": "eyeL",
-      "parent": "body",
-      "shape": "sphere",
-      "size": {
-        "r": 0.011
-      },
-      "pos": [
-        0.045,
-        0.04,
-        0.028
-      ],
-      "color": "#2a1a08"
-    },
-    {
-      "id": "eyeR",
-      "parent": "body",
-      "shape": "sphere",
-      "size": {
-        "r": 0.011
-      },
-      "pos": [
-        0.045,
-        0.04,
-        -0.028
-      ],
-      "color": "#2a1a08"
-    },
-    {
-      "id": "thighL",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.014,
-        "len": 0.06
-      },
-      "pos": [
-        -0.03,
-        -0.02,
-        0.045
-      ],
-      "rot": [
-        0,
-        0,
-        70
-      ],
-      "pivot": [
-        0,
-        -0.03,
-        0
-      ],
-      "color": "#4a8a30",
-      "anim": {
-        "axis": "z",
-        "deg": 30,
-        "speed": 0.8,
-        "phase": 0
-      }
-    },
-    {
-      "id": "thighR",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.014,
-        "len": 0.06
-      },
-      "pos": [
-        -0.03,
-        -0.02,
-        -0.045
-      ],
-      "rot": [
-        0,
-        0,
-        70
-      ],
-      "pivot": [
-        0,
-        -0.03,
-        0
-      ],
-      "color": "#4a8a30",
-      "anim": {
-        "axis": "z",
-        "deg": 30,
-        "speed": 0.8,
-        "phase": 0
-      }
-    },
-    {
-      "id": "shinL",
-      "parent": "thighL",
-      "shape": "capsule",
-      "size": {
-        "r": 0.01,
-        "len": 0.06
-      },
-      "pos": [
-        0,
-        -0.06,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        -120
-      ],
-      "pivot": [
-        0,
-        -0.03,
-        0
-      ],
-      "color": "#4a8a30"
-    },
-    {
-      "id": "shinR",
-      "parent": "thighR",
-      "shape": "capsule",
-      "size": {
-        "r": 0.01,
-        "len": 0.06
-      },
-      "pos": [
-        0,
-        -0.06,
-        0
-      ],
-      "rot": [
-        0,
-        0,
-        -120
-      ],
-      "pivot": [
-        0,
-        -0.03,
-        0
-      ],
-      "color": "#4a8a30"
-    },
-    {
-      "id": "legFL",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.008,
-        "len": 0.04
-      },
-      "pos": [
-        0.04,
-        -0.03,
-        0.035
-      ],
-      "pivot": [
-        0,
-        -0.02,
-        0
-      ],
-      "color": "#4a8a30",
-      "anim": {
-        "axis": "z",
-        "deg": 24,
-        "speed": 0.8,
-        "phase": 3.14
-      }
-    },
-    {
-      "id": "legFR",
-      "parent": "body",
-      "shape": "capsule",
-      "size": {
-        "r": 0.008,
-        "len": 0.04
-      },
-      "pos": [
-        0.04,
-        -0.03,
-        -0.035
-      ],
-      "pivot": [
-        0,
-        -0.02,
-        0
-      ],
-      "color": "#4a8a30",
-      "anim": {
-        "axis": "z",
-        "deg": 24,
-        "speed": 0.8,
-        "phase": 3.14
-      }
-    }
-  ]
+    {"id": "body", "parent": null, "shape": "sphere", "size": {"r": 0.03}, "scale": [1.5, 0.75, 1.1], "pos": [-0.005, 0.03, 0], "color": "@back"},
+    {"id": "head", "parent": "body", "shape": "sphere", "size": {"r": 0.016}, "scale": [1.4, 0.8, 1.2], "pos": [0.035, 0.006, 0], "color": "@back"},
+    {"id": "thighL", "parent": "body", "shape": "tube", "size": {"a": [0, 0, 0], "c": [0.018, -0.006, 0.009], "b": [0.036, -0.012, 0.018], "r1": 0.009, "r2": 0.0072}, "pos": [-0.035, -0.006, 0.012], "color": "@back", "anim": {"axis": "z", "deg": 30, "speed": 0.8, "phase": 0}},
+    {"id": "shinL", "parent": "thighL", "shape": "tube", "size": {"a": [0, 0, 0], "c": [-0.0205, -0.002, -0.001], "b": [-0.041, -0.004, -0.002], "r1": 0.006, "r2": 0.0048}, "pos": [0.036, -0.012, 0.018], "color": "@back"},
+    {"id": "footL", "parent": "shinL", "shape": "tube", "size": {"a": [0, 0, 0], "c": [0.0225, -0.003, 0.004], "b": [0.045, -0.006, 0.008], "r1": 0.003, "r2": 0.0024}, "pos": [-0.041, -0.004, -0.002], "color": "@back"},
+    {"id": "armL", "parent": "body", "shape": "tube", "size": {"a": [0, 0, 0], "c": [0.004, -0.0105, 0.004], "b": [0.008, -0.021, 0.008], "r1": 0.005, "r2": 0.004}, "pos": [0.027, -0.006, 0.014], "color": "@back", "anim": {"axis": "z", "deg": 20, "speed": 0.8, "phase": 3.14}},
+    {"id": "thighR", "parent": "body", "shape": "tube", "size": {"a": [0, 0, 0], "c": [0.018, -0.006, -0.009], "b": [0.036, -0.012, -0.018], "r1": 0.009, "r2": 0.0072}, "pos": [-0.035, -0.006, -0.012], "color": "@back", "anim": {"axis": "z", "deg": 30, "speed": 0.8, "phase": 0}},
+    {"id": "shinR", "parent": "thighR", "shape": "tube", "size": {"a": [0, 0, 0], "c": [-0.0205, -0.002, 0.001], "b": [-0.041, -0.004, 0.002], "r1": 0.006, "r2": 0.0048}, "pos": [0.036, -0.012, -0.018], "color": "@back"},
+    {"id": "footR", "parent": "shinR", "shape": "tube", "size": {"a": [0, 0, 0], "c": [0.0225, -0.003, -0.004], "b": [0.045, -0.006, -0.008], "r1": 0.003, "r2": 0.0024}, "pos": [-0.041, -0.004, 0.002], "color": "@back"},
+    {"id": "armR", "parent": "body", "shape": "tube", "size": {"a": [0, 0, 0], "c": [0.004, -0.0105, -0.004], "b": [0.008, -0.021, -0.008], "r1": 0.005, "r2": 0.004}, "pos": [0.027, -0.006, -0.014], "color": "@back", "anim": {"axis": "z", "deg": 20, "speed": 0.8, "phase": 3.14}}
+  ],
+  "sculpt": {
+    "keep": [],
+    "patScale": 0.16,
+    "mesh": {"tris": [4500, 1400]},
+    "shape": [
+      {"id": "trunk", "type": "ell", "c": [-0.012, 0.03, 0], "r": [0.042, 0.018, 0.022], "rot": [0, 0, 14], "k": 0.01, "color": "@back", "pat": {"when": "spots", "v": "patches"}, "frame": {"o": [0, 0.03, 0], "u": [1, 0, 0], "r": 0.02}},
+      {"id": "belly", "type": "ell", "c": [-0.008, 0.021, 0], "r": [0.04, 0.013, 0.02], "rot": [0, 0, 14], "k": 0.01, "color": "@belly"},
+      {"id": "hump", "type": "ell", "c": [-0.03, 0.036, 0], "r": [0.016, 0.01, 0.014], "k": 0.008, "color": "@back", "pat": {"when": "spots", "v": "patches"}, "frame": {"o": [0, 0.03, 0], "u": [1, 0, 0], "r": 0.02}},
+      {"id": "flank", "type": "ell", "c": [-0.01, 0.027, 0.01], "r": [0.03, 0.012, 0.012], "rot": [0, 0, 12], "k": 0.008, "color": "@side", "mirror": true, "pat": {"when": "spots", "v": "patches"}, "frame": {"o": [0, 0.03, 0], "u": [1, 0, 0], "r": 0.02}},
+      {"id": "head", "type": "ell", "bone": "head", "c": [0.03, 0.037, 0], "r": [0.024, 0.012, 0.02], "rot": [0, 0, 6], "k": 0.01, "color": "@back", "pat": {"when": "spots", "v": "patches"}, "frame": {"o": [0, 0.03, 0], "u": [1, 0, 0], "r": 0.02}},
+      {"id": "snout", "type": "ell", "bone": "head", "c": [0.046, 0.034, 0], "r": [0.012, 0.0075, 0.0125], "k": 0.008, "color": "@back"},
+      {"id": "throat", "type": "ell", "bone": "head", "c": [0.026, 0.027, 0], "r": [0.024, 0.008, 0.018], "k": 0.008, "color": "@belly"},
+      {"id": "eyeBump", "type": "ell", "bone": "head", "c": [0.027, 0.043, 0.0115], "r": [0.0085, 0.0075, 0.0075], "k": 0.004, "color": "@back", "mirror": true},
+      {"id": "lidLine", "type": "ell", "bone": "head", "c": [0.027, 0.0485, 0.011], "r": [0.007, 0.002, 0.005], "k": 0.002, "kc": 0.001, "color": "@ridge", "mirror": true, "when": "ridges"},
+      {"id": "tympanum", "type": "ell", "bone": "head", "c": [0.0135, 0.0385, 0.0172], "r": ["0.0048*tympS", "0.0048*tympS", 0.0018], "rot": [0, -25, 0], "k": 0.0015, "kc": 0.0006, "color": "@tymp", "mirror": true},
+      {"id": "mask", "type": "ell", "bone": "head", "c": [0.016, 0.037, 0.0165], "r": [0.012, 0.0055, 0.003], "rot": [0, -20, -8], "k": 0.002, "kc": 0.001, "color": "@mask", "mirror": true, "when": "mask"},
+      {"id": "mouth", "type": "tube", "bone": "head", "pts": [[0.056, 0.0315, 0.003, 0.0012], [0.05, 0.0298, 0.011, 0.0012], [0.038, 0.0288, 0.017, 0.0012], [0.022, 0.0292, 0.0195, 0.0012], [0.012, 0.031, 0.0195, 0.0012]], "kc": 0.001, "color": "@mouth", "mirror": true, "op": "paint"},
+      {"id": "nostril", "type": "sphere", "bone": "head", "c": [0.0525, 0.0375, 0.0042], "r": 0.0011, "k": 0.0005, "kc": 0.0003, "color": "@mouth", "mirror": true},
+      {"id": "ridge", "type": "tube", "pts": [[0.018, 0.0445, 0.0135, 0.0015], [-0.008, 0.043, 0.0158, 0.0017], [-0.036, 0.036, 0.0135, 0.0014]], "k": 0.003, "kc": 0.0012, "color": "@ridge", "mirror": true, "when": "ridges"},
+      {"id": "arm", "type": "tube", "bone": "armL", "pts": [[0.02, 0.026, 0.012, 0.0068], [0.025, 0.014, 0.018, 0.0052], [0.029, 0.004, 0.02, 0.0042]], "k": 0.004, "color": ["@limb", "@side"], "mirror": true},
+      {"id": "finger0", "type": "cone", "bone": "armL", "a": [0.03, 0.002, 0.02], "b": [0.0331, 0.001, 0.0276], "ra": 0.002, "rb": 0.0016, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "finger1", "type": "cone", "bone": "armL", "a": [0.03, 0.002, 0.02], "b": [0.0378, 0.001, 0.024], "ra": 0.002, "rb": 0.0016, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "finger2", "type": "cone", "bone": "armL", "a": [0.03, 0.002, 0.02], "b": [0.0389, 0.001, 0.0186], "ra": 0.002, "rb": 0.0016, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "finger3", "type": "cone", "bone": "armL", "a": [0.03, 0.002, 0.02], "b": [0.0364, 0.001, 0.0143], "ra": 0.002, "rb": 0.0016, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "thigh", "type": "tube", "bone": "thighL", "pts": [[-0.04, 0.024, 0.01, 0.0095], [-0.022, 0.018, 0.024, 0.0085], [-0.004, 0.012, 0.03, 0.0062]], "k": 0.004, "color": ["@leg", "@back"], "mirror": true, "pat": {"when": "spots", "v": "patches"}, "frame": {"o": [-0.04, 0.024, 0.012], "u": [1, 0, 0], "r": 0.01}},
+      {"id": "shank", "type": "tube", "bone": "shinL", "pts": [[-0.004, 0.012, 0.03, 0.006], [-0.0245, 0.01, 0.029, 0.0056], [-0.045, 0.008, 0.028, 0.0036]], "k": 0.003, "color": ["@leg", "@back"], "mirror": true, "pat": {"when": "spots", "v": "patches"}, "frame": {"o": [-0.04, 0.024, 0.012], "u": [1, 0, 0], "r": 0.01}},
+      {"id": "tarsus", "type": "tube", "bone": "footL", "pts": [[-0.045, 0.008, 0.028, 0.0034], [-0.03, 0.005, 0.033, 0.003], [-0.018, 0.004, 0.036, 0.0026]], "k": 0.002, "color": ["@limb", "@side"], "mirror": true},
+      {"id": "toe0", "type": "cone", "bone": "footL", "a": [-0.019, 0.0035, 0.036], "b": [-0.0068, 0.0015, 0.0316], "ra": 0.0019, "rb": 0.0015, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "toe1", "type": "cone", "bone": "footL", "a": [-0.019, 0.0035, 0.036], "b": [-0.001, 0.0015, 0.036], "ra": 0.0019, "rb": 0.0015, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "toe2", "type": "cone", "bone": "footL", "a": [-0.019, 0.0035, 0.036], "b": [0.0036, 0.0015, 0.0442], "ra": 0.0019, "rb": 0.0015, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "toe3", "type": "cone", "bone": "footL", "a": [-0.019, 0.0035, 0.036], "b": [-0.0044, 0.0015, 0.0482], "ra": 0.0019, "rb": 0.0015, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "toe4", "type": "cone", "bone": "footL", "a": [-0.019, 0.0035, 0.036], "b": [-0.0134, 0.0015, 0.0466], "ra": 0.0019, "rb": 0.0015, "k": 0.001, "color": ["@toe", "@limb", "@side"], "mirror": true},
+      {"id": "web", "type": "ell", "bone": "footL", "c": [-0.007, 0.0018, 0.041], "r": [0.011, 0.0012, 0.009], "rot": [0, -25, 0], "k": 0.0015, "color": "@web", "mirror": true},
+      {"id": "pf_stripe0", "when": "stripe", "op": "paint", "type": "tube", "bone": "body", "pts": [[0.0538, 0.0424, 0.0044, 0.0009], [0.0428, 0.0453, 0.0119, 0.0009], [0.0299, 0.0469, 0.0175, 0.0009], [0.017, 0.0438, 0.0168, 0.0009], [0.0116, 0.0428, 0.0178, 0.0009], [-0.002, 0.04, 0.0201, 0.0009], [-0.02, 0.036, 0.0206, 0.0009], [-0.0384, 0.0321, 0.0172, 0.0009]], "kc": 0.0008, "color": "@stripeEdge", "mirror": true},
+      {"id": "pf_stripe1", "when": "stripe", "op": "paint", "type": "tube", "bone": "body", "pts": [[0.0548, 0.0404, 0.0059, 0.0022], [0.0433, 0.0436, 0.014, 0.0022], [0.03, 0.044, 0.019, 0.0022], [0.017, 0.0418, 0.0193, 0.0022], [0.0115, 0.0399, 0.0192, 0.0022], [-0.002, 0.0372, 0.0218, 0.0022], [-0.02, 0.0331, 0.0222, 0.0022], [-0.0388, 0.0297, 0.0193, 0.0022]], "kc": 0.001, "color": "@stripe", "mirror": true},
+      {"id": "pf_midline2", "when": "midline", "op": "paint", "type": "tube", "bone": "body", "pts": [[0.0562, 0.0401, 0, 0.0011], [0.0349, 0.0493, 0, 0.0011], [0.01, 0.0503, 0, 0.0011], [-0.0201, 0.0475, 0, 0.0011], [-0.0471, 0.0367, 0, 0.0011]], "kc": 0.0004, "color": "@midline"},
+      {"id": "pf_bands3", "when": "bands", "op": "paint", "type": "ell", "c": [0.034, 0.05, 0], "r": [0.0055, 0.016, 0.03], "rot": [0, 0, 8], "kc": 0.0005, "color": "@band"},
+      {"id": "pf_bands4", "when": "bands", "op": "paint", "type": "ell", "c": [0.004, 0.048, 0], "r": [0.0065, 0.022, 0.034], "rot": [0, 0, 14], "kc": 0.0005, "color": "@band"},
+      {"id": "pf_bands5", "when": "bands", "op": "paint", "type": "ell", "c": [-0.03, 0.044, 0], "r": [0.0065, 0.02, 0.032], "rot": [0, 0, 20], "kc": 0.0005, "color": "@band"},
+      {"id": "pf_flankBars6", "when": "flankBars", "op": "paint", "type": "ell", "c": [-0.012, 0.027, 0.02], "r": [0.032, 0.0085, 0.009], "rot": [0, 0, 10], "kc": 0.002, "color": "@side", "mirror": true},
+      {"id": "pf_flankBars7", "when": "flankBars", "op": "paint", "type": "tube", "bone": "body", "pts": [[0.0081, 0.0373, 0.0206, 0.0013], [0.0036, 0.0243, 0.0226, 0.0013]], "kc": 0.0009, "color": "@bar", "mirror": true},
+      {"id": "pf_flankBars8", "when": "flankBars", "op": "paint", "type": "tube", "bone": "body", "pts": [[-0.006, 0.0379, 0.0214, 0.0013], [-0.0109, 0.0245, 0.0246, 0.0013]], "kc": 0.0009, "color": "@bar", "mirror": true},
+      {"id": "pf_flankBars9", "when": "flankBars", "op": "paint", "type": "tube", "bone": "body", "pts": [[-0.02, 0.037, 0.0199, 0.0013], [-0.0238, 0.0293, 0.0233, 0.0013]], "kc": 0.0009, "color": "@bar", "mirror": true},
+      {"id": "pf_flankBars10", "when": "flankBars", "op": "paint", "type": "tube", "bone": "body", "pts": [[-0.0322, 0.0358, 0.0172, 0.0013], [-0.0391, 0.0259, 0.0218, 0.0013]], "kc": 0.0009, "color": "@bar", "mirror": true}
+    ],
+    "eyes": {"at": [0.029, 0.045, 0.02], "from": [0.029, 0.045, 0], "r": 0.0056, "color": "@eyeDark", "iris": "@eye", "pupil": [{"when": "pupilSlit", "v": "slit"}, {"when": "pupilBar", "v": "bar"}], "lid": "@back", "sink": 0.3}
+  }
 }

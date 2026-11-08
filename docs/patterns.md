@@ -66,7 +66,7 @@ as a sheet; `tileSampler` reads a tile at (u, v) metres (the headless checks ren
 | stone | ashlar, fine ashlar, rusticated, brick (running and Flemish bond), rubble, marble, book-matched revetment, travertine, granite, plaster, scored stucco, sand, a column's flute, field rubble (shards) |
 | floors | chequer (square and diagonal), the Pantheon's opus sectile, octagon and dot, star and cross, basketweave, flagstones, terracotta, a Cosmatesque roundel, a compass rose (panel) |
 | carpets | the herati field, a border vine, prayer rows, kilim, and the medallion carpet (a panel of any size: W, H) |
-| tiles | Iznik carnation, rumi and frieze; zellige star; girih; azulejo; trencadis (plain, spotted, chequer, bands: shards) |
+| tiles | Iznik carnation, rumi and frieze; zellige star; girih; azulejo; trencadis (plain, spotted, chequer, bands: shards); kufic band (an epigraphic band, palette `kufic`); bannai (brick with glazed lozenges, palette `bannai`) |
 | painted | gold mosaic, starry vault, stained glass, the Chinese painted beam (caihua), cloud scroll, window lattice, coffered ceiling, Russian floral, Ottoman stencil, faux marble |
 | roofs | Chinese tube tiles, coppi, slate, fish scale, sheet metal (lead, copper), gold leaf, glazed chevrons (the Stephansdom), onion stripes, spiral and diamonds, glazed diamonds |
 | panels | Florentine polychrome, pietra dura, jali, a Chinese balustrade's panel, wainscot |

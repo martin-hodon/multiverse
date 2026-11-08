@@ -1,118 +1,129 @@
 {
   "name": "cat",
+  "_about": "the house cat SCULPTED on the big-cat frame at s = .22 (2026-11-05, gen: scratchpad sc/carn/gen/cat.py from the tiger's body): 25 cm at the shoulder, 47 cm head-body, slim and a little longer in the leg than a tiger, the tail carried up; a round short-faced head with big forward eyes and big upright ears. Its colours are the coat's keys (its `coats`: species.js makeCat builds each from this file) (2026-11-08, ears2.py) The EARS (ears2.py): one cupped sheet each (sharp.js `fin`), an upright triangle with full sides and a round tip, the hollow pink inside a band of fur, the root faired into the head. (2026-11-08) The CHEEK's tabby lines back from the eye (its own frame, sc/carn/gen/cat.py): below the ear that frame meets the skull's and the neck's, three at once, which bodymesh.js now paints in three slots per vertex (patternsMesh) -- the lines run on clean there, no stair-stepped terraces. WHISKERS (2026-11-08, tools/creaturegen/sharp/whiskers.py): 12 white whiskers a side, 4 rows on the whisker pad (40-60 mm); 3 white whiskers a side, a brow tuft (19-26 mm) -- `whiskers` shapes (bodyspec.js whiskerStrands: thin pointed strands, mirrored, on the head, near mesh only; details, so every coat and variant still shares one mesh). (2026-11-08, tools/creaturegen/sweep/tails.py) The TAIL is one `sweep` (sculpt.js) along its bones, not a chain of cones blended one into the next: no beads, its thin end exact rings. (`thin` 3.2 set by hand: under 3.2 cells across it is drawn as rings, the tip rounded.)",
+  "use": "creatures/frames/cat",
   "shy": 5,
-  "kind": "mammal",
-  "headScale": 0.54,
   "headTurn": 22,
   "pupil": "slit",
-  "rear": [
-    -0.12,
-    0.2,
-    0,
-    0.14,
-    0.09,
-    0.085
-  ],
-  "front": [
-    0.08,
-    0.2,
-    0,
-    0.13,
-    0.09,
-    0.08
-  ],
-  "neck": [
-    0.18,
-    0.24,
-    0,
-    0.26,
-    0.3,
-    0,
-    0.05,
-    0.042
-  ],
-  "head": [
-    0.3,
-    0.32,
-    0,
-    0.08
-  ],
-  "muzzle": [
-    0.36,
-    0.29,
-    0,
-    0.05,
-    0.035,
-    0.045
-  ],
-  "nose": [
-    0.405,
-    0.3,
-    0,
-    0.012
-  ],
+  "params": {
+    "s": 0.22,
+    "tuft": 0,
+    "tailSway": 20,
+    "tabby": true
+  },
+  "rear": [-0.1006, 0.1955, 0.0, 0.1021, 0.0515, 0.0594],
+  "front": [0.0644, 0.1982, 0.0, 0.1021, 0.0535, 0.0614],
+  "neck": [0.132, 0.2112, 0.0, 0.1804, 0.2376, 0.0, 0.0439, 0.0376],
+  "head": [0.2024, 0.2486, 0.0, 0.0484],
+  "muzzle": [0.2398, 0.231, 0.0, 0.0374, 0.0264, 0.033],
+  "nose": [0.2728, 0.242, 0.0, 0.0088],
   "ears": [
-    0.28,
-    0.38,
-    0.04,
-    0.27,
-    0.46,
-    0.055,
-    0.025,
-    0.006
-  ],
-  "eyes": [
-    0.35,
+    0.1853,
+    0.2915,
+    0.0314,
+    0.1895,
     0.34,
-    0.04,
-    0.015
+    0.0443,
+    0.0264,
+    0.0034
   ],
+  "eyes": [0.251, 0.2657, 0.0271, 0.0126],
   "legs": {
-    "front": [
-      0.12,
-      0.2,
-      0.05,
-      0.08
-    ],
-    "hind": [
-      -0.12,
-      0.2,
-      0.055,
-      0.085
-    ],
-    "radii": [
-      0.03,
-      0.025,
-      0.02
-    ],
-    "foot": [
-      0.03,
-      0.02,
-      0.028
-    ]
+    "front": [0.088, 0.1584, 0.0387, 0.0742],
+    "hind": [-0.132, 0.165, 0.0465, 0.08],
+    "radii": [0.0293, 0.0215, 0.0172],
+    "foot": [0.0215, 0.0118, 0.0193]
   },
   "tail": {
-    "c": [
-      -0.38,
-      0.3
-    ],
-    "R": 0.13,
+    "c": [-0.3354, 0.2628],
+    "R": 0.1364,
     "a0": -0.43,
-    "a1": 1.9,
-    "r1": 0.022,
-    "r2": 0.015,
+    "a1": 1.85,
+    "r1": 0.0136,
+    "r2": 0.0097,
     "n": 6,
     "sway": 20,
     "speed": 0.9
   },
-  "c": {
+  "colors": {
     "body": "#c77b3a",
+    "head": "#c77b3a",
+    "front": "#c77b3a",
+    "belly": "#dba573",
     "muzzle": "#dba573",
     "ear": "#b06f34",
+    "earIn": "#e0a8a0",
     "leg": "#b06f34",
+    "foot": "#b06f34",
     "tail": "#b06f34",
     "eye": "#8fa03a",
-    "nose": "#d67c88"
+    "nose": "#d67c88",
+    "lid": "#3a2a20",
+    "ring": "#6e3a16"
   },
-  "print": "paw"
+  "coats": [
+    {"name": "ginger", "body": "#c77b3a", "head": "#c77b3a", "front": "#c77b3a", "belly": "#dba573", "muzzle": "#dba573", "ear": "#b06f34", "leg": "#b06f34", "foot": "#b06f34", "tail": "#b06f34", "ring": "#49250e", "eye": "#8fa03a", "nose": "#d67c88"},
+    {"name": "black", "params": {"tabby": false}, "body": "#232020", "head": "#232020", "front": "#232020", "belly": "#2c2727", "muzzle": "#2c2727", "ear": "#1b1818", "leg": "#1b1818", "foot": "#1b1818", "tail": "#1b1818", "ring": "#1b1818", "eye": "#c9b23a", "nose": "#3a2e2e"},
+    {"name": "white", "params": {"tabby": false}, "body": "#ece8e0", "head": "#ece8e0", "front": "#ece8e0", "belly": "#f5f2eb", "muzzle": "#f5f2eb", "ear": "#dcc4c0", "leg": "#e4e0d8", "foot": "#e4e0d8", "tail": "#e4e0d8", "ring": "#e4e0d8", "eye": "#6fa0c8", "nose": "#e39aa6"},
+    {"name": "grey", "body": "#8a8580", "head": "#8a8580", "front": "#8a8580", "belly": "#b5b0a8", "muzzle": "#b5b0a8", "ear": "#6a6662", "leg": "#7a7570", "foot": "#7a7570", "tail": "#6a6662", "ring": "#2c221b", "eye": "#9fb04a", "nose": "#5a4a4a"},
+    {"name": "tuxedo", "params": {"tabby": false}, "body": "#222020", "head": "#222020", "front": "#222020", "belly": "#f0ece4", "muzzle": "#f0ece4", "ear": "#1c1a1a", "leg": "#f0ece4", "foot": "#f0ece4", "tail": "#1c1a1a", "ring": "#1c1a1a", "eye": "#a8b848", "nose": "#d89aa0"},
+    {"name": "cream", "body": "#e2c9a0", "head": "#e2c9a0", "front": "#e2c9a0", "belly": "#efe0c4", "muzzle": "#efe0c4", "ear": "#d4b58a", "leg": "#d4b58a", "foot": "#d4b58a", "tail": "#d4b58a", "ring": "#593d26", "eye": "#c99a3a", "nose": "#d8909a"},
+    {"name": "brown", "body": "#6e5238", "head": "#6e5238", "front": "#6e5238", "belly": "#a88a6a", "muzzle": "#a88a6a", "ear": "#55402c", "leg": "#5e4630", "foot": "#5e4630", "tail": "#55402c", "ring": "#23150c", "eye": "#8fa03a", "nose": "#5a3a30"},
+    {"name": "calico", "params": {"tabby": false}, "body": "#f0ebe2", "head": "#c77b3a", "front": "#2a2424", "belly": "#f0ebe2", "muzzle": "#f0ebe2", "ear": "#2a2424", "leg": "#f0ebe2", "foot": "#f0ebe2", "tail": "#c77b3a", "ring": "#c77b3a", "eye": "#b0a040", "nose": "#e39aa6"}
+  ],
+  "_coats": "COATS (species.js makeCat, picked by seed; creatures.js dressed): each written out whole over the colours above -- ginger, black, white, grey, tuxedo (white face and socks), cream, brown, calico (patches) -- the plain ones with { \"tabby\": false }, which takes the tabby stripes off (the sculpt's `pat`, gated on that param). Until 2026-11-06 these were mammals.js CAT_COATS",
+  "patScale": 0.21,
+  "print": "paw",
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [6000, 1900]
+    },
+    "shape": [
+      {"id": "chest", "type": "ell", "c": [0.0566, 0.1873, 0.0], "r": [0.0982, 0.0515, 0.0517], "k": 0.0264, "color": "@body", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body"},
+      {"id": "keel", "type": "ell", "c": [0.0801, 0.1497, 0.0], "r": [0.0511, 0.0257, 0.0401], "k": 0.022, "color": "@belly"},
+      {"id": "withers", "type": "ell", "c": [0.088, 0.22, 0.0], "r": [0.0572, 0.0257, 0.0412], "k": 0.022, "color": "@front", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body"},
+      {"id": "loin", "type": "ell", "c": [-0.0652, 0.1929, 0.0], "r": [0.0904, 0.0337, 0.0421], "k": 0.0264, "color": "@body", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body"},
+      {"id": "rump", "type": "ell", "c": [-0.1395, 0.2024, 0.0], "r": [0.066, 0.0376, 0.0445], "k": 0.022, "color": "@body", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body"},
+      {"id": "belly", "type": "ell", "c": [-0.0024, 0.1505, 0.0], "r": [0.0884, 0.0158, 0.0322], "k": 0.022, "color": "@belly"},
+      {"id": "pouch", "type": "ell", "c": [-0.1006, 0.1603, 0.0], "r": [0.0346, 0.0097, 0.0232], "k": 0.0176, "color": "@belly"},
+      {"id": "scapula", "type": "ell", "c": [0.0968, 0.2024, 0.0257], "r": [0.0198, 0.0376, 0.0158], "rot": [0, 0, 28], "k": 0.0176, "color": "@front", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body", "mirror": true},
+      {"id": "arm", "type": "tube", "bone": "legFLu", "pts": [[0.1056, 0.1848, 0.029, 0.024], [0.0968, 0.1485, 0.03, 0.023], [0.0841, 0.1089, 0.031, 0.0178]], "k": 0.0154, "color": "@body", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body", "mirror": true},
+      {"id": "triceps", "type": "ell", "bone": "legFLu", "c": [0.0801, 0.1386, 0.029], "r": [0.0209, 0.0272, 0.0178], "rot": [0, 0, -12], "k": 0.0132, "color": "@body", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body", "mirror": true},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.0841, 0.104, 0.0319], "b": [0.0924, 0.0322, 0.0319], "ra": 0.0178, "rb": 0.0121, "k": 0.011, "color": "@leg", "pat": {"when": "tabby", "v": "tabby"}, "frame": {"o": "$legFLu", "u": [0, -1, 0], "r": 0.016}, "mirror": true},
+      {"id": "flexor", "type": "ell", "bone": "legFLl", "c": [0.087, 0.0842, 0.0319], "r": [0.0157, 0.0248, 0.0146], "k": 0.011, "color": "@leg", "pat": {"when": "tabby", "v": "tabby"}, "frame": {"o": "$legFLu", "u": [0, -1, 0], "r": 0.016}, "mirror": true},
+      {"id": "pastern", "type": "cone", "bone": "footFL", "a": [0.0924, 0.0347, 0.0319], "b": [0.1012, 0.0149, 0.0319], "ra": 0.0121, "rb": 0.0125, "k": 0.0066, "color": "@foot", "mirror": true},
+      {"id": "paw", "type": "ell", "bone": "footFL", "c": [0.1078, 0.0111, 0.0319], "r": [0.0199, 0.0119, 0.0163], "k": 0.0066, "color": "@foot", "mirror": true},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-0.1387, 0.15, 0.0252], "r": [0.0374, 0.055, 0.0242], "rot": [0, 0, 22], "k": 0.0176, "color": "@body", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body", "mirror": true},
+      {"id": "gaskin", "type": "cone", "bone": "legHLu", "a": [-0.1163, 0.1125, 0.0252], "b": [-0.1408, 0.0675, 0.0252], "ra": 0.0187, "rb": 0.011, "k": 0.011, "color": "@leg", "pat": {"when": "tabby", "v": "tabby"}, "frame": {"o": "$legHLu", "u": [0, -1, 0], "r": 0.016}, "mirror": true},
+      {"id": "hock", "type": "cone", "bone": "legHLl", "a": [-0.1419, 0.07, 0.0252], "b": [-0.13, 0.02, 0.0252], "ra": 0.011, "rb": 0.0101, "k": 0.0066, "color": "@leg", "pat": {"when": "tabby", "v": "tabby"}, "frame": {"o": "$legHLu", "u": [0, -1, 0], "r": 0.016}, "mirror": true},
+      {"id": "hpaw", "type": "ell", "bone": "footHL", "c": [-0.1202, 0.01, 0.0248], "r": [0.0194, 0.011, 0.0154], "k": 0.0066, "color": "@foot", "mirror": true},
+      {"id": "neck", "type": "ell", "bone": "neck", "c": [0.154, 0.2156, 0.0], "r": [0.046, 0.0418, 0.0376], "rot": [0, 0, 32], "k": 0.022, "color": "@head", "pat": {"when": "tabby", "v": "tabby"}, "frame": "body"},
+      {"id": "throat", "type": "ell", "bone": "neck", "c": [0.1584, 0.198, 0.0], "r": [0.0376, 0.0209, 0.0251], "k": 0.0176, "color": "@belly"},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.1958, 0.2573, 0.0], "r": [0.043, 0.035, 0.036], "k": 0.012, "color": "@head", "pat": {"when": "tabby", "v": "tabby"}, "frame": {"o": "$head", "u": [0, 0, 1], "v": [0, 1, 0], "r": 0.012}},
+      {"id": "crown", "type": "ell", "bone": "head", "c": [0.2078, 0.2713, 0.0], "r": [0.03, 0.02, 0.028], "k": 0.012, "kc": 0.004, "color": "@head", "pat": {"when": "tabby", "v": "tabby"}, "frame": {"o": "$head", "u": [0, 0, 1], "v": [0, 1, 0], "r": 0.012}},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [0.2098, 0.2373, 0.021], "r": [0.026, 0.022, 0.018], "k": 0.01, "color": "@head", "mirror": true, "pat": {"when": "tabby", "v": "tabby"}, "frame": {"o": "$head", "u": [0, 1, 0], "v": [1, 0, 0], "r": 0.014}},
+      {"id": "bridge", "type": "cone", "bone": "head", "a": [0.2158, 0.2653, 0.0], "b": [0.2478, 0.2493, 0.0], "ra": 0.016, "rb": 0.0085, "k": 0.008, "color": "@head"},
+      {"id": "muzzle", "type": "ell", "bone": "head", "c": [0.2378, 0.2353, 0.0], "r": [0.017, 0.014, 0.019], "k": 0.007, "color": "@head"},
+      {"id": "pad", "type": "ell", "bone": "head", "c": [0.2458, 0.2335, 0.0098], "r": [0.0132, 0.0112, 0.0124], "k": 0.004, "kc": 0.002, "color": "@muzzle", "mirror": true},
+      {"id": "whiskers", "type": "whiskers", "bone": "head", "at": [0.24423, 0.23298, 0.02028], "dir": [-0.15, -0.05, 1], "rows": 4, "per": 3, "gap": [0.0042, 0.0032], "fan": [18, -14], "sweep": [-12, 28], "len": [0.04, 0.06], "rowLen": [1, 0.72], "droop": 0.08, "curl": 0.1, "r": 0.00055, "color": "#f4f2ea", "tip": "#e8e2d2", "seed": 3, "normal": [-0.13, -0.06, 0.99]},
+      {"id": "chin", "type": "ell", "bone": "head", "c": [0.2358, 0.2208, 0.0], "r": [0.0135, 0.0068, 0.0108], "k": 0.004, "kc": 0.002, "color": "@muzzle"},
+      {"id": "jowl", "type": "ell", "bone": "head", "c": [0.2038, 0.2233, 0.0], "r": [0.03, 0.014, 0.024], "k": 0.01, "color": "@belly"},
+      {"id": "nose", "type": "ell", "bone": "head", "c": [0.2556, 0.2438, 0.0], "r": [0.0042, 0.0045, 0.0062], "rot": [0, 0, 20], "k": 0.002, "kc": 0.001, "color": "@nose", "wet": 0.4},
+      {"id": "brows", "type": "whiskers", "bone": "head", "at": [0.22925, 0.26713, 0.02347], "dir": [-0.4, 0.6, 0.7], "along": [1, 0.5, -0.8], "rows": 1, "per": 3, "gap": [0.003, 0], "fan": [0, 0], "bury": 0.006, "sweep": [-10, 18], "len": [0.019, 0.026], "droop": 0.18, "curl": -0.05, "r": 0.0004, "color": "#f4f2ea", "tip": "#e8e2d2", "seed": 5, "normal": [0.657, 0.081, 0.749]},
+      {"id": "ear", "type": "fin", "bone": "earL", "root": [[0.1825, 0.2731, 0.0234], [0.1907, 0.2829, 0.0168]], "edge": [[0.1799, 0.2713, 0.0257], [0.1741, 0.2832, 0.0397], [0.1747, 0.2872, 0.0394], [0.1754, 0.2909, 0.0388], [0.1762, 0.2945, 0.0381], [0.1772, 0.298, 0.0373], [0.1782, 0.3014, 0.0363], [0.1794, 0.3048, 0.035], [0.1808, 0.3082, 0.0334], [0.1833, 0.3118, 0.0305], [0.186, 0.3096, 0.0265], [0.1877, 0.3072, 0.0239], [0.1892, 0.3045, 0.0216], [0.1905, 0.3018, 0.0194], [0.1917, 0.2989, 0.0175], [0.1928, 0.2959, 0.0156], [0.1939, 0.2926, 0.0138], [0.1948, 0.2891, 0.0121], [0.1943, 0.2878, 0.013]], "thick": 0.0014, "slope": 0.3, "face": [0.8051, -0.0696, 0.589], "cup": 0.55, "color": "@ear", "inner": "@earIn", "innerRim": 0.0052, "mirror": true, "fair": {"r": 0.0056, "sink": 3}},
+      {"id": "tail", "type": "sweep", "bones": ["tail", "tail1"], "thin": 3.2, "pts": [[-0.2114, 0.2059, 0, 0.0184], [-0.2045, 0.2234, 0, 0.0134], [-0.1998, 0.2406, 0, 0.0132], [-0.1975, 0.2574, 0, 0.013], [-0.1975, 0.274, 0, 0.0128], [-0.1998, 0.2902, 0, 0.0125], [-0.2044, 0.306, 0, 0.0123], [-0.2112, 0.3216, 0, 0.0121], [-0.2205, 0.3368, 0, 0.0119], [-0.232, 0.3517, 0, 0.0117], [-0.245, 0.3653, 0, 0.0114], [-0.2586, 0.3767, 0, 0.0112], [-0.273, 0.3858, 0, 0.011], [-0.288, 0.3928, 0, 0.0108], [-0.3036, 0.3975, 0, 0.0106], [-0.32, 0.3999, 0, 0.0103], [-0.337, 0.4001, 0, 0.0101], [-0.3547, 0.3981, 0, 0.009], [-0.373, 0.3939, 0, 0.0078]], "k": 0.0136, "kc": 0.0016, "pat": {"when": "tabby", "v": "tabby"}, "frame": {"o": [-0.2114, 0.2059, 0], "u": [0.0069, 0.0175, 0], "r": 0.012}, "color": "@tail", "bands": [[0.3288, 0.44, "@ring"], [0.5602, 0.6712, "@ring"], [0.776, 0.8832, "@ring"], [0.9305, 1, "@ring"]]}
+    ],
+    "eyes": {
+      "at": [0.2298, 0.2573, 0.019],
+      "from": [0.1958, 0.2553, 0.0],
+      "r": 0.0084,
+      "iris": "@eye",
+      "pupil": "slit",
+      "lid": "@lid",
+      "sink": 0.58,
+      "socket": 1.07,
+      "color": "#2e2a12"
+    }
+  }
 }

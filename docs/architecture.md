@@ -81,6 +81,22 @@ stride: the skeleton stretches the gait clock by the run/walk stride ratio
 something runs is its Froude number: `runs(speed, base)` is v^2 > 4.8 x base
 (~ v^2/gL > .5), so a cat trots where a horse still walks.
 
+On a slope (2026-11-04): a herd given `herd.ground = (x, z) => y` (the game's
+herds: `groundH`) stands its four-legged figures on it (`fitGround`,
+skeleton.js; display only, like the rest of the pose). Before, the body
+stayed level with its origin on the ground under its middle, so uphill
+feet went into the hillside and downhill ones hung in the air. Now the
+ground is read under the four hips (`parts.hips`, compiled for any def with
+four IK legs that is not biped, flying or swimming). The body pitches to
+the line from the hind feet's ground to the front feet's (`an._fit.pitch`,
+at most `FIT.max`). Each foot's IK target moves by the ground's distance off
+that plane, which covers side slopes and bumps (`dy[leg]`). Where a foot
+has to reach further than its leg's slack, the body comes down
+(`drop`), so no foot hangs. Only a figure within `FIT.near` of the ground
+at its origin is fitted; one on a sill, a floor or a bridge is not. The
+fit is recomputed when the figure moves or turns, and eased toward. To
+test it: menagerie.html `?slope=deg`, `?tilt=deg`.
+
 ## The human rig and wardrobe
 
 `people.js` builds a person the mammal rig's way, from root-space

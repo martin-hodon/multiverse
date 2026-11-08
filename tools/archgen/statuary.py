@@ -33,6 +33,22 @@ def row(prefix, pts, **d):
     return out
 
 
+def madonna(at, scale=1.0, face=FACE_PZ, stone="gold", seed=1, style="roman", child=None, prefix="virgin"):
+    """(2026-11-04) a VIRGIN AND CHILD: two `statue` markers -- the Mother standing ("offering left": her left forearm
+    held out), the Child seated on that forearm, a third of her size. `at` her feet, `face` her turn (FACE_PZ: looking
+    along +z); `child` [up, forward, left] overrides where the Child sits, in her heights (1.0 = her full height) -- the
+    Garde's gilt colossus, a crypt's painted Virgin with her bouquet, a silver one on an altar"""
+    import math
+    H = 1.78 * scale
+    up, fwd, left = child or (0.64, 0.21, 0.12)
+    # (a figure's +x is its forward and -z its left; turned by `face` as statues.js turns it: x' = x cos + z sin, z' = -x sin + z cos)
+    c, s = math.cos(face), math.sin(face)
+    fx, fz = fwd * H, -left * H
+    p = (at[0] + fx * c + fz * s, at[1] + up * H, at[2] - fx * s + fz * c)
+    return {prefix: statue(at, kind="woman", pose="offering left", style=style, stone=stone, scale=scale, seed=seed, face=face),
+            f"{prefix} child": statue(p, kind="man", pose="seated", style=style, stone=stone, scale=round(scale * 0.32, 3), seed=seed + 1, face=face)}
+
+
 def capped(statues):
     """no more than LIMIT: the ones listed first are the more prominent"""
     keep, n = {}, 0

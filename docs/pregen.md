@@ -78,6 +78,7 @@ in architecture.js, and every tweak to a look (the roofs' moss, the grain's gust
     python3 build/pregen.py                          # every landmark, every fabric, the loose items, the wings, a random lot of faces, the worlds -> pregen/
     python3 build/pregen.py --resume                 # carry on a run that stopped, from the parts it had finished
     python3 build/pregen.py --worlds-only --worlds 4 # only record worlds, into the cache as it is
+    python3 build/pregen.py --bodies                 # only bake the creatures' shapes -> pregen/shapes/ (docs/engines.md "Faster shapes, baked shapes")
 
 It opens `pregen.html` headless (build/headless.py, shared with build/textures.py) ONE PART AT A TIME -- six
 landmarks, the towns' tiles, the items, the wings, the faces, the fabrics (`pregen.html?part=list` names them) --

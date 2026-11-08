@@ -161,6 +161,125 @@ Checked in node on the two cached grown seeds and on landscape seeds (scratch `s
 ~90-115 m stretch 185-350 m from the town's middle (the round world's edge rules out the coast beside a town in its
 south-east), 3.4-7 m deep 40 m out, its land 0.5-4 m over the water, in ~15 ms; `addOpenWater` costs 150-290 ms at load.
 
+## The open water's giants (sealife.js, 2026-11-06)
+
+A sea gets two HUMPBACK whales (14 m) and a pod of three bull ORCAS (7 m) far offshore, and a PLESIOSAUR (3.3 m); a big
+lake gets the plesiosaur alone (a Loch Ness wink). Their bodies are the sculpted assets/creatures/sea/{humpback,orca,
+plesiosaurus}.json (species.js `makeHumpback`/`makeOrca`/`makePlesiosaurus`) in a composite herd of their own. They are
+not wanderers: each swims a LOOP of its own (an ellipse with a wobble, `SEALIFE` axes: a whale's 78 x 40 m, the pod's 66 x
+34, a plesiosaur's 40 x 22 in a sea and 24 x 14 in a lake), and where it is, how deep and how tipped is a pure function of
+the shared clock (simTick x TICK) -- every peer sees the same blow. `findLoop` tries centres on a 20 m grid, nearest
+the world's middle first (a lake's: its centre), and keeps a loop only if every 4th point and a body's margin either
+side of it are `isOpenWater` (so never the river's channel) and at least `need` deep (the deepest any part of the body
+goes in its cycle, plus a metre: a whale 21 m with its fluke-up dive, else 14 m and no fluke dive; an orca 10; a
+plesiosaur 5), 80 m from the mouth, clear of the ships' lanes (40 / 35 / 12 m) and of the loops taken before it (a
+small lake's plesiosaur: a loop 0.7 the size, under the boats' round if it must; a shallow lake's: 0.55 the size,
+3.8 m deep); none found, that animal is left out.
+- HUMPBACK (a 110 s cycle, its speed 1.9 m/s): a cruise 9 m down, up to the surface for three breaths -- the BLOW at each:
+  a bushy spout ~4-5 m high, narrow at the blowholes and opening into a V / balloon that drifts downwind and fades over
+  ~3 s (breath.js puffs released up the column), and a ring. At a breath the whale rises to 0.9 m under with its nose
+  tipped up 0.2 rad, so only the head's top with the blowholes and a little of the back break the water; between
+  breaths it sinks to 1.75 m, all of it under; then down again; every third dive FLUKES-UP where the water is deep enough (tipped ~65° nose down, the
+  stock and flukes lifted clear and sliding in, a ring where they go). Flukes stroke up and down (the tail bones pitch).
+- ORCAS (60 s, 3 m/s): one ahead and two staggered behind on one loop, cruising 4 m down, then a run of three shallow arcs
+  at the surface, the bull's 1.5 m fin breaking the water at each crest with a short puff (the whale's spout, small: ~1.3 m).
+- PLESIOSAUR (75 s, 1.3 m/s): ~2.6 m down, flying on four flippers (fore and hind flapping out of phase, feathering);
+  once a cycle it rises head-up until its head and the top of its neck break the surface, holds, and sinks back.
+- MANTAS (2026-11-07; a sea only, two; assets/creatures/sea/ray.json's "manta (reef manta)" variant, 3.4 m across):
+  loops of their own offshore like the orcas' (44 x 24 m, 1.1 m/s, 7 m of water, 25 m off the lanes), a 70 s cycle:
+  gliding ~3.5 m down, then up to cruise a metre under -- no shallower: the asset's wing wave lifts a tip ~0.7 m, and a
+  black tip out of the water reads as a shark's fin -- and down again. Banked into the turns (less near the top),
+  pitched with the climb, the wings' slow wave.
+- STINGRAYS (2026-11-07; a sea only, one or two; the ray's coats by seed, so a dark or a sandy one): a small loop
+  (9 x 4.5 m) 9-17 m off a beach where the water is 1.1-5 m deep (`findShallow`), a hand's breadth over the sand.
+- CRABS (2026-11-07; a sea only, two groups of 3-4 on beaches; coats edible, green shore crab, red-orange): `crabBeaches`
+  picks beach shore points (clear of the mouth, 50 m from the port, the sites, the stands; dry low ground 0.7-2.2 m up
+  the sand), nearest the town first, 30 m apart. Each crab WALKS SIDEWAYS (rotY faces it to the water, so its +x runs
+  along the shore) every 11 s to a new spot a few metres along the shore and up or down the wet sand, set on the
+  ground (`ground`). Not on a lake: the edible and shore crabs are marine.
+- NARWHALS (2026-11-07; a sea only; assets/creatures/sea/narwhal.json, species.js `makeNarwhal` and its variants): in a
+  COLD sea (`climate` "alpine", the coldest a landscape has) a pod of four -- a tusked bull, a cow, her calf (1.6 m) at
+  her side and an old pale bull; where it is temperate (or the river country) a fifth of the worlds get a pair (a bull
+  and a cow); none in an arid, tropical or mediterranean sea. One loop (54 x 28 m, 1.6 m/s, 9 m of water -- the tusk's
+  point tipped down on a dive -- 30 m off the lanes), laid last and on a random stream of its own, so the other animals'
+  loops are as they were. A 52 s cycle: cruising 3.5 m down, then up to 1.6 m and two slow arcs cresting at 39 and 45 s
+  (the root 0.3 m under: the back awash, the bull's tusk lifting clear as the head comes up), a small puff and a ring at
+  each; pitched with the climb, the flukes beating up and down.
+`createSeaLife(scene, { SEA, seed, ring, ground, blocked, harbour, climate })` (null with no open water; `update(T, t)` each frame; `list`, `callers` for
+calls.js -- the whale's song, the orcas' whistles and pulsed calls; `__dbg.seaLife`). The console says where each swims
+("sealife: ...").
+
+## Seals and walruses on the shore (haulout.js, 2026-11-06)
+
+HAUL-OUTS: groups of seals lying out on the shore of a sea or a big lake, and on a cold sea a herd of walruses. The
+bodies are the sculpted assets/creatures/sea/{seal,walrus}.json (species.js `makeSeal({ seed | coat })`, `makeWalrus`)
+in a composite herd of their own (`HAULOUT` in haulout.js holds the numbers).
+
+- WHO: a sea gets two groups of 4-7 seals, a lake one group of 3-4 (freshwater seals, as in Lake Iliamna or Saimaa).
+  Seven in ten sea groups are HARBOUR SEALS (the asset's coats 0-3: silver grey, dark, brown); the rest are GREY SEALS
+  (coats 4 and 5: a dark bull at 1.25x and pale cows at 1.1x). WALRUSES are Arctic, so they go by the world's climate
+  (`MAP.climate`): an "alpine" landscape (1 °C, the coldest there is) gets a herd of 3-5 on the sea's shore; a temperate
+  one, or the river country, gets one lone VAGRANT 35% of the time (walruses have wandered to Ireland, Wales, the
+  Netherlands and Spain); arid, tropical and mediterranean worlds and every lake get none. `?walrus=N` puts N there
+  whatever the climate.
+- WHERE: a stretch of shore (`SEA.shore` points, ±12 m of it) of the right kind -- seals beach first, then low rock;
+  walruses rock first, then beach; never a cliff or the river's mouth -- whose strip inland is dry from 2 m up, gentle
+  (no step over 0.45 m in a metre) and free of the town's sites, the port and its quays (`inSites`), trees, props and
+  claimed paths (`clearOfStands`), with water 0.8 m deep 8 m out and 1.6 m deep 18 m out. Kept 70 m from the port's
+  shore and 60 m from the river's mouth; groups 70 m apart, the walruses (the rarer) choosing first. A stretch none of a
+  group could swim off (no loop out and back through open water a metre deep) is passed over for the next. Each animal gets a SPOT 2-5 m up the shore (a walrus
+  2.5-5.5 m), a body or two from the next, lying FACING THE WATER give or take 45° (it hauls out where it can slip off).
+  Not on the quays: the port is busy with ships, freight and dock hands all day, and a seal on the quay would lie in
+  their way.
+- WHEN: a pure function of the shared clock, like the sea's giants. Each animal has its own cycle (a seal 3.5-5.5 min,
+  a walrus 5-7.5 min). In a share of the cycles (`goes`, drawn per cycle: half a seal's, 40% a walrus's) it goes in:
+  it turns toward the water and GALUMPHS down (a seal humps along on its belly at 0.45 m/s -- its back arching as the
+  hindquarters are drawn in, then the chest thrown forward; its hind flippers cannot turn under it, so they stay up off
+  the ground. A walrus WALKS at 0.24 m/s on all four flippers, the hind ones turned forward under the pelvis, rolling
+  from side to side), a ring where it reaches the water; then SWIMS a smooth loop out from the shore (12-26 m out for a
+  seal, as far as the water is open and a metre deep), the hind flippers sweeping side to side (a seal's 1.2 a second, a
+  walrus's 0.7), with two dives as deep as the water allows; at the loop's far end it BOTTLES -- floats upright, its
+  head out and bent level, looking about -- for 7-14 s (a walrus 12-24 s); swims back and hauls out to its spot,
+  turning round there over 6 s to face the water again. The rest of the time it lies: the head up, now and then
+  looking about; a seal now and then in the "banana" (the head and the hind flippers raised together); a walrus now
+  and then laying its head down. Lying, it is tipped to the ground under it.
+- THE POSES are `an.pose` per bone (skeleton.js writeAnimal's held rotations: neck, head, hips, tail, the four
+  flippers) -- the assets themselves are drawn level, a seal as it swims, a walrus lying with its fore flippers under
+  it.
+- VOICES (calls.js): every other seal moans (long, wavering, nasal), barks hoarsely twice or growls; a walrus bull
+  bellows or grunts, and a second walrus (if there is one) rings its "bell" -- a run of struck pure tones.
+
+`createHaulout(scene, { SEA, ground, blocked, harbour, climate, seed, ring, force })` (null with no open water or no
+place; `update(T, t)`; `list`, `groups`, `callers`; debug `hold`, `shift`, `peek(i, T)`, `next(i, state)`;
+`__dbg.haulout`). The console says where ("haulout: 6 harbour seals on the beach at x, z; ...").
+
+## Pteranodons over the water (pterosaurs.js, 2026-11-06)
+
+Two or three PTERANODONS (6 m across: assets/creatures/dinosaurs/pteranodon.json, species.js `makePteranodon`) soar
+over the open water -- the sea or the big lake (sea.js `isOpenWater`), else the small lake (ground.js `lakeSD`), else
+(two of them, higher) over the country round the town -- in a composite herd of their own, always in the flight pose
+(skeleton.js `an.fly` 1). Not wanderers: where each one is is a pure function of the shared clock (simTick x TICK), as
+the whales' is. `PTERO`:
+- CIRCLING: round a centre at its own radius (26-46 m) and speed (8-10.5 m/s), one way round, banked into the turn as its
+  speed and the turn's rate want (`roll`: atan(v w / g)) and pitched with its climb. Its centres are its ANCHORS, found
+  once on a 16 m grid nearest the town first: up to three within 260 m of each other where the whole circle (and 10 m)
+  lies over open water, 70 m from another's. Each CYCLE (80-120 s, its own) a hash of the cycle picks the anchor, and
+  the centre glides there (6 m/s), so it drifts as a soaring bird does on the wind.
+- HEIGHT: 16-34 m over the water (34-48 over the land), swelling slowly (two sines, 5 and 3 m) -- and never under the
+  FLOOR: the ground plus 26 m (trees and roofs are not in groundH), or the water plus 1.4 m where there is water over
+  it, sampled along its path every 0.5 s of the clock from 6 s behind to 6 s ahead (under both wingtips too, 3.1 m
+  either side), less 2.6 m for every second away -- so it rises smoothly to a coast or a hill before it reaches it.
+  Each sample is memoised: one new one a step.
+- SWOOP: in half the cycles, once the centre has settled, the root dips over 18 s to 1.9 m above the water and up
+  again -- only where the water lies under the whole stretch (from 4 s before to 6 s after, and the floor's 6 s look
+  beyond) and 30 m from the ships' lanes; then six hard beats on the climb away.
+- BEATS: bursts of 0-5 beats (1.35 a second) every 13 s (`flaps`), the wings otherwise still and level: the wing clock
+  (`an.wingT`) is each burst's progress in whole beats, so it starts over each slot unseen. On each upstroke the hand
+  flexes back and down at the wrist (the parts' `flyUp`); it is straight again through the downstroke and the glide.
+`createPterosaurs(scene, { SEA, hasLake, lakeSD, waterY, groundH, groundR, seed })` (null if none fit; `update(T, t)`
+each frame; `peek(i, T)`: where one is at clock T, its cycle, swoop and floor; `__dbg.pterosaurs`). They are silent
+(calls.js). The console says where each circles ("pterosaurs: ...").
+
 ## The port's layout (port.js, 2026-11-03)
 
 `port.js` is a pure module (no imports; node tests it) that says where a culture's harbour pieces stand along a shore
@@ -390,9 +509,68 @@ you can always walk out of one that has stepped onto you.
   and run gaits -- walk or run by one Froude rule (`runs()`: every
   wanderer, and a ridden mount at 2.5x its speed, 7x with Shift), head and
   tail on the same stretched gait clock as the legs, a standing
-  animal fades its stride out onto straight legs. The small and odd ones
+  animal fades its stride out onto straight legs. The first primates
+  (2026-11-05: gorilla and orangutan knuckle- and fist-walking, baboon
+  and ring-tailed lemur on their palms) and the kangaroo (a biped that
+  bounds, `hop.sync` below) are sculpted on the same rig, and so are
+  (2026-11-05) the spotted hyena, impala, giant anteater, pangolin, striped
+  skunk and capybara (each with its call in calls.js), and (2026-11-06) the
+  European badger and the least weasel: the badger low and wedge-shaped on
+  short black legs, its striped face sharp-edged (coatpat.js `badger`),
+  walking with a rolling waddle (`gaits.walk.roll`); three in the meadow,
+  two of them out only from dusk and by night (`active: "night"`: in the
+  sett by day); the weasel a 20 cm chestnut-and-white tube that BOUNDS
+  (`hop.sync`, its back humping up and lying out each bound: `flex`), three
+  of them each on a hedge bank of its own beside a hedged country lane
+  (index.html `hedgeBeat`, else the meadow) -- and, stopping, half the time
+  it stands up on its hind legs to look about (`upright`, skeleton.js
+  UPRIGHT). The badger grunts and purrs, the weasel trills. And (2026-11-06)
+  five more, each in its own range (index.html `NEW_RANGES`): the Eurasian
+  lynx on the cat frame (high on long legs, jointed at wrist and hock,
+  broad furred paws with toe lobes, a bobbed black-tipped tail, a pale
+  ruff down the jaw line to points beside the throat, a thin dark line
+  along each cheek, tall ears with long black tufts, spots small to
+  medium, densest on the legs and flanks -- coatpat.js 63 -- on
+  sandy-grey to red: coats grey/red,
+  the `spotted` variant its spots smaller and denser -- `patScale`) alone at the forest's EDGE (a
+  ring round the forest's spot: `forestSpot`, the search buildFlora grows
+  the forest at, run before the cast is spawned); four chamois on the deer
+  frame (hooked black horns, the white face with its black eye-to-muzzle
+  stripes, dark legs and dorsal stripe, a pale rump; summer or `winter`
+  coats) on the CRAGS -- `cragRange`, a 14 m disc round the steepest, barest
+  dry ground of a grown landscape (`MAP.surface.bare`, the slope of
+  `groundH`), else the meadow -- stocky, short-necked goat-antelopes on
+  sturdy legs; two giant pandas (the bear's rig at 0.62: a big round head
+  on a short muzzle, white, the black legs, shoulder band and slanting
+  oval eye patches drawn per pixel -- coatpat.js 64/65 -- round black
+  ears; they lie down at their stops -- `rest` -- no sitting pose) and two
+  red pandas (short and round-backed, rusty red, black legs and belly, a
+  big round head, smallish white-rimmed ears with rounded tips, a black nose, white brows, cheeks and
+  muzzle with a red-brown tear between, a thick bushy tail ringed red and
+  buff) inside the woods;
+  and three crested porcupines in the meadow (two out only by night): a
+  stocky dark rodent, its black-and-white banded quills swept back close
+  to the body and raised into a fan only over the rump, a crest of long
+  pale bristles on its head and neck (bodymesh.js coat `bands`, `fan`,
+  `sparse`, a shape's numeric `coat`). Calls: the lynx hisses and yowls, the chamois whistles,
+  the red panda squeaks and twitters, the giant panda bleats, the
+  porcupine grunts and rattles its quills. (2026-11-07) The mammals in
+  coats and variants of their own (docs/assets.md, Coats and variants):
+  each bear, fox, dog, leopard, cow, baboon, kangaroo and camel in a coat
+  the town's seed picks (a grizzly, a silver fox, a black panther, a
+  Jersey or a hornless Angus, a hamadryas, an eastern grey); three
+  striped piglets with the boar, two hinds and a fallow or a roe doe
+  with the red stag, two fawn blackbuck does, a gorilla female and a
+  hippo calf. (2026-11-08) The NORTHERN UNGULATES (tools/creaturegen/ungulates):
+  a bull MOOSE (palmate antlers, the bell, the overhanging muzzle) with a
+  cow and a reddish calf at the forest's EDGE (`woodsRange(true)`, as the
+  lynx); a bull BISON (the shaggy cape, the hump, the head carried low)
+  with three cows and an orange-red calf in the meadow; an IBEX billy
+  (the knobbed scimitar horns, a beard) with two nannies and a kid on the
+  CRAGS (`cragRange`, as the chamois) -- each herd its variants (index.html
+  `kin`), each in the range its species' name gives (`NEW_RANGES`). The small and odd ones
   keep their classic capsule parts (still a trot of diagonal leg pairs);
-  monsters (hydra, dragon, manticore, unicorn, beast-men, tauric beasts) with
+  monsters (hydra, dragon, manticore, cerberus, unicorn, beast-men, tauric beasts) with
   jointed bat wings -- all on the rig: the dragon (a long raised neck,
   horns and frill, spines, a sweeping tail with a spade), the hydra (three
   slender necks splaying apart, each an arc chain with its head), the
@@ -421,28 +599,79 @@ you can always walk out of one that has stepped onto you.
   counterweight) and the triceratops (9.1m: brow and nose horns, a parrot
   beak, the frill as three flat triangles fanned into a shield) -- one
   `ceratopsian()` family: the styracosaurus is its frame at .6 (5.5m) with a
-  long nose horn and a crown of frill spikes; the stegosaurus (9.1m: two
+  long nose horn and a crown of frill spikes; the diabloceratops (2026-11-05,
+  sculpted: the styracosaurus' body, two long devil's-horn spikes up and out
+  off the frill's top, small hooks along its sides, tall brow horns, a low
+  nose horn and a deep short face; its own honk in calls.js); four more
+  sculpted on the tyrannosaur's rig (2026-11-05, generators outside the
+  repo, notes rework/newdinos.md): the carnotaurus (7.8m, hips 2.1m: a
+  short deep boxy skull with two thick horns over the eyes, out and up,
+  arms reduced to stubs, long slim legs, a tail broad at its root, and
+  rows of big domed feature scales over neck, back, flanks and tail -- the
+  coat pattern `osteoderms`, coatpat.js 25); the dilophosaurus (7m, hips
+  1.6m: slender, a long neck, a narrow snout kinked at the subnarial notch,
+  two thin arched crests side by side on the skull, long three-fingered
+  arms); the allosaurus (8.5m, hips 2.15m: an S-neck, a long narrow skull
+  with triangular lacrimal horns and a nasal ridge, strong arms with big
+  curved thumb claws, the tail level); and the pachycephalosaurus (4.5m,
+  hips 1.3m: a thick dome ringed by knobs and blunt spikes, knobs on a
+  short beaked snout, short arms, a deep gut and a stiff tail); each with
+  its own call (the carnotaur's and allosaur's booms, the dilophosaur's
+  higher hoot, the pachycephalosaur's honk-grunt) and all four mountable;
+  the stegosaurus (9.1m: two
   rows of plates, the tail's riding its links, the four-spiked
   thagomizer) and the ankylosaurus (8.2m, twin side lobes for its width,
   scutes, flank spikes, a tail club); all but the stegosaurus
-  mountable; riders sit at one shared `saddle(def)` point, a third
-  of the way from rump to chest; generative
-  butterflies, pond fish, a shark and a dolphin. The small and odd ones:
+  mountable; with them in the pen (2026-11-08: the world's prehistoric corner -- there is no other) one each
+  of three PREHISTORIC MAMMALS, sculpted (assets/creatures/mammals, generator tools/creaturegen/prehistoric/gen.py;
+  index.html pushes them onto the cast with MFENCE as their range, in a coat the town's seed picks, and their calves
+  join YOUNG's spring kinds): the uintatherium (3.9 m: three pairs of skull knobs, sabre tusks), the brontotherium
+  (Megacerops, 5 m, 2.5 m at the withers hump: the forked nasal horns) and the elasmotherium (4.5 m: the shoulder
+  hump, one 1.1 m forehead horn, a woolly coat), each calling as the rhinoceros (`call`), all mountable;
+  and two PREHISTORIC REPTILES with them, likewise one each in a coat by the town's seed (assets/creatures/dinosaurs,
+  generators tools/creaturegen/prehistoric/dimetrodon.py and desmatosuchus.py, "parts" rigs in the crocodile's plan):
+  the dimetrodon (3.2 m, Permian: the spined sail, the stepped jaw with its fangs) and the desmatosuchus (4.5 m,
+  Triassic aetosaur: rows of plates from neck to tail tip, the great curved shoulder spikes, the upturned spade snout);
+  riders sit at one shared `saddle(def)` point, a third
+  of the way from rump to chest (or, opt-in, the definition's own
+  `saddle: { x, y }` in root space: x forward, y the back's height
+  there. The sculpted dragons use it, dragons.js PLANS `seat`: at the
+  neck's base, ahead of the wings, with a gap in the dorsal spikes;
+  geom.js scaleDef scales it); generative
+  butterflies, pond fish, a shark and a dolphin (the swimmers: assets/creatures/sea, the catalogue's "Sea life";
+  species.js makeFish picks a fish's coat and one of three sizes by its seed, makeDolphin/makeShark are A(); every tenth
+  of the pond fish is a carp, a pike or a trout instead -- index.html addSwimmer, the same random draws -- while the sea's
+  own, the swordfish, clownfish, lionfish, eel and octopus, are only in the catalogue; the open water's
+  humpbacks, orcas and plesiosaur, a sea's mantas and stingrays (the ray) and its beach crabs, are in sealife.js --
+  "The open water's giants"). The small and odd ones:
   a snake whose chained segments carry a travelling wave, rat, wild boar
-  with bristle mane and tusks, hedgehog under a coat of spine cones,
+  with bristle mane and tusks, hedgehog SCULPTED -- one skinned surface, eyes in its face, a coat of quills sown on it (bodies.js),
   scorpion with pincers and a tail curled over its back, a tarantula-sized
   spider stepping its eight legs in two alternating sets, a peacock whose
   seven-plume train is eyespotted in the shader; on the lake three swans
   and three mallards (`swim`: they ride the shared water level
   half-submerged) and on
   the lagoon's grassy heart a crocodile, a frog, a turtle and a beaver
-  with its paddle tail (`shore`).
+  with its paddle tail (`shore`). Four HERPS (2026-11-08, assets/creatures/others, generators tools/creaturegen/herps/;
+  catalogue species built by coatDef, index.html pushes them with a range of their own, by MAP.climate as the fennec):
+  the AGAMA (28 cm, the male orange-headed and indigo, the females brown) -- in a warm world (arid, tropical,
+  mediterranean) a male and two females on the crags (an arid land's) or at the foot of a building's sunny walls (the
+  wall lizard's range), elsewhere a stray male in a town in three; the FIRE SALAMANDER (20 cm, glossy black, yellow
+  spots or stripes, rarely orange-red) -- two in any world but an arid or a tropical one, in the forest's heart or,
+  without woods, on the shore; the GILA MONSTER (50 cm, beaded, black and pink, banded or reticulated) -- two in an arid
+  world on the open ground, elsewhere a stray one in a town in five; the GREEN IGUANA (1.5 m, spined crest, dewlap,
+  the cheek's pale shield; green, the orange breeding male) -- two in a tropical world, one by the water and one in the
+  forest's heart (else the shore), elsewhere a stray one on the shore in a town in six.
 - **Ranges**: a wanderer's range is a rectangle, or a shape: the lake range
   tests the carved bottom for water and steers home toward the arc, so
   fish, swans and ducks spread over the whole C instead of one belly.
 - **Wanderers**: every creature alternates walking and standing at random
   intervals; hoppers (the frog) travel in bursts, airborne on a little
-  parabola for each hop and still between. All are
+  parabola for each hop and still between; a BOUNDER (`hop.sync`: the
+  kangaroo) moves on over its feet while they are down, its bound's clock
+  runs with its speed and its legs' cycle is locked to the bound -- one
+  stride a hop, pushing off behind, landing reaching forward (index.html
+  hopStep; the frog is unchanged). All are
   steered back inside their fence; standers settle legs perfectly
   straight. Fliers cruise at per-individual altitudes and glide instead of
   standing: twenty parrots, fifty owls, twenty eagles, a hundred bats and 140 butterflies
@@ -456,6 +685,56 @@ you can always walk out of one that has stepped onto you.
   in, town row and riverside); parrots and eagles fly by day, owls and bats
   only at night (N), roosting out of sight otherwise; swimmers do the same between lake floor and surface. Terrain is
   sampled under nose, center and tail so long bodies never bury a nose.
+  PERCHERS (perchers.js, 2026-11-06): the owls, the parrots (macaws) and the eagles no longer only fly. Out and about,
+  a flight now and then ends on a perch near it (owls half their flights, within 90 m; macaws 60 %, 70 m; eagles 30 %,
+  170 m), sat 15-140 s; in their resting time (owls by day, the others by night) each flies to the nearest free perch,
+  however far, and sits there till it is out again and a minute more -- the bats still roost out of sight (and so does
+  any bird that found no perch). At the world's start the resting ones are already sat, and a third to a half of the
+  others. WHERE: the trees' near-level boughs (flora.js makeTree `boughs`: limbs off the trunk and the next out, rising
+  at most 1 in 2, over 3 cm thick; eight a tree, spread up the crown), the upper boughs of the trees over 9 m (`top`),
+  the gable ends of the roofs' ridges (on the ridge tiles) and the ridges 8 m and more up (`high`) -- pitched, tiled
+  ridges only: no hips, no shared wall tops or level ridges, where the tail would sink into the roof. Owls: boughs 3-11 m
+  and gables; macaws: boughs 3-15 m, a tree with macaws in it counting 40 m nearer (they gather); eagles: the tall
+  crowns and the high ridges. One bird a perch; it sits across the bough or the ridge, facing the way nearer its
+  flight. COMING IN: to a point `fin` m (6-14) short of it and a third of that above, circling down where too high to
+  glide there, a last glide slowing all the way, the flare over its last third (tipped up, deep beats), touch-down and
+  0.9 s settling: the wings fold along the flanks and it stands up (skeleton.js PERCH: an.perch folds each wing chain
+  -- arm, wrist, hand -- stills the beat, droops the tail, keeps the head level on the tipped body; an.pitch tips it
+  62 deg for an owl, 55 an eagle, 50 a macaw). The fold hangs each wing down its flank about its own chord, the
+  feathers still pointing back, the hand turned back so the primaries reach over the tail; a rigid wing is twice as
+  deep as the flank, so the arm's frame is squeezed too (`squeeze`: the chord to a half or so, the span to a third --
+  the feathers stacked as a folded wing's are). Each species has its own (PERCHERS `fold`, `squeeze`), fitted to its
+  model by a search against the body's shapes. PERCH LEGS (owl, eagle, macaw): each has a leg chain -- `legL/R`
+  (the thigh, in the eagles' and owls' feathered "trousers"), `shinL/R` (the tarsus, feathered to the toes in those
+  two), `footL/R` and four toe bones (`toeL0..3`: two forward and two back, the owl's and the macaw's; three forward
+  and the long hind talon, the eagle's). The model is drawn PERCHED -- the body upright above the feet, the toes
+  curled round a bough of radius `curl.r0` -- and aloft the chain is tucked back under the tail (a bone's `tuck`,
+  degrees about z, scaled by 1 - an.legs). an.legs (perchers.js, drawn smooth) lets them down over the flare's last
+  half and draws them up as it takes off; on the perch each toe's `curl` turns it to fit the bough it is on
+  (an.perchR, the bough's radius there, or a ridge's 5 cm): a thicker bough opens the toes, a thinner one closes them;
+  tucked they lie back along the underside. The foot's `perchPitch` is the tip the model was drawn at, and the toes' root (summed down the
+  chain) is what rests on the perch (built by a script from the body's shapes: the birds' `tag: "perchleg"` prims).
+  The owl's tail is a broad rounded fan. SAT: the head turning to a new bearing now and then and held (an owl's far round, its
+  turns three times rarer while it dozes by day); a macaw sidles along its bough. TAKING OFF: wings out, a drop off
+  the perch on hard beats, away level, then climbing back to its cruising height at 1.6 m/s (wanderStep `yFrom`). On
+  the wanderer's own seeded stream and the tick, deterministic; pitch, fold and look are drawn smooth between ticks
+  (a track). A perched eagle is not taken for a hunt. The GREAT HORNBILL (2026-11-07: hornbill.json, from the macaw's
+  plan at 1.3 times its size) perches too: three over the forest by day, on boughs 5-20 m and the tall crowns, pitched
+  30 deg, keeping together (`group`); its perch legs three toes forward and one back, the thighs white.
+  THE BIRDS OF 2026-11-07: an Atlantic PUFFIN colony (six) on the steepest dry ground within a few metres of the sea --
+  sea worlds only (index.html seaCliff; elsewhere the one in the cast walks the shore); a pair of GREY CROWNED CRANES
+  and three SPOONBILLS on the shore (`shore`; the spoonbills each in a coat the town's seed picks: the Eurasian, the
+  roseate); a SOUTHERN CASSOWARY, one, deep in the forest (woodsRange); wild TURKEYS at the forest's edge -- the tom, a
+  tom in display (his `display` variant: the tail raised in its fan) and two hens (`hen`: smaller, duller, no snood or
+  beard) -- and a white domestic turkey (coat 1) among the hens of each hen yard. The birds' other coats in the cast
+  (coatDef, picked by the town's seed): a Pekin duck among the mallards, a juvenile among every four flamingos, a bald
+  eagle among every five eagles, a barn owl in five owls and a snowy owl in ten, the river's swans black in a town in
+  three, the woodpecker a green woodpecker in every other town, the penguin an emperor; the pigeons' morphs mixed in a
+  flock (blue bar, checker, ash-red, white, pied, spread black), the gulls' four kinds, the crows hooded in a town in
+  three, the geese greylag, domestic white and Canada, the buzzards' pale and dark morphs, a kestrel among the falcons,
+  the sparrows' and blackbirds' hens, a black stork in four, the ibis sacred in every other town, the cockatiels' lutino
+  and whiteface, a white dove in three, a great egret among the herons; an ostrich hen with the cock and two pheasant
+  hens (their `hen` variants). The spoonbill feeds standing with its head down (`graze`) and swinging side to side.
 - **People** (`people.js`, see architecture.md): seeded kind -- man, woman, ten-year-old,
   five-year-old (children with bigger heads and shorter legs; working people are adults) -- height,
   build, skin, face (nose, ears), hair style and a medieval wardrobe: shirts, tunics, dresses,
@@ -466,7 +745,8 @@ you can always walk out of one that has stepped onto you.
   the whole open country -- every patch of grass on the ground that is not
   water, moat or a building -- and kept out of those as they roam.
   Cathedrals export `folkSpots` and get a static congregation.
-- **Dragonflies** (`makeDragonfly` in `species.js`): 70 generative
+- **Dragonflies** (`makeDragonfly` in `species.js`, from the definition
+  assets/creatures/others/dragonfly.json: its coat and its size `k` picked by the seed): 70 generative
   darters, 7-8cm with a 10cm span in four colorings, beating four glassy
   wings fast and low (0.3-2.2m) over water only -- their range is the 5m
   band along the lake's shores and the river; every flier now rides above
@@ -710,6 +990,16 @@ you can always walk out of one that has stepped onto you.
   eyes when you ride anything -- a horse or a diplodocus -- your own body on
   the saddle, a peer's rider and a clone all sit there. Your own body is
   placed right after the move, before its head and the bow read it.
+  The fused rider's horse is drawn SCULPTED like a loose one since 2026-11-08 (its body carried in the fused
+  definition's `sculpts`, bodyspec.js `sculptPart`; engines.md "A sculpted body inside a bigger figure") -- it was
+  plain pills before, and so were the cart teams and the centaur's horse.
+- **Riding** (2026-11-08): the mount and your eye stand at `rideY`, eased toward the ground under them, and a ridden
+  mount's gait does not bob it (skeleton.js `an.ridden`) -- it hopped up and down under a level view on the ground
+  where aloft it was smooth. The larger beasts that had no `mount` can be ridden now: the moose, the bison, the
+  stegosaurus, the desmatosuchus, the cerberus, the ostrich -- and the PEGASUS and the GRIFFIN, flying (E up, Q down,
+  as a dragon; docs/motion.md "A sky steed ridden": their wings fold by PERCH and their legs tuck as when they fly on
+  their own; mounting one puts its own flights off). A mount must be on your level to be mounted (a pegasus circling
+  overhead is not).
 - **Water mill** (`assets/architecture/village/watermill`, tools/archgen/riverside.py): a 9 x 6.5m stone
   mill house with a 6.1m undershot wheel standing off the river wall on a
   piled frame, its axle only .5m above the floor so the paddles reach the
@@ -912,10 +1202,78 @@ you can always walk out of one that has stepped onto you.
   with a rounded clump of the same leaf cards; about a third bear fruit --
   berry-cluster cards in currant, blueberry, blackberry, gooseberry or rose
   hip colour on the clump's surface alongside the leaves. Five flower kinds at
-  generous real sizes, mushrooms; drifting multi-tone clouds. The wood and
+  generous real sizes; drifting multi-tone clouds. The wood and
   undergrowth share one instanced draw; everything rebuilds
-  deterministically when the season changes. `grove.html` shows every
+  deterministically when the season changes. The MUSHROOMS in the trees' shade (a fly agaric, a cep, a chanterelle,
+  at real sizes, 6-20 cm) are ITEMS since 2026-11-08 -- `assets/items/mushrooms/<kind>`, written by
+  tools/mushroomgen.py in lathes as the flowers are, each kind in three growths by its seed, the fly agaric's warts
+  turned by `spin` -- drawn in the flowers' one batched pool (`buildFlora` collects their spots, `mspots`, and fixes
+  a copy each) and picked like a flower (its copy hidden). They were the last figures the game still made in the old
+  part vocabulary, a pill under a squashed sphere, in the tree herd. `grove.html` shows every
   species (A: autumn, R: re-roll).
+
+### Burrows, anthills and nests (nature.js, 2026-11-08)
+
+Placed once the drawn ground has arrived (`terrainReady`), by `nature.js placeNature`; what each kind is lives in its
+asset, `assets/nature/` (the asset viewer's **Nature** group shows each one as the world builds it). `?nature=0` leaves
+them out; `__dbg.nature` lists them.
+
+- **Burrows** (burrows.js; assets `nature/burrows/*`: the badger's sett, the fox's earth, the wolf's and hyena's den,
+  the bear's den, the small one of the porcupine, pangolin and skunk, the rats' warren, the kingfisher's and puffin's
+  bank hole -- each names its `species`). For each species of the cast that digs, one burrow in its range near where it
+  is, on a slope or a bank (the tunnel runs into the hill), clear of buildings, roads, trees and water (`where: bank`:
+  1-3 m from the water's edge). **The hole is real**: the ground's pixels inside each mouth's oval are discarded --
+  grass.js `PITS` (up to 23 ovals, after the 16 `DIG_RECTS`, in the same texture; the ground, the water and the grass
+  mask all ask `groundHole`, and only pixels inside the box round all the ovals pay for the loop, one texel read per oval
+  that is not near). Each oval is a D (its near half squarer, `PITS.d`): the tube is D-sectioned -- an arched roof, a
+  flat trodden floor -- and the cut is fitted inside its rim with the same test. Round every mouth and under its heap the
+  ground is **bare earth** (grass.js `groundEarth`/`earthOver`: an apron about half the mouth's width, the heap's
+  footprint and a little past it, the edge frayed by noise into the lawn; crumbly, a few pebbles; the grass mask counts it
+  bare, so no stalks stand on it). Under it a tube of earth goes down at the burrow's `dip`, levels, turns and ends in a chamber; the
+  tube is the cylinder whose cut the oval is, its rim laid on the DRAWN terrain (burrows.js `terrainSampler`: the tiles'
+  own triangles, not `groundH`, which they stray from by up to 15 cm) 1.8 cm under it, with a flange of earth running
+  out under the ground round it, so no seam and no sky shows at any angle. The walls are lit earth by the lip and darken
+over about one tunnel-width in, so from above the floor is seen going down into the dark under the far lip (baked per vertex; the soil's grain per pixel: grass.js `soilGrain`). Before the
+  mouth the spoil heap: a fan of bare earth rising from the cut's own front lip (the oval's, not the tube's rim, which can
+lie a hand further out), a FAN narrow at the mouth and spreading out down the slope, highest a little out from the
+hole, its outline ragged and its toe running out low and the colour of the bare earth round it, lumpy, a trough worn down its middle by the comings and goings, clods and a few stones lying on it (`clods`,
+`stones`), on a sett's old bedding dragged out (`bedding`); `roots` can lay arcs of root over a mouth's back (off in the shipped
+assets: on open ground they read as a lid); its outer edge
+under the ground, on the bare earth (a ground prop: no grass
+  through it, snow on it). The animals that walk get a **den** (`w.den`, burrows.js `makeDen`, stepped in `wanderStep`
+  before anything else): every `visit` seconds or so one walks to its mouth, stands looking about, and half the time goes
+  in nose down along the tunnel's floor (hidden once inside) and comes out a while later nose up; out of its hours
+  (`active`: the night badgers and porcupines by day) it goes in and stays; a shy one you come near at its mouth bolts in.
+  A sett's mouths are shared out among its badgers. Cost: one draw for all the tunnels, one a heap.
+- **Anthills** (ants.js; asset `nature/anthill`): two wood ants' mounds at the forest's edge (1.8-6 m from a tree, in the
+  open; else by a tree in the meadow), each a dome of needles 1.5-2.2 m across and knee high (a needle-streak pattern per
+  pixel on snowyLit), 4-7 trails running 5-11 m out over dry open ground, each a worn strip of litter in the grass
+  (part of the mound's mesh: no stalks over it). Its ants -- 150 milling over the dome, 900 on the trails, out and back
+  on either side of the strip, every ant of a trail keeping to its winding (antTrailAng) -- are cards lying ON the ground with an ant drawn per pixel (black gaster,
+  waist, red-brown thorax and head, six legs stepping in alternating tripods, elbowed antennae; 1.1 cm), placed on the
+  GPU from the time and their seeds; their height is the drawn ground (a 64x64 float patch round each mound, read
+  bilinearly in the vertex stage) plus the mound's dome (the same formula as its mesh). Out by day in fair weather; in at
+  night, in the rain, in the frost and the snow; fewer in late autumn. Not drawn beyond 16 m. One draw for every ant.
+  True size within 1 m of the eye (`ANTS.legible`); farther, drawn growing with the distance -- a 1 cm ant is a speck
+  from eye height and a trail of specks does not read -- but at most 2.5 times (`ANTS.grow`: a 2.8 cm ant; uncapped,
+  the trails' ants 8 m off were 10 cm, mice in a file): so from a few metres the trails are lines of moving ants, a
+  little larger than life, and farther they thin to specks.
+- **Nests** (nests.js; assets `nature/nests/*`): sticks (blocks.js logs) in courses round a rim, each crossing the last,
+  a floor across the bowl, a lining, eggs. A **stick nest** in the fork of a tree's highest bough for the crow, the raven
+  and the buzzard; a **heronry** of three big ones in tall trees near the water, a heron standing on one; the **magpie's**
+  roofed with a dome of sticks; the **eyrie** in the tallest tree (wide, thick sticks, green sprigs, two eggs), the eagle
+  sat in it (perchers.js's seat: the same foot and pitch as on a bough); on dry ground 1-2.5 m from the water the
+  **duck's** and the **goose's** (grass and stems, a ring of grey down, eggs) and the **swan's** reed mound with a swan
+  standing by it. The nests are placed whether or not their builders are in the cast (the crow, raven, magpie, buzzard
+and goose are not); a bird is added only for a species that is (`defOf`). The birds at the nests are herd figures that
+stay put (`a.nest`) -- sculpted bodies, so in a fresh profile one shows only once bodies.js has built its mesh (the
+first time it is in view: up to a minute headless; from the IndexedDB cache after that). All the tree nests are one mesh; a
+  ground nest is a ground prop of its own. The storks' nests stay on the chimneys (storkNests), the swallows' under the
+  eaves (icicles.js).
+- **Cost** (a typical town: 10 burrows with 15 mouths, 2 anthills, 820 ants, 10 nests): about 20 draws -- one for the
+  tunnels, one per burrow's heap, one per mound, one for every ant, one for the tree nests, one per ground nest -- and
+  placing it all takes 0.2-0.3 s once, after the terrain. Headless, by an anthill with all of it on and with it hidden:
+  16.3 and 16.4 ms a frame (the frame is held at 60 Hz there; no difference to measure).
 
 ## Village life
 
@@ -1144,6 +1502,37 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   a lake, standing at the water's edge or wading the shallows, now and then striking down at a fish (the hens' `peck`).
   With no lake the shore birds -- herons and flamingos -- keep to the river's BANKS (index.html: a band from .6 m in
   from the water's edge to 2 m up the bank), not the herd's meadow.
+- **Six more birds** (2026-11-05; assets/creatures/birds, the catalogue's "Birds", one of each in the cast: species.js
+  SPECIES `A(...)`, each with its call in calls.js): the **rooster** (rooster.json -- the chicken's cock as a bird of his
+  own: red-junglefowl colours, the comb and wattles, the golden hackles and saddle, the long iridescent sickles; the
+  dawn crow `rooster`), the **toucan** (a keel-billed: the huge lime bill with its orange band and red tip, black with
+  the lemon bib; a croaking "krrrek"), and on the shore (`shore`, with the herons) the scarlet **ibis** (the long
+  decurved bill; low honks), the king **penguin** (upright, the orange ear patches and golden bib, stiff FLIPPERS in
+  place of feathered wings that flap a little as it WADDLES -- the body rocking once a stride; a brassy trumpet) and the
+  great white **pelican** (the hooked bill and the yellow pouch, black flight feathers, ~2.9 m across aloft; a grunt);
+  and the **ostrich** (2.5 m: the black body plumes, white wing and tail plumes, the long bare neck, bare pink thighs,
+  two toes; a closed-bill boom). The penguin and the ostrich are FLIGHTLESS: no `flight` flag and no `flyRot`, so
+  skeleton.js gives them no flight pose (parts.flight null) and nothing takes them into the air; the toucan, ibis and
+  pelican spread their wings aloft (the spread wing of nbwing.py, hidden inside the body on the ground) but walk the
+  world like the other birds. Built by tools in the birds scratch kit (nb.py newbirds.py; rooster.py from the chicken).
+  (A note: index.html binds the hen yard's dawn crow to the first cast animal NAMED rooster -- now the meadow's.)
+- **Six more birds again** (2026-11-05; the same "Birds", the cast and calls.js): the griffon **vulture** (vulture.json --
+  hunched, tilted up at the shoulders, the dark mantle and folded wings over a sandy body, the S-neck sunk in a shaggy
+  cream ruff, the bald white head held low, the deep hooked bill dark-tipped; ~1 m long; aloft
+  the huge broad FINGERED wings, ~2.6 m; a hiss and a grunt), the **tawny owl** (tawny-owl.json, name "tawny owl" --
+  smaller than the eagle-owl, PLUMP, the big round head on the shoulders and NO ear tufts: russet, streaked below, pale
+  scapular spots; the buff facial disc in a pale ring edged dark, the pale frowning V of the brows, big black eyes;
+  "ke-wick" then the hoot), the **hoopoe** (cinnamon-pink, the
+  black-tipped fan crest, the long thin decurved bill, broad rounded BLACK wings barred white and the black tail with
+  its white band -- the white as geometry over the black: nbwing.py `strips` (bars across the spread wing) and
+  `bands` (feathers' copies cut short and stacked), nb.py tail `strip`;
+  "oop-oop-oop"), the great spotted **woodpecker** (pied, the white shoulder patches, red nape and vent, the chisel bill,
+  the stiff tail propped on the ground beneath it -- it stands upright on it; it does not cling to trunks; a sharp
+  "kik"), the sulphur-crested **cockatoo** (white, the raised yellow crest, the dark heavy hooked bill; a screech) and the
+  **cockatiel** (grey, the white wing patches, the yellow face and orange cheeks, the long upright crest and long
+  pointed tail; a rising "queel"). The parrots, owl and woodpecker stand on ZYGODACTYL feet (two toes forward, two
+  back: nb.py `zygo`); the crests are rows of feathers on the head bone (newbirds.py `crest`). All six fly in the
+  spread-wing pose aloft and walk the world like the other nb birds.
 - **Wakes** (wakes.js): a duck or a swan under way draws a V of ripples behind it on the water -- two arms at the
   Kelvin angle (19.5 degrees each side, as every boat's and duck's wake), short crests slanting off them, fading behind;
   longer and brighter with its speed (full at .45 m/s), gone when it rests or is 90 m off. One card a swimmer, one draw.
@@ -1332,7 +1721,10 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   laid over whatever they were doing for 2.6 s) and say "hello!" in their own language and voice; walk off past 9 m
   and they wave you goodbye. Each greets you at most once a minute (index.html GREET, greetTick). While greeting (and
   while you stay close) the head turns to you as far as a neck goes (+-70 degrees, eased): `an.look`, the skeleton's
-  head turn about the vertical, two fifths of it in the neck and the rest in the head (skeleton.js compiled `look`). The chatter and the
+  head turn about the vertical, two fifths of it in the neck and the rest in the head (skeleton.js LOOK). Since
+  2026-11-08 the neck's share is a turn about the vertical through the neck's root -- the neck swings round and the
+  head (hung beside it on the body, a mammal's; or on it, a person's) rides that swing and adds its own -- where before
+  it was a turn about the neck's own axis, a pill spun about its length, so the head turned alone as if on a pin. The chatter and the
   greetings speak through one `utter(talker, figure, {text | vocal, mood})`: language, voice, distance law, pan, face.
 - **The meadows' drifts** (cloudshadow.js `meadowPatches`, on the ground): the lawn is never one green -- broad drifts
   a little drier and yellower, others lusher and deeper, at two scales (~60 m and ~20 m), from the same smooth noise.
@@ -1462,8 +1854,8 @@ loop's additions (12.4 against 11.9 ms measured headless with them switched off)
   windows, two staggered rows of one tall garden flower along the wall -- foxgloves, irises, roses or lilies (the
   flower items) -- in the flowers' one batched pool, rebuilt with them by the season. The meadow's flowers keep off the
   sites, so there were none by a house. Never in a road, a wall or a prop; `?beds=0`.
-  ALL the flowers (the meadow's too) and the woods' mushrooms are hidden while the snow lies (`SNOW` > .5, the tick;
-  the mushrooms flipped only as the snow comes or goes) and cannot be picked then -- they had grown through it.
+  ALL the flowers (the meadow's too) and the woods' mushrooms (in the same pool) are hidden while the snow lies
+  (`SNOW` > .5, the tick) and cannot be picked then -- they had grown through it.
   The BUTTERFLIES fly only by day, in fair weather and with no snow lying (the gate in index.html, not butterflies.js,
   which keys the startup cache's wings: they
   had fluttered at night, in the rain and over the snow), and the bees stay in while snow lies; the swallows are gone

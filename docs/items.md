@@ -14,6 +14,7 @@ Everything is up to about 1800: no upholstered sofas, no revolvers. The catalogu
 | `weapons/` | swords (arming sword, gladius, xiphos, spatha, viking, longsword, claymore, zweihander, falchion, sabre, rapier, smallsword, shamshir, katana, jian, dao), daggers (rondel, seax, dirk, pugio, tanto, stiletto), axes (bearded, dane, francisca, battle), polearms (spear, winged spear, dory, pike, sarissa, halberd, glaive, bill, partisan, poleaxe, guandao, naginata, pilum, javelin), blunt (mace, flanged mace, morning star, war hammer, club, quarterstaff, flail), bows, a crossbow, a musket, a pistol |
 | `shields/` | heater, round, kite, scutum, aspis, buckler, targe, pavise, oval, rattan, dhal -- their faces heraldic |
 | `tools/` | the village's tools (scythe, spade, hoe, hammer, saw, cleaver, fishing rod, lute...) and things carried (lantern, torch, book, bucket, basket, pitcher, candlestick) |
+| `mushrooms/` | the woods' mushrooms (`tools/mushroomgen.py`, 2026-11-08): fly agaric (amanita), cep (boletus), chanterelle -- lathes at real size (6-20 cm), `s` their size and the agaric's `spin` its warts' turn, drawn by the seed; the game grows them in the trees' shade in the flowers' pool (docs/world.md) |
 | `furniture/` | seats (stools, benches, settle, divan, chairs from the klismos and curule to the Windsor and the fauteuil, thrones), tables (and the brass tray on its stand), beds (pallet, bedstead, box bed, four-poster, Chinese bed, Roman couch, Egyptian bed, charpai, hammock, cradle), storage (chests, cassone, cask, cupboard, armoire, dresser, bureau, bookcase), and the rest (lectern, harpsichord, spinning wheel, longcase clock, screen, mirror) |
 | `components/` | the reusable pieces: grip, pommel, crossguard, boss, axe head, spearhead, polearm head, blunt head, turned / square / cabriole leg, bun and bracket feet, finial, knob, ring pull, drawer, panel door, spindle, cushion, strap, rocker |
 | `ships/` | 40 vessels up to 1800 (`tools/shipgen.py` writes them; docs/ships.md): punt ship, gaulos, dromon, kadirga, hulk, treasure ship, bezaisen, atakebune, Maya canoe, koch, dugout, reed boat, Egyptian river boat, trireme, Roman merchantman, longship, knarr, cog, carrack, caravel, galleon, galley, dhow, junk, sampan, outrigger canoe, voyaging canoe, gondola, birchbark canoe, kayak, umiak, coracle, fishing boat, skiff, fluyt, xebec, felucca, ship of the line, frigate, East Indiaman |
@@ -199,6 +200,19 @@ curled. Only the outside is seen, so a sheet of ribbons is enough: no volume ins
   corner (its last cut carried the third edge's offset, its first the first edge's: a sliver of nothing from the
   plate's centre to that corner -- the cracks across wing membranes, ears, fins); wing parts draw no border band
   (`edge: 0`).
+- **Sculpted creatures** (`"kind": "sculpt"`, 2026-11-04: bodyspec.js, bodymesh.js, bodies.js; docs/engines.md
+  "Sculpted bodies"): the hedgehog is no longer parts. Its definition is a `skeleton` (the root, the head's pivot and
+  idle turn, four IK legs from hip points, an ankle height and radii), a `shape` list of blended primitives on those
+  bones (ellipsoids, round cones, spheres, tubes, boxes; `k` the blend, `mirror`, `seat` -- an ear set ON the surface
+  the others make), `eyes` (found on the head's surface, eyeballs in carved sockets, mirrored), a `coat` of quills
+  (gap, len, r, lean, vary, skirt, drop, face, rise, tip, dark, darkTip, base, hold: sown where shapes with
+  `coat: true` are) and a `mesh` budget (`cell`, `tris: [near, far]`, `far` metres). It is ONE skinned mesh: about
+  5.4k triangles near (1.6k of body, 1077 quills of 3, two eyeballs) and 1.8k past 4 m (600 of body, 350 quills).
+  Its first versions were 126 cone parts, then a rig mammal under a quill coat mesh -- seams, steps in the density,
+  eyes floating off a head they were painted beside.
+  Every other creature is now drawn the same way, converted from its parts when it joins a herd (bodyspec.js
+  `sculptOf`): its parts become its bones and their shapes the field, and nothing in its definition changes.
+  `"sculpt": false` keeps a definition as parts, and `?sculpt=0` shows the old drawing.
 - Hair below the nape is pushed OFF THE BODY (an ellipse growing from the neck's to the shoulders' section): long
   hair falls over the back, not into the dress. Hanging hair starts 55-60 degrees round from the front, so it frames
   the face instead of covering its sides.
@@ -272,8 +286,10 @@ cheese), which the market places (docs/arch.md). Not there yet: heaps of them in
 
 ## Birds
 
-Birds (`birds/*.json`, `tools/birdgen.py`, "Items: birds": 27 from the sparrow to the swan, the peacock, the
-eagle) with FEATHERED WINGS AND TAILS: the part type `feathers` (`feathers.js`) lays a fan of feathers in the part's
+Birds (`birds/*.json`, `tools/birdgen.py`). Since 2026-11-05 only the stork is still an item (listed under "Items:
+components"), for the chimney nest's folded and spread poses (index.html `storkSet`); the other 26 duplicated the
+creatures in `assets/creatures/birds` and were removed (birdgen.py keeps their numbers in `BIRDS`, writing only `KEEP`).
+The item birds were made with FEATHERED WINGS AND TAILS: the part type `feathers` (`feathers.js`) lays a fan of feathers in the part's
 x-z plane -- `n` quills rooted along a `roots` line, their directions from `dir` [first, last] (degrees from +z out
 along the span, 90 straight back), `length` and `width` [first, last], each vane a strip of 7 triangles (leading
 vane narrow, trailing wide, `shape` pointed / rounded / square at the tip), `droop` bending the tips down, `lift`

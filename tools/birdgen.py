@@ -327,10 +327,15 @@ MATERIALS = {
 }
 
 
+# only the chimney nest's stork (index.html storkSet: its folded and spread poses) is still an item; every other bird
+# here was a duplicate of a creature (assets/creatures/birds) and is gone. BIRDS keeps them all as reference.
+KEEP = ("stork",)
+
+
 def main():
     write("components/wing", WING)
-    for k, v in BIRDS.items():
-        write("birds/" + k, v)
+    for k in KEEP:   # (the rest are creatures now: assets/creatures/birds, 2026-11-05)
+        write("birds/" + k, BIRDS[k])
     mpath = os.path.join(ITEMS, "materials.json")
     lib = json.load(open(mpath))
     added = 0
@@ -341,15 +346,12 @@ def main():
     ipath = os.path.join(ROOT, "assets", "index.json")
     index = json.load(open(ipath))
     cats = {c["name"]: c for c in index["categories"]}
-    if "Items: birds" not in cats:
-        pos = index["categories"].index(cats["Items: food"]) + 1
-        index["categories"].insert(pos, {"name": "Items: birds", "kind": "item", "paths": []})
-        cats = {c["name"]: c for c in index["categories"]}
-    cats["Items: birds"]["paths"] = ["items/birds/" + k for k in BIRDS]
+    if "Items: birds" in cats: index["categories"].remove(cats.pop("Items: birds"))
     comps = cats["Items: components"]["paths"]
-    if "items/components/wing" not in comps: comps.append("items/components/wing")
+    for c in ["items/components/wing"] + ["items/birds/" + k for k in KEEP]:
+        if c not in comps: comps.append(c)
     json.dump(index, open(ipath, "w"), indent=2, ensure_ascii=False)
-    print(len(BIRDS), "birds,", added, "materials added")
+    print(len(KEEP), "birds,", added, "materials added")
 
 
 if __name__ == "__main__":

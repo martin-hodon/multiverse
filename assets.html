@@ -78,6 +78,19 @@
   #hairOpts input[type=range] { width:56px; }
   #bar label { white-space:nowrap; }
   #shade, #hairOpts { flex-wrap:wrap; row-gap:2px; }
+  /* THE VARIANTS (assetvariants.js): a creature's coats and named variants, one picked in the bar and edited atop the form */
+  #varPick { font:inherit; max-width:230px; background:#1e2126; color:var(--ink); border:1px solid var(--line); border-radius:3px; padding:1px 4px; }
+  #varPick.on { border-color:var(--hot); color:var(--hot); }
+  .vpanel { border:1px solid var(--line); border-radius:4px; padding:6px 8px 8px; margin:2px 0 10px; background:#262a30; }
+  .vpanel .vhead { display:flex; gap:4px; align-items:center; padding-bottom:4px; }
+  .vpanel .vhead b { color:var(--hot); font-weight:600; }
+  .vpanel .vsec { margin-top:6px; }
+  .vpanel .vsub { color:var(--dim); font-size:11px; letter-spacing:.06em; text-transform:uppercase; padding:2px 0; }
+  .vpanel .vbase { display:inline-block; width:14px; height:14px; border:1px solid var(--line); border-radius:2px; flex:none; }
+  .vpanel .vbase.none { border-style:dashed; }
+  .vpanel .vx { padding:0 6px; }
+  .vpanel .vadd .ftext { flex:1; }
+  .vpanel button.armed { border-color:#e27a6a; color:#e27a6a; }
 </style>
 </head>
 <body>
@@ -90,11 +103,13 @@
     <div id="bar">
       <span id="what">—</span>
       <span id="stats" style="color:var(--dim)"></span>
+      <span id="kin"></span>
       <span style="flex:1"></span>
       <span id="det" style="color:var(--dim)">detail 1</span>
       <label><input type="checkbox" id="edges"> edges <span style="color:var(--dim)">(T)</span></label>
       <label><input type="checkbox" id="spin"> turn</label>
       <label><input type="checkbox" id="walk"> walk</label>
+      <label title="a beast that flies (a dragon, the manticore, the pegasus, the griffin): aloft, its wings beating"><input type="checkbox" id="fly"> fly</label>
       <span id="motionOpts" style="display:none; gap:8px; align-items:center" title="THE BODY IN MOTION (docs/motion.md): a position held, a movement or an exercise played, every joint's range swept, reaching for points round the body">
         <select id="motionPick" title="what is shown: a position (all: every one at once), a movement, an exercise; for the joints, their ranges or reaching"></select>
         <select id="motionWho" title="who does it, and in what (the clothes move with the parts they lie on)">
@@ -102,7 +117,7 @@
         </select>
         <label title="put a position that breaks the body's rules right (joints.json collision.fix): an arm out of the trunk, a leg off the other"><input type="checkbox" id="motionFix" checked> fix</label>
       </span>
-      <label title="a building in its finish (assets/finishes/): its floors, walls and roofs patterned"><input type="checkbox" id="finish" checked> finish</label>
+      <label id="finishL" title="a building in its finish (assets/finishes/): its floors, walls and roofs patterned (buildings only: a creature's coat is its own pattern)"><input type="checkbox" id="finish" checked> finish</label>
       <span id="shade" style="display:none; gap:8px; align-items:center" title="the mesh heads' shading (heads.js, config.json people.faceShade): lit full where the normal faces the light, darker gradually round to what faces away">
         shade <label title="how high the sun is (the world's: config.json light.dir): 90 straight above, 0 level">light <input type="range" id="shPitch" min="0" max="90" step="1" style="width:60px"></label>
         <label title="where round the sun is: 0 in front of this face (+x), 90 its right (+z), -90 its left">side <input type="range" id="shYaw" min="-90" max="90" step="1" style="width:60px"></label>
@@ -132,6 +147,7 @@
         <label title="both highlights moved along the hair (root .. tip)">shift <input type="range" id="hShift" min="-0.4" max="0.4" step="0.01"></label>
         <button id="hCopy" title="the config.json values (people.faceShade.hair), to the clipboard">copy</button>
       </span>
+      <label id="varOpts" style="display:none" title="THE VARIANTS (V: the next one, Shift+V: the one before): the creature in one of its coats (the world picks one by seed) or named variants -- edited at the top of the form (assetvariants.js, docs/assets.md &quot;Coats and variants&quot;)">variant <select id="varPick"></select></label>
       <button id="fit">frame</button>
       <button id="revert">revert</button>
       <button id="save">save</button>
@@ -171,7 +187,9 @@
 import * as THREE from "three";
 import { createNav } from "./cursornav.js";   // the view turns and zooms about the point under the pointer, as the atlas's
 import { createComposite, figureDetail, figureGrids } from "./composite.js";
-import { buildCreature, loadCatalogue, fetchAsset, ASSET_BASE } from "./creatures.js";
+import { buildCreature, loadCatalogue, fetchAsset, ASSET_BASE, dressed } from "./creatures.js";
+import { variantList, variantPanel, pickKey, pickOf, pickValid, dressArgs } from "./assetvariants.js";   // a creature's COATS and VARIANTS: one picked, shown, edited
+import { chain, merge } from "./defs.js";
 import { makePerson } from "./people.js";
 import { setClothesNow } from "./clothes.js";   // CLOTHES: a garment or a component shown on the body it is cut for
 import { archAssembly, archMesh, plainStone, itemObject } from "./architecture.js";
@@ -179,6 +197,8 @@ import { buildItem, pickKit } from "./items.js";   // ITEMS: a sword, a shield, 
 import { createTools, handIndex } from "./tools.js";   // KITS: what a kind of person carries, in their hands as the game puts it there
 import { faceGeometry, faceMaterial, hairFaceParams, SHADE, HAIR_SHEEN } from "./heads.js";
 import { buildForm } from "./assetform.js";   // the definition as a FORM, beside its JSON
+import { createBodies, restBox } from "./bodies.js";
+import { lookFamily } from "./bodyspec.js";   // (a creature's looks told to its body: its coats share one shape build)   // a sculpted creature's one skinned surface (every creature), as the game draws it
 import { createManes } from "./manes.js";     // a creature's mane of thorns (a lion's), as the game draws it
 import { placeStatues } from "./statues.js";  // a building's STATUES, carved, as the game stands them
 import { doorGroup } from "./doors.js";        // its DOORS, shut, as the game hangs them (assets/doors)
@@ -192,10 +212,12 @@ import { showPick, asked, drawPicked } from "./assetpick.js";   // ONE OF A FAMI
 import { registerPatterns, drawSheet, renderPattern, patternNames, PALETTES } from "./patterns.js";   // PATTERNS: a family shown as a sheet of swatches, in its palettes
 import { bakeTiles } from "./textures.js";   // the older tiles (ashlar, marble, the orders' ornament...) a finish may still name as `pat`
 import { loadUses } from "./arch/assemble.js";   // a building's COMPONENTS (other definitions it `use`s), fetched before it is built
-import { gaitBase } from "./species.js";
+import { gaitBase, beast } from "./species.js";   // (beast: a creature marked to be drawn sculpted, as the world draws it -- bodyspec.js)
+import { SKYSTEEDS, tuckLegs } from "./skysteeds.js";   // the pegasus and the griffin: on the ground their wings folded, `fly` takes them aloft as the game does
 import { createArchView } from "./archview.js";   // CUTS through what is shown; a building's PARTS picked, framed, isolated, hidden; its LAYERS faded
 import { EXPRESSIONS, VISEMES } from "./face.js";
 import { drawSpecimen } from "./butterflies.js";
+import { natureSpecimen } from "./nature.js";   // NATURE: a burrow in a bank (the ground really cut), an anthill and its ants, a nest -- as the world builds them
 import { TECHNIQUES } from "./greek/paint.js";
 import { registerGreek, renderGreek } from "./greek.js";   // GREEK PAINTINGS: the data, each painting by seed
 import { registerMurals, drawMuralSheet, renderPainting as renderMural } from "./murals.js";   // MURALS: tomb paintings -- their parts, the figures, the paintings   // BUTTERFLIES: a species as a specimen plate, upperside and underside   // the face's moods and mouth shapes, for the face view's dropdowns
@@ -257,7 +279,7 @@ const glyphModes = () => ["", ...Object.keys(JSON.parse(source.get("glyphs/color
 const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem("assets." + k)) ?? d; } catch { return d; } },
                 set: (k, v) => { try { localStorage.setItem("assets." + k, JSON.stringify(v)); } catch {} } };
 const GROUPS = [["Recent", []], ["Creatures", ["creature"]], ["Buildings", ["building", "doors"]], ["People & clothes", ["body", "motion", "garment", "wardrobe"]],
-                ["Items", ["item", "item-kit", "item-materials"]], ["Surfaces", ["pattern", "finish"]], ["Hieroglyphs", glyphKinds], ["Butterflies", ["butterfly", "butterfly-shapes"]], ["Murals", ["mural"]], ["Greek paintings", ["greek"]]];
+                ["Items", ["item", "item-kit", "item-materials"]], ["Surfaces", ["pattern", "finish"]], ["Hieroglyphs", glyphKinds], ["Butterflies", ["butterfly", "butterfly-shapes"]], ["Murals", ["mural"]], ["Greek paintings", ["greek"]], ["Nature", ["nature"]]];
 const openSet = new Set(store.get("open", ["Recent"]));
 const remember = (d, key) => { d.open = openSet.has(key); d.addEventListener("toggle", () => { if ($("q").value) return; d.open ? openSet.add(key) : openSet.delete(key); store.set("open", [...openSet]); }); };
 const linkOf = (p) => { const a = document.createElement("a"); a.textContent = p.split("/").pop(); a.dataset.path = p; a.title = p; a.onclick = () => show(p); return a; };
@@ -267,10 +289,16 @@ const fold = (cls, key, label, n) => {
   sm.append(label, Object.assign(document.createElement("span"), { className: "n", textContent: n }));
   d.append(sm); remember(d, key); return d;
 };
+// A BUILDING'S DOORS AND ITS FINISH are not listed: each is shown on its building, which is drawn in its finish and
+// with its doors anyway -- three lists of the same eighty buildings. They are reached from the building itself (the
+// links beside its name, #kin) and by the search; the door STYLES, a page of their own, stay listed.
+const unlisted = (c) => c.kind === "finish" || c.kind === "doors";
+const listedCats = (kinds) => index.categories.flatMap((c) => !kinds.includes(c.kind) ? []
+  : !unlisted(c) ? [c] : c.kind === "doors" ? [{ ...c, name: "Door styles", paths: c.paths.filter((p) => p === "doors/styles") }] : []);
 function buildTree() {
   const tree = $("tree"); tree.replaceChildren();
   for (const [g, kinds] of GROUPS) {
-    const cats = g === "Recent" ? [{ name: "Recent", paths: store.get("recent", []).filter((p) => kindOf.has(p)) }] : index.categories.filter((c) => kinds.includes(c.kind));
+    const cats = g === "Recent" ? [{ name: "Recent", paths: store.get("recent", []).filter((p) => kindOf.has(p)) }] : listedCats(kinds).filter((c) => c.paths.length);
     const total = cats.reduce((n, c) => n + c.paths.length, 0);
     if (!total) continue;
     const gd = fold("grp", g, g, total);
@@ -294,6 +322,12 @@ function buildTree() {
     }
     tree.append(gd);
   }
+  // (the unlisted ones: in the tree for the search alone, hidden while nothing is typed)
+  const hid = fold("grp", "Doors & finishes", "Doors & finishes (search)", 0);
+  hid.classList.add("searchOnly");
+  for (const c of index.categories.filter(unlisted)) for (const p of c.paths) if (p !== "doors/styles") hid.append(linkOf(p));
+  hid.querySelector(".n").textContent = hid.querySelectorAll("a").length;
+  tree.append(hid);
   filterTree();
 }
 // the search: every word must be in the path; the folds holding a match open while it is typed, the rest hide
@@ -309,7 +343,7 @@ function filterTree() {
   }
   for (const d of [...$("tree").querySelectorAll("details")].reverse()) {
     const any = [...d.querySelectorAll("a")].some((a) => a.style.display !== "none");
-    d.style.display = any || !words.length ? "" : "none";
+    d.style.display = (any || !words.length) && !(d.classList.contains("searchOnly") && !words.length) ? "" : "none";
     d.open = words.length ? any && d.dataset.key !== "Recent" : openSet.has(d.dataset.key);
   }
 }
@@ -658,6 +692,11 @@ function build(path, text) {
     person = [{ an, base: gaitBase(d) }];
     return { label: `the human canon · ${qp.get("who") ?? "man"}`, stats: `${an.parts.length} parts` };
   }
+  if (kind === "nature") {   // (2026-11-08) a burrow, an anthill, a nest: nature.js natureSpecimen, from the text being edited
+    const S = natureSpecimen(path, def);
+    mesh = S.object; stand.add(mesh);
+    return { label: S.label, stats: S.stats };
+  }
   if (kind === "item") {
     // AN ITEM: the definition as it is written, through the builder the world uses (items.js), its materials from the
     // library; its GRIP a red dot with the handle's line out of it, its markers (a seat, a bed) as green ones
@@ -767,15 +806,39 @@ function build(path, text) {
     stand.add(mesh);
     return { label: "item materials", stats: `${names.length} materials: ` + names.join(", ") };
   }
-  // a creature: the definition, on whatever frame it stands on, through the engine the world uses
+  // a creature: the definition, on whatever frame it stands on, through the engine the world uses -- in the coat or the
+  // variant picked in the bar (creatures.js dressed, as the world dresses it)
   const local = new Map(bank); local.set(path, def);
-  const made = buildCreature(def, local);
+  if (!pickValid(def, dress)) dress = null;
+  const made = lookFamily(beast(def, buildCreature(dress ? dressed(def, dressArgs(dress)) : def, local)), looksOf(def, local));
   herd = createComposite(200); stand.add(herd.mesh);
   const an = herd.add(made);
   an.rotY = -Math.PI / 2;
+  // (a SKY STEED -- the pegasus, the griffin: no FLIGHT pose of its own, so as skysteeds.js poses it in the game: on the
+  //  ground its wings folded (PERCH, its own fit), aloft spread and beating with the legs tucked (tuckLegs); `fly` eases between)
+  const steed = SKYSTEEDS[made.name] ?? null;
+  if (steed) { an.perchFold = { fold: steed.fold, squeeze: steed.squeeze }; an.steedU = $("fly").checked ? 1 : 0; an.perch = 1 - an.steedU; an.wingT = 0; }
   herd.update(0);
-  person = [{ an, base: gaitBase(made) }];
-  return { label: made.name ?? path, stats: `${made.parts.length} parts` };
+  person = [{ an, base: gaitBase(made), steed }];
+  const vl = dress && variantList(def).find((v) => pickKey(v.pick) === pickKey(dress));
+  return { label: (made.name ?? path) + (vl ? ` · ${vl.label}` : ""), stats: `${made.parts.length} parts` + (an.sculpted || made.sculpted ? " (sculpted: one skinned surface)" : "") };
+}
+
+// THE LOOKS OF THE CREATURE SHOWN (bodyspec.js lookFamily): its base and every coat and variant, made as the stand
+// would show each -- told to its body, so bodies.js builds ONE shape for them all and a coat picked next is only
+// dressed on it (the world's species.js does the same). Made when first asked, kept by the document's text
+const looksMade = new Map();
+function looksOf(def, local) {
+  const key = JSON.stringify(def);
+  return () => {
+    if (!looksMade.has(key)) {
+      const out = [];
+      for (const p of [null, ...variantList(def).map((v) => v.pick)]) { try { out.push(beast(def, buildCreature(p ? dressed(def, dressArgs(p)) : def, local))); } catch { /* (a look that cannot be made: none) */ } }
+      looksMade.set(key, out);
+      for (const k of looksMade.keys()) { if (looksMade.size <= 6) break; looksMade.delete(k); }
+    }
+    return looksMade.get(key);
+  };
 }
 
 // a document as the editor has it (unsaved changes and all), or undefined if the catalogue has none
@@ -830,6 +893,13 @@ function assetBox() {
         box.expandByPoint(new THREE.Vector3(e[0] + r, e[1] + r, e[2] + r));
       }
     }
+    // (a SCULPTED one: its surface, which reaches past its bones -- the mesh's box at rest, turned and placed as it stands)
+    const rb = p.an.sculpted && restBox(p.an.sculpted);
+    if (rb) {
+      const c = Math.cos(p.an.rotY ?? 0), s = Math.sin(p.an.rotY ?? 0), P = p.an.position;
+      for (const x of [rb[0][0], rb[1][0]]) for (const y of [rb[0][1], rb[1][1]]) for (const z of [rb[0][2], rb[1][2]])
+        box.expandByPoint(new THREE.Vector3(P.x + c * x + s * z, P.y + y, P.z - s * x + c * z));
+    }
   }
   return box;
 }
@@ -849,14 +919,17 @@ function frame(fly = false) {
 }
 
 let dirty = null;
+let fitBody = false;   // (a creature just shown: framed again once its sculpted surface is built -- the bones alone frame it short)
 async function apply(path, text, { refit = false } = {}) {
   try {
     if (kindOf.get(path) === "building") await loadUses(JSON.parse(text), (p) => fetchAsset("architecture/" + p));
     if (kindOf.get(path) === "finish") { const b = bank.get(JSON.parse(text).building); if (b) await loadUses(b, (p) => fetchAsset("architecture/" + p)); }
     if (kindOf.get(path) === "doors") { const b = bank.get("architecture/" + JSON.parse(text).building); if (b) await loadUses(b, (p) => fetchAsset("architecture/" + p)); }
     const out = build(path, text);
+    variantBar(path, text);
     $("what").innerHTML = `<b>${out.label}</b> <span style="color:var(--dim)">${path}.json</span>`;
     $("stats").textContent = out.stats;
+    kin(path);
     showDetail();
     $("err").textContent = "";
     if (refit) frame();
@@ -868,13 +941,60 @@ async function apply(path, text, { refit = false } = {}) {
     return false;
   }
 }
+// a building's own files -- the building, its finish, its doors: one click each, the one open in bold
+function kin(path) {
+  const k = kindOf.get(path), el = $("kin"); el.replaceChildren();
+  if (!["building", "finish", "doors"].includes(k) || path === "doors/styles") return;
+  let b = path;
+  if (k !== "building") { const d = editedDoc(path); b = d?.building ? (k === "finish" ? d.building : "architecture/" + d.building) : null; }
+  if (!b) return;
+  const n = b.split("/").pop();
+  for (const [lab, p] of [["building", b], ["finish", "finishes/" + n], ["doors", "doors/" + n]]) {
+    if (!kindOf.has(p)) continue;
+    const a = Object.assign(document.createElement(p === path ? "b" : "a"), { textContent: lab, title: p });
+    if (p !== path) { a.href = "#"; a.onclick = (e) => { e.preventDefault(); show(p); }; }
+    el.append(" ", a);
+  }
+}
 function show(path) {
-  current = path;
+  if (current && path !== current) dress = null;   // (another asset: shown as it is -- its own coats are picked in the bar)
+  current = path; fitBody = kindOf.get(path) === "creature";
+  $("finishL").style.display = ["building", "finish", "doors"].includes(kindOf.get(path)) ? "" : "none";   // (the finish box is a building's)
   mark(path); addRecent(path);
   $("json").value = source.get(path) ?? "";
   if (tab === "form") makeForm();
   apply(path, $("json").value, { refit: true });
-  history.replaceState(null, "", "?a=" + encodeURIComponent(path));
+  history.replaceState(null, "", "?a=" + encodeURIComponent(path) + dressQuery());
+}
+// ---- THE VARIANTS: a creature's coats and named variants (assetvariants.js). One is picked in the bar (null: the
+// definition as it is) and the stand shows the creature dressed in it; the form opens with it, its colours and params
+// against the base's, to change, add to, take out; a coat or a variant added, copied, renamed, deleted. The JSON stays
+// the truth: every change is written back into it, and Save saves it. (?coat=3 or ?variant=rooster opens one.)
+let dress = qp.has("coat") ? { coat: +qp.get("coat") } : qp.has("variant") ? { variant: qp.get("variant") } : null;
+const dressQuery = () => dress == null ? "" : "coat" in dress ? `&coat=${dress.coat}` : `&variant=${encodeURIComponent(dress.variant)}`;
+// the bar's list: shown for a creature, its entries the document's as the editor has it
+function variantBar(path, text) {
+  const on = kindOf.get(path) === "creature";
+  $("varOpts").style.display = on ? "" : "none";
+  if (!on) return;
+  let doc; try { doc = JSON.parse(text); } catch { return; }
+  const sel = $("varPick"), list = variantList(doc), opts = [["", list.length ? `base · ${list.length} more` : "base (none)"], ...list.map((v) => [pickKey(v.pick), v.label])];
+  if (sel.options.length !== opts.length || opts.some(([k, l], i) => sel.options[i].value !== k || sel.options[i].text !== l)) sel.replaceChildren(...opts.map(([k, l]) => new Option(l, k)));
+  sel.value = pickKey(pickValid(doc, dress) ? dress : null);
+  sel.classList.toggle("on", !!sel.value);
+}
+// pick one (null: the base): shown, and the form made again round it
+function pickDress(p) {
+  dress = p;
+  history.replaceState(null, "", "?a=" + encodeURIComponent(current) + dressQuery());
+  if (tab === "form") makeForm();
+  return apply(current, $("json").value);
+}
+$("varPick").addEventListener("change", () => pickDress(pickOf($("varPick").value)));
+// what a coat is laid over: the definition's colours and params with its frame's under them
+function variantBase(doc) {
+  try { let flat = {}; for (const d of chain(doc, bank).slice(0, -1)) flat = merge(flat, d); return { colors: flat.colors ?? flat.c ?? {}, params: flat.params ?? {} }; }
+  catch { return {}; }
 }
 $("json").addEventListener("input", () => {
   source.set(current, $("json").value);
@@ -902,12 +1022,17 @@ let tab = store.get("tab", "form");
 function makeForm() {
   let doc;
   try { doc = JSON.parse($("json").value); } catch (e) { $("form").replaceChildren(Object.assign(document.createElement("div"), { className: "fnote", textContent: "the JSON does not parse -- fix it there: " + e.message })); return; }
-  buildForm($("form"), doc, (d) => {
+  const changed = (d) => {
     $("json").value = JSON.stringify(d, null, 2);
     source.set(current, $("json").value);
     clearTimeout(dirty);
     dirty = setTimeout(() => apply(current, $("json").value), 120);
-  }, { suggest });
+  };
+  buildForm($("form"), doc, changed, { suggest });
+  // (a creature: its coats and variants first -- the one picked in the bar, to edit; assetvariants.js)
+  if (kindOf.get(current) === "creature" && doc && typeof doc === "object")
+    $("form").prepend(variantPanel(doc, pickValid(doc, dress) ? dress : null, { base: variantBase(doc), onChange: changed,
+      onPick: (p) => { clearTimeout(dirty); pickDress(p); } }));
 }
 function setTab(t) {
   tab = t; store.set("tab", t);
@@ -945,10 +1070,16 @@ $("save").onclick = async () => {
 // EDGES (T): the triangles the asset is actually made of. A figure's are built in the VERTEX SHADER, so
 // nothing on the CPU can see them -- the shell draws them itself, in the blue the old cards used, on the same
 // switch the game's own geometry view runs on (outline.js setQuads, index.html T). A building is an ordinary
-// mesh and simply goes wireframe.
+// mesh and simply goes wireframe -- and so does a sculpted creature's surface (bodies.js: a skinned mesh in the stand,
+// its quills and eyes beside it), which arrives from the worker after the creature is shown: wire() puts those on
+// as they come (the render loop).
+function wire(root, on) {
+  root.traverse((o) => { if (!o.isMesh || (herd && (o === herd.mesh || o.parent === herd.mesh))) return;   // (the figures' shell: its own edges, setQuads)
+    for (const m of Array.isArray(o.material) ? o.material : [o.material]) if (m && m.wireframe !== on) { m.wireframe = on; m.needsUpdate = true; } });
+}
 function edges(on) {
   setQuads(on);
-  if (mesh) mesh.traverse((o) => { for (const m of Array.isArray(o.material) ? o.material : [o.material]) if (m) { m.wireframe = on; m.needsUpdate = true; } });
+  wire(stand, on);
   grid.visible = !on;
 }
 $("edges").onchange = () => { edges($("edges").checked); if (current?.startsWith("items/")) apply(current, $("json").value); };   // (a face's guide lines come and go with its triangles)
@@ -960,6 +1091,10 @@ addEventListener("keydown", (e) => {
   if (e.key === "/") { e.preventDefault(); $("q").focus(); $("q").select(); return; }
   if (e.code === "KeyT") { $("edges").checked = !$("edges").checked; $("edges").onchange(); }
   if (e.code === "KeyF") frame(true);
+  if (e.code === "KeyV" && kindOf.get(current) === "creature") {   // (the next coat or variant; Shift: the one before)
+    const keys = [...$("varPick").options].map((o) => o.value), i = keys.indexOf($("varPick").value);
+    if (keys.length > 1) pickDress(pickOf(keys[(i + (e.shiftKey ? -1 : 1) + keys.length) % keys.length]));
+  }
   if (e.key === "+" || e.key === "=" || e.code === "NumpadAdd") detail(1);
   if (e.key === "-" || e.key === "_" || e.code === "NumpadSubtract") detail(-1);
   if (e.code === "KeyM" && glyphKinds.includes(kindOf.get(current))) { glyphMode = (glyphMode + 1) % glyphModes().length; showDetail(); apply(current, $("json").value); }
@@ -976,6 +1111,7 @@ const view = createArchView({ stand, camera, nav, canvas: renderer.domElement, h
     t.scrollTop = Math.max(0, (t.value.slice(0, i).split("\n").length - 4) * 17.4);
   } });
 const manes = createManes(stand, { shade: CONFIG.people?.faceShade ?? {} });
+const bodies = createBodies(stand, { shade: CONFIG.people?.faceShade ?? {} });
 const heads = createHeads(stand, { shade: CONFIG.people?.faceShade ?? {} });   // (every figure's mesh head: a person's, a winged one's, a statue's carved one)
 const jewels = createJewels(stand);   // (and what hangs round their necks: jewels.js)
 const clock = new THREE.Clock();
@@ -991,9 +1127,22 @@ renderer.setAnimationLoop(() => {
   if ($("spin").checked && mesh) mesh.rotation.y += dt * .2;
   if (person) {
     tPose += dt;
-    for (const p of person) { p.an.ampT = $("walk").checked ? 1 : 0; if ($("walk").checked) p.an.animT = (p.an.animT ?? 0) + dt * 1.4 / p.base; }
+    for (const p of person) { p.an.ampT = $("walk").checked && !$("fly").checked ? 1 : 0; if ($("walk").checked) p.an.animT = (p.an.animT ?? 0) + dt * 1.4 / p.base;
+      if (p.an.parts?.flight) { p.an.flyT = $("fly").checked ? 1 : 0; if ($("fly").checked) p.an.wingT = (p.an.wingT ?? 0) + dt * 2.2; }
+      if (p.steed) {   // (skysteeds.js: wings out and beating -- its hard beats, as it climbs -- the legs tucked; down, the beat run on to level and the wings folded)
+        const S = p.steed, a = p.an, lv = 1 / S.wingSpeed, up = $("fly").checked;
+        a.steedU += Math.max(-dt * 1.6, Math.min(dt * 1.2, (up ? 1 : 0) - a.steedU));
+        const u = a.steedU * a.steedU * (3 - 2 * a.steedU);
+        a.perch = 1 - u; tuckLegs(a, u, S.tuck);
+        // (and as in the game the gait runs on aloft, at `legs` of its pace at the soaring speed: the wings' beat is scaled by its amplitude)
+        if (up) { a.wingT += dt * S.beatHz[1] / S.wingSpeed; a.ampT = 1; a.animT = (a.animT ?? 0) + dt * (S.speed[0] + S.speed[1]) / 2 * S.legs / p.base; }
+        else a.wingT = Math.min(Math.ceil(a.wingT / lv - 1e-6) * lv, a.wingT + dt * S.beatHz[0] / S.wingSpeed);
+      } }
     herd?.update(tPose);
     manes.place(herd ? [herd] : []);
+    bodies.place(herd ? [herd] : [], camera.position);
+    if ($("edges").checked) wire(stand, true);   // (the body's surface, once built, and each LOD it swaps in: wireframe too)
+    if (fitBody && person.some((p) => p.an.sculpted && restBox(p.an.sculpted))) { fitBody = false; frame(); }   // (its surface has arrived: framed again round it)
     heads.place(herd ? [herd] : []);   // (a person's SDF head is a pin: without the mesh it stands headless)
     jewels.place(herd ? [herd] : []);
     if (tools) tools.place([[herd, held]]);
@@ -1004,8 +1153,10 @@ renderer.setAnimationLoop(() => {
   renderer.render(scene, camera);
 });
 resize();
+if (qp.get("fly")) $("fly").checked = true;   // (?fly=1: shown aloft)
 show(qp.get("a") ?? index.categories.find((c) => c.kind === "creature").paths[0]);
-window.__assets = { show, build, bank, source, index, renderer, scene, camera, controls, nav, frame, standOn, view };
+window.__assets = { show, build, bank, source, index, renderer, scene, camera, controls, nav, frame, standOn, view, get person() { return person; },
+                    get dress() { return dress; }, pickDress, setTab };   // (dress: the coat or variant shown -- pickDress({ coat: 3 }) shows another)   // (person: the figures shown, for a headless check to pose)
 </script>
 </body>
 </html>

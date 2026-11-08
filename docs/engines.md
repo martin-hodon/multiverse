@@ -345,7 +345,8 @@ to the engine, all of them per part and all still closed-form:
 - **Reptile scales** (pattern `scales`, 17 -- after the cloth ids, so the
   cloth routing skips it): pebbly scales in a 3D voronoi, each a dome
   lighter in its middle with a dark seam and its own tone, sized by the
-  limb's girth, patches of bigger feature scales under a slow mottle; the
+  limb's girth (7% of its radius, 3 mm to 5 cm -- the floor was 1.2 cm until 2026-11-05, which left a snake's
+  scales a third of its girth), patches of bigger feature scales under a slow mottle; the
   composite sets `gPatPx` (the pixel's size at the surface) before
   `patternAt`, and the scales fade to the mottle once they fall under ~2
   pixels (vertex shaders share the code but have no derivatives). The
@@ -1209,6 +1210,12 @@ LENGTHS, not metres, so a muzzle or an ear falls to the coarse grid while a body
 the fine one at the same distance. Nine grids, grown on demand, most
 of them nearly empty -- and three more, the finest
 with `STONE.divs` x its points round, for a statue's carved cloth near (its folds cut into the surface, docs/arch.md).
+And one grid outside the bands, for SPIKES (2026-11-04, `SHELL.spike`): a lone, straight, pointed part no thicker than
+1.2 cm and no longer than 12 cm -- a quill, a claw, a stinger -- is a spindle of 2 rings x 4 points (16 triangles) at
+every distance. A hedgehog's 126 quills had been 126 full chains: 16.8k triangles near, 8k at a metre, now 3.7k and
+3k. (Its quills had also been blunt rods: banner.js `segmentFor` floored a cone's apex at 8 mm, more than their 6 mm
+base; the floor is now at most 30% of the base.) `?shellspike=0` turns it off. (The hedgehog itself has since left
+the shell engine altogether: it is sculpted -- "Sculpted bodies" below.)
 
 **Hair at a distance** (2026-09-28): a head of hair vanished a few metres off. Two chord errors together, both
 about a centimetre -- and hair is a cut shell 1.2 cm thick over the scalp. ALONG the cap: a hair cap's chain is
@@ -1725,20 +1732,82 @@ Measured headless at the market, CPU per frame: 7.16 -> 5.21 ms; three's submit 
   in the fragment the small locks' crevices darkened (`lock`, `crease`; faded where finer than a pixel).
 - **Ears flick** (`anim.flick`: that power of the sine's crest -- a quick twitch now and then), and the idle parts (head,
   ears, tail) run each animal on its own beat (`an.idx`): a herd no longer looked about in step.
+- **A gait's rock** (2026-11-06, `gaits.walk.roll` / `.pitch`, radians, `rollPh` / `pitchPh`: skeleton.js): the root
+  rocked once a stride, fading with it -- a badger's rolling waddle side to side; a bounding weasel's body tipping nose
+  up as its forefeet leave the ground and down as they land. **FLEX** (`flex`: degrees, `flexPh`; mammals.js): the two
+  spine cuts behind the chest tip nose-down together once a stride, so the back between rump and chest humps up as the
+  hind feet come up to the fore and lies out again (the shapes on `body2`/`body3` ride them). **UPRIGHT** (`upright`:
+  { deg, fold }; `an.upright` 0..1 eased toward `an.uprightT`): standing up on the hind legs -- the body part tipped nose
+  up about the hind hips, the hind feet's targets turned back so they stay on the ground (legPose `tip`), the forelegs
+  drawn up off the ground, the paws hanging below the chest (`draw`, then turned like the hind feet), the tail laid back; the root's frame untouched, so the feet stay level. A weasel
+  stopping does it half the time, its head nodded down to look ahead (index.html). And a rig leg's `ankle` (mammals.js,
+  default .02 m) sets the ankle joint's height over the foot -- a weasel's is a few millimetres.
 - **Heads nod with the step** (`walkNod` degrees, a necked mammal 4 by default, the horse frame 7; skeleton.js
   `stepNod` into the neck's nod): twice a stride, fading as the walker stops, halved at a run.
 - **Soiled hems** (shell.js `SOIL`): a long pleated piece (a skirt sweeping the street) darker and browner along its
   lowest hand's breadth, the line ragged.
-- **Coats** (a species asset's `coats`: colour tables over its own; `species.js coatDef(species, k)`, built once each):
-  the stables' horses bay, chestnut, black, grey, dun, some with white socks (`sock`: the lower legs' colour,
-  mammals.js) and one with a pale snip -- every other coat from a start the town's seed picks, so the socked ones come
-  up; the shepherd's flock has a black sheep and a cream one, the pigs pink, ginger or black, the dog a black sheepdog.
+- **Coats** (a species asset's `coats`: colour tables over its own, with an optional `name` and the `params` they change;
+  `species.js coatDef(species, k)`, built once each; creatures.js `dressed`, docs/assets.md "Coats and variants"):
+  the stables' horses -- every other coat from a start the town's seed picks -- and since 2026-11-06 the riders' and
+  the loose horses too, each in a coat of its own out of fourteen: bay, chestnut, black, grey, dun, dark bay, palomino,
+  buckskin, flaxen chestnut; with white socks (`pastern`: the fetlock and pastern) or stockings (`sock`: the leg from the
+  knee down), a blaze (`"blaze": true`, a white plate down the face); dapple grey, piebald and appaloosa, their body's
+  shapes patterned by a gated `pat` (mottle, piebald, dots). The shepherd's flock has a black sheep and a cream one, the
+  pigs pink, ginger or black, the dog a black sheepdog; the house cats their eight coats (cat.json, once mammals.js
+  CAT_COATS; the plain ones `"tabby": false`).
 - **A horse's mane of locks** (manes.js `arc`: a CREST along the top of the neck instead of a ring round it -- the
   lattice open at its edges; frames/horse.json mane an ellipsoid with `thorns`): locks from the withers to the poll,
   swept back and up, a little to the side, varied -- in each coat's mane colour. It was a pill mostly inside the neck
-  (a dark wedge at the poll). The game draws thorn manes; the menagerie bench does not.
+  (a dark wedge at the poll). The game draws thorn manes, and (since 2026-11-04) the menagerie bench too (`?nomane`: not).
 - **The fox's brush** (fox.json tail widening .065 -> .1 and a white tip; mammals.js arcChain `tuftOut`: the tuft set past
   the tail's end, not buried in a wide one).
+
+## Animals: faces, facets, eyes in their sockets (2026-11-04)
+
+Measured against a stylised low-poly lion (flat triangles, a mane framing the face, a muzzle with a pale chin, eyes set
+in under a brow, heavy legs on real paws) -- without more triangles near by:
+- **Eyes on the head, not beside it** (shell.js chain sweep, face marks): a mark used to stand on the parent's SPHERE,
+  lifted by a quarter of its blend radius -- 2 cm off a skull drawn smaller than its sphere, or between the coarse rings
+  of a lone ball. The plate is now projected onto the parent's drawn surface (its capsule plus the bulge its blends
+  with its neighbours add) and climbs out of any neighbour it ends up inside (a brow, a cheek). A lone ball (a skull, a
+  hen's head) spends all its rings on its two caps by latitude, where half went to a zero-length span.
+- **Faces** (mammals.js `faceParts`, `headForm` on the species or its frame: cat, canid, horse, cervid, bovid, cattle, bear, pig, rodent,
+  reptile, dragon; plain by default, `false` none): a brow over the eyes (across the forehead for eyes in front, a short
+  ridge over each for eyes on the sides of the head), cheekbones, a jaw line in the `chin` colour, a nose bridge
+  (`bridge` colour) and a cat's whisker pads (`pads`) -- pills sunk into the skull so only their ridges stand out. They are
+  `detail` parts: shell.js leaves them out past `SHELL.detail` (250) times their own girth.
+- **Ears are plates** (a pointed ear: a thick round-rimmed triangle facing forward and out, with its hollow in `earIn`,
+  else the ear darkened); round ears (a bear's) stay stubs; `earPlate: false` keeps the cones.
+- **Faceted** (stat bit 16384 on a non-stone part; mammals.js and parts-kind creatures by default, `facet: false` not):
+  shellShade mixes the triangle's own plane into the normal (`FACET.mix` .8, `?facet=`), and push() treats a faceted
+  chain as `FACET.coarse` (2) times further away -- broad planes are the look, and what that saves on the body pays
+  for the face. Measured over all 71 species (menagerie, one at a time, 6 / 20 / 60 m): 434k / 232k / 163k triangles
+  before, 336k / 191k / 151k after -- near, most draw fewer (lion 5464 > 4152, bear 7328 > 4320); far, a mammal with a
+  face about 10% more (lion 1484 > 1624: the extra chains), the worst the house cat (+29% near, +14% far).
+- **Eyes find what they sit under**: a creature's eye (a faceted parent) climbs out of its OWN nearest parts, not its
+  head's first three neighbours (which on a head with a brow, cheeks and a jaw are those, and missed the neck a pig's
+  small head half sinks into); a person's keeps its head's.
+- **Bodies**: a `waist` (mammals.js: the spine tucked up and in between chest and haunch -- cats .12-.14, canids .1-.12,
+  deer .1), a big cat's heavy fore leg (`legs.shoulder`, the fore counterpart of `thigh`) and bigger paws
+  (frames/cat.json), the lion's mane larger, darker and round the face, its muzzle tan with a pale chin.
+- **Second round** (after review against the reference):
+  - *Manes of lumps* (manes.js `tufts`): instead of a sleeve of spikes (it read as a porcupine), a dozen or two big
+    faceted masses -- icosahedra (20 flat faces) stretched along their lock's fall, a little turned, each its own size
+    and a shade apart (`tone`), no fibre sheen -- in rings: `tufts: [[along, count, size, from?, to?], ...]` (an arc
+    for a crest or the chest), `shape` [long, wide, thick], `sink`. Lion and manticore: 20 lumps (a ruff of six round
+    the back of the head framing the face, two rings down the neck, three down the chest); the horse: 16 flat locks in
+    pairs along its crest. 400 / 320 triangles, one instanced mesh per kind (the lion's spikes were ~450).
+  - *Heads by family from the front*: a horse's skull smaller and its muzzle a long wedge from inside it (narrow
+    jowls: `horse` cheeks), a deer the same (`cervid`, its muzzle a tapered pill now); cattle (`cattle`: cow, ox) a
+    box -- a `poll` pill across the top of the face squares the skull's upper corners, broad muzzle `pads`.
+  - *Crisper facets*: `FACET.mix` 1 (the plane's own normal), and `FACET.contrast` (2.2, `?facetcontrast=`): a plane's
+    light is pushed that many times away from the smooth shape's under it -- the world's ambient (.62) left the planes
+    only a few percent apart; the coat's strand noise is 70% off a faceted hide (`FACET.fur`), it blurred them.
+  - *Shoulders and haunches*: `legs.shoulder` 1.2-1.25 on horse, cow, wolf and deer (wolf and deer `thigh` 1.45).
+  - Triangles (shell, 6 / 20 / 60 m): lion 4152 / 2160 / 1624, horse 3936 / 1964 / 1484, cow 3640 / 1976 / 1764,
+    wolf 2432 / 1736 / 1568 (before this work: 5464 / 2236 / 1484, 4840 / 1940 / 1344, 4824 / 2528 / 1808,
+    3640 / 1584 / 1428).
+- Test it: menagerie.html `?only=lion,horse` (`?facet=0`: smooth, `?nomane`).
 
 ### The hen (assets/creatures/birds/chicken.json, 2026-10-24)
 The hen was separate faceted balls (body, head, tail fan) with no blend and the classic border band, and from across
@@ -1800,3 +1869,802 @@ pales them the same way. Thinning crowns past 60 m (half the cards fade, the oth
 wood, as the figures above said. Cutting each card to an octagon round its leaves (59-78% of the quad for the leaf styles): no
 gain either (-0.31 ms, 15 paired runs, 4 in its favour): an empty pixel is cheap, and 6 triangles a card pay back what it saves.
 Less MSAA is what's left, and that's a visible trade: not done.
+
+## Sculpted bodies: a field, meshed and skinned (2026-11-04)
+
+The hedgehog showed what the shell engine cannot do for a small, round, close-up animal: each part a chain of its own
+rings, so a thin part beside a fat one was a step in the surface and the density jumped from piece to piece; and a face
+mark stood on its parent's sphere, which is not where the blended head's surface is -- the eyes floated beside the
+face. A `"kind": "sculpt"` creature is not parts at all.
+
+- **The definition** (bodyspec.js, data only): its parts are all BONES (`bone: true`: posed by skeleton.js like any
+  rig -- the walk, IK legs, the head's idle turn -- never drawn by the composite), and `def.sculpted` is the shape: blended
+  primitives on those bones, the eyes, the coat, the budgets. Legs make their own shapes (round cones hip-knee-ankle,
+  an ellipsoid foot) on the straight bone chain, so the rest frames are pure translations.
+- **The field** (sculpt.js): signed distances blended by smooth minimum (`k`) or carved (`op: "sub"`) -- or only painted (`op: "paint"`: no shape at all, the surface inside it takes its colour, `kc` either side of its edge; after everything else), each primitive
+  carrying an attribute vector blended exactly as the distance is: colour, wetness, fibres, the coat's mask, and a
+  weight of one on its bone. Where the head melts into the body the bone weights do too, so the neck bends instead of
+  tearing.
+- **The mesh**: surface nets on a `cell` grid (evaluated in a narrow band: a coarse pass every 4 cells, the fine one only
+  near the surface -- 3x faster, the same faces), then quadric-error simplification to `tris[0]` and from that to
+  `tris[1]` (never flipping a face, never leaving a sliver, never joining two sheets), every vertex put back on the
+  surface with the gradient for its normal and the field's attributes, its four heaviest bones its skin.
+- **Seated shapes and eyes**: an eye is found by marching from inside the head toward `at` until the field crosses
+  zero; a socket is carved round that point (its hollow in the `lid` colour) and a real eyeball set `sink` of its radius
+  into it. A shape with `seat` (an ear) is moved the same way onto the surface the unseated shapes make. Neither can float
+  or be buried, whatever the blends did to the head.
+- **The coat**: quills sown on the FINE mesh (the true surface, before simplification) by dart throwing -- blue noise, a
+  gap apart -- where the coat attribute is over `hold` and the skirt rule allows; four vertices each (three root corners
+  and the tip, smooth-shaded), skinned with their root's weights, so they ride the body and the head exactly where they
+  stand. The far mesh has its own sparser, thicker coat (bodymesh.js COAT_FAR).
+  A shape's `coat` may be a NUMBER instead of `true`: the attribute's value, and over 1 the quills sown there grow that
+  many times longer (2026-11-06: the porcupine's -- 1 its back, 1.3 the bristle crest on its head and neck, 1.5 the fan
+  over its rump). `coat.bands: [[f, colour], ...]` bands each quill SHARPLY: at each fraction f of its length a doubled
+  ring (the two coincident, one the colour below and one the colour above), so the colour steps there instead of
+  fading; the root takes `base`, the tip vertex the last band's colour -- 3 sides x (bands + 1) sections x 2 + 3
+  triangles a quill (21 for three bands; plain ones 3).
+  Two more (2026-11-06, the porcupine's 2nd pass): `coat.fan` -- where the attribute is over `coat.fanAt` (default 1)
+  each quill's `lean` drops by `fan` x the excess (floor .05), so the quills there stand up off the skin while the rest
+  lie swept back (a rump's raised FAN over a coat lying 25-40 degrees to the skin); `coat.sparse` -- that share of the
+  darts thrown on a vertical side dropped, scaled by how far the normal is off the vertical (`1 - max(0, n.y)`), so the
+  coat is densest on the back and thins down the flanks.
+- **Drawing** (bodies.js): built once per species (hedgehog: ~2 s in the browser, logged), each animal a SkinnedMesh over
+  the shared geometry; three's skinning reads `skeleton.boneMatrices`, which place() writes straight from the frames
+  skeleton.js keeps for such an animal (`an._bm`): bone j = W_j * S(f) * T(-rest_j), f the animal's size against the
+  definition's. Past `mesh.far` the far geometry. Material: heads.js faceMaterial with the manes' softer sheen.
+  Callers: index.html, menagerie.html, assets.html (`createBodies(scene)`, `bodies.place(herds, camera.position)`).
+
+### Every other creature, converted (2026-11-04)
+
+The hedgehog was so much better than the shells that every animal is now drawn this way, without rewriting any
+definition: **bodyspec.js `sculptOf(def)`** turns a creature of parts into a sculpted body when it joins a herd
+(composite.js herd.add). The parts stay exactly as they were, as BONES: the walk, the IK legs, the wings' beat, the
+tails, the head's turn, riders, shadows and culling all read them as before, but the composite draws none of them.
+Each part's SHAPE, in the rest pose, goes into the field instead:
+
+- a capsule or cone becomes a round cone between its ends; a scaled sphere becomes a true ellipsoid in its frame; a
+  tube becomes a spline of round cones through its Bezier (its radius eased and bulged); a triangle becomes a slab as
+  thick as its rounding; a face mark (`dot`) becomes an eye found on its parent's blended surface, with its iris and
+  pupil as rings on the eyeball (round, slit or bar);
+- the blend is the part's own `k`, but never more than most of its radius, because a big blend melted small parts
+  away. The PAINT blends at a third of that (sculpt.js `kc`: the first `sharp` attributes), so a muzzle's white keeps its
+  edge on a smoothly blended head while the bone weights still fade softly across the joint;
+- the grid is sized for about 32k faces of surface (`CONVERT.faces`, at most 6M cells). Whatever is thinner than
+  0.8 cell (a claw, a whisker, an ear's plate, a wing's membrane) becomes explicit geometry on its bone (`details`:
+  a six-sided smooth lathe, a two-sided plate, a small ball), so it is not lost between samples;
+- the near budget is 1000 + 22 per shape (1600-3200 triangles), the far budget a third of that; the far LOD starts at
+  14 half-lengths of the animal (at least 4 m);
+- `fleece` heaps its shape in lumps (sculpt.js `lumps`: cellular displacement) -- `true` sizes them by the shape's
+  thickness (`CONVERT.lumps`), `{amp, size}` (metres) sets them: small and sharp, a fringe of fine hair tips (a skunk's tail).
+
+The rest frames carry rotation and scale, so the skin is the general form: bone j = W_j * S(f) * RestInv_j.
+
+**Colour boundaries** survive simplification: before the QEM pass, every nets vertex whose paint differs from a
+neighbour's gets a point quadric (sculpt.js `anchor`, weight `PAINT_ANCHOR` x contrast x cell area) that holds it in
+place. The edge of a muzzle, a sock or a belly stays in the vertices, and the coarsening happens between them.
+Without it, a 2k-triangle tiger's face was a pink-white smear.
+
+**The face kept finer** (`sculpt.mesh.focus`, 2026-11-05): `{ boneId: factor }`, which applies to that bone and every bone
+below it (a head's jaw, ears and nose). A deeper name overrides its ancestor's. The factor is blended by each vertex's
+bone weights, so the density changes as softly as the joint does. It acts in two ways:
+- the vertex's quadric weighs `factor`× more (sculpt.js `scale`);
+- on the near LOD only, no collapse may leave an edge there longer than `FOCUS_EDGE` (6) × cell / √factor (sculpt.js
+  `maxEdge`, the lesser of an edge's two ends). A refused collapse stays, so the budget can be overrun slightly; the
+  scorpion overruns by 3%.
+
+QEM on its own spans a gently curved cheek with a few long, flat triangles. Shading follows the field's normals, so the
+inside looks smooth, but the silhouette is drawn in straight segments: the "faceted heads" reviews kept flagging. On a
+6.5k fox the longest head edge went from 65 mm to 22 mm, at the same total. The default is `{ head: 4 }` for every
+converted body (bodyspec.js `CONVERT.focus`); `{}` turns it off. The paint anchors and the focus read one shared
+evaluation of the field at the fine vertices, so build time is unchanged.
+
+**Mirror-symmetric bodies, meshed as a half** (2026-11-08, sculpt.js `mirrorOf`, `surfaceNets(..., { half })`,
+`mirrorMesh`): x is forward, y up, z across, so an animal is its own mirror image in z = 0. A whole mesh simplified
+greedily is NOT symmetric even when its field is -- a collapse on one flank comes before its twin on the other, and a
+coarse budget cuts the two sides differently (the orangutan's trunk, 68 faces, visibly lopsided). A symmetric body is
+now meshed as its +z half and reflected:
+- **detection, from the primitives** (`mirrorOf(F, cell)`): every shape has a twin -- the same primitive reflected,
+  within 2% of a cell -- or is its own (on the plane: an ellipsoid whose axes the reflection only re-signs, a cone or a
+  tube whose ends it swaps). A sampled test cannot do it: the ORDER of blending makes the field itself differ slightly
+  (smin(smin(belly, left leg), right leg) is not smin(smin(belly, right), left) where both reach the belly: the dolphin's
+  flukes differ by .7 cell) -- as much as a deliberate one-sided mane does. Shapes with `lumps` (a fleece's noise) are not
+  mirrored. 117 of 154 creatures pass; the rest really are one-sided (the horses' mane, the walrus's bosses, the
+  narwhal's tusk side and bumps, stegosaurus's alternating plates, the snakes' and the serpent dragons' S-curves, the
+  owls' streaks, the fleeces). `mesh.symmetric: true | false` says outright (bodymesh.js; for the sculpt overlay
+  bodyspec.js `sculptOf` must pass the key through -- it copies only cell/tris/far/anchor/focus);
+- **the half grid**: samples at z = +-cell/2, +-3cell/2 ..., the layer at -cell/2 a copy of +cell/2, so no grid edge
+  crosses the plane, every face lies on the +z side and the middle layer's vertices are EXACTLY on it (z = 0, `mid`):
+  half the field's evaluations;
+- **the half simplified to half the budget** with the midline held: a collapse with a midline vertex lands on the plane
+  (a 2x2 quadric solve there), two midline vertices join only along the boundary they draw, no face may come to lie flat
+  in the plane, nothing crosses it, and a midline vertex's cost counts twice (its quadric in the whole mesh is its
+  half's and its twin's) -- so the budget is spent as the whole mesh would spend it. Anchors and focus are each
+  computed for both sides (the attributes read at the half's vertices and at their reflections) and the larger kept, so
+  a one-sided paint boundary is held on the half too;
+- **reflected** (`mirrorMesh`): the off-plane vertices doubled with z negated, the midline's shared (no crack can open),
+  the reflected faces wound the other way; `finish` places each pair once and reflects it (the midline's normal kept
+  in the plane) but reads every vertex's ATTRIBUTES where it really is: the left leg's bones on the left, a zebra's
+  stripes and the mottle not mirrored. The coat is sown on the reflected fine mesh (its quills are not mirrored either).
+Measured (Node, one build each, ms before -> after): tiger 9840 -> 6030, zebra 2320 -> 1070, dolphin 14980 -> 9840,
+plesiosaurus 24980 -> 15140, orangutan 16520 -> 10840 (with its old budget); horse, walrus, narwhal unchanged
+(one-sided). Output: the largest distance from a reflected vertex to its nearest vertex 0 (before 9-12 mm), no open
+edge, no face turned over.
+
+**Half-drawn on the GPU** (2026-11-08, bodyhalf.js; bodies.js `?halfdraw=1`, OFF by default -- measured not worth it,
+below). A mirrored LOD says where its half is (buildBody: `L.half = { n, t, twin }` -- its first n vertices, the
+midline's among them, and first t triangles; the rest of its surface their reflections). `halfOf` keeps the half and
+the extras (eyes, details, coat) and drops the reflections; bodies.js draws it twice over the SAME buffers: once as it
+is, once as a second SkinnedMesh on the same skeleton whose world AND bind matrices are M = diag(1, 1, -1) -- three
+skins M^-1 (sum w B) M v and places it by M, so the vertex lands at sum w B (M v), the reflection skinned by the bones
+its own `skinIndex` names: each bone's TWIN (found from the mesh: a half vertex's bones against its reflection's, by
+weight; a bone with no twin is its own -- the rigs' `cheeks`, `pads` carry both sides). The legs stay independent (a
+walk swings one foreleg forward and the other back, flight beats both wings). A negative-determinant world matrix makes
+three's WebGPU pipeline flip the front face, and the normals come out of the same matrices reflected: nothing inside
+out. The MIDLINE is drawn by both and must land on the same spot to the bit: its weights are made symmetric (a bone and
+its twin the mean of the two, a pair kept whole in the four slots) and the reflected draw takes the same slots in the
+same order, so both sums are the same arithmetic. Its own colour (the mottle where the reflection really is) and
+skinIndex are the reflected draw's only buffers (padded over the extras: three's CPU skinning -- a box, a pick ray --
+reads every vertex the position has); its PATTERNS are the near side's coordinates with the across axis turned over
+(the material's `FLIP`): every frame bodymesh.js lays has its twin's reflected as (Mu, Mv, -Mw), so the far side's
+stripes are its own, not a mirror copy. Checked: tiger and zebra rendered still with it on and off differ only where
+the idle head and tail moved between the shots; walking (tiger, zebra) and flying (eagle, manticore), no seam along the
+back or the belly. Measured -- why it is off:
+- memory: over all 154 creatures the vertex+index bytes go 270 -> 258.5 MB (4.2%; 6% over the 117 symmetric ones):
+  a tiger 1.67 -> 1.23 MB, a leopard 1.39 -> 1.07, but a zebra, a manticore 0% (their coat and membranes are most of
+  the vertices and are not halved) and the feathered birds WORSE (eagle 2.68 -> 2.91 MB: the reflected draw's colour
+  and bones padded over the feathers). The 37 one-sided bodies (horse, elephant, lion, cow...) gain nothing;
+- time: every symmetric animal is two draws. 300 tigers on the far LOD: 32.7, 32.2 -> 43.1, 47.9 ms a frame (two
+  headless runs, each the median of 60 frames: CPU submit 7-11 -> 16 ms); near LOD 57.8, 53.8 -> 54.5, 64 (the vertex
+  work is the same: the half is skinned twice); 100 tigers within the noise (17-25 ms either way). Halving at hand-over
+  costs up to ~50 ms a species on the main thread (the tiger 30-47 ms in the browser).
+The vertices skinned per frame do not fall (each half vertex is skinned twice), so the GPU saves nothing and the CPU
+pays a draw call; the buffers saved are a few hundred kB a species. Worth revisiting only with instanced drawing of
+both halves in one call (a per-instance bone offset and front face) or if memory, not draws, becomes the limit.
+
+**Patterns** are the composite's own (banner_wgsl patternAt), painted per pixel by bodies.js. Each vertex carries
+THREE pattern slots (2026-11-08; two before): a point in each slot's frame (`patP`, `patQ`, `patR`), the three ids
+(`patId`, flat-interpolated, so a seam never shows a pattern between two), and `patKT` = the patterned amount (blended
+in the field like the colour, so a pattern fades out where its shape meets a plain one) and the shares of slots 1
+and 2 (slot 0 has the rest). The slots are chosen over the
+whole mesh at once (bodymesh.js patternsMesh, below), because a slot that holds one frame at one corner of a triangle
+and another at the next interpolates to a point in neither: ordering by distance squeezed the stripes into a zigzag
+inside each triangle, and a fixed order still terraced them wherever a vertex's idle second group changed. A shape with `frame: "body"` uses the animal's frame, as shell.js
+`bodyFrame` does, so a tiger's stripes run on across its trunk pieces. The solid patterns (giraffe cells, piebald,
+scales, scutes, leopard patches) are laid in the rest pose's own space.
+
+**What is converted**: every definition species.js builds for a creature is marked (`markSculpt`): A() for each
+catalogue species, its coats, its variants, its young, the house cats (one definition per coat, cached), the fish
+(assets/creatures/sea/fish.json in one of its coats at one of three sizes, cached; its overlay scaled by `sculptScale: k`),
+the dolphin and the shark (sea/dolphin, sea/shark). People, the winged people (angel, demon), hybrids built
+from a person (centaur, sphinx...) and statues are not marked; the instanced dragonflies (others/dragonfly.json) opt out
+with `"sculpt": false`. `"sculpt": false` on a
+definition opts it out, and `?sculpt=0` draws everything the old way for comparison.
+
+**Building** happens in module workers (bodyworker.js, up to 4) and is cached in IndexedDB under the body's hash and
+the mesher's source hash, so a change to either rebuilds (`?bodycache=0` skips the cache). An animal is not drawn
+until its mesh arrives: about 1-1.5 s per species on a worker (0.7-5 s; the longest are the long-necked birds and
+the snake, whose thin parts need a fine grid), and instant from the cache. WebGPU allows 8 vertex buffers, so every
+float attribute is interleaved into one buffer, plus the skin indices.
+
+**Shapes shared by a definition's looks (2026-11-08).** A body is built in two passes (bodymesh.js `buildBody` =
+`dressBody(body, buildShape(body))`): the SHAPE -- the field sampled, surface nets, the simplifier's LODs: positions,
+normals, triangles, the mirror's half and the coat's quills, everything that costs -- and the DRESS laid on it: each
+vertex's colour, hair, wetness, the coat patterns' frames, countershading, the skin weights, the eyes, the details
+(fins, horns, feathers, membranes, thin prims: never in the field, so redrawn per look) and the quills' colours. The shape
+depends only on `shapeSpec(body)`: the field's (non-paint) shapes, the eyes, bones and rest pose, the mesh budgets and
+the coat, every length divided by the grid cell -- so a body scaled by f (whose cell scales with it) has the same spec,
+and the dress lays it out at f times the stored shape. bodies.js keys the shape on that spec, keeps the latest 48 in
+memory and each in IndexedDB (`shape:` + key), and dresses each look on it in a worker; the dressed body is still kept
+by its whole JSON as before, so a reload reads it back without a pass. Which bodies share: every LOOK of one definition
+-- its base, coats, variants and young (`bodyspec.js lookFamily(def, () => looks)`, told by species.js for the world's
+and by assets.html for the stand; `familyOf(body)` asks) -- whose shapeSpec is the same: the coats; a variant or young
+that only rescales (the arctic fox .82, the fennec .58, Grevy's zebra 1.12, the lamb .56); a variant that changes only
+its details or paint (the fennec's ears are fins, its eye streak a paint: `creatures.js sculptOver`, a variant's own
+`sculpt` over the base's by id). One that changes the field (the rooster's comb and tail, the mallard hen's head, the
+Jersey's udder, a calf's proportions) builds its own. The simplifier holds colour boundaries (paint anchors), so the
+shared shape is simplified holding the boundaries of EVERY look in the family (each look's paint read on the fine
+surface, the max of their weights) -- the bay's black legs and the chestnut's socks both stay crisp -- and the shape key
+holds the set of the family's paints, so every look computes the same key (a single look: exactly the old build).
+Measured in Node (no workers): the fox's six looks 4.2 s instead of about 11 (one shape 1.6 s, each other look
+dressed in 0.4 s); the dog's nine 6.9 s, the cat's nine 9.0 s, the chicken's six hens 3.8 s (each hen 0.1 s). The
+scaled shape is not bit-equal to one built at that size (the simplifier's float ties fall differently), but the same
+surface: its vertices within a cell of a fresh build's. On the GPU, the geometry -- position, normal, skin weights, uv --
+is one interleaved buffer and the paint (colour, hair, wet, the pattern ids and frames) another (`bodies.js geometry`):
+looks that share a shape at the same size share the geometry buffer, the skin indices and the index buffer (found by
+content), and only the paint buffer is their own (`its geometry shared` in the log). The worker queue is held in
+bodies.js and hands a free worker a DRESS before any shape (a load asks for every species at once; a dress queued in a
+worker behind forty shapes drew nothing until they were all built). In the viewer, all of a horse's fourteen coats in
+turn: 25.4 s -> 11.9 s; the dog's eight 8.9 -> 4.7 s, the cat's 9.4 -> 3.7 s; the first look of a family costs more
+(the horse 2.2 -> 4.9 s: one paint field per other look read on the fine surface, about 0.15 s each). A game load (seed
+353465086, 125 s, headless): 69 bodies to hand against 63 before, and 38 of the cast's looks asked for a shape already
+being built -- each a full build before. IndexedDB: a shape is about 0.2 MB (the horse's), a dressed body 2.6 MB.
+
+**Faster shapes, baked shapes -- and why the cat's mesh is not warped into the smilodon (2026-11-08).** Where a shape's
+time went (Node, the original code): the cat 1.4 s = surface nets 0.56 (the field sampled) + the first simplify 0.41 +
+finish 0.10 + the paint read on the fine surface 0.18; the lion 6.0 s = nets 3.2 + simplify 1.2 + finish 0.8 + paint
+0.4. The lion is 4-5 cats because it has 141 prims to the cat's 63 (the mane), is not mirror-symmetric (the whole grid
+meshed, not half) and its fine surface is 4x the cat's (38k vertices, 77k triangles to simplify), so 4x the samples
+at 2x the cost each. Of a sample's cost almost nothing was the prims that count (9.6 a sample of 141): it was the
+bounding-sphere test every prim makes, `Math.hypot` -- 127 of them a sample, 7.4 us. The dress, the worker hand-over and
+IndexedDB are small beside it (dress 0.3-0.8 s; the rest tens of ms).
+
+*Faster, to the bit* (sculpt.js; every one of the 159 species' shapes and dresses, positions, normals, triangles, colours,
+weights, compared byte for byte against the old code: all equal). `hyp3` is V8's Math.hypot for three arguments
+written out (the same Kahan sum, the same float ops: the same bits) but without the call's overhead; the bounding-sphere
+test asks a plain square root first and only a sample within 1e-12 of the threshold asks hyp3 -- the decision is the
+old one; a tube's spans are culled by their own bounding spheres, nearest group first (a minimum, order-free);
+ellipsoids and boxes have their rotation inlined. Surface nets keeps its rounding tables and visits only the cells and
+quads near a sign change (rows that can emit nothing are skipped, the emission order unchanged). The simplifier was
+rewritten on typed arrays (a slot heap with the same comparisons, rings by stamp arrays in the old Sets' order, no
+allocation in its tests). Node, a shape + its dress, old -> new: the cat 2.2 -> 0.8 s, the smilodon 1.3 -> 0.5,
+the lion 6.3 -> 2.9, the tiger 5.8 -> 2.6, the horse 2.0 -> 0.8, the zebra 1.4 -> 0.6; all 159: 581 -> 221 s.
+Still the biggest: the walrus and the crab (14-15 million grid points, asymmetric): 7 s, of it 2.5 s sampling and
+1.7 s the garbage collector freeing the 56 MB sample and index grids.
+
+*Baked shapes.* `python3 build/pregen.py --bodies` (pregen.html part "bodies") builds every look's shape once
+(species.js `allLooks`: the catalogue, coats, variants, young, the fish) and writes pregen/shapes/: one gzipped binary a
+shape (bodies.js `packShape`: the arrays to the bit; 199 shapes for 452 looks, 25 MB, 30-380 kB each; 108 s, the
+browser at 1.1 GB) and index.json with the mesher's hash. A shape not in
+IndexedDB is fetched from there before it is built; an index made by other mesher code is ignored whole, a key not in
+it (a species edited since) is built as before. A world fetches only its own species. Run it after an edit to the
+mesher or a species (a full pregen run makes it too); a stale bake costs nothing but the old build times.
+
+Headless game load, seed 353465086, a fresh profile (no IndexedDB), 192 bodies (154 shapes built, 38 shared), time from
+the first body asked for: the first body to hand 8.2 s -> 6.8 s (new code) -> 6.2 s (baked); all 192: 217 s -> 116 s
+-> 31 s. (Of the first body's 6 s the mesher is a fraction -- a baked shape, a 0.2 s dress; the rest is the load around it, not
+measured further.) The viewer
+(assets.html, fresh profile), cat, then smilodon, then lion: 1.9 / 1.1 / 5.0 s -> 1.2 / 0.6 / 2.9 s -> 0.6 / 0.3 /
+0.8 s.
+
+*Not done: one species' mesh bent into another's.* The cat and the smilodon load alike, so: mesh the cat once, then
+move each vertex with the bone it is skinned to (the smilodon's rest bone over the cat's, per-bone affine) -- 3-7 ms
+instead of a build. Measured against the smilodon's own field, in its grid cells: median 1.5, 90% within 4.5, worst
+15; 30% of the vertices within one cell. The renders show why: a slim cat where the smilodon has its massive shoulders
+and hump, the cat's head, the cat's two-bone tail folded onto the smilodon's one. The tiger bent into the lion (no
+mane: median 2.1, p90 7.7), the leopard into the tiger (1.1, 4.9) no better; only the horse scaled into the zebra
+comes close (median 0.36, p90 0.94, worst 2.4 cells -- the barrel and the mane ridge off). A shape is its prims, not its
+skeleton: bones move a body, they do not make the smilodon's neck from the cat's. As a placeholder until the real one
+comes it would pop visibly to another animal -- and the real one now comes in well under a second, or baked at once.
+Sharing samples per prim across species does not work either (the grids, cells and prims differ); what CAN be shared,
+looks of one definition with the same field, already is (shapeSpec, above).
+
+
+### A sculpted body inside a bigger figure (2026-11-08)
+
+A fused rider (index.html `fuseRider`: the mount's parts, then the person's hung at the saddle), a cart's team
+(carts.js `teamDef`: one beast between shafts, or two under a yoke, their ids prefixed `L_` / `R_`) and the tauric
+hybrids (species.js `tauric`: a horse without its head and neck, a person's upper body on its chest) are definitions
+put together from an animal's parts and more. `sculptOf` converts only what species.js marked, and these were new
+objects, so they stayed PARTS: the ridden horse and the team were drawn as plain pills while the loose horse grazing
+beside them was a skinned body -- "the animals in carriages are very low-detail".
+
+Now the animal is converted on its own and carried inside the figure: bodyspec.js **`sculptPart(def)`** returns its
+parts as bones and its body, and the figure's definition lists **`sculpts: [{ body, base }]`** -- `base` the index of
+the body's first bone among the figure's parts (its parts, in order, in one block). composite.js keeps `sculpts` on
+the animal, skeleton.js keeps the frames (`an._bm`) for a figure with either, and bodies.js `place` draws every body of
+the list from the frames at `base` on (one record per body, `live` holds a list per figure; a figure's size against
+its body's is read at `an.parts[base]`). The rest of the figure -- the man, the yoke, the shafts, the pole -- is drawn
+by the composite as before. A pair under a yoke is two bodies of one shape (`sculpts` twice, `base` 0 and n). For the
+centaur and the sphinx the overlay is TRIMMED first (`trimOverlay`): the shapes on the bones that are gone (the neck's
+and the head's) are left out and so are its eyes (they sat on the head), and what is left is converted as a body of
+its own (`<name> trunk`).
+
+### Authoring a converted creature: the sculpt overlay (2026-11-04)
+
+A converted animal keeps its rig's pill proportions: a tiger whose trunk is one capsule with straight-cone legs. The
+OVERLAY lets a species say what its body is, while its rig stays as it is: the same bones, gaits, IK, riders and
+saddle. Add `"sculpt": { shape, keep, eyes, mesh, coat, ... }` to the species JSON or to its frame. The schema is the
+comment at the top of bodyspec.js, and **assets/creatures/mammals/tiger.json is the worked example**.
+
+- **What is drawn.** With an overlay, none of the rig's parts are drawn except those `keep` names. `keep` holds
+  regular expressions over the whole id, e.g. `"tail\\d*"`, `"tailTuft"`, `"horn.*"`. The rig's dot eyes are found on
+  the new head unless the overlay authors its own `eyes`, written like the hedgehog's and mirrored, on bone `head` by
+  default.
+- **Where shapes go.** Shapes are written in the REST frame: x forward, y up, z left, metres, as `node t_dump.mjs <name>`
+  prints the rig.
+  - Each shape rides the bone it names. An unknown bone throws, and the message lists the bones.
+  - Any point can name a joint: `"$legFLl"` is the bone's origin (the knee), `"$legFLl.end"` is the segment's far end,
+    and `["$head", dx, dy, dz]` is an offset from a joint.
+  - Shape types: sphere, ell (with `rot` in degrees), cone, tube (`pts` with a radius each), box, tri, feathers,
+    membrane (below), and the sharp parts `horn` and `fin` (below).
+  - Shape features: `mirror` (the twin goes on the twin bone, e.g. legFLu becomes legFRu and earL becomes earR), `seat`,
+    `op: "sub"`, `op: "paint"` (colour only: a snake's rings, a frog's stripe), `k`, and `kc` (paint blend, which defaults to half of `k`). Paint and finish: `color` (`"@ref"`
+    colours from the species' `colors`), `wet`, `hair`, `coat` and `fleece`.
+  - Shapes with an `id` merge by id between a frame and a species, so a species can retouch one shape of its frame's.
+- **Rig proportions** are the frame's own params, overridden in the species. The tiger moves its hips back with
+  `"legs": { "hind": [-0.66*s, ...] }` and thickens its tail with `"tail": { "r1", "r2" }`. The joints then move, and
+  shapes written on them follow.
+- **Young and variants.** geom.js `scaleDef` carries `sculptScale`, and every length in the overlay is scaled by it
+  (directions are not). Coats and variants pass the overlay through, because buildCreature copies `sculpt` and
+  `patScale` onto KINDS output. A tiger cub at 0.45 builds at 0.45 with the same number of stripes, because `patScale`
+  goes 1 to 0.45.
+
+**The primates and the kangaroo (2026-11-05): written in the STANDING pose.** The overlay is in the rest frame, where
+the legs hang straight; a leg the IK folds a lot at rest (a kangaroo's hind leg, `bend` 1.15: the thigh 50 degrees
+forward, the shank back) is hard to write there. The generators (scratchpad sc/prim/gen: gorilla, orangutan, baboon,
+lemur, kangaroo) write every shape where it should be when the animal STANDS (skeleton.js `writeAnimal`, amp 0) and
+carry it back onto its bone's rest frame (sk.py: rest = W_rest * W_standing^-1 per bone, a point moved, an `ell`'s
+`rot` composed) -- so the JSON is ordinary rest-frame overlay. The field is still blended in the rest pose, so keep
+the mass that must not stretch on the bone that does not move (the kangaroo's haunch on the body, not the thigh).
+Their hands are written as hands: a gorilla's curled fingers with bare pads under the middle joints (knuckle-walking),
+an orangutan's fists, a baboon's and a lemur's flat palms with fingers, and an ape's foot with the great toe apart.
+Two coats for them in coatpat.js: 36 `shag` (long hair in the shape's own frame: locks a centimetre across along its
+axis with dark partings and fine strands -- down a hanging arm, back along a trunk) and 37 `agouti` (ticked fur, a
+SOLID pattern: a fine salt-and-pepper over a soft mottle). The lemur's tail is 27 cones, one a band, re-cut by arc
+length and painted with `kc` 0.0008 so the 13 rings stay crisp.
+
+**Countershading: `shade` (2026-11-05).** This is opt-in; a body without it builds exactly as before.
+
+Add `"shade": { "back": "#8a4f22", "belly": "#d8b48a", "k": 0.18, "at": 0.05 }` to the overlay. bodymesh.js then crossfades every body vertex's painted colour from the back tone on top to the belly tone below. A tone can also be a number under 4, meaning that factor of `on`, e.g. `"back": 0.8, "belly": 1.15`. A coat variant then keeps its own hue.
+
+- **Height.** The crossfade runs by rest-pose height along `up` (default `[0, 1, 0]`), measured from the root joint. It is even at `at` metres above that joint, the trunk's middle by default. It is a smoothstep `k` metres either side, which defaults to half the trunk's girth.
+- **`mode: "mul"` (default).** Each vertex is scaled by tone / `on`. `on` is the coat colour, by default the colour the most shape volume is painted in. The coat itself becomes exactly the tone, while a black mark stays black and a white belly takes the tone's lightness. Markings, patterns and the mottle keep their contrast.
+- **`mode: "mix"`.** Only paint near `on` is replaced: within `tol` (linear rgb, default 0.25), by `amount` (default 1). Markings are left untouched.
+- **`low`.** A tone the legs return to below `lowAt` (metres from the root joint, default 1.3 girths down), over the same `k`. Use `low: 1` for a pale belly over legs in the coat's own colour.
+- **Scaling.** `k`, `at` and `lowAt` are lengths and scale with `sculptScale`, like the rest of the overlay.
+- **What it skips.** It shades the skinned surface only. Details too thin for the grid, the eyes and the quills keep their own colours.
+
+**Big bodies (2026-11-06, the whales).** `sculpt.mottle` overrides bodymesh.js `MOTTLE` ({ scale, amount }): the sea's
+giants say `{ amount: 0 }` -- a whale's vertices lie ~7 cm apart, so the centimetre mottle aliases into speckle (their
+colour variation is the SOLID pattern's). An eye's `lid: false` drops the socket rim (on a whale's small eye it read as a grey
+rivet). `mesh.far` (metres, default 4) is where the far LOD takes over: the humpback's 40, the orca's 20. A shape's `wet`
+(0-1, the nose's shine) on the orca's skin, 0.14: a faint glint and rim, so the black is not a flat silhouette.
+
+**Patterns on authored shapes.** Set `pat` by name. On the trunk, use `frame: "body"`: the whole trunk is then one
+coat, laid along the root's axis, with one girth `r` for all the trunk's pieces. Before this, each piece spaced its
+stripes by its own radius, which gave the belly thin barcode lines. A limb or the head can take a frame of its own:
+`{ o, u, v, r }`.
+
+- `u` is what the pattern runs across: stripes are bands across `u`, so `u: [0,-1,0]` gives a leg its rings.
+- `v` is where the pattern is measured round from (the stripe's root). It defaults to up, or to a limb's outer side.
+- `o` defaults to the joint of the bone the shape rides.
+- Shapes written with the same frame SHARE it: bodyspec dedupes the frames by value after mirroring.
+
+bodymesh.js chooses a vertex's pattern slots by GROUP (shapes with the same frame and pattern), not by shape:
+
+- for each group, the distance to its nearest shape;
+- the nearest groups (up to three: THE SLOTS below).
+
+A chest, a withers and a shoulder blade all in the body frame therefore need no crossfade. Before, a shoulder where
+five shapes met swapped frames between neighbouring vertices and painted a moiré of fine lines. The tiger gives each
+leg ONE frame (`o: "$legFLu"` for all its pieces), so only the body-to-leg seam crossfades.
+
+A group is also one SIZE (2026-11-08). The rest pose's space (the solid patterns) and the animal's frame are shared,
+but each shape brings its own size `r`, and the lattice is laid from the frame's origin at that size. Two shapes of
+different sizes in one frame therefore disagree everywhere, and a vertex-by-vertex switch between them garbled the
+seam: the whale shark's spots between its trunk tubes of falling girth (not the fins' frame borrowing). Shapes of
+different sizes now form separate groups and crossfade -- but only for the patterns whose lattice is laid AT that size
+(bodymesh.js `SIZED`: 17 scales, 25 osteoderms, 27 palespots, 28 trout, 29 mottle, 32 rowscales). The rest (a
+giraffe's cells, a tiger's stripes, piebald, a lynx's spots) paint the same at any `r`, and splitting them by it only
+crowded a third group into seams that two slots could hold (the giraffe's hind leg, the zebra's rump).
+
+THE SLOTS, mesh-wide (patternsMesh, 2026-11-08). Each vertex has its ACTIVE groups (its nearest, and up to two more
+where the crossfade gives them a share: each one's odds t / (1 - t) against the nearest, so two groups blend exactly as
+the two-slot crossfade did), and NEEDS every group active at a corner of any triangle it is in -- painted in that
+group's frame even where its own share is nil. A first arrangement gives every group ONE slot mesh-wide, coloured like
+a map (DSatur: groups needed together by some vertex get different slots, the most constrained first); a vertex holds
+each group it needs in that group's slot and fills a slot it has no use for with its nearest group (share nil). Then a
+local search, vertex by vertex and region by region (a connected run of one arrangement, its slots permuted as a
+whole), takes whichever arrangement tears the fewest triangles (a slot torn: different groups at its corners, weighted
+by the share it carries). THREE slots (2026-11-08; two before): where three frames meet -- a cat's cheek, skull and
+neck below its ear -- two slots tore a triangle at every vertex of the junction and drew
+a stair-stepped line. Over the 125 patterned species: torn weight -17% (leopard 144 torn triangles -> 4, tiger 117 ->
+17, giraffe 77 -> 0, cat's head 81 -> 0); a few mottled bodies (lion, seal, walrus, gorilla) tear more triangles, but
+by less weight. The shader (bodies.js patBase) blends c0 + (c1 - c0) k1 + (c2 - c0) k2, each slot only where its
+share is above .002 -- 13 vertex attributes in one interleaved buffer. Torn triangles: zebra 1.2% -> 0, giraffe 21.5% -> 1.4%, tiger 5.2% -> 3.4% (nearly all of it its tail, where three groups meet). Where a frame
+is implicit, give `v` explicitly when the shape's `u` is a limb's (|u_y| > .7): bodyspec otherwise turns `v` to each
+side, splitting one frame into a left, a right and a middle group (the zebra's head and hindquarters now say `v`). The whale shark itself authors one `patFrame` for its whole
+trunk (shark.py), so its spots are one size from snout to tail and the tail fin borrows the same frame.
+
+**Coat patterns** (coatpat.js, new: WGSL called by bodies.js patBase for each slot). Antialiasing comes from the
+screen derivative of the pattern coordinate. Every pattern divides by `PAT_S`, the body's `patScale`, so patterns
+scale with the animal. `patScale` defaults to the root girth over a tiger's (`PAT_GIRTH` 0.28), clamped to 0.2–3.
+
+- **stripes** (3), tiger:
+  - Bands across `u`, noise-warped so no two are parallel.
+  - Each band reaches round from `v` a random distance and tapers to a point. Bands reach further round thin parts,
+    so legs and the tail get near-rings.
+  - Some fork part way down (two thinner branches), some get a short thin companion, some are broken by a gap.
+  - The spacing grows a little with the girth: thinner bands on legs, broader on the flank.
+  - White underparts are colours, not pattern: authored white shapes, with stripes fading into them.
+- **zebra** (4): the same, regular, broad, reaching nearly all round, square-ended, black on white.
+- **rosettes** (18), leopard (now `"pat": "rosettes"`):
+  - Solid-3D cells, each a broken ring of 3–5 blotches (angular noise cuts the ring) around a centre a shade darker
+    than the coat.
+  - 16% of cells are solid spots instead.
+  - Where the girth is small (head, lower legs), small solid spots on a finer cell.
+- **dots** (21): solid spots alone.
+- **giraffe** (5): a warped Voronoi; each cell is a liver patch with its own tone, parted by a thin pale network.
+- **piebald** (22): the composite's blotches, laid near black in the sculpted body's linear colour (a cow's).
+- **tabby** (24, 2026-11-05): the tiger's stripes, darkened from the coat itself (× 0.34/0.24/0.17), not laid in
+  black. A ginger cat's come out ginger-brown, a grey cat's grey-brown. A dun's dorsal stripe or a brindle can use it too.
+- **ridges** (34, 2026-11-05): rings across `u` about every 1.3 `r` (a frame's radius), a raised crest and a dark groove each,
+  fading out when a ring is under a pixel. No two alike: the spacing wanders, each ring leans and waves a little round
+  the horn, and each has its own depth (evenly spaced, they read as an accordion). An impala's horns: ridged cones
+  along the lower two thirds with an explicit frame each, the rest a smooth point.
+- **pangolin** (35, 2026-11-05): staggered rows of broad rounded scales overlapping tailward (4 cm along, 4.4 cm round,
+  in patScale units), each with its own shade, a pale lip on its free rim, fine grain along it and the shadow of the
+  scale over it; dark between the rows. The scale shapes carry it with `frame: "body"`. (A coat of flat
+  plates sown over it was tried and dropped: close up they read as loose shards lying across the painted rows.)
+- **anteater** (38, 2026-11-05, a SOLID pattern: the rest pose's own space, metres): a giant anteater's black band,
+  a polyline of (x, arc round the trunk's axis) knots with a half-width each, from under the throat back and up over
+  the shoulder to a point on the back, white-bordered, mirrored across z. It is on every trunk shape and the upper
+  forelegs. Laid as paint ells on the measured skin instead, the near mesh's vertices tore its edges into shards.
+- **skunk** (39, 2026-11-05, SOLID): a striped skunk's white -- knots along x, each the axis height there and the
+  white's centre and half-width as angles round that axis from the top: the blaze up the snout, a gap, the cap over
+  crown and nape, parting at the shoulders into two bands to the rump. On every shape of the coat, tail included, all
+  of it in coarse fur (`hairOf`, below), black with grey glints. The tail is found by height and by being behind the
+  rump. It is black with white hairs all through it, and its hair runs up it.
+- **coarse** (40, 2026-11-05, SOLID): a capybara's sparse coarse hair. `hairOf` (also inside `skunk`) draws strands L
+  long and W across as value noise stretched along x on the trunk (hair lying back) and along y down the legs. The
+  noise's across-axes are turned off its grid, with a second octave at another turn, so no squares show up close.
+  It adds clumps, dark partings, an optional grey `lift` on the crests (a black coat's glints) and a grizzle of
+  pale tips. Every scale fades to its mean under the pixels. With the shapes' `hair` kept low (0.15–0.2), the
+  coat reads as matt fur, not plastic.
+- **orca** (41, 2026-11-06, SOLID): a bull killer whale's markings. Round the body's axis (`AX` knots: x, the axis's
+  height, half height, half width) each point has an ELLIPTIC ANGLE from the belly's midline (0) to the spine (pi); the
+  white and the grey are polygons in (x, that angle x a radius), signed-distance tested and antialiased by the pixel,
+  so every edge is sharp: the white lower jaw under the lip line, throat and belly narrowing between the flippers and
+  parting into the flank lobes behind the fin; the grey saddle; the egg-shaped eye patch; the flukes' white underside in
+  a black margin. The generator (scratchpad sc/sea3/gen/orca.py, wgsl_orca.py) writes the numbers.
+- **humpback** (42, 2026-11-06, SOLID): the same elliptic angle (its axis table the real section: top, the throat's
+  sagging bottom, half width): the dark back -- matte but not flat: a broad mottle, paler down the flanks, here and there
+  thin pale lengthwise SCARS behind the head -- the white belly with a wandering edge, grey blotches and white flecks; 15 throat-pleat grooves a side from chin to navel, fanning over the throat (faded
+  once a pixel is wider than a groove); the flippers white and mottled, dark at the root; the flukes' underside white
+  inside a black margin (a polygon SDF of the fluke outline) with black blotches; a dark mouth line.
+- **plesio** (43, 2026-11-06, SOLID): countershading at a wandering line through the body's mid-height, rising with
+  the neck's resting curve, out on a flipper its (down-angled) mid-plane -- the tops dark, the undersides pale; the back finely blotched, a pebbled skin that fades under the pixel.
+- **badger** (44, 2026-11-06, SOLID): a European badger's coat. THE FACE round the head's axis: knots along x (the axis's
+  height, the white blaze's half-angle, the black stripe's lower edge, the white cheek's lower edge, and how much of the
+  face there is -- 1 on the head, 0 on the neck behind it), each point's angle from the top round that axis: a white
+  blaze up the middle, a black stripe either side from beside the nose pad over the eye and the ear (its upper rim white)
+  back to the neck, white cheeks and upper lip, the chin and throat black -- each edge antialiased by the pixel; behind
+  the ears the cheek band tapers out and the face fades, its edge looked up a little ragged. THE BODY grizzled: a dark
+  undercoat (`hairOf`'s strands), silver tips over it -- `hairOf` called again on black returns just its tip mask, two
+  sets of strands on the flanks, one along the spine (darker there), gathered in locks a centimetre or two long; where
+  the strands are too fine to draw, their mean, so the grizzle still shows as a silver-grey mottle further off. Black
+  under a line along the flank (x, its height): legs, chest and belly. Its numbers are written in coatpat.js by hand
+  from the generator's shapes.
+- **weasel** (45, 2026-11-06, SOLID): a least weasel's russet above and white below -- the upper lip, chin, throat,
+  chest and belly: the line an angle round the body's axis per knot along x, wavering along the flank (a low noise along
+  x) and sharp at the pixel; the legs brown below the line; the chestnut darker down the back, paler toward the
+  flanks; short fine fur (`hairOf`, strands 6.5 mm) over all of it.
+- **seal** / **greyseal** (60 / 61, 2026-11-06, SOLID, assets/creatures/sea/seal.json -- the asset's `pat` is gated
+  on its `harbour` / `greyseal` params, so a coat picks the pattern): COUNTERSHADED -- the coat's colour above, a pale
+  silvery belly under a line low on the flank (wandering by a low noise, a little higher at the head: the chin and
+  throat pale), the middle of the back darker. A harbour seal's (60): dense small dark SPOTS (Voronoi cells of 3.6 cm
+  on the body, 2.2 cm on the head, warped so they are not round), some inside a pale ring, fewer and fainter on the
+  belly. A grey seal's (61): big irregular BLOTCHES of a three-octave noise instead -- pale on a dark coat (the bull),
+  dark on a pale one (the cow). Fine fur noise over all; the marks fade once a pixel is wider than they are.
+- **walrus** (62, 2026-11-06, SOLID, assets/creatures/sea/walrus.json): a bull's hide -- cinnamon brown, darker
+  along the back, PINKER low down and over the neck and chest (a walrus warm on land flushes); WRINKLED: deep creases
+  across the neck and shoulders (rings ~6 cm apart, wandering) and a net of finer ones over the rest, each with a paler
+  ridge beside it; the flippers' bare soles darker; a sparse stipple of short hairs. The creases fade once a pixel is
+  wider than they are.
+- **lynx** (63, 2026-11-06, SOLID and a COAT pattern -- the body's `patScale`, 1 = metres; assets/creatures/mammals/
+  lynx.json): a Eurasian lynx's spots, solid and dark, of DIFFERENT sizes in three scattered layers (`spotsOf`, each
+  its own seed): a fine sprinkle (~8 mm) everywhere, densest below y .55 m (the legs and flanks), middling ones
+  (~1.5 cm) on the body and legs behind the neck (x < .42 m), and the largest (~2.5 cm -- medium-small; at twice that
+  they read as a leopard's blotches) only below the back's line (y < .59 m) -- the flanks, haunches and legs. The
+  edges wobbled a little by a noise; each layer fades to its mean once a pixel is wider than its spots. Which spots a
+  layer keeps is decided at each spot's centre (`lynxSpots` returns it), so a spot is whole or absent, never cut along
+  the line where its region ends.
+- **panda** / **qinling** (64 / 65, 2026-11-06, SOLID, assets/creatures/mammals/giantpanda.json -- `pat` gated on its
+  `panda` / `qinling` params, so the brown coat picks 65): a giant panda's markings per pixel -- two ellipsoids, each its
+  centre and the rows of its inverse frame (the generator, sc/m5/giantpanda.py, prints them): the EYE PATCHES (mirrored
+  across z), big ovals slanting down and out round the eyes, and the SHOULDER BAND right round the trunk; black there
+  (65: dark brown), the edge antialiased by the pixel and softened 3 / 8 mm (fur). Laid as paints, the near mesh's
+  coarse vertices tore the black-to-white edge into grey shards; the patch keeps a paint CORE (70% of it) so the eye's
+  socket, which no pattern reaches, sits in black.
+
+The ids are the old engine's, so the old NAMES say something else: `"bands"` is 4 (drawn as zebra here), `"spots"`
+is 5 (drawn as giraffe) and `"patches"` is 21 (drawn as dots). The names `"zebra"`, `"giraffe"` and `"dots"`
+(bodyspec.js PATS, 2026-11-05) say what is drawn; write those.
+
+The other patterns still go to banner_wgsl `patternAt`. `?sculpt=0` does not use coatpat.js, and the shell path is
+unchanged.
+
+**Feathers** are a detail type (bodymesh.js featherMesh). They are thin geometry beside the field, never in it.
+
+- **Rows and blades.** A feather shape has `rows` (`{ at, dir | to, len, w, bone, up }`) and `n` blades spread from the
+  first row to the last. Each blade's root, direction, length, width and BONES are interpolated between the two rows it
+  lies between. Its skin is those two bones weighted by where it lies, so a wing folds feather by feather.
+- **Blade shape.** Each blade is tapered to an `outline`: `flight` (a narrow leading vane and a broad trailing one),
+  `round` (covert or tail), or `train` (a bare shaft opening into a broad round eye).
+  - It is cambered across, curved along toward `up`, and lifted off its row (`lift`, `stagger`, `stack`), with length
+    varied by `vary`.
+  - It has rows dense toward the tip and two sides with their own normals.
+- **Colour.** The vertex colour runs from `color` at the root to `tip` (by s^1.4, ±7% tone per blade).
+- **Per-pixel detail** (coatpat.js featherOf, from the blade's own coordinates): barbs, a pale rachis, optional
+  `bars: { n, dark }`, and an `ocellus: { at, r }` drawn as concentric rings (navy heart, turquoise, bronze, green,
+  dark rim).
+- **Every bird gets them without a line of its own** (bodyspec.js birdFeathers, unless `feathers: false`):
+  - A flapping wing's triangle becomes 13 flight feathers, 11 greater and 10 lesser coverts, and a leading-edge arm.
+  - A folded wing keeps its slab under 9 + 7 feathers.
+  - A tail triangle or cone becomes a fan of 12.
+  - The peacock's plume becomes a train of 18 ocellated feathers on a wedge opened 35% each way.
+- **Budgets.** Eagle 13.6k/3.4k triangles, peacock about 15k/3.7k, duck 8.4k/2.3k (near/far).
+- **The nine birds now author their own** (assets/creatures/birds/*.json `sculpt`, no rig plates kept, so birdFeathers
+  does not run for them). Their generator scripts and helpers live outside the repo; the conventions they follow:
+  - A flier's wing is three bones: `wingL` (the beat, about x), `wristL` at the wrist (about y, a `flick` that sweeps the
+    hand back on the upstroke) and `handL` on it (its own beat, lagging). Wrist and hand carry `fold: [0, 0, 0]` so only
+    the arm folds when struck down. The fliers have no `flight`: they are authored aloft.
+  - A "parts" creature keeps only `flags` beside its parts (creatures.js), so a species' `flight` goes in `flags.flight`;
+    a top-level `flight` is dropped.
+  - The duck, swan, heron and flamingo fly in the asset viewer (`fly`) with their folded wing: its tracts are skinned to
+    `wrollL`, on `wfoldL`, on `wingL` at the wing's bend. Aloft, `wfoldL`'s `flyRot` turns the tip out from the tail to
+    square across and `wrollL`'s lays it flat with the coverts' edge leading. `wingL` flutters 0.5 degrees on the ground
+    and `flags.flight.beat` (44) times that aloft. The waders' swinging legs trail back by a `flyRot` on `legL`/`legR`.
+    There is no runtime bone scale, so the spread span is lengthened by a `wtipL` bone (pivot `reach` m behind the wrist, `flyRot` z ~25°) that swings the primaries outward aloft. The slide must stay under the primaries' overlap with the secondaries, or they float detached: `fold_wing(proot=.12)` roots them further up under the coverts so a reach of .25-.3 stays attached;
+    the span itself is widened by `ext`: a pure translation aloft (a +90 deg flyRot about z on wextA and -90 on its child wextB, half of `ext` out in x and y) carries the whole folded wing `ext` m further out, and hidden inner arm feathers (inSec/inCov, sunk just under the body surface at rest, raised level by a matching wliftA/B translation about x, and turned `iturn` deg aloft on witurn so they point straight out rather than down the fold's slope) fill the arm between the body and the slid wing. Keep `inner.len` at least `ext` + .3 x the fold length (where the slid secondaries start), or a gap opens;
+    the swan and flamingo reach their necks forward in flight with `flyRot` on `neck` (about -72°) and `head` (about +65°). The heron keeps its folded S.
+    The spread wing is the folded one's size, short and narrow next to a real span.
+  - **The birds that came over from items/birds (2026-11-05)** are creatures too:
+    - Fifteen standing birds share one parametric body plan (generator nb.py, units of the bird's length): sparrow, robin, swallow, blackbird, magpie, crow, raven, pigeon, dove, kingfisher, gull, goose, stork, crane and pheasant. Each has a folded wing that spreads aloft (`flags.flight`) and real sizes, from the 15 cm sparrow to the 1.2 m crane.
+    - The buzzard and the falcon are sky fliers like the eagle: its soaring plan with their own wings and tail, scaled to 0.6 and 0.47.
+    - The fold's tracts stand off the body by a margin scaled to the bird's size (the duck's at 0.5 m and up). An absolute margin floats a small bird's coverts a centimetre off its back.
+    - The items/birds stork stays: index.html's chimney nest uses its poses.
+    - Their wings (generator nbwing.py, round 8) are six tracts of long overlapping strips: lesser coverts, primary coverts, greater coverts, secondaries, tertials and a narrow primary bundle that projects past the tertials. The tips are pointed (swallow, gull) or rounded (pigeon, pheasant, stork). Each blade's tip is a shade darker, so the layering reads.
+    - Each feather rides its own row of three bones: yaw, pitch and roll. Feathers that blend two rows' bones across a big turn get squashed. Their `flyRot` opens the fold into a full span aloft, with the wrist forward, the primaries fanned (`th`) and the secondaries set back for chord. Broad fills lie on the skin under the fold, out of sight at rest, and close the arm and hand when spread.
+    - The legs tuck aloft (`flyRot` on the leg, tarsus and foot, with the walk swing faded by `amp`). There are three tucks: drawn up under the belly (passerines, corvids), back under the tail (gull, goose, pigeon) and trailing straight (stork, crane).
+    - The sparrow's bib is a flat paint patch (an ell sunk into the throat along its surface normal), not a lump.
+    - The SPREAD wing (round 9) is its own geometry, not the fold opened: per wing a fan of secondaries along the arm, two covert bands laid span-wise over them, primary coverts and five or six primaries round the hand, every blade overlapping its neighbours by 40% or more, flat at the shoulder's height with a few degrees' dihedral. Spans are the real ones (about 1.5x the body's length for a passerine, 2x a crow's, 2.3x the gull's, 2.5x the stork's and crane's); the crow, stork and crane are fingered (separate tips in the hand's outer third), the gull long and pointed, the swallow pointed and swept, the pigeon and dove pointed (nbwing.py SPREAD, a species' `spread`).
+    - There is no visibility switch, so each set hides inside the body when it is not wanted. On the ground every spread blade stands on edge in the trunk's vertical section (a 90° roll aloft lays it flat, then a yaw swings it out); aloft each fold tract turns about a point inside the trunk (a 180° yaw, a pitch) and sinks into it. Both are checked against the body's field when built (nb.py prints how deep the shallowest point is).
+    - Flightless birds (`flightless`): no `flags.flight` and no `flyRot` on any part, so skeleton.js gives them no flight pose. The ostrich keeps its fold as plumes; the penguin's `flipper` is a flat paddle on wingL that flaps a little with the walk, and its `waddle` rocks the body once a stride. `toes2` is the ostrich's two-toed foot.
+  - A spread wing is a thin slab (about 6% of its chord each side) of overlapping pieces from root to tip (no window at
+    the wrist), its leading edge angled forward to the wrist and back to the tip, the hand's chord narrowing, colour
+    bands just inside its underside for the underwing lining (the eagle's pale bar, the parrot's red), with a fine leading edge, round overlapping
+    secondaries, primaries fanned over about 30 degrees behind the leading edge, and two covert tracts plus primary
+    coverts over the front half. A folded wing is four tracts (coverts, greater coverts, secondaries, primaries, each
+    over the one before) laid on the flank, the primaries' tips over the tail's base.
+  - The peacock's walking train is slope tiers (one concave profile from the rump down to the ground: every tier's
+    `curve` in proportion to its length) and ground tiers lying flat beyond, over plain underlay blades; its `display`
+    variant is a four-tier fan of 102 feathers. Three tiers of short eyed coverts lie over the mass's end and the
+    slope's start, so the eyes begin about 15 cm behind the rump. The world keeps three peacocks, and one of them (chosen by the town's
+    seed) is in display (index.html, from `variantDef`, renamed "peacock" for his calls).
+  - Budgets: every blade is 160 triangles near and 32 far, so the tracts keep only the blades that show (secondaries
+    under greater coverts, a few lesser coverts on the slab). Every bird except the peacock is 11–12k/3k; the peacock is
+    23k/5.7k walking and 25k/6k in display.
+
+**The tiger** (34 shapes, 7.5k/2.5k triangles, built in about 1.7 s):
+
+- **Trunk:** a long deep chest, a cream keel under it, a withers hump, a lean loin over a white belly with the loose
+  belly-skin pouch, and a high rump.
+- **Forelegs:** shoulder blades tilted back; a thick upper arm with a triceps bulge; a massive forearm over a flexor
+  bulge; a short pastern; a big round paw.
+- **Hind legs:** a heavy tilted thigh, the gaskin back to a high hock, and the metatarsus down to a paw.
+- **Neck:** a deep, narrower-than-round neck with a white throat.
+- **Head:** a broad, cheek-heavy head 10% larger than the rig's, with flared white cheeks and ruff (striped), white
+  brows, an orange bridge and muzzle, white whisker pads and chin, a wet pink-brown nose, short rounded black-backed
+  ears with cream insides, and amber eyes.
+- **Tail:** the rig's own tail, kept and thickened, with rings and a dark tip.
+
+It walks in the menagerie with the skin holding.
+
+**Limits, for whoever authors the next species:**
+
+- The trunk is rigid: the rig's trunk cuts all ride `body`, so the spine does not flex.
+- Feathers are not in the field, so a feather never blends into the body.
+- The angel's and griffin's `birdWing` vanes are not converted.
+- `$` joints are rest positions: a shape on bone A written at bone B's joint rides A, not B.
+- Where FOUR pattern groups meet within one triangle, three slots cannot hold them all and a slot is torn there.
+  Give a limb one frame. The tiger's and the cat's tails still have a frame per segment (tailSeg0..9): most of what
+  is still torn on them is there.
+
+**Sharp parts: `horn` and `fin`** (2026-11-08, sharp.js; the schema is in the bodyspec.js comment). The field cannot
+draw a POINT or an EDGE. A horn, tusk, claw or beak made of field shapes is a round cone sampled on the grid: its tip is
+a blob a cell or two across, it is stepped wherever it is thinner than a few cells, and it blends into whatever it
+touches. A fin, ear or fluke made of stacked flat ellipsoids is stepped along its edge (the dolphin's dorsal fin was 26
+slices, its flukes 24) and bumpy across it. The two sharp types are explicit meshes like feathers and membranes. They
+are never in the field and never blend, are skinned to their bone, and are built per LOD (the far mesh has about half
+the rings and rim samples).
+- **horn**: `pts` is a CENTRELINE, a centripetal Catmull-Rom through `[x, y, z, r, (aspect)]`. The first point is buried
+  in the body (its end is closed), and the last is the tip: its radius is forced to 0, a true apex. The cross-section
+  is an ellipse, `r` wide and `r × aspect` along `up`. It is carried along the curve by a rotation-minimising frame, so
+  it does not turn unless `twist` (degrees, root to tip) says so. It can be `flat` on the −up side (a bill's closing
+  face) and can have a `keel` (a ridge on +up). Rings are placed where the curve turns or the radius bends, not evenly.
+  The normals are the surface's own. Colour is `color` fading to `tip` from `tipAt`. `bone2` and `blend` pass the skin
+  to a second bone along it (a talon riding the toe and the claw).
+  Used for tusks (boar, walrus, elephant), the horns of the ox, cow, oryx, impala, chamois, rhinoceros and
+  carnotaurus (tools/creaturegen/sharp/horns.py: the field horn and its thin detail tip merged into one centreline), and the crane's and crowned crane's bills: the upper mandible `flat` 1 with a
+  keel, the lower `flat` 1 the other way up, meeting along the commissure. The second pass (same folder: claws.py,
+  teeth.py, spikes.py, antlers.py, bills.py) made every remaining pointed part one: the claws, talons and nails of
+  mammals, birds, reptiles and dinosaurs (a theropod's hand a field finger plus a hooked claw; the hoof-nails of
+  camels, hippo, rhino and capybara short flat shells with a rounded end -- the last two points close together); the
+  teeth and fangs; the ceratopsians' horns and frill spikes, the armoured dinosaurs' spikes; the deer's and reindeer's
+  antlers (each beam and tine a horn, a tine's root ON its beam's centreline at most of its girth; the reindeer's palms
+  first flat horns, now `fin` sheets -- below); the unicorn's and blackbuck's spiral horns (a thin ridge horn wound
+  round the main one: `twist` turns the ring's vertices but not its section, so a keel does not spiral) and the ram's
+  coil (its growth rings relief in the horn, the radius raised and sunk every half pitch); and every bird's bill (two
+  mandibles as the crane's, per-point aspect carrying the old outline; a duck's and swan's flat with a rounded end and
+  a nail shell; the hornbill's casque a third horn). Two points of a horn at ONE place (a zero-length segment) give
+  sharp.js a NaN tangent and the horn is drawn as a sheet across the scene: sharp2.py `dedup` drops them.
+- **fin**: a SHEET. `root` is a line buried in the body. `edge` is the free rim from `root[0]` round to the root's last
+  point, and its points may carry a bluntness `b` (default 1; about 1.8 on a leading edge). The rim is smoothed through
+  the points and resampled by arc length, keeping the root's ends and `corners` (indices into edge: a fin's tip, a
+  fluke's notch) exact. The rim is EXACTLY the authored outline.
+  - Rows run from the root to the rim, closer toward the rim. The middle is relaxed (the rows keep their spacing), so a
+    concave outline does not fold. `grid: "flow"` (2026-11-08, pass 2; the cetaceans' sheets, cetlib.py `fin_sheet`)
+    instead solves the inside HARMONIC over the parameter rectangle (sharp.js `harmonicGrid`: weights from the row
+    spacing and the column lengths, conjugate gradients per coordinate): the columns curve with the outline. Straight
+    columns fanned out of a short root bunched into a line of slivers down a swept fluke or flipper, and that line showed
+    as a ridge down the middle of every fluke -- the dolphin's "steppy" tail. `rootBy: c` shares the root out over the
+    rim by its length weighted 1 / (distance from the root + c × the root's length) instead of plain length.
+  - THICKNESS is a function of the distance d from the rim: `thick × tanh(slope × b × d / thick)`. So the rim is sharp
+    everywhere, a broad fin is thicker than a narrow one, the tip is thinner than the root, and the cross-section is
+    regular (an airfoil where the leading edge is blunt). `thick` defaults to 6% of the span and `slope` to .3.
+    (2026-11-08, pass 2) d is a SMOOTH rim distance (sharp.js `smoothRimDist`): the true distance has a crease along the
+    medial axis (two parts of the rim equally near) and so every blade had a ridge line down its middle. Instead u, the
+    Poisson solution (-Δu = 1, u = 0 on the rim and the root's ends, the root row free: P1 finite elements, cotangent
+    weights, CG); a = sqrt(|∇u|² + 2u) is the local half-width, τ = u / a², d = a (τ + τ²) -- the true distance near the
+    rim, easing to 3/4 of it on the axis, smooth throughout; the bluntness `b` carried in harmonically. On a FAIRED sheet
+    it is solved on the even grid and carried along each column to its bunched rows (cubic Hermite): solved on the
+    bunched grid, its slivers threw spikes into the thickness. `thickBy: "rim"` keeps the raw distance. Every fin uses
+    it (ears, plates, palms too).
+  - Shaping toward `face`: `cup` (a hollow, as in an ear), `camber`, `curl` (the far part folded over, from `curlAt`).
+  - `inner` is the face side's colour, and `innerRim` a band of `color` round it on that side (an ear's lining).
+  - `rootBone` / `rootBlend` skin the rows near the root to a second bone.
+  - `cup` is the distance to the rim SMOOTHED over the grid (relaxed, rim and root held): the raw distance has a ridge
+    along the sheet's middle and creased every ear's hollow into a V.
+  - `rim` (metres) is a band of `rimColor` (default `tip`, else `color`) round the rim on both faces, from `rimAt` of the
+    way out (default all round): the zebra's dark ear edge, the giraffe's and kangaroo's dark far edge; `rimBack` (0..1, default 1) how strongly it shows on the back face (the
+    fennec's white-haired hollow edge, only a little paler behind). `patFace`
+    ("back" | "face") paints a `pat` on one face only: the zebra's ear striped behind, its hollow plain white.
+  - THE JOIN (2026-11-08, `fair`: a radius, or `{ r, sink, reach, color }`): where the sheet leaves the body each face is
+    the SMOOTH UNION of the sheet's face and the body's field. Every face point is marched out along the sheet's normal
+    to where `smin(t - h, f(p + t n), r)` crosses 0 (h the half-thickness, f the body's distance: sharp.js `fairAt`),
+    so the body swells out into the sheet with a fillet `r` wide and a regular cross-section. The RIM is never faired:
+    the fillet fades out within `edge` (default [.2, 1.5] times `r`) of it, the face points eased back onto the plain
+    face (`round` > 0, opt-in: within `round` r of the rim the march turns toward the rim's own outward direction, the
+    rim rounded into the body -- sharp.js `fairFin`; off by default, as where a sheet dives into the body at a grazing
+    angle its face points marched in-plane overtook the rim and folded) (2026-11-08: the old band where the two rims parted as they ran in made a flat wedge with a flap at each rim
+    end -- the dolphin's "steppy" flipper root). The normal there is the union's own
+    gradient -- the two normals mixed by the blend's share, exact for this blend -- and the paint, wetness and skin
+    weights pass to the body's (bodymesh.js `fairContext`: the field's colour countershaded and mottled as the body's
+    own vertices get it) by the same share. Extra rows are bunched where each column leaves the body (the degenerate
+    root-end columns kept in their place among them). Deeper in, the face is drawn just under the body's surface
+    (`sink` cells, along the BODY's normal there, not the march: a sheet lying close along the body, as a flipper does,
+    meets it at a grazing angle, where a sink along the march slid sideways into a sawtooth), and wherever the skin is
+    met well clear of the sheet's own face (from 1 to 1.5 `r`; horns 1.6-3) the face is drawn back down to its own --
+    neighbouring points that met the skin near and far no longer spike. It replaced the field fillets (`finBase`,
+    `flukeBase`, `pectPad`, `earBase` and the kangaroo's `earB` are gone), which ended as a rounded stump on the sheet.
+    `swell: [t, len, slope]` thickens the sheet toward its root (t, held 40% of `len` from it, gone at `len`): a fluke's
+    middle as deep as the stock it leaves. Its wedge is on the SMOOTHED rim distance (as the cup's) and it meets the
+    sheet's own thickness by a smooth max (a third of the greater, none at the rim): the raw distance's medial ridge and a
+    plain max creased the underside of every fluke where stock met sheet.
+  Used for the ears of the boar, zebra, kangaroo and giraffe (cupped, with an inner colour, faired), and
+  for the dolphin's, orca's and humpback's dorsal fins, flippers and flukes. The flukes are ONE sheet rooted across
+  the stock, round both tips (corners) and the notch (a corner); its root's ends lie ON the leading edges (2026-11-08,
+  pass 2: the humpback's were 10 cm ahead of them, the rim ran back along the stock into a concave corner and the sheet
+  folded there -- `fluke_sheet_blade(root_x="le")`), and the stock tube ends where it is down to the flukes' swollen
+  depth (the orca's ran on past it and its flanks stood above the thin sheet as a rounded lip). The humpback's knobbed flipper edge and serrated fluke
+  edge are in the outline itself. The cetacean helpers are in tools/creaturegen/sc/sea3/gen/cetlib.py (`fin_sheet`,
+  `dorsal_sheet`, `flipper_sheet`, `fluke_sheet2`, `fluke_sheet_blade`). Also (2026-11-08) for antler PALMS and for PLATES and CRESTS:
+  the reindeer's crown, bez palm and shovel (tools/creaturegen/sharp/caribou.py: each a sheet in its own plane, rooted
+  along the beam or the tine it spreads from -- that horn flattened there by a per-point aspect with `up` the plane's
+  normal, so the two are flush -- `swell` as thick as it at the root, `slope` ~1.2-1.6 so the middle is a flat slab and
+  the thickness has no medial-axis crease; each tine a horn in the plane rooted inside the sheet behind its base on the
+  rim, the rim flaring in onto the tine's sides; a fan rooted ACROSS a stem's end streaked and crumpled -- the rows
+  converge on a short root -- so a palm is rooted along its stem and one-sided), the stegosaurus's plates and the
+  dilophosaurus's crests (sharp/plates.py: rooted on the back measured with fd.mjs rays, `fair`, `swell`, an apex
+  `corner`, the plates grooved by `finrays` in a frame of their own whose origin is below the base; 19 fins add up:
+  `n` 72 / `across` 8 / 7 fair rows made the animal 106k tris, `n` 20-40 by size / `across` 4 / `fair.rows` 3 make it 40k).
+- A horn takes `fair` too (2026-11-08: a ROOT FLARE): each ring's spokes reach out to the smooth union of the horn and
+  the body, smoothed round the ring and never sunk, with rings bunched where the horn leaves the body; a ring whose
+  centre is deeper than its radius is left alone. The paint is the body's below ONE LINE round the horn: where each
+  spoke's share of the body falls through half of `fair.skin` (default .3), smoothed round the ring, and never lower than
+  a little past where that spoke comes out of the skin (so the horn's edge on the body's facets is skin on skin). Until
+  2026-11-08 it passed vertex by vertex by the share itself, and the spokes that just caught the body and those that just
+  missed it painted a ragged collar of blotches up the ox's horn. A gum round the boar's tusk, the elephant's lip round its tusks, a boss at
+  the base of the ox's, cow's, oryx's, impala's, chamois's, rhinoceros's and carnotaurus's horns
+  (tools/creaturegen/sharp/fair_bases.py; it also re-placed the boar's tusk, its root deep in the jaw, out from under the
+  upper lip and standing clear of the snout).
+- Both take `pat`. A detail with a pattern and no frame of its own is painted in the frame of the nearest field shape
+  with the same pattern, so a sheet's spots are the size of the body's. A `membrane`'s pattern name is now resolved
+  too: the whale shark's tail spots.
+- `mirror` twins them across z on the twin bone (root, edge, face, pts, up, bone2 and rootBone mirrored, a twist turned the other way): the twin's vertices are the exact reflection (checked).
+- They do not count as "something to sculpt": an overlay still needs field shapes.
+
+**Whiskers** (`type: "whiskers"`, 2026-11-08; bodyspec.js `whiskerStrands`, sharp.js `strandMesh`). One shape per group
+of vibrissae, expanded where the overlay is placed into `rows` × `per` horn STRANDS (`strand: true`) and mirrored. A
+strand is a horn mesher's light cousin: `sides` round (default 3), `n` segments past the skin (default 3), no fair,
+skinned to its bone alone, its first point buried and its last an exact apex. It costs about 21 triangles, so a cat's
+whole face (12 mystacial and 3 brow whiskers a side) is about 630. It is drawn on the NEAR mesh only (`far: true` to
+keep it): past a few metres a whisker is a tenth of a pixel across and would only sparkle.
+- `at` is the pad's centre, a little under its skin (the left one; it may name a joint). The roots form a grid round
+  it: `gap` [along the row, between the rows], on the skin's tangent plane when `normal` is given (a muzzle that
+  narrows toward the nose then has its front roots no further out than its back ones), otherwise square to `dir`.
+  `along` turns the rows (a brow's runs along the brow's slope). Each root is buried `bury` (default 4 r) back along
+  its own line.
+- Direction: `dir` is the fan's middle line. Each row pitches from `fan[0]` (the top row, degrees up) to `fan[1]` (the
+  bottom row), and each strand sweeps from `sweep[0]` (the front one, degrees back around the up axis) to `sweep[1]`
+  (the back one). `len` is [front, back] times `rowLen` [top, bottom]. `droop` sags the tip (a share of the length) and
+  `curl` bends it toward the snout (a cat's forward arc). `jitter` (degrees) and `seed` keep the grid from looking
+  combed. `r` is the root radius; the strand tapers to 0. `color`, `tip` and `tipAt` work as on a horn.
+- Strands are details, so they never enter the field. bodies.js keys a shape on the field alone, so the coats and
+  variants of a species still share one mesh (the fox's arctic and fennec looks, the cat's eight coats). A young or
+  scaled look scales them (`bury` is among the overlay's lengths).
+- Authored per species by tools/creaturegen/sharp/whiskers.py, one table with the audit. It finds `at` by a ray from a
+  seed inside the head along `dir` to the skin (wprobe.mjs), and `normal` from the field's gradient there. Its
+  `--check` reports every strand's buried root and skin point against the field. Felids get white or ivory whiskers,
+  four rows fanned out of the pad with the back ones longest, plus a brow tuft of three. Canids, rodents, mustelids,
+  the hedgehog and the red panda get fewer and mostly dark ones. The seal gets a pale fan and two brow whiskers. The
+  lion's and tiger's `at` is written over their head params (the pad's own expressions plus the offset, lengths × `hs`),
+  so the lioness's bigger head carries them. The rat's, weasel's, seal's and porcupine's hand-placed cones and tubes
+  were converted. The walrus keeps its own grid of thick cones: its moustache covers the whole front of a muzzle too
+  curved for one root plane.
+
+**Sweeps: a long neck or a thin tail as one tube** (`type: "sweep"`, 2026-11-08; sculpt.js `sweepCurve` /
+`prepareSweep`, sharp.js `sweepMesh`, bodyspec.js `sweepSkin` / `splitSweep`; the schema is in the bodyspec.js comment).
+- WHY. A swan's neck written as three tubes (neckA, neckB, neckC, one per bone) was a string of beads. Where two tubes
+  overlap, the smooth union of two surfaces that nearly agree is fatter than either, by up to k/4. The swan's field
+  was 56 mm across at the neckA/neckB join where both tubes said 47, and 46.5 at neckB/neckC where they said 40. The
+  Catmull-Rom radius of a tube also overshoots before every narrowing. A cat's tail written as 18 blended cones at
+  2.4 to 4.5 grid cells across was faceted, lumpy at the root and blunt at the tip.
+- WHAT. One shape for the whole run. Its centreline is a centripetal Catmull-Rom spline through `pts` (no cusps or
+  loops), sampled 8 to 64 times a span (finer where it is thin). The radius is a monotone cubic over ARC LENGTH
+  (Fritsch-Carlson), so it is C1 and never swells past its neighbours. Its distance is the exact union of the round
+  cones between the samples (a canal surface). With `aspect` (an ellipse), it is the section's distance at the nearest
+  foot, in a rotation-minimising frame started from `up`. Samples are grouped 8 to a bounding sphere, so a point far
+  away costs one test a group. One sample costs about 2.5 times a tube's (200k samples: 253 against 97 ms).
+- SKIN. `bones` is the rig chain it rides, root first. bodyspec.js `sweepSkin` finds where each later bone's joint
+  falls along the curve (the knots). Every point of the surface (field vertices through the prim's `atf`, and the
+  detail rings) is weighted from one bone to the next across a smoothstep `blend` x radius wide. So the neck bends
+  with the bones and has no seam at a joint. The swan in flight and a walking cat were checked.
+- FLIGHT NECKS. A bone turned rigidly keeps the curve of the stretch it carries, so turning an S-shaped neck's bones
+  aloft drew a wave with a kink behind the head. Two options move the hand-offs off the joints: `knotsAt` (shares of
+  the length where each bone takes over, put on the rest curve's bends) and `spread` (each hand-off widened to that
+  share of the gap to its nearer neighbour, so the turn is shared out along the neck). `bones` may start with "body",
+  so the root is handed from the body to the neck and not torn off it. Nothing moves at rest.
+  tools/creaturegen/sweep/flynecks.py sets these and the parts' `flyRot` together for the swan, goose, crane, stork,
+  flamingo (given a third neck bone, `neck3`), ibis and spoonbill. The values were searched with the flight centreline
+  skinned through skeleton.js's flight pose: its stretches run from -6 degrees at the root to +2 at the head, a slight
+  sag. The heron flies with its neck folded and was left alone.
+- THIN ENDS. The field cannot draw a tube under about 2 cells across. bodyspec.js `splitSweep` cuts the sweep where
+  its radius falls under `thin` cells (default 2). The part before the cut stays in the field and blends into the
+  body. It is shrunk by `shrinkBy` (8%) over its last 2 radii, under the detail. The rest is drawn by sharp.js
+  `sweepMesh` as exact rings: their count set by the bend and the taper, their sides by the girth in cells (6 to 16
+  near, 5 to 8 far). It ends in a hemisphere cap, or with `end: "point"` it eases to a point. A sweep that is thin all
+  along is all detail. Paint (`color`, `bands`, the shade and mottle) goes through the same `fairCtx.paint` as a fin's.
+  Its `hair` is carried onto the rings, so the tone does not change where the field part hands over (the dog's tail).
+  A band from 0 or to 1 has no edge there: a dark tip stays dark over the round cap to its pole.
+- PATTERN. A sweep's `pat` is laid in a frame that BENDS with it (bodymesh.js `sweepFrame`). "Along" is the arc
+  length and "round" is measured from `v` carried along without twisting, so a curled tail keeps its rings square.
+- SHARING. Its shape lengths (`knots`, `cut`, `shrink`, `bandEdge`) are in bodymesh.js LEN and `bands` is in PAINT. So
+  coats and variants still share one shape. `mirrorOf` compares sweeps too, so a body stays half-meshed.
+- AUTHORING. tools/creaturegen/sweep/necks.py merges a bird's neckA/neckB/neckC tubes into one sweep. It divides the
+  radii by the square root of the aspect (1.1) to keep the area. tails.py joins a mammal's tail cones or tube into one
+  sweep: the commonest colour becomes its colour and the others become `bands`. Both append a note to `_about`.
+- COST, measured (node, one build): the swan built in 769 to 827 ms before and 790 after; the cat in 2.1 to 2.5 s
+  before and 1.7 to 1.8 s after (one sweep and a detail tube in place of 18 blended cones).
+
+**A membrane** (`type: "membrane"`, 2026-11-06; the pteranodon's wings): a skin stretched between bones, drawn as
+explicit geometry (a detail, never in the field), two-sided `r` apart (bodymesh.js membraneMesh).
+- `pts` are its points where the rest pose puts them, `tris` three indices a face, `bones` a list of ids, and `skin` one
+  entry a point: an index into `bones`, or `[i, j, t]` for 1 - t of bone i and t of bone j. Optional per point: `tone`
+  (scales the colour) and `nrm` (the normal outright). `mirror` puts the twin on the twin bones, its faces wound back.
+- Optional `under` scales the colour of the side the normals point away from (the pteranodon's 1.3: a wing lighter from
+  below, as if lit through).
+- The pteranodon's skin is a grid of streamwise CHORDS (its generator: scratchpad sc/ptero/gen.py, round 2). The root
+  chord (shoulder to hip) rides `body`, on the axis the whole wing beats about (one bone, `wRoot*`), so it never leaves
+  the flank.
+- A FREE chord (its trailing end loose: forearm, metacarpal, wing finger, the propatagium) FURLS. It has one bone T of
+  its own, a child of its leading bone, hinged about one chord-length above the chord's middle. T is in line with the
+  leading bone aloft and turned back at rest (its flyRot undoes that). Each point is skinned `[lead, T, w]`, with
+  w = u (1 - W / l), and its rest point is solved so that this blend carries it exactly onto its flight position.
+  With w = u the whole chord would close onto its leading point. The W/l short of that leaves a strip W wide beside
+  the bone (5 and 3 cm, alternately: pleats).
+- A chord whose trailing end is on the LEG (humerus to thigh and shin, the skin ending at the ankle) is skinned
+  `[arm, X]`. X is a bone of its own, a child of the leg, that is in line with the leg aloft and swung up at rest to
+  lay the chord beside the arm. Its rest turn is searched (within 60 deg of the arm's own) for the shortest rest chord,
+  so the blend stays well conditioned.
+- Aloft every point is where the generator meant it, bar the flight's bob (sc/ptero/t_pose.mjs checks it).
+- A furled skin has no sound normal at rest. Pass `nrm`: the flight normal carried back through each point's own
+  blended skinning (M_w^-1 n). Without it, the creases shade as dark blotches in flight.
+- A WING OF PANELS is one membrane too, never a plate a panel (2026-11-08, the manticore: tools/creaturegen/var/isl/
+  mantwing.py). It was 22 `tri` plates a wing, each on a bone of its own: plates on different bones pose apart, and every
+  shared edge opened into a sliver aloft. Now each wing is one sheet whose neighbouring panels SHARE their edge's
+  vertices, so no pose can open a seam: a fan of rings from the wrist (a point between two fingers rides both by its
+  angle) and one from the shoulder (riding `[wRoot, last finger]` by how far it lies from the root line toward that
+  finger), meeting on the last finger's spoke. Rest points solved from the spread pose as above; `wRoot` is the body's
+  frame aloft and folds the root strip up against the flank at rest.
