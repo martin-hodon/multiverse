@@ -47,4 +47,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     print(f"serving {ROOT} on http://127.0.0.1:{PORT}  (assets.html is the asset viewer)")
-    http.server.ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
+    class Srv(http.server.ThreadingHTTPServer):
+        request_queue_size = 512   # (1300 asset files fetched at once; the default backlog of 5 refused some under load)
+    Srv(("127.0.0.1", PORT), Handler).serve_forever()

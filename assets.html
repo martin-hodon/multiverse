@@ -1156,6 +1156,7 @@ resize();
 if (qp.get("fly")) $("fly").checked = true;   // (?fly=1: shown aloft)
 show(qp.get("a") ?? index.categories.find((c) => c.kind === "creature").paths[0]);
 window.__assets = { show, build, bank, source, index, renderer, scene, camera, controls, nav, frame, standOn, view, get person() { return person; },
+                    get bodies() { return bodies; }, assetBox,   // (a headless check: wait for bodies.ready(), frame by the asset's box)
                     get dress() { return dress; }, pickDress, setTab };   // (dress: the coat or variant shown -- pickDress({ coat: 3 }) shows another)   // (person: the figures shown, for a headless check to pose)
 </script>
 </body>

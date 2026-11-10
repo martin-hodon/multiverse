@@ -388,10 +388,13 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   const cut = (id, parent, [yA, rA], [yB, rB], extra = {}) => add({ id, parent, shape: "capsule", pos: [0, 0, 0], frame: "body", k: kT, spine: true,
         size: { r: rA, r2: rB, len: yA - yB }, pivot: [0, (yA + yB) / 2 - chestO, 0], flat: torsoFlat, color: skin,
         anat: 1 + trunkAt(yA) + 128 * trunkAt(yB) + (female || anatomy === "soft" ? 16384 : 0) + (female ? 32768 : 0), ...(pot > 0 ? { pot } : {}), ...extra });   // (pot: its belly, shell.js TRUNK.pot)
+  // (RIDING, 2026-11-09: the rider's SEAT absorbs the mount's bob -- the hips go with the saddle whole, the belly .7 of it, the
+  //  chest .45, the neck and head .2 (skeleton.js bobK): a rider sits a trotting horse, the head nearly level)
+  const ride = pose === "ride" ? (k) => ({ bobK: k }) : () => ({});
   cut("chest", "pelvis", RINGS[0], RINGS[1], { caps: { a: (collarY - rimY) / sW, b: 1, p: Bt.capSquare },
-        anim: { axis: "y", deg: 4, speed: .8, phase: Math.PI, amp: true, work: workOf("chest", 1) } });
-  cut("belly", "chest", RINGS[1], RINGS[2]);
-  cut("hips", "chest", RINGS[2], RINGS[3], { caps: { a: 1, b: (baseY - crotchY) / hW, p: 1.6 } });   // (narrowing early, into the thighs: not a hem standing over them)
+        anim: { axis: "y", deg: 4, speed: .8, phase: Math.PI, amp: true, work: workOf("chest", 1) }, ...ride(.45) });
+  cut("belly", "chest", RINGS[1], RINGS[2], ride(.7));
+  cut("hips", "chest", RINGS[2], RINGS[3], { caps: { a: 1, b: (baseY - crotchY) / hW, p: 1.6 }, ...ride(1) });   // (narrowing early, into the thighs: not a hem standing over them)
   // THE NECK STARTS UNDER THE JAW, not inside the skull. The shell engine sweeps a part and its neighbour as
   // ONE LATHE where they meet, share a colour and run the same way -- head and neck do all three -- and the
   // neck's top used to sit ABOVE the chin, so that lathe doubled back on itself and came out as one long
@@ -407,14 +410,14 @@ export function makePerson({ seed = 1, height, pose, still, kind, adult, outfit,
   const neckFoot = neckR * (ph?.neck ?? 1) * (Bh.neckFoot ?? 1), neckHead = neckR * (1 + ((ph?.neck ?? 1) - 1) / 3);
   // (leaning forward as it rises, the head carried a little before the chest: `neckLean`, a column stood straight up and the
   //  head sat on it like a ball on a post; its foot wider, the trapezius rising into it: Bh.neckFoot)
-  add({ id: "neck", parent: "chest", shape: "capsule", size: { r: neckHead, r2: neckFoot, len: neckTop - neckBot }, pos: [0, (neckTop + neckBot) / 2 - chestO, 0], rot: [0, 0, -(beast ? 0 : Bh.neckLean ?? 0)], color: skin, k: .03 * S });
+  add({ id: "neck", parent: "chest", shape: "capsule", size: { r: neckHead, r2: neckFoot, len: neckTop - neckBot }, pos: [0, (neckTop + neckBot) / 2 - chestO, 0], rot: [0, 0, -(beast ? 0 : Bh.neckLean ?? 0)], color: skin, k: .03 * S, ...ride(.2) });
   // The head is an OVOID, not a ball: a round cone standing on its own axis -- the CRANIUM is the sphere it
   // always was (its top cap centre sits at the part's own origin, so the hair, the hats and the eyes keep
   // exactly the places they had), and below it the head runs on for hL and narrows to hJaw: a jaw and a chin.
   // That, not a symmetric stretch, is what makes a head read as a head -- the stretch hides under the hair,
   // the jaw is the part a face shows. (Round about its axis: it cannot also be narrower across than deep.)
   // (hL, hJaw: the jaw, declared above the neck that hangs under it)
-  const headPart = add({ id: "head", parent: "chest", shape: "capsule", size: { r: hr, r2: hJaw, len: hL }, pivot: [0, -hL / 2, 0],
+  const headPart = add({ id: "head", parent: "chest", shape: "capsule", size: { r: hr, r2: hJaw, len: hL }, pivot: [0, -hL / 2, 0], ...ride(.2),
         pos: [(beast ? .01 * S : (Bh.forward ?? .006) * h), headY - chestO, 0], color: skin, k: .02 * S,
         anim: { axis: "y", deg: 14, speed: .22, phase: headPh } });
 

@@ -172,6 +172,10 @@ export function compileDef(def) {
       side: Math.sign(((seg.b?.[2] ?? 0) + (seg.c?.[2] ?? 0)) || (part.pos?.[2] ?? 0)) || 1,
       ik: part.ik ?? null,        // mammal rig leg: { leg, upper, lower, side, foot, phase } on the upper bone, { leg, follow: true } on the lower
       bob: !!part.bob,            // the body: rides the gait's vertical bob
+      // bobK (2026-11-09): this part's own SHARE of the bob, 0..1, where its parent has more -- a rider's trunk .45 and head .2
+      // (people.js pose "ride"): the hips follow the saddle whole, the seat absorbs the rest, as a rider's does. Without it a
+      // part rides its parent's share whole (an idle head, neck or tail on the body: none -- it cancels the body's)
+      bobK: typeof part.bobK === "number" ? part.bobK : undefined,
       spine: !!part.spine,        // a torso cut (mammals.js): these sweep as ONE lathe, whatever their shading
       // body motion (head turns, tail swishes, neck sway) follows MOVEMENT in
       // general -- the gait clock, or a mount's own movement clock while it
@@ -472,7 +476,11 @@ export function writeAnimal(an, t, fA, fB, fC) {
   // fading with the stride as the walker stops and halving at a run
   const stepNod = parts.walkNod && g ? parts.walkNod * amp * (1 - .5 * (an.run ?? 0)) * Math.sin(phase * 2 + (g.offsets?.[0] ?? 0) * 2 + .6) : 0;
   nodNow += stepNod * (1 - fly);   // (2026-11-08: aloft no step nods the head -- a pegasus, a griffin; it fades out with an.fly)
-  const bob = g && !an.ridden ? g.bob * amp * Math.sin(phase * 2 + (g.bobPh ?? .5)) : 0;   // (2026-11-08: a RIDDEN mount does not bob -- its rider's eye does not, so the whole beast jumped up and down under a level view; the legs still step)
+  // (2026-11-09: a RIDDEN mount bobs like any -- its rider's hips go with the saddle and its trunk and head take a share
+  //  (bobK), the camera the head's: index.html; before, a ridden mount did not bob at all and rode dead under a level view)
+  const bobOwn = g ? g.bob * amp * Math.sin(phase * 2 + (g.bobPh ?? .5)) : 0;
+  const bob = bobOwn + (an.bobExt ?? 0);   // (bobExt: a bob given from outside -- the player's own rider figure, hung on its mount's, index.html updateSelf)
+  an.bobNow = bobOwn; an.gaitPhase = phase; an.gaitAmp = amp;   // (read back by whoever rides it: the eye's share of the bob, the sway in step)
   _root.makeRotationY(an.rotY);
   const fit = an._fit;   // (stood on a slope: fitGround)
   if (fit) _root.multiply(_pitch.makeRotationZ(fit.pitch));
@@ -591,8 +599,12 @@ export function writeAnimal(an, t, fA, fB, fC) {
     if (swing) swing[i] = an.pose?.[i] ? 0 : rz;
     if (p.follow >= 0) rz += p.followK * Math.min(LIFT.max * Math.PI / 180, Math.max(0, swing[p.follow] - LIFT.from * Math.PI / 180));
     // the body rides the stride's bob; the idle parts hung on it (neck, head, tail) cancel it -- they
-    // stay as steady running as they do walking or flying
-    const dy = (p.bob ? bob : 0) - (p.idle && p.parentIdx >= 0 && parts[p.parentIdx].bob ? bob : 0);
+    // stay as steady running as they do walking or flying. Each part's SHARE of the bob: the body's 1, an idle part's on it 0,
+    // a part's own `bobK` where it says, else its parent's; a part moves by its share less its parent's (so a rider's pelvis
+    // marked bob on a bobbing mount rides it once, not twice)
+    const pShare = p.parentIdx >= 0 ? parts[p.parentIdx]._share : 0;
+    p._share = p.bob ? 1 : p.bobK !== undefined ? p.bobK : p.idle && p.parentIdx >= 0 && parts[p.parentIdx].bob ? 0 : pShare;
+    const dy = bob * (p._share - pShare);
     const held = an.pose?.[i];
     if (held) {   // held by its joint: that rotation, about the joint's pivot
       _local.makeRotationFromQuaternion(held.q);

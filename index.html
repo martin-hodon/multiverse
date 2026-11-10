@@ -4835,7 +4835,7 @@ if (pathRoutes.length && nFolk) {
     const pd = makePerson({ seed, pose: "ride", still: true, adult: true });
     return { name: "rider", gaits: horseDef.gaits, legLen: horseDef.legLen, probe: horseDef.probe, ...fuseRider(md, pd) };
   };
-  riderHerd = createComposite(3 * 60 + 4 * 40);
+  riderHerd = createComposite(3 * 60 + 6 * 40);   // (the riders, four loose horses and two donkeys)
   riderHerd.ground = groundH;
   scene.add(riderHerd.mesh);
   spareHerd = createComposite(3 * (60 + 45)); spareHerd.ground = groundH;   // riders and horses parted by a blow (combat.js): the horse alone, the man on his own
@@ -4891,15 +4891,15 @@ if (pathRoutes.length && nFolk) {
     an.runT = runs(r.speed, r.base) ? 1 : 0;   // the faster riders canter, the rest walk
     track(() => [r.an.position.x, r.an.position.y, r.an.position.z, r.an.rotY, r.an.animT], (v) => { r.an.position.set(v[0], v[1], v[2]); r.an.rotY = v[3]; r.an.animT = v[4]; }, { angles: [3] });   // (r.an: the horse alone or the man on foot once they part, combat.js)
   }
-  for (let i = 0; i < 4; i++) {   // loose horses: wanderers, and mountable by clicking
-    const md = coatDef("horse", 9 + i), an = riderHerd.add(md);   // (in coats of their own, past the paddocks' and the riders')
+  for (let i = 0; i < 6; i++) {   // loose horses -- and two DONKEYS (2026-11-09): wanderers, and mountable by clicking
+    const md = i < 4 ? coatDef("horse", 9 + i) : coatDef("donkey", i), an = riderHerd.add(md);   // (in coats of their own, past the paddocks' and the riders')
     const [x, z] = spawnIn(FENCE);
     an.position.set(x, 0, z);
     an.rotY = wrand() * Math.PI * 2;
     const w = addWanderer(an.position, (h) => an.rotY = h, (v, wt, mt, mv, run) => { an.animT = v; if (mv !== undefined) { an.ampT = mv ? 1 : 0; an.runT = run ? 1 : 0; } },
       ...(([sp, b, alt, hz]) => [sp, an.rotY, b, alt, hz, FENCE, bodyProbe(md)])(wanderParams(md)));
     an.w = w; mountables.push({ w, def: md, a: an });
-    callers.push({ name: "horse", p: an.position, an, pitch: .9 + wrand() * .2 });
+    if (md.name === "horse") callers.push({ name: "horse", p: an.position, an, pitch: .9 + wrand() * .2 });   // (no bray written yet: the donkeys are silent)
   }
 }
 
@@ -5213,9 +5213,14 @@ if (n) for (const s of town) {
 // head, movement drives the horse at double speed; click again to dismount
 let mounted = null, resting = null, swimming = false, swimTop = 0, swimRing = 0, moveSpeed2D = 0, lastXZ = [0, 0], feetWet = false;
 // RIDING SMOOTHLY (2026-11-08): the mount and the eye on it stand at `rideY`, eased toward the ground under them, not at the
-// ground itself step by step -- a bumpy track jolted both; and a ridden mount's gait does not bob it (skeleton.js an.ridden):
-// the eye did not bob with it, so the whole beast jumped up and down under a level view. Aloft it was smooth; now it is on the ground too
+// ground itself step by step -- a bumpy track jolted both. (That day a ridden mount's gait did not bob it either, so the
+// eye would not bob: the beast rode dead under a level view. Since 2026-11-09 it bobs, and the rider absorbs it: RIDE_FEEL.)
 let rideY = null;
+// HOW RIDING FEELS (2026-11-09): the mount bobs with its gait again (skeleton.js); the rider's hips go with the saddle, the
+// trunk takes `trunk` of the bob and the head `head` (people.js pose "ride": bobK), the EYE `eyeBob` of it; the view
+// pitches `pitch` degrees twice a stride and rolls `roll` once (the weight shifting foot to foot), fading as the mount stops
+const RIDE_FEEL = CONFIG.rideFeel ?? { eyeBob: .2, pitch: .5, roll: .3 };
+const rideSway = { pitch: 0, roll: 0 };
 // a SKY STEED ridden (the pegasus, the griffin: skysteeds.js): it has no FLIGHT pose of its own (its definition says
 // `flight: false`) -- as when it flies on its own, its wings fold by PERCH and its legs are held by tuckLegs, eased in as
 // it takes off and out as it lands. aloft: whether it is in the air now; dt: the step
@@ -5224,8 +5229,9 @@ const steedRide = (a, spec, aloft, dt) => {
   const u = a.tuckU * a.tuckU * (3 - 2 * a.tuckU);
   a.perch = 1 - u; a.perchFold ??= { fold: spec.fold, squeeze: spec.squeeze }; tuckLegs(a, u, spec.tuck);
 };
-// what a mount's figure does as you get on or off it (and a peer's, setPeerMount): no bob while ridden; a sky steed set
-// down where it stands, its own flights put off
+// what a mount's figure does as you get on or off it (and a peer's, setPeerMount): marked ridden (a.ridden -- nothing reads
+// it since 2026-11-09, when the gait stopped stilling a ridden mount's bob; kept as the mark); a sky steed set down where it
+// stands, its own flights put off
 const rideOn = (m, on) => {
   if (!m.a) return;
   m.a.ridden = on;
@@ -5707,7 +5713,8 @@ function updateSelf() {
   const x = camera.position.x - fx * back, z = camera.position.z - fz * back;
   const moved = selfLast ? Math.hypot(x - selfLast[0], z - selfLast[1]) : 0; selfLast = [x, z];
   const onFoot = kind === "walk" || kind === "draw";
-  av.an.position.set(x, onFoot ? standY : kind === "ride" ? standY + riderOrigin(mounted.def, av) : camera.position.y - av.eyeAt[1], z);   // on its feet; riding: on the saddle (riderOrigin, as a clone or a peer); seated: the eyes at the camera's height
+  av.an.position.set(x, onFoot ? standY : kind === "ride" ? rideY + riderOrigin(mounted.def, av) : camera.position.y - av.eyeAt[1], z);   // on its feet; riding: on the saddle (riderOrigin, as a clone or a peer -- at rideY, where the mount stands); seated: the eyes at the camera's height
+  av.an.bobExt = kind === "ride" ? (mounted.a?.bobNow ?? 0) : 0;   // (riding: hung on the mount's bob -- its hips whole, its trunk and head their bobK share, skeleton.js)
   av.an.rotY = yaw + Math.PI / 2;   // camera yaw -> the walker's heading convention
   if (onFoot) { av.an.animT = (av.an.animT ?? 0) + Math.min(moved, 1) / av.base; av.an.ampT = walking ? 1 : 0; }
   av.herd.update(lastT);
@@ -5818,6 +5825,7 @@ function netTick(tNow) {
              : av.ty;
     const p = av.an.position, k = .18;
     p.x += (av.tx - p.x) * k; p.y += (ty - p.y) * k; p.z += (av.tz - p.z) * k;
+    av.an.bobExt = av.kind === "ride" ? (mountables[av.mi]?.a?.bobNow ?? 0) : 0;   // (a peer riding: on its mount's bob, as your own figure is)
     av.an.rotY = av.yaw + Math.PI / 2;       // camera yaw -> the walker's heading convention
     av.an.animT = (av.an.animT ?? 0) + (av.moving && av.kind === "walk" ? 1 / 45 : 0);
     av.an.ampT = av.moving && av.kind === "walk" ? 1 : 0;
@@ -6484,7 +6492,10 @@ function fpsStep(dt) {
   //  this very step, and an eye easing after it lagged behind -- the mount moved first and the camera followed)
   // (nor on a moving floor: the bed rises and dips under the feet this very step -- the eye goes with it)
   // (RIDING: the mount and the eye both stand at rideY, eased toward the ground -- in step with each other, and not jolted by it)
-  if (mounted) { rideY = rideY === null ? standY : rideY + (standY - rideY) * Math.min(1, dt * 8); camera.position.y = rideY + (crouch || wedged ? Math.min(eyeH, .85) : eyeH); }
+  // (RIDING, 2026-11-09: the eye takes the HEAD'S SHARE of the mount's bob -- a fifth, as a rider's seat absorbs the rest -- so
+  //  the mount visibly rises and falls under you while the horizon barely moves: a centimetre at a trot; and the view sways in
+  //  step, below: pitch twice a stride, roll once, small -- motion read as rotation, not as the world jumping)
+  if (mounted) { rideY = rideY === null ? standY : rideY + (standY - rideY) * Math.min(1, dt * 8); camera.position.y = rideY + (crouch || wedged ? Math.min(eyeH, .85) : eyeH) + RIDE_FEEL.eyeBob * (mounted.a?.bobNow ?? 0); }
   else if (onFloor) camera.position.y = standY + (crouch || wedged ? Math.min(eyeH, .85) : eyeH);
   else camera.position.y += (standY + (crouch || wedged ? Math.min(eyeH, .85) : eyeH) - camera.position.y) * Math.min(1, dt * 10);
   // THE MOUNT, where the camera has ended up this step -- after the walk, the jump, the fall, the dash: placed before
@@ -6510,7 +6521,13 @@ function fpsStep(dt) {
       if (SKYSTEEDS[mounted.def.name]) steedRide(mounted.a, SKYSTEEDS[mounted.def.name], mounted.flying, dt);
       else mounted.a.flyT = mounted.flying ? 1 : 0;
     }
-  }
+    // the view's SWAY in step with the gait (RIDE_FEEL): the phase and the stride amplitude the mount's skeleton wrote last
+    // frame (skeleton.js an.gaitPhase, an.gaitAmp -- a ridden mount is posed every frame); nothing aloft
+    const ph = mounted.a?.gaitPhase ?? 0, ga = mounted.flying ? 0 : (mounted.a?.gaitAmp ?? 0) * Math.min(1, vel / (mw.base * .4));
+    rideSway.pitch += ((RIDE_FEEL.pitch * Math.PI / 180) * ga * Math.sin(ph * 2 + .9) - rideSway.pitch) * Math.min(1, dt * 12);
+    rideSway.roll += ((RIDE_FEEL.roll * Math.PI / 180) * ga * Math.sin(ph) - rideSway.roll) * Math.min(1, dt * 12);
+    camera.rotation.set(pitch + rideSway.pitch, yaw, rideSway.roll);
+  } else if (rideSway.pitch || rideSway.roll) { rideSway.pitch = rideSway.roll = 0; camera.rotation.set(pitch, yaw, 0); }
 }
 
 // orbit-mode free-fly: WASD relative to the view, Q/E straight down/up;

@@ -305,7 +305,7 @@ def elasmotherium():
         "neck": [1.15, 1.75, 0, 1.55, 1.5, 0, 0.42, 0.34],
         "head": [1.78, 1.45, 0, 0.32],
         "muzzle": [1.95, 1.33, 0, 2.55, 0.97, 0, 0.2, 0.15],
-        "ears": [1.66, 1.7, 0.15, 1.62, 1.87, 0.2, 0.06, 0.03],
+        "ears": [1.76, 1.78, 0.2, 1.72, 1.97, 0.28, 0.06, 0.03],   # (2026-11-09: forward and up, clear of the neck and the crest -- they sat buried in them)
         "eyes": [2.06, 1.42, 0.18, 0.022],
         "legs": {"front": [0.85, 1.42, 0.4, 0.72], "hind": [-1.25, 1.42, 0.38, 0.74], "radii": [0.21, 0.16, 0.14],
                  "foot": [0.15, 0.07, 0.14]},
@@ -365,15 +365,16 @@ def elasmotherium():
     hang_tail(d, S, 1.75, 0.5, 0.055, 0.03, color="@tail")
     # ---- the horn: one, very long, keratin, rising from the dome and curving gently forward
     def horn(id, f, when):
-        # (about 1.4 m from a base some 28 cm across on the dome, rising steeply and curving gently FORWARD, its tip
-        #  out over the nostrils)
-        P0 = [[1.98, 1.6, 0, 0.15], [2.02, 1.8, 0, 0.142], [2.1, 2.1, 0, 0.12], [2.22, 2.4, 0, 0.09], [2.36, 2.66, 0, 0.056],
-              [2.48, 2.84, 0, 0.026], [2.56, 2.95, 0, 0.0]]
+        # (about 1.4 m from a base some 28 cm across on the dome ABOVE THE EYE (2026-11-09: it stood behind it), leaning
+        #  FORWARD from the root and straightening toward the tip, which curls a little back -- a sabre's curve, not a
+        #  hook forward over the nose)
+        P0 = [[2.12, 1.62, 0, 0.15], [2.24, 1.84, 0, 0.142], [2.37, 2.12, 0, 0.12], [2.47, 2.4, 0, 0.09], [2.53, 2.65, 0, 0.056],
+              [2.55, 2.84, 0, 0.026], [2.53, 2.96, 0, 0.0]]
         b = P0[0]
         P = [[b[0] + (p[0] - b[0]) * f, b[1] + (p[1] - b[1]) * f, 0, p[3] * (0.7 + 0.3 * f)] for p in P0]
         return gate(curve_horn(id, P, "@horn", fair={"r": 0.1, "skin": 0.4}, tip="@hornTip", tipAt=0.55, up=[1, 0, 0], aspect=0.85), when)
     horns = [horn("horn", 1.0, ["bull"]), horn("hornCow", 0.6, ["cow"])]
-    ear = ear_from_rhino(J["earL"], s=0.9, tilt=20, out=25, yaw=55, shift=(0.04, 0.05, 0.07), pat="coarse")
+    ear = ear_from_rhino(J["earL"], s=1.05, tilt=10, out=48, yaw=40, shift=(0.0, 0.1, 0.11), pat="coarse")   # (2026-11-09: larger, stood out from the head and higher -- it lay flat on it, half in the crest)
     sharp = horns + sharp + [ear]
     finish(d, S, sharp, J, horn_ids=[h["id"] for h in horns])
     d["coats"] = [{"name": "brown"},
@@ -388,7 +389,7 @@ def elasmotherium():
                    "3.5-4 t -- a HUGE shoulder hump, a long back falling to the rump, a slimmer barrel on long legs (a "
                    "runner), three hoof-nails a foot; a long head held low to a broad grazer's lip, a great DOME on the "
                    "forehead between the eyes carrying ONE very long horn (keratin, about 1.4 m from a base some 28 cm across, "
-                   "rising steeply and curving gently forward over the snout -- "
+                   "rising from above the eye, leaning forward and straightening to a tip that curls a little back -- "
                    "its length is a reconstruction: only the dome's bony base is known); a SHAGGY brown woolly coat "
                    "(coatpat `shag`, `coarse` on the head; in the outline a wavy fringe along the belly and a low lumpy mane "
                    "on the hump, which runs forward over a thick neck to the head) for the cold. Horn and nails sharp `horn`s faired into the "

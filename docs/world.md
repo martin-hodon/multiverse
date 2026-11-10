@@ -993,9 +993,14 @@ you can always walk out of one that has stepped onto you.
   The fused rider's horse is drawn SCULPTED like a loose one since 2026-11-08 (its body carried in the fused
   definition's `sculpts`, bodyspec.js `sculptPart`; engines.md "A sculpted body inside a bigger figure") -- it was
   plain pills before, and so were the cart teams and the centaur's horse.
-- **Riding** (2026-11-08): the mount and your eye stand at `rideY`, eased toward the ground under them, and a ridden
-  mount's gait does not bob it (skeleton.js `an.ridden`) -- it hopped up and down under a level view on the ground
-  where aloft it was smooth. The larger beasts that had no `mount` can be ridden now: the moose, the bison, the
+- **Riding** (2026-11-08): the mount and your eye stand at `rideY`, eased toward the ground under them -- a bumpy
+  track jolted both. HOW IT FEELS (2026-11-09): the mount bobs with its gait as any walker (on 2026-11-08 a ridden one
+  did not, and rode dead under a level view), and the rider absorbs the bob as a seated body does: hips with the saddle,
+  trunk .45 of it, neck and head .2 (people.js pose "ride" -> skeleton.js `bobK`, a part's own share of its figure's
+  bob; your own rider figure hangs on its mount's bob through `an.bobExt`); your eye takes the head's .2 (`RIDE_FEEL.eyeBob`),
+  and the view sways in step with the stride -- pitch ±.5° twice a stride, roll ±.3° once, from the mount's `gaitPhase`
+  and `gaitAmp`, scaled down as it slows and gone when it stands (`CONFIG.rideFeel` = { eyeBob, pitch, roll }).
+  The larger beasts that had no `mount` can be ridden now: the moose, the bison, the
   stegosaurus, the desmatosuchus, the cerberus, the ostrich -- and the PEGASUS and the GRIFFIN, flying (E up, Q down,
   as a dragon; docs/motion.md "A sky steed ridden": their wings fold by PERCH and their legs tuck as when they fly on
   their own; mounting one puts its own flights off). A mount must be on your level to be mounted (a pegasus circling

@@ -20,9 +20,14 @@ import { scaleDef } from "./geom.js";
 export const ASSET_BASE = new URL("./assets/", import.meta.url).href;   // (the game, the viewer and the harnesses all read the same files)
 export const fetchAsset = async (path) => (await fetch(ASSET_BASE + path + ".json")).json();
 
+// (a few dozen fetches in flight, not all at once: with 1300 assets in the catalogue (2026-11-10) Chromium refused the last
+//  of them -- net::ERR_INSUFFICIENT_RESOURCES, its cap on requests in flight -- and the page never came up)
+const IN_FLIGHT = 48;
 export async function loadBank(paths, fetchJSON = fetchAsset) {
   const bank = new Map();
-  await Promise.all(paths.map(async (path) => bank.set(path, await fetchJSON(path))));
+  let next = 0;
+  const worker = async () => { while (next < paths.length) { const path = paths[next++]; bank.set(path, await fetchJSON(path)); } };
+  await Promise.all(Array.from({ length: Math.min(IN_FLIGHT, paths.length) }, worker));
   return bank;
 }
 // the whole catalogue (assets/index.json): every asset, by category
