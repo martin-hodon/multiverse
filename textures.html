@@ -34,7 +34,7 @@
 </script>
 <script type="module">
 import * as THREE from "three";
-import { TILES, bakeTiles, readTile, leafAtlasCanvas, LEAF_STYLES } from "./textures.js";
+import { TILES, bakeTiles, readTile } from "./textures.js";
 
 const renderer = new THREE.WebGPURenderer();
 await renderer.init();
@@ -81,21 +81,6 @@ for (const [name, t] of Object.entries(TILES)) {
   cap.innerHTML = `<b>${name}</b> <small>${t.size}² texels · one tile = ${t.period[0].toFixed(3)} × ${t.period[1].toFixed(3)} m</small>`;
   fig.append(cap);
   document.getElementById("grid").append(fig);
-}
-// the trees' leaf atlas (painted on a canvas): as stored, and tinted leaf green on a light ground
-{
-  const at = leafAtlasCanvas(), tmp = document.createElement("canvas"), pv = document.createElement("canvas");
-  tmp.width = pv.width = at.width; tmp.height = pv.height = at.height;
-  const t = tmp.getContext("2d"); t.drawImage(at, 0, 0); t.globalCompositeOperation = "multiply"; t.fillStyle = "#5f8f3a"; t.fillRect(0, 0, tmp.width, tmp.height);
-  t.globalCompositeOperation = "destination-in"; t.drawImage(at, 0, 0);
-  const p = pv.getContext("2d"); p.fillStyle = "#e4ecdc"; p.fillRect(0, 0, pv.width, pv.height); p.drawImage(tmp, 0, 0);
-  shown.leaves = { raw: at, preview: pv };
-  const fig = document.createElement("figure"), row = document.createElement("div");
-  for (const c of [at, pv]) { c.style.width = "900px"; c.style.height = "180px"; c.style.background = "#fff"; }
-  row.style.flexDirection = "column"; row.append(at, pv); fig.append(row);
-  const cap = document.createElement("figcaption");
-  cap.innerHTML = `<b>leaves</b> <small>the trees' leaf atlas: ${LEAF_STYLES.join(", ")} -- one ${at.height}px cell each, alpha cut-out</small>`;
-  fig.append(cap); document.getElementById("grid").append(fig);
 }
 // for build/textures.py: every tile as PNG data URLs (the stored channels, and the preview)
 window.__textures = () => Object.entries(shown).map(([name, s]) => ({ name, raw: s.raw.toDataURL("image/png"), preview: s.preview.toDataURL("image/png") }));

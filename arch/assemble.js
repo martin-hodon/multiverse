@@ -74,6 +74,15 @@ export const ORDERS = {
   //   capital -- only the outline of the baklava capital: a tall plain flare to a thin abacus, faceted by the column's
   //   `sides` (8 reads as the octagonal capital; its lozenge or muqarnas carving is not modelled)
   ottoman:     { base: .6,  baseR: 1.25, cap: 1.8, capR: 1.35, abacus: .14, flare: .97, taper: .96 },
+  // THE WESTERN ISLAMIC COLUMNS:
+  //   CALIPHAL (Cordoba's): a Roman or Visigothic shaft re-used, hardly tapering, under a Corinthianising bell capital
+  //   carved in the hive-like "honeycomb" of the 10th century; the CIMACIO (impost block) over it is the building's own
+  //   part, as it is wider than the column across the arcade;
+  //   NASRID (the Alhambra's): a slender marble shaft on a ring for a base, a round lower capital barely wider than it
+  //   and over it the tall CUBE -- the abacus here is most of the capital (`abacus` .55) and as wide as the arch's
+  //   stilt it carries
+  caliphal:    { base: .5,  baseR: 1.3,  cap: 1.9, capR: 1.45, abacus: .2,  flare: .92, taper: .92 },
+  nasrid:      { base: .35, baseR: 1.15, cap: 2.4, capR: 1.3,  abacus: .55, flare: .82, taper: .97 },
 };
 
 // An arch head's own numbers are expressions too -- "seg", "storeyH * 0.2" -- so they are evaluated here
@@ -85,7 +94,7 @@ export const ORDERS = {
 const wordOf = (w, params) => { for (let i = 0; i < 4 && typeof w === "string" && typeof params[w] === "string"; i++) w = params[w]; return w; };
 const headOf = (h, params) => {
   const out = { ...(h ?? {}) };
-  for (const k of ["seg", "rise", "spread", "over", "bulge", "neck", "lobe", "bow", "waist", "lift", "lo", "hi", "cap", "slope", "steps"]) if (k in out) out[k] = num_(out[k], params);
+  for (const k of ["seg", "rise", "spread", "over", "bulge", "neck", "lobe", "lobes", "bow", "waist", "lift", "lo", "hi", "cap", "slope", "steps"]) if (k in out) out[k] = num_(out[k], params);
   // (the profile may name a parameter: every opening in a building follows one decision)
   out.profile = wordOf(out.profile, params);
   out.per90 = detailOf(params);
@@ -1103,6 +1112,53 @@ function buildPart_(name, defs, params) {
              face, kind: "barrel" };
   }
 
+  if (def.type === "arch") {
+    // A FREE ARCH: the band of voussoirs alone, standing on its two imposts with nothing over it -- the horseshoe arches
+    // that brace Cordoba's columns under the round arches carrying the wall, an arch thrown across a court, a stilted
+    // arch on two Nasrid columns. (An arch IN a wall is an opening: the wall is its masonry.) `width` is the clear span
+    // between the springing points, `head` the intrados (any profile), `depth` the voussoirs' depth, `thickness` the
+    // band's depth through the wall (along z). The extrados is the intrados struck `depth` further out, unless `extrados`
+    // gives its own profile, drawn on a half-width `depth` wider; a lobed arch's is by default its envelope (the plain
+    // horseshoe or semicircle round the lobes). `stilt` carries both down straight below the springing (a stilted arch); the placement is the band's
+    // foot, which sits flat on the impost.
+    const w = P(def.width), d = P(def.depth), t = P(def.thickness), stilt = P(def.stilt, 0), a = w / 2;
+    if (!(w > 0 && d > 0 && t > 0)) throw new Error(`"${name}": an arch needs a width, a depth and a thickness`);
+    const hd = headOf(def.head, params), inner = archCurve(a, hd);
+    // (a LOBED arch's extrados is its envelope -- the lobes are cut into a plain band, and an offset of its cusps would fold)
+    const ex = def.extrados ? headOf(def.extrados, params) : hd.profile === "lobed" ? { ...hd, profile: hd.over > 0 ? "horseshoe" : "semicircular" } : null;
+    let outer;
+    if (ex) outer = archCurve(a + d, ex);
+    else {
+      // offset along each point's normal (the mitre of its two segments, held to twice the depth at a sharp crown)
+      const nrm = (p, q) => { const dx = q[0] - p[0], dy = q[1] - p[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; };
+      outer = inner.map((p, i) => {
+        if (i === 0) return [-a - d, 0];
+        if (i === inner.length - 1) return [a + d, 0];
+        const n1 = nrm(inner[i - 1], p), n2 = nrm(p, inner[i + 1]);
+        let nx = n1[0] + n2[0], ny = n1[1] + n2[1]; const l = Math.hypot(nx, ny) || 1; nx /= l; ny /= l;
+        const k = Math.min(2, 1 / Math.max(.5, nx * n1[0] + ny * n1[1]));
+        return [p[0] + nx * d * k, p[1] + ny * d * k];
+      });
+    }
+    const lift = (pts) => (stilt > 0 ? [[pts[0][0], -stilt], ...pts, [pts[pts.length - 1][0], -stilt]] : pts).map(([x, y]) => [x, y + stilt]);
+    const I = lift(inner), O = lift(outer);
+    // the face: intrados left to right, extrados back right to left, closed along the two flat feet -- ear-clipped
+    const ring = [...I, ...O.slice().reverse()], loop = ring.map((_, i) => i);
+    const m = mesh(), z0 = -t / 2, z1 = t / 2;
+    const F = ring.map(([x, y]) => m.vert(x, y, z1)), B = ring.map(([x, y]) => m.vert(x, y, z0));
+    for (const [i, j, k] of earClip(ring, loop)) {
+      // (earClip turns the loop counter-clockwise: its triangles face +z)
+      m.tri(F[i], F[j], F[k]); m.tri(B[k], B[j], B[i]);
+    }
+    // the sides all round the loop: soffit, feet, extrados -- the ring runs counter-clockwise seen from +z (up the left
+    // jamb, over the intrados, back over the extrados), so each quad faces out
+    for (let i = 0; i < ring.length; i++) { const j = (i + 1) % ring.length; m.quad(F[i], B[i], B[j], F[j]); }
+    // (where its voussoirs radiate from -- the envelope's centre, `over` half-widths up for a horseshoe or a lobed arch --
+    //  and the middle line's radius: finish.js maps the band's faces round it)
+    const yc = stilt + (["horseshoe", "lobed"].includes(hd.profile) ? a * (hd.over ?? (hd.profile === "horseshoe" ? .3 : 0)) : 0);
+    return { name, geometry: m.arrays(), instances: placements(def, P, params), kind: "arch", radial: { yc, R: a + d / 2 } };
+  }
+
   if (def.type === "ring") {                       // a round building's storey: one bay, N times round
     const n = def._n ?? Math.max(3, Math.round(P(def.count)));
     const rOuter = P(def.rOuter), rInner = P(def.rInner);
@@ -2030,7 +2086,10 @@ function buildPart_(name, defs, params) {
         face(A, B, q(ei, ej), w); face(A, q(ei, ej), q(di, dj), w);
       }
     }
-    return { name, geometry: m.arrays(), instances: def.at ? placements(def, P, params) : [[0, 0, 0, 0]], kind: def.kind ?? "prism", ...(def.walked ? { walked: true } : {}) };
+    // (`openBelow`: its only open edges are the rim at `base` with no underside -- by design: archcheck's closed-solid
+    //  test leaves it out)
+    return { name, geometry: m.arrays(), instances: def.at ? placements(def, P, params) : [[0, 0, 0, 0]], kind: def.kind ?? "prism",
+             ...(def.walked ? { walked: true } : {}), ...(def.bottom === false ? { openBelow: true } : {}) };
   }
 
   if (def.type === "loft") {

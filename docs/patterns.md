@@ -149,7 +149,9 @@ A small up-facing face that is not a stair's (under 2 square metres, or a column
 vaults, drums, columns: round the part's own axis, a whole number of tiles round so the rows meet, and up a dome's
 meridian by its length -- the rows of a round roof converge toward its crown as the real ones do), `conformal` (the same, with v stretched as u narrows: a star stays a star and only shrinks toward the crown, as a real
 dome's lattice does; end it at a height, with a plan-mapped star for the crown), `slope` (roofs: along
-the eave, up the slope).
+the eave, up the slope), `radial` (an `arch` part's own, by default: u in metres along the arch's middle line round its
+centre, v out from it -- so a pattern's upright stripes become its voussoirs, on both faces and round the soffit:
+`stone/voussoirs`, Cordoba's alternating brick and stone wedges in the palette `cordoba-voussoir`, 2026-11-18).
 
 ## In the game
 

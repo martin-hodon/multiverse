@@ -15,48 +15,27 @@
 #   East is +x (toward the entrance), south is +z; the dome's axis at the origin. Numbers are worked here and written as
 #   numbers.
 import os, json, math
+from kit import onion_h, tiles, side_away, muqarnas as muq_cells, muqarnas_box
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 parts = {}; build = []
 def add(n, d): parts[n] = d; build.append(n)
+def muqarnas(name, X, Z, yaw, w, s, it):
+    return muq_cells(X, Z, yaw, w, s, it, tiers=(5, 7, 9, 11, 13))
+def muqarnas_part(name, at, w): add(name, muqarnas_box(w, at, "its cells"))
 comp = lambda use, params, at, **kw: {"type": "component", "use": use, "params": params, "at": at, **kw}
 Q = math.pi / 2
 r4 = lambda v: round(v, 4)
 POINTED = {"profile": "pointed", "spread": .5}
 
-# the onion's height over its springing (profiles.js onion), as sheikh_zayed.py has it
-def onion_h(a, bulge, neck):
-    R1, R2 = a * bulge, a * neck
-    return math.sqrt(R1 * R1 - a * a) + math.sqrt(R1 * R1 + 2 * R1 * R2)
 def finial(name, x, y, z, h, about=None):
     """the gilt finial on a dome's crown: a spike and a ball"""
     add(name, {"type": "column", "radius": r4(h * .045), "height": h, "sides": 8, "taper": .3, "at": [[r4(x), r4(y), r4(z), 0]],
                **({"_about": about} if about else {})})
     add(name + " ball", {"type": "column", "radius": r4(h * .1), "height": r4(h * .14), "sides": 10, "taper": .5, "at": [[r4(x), r4(y + h * .4), r4(z), 0]]})
-def muqarnas(name, X, Z, yaw, w, s, it, tiers=(5, 7, 9, 11, 13), rise=1.35):
-    """the stalactite hood of an iwan: tiers of little cells hung under its half dome, each a block turned to the middle, drawing in and
-    climbing as the vault does -- ending in the small crown. (X, Z, yaw): the `portal`'s placement; w s it its opening"""
-    r = w / 2 + .05; zc = w / 2 + it; at = []; n = len(tiers); c, sn = math.cos(yaw), math.sin(yaw)
-    for k, m in enumerate(tiers[::-1]):
-        f = (k + .35) / (n + .4); phi = f * math.pi / 2 * .94
-        rr, y = r * math.cos(phi), s + r * rise * math.sin(phi)
-        for j in range(m):
-            th = -math.pi / 2 * .96 + math.pi * .96 * (j + (.5 if k % 2 else .0) + (0 if k % 2 else .5)) / m
-            lx, lz = (rr - .2) * math.sin(th), zc - (rr - .2) * math.cos(th)
-            at.append([r4(X + c * lx + sn * lz), r4(y), r4(Z - sn * lx + c * lz), r4(yaw + th)])
-    return at
-def muqarnas_part(name, at, w):
-    cw = r4(w * .1)
-    add(name, {"type": "box", "width": cw, "length": r4(w * .06), "height": r4(w * .085), "at": at, "_about": "its cells"})
 def door(at=0, w=3.2, s=4.5): return {"at": r4(at), "width": r4(w), "sill": 0, "springing": r4(s), "head": POINTED}
 def iwan_door(w, it, s):
     """the door through a `portal`'s iwan (its own default), which the building behind must open to match"""
     return min(3.2, (w / 2 + it) * .5 - .25), s * .45
-def side_away(path, c):
-    """the `side` of a range whose OUT looks away from the point c (bandPoints: the right of a segment is (-e.z, e.x))"""
-    (x0, z0), (x1, z1) = path[0], path[1]
-    ex, ez = x1 - x0, z1 - z0
-    return "right" if (-ez) * (c[0] - (x0 + x1) / 2) + ex * (c[1] - (z0 + z1) / 2) < 0 else "left"
-
 # ---- the sanctuary: the hall, the dome chamber in it, the great dome ------------------------------------------------
 HX, HZ, HH, HT, RS = 19.0, 45.5, 14.0, 2.0, .6       # the hall: x -19..19, z -45.5..45.5, its walls' height and thickness, its roof slab
 S, PR, SPR = 24.0, 3.0, 10.0                         # the chamber: its span between the piers, the piers, the arches' springing
@@ -88,19 +67,6 @@ add("great dome", comp("components/drum-dome", {"R": DR, "dt": DT, "H": DH, "n":
                        _about="the great dome on its high drum, sixteen windows round it: the tiled onion over the chamber, 52m to its crown"))
 finial("great dome finial", 0, CT + .5 + DH + onion_h(DR + DT, BULGE, NECK) - .2, 0, 4.0, "the gilt finial on the great dome")
 # the flat roofs round the chamber: the hall's top in strips, the chamber's square left open (as sheikh_zayed.py)
-def tiles(x0, z0, x1, z1, holes):
-    xs = sorted({x0, x1, *[c for h in holes for c in (h[0], h[2]) if x0 < c < x1]})
-    zs = sorted({z0, z1, *[c for h in holes for c in (h[1], h[3]) if z0 < c < z1]})
-    out = []
-    for j in range(len(zs) - 1):
-        run = None
-        for i in range(len(xs) - 1):
-            mx, mz = (xs[i] + xs[i + 1]) / 2, (zs[j] + zs[j + 1]) / 2
-            free = not any(h[0] < mx < h[2] and h[1] < mz < h[3] for h in holes)
-            if free and run is None: run = xs[i]
-            if (not free or i == len(xs) - 2) and run is not None:
-                out.append((run, zs[j], xs[i + 1] if free else xs[i], zs[j + 1])); run = None
-    return out
 for k, (a, b, c, d) in enumerate(tiles(-HX, -HZ, HX, HZ, [(-RO, -RO, RO, RO)])):
     add(f"sanctuary roof {k + 1}", {"flatRoof": True, "type": "box", "width": r4(c - a), "length": r4(d - b), "height": RS,
                                     "at": [[r4((a + c) / 2), HH, r4((b + d) / 2), 0]]})

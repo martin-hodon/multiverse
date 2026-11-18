@@ -1,0 +1,449 @@
+{
+ "name": "Alminar",
+ "_about": "AN ALMINAR, the square minaret of al-Andalus -- Abd al-Rahman III's at Cordoba (951-958): a shaft `W` square and `H` to its terrace (walls `tw` round a solid core: the two stairs ran in them), blind below, two storeys `ts` tall of paired horseshoe windows `pw` wide, a band `bh` tall of `bn` blind lobed arches `bw` wide, and `th` of plain wall to the top; a parapet of stepped merlons; the muezzin's lantern `lw` square and `lh` tall with a horseshoe arch in each face and a small dome; the yamur on it, a rod through three gilt balls. Centred on its placement, standing on it.",
+ "params": {
+  "detail": 4,
+  "W": 8.5,
+  "H": 34.0,
+  "tw": 1.5,
+  "lw": 4.4,
+  "lh": 5.6,
+  "yam": 4.0,
+  "ts": 6.0,
+  "pw": 1.0,
+  "bh": 4.0,
+  "bn": 9,
+  "bw": 0.42,
+  "th": 3.0
+ },
+ "build": [
+  "shaft",
+  "core",
+  "merlons 1",
+  "merlons 2",
+  "merlons 3",
+  "merlons 4",
+  "lantern",
+  "lantern cornice",
+  "lantern dome",
+  "yamur",
+  "yamur ball 1",
+  "yamur ball 2",
+  "yamur ball 3"
+ ],
+ "parts": {
+  "shaft": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "W",
+     "W"
+    ]
+   },
+   "thickness": "tw",
+   "height": "H",
+   "glass": false,
+   "tiers": [
+    {
+     "h": "H - 2 * ts - bh - th",
+     "openings": []
+    },
+    {
+     "h": "ts",
+     "openings": [
+      {
+       "at": "-1 * pw * 0.75",
+       "width": "pw",
+       "sill": "ts * 0.3",
+       "springing": "ts * 0.6167",
+       "head": {
+        "profile": "horseshoe",
+        "over": 0.35
+       }
+      },
+      {
+       "at": "1 * pw * 0.75",
+       "width": "pw",
+       "sill": "ts * 0.3",
+       "springing": "ts * 0.6167",
+       "head": {
+        "profile": "horseshoe",
+        "over": 0.35
+       }
+      }
+     ]
+    },
+    {
+     "h": "ts",
+     "openings": [
+      {
+       "at": "-1 * pw * 0.75",
+       "width": "pw",
+       "sill": "ts * 0.3",
+       "springing": "ts * 0.6167",
+       "head": {
+        "profile": "horseshoe",
+        "over": 0.35
+       }
+      },
+      {
+       "at": "1 * pw * 0.75",
+       "width": "pw",
+       "sill": "ts * 0.3",
+       "springing": "ts * 0.6167",
+       "head": {
+        "profile": "horseshoe",
+        "over": 0.35
+       }
+      }
+     ]
+    },
+    {
+     "h": "bh",
+     "openings": {
+      "pattern": "bn",
+      "width": "bw",
+      "gap": "bw * 0.4286",
+      "sill": "bh * 0.3",
+      "springing": "bh * 0.55",
+      "head": {
+       "profile": "lobed",
+       "lobes": 3,
+       "over": 0.25
+      }
+     }
+    },
+    {
+     "h": "th",
+     "openings": []
+    }
+   ],
+   "_about": "the shaft, 8.5 m square: blind below, two storeys of paired horseshoe windows, the band of nine blind arches under the top"
+  },
+  "core": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "W - 2 * tw + 0.02",
+     "W - 2 * tw + 0.02"
+    ]
+   },
+   "height": "H",
+   "flatRoof": true,
+   "_about": "its masonry core between the two stairs (the windows are the stairs' lights: niches here)"
+  },
+  "merlons 1": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "W",
+    "t": 0.45,
+    "h": 0.7,
+    "step": 1.05,
+    "mh": 0.85,
+    "merlon": "stepped"
+   },
+   "at": [
+    [
+     0,
+     "H",
+     "W / 2 - 0.225",
+     0
+    ]
+   ],
+   "_about": "the terrace's parapet of stepped merlons"
+  },
+  "merlons 2": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "W",
+    "t": 0.45,
+    "h": 0.7,
+    "step": 1.05,
+    "mh": 0.85,
+    "merlon": "stepped"
+   },
+   "at": [
+    [
+     0,
+     "H",
+     "0.225 - W / 2",
+     3.1416
+    ]
+   ]
+  },
+  "merlons 3": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "W - 0.9",
+    "t": 0.45,
+    "h": 0.7,
+    "step": 1.05,
+    "mh": 0.85,
+    "merlon": "stepped"
+   },
+   "at": [
+    [
+     "W / 2 - 0.225",
+     "H",
+     0,
+     -1.5708
+    ]
+   ]
+  },
+  "merlons 4": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "W - 0.9",
+    "t": 0.45,
+    "h": 0.7,
+    "step": 1.05,
+    "mh": 0.85,
+    "merlon": "stepped"
+   },
+   "at": [
+    [
+     "0.225 - W / 2",
+     "H",
+     0,
+     1.5708
+    ]
+   ]
+  },
+  "lantern": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "lw",
+     "lw"
+    ]
+   },
+   "thickness": 0.55,
+   "height": "lh",
+   "glass": false,
+   "interior": true,
+   "openings": [
+    {
+     "at": 0,
+     "width": "lw * 0.3864",
+     "sill": 0,
+     "springing": "lh * 0.5357",
+     "head": {
+      "profile": "horseshoe",
+      "over": 0.35
+     }
+    }
+   ],
+   "at": [
+    [
+     0,
+     "H",
+     0,
+     0
+    ]
+   ],
+   "_about": "the muezzin's lantern: one horseshoe arch in every face"
+  },
+  "lantern cornice": {
+   "type": "box",
+   "width": "lw + 0.4",
+   "length": "lw + 0.4",
+   "height": 0.3,
+   "at": [
+    [
+     0,
+     "H + lh",
+     0,
+     0
+    ]
+   ]
+  },
+  "lantern dome": {
+   "type": "dome",
+   "radius": "lw / 2",
+   "thickness": 0,
+   "sides": 8,
+   "head": {
+    "profile": "semicircular"
+   },
+   "at": [
+    [
+     0,
+     "H + lh + 0.3",
+     0,
+     0
+    ]
+   ],
+   "_about": "its little ribbed dome"
+  },
+  "yamur": {
+   "type": "column",
+   "radius": 0.05,
+   "height": "yam",
+   "sides": 6,
+   "taper": 0.6,
+   "at": [
+    [
+     0,
+     "H + lh + 0.3 + lw / 2 - 0.05",
+     0,
+     0
+    ]
+   ],
+   "_about": "the YAMUR: an iron rod through three gilt balls, the largest lowest"
+  },
+  "yamur ball 1": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 12,
+   "sections": [
+    {
+     "s": 0.0,
+     "a": 0.01,
+     "b": 0.01
+    },
+    {
+     "s": 0.0737,
+     "a": 0.275,
+     "b": 0.275
+    },
+    {
+     "s": 0.275,
+     "a": 0.4763,
+     "b": 0.4763
+    },
+    {
+     "s": 0.55,
+     "a": 0.55,
+     "b": 0.55
+    },
+    {
+     "s": 0.825,
+     "a": 0.4763,
+     "b": 0.4763
+    },
+    {
+     "s": 1.0263,
+     "a": 0.275,
+     "b": 0.275
+    },
+    {
+     "s": 1.1,
+     "a": 0.01,
+     "b": 0.01
+    }
+   ],
+   "at": [
+    [
+     0,
+     "H + lh + 0.3 + lw / 2 + yam * 0.18",
+     0,
+     0
+    ]
+   ]
+  },
+  "yamur ball 2": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 12,
+   "sections": [
+    {
+     "s": 0.0,
+     "a": 0.01,
+     "b": 0.01
+    },
+    {
+     "s": 0.0563,
+     "a": 0.21,
+     "b": 0.21
+    },
+    {
+     "s": 0.21,
+     "a": 0.3637,
+     "b": 0.3637
+    },
+    {
+     "s": 0.42,
+     "a": 0.42,
+     "b": 0.42
+    },
+    {
+     "s": 0.63,
+     "a": 0.3637,
+     "b": 0.3637
+    },
+    {
+     "s": 0.7837,
+     "a": 0.21,
+     "b": 0.21
+    },
+    {
+     "s": 0.84,
+     "a": 0.01,
+     "b": 0.01
+    }
+   ],
+   "at": [
+    [
+     0,
+     "H + lh + 0.3 + lw / 2 + yam * 0.42",
+     0,
+     0
+    ]
+   ]
+  },
+  "yamur ball 3": {
+   "type": "loft",
+   "axis": "y",
+   "sides": 12,
+   "sections": [
+    {
+     "s": 0.0,
+     "a": 0.01,
+     "b": 0.01
+    },
+    {
+     "s": 0.0402,
+     "a": 0.15,
+     "b": 0.15
+    },
+    {
+     "s": 0.15,
+     "a": 0.2598,
+     "b": 0.2598
+    },
+    {
+     "s": 0.3,
+     "a": 0.3,
+     "b": 0.3
+    },
+    {
+     "s": 0.45,
+     "a": 0.2598,
+     "b": 0.2598
+    },
+    {
+     "s": 0.5598,
+     "a": 0.15,
+     "b": 0.15
+    },
+    {
+     "s": 0.6,
+     "a": 0.01,
+     "b": 0.01
+    }
+   ],
+   "at": [
+    [
+     0,
+     "H + lh + 0.3 + lw / 2 + yam * 0.64",
+     0,
+     0
+    ]
+   ]
+  }
+ }
+}

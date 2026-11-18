@@ -1,4 +1,4 @@
-# bills.py SPECIES... | all : BILLS and BEAKS made the engine's `horn` (sharp.js), as the crane's (named.py crane()):
+# bills.py SPECIES... | all | retip SPECIES... | all : BILLS and BEAKS made the engine's `horn` (sharp.js), as the crane's (named.py crane()):
 # TWO MANDIBLES, each a horn whose centreline runs along the line the bill closes on (the commissure) -- the upper's
 # cross-section a dome above it (flat=1: its underside flat where it shuts on the lower), the lower's a dome below
 # it (up -y, flat=1) -- so the two meet along the mouth line, and each ends in a real point (the lower's on that line,
@@ -105,6 +105,12 @@ def mandibles(U, tipU, L, tipL):
             # round to match, so a hook's centreline is not thrown behind it)
             k = 1 - (free.index(u) + 1) / (len(free) + 1)
             up.append(add(u.c, u.n, -k * u.h) + [u.w, clampa((1 + k) * u.h / u.w)])
+    # (2026-11-18) a short round-tipped tube's end (the goose's, the turkey's) made a BROKEN END: its last point pinched
+    # to a thin upright fin, and the tip at the tube's mid-height, well up off the mouth line the point before closes on
+    # -- the underside stepping up to a point in the air. The fin dropped; the tip put on that line, as a real upper closes
+    if not beyond and len(up) > 2 and up[-1][4] >= 3.5: up.pop()   # (a last point pinched to a thin upright FIN: dropped)
+    q = up[-1]; dq = U[-1].n; off = sum((eU[i] - q[i]) * dq[i] for i in range(3))
+    if not beyond and off > .5 * q[3] * q[4]: eU = add(eU, dq, -off)
     up.append(eU + [0.0, up[-1][4]])
     lo = []
     for l in L:
@@ -336,7 +342,7 @@ def chain1(sp, pre, split=0.1, lfrac=0.97, every=3, tipcol=None, rnd=False, reve
         return [h]
     replace(sp, ids, make)
 
-PAIRS = ["blackbird", "cassowary", "chicken", "dove", "goose", "gull", "hoopoe", "ibis", "magpie", "ostrich", "pelican",
+PAIRS = ["blackbird", "cassowary", "chicken", "dove", "goose", "gull", "hoopoe", "ibis", "ostrich", "pelican",
          "penguin", "pheasant", "pigeon", "robin", "rooster", "sparrow", "stork", "swallow", "tawny-owl", "turkey"]
 SPEC = {("birds/" + b): (lambda b=b: pair("birds/" + b)) for b in PAIRS}
 SPEC.update({
@@ -348,6 +354,7 @@ SPEC.update({
     "monsters/griffin": lambda: pair("monsters/griffin", "eupper", "elower", tipcol=("eBeakTip", 0.7)),
     "birds/crow": lambda: chain("birds/crow", "upperBill", "lowerBill"),
     "birds/raven": lambda: chain("birds/raven", "upperBill", "lowerBill"),
+    "birds/magpie": lambda: chain("birds/magpie", "upperBill", "lowerBill"),   # (2026-11-18: the corvids' blade, as the crow's)
     "birds/kingfisher": lambda: chain("birds/kingfisher", "upperBill", "lowerBill"),
     "birds/puffin": lambda: chain("birds/puffin", "upperBill", "lowerBill"),
     "birds/woodpecker": lambda: chain("birds/woodpecker", "upperBill", "lowerBill"),
@@ -370,7 +377,29 @@ SPEC.update({
     "sea/swordfish": lambda: chain1("sea/swordfish", "bill", every=1, reverse=True, two=False),
 })
 
+def retip(sp, uid="upperBill"):
+    """(2026-11-18) a bill converted before mandibles() kept a pinched point's height and put a stranded tip on the mouth
+    line, mended in place: a FIN before the tip dropped, and the tip moved down onto the line when it stands well up
+    off the one the point before it closes on; the rest of the file untouched -- for species whose generator a later pass (a neck sweep, ...) followed, so they are not re-run"""
+    txt, d = load(sp); sh = d["sculpt"]["shape"]
+    h = next((q for q in sh if q.get("id") == uid and q["type"] == "horn"), None)
+    if not h: return print(sp, "no", uid)
+    P = h["pts"]; n = h["up"]; did = []
+    if len(P) > 3 and P[-2][4] >= 3.5:   # (the point before the tip pinched to a thin upright FIN -- its aspect at the
+        P.pop(-2); P[-1][4] = P[-2][4]; did.append("fin dropped")   #  clamp: the bill tapers straight to its tip instead)
+    q, e = P[-2], P[-1]
+    off = sum((e[i] - q[i]) * n[i] for i in range(3))
+    if off > .5 * q[3] * q[4]:
+        P[-1] = [round(e[i] - n[i] * off, 4) for i in range(3)] + e[3:]; did.append("tip down %.1f mm" % (off * 1000))
+    if not did: return print(sp, "fine already")
+    save(sp, sh, txt); print(sp, ", ".join(did))
+
+RETIP = ["birds/" + b for b in PAIRS]
+
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["retip"]:
+        for a in (sys.argv[2:] if sys.argv[2:] != ["all"] else RETIP): retip(a if "/" in a else "birds/" + a)
+        sys.exit()
     args = sys.argv[1:]
     if args == ["all"]: args = list(SPEC)
     for a in args:

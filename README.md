@@ -32,6 +32,7 @@ paths.js          the path network: lanes (carts, riders), highway, every track 
 freight.js        the freight chain: goods and their states (one table), barge, dock hands, freight stops, goods riding moving floors
 weather.js        the rain and snow curtains (the weather's state stays with the world)
 sky.js            the sky dome and the hour: zenith to horizon, the sun setting in the west, the fog's colour and the frame's tint by `dark`; the rainbow opposite the sun
+clouds.js         the sky's cloud types (assets/sky): heaps marched as a volume, sheets, cells, cirrus; the skies the weather picks (docs/clouds.md; lab: clouds.html)
 smoke.js          chimney smoke: puffs from the lit hearths, placed on the GPU by time, one draw for the town
 nightglow.js      what shines at night after the darkening: lamplight in the windows (leaking round the shutters), fireflies, carried lanterns
 stones.js         G: skipping stones -- skims, spray, rings spreading on the water, the skips counted

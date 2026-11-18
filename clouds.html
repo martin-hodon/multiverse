@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clouds — the sky lab</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #c7ddee; font: 13px "Avenir Next", "Segoe UI", sans-serif; color: #22303c; }
+  canvas { display: block; }
+  #bar { position: absolute; left: 10px; top: 10px; max-width: 52em; background: rgba(255, 255, 255, .82); border-radius: 6px; padding: 8px 10px; line-height: 1.5; }
+  #bar.off { display: none; }
+</style>
+</head>
+<body>
+<div id="bar">
+  <b>Clouds</b>: the sky's cloud types (clouds.js, assets/sky) in the dome the world draws, seen from a meadow.
+  Drag to look round · <b>K</b> next sky · <b>H</b> the hour · <b>B</b> this bar ·
+  <code>?sky=fair</code> or <code>?types=cumulus,cirrus</code> · <code>?hour=0..1</code> (0 midday, .4 sunset, .85 night) ·
+  <code>?look=yaw,pitch</code> (degrees; yaw 0 toward the sun) · <code>?fov=</code> · <code>?t=</code> (seconds: the drift)
+  <div id="what"></div>
+</div>
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu": "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl": "https://unpkg.com/three@0.185.1/build/three.tsl.js",
+    "three/addons/": "https://unpkg.com/three@0.185.1/examples/jsm/"
+} }
+</script>
+<script type="module">
+// THE SKY LAB: one sky of skies.json (or the types named) over a flat meadow, the eye at 1.7 m; a lab to tune the
+// cloud types in at full size -- assets.html shows them too (Sky), editable.
+import * as THREE from "three";
+import { createSky, SKY } from "./sky.js";
+import { SKIES, CLOUD_TYPES } from "./clouds.js";
+
+const qp = new URLSearchParams(location.search);
+const renderer = new THREE.WebGPURenderer({ antialias: true });
+await renderer.init();
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(+(qp.get("fov") ?? 70), innerWidth / innerHeight, .1, 5000);
+camera.position.set(0, 1.7, 0);
+const ground = new THREE.Mesh(new THREE.CircleGeometry(3000, 64), new THREE.MeshBasicNodeMaterial({ color: 0x7d9150 }));
+ground.rotation.x = -Math.PI / 2; scene.add(ground);
+const sky = createSky(scene, { radius: 4000 });
+
+const names = Object.keys(SKIES.skies);
+let skyAt = Math.max(0, names.indexOf(qp.get("sky") ?? "fair")), hour = +(qp.get("hour") ?? .08);
+const show = () => {
+  const list = qp.get("types") ? qp.get("types").split(",").map((type) => ({ type })) : SKIES.skies[names[skyAt]];
+  sky.clouds.set(list, { now: true });
+  document.getElementById("what").textContent = (qp.get("types") ? "" : names[skyAt] + ": ") + (sky.clouds.list.map((e) => e.name).join(" + ") || "a clear sky")
+    + ` · hour ${hour.toFixed(2)} · dims the sun ${Math.round(sky.clouds.dim() * 100)}%`;
+};
+show();
+
+// the look: yaw from the sun's bearing, pitch up; drag turns it
+let [yaw, pitch] = (qp.get("look") ?? "60,25").split(",").map((v) => +v * Math.PI / 180);
+const look = () => {
+  const az = Math.atan2(Math.sin(SKY.sunAz), -Math.cos(SKY.sunAz)) + yaw;
+  camera.lookAt(camera.position.x + Math.cos(az) * Math.cos(pitch), camera.position.y + Math.sin(pitch), camera.position.z + Math.sin(az) * Math.cos(pitch));
+};
+let drag = null;
+renderer.domElement.onpointerdown = (e) => { drag = [e.clientX, e.clientY]; };
+addEventListener("pointerup", () => { drag = null; });
+addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  yaw += (e.clientX - drag[0]) * .004; pitch = Math.max(-.2, Math.min(1.55, pitch + (e.clientY - drag[1]) * .004)); drag = [e.clientX, e.clientY];
+});
+addEventListener("keydown", (e) => {
+  if (e.code === "KeyK") { skyAt = (skyAt + 1) % names.length; qp.delete("types"); show(); }
+  if (e.code === "KeyH") { hour = [0, .16, .3, .4, .5, .85].find((h) => h > hour + .01) ?? 0; show(); }
+  if (e.code === "KeyB") document.getElementById("bar").classList.toggle("off");
+});
+addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
+
+const t0 = performance.now(), freeze = qp.has("t") ? +qp.get("t") : null;
+let frames = 0;
+renderer.setAnimationLoop(() => {
+  look();
+  const t = freeze ?? (performance.now() - t0) / 1000;
+  const { horizon } = sky.update(camera, hour, 0, 0, { t });
+  scene.background = horizon;
+  sky.render(renderer, camera);
+  ground.material.color.setRGB(.49, .57, .31).multiplyScalar(1 - hour * .85);
+  renderer.render(scene, camera);
+  if (++frames > 3) window.__ready = true;
+});
+window.__lab = { sky, set: (o) => { if (o.sky) { skyAt = names.indexOf(o.sky); qp.delete("types"); } if (o.types) qp.set("types", o.types); if (o.hour !== undefined) hour = o.hour;
+  if (o.look) [yaw, pitch] = o.look.map((v) => v * Math.PI / 180); show(); return 1; }, CLOUD_TYPES };
+</script>
+</body>
+</html>

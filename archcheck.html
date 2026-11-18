@@ -21,7 +21,7 @@
 // (floating), whether every vault is roofed -- no lunette left open over a wall stopped at its springing
 // (vaultsRoofed, abutment and lintels, listed with the support findings), and what it costs (triangles and vertices drawn: every copy of every part). `?only=a,b` (substrings of the
 // paths), `?cat=Architecture,Village` (the catalogue's categories; those two and Dwellings by default), `?detail=4`.
-// `?mesh=1` also asks every part that is not a shell whether it is a closed solid wound outward: its open edges (an
+// `?mesh=1` also asks every part that is not a shell (nor a terrain left open below: `openBelow`) whether it is a closed solid wound outward: its open edges (an
 // edge with no twin running the other way), edges walked twice the same way (a face turned against its neighbours),
 // and its volume (negative: turned inside out).
 // Headless: build/archcheck.py prints window.__archcheck.
@@ -71,7 +71,7 @@ for (const path of paths) {
     let tris = 0, verts = 0;
     for (const p of asm.parts) if (p.geometry?.index) { tris += p.geometry.index.length / 3 * p.instances.length; verts += p.geometry.position.length / 3 * p.instances.length; }
     const stairs = stairClearance(asm), floats = [...floating(asm), ...vaultsRoofed(asm), ...abutment(asm), ...lintels(asm)];
-    const mesh = qp.get("mesh") ? asm.parts.filter((p) => p.geometry?.index && !p.shell && p.kind !== "glass").map(solidity).filter((r) => r.open || r.twice || r.vol < 0) : [];
+    const mesh = qp.get("mesh") ? asm.parts.filter((p) => p.geometry?.index && !p.shell && !p.openBelow && p.kind !== "glass").map(solidity).filter((r) => r.open || r.twice || r.vol < 0) : [];
     const mixed = finishes.has(path) ? finishPieces(asm, finishes.get(path)).mixed.filter((m) => m.minor > +(qp.get("minor") ?? .02)) : [];
     rows.push({ path, parts: asm.parts.length, tris, verts, stairs, floats, mesh, mixed, ms: Math.round(performance.now() - t0) });
   } catch (e) {

@@ -6,12 +6,15 @@
 //
 //   const sky = createSky(scene, { radius })
 //   sky.update(camera, dark, overcast, bow, { aurora, t }) -> { horizon, tint, sunDir, sunCol, cloud }   (the fog colour, the frame's multiply colour, the sun for the water)
+//   sky.render(renderer, camera)   each frame before the scene is drawn: the heaped clouds' own pass (clouds.js heapPass)
+//   sky.clouds                     the cloud types shown (clouds.js): sky.clouds.set(sky.clouds.sky("fair"))
 //
 // A RAINBOW (bow 0..1, index.html: light rain, or the sun coming out after rain) stands where a real one does: a ring
 // 42 degrees round the point straight opposite the sun -- low and flat at noon, a tall arch toward evening -- red
 // outside, violet in; the faint second bow at 51 degrees with its colours the other way round, the sky inside the first
 // a shade brighter and the band between them (Alexander's) a shade darker. In the dome's own shader: no extra draw.
 import * as THREE from "three";
+import { createClouds, compose, heapPass, bakeCloudNoise, bakeCloudVolume } from "./clouds.js";
 import { uniform, vec2, vec3, float, positionWorld, cameraPosition, smoothstep, mix, pow, max, dot, normalize, clamp, acos, fract, abs, exp, texture, wgslFn } from "three/tsl";
 
 const ridges = wgslFn(`
@@ -104,46 +107,6 @@ const sunRays = wgslFn(`
 // a hue from violet (0) to red (1): the rainbow's bands, a soap bubble's film (bubbles.js)
 export const spectrum = (t) => clamp(abs(fract(t.oneMinus().mul(.75).add(vec3(1, 2 / 3, 1 / 3))).mul(6).sub(3)).sub(1), 0, 1);
 
-// THE CLOUDS' NOISE, baked once into one tile that repeats, so the sky's shader only reads it (six reads a pixel): r heaped
-// billows (inverted Worley, three octaves, with some smooth noise so they aren't all round), g the same finer, for their edges,
-// b broad drifts (where the sky is clearer or fuller), a smooth wisps (the cirrus, read stretched). Each 0..1 over its whole range.
-function bakeCloudNoise(N = 512) {
-  const hash = (x, y, s) => { let h = Math.imul(x * 374761393 + y * 668265263 + s * 2147483647 | 0, 1274126177); h ^= h >>> 13; h = Math.imul(h, 1103515245); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
-  const worley = (u, v, f, s) => {                     // (distance to the nearest of a jittered grid, f cells a tile: 0 at a point, about 1 between them)
-    const X = u * f, Y = v * f, ix = Math.floor(X), iy = Math.floor(Y);
-    let best = 9;
-    for (let b = -1; b <= 1; b++) for (let a = -1; a <= 1; a++) {
-      const cx = ((ix + a) % f + f) % f, cy = ((iy + b) % f + f) % f, dx = ix + a + hash(cx, cy, s) - X, dy = iy + b + hash(cx, cy, s + 1) - Y, d = dx * dx + dy * dy;
-      if (d < best) best = d;
-    }
-    return Math.min(1, Math.sqrt(best));
-  };
-  const smooth = (u, v, f, s) => {                     // (value noise, f cells a tile)
-    const X = u * f, Y = v * f, ix = Math.floor(X), iy = Math.floor(Y), fx = X - ix, fy = Y - iy, a = fx * fx * (3 - 2 * fx), c = fy * fy * (3 - 2 * fy);
-    const at = (i, j) => hash(((i % f) + f) % f, ((j % f) + f) % f, s);
-    return (at(ix, iy) * (1 - a) + at(ix + 1, iy) * a) * (1 - c) + (at(ix, iy + 1) * (1 - a) + at(ix + 1, iy + 1) * a) * c;
-  };
-  const chans = [new Float32Array(N * N), new Float32Array(N * N), new Float32Array(N * N), new Float32Array(N * N)];
-  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
-    const u = x / N, v = y / N, i = y * N + x;
-    const warp = smooth(u, v, 5, 41) * .05;            // (a little sideways: no billow is a perfect round)
-    chans[0][i] = .55 * (1 - worley(u + warp, v, 7, 1)) + .3 * (1 - worley(u, v + warp, 15, 3)) + .15 * (1 - worley(u, v, 31, 5)) + .42 * (smooth(u, v, 4, 7) - .5);
-    chans[1][i] = .5 * (1 - worley(u, v, 19, 9)) + .3 * (1 - worley(u, v, 37, 11)) + .2 * smooth(u, v, 64, 13);
-    chans[2][i] = .6 * smooth(u, v, 3, 15) + .3 * smooth(u, v, 6, 17) + .1 * smooth(u, v, 12, 19);
-    chans[3][i] = .5 * smooth(u, v, 8, 21) + .28 * smooth(u, v, 16, 23) + .15 * smooth(u, v, 32, 25) + .07 * smooth(u, v, 64, 27);
-  }
-  const data = new Uint8Array(N * N * 4);
-  chans.forEach((c, k) => {
-    let lo = Infinity, hi = -Infinity;
-    for (const q of c) { if (q < lo) lo = q; if (q > hi) hi = q; }
-    for (let i = 0; i < c.length; i++) data[i * 4 + k] = Math.round((c[i] - lo) / (hi - lo) * 255);
-  });
-  const tex = new THREE.DataTexture(data, N, N, THREE.RGBAFormat);
-  tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.magFilter = THREE.LinearFilter; tex.minFilter = THREE.LinearMipmapLinearFilter;
-  tex.generateMipmaps = true; tex.anisotropy = 4; tex.needsUpdate = true;
-  return tex;
-}
-
 // the hours of the sky, by `dark`: the zenith, the horizon, the sun's glow, the frame's tint; the clouds' sunlit side and their shade
 const KEYS = [
   { at: 0,    zen: [.145, .335, .70], hor: [.66, .80, .93], sun: [1.0, .97, .88], tint: [1, 1, 1],         cloud: [1, 1, 1],        lit: [1.0, .99, .97],  shade: [.50, .57, .69] },
@@ -164,7 +127,8 @@ const at = (dark, k) => {
 export function createSky(scene, { radius = 1500 } = {}) {
   const U = { zen: uniform(new THREE.Color()), hor: uniform(new THREE.Color()), sun: uniform(new THREE.Color()),
               dir: uniform(new THREE.Vector3(-1, .6, 0)), disc: uniform(1), glow: uniform(.2), stars: uniform(0), bow: uniform(0), aurora: uniform(0), t: uniform(0), rays: uniform(0),
-              lit: uniform(new THREE.Color()), shade: uniform(new THREE.Color()), cover: uniform(.45), solid: uniform(1), wisp: uniform(.6) };
+              lit: uniform(new THREE.Color()), shade: uniform(new THREE.Color()), solid: uniform(1), sunUp: uniform(1) };
+  const clouds = createClouds();
   // (drawn in the transparent pass, first of it: after every opaque thing, so it fills only the pixels nothing covers,
   // and the grass mask and the occluders -- which take opaque meshes only -- never see it)
   const mat = new THREE.MeshBasicNodeMaterial({ side: THREE.BackSide, depthWrite: false, fog: false, transparent: true });
@@ -188,28 +152,10 @@ export function createSky(scene, { radius = 1500 } = {}) {
   const ground = smoothstep(-.01, .03, up);                                // (the land hides its feet)
   const arcs = hue(t1).mul(band(t1)).add(hue(t2).mul(band(t2)).mul(.38)).mul(U.bow).mul(ground).mul(.5);
   const shade = float(1).add(smoothstep(41, 34, ang).mul(.07)).sub(smoothstep(42.2, 43.5, ang).mul(smoothstep(50.6, 49.4, ang)).mul(.05)).sub(1).mul(U.bow).mul(ground).add(1);
-  // THE CLOUDS: a layer overhead read from the baked tile. The ray meets it some way off, bent a little so that it never runs out at the horizon;
-  // what's above the threshold is cloud, the broad drifts moving the threshold so that it heaps here and clears there. A step toward
-  // the sun tells which side of a billow is lit, and the thick of a cloud is its shaded belly; far off they go into the haze.
-  const noise = bakeCloudNoise(), H = 900;
-  const ray = max(float(H).sub(cameraPosition.y), 60).div(up.add(.075).max(.012)), wp = cameraPosition.xz.add(v.xz.mul(ray));
-  const drift = U.t.mul(4.5), sunXZ = normalize(U.dir.xz.add(vec2(.001, 0)));
-  const uvA = wp.add(vec2(drift.negate(), 0)).div(12500), uvB = wp.add(vec2(drift.mul(-1.25), drift.mul(.08))).div(3100), uvC = wp.add(vec2(drift.mul(-.6), 0)).div(46000);
-  const fieldOf = (a, b) => texture(noise, a).r.mul(.8).add(texture(noise, b).g.mul(.2));
-  const field = fieldOf(uvA, uvB), sunward = fieldOf(uvA.add(sunXZ.mul(.0075)), uvB.add(sunXZ.mul(.03)));
-  const line = mix(float(.72), float(.2), U.cover).add(texture(noise, uvC).b.sub(.5).mul(.36));
-  const seen = smoothstep(.015, .13, up);                                  // (only above the land, and thinning into the haze)
-  const cloudA = smoothstep(line, line.add(.075), field).mul(seen).mul(U.solid);
-  const thick = smoothstep(line.add(.02), line.add(.26), field);
-  const relief = clamp(field.sub(sunward).mul(11).add(.6), 0, 1);
-  const litShare = clamp(relief.mul(float(1).sub(thick.mul(.62))).add(smoothstep(.5, .08, up).mul(.34)), 0, 1);
-  const hazed = smoothstep(.28, .03, up).mul(.62);
-  const rim = pow(toSun, 9).mul(.75).add(pow(toSun, 90).mul(1.1)).mul(float(1).sub(thick).pow(2)).mul(U.disc);    // (the silver lining: thin cloud toward the sun)
-  const cloudCol = mix(mix(U.shade, U.lit, litShare).add(U.sun.mul(rim)), U.hor, hazed);
-  // ...and high cirrus, a thin veil of combed streaks behind them
-  const uvW = wp.add(vec2(drift.mul(-.35), 0));
-  const wisps = smoothstep(.5, .78, texture(noise, vec2(uvW.x.div(52000).add(uvW.y.div(160000)), uvW.y.div(9000))).a.mul(.7).add(texture(noise, vec2(uvW.x.div(14000), uvW.y.div(3400))).a.mul(.3))).mul(U.wisp).mul(smoothstep(.03, .2, up)).mul(.3);
-  const sky = mix(mix(lit.mul(shade), mix(U.lit, U.hor, hazed.mul(.5)), wisps), cloudCol, cloudA).add(arcs);
+  // THE CLOUDS (clouds.js): its layers by type -- heaps, sheets, cells, streaks -- over the sky, in this same shader
+  const cctx = { U: clouds.U, noise: bakeCloudNoise(), cam: cameraPosition, dir: U.dir, t: U.t, lit: U.lit, shade: U.shade, hor: U.hor, sun: U.sun, disc: U.disc, sunUp: U.sunUp, solid: U.solid };
+  const heaps = heapPass({ ...cctx, vol: bakeCloudVolume() }, { radius: radius * .9 });   // (the heaps: a volume, drawn small first -- render below)
+  const sky = compose({ ...cctx, heapTex: heaps.texture, heapTexel: heaps.texel, v, up, base: lit.mul(shade) }).add(arcs);
   // DISTANT MOUNTAINS round the edge of the world: two ridges, the far one paler (the air between), silhouettes
   // against the sunset, black under the stars -- a height by bearing, from whole-numbered waves so it closes round
   mat.colorNode = ridges({ v, up, sky, hor: U.hor, zen: U.zen });
@@ -219,19 +165,24 @@ export function createSky(scene, { radius = 1500 } = {}) {
   dome.name = "sky";
   dome.userData.noMerge = true;
   scene.add(dome);
+  let last = null;
   const horizon = new THREE.Color(), tint = new THREE.Color(), sunCol = new THREE.Color(), cloud = new THREE.Color(), _dim = new THREE.Color();
   return {
-    dome,
+    dome, clouds,
+    // the heaps' picture, before the frame is drawn (the sky's shader reads it): the page calls it each frame
+    render(renderer, camera) { heaps.render(renderer, camera); },
     // overcast 0 clear .. 1 a grey sky (rain, snow: the weather's intensity): the blue and the sunset's colours give way
     // to grey, the sun goes behind the cloud, the light dims
-    update(camera, dark, overcast = 0, bow = 0, { aurora: au = 0, t = 0, cover = .45 } = {}) {
+    update(camera, dark, overcast = 0, bow = 0, { aurora: au = 0, t = 0 } = {}) {
       dome.position.copy(camera.position);
+      const now = performance.now(); clouds.update(Math.min(1, (now - (last ?? now)) / 1000)); last = now;   // (the sky's change eases in real seconds)
+      overcast = Math.max(overcast, clouds.dim());   // (a grey sheet greys the sky as the weather's rain does)
       const grey = (c, g) => c.map((v, j) => v + (g * [1, 1.02, 1.06][j] * (1 - dark * .85) - v) * overcast * .85);
       U.zen.value.setRGB(...grey(at(dark, "zen"), .58)); U.hor.value.setRGB(...grey(at(dark, "hor"), .72)); U.sun.value.setRGB(...at(dark, "sun"));
       // the sun's height: high by day, at the horizon at dusk (dark ~ .42), below it once night has come
       const el = THREE.MathUtils.lerp(.62, -.16, Math.min(1, Math.max(0, dark / .6)) ** 1.15);
       U.dir.value.set(-Math.cos(SKY.sunAz) * Math.cos(el), Math.sin(el), Math.sin(SKY.sunAz) * Math.cos(el)).normalize();
-      U.disc.value = Math.max(0, Math.min(1, (el + .03) / .05)) * (1 - overcast);   // (the disc sets: gone 2 degrees under; or behind the cloud)
+      U.sunUp.value = Math.max(0, Math.min(1, (el + .03) / .05)); U.disc.value = U.sunUp.value * (1 - overcast);   // (the disc sets: gone 2 degrees under; or behind the cloud)
       U.glow.value = (.16 + .75 * Math.max(0, 1 - Math.abs(dark - .4) / .22)) * (1 - overcast * .8);   // (the glow is widest at sunset)
       horizon.setRGB(...grey(at(dark, "hor"), .72));
       tint.setRGB(...at(dark, "tint")).multiply(_dim.setRGB(1 - overcast * .3, 1 - overcast * .27, 1 - overcast * .2));   // (grey light: a third less under a heavy sky)
@@ -242,9 +193,7 @@ export function createSky(scene, { radius = 1500 } = {}) {
       U.rays.value = .55 * Math.max(0, 1 - Math.abs(dark - .38) / .14) * (1 - overcast);   // (the sunbeams: round sunset, in a clear sky)   // (the northern lights: only in the dark, never under cloud)
       cloud.setRGB(...at(dark, "cloud")).lerp(_dim.setRGB(.62, .64, .68), overcast * .7 * (1 - dark));   // (rain clouds: grey)   // (lit rose-gold by the low sun, slate by night -- over and above the frame's tint)
       U.lit.value.setRGB(...grey(at(dark, "lit"), .62)); U.shade.value.setRGB(...grey(at(dark, "shade"), .26));
-      U.cover.value = cover;
       U.solid.value = 1 - (1 - overcast) * Math.max(0, Math.min(1, (dark - .62) / .3)) * .72;   // (a clear night's clouds thin out: the stars are its point)
-      U.wisp.value = (1 - overcast) * (1 - Math.max(0, Math.min(1, (dark - .55) / .25)));
       return { horizon, tint, sunDir: U.dir.value, sunCol, cloud };
     },
   };

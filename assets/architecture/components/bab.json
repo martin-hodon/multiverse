@@ -1,0 +1,228 @@
+{
+ "name": "Bab",
+ "_about": "A BAB, the gate of al-Andalus: a frontispiece `W` wide, `H` tall and `D` proud of the wall behind it (its back at z 0, its face toward +z), with a doorway `dw` wide springing at `ds` under a horseshoe (`over`) of voussoirs `vd` deep; round the arch the ALFIZ, a rectangular frame from the imposts to over the crown; above it `bn` blind polylobed arches on colonnettes; a carved eave on corbels; and (`crest` merlons) stepped merlons on top. The wall it stands on needs its own doorway behind it.",
+ "params": {
+  "detail": 4,
+  "W": 5.8,
+  "H": 8.4,
+  "D": 0.45,
+  "dw": 2.3,
+  "ds": 3.2,
+  "over": 0.32,
+  "vd": "dw * 0.27",
+  "ax": "dw / 2 + vd + 0.35",
+  "ay": "ds + dw / 2 * over + sqrt(dw * dw / 4 * (1 + over * over)) + vd + 0.3",
+  "bn": 5,
+  "bw": "min(0.75, (W - 1.2) / bn - 0.5)",
+  "crest": "merlons"
+ },
+ "build": [
+  "front",
+  "voussoirs",
+  "alfiz head",
+  "alfiz sides",
+  "blind arcade",
+  "blind colonnettes",
+  "eave",
+  "corbels",
+  "merlons"
+ ],
+ "parts": {
+  "front": {
+   "type": "wall",
+   "width": "W",
+   "height": "H",
+   "thickness": "D",
+   "glass": false,
+   "openings": [
+    {
+     "at": "W / 2",
+     "width": "dw",
+     "sill": 0,
+     "springing": "ds",
+     "head": {
+      "profile": "horseshoe",
+      "over": "over"
+     }
+    }
+   ],
+   "at": [
+    [
+     0,
+     0,
+     "D",
+     0
+    ]
+   ],
+   "_about": "the frontispiece, standing proud of the wall it is set in, the doorway through it"
+  },
+  "voussoirs": {
+   "type": "arch",
+   "width": "dw",
+   "depth": "vd",
+   "thickness": "D + 0.06",
+   "head": {
+    "profile": "horseshoe",
+    "over": "over"
+   },
+   "at": [
+    [
+     0,
+     "ds",
+     "D / 2",
+     0
+    ]
+   ],
+   "_about": "the doorway's arch: red and white voussoirs radiating from its centre, not from the springing"
+  },
+  "alfiz head": {
+   "type": "box",
+   "width": "2 * ax + 0.3",
+   "length": 0.12,
+   "height": 0.3,
+   "at": [
+    [
+     0,
+     "ay",
+     "D + 0.06",
+     0
+    ]
+   ],
+   "_about": "the ALFIZ: the moulded frame round the arch, from the imposts to over its crown"
+  },
+  "alfiz sides": {
+   "type": "box",
+   "width": 0.3,
+   "length": 0.12,
+   "height": "ay + 0.3 - ds + 0.4",
+   "at": [
+    [
+     "-ax",
+     "ds - 0.4",
+     "D + 0.06",
+     0
+    ],
+    [
+     "ax",
+     "ds - 0.4",
+     "D + 0.06",
+     0
+    ]
+   ]
+  },
+  "blind arcade": {
+   "type": "arch",
+   "width": "bw",
+   "depth": 0.16,
+   "thickness": 0.1,
+   "head": {
+    "profile": "lobed",
+    "lobes": 5,
+    "over": 0.3
+   },
+   "at": [
+    [
+     "-(bn - 1) / 2 * (bw + 0.5)",
+     "ay + 0.9",
+     "D + 0.05",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "bn",
+    "step": [
+     "bw + 0.5",
+     0,
+     0,
+     0
+    ]
+   },
+   "_about": "over the alfiz a row of blind polylobed arches"
+  },
+  "blind colonnettes": {
+   "type": "box",
+   "width": 0.14,
+   "length": 0.1,
+   "height": 0.9,
+   "at": [
+    [
+     "-(bn - 1) / 2 * (bw + 0.5) - bw / 2 - 0.16",
+     "ay",
+     "D + 0.05",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "bn + 1",
+    "step": [
+     "bw + 0.5",
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "eave": {
+   "type": "box",
+   "width": "W + 0.5",
+   "length": "D + 0.45",
+   "height": 0.32,
+   "at": [
+    [
+     0,
+     "H",
+     "(D + 0.45) / 2 - 0.02",
+     0
+    ]
+   ],
+   "_about": "the eave on its carved corbels (modillones de rollos)"
+  },
+  "corbels": {
+   "type": "box",
+   "width": 0.22,
+   "length": 0.55,
+   "height": 0.28,
+   "at": [
+    [
+     "-(W - 0.6) / 2",
+     "H - 0.28",
+     "D + 0.2",
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "round((W - 0.6) / 0.55) + 1",
+    "step": [
+     "(W - 0.6) / round((W - 0.6) / 0.55)",
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "merlons": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "W",
+    "t": 0.4,
+    "h": 0.25,
+    "step": 0.95,
+    "mh": 0.8,
+    "merlon": "stepped"
+   },
+   "at": [
+    [
+     0,
+     "H + 0.32",
+     "D / 2",
+     0
+    ]
+   ],
+   "when": {
+    "crest": "merlons"
+   },
+   "_about": "Cordoba's stepped merlons on top"
+  }
+ }
+}

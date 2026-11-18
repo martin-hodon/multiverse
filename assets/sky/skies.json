@@ -1,0 +1,161 @@
+{
+  "_about": "Skies: the cloud types seen together (one a family at a time: a heap, a sheet, cells, streaks -- clouds.js), and which of them each weather shows. A sky entry is a list of {type, ...a field of the type overridden}; `weather` gives, for clear / rain / snow and each intensity (low, mid, high), the skies the day draws from, one after another",
+  "skies": {
+    "blue": [],
+    "fair": [
+      {
+        "type": "cumulus"
+      },
+      {
+        "type": "cirrus",
+        "amount": 0.5
+      }
+    ],
+    "high": [
+      {
+        "type": "cirrus"
+      },
+      {
+        "type": "cirrocumulus",
+        "amount": 0.6
+      }
+    ],
+    "scattered": [
+      {
+        "type": "cumulus",
+        "cover": 0.25
+      }
+    ],
+    "mackerel": [
+      {
+        "type": "altocumulus"
+      },
+      {
+        "type": "cirrus",
+        "amount": 0.4
+      }
+    ],
+    "veiled": [
+      {
+        "type": "cirrostratus"
+      },
+      {
+        "type": "cirrus",
+        "amount": 0.6
+      }
+    ],
+    "towering": [
+      {
+        "type": "congestus"
+      },
+      {
+        "type": "altocumulus",
+        "amount": 0.4,
+        "cover": 0.4
+      }
+    ],
+    "grey": [
+      {
+        "type": "stratocumulus"
+      }
+    ],
+    "dull": [
+      {
+        "type": "stratocumulus",
+        "cover": 0.65
+      },
+      {
+        "type": "altostratus"
+      }
+    ],
+    "overcast": [
+      {
+        "type": "stratus"
+      }
+    ],
+    "showers": [
+      {
+        "type": "congestus",
+        "dark": 0.62
+      },
+      {
+        "type": "nimbostratus",
+        "cover": 0.62,
+        "rain": 0.5,
+        "dark": 0.7
+      }
+    ],
+    "rain": [
+      {
+        "type": "nimbostratus"
+      },
+      {
+        "type": "fractus"
+      }
+    ],
+    "storm": [
+      {
+        "type": "cumulonimbus"
+      },
+      {
+        "type": "nimbostratus",
+        "cover": 0.85,
+        "dark": 0.9
+      }
+    ],
+    "snow": [
+      {
+        "type": "nimbostratus",
+        "dark": 0.55,
+        "rain": 0,
+        "texture": 0.3
+      }
+    ]
+  },
+  "weather": {
+    "clear": [
+      [
+        "blue",
+        "high",
+        "scattered",
+        "fair"
+      ],
+      [
+        "fair",
+        "mackerel",
+        "veiled",
+        "high",
+        "scattered"
+      ],
+      [
+        "towering",
+        "grey",
+        "dull",
+        "overcast"
+      ]
+    ],
+    "rain": [
+      [
+        "showers"
+      ],
+      [
+        "rain"
+      ],
+      [
+        "storm"
+      ]
+    ],
+    "snow": [
+      [
+        "snow"
+      ],
+      [
+        "snow"
+      ],
+      [
+        "snow"
+      ]
+    ]
+  },
+  "change": 600
+}

@@ -14,6 +14,8 @@
 #   Everything stands on the platform (PH), the flights up to it on three sides.
 #   East is +x, south is +z. Numbers are worked here and written as numbers.
 import os, json, math
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from kit import tiles
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 parts = {}; build = []
 def add(n, d): parts[n] = d; build.append(n)
@@ -90,20 +92,6 @@ for nm, cx, cz, S, PR, SPR, DH, DT, DN, FIN, about in CROSS:
     domed(f"{nm} dome", cx, CT + .5, cz, S / 2, DT, DH, DN, about, FIN)
 
 # the flat roofs round the crossings: the hall's top in strips, the crossings' squares left open
-def tiles(x0, z0, x1, z1, holes):
-    xs = sorted({x0, x1, *[c for h in holes for c in (h[0], h[2]) if x0 < c < x1]})
-    zs = sorted({z0, z1, *[c for h in holes for c in (h[1], h[3]) if z0 < c < z1]})
-    out = []
-    for j in range(len(zs) - 1):
-        run = None
-        for i in range(len(xs) - 1):
-            mx, mz = (xs[i] + xs[i + 1]) / 2, (zs[j] + zs[j + 1]) / 2
-            free = not any(h[0] < mx < h[2] and h[1] < mz < h[3] for h in holes)
-            if free and run is None: run = xs[i]
-            if (not free or i == len(xs) - 2) and run is not None:
-                end = xs[i + 1] if free else xs[i]
-                out.append((run, zs[j], end, zs[j + 1])); run = None
-    return out
 roof = tiles(X0, -EZ, X1, EZ, holes)
 for k, (a, b, c, d) in enumerate(roof):
     add(f"hall roof {k + 1}", {"flatRoof": True, "type": "box", "width": r4(c - a), "length": r4(d - b), "height": RS,

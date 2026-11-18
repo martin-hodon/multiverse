@@ -56,6 +56,8 @@ const PUPILS = { round: 0, bar: 1, slit: 2 };
 //          link 1 - taper), so the tip no longer whips into a kink
 // A species may write its own: `"flight": { "straight": .3, ... }` (any of these keys) in its definition -- a lung's
 // body keeps its waves -- and any part a `flyRot` [x, y, z] (degrees, added aloft: a wing folded at rest, spread in flight).
+// A part's `flyScale` [x, y, z] (2026-11-18) is its scale aloft, eased to from 1 about its own origin: a bird's folded-wing
+// pad (tools/creaturegen/birds/padfly.py) drawn in to a point inside the body as the spread wing takes its place.
 // A wing part's `anim.side` (+-1) says which way it reaches when its rest pose cannot tell (a hand folded flat in the
 // arm's plane, an arm tilted in at rest). THE UPSTROKE FOLD (2026-11-05): a part's `flyUp` [x, y, z] (degrees) is added
 // aloft on the upstroke only, on the wing's own clock -- nothing through the downstroke, all of it at mid-upstroke
@@ -136,6 +138,8 @@ function flightPose(def, parts, index) {
     //  rest swept out to its spread, a dragon's fingers fanned)
     const fr = def.parts[i].flyRot;
     if (fr) { f.rx = (f.rx ?? 0) + fr[0] * deg; f.ry = (f.ry ?? 0) + fr[1] * deg; f.rz = (f.rz ?? 0) + fr[2] * deg; }
+    const fs = def.parts[i].flyScale;
+    if (fs) f.sc = fs;
     const fu = def.parts[i].flyUp;
     if (fu) f.up = fu.map((v) => v * deg);
     p.fl = Object.keys(f).length ? f : null;
@@ -624,6 +628,7 @@ export function writeAnimal(an, t, fA, fB, fC) {
       _nod.makeTranslation(p.pos[0], p.pos[1] + dy, p.pos[2]).multiply(_nodT.makeRotationAxis(p.sway, swayA)).multiply(_nodT.makeTranslation(-p.pos[0], -p.pos[1] - dy, -p.pos[2]));
       _local.premultiply(_nod);
     }
+    if (fly && p.fl?.sc) { const S = p.fl.sc; _local.scale(_v.set(1 + (S[0] - 1) * fly, 1 + (S[1] - 1) * fly, 1 + (S[2] - 1) * fly)); }   // (flyScale)
     if (pk && pk.k === 0) { const Q = (an.perchFold ?? PERCH).squeeze; _local.scale(_v.set(1 + (Q[0] - 1) * perch, 1 + (Q[1] - 1) * perch, 1 + (Q[2] - 1) * perch)); }   // (PERCH: the folded wing's feathers stacked)
     if (pk && pk.head) {   // (PERCH: the head kept level on the tipped body, and turned about the plumb line by an.look)
       _nod.makeTranslation(p.pos[0], p.pos[1] + dy, p.pos[2]).multiply(_nodT.makeRotationZ(-(an.pitch ?? 0) * perch)).multiply(_nodT.makeRotationY((an.look ?? 0) * p.look))

@@ -14,6 +14,7 @@
 //                  equilateral (spread 1) through lancet (> 1) to drop (< 1)
 //   trigonal       two straight chamfers meeting at a point: the triangular head
 //   curtain        quarter-round shoulders and hanging swags: the late-Gothic Vorhangbogen
+//   lobed          small circles strung along a horseshoe or semicircle, crossing in cusps: the polylobed arch
 //   flat           a straight lintel, so an opening can be square-headed without a special case
 //
 // HOW MANY POINTS A CURVE GETS is one knob for the whole building, in powers of two: `per90` segments per 90
@@ -166,6 +167,46 @@ export const PROFILES = {
     const top = arc(0, c, r, a2, Math.PI / 2, segsFor(Math.PI / 2 - a2, p, 3), []);
     top[top.length - 1] = [0, c + r];
     return pin(mirrorUp([...side, ...top.slice(1)]), a);
+  },
+
+  // THE POLYLOBED ARCH (Cordoba's maqsura, the Aljaferia, the Nasrid porticoes): small circles strung INSIDE an
+  // ENVELOPE -- the horseshoe (`over` half-widths: the centre above the springing line) or, `over` 0, the semicircle the
+  // arch would be without them. Every lobe touches the envelope from inside (its centre `lobe` radii in from it), so the
+  // outline swells out to the envelope at each lobe and comes back in at the CUSPS where neighbours cross, which point
+  // into the opening. The first and last lobes are centred on the springing points' own radii, so the arch rises from
+  // each impost as a HALF lobe; between them stand `lobes` whole ones (an odd count puts one at the crown, as the
+  // Cordoban ones have). `lobe` is the lobes' radius in half-widths; left out, it is the one whose cusps stand in a
+  // good part of a lobe -- a deep, crisp scallop. Lobes too small to reach their neighbours would leave
+  // gaps, and the engine says so.
+  lobed: (a, p) => {
+    const m = Math.max(1, Math.round(p.lobes ?? 5)), cy = a * (p.over ?? 0), Re = Math.hypot(a, cy);
+    const ts = Math.PI + Math.atan2(cy, a), te = -Math.atan2(cy, a), D = (ts - te) / (m + 1);   // springing angles, the step
+    const sd = Math.sin(D / 2), rMin = Re * sd / (1 + sd);            // (the radius at which neighbours only touch)
+    const r = p.lobe !== undefined ? a * p.lobe : rMin * 1.12, Rc = Re - r;
+    if (r <= rMin + 1e-9) throw new Error(`a lobed arch's lobes (${p.lobe} of the half-width) are too small to meet`);
+    const C = Array.from({ length: m + 2 }, (_, i) => { const t = ts - D * i; return [Rc * Math.cos(t), cy + Rc * Math.sin(t)]; });
+    // the CUSP: neighbours' crossing on the outside of their union (the one farther from the envelope's centre; the
+    // other lies inside the opening)
+    const cusp = (A, B) => {
+      const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2, dx = B[0] - A[0], dy = B[1] - A[1], d = Math.hypot(dx, dy);
+      const h = Math.sqrt(Math.max(0, r * r - d * d / 4)), ux = -dy / d, uy = dx / d;
+      const p1 = [mx + ux * h, my + uy * h], p2 = [mx - ux * h, my - uy * h];
+      return Math.hypot(p1[0], p1[1] - cy) > Math.hypot(p2[0], p2[1] - cy) ? p1 : p2;
+    };
+    const ends = [[-a, 0], ...C.slice(1).map((c, i) => cusp(C[i], c)), [a, 0]];
+    const out = [];
+    C.forEach(([x, y], i) => {
+      // from this lobe's first point to its last, clockwise (left to right) round its centre, over its outer side
+      const p0 = ends[i], p1 = ends[i + 1];
+      const a0 = Math.atan2(p0[1] - y, p0[0] - x);
+      let a1 = Math.atan2(p1[1] - y, p1[0] - x);
+      while (a1 >= a0) a1 -= TAU;
+      const seg = arc(x, y, r, a0, a1, Math.max(3, segsFor(a0 - a1, p)), []);
+      seg[0] = p0; seg[seg.length - 1] = p1;
+      if (i) seg.shift();                                     // (the cusp is one point, not two)
+      out.push(...seg);
+    });
+    return pin(out, a);
   },
 
   // TWO ARCS CURVING INWARD to a point: the pointed arch turned inside out, each side bowing toward the

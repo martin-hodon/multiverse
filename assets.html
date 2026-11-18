@@ -110,6 +110,7 @@
       <label><input type="checkbox" id="spin"> turn</label>
       <label><input type="checkbox" id="walk"> walk</label>
       <label title="a beast that flies (a dragon, the manticore, the pegasus, the griffin): aloft, its wings beating"><input type="checkbox" id="fly"> fly</label>
+      <label id="seasonOpt" style="display:none" title="a tree or the bush in leaf only, in flower (spring blossom, or its flowers), in fruit, or both (render.js SEASON; each species flowers or fruits on its own share of sprays, species.js season)">shown <select id="plantSeason"><option value="both">flowers + fruit</option><option value="flower">in flower</option><option value="fruit">in fruit</option><option value="leaf">leaf only</option></select></label>
       <span id="motionOpts" style="display:none; gap:8px; align-items:center" title="THE BODY IN MOTION (docs/motion.md): a position held, a movement or an exercise played, every joint's range swept, reaching for points round the body">
         <select id="motionPick" title="what is shown: a position (all: every one at once), a movement, an exercise; for the joints, their ranges or reaching"></select>
         <select id="motionWho" title="who does it, and in what (the clothes move with the parts they lie on)">
@@ -208,6 +209,8 @@ import { createJewels } from "./jewels.js";
 import { lifeOf, doorsOf } from "./architecture.js";   // FACES: shown as the game draws them (half-Lambert under the sun), with sliders
 import { LIGHT } from "./light.js";
 import CONFIG from "./config.json" with { type: "json" };
+import { createSky, SKY } from "./sky.js";   // CLOUDS AND SKIES: shown in the sky dome the world draws
+import { CLOUD_TYPES, SKIES } from "./clouds.js";
 import { showPick, asked, drawPicked } from "./assetpick.js";   // ONE OF A FAMILY: listed, and only the one picked generated
 import { registerPatterns, drawSheet, renderPattern, patternNames, PALETTES } from "./patterns.js";   // PATTERNS: a family shown as a sheet of swatches, in its palettes
 import { bakeTiles } from "./textures.js";   // the older tiles (ashlar, marble, the orders' ornament...) a finish may still name as `pat`
@@ -217,6 +220,9 @@ import { SKYSTEEDS, tuckLegs } from "./skysteeds.js";   // the pegasus and the g
 import { createArchView } from "./archview.js";   // CUTS through what is shown; a building's PARTS picked, framed, isolated, hidden; its LAYERS faded
 import { EXPRESSIONS, VISEMES } from "./face.js";
 import { drawSpecimen } from "./butterflies.js";
+import { createPlantField, PLANT_LOD, SEASON as PLANT_SEASON } from "./plants/render.js";   // PLANTS: a tree, the bush, a flower -- grown from the definition being edited, as the world draws them
+import { speciesDef } from "./plants/species.js";
+import { setFlowerLook, flowerGeometry, flowerMaterial } from "./plants/flowers.js";
 import { natureSpecimen } from "./nature.js";   // NATURE: a burrow in a bank (the ground really cut), an anthill and its ants, a nest -- as the world builds them
 import { TECHNIQUES } from "./greek/paint.js";
 import { registerGreek, renderGreek } from "./greek.js";   // GREEK PAINTINGS: the data, each painting by seed
@@ -279,7 +285,7 @@ const glyphModes = () => ["", ...Object.keys(JSON.parse(source.get("glyphs/color
 const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem("assets." + k)) ?? d; } catch { return d; } },
                 set: (k, v) => { try { localStorage.setItem("assets." + k, JSON.stringify(v)); } catch {} } };
 const GROUPS = [["Recent", []], ["Creatures", ["creature"]], ["Buildings", ["building", "doors"]], ["People & clothes", ["body", "motion", "garment", "wardrobe"]],
-                ["Items", ["item", "item-kit", "item-materials"]], ["Surfaces", ["pattern", "finish"]], ["Hieroglyphs", glyphKinds], ["Butterflies", ["butterfly", "butterfly-shapes"]], ["Murals", ["mural"]], ["Greek paintings", ["greek"]], ["Nature", ["nature"]]];
+                ["Items", ["item", "item-kit", "item-materials"]], ["Surfaces", ["pattern", "finish"]], ["Hieroglyphs", glyphKinds], ["Butterflies", ["butterfly", "butterfly-shapes"]], ["Murals", ["mural"]], ["Greek paintings", ["greek"]], ["Nature", ["nature"]], ["Plants", ["plant"]], ["Sky", ["cloud", "skies"]]];
 const openSet = new Set(store.get("open", ["Recent"]));
 const remember = (d, key) => { d.open = openSet.has(key); d.addEventListener("toggle", () => { if ($("q").value) return; d.open ? openSet.add(key) : openSet.delete(key); store.set("open", [...openSet]); }); };
 const linkOf = (p) => { const a = document.createElement("a"); a.textContent = p.split("/").pop(); a.dataset.path = p; a.title = p; a.onclick = () => show(p); return a; };
@@ -367,6 +373,7 @@ function addRecent(path) {
 buildTree();
 
 // ---- what is on the stand ------------------------------------------------------------------------------------
+let plantField = null;   // (a tree or the bush shown: the plants engine's own field, made for it and let go after)
 let current = null, herd = null, mesh = null, doorsOn = null, person = null, gait = 1, tPose = 0, front = false, itemSeed = 1, tools = null, held = null, glyphMode = 0;
 let shownArch = null;   // (a building shown: its assembly and definition, for archview.js)
 let motions = null, motionStatsAt = 0, motionBox = null;   // the figures in motion (motion.js players), and when their line was last written
@@ -441,6 +448,7 @@ function clearStand() {
   if (mesh) { stand.remove(mesh); mesh.traverse((o) => o.geometry?.dispose?.()); mesh = null; }   // (a finished building is a group)
   if (doorsOn) { stand.remove(doorsOn); doorsOn = null; }   // (its doors: their leaves are doors.js's, cached and shared -- not disposed)
   if (tools) { tools.dispose(); tools = held = null; }
+  if (plantField) { plantField.dispose(); plantField = null; }
   person = null; shownArch = null;
   manes?.place([]);   // (no figure: no mane left standing)
   heads?.place([]);   // (nor its head)
@@ -535,6 +543,7 @@ function build(path, text) {
   front = def._view === "front";
   const kind = kindOf.get(path) ?? "creature";
   clearStand();
+  skyOff();
   $("pick").style.display = "none"; $("view").classList.remove("picking");
   $("motionOpts").style.display = kind === "motion" ? "inline-flex" : "none";
   flat(kind === "pattern" || glyphKinds.includes(kind) || kind === "butterfly" || kind === "butterfly-shapes" || kind === "mural" || kind === "greek");
@@ -692,6 +701,8 @@ function build(path, text) {
     person = [{ an, base: gaitBase(d) }];
     return { label: `the human canon · ${qp.get("who") ?? "man"}`, stats: `${an.parts.length} parts` };
   }
+  if (kind === "plant") return buildPlant(path, def);
+  if (kind === "cloud" || kind === "skies") return buildSky(path, def, kind);
   if (kind === "nature") {   // (2026-11-08) a burrow, an anthill, a nest: nature.js natureSpecimen, from the text being edited
     const S = natureSpecimen(path, def);
     mesh = S.object; stand.add(mesh);
@@ -904,6 +915,7 @@ function assetBox() {
   return box;
 }
 function frame(fly = false) {
+  if (skyLook) return skyFrame();   // (a sky: the eye stays on the ground)
   const box = assetBox();
   if (box.isEmpty()) box.set(new THREE.Vector3(-1, 0, -1), new THREE.Vector3(1, 2, 1));
   const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
@@ -918,6 +930,101 @@ function frame(fly = false) {
   grid.scale.setScalar(g / 20);
 }
 
+// a tree or the bush in leaf, in flower, in fruit, or both (the "shown" switch): the season uniforms its shaders read
+function plantSeason() {
+  const v = $("plantSeason").value, fl = v === "flower" || v === "both" ? 1 : 0;
+  PLANT_SEASON.bloom.value = fl; PLANT_SEASON.flowers.value = fl;
+  PLANT_SEASON.fruit.value = v === "fruit" || v === "both" ? 1 : 0;
+}
+
+// PLANTS (2026-11-18, docs/plants.md): grown from the text being edited, through the engine the world draws them with.
+// A TREE: its three variants in a row, each a skeleton of its own seed, nearest at full detail (the L key in the lab,
+// grove.html, steps the levels; here they follow the distance, as in the world); THE BUSH: bare and in a few of its
+// fruits; A FLOWER: four of the kind (two colourings, each grown twice), its atlas painted anew from the definition.
+function buildPlant(path, def) {
+  const name = path.split("/").pop();
+  if (path.startsWith("plants/flowers/")) {
+    setFlowerLook(name, def);
+    mesh = new THREE.Group();
+    let tris = 0;
+    for (let v = 0; v < 4; v++) {
+      const g = flowerGeometry(name, v), m = new THREE.Mesh(g, flowerMaterial());
+      m.position.x = (v - 1.5) * .35; m.rotation.y = v * 1.9; mesh.add(m);
+      tris += g.index.count / 3;
+    }
+    stand.add(mesh);
+    return { label: (def._about ?? name).split(":")[0], stats: `4 plants · ${Math.round(tris / 4)} triangles each · drawn larger than life (plants/flowers.js BLOOM)` };
+  }
+  const bush = name === "bush", S = speciesDef(def);
+  plantSeason();
+  plantField = createPlantField(stand, { species: { [bush ? "bush" : name]: S } });
+  const kinds = bush ? ["bush", ...def.fruits.slice(0, 4).map((f) => "bush:" + f.name)] : [name, name, name];
+  const added = [];
+  for (let i = 0, seed = 0; i < kinds.length; i++) {
+    let h, s;   // (a tree: the seeds that give variants 0, 1, 2 in turn)
+    do h = plantField.add(kinds[i], 0, 0, 0, { yaw: i * 2.1, seed: s = seed++ }); while (!bush && h.variant !== i && seed < 64);
+    added.push({ ...h, seed: s });
+  }
+  plantField.clear();
+  const gap = Math.max(...added.map((h) => h.info.crown)) * 2.1 + 1;
+  added.forEach((h, i) => plantField.add(kinds[i], (i - (kinds.length - 1) / 2) * gap, 0, 0, { yaw: i * 2.1, seed: h.seed }));
+  plantField.build();
+  const H = Math.max(...added.map((h) => h.info.height)), W = gap * kinds.length;
+  mesh = new THREE.Mesh(new THREE.BoxGeometry(W, H, gap), new THREE.MeshBasicMaterial());   // (the row's bounds, for framing it)
+  mesh.position.y = H / 2; mesh.visible = false; stand.add(mesh);
+  const K = plantField.kinds.get(bush ? "bush" : name);
+  const lv = K.variants.map((V) => V.geo.map((parts) => parts.reduce((t, [, a]) => t + a.tris, 0)));
+  const per = lv.map((l, v) => `${l.join(" / ")}`).join(" · ");
+  return { label: (def._about ?? name).split(":")[0], stats: `${K.variants.length} variants · triangles near / mid / far: ${per} · ${H.toFixed(1)} m · LOD ${PLANT_LOD.force < 0 ? "by distance" : PLANT_LOD.force}` };
+}
+
+// CLOUDS AND SKIES (2026-11-18, clouds.js): a cloud type, or a sky (skies.json's types seen together), in the sky dome
+// the world draws, looked at from the ground -- the eye at 1.7 m, dragging turns it round; the hour and the view picked
+// beside the list, and a type shown alone or with others (the sky's other families)
+const SKY_HOURS = [["midday", "midday", 0], ["afternoon", "afternoon", .16], ["evening", "evening", .3], ["sunset", "sunset", .4], ["dusk", "dusk", .5], ["night", "night", .85]];
+const SKY_LOOKS = { horizon: [0, .12], up: [0, .75], overhead: [0, 1.45], sun: [-1, .2], away: [1, .2] };   // (bearing: toward the sun -1, away 1; pitch up)
+let skyView = null, skyLook = null, skyDark = 0;
+function skyOff() {
+  if (!skyView) return;
+  skyView.dome.visible = false; grid.visible = true; skyLook = null; nav.opts.clip = true;
+  scene.background = new THREE.Color(0x2a2f36); camera.far = 600; camera.updateProjectionMatrix();
+}
+function buildSky(path, def, kind) {
+  if (!skyView) skyView = createSky(scene, { radius: 4000 });
+  skyView.dome.visible = true; grid.visible = false;
+  nav.opts.clip = false; camera.near = .1; camera.far = 5000; camera.updateProjectionMatrix();   // (the dome far off: no fitting near/far to the eye's 5 cm)
+  const types = Object.keys(CLOUD_TYPES);
+  const S = pick(path, kind === "skies" ? Object.keys(def.skies).map((k) => [k, k + " · " + (def.skies[k].map((e) => e.type).join(" + ") || "clear")])
+                                        : SKY_HOURS.map(([k, l]) => [k, l]), (k) => [
+    ...(kind === "skies" ? [{ key: "hour", own: "afternoon", options: SKY_HOURS.map(([h, l]) => [h, l]) }] : []),
+    { key: "look", label: "looking", own: "up", options: Object.keys(SKY_LOOKS).map((l) => [l, l]) },
+    ...(kind === "cloud" ? [{ key: "with", label: "with", own: "alone", options: types.filter((t) => t !== path.split("/").pop()).map((t) => [t, t]) },
+                            { key: "amount", own: def.amount ?? 1 }] : []),
+  ]);
+  let list;
+  if (kind === "skies") list = def.skies[S.key];
+  else {
+    const name = path.split("/").pop(), w = asked(S, "with");
+    list = [{ def, ...(asked(S, "amount") !== undefined ? { amount: asked(S, "amount") } : {}) }, ...(w && CLOUD_TYPES[w].family !== def.family ? [{ type: w }] : [])];
+    if (w && CLOUD_TYPES[w].family === def.family) $("err").textContent = `${w} is a ${def.family} too: one a family at a time`;
+  }
+  skyView.clouds.set(list, { now: true });
+  const hour = kind === "skies" ? asked(S, "hour") ?? "afternoon" : S.key;
+  skyDark = SKY_HOURS.find(([h]) => h === hour)?.[2] ?? 0;
+  skyLook = SKY_LOOKS[asked(S, "look") ?? "up"];
+  skyFrame();
+  const fams = skyView.clouds.list.map((e) => `${e.name ?? e.type} (${e.family})`).join(" + ") || "a clear sky";
+  return { label: kind === "skies" ? `Sky: ${S.key}` : (def.name ?? path) + (def.latin ? ` · ${def.latin}` : ""),
+           stats: `${fams} · ${hour} · dims the sun ${Math.round(skyView.clouds.dim() * 100)}% · drag to look round` };
+}
+// the eye on the ground, looking along the picked bearing and pitch (the sun's bearing from sky.js SKY.sunAz)
+function skyFrame() {
+  const [side, pitch] = skyLook, sx = -Math.cos(SKY.sunAz), sz = Math.sin(SKY.sunAz);   // (the sun's bearing over the ground)
+  const [hx, hz] = side < 0 ? [sx, sz] : side > 0 ? [-sx, -sz] : [-sz, sx];                  // (toward it, away, or across)
+  const eye = new THREE.Vector3(0, 1.7, 0), f = new THREE.Vector3(hx * Math.cos(pitch), Math.sin(pitch), hz * Math.cos(pitch));
+  nav.lookAt(eye, eye.clone().addScaledVector(f, .05));
+}
+
 let dirty = null;
 let fitBody = false;   // (a creature just shown: framed again once its sculpted surface is built -- the bones alone frame it short)
 async function apply(path, text, { refit = false } = {}) {
@@ -929,6 +1036,7 @@ async function apply(path, text, { refit = false } = {}) {
     variantBar(path, text);
     $("what").innerHTML = `<b>${out.label}</b> <span style="color:var(--dim)">${path}.json</span>`;
     $("stats").textContent = out.stats;
+    $("seasonOpt").style.display = path.startsWith("plants/") && !path.startsWith("plants/flowers/") ? "" : "none";
     kin(path);
     showDetail();
     $("err").textContent = "";
@@ -1115,6 +1223,7 @@ const bodies = createBodies(stand, { shade: CONFIG.people?.faceShade ?? {} });
 const heads = createHeads(stand, { shade: CONFIG.people?.faceShade ?? {} });   // (every figure's mesh head: a person's, a winged one's, a statue's carved one)
 const jewels = createJewels(stand);   // (and what hangs round their necks: jewels.js)
 const clock = new THREE.Clock();
+let frames = 0;
 renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), .1);
   if ($("spin").checked && person) for (const p of person) p.an.rotY += dt * .5;
@@ -1150,9 +1259,14 @@ renderer.setAnimationLoop(() => {
   // the shell adds a mesh whenever a figure first needs a coarser or finer bucket, so the wireframe is put
   // back on now and then rather than once
   nav.update(dt);
+  plantField?.update(camera);
+  if (skyLook) { const sk = skyView.update(camera, skyDark, 0, 0, { t: performance.now() / 1000 }); scene.background = sk.horizon; skyView.render(renderer, camera); }
   renderer.render(scene, camera);
+  if (++frames > 3) window.__ready = true;   // (a headless shot waits for it: tools/pshot.py)
 });
 resize();
+if (qp.get("season")) $("plantSeason").value = qp.get("season");   // (?season=leaf|flower|fruit|both: a plant shown so)
+$("plantSeason").onchange = plantSeason;
 if (qp.get("fly")) $("fly").checked = true;   // (?fly=1: shown aloft)
 show(qp.get("a") ?? index.categories.find((c) => c.kind === "creature").paths[0]);
 window.__assets = { show, build, bank, source, index, renderer, scene, camera, controls, nav, frame, standOn, view, get person() { return person; },

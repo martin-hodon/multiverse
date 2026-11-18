@@ -146,7 +146,8 @@ def magpie():
     bird("magpie", "a magpie strutting: pied -- the black head, breast and back, white belly and the white scapulars along the folded wing, the wings glossed blue, the long graduated tail glossed green; a stout black bill, black legs",
          .45, c, **M_(MED, dict(tilt=14, trunk=[.17, .098, .088], breast=[.1, .09, .085], bc=[.08, -.01],
          neck=[[.1, .06, .062], [.145, .09, .052]], head=[.17, .115], hr=[.06, .054, .05],
-         bill=dict(len=.07, r=.025, droop=8, depth=1.1),
+         # (2026-11-18: the corvids' blade -- a stout bill to a sharp point; the plain bill's tip ended flared and kicked up)
+         bill=dict(len=.072, r=.024, droop=6, curve=8, depth=1.1, baseY=.0, comp=.5, blade=True, taper=1.3, tipK=.95, lowK=.78, minR=.0008, wTip=.85),
          tail=dict(len=.56, w=.06, n=6, ang=-8, spread=.08, lens=[.62, .85, 1.0, .85, .62]),
          fold=dict(S=[.07, .055, .09], T=[-.24, .01, .045], H=.1, w=.045,
                    pad=PAD(col="@cov", tipCol="@primTip", patches=[dict(x=.3, y=.24, rx=.5, ry=.3, col="@wht", rot=-4), dict(x=.62, y=.6, rx=.16, ry=.26, col="@sec", rot=-6)])),
@@ -227,22 +228,29 @@ def dove():
 
 @sp
 def kingfisher():
-    c = pal("#1f88c6", "#e0782e", head="#1a6c9c", wing="#1b6a8c", tail="#1a5a8a", bill="#1a1818", leg="#e0603a",
-            cheek="#e0782e", throat="#f4efe6", gcovTip="#3aa8d8", covTip="#2a90c0", sec="#1a5a7a", prim="#1a4a6a", primTip="#163e58",
-            cyan="#4ccaf2", wht="#f4efe6", eye="#0e0a08")
+    # (C 2026-11-18: it read as a chick -- the head as big as the body and round, the face a pink blur. Now the head
+    #  smaller and flatter-crowned on a slimmer, more upright body; the face's bands crisp paint: the orange from the
+    #  lores through the eye to the ear, the blue moustache under it, the white throat and neck patch; the wing's cyan
+    #  spots big enough to read; the cyan stripe down the back wider)
+    c = pal("#1f88c6", "#d65c1a", head="#1a6c9c", wing="#1b6a8c", tail="#1a5a8a", bill="#1a1818", leg="#e0603a",
+            cheek="#1a6c9c", throat="#f4efe6", gcovTip="#3aa8d8", covTip="#2a90c0", sec="#1a5a7a", prim="#1a4a6a", primTip="#163e58",
+            cyan="#4ccaf2", wht="#f4efe6", eye="#0e0a08", ear="#dc6a22", spot="#5cc8ee", crown="#1d74a8")
     bird("kingfisher", "a common kingfisher on its perch: a big head and the long black dagger of a bill, electric blue back with the brilliant cyan stripe down to the rump, blue-green wings spotted paler, orange cheeks and underparts, white throat and neck patch, the stump of a tail, tiny red feet",
-         .17, c, **M_(SMALL, dict(tilt=25, trunk=[.16, .11, .105], breast=[.11, .105, .1], bc=[.075, -.01],
-         neck=[[.11, .07, .09], [.165, .1, .085]], head=[.19, .13], hr=[.1, .088, .084],
-         bill=dict(len=.21, r=.032, droop=3, depth=1.15, comp=.46, blade=True, taper=1.0, tipK=.97, lowK=.85, minR=.0007, wTip=.9),   # (C 2026-11-07: a dagger, not a slab)
-         tail=dict(len=.16, w=.06, n=5, ang=-6, spread=.2),
-         fold=dict(S=[.08, .06, .1], T=[-.19, .01, .058], H=.1, w=.045, pad=PAD(out=.026, th=.028, col="@cov", tipCol="@primTip",
-                   patches=[dict(x=x_, y=y_, rx=.05, ry=.06, col="@gcovTip") for x_, y_ in ((.14, .22), (.26, .2), (.2, .38), (.34, .36), (.12, .52), (.28, .52))])),
+         .17, c, **M_(SMALL, dict(tilt=42, trunk=[.165, .1, .095], breast=[.11, .098, .092], bc=[.07, -.01],
+         neck=[[.1, .065, .08], [.15, .095, .072]], head=[.18, .125], hr=[.084, .068, .07],
+         bill=dict(len=.22, r=.028, droop=3, depth=1.15, comp=.46, blade=True, taper=1.0, tipK=.97, lowK=.85, minR=.0007, wTip=.9),   # (C 2026-11-07: a dagger, not a slab)
+         tail=dict(len=.15, w=.055, n=5, ang=-4, spread=.2),
+         fold=dict(S=[.075, .055, .092], T=[-.2, .01, .055], H=.095, w=.043, pad=PAD(out=.026, th=.028, col="@cov", tipCol="@primTip",
+                   patches=[dict(x=x_, y=y_, rx=.075, ry=.085, col="@spot", paint=True) for x_, y_ in ((.12, .2), (.27, .18), (.19, .4), (.35, .36), (.1, .58), (.27, .56), (.43, .52))])),
          tars=.05, legr=.011, toes=.07, eye=.018, gap=.006,   # (mesh in CLOSE) (C 2026-11-07: legr .007 left the stubby tarsus too thin for the grid at 1000 tris -- the feet floated)
          spread=dict(span=1.6, armF=.36, asp=2.2, tipC=.5, hsweep=.2), wing=dict(armK=1.25, th=(25, 70), rounded=True, n=NOTRACT),
          marks=[("b", "backP", [-.01, .065, 0], [.22, .075, .13], "@back", {"k": .006, "kc": .004, "op": "paint"}),   # (C 2026-11-07: a crisp blue back, no pink blend band)
-                ("b", "rumpStripe", [-.05, .112, 0], [.17, .025, .022], "@cyan", {"k": .006, "kc": .003, "op": "paint"}),
-                ("h", "neckW", [-.05, -.045, .07], [.03, .035, .02], "@wht", {"k": .006, "mirror": True}),
-                ("h", "moustache", [.02, -.05, .06], [.05, .015, .02], "@back", {"k": .005, "mirror": True})])))
+                ("b", "underP", [.03, -.06, 0], [.21, .07, .13], "@under", {"k": .006, "kc": .006, "op": "paint"}),   # (C 2026-11-18: the orange crisp too -- blended into the blue trunk it went salmon)
+                ("b", "rumpStripe", [-.05, .1, 0], [.18, .03, .032], "@cyan", {"k": .006, "kc": .003, "op": "paint"}),
+                ("h", "ear", [.0, -.008, .06], [.085, .021, .05], "@ear", {"k": .004, "kc": .003, "mirror": True, "rot": -6, "op": "paint"}),
+                ("h", "moustache", [.015, -.038, .055], [.07, .014, .05], "@back", {"k": .004, "kc": .003, "mirror": True, "rot": -12, "op": "paint"}),
+                ("h", "throatW", [.04, -.058, 0], [.045, .022, .05], "@wht", {"k": .004, "kc": .003, "op": "paint"}),
+                ("h", "neckW", [-.07, -.03, .055], [.025, .03, .04], "@wht", {"k": .004, "kc": .003, "mirror": True, "op": "paint"})])))
 
 @sp
 def gull():

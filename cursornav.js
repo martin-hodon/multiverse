@@ -26,7 +26,7 @@ export function createNav(camera, dom, opts = {}) {
   const f = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3(), eye = new THREE.Vector3();
   const t1 = new THREE.Vector3(), t2 = new THREE.Vector3();
   const nav = {
-    target: new THREE.Vector3(), yaw: 0, pitch: .3, r: 5, to: null, enabled: true,
+    target: new THREE.Vector3(), yaw: 0, pitch: .3, r: 5, to: null, enabled: true, opts: o,   // (opts.clip: false -- a page sets near/far itself)
     // f (the line of sight), right, up -- yaw 0, pitch 0 looks along -z
     basis() {
       const cp = Math.cos(this.pitch);

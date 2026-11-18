@@ -256,6 +256,34 @@ scripts write those JSON files under `assets/architecture/`:
                                             Tour des Marques on the forecourt island; Diane's + Catherine's parterres; the Cher as a
                                             site.moat pool (OSM river + canal shore, islands). Writes its finish, doors and the new
                                             components/loire-turret, loire-dormer, oculus-dormer
+    kit.py        (a library)               what the generators share: `Doc` (parts, components, slabs, write), `at`, `wall_at`
+                                            (a `wall` CENTRED on its line -- a wall stands behind its face, local z -t..0, unlike
+                                            a box or an arch), arch heads (`horseshoe`, `lobed`), `tiles`/`split` (paving cut round
+                                            holes, in pieces), muqarnas (`muqarnas`, `muqarnas_box`, `muqarnas_dome`), `plant`
+                                            (orange, palm, cypress) and `hedges`. Import it rather than copying a helper
+    andalusi.py   components/{cordoban-arcade,cordoban-lantern,alminar,bab,nasrid-portico,qubba,torre}
+                                            al-Andalus's pieces: Cordoba's two-tier arcade (horseshoe under round arches,
+                                            voussoirs), its ribbed lantern dome, the square minaret (storeys, windows, blind
+                                            band all params), the gate in its alfiz; the Nasrid portico (columns single or
+                                            paired, lace wall over stilted or lobed arches, ceiling, eave, shed roof), the qubba
+                                            (square hall, drum of windows, squinch deck, dome lined with muqarnas, pyramid roof),
+                                            the torre (a tower round a core, its hall storey with windows, merlons or a roof)
+    cordoba.py    cordoba.json              The Great Mosque of Cordoba as al-Hakam II and al-Mansur left it (c. 988; no
+                                            Christian work): the hall's 19 naves of `cordoban-arcade`s, the maqsura's lobed and
+                                            interlaced arches under its ribbed domes, the mihrab, the court of oranges and
+                                            palms, the alminar, the walls with their buttresses and babs; finish + doors
+    alhambra.py   alhambra.json             The Alhambra under Muhammad V (c. 1370-91; no Christian work -- what is left out is
+                                            in its docstring): the IGN 5 m terrain (alhambra_dtm.txt) cut level under every
+                                            site, platforms under them; the OSM wall ring and the Alcazaba's as sweeps with
+                                            breastwork and merlons, 33 towers (`torre`, Comares with the Ambassadors' hall,
+                                            the gates with `bab`); the Mexuar, Cuarto Dorado, Comares and the Myrtles, the
+                                            baths, the Lions (porticoes, pavilions and Two Sisters/Abencerrajes as `qubba`,
+                                            the fountain of 12 `couchant-lion`s), Lindaraja, the Partal; the mosque where
+                                            Santa Maria stands, its baths, three medina palaces, ~100 houses; across the
+                                            ravine the GENERALIFE in its own turned `Frame` (Court of the Water Channel,
+                                            porticoes, west gallery + mirador, Sala Regia, Ismail I's tower, Sultana garden,
+                                            entrance courts and stair, the water stair's flights to an oratory, the
+                                            orchards), the Albercon Arabe, the Silla del Moro; finish + doors
 
 To look at a building's statues in the lab, `arch_lab.html?statues=1` draws its `statue` markers (without them it leaves them out).
 

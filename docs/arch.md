@@ -3717,3 +3717,66 @@ the bed at -F-D -- so a piece's origin sits on the quay face and the layout only
 
 Checked: archcheck clean (0 findings, mesh) for all eighteen components and the nine harbours with their finishes;
 headless assemble with stair headroom and support checks clean.
+
+## Al-Andalus: the Great Mosque of Cordoba and the Alhambra (2026-11-18)
+
+Two landmarks at their height, with nothing Christian added: the **Mezquita** as al-Hakam II and al-Mansur left it
+(c. 988 -- no cathedral in its middle, the court open on the hall), and the **Alhambra** as Muhammad V left it
+(c. 1370-91 -- no palace of Charles V, no Santa Maria, no bastions or Peinador gallery), with the **Generalife**
+across the ravine as Ismail I remade it (1319 -- no gallery of 1494, no Sultana galleries, no Romantic mirador or
+modern gardens); what each generator leaves out and why is in its docstring. Both are built by scripts in `tools/archgen` from one shared kit and one module of
+components, so the next building of the Islamic west starts from pieces, not from a blank file.
+
+**Engine.**
+- A new part `type: "arch"`: a FREE arch, the band of voussoirs alone on its two imposts (Cordoba's horseshoe braces
+  between the columns, an arch across a court). `width` clear span, `head` the intrados (any profile), `depth` the
+  voussoirs, `thickness` through the wall, `stilt`, optional `extrados`. An arch *in* a wall stays an opening.
+- A new arch profile `lobed` (arch/profiles.js): `lobes` whole lobes between two half lobes at the imposts, strung
+  inside a horseshoe (`over`) or a semicircle; cusps point into the opening; lobes too small to meet are refused.
+- Column orders `caliphal` (re-used shaft, honeycomb bell capital) and `nasrid` (ring base, tall cubic capital).
+- Finish mapping `radial`, an arch part's default: u round the arch's centre along its middle line, v out from it, so
+  upright stripes become voussoirs (`stone/voussoirs`, docs/patterns.md).
+- Palettes `cordoba-voussoir`, `cordoba-stone`, `nasrid-stucco`, `nasrid-tile`, `alhambra-earth`; door style `andalusi`.
+
+**Generators.** `kit.py` gathers what had been copied from script to script (`tiles` now comes from there in
+imam_mosque, qasr_al_nur, sheikh_zayed, st_marks): `Doc`, `at`, `wall_at`, arch heads, `tiles`/`split`, muqarnas
+(`muqarnas_dome`: rings of cells over a unit hemisphere, placed by the qubba as expressions), `plant`, `hedges`.
+`andalusi.py` writes seven components: `cordoban-arcade`, `cordoban-lantern`, `alminar`, `bab`, `nasrid-portico`,
+`qubba`, `torre` (README). Their sizes are params with defaults that build Cordoba's; the Alhambra's mosque minaret
+is the same `alminar` at 19 m with smaller storeys, every Nasrid court's arcade the same `nasrid-portico`.
+
+**THE WALL CONVENTION** (the cause of every floating finding met here): a `wall` part stands *behind* its placement --
+its local z runs from -thickness to 0 -- while a box, an arch, a prism or a roof is centred on it. A wall meant to sit
+on a line must be placed with `kit.wall_at(x, y, z, yaw, t)`. Reliefs on a wall's face (an alfiz, a blind arcade) go at
+z = their own half depth in front of 0.
+
+**Faces of a rect enclosure**: built from [[-a,-b],[a,-b],[a,b],[-a,b]] and turned so that face 0 is +z (south), 1
++x, 2 -z (north), 3 -x; an opening's `at` is from the face's middle. One face's openings may not overlap even one
+above another: two storeys of doors and windows are `tiers` (alhambra.py `storeys`).
+
+**The Alhambra's ground.** The IGN's MDT05 (5 m) as `alhambra_dtm.txt`, decimetres over 772 m, y 0 = 745 m. Every
+building declares its SITE (rectangles and a level); the hill is cut to just under each site and a cell round it
+*before* anything reads the ground (a tower's foot, a house, the wall's walk), and a walked platform stands from the
+lowest ground under the site to its level. The city wall is one closed `sweep` along the OSM ring, its walk 9 m over
+the smoothed ground and let down under a palace's floor where it runs through one; breastwork sweeps and one merlon
+part on the outer side of every run outside a site (which side is outside: the ring's signed area).
+
+**Frames.** A plan turned off the compass gets its own `Frame` (alhambra.py: origin, turn; `w`/`l` map between local
+and world, `at` places in it). Sites, halls, courts, pools, porticoes and free walls (`fwall`) all take one, and
+`kit.Doc.slabs` takes `place`, so the Generalife -- 38 degrees off -- is written in the court's own axes, square to
+OSM's outline there. A free `wall`'s openings count from its START (its local -x end), not its middle as an
+enclosure face's do; `fwall` takes them as coordinates along its line and converts.
+
+**Terrain left open below**: a `terrain` with `bottom: false` now reports `openBelow`, and archcheck's closed-solid
+test passes over it (its only open edges are the rim at `base`, by design; Park Guell's hill had carried the same
+finding).
+
+**Checked**: archcheck (mesh, finish) clean for both; every new component alone clean (comp.mjs); headless renders
+of both reviewed from full-size close-ups. **Lessons**: a component's sizes belong in params from its first use (the
+alminar and its lantern had Cordoba's metres written in and could not be built smaller); a fountain's basin on lions
+must sit on their backs, not their manes; a qubba standing in a range is built round, never under that range's roof
+(the Two Sisters and the Abencerrajes first stood inside it); a bab's blind arcade stands over `ay`, so its `H` must
+clear it (~8 m). **Not built**: the dadoes of tiles under the plaster (a finish cannot tell a band of a wall yet), the
+muqarnas as more than a lining of cells, the Lions' pavilions on their clustered columns (walled qubbas stand for
+them), the medina's real street plan (unmapped; a grid of courtyard houses stands for it), the Dar al-Arusa and the
+Alijares (beyond the frame), the path across the ravine to the Generalife.

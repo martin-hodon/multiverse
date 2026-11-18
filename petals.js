@@ -19,7 +19,7 @@ const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a
 const norm = (a) => { const l = Math.hypot(...a) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
 
 // the blade's half-width at s (0 its base .. 1 its tip), a share of the widest; and how far the tip's middle is pulled back
-function widthAt(shape, s) {
+export function widthAt(shape, s) {
   switch (shape) {
     case "strap": return s < .12 ? .55 + s / .12 * .45 : s > .82 ? Math.sqrt(Math.max(0, 1 - ((s - .82) / .18) ** 2)) : 1;
     case "pointed": return Math.sin(Math.PI * Math.min(1, s * 1.05)) ** .8 * (s < .45 ? 1 : 1 - .15 * (s - .45));

@@ -3,19 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grove — Bannerfield trees</title>
+<title>Grove — the plants lab</title>
 <style>
   html, body { margin: 0; height: 100%; overflow: hidden; background: #c7ddee; font: 13px "Avenir Next", "Segoe UI", sans-serif; color: #22303c; }
   canvas { display: block; }
-  #bar { position: absolute; left: 10px; top: 10px; max-width: 46em; background: rgba(255, 255, 255, .82); border-radius: 6px; padding: 8px 10px; line-height: 1.5; }
+  #bar { position: absolute; left: 10px; top: 10px; max-width: 50em; background: rgba(255, 255, 255, .82); border-radius: 6px; padding: 8px 10px; line-height: 1.5; }
+  #stats { font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
 <div id="bar">
-  <b>Grove</b>: the grown trees of flora.js -- wood as banner capsules (instanced), leaves as alpha
-  cut-out cards (foliage.js), two of every species: <span id="species"></span>.
-  In front: bushes, plain and one of every fruit. Drag to orbit · <b>A</b> autumn (summer / half / full) · <b>R</b> re-roll · <b>B</b> leaves face the camera on/off ·
-  <code>?seed=N</code> <code>?t=</code> (freeze) <code>?cam=x,y,z,tx,ty,tz</code> <span id="info"></span>
+  <b>Grove</b>: the plants engine (plants/) -- every tree species twice, the bushes with every fruit in front, the flowers before them.
+  Drag to orbit · <b>S</b> season (summer / spring / late summer / autumn / bare / snow) · <b>L</b> level of detail
+  (auto / 0 / 1 / 2) · <b>F</b> forest (a thousand trees) on/off · <b>W</b> wind ·
+  <code>?seed=N</code> <code>?t=</code> (freeze) <code>?cam=x,y,z,tx,ty,tz</code> <code>?season=</code> <code>?lod=</code> <code>?forest=N</code> <code>?kinds=a,b</code>
+  <div id="stats"></div>
 </div>
 <script type="importmap">
 { "imports": {
@@ -26,19 +28,24 @@
 } }
 </script>
 <script type="module">
-// A test bench for the trees: each species twice in a row, the wood in one
-// instanced herd, the leaves in one foliage mesh -- as the world draws them.
+// THE PLANTS LAB: the field (plants/render.js) as the world draws it -- one of every kind in rows to look at close,
+// a forest to measure (?forest=N or F), the seasons and the levels of detail to switch through.
 import * as THREE from "three";
-import { navControls } from "./cursornav.js";   // (the view turns and zooms about the point under the pointer, as the atlas's: here the ground's)
-import { createHerd } from "./instanced.js";
-import { makeTree, TREE_SPECIES, WARM_TREES, FRUIT_TREES, makeBush, BUSH_FRUITS } from "./flora.js";
-import { buildFoliage, FOLIAGE_T, FOLIAGE_BB } from "./foliage.js";
+import { navControls } from "./cursornav.js";
+import { createPlantField, SEASON, PLANT_LOD } from "./plants/render.js";
+import { TREES, BUSH_FRUITS } from "./plants/species.js";
+import { FOLIAGE_T, SNOW } from "./foliage.js";
+import { WIND } from "./grass.js";
+import { rng } from "./rng.js";
+import { FLOWER_KINDS, FLOWERS_OF, flowerGeometry, flowerMaterial } from "./plants/flowers.js";
+import { batchPool } from "./batchpool.js";
 
 const qp = new URLSearchParams(location.search);
 const num = (k, d) => qp.has(k) ? +qp.get(k) : d;
 const freeze = qp.has("t") ? +qp.get("t") : null;
-let seed = num("seed", 1), autumn = num("autumn", 0);
-FOLIAGE_BB.value = num("billboard", 1) > 0 ? 1 : 0;
+const seed = num("seed", 1);
+PLANT_LOD.force = num("lod", -1);
+WIND.strength.value = num("wind", .5);
 
 const renderer = new THREE.WebGPURenderer({ antialias: true });
 await renderer.init();   // multisampled: the leaves' alpha-to-coverage edges
@@ -47,58 +54,122 @@ renderer.setSize(innerWidth, innerHeight);
 document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xc7ddee);
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(600, 600), new THREE.MeshBasicMaterial({ color: 0x9aad6a }));
+scene.fog = new THREE.Fog(0xc7ddee, 250, 700);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(1400, 1400), new THREE.MeshBasicNodeMaterial({ color: 0x8a9d5c }));
 ground.rotation.x = -Math.PI / 2;
 scene.add(ground);
 const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .3, 2000);
-const cam = (qp.get("cam") ?? "0,14,95,0,13,0").split(",").map(Number);
+const cam = (qp.get("cam") ?? "0,14,95,0,11,0").split(",").map(Number);
 camera.position.set(cam[0], cam[1], cam[2]);
 const controls = navControls(camera, renderer.domElement);
 controls.target.set(cam[3], cam[4], cam[5]);
 controls.update();
-document.getElementById("species").textContent = [...TREE_SPECIES, ...WARM_TREES, ...FRUIT_TREES].join(", ");
 
-let herd = null, foliage = null;
-function build() {
-  if (herd) scene.remove(herd.mesh);
-  if (foliage) { scene.remove(foliage); foliage.geometry.dispose(); foliage.material.dispose(); }
-  const trees = [];
-  const all = [...TREE_SPECIES, ...WARM_TREES, ...FRUIT_TREES];
-  all.forEach((sp, i) => { for (let j = 0; j < 2; j++) trees.push({ def: makeTree(sp, { seed: seed * 100 + i * 2 + j, autumn }), x: (i * 2 + j - (all.length * 2 - 1) / 2) * 14 }); });
-  // a row of bushes in front: plain ones and one of every fruit
-  [null, ...BUSH_FRUITS.map((f) => f.name), null].forEach((fruit, i, all) => trees.push({ def: makeBush({ seed: seed * 50 + i, autumn, fruit }), x: (i - (all.length - 1) / 2) * 5, z: 22 }));
-  herd = createHerd(trees.reduce((a, t) => a + t.def.parts.length, 0));
-  scene.add(herd.mesh);
-  const cards = [];
-  for (const t of trees) {
-    const an = herd.add(t.def);
-    const z = t.z ?? 0;
-    an.position.set(t.x, 0, z);
-    for (const L of t.def.leaves) cards.push({ ...L, c: [L.c[0] + t.x, L.c[1], L.c[2] + z] });
-  }
-  herd.update(0);
-  foliage = buildFoliage(cards);
-  scene.add(foliage);
-  document.getElementById("info").textContent = ` · ${herd.animals.reduce((a, an) => a + an.parts.length, 0)} wood segments, ${cards.length} leaf cards`;
+// THE SEASONS the lab steps through: [name, autumn, bare, bloom, fruit, snow]
+const SEASONS = [["summer", 0, 0, 0, 0, 0], ["spring", 0, 0, 1, 0, 0], ["late summer", 0, 0, 0, 1, 0], ["autumn", .85, .1, 0, 1, 0],
+                 ["bare", 1, 1, 0, 0, 0], ["snow", 1, 1, 0, 0, .8]];
+let season = Math.max(0, SEASONS.findIndex((s) => s[0] === (qp.get("season") ?? "summer")));
+function setSeason() {
+  const [, a, b, bl, f, sn] = SEASONS[season];
+  SEASON.autumn.value = a; SEASON.bare.value = b; SEASON.bloom.value = bl; SEASON.fruit.value = f; SNOW.value = sn;
 }
-build();
+setSeason();
+
+const t0 = performance.now();
+const field = createPlantField(scene);
+const kinds = qp.has("kinds") ? qp.get("kinds").split(",").filter((k) => TREES[k]) : Object.keys(TREES);   // (?kinds=yew,olive: only those)
+// the rows: every species twice (two variants), 16 m apart; the bushes in front
+kinds.forEach((k, i) => { for (let j = 0; j < 2; j++) field.add(k, (i * 2 + j - (kinds.length * 2 - 1) / 2) * 16, 0, 0, { yaw: j * 2.1, seed: seed * 100 + i * 2 + j }); });
+["bush", ...BUSH_FRUITS.map((f) => "bush:" + f.name)].forEach((k, i, a) => field.add(k, (i - (a.length - 1) / 2) * 5, 0, 24, { yaw: i, seed: seed * 50 + i }));
+// the flowers (plants/flowers.js): every kind twice in a row before the bushes, 60 cm apart, and a meadow of them
+// round it, in clumps, in one batched pool as in the game
+const flowerAt = new Map();
+{
+  const pool = batchPool(scene, flowerMaterial(), { name: "flowers", copies: 1024 }), shapes = new Map(), r = rng(seed * 77);
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), up = new THREE.Vector3(0, 1, 0), one = new THREE.Vector3(1, 1, 1);
+  const put = (kind, v, x, z, yaw, sc = 1) => {
+    const key = kind + v;
+    if (!shapes.has(key)) shapes.set(key, pool.add(flowerGeometry(kind, v)));
+    pool.fix(shapes.get(key), m.compose(new THREE.Vector3(x, 0, z), q.setFromAxisAngle(up, yaw), one.clone().multiplyScalar(sc)));
+  };
+  FLOWER_KINDS.forEach((k, i) => { for (let v = 0; v < 2; v++) { const x = (i * 2 + v - FLOWER_KINDS.length + .5) * .6; put(k, v, x, 30, v * 2); if (!v) flowerAt.set(k, [x, 30]); } });
+  const MEADOW = FLOWERS_OF("meadow");   // (the random meadow: no water lily on dry land, no agave in the grass)
+  for (let c = 0; c < 160; c++) {
+    const kind = MEADOW[Math.floor(r() * MEADOW.length)], v = Math.floor(r() * 2), cx = (r() - .5) * 40, cz = 33 + r() * 14;
+    for (let k = 0; k < 2 + Math.floor(r() * 3); k++) put(kind, v, cx + (r() - .5) * 1.4, cz + (r() - .5) * 1.4, r() * 6.28, 1.2 + r() * .3);
+  }
+}
+// the forest: N trees of the wild mix over a disc behind the rows
+let forestOn = qp.has("forest");
+const forestN = num("forest", 1000);
+function plantForest() {
+  const r = rng(seed * 991), wild = ["oak", "birch", "pine", "spruce", "maple", "oak", "birch", "maple"];
+  const R = Math.sqrt(forestN) * 6.2;
+  for (let i = 0; i < forestN; i++) {
+    const a = r() * Math.PI * 2, d = Math.sqrt(r()) * R;
+    field.add(wild[Math.floor(r() * wild.length)], Math.cos(a) * d, 0, -50 - R + Math.sin(a) * d, { yaw: r() * 6.28, scale: .8 + .4 * r(), seed: i * 7 + 3 });
+  }
+}
+if (forestOn) plantForest();
+field.build();
+const buildMs = performance.now() - t0;
 
 addEventListener("keydown", (e) => {
-  if (e.key === "a" || e.key === "A") { autumn = autumn >= 1 ? 0 : autumn + .5; build(); }
-  if (e.key === "r" || e.key === "R") { seed++; build(); }
-  if (e.key === "b" || e.key === "B") FOLIAGE_BB.value = FOLIAGE_BB.value > .5 ? 0 : 1;   // leaves as camera-facing banners, or fixed
+  const k = e.key.toLowerCase();
+  if (k === "s") { season = (season + 1) % SEASONS.length; setSeason(); }
+  if (k === "l") PLANT_LOD.force = PLANT_LOD.force >= 2 ? -1 : PLANT_LOD.force + 1;
+  if (k === "w") WIND.strength.value = WIND.strength.value > 1.2 ? 0 : WIND.strength.value + .5;
+  if (k === "f") { forestOn = !forestOn; field.clear(); location.search = forestOn ? "?forest=" + forestN : ""; }
 });
 addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
-let t = 0, last = performance.now();
+const statsEl = document.getElementById("stats");
+let t = 0, last = performance.now(), fps = 60, frames = 0;
 (function frame(now) {
-  t = freeze ?? t + Math.min(now - last, 50) / 1000; last = now;
+  const dt = Math.min(now - last, 100); last = now;
+  fps = fps * .95 + (1000 / Math.max(1, dt)) * .05;
+  t = freeze ?? t + dt / 1000;
   controls.update();
   FOLIAGE_T.value = t;
+  field.update(camera);
   renderer.render(scene, camera);
-  window.__ready = true;
+  if (++frames % 15 === 0) {
+    const s = field.stats, ri = renderer.info.render;
+    statsEl.textContent = `${SEASONS[season][0]} · LOD ${PLANT_LOD.force < 0 ? "auto" : PLANT_LOD.force} · ${s.trees} plants, ${s.shown} in view · ` +
+      `${(s.tris / 1e6).toFixed(2)} M plant triangles · ${ri.drawCalls ?? ri.calls} draws · ${fps.toFixed(0)} fps · built in ${buildMs.toFixed(0)} ms`;
+  }
+  if (frames > 3) window.__ready = true;
   requestAnimationFrame(frame);
 })(last);
-window.__dbg = { THREE, scene, camera, controls, get herd() { return herd; }, get foliage() { return foliage; } };
+// the lab's camera hook: frame kind's first plant -- from `dist` heights off (on side `ang`), looking at `at` of its height
+function focus(kind, { dist = 1.5, ang = 0, at = .5, up = .15 } = {}) {
+  const it = field.first(kind), H = it.K.variants[it.v].sk.H * it.scale;
+  controls.target.set(it.x, H * at, it.z);
+  camera.position.set(it.x + Math.sin(ang) * H * dist, H * (at + up), it.z + Math.cos(ang) * H * dist);
+  controls.update();
+  return 1;
+}
+// a close look: from eye [x, y, z] relative to kind's first plant at target [x, y, z] relative to it
+function near(kind, eye, at) {
+  const it = field.first(kind);
+  camera.position.set(it.x + eye[0], it.y + eye[1], it.z + eye[2]);
+  controls.target.set(it.x + at[0], it.y + at[1], it.z + at[2]);
+  controls.update();
+  return 1;
+}
+// a look at kind's crown (its trunk's top, wherever the lean took it): from `dist` metres off on side `ang`, `up` above
+function crown(kind, { dist = 6, ang = 0, up = 0 } = {}) {
+  const it = field.first(kind), [px, py, pz] = it.K.variants[it.v].sk.branches[0].pts.at(-1).map((v) => v * it.scale);
+  const c = Math.cos(it.yaw), s = Math.sin(it.yaw), x = it.x + px * c + pz * s, y = it.y + py, z = it.z - px * s + pz * c;
+  controls.target.set(x, y, z); camera.position.set(x + Math.sin(ang) * dist, y + up, z + Math.cos(ang) * dist); controls.update();
+  return 1;
+}
+// a look at kind's flower in the row: from `dist` metres in front, its middle at height `at`
+function flower(kind, { dist = .9, at = .3, side = 0 } = {}) {
+  const [x, z] = flowerAt.get(kind);
+  camera.position.set(x + side, at + .1, z + dist); controls.target.set(x, at, z); controls.update();
+  return 1;
+}
+window.__dbg = { THREE, scene, camera, controls, field, renderer, SEASON, PLANT_LOD, focus, near, crown, flower, setSeason: (i) => { season = i; setSeason(); return 1; } };
 </script>
 </body>
 </html>

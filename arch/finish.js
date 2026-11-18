@@ -33,7 +33,8 @@
 // so the rows meet -- and v up the meridian's length on a dome; `meridian` the same in true metres, for a picture; `conformal` with v stretched as u narrows, so a
 // star stays a star and only gets smaller toward the crown, as a real dome's lattice does), `slope` (a roof: u along the eave, v up the slope).
 // By kind unless the rule says. `align: "part"` sets the tile's foot on the part's foot (a painted beam, a band); `align:
-// "above"` on the rule's `above` line (a painted frieze high on a wall). `whole: true` on a wall: each flat face holds a
+// "above"` on the rule's `above` line (a painted frieze high on a wall). `radial` (an `arch` part's own, by default): u round the
+// arch's centre along its middle line, v out from it -- upright stripes become its voussoirs. `whole: true` on a wall: each flat face holds a
 // whole number of tiles, stretched to fit, so a painting ends at the room's corner and no picture folds round it.
 import { evalNum } from "../expr.js";
 
@@ -792,7 +793,7 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1], sun = null } 
           let uvs = null;
           if (g.uv) {
             const r = hit.rule, size = hit.size ??= sizeOf(r).map((q) => q * (r.scale ?? 1));   // (worked out once a rule)
-            let mode = r.map ?? (hit.panel ? "plan" : ["dome", "vault"].includes(p.kind) || (["column", "ring"].includes(p.kind) && Math.abs(n[1]) < .7) ? "revolve"
+            let mode = r.map ?? (hit.panel ? "plan" : p.radial ? "radial" : ["dome", "vault"].includes(p.kind) || (["column", "ring"].includes(p.kind) && Math.abs(n[1]) < .7) ? "revolve"
                                  : p.kind === "roof" ? "slope" : surf0 === "floor" || surf0 === "ceiling" ? "plan" : "face");
             if ((mode === "face" || mode === "slope") && Math.abs(n[1]) > .95) mode = "plan";
             if (mode === "slope" && Math.abs(n[1]) < .05) mode = "face";   // (a gable: its wall's own coordinates)
@@ -802,7 +803,16 @@ export function finishPieces(asm, finish, { sizeOf = () => [1, 1], sun = null } 
               if (l > 1e-6 && Math.abs(n[0] * cx + n[2] * cz) / l < .5) mode = "face";
             }
             const th = Math.hypot(n[0], n[2]) || 1, tx = n[2] / th, tz = -n[0] / th;
-            if (mode === "opening") {
+            if (mode === "radial" && p.radial) {
+              // (AN ARCH'S VOUSSOIRS: u round the arch's own centre -- this copy's, in its own frame -- in metres along its
+              //  middle line, v out from the centre; so a pattern's upright stripes are the wedges of an arch, on its faces and
+              //  round its soffit alike)
+              const { yc, R } = p.radial;
+              uvs = poly.map((v) => {
+                const dx = v[0] - X, dz = v[2] - Z, lx = dx * c - dz * s, ly = v[1] - Y - yc;
+                return [Math.atan2(lx, ly) * R, Math.hypot(lx, ly)];
+              });
+            } else if (mode === "opening") {
               // (A PICTURE TO A CELL, read from inside: as wide as the cell, as many of it up the cell as its shape allows, filling it exactly.
               //  Only a cell far wider than a picture crops it, about the middle, for a figure keeps its build. A rose fills; tracery is plain metres.)
               const q = cur.pane(), c = cur.cell(), side90 = Math.abs(r.turn ?? 0) % 180 === 90, w = side90 ? size[1] : size[0], h = side90 ? size[0] : size[1];

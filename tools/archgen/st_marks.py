@@ -14,6 +14,7 @@
 #   Not on a survey: the sizes are the published ones, the positions (the Campanile's among them) worked from them. Numbers are worked here.
 import os, json, math, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from kit import tiles
 from shapes import onion_height
 from statuary import statue, FACE_NZ
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -99,19 +100,6 @@ for nm, x0, z0, x1, z1, top in (("west", -6.5, -RM - G1, 6.5, -RM, 22.5), ("east
 holes += [(-6.5, -RM - G1, 6.5, -RM), (-5.5, RM, 5.5, RM + G2), (RM, -5.5, RM + G2, 5.5), (-RM - G2, -5.5, -RM, 5.5)]
 
 # the flat roofs, cut round every crossing and join
-def tiles(x0, z0, x1, z1, holes):
-    xs = sorted({x0, x1, *[c for h in holes for c in (h[0], h[2]) if x0 < c < x1]})
-    zs = sorted({z0, z1, *[c for h in holes for c in (h[1], h[3]) if z0 < c < z1]})
-    out = []
-    for j in range(len(zs) - 1):
-        run = None
-        for i in range(len(xs) - 1):
-            mx, mz = (xs[i] + xs[i + 1]) / 2, (zs[j] + zs[j + 1]) / 2
-            free = not any(h[0] < mx < h[2] and h[1] < mz < h[3] for h in holes)
-            if free and run is None: run = xs[i]
-            if (not free or i == len(xs) - 2) and run is not None:
-                out.append((run, zs[j], xs[i + 1] if free else xs[i], zs[j + 1])); run = None
-    return out
 k = 0
 for (a, b, c, d) in [(-FW, ZW0, FW, -ZT), (-XT, -ZT, XT, ZT), (-XA, ZT, XA, ZE)]:
     for (x0, z0, x1, z1) in tiles(a, b, c, d, holes):

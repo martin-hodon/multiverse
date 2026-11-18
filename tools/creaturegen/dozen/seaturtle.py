@@ -1,7 +1,7 @@
 # THE GREEN SEA TURTLE (2026-11-09): the pond turtle (others/turtle, a `parts` rig) at 3.2 -- 1 m of shell -- then a sea
 # turtle's: the carapace flattened and drawn out long, its raised scute plates gone (a sea turtle's are flat: the seams
-# stay as lines), the fore legs long swept-back FLIPPERS (one `fin` sheet each on the leg bone, so they still beat with
-# the leg's swing), the hind legs short paddles, no claws, a bigger blunt head that cannot draw in, the hooked beak kept.
+# stay as lines), the fore legs long swept-back scythe FLIPPERS and the hind legs short rounded paddles (each one `fin` sheet on
+# its leg bone, rooted under the shell, so they still beat with the leg's swing), no claws, a bigger blunt head that cannot draw in, the hooked beak kept.
 # Olive-brown shell, pale yellow plastron, greenish-grey skin; loggerhead and hawksbill coats.
 import sys, os; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dlib import *
@@ -45,21 +45,33 @@ for k in ("at", "from"): e[k] = [hc[j] + (e[k][j] - hc[j]) * 1.3 for j in range(
 e["r"] *= 1.3
 over(d, "ear", color="@skin")
 n = shape(d, "neck"); n["pts"] = [[p[0], p[1], p[2], p[3] * 1.3] for p in n["pts"]]
-# ---- the fore flippers: the leg tube kept short as the shoulder, the foot and claws gone, one swept-back fin sheet a side
-drop(d, "footF", *[f"clawF{j}" for j in range(5)])
-sh = [0.07 * S, 0.04 * S, 0.068 * S]
-over(d, "legF", pts=[[sh[0], sh[1], sh[2], 0.0145 * S], [sh[0] + 0.03 * S, sh[1] - 0.005 * S, sh[2] + 0.05 * S, 0.014 * S]], pat=None)
-R = lambda x, y, z: [sh[0] + x * S, sh[1] + y * S, sh[2] + z * S]
-add(d, {"id": "flipper", "type": "fin", "bone": "legFL",
-        "root": [R(0.045, 0.0, 0.02), R(-0.03, -0.004, 0.025)],
-        "edge": [R(0.05, 0.0, 0.03), R(0.05, 0.002, 0.07), R(0.035, 0.004, 0.105), R(0.005, 0.006, 0.135), R(-0.035, 0.006, 0.152),
-                 R(-0.055, 0.006, 0.14), R(-0.06, 0.004, 0.11), R(-0.05, 0.0, 0.075), R(-0.038, -0.003, 0.04)],
-        "corners": [4], "thick": 0.012 * S, "slope": 0.28, "color": "@skin", "pat": "scales", "fair": {"r": 0.01 * S}, "camber": 0.04, "mirror": True}, after="legF")
-# ---- the hind paddles: a shorter leg, a flat oval foot, no claws
-drop(d, *[f"clawH{j}" for j in range(4)])
-hp = [-0.07 * S, 0.038 * S, 0.068 * S]
-over(d, "legH", pts=[[hp[0], hp[1], hp[2], 0.02 * S], [hp[0] - 0.02 * S, hp[1] - 0.006 * S, hp[2] + 0.04 * S, 0.016 * S]])
-over(d, "footH", c=[hp[0] - 0.04 * S, hp[1] - 0.012 * S, hp[2] + 0.058 * S], r=[0.036 * S, 0.006 * S, 0.052 * S], rot=[0, 30, 0])   # (overlapping the shell margin: no gap)
+# ---- the FLIPPERS (2026-11-18): each limb ONE sheet rooted under the shell's margin -- no leg tube showing (a tube with
+# a sheet hung on it read as a leg carrying a sail). Planform in body space (x forward, z out to the left), y beside it.
+# The fore flipper a long narrow scythe, ~half the carapace long: its leading edge blunt (the arm's bones run in it,
+# bluntness 2.4) sweeping out and back to a pointed tip, the trailing edge thin and a little hollow; one small claw on
+# the leading edge. The hind flipper a short rounded paddle trailing beside the tail. Both swell toward the root
+# (`swell`: as deep as the limb they grew from) and are faired into the body.
+drop(d, "legF", "footF", *[f"clawF{j}" for j in range(5)], "legH", "footH", *[f"clawH{j}" for j in range(4)])
+def flip(id, bone, root, le, tip, te, y, thick, swell, **kw):
+    """a flipper sheet: le / te the leading and trailing edges (x, z) from the root out, tip (x, z); y(z) its height"""
+    edge = [[x, y(z), z, 2.4] for x, z in le] + [[tip[0], y(tip[1]), tip[1], 1]] + [[x, y(z), z, 1] for x, z in te[::-1]]
+    add(d, {"id": id, "type": "fin", "bone": bone, "root": [[x, y(z), z] for x, z in root], "edge": edge, "corners": [len(le)],
+            "thick": thick, "slope": 0.55, "grid": "flow", "swell": swell, "color": "@skin", "pat": "scales",
+            "rim": 0.012, "rimColor": "@chin", "fair": {"r": 0.035}, "mirror": True, **kw}, after="dome")
+fy = lambda z: 0.125 - 0.03 * max(0.0, z - 0.3)                      # (held level and flat, the far blade a little lower)
+flip("flipper", "legFL", root=[(0.30, 0.22), (0.16, 0.23)],
+     le=[(0.32, 0.29), (0.345, 0.37), (0.34, 0.45), (0.315, 0.53), (0.265, 0.61), (0.19, 0.68), (0.10, 0.735)],
+     tip=(-0.02, 0.77),
+     te=[(0.19, 0.29), (0.205, 0.37), (0.195, 0.45), (0.17, 0.53), (0.13, 0.61), (0.075, 0.68), (0.02, 0.735)],
+     y=fy, thick=0.026, swell=[0.05, 0.16, 0.5])
+add(d, {"id": "flipperClaw", "type": "horn", "bone": "legFL", "pts": [[0.315, fy(0.53) + 0.003, 0.53, 0.005], [0.33, fy(0.54) + 0.002, 0.55, 0.001]],
+        "color": "@claw", "mirror": True}, after="flipper")
+hy = lambda z: 0.115 - 0.03 * max(0.0, z - 0.25)
+flip("hindFlipper", "legHL", root=[(-0.20, 0.20), (-0.34, 0.20)],
+     le=[(-0.215, 0.27), (-0.25, 0.34), (-0.30, 0.40), (-0.36, 0.445)],
+     tip=(-0.43, 0.46),
+     te=[(-0.37, 0.25), (-0.42, 0.29), (-0.46, 0.34), (-0.47, 0.40)],
+     y=hy, thick=0.02, swell=[0.04, 0.12, 0.5])
 for p in d["parts"]:
     if p["id"].startswith("legF"): p["anim"] = {"axis": "x", "deg": 22, "speed": 0.6, "phase": 0.0}   # (the flippers beat up and down together)
     if p["id"].startswith("legH"): p["anim"] = {"axis": "z", "deg": 10, "speed": 0.6, "phase": 3.1416}

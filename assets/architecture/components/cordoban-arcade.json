@@ -1,0 +1,201 @@
+{
+ "name": "Cordoban arcade",
+ "_about": "A CORDOBAN ARCADE (the Great Mosque of Cordoba, 785-988): one line of N bays `bay` apart along x, centred, `t` thick along z, standing on the floor. Columns (`order` caliphal) `colH` to the top of the capital, an impost block `impH` on each, the LOWER arch (head `low`: horseshoe in the hall) braced between the imposts, and over the imposts a wall of PIERS `pierW` wide carrying the UPPER arches (head `up`: semicircular) and the gutter at `top`. The heads are words, `low`/`up` + Over and Lobes their numbers: horseshoe, semicircular or lobed. `interlace` yes adds al-Hakam II's interlaced arches, each from a pier to the next but one. The two tiers are what let the hall stand 9.8 m on columns 3 m tall: the lower arch braces, the upper carries (Hernandez Gimenez; Ewert). `ends` 0 leaves out the end columns and piers: a run between two others that already stand on them (or a screen between two arcades).",
+ "params": {
+  "detail": 4,
+  "N": 12,
+  "bay": 3.15,
+  "ends": 1,
+  "order": "caliphal",
+  "colR": 0.22,
+  "colH": 3.6,
+  "impH": 0.35,
+  "impW": "pierW + 2 * lowD",
+  "pierW": 0.8,
+  "t": 1.07,
+  "top": 9.805,
+  "low": "horseshoe",
+  "lowOver": 0.3,
+  "lowLobes": 5,
+  "lowD": 0.42,
+  "lowT": "t * 0.78",
+  "up": "semicircular",
+  "upOver": 0,
+  "upLobes": 5,
+  "upSpr": 6.335,
+  "upD": 0.45,
+  "interlace": "no",
+  "ilD": 0.32
+ },
+ "build": [
+  "columns",
+  "imposts",
+  "piers",
+  "lower arches",
+  "upper arches",
+  "interlaced arches"
+ ],
+ "parts": {
+  "columns": {
+   "type": "colonnade",
+   "plan": "straight",
+   "count": "N + 2 * ends - 1",
+   "spacing": "bay",
+   "order": "order",
+   "columnR": "colR",
+   "height": "colH",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "_about": "the columns, one under every pier: reused Roman and Visigothic shafts, new caliphal capitals"
+  },
+  "imposts": {
+   "type": "box",
+   "width": "impW",
+   "length": "t + 0.08",
+   "height": "impH",
+   "at": [
+    [
+     "-(N + 2 * ends - 2) * bay / 2",
+     "colH",
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "N + 2 * ends - 1",
+    "step": [
+     "bay",
+     0,
+     0,
+     0
+    ]
+   },
+   "_about": "the impost block on every capital, long along the arcade: the lower arches spring from its ends, the pier stands in its middle"
+  },
+  "piers": {
+   "type": "wall",
+   "width": "N * bay + pierW * (2 * ends - 1)",
+   "height": "top - colH - impH",
+   "thickness": "t",
+   "glass": false,
+   "openings": {
+    "pattern": "N",
+    "width": "bay - pierW",
+    "gap": "pierW",
+    "end": "pierW * ends",
+    "sill": 0,
+    "springing": "upSpr - colH - impH",
+    "head": {
+     "profile": "up",
+     "over": "upOver",
+     "lobes": "upLobes"
+    }
+   },
+   "at": [
+    [
+     0,
+     "colH + impH",
+     "t / 2",
+     0
+    ]
+   ],
+   "_about": "the wall over the columns: a pier on every impost, the upper arches between them, the gutter on its top"
+  },
+  "lower arches": {
+   "type": "arch",
+   "width": "bay - pierW",
+   "depth": "lowD",
+   "thickness": "lowT",
+   "head": {
+    "profile": "low",
+    "over": "lowOver",
+    "lobes": "lowLobes"
+   },
+   "at": [
+    [
+     "-N * bay / 2 + bay / 2",
+     "colH + impH",
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "N",
+    "step": [
+     "bay",
+     0,
+     0,
+     0
+    ]
+   },
+   "_about": "the lower arches, braced from impost to impost -- horseshoes in the hall, polylobed in the maqsura"
+  },
+  "upper arches": {
+   "type": "arch",
+   "width": "bay - pierW",
+   "depth": "upD",
+   "thickness": "t + 0.04",
+   "head": {
+    "profile": "up",
+    "over": "upOver",
+    "lobes": "upLobes"
+   },
+   "at": [
+    [
+     "-N * bay / 2 + bay / 2",
+     "upSpr",
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "N",
+    "step": [
+     "bay",
+     0,
+     0,
+     0
+    ]
+   },
+   "_about": "the upper arches, from pier to pier: the ones that carry"
+  },
+  "interlaced arches": {
+   "type": "arch",
+   "width": "2 * bay - pierW",
+   "depth": "ilD",
+   "thickness": "t + 0.1",
+   "head": {
+    "profile": "up",
+    "over": "upOver",
+    "lobes": "upLobes"
+   },
+   "at": [
+    [
+     "-N * bay / 2 + bay",
+     "upSpr",
+     0,
+     0
+    ]
+   ],
+   "repeat": {
+    "count": "N - 1",
+    "step": [
+     "bay",
+     0,
+     0,
+     0
+    ]
+   },
+   "when": {
+    "interlace": "yes"
+   },
+   "_about": "al-Hakam II's interlacing: an arch from every pier to the next but one, so that each crosses its neighbours"
+  }
+ }
+}

@@ -81,6 +81,7 @@ def load(name): return json.load(open(R + name + ".json"))
 def save(name, d, root=True):
     open(R + name + ".json", "w").write(fmt(d) + "\n")
     if root: root_feathers(name, d)
+    import padfly; padfly.run(name)   # (a flier's folded-wing pad drawn in aloft: it is not left on the flank under the spread wing)
 
 # ---- THE ROOTS: every feather blade's root sunk into the body (the post-pass of every generator's save) ---------------
 # rootfix.mjs builds the bird as the game does, lays each blade as bodymesh.js does, and measures its root against the

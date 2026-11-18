@@ -76,6 +76,7 @@ assets/doors/qasr-al-nur.json. Run: python3 tools/archgen/qasr_al_nur.py
 import os, sys, json, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from historicism import flight as hflight
+from kit import onion_h, pointed_h, muqarnas, tiles, split
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 parts = {}; build = []
 def add(n, d):
@@ -90,10 +91,6 @@ B = 4.5                     # the bay
 PH = 1.2                    # the platform
 SLAB = .3
 
-def onion_h(a, bulge, neck):
-    R1, R2 = a * bulge, a * neck
-    return math.sqrt(R1 * R1 - a * a) + math.sqrt(R1 * R1 + 2 * R1 * R2)
-def pointed_h(a, spread): return a * math.sqrt(1 + 2 * spread)
 def crown(w, s, spread=.5): return s + w / 2 * math.sqrt(1 + 2 * spread)
 def finial(name, x, y, z, h, about=None):
     """the gilt finial on a dome's crown: a spike and two balls"""
@@ -107,19 +104,7 @@ def op(at, w, sill, spr, head=POINTED, glass=None, **kw):
     return d
 def door(at=0, w=1.6, h=2.6, head=POINTED): return op(at, w, 0, h, head, glass=False)
 
-# ---- MUQARNAS: the stalactite hood of an iwan (imam_mosque.py's): tiers of cells hung under its half dome, each a block
-# turned to the middle, drawing in and climbing as the vault does
-def muqarnas(X, Z, yaw, w, s, it, tiers=None, rise=1.35):
-    tiers = tiers or ((7, 9, 11, 13, 15, 17) if w >= 9 else (5, 7, 9, 11, 13))
-    r = w / 2 + .05; zc = w / 2 + it; at = []; n = len(tiers); c, sn = math.cos(yaw), math.sin(yaw)
-    for k, m in enumerate(tiers[::-1]):
-        f = (k + .35) / (n + .4); phi = f * math.pi / 2 * .94
-        rr, y = r * math.cos(phi), s + r * rise * math.sin(phi)
-        for j in range(m):
-            th = -math.pi / 2 * .96 + math.pi * .96 * (j + (.5 if k % 2 else .0) + (0 if k % 2 else .5)) / m
-            lx, lz = (rr - .2) * math.sin(th), zc - (rr - .2) * math.cos(th)
-            at.append([r4(X + c * lx + sn * lz), r4(y), r4(Z - sn * lx + c * lz), r4(yaw + th)])
-    return at
+# ---- MUQARNAS: the stalactite hood of an iwan (kit.muqarnas)
 MUQ = []
 PISH = []                                   # every pishtaq as built: what the finish needs to set out its frame's bands
 def pishtaq(name, X, Z, yaw, W, Hh, D, w, s, it=.7, about="", cells=True, y=0.0, door_w=None):
@@ -136,29 +121,7 @@ def pishtaq(name, X, Z, yaw, W, Hh, D, w, s, it=.7, about="", cells=True, y=0.0,
         MUQ.append(name + " muqarnas")
 def iwan_door(w, it): return min(3.2, (w / 2 + it) * .5 - .25)
 
-# ---- the platform's tiles: rectangles cut round holes (pools, parterres, channels)
-def tiles(x0, z0, x1, z1, holes):
-    xs = sorted({x0, x1, *[c for h in holes for c in (h[0], h[2]) if x0 < c < x1]})
-    zs = sorted({z0, z1, *[c for h in holes for c in (h[1], h[3]) if z0 < c < z1]})
-    out = []
-    for j in range(len(zs) - 1):
-        run = None
-        for i in range(len(xs) - 1):
-            mx, mz = (xs[i] + xs[i + 1]) / 2, (zs[j] + zs[j + 1]) / 2
-            free = not any(h[0] < mx < h[2] and h[1] < mz < h[3] for h in holes)
-            if free and run is None: run = xs[i]
-            if (not free or i == len(xs) - 2) and run is not None:
-                out.append((run, zs[j], xs[i + 1] if free else xs[i], zs[j + 1])); run = None
-    return out
-def split(rects, m=16.0):
-    """cut every rectangle into pieces no longer than m (no one triangle of a floor vast)"""
-    out = []
-    for a, b, c, d in rects:
-        nx, nz = max(1, math.ceil((c - a) / m - 1e-6)), max(1, math.ceil((d - b) / m - 1e-6))
-        for i in range(nx):
-            for j in range(nz):
-                out.append((a + (c - a) * i / nx, b + (d - b) * j / nz, a + (c - a) * (i + 1) / nx, b + (d - b) * (j + 1) / nz))
-    return out
+# ---- the platform's tiles: rectangles cut round holes (pools, parterres, channels): kit.tiles, kit.split
 def slab_rects(name, rects, y, h=SLAB, walked=False, flat=False, about=None, **kw):
     d = {"type": "box", "width": 1, "length": 1, "height": h, "at": []}
     out = []

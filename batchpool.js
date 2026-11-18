@@ -15,7 +15,18 @@
 // there was room for, every head stayed behind, piled where they had been, and the people walked on without them. Now
 // a pool that must grow makes a fresh BatchedMesh twice the size, adds every shape and copy again in the same order (the
 // same ids, so the shapes and copies handed out stay good), and takes the old one's place.
+//
+// THE OLD ONE IS RETIRED, NOT DISPOSED AT ONCE (2026-11-18): other lists than the scene graph hold objects -- the grass
+// mask's flat lists (grass.js), re-gathered twice a second -- and a BatchedMesh disposed while one still held it was
+// rendered with its matrices texture gone ("Cannot read properties of null (reading 'image')", every frame until the
+// lists caught up). So it is hidden now (three draws nothing hidden, wherever it is listed) and disposed a while later.
 import * as THREE from "three";
+
+const RETIRE_MS = 3000;   // (long after every list that might hold the old mesh has been gathered again)
+function retire(old) {
+  old.visible = false;
+  setTimeout(() => old.dispose(), RETIRE_MS);
+}
 
 export function batchPool(scene, material, { name = "batch pool", copies = 16 } = {}) {
   let maxI = copies, maxV = 2048, maxX = 4096, usedV = 0, usedX = 0;
@@ -42,7 +53,8 @@ export function batchPool(scene, material, { name = "batch pool", copies = 16 } 
       mesh.setMatrixAt(id, old.getMatrixAt(id, _m)); mesh.setVisibleAt(id, old.getVisibleAt(id));
     });
     mesh.visible = old.visible;
-    parent?.add(mesh); parent?.remove(old); old.dispose();
+    parent?.add(mesh); parent?.remove(old);
+    retire(old);
   };
   const copy = (s) => { room(0, 0, 1); copyOf.push(s); return mesh.addInstance(s.id); };
   return {
@@ -75,6 +87,6 @@ export function batchPool(scene, material, { name = "batch pool", copies = 16 } 
       }
       mesh.visible = any;
     },
-    dispose() { mesh.parent?.remove(mesh); mesh.dispose(); },
+    dispose() { mesh.parent?.remove(mesh); retire(mesh); },
   };
 }

@@ -1,0 +1,175 @@
+{
+ "name": "Nasrid portico",
+ "_about": "A NASRID PORTICO (the Alhambra, 14th c.): N arches `bay` apart along x, centred, the arcade's middle on z 0 and the gallery behind it, `d` deep toward -z (the wall at -d is the building's). Columns of the `nasrid` order `colH` to the top of their cubic capitals -- `pairs` yes sets two on every pier, `pairGap` apart -- carrying a wall `t` thick and up to `H` in which the arches are cut, stilted: their jambs `spr` straight up from the capitals, `pierW` apart, under heads of any profile (`head` semicircular, or lobed with `lobes`; `over` a horseshoe's). A wooden ceiling, the eave `eave` out on the court side, and (`roof` yes) a shed roof of tiles `pitch` degrees over it all, high against the back wall.",
+ "params": {
+  "detail": 4,
+  "N": 7,
+  "bay": 2.6,
+  "colR": 0.14,
+  "colH": 2.9,
+  "pairs": "no",
+  "pairGap": "colR * 2.6",
+  "H": 5.8,
+  "t": 0.55,
+  "d": 3.4,
+  "pierW": 0.5,
+  "spr": 1.2,
+  "head": "semicircular",
+  "over": 0,
+  "lobes": 5,
+  "eave": 0.9,
+  "pitch": 24,
+  "roof": "yes"
+ },
+ "build": [
+  "columns",
+  "columns a",
+  "columns b",
+  "arcade",
+  "ceiling",
+  "eave",
+  "roof"
+ ],
+ "parts": {
+  "columns": {
+   "type": "colonnade",
+   "plan": "straight",
+   "count": "N + 1",
+   "spacing": "bay",
+   "order": "nasrid",
+   "columnR": "colR",
+   "height": "colH",
+   "at": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "pairs": "no"
+   },
+   "_about": "the slender marble columns, ringed at the neck, under their cubic capitals"
+  },
+  "columns a": {
+   "type": "colonnade",
+   "plan": "straight",
+   "count": "N + 1",
+   "spacing": "bay",
+   "order": "nasrid",
+   "columnR": "colR",
+   "height": "colH",
+   "at": [
+    [
+     "-1 * pairGap / 2",
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "pairs": "yes"
+   },
+   "_about": "or a pair on every pier (the Court of the Lions' corners and pavilions)"
+  },
+  "columns b": {
+   "type": "colonnade",
+   "plan": "straight",
+   "count": "N + 1",
+   "spacing": "bay",
+   "order": "nasrid",
+   "columnR": "colR",
+   "height": "colH",
+   "at": [
+    [
+     "1 * pairGap / 2",
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "pairs": "yes"
+   }
+  },
+  "arcade": {
+   "type": "wall",
+   "width": "N * bay + pierW",
+   "height": "H - colH",
+   "thickness": "t",
+   "glass": false,
+   "openings": {
+    "pattern": "N",
+    "width": "bay - pierW",
+    "gap": "pierW",
+    "end": "pierW",
+    "sill": 0,
+    "springing": "spr",
+    "head": {
+     "profile": "head",
+     "over": "over",
+     "lobes": "lobes"
+    }
+   },
+   "at": [
+    [
+     0,
+     "colH",
+     "t / 2",
+     0
+    ]
+   ],
+   "_about": "the wall the columns carry, the arches cut in it -- stilted, their jambs running straight up from the capitals -- and over them the SEBKA, the net of lozenges in plaster (the finish's)"
+  },
+  "ceiling": {
+   "type": "box",
+   "width": "N * bay + pierW",
+   "length": "d + t / 2",
+   "height": 0.25,
+   "at": [
+    [
+     0,
+     "H - 0.25",
+     "(t / 2 - d) / 2",
+     0
+    ]
+   ],
+   "_about": "the gallery's wooden ceiling, from the arcade back to the wall behind"
+  },
+  "eave": {
+   "type": "box",
+   "width": "N * bay + pierW + 0.6",
+   "length": "eave + t",
+   "height": 0.22,
+   "at": [
+    [
+     0,
+     "H",
+     "eave / 2",
+     0
+    ]
+   ],
+   "_about": "the carved wooden eave on its brackets, far out over the arcade"
+  },
+  "roof": {
+   "type": "roof",
+   "form": "shed",
+   "width": "d + eave + t / 2",
+   "length": "N * bay + pierW + 0.6",
+   "pitch": "pitch",
+   "at": [
+    [
+     0,
+     "H + 0.22",
+     "(t / 2 + eave - d) / 2",
+     1.5707963267948966
+    ]
+   ],
+   "when": {
+    "roof": "yes"
+   },
+   "_about": "a roof of tiles falling to the eave (`roof` no: the building roofs it)"
+  }
+ }
+}

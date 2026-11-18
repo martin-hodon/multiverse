@@ -23,10 +23,15 @@ drop(d, "patchCore")
 # the ears: big, round, FLUFFY -- a thick pad of fur, not a sheet (the panda's fin, however thick, is a sharp-rimmed
 # sheet: seen edge-on from the far side it was a white spike above the head, 2026-11-10). A fat ellipsoid standing off
 # the top-rear of the skull, grey, a paler fringe painted on its outer face and a cream hollow inside that
+# (2026-11-18: they stood clear of the skull -- the ear's own bone, earL, starts above the cranium, and the ellipsoid
+# sat further out still: a gap of a few mm all round. Now each sits lower and in against the skull, and a ROOT of fur
+# on the head bone bridges the two, blended into both -- so the ear stays joined however earL turns.)
+EY, EZ = -0.012, -0.016   # (the ear moved down and in from where the panda's left it)
 drop(d, "ear")
-add(d, {"id": "ear", "type": "ell", "bone": "earL", "c": [0.301, 0.356, 0.074], "r": [0.04, 0.043, 0.024], "k": 0.012, "kc": 0.004, "color": "@ear", "mirror": True}, after="cheek")
-add(d, {"id": "earFringe", "type": "ell", "op": "paint", "bone": "earL", "c": [0.301, 0.356, 0.088], "r": [0.036, 0.039, 0.014], "kc": 0.003, "color": "@earRim", "mirror": True}, after="ear")
-add(d, {"id": "earHollow", "type": "ell", "op": "paint", "bone": "earL", "c": [0.303, 0.354, 0.096], "r": [0.022, 0.025, 0.008], "kc": 0.002, "color": "@earIn", "mirror": True}, after="earFringe")
+add(d, {"id": "earRoot", "type": "ell", "bone": "head", "c": [0.304, 0.33 + EY * .5, 0.05], "r": [0.03, 0.028, 0.026], "k": 0.02, "kc": 0.006, "color": "@ear", "mirror": True}, after="cheek")
+add(d, {"id": "ear", "type": "ell", "bone": "earL", "c": [0.301, 0.356 + EY, 0.074 + EZ], "r": [0.04, 0.043, 0.027], "k": 0.018, "kc": 0.004, "color": "@ear", "mirror": True}, after="earRoot")
+add(d, {"id": "earFringe", "type": "ell", "op": "paint", "bone": "earL", "c": [0.301, 0.356 + EY, 0.091 + EZ], "r": [0.036, 0.039, 0.014], "kc": 0.003, "color": "@earRim", "mirror": True}, after="ear")
+add(d, {"id": "earHollow", "type": "ell", "op": "paint", "bone": "earL", "c": [0.303, 0.354 + EY, 0.099 + EZ], "r": [0.022, 0.025, 0.008], "kc": 0.002, "color": "@earIn", "mirror": True}, after="earFringe")
 # the nose: large, black, leathery -- and the muzzle short under a broad flat face
 grow(d, "nose", 1.9, 1.8, 1.6); move(d, "nose", -0.004, 0.004, 0)
 over(d, "nose", wet=0.15)

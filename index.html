@@ -91,7 +91,10 @@ import { animateSpecies } from "./anim.js";
 import { seedFinishes, BUILDINGS, LANDMARKS, LANDMARK_NAMES, LANDMARK_HOLDS, LAND, DRESS, PATTERN_LIBRARY, finishesAhead, buildBuilding, buildInstanced, placedMaterial, waterWheelParams, archBuilding, archAssembly, woodMaterial, paintGeometry, barge as bargeDef, SNOW, doorPanel, windowPane, itemGroup, itemInstanced, itemObject } from "./architecture.js";
 import { planTown, townStyle, townFinishes, doorNormal } from "./town.js";
 import { makeCart, wheelParams, FLEET, LOAD_VARIANTS, CART_SIZES } from "./carts.js";
-import { makeTree, TREE_SPECIES, WARM_TREES, MUSHROOMS, makeBush, rng } from "./flora.js";
+import { MUSHROOMS, rng } from "./flora.js";
+import { createPlantField, SEASON as PLANT_SEASON } from "./plants/render.js";   // the trees and bushes (plants/: docs/plants.md)
+import { TREE_SPECIES, WARM_TREES, BUSH_FRUITS } from "./plants/species.js";
+import { FLOWER_KINDS, FLOWERS_OF, flowerGeometry, flowerMaterial } from "./plants/flowers.js";
 import { makePerson, personKind, PEOPLE, SOLDIER, setPeriodDress } from "./people.js";
 import { laneFrom, buildPathNetwork, planRoads, routeGraph, wanderLoop, ROAD_WET } from "./paths.js";
 import { createVillageLife } from "./village-life.js";
@@ -120,6 +123,7 @@ import { createWeather } from "./weather.js";
 import { createSmoke } from "./smoke.js";
 import { createNightGlow, createWallLamps, createHangingLamps, createFireGlow } from "./nightglow.js";
 import { createSky } from "./sky.js";
+import { SKIES } from "./clouds.js";
 import { createStones } from "./stones.js";
 import { createMurmuration } from "./murmuration.js";
 import { createFlyover, GEESE, ROOKS } from "./geese.js";
@@ -174,8 +178,7 @@ import { createPterosaurs } from "./pterosaurs.js";   // pteranodons soaring ove
 import { createFreight, goodsCulture } from "./freight.js";
 import { planHarbour, buildHarbour, createHarbourLife } from "./harbour.js";
 import { TEXTURES, PARALLAX, bakeTiles, tileTexture } from "./textures.js";
-import { buildFoliage, FOLIAGE_T, FOLIAGE_BB, HARVEST } from "./foliage.js";
-FOLIAGE_BB.value = new URLSearchParams(location.search).get("billboard") === "0" ? 0 : 1;   // ?billboard=0: leaf cards fixed in space instead of turned to the camera
+import { FOLIAGE_T, HARVEST } from "./foliage.js";
 import { HostSession, GuestSession } from "./rtc.js";
 import { createSpeaker, LANGS, WORDS, MOODS, VOICES, voiceFor } from "./speech.js";
 import { createEnvironment } from "./environment.js";
@@ -445,7 +448,7 @@ const townReach = Math.max(0, ...town.map((s) => Math.abs(s.x) + BUILDINGS[s.key
 const baseR = town.length ? Math.max(extent, -frontZ + townDepth + 12, townReach + 30) : extent;   // +30: the highway's turning loops sit past the last building
 const nTreesReq = qp.has("trees") ? Math.max(0, num("trees", 0)) : null;   // ?trees=0 disables
 const groundR = Math.max(baseR, nTreesReq !== 0 ? extent + 285 : 0);       // room for the woods, the (large) lake, and the farm village on the river's south bank
-const nTrees = nTreesReq ?? Math.min(240, Math.max(40, Math.round(groundR * groundR / 2200)));
+const nTrees = nTreesReq ?? Math.min(600, Math.max(40, Math.round(groundR * groundR / 220)));   // (plants/: a thousand trees in the field, with the forest, cost a few dozen draws)
 // the land, grown (mapgen.js): on the renderer's own GPU, a window of river country the world's size, the river where
 // the old one ran (extent + 120 south), the herd's meadow and the monument's stretch of the facade line settled flat
 let MAP = null;
@@ -762,7 +765,7 @@ const colliderSites = sites.map((s) => {
 const doors = [];      // clickable house doors, populated with the town below
 const tableware = createTableware(scene);   // mugs and jugs to drink from, food on plates to eat (tableware.js), populated with the town below
 const treeCols = [];   // tree trunks, populated by buildFlora
-// a tree's trunk in the world (makeTree's centreline, turned by the tree's yaw, moved to where it stands): what climbers follow
+// a tree's trunk in the world (plantInfo's centreline, turned by the tree's yaw, moved to where it stands): what climbers follow
 const trunkWorld = (td, t) => {
   const c = Math.cos(t.rotY), s = Math.sin(t.rotY), p = t.position, W = (q) => [p.x + q[0] * c + q[2] * s, p.y + q[1], p.z - q[0] * s + q[2] * c];
   return (td.trunk ?? []).map((g) => ({ a: W(g.a), b: W(g.b), r0: g.r0, r1: g.r1 }));
@@ -2718,19 +2721,21 @@ const autumn = num("autumn", 0);                             // 0 = summer .. 1 
 const HEDGE = { gap: 2.1, off: 1.6, fill: .8, height: [1.5, 2.1] };   // hedgerows (buildFlora): metres between bushes, off the lane's edge, the share filled
 const hedgeSpots = [];   // (where they stand: the green keeps clear of them)
 const nBush = Math.round(nTrees * 1.3), nFlower = Math.round(Math.min(420, nTrees * 3) * (GROUND_LOOK.flowers ?? 1));   // (sand keeps few)
-// the wild trees: the period's (assets/world/periods.json `trees`), those flora.js can grow (its warm ones too); else the whole mix
+// the wild trees: the period's (assets/world/periods.json `trees`), those plants/species.js grows (its warm ones too); else the whole mix
 const WILD = (() => { const own = (PERIOD.trees ?? []).filter((k) => TREE_SPECIES.includes(k) || WARM_TREES.includes(k)); return own.length ? own : TREE_SPECIES; })();
 const FOREST = { ...(CONFIG.forest ?? {}), trees: qp.has("forest") ? Math.max(0, num("forest", 0)) : (CONFIG.forest?.trees ?? 0) };   // (?forest=N: that many, 0 none)
-// the whole flora herd is rebuilt on demand ("I" cycles summer/half/full
-// autumn): same seed, same layout, only the colors change
-let treeHerd = null, foliage = null;   // the trees' wood (banner parts) and their leaf cards (foliage.js)
+// THE PLANTS (2026-11-18): every tree and bush in one field (plants/render.js) -- a few grown variants a kind, instanced,
+// at three levels of detail by distance. Replanted on a season's change ("I" cycles summer / half / full autumn / spring):
+// the same seeds, the same layout; the season itself is the shaders' (PLANT_SEASON), the meshes are kept
+const plants = createPlantField(scene);
+// a bush as the woods grow them: a third bear fruit (plants/species.js BUSH_FRUITS), the rest leaf only
+const wildBush = (r) => r() < 1 / 3 ? "bush:" + BUSH_FRUITS[Math.floor(r() * BUSH_FRUITS.length)].name : "bush";
 let autumnLvl = qp.get("season") === "spring" ? 3 : Math.round(Math.min(1, autumn) * 2);   // 0 summer, 1 half autumn, 2 full, 3 SPRING (I cycles; ?season=spring)
 const autumnK = () => autumnLvl === 3 ? 0 : autumnLvl / 2, springK = () => autumnLvl === 3 ? 1 : 0;
 bootMark("THE FLOWERS (2026-10-06): polygon plants o");
-// THE FLOWERS (2026-10-06): polygon plants out of the items (assets/items/flowers, tools/flowergen.py) -- every kind of
-// them, in two colourings, one instanced mesh a material; a flower picked is a copy scaled to nothing
-const FLOWER_KINDS = [...ASSETS.keys()].filter((p) => /^items\/flowers\/[^/]+$/.test(p)).map((p) => p.split("/").pop());
-let flowerRoot = null, flowerMat = null;   // (flowerMat: one for every flower, kept across the seasons' rebuilds)
+// THE FLOWERS (2026-10-06; grown and painted by plants/flowers.js since 2026-11-18 -- they were polygon items) -- every
+// kind of them, in two variants, one batched pool; a flower picked is its copy hidden. The mushrooms: a pool of their own
+let flowerRoot = null, flowerPools = [], mushroomMat = null;   // (mushroomMat: kept across the seasons' rebuilds)
 // clear of every road by m metres (a tree, a bush, a hedge are never planted in a street: ground.js roads, signed distance)
 const offRoad = (x, z, m) => (GROUND.roadAt(x, z)?.d ?? 1e9) > m;
 // THE CHURCHYARD (2026-10-24): graves round the church on the ground it has free -- headstones with rounded tops, a
@@ -2832,22 +2837,21 @@ const CHURCHYARD = { near: 2.5, far: 12, along: 1.7, rows: 2.4, max: 46, door: 7
 }
 const treeShade = createShadeBlobs(scene, "tree shade");
 // a tree as the world keeps it (treeCols: what walking bumps into, the leaves fall from, the shade lies under)
-const treeCol = (x, z, td, an, extra = {}) => ({ x, z, r: td.trunkR, h: td.height, crown: td.crown, evergreen: td.evergreen, leafC: td.autumnC, trunk: trunkWorld(td, an), boughs: trunkWorld({ trunk: td.boughs }, an), ...extra });   // (boughs: where a bird sits -- PERCHERS)
+// (P: field.add's plant -- its info is plants/render.js plantInfo, scaled; boughs: where a bird sits -- PERCHERS)
+const treeCol = (x, z, P, extra = {}) => { const I = P.info;
+  return { x, z, r: I.trunkR, h: I.height, crown: I.crown, evergreen: I.evergreen, leafC: I.autumnC, trunk: trunkWorld(I, P), boughs: trunkWorld({ trunk: I.boughs }, P), ...extra }; };
+// the season as the plants' shaders take it: autumn turning the leaves (some fallen in full autumn), the orchards' blossom
+// in spring, fruit from summer on; under snow the broadleaves stand bare (render.js: snow lying drops them too)
+const plantSeason = (autumnNow, springNow) => {
+  PLANT_SEASON.autumn.value = autumnNow * .9; PLANT_SEASON.bare.value = autumnNow >= 1 ? .2 : 0;
+  PLANT_SEASON.bloom.value = springNow; PLANT_SEASON.fruit.value = springNow ? 0 : autumnNow ? 1 : .6;
+};
 const LITTER = { r: .85, s: 1, dark: 1, brown: .3 };   // fallen leaves under a broadleaf crown in autumn: its reach, strength (by autumn), how dark, how far browned from its autumn colour
 const _russet = new THREE.Color(0x7a4a22);
 const buildFlora = (autumnNow, springNow = 0) => {
-  if (flowerRoot) { scene.remove(flowerRoot); flowerRoot.traverse((o) => { if (o.isBatchedMesh) o.dispose(); else if (o.isMesh) o.geometry.dispose(); }); flowerRoot = null; }
-  if (treeHerd) scene.remove(treeHerd.mesh);
-  treeHerd = null;
-  if (foliage) { scene.remove(foliage); foliage.geometry.dispose(); foliage.material.dispose(); foliage = null; }
-  const leafCards = [];
-  const addCards = (def, an) => {   // a plant's leaf (and fruit) cards into the one foliage mesh, turned and placed as the plant
-    const c = Math.cos(an.rotY), sn = Math.sin(an.rotY), rot = (v) => [v[0] * c + v[2] * sn, v[1], -v[0] * sn + v[2] * c];
-    for (const L of def.leaves) {
-      const q = rot(L.c);
-      leafCards.push({ ...L, c: [q[0] + an.position.x, q[1] + an.position.y, q[2] + an.position.z], r: rot(L.r), u: rot(L.u) });
-    }
-  };
+  if (flowerRoot) { scene.remove(flowerRoot); for (const p of flowerPools) p.dispose(); flowerPools = []; flowerRoot = null; }   // (retired, not disposed at once: batchpool.js)
+  plants.clear();
+  plantSeason(autumnNow, springNow);
   treeCols.length = 0;
   pickables.length = 0;   // the season rebuild regrows what was picked
   const mspots = [];   // the mushrooms to grow -- [kind, x, z, seed, yaw] -- drawn with the flowers below (items/mushrooms, in the flowers' pool)
@@ -2856,8 +2860,6 @@ const buildFlora = (autumnNow, springNow = 0) => {
   // plants a building site grows (the village's orchard and currant rows): the same trees and bushes as the woods
   const sitePlants = sites.flatMap((s) => (BUILDINGS[s.key].plants ?? []).map((p) => ({ ...p, x: s.x + p.x, z: siteZ(s) + p.z })));
   if (!nTrees && !sitePlants.length) return;
-  treeHerd = createHerd((nTrees + 24 + FOREST.trees) * 260 + (nBush + FOREST.trees) * 14 + sitePlants.length * 120, { pixelDepth });   // (+24: the riverbank willows)   // grown trees up to ~200 segments (spruce), plus bushes
-  scene.add(treeHerd.mesh);
   const rand = rng(7);
   const spots = [];
   for (let placed = 0, guard = 0; placed < nTrees && guard < nTrees * 40; guard++) {
@@ -2869,13 +2871,9 @@ const buildFlora = (autumnNow, springNow = 0) => {
     if (riverSD(x, z) < 4) continue;              // nor in the river
     if (SEA && waterSD(x, z) < 4) continue;       // nor in the sea or the big lake (sea.js)
     if (inSites(x, z, 5) || !offRoad(x, z, 2) || hitsBuildings(x, z, groundH(x, z))) continue;
-    const td = makeTree(WILD[Math.floor(rand() * WILD.length)], { seed: placed + 11, autumn: autumnNow, spring: springNow });
-    const t = treeHerd.add(td);
-    t.position.set(x, groundH(x, z) - .1, z);
-    t.rotY = rand() * Math.PI * 2;
+    const t = plants.add(WILD[Math.floor(rand() * WILD.length)], x, groundH(x, z) - .1, z, { yaw: rand() * Math.PI * 2, scale: .85 + rand() * .3, seed: placed + 11 });
     spots.push([x, z]);
-    treeCols.push(treeCol(x, z, td, t));   // the trunk blocks walking
-    addCards(td, t);
+    treeCols.push(treeCol(x, z, t));   // the trunk blocks walking
     if (rand() < .5)                                           // mushrooms in the tree's shade
       for (let m = 0, mn = 1 + Math.floor(rand() * 3); m < mn; m++) {
         const mx = x + (rand() * 2 - 1) * 5, mz = z + (rand() * 2 - 1) * 5;
@@ -2900,13 +2898,11 @@ const buildFlora = (autumnNow, springNow = 0) => {
         if (rr > e || fr() > 1.15 - (rr / e) ** 2) continue;   // denser in the middle, thinning out to the edge
         const gap2 = (sp * (1 + .5 * (rr / e) ** 2)) ** 2;
         if (spots.some((s) => (s[0] - x) ** 2 + (s[1] - z) ** 2 < gap2) || !open(x, z, 3)) continue;
-        const td = makeTree(kinds[Math.floor(fr() * kinds.length)], { seed: 9000 + placed, autumn: autumnNow, spring: springNow });
-        const t = treeHerd.add(td);
-        t.position.set(x, groundH(x, z) - .1, z); t.rotY = fr() * Math.PI * 2;
-        spots.push([x, z]); treeCols.push(treeCol(x, z, td, t, { bloom: true })); addCards(td, t);   // (bloom: its petals fall in spring)
+        const t = plants.add(kinds[Math.floor(fr() * kinds.length)], x, groundH(x, z) - .1, z, { yaw: fr() * Math.PI * 2, scale: .8 + fr() * .4, seed: 9000 + placed });
+        spots.push([x, z]); treeCols.push(treeCol(x, z, t, { bloom: true }));   // (bloom: its petals fall in spring)
         if (fr() < .45) {   // the undergrowth: a bush in a gap, mushrooms in the shade
-          const bx = x + (fr() * 2 - 1) * 2.2, bz = z + (fr() * 2 - 1) * 2.2, bd = makeBush({ seed: 9500 + placed, autumn: autumnNow, spring: springNow }), b = treeHerd.add(bd);
-          b.position.set(bx, groundH(bx, bz), bz); b.rotY = fr() * Math.PI * 2; addCards(bd, b);
+          const bx = x + (fr() * 2 - 1) * 2.2, bz = z + (fr() * 2 - 1) * 2.2;
+          plants.add(wildBush(fr), bx, groundH(bx, bz), bz, { yaw: fr() * Math.PI * 2, seed: 9500 + placed });
         }
         if (fr() < .35) {
           const mx = x + (fr() * 2 - 1) * 2, mz = z + (fr() * 2 - 1) * 2, mKind = MUSHROOMS[Math.floor(fr() * MUSHROOMS.length)];
@@ -2925,10 +2921,8 @@ const buildFlora = (autumnNow, springNow = 0) => {
     for (let x = Math.min(RIVER.xEnd - 8, groundR * .9); x > -groundR * .9; x -= 22 + wr() * 14) for (const side of [-1, 1]) {
       const z = riverZ(x) + side * (riverHW(x) + 1.8 + wr() * .8), keep = wr() < .7;
       if (!keep || inSites(x, z, 4) || (hasLake && lakeSD(x, z) < 3) || (SEA && waterY(x, z) > groundH(x, z)) || spots.some((s) => (s[0] - x) ** 2 + (s[1] - z) ** 2 < 49)) continue;
-      const td = makeTree(WILD.includes("willow") ? "willow" : WILD[0], { seed: 7000 + Math.round(x * 3) + side, autumn: autumnNow, spring: springNow });   // (the period's, where willows do not grow: the Nile's palms)
-      const t = treeHerd.add(td);
-      t.position.set(x, groundH(x, z) - .1, z); t.rotY = wr() * Math.PI * 2;
-      spots.push([x, z]); treeCols.push(treeCol(x, z, td, t)); addCards(td, t);
+      const t = plants.add(WILD.includes("willow") ? "willow" : WILD[0], x, groundH(x, z) - .1, z, { yaw: wr() * Math.PI * 2, seed: 7000 + Math.round(x * 3) + side });   // (the period's, where willows do not grow: the Nile's palms)
+      spots.push([x, z]); treeCols.push(treeCol(x, z, t));
     }
   }
 
@@ -2942,10 +2936,7 @@ const buildFlora = (autumnNow, springNow = 0) => {
     if (hasLake && lakeSD(x, z) < 2) continue;
     if (riverSD(x, z) < 2 || (SEA && waterSD(x, z) < 2)) continue;
     if (inSites(x, z, 3) || !offRoad(x, z, 1.2) || hitsBuildings(x, z, groundH(x, z))) continue;
-    const bd = makeBush({ seed: placed + 17, autumn: autumnNow, spring: springNow }), b = treeHerd.add(bd);
-    b.position.set(x, groundH(x, z), z);
-    b.rotY = rand() * Math.PI * 2;
-    addCards(bd, b);
+    plants.add(wildBush(rand), x, groundH(x, z), z, { yaw: rand() * Math.PI * 2, scale: .8 + rand() * .4, seed: placed + 17 });
     bspots.push([x, z]);
     placed++;
   }
@@ -2973,9 +2964,8 @@ const buildFlora = (autumnNow, springNow = 0) => {
             if (x * x + z * z > groundR * groundR * .8 || inTown(x, z) || inSites(x, z, 1.5) || riverSD(x, z) < 3 || (hasLake && lakeSD(x, z) < 3)) continue;
             if (!offRoad(x, z, 1) || hitsBuildings(x, z, groundH(x, z))) continue;   // (nor in a wall: the town's, a yard's fence)
             if (Math.abs(x) < extent + 4 && z < 4 && z > -(rows * gap + 6)) continue;   // (the herd's corral)
-            const bd = makeBush({ seed: 7300 + n, autumn: autumnNow, spring: springNow, height: HEDGE.height[0] + hr() * (HEDGE.height[1] - HEDGE.height[0]) }), b = treeHerd.add(bd);
-            b.position.set(x, groundH(x, z), z); b.rotY = hr() * Math.PI * 2;
-            addCards(bd, b); hedgeSpots.push([x, z]); n++;
+            plants.add(wildBush(hr), x, groundH(x, z), z, { yaw: hr() * Math.PI * 2, seed: 7300 + n, height: HEDGE.height[0] + hr() * (HEDGE.height[1] - HEDGE.height[0]) });
+            hedgeSpots.push([x, z]); n++;
           }
         }
       }
@@ -2984,21 +2974,48 @@ const buildFlora = (autumnNow, springNow = 0) => {
 
   // flowers: bright patches everywhere (the meadow included), each spot a small clump of one kind -- the way
   // wildflowers actually grow; a kind in two colourings (its item's seed), each its own instanced set
+  // (the meadow's own kinds; the world's DRY ones -- an aloe, an agave: periods.json `flowers` -- on a share of its spots,
+  //  one plant a spot and life size; its GARDEN ones -- a petunia, an acanthus -- on a share of the rest, in clumps as
+  //  the meadow's; its WATER ones -- a lotus, a water lily -- on still water below)
   const fspots = new Map();   // "kind|variant" -> [[x, y, z, yaw, scale], ...]
-  for (let placed = 0, guard = 0; placed < nFlower && guard < nFlower * 8 && FLOWER_KINDS.length; guard++) {
+  const MEADOW = FLOWERS_OF("meadow"), own = (h) => FLOWERS_OF(h).filter((k) => (PERIOD.flowers ?? []).includes(k)), DRY = own("dry"), WET = own("water"), GARDEN = own("garden");
+  for (let placed = 0, guard = 0; placed < nFlower && guard < nFlower * 8 && MEADOW.length; guard++) {
     const x = (rand() * 2 - 1) * groundR * .9, z = (rand() * 2 - 1) * groundR * .9;
     if (x * x + z * z > groundR * groundR * .8) continue;
     if (hasLake && lakeSD(x, z) < 1) continue;
     if (riverSD(x, z) < 1) continue;
     if (inSites(x, z, 1)) continue;
-    const kind = FLOWER_KINDS[Math.floor(rand() * FLOWER_KINDS.length)], key = kind + "|" + Math.floor(rand() * 2);
-    const clump = 1 + Math.floor(rand() * 3);
+    const dry = DRY.length > 0 && rand() < .25, kinds = dry ? DRY : GARDEN.length && rand() < .3 ? GARDEN : MEADOW;
+    const kind = kinds[Math.floor(rand() * kinds.length)], key = kind + "|" + Math.floor(rand() * 2);
+    const clump = dry ? 1 : 1 + Math.floor(rand() * 3);
     for (let c = 0; c < clump && placed < nFlower; c++, placed++) {
       const fx = x + (rand() * 2 - 1) * 1.4, fz = z + (rand() * 2 - 1) * 1.4;
       const onRoad = GROUND.roadAt(fx, fz);
       if (onRoad && onRoad.d < .4) continue;   // (none in the road)
       if (!fspots.has(key)) fspots.set(key, []);
-      fspots.get(key).push([fx, groundH(fx, fz), fz, rand() * Math.PI * 2, 1.2 + rand() * .3]);   // (a little larger than life: seen across the meadow)
+      fspots.get(key).push([fx, groundH(fx, fz), fz, rand() * Math.PI * 2, dry ? .9 + rand() * .25 : 1.2 + rand() * .3]);   // (a little larger than life: seen across the meadow)
+    }
+  }
+  // WATER FLOWERS: clumps on the lake's and the river's still margins -- from the middle out to the shore, then back
+  // into water 0.25 to 1.2 m deep (the reeds stand in the last metre) -- each pad and bloom at the water's surface
+  if (WET.length && (hasLake || hasRiver)) {
+    const wr = rng(townSeed * 131 + 7), nClump = 14;
+    for (let n = 0, guard = 0; n < nClump && guard < nClump * 20; guard++) {
+      let x, z, dx = 0, dz = 0;
+      if (hasLake && (!hasRiver || wr() < .6)) { const a = wr() * Math.PI * 2; x = LAKE.x; z = LAKE.z; dx = Math.cos(a); dz = Math.sin(a); }
+      else { x = (wr() * 2 - 1) * groundR * .7; z = riverZ(x); dz = wr() < .5 ? -1 : 1; }
+      let k = 0;
+      for (; k < 400; k++, x += dx * .5, z += dz * .5) if (groundH(x, z) > waterY(x, z) - .1) break;
+      if (k === 400) continue;
+      const back = 1.5 + wr() * 3; x -= dx * back; z -= dz * back;
+      const kind = WET[Math.floor(wr() * WET.length)], key = kind + "|" + Math.floor(wr() * 2), m = 3 + Math.floor(wr() * 5);
+      for (let c = 0; c < m; c++) {
+        const fx = x + (wr() * 2 - 1) * 1.6, fz = z + (wr() * 2 - 1) * 1.6, wy = waterY(fx, fz), depth = wy - groundH(fx, fz);
+        if (!(wy > -1e8) || depth < .25 || depth > 1.2 || inSites(fx, fz, 2)) continue;
+        if (!fspots.has(key)) fspots.set(key, []);
+        fspots.get(key).push([fx, wy, fz, wr() * Math.PI * 2, .9 + wr() * .3]);
+      }
+      n++;
     }
   }
   // COTTAGE BEDS: under a share of the houses' ground-floor shuttered windows, a row of tall garden flowers along the
@@ -3024,11 +3041,10 @@ const buildFlora = (autumnNow, springNow = 0) => {
   // (every kind and colouring in ONE batched pool, one material -- each flower culled on its own: they were a draw a
   //  kind and colouring, twenty-odd, every frame wherever you looked)
   const fm = new THREE.Matrix4(), fq = new THREE.Quaternion(), fs = new THREE.Vector3(), fp = new THREE.Vector3(), fy = new THREE.Vector3(0, 1, 0);
-  const pool = batchPool(flowerRoot, flowerMat ??= litMaterial(), { name: "flowers", copies: Math.max(16, [...fspots.values()].reduce((a, l) => a + l.length, 0) + mspots.length) });
+  const pool = batchPool(flowerRoot, flowerMaterial(), { name: "flowers", copies: Math.max(16, [...fspots.values()].reduce((a, l) => a + l.length, 0)) });
   for (const [key, list] of fspots) {
-    const [kind, variant] = key.split("|"), geo = paintedItemGeometry("items/flowers/" + kind, { seed: 1 + +variant * 7 }), shape = pool.add(geo);
-    geo.computeBoundingBox();
-    const top = geo.boundingBox.max.y;   // (its bloom's top: where a butterfly sits)
+    const [kind, variant] = key.split("|"), geo = flowerGeometry(kind, +variant), shape = pool.add(geo);
+    const top = geo.userData.top;   // (its bloom's top: where a butterfly sits)
     list.forEach(([x, y, z, yaw, sc]) => {
       const id = pool.fix(shape, fm.compose(fp.set(x, y, z), fq.setFromAxisAngle(fy, yaw), fs.setScalar(sc)));
       const perch = { x, y: y + top * sc, z, taken: null, gone: false };
@@ -3036,29 +3052,24 @@ const buildFlora = (autumnNow, springNow = 0) => {
       pickables.push({ x, z, kind, hide: () => { pool.hide(id); perch.gone = true; } });
     });
   }
-  // THE MUSHROOMS (2026-11-08): items now -- assets/items/mushrooms, written by tools/mushroomgen.py: lathes, as the flowers
-  // are -- in the flowers' pool, each kind in three growths by its seed; a pick hides its copy; under the snow with the
-  // flowers. (They were figures of the tree herd in the old part vocabulary, a pill and a squashed sphere: the last of it)
-  const mgeo = new Map();
+  // THE MUSHROOMS (2026-11-08): items now -- assets/items/mushrooms, written by tools/mushroomgen.py: lathes -- in a pool
+  // of their own (lit by vertex colour: the flowers' material is their atlas's), each kind in three growths by its
+  // seed; a pick hides its copy; under the snow with the flowers. (They were figures of the tree herd in the old part vocabulary, a pill and a squashed sphere: the last of it)
+  const mgeo = new Map(), mpool = batchPool(flowerRoot, mushroomMat ??= litMaterial(), { name: "mushrooms", copies: Math.max(16, mspots.length) });
+  flowerPools = [pool, mpool];
   for (const [kind, x, z, seed, yaw] of mspots) {
     const v = seed % 3, key = kind + v;
-    if (!mgeo.has(key)) mgeo.set(key, pool.add(paintedItemGeometry("items/mushrooms/" + kind, { seed: 1 + v * 13 })));
-    const id = pool.fix(mgeo.get(key), fm.compose(fp.set(x, groundH(x, z), z), fq.setFromAxisAngle(fy, yaw), fs.setScalar(1)));
-    pickables.push({ x, z, kind, hide: () => pool.hide(id) });
+    if (!mgeo.has(key)) mgeo.set(key, mpool.add(paintedItemGeometry("items/mushrooms/" + kind, { seed: 1 + v * 13 })));
+    const id = mpool.fix(mgeo.get(key), fm.compose(fp.set(x, groundH(x, z), z), fq.setFromAxisAngle(fy, yaw), fs.setScalar(1)));
+    pickables.push({ x, z, kind, hide: () => mpool.hide(id) });
   }
   scene.add(flowerRoot);
-  for (const P of sitePlants) {   // the site plants: grown like the woods, drawn in the same herd and foliage
-    const def = P.kind === "tree" ? makeTree(P.species, { seed: P.seed, autumn: autumnNow, spring: springNow, height: P.height })
-                                  : makeBush({ seed: P.seed, autumn: autumnNow, spring: springNow, fruit: P.fruit, height: P.height });
-    const an = treeHerd.add(def);
-    an.position.set(P.x, groundH(P.x, P.z) - .05, P.z);
-    an.rotY = P.rotY ?? 0;
-    addCards(def, an);
-    if (P.kind === "tree") treeCols.push(treeCol(P.x, P.z, def, an));   // the trunk blocks walking
+  for (const P of sitePlants) {   // the site plants: grown like the woods, in the same field (fruit: a BUSH_FRUITS name, null none)
+    const kind = P.kind === "tree" ? P.species : P.fruit ? "bush:" + P.fruit : "bush";
+    const t = plants.add(kind, P.x, groundH(P.x, P.z) - .05, P.z, { yaw: P.rotY ?? 0, seed: P.seed ?? 1, height: P.height ?? 0 });
+    if (P.kind === "tree") treeCols.push(treeCol(P.x, P.z, t));   // the trunk blocks walking
   }
-  treeHerd.update(0);   // trees stand still: one buffer write per rebuild
-  foliage = buildFoliage(leafCards);
-  scene.add(foliage);
+  plants.build();
   // the shade under each crown, as wide as it reaches (shadows.js createShadeBlobs: one draw)
   // ...and in autumn the LEAF LITTER under the broadleaf crowns, in the leaves' own autumn colour (laid after the shade: on top of it)
   const litter = autumnNow > 0 ? treeCols.filter((tc) => !tc.evergreen && tc.leafC !== undefined).map((tc) => ({ x: tc.x, y: groundH(tc.x, tc.z) + .11, z: tc.z,
@@ -5573,7 +5584,7 @@ function applyNetOp(op) {
   } else if (op.k === "arrow") {   // a peer's shot: it flies and sticks here too
     archery.spawn(op.p, op.v, true);
   } else if (op.k === "env") {
-    weather = op.weather; wxInt = op.int;   // (the snow settles or melts from there: the tick eases SNOW)
+    if (weather !== op.weather || wxInt !== op.int) { weather = op.weather; wxInt = op.int; applyClouds(); }   // (the snow settles or melts from there: the tick eases SNOW)
     if ((darkTo > .5) !== !!op.night) darkTo = op.night ? 1 : 0;   // (the host's dusk, falling here too)
     if (op.autumn !== autumnLvl) { autumnLvl = op.autumn; buildFlora(autumnK(), springK()); }
   }
@@ -6117,6 +6128,12 @@ night = dark > .5;
 const RAINBOW = { after: 90 };
 let bow = num("bow", 0), rainTill = -1e9;   // (?bow=1 shows it now)
 const sky = createSky(scene, { radius: Math.min(camera.far * .92, groundR * 2.45) });
+// THE CLOUDS (clouds.js, assets/sky/skies.json): a sky drawn for the weather and its intensity (P, O) -- the world's
+// seed picks which of the kind's skies, and every SKIES.change seconds of the clock the next one eases in (?sky=NAME
+// holds one sky). Peers sharing the world's seed and weather see the same one.
+let skyTurn = townSeed % 997, skyTurnAt = 0;
+const applyClouds = (now = false) => sky.clouds.set(sky.clouds.sky(qp.get("sky") ?? sky.clouds.weather(["clear", "rain", "snow"][weather], wxInt, skyTurn)), { now });
+applyClouds(true);
 const daySky = new THREE.Color(0xcfe0e8), nightSky = new THREE.Color(0x101728);
 const nightScene = new THREE.Scene();
 const nightCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -6169,7 +6186,7 @@ const AURORA = { chance: .3, ease: 30 };
 let aurora = 0, auroraOn = qp.get("aurora") === "1", skyT = 0;
 // the hour on the screen: the sky dome, the fog (the horizon's colour), the frame's tint, the stars and the moon
 const applyHour = () => {
-  const { horizon, tint, sunDir, sunCol, cloud } = sky.update(camera, dark, weather ? .45 + .25 * wxInt : 0, bow, { aurora, t: skyT, cover: weather ? .92 + .04 * wxInt : [.3, .5, .72][wxInt] });   // (rain or snow: an overcast sky, darker the harder it falls)
+  const { horizon, tint, sunDir, sunCol, cloud } = sky.update(camera, dark, weather ? .45 + .25 * wxInt : 0, bow, { aurora, t: skyT });   // (rain or snow: a greyer sky, darker the harder it falls -- the clouds' own sky greys it more)
   cloudTint.value.copy(cloud);
   waterSky.value.copy(horizon); waterSunDir.value.copy(sunDir); waterSunCol.value.copy(sunCol); ROAD_WET.sky.value.copy(horizon);
   waterMoonDir.value.copy(moon.position).normalize();
@@ -6282,8 +6299,8 @@ addEventListener("keydown", (e) => {
     el.style.display = el.style.display === "block" ? "none" : "block";
   }
   if (e.code === "Space") e.preventDefault();
-  if (e.code === "KeyP") { weather = (weather + 1) % 3; netEnv(); }   // (the snow settles or melts over minutes: the tick eases SNOW)
-  if (e.code === "KeyO" && !e.shiftKey) { wxInt = (wxInt + 1) % 3; netEnv(); }   // weather intensity low/mid/high -- and cloud cover on a clear day
+  if (e.code === "KeyP") { weather = (weather + 1) % 3; applyClouds(); netEnv(); }   // (the snow settles or melts over minutes: the tick eases SNOW)
+  if (e.code === "KeyO" && !e.shiftKey) { wxInt = (wxInt + 1) % 3; applyClouds(); netEnv(); }   // weather intensity low/mid/high -- and which skies (more cloud the higher)
   if (e.code === "KeyO" && e.shiftKey) setOutline(!outlineOn());   // the world's one outline switch: 1px lines on everything, or nothing (cheapest)
   if (e.code === "KeyI") { autumnLvl = (autumnLvl + 1) % 4; buildFlora(autumnK(), springK()); netEnv(); toast(["Summer", "Autumn", "Late autumn", "Spring: the orchards in blossom"][autumnLvl]); }   // summer / half / full autumn / spring
   if (e.code === "KeyN" && !e.shiftKey) { darkTo = darkTo > .5 ? 0 : 1; DUSK.day = 0; netEnv(); }   // (dusk or dawn: over DUSK.secs)
@@ -6855,6 +6872,7 @@ function frameBody() {
     waterReflOn.value = near ? (REFLECT.mode === "raw" ? 3 : 1) : 0;
   }
   FOLIAGE_T.value = t;   // the leaves' wind
+  plants.update(camera);   // the trees' levels of detail, culled to the view
   jetT.value = t; poolT.value = t;
   fireT.value = t;   // flames flicker on the render clock
   // THE HOUR: eased toward the night or the day (N), or run round a day (U, ?day=): dark = (1 - cos) / 2 of the day's turn
@@ -6887,8 +6905,10 @@ function frameBody() {
   ROAD_WET.rain.value = waterRain.value; ROAD_WET.t.value = t;
   // the clouds' shadows: on a clear day only (rain or snow: the whole sky is grey), by the sun (gone at dusk), more of
   // the land under them the more clouds there are (O on a clear day: few, half, all)
-  CLOUD.t.value = t; CLOUD.cover.value = [.35, .65, .9][wxInt];
-  CLOUD.amount.value = weather ? 0 : Math.max(0, 1 - dark / .38);
+  if (t - skyTurnAt > SKIES.change) { skyTurnAt = t; skyTurn++; applyClouds(); }   // (the next sky of the weather's kind)
+  const cs = sky.clouds.shadow();   // the land's cloud shadows: as the sky's clouds
+  CLOUD.t.value = t; CLOUD.cover.value = cs.cover;
+  CLOUD.amount.value = weather ? 0 : cs.amount * Math.max(0, 1 - dark / .38);
   SUN.k.value = SUN.baked && !NO_SUNSHADOW ? (weather ? .25 : 1) * Math.max(0, 1 - dark / .38) : 0;   // (the buildings' shadows: faint under a grey sky, none by night -- sunshadow.js)
   smoke.update(t, { amount: (weather === 2 || autumnLvl === 2 ? 1.45 : weather === 1 ? .85 : 1) * (1 - dark * .2), light: cloudTint.value });   // (more fires on a cold day; lit by the hour as the clouds are)
   flock.update(t, { dark });
@@ -7052,6 +7072,8 @@ function frameBody() {
   if (ducklings.count) { let near = false; for (const b of ducklings.broods) if (b.m.position.distanceTo(camera.position) < 160) { near = true; break; } ducklings.mesh.visible = near && (autumnLvl === 0 || autumnLvl === 3) && SNOW.value < .5; }   // (near you -- and in spring and summer only, no snow lying: they swam in autumn and in the snow)
   grassFringe.update(renderer, scene, camera, t, MAP ? -1e9 : WLEVEL);   // the ground's mask, for the stalks that stand over what is in front of them
   mark("grass mask");
+  sky.render(renderer, camera);   // the heaped clouds' own pass, before the sky reads it
+  mark("clouds");
   renderer.render(scene, camera);
   renderer.autoClear = false;
   const camWater = waterY(camera.position.x, camera.position.z);
@@ -7173,7 +7195,7 @@ tick();
 if (HEADLESS) {   // the self-check: one more frame, into a render target, posted as ASCII (see ?probe above)
   await terrainReady;   // the ground comes from a worker: photograph the world with it in
   // (what a headless test reads and drives: the simulation, the flowers, the movers; standing the walker somewhere)
-  window.__dbg = { simTo, wanderers, perches, carts, movers, frameBody, camera, renderer, scene, bedY, siteZ, period: PERIOD_NAME, town, TOWN, BUILDINGS, smoke, glow, stones, flock, laundry, ivy, icicles, CHURCHYARD, SHRINES, SILL_CATS, SHOP_BARRELS, storkNests, get nature() { return nature; }, storkTick, roosting, roostTick, choreLureTick, windowBoxes, fireworks, wallLamps, lightning, leaves, reeds, sparks, pigeons, prints, flags, breath, flagPeaks, ridgeLines, treeCols, tick, get swimming() { return swimming; }, get feetWet() { return feetWet; }, setAutumn: (k) => { autumnLvl = k; buildFlora(autumnK(), springK()); }, LEAP, poseAll, waterRain, setWeather: (w, i = 1) => { weather = w; wxInt = i; SNOW.value = w === 2 ? 1 : 0; applyClouds(); applyHour(); }, initAudio, greetTick, idleTick, talkers, GREET, get fishHerd() { return fishHerd; }, chimneyTops, glowWins, nightScene, nightCam, sky, waterEye, setNight: (v) => { dark = darkTo = v ? 1 : 0; night = v; applyNight(); applyHour(); }, setDark: (k) => { dark = darkTo = k; night = k > .5; applyNight(); applyHour(); }, get dark() { return dark; }, get tagGame() { return tagGame; }, get juggler() { return juggler; }, showCrowd, CLOUD, swallows, dancers, bees, squarePigeons, crows, spray, waterWheels, fishing, splashes, WIND, moths, setFog: (t) => { fogFrom = t; }, get pasture() { return pasture; }, pastureFolk, pastureTick, get washer() { return washer; }, startTour, tourTick, get tour() { return tour; }, lambs, lambTick, snowballTick, snowballs, huntTick, get hunt() { return hunt; }, HARVEST, dust, supportAt, groundH, ringBell, CHURCH_DOOR, get watchman() { return watchman; }, get sentry() { return sentry; }, watchTick, get maypole() { return maypole; }, maypoleTick, get kites() { return kites; }, kiteFlyers, kiteTick, bubbles, get bubbleKid() { return bubbleKid; }, geese, rooks, ICE, hitsBuildings, claims, lintPlaces, get simT() { return simTick * TICK; }, unseen, fpsMove: (dt) => fpsMove(dt), setYaw: (v) => { yaw = v; }, get yaw() { return yaw; }, setPitch: (v) => { pitch = v; }, placePane: (dr) => placePane(dr), setFrost: (k) => { frostK = k; }, skaters, skateTick, lureBirds, get sledding() { return sledding; }, sledTick, setSled: (v) => { sledOn = v; }, bathers, get bathePatch() { return bathePatch; }, batheTick, get leapfrog() { return leapfrog; }, leapKids, leapTick, get hideSeek() { return hideSeek; }, hideSpots, chores, choreTick, choreWhy: (name) => CHORES[name].find().map((c) => [c.at.map(Math.round), choreMiss(CHORES[name], c)]), stallSeasons, stallSeasonTick, crierTick, marketStalls, seenFrom, wakes, surfaceAt, wallShade, get skimmer() { return skimmer; }, skimTick, get haycocks() { return haycocks; }, shadows, treeShade, updateShadows: () => shadows.update([herd, folk, extrasHerd, lifeHerd, guardHerd, crewHerd, riderHerd, spareHerd, cartHerd, cartSpare], camera, floorUnder, carts), tools, folkHold, findInteraction, setStill: (v) => { youStill = v; }, hedgeSpots, wedding, weddingTick, petals, get swing() { return swing; }, swingKids, swingTick, get boatSt() { return boatSt; }, get snowman() { return snowman; }, ROAD_WET, ducklings, get bonfire() { return bonfire; }, fireSitters, companion, callDog, get herd() { return herd; }, mist, grassFringe, extrasHerd, get folkHerd() { return folk; }, setBow: (k) => { bow = k; applyHour(); }, setAurora: (k, t = 0) => { aurora = k; auroraOn = k > 0; skyT = t; applyHour(); },
+  window.__dbg = { simTo, wanderers, perches, carts, movers, frameBody, camera, renderer, scene, bedY, siteZ, period: PERIOD_NAME, town, TOWN, BUILDINGS, smoke, glow, stones, flock, laundry, ivy, icicles, CHURCHYARD, SHRINES, SILL_CATS, SHOP_BARRELS, storkNests, get nature() { return nature; }, storkTick, roosting, roostTick, choreLureTick, windowBoxes, fireworks, wallLamps, lightning, leaves, reeds, sparks, pigeons, prints, flags, breath, flagPeaks, ridgeLines, treeCols, tick, get swimming() { return swimming; }, get feetWet() { return feetWet; }, setAutumn: (k) => { autumnLvl = k; buildFlora(autumnK(), springK()); }, LEAP, poseAll, waterRain, setWeather: (w, i = 1) => { weather = w; wxInt = i; SNOW.value = w === 2 ? 1 : 0; applyClouds(); applyHour(); }, initAudio, greetTick, idleTick, talkers, GREET, get fishHerd() { return fishHerd; }, chimneyTops, glowWins, nightScene, nightCam, sky, waterEye, setNight: (v) => { dark = darkTo = v ? 1 : 0; night = v; applyNight(); applyHour(); }, setDark: (k) => { dark = darkTo = k; night = k > .5; applyNight(); applyHour(); }, get dark() { return dark; }, get tagGame() { return tagGame; }, get juggler() { return juggler; }, showCrowd, CLOUD, swallows, dancers, bees, squarePigeons, crows, spray, waterWheels, fishing, splashes, WIND, moths, setFog: (t) => { fogFrom = t; }, get pasture() { return pasture; }, pastureFolk, pastureTick, get washer() { return washer; }, startTour, tourTick, get tour() { return tour; }, lambs, lambTick, snowballTick, snowballs, huntTick, get hunt() { return hunt; }, HARVEST, dust, supportAt, groundH, ringBell, CHURCH_DOOR, get watchman() { return watchman; }, get sentry() { return sentry; }, watchTick, get maypole() { return maypole; }, maypoleTick, get kites() { return kites; }, kiteFlyers, kiteTick, bubbles, get bubbleKid() { return bubbleKid; }, geese, rooks, ICE, hitsBuildings, claims, lintPlaces, get simT() { return simTick * TICK; }, unseen, fpsMove: (dt) => fpsMove(dt), setYaw: (v) => { yaw = v; }, get yaw() { return yaw; }, setPitch: (v) => { pitch = v; }, placePane: (dr) => placePane(dr), setFrost: (k) => { frostK = k; }, skaters, skateTick, lureBirds, get sledding() { return sledding; }, sledTick, setSled: (v) => { sledOn = v; }, bathers, get bathePatch() { return bathePatch; }, batheTick, get leapfrog() { return leapfrog; }, leapKids, leapTick, get hideSeek() { return hideSeek; }, hideSpots, chores, choreTick, choreWhy: (name) => CHORES[name].find().map((c) => [c.at.map(Math.round), choreMiss(CHORES[name], c)]), stallSeasons, stallSeasonTick, crierTick, marketStalls, seenFrom, wakes, surfaceAt, wallShade, get skimmer() { return skimmer; }, skimTick, get haycocks() { return haycocks; }, shadows, treeShade, plants, updateShadows: () => shadows.update([herd, folk, extrasHerd, lifeHerd, guardHerd, crewHerd, riderHerd, spareHerd, cartHerd, cartSpare], camera, floorUnder, carts), tools, folkHold, findInteraction, setStill: (v) => { youStill = v; }, hedgeSpots, wedding, weddingTick, petals, get swing() { return swing; }, swingKids, swingTick, get boatSt() { return boatSt; }, get snowman() { return snowman; }, ROAD_WET, ducklings, get bonfire() { return bonfire; }, fireSitters, companion, callDog, get herd() { return herd; }, mist, grassFringe, extrasHerd, get folkHerd() { return folk; }, setBow: (k) => { bow = k; applyHour(); }, setAurora: (k, t = 0) => { aurora = k; auroraOn = k > 0; skyT = t; applyHour(); },
     stand: (x, z, y) => { camera.position.set(x, 0, z); standY = y ?? supportNear(x, z, 1e9); airborne = false; vy = 0; camera.position.y = standY + eyeH; } };
   const { probe } = await import("./wgprobe.js");
   const post = (t) => fetch("/report", { method: "POST", body: t }).catch(() => {});
@@ -7423,7 +7445,7 @@ addEventListener("resize", () => {
 
 window.__scene = scene; window.__THREE = THREE; window.__camera = camera;   // debug hooks for the headless harness
 window.__simStep = () => simTicks(simTick + 1);
-window.__dbg = Object.defineProperties({ ground: GROUND, sea: SEA, get seaLife() { return seaLife; }, get haulout() { return haulout; }, get pterosaurs() { return pterosaurs; }, get harbour() { return HARBOUR_LIFE ?? HARBOUR; },get bflies() { return bflies; }, get nature() { return nature; }, get pathRoutes() { return pathRoutes; }, pickables, forest: FOREST, supportNear, storkNests, period: PERIOD_NAME, get standY() { return standY; }, get controls() { return controls; }, get jumpState() { return { airborne, vy, jumpHeld, swimming, resting: !!resting, mounted: !!mounted }; }, buildings: BUILDINGS, map: MAP, riverZ, riverLevel, waterY, VILLAGE_X, scene, camera, renderer, poolMat, jetMat, herds, combat, combatNames, sword, setWeapon, archery, tableware, guards, mountables, keys, findInteraction, herd, talkers, callers, doors, carts, collides, colliderSites, goods, hands, get barge() { return bargeSt; }, get boat() { return boatSt; }, get life() { return life; }, sites, groundH, bargePose, yards, callNow: () => { for (const c of callers) c.next = 0; }, speech: () => ({ spoken, langMode, toneMode, wordMode, moodMode }),
+window.__dbg = Object.defineProperties({ ground: GROUND, sea: SEA, get seaLife() { return seaLife; }, get haulout() { return haulout; }, get pterosaurs() { return pterosaurs; }, get harbour() { return HARBOUR_LIFE ?? HARBOUR; },get bflies() { return bflies; }, get nature() { return nature; }, get pathRoutes() { return pathRoutes; }, pickables, forest: FOREST, plants, treeCols, supportNear, storkNests, period: PERIOD_NAME, get standY() { return standY; }, get controls() { return controls; }, get jumpState() { return { airborne, vy, jumpHeld, swimming, resting: !!resting, mounted: !!mounted }; }, buildings: BUILDINGS, map: MAP, riverZ, riverLevel, waterY, VILLAGE_X, scene, camera, renderer, sky, poolMat, jetMat, herds, combat, combatNames, sword, setWeapon, archery, tableware, guards, mountables, keys, findInteraction, herd, talkers, callers, doors, carts, collides, colliderSites, goods, hands, get barge() { return bargeSt; }, get boat() { return boatSt; }, get life() { return life; }, sites, groundH, bargePose, yards, callNow: () => { for (const c of callers) c.next = 0; }, speech: () => ({ spoken, langMode, toneMode, wordMode, moodMode }),
   talkNow: () => { for (const t of talkers) t.next = 0; },
   look: (x, z, down = 0) => { yaw = Math.atan2(-(x - camera.position.x), -(z - camera.position.z)); pitch = -down; },   // (down: radians below level, for checks)
   pitch: (p) => { if (p !== undefined) pitch = p; return pitch; },

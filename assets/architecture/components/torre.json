@@ -1,0 +1,208 @@
+{
+ "name": "Torre",
+ "_about": "A NASRID WALL TOWER: `W` along the wall's line (x) by `L` out from it (z), centred, `H` from its foot to the terrace, walls `tw` thick round a solid core; its top storey `hw` tall a hall with `win` horseshoe windows `ww` wide in every face (from `wsill` over its floor, springing at `wspr`), and on top (`crest`) a terrace behind square merlons, or a hipped roof.",
+ "params": {
+  "detail": 4,
+  "W": 9.0,
+  "L": 8.0,
+  "H": 18.0,
+  "tw": 1.4,
+  "hw": 5.5,
+  "win": 1,
+  "ww": 1.1,
+  "wsill": 1.0,
+  "wspr": "hw - 1.3 - ww / 2",
+  "crest": "merlons"
+ },
+ "build": [
+  "shaft",
+  "core",
+  "deck",
+  "merlons 1",
+  "merlons 2",
+  "merlons 3",
+  "merlons 4",
+  "roof"
+ ],
+ "parts": {
+  "shaft": {
+   "type": "enclosure",
+   "plan": {
+    "rect": [
+     "W",
+     "L"
+    ]
+   },
+   "thickness": "tw",
+   "height": "H",
+   "glass": false,
+   "tiers": [
+    {
+     "h": "H - hw",
+     "openings": []
+    },
+    {
+     "h": "hw",
+     "openings": {
+      "pattern": "win",
+      "width": "ww",
+      "gap": "ww * 0.9",
+      "sill": "wsill",
+      "springing": "wspr",
+      "head": {
+       "profile": "horseshoe",
+       "over": 0.2
+      }
+     }
+    }
+   ],
+   "_about": "the tower: a blind mass of rammed earth and rubble below, the hall storey over it lit by its windows (a tower-palace's: the Ladies', the Captive's)"
+  },
+  "core": {
+   "type": "prism",
+   "plan": {
+    "rect": [
+     "W - 2 * tw + 0.02",
+     "L - 2 * tw + 0.02"
+    ]
+   },
+   "height": "H - hw",
+   "flatRoof": true,
+   "_about": "its solid foot, the hall's floor on it"
+  },
+  "deck": {
+   "type": "box",
+   "width": "W - 2 * tw + 0.02",
+   "length": "L - 2 * tw + 0.02",
+   "height": 0.4,
+   "at": [
+    [
+     0,
+     "H - 0.4",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "crest": "merlons"
+   },
+   "_about": "the hall's ceiling, the terrace on it"
+  },
+  "merlons 1": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "W",
+    "t": 0.5,
+    "h": 1.0,
+    "step": 2.0,
+    "mw": 1.0,
+    "mh": 1.1,
+    "merlon": "square"
+   },
+   "at": [
+    [
+     0,
+     "H",
+     "L / 2 - 0.25",
+     0
+    ]
+   ],
+   "when": {
+    "crest": "merlons"
+   },
+   "_about": "the terrace's breastwork and square merlons"
+  },
+  "merlons 2": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "W",
+    "t": 0.5,
+    "h": 1.0,
+    "step": 2.0,
+    "mw": 1.0,
+    "mh": 1.1,
+    "merlon": "square"
+   },
+   "at": [
+    [
+     0,
+     "H",
+     "0.25 - L / 2",
+     3.1416
+    ]
+   ],
+   "when": {
+    "crest": "merlons"
+   }
+  },
+  "merlons 3": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "L - 1.0",
+    "t": 0.5,
+    "h": 1.0,
+    "step": 2.0,
+    "mw": 1.0,
+    "mh": 1.1,
+    "merlon": "square"
+   },
+   "at": [
+    [
+     "W / 2 - 0.25",
+     "H",
+     0,
+     -1.5708
+    ]
+   ],
+   "when": {
+    "crest": "merlons"
+   }
+  },
+  "merlons 4": {
+   "type": "component",
+   "use": "components/crenellation",
+   "params": {
+    "L": "L - 1.0",
+    "t": 0.5,
+    "h": 1.0,
+    "step": 2.0,
+    "mw": 1.0,
+    "mh": 1.1,
+    "merlon": "square"
+   },
+   "at": [
+    [
+     "0.25 - W / 2",
+     "H",
+     0,
+     1.5708
+    ]
+   ],
+   "when": {
+    "crest": "merlons"
+   }
+  },
+  "roof": {
+   "type": "roof",
+   "form": "hip",
+   "width": "W + 0.5",
+   "length": "L + 0.5",
+   "pitch": 27,
+   "at": [
+    [
+     0,
+     "H",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "crest": "roof"
+   },
+   "_about": "or (`crest` roof) a hipped roof of tiles, as a tower-palace has"
+  }
+ }
+}
