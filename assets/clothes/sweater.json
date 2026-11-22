@@ -1,0 +1,50 @@
+{
+  "name": "Sweater",
+  "kind": "garment",
+  "layer": 3,
+  "_about": "a knitted sweater (the jumper, the pullover): wool or cotton jersey, a crew neck, long sleeves, to the hips, its welt and cuffs ribbed tight",
+  "thick": 0.006,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "heather-grey"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip + 0.04",
+        "neckline": "round",
+        "neckFront": 0.012,
+        "neckBack": 0.004
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist + 0.01"
+      }
+    },
+    {
+      "use": "clothes/components/patch",
+      "params": {
+        "from": "hip - 0.01",
+        "to": "hip + 0.04",
+        "thick": 0.009
+      }
+    },
+    {
+      "use": "clothes/components/patch",
+      "params": {
+        "from": "collar - 0.012",
+        "to": "collar + 0.014",
+        "thick": 0.009,
+        "neckline": "round",
+        "neckFront": 0.0,
+        "neckBack": 0.0
+      }
+    }
+  ]
+}

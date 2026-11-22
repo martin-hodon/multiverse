@@ -1,0 +1,243 @@
+{
+ "kind": "item",
+ "name": "Zebra crossing",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "the straight road (TILE 10 m, ports at x +-5) with a zebra crossing: seven white bars 0.5 m wide across both lanes, tactile paving at the kerbs, a blue crossing sign and an amber globe on a post each side.",
+ "params": {},
+ "materials": {
+  "asphalt": "asphalt",
+  "line": "tarmac-line",
+  "kerb": "#9b9a95",
+  "pave": "#b3afa6",
+  "joint": "#8a877f",
+  "grate": "#2a2b2d",
+  "tactile": "#d2c08a",
+  "post": "paint-grey",
+  "signBlue": "paint-blue",
+  "signWhite": "paint-white",
+  "beacon": "lamp-amber"
+ },
+ "parts": [
+  {
+   "id": "road",
+   "use": "items/modern/infra/road-straight",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "centre": 0
+   }
+  },
+  {
+   "id": "bars",
+   "type": "box",
+   "material": "line",
+   "size": [
+    4.0,
+    0.004,
+    0.5
+   ],
+   "at": [
+    [
+     0,
+     0.0225,
+     -3.0
+    ],
+    [
+     0,
+     0.0225,
+     -2.0
+    ],
+    [
+     0,
+     0.0225,
+     -1.0
+    ],
+    [
+     0,
+     0.0225,
+     0.0
+    ],
+    [
+     0,
+     0.0225,
+     1.0
+    ],
+    [
+     0,
+     0.0225,
+     2.0
+    ],
+    [
+     0,
+     0.0225,
+     3.0
+    ]
+   ]
+  },
+  {
+   "id": "tactile",
+   "type": "box",
+   "material": "tactile",
+   "size": [
+    3.6,
+    0.012,
+    0.8
+   ],
+   "at": [
+    0.0,
+    0.166,
+    4.1
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "post1",
+   "type": "rod",
+   "material": "post",
+   "r": 0.035,
+   "from": [
+    2.4,
+    0.16,
+    4.9
+   ],
+   "to": [
+    2.4,
+    2.9,
+    4.9
+   ],
+   "sides": 8
+  },
+  {
+   "id": "sign1",
+   "type": "box",
+   "material": "signBlue",
+   "size": [
+    0.03,
+    0.6,
+    0.6
+   ],
+   "at": [
+    2.4,
+    2.55,
+    4.9
+   ]
+  },
+  {
+   "id": "signTri1",
+   "type": "plate",
+   "material": "signWhite",
+   "outline": [
+    [
+     0,
+     0.2
+    ],
+    [
+     0.21,
+     -0.17
+    ],
+    [
+     -0.21,
+     -0.17
+    ]
+   ],
+   "thick": 0.04,
+   "at": [
+    2.4,
+    2.55,
+    4.9,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "beacon1",
+   "type": "sphere",
+   "material": "beacon",
+   "r": 0.15,
+   "at": [
+    2.4,
+    3.0,
+    4.9
+   ],
+   "sides": 12
+  },
+  {
+   "id": "post-1",
+   "type": "rod",
+   "material": "post",
+   "r": 0.035,
+   "from": [
+    -2.4,
+    0.16,
+    -4.9
+   ],
+   "to": [
+    -2.4,
+    2.9,
+    -4.9
+   ],
+   "sides": 8
+  },
+  {
+   "id": "sign-1",
+   "type": "box",
+   "material": "signBlue",
+   "size": [
+    0.03,
+    0.6,
+    0.6
+   ],
+   "at": [
+    -2.4,
+    2.55,
+    -4.9
+   ]
+  },
+  {
+   "id": "signTri-1",
+   "type": "plate",
+   "material": "signWhite",
+   "outline": [
+    [
+     0,
+     0.2
+    ],
+    [
+     0.21,
+     -0.17
+    ],
+    [
+     -0.21,
+     -0.17
+    ]
+   ],
+   "thick": 0.04,
+   "at": [
+    -2.4,
+    2.55,
+    -4.9,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "beacon-1",
+   "type": "sphere",
+   "material": "beacon",
+   "r": 0.15,
+   "at": [
+    -2.4,
+    3.0,
+    -4.9
+   ],
+   "sides": 12
+  }
+ ]
+}

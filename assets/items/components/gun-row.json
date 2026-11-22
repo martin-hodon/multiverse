@@ -2,7 +2,7 @@
  "kind": "item",
  "name": "Gun row",
  "category": "component",
- "_about": "a broadside: n gun ports along a side from x = from to x = to at height y in a hull of half-breadth z, each a dark port with a muzzle out of it -- on both sides",
+ "_about": "a broadside: n gun ports along a side from x = from to x = to at height y in a hull of half-breadth z, each a dark port with its lid hinged at the top and a gun behind it -- on both sides. `open` (default 1: at sea, cleared for action): over its first half the lids swing up and out, over the second the guns run out through the ports",
  "params": {
   "n": 10,
   "from": 4,
@@ -10,11 +10,13 @@
   "y": 3,
   "z": 5,
   "bore": 0.11,
-  "reach": 0.5
+  "reach": 0.5,
+  "open": 1
  },
  "materials": {
   "metal": "iron",
-  "port": "#1a1612"
+  "port": "#1a1612",
+  "lid": "#5a3a22"
  },
  "parts": [
   {
@@ -42,35 +44,100 @@
    "mirror": "z"
   },
   {
-   "id": "muzzle",
-   "type": "rod",
-   "material": "metal",
-   "from": [
+   "id": "lid",
+   "type": "hinge",
+   "pivot": [
     0,
+    "bore * 2.95",
+    "0.04"
+   ],
+   "axis": [
+    1,
     0,
     0
    ],
-   "to": [
+   "max": -80,
+   "range": [
     0,
-    0,
-    "reach"
+    0.5
    ],
-   "r0": "bore * 1.35",
-   "r1": "bore * 1.25",
    "along": {
     "n": "n",
     "from": [
      "from",
      "y",
-     "z - 0.1"
+     "z"
     ],
     "to": [
      "to",
      "y",
-     "z - 0.1"
+     "z"
     ]
    },
-   "mirror": "z"
+   "mirror": "z",
+   "parts": [
+    {
+     "id": "lidBoard",
+     "type": "box",
+     "material": "lid",
+     "size": [
+      "bore * 6.4",
+      "bore * 5.9",
+      0.06
+     ],
+     "at": [
+      0,
+      0,
+      0.04
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gun",
+   "type": "slide",
+   "move": [
+    0,
+    0,
+    "reach + 0.05"
+   ],
+   "range": [
+    0.5,
+    1
+   ],
+   "along": {
+    "n": "n",
+    "from": [
+     "from",
+     "y",
+     "z - 0.15 - reach"
+    ],
+    "to": [
+     "to",
+     "y",
+     "z - 0.15 - reach"
+    ]
+   },
+   "mirror": "z",
+   "parts": [
+    {
+     "id": "muzzle",
+     "type": "rod",
+     "material": "metal",
+     "from": [
+      0,
+      0,
+      0
+     ],
+     "to": [
+      0,
+      0,
+      "reach"
+     ],
+     "r0": "bore * 1.35",
+     "r1": "bore * 1.25"
+    }
+   ]
   }
  ]
 }

@@ -1,0 +1,833 @@
+{
+ "kind": "item",
+ "name": "Trumpet",
+ "category": "tool",
+ "era": "1400-2030",
+ "region": "everywhere",
+ "_about": "a trumpet, its bell toward +x: a valved trumpet, the leadpipe from the mouthpiece to the three piston valves, the main tuning slide ahead of them, the bell bow behind and the bell yard alongside to the flared bell (style valved), or a natural trumpet without valves, once folded, a ball on its bell yard (natural)",
+ "params": {
+  "style": {
+   "pick": [
+    "valved",
+    "valved",
+    "natural"
+   ]
+  }
+ },
+ "materials": {
+  "brass": {
+   "pick": [
+    "brass",
+    "brass",
+    "silver",
+    "gilt"
+   ]
+  },
+  "pearl": "pearl",
+  "dark": "mouth-dark"
+ },
+ "parts": [
+  {
+   "id": "mouthpiece",
+   "type": "lathe",
+   "material": "brass",
+   "profile": [
+    [
+     0.0045,
+     0
+    ],
+    [
+     0.005,
+     0.05
+    ],
+    [
+     0.0085,
+     0.07
+    ],
+    [
+     0.013,
+     0.085
+    ],
+    [
+     0.0125,
+     0.09
+    ],
+    [
+     0.0095,
+     0.09
+    ]
+   ],
+   "sides": 10,
+   "when": {
+    "style": "valved"
+   },
+   "at": [
+    -0.17,
+    0.0,
+    0.0,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "leadpipe",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.0055,
+   "from": [
+    -0.17,
+    0.0,
+    0.0
+   ],
+   "to": [
+    -0.012,
+    0.0,
+    0.0
+   ],
+   "sides": 8,
+   "r1": 0.0068,
+   "when": {
+    "style": "valved"
+   }
+  },
+  {
+   "id": "valves",
+   "type": "lathe",
+   "material": "brass",
+   "profile": [
+    [
+     0,
+     -0.083
+    ],
+    [
+     0.0105,
+     -0.083
+    ],
+    [
+     0.0105,
+     -0.075
+    ],
+    [
+     0.0095,
+     -0.075
+    ],
+    [
+     0.0095,
+     0.035
+    ],
+    [
+     0.0105,
+     0.035
+    ],
+    [
+     0.0105,
+     0.043
+    ],
+    [
+     0,
+     0.043
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "when": {
+    "style": "valved"
+   },
+   "at": [
+    [
+     0.0,
+     0,
+     0
+    ],
+    [
+     0.026,
+     0,
+     0
+    ],
+    [
+     0.052,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "stems",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.003,
+   "from": [
+    0,
+    0.043,
+    0
+   ],
+   "to": [
+    0,
+    0.068,
+    0
+   ],
+   "sides": 6,
+   "at": [
+    [
+     0.0,
+     0,
+     0
+    ],
+    [
+     0.026,
+     0,
+     0
+    ],
+    [
+     0.052,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "style": "valved"
+   }
+  },
+  {
+   "id": "buttons",
+   "type": "lathe",
+   "material": "pearl",
+   "profile": [
+    [
+     0.009,
+     0
+    ],
+    [
+     0.009,
+     0.006
+    ],
+    [
+     0,
+     0.006
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "valved"
+   },
+   "at": [
+    [
+     0.0,
+     0.068,
+     0
+    ],
+    [
+     0.026,
+     0.068,
+     0
+    ],
+    [
+     0.052,
+     0.068,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "tuningSlide",
+   "type": "sweep",
+   "material": "brass",
+   "path": [
+    [
+     0.06,
+     -0.012,
+     0
+    ],
+    [
+     0.16,
+     -0.012,
+     0
+    ],
+    [
+     0.19,
+     -0.035,
+     0
+    ],
+    [
+     0.16,
+     -0.058,
+     0
+    ],
+    [
+     0.06,
+     -0.058,
+     0
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "valved"
+   },
+   "seg": 3,
+   "r": 0.0065
+  },
+  {
+   "id": "bellBow",
+   "type": "sweep",
+   "material": "brass",
+   "path": [
+    [
+     0.052,
+     0.02,
+     -0.022
+    ],
+    [
+     0.0,
+     0.025,
+     -0.024
+    ],
+    [
+     -0.12,
+     0.025,
+     -0.024
+    ],
+    [
+     -0.155,
+     -0.01,
+     -0.024
+    ],
+    [
+     -0.12,
+     -0.05,
+     -0.024
+    ],
+    [
+     -0.02,
+     -0.05,
+     -0.024
+    ],
+    [
+     0.08,
+     -0.04,
+     -0.024
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "valved"
+   },
+   "seg": 3,
+   "r": 0.0065
+  },
+  {
+   "id": "thirdSlide",
+   "type": "sweep",
+   "material": "brass",
+   "path": [
+    [
+     0.052,
+     -0.02,
+     0.0
+    ],
+    [
+     0.09,
+     -0.02,
+     0.018
+    ],
+    [
+     0.12,
+     -0.03,
+     0.018
+    ],
+    [
+     0.09,
+     -0.04,
+     0.018
+    ],
+    [
+     0.052,
+     -0.04,
+     0.0
+    ]
+   ],
+   "sides": 6,
+   "when": {
+    "style": "valved"
+   },
+   "seg": 3,
+   "r": 0.005
+  },
+  {
+   "id": "firstSlide",
+   "type": "sweep",
+   "material": "brass",
+   "path": [
+    [
+     0.0,
+     -0.02,
+     0.0
+    ],
+    [
+     -0.03,
+     -0.02,
+     0.018
+    ],
+    [
+     -0.06,
+     -0.03,
+     0.018
+    ],
+    [
+     -0.03,
+     -0.04,
+     0.018
+    ],
+    [
+     0.0,
+     -0.04,
+     0.0
+    ]
+   ],
+   "sides": 6,
+   "when": {
+    "style": "valved"
+   },
+   "seg": 3,
+   "r": 0.005
+  },
+  {
+   "id": "bellYard",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.0065,
+   "from": [
+    0.08,
+    -0.04,
+    -0.024
+   ],
+   "to": [
+    0.2,
+    -0.03,
+    -0.024
+   ],
+   "sides": 8,
+   "when": {
+    "style": "valved"
+   }
+  },
+  {
+   "id": "bell",
+   "type": "lathe",
+   "material": "brass",
+   "profile": [
+    [
+     0.0062,
+     0
+    ],
+    [
+     0.008,
+     0.068
+    ],
+    [
+     0.014,
+     0.119
+    ],
+    [
+     0.03,
+     0.153
+    ],
+    [
+     0.0465,
+     0.1649
+    ],
+    [
+     0.062,
+     0.17
+    ],
+    [
+     0.06,
+     0.17
+    ],
+    [
+     0.004,
+     0.002
+    ]
+   ],
+   "sides": 18,
+   "caps": false,
+   "double": true,
+   "when": {
+    "style": "valved"
+   },
+   "at": [
+    0.2,
+    -0.03,
+    -0.024,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "braces",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.003,
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    0,
+    0.024
+   ],
+   "sides": 5,
+   "at": [
+    [
+     -0.08,
+     0.0,
+     -0.024
+    ],
+    [
+     0.15,
+     -0.035,
+     -0.024
+    ]
+   ],
+   "when": {
+    "style": "valved"
+   }
+  },
+  {
+   "id": "mouthN",
+   "type": "lathe",
+   "material": "brass",
+   "profile": [
+    [
+     0.0045,
+     0
+    ],
+    [
+     0.005,
+     0.05
+    ],
+    [
+     0.0085,
+     0.07
+    ],
+    [
+     0.013,
+     0.085
+    ],
+    [
+     0.0125,
+     0.09
+    ],
+    [
+     0.0095,
+     0.09
+    ]
+   ],
+   "sides": 10,
+   "when": {
+    "style": "natural"
+   },
+   "at": [
+    -0.12,
+    0.0,
+    0.0,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "yard1",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.0055,
+   "from": [
+    -0.12,
+    0.0,
+    0.0
+   ],
+   "to": [
+    0.42,
+    0.0,
+    0.0
+   ],
+   "sides": 8,
+   "when": {
+    "style": "natural"
+   }
+  },
+  {
+   "id": "frontBow",
+   "type": "sweep",
+   "material": "brass",
+   "path": [
+    [
+     0.42,
+     0.0,
+     0.0
+    ],
+    [
+     0.47,
+     0.0,
+     0.0
+    ],
+    [
+     0.5,
+     0.035,
+     0.0
+    ],
+    [
+     0.47,
+     0.07,
+     0.0
+    ],
+    [
+     0.42,
+     0.07,
+     0.0
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "natural"
+   },
+   "seg": 3,
+   "r": 0.0058
+  },
+  {
+   "id": "yard2",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.006,
+   "from": [
+    0.42,
+    0.07,
+    0.0
+   ],
+   "to": [
+    -0.12,
+    0.07,
+    0.0
+   ],
+   "sides": 8,
+   "when": {
+    "style": "natural"
+   }
+  },
+  {
+   "id": "backBow",
+   "type": "sweep",
+   "material": "brass",
+   "path": [
+    [
+     -0.12,
+     0.07,
+     0.0
+    ],
+    [
+     -0.16,
+     0.07,
+     0.0
+    ],
+    [
+     -0.19,
+     0.05,
+     0.018
+    ],
+    [
+     -0.16,
+     0.035,
+     0.035
+    ],
+    [
+     -0.12,
+     0.035,
+     0.035
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "natural"
+   },
+   "seg": 3,
+   "r": 0.0062
+  },
+  {
+   "id": "bellYardN",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.0065,
+   "from": [
+    -0.12,
+    0.035,
+    0.035
+   ],
+   "to": [
+    0.3,
+    0.035,
+    0.035
+   ],
+   "sides": 8,
+   "when": {
+    "style": "natural"
+   }
+  },
+  {
+   "id": "ballN",
+   "type": "lathe",
+   "material": "brass",
+   "profile": [
+    [
+     0.0068,
+     -0.025
+    ],
+    [
+     0.016,
+     -0.015
+    ],
+    [
+     0.018,
+     0
+    ],
+    [
+     0.016,
+     0.015
+    ],
+    [
+     0.0068,
+     0.025
+    ]
+   ],
+   "sides": 10,
+   "caps": false,
+   "when": {
+    "style": "natural"
+   },
+   "at": [
+    0.12,
+    0.035,
+    0.035,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "bellN",
+   "type": "lathe",
+   "material": "brass",
+   "profile": [
+    [
+     0.0062,
+     0
+    ],
+    [
+     0.008,
+     0.096
+    ],
+    [
+     0.014,
+     0.168
+    ],
+    [
+     0.03,
+     0.216
+    ],
+    [
+     0.0413,
+     0.2328
+    ],
+    [
+     0.055,
+     0.24
+    ],
+    [
+     0.053,
+     0.24
+    ],
+    [
+     0.004,
+     0.002
+    ]
+   ],
+   "sides": 18,
+   "caps": false,
+   "double": true,
+   "when": {
+    "style": "natural"
+   },
+   "at": [
+    0.3,
+    0.035,
+    0.035,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "bracesN",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.003,
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    0.07,
+    0
+   ],
+   "sides": 5,
+   "at": [
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.3,
+     0.0,
+     0.0
+    ]
+   ],
+   "when": {
+    "style": "natural"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0.026,
+   -0.02,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0,
+    -1,
+    0.2
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

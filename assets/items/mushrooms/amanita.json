@@ -91,8 +91,7 @@
     ]
    ],
    "sides": 12,
-   "caps": false,
-   "double": true
+   "caps": false
   },
   {
    "type": "lathe",
@@ -120,18 +119,28 @@
     ]
    ],
    "sides": 12,
-   "caps": false,
-   "double": true
+   "caps": false
   },
   {
    "id": "crown",
-   "type": "sphere",
+   "type": "lathe",
    "material": "spot",
-   "r": "s * 0.006",
-   "stretch": [
-    1,
-    0.45,
-    1
+   "sides": 5,
+   "caps": false,
+   "smooth": true,
+   "profile": [
+    [
+     "s * 0.006",
+     "s * -0.0007"
+    ],
+    [
+     "s * 0.0042",
+     "s * 0.0016"
+    ],
+    [
+     0,
+     "s * 0.0027"
+    ]
    ],
    "at": [
     0,
@@ -141,69 +150,102 @@
   },
   {
    "id": "warts1",
-   "type": "sphere",
+   "type": "lathe",
    "material": "spot",
-   "r": "s * 0.0055",
-   "stretch": [
-    1,
-    0.45,
-    1
+   "sides": 5,
+   "caps": false,
+   "smooth": true,
+   "profile": [
+    [
+     "s * 0.0055",
+     "s * -0.0006"
+    ],
+    [
+     "s * 0.0038",
+     "s * 0.0015"
+    ],
+    [
+     0,
+     "s * 0.0025"
+    ]
+   ],
+   "at": [
+    0,
+    "s * 0.1552",
+    0
    ],
    "around": {
     "n": 3,
     "r": "s * 0.018",
     "plane": "xz",
     "start": "spin"
-   },
-   "at": [
-    0,
-    "s * 0.1552",
-    0
-   ]
+   }
   },
   {
    "id": "warts2",
-   "type": "sphere",
+   "type": "lathe",
    "material": "spot",
-   "r": "s * 0.005",
-   "stretch": [
-    1,
-    0.45,
-    1
+   "sides": 5,
+   "caps": false,
+   "smooth": true,
+   "profile": [
+    [
+     "s * 0.005",
+     "s * -0.0006"
+    ],
+    [
+     "s * 0.0035",
+     "s * 0.0014"
+    ],
+    [
+     0,
+     "s * 0.0023"
+    ]
+   ],
+   "at": [
+    0,
+    "s * 0.1441",
+    0
    ],
    "around": {
     "n": 6,
     "r": "s * 0.038",
     "plane": "xz",
     "start": "spin + 30"
-   },
-   "at": [
-    0,
-    "s * 0.1441",
-    0
-   ]
+   }
   },
   {
    "id": "warts3",
-   "type": "sphere",
+   "type": "lathe",
    "material": "spot",
-   "r": "s * 0.004",
-   "stretch": [
-    1,
-    0.5,
-    1
+   "sides": 5,
+   "caps": false,
+   "smooth": true,
+   "profile": [
+    [
+     "s * 0.004",
+     "s * -0.0005"
+    ],
+    [
+     "s * 0.0028",
+     "s * 0.0012"
+    ],
+    [
+     0,
+     "s * 0.002"
+    ]
+   ],
+   "at": [
+    0,
+    "s * 0.1268",
+    0
    ],
    "around": {
     "n": 7,
     "r": "s * 0.05",
     "plane": "xz",
     "start": "spin + 55"
-   },
-   "at": [
-    0,
-    "s * 0.1268",
-    0
-   ]
+   }
   }
  ]
 }

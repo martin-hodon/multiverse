@@ -1,0 +1,184 @@
+{
+ "kind": "item",
+ "name": "Car dashboard",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a car's dashboard: the moulded body running forward to the windscreen, the instrument hood with its dials, the centre screen, four vents, the glovebox, the steering wheel on its column -- the driver at z = drive * sz",
+ "params": {
+  "w": 1.42,
+  "d": 0.42,
+  "h": 0.4,
+  "drive": -1,
+  "sz": 0.37
+ },
+ "materials": {
+  "dash": "plastic-black",
+  "dashTop": "plastic-black",
+  "vent": "plastic-grey",
+  "chromeTrim": "chrome"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "loft",
+   "material": "dash",
+   "stations": [
+    [
+     -0.04,
+     "w / 2 - 0.03",
+     "-h",
+     -0.03,
+     "w / 2 - 0.04"
+    ],
+    [
+     0.08,
+     "w / 2",
+     "-h",
+     0.0,
+     "w / 2 - 0.02"
+    ],
+    [
+     "d",
+     "w / 2",
+     "-h * 0.7",
+     -0.03,
+     "w / 2 - 0.02"
+    ]
+   ],
+   "round": [
+    0.03,
+    0.07
+   ],
+   "seg": 2
+  },
+  {
+   "id": "hood",
+   "type": "box",
+   "material": "dashTop",
+   "size": [
+    0.2,
+    0.07,
+    0.44
+   ],
+   "at": [
+    0.06,
+    0.025,
+    "drive * sz",
+    0,
+    0,
+    8
+   ]
+  },
+  {
+   "id": "dials",
+   "use": "items/modern/components/screen",
+   "at": [
+    -0.02,
+    -0.055,
+    "drive * sz",
+    180,
+    0,
+    -12
+   ],
+   "params": {
+    "w": 0.34,
+    "h": 0.11
+   }
+  },
+  {
+   "id": "centre",
+   "use": "items/modern/components/screen",
+   "at": [
+    -0.045,
+    -0.1,
+    0,
+    180,
+    0,
+    -18
+   ],
+   "params": {
+    "w": 0.24,
+    "h": 0.15
+   }
+  },
+  {
+   "id": "vent",
+   "type": "box",
+   "material": "vent",
+   "size": [
+    0.012,
+    0.05,
+    0.13
+   ],
+   "at": [
+    [
+     -0.045,
+     -0.2,
+     -0.52
+    ],
+    [
+     -0.05,
+     -0.27,
+     -0.09
+    ],
+    [
+     -0.05,
+     -0.27,
+     0.09
+    ],
+    [
+     -0.045,
+     -0.2,
+     0.52
+    ]
+   ]
+  },
+  {
+   "id": "ventTrim",
+   "type": "box",
+   "material": "chromeTrim",
+   "size": [
+    0.012,
+    0.006,
+    0.6
+   ],
+   "at": [
+    -0.047,
+    -0.31,
+    0
+   ]
+  },
+  {
+   "id": "glovebox",
+   "type": "box",
+   "material": "vent",
+   "size": [
+    0.008,
+    0.004,
+    0.36
+   ],
+   "at": [
+    -0.05,
+    -0.3,
+    "-drive * sz"
+   ]
+  },
+  {
+   "id": "wheel",
+   "use": "items/modern/components/steering-wheel",
+   "at": [
+    -0.17,
+    -0.1,
+    "drive * sz",
+    0,
+    0,
+    -24
+   ],
+   "params": {
+    "R": 0.185,
+    "col": 0.22
+   }
+  }
+ ]
+}

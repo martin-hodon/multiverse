@@ -1,0 +1,454 @@
+{
+ "kind": "item",
+ "name": "Anvil",
+ "category": "furniture",
+ "era": "1600-1950",
+ "region": "Europe",
+ "_about": "a smith's anvil of the London pattern on its stump: splayed feet, the waist, the body with its steel face, the heel with the hardy and pritchel holes, the step and the conical horn (+x) -- dogged onto an iron-bound stump (stump 0: on the floor)",
+ "params": {
+  "stump": 1,
+  "sh": [
+   0.5,
+   0.56
+  ],
+  "base": "stump * sh"
+ },
+ "materials": {
+  "stump": {
+   "pick": [
+    "oak-grey",
+    "oak"
+   ]
+  },
+  "endgrain": "pine",
+  "iron": "iron",
+  "steel": "steel",
+  "dark": "mouth-dark"
+ },
+ "parts": [
+  {
+   "id": "stump",
+   "type": "lathe",
+   "material": "stump",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.31,
+     0
+    ],
+    [
+     0.3,
+     0.05
+    ],
+    [
+     0.27,
+     0.18
+    ],
+    [
+     0.265,
+     "sh - 0.03"
+    ],
+    [
+     0.26,
+     "sh"
+    ],
+    [
+     0,
+     "sh"
+    ]
+   ],
+   "sides": 11,
+   "faceted": true,
+   "when": "stump"
+  },
+  {
+   "id": "endgrain",
+   "type": "lathe",
+   "material": "endgrain",
+   "profile": [
+    [
+     0.248,
+     "sh"
+    ],
+    [
+     0.248,
+     "sh + 0.003"
+    ],
+    [
+     0,
+     "sh + 0.003"
+    ]
+   ],
+   "sides": 11,
+   "when": "stump"
+  },
+  {
+   "id": "band",
+   "type": "lathe",
+   "material": "iron",
+   "profile": [
+    [
+     0.262,
+     -0.02
+    ],
+    [
+     0.268,
+     -0.014
+    ],
+    [
+     0.268,
+     0.014
+    ],
+    [
+     0.262,
+     0.02
+    ]
+   ],
+   "sides": 11,
+   "caps": false,
+   "when": "stump",
+   "at": [
+    0,
+    "sh - 0.07",
+    0
+   ]
+  },
+  {
+   "id": "feet",
+   "type": "plate",
+   "material": "iron",
+   "outline": [
+    [
+     -0.2,
+     0
+    ],
+    [
+     -0.07,
+     0
+    ],
+    [
+     -0.055,
+     0.026
+    ],
+    [
+     0.055,
+     0.026
+    ],
+    [
+     0.07,
+     0
+    ],
+    [
+     0.2,
+     0
+    ],
+    [
+     0.18,
+     0.03
+    ],
+    [
+     0.08,
+     0.09
+    ],
+    [
+     -0.08,
+     0.09
+    ],
+    [
+     -0.18,
+     0.03
+    ]
+   ],
+   "thick": 0.2,
+   "at": [
+    0,
+    "base",
+    0
+   ]
+  },
+  {
+   "id": "feetAcross",
+   "type": "plate",
+   "material": "iron",
+   "outline": [
+    [
+     -0.12,
+     0
+    ],
+    [
+     -0.04,
+     0
+    ],
+    [
+     -0.03,
+     0.02
+    ],
+    [
+     0.03,
+     0.02
+    ],
+    [
+     0.04,
+     0
+    ],
+    [
+     0.12,
+     0
+    ],
+    [
+     0.1,
+     0.03
+    ],
+    [
+     0.05,
+     0.09
+    ],
+    [
+     -0.05,
+     0.09
+    ],
+    [
+     -0.1,
+     0.03
+    ]
+   ],
+   "thick": 0.3,
+   "at": [
+    0,
+    "base",
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "waist",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.11,
+   "from": [
+    0,
+    "base + 0.085",
+    0
+   ],
+   "to": [
+    0,
+    "base + 0.175",
+    0
+   ],
+   "sides": 4,
+   "r1": 0.08,
+   "at": [
+    0,
+    0,
+    0,
+    45,
+    0,
+    0
+   ],
+   "stretch": [
+    1.25,
+    1,
+    0.75
+   ]
+  },
+  {
+   "id": "body",
+   "type": "plate",
+   "material": "iron",
+   "outline": [
+    [
+     -0.17,
+     0.17
+    ],
+    [
+     0.08,
+     0.17
+    ],
+    [
+     0.12,
+     0.195
+    ],
+    [
+     0.132,
+     0.24
+    ],
+    [
+     0.132,
+     0.272
+    ],
+    [
+     0.06,
+     0.272
+    ],
+    [
+     0.06,
+     0.291
+    ],
+    [
+     -0.27,
+     0.291
+    ],
+    [
+     -0.27,
+     0.252
+    ],
+    [
+     -0.21,
+     0.225
+    ]
+   ],
+   "thick": 0.11,
+   "at": [
+    0,
+    "base",
+    0
+   ]
+  },
+  {
+   "id": "face",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.33,
+    0.008,
+    0.112
+   ],
+   "at": [
+    -0.105,
+    "base + 0.2945",
+    0
+   ]
+  },
+  {
+   "id": "horn",
+   "type": "lathe",
+   "material": "iron",
+   "profile": [
+    [
+     0.046,
+     0
+    ],
+    [
+     0.042,
+     0.04
+    ],
+    [
+     0.03,
+     0.1
+    ],
+    [
+     0.014,
+     0.16
+    ],
+    [
+     0.004,
+     0.185
+    ],
+    [
+     0,
+     0.19
+    ]
+   ],
+   "sides": 12,
+   "at": [
+    0.125,
+    "base + 0.228",
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "hardy",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.024,
+    0.003,
+    0.024
+   ],
+   "at": [
+    -0.225,
+    "base + 0.2995",
+    0
+   ]
+  },
+  {
+   "id": "pritchel",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.013,
+    0.003,
+    0.013
+   ],
+   "at": [
+    -0.17,
+    "base + 0.2995",
+    0.028
+   ]
+  },
+  {
+   "id": "hardyTool",
+   "type": "box",
+   "material": "iron",
+   "size": [
+    0.022,
+    0.05,
+    0.03
+   ],
+   "at": [
+    -0.225,
+    "base + 0.32",
+    0
+   ],
+   "when": "stump"
+  },
+  {
+   "id": "dogs",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.008,
+   "from": [
+    0,
+    "base + 0.045",
+    0
+   ],
+   "to": [
+    0,
+    "base + -0.05",
+    0
+   ],
+   "sides": 4,
+   "at": [
+    [
+     0.22,
+     0,
+     0.06
+    ],
+    [
+     -0.22,
+     0,
+     -0.06
+    ],
+    [
+     0.05,
+     0,
+     0.16
+    ],
+    [
+     -0.05,
+     0,
+     -0.16
+    ]
+   ],
+   "when": "stump"
+  }
+ ]
+}

@@ -4,14 +4,15 @@
  "category": "furniture/storage",
  "era": "1400-1600",
  "region": "Italy",
- "_about": "the marriage chest of Renaissance Italy: shaped like a sarcophagus on lion's paws, its moulded lid stepped, its front a painted or gilded panel",
+ "_about": "the marriage chest of Renaissance Italy: shaped like a sarcophagus on lion's paws, its moulded lid stepped, its front a painted or gilded panel -- hollow: the lid (both its steps) hinged at the back and lifted by `open` onto the trousseau inside: folded linen, a bolt of brocade, a small casket",
  "params": {
   "w": [
    1.5,
    1.8
   ],
   "d": 0.55,
-  "h": 0.68
+  "h": 0.68,
+  "open": 0
  },
  "materials": {
   "wood": {
@@ -34,7 +35,10 @@
      "fit": true
     }
    ]
-  }
+  },
+  "linen": "linen",
+  "brocade": "brocade",
+  "casket": "gilt"
  },
  "parts": [
   {
@@ -80,7 +84,130 @@
      "d * 0.72",
      "h - 0.12"
     ]
-   ]
+   ],
+   "caps": false
+  },
+  {
+   "id": "lining",
+   "type": "lathe",
+   "material": "wood",
+   "faceted": true,
+   "sides": 4,
+   "caps": false,
+   "stretch": [
+    "w / d",
+    1,
+    1
+   ],
+   "at": [
+    0,
+    0,
+    0,
+    45,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     "d * 0.72",
+     "h - 0.12"
+    ],
+    [
+     "d * 0.72 - 0.035",
+     "h - 0.12"
+    ],
+    [
+     "d * 0.62 - 0.035",
+     0.16
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w * 0.8",
+    0.02,
+    "d * 0.8"
+   ],
+   "at": [
+    0,
+    0.17,
+    0
+   ],
+   "inside": true
+  },
+  {
+   "id": "linen",
+   "type": "box",
+   "material": "linen",
+   "size": [
+    "w * 0.26",
+    0.12,
+    "d * 0.5"
+   ],
+   "round": 0.02,
+   "at": [
+    [
+     "0 - w * 0.22",
+     0.24,
+     0
+    ],
+    [
+     "0 - w * 0.2",
+     0.35,
+     0.01,
+     0,
+     6,
+     0
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "brocade",
+   "type": "rod",
+   "material": "brocade",
+   "r": 0.07,
+   "from": [
+    0,
+    0,
+    "0 - d * 0.28"
+   ],
+   "to": [
+    0,
+    0,
+    "d * 0.28"
+   ],
+   "sides": 10,
+   "at": [
+    0.02,
+    0.25,
+    0
+   ],
+   "inside": true
+  },
+  {
+   "id": "casket",
+   "type": "box",
+   "material": "casket",
+   "size": [
+    0.22,
+    0.12,
+    0.15
+   ],
+   "round": 0.01,
+   "at": [
+    "w * 0.24",
+    0.24,
+    -0.02,
+    0,
+    -10,
+    0
+   ],
+   "inside": true
   },
   {
    "id": "panel",
@@ -99,33 +226,50 @@
   },
   {
    "id": "lid",
-   "type": "box",
-   "material": "wood",
-   "size": [
-    "w + 0.1",
-    0.05,
-    "d + 0.1"
-   ],
-   "at": [
+   "type": "hinge",
+   "pivot": [
     0,
-    "h - 0.08",
-    0
-   ]
-  },
-  {
-   "id": "lid top",
-   "type": "box",
-   "material": "wood",
-   "size": [
-    "w - 0.05",
-    0.06,
-    "d - 0.05"
+    "h - 0.105",
+    "0 - d / 2 - 0.05"
    ],
-   "round": 0.02,
-   "at": [
+   "axis": [
+    1,
     0,
-    "h - 0.03",
     0
+   ],
+   "max": -105,
+   "parts": [
+    {
+     "id": "lid",
+     "type": "box",
+     "material": "wood",
+     "size": [
+      "w + 0.1",
+      0.05,
+      "d + 0.1"
+     ],
+     "at": [
+      0,
+      "h - 0.08",
+      0
+     ]
+    },
+    {
+     "id": "lid top",
+     "type": "box",
+     "material": "wood",
+     "size": [
+      "w - 0.05",
+      0.06,
+      "d - 0.05"
+     ],
+     "round": 0.02,
+     "at": [
+      0,
+      "h - 0.03",
+      0
+     ]
+    }
    ]
   },
   {

@@ -4,7 +4,7 @@
  "category": "food/vegetable",
  "era": "-500-1900",
  "region": "everywhere",
- "_about": "a cabbage head standing in its field row: a pale round head in a cup of darker outer leaves spread open round it (2026-10-24: was one six-sided ball, which read as a green cube) -- still low-poly, for a field of hundreds",
+ "_about": "a cabbage head standing in its field row: a pale round head in a cup of darker outer leaves spread open round it (2026-10-24: was one six-sided ball, which read as a green cube) -- still low-poly, for a field of hundreds (2026-11-22: the head a dome of three bands, not a ball whose lower half sat in the cup; the cup's bottom band one-sided, its inside: its underside faces the ground)",
  "params": {
   "r": [
    0.16,
@@ -28,30 +28,53 @@
  "parts": [
   {
    "id": "head",
-   "type": "sphere",
+   "type": "lathe",
    "material": "head",
-   "r": "r * 0.62",
    "sides": 8,
-   "at": [
-    0,
-    "r * 0.62",
-    0
-   ],
-   "stretch": [
-    1,
-    0.92,
-    1
+   "caps": false,
+   "smooth": true,
+   "profile": [
+    [
+     "r * 0.42",
+     "r * 0.12"
+    ],
+    [
+     "r * 0.62",
+     "r * 0.57"
+    ],
+    [
+     "r * 0.44",
+     "r * 0.97"
+    ],
+    [
+     0,
+     "r * 1.14"
+    ]
    ]
+  },
+  {
+   "id": "cup",
+   "type": "lathe",
+   "material": "leaf",
+   "profile": [
+    [
+     "r * 0.85",
+     "r * 0.22"
+    ],
+    [
+     "r * 0.3",
+     0
+    ]
+   ],
+   "sides": 9,
+   "caps": false,
+   "faceted": true
   },
   {
    "id": "leaves",
    "type": "lathe",
    "material": "leaf",
    "profile": [
-    [
-     "r * 0.3",
-     0
-    ],
     [
      "r * 0.85",
      "r * 0.22"

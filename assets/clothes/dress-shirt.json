@@ -1,0 +1,41 @@
+{
+  "name": "Dress shirt",
+  "kind": "garment",
+  "layer": 0,
+  "_about": "the dress shirt (the collar sewn on from the 1920s): white or pale blue cotton poplin, a turned-down collar on a stand, buttoned all down the front, long sleeves with buttoned cuffs, TUCKED into the trousers or the skirt (layer 0) -- worn open at the throat, or closed under a tie; a woman's blouse is cut the same",
+  "thick": 0.0025,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "cotton-white"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip + 0.06",
+        "neckline": "v",
+        "neckFront": 0.035,
+        "neckBack": 0.002,
+        "neckWidth": 14
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist + 0.012"
+      }
+    },
+    {
+      "use": "clothes/components/collar",
+      "params": {
+        "height": 0.032,
+        "drop": 0.02,
+        "flare": 1.0,
+        "gap": 26
+      }
+    }
+  ]
+}

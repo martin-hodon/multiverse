@@ -245,20 +245,8 @@ export function markGroundProp(obj) {
 // vertices (index.html), so the two cannot drift.
 export const GRADE = { lo: 0x4f7f44, mid: 0x7ba863, hi: 0xa8b568, span: 9.6, band: 1.1 };
 const hex = (h) => `vec3(${(h >> 16 & 255) / 255}, ${(h >> 8 & 255) / 255}, ${(h & 255) / 255})`;
-// The lawn's colour, shared by the ground (index.html), the baked tile and the fringe below -- one definition,
-// so a stalk and the grass it grows out of can never be two different greens.
-export const GRASS_COLOR_WGSL = /* wgsl */ `
-  fn grassGrade(y: f32) -> f32 { return clamp(y / ${GRADE.span.toFixed(2)} + 0.5, 0.0, 1.0); }   // 0 lush .. 1 dry
-  fn grassGround(t: f32, band: f32, mottle: f32) -> vec3<f32> {
-    var c = mix(${hex(GRADE.mid)}, ${hex(GRADE.hi)}, (t - 0.5) * 2.0);
-    if (t < 0.5) { c = mix(${hex(GRADE.lo)}, ${hex(GRADE.mid)}, t * 2.0); }
-    return c * select(0.99, 1.012, band > 0.5) * (0.87 + 0.23 * mottle);
-  }
-  // a blade over the ground it grows from: dark at the root, catching the light at the tip, its own tone
-  fn grassBlade(base: vec3<f32>, tip: f32, tone: f32) -> vec3<f32> {
-    return base * mix(vec3<f32>(0.6, 0.74, 0.5), vec3<f32>(1.26, 1.28, 1.02), tip) * (0.88 + 0.24 * tone);
-  }
-`;
+// The lawn's colour -- grassGrade, grassGround, grassBlade below -- shared by the ground (index.html), the baked tile and
+// the fringe: one definition each, so a stalk and the grass it grows out of can never be two different greens.
 export const grassGrade = wgslFn(`
   fn grassGrade(y: f32) -> f32 { return clamp(y / ${GRADE.span.toFixed(2)} + 0.5, 0.0, 1.0); }
 `);

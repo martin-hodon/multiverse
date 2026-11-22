@@ -234,10 +234,30 @@ elif mode == "zebra":
       qf = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False); json.dump({"pts": [b[2] for b in B], "S": [1, .6]}, qf); qf.close()
       M = json.loads(subprocess.run(["node", HERE + "/../zeb/stripe.mjs", HERE + "/../zeb/dump.json", qf.name], capture_output=True, text=True, check=True).stdout)
       os.unlink(qf.name)
-    for (bid, P, _), (m1, m2) in zip(B, M):
-        key = "zb" + ("D" if m1 > .5 else "W") + ("D" if m2 > .5 else "W")
-        locks.append({"id": bid, "type": "tube", "bone": "neck", "pts": [[R5(v) for v in p] for p in P], "k": 0, "color": "@" + key})
+    # (2026-11-21: written as ONE `brush` shape -- bodyspec.js brushTufts makes the 198 tubes of it, as they were one a
+    #  line: the root line on the neck's top, the tip line the tallest bristles' tips (the smoothed top, a touch back),
+    #  the three rows, each tuft's colour key; its +-3 % lengths the engine's own seeded jitter now, not this rnd's)
+    # (2026-11-22, TODO "reads a little too regular, like a comb": each tuft +-12 % long, leaning its own way -- up to
+    #  18 % of its length along the crest, 10 % across -- and set +-25 % of the spacing off its place: bodyspec.js)
+    NU = n + 1
+    roots, tips = [], []
+    for j in range(NU):
+        u = j / (NU - 1); x = X0 - .03 * s + (X1 - X0 + .03 * s) * u
+        t = top(x); t1 = ts(x); m_ = sl(x); nl = math.hypot(m_, 1); nx, ny = -m_ / nl, 1 / nl
+        a = math.radians(12); nx, ny = nx * math.cos(a) - ny * math.sin(a), nx * math.sin(a) + ny * math.cos(a)
+        h = (.03 + .085 * math.sin(math.pi * u) ** .75) * s
+        roots.append([R5(x), R5(t), 0]); tips.append([R5(x + nx * h), R5(t1 + ny * h), 0])
+    pick = [2 * (m1 > .5) + (m2 > .5) for m1, m2 in M]
+    locks.append({"id": "brush", "type": "brush", "bone": "neck", "roots": roots, "tips": tips, "n": n,
+                  "rows": [[R5(off + .2), R5(dz * s), .9 if dz else 1] for off, dz in rows], "bury": R5(.022 * s), "at": [0, .5, 1],
+                  "r": [R5(r0 * .9), r0, R5(r0 * .85), rt], "spread": [.6, 1, 1.12, 1.2], "vary": .12, "lean": [.18, .1], "jog": .25, "seed": 5, "k": 0,
+                  "palette": {"0": "@zbWW", "1": "@zbWD", "2": "@zbDW", "3": "@zbDD"}, "pick": pick})
 os.unlink(tmp.name)
+# (2026-11-22: each run of ten or more locks -- lkA, lkB -- written as ONE `brush` bundle, bodyspec.js brushStrands,
+#  which makes it back into the same tubes, ids and keys: sharp/runs2brush.py)
+sys.path.insert(0, os.path.join(HERE, "..", "..", "sharp")); import runs2brush
+flat = [p[3] for q in locks for p in (q.get("pts") or [])]
+locks = runs2brush.convert(locks, 10, r"^lk[A-Z]\d+$")[0]
 # (written into the file's own text: the old mane's lines out, the locks' lines in after the crest's under-layer, the
 # mesh line pinned -- every other line as it was, so the file keeps its own layout)
 lines = open(src).read().split("\n")
@@ -267,4 +287,5 @@ if mode == "zebra":
     txt = re.sub(r'\{"name": "Grevy\'s"[^\n]*?\}(?=,?\n)', grevy, txt, count=1)
 json.loads(txt)
 open(out, "w").write(txt)
-print(mode, "locks", len(locks), "cell", CELL, "rmax", round(RMAX, 4), "max r", max(p[3] for q in locks for p in q["pts"]), "min r", min(p[3] for q in locks for p in q["pts"]))
+rs = flat if mode != "zebra" else locks[0]["r"]
+print(mode, "lock shapes", len(locks) if mode != "zebra" else f"1 brush ({n} x {len(rows)} tufts)", "cell", CELL, "rmax", round(RMAX, 4), "max r", max(rs), "min r", min(rs))

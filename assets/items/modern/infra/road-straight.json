@@ -1,0 +1,162 @@
+{
+ "kind": "item",
+ "name": "Road, straight",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a straight piece of town road, 10 m (TILE 10 m: ports at x -5 and +5, the road along x): two lanes of 3.5 m, the centre line dashed 3 m / 2 m, granite kerbs 15 cm high, pavements to 5.5 m each side (11 m in all); `edges` adds edge lines. Asphalt top y 0.02, pavement 0.16.",
+ "params": {
+  "edges": 0,
+  "centre": 1
+ },
+ "materials": {
+  "asphalt": "asphalt",
+  "line": "tarmac-line",
+  "kerb": "#9b9a95",
+  "pave": "#b3afa6",
+  "joint": "#8a877f",
+  "grate": "#2a2b2d"
+ },
+ "parts": [
+  {
+   "id": "asphalt",
+   "type": "box",
+   "material": "asphalt",
+   "size": [
+    10.0,
+    0.14,
+    7.0
+   ],
+   "at": [
+    0.0,
+    -0.05,
+    0.0
+   ]
+  },
+  {
+   "id": "kerb",
+   "type": "box",
+   "material": "kerb",
+   "size": [
+    10.0,
+    0.29,
+    0.15
+   ],
+   "at": [
+    0.0,
+    0.025,
+    3.575
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "pave",
+   "type": "box",
+   "material": "pave",
+   "size": [
+    10.0,
+    0.28,
+    1.85
+   ],
+   "at": [
+    0.0,
+    0.02,
+    4.575
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "joint",
+   "type": "box",
+   "material": "joint",
+   "size": [
+    0.025,
+    0.003,
+    1.85
+   ],
+   "at": [
+    [
+     -4.0,
+     0.1615,
+     4.575
+    ],
+    [
+     -2.0,
+     0.1615,
+     4.575
+    ],
+    [
+     0.0,
+     0.1615,
+     4.575
+    ],
+    [
+     2.0,
+     0.1615,
+     4.575
+    ],
+    [
+     4.0,
+     0.1615,
+     4.575
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "centre",
+   "type": "box",
+   "material": "line",
+   "size": [
+    3,
+    0.004,
+    0.12
+   ],
+   "at": [
+    [
+     -2.5,
+     0.022,
+     0
+    ],
+    [
+     2.5,
+     0.022,
+     0
+    ]
+   ],
+   "when": "centre"
+  },
+  {
+   "id": "edge",
+   "type": "box",
+   "material": "line",
+   "size": [
+    10.0,
+    0.004,
+    0.12
+   ],
+   "at": [
+    0,
+    0.022,
+    3.2
+   ],
+   "mirror": "z",
+   "when": "edges"
+  },
+  {
+   "id": "grate",
+   "type": "box",
+   "material": "grate",
+   "size": [
+    0.5,
+    0.006,
+    0.4
+   ],
+   "at": [
+    2.85,
+    0.023,
+    3.25
+   ]
+  }
+ ]
+}

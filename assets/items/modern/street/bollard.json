@@ -1,0 +1,226 @@
+{
+ "kind": "item",
+ "name": "Bollard",
+ "category": "street",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a bollard, `style`: steel (a stainless tube 0.9 m tall and 140 mm round, a domed cap, two white reflective bands), cast (a black cast-iron heritage bollard, 1 m, a moulded collar and a gilt band, a ball on top), or concrete (a squat chamfered cylinder 0.7 m, 400 mm round).",
+ "params": {
+  "style": {
+   "pick": [
+    "steel",
+    "cast",
+    "concrete"
+   ]
+  }
+ },
+ "materials": {
+  "steel": "chrome",
+  "band": "#e8e8e8",
+  "iron": "paint-black",
+  "gilt": "gilt",
+  "concrete": "concrete"
+ },
+ "parts": [
+  {
+   "id": "tube",
+   "type": "lathe",
+   "material": "steel",
+   "profile": [
+    [
+     0.07,
+     0
+    ],
+    [
+     0.07,
+     0.86
+    ],
+    [
+     0.055,
+     0.89
+    ],
+    [
+     0.03,
+     0.905
+    ],
+    [
+     0,
+     0.91
+    ]
+   ],
+   "sides": 18,
+   "when": {
+    "style": "steel"
+   },
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "band",
+   "type": "lathe",
+   "material": "band",
+   "profile": [
+    [
+     0.0715,
+     0.7
+    ],
+    [
+     0.0715,
+     0.74
+    ]
+   ],
+   "caps": false,
+   "sides": 18,
+   "when": {
+    "style": "steel"
+   },
+   "at": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     -0.1,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "cast",
+   "type": "lathe",
+   "material": "iron",
+   "profile": [
+    [
+     0.15,
+     0
+    ],
+    [
+     0.15,
+     0.04
+    ],
+    [
+     0.12,
+     0.08
+    ],
+    [
+     0.1,
+     0.12
+    ],
+    [
+     0.085,
+     0.7
+    ],
+    [
+     0.11,
+     0.74
+    ],
+    [
+     0.11,
+     0.8
+    ],
+    [
+     0.09,
+     0.84
+    ],
+    [
+     0.08,
+     0.88
+    ],
+    [
+     0.075,
+     0.92
+    ],
+    [
+     0.06,
+     0.95
+    ]
+   ],
+   "sides": 16,
+   "when": {
+    "style": "cast"
+   },
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "ball",
+   "type": "sphere",
+   "material": "iron",
+   "r": 0.07,
+   "at": [
+    0,
+    0.99,
+    0
+   ],
+   "sides": 14,
+   "when": {
+    "style": "cast"
+   }
+  },
+  {
+   "id": "castBand",
+   "type": "lathe",
+   "material": "gilt",
+   "profile": [
+    [
+     0.112,
+     0.755
+    ],
+    [
+     0.112,
+     0.785
+    ]
+   ],
+   "caps": false,
+   "sides": 16,
+   "when": {
+    "style": "cast"
+   },
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "block",
+   "type": "lathe",
+   "material": "concrete",
+   "profile": [
+    [
+     0.2,
+     0
+    ],
+    [
+     0.2,
+     0.62
+    ],
+    [
+     0.17,
+     0.68
+    ],
+    [
+     0,
+     0.69
+    ]
+   ],
+   "sides": 20,
+   "when": {
+    "style": "concrete"
+   },
+   "at": [
+    0,
+    0,
+    0
+   ]
+  }
+ ]
+}

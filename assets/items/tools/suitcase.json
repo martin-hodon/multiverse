@@ -1,0 +1,717 @@
+{
+ "kind": "item",
+ "name": "Suitcase",
+ "category": "tool",
+ "era": "1850-2030",
+ "region": "everywhere",
+ "_about": "a suitcase lying on its back, the handle at +z: a leather case with brass corners, two straps, locks (style leather), or a ribbed hard shell with a zip line and wheels at -x (hard) -- the lid the upper half, hinged along the back edge (`open` lifts it)",
+ "params": {
+  "style": {
+   "pick": [
+    "leather",
+    "leather",
+    "hard"
+   ]
+  },
+  "open": 0
+ },
+ "materials": {
+  "leather": {
+   "pick": [
+    "leather",
+    "leather-dark",
+    "leather-red",
+    "hide"
+   ]
+  },
+  "strap": "leather-dark",
+  "brass": "brass",
+  "lining": {
+   "pick": [
+    "damask-red",
+    "linen",
+    "velvet-green"
+   ]
+  },
+  "shell": {
+   "pick": [
+    "plastic-grey",
+    "paint-navy",
+    "paint-black",
+    "paint-red",
+    "aluminium"
+   ]
+  },
+  "trim": "plastic-black",
+  "tyre": "rubber"
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "box",
+   "material": "leather",
+   "size": [
+    0.64,
+    0.095,
+    0.42
+   ],
+   "at": [
+    0,
+    0.0475,
+    0
+   ],
+   "when": {
+    "style": "leather"
+   }
+  },
+  {
+   "id": "lining",
+   "type": "box",
+   "material": "lining",
+   "size": [
+    0.62,
+    0.004,
+    0.4
+   ],
+   "at": [
+    0,
+    0.094,
+    0
+   ],
+   "when": {
+    "style": "leather"
+   }
+  },
+  {
+   "id": "cornersB",
+   "type": "box",
+   "material": "brass",
+   "size": [
+    0.03,
+    0.05,
+    0.03
+   ],
+   "at": [
+    [
+     -0.308,
+     0.03,
+     -0.198
+    ],
+    [
+     -0.308,
+     0.03,
+     0.198
+    ],
+    [
+     0.308,
+     0.03,
+     -0.198
+    ],
+    [
+     0.308,
+     0.03,
+     0.198
+    ]
+   ],
+   "when": {
+    "style": "leather"
+   }
+  },
+  {
+   "id": "strapsB",
+   "type": "box",
+   "material": "strap",
+   "size": [
+    0.04,
+    0.099,
+    0.428
+   ],
+   "at": [
+    [
+     -0.17,
+     0.0475,
+     0
+    ],
+    [
+     0.17,
+     0.0475,
+     0
+    ]
+   ],
+   "when": {
+    "style": "leather"
+   }
+  },
+  {
+   "id": "hasps",
+   "type": "box",
+   "material": "brass",
+   "size": [
+    0.03,
+    0.03,
+    0.006
+   ],
+   "at": [
+    [
+     -0.2,
+     0.085,
+     0.213
+    ],
+    [
+     0.2,
+     0.085,
+     0.213
+    ]
+   ],
+   "when": {
+    "style": "leather"
+   }
+  },
+  {
+   "id": "baseH",
+   "type": "box",
+   "material": "shell",
+   "size": [
+    0.64,
+    0.095,
+    0.42
+   ],
+   "at": [
+    0,
+    0.0475,
+    0
+   ],
+   "when": {
+    "style": "hard"
+   }
+  },
+  {
+   "id": "ribsB",
+   "type": "box",
+   "material": "shell",
+   "size": [
+    0.03,
+    0.075,
+    0.428
+   ],
+   "at": [
+    [
+     -0.18,
+     0.0475,
+     0
+    ],
+    [
+     -0.06,
+     0.0475,
+     0
+    ],
+    [
+     0.06,
+     0.0475,
+     0
+    ],
+    [
+     0.18,
+     0.0475,
+     0
+    ]
+   ],
+   "when": {
+    "style": "hard"
+   }
+  },
+  {
+   "id": "zip",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.646,
+    0.012,
+    0.426
+   ],
+   "at": [
+    0,
+    0.095,
+    0
+   ],
+   "when": {
+    "style": "hard"
+   }
+  },
+  {
+   "id": "wheelBlocks",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.03,
+    0.05,
+    0.05
+   ],
+   "at": [
+    [
+     -0.332,
+     0.03,
+     0.17
+    ],
+    [
+     -0.332,
+     0.03,
+     -0.17
+    ]
+   ],
+   "when": {
+    "style": "hard"
+   }
+  },
+  {
+   "id": "wheels",
+   "type": "lathe",
+   "material": "tyre",
+   "profile": [
+    [
+     0.031,
+     0.0
+    ],
+    [
+     0.0265,
+     0.0078
+    ],
+    [
+     0.0175,
+     0.0078
+    ],
+    [
+     0.013,
+     0.0
+    ],
+    [
+     0.0175,
+     -0.0078
+    ],
+    [
+     0.0265,
+     -0.0078
+    ],
+    [
+     0.031,
+     -0.0
+    ]
+   ],
+   "sides": 10,
+   "caps": false,
+   "when": {
+    "style": "hard"
+   },
+   "at": [
+    [
+     -0.345,
+     0.03,
+     0.17,
+     0,
+     0,
+     90
+    ],
+    [
+     -0.345,
+     0.03,
+     -0.17,
+     0,
+     0,
+     90
+    ]
+   ]
+  },
+  {
+   "id": "telescope",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.03,
+    0.03,
+    0.26
+   ],
+   "at": [
+    -0.3,
+    0.115,
+    0
+   ],
+   "when": {
+    "style": "hard"
+   }
+  },
+  {
+   "id": "lid",
+   "type": "hinge",
+   "pivot": [
+    0,
+    0.095,
+    -0.21
+   ],
+   "axis": [
+    -1,
+    0,
+    0
+   ],
+   "max": 100,
+   "parts": [
+    {
+     "id": "lidL",
+     "type": "box",
+     "material": "leather",
+     "size": [
+      0.64,
+      0.095,
+      0.42
+     ],
+     "at": [
+      0,
+      0.1425,
+      0
+     ],
+     "when": {
+      "style": "leather"
+     }
+    },
+    {
+     "id": "liningL",
+     "type": "box",
+     "material": "lining",
+     "size": [
+      0.62,
+      0.004,
+      0.4
+     ],
+     "at": [
+      0,
+      0.096,
+      0
+     ],
+     "when": {
+      "style": "leather"
+     }
+    },
+    {
+     "id": "cornersL",
+     "type": "box",
+     "material": "brass",
+     "size": [
+      0.03,
+      0.05,
+      0.03
+     ],
+     "at": [
+      [
+       -0.308,
+       0.16,
+       -0.198
+      ],
+      [
+       -0.308,
+       0.16,
+       0.198
+      ],
+      [
+       0.308,
+       0.16,
+       -0.198
+      ],
+      [
+       0.308,
+       0.16,
+       0.198
+      ]
+     ],
+     "when": {
+      "style": "leather"
+     }
+    },
+    {
+     "id": "strapsL",
+     "type": "box",
+     "material": "strap",
+     "size": [
+      0.04,
+      0.099,
+      0.428
+     ],
+     "at": [
+      [
+       -0.17,
+       0.1425,
+       0
+      ],
+      [
+       0.17,
+       0.1425,
+       0
+      ]
+     ],
+     "when": {
+      "style": "leather"
+     }
+    },
+    {
+     "id": "buckles",
+     "type": "box",
+     "material": "brass",
+     "size": [
+      0.05,
+      0.004,
+      0.035
+     ],
+     "at": [
+      [
+       -0.17,
+       0.194,
+       0.1
+      ],
+      [
+       0.17,
+       0.194,
+       0.1
+      ]
+     ],
+     "when": {
+      "style": "leather"
+     }
+    },
+    {
+     "id": "locks",
+     "type": "box",
+     "material": "brass",
+     "size": [
+      0.035,
+      0.03,
+      0.01
+     ],
+     "at": [
+      [
+       -0.2,
+       0.113,
+       0.214
+      ],
+      [
+       0.2,
+       0.113,
+       0.214
+      ]
+     ],
+     "when": {
+      "style": "leather"
+     }
+    },
+    {
+     "id": "handleBlocks",
+     "type": "box",
+     "material": "strap",
+     "size": [
+      0.03,
+      0.025,
+      0.02
+     ],
+     "at": [
+      [
+       -0.065,
+       0.135,
+       0.22
+      ],
+      [
+       0.065,
+       0.135,
+       0.22
+      ]
+     ],
+     "when": {
+      "style": "leather"
+     }
+    },
+    {
+     "id": "handle",
+     "type": "sweep",
+     "material": "strap",
+     "path": [
+      [
+       -0.065,
+       0.14,
+       0.225
+      ],
+      [
+       -0.045,
+       0.145,
+       0.26
+      ],
+      [
+       0.045,
+       0.145,
+       0.26
+      ],
+      [
+       0.065,
+       0.14,
+       0.225
+      ]
+     ],
+     "sides": 6,
+     "when": {
+      "style": "leather"
+     },
+     "seg": 3,
+     "r": 0.009
+    },
+    {
+     "id": "lidH",
+     "type": "box",
+     "material": "shell",
+     "size": [
+      0.64,
+      0.095,
+      0.42
+     ],
+     "at": [
+      0,
+      0.1425,
+      0
+     ],
+     "when": {
+      "style": "hard"
+     }
+    },
+    {
+     "id": "ribsL",
+     "type": "box",
+     "material": "shell",
+     "size": [
+      0.03,
+      0.075,
+      0.428
+     ],
+     "at": [
+      [
+       -0.18,
+       0.1425,
+       0
+      ],
+      [
+       -0.06,
+       0.1425,
+       0
+      ],
+      [
+       0.06,
+       0.1425,
+       0
+      ],
+      [
+       0.18,
+       0.1425,
+       0
+      ]
+     ],
+     "when": {
+      "style": "hard"
+     }
+    },
+    {
+     "id": "ribsTop",
+     "type": "box",
+     "material": "shell",
+     "size": [
+      0.03,
+      0.006,
+      0.4
+     ],
+     "at": [
+      [
+       -0.18,
+       0.192,
+       0
+      ],
+      [
+       -0.06,
+       0.192,
+       0
+      ],
+      [
+       0.06,
+       0.192,
+       0
+      ],
+      [
+       0.18,
+       0.192,
+       0
+      ]
+     ],
+     "when": {
+      "style": "hard"
+     }
+    },
+    {
+     "id": "handleH",
+     "type": "sweep",
+     "material": "trim",
+     "path": [
+      [
+       -0.07,
+       0.14,
+       0.21
+      ],
+      [
+       -0.05,
+       0.14,
+       0.245
+      ],
+      [
+       0.05,
+       0.14,
+       0.245
+      ],
+      [
+       0.07,
+       0.14,
+       0.21
+      ]
+     ],
+     "sides": 4,
+     "when": {
+      "style": "hard"
+     },
+     "seg": 3,
+     "section": [
+      0.025,
+      0.012
+     ]
+    }
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.14,
+   0.255
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   1,
+   0
+  ],
+  "carry": {
+   "axis": [
+    1,
+    0,
+    0
+   ],
+   "face": [
+    0,
+    0,
+    1
+   ]
+  }
+ }
+}

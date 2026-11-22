@@ -5928,6 +5928,11 @@ function bardTick() {
   playAt("inn", night && INN_DOOR && FIRE_INSTRUMENTS.length ? INN_DOOR : null, FIRE_INSTRUMENTS, { muffle: 900 });
   const wm = wedding.musician;
   playAt("wedding", wedding.on && wm && FIRE_INSTRUMENTS.length ? [wm.position.x, wm.position.y, wm.position.z] : null, FIRE_INSTRUMENTS);
+  // ...each with the instrument of the song they play in hand (tools.js TOOL_ITEMS: a fiddle, a recorder -- the lute by default)
+  for (const [key, an] of [["fire", fm], ["wedding", wm]]) {
+    const hd = an && fireHold.find((h) => h.an === an), inst = musicians.get(key)?.s?.instrument;
+    if (hd && inst) hd.tool = inst;
+  }
 }
 let idleT = null;
 function audioTick(T) {
@@ -6695,6 +6700,7 @@ function poseAll(ta) {
   if (statueHerd) { statuesSeen(statueHerd, camera.position); statueHerd.update(ta); }
   mark("people");
   const lifeHold = lifeHerd ? life.holders() : null;
+  for (const hd of lifeHold ?? []) if (hd.bard) hd.tool = musicians.get("bard")?.s?.instrument ?? hd.tool;   // (the fountain bard: the song's instrument)
   if (dark > .25) {   // the lanterns' light: the wall lamps', and where the hands carrying lanterns are (nightglow.js setLamps)
     const lamps = wallLamps.slice();
     for (const hd of lifeHold ?? []) if (hd.lamp && !hd.an.hidden) { const [h] = lifeHerd.ends(hd.an, hd.hand[0]); lamps.push([h[0], h[1] - .24, h[2], groundH(h[0], h[2])]); }
@@ -6713,10 +6719,11 @@ function poseAll(ta) {
     sparks.update(now, smiths, dark);
   }
   tools.place([folk && folkHold.length && [folk, folkHold], fireHold.length && [extrasHerd, fireHold], shepherdHold.length && [extrasHerd, shepherdHold], choreHold.length && [extrasHerd, choreHold], watchman && !watchman.an.hidden && [extrasHerd, watchman.hold], sentry && !sentry.an.hidden && [extrasHerd, sentry.hold], lifeHerd && [lifeHerd, lifeHold], guardHerd && [guardHerd, guards], crewHerd && [crewHerd, crew], statueHerd && [statueHerd, statueHolders], selfHolders()].filter(Boolean));
-  heads.place([...combatNames().map(([, h]) => h), ...[...avatars.values()].map((a) => a.herd), statueHerd, extrasHerd].filter(Boolean));
-  jewels.place([...combatNames().map(([, h]) => h), ...[...avatars.values()].map((a) => a.herd), extrasHerd].filter(Boolean));
-  bodies.place(herds, camera.position);   // (the sculpted creatures' skins on their posed bones: every composite herd -- the pastures' extras and the trees' too)
-  manes.place(combatNames().map(([, h]) => h));   // (and the manes on whatever in those herds has one: the lions)   // every herd with people: the village's, the arena's, the player's own and the duplicates (Ctrl+N)
+  const fighters = combatNames().map(([, h]) => h), people = [...fighters, ...[...avatars.values()].map((a) => a.herd)];   // (listed once a frame, not per use)
+  heads.place([...people, statueHerd, extrasHerd].filter(Boolean), camera.position);   // (the eye: far heads past heads.js FAR.out are drawn at half the triangles)
+  jewels.place([...people, extrasHerd].filter(Boolean));
+  bodies.place(herds, camera.position, camera);   // (the sculpted creatures' skins on their posed bones: every composite herd -- the pastures' extras and the trees' too)
+  manes.place(fighters);   // (and the manes on whatever in those herds has one: the lions)   // every herd with people: the village's, the arena's, the player's own and the duplicates (Ctrl+N)
   mark("tools");
   // (butterflies by day, in fair weather, not over snow -- they flew in all of it; the gate here, not in butterflies.js:
   //  that file keys the startup cache's wings, and an edit there sends every start back to painting them)
@@ -6742,139 +6749,11 @@ function tick() {
 }
 let hintAt = -1, hintShown = undefined, stillFrom = 0, frameNo = 0;
 const stillAt = new THREE.Vector3();
-function frameBody() {
-  const tick0 = performance.now();
-  frameNo++;
-  if (BOOT.frames < 60) {
-    BOOT.frames++; bootMark("frame " + BOOT.frames);
-    if (BOOT.frames === 60 && !HEADLESS) {   // a WELCOME hint the first time in this browser: where to start
-      let seen = false; try { seen = localStorage.getItem("bannerfield-welcome") === "1"; localStorage.setItem("bannerfield-welcome", "1"); } catch { /* no storage: show it */ }
-      if (!seen) toast("Welcome to Bannerfield -- Y for a tour flight over the sights, Tab for all the controls", 7000);
-    }
-  }
-  // (a WORLD RECORDING, build/pregen.py: after sixty frames -- every head built, every tool in hand -- what it made is written)
-  if (RECORD_WORLD && BOOT.frames === 60 && !window.__pregenWorld) window.__pregenWorld = flushWorld().then((r) => { window.__pregenWorldDone = r; console.info("pregen record:", JSON.stringify(r)); }, (e) => { window.__pregenWorldDone = { error: String(e) }; });
-  // THE FRAME'S OWN NUMBERS. three resets renderer.info only from ITS animation loop (Renderer.start), and
-  // this loop is our own -- so draws and triangles accumulated from the first frame onwards, which is why the
-  // readout climbed into the thousands and never came down. Reset it here, where a frame begins.
-  renderer.info.reset();
-  PROF.t0 = tick0; if (PROF.on) { PROF.frames++; PROF.posed = (PROF.posed ?? 0) + POSE.figures; PROF.parts = (PROF.parts ?? 0) + POSE.parts; }
-  POSE.figures = 0; POSE.parts = 0;      // what the frame about to run poses (composite.js POSE, both engines)
-  stirred++;
-  gpuBegin();
-  const t = clock.getElapsedTime();
-  const dt = Math.min(t - tPrev, .1);
-  tPrev = t;
-  // ONE FRAME OF REFERENCE: the world's movers first -- the sim tick, the carts, barge and boat where they are THIS frame,
-  // the goods on their beds -- then the camera, which a moving floor carries by what its floor did this frame, then
-  // your body where the camera is. (The camera moved first, it followed the floor's motion of the frame before: the
-  // cart drew a step ahead of whoever stood on it.)
-  const ta = freeze ?? t;   // camera stays live even when the pose is pinned
-  if (freeze === null) {
-    simTo(t + clockOff);
-    if (SMOOTH) tracksDraw(Math.min(1, Math.max(0, (t + clockOff - simTick * TICK) / TICK)));   // draw between the last two ticks
-  }
-  if (freeze === null && stir()) { const fr = Math.max(0, t + clockOff - simTick * TICK); placeCarts(fr); placeBarge(fr); placeBoat(fr); }   // carts, barge and boat glide between ticks
-  if (freeze === null) HARBOUR_LIFE?.update(t, dt);   // the port's ships: under way, coming in, lying at their berths (harbour.js)
-  placeRiding();   // goods set down on those moving floors go with them
-  if (freeze === null) companion.update(dt, { x: camera.position.x, z: camera.position.z, yaw });   // your dog, at heel or fetching
-  mark("sim tick");
-  if (tourTick(clock.getElapsedTime())) { /* the tour flies the camera */ }
-  else if (camMode === "fps") fpsMove(dt);
-  else { moveCamera(dt); controls.update(); }
-  // in the snow -- or the mud of a soaked road -- a print every pace, left and right by turns, pointing the way you go
-  const onFoot = camMode === "fps" && !mounted && !airborne && !swimming && !resting;
-  const mud = onFoot && SNOW.value <= .5 && ROAD_WET.wet.value > .45 && (GROUND.roadAt(camera.position.x, camera.position.z)?.d ?? 1) < 0;
-  // (and on the ground itself -- not a bridge's deck, the wall's walk, a floor: the print would go on the ground under it)
-  if (onFoot && (SNOW.value > .5 || mud) && camera.position.y - eyeH - groundH(camera.position.x, camera.position.z) < .3 && !roofedAt(camera.position.x, camera.position.z, camera.position.y)) {
-    const x = camera.position.x, z = camera.position.z;
-    if (!printAt) printAt = [x, z];
-    else if (Math.hypot(x - printAt[0], z - printAt[1]) > FOOTPRINTS.pace) { prints.step(x, z, Math.atan2(x - printAt[0], z - printAt[1]), printSide, t, mud); printSide = -printSide; printAt = [x, z]; }
-  } else printAt = null;
-  // ...and the steps of everyone walking near you: villagers, walkers, animals -- a print every pace of theirs, left and
-  // right by turns, as big as their legs are long (FOLLOW.near metres round you; every third frame)
-  if (SNOW.value > .5 && camMode === "fps" && (printTick++ % 3) === 0) {
-    const cx = camera.position.x, cz = camera.position.z;
-    for (const h of [folk, herd, lifeHerd, extrasHerd]) if (h) for (const an of h.animals) {
-      if (an.hidden || !(an.amp > .5) || an.flying || an.print === "none") continue;   // (none: a snake, a spider leave no prints)
-      const x = an.position.x, z = an.position.z;
-      if (Math.abs(x - cx) > PRINTS_NEAR || Math.abs(z - cz) > PRINTS_NEAR) { an._pr = null; continue; }
-      const L = an.parts.legLen || .5, pace = L * .8;
-      if (!an._pr) { an._pr = [x, z, 1]; continue; }
-      if (Math.hypot(x - an._pr[0], z - an._pr[1]) < pace || roofedAt(x, z, an.position.y + 1)) continue;
-      if (an.position.y - groundH(x, z) > .3) { an._pr = null; continue; }   // (not on the ground: in the water, on a floor)
-      // (a person's boot, as big as the legs are long; an animal's own print, its species' `print` -- paw if it says none)
-      const kind = an.print ? (an._prK ??= printOf(an.print, L)) : an.face ? null : (an._prK ??= printOf("paw", L));   // (a declared print first: the centaur has a face but a horse's legs)
-      prints.step(x, z, Math.atan2(x - an._pr[0], z - an._pr[1]), an._pr[2], t, false, Math.max(.85, Math.min(1.4, L / .7)), kind);
-      an._pr = [x, z, -an._pr[2]];
-    }
-  }
-  prints.update(t);
-  mark("camera+collide");
-  lastT = t;
-  updateSelf();   // (your own body where the camera now is: its head, the bow in its hand and the mirrors all read it this frame)
-  OUTLINE_PX.value = 2 / (camera.projectionMatrix.elements[5] * renderer.domElement.height);   // metres per pixel at unit depth, for the 1px hulls
-  groundT.value = t;   // the grass's wind
-  poseAll(ta);
-  {   // standing still on foot? (the ducks come for bread: begStep)
-    const moved = Math.hypot(camera.position.x - stillAt.x, camera.position.z - stillAt.z) > .05;
-    if (moved || mounted || swimming || resting) { stillAt.copy(camera.position); stillFrom = t; }
-    youStill = t - stillFrom > BEG.still;
-  }
-  // CONTACT SHADOWS (shadows.js) under the figures near you -- on the floor or the ground under each, looked up again
-  // only when it has moved 15 cm (supportAt is a dear call)
-  if (SHADOWS_ON) shadows.update([herd, folk, extrasHerd, lifeHerd, guardHerd, crewHerd, riderHerd, spareHerd, cartHerd, cartSpare], camera, floorUnder, carts);
-  if (carrying) {   // and in yours
-    const fx = -Math.sin(yaw), fz = -Math.cos(yaw);
-    placeCarried(carrying, camera.position.x + fx * .8, camera.position.y - .75, camera.position.z + fz * .8, yaw);
-  }
-  for (const gs of Object.values(goodsSets)) gs.commit();   // upload the goods' matrices
-  for (const ah of arenaHerds) ah.update(ta);
-  mark("carts+hands+arena");
-  for (const dr of doors) {   // doors swing smoothly toward their state
-    if (dr.fixed) continue;
-    const target = dr.open ? dr.openAng ?? SHUTTER.door : 0;
-    if (Math.abs(target - dr.ang) > .001) {
-      dr.ang += (target - dr.ang) * Math.min(1, dt * (dr.bars ? 3 : 5));   // (a great leaf swings slower)
-      if (dr.slide) dr.grp.position.set(dr.home.x - dr.ax * dr.sign * dr.ang, dr.home.y, dr.home.z - dr.az * dr.sign * dr.ang);   // (slid back behind the wall beside it)
-      else dr.grp.rotation.y = dr.base + (dr.sign ?? 1) * dr.ang;
-      if (dr.win || dr.panel) placePane(dr);
-    }
-  }
-  if (camMode === "fps" && t - hintAt > .1) {   // bottom-center hint for the one available action (looked for ten times a second; the page touched only when it changes)
-    hintAt = t;
-    const it = findInteraction(), label = it ? it.label : null;
-    if (label !== hintShown) { hintShown = label; hintEl.style.display = label ? "block" : "none"; if (label) hintEl.textContent = label; }
-  }
-  netTick(t);
-  combat.update(dt);
-  archery.update(dt);
-  sword.update(dt);
-  stones.update(dt, t);
-  mark("doors+net+combat");
-  sailTurn += (freeze === null ? dt : 0) * .45 * WIND.strength.value;   // the sails turn with the wind: lazily on a still day, racing in a gale
-  if (stir()) for (const hb of windmillHubs) hb.rotation.z = sailTurn;
-  if (stir() && !iceFirm()) for (const ww of waterWheels) ww.grp.rotation.z = -ta * ww.omega;   // the current turns the mill wheel (undershot: bottom runs with the flow) -- not in a river frozen hard: it stands
-  if (stir()) for (const sp of spinners) {   // ...and the millwork with it, or with the sails
-    if (!sp.wind && iceFirm()) continue;   // (the water mill's work stands with its wheel)
-    const ang = (sp.wind ? sailTurn : -ta * sp.omega) * sp.ratio;
-    if (sp.axis === "y") sp.grp.rotation.y = sp.yaw + ang; else sp.grp.rotation[sp.axis] = ang;
-  }
-  audioTick(t + clockOff);
-  mark("clouds+audio");
-  waterT.value = t;
-  waterEye.value.copy(camera.position);
-  if (waterReflector) {
-    // the water plane spans the world, so the frustum never culls it: gate the extra draw on there being
-    // water within reach of the eye. A hidden target means no mirrored pass at all.
-    const near = waterSD(camera.position.x, camera.position.z) < REFLECT.reach;
-    waterReflector.target.visible = near;
-    waterReflOn.value = near ? (REFLECT.mode === "raw" ? 3 : 1) : 0;
-  }
-  FOLIAGE_T.value = t;   // the leaves' wind
-  plants.update(camera);   // the trees' levels of detail, culled to the view
-  jetT.value = t; poolT.value = t;
-  fireT.value = t;   // flames flicker on the render clock
+// the herds whose figures cast contact shadows (shadows.js): built when asked, as some herds come later
+const shadowHerds = () => [herd, folk, extrasHerd, lifeHerd, guardHerd, crewHerd, riderHerd, spareHerd, cartHerd, cartSpare];
+// THE HOUR AND THE WEATHER, a frame's worth (frameBody): the day's light eased or run round, the aurora, shooting
+// stars, the rainbow, rain and snow on the land -- wet roads, settled snow, frost, ice --, the clouds and their shadows
+function skyAndWeather(t, dt) {
   // THE HOUR: eased toward the night or the day (N), or run round a day (U, ?day=): dark = (1 - cos) / 2 of the day's turn
   if (DUSK.day) { dayClock = (dayClock + dt / (DUSK.day * 60)) % 1; dark = darkTo = (1 - Math.cos(dayClock * 2 * Math.PI)) / 2; }
   else dark += Math.max(-dt / DUSK.secs, Math.min(dt / DUSK.secs, darkTo - dark));
@@ -6910,6 +6789,10 @@ function frameBody() {
   CLOUD.t.value = t; CLOUD.cover.value = cs.cover;
   CLOUD.amount.value = weather ? 0 : cs.amount * Math.max(0, 1 - dark / .38);
   SUN.k.value = SUN.baked && !NO_SUNSHADOW ? (weather ? .25 : 1) * Math.max(0, 1 - dark / .38) : 0;   // (the buildings' shadows: faint under a grey sky, none by night -- sunshadow.js)
+}
+// WHAT LIVES BY THE HOUR AND THE WEATHER, a frame's worth (frameBody): smoke, birds and beasts, the village's doings,
+// dawn's rooster and fog, the mist, the bonfire, the storm, the bell, breath and dust, the wind, the wheels' spray, the glow
+function worldLife(t, dt) {
   smoke.update(t, { amount: (weather === 2 || autumnLvl === 2 ? 1.45 : weather === 1 ? .85 : 1) * (1 - dark * .2), light: cloudTint.value });   // (more fires on a cold day; lit by the hour as the clouds are)
   flock.update(t, { dark });
   // (the wash taken in for rain, snow and the night)
@@ -7045,6 +6928,146 @@ function frameBody() {
   GLASS_SUN.value = (weather ? .25 : 1) * Math.max(0, 1 - dark / .38);   // (and the light they throw)
   glow.update(t, { night: dark > .25, level: dark, fireflies: weather === 0 && autumnLvl !== 2 });
   fireLight.update(t, dark);   // (the firelight round the hearths and candles)
+}
+// FOOTPRINTS, a frame's worth: yours, and those of everyone walking near you (frameBody, after the camera has moved)
+function stepPrints(t) {
+  // in the snow -- or the mud of a soaked road -- a print every pace, left and right by turns, pointing the way you go
+  const onFoot = camMode === "fps" && !mounted && !airborne && !swimming && !resting;
+  const mud = onFoot && SNOW.value <= .5 && ROAD_WET.wet.value > .45 && (GROUND.roadAt(camera.position.x, camera.position.z)?.d ?? 1) < 0;
+  // (and on the ground itself -- not a bridge's deck, the wall's walk, a floor: the print would go on the ground under it)
+  if (onFoot && (SNOW.value > .5 || mud) && camera.position.y - eyeH - groundH(camera.position.x, camera.position.z) < .3 && !roofedAt(camera.position.x, camera.position.z, camera.position.y)) {
+    const x = camera.position.x, z = camera.position.z;
+    if (!printAt) printAt = [x, z];
+    else if (Math.hypot(x - printAt[0], z - printAt[1]) > FOOTPRINTS.pace) { prints.step(x, z, Math.atan2(x - printAt[0], z - printAt[1]), printSide, t, mud); printSide = -printSide; printAt = [x, z]; }
+  } else printAt = null;
+  // ...and the steps of everyone walking near you: villagers, walkers, animals -- a print every pace of theirs, left and
+  // right by turns, as big as their legs are long (FOLLOW.near metres round you; every third frame)
+  if (SNOW.value > .5 && camMode === "fps" && (printTick++ % 3) === 0) {
+    const cx = camera.position.x, cz = camera.position.z;
+    for (const h of [folk, herd, lifeHerd, extrasHerd]) if (h) for (const an of h.animals) {
+      if (an.hidden || !(an.amp > .5) || an.flying || an.print === "none") continue;   // (none: a snake, a spider leave no prints)
+      const x = an.position.x, z = an.position.z;
+      if (Math.abs(x - cx) > PRINTS_NEAR || Math.abs(z - cz) > PRINTS_NEAR) { an._pr = null; continue; }
+      const L = an.parts.legLen || .5, pace = L * .8;
+      if (!an._pr) { an._pr = [x, z, 1]; continue; }
+      if (Math.hypot(x - an._pr[0], z - an._pr[1]) < pace || roofedAt(x, z, an.position.y + 1)) continue;
+      if (an.position.y - groundH(x, z) > .3) { an._pr = null; continue; }   // (not on the ground: in the water, on a floor)
+      // (a person's boot, as big as the legs are long; an animal's own print, its species' `print` -- paw if it says none)
+      const kind = an.print ? (an._prK ??= printOf(an.print, L)) : an.face ? null : (an._prK ??= printOf("paw", L));   // (a declared print first: the centaur has a face but a horse's legs)
+      prints.step(x, z, Math.atan2(x - an._pr[0], z - an._pr[1]), an._pr[2], t, false, Math.max(.85, Math.min(1.4, L / .7)), kind);
+      an._pr = [x, z, -an._pr[2]];
+    }
+  }
+}
+function frameBody() {
+  const tick0 = performance.now();
+  frameNo++;
+  if (BOOT.frames < 60) {
+    BOOT.frames++; bootMark("frame " + BOOT.frames);
+    if (BOOT.frames === 60 && !HEADLESS) {   // a WELCOME hint the first time in this browser: where to start
+      let seen = false; try { seen = localStorage.getItem("bannerfield-welcome") === "1"; localStorage.setItem("bannerfield-welcome", "1"); } catch { /* no storage: show it */ }
+      if (!seen) toast("Welcome to Bannerfield -- Y for a tour flight over the sights, Tab for all the controls", 7000);
+    }
+  }
+  // (a WORLD RECORDING, build/pregen.py: after sixty frames -- every head built, every tool in hand -- what it made is written)
+  if (RECORD_WORLD && BOOT.frames === 60 && !window.__pregenWorld) window.__pregenWorld = flushWorld().then((r) => { window.__pregenWorldDone = r; console.info("pregen record:", JSON.stringify(r)); }, (e) => { window.__pregenWorldDone = { error: String(e) }; });
+  // THE FRAME'S OWN NUMBERS. three resets renderer.info only from ITS animation loop (Renderer.start), and
+  // this loop is our own -- so draws and triangles accumulated from the first frame onwards, which is why the
+  // readout climbed into the thousands and never came down. Reset it here, where a frame begins.
+  renderer.info.reset();
+  PROF.t0 = tick0; if (PROF.on) { PROF.frames++; PROF.posed = (PROF.posed ?? 0) + POSE.figures; PROF.parts = (PROF.parts ?? 0) + POSE.parts; }
+  POSE.figures = 0; POSE.parts = 0;      // what the frame about to run poses (composite.js POSE, both engines)
+  stirred++;
+  gpuBegin();
+  const t = clock.getElapsedTime();
+  const dt = Math.min(t - tPrev, .1);
+  tPrev = t;
+  // ONE FRAME OF REFERENCE: the world's movers first -- the sim tick, the carts, barge and boat where they are THIS frame,
+  // the goods on their beds -- then the camera, which a moving floor carries by what its floor did this frame, then
+  // your body where the camera is. (The camera moved first, it followed the floor's motion of the frame before: the
+  // cart drew a step ahead of whoever stood on it.)
+  const ta = freeze ?? t;   // camera stays live even when the pose is pinned
+  if (freeze === null) {
+    simTo(t + clockOff);
+    if (SMOOTH) tracksDraw(Math.min(1, Math.max(0, (t + clockOff - simTick * TICK) / TICK)));   // draw between the last two ticks
+  }
+  if (freeze === null && stir()) { const fr = Math.max(0, t + clockOff - simTick * TICK); placeCarts(fr); placeBarge(fr); placeBoat(fr); }   // carts, barge and boat glide between ticks
+  if (freeze === null) HARBOUR_LIFE?.update(t, dt);   // the port's ships: under way, coming in, lying at their berths (harbour.js)
+  placeRiding();   // goods set down on those moving floors go with them
+  if (freeze === null) companion.update(dt, { x: camera.position.x, z: camera.position.z, yaw });   // your dog, at heel or fetching
+  mark("sim tick");
+  if (tourTick(clock.getElapsedTime())) { /* the tour flies the camera */ }
+  else if (camMode === "fps") fpsMove(dt);
+  else { moveCamera(dt); controls.update(); }
+  stepPrints(t);
+  prints.update(t);
+  mark("camera+collide");
+  lastT = t;
+  updateSelf();   // (your own body where the camera now is: its head, the bow in its hand and the mirrors all read it this frame)
+  OUTLINE_PX.value = 2 / (camera.projectionMatrix.elements[5] * renderer.domElement.height);   // metres per pixel at unit depth, for the 1px hulls
+  groundT.value = t;   // the grass's wind
+  poseAll(ta);
+  {   // standing still on foot? (the ducks come for bread: begStep)
+    const moved = Math.hypot(camera.position.x - stillAt.x, camera.position.z - stillAt.z) > .05;
+    if (moved || mounted || swimming || resting) { stillAt.copy(camera.position); stillFrom = t; }
+    youStill = t - stillFrom > BEG.still;
+  }
+  // CONTACT SHADOWS (shadows.js) under the figures near you -- on the floor or the ground under each, looked up again
+  // only when it has moved 15 cm (supportAt is a dear call)
+  if (SHADOWS_ON) shadows.update(shadowHerds(), camera, floorUnder, carts);
+  if (carrying) {   // and in yours
+    const fx = -Math.sin(yaw), fz = -Math.cos(yaw);
+    placeCarried(carrying, camera.position.x + fx * .8, camera.position.y - .75, camera.position.z + fz * .8, yaw);
+  }
+  for (const gs of Object.values(goodsSets)) gs.commit();   // upload the goods' matrices
+  for (const ah of arenaHerds) ah.update(ta);
+  mark("carts+hands+arena");
+  for (const dr of doors) {   // doors swing smoothly toward their state
+    if (dr.fixed) continue;
+    const target = dr.open ? dr.openAng ?? SHUTTER.door : 0;
+    if (Math.abs(target - dr.ang) > .001) {
+      dr.ang += (target - dr.ang) * Math.min(1, dt * (dr.bars ? 3 : 5));   // (a great leaf swings slower)
+      if (dr.slide) dr.grp.position.set(dr.home.x - dr.ax * dr.sign * dr.ang, dr.home.y, dr.home.z - dr.az * dr.sign * dr.ang);   // (slid back behind the wall beside it)
+      else dr.grp.rotation.y = dr.base + (dr.sign ?? 1) * dr.ang;
+      if (dr.win || dr.panel) placePane(dr);
+    }
+  }
+  if (camMode === "fps" && t - hintAt > .1) {   // bottom-center hint for the one available action (looked for ten times a second; the page touched only when it changes)
+    hintAt = t;
+    const it = findInteraction(), label = it ? it.label : null;
+    if (label !== hintShown) { hintShown = label; hintEl.style.display = label ? "block" : "none"; if (label) hintEl.textContent = label; }
+  }
+  netTick(t);
+  combat.update(dt);
+  archery.update(dt);
+  sword.update(dt);
+  stones.update(dt, t);
+  mark("doors+net+combat");
+  sailTurn += (freeze === null ? dt : 0) * .45 * WIND.strength.value;   // the sails turn with the wind: lazily on a still day, racing in a gale
+  if (stir()) for (const hb of windmillHubs) hb.rotation.z = sailTurn;
+  if (stir() && !iceFirm()) for (const ww of waterWheels) ww.grp.rotation.z = -ta * ww.omega;   // the current turns the mill wheel (undershot: bottom runs with the flow) -- not in a river frozen hard: it stands
+  if (stir()) for (const sp of spinners) {   // ...and the millwork with it, or with the sails
+    if (!sp.wind && iceFirm()) continue;   // (the water mill's work stands with its wheel)
+    const ang = (sp.wind ? sailTurn : -ta * sp.omega) * sp.ratio;
+    if (sp.axis === "y") sp.grp.rotation.y = sp.yaw + ang; else sp.grp.rotation[sp.axis] = ang;
+  }
+  audioTick(t + clockOff);
+  mark("clouds+audio");
+  waterT.value = t;
+  waterEye.value.copy(camera.position);
+  if (waterReflector) {
+    // the water plane spans the world, so the frustum never culls it: gate the extra draw on there being
+    // water within reach of the eye. A hidden target means no mirrored pass at all.
+    const near = waterSD(camera.position.x, camera.position.z) < REFLECT.reach;
+    waterReflector.target.visible = near;
+    waterReflOn.value = near ? (REFLECT.mode === "raw" ? 3 : 1) : 0;
+  }
+  FOLIAGE_T.value = t;   // the leaves' wind
+  plants.update(camera);   // the trees' levels of detail, culled to the view
+  jetT.value = t; poolT.value = t;
+  fireT.value = t;   // flames flicker on the render clock
+  skyAndWeather(t, dt);   // the hour, the sky and the weather on the land
+  worldLife(t, dt);       // and all that lives by them
   mark("water+precip");
   // the paintings: ONE view a frame from the third frame on, so ten extra world renders never land in one
   if (paintingsMayStart && ++paintingsIn >= 3 && !paintingsDone) {
@@ -7195,7 +7218,7 @@ tick();
 if (HEADLESS) {   // the self-check: one more frame, into a render target, posted as ASCII (see ?probe above)
   await terrainReady;   // the ground comes from a worker: photograph the world with it in
   // (what a headless test reads and drives: the simulation, the flowers, the movers; standing the walker somewhere)
-  window.__dbg = { simTo, wanderers, perches, carts, movers, frameBody, camera, renderer, scene, bedY, siteZ, period: PERIOD_NAME, town, TOWN, BUILDINGS, smoke, glow, stones, flock, laundry, ivy, icicles, CHURCHYARD, SHRINES, SILL_CATS, SHOP_BARRELS, storkNests, get nature() { return nature; }, storkTick, roosting, roostTick, choreLureTick, windowBoxes, fireworks, wallLamps, lightning, leaves, reeds, sparks, pigeons, prints, flags, breath, flagPeaks, ridgeLines, treeCols, tick, get swimming() { return swimming; }, get feetWet() { return feetWet; }, setAutumn: (k) => { autumnLvl = k; buildFlora(autumnK(), springK()); }, LEAP, poseAll, waterRain, setWeather: (w, i = 1) => { weather = w; wxInt = i; SNOW.value = w === 2 ? 1 : 0; applyClouds(); applyHour(); }, initAudio, greetTick, idleTick, talkers, GREET, get fishHerd() { return fishHerd; }, chimneyTops, glowWins, nightScene, nightCam, sky, waterEye, setNight: (v) => { dark = darkTo = v ? 1 : 0; night = v; applyNight(); applyHour(); }, setDark: (k) => { dark = darkTo = k; night = k > .5; applyNight(); applyHour(); }, get dark() { return dark; }, get tagGame() { return tagGame; }, get juggler() { return juggler; }, showCrowd, CLOUD, swallows, dancers, bees, squarePigeons, crows, spray, waterWheels, fishing, splashes, WIND, moths, setFog: (t) => { fogFrom = t; }, get pasture() { return pasture; }, pastureFolk, pastureTick, get washer() { return washer; }, startTour, tourTick, get tour() { return tour; }, lambs, lambTick, snowballTick, snowballs, huntTick, get hunt() { return hunt; }, HARVEST, dust, supportAt, groundH, ringBell, CHURCH_DOOR, get watchman() { return watchman; }, get sentry() { return sentry; }, watchTick, get maypole() { return maypole; }, maypoleTick, get kites() { return kites; }, kiteFlyers, kiteTick, bubbles, get bubbleKid() { return bubbleKid; }, geese, rooks, ICE, hitsBuildings, claims, lintPlaces, get simT() { return simTick * TICK; }, unseen, fpsMove: (dt) => fpsMove(dt), setYaw: (v) => { yaw = v; }, get yaw() { return yaw; }, setPitch: (v) => { pitch = v; }, placePane: (dr) => placePane(dr), setFrost: (k) => { frostK = k; }, skaters, skateTick, lureBirds, get sledding() { return sledding; }, sledTick, setSled: (v) => { sledOn = v; }, bathers, get bathePatch() { return bathePatch; }, batheTick, get leapfrog() { return leapfrog; }, leapKids, leapTick, get hideSeek() { return hideSeek; }, hideSpots, chores, choreTick, choreWhy: (name) => CHORES[name].find().map((c) => [c.at.map(Math.round), choreMiss(CHORES[name], c)]), stallSeasons, stallSeasonTick, crierTick, marketStalls, seenFrom, wakes, surfaceAt, wallShade, get skimmer() { return skimmer; }, skimTick, get haycocks() { return haycocks; }, shadows, treeShade, plants, updateShadows: () => shadows.update([herd, folk, extrasHerd, lifeHerd, guardHerd, crewHerd, riderHerd, spareHerd, cartHerd, cartSpare], camera, floorUnder, carts), tools, folkHold, findInteraction, setStill: (v) => { youStill = v; }, hedgeSpots, wedding, weddingTick, petals, get swing() { return swing; }, swingKids, swingTick, get boatSt() { return boatSt; }, get snowman() { return snowman; }, ROAD_WET, ducklings, get bonfire() { return bonfire; }, fireSitters, companion, callDog, get herd() { return herd; }, mist, grassFringe, extrasHerd, get folkHerd() { return folk; }, setBow: (k) => { bow = k; applyHour(); }, setAurora: (k, t = 0) => { aurora = k; auroraOn = k > 0; skyT = t; applyHour(); },
+  window.__dbg = { simTo, wanderers, perches, carts, movers, frameBody, camera, renderer, scene, bedY, siteZ, period: PERIOD_NAME, town, TOWN, BUILDINGS, smoke, glow, stones, flock, laundry, ivy, icicles, CHURCHYARD, SHRINES, SILL_CATS, SHOP_BARRELS, storkNests, get nature() { return nature; }, storkTick, roosting, roostTick, choreLureTick, windowBoxes, fireworks, wallLamps, lightning, leaves, reeds, sparks, pigeons, prints, flags, breath, flagPeaks, ridgeLines, treeCols, tick, get swimming() { return swimming; }, get feetWet() { return feetWet; }, setAutumn: (k) => { autumnLvl = k; buildFlora(autumnK(), springK()); }, LEAP, poseAll, waterRain, setWeather: (w, i = 1) => { weather = w; wxInt = i; SNOW.value = w === 2 ? 1 : 0; applyClouds(); applyHour(); }, initAudio, greetTick, idleTick, talkers, GREET, get fishHerd() { return fishHerd; }, chimneyTops, glowWins, nightScene, nightCam, sky, waterEye, setNight: (v) => { dark = darkTo = v ? 1 : 0; night = v; applyNight(); applyHour(); }, setDark: (k) => { dark = darkTo = k; night = k > .5; applyNight(); applyHour(); }, get dark() { return dark; }, get tagGame() { return tagGame; }, get juggler() { return juggler; }, showCrowd, CLOUD, swallows, dancers, bees, squarePigeons, crows, spray, waterWheels, fishing, splashes, WIND, moths, setFog: (t) => { fogFrom = t; }, get pasture() { return pasture; }, pastureFolk, pastureTick, get washer() { return washer; }, startTour, tourTick, get tour() { return tour; }, lambs, lambTick, snowballTick, snowballs, huntTick, get hunt() { return hunt; }, HARVEST, dust, supportAt, groundH, ringBell, CHURCH_DOOR, get watchman() { return watchman; }, get sentry() { return sentry; }, watchTick, get maypole() { return maypole; }, maypoleTick, get kites() { return kites; }, kiteFlyers, kiteTick, bubbles, get bubbleKid() { return bubbleKid; }, geese, rooks, ICE, hitsBuildings, claims, lintPlaces, get simT() { return simTick * TICK; }, unseen, fpsMove: (dt) => fpsMove(dt), setYaw: (v) => { yaw = v; }, get yaw() { return yaw; }, setPitch: (v) => { pitch = v; }, placePane: (dr) => placePane(dr), setFrost: (k) => { frostK = k; }, skaters, skateTick, lureBirds, get sledding() { return sledding; }, sledTick, setSled: (v) => { sledOn = v; }, bathers, get bathePatch() { return bathePatch; }, batheTick, get leapfrog() { return leapfrog; }, leapKids, leapTick, get hideSeek() { return hideSeek; }, hideSpots, chores, choreTick, choreWhy: (name) => CHORES[name].find().map((c) => [c.at.map(Math.round), choreMiss(CHORES[name], c)]), stallSeasons, stallSeasonTick, crierTick, marketStalls, seenFrom, wakes, surfaceAt, wallShade, get skimmer() { return skimmer; }, skimTick, get haycocks() { return haycocks; }, shadows, treeShade, plants, updateShadows: () => shadows.update(shadowHerds(), camera, floorUnder, carts), tools, folkHold, findInteraction, setStill: (v) => { youStill = v; }, hedgeSpots, wedding, weddingTick, petals, get swing() { return swing; }, swingKids, swingTick, get boatSt() { return boatSt; }, get snowman() { return snowman; }, ROAD_WET, ducklings, get bonfire() { return bonfire; }, fireSitters, companion, callDog, get herd() { return herd; }, mist, grassFringe, extrasHerd, get folkHerd() { return folk; }, setBow: (k) => { bow = k; applyHour(); }, setAurora: (k, t = 0) => { aurora = k; auroraOn = k > 0; skyT = t; applyHour(); },
     stand: (x, z, y) => { camera.position.set(x, 0, z); standY = y ?? supportNear(x, z, 1e9); airborne = false; vy = 0; camera.position.y = standY + eyeH; } };
   const { probe } = await import("./wgprobe.js");
   const post = (t) => fetch("/report", { method: "POST", body: t }).catch(() => {});

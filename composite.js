@@ -306,8 +306,13 @@ export function createComposite(capacity = 256) {
       // sets, because a figure can be hidden by an owner that then stops updating it (the player's own body,
       // hidden the moment you crouch) -- and the pool would go on drawing it where it stood.
       if (an.hidden || an._off || an._out) continue;
+      if (an._tiny && an._posed) continue;   // (not posed since: its sphere as it was -- bodies.js BODY_LOD)
       const n = an.parts.length;
-      P.markDyn(an.base, n);
+      // a figure that is BONES ALONE -- a sculpted creature, drawn by bodies.js from its frames (skeleton.js an._bm) --
+      // has no rows anything draws: its bounding sphere only (the culling, the shadows), none of its parts' rows
+      // written or uploaded (2026-11-22: two hundred creatures' bones were sent to the GPU every frame for nothing)
+      const bones = an._bones ?? (an._bones = an.parts.every((p) => p.k < -.5 && p.k > -1.5));
+      if (!bones) P.markDyn(an.base, n);
       {   // its bounding sphere (world: the box round every part's ends, padded by the largest radius)
         let x0 = 1e9, y0 = 1e9, z0 = 1e9, x1 = -1e9, y1 = -1e9, z1 = -1e9, rm = 0;
         for (let i = 0; i < n; i++) {
@@ -321,6 +326,7 @@ export function createComposite(capacity = 256) {
         const bo = an._bo ?? (an._bo = [0, 0, 0]); bo[0] = fBound[j] - an.position.x; bo[1] = fBound[j + 1] - an.position.y; bo[2] = fBound[j + 2] - an.position.z; an._br = fBound[j + 3];   // (off-view culling)
         an._y0 = y0; an._y1 = y1; an._fx = (x1 - x0) / 2; an._fz = (z1 - z0) / 2;   // (its lowest point, its top and its spread over the ground: shadows.js)
       }
+      if (bones) continue;
       for (let i = 0; i < n; i++) {
         const p = an.parts[i], so = (an.base + i) * 12, tri = p.r2 < 0 || !!p.dot;   // (a face mark: three points too)
         for (let c = 0; c < 3; c++) {
@@ -342,7 +348,7 @@ export function createComposite(capacity = 256) {
 
   function pushChains(camera) {
     for (const an of animals) {
-      if (an.hidden || an._off || an._out) continue;
+      if (an.hidden || an._off || an._out || an._bones) continue;   // (bones alone: no chains -- shell.js draws no bone)
       shell.push(an, camera.position.distanceTo(an.position));   // its detail level, by distance
     }
   }
@@ -417,6 +423,9 @@ export function createComposite(capacity = 256) {
         }
         if (an._out) { an._out = false; an._posed = false; }
         if (an._off) { an._off = false; an._posed = false; }
+        // a creature too small on the screen to draw (bodies.js BODY_LOD: a sculpted body under a couple of pixels):
+        // not posed while it stays so -- bodies.js clears `_tiny` and `_posed` the frame before it is drawn again
+        if (an._tiny && an._posed && !an.moving) continue;
         easeGait(an, dt);
         // distant figures are posed every 2nd (past LOD.near) or 4th (past LOD.far) frame, staggered --
         // display only, so the world's deterministic simulation is untouched

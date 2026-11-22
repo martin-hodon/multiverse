@@ -1,0 +1,703 @@
+{
+ "kind": "item",
+ "name": "Washing machine",
+ "category": "electronics",
+ "era": "1960-2030",
+ "region": "everywhere",
+ "_about": "a front-loading washing machine, 60 x 60 x 85 cm: the cabinet, a control panel with the detergent drawer (it slides out), the programme dial, a display and buttons, the round door hinged at its side (its bulging glass porthole in a chrome ring) opening onto the rubber seal and the steel drum, the filter flap -- facing +x",
+ "params": {
+  "open": 0
+ },
+ "materials": {
+  "body": "paint-white",
+  "panel": {
+   "pick": [
+    "plastic-white",
+    "#d6d8db",
+    "#3a3d42"
+   ]
+  },
+  "trim": {
+   "pick": [
+    "chrome",
+    "plastic-grey",
+    "aluminium"
+   ]
+  },
+  "glass": "window-glass",
+  "seal": "#9da2a8",
+  "drum": "aluminium",
+  "knob": "plastic-white",
+  "display": "screen",
+  "button": "plastic-grey",
+  "recess": "#55585e",
+  "dark": "#1c1d20",
+  "tray": "plastic-white",
+  "powder": "#dfe7f0",
+  "cloth": {
+   "pick": [
+    "#3b5a8a",
+    "#a33b3b",
+    "#d8d2c0"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "cabinet",
+   "type": "loft",
+   "material": "body",
+   "stations": [
+    [
+     -0.3,
+     0.3,
+     0.015,
+     0.85
+    ],
+    [
+     0.3,
+     0.3,
+     0.015,
+     0.85
+    ]
+   ],
+   "round": [
+    0.004,
+    0.012
+   ],
+   "seg": 1,
+   "caps": [
+    true,
+    false
+   ]
+  },
+  {
+   "id": "front",
+   "type": "plate",
+   "material": "body",
+   "outline": [
+    [
+     0,
+     0.017
+    ],
+    [
+     0.298,
+     0.017
+    ],
+    [
+     0.298,
+     0.715
+    ],
+    [
+     0,
+     0.715
+    ],
+    [
+     0.0,
+     0.585
+    ],
+    [
+     0.0427,
+     0.5794
+    ],
+    [
+     0.0825,
+     0.5629
+    ],
+    [
+     0.1167,
+     0.5367
+    ],
+    [
+     0.1429,
+     0.5025
+    ],
+    [
+     0.1594,
+     0.4627
+    ],
+    [
+     0.165,
+     0.42
+    ],
+    [
+     0.1594,
+     0.3773
+    ],
+    [
+     0.1429,
+     0.3375
+    ],
+    [
+     0.1167,
+     0.3033
+    ],
+    [
+     0.0825,
+     0.2771
+    ],
+    [
+     0.0427,
+     0.2606
+    ],
+    [
+     0.0,
+     0.255
+    ]
+   ],
+   "thick": 0.01,
+   "at": [
+    [
+     0.295,
+     0,
+     0,
+     90,
+     0,
+     0
+    ],
+    [
+     0.295,
+     0,
+     0,
+     -90,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "lip",
+   "type": "box",
+   "material": "body",
+   "size": [
+    0.01,
+    0.015,
+    0.57
+   ],
+   "at": [
+    0.295,
+    0.8425,
+    0
+   ]
+  },
+  {
+   "id": "kick",
+   "type": "box",
+   "material": "recess",
+   "size": [
+    0.02,
+    0.015,
+    0.56
+   ],
+   "at": [
+    0.27,
+    0.0075,
+    0
+   ]
+  },
+  {
+   "id": "panel",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    0.008,
+    0.12,
+    0.381
+   ],
+   "at": [
+    0.303,
+    0.775,
+    0.1055
+   ]
+  },
+  {
+   "id": "panelEnd",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    0.008,
+    0.12,
+    0.021
+   ],
+   "at": [
+    0.303,
+    0.775,
+    -0.2855
+   ]
+  },
+  {
+   "id": "panelRail",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    0.008,
+    0.0175,
+    0.19
+   ],
+   "at": [
+    [
+     0.303,
+     0.8263,
+     -0.18
+    ],
+    [
+     0.303,
+     0.7238,
+     -0.18
+    ]
+   ]
+  },
+  {
+   "id": "housing",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.3,
+    0.085,
+    0.19
+   ],
+   "at": [
+    0.149,
+    0.775,
+    -0.18
+   ]
+  },
+  {
+   "id": "drawer",
+   "use": "items/components/drawer",
+   "at": [
+    0.302,
+    0.775,
+    -0.18,
+    90,
+    0,
+    0
+   ],
+   "params": {
+    "front": "slab",
+    "w": 0.19,
+    "h": 0.085,
+    "t": 0.014,
+    "back": 0,
+    "pull": "grip",
+    "hy": -0.03,
+    "hl": 0.08,
+    "gh": 0.012,
+    "gd": 0.0025,
+    "depth": 0.25,
+    "floor": 0.006,
+    "lift": 0.005,
+    "wall": 0.006,
+    "gap": 0.01,
+    "rise": 0.7059,
+    "stock": "powder"
+   },
+   "materials": {
+    "front": "panel",
+    "metal": "recess",
+    "goods": "powder"
+   }
+  },
+  {
+   "id": "dial",
+   "type": "lathe",
+   "material": "knob",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.0345,
+     0
+    ],
+    [
+     0.0345,
+     0.007
+    ],
+    [
+     0.03,
+     0.0098
+    ],
+    [
+     0.0285,
+     0.028
+    ],
+    [
+     0,
+     0.028
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    0.307,
+    0.775,
+    0.06,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "dialRing",
+   "type": "ring",
+   "material": "button",
+   "r": 0.045,
+   "tube": 0.0025,
+   "at": [
+    0.308,
+    0.775,
+    0.06,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "display",
+   "type": "box",
+   "material": "display",
+   "size": [
+    0.002,
+    0.03,
+    0.08
+   ],
+   "at": [
+    0.308,
+    0.79,
+    0.185
+   ]
+  },
+  {
+   "id": "button",
+   "type": "box",
+   "material": "button",
+   "size": [
+    0.006,
+    0.012,
+    0.018
+   ],
+   "at": [
+    0.309,
+    0.75,
+    0
+   ],
+   "along": {
+    "n": 3,
+    "from": [
+     0,
+     0,
+     0.155
+    ],
+    "to": [
+     0,
+     0,
+     0.215
+    ]
+   }
+  },
+  {
+   "id": "seal",
+   "type": "ring",
+   "material": "seal",
+   "r": 0.155,
+   "tube": 0.018,
+   "at": [
+    0.304,
+    0.42,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "sleeve",
+   "type": "lathe",
+   "material": "seal",
+   "profile": [
+    [
+     0.168,
+     0.0
+    ],
+    [
+     0.162,
+     -0.03
+    ],
+    [
+     0.152,
+     -0.06
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 24,
+   "at": [
+    0.3,
+    0.42,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "drum",
+   "type": "lathe",
+   "material": "drum",
+   "profile": [
+    [
+     0.152,
+     -0.06
+    ],
+    [
+     0.2,
+     -0.09
+    ],
+    [
+     0.215,
+     -0.11
+    ],
+    [
+     0.215,
+     -0.42
+    ],
+    [
+     0.0,
+     -0.43
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 24,
+   "at": [
+    0.3,
+    0.42,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "lifter",
+   "type": "box",
+   "material": "drum",
+   "size": [
+    0.28,
+    0.035,
+    0.03
+   ],
+   "at": [
+    [
+     0.04,
+     0.52,
+     0.1732,
+     0,
+     -60,
+     0
+    ],
+    [
+     0.04,
+     0.22,
+     0.0,
+     0,
+     -180,
+     0
+    ],
+    [
+     0.04,
+     0.52,
+     -0.1732,
+     0,
+     -300,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "washing",
+   "type": "sphere",
+   "material": "cloth",
+   "r": 0.09,
+   "at": [
+    [
+     0.05,
+     0.27,
+     0.05
+    ],
+    [
+     -0.03,
+     0.28,
+     -0.08
+    ]
+   ],
+   "stretch": [
+    1.2,
+    0.55,
+    1.0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "door",
+   "type": "hinge",
+   "pivot": [
+    0.32,
+    0.42,
+    -0.2
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": 100,
+   "parts": [
+    {
+     "id": "glass",
+     "type": "lathe",
+     "material": "glass",
+     "profile": [
+      [
+       0,
+       0.055
+      ],
+      [
+       0.06,
+       0.052
+      ],
+      [
+       0.11,
+       0.04
+      ],
+      [
+       0.145,
+       0.018
+      ],
+      [
+       0.15,
+       0.006
+      ]
+     ],
+     "caps": false,
+     "double": true,
+     "sides": 24,
+     "at": [
+      0.3,
+      0.42,
+      0,
+      0,
+      0,
+      -90
+     ]
+    },
+    {
+     "id": "bowl",
+     "type": "lathe",
+     "material": "glass",
+     "profile": [
+      [
+       0.15,
+       0.006
+      ],
+      [
+       0.13,
+       -0.02
+      ],
+      [
+       0.1,
+       -0.045
+      ],
+      [
+       0.05,
+       -0.06
+      ],
+      [
+       0,
+       -0.062
+      ]
+     ],
+     "caps": false,
+     "double": true,
+     "sides": 20,
+     "at": [
+      0.3,
+      0.42,
+      0,
+      0,
+      0,
+      -90
+     ]
+    },
+    {
+     "id": "doorRing",
+     "type": "ring",
+     "material": "trim",
+     "r": 0.165,
+     "tube": 0.028,
+     "at": [
+      0.32,
+      0.42,
+      0,
+      0,
+      0,
+      -90
+     ]
+    },
+    {
+     "id": "pull",
+     "type": "box",
+     "material": "trim",
+     "size": [
+      0.03,
+      0.08,
+      0.025
+     ],
+     "at": [
+      0.33,
+      0.42,
+      0.19
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hinge",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.02,
+    0.03,
+    0.02
+   ],
+   "at": [
+    [
+     0.31,
+     0.51,
+     -0.185
+    ],
+    [
+     0.31,
+     0.33,
+     -0.185
+    ]
+   ]
+  },
+  {
+   "id": "flap",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    0.004,
+    0.08,
+    0.1
+   ],
+   "at": [
+    0.302,
+    0.075,
+    0.2
+   ]
+  }
+ ]
+}

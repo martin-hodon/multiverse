@@ -1,0 +1,212 @@
+{
+ "kind": "item",
+ "name": "Oven peel",
+ "category": "tool",
+ "era": "any",
+ "region": "Europe",
+ "_about": "a baker's oven peel: a long ash handle into a broad thin blade, scorched along its edge -- stood on the blade's edge, leaned `lean` degrees toward -x (against the oven or the wall)",
+ "params": {
+  "lean": 0,
+  "L": [
+   1.6,
+   1.85
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "ash",
+    "pine",
+    "oak"
+   ]
+  },
+  "scorch": "crust-dark"
+ },
+ "parts": [
+  {
+   "id": "blade",
+   "type": "plate",
+   "material": "wood",
+   "outline": [
+    [
+     -0.15,
+     0.0
+    ],
+    [
+     0.15,
+     0.0
+    ],
+    [
+     0.165,
+     0.02
+    ],
+    [
+     0.16,
+     0.26
+    ],
+    [
+     0.13,
+     0.31
+    ],
+    [
+     0.04,
+     0.35
+    ],
+    [
+     -0.04,
+     0.35
+    ],
+    [
+     -0.13,
+     0.31
+    ],
+    [
+     -0.16,
+     0.26
+    ],
+    [
+     -0.165,
+     0.02
+    ]
+   ],
+   "thick": 0.01,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    "lean"
+   ]
+  },
+  {
+   "id": "scorch",
+   "type": "plate",
+   "material": "scorch",
+   "outline": [
+    [
+     -0.15,
+     0.0
+    ],
+    [
+     0.15,
+     0.0
+    ],
+    [
+     0.165,
+     0.02
+    ],
+    [
+     -0.165,
+     0.02
+    ]
+   ],
+   "thick": 0.012,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    "lean"
+   ]
+  },
+  {
+   "id": "shoulder",
+   "type": "plate",
+   "material": "wood",
+   "outline": [
+    [
+     -0.04,
+     0.3
+    ],
+    [
+     0.04,
+     0.3
+    ],
+    [
+     0.02,
+     0.42
+    ],
+    [
+     -0.02,
+     0.42
+    ]
+   ],
+   "thick": 0.026,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    "lean"
+   ]
+  },
+  {
+   "id": "handle",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.017,
+   "from": [
+    "(0) * cos(lean * 0.0174533) - (0.38) * sin(lean * 0.0174533)",
+    "(0) * sin(lean * 0.0174533) + (0.38) * cos(lean * 0.0174533)",
+    0
+   ],
+   "to": [
+    "(0) * cos(lean * 0.0174533) - (L) * sin(lean * 0.0174533)",
+    "(0) * sin(lean * 0.0174533) + (L) * cos(lean * 0.0174533)",
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "end",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.02,
+   "from": [
+    "(0) * cos(lean * 0.0174533) - (L - 0.015) * sin(lean * 0.0174533)",
+    "(0) * sin(lean * 0.0174533) + (L - 0.015) * cos(lean * 0.0174533)",
+    0
+   ],
+   "to": [
+    "(0) * cos(lean * 0.0174533) - (L + 0.01) * sin(lean * 0.0174533)",
+    "(0) * sin(lean * 0.0174533) + (L + 0.01) * cos(lean * 0.0174533)",
+    0
+   ],
+   "sides": 8
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   1.2,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  },
+  "follow": 0.35,
+  "rest": "ground"
+ }
+}

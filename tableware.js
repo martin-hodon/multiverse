@@ -29,6 +29,7 @@ const SHAPE = (kind) => { if (!SHAPES.has(kind)) SHAPES.set(kind, shapeOf(kind))
 // the food on a plate: items too (assets/items/food)
 const FOODS = { bread: "items/food/plain-loaf", cheese: "items/food/cheese-slice", sausage: "items/food/sausage" };
 const WALL = .005;
+const PLATE_WELL = .009;   // (the plate's well floor above the table: items/tableware/plate's `well`)
 
 export function createTableware(scene) {
   const vessels = [], dishes = [];
@@ -76,12 +77,18 @@ export function createTableware(scene) {
         vessels.push(v);
         level(v);
       }
-      for (const d of def.dishes ?? []) {
-        const grp = itemGroup(FOODS[d.food] ?? FOODS.bread);
-        grp.position.set(ox + d.x, d.y + .01, oz + d.z);
+      def.dishes?.forEach((d, k) => {
+        // each on its PLATE (items/tableware/plate: a bread trencher unless the dish names pewter or ceramic), which
+        // stays when the food is eaten; the food sits in the plate's well
+        const plate = itemGroup("items/tableware/plate", { seed: 1 + k, params: { style: d.plate ?? "trencher" } });
+        plate.position.set(ox + d.x, d.y + .002, oz + d.z);
+        if (d.yaw) plate.rotation.y = d.yaw * Math.PI / 180;
+        site.add(plate);
+        const grp = itemGroup(FOODS[d.food] ?? FOODS.bread), y = d.y + .002 + PLATE_WELL;
+        grp.position.set(ox + d.x, y, oz + d.z);
         site.add(grp);
-        dishes.push({ ...d, grp, eaten: false, wx: ox + d.x, wy: d.y + .01, wz: oz + d.z });
-      }
+        dishes.push({ ...d, grp, eaten: false, wx: ox + d.x, wy: y, wz: oz + d.z });
+      });
     },
     // what a click would do here: drink from a vessel with something in it, or eat what lies on a plate -- within reach
     // (standing or seated at the table) and looked at. send: to peers

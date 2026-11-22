@@ -1,0 +1,209 @@
+{
+ "kind": "item",
+ "name": "Desk lamp",
+ "category": "furniture/lamp",
+ "era": "1932-2030",
+ "region": "everywhere",
+ "_about": "a balanced-arm desk lamp (the Anglepoise kind): a weighted base, lower and upper arms of twin rods with the springs that balance them, a conical shade turned forward (+z) and down over the bulb",
+ "params": {},
+ "materials": {
+  "metal": {
+   "pick": [
+    "paint-black",
+    "paint-red",
+    "paint-cream",
+    "paint-blue",
+    "aluminium"
+   ]
+  },
+  "steel": "steel",
+  "bulb": "lamp"
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "lathe",
+   "material": "metal",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.085,
+     0
+    ],
+    [
+     0.085,
+     0.022
+    ],
+    [
+     0.06,
+     0.04
+    ],
+    [
+     0.02,
+     0.045
+    ],
+    [
+     0,
+     0.045
+    ]
+   ],
+   "sides": 20,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "turret",
+   "type": "lathe",
+   "material": "metal",
+   "profile": [
+    [
+     0.022,
+     0.04
+    ],
+    [
+     0.02,
+     0.07
+    ],
+    [
+     0,
+     0.07
+    ]
+   ],
+   "sides": 10,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "lower",
+   "type": "rod",
+   "material": "metal",
+   "r": 0.006,
+   "from": [
+    0.014,
+    0.065,
+    0
+   ],
+   "to": [
+    0.014,
+    0.36,
+    0.1
+   ],
+   "sides": 6,
+   "mirror": "x"
+  },
+  {
+   "id": "upper",
+   "type": "rod",
+   "material": "metal",
+   "r": 0.006,
+   "from": [
+    0.014,
+    0.36,
+    0.085
+   ],
+   "to": [
+    0.014,
+    0.42,
+    0.4
+   ],
+   "sides": 6,
+   "mirror": "x"
+  },
+  {
+   "id": "spring",
+   "type": "rod",
+   "material": "steel",
+   "r": 0.008,
+   "from": [
+    0.03,
+    0.08,
+    -0.01
+   ],
+   "to": [
+    0.03,
+    0.27,
+    0.06
+   ],
+   "sides": 8,
+   "mirror": "x"
+  },
+  {
+   "id": "knuckle",
+   "type": "sphere",
+   "material": "metal",
+   "r": 0.016,
+   "at": [
+    [
+     0,
+     0.36,
+     0.1
+    ],
+    [
+     0,
+     0.42,
+     0.4
+    ]
+   ],
+   "sides": 8
+  },
+  {
+   "id": "shade",
+   "type": "lathe",
+   "material": "metal",
+   "profile": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.03,
+     0.0
+    ],
+    [
+     0.035,
+     -0.04
+    ],
+    [
+     0.075,
+     -0.13
+    ],
+    [
+     0.078,
+     -0.135
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 20,
+   "at": [
+    0,
+    0.42,
+    0.42,
+    0,
+    -28,
+    0
+   ]
+  },
+  {
+   "id": "bulb",
+   "type": "sphere",
+   "material": "bulb",
+   "r": 0.026,
+   "at": [
+    0,
+    0.367,
+    0.4482
+   ],
+   "sides": 10
+  }
+ ]
+}

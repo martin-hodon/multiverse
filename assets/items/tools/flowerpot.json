@@ -1,0 +1,319 @@
+{
+ "kind": "item",
+ "name": "Flowerpot",
+ "category": "tool",
+ "era": "any",
+ "region": "everywhere",
+ "_about": "a terracotta flowerpot on its saucer, its rim thickened, the soil in it, and a `plant` from assets/items/flowers growing in it (\"\": an empty pot); `ph` the plant's height param",
+ "params": {
+  "plant": {
+   "pick": [
+    "items/flowers/tulip",
+    "items/flowers/daisy",
+    "items/flowers/rose",
+    "items/flowers/lavender",
+    "items/flowers/poppy",
+    "items/flowers/cornflower",
+    "items/flowers/iris",
+    "items/flowers/sunflower",
+    ""
+   ]
+  },
+  "ph": [
+   0.55,
+   0.75
+  ],
+  "saucer": {
+   "pick": [
+    0,
+    1,
+    1
+   ]
+  }
+ },
+ "materials": {
+  "clay": {
+   "pick": [
+    "terracotta",
+    "terracotta",
+    "paint-cream",
+    "faience-blue"
+   ]
+  },
+  "soil": "crust-dark"
+ },
+ "parts": [
+  {
+   "id": "pot",
+   "type": "lathe",
+   "material": "clay",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.058,
+     0.012
+    ],
+    [
+     0.062,
+     0.014
+    ],
+    [
+     0.082,
+     0.14
+    ],
+    [
+     0.091,
+     0.142
+    ],
+    [
+     0.092,
+     0.168
+    ],
+    [
+     0.085,
+     0.168
+    ],
+    [
+     0.084,
+     0.142
+    ],
+    [
+     0.075,
+     0.14
+    ],
+    [
+     0.0563,
+     0.022
+    ],
+    [
+     0,
+     0.022
+    ]
+   ],
+   "sides": 16,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "saucer",
+   "type": "lathe",
+   "material": "clay",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.085,
+     0
+    ],
+    [
+     0.095,
+     0.014
+    ],
+    [
+     0.09,
+     0.016
+    ],
+    [
+     0.08,
+     0.006
+    ],
+    [
+     0,
+     0.006
+    ]
+   ],
+   "sides": 16,
+   "when": "saucer"
+  },
+  {
+   "id": "soil",
+   "type": "lathe",
+   "material": "soil",
+   "profile": [
+    [
+     0.0837,
+     0.15
+    ],
+    [
+     0,
+     0.15
+    ]
+   ],
+   "sides": 12
+  },
+  {
+   "id": "plant",
+   "use": "items/flowers/tulip",
+   "at": [
+    0,
+    0.15,
+    0
+   ],
+   "params": {
+    "h": "ph"
+   },
+   "when": {
+    "plant": [
+     "items/flowers/tulip"
+    ]
+   }
+  },
+  {
+   "id": "plant",
+   "use": "items/flowers/daisy",
+   "at": [
+    0,
+    0.15,
+    0
+   ],
+   "params": {
+    "h": "ph"
+   },
+   "when": {
+    "plant": [
+     "items/flowers/daisy"
+    ]
+   }
+  },
+  {
+   "id": "plant",
+   "use": "items/flowers/rose",
+   "at": [
+    0,
+    0.15,
+    0
+   ],
+   "params": {
+    "h": "ph"
+   },
+   "when": {
+    "plant": [
+     "items/flowers/rose"
+    ]
+   }
+  },
+  {
+   "id": "plant",
+   "use": "items/flowers/lavender",
+   "at": [
+    0,
+    0.15,
+    0
+   ],
+   "params": {
+    "h": "ph"
+   },
+   "when": {
+    "plant": [
+     "items/flowers/lavender"
+    ]
+   }
+  },
+  {
+   "id": "plant",
+   "use": "items/flowers/poppy",
+   "at": [
+    0,
+    0.15,
+    0
+   ],
+   "params": {
+    "h": "ph"
+   },
+   "when": {
+    "plant": [
+     "items/flowers/poppy"
+    ]
+   }
+  },
+  {
+   "id": "plant",
+   "use": "items/flowers/cornflower",
+   "at": [
+    0,
+    0.15,
+    0
+   ],
+   "params": {
+    "h": "ph"
+   },
+   "when": {
+    "plant": [
+     "items/flowers/cornflower"
+    ]
+   }
+  },
+  {
+   "id": "plant",
+   "use": "items/flowers/iris",
+   "at": [
+    0,
+    0.15,
+    0
+   ],
+   "params": {
+    "h": "ph"
+   },
+   "when": {
+    "plant": [
+     "items/flowers/iris"
+    ]
+   }
+  },
+  {
+   "id": "plant",
+   "use": "items/flowers/sunflower",
+   "at": [
+    0,
+    0.15,
+    0
+   ],
+   "params": {
+    "h": "ph"
+   },
+   "when": {
+    "plant": [
+     "items/flowers/sunflower"
+    ]
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.08,
+   0
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    1,
+    0,
+    0
+   ],
+   "face": [
+    0,
+    0,
+    1
+   ]
+  },
+  "follow": 0.7
+ }
+}

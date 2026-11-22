@@ -1,0 +1,813 @@
+{
+ "kind": "item",
+ "name": "Fitted kitchen",
+ "category": "furniture/kitchen",
+ "era": "1950-2030",
+ "region": "everywhere",
+ "_about": "a fitted kitchen run, 3.0 m: five 600 mm base units on a recessed plinth under a 40 mm worktop at 0.9 m (a drawer unit, a sink unit with an inset steel sink, drainer and swan-neck tap, an integrated dishwasher, pan drawers under a ceramic hob, a door unit), a tiled upstand, four wall units from 1.45 m and a chimney hood -- its back against a wall at -z; the seed picks flat slab fronts or shaker ones (`frame` 0.06: stiles and rails round a sunk panel a shade darker), and a colourway (front and panel)",
+ "params": {
+  "open": 0,
+  "frame": {
+   "pick": [
+    0,
+    0.06
+   ]
+  },
+  "colourway": {
+   "pick": [
+    "white",
+    "slate",
+    "cream",
+    "sage",
+    "oak",
+    "red"
+   ]
+  }
+ },
+ "materials": {
+  "carcass": "#c4c1ba",
+  "front": "plastic-white",
+  "panel": "#d0d0ca",
+  "metal": "aluminium",
+  "worktop": {
+   "pick": [
+    "oak",
+    "granite-black",
+    "marble",
+    "#d8d2c4"
+   ]
+  },
+  "plinth": "#2a2a2c",
+  "tile": "#e8e4dc",
+  "steel": "steel",
+  "chrome": "chrome",
+  "groove": "#8d9298",
+  "hobGlass": "#131416",
+  "zone": "#5c5f66"
+ },
+ "parts": [
+  {
+   "id": "plinth",
+   "type": "box",
+   "material": "plinth",
+   "size": [
+    3.0,
+    0.14,
+    0.5
+   ],
+   "at": [
+    0,
+    0.07,
+    -0.07
+   ]
+  },
+  {
+   "id": "carcass",
+   "type": "box",
+   "material": "carcass",
+   "size": [
+    3.0,
+    0.72,
+    0.56
+   ],
+   "at": [
+    0,
+    0.5,
+    -0.02
+   ]
+  },
+  {
+   "id": "worktopL",
+   "type": "box",
+   "material": "worktop",
+   "size": [
+    0.67,
+    0.04,
+    0.63
+   ],
+   "at": [
+    -1.165,
+    0.88,
+    0.015
+   ]
+  },
+  {
+   "id": "worktopR",
+   "type": "box",
+   "material": "worktop",
+   "size": [
+    1.87,
+    0.04,
+    0.63
+   ],
+   "at": [
+    0.565,
+    0.88,
+    0.015
+   ]
+  },
+  {
+   "id": "worktopB",
+   "type": "box",
+   "material": "worktop",
+   "size": [
+    0.46,
+    0.04,
+    0.1
+   ],
+   "at": [
+    -0.6,
+    0.88,
+    -0.25
+   ]
+  },
+  {
+   "id": "worktopF",
+   "type": "box",
+   "material": "worktop",
+   "size": [
+    0.46,
+    0.04,
+    0.17
+   ],
+   "at": [
+    -0.6,
+    0.88,
+    0.245
+   ]
+  },
+  {
+   "id": "upstand",
+   "type": "box",
+   "material": "tile",
+   "size": [
+    3.0,
+    0.55,
+    0.01
+   ],
+   "at": [
+    0,
+    1.175,
+    -0.295
+   ]
+  },
+  {
+   "id": "drawer1",
+   "use": "items/components/drawer",
+   "at": [
+    -1.2,
+    0.772,
+    0.26
+   ],
+   "params": {
+    "front": "slab",
+    "w": 0.592,
+    "h": 0.17,
+    "pull": "hbar",
+    "hx": 0.0,
+    "hy": 0.0,
+    "hl": 0.32,
+    "frame": "frame * 2 / 3",
+    "depth": 0.48,
+    "back": 0,
+    "floor": 0.012,
+    "lift": 0.024,
+    "gap": 0.03,
+    "rise": 0.62
+   },
+   "materials": {
+    "tray": "#d9d5cc"
+   }
+  },
+  {
+   "id": "drawer2",
+   "use": "items/components/drawer",
+   "at": [
+    [
+     -1.2,
+     0.546,
+     0.26
+    ],
+    [
+     -1.2,
+     0.276,
+     0.26
+    ]
+   ],
+   "params": {
+    "front": "slab",
+    "w": 0.592,
+    "h": 0.266,
+    "pull": "hbar",
+    "hx": 0.0,
+    "hy": 0.08,
+    "hl": 0.32,
+    "frame": "frame",
+    "depth": 0.48,
+    "back": 0,
+    "floor": 0.012,
+    "lift": 0.024,
+    "gap": 0.03,
+    "rise": 0.62
+   },
+   "materials": {
+    "tray": "#d9d5cc"
+   }
+  },
+  {
+   "id": "sinkDoor",
+   "use": "items/modern/components/slab-door",
+   "at": [
+    -0.75,
+    0.5,
+    0.26
+   ],
+   "params": {
+    "w": 0.293,
+    "h": 0.714,
+    "pull": "vbar",
+    "hx": 0.11,
+    "hy": 0.237,
+    "hl": 0.16,
+    "frame": "frame"
+   }
+  },
+  {
+   "id": "sinkDoorR",
+   "use": "items/modern/components/slab-door",
+   "at": [
+    -0.45,
+    0.5,
+    0.26
+   ],
+   "params": {
+    "w": 0.293,
+    "h": 0.714,
+    "pull": "vbar",
+    "hx": -0.11,
+    "hy": 0.237,
+    "hl": 0.16,
+    "frame": "frame"
+   }
+  },
+  {
+   "id": "dishwasher",
+   "use": "items/modern/components/slab-door",
+   "at": [
+    0.0,
+    0.5,
+    0.26
+   ],
+   "params": {
+    "w": 0.592,
+    "h": 0.714,
+    "pull": "hbar",
+    "hx": 0.0,
+    "hy": 0.307,
+    "hl": 0.4,
+    "frame": "frame"
+   }
+  },
+  {
+   "id": "pan",
+   "use": "items/components/drawer",
+   "at": [
+    0.6,
+    0.313,
+    0.26
+   ],
+   "params": {
+    "front": "slab",
+    "w": 0.592,
+    "h": 0.34,
+    "pull": "hbar",
+    "hx": 0.0,
+    "hy": 0.11,
+    "hl": 0.32,
+    "frame": "frame",
+    "depth": 0.48,
+    "back": 0,
+    "floor": 0.012,
+    "lift": 0.024,
+    "gap": 0.03,
+    "rise": 0.5882
+   },
+   "materials": {
+    "tray": "#d9d5cc"
+   }
+  },
+  {
+   "id": "pan2",
+   "use": "items/components/drawer",
+   "at": [
+    0.6,
+    0.672,
+    0.26
+   ],
+   "params": {
+    "front": "slab",
+    "w": 0.592,
+    "h": 0.37,
+    "pull": "hbar",
+    "hx": 0.0,
+    "hy": 0.125,
+    "hl": 0.32,
+    "frame": "frame",
+    "depth": 0.48,
+    "back": 0,
+    "floor": 0.012,
+    "lift": 0.024,
+    "gap": 0.03,
+    "rise": 0.5405
+   },
+   "materials": {
+    "tray": "#d9d5cc"
+   }
+  },
+  {
+   "id": "door5",
+   "use": "items/modern/components/slab-door",
+   "at": [
+    1.2,
+    0.5,
+    0.26
+   ],
+   "params": {
+    "w": 0.592,
+    "h": 0.714,
+    "pull": "vbar",
+    "hx": -0.25,
+    "hy": 0.237,
+    "hl": 0.16,
+    "frame": "frame"
+   }
+  },
+  {
+   "id": "bowlFloor",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.44,
+    0.006,
+    0.34
+   ],
+   "at": [
+    -0.6,
+    0.71,
+    -0.02
+   ]
+  },
+  {
+   "id": "bowlSide",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.006,
+    0.19,
+    0.34
+   ],
+   "at": [
+    [
+     -0.817,
+     0.805,
+     -0.02
+    ],
+    [
+     -0.383,
+     0.805,
+     -0.02
+    ]
+   ]
+  },
+  {
+   "id": "bowlEnd",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.44,
+    0.19,
+    0.006
+   ],
+   "at": [
+    [
+     -0.6,
+     0.805,
+     -0.187
+    ],
+    [
+     -0.6,
+     0.805,
+     0.147
+    ]
+   ]
+  },
+  {
+   "id": "waste",
+   "type": "ring",
+   "material": "chrome",
+   "r": 0.03,
+   "tube": 0.006,
+   "at": [
+    -0.6,
+    0.715,
+    -0.02
+   ]
+  },
+  {
+   "id": "rimB",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.5,
+    0.004,
+    0.03
+   ],
+   "at": [
+    [
+     -0.6,
+     0.902,
+     -0.205
+    ],
+    [
+     -0.6,
+     0.902,
+     0.165
+    ]
+   ]
+  },
+  {
+   "id": "rimS",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.03,
+    0.004,
+    0.4
+   ],
+   "at": [
+    [
+     -0.835,
+     0.902,
+     -0.02
+    ],
+    [
+     -0.365,
+     0.902,
+     -0.02
+    ]
+   ]
+  },
+  {
+   "id": "drainer",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.4,
+    0.004,
+    0.4
+   ],
+   "at": [
+    -0.15,
+    0.902,
+    -0.02
+   ]
+  },
+  {
+   "id": "groove",
+   "type": "box",
+   "material": "groove",
+   "size": [
+    0.32,
+    0.002,
+    0.008
+   ],
+   "at": [
+    -0.15,
+    0.9045,
+    0
+   ],
+   "along": {
+    "n": 7,
+    "from": [
+     0,
+     0,
+     -0.16
+    ],
+    "to": [
+     0,
+     0,
+     0.12
+    ]
+   }
+  },
+  {
+   "id": "tapBase",
+   "type": "lathe",
+   "material": "chrome",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.026,
+     0
+    ],
+    [
+     0.024,
+     0.04
+    ],
+    [
+     0.019,
+     0.06
+    ],
+    [
+     0,
+     0.06
+    ]
+   ],
+   "sides": 12,
+   "at": [
+    -0.6,
+    0.9,
+    -0.245
+   ]
+  },
+  {
+   "id": "spout",
+   "type": "sweep",
+   "material": "chrome",
+   "path": [
+    [
+     -0.6,
+     0.95,
+     -0.245
+    ],
+    [
+     -0.6,
+     1.18,
+     -0.24
+    ],
+    [
+     -0.6,
+     1.23,
+     -0.17
+    ],
+    [
+     -0.6,
+     1.18,
+     -0.08
+    ],
+    [
+     -0.6,
+     1.14,
+     -0.07
+    ]
+   ],
+   "r": 0.012
+  },
+  {
+   "id": "tapLever",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.006,
+   "from": [
+    -0.58,
+    0.95,
+    -0.245
+   ],
+   "to": [
+    -0.51,
+    0.97,
+    -0.245
+   ],
+   "sides": 6
+  },
+  {
+   "id": "hob",
+   "type": "box",
+   "material": "hobGlass",
+   "size": [
+    0.58,
+    0.006,
+    0.51
+   ],
+   "at": [
+    0.6,
+    0.903,
+    0.0
+   ]
+  },
+  {
+   "id": "zone",
+   "type": "ring",
+   "material": "zone",
+   "r": 0.09,
+   "tube": 0.0025,
+   "at": [
+    [
+     0.46,
+     0.906,
+     -0.12
+    ],
+    [
+     0.74,
+     0.906,
+     -0.12
+    ]
+   ]
+  },
+  {
+   "id": "zoneS",
+   "type": "ring",
+   "material": "zone",
+   "r": 0.07,
+   "tube": 0.0025,
+   "at": [
+    [
+     0.46,
+     0.906,
+     0.1
+    ],
+    [
+     0.74,
+     0.906,
+     0.1
+    ]
+   ]
+  },
+  {
+   "id": "touch",
+   "type": "box",
+   "material": "zone",
+   "size": [
+    0.2,
+    0.002,
+    0.03
+   ],
+   "at": [
+    0.6,
+    0.9065,
+    0.22
+   ]
+  },
+  {
+   "id": "wallCarcass",
+   "type": "box",
+   "material": "carcass",
+   "size": [
+    1.8,
+    0.72,
+    0.33
+   ],
+   "at": [
+    -0.6,
+    1.81,
+    -0.135
+   ]
+  },
+  {
+   "id": "wallCarcassR",
+   "type": "box",
+   "material": "carcass",
+   "size": [
+    0.6,
+    0.72,
+    0.33
+   ],
+   "at": [
+    1.2,
+    1.81,
+    -0.135
+   ]
+  },
+  {
+   "id": "wallDoor",
+   "use": "items/modern/components/slab-door",
+   "at": [
+    [
+     -1.2,
+     1.81,
+     0.03
+    ],
+    [
+     -0.6,
+     1.81,
+     0.03
+    ],
+    [
+     0.0,
+     1.81,
+     0.03
+    ],
+    [
+     1.2,
+     1.81,
+     0.03
+    ]
+   ],
+   "params": {
+    "w": 0.592,
+    "h": 0.716,
+    "pull": "hbar",
+    "hx": 0.0,
+    "hy": -0.31,
+    "hl": 0.2,
+    "frame": "frame"
+   }
+  },
+  {
+   "id": "hoodCanopy",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.6,
+    0.07,
+    0.5
+   ],
+   "at": [
+    0.6,
+    1.605,
+    -0.05
+   ]
+  },
+  {
+   "id": "chimney",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.28,
+    0.76,
+    0.26
+   ],
+   "at": [
+    0.6,
+    2.02,
+    -0.17
+   ]
+  },
+  {
+   "id": "hoodFilter",
+   "type": "box",
+   "material": "groove",
+   "size": [
+    0.56,
+    0.004,
+    0.44
+   ],
+   "at": [
+    0.6,
+    1.568,
+    -0.05
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "spot",
+   "at": [
+    [
+     -0.6,
+     0,
+     0.65
+    ],
+    [
+     0.6,
+     0,
+     0.65
+    ]
+   ],
+   "data": {
+    "pose": "stand",
+    "face": 1.5708,
+    "work": 1
+   }
+  }
+ ],
+ "colourways": {
+  "white": {
+   "front": "plastic-white",
+   "panel": "#d0d0ca"
+  },
+  "slate": {
+   "front": "#3f4a57",
+   "panel": "#333c47"
+  },
+  "cream": {
+   "front": "#c9c1b0",
+   "panel": "#b5ad9b"
+  },
+  "sage": {
+   "front": "#556b5a",
+   "panel": "#47594b"
+  },
+  "oak": {
+   "front": "oak",
+   "panel": "walnut"
+  },
+  "red": {
+   "front": "#8c2f2f",
+   "panel": "#782828"
+  }
+ }
+}

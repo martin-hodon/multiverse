@@ -1,0 +1,192 @@
+{
+ "kind": "item",
+ "name": "Slab door",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a modern carcass's flat door or drawer front: a plain slab looking +z, its back at z 0 and its face at t (`anchor` 0, the default; 1: its face at z 0, as components/panel-door stands), with a bar handle across or upright (`stand`, `r`, `sides`, `pr`, `psides`, `inset` passed on to modern/components/bar-handle), a knob, an edge lip, a moulded grip (`gh` high, `gd` proud) or nothing -- the kitchen's, the wardrobe's, the desk's, the TV stand's; `frame` > 0: a shaker front instead of the slab (components/panel-door, anchor 0, its stiles and rails that wide, no knob, role front; its sunk panel role panel, the front unless mapped)",
+ "params": {
+  "w": 0.6,
+  "h": 0.7,
+  "t": 0.018,
+  "pull": "hbar",
+  "hx": 0,
+  "hy": 0,
+  "hl": 0.16,
+  "anchor": 0,
+  "stand": 0.028,
+  "r": 0.0065,
+  "sides": 8,
+  "pr": 0.005,
+  "psides": 6,
+  "inset": 0.012,
+  "gh": 0.02,
+  "gd": 0.007,
+  "frame": 0
+ },
+ "materials": {
+  "front": "plastic-white",
+  "metal": "aluminium",
+  "panel": "front"
+ },
+ "parts": [
+  {
+   "id": "slab",
+   "type": "box",
+   "material": "front",
+   "size": [
+    "w",
+    "h",
+    "t"
+   ],
+   "at": [
+    0,
+    0,
+    "t / 2 - t * anchor"
+   ],
+   "when": {
+    "frame": 0
+   }
+  },
+  {
+   "id": "shaker",
+   "use": "items/components/panel-door",
+   "at": [
+    0,
+    0,
+    "0 - t * anchor"
+   ],
+   "when": "frame",
+   "params": {
+    "w": "w",
+    "h": "h",
+    "t": "t",
+    "s": "frame",
+    "anchor": 0,
+    "knob": 0
+   },
+   "materials": {
+    "wood": "front"
+   }
+  },
+  {
+   "id": "hbar",
+   "use": "items/modern/components/bar-handle",
+   "at": [
+    "hx",
+    "hy",
+    "t - t * anchor"
+   ],
+   "when": {
+    "pull": "hbar"
+   },
+   "params": {
+    "l": "hl",
+    "along": "across",
+    "stand": "stand",
+    "r": "r",
+    "sides": "sides",
+    "pr": "pr",
+    "psides": "psides",
+    "inset": "inset"
+   }
+  },
+  {
+   "id": "vbar",
+   "use": "items/modern/components/bar-handle",
+   "at": [
+    "hx",
+    "hy",
+    "t - t * anchor"
+   ],
+   "when": {
+    "pull": "vbar"
+   },
+   "params": {
+    "l": "hl",
+    "along": "upright",
+    "stand": "stand",
+    "r": "r",
+    "sides": "sides",
+    "pr": "pr",
+    "psides": "psides",
+    "inset": "inset"
+   }
+  },
+  {
+   "id": "knob",
+   "type": "lathe",
+   "material": "metal",
+   "profile": [
+    [
+     0.006,
+     0
+    ],
+    [
+     0.006,
+     0.014
+    ],
+    [
+     0.014,
+     0.02
+    ],
+    [
+     0.013,
+     0.028
+    ],
+    [
+     0,
+     0.03
+    ]
+   ],
+   "sides": 10,
+   "when": {
+    "pull": "knob"
+   },
+   "at": [
+    "hx",
+    "hy",
+    "t - t * anchor",
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "lip",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    "w",
+    0.014,
+    0.012
+   ],
+   "at": [
+    0,
+    "h / 2 - 0.007",
+    "t + 0.003 - t * anchor"
+   ],
+   "when": {
+    "pull": "lip"
+   }
+  },
+  {
+   "id": "grip",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    "hl",
+    "gh",
+    "gd + 0.003"
+   ],
+   "at": [
+    "hx",
+    "hy",
+    "t + gd / 2 - 0.0015 - t * anchor"
+   ],
+   "when": {
+    "pull": "grip"
+   }
+  }
+ ]
+}

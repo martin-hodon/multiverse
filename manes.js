@@ -11,11 +11,8 @@ import * as THREE from "three";
 import { setCount } from "./bounds.js";   // (an empty pool not drawn)
 import { thornLattice } from "./thorns.js";
 import { faceMaterial, SHADE } from "./heads.js";
+import { rng1 as rng } from "./rng.js";
 
-function rng(seed) {
-  let a = (seed >>> 0) || 1;
-  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-}
 const DEG = Math.PI / 180;
 
 // the mane's geometry in the NECK's frame: x along the neck from its chest end (0) to its head end (neckLen), y up, z to
@@ -98,14 +95,18 @@ export function createManes(scene, { cap = 32, shade = {} } = {}) {
   // (a mane's spikes are broad flat facets, not fine hair: a softer sheen than a head's, or they shine white)
   const mat = faceMaterial({ ...SHADE, ...shade, hair: { s1: .05, s2: .09, ...(shade.hair ?? {}) } });
   const kinds = new Map();   // the mane's numbers -> { mesh, n }
+  let byMane = new WeakMap();   // (a mane -> its kind: its numbers keyed once, not every frame -- a creature's mane never changes)
   const kindOf = (m) => {
+    let k = byMane.get(m);
+    if (k) return k;
     const key = `${m.r.toFixed(3)}|${m.neckLen.toFixed(3)}|${m.rA.toFixed(3)}|${m.headR.toFixed(3)}|${m.color}|${JSON.stringify(m.thorns)}`;
     if (!kinds.has(key)) {
       const mesh = new THREE.InstancedMesh(maneGeometry(m), mat, cap);
       setCount(mesh, 0); mesh.frustumCulled = false; scene.add(mesh);
       kinds.set(key, { mesh, n: 0 });
     }
-    return kinds.get(key);
+    byMane.set(m, k = kinds.get(key));
+    return k;
   };
   const M = new THREE.Matrix4(), X = new THREE.Vector3(), Y = new THREE.Vector3(), Z = new THREE.Vector3(), C = new THREE.Vector3(), H = new THREE.Vector3();
   return {
@@ -136,7 +137,7 @@ export function createManes(scene, { cap = 32, shade = {} } = {}) {
     },
     dispose() {
       for (const k of kinds.values()) { scene.remove(k.mesh); k.mesh.geometry.dispose(); k.mesh.dispose(); }
-      mat.userData.ramp.dispose(); mat.dispose(); kinds.clear();
+      mat.userData.ramp.dispose(); mat.dispose(); kinds.clear(); byMane = new WeakMap();
     },
   };
 }

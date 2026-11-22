@@ -46,6 +46,7 @@
 import { createComposite } from "./composite.js";
 import { createPuffs } from "./breath.js";
 import { makeHumpback, makeOrca, makePlesiosaurus, makeNarwhal, coatDef, variantDef } from "./species.js";
+import { lcg as rng } from "./rng.js";
 
 export const SEALIFE = {
   // loops: [semi-axis along, across] m; speed m/s; NEED: the water's least depth on the loop, m (with the fluke-up dive /
@@ -75,7 +76,6 @@ export const SEALIFE = {
 const TAU = Math.PI * 2;
 const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 const lerp = (a, b, t) => a + (b - a) * t;
-const rng = (seed) => { let s = (seed >>> 0) || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; };
 
 // a closed smooth loop through centre c: an ellipse (a along the angle th, b across) with a gentle wobble, sampled by arc
 // length so a body swims it at an even speed. at(d) -> [x, z, heading (rotY), curvature]

@@ -1,0 +1,145 @@
+{
+ "kind": "item",
+ "name": "Taxiway",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a taxiway segment, 30 m (TILE 30 m: ports x +-15): 23 m of pavement between 7.5 m shoulders, the yellow centre line with green lights, the double yellow edge lines, blue edge lights.",
+ "params": {},
+ "materials": {
+  "asphalt": "asphalt",
+  "shoulder": "#57585b",
+  "white": "tarmac-line",
+  "yellow": "paint-yellow",
+  "edgeLamp": "lamp",
+  "blueLamp": "#3a6cff",
+  "greenLamp": "lamp-green",
+  "redLamp": "lamp-red",
+  "lampPost": "#c9b23a",
+  "grass": "#5d7f3a"
+ },
+ "parts": [
+  {
+   "id": "taxi",
+   "type": "box",
+   "material": "asphalt",
+   "size": [
+    30.0,
+    0.35,
+    23.0
+   ],
+   "at": [
+    0.0,
+    -0.125,
+    0.0
+   ]
+  },
+  {
+   "id": "shoulder",
+   "type": "box",
+   "material": "shoulder",
+   "size": [
+    30.0,
+    0.34,
+    7.5
+   ],
+   "at": [
+    0.0,
+    -0.13,
+    15.25
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "centre",
+   "type": "box",
+   "material": "yellow",
+   "size": [
+    30.0,
+    0.004,
+    0.15
+   ],
+   "at": [
+    0,
+    0.052,
+    0
+   ]
+  },
+  {
+   "id": "edgeA",
+   "type": "box",
+   "material": "yellow",
+   "size": [
+    30.0,
+    0.004,
+    0.15
+   ],
+   "at": [
+    [
+     0,
+     0.052,
+     11.3
+    ],
+    [
+     0,
+     0.052,
+     11.0
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "cLight",
+   "type": "box",
+   "material": "greenLamp",
+   "size": [
+    0.25,
+    0.012,
+    0.25
+   ],
+   "at": [
+    [
+     -7.5,
+     0.055,
+     0
+    ],
+    [
+     7.5,
+     0.055,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "edgePost",
+   "type": "rod",
+   "material": "lampPost",
+   "r": 0.035,
+   "from": [
+    0,
+    0.04,
+    12.5
+   ],
+   "to": [
+    0,
+    0.32,
+    12.5
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "edgeLight",
+   "type": "sphere",
+   "material": "blueLamp",
+   "r": 0.08,
+   "at": [
+    0,
+    0.36,
+    12.5
+   ],
+   "mirror": "z",
+   "sides": 10
+  }
+ ]
+}

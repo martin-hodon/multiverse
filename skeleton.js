@@ -731,6 +731,7 @@ export function writeAnimal(an, t, fA, fB, fC) {
   if (an.sculpted || an.sculpts) {   // a SCULPTED body (bodies.js) is skinned to these frames: kept on the animal, the next figure overwrites _mats (sculpts: the bodies inside a bigger figure -- a mount under its rider)
     const bm = an._bm?.length === parts.length * 16 ? an._bm : (an._bm = new Float32Array(parts.length * 16));
     for (let i = 0; i < parts.length; i++) bm.set(_mats[i].elements, i * 16);
+    an._bmN = (an._bmN | 0) + 1;   // (posed again: bodies.js writes the bones from it only then)
   }
   if (parts.forwardFrom > 0) {   // the root's axis, turned by the frame that names the figure's forward
     const j = an.base * 3, m = _mats[parts.forwardFrom];

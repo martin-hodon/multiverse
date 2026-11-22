@@ -1,0 +1,32 @@
+{
+  "name": "Collar",
+  "kind": "component",
+  "_about": "A COLLAR round the neck: a short cone HUNG from `height` metres above the collar point down to just under it, its ring the neck's own (`fromRadius` 0: the tailor takes the neck's radius and its ease), flaring out by `flare` a metre -- a shirt's turned-down collar, a polo's, a coat's stand collar zipped up (flare low), a trench coat's turned out (flare high). Open at the front over `gap` degrees. Stiff: no folds, no sway.",
+  "params": {
+    "height": 0.04,
+    "drop": 0.012,
+    "flare": 0.8,
+    "gap": 30,
+    "fabric": "main"
+  },
+  "pieces": [
+    {
+      "name": "collar",
+      "kind": "hang",
+      "on": "torso",
+      "from": "collar - height",
+      "to": "collar + drop",
+      "fromRadius": 0,
+      "flare": "flare",
+      "wrap": [
+        180,
+        "360 - gap"
+      ],
+      "fabric": "main",
+      "pleats": 0,
+      "swing": false,
+      "lid": false,
+      "open": true
+    }
+  ]
+}

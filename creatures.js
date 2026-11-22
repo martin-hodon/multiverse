@@ -114,6 +114,13 @@ export function resolveDef(def, bank) {
   const parts = chain(def, bank);
   let flat = {};
   for (const d of parts) flat = merge(flat, d);
+  // (a kin's shape `{ "id": "fin", "drop": true }` takes the base's of that id out: the beluga's dorsal fin -- as a variant's does, sculptOver)
+  if (Array.isArray(flat.sculpt?.shape) && flat.sculpt.shape.some((s) => s?.drop)) flat.sculpt = { ...flat.sculpt, shape: flat.sculpt.shape.filter((s) => !s?.drop) };
+  if (Array.isArray(flat.parts) && flat.parts.some((q) => q?.drop)) {   // (a part taken out takes the parts hung on it along)
+    const gone = new Set(flat.parts.filter((q) => q?.drop).map((q) => q.id));
+    for (let more = true; more;) { more = false; for (const q of flat.parts) if (q && !gone.has(q.id) && gone.has(q.parent)) { gone.add(q.id); more = true; } }
+    flat.parts = flat.parts.filter((q) => q && !gone.has(q.id));
+  }
   const params = { ...(flat.params ?? {}) };
   const colors = Object.fromEntries(Object.entries(flat.colors ?? flat.c ?? {})
     .map(([k, v]) => [k, typeof v === "string" && HEX.test(v) ? parseInt(v.slice(1), 16) : v]));
@@ -189,6 +196,14 @@ export function buildCreature(def, bank) {
   // (dressed in a variant with a `scale` of its own: built at the definition's size, then scaled as a whole)
   if (def.scaleBy !== undefined) { const { scaleBy, ...own } = def; const b = buildCreature(own, bank); return scaleBy ? scaleDef(b, scaleBy) : b; }
   const d = resolveDef(def, bank);
+  // (2026-11-21) `size`: a KIN species -- one written as another's (`use`: "creatures/mammals/leopard", a cheetah) -- at that
+  // share of its size, built as the other and scaled as a whole (as a coat's `scale`). The definition's own, or else its base's
+  const size = typeof d.size === "number" && d.size > 0 && d.size !== 1 ? d.size : null;
+  delete d.size;
+  if (size) return scaleDef(buildOf(d), size);
+  return buildOf(d);
+}
+function buildOf(d) {
   if (d.extras) d.extras = expand(d.extras);
   const kind = d.kind ?? "mammal";
   delete d.kind;

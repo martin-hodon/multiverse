@@ -1,0 +1,127 @@
+{
+ "kind": "item",
+ "name": "Door card",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "the inside of a car's door: the trim panel facing -z (into the cabin), its cloth insert, the armrest with its pull, the opening handle, the speaker low at the front",
+ "params": {
+  "w": 1.0,
+  "h": 0.55
+ },
+ "materials": {
+  "card": "plastic-grey",
+  "insert": "upholstery-grey",
+  "pull": "plastic-black",
+  "lever": "chrome"
+ },
+ "parts": [
+  {
+   "id": "panel",
+   "type": "box",
+   "material": "card",
+   "size": [
+    "w",
+    "h",
+    0.03
+   ],
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "insert",
+   "type": "box",
+   "material": "insert",
+   "size": [
+    "w * 0.6",
+    "h * 0.22",
+    0.012
+   ],
+   "at": [
+    "-w * 0.08",
+    "h * 0.18",
+    -0.018
+   ]
+  },
+  {
+   "id": "arm",
+   "type": "box",
+   "material": "card",
+   "size": [
+    "w * 0.5",
+    0.05,
+    0.08
+   ],
+   "at": [
+    "-w * 0.12",
+    "-h * 0.05",
+    -0.05
+   ]
+  },
+  {
+   "id": "pull",
+   "type": "box",
+   "material": "pull",
+   "size": [
+    0.12,
+    0.035,
+    0.03
+   ],
+   "at": [
+    "-w * 0.12",
+    "-h * 0.05 + 0.045",
+    -0.08
+   ]
+  },
+  {
+   "id": "lever",
+   "type": "box",
+   "material": "lever",
+   "size": [
+    0.08,
+    0.025,
+    0.012
+   ],
+   "at": [
+    "w * 0.28",
+    "h * 0.28",
+    -0.02
+   ]
+  },
+  {
+   "id": "speaker",
+   "type": "lathe",
+   "material": "pull",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.075,
+     0
+    ],
+    [
+     0.075,
+     0.01
+    ],
+    [
+     0,
+     0.012
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    "w * 0.3",
+    "-h * 0.32",
+    -0.015,
+    0,
+    -90,
+    0
+   ]
+  }
+ ]
+}

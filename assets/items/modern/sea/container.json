@@ -1,0 +1,58 @@
+{
+ "kind": "item",
+ "name": "Shipping container (40 ft)",
+ "category": "freight",
+ "era": "1956-2030",
+ "region": "everywhere",
+ "_about": "an ISO 40 ft freight container: 12.192 m long, 2.438 m wide, 2.591 m high (8 ft 6 in) -- corrugated steel walls, corner posts and castings, the doors at -x with their four locking bars (`open` swings them round against the sides onto the inside: a plank floor, a light load or, `load` 0, none); its colour the line's that owns it, drawn by the seed",
+ "params": {
+  "open": 0,
+  "load": {
+   "pick": [
+    1,
+    1,
+    0
+   ]
+  }
+ },
+ "materials": {
+  "box": {
+   "pick": [
+    "#5d9ccb",
+    "#d8c9a8",
+    "#22427e",
+    "#3b7148",
+    "#d0642b",
+    "#4a6f95",
+    "#b8366f",
+    "#a8342e",
+    "#8c9196",
+    "#d9d9d4",
+    "#73492f",
+    "#d9b13a",
+    "#2f8487"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "box",
+   "use": "items/modern/components/container",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "L": 12.192,
+    "ribs": 44,
+    "load": "load"
+   },
+   "materials": {
+    "cbox": "box",
+    "cframe": "box",
+    "cbar": "steel"
+   }
+  }
+ ]
+}

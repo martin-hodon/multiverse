@@ -1,0 +1,215 @@
+{
+ "kind": "item",
+ "name": "Bus shelter",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a bus shelter, 4 x 1.6 m: glass back and ends in a steel frame, a roof sloping back, a bench inside, a lit advertising panel, the timetable case, and the stop's flag on its pole by the kerb; open to +x",
+ "params": {},
+ "materials": {
+  "frameS": "#4a5560",
+  "glazing": "glass-light",
+  "advert": "lamp",
+  "roofS": "#4a5560",
+  "fasciaS": "#2f8a4a",
+  "timetable": "paint-white",
+  "flagSign": "paint-yellow",
+  "flagMark": "#2f8a4a"
+ },
+ "parts": [
+  {
+   "id": "post",
+   "type": "box",
+   "material": "frameS",
+   "size": [
+    0.08,
+    2.5,
+    0.08
+   ],
+   "at": [
+    [
+     -0.75,
+     1.25,
+     -2.0
+    ],
+    [
+     -0.75,
+     1.25,
+     -0.6667
+    ],
+    [
+     -0.75,
+     1.25,
+     0.6667
+    ],
+    [
+     -0.75,
+     1.25,
+     2.0
+    ],
+    [
+     0.7,
+     1.25,
+     2.0
+    ],
+    [
+     0.7,
+     1.25,
+     -2.0
+    ]
+   ]
+  },
+  {
+   "id": "back",
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    0.02,
+    2.15,
+    3.9
+   ],
+   "at": [
+    -0.75,
+    1.35,
+    0
+   ]
+  },
+  {
+   "id": "end",
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    1.4,
+    2.15,
+    0.02
+   ],
+   "at": [
+    0,
+    1.35,
+    2.0
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "advert",
+   "type": "box",
+   "material": "advert",
+   "size": [
+    1.35,
+    1.7,
+    0.08
+   ],
+   "at": [
+    0,
+    1.25,
+    -1.94
+   ]
+  },
+  {
+   "id": "roofS",
+   "type": "box",
+   "material": "roofS",
+   "size": [
+    2.0,
+    0.08,
+    4.3
+   ],
+   "at": [
+    0.1,
+    2.55,
+    0,
+    0,
+    0,
+    -4
+   ]
+  },
+  {
+   "id": "roofEdge",
+   "type": "box",
+   "material": "fasciaS",
+   "size": [
+    0.06,
+    0.16,
+    4.3
+   ],
+   "at": [
+    1.08,
+    2.56,
+    0
+   ]
+  },
+  {
+   "id": "bench",
+   "use": "items/modern/infra/bench",
+   "at": [
+    -0.35,
+    0,
+    0.3
+   ]
+  },
+  {
+   "id": "timetable",
+   "type": "box",
+   "material": "timetable",
+   "size": [
+    0.03,
+    0.7,
+    0.5
+   ],
+   "at": [
+    -0.72,
+    1.5,
+    1.5
+   ]
+  },
+  {
+   "id": "flag",
+   "type": "rod",
+   "material": "frameS",
+   "r": 0.04,
+   "from": [
+    1.0,
+    0,
+    2.4
+   ],
+   "to": [
+    1.0,
+    3.0,
+    2.4
+   ],
+   "sides": 8
+  },
+  {
+   "id": "flagSign",
+   "type": "box",
+   "material": "flagSign",
+   "size": [
+    0.04,
+    0.5,
+    0.5
+   ],
+   "at": [
+    1.0,
+    2.8,
+    2.4
+   ]
+  },
+  {
+   "id": "flagH",
+   "type": "sphere",
+   "material": "flagMark",
+   "r": 0.17,
+   "at": [
+    1.0,
+    2.8,
+    2.4
+   ],
+   "stretch": [
+    0.35,
+    1,
+    1
+   ],
+   "sides": 12
+  }
+ ]
+}

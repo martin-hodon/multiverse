@@ -1,0 +1,1297 @@
+{
+ "kind": "item",
+ "name": "Stagecoach",
+ "category": "carriage",
+ "era": "1827-1910",
+ "region": "North America",
+ "_about": "a Concord stagecoach (Abbot-Downing, 1827-1900): the egg-shaped body on two leather thoroughbraces slung between iron jacks, three benches inside for nine (seen through the quarters' and the doors' let-down windows; the doors hinged at their rear edge and opening), the driver's box over the front boot with its footboard and brake, the railed roof with trunks, the leather rear boot; dished wheels 1.52 m and 1.12 m on a 1.57 m track; the pole for a team of four, ~2.3 m body, 2.6 m over the luggage",
+ "params": {
+  "open": 0
+ },
+ "materials": {
+  "paint": {
+   "pick": [
+    "#8c1f1c",
+    "#2f4f36",
+    "#20304f",
+    "#7a1d2a"
+   ]
+  },
+  "trim": "#d8b34a",
+  "gear": {
+   "pick": [
+    "#d7a62a",
+    "#c99a2a"
+   ]
+  },
+  "seat": "leather",
+  "trunk": "#5a3a22",
+  "trunk2": "#384b5a",
+  "bag": "#6b4b2a",
+  "glass": "window-glass",
+  "iron": "#2b2a28",
+  "brass": "brass",
+  "black": "#19191a",
+  "lamp": "lamp",
+  "leather": "leather-dark",
+  "inside": "#3a2a20"
+ },
+ "parts": [
+  {
+   "id": "rear",
+   "use": "items/modern/components/carriage-wheel",
+   "at": [
+    -1.05,
+    0.76,
+    0.785
+   ],
+   "mirror": "z",
+   "params": {
+    "r": 0.76,
+    "n": 16,
+    "w": 0.065,
+    "f": 0.08,
+    "hr": 0.11,
+    "hl": 0.34,
+    "sr": 0.021
+   },
+   "materials": {
+    "cwood": "gear",
+    "ciron": "iron",
+    "ccap": "brass"
+   }
+  },
+  {
+   "id": "front",
+   "use": "items/modern/components/carriage-wheel",
+   "at": [
+    1.15,
+    0.56,
+    0.785
+   ],
+   "mirror": "z",
+   "params": {
+    "r": 0.56,
+    "n": 12,
+    "w": 0.065,
+    "f": 0.075,
+    "hr": 0.1,
+    "hl": 0.32,
+    "sr": 0.019
+   },
+   "materials": {
+    "cwood": "gear",
+    "ciron": "iron",
+    "ccap": "brass"
+   }
+  },
+  {
+   "id": "rearAxle",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.03,
+   "from": [
+    -1.05,
+    0.76,
+    -0.785
+   ],
+   "to": [
+    -1.05,
+    0.76,
+    0.785
+   ],
+   "sides": 8
+  },
+  {
+   "id": "rearAxleBed",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.12,
+    0.12,
+    1.21
+   ],
+   "at": [
+    -1.05,
+    0.85,
+    0
+   ]
+  },
+  {
+   "id": "frontAxle",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.03,
+   "from": [
+    1.15,
+    0.56,
+    -0.785
+   ],
+   "to": [
+    1.15,
+    0.56,
+    0.785
+   ],
+   "sides": 8
+  },
+  {
+   "id": "frontAxleBed",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.12,
+    0.12,
+    1.21
+   ],
+   "at": [
+    1.15,
+    0.65,
+    0
+   ]
+  },
+  {
+   "id": "fifth",
+   "type": "ring",
+   "material": "iron",
+   "r": 0.42,
+   "tube": 0.02,
+   "at": [
+    1.15,
+    0.76,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "reach",
+   "type": "sweep",
+   "material": "gear",
+   "path": [
+    [
+     1.15,
+     0.68,
+     0
+    ],
+    [
+     0,
+     0.78,
+     0
+    ],
+    [
+     -1.05,
+     0.88,
+     0
+    ]
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "seg": 3,
+   "section": [
+    0.09,
+    0.11
+   ]
+  },
+  {
+   "id": "jackF",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     1.15,
+     0.71,
+     0.48
+    ],
+    [
+     1.0,
+     1.01,
+     0.48
+    ],
+    [
+     0.92,
+     1.36,
+     0.48
+    ]
+   ],
+   "seg": 3,
+   "mirror": "z",
+   "r": 0.025
+  },
+  {
+   "id": "jackR",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     -1.05,
+     0.91,
+     0.48
+    ],
+    [
+     -0.97,
+     1.21,
+     0.48
+    ],
+    [
+     -0.92,
+     1.48,
+     0.48
+    ]
+   ],
+   "seg": 3,
+   "mirror": "z",
+   "r": 0.025
+  },
+  {
+   "id": "brace",
+   "type": "sweep",
+   "material": "leather",
+   "path": [
+    [
+     0.92,
+     1.38,
+     0.48
+    ],
+    [
+     0.6,
+     1.02,
+     0.48
+    ],
+    [
+     0,
+     0.86,
+     0.48
+    ],
+    [
+     -0.6,
+     1.0,
+     0.48
+    ],
+    [
+     -0.92,
+     1.5,
+     0.48
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "seg": 4,
+   "mirror": "z",
+   "section": [
+    0.07,
+    0.11
+   ]
+  },
+  {
+   "id": "body",
+   "type": "loft",
+   "material": "paint",
+   "stations": [
+    [
+     -1.15,
+     0.56,
+     1.28,
+     2.22,
+     0.6
+    ],
+    [
+     -0.95,
+     0.66,
+     1.02,
+     2.33,
+     0.66
+    ],
+    [
+     -0.4,
+     0.69,
+     0.92,
+     2.37,
+     0.67
+    ],
+    [
+     0.4,
+     0.69,
+     0.92,
+     2.37,
+     0.67
+    ],
+    [
+     0.85,
+     0.66,
+     1.02,
+     2.33,
+     0.66
+    ],
+    [
+     1.05,
+     0.56,
+     1.28,
+     2.22,
+     0.6
+    ]
+   ],
+   "round": [
+    0.18,
+    0.07
+   ],
+   "double": true,
+   "seg": 4,
+   "corner": 4,
+   "holes": [
+    {
+     "x": [
+      0.45,
+      0.8
+     ],
+     "y": [
+      1.7,
+      2.14
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -0.8,
+      -0.45
+     ],
+     "y": [
+      1.7,
+      2.14
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -0.36,
+      0.36
+     ],
+     "y": [
+      1.12,
+      2.22
+     ],
+     "side": "both"
+    }
+   ]
+  },
+  {
+   "id": "door",
+   "type": "hinge",
+   "pivot": [
+    -0.36,
+    1.6,
+    0.6722
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": -85,
+   "parts": [
+    {
+     "type": "loft",
+     "material": "paint",
+     "stations": [
+      [
+       -1.15,
+       0.56,
+       1.28,
+       2.22,
+       0.6
+      ],
+      [
+       -0.95,
+       0.66,
+       1.02,
+       2.33,
+       0.66
+      ],
+      [
+       -0.4,
+       0.69,
+       0.92,
+       2.37,
+       0.67
+      ],
+      [
+       0.4,
+       0.69,
+       0.92,
+       2.37,
+       0.67
+      ],
+      [
+       0.85,
+       0.66,
+       1.02,
+       2.33,
+       0.66
+      ],
+      [
+       1.05,
+       0.56,
+       1.28,
+       2.22,
+       0.6
+      ]
+     ],
+     "round": [
+      0.18,
+      0.07
+     ],
+     "double": true,
+     "seg": 4,
+     "corner": 4,
+     "id": "skin",
+     "only": [
+      {
+       "x": [
+        -0.354,
+        0.354
+       ],
+       "y": [
+        1.126,
+        2.214
+       ],
+       "side": "right"
+      }
+     ],
+     "holes": [
+      {
+       "x": [
+        -0.26,
+        0.26
+       ],
+       "y": [
+        1.66,
+        2.12
+       ],
+       "side": "right"
+      }
+     ]
+    },
+    {
+     "id": "doorBelt",
+     "type": "sweep",
+     "material": "trim",
+     "path": [
+      [
+       -0.35,
+       1.6,
+       0.6872
+      ],
+      [
+       0.35,
+       1.6,
+       0.6872
+      ]
+     ],
+     "seg": 1,
+     "r": 0.014
+    },
+    {
+     "id": "handle",
+     "type": "box",
+     "material": "brass",
+     "size": [
+      0.08,
+      0.02,
+      0.02
+     ],
+     "at": [
+      0.26,
+      1.5,
+      0.6999
+     ]
+    },
+    {
+     "id": "doorLining",
+     "type": "box",
+     "material": "leather",
+     "size": [
+      0.62,
+      0.42,
+      0.02
+     ],
+     "at": [
+      0,
+      1.36,
+      0.6587
+     ]
+    },
+    {
+     "id": "glassTop",
+     "type": "box",
+     "material": "glass",
+     "size": [
+      0.5,
+      0.02,
+      0.012
+     ],
+     "at": [
+      0,
+      1.655,
+      0.6684
+     ]
+    },
+    {
+     "id": "strapPull",
+     "type": "box",
+     "material": "leather",
+     "size": [
+      0.05,
+      0.22,
+      0.01
+     ],
+     "at": [
+      0,
+      1.52,
+      0.6408
+     ]
+    }
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "inside",
+   "size": [
+    1.95,
+    0.04,
+    1.25
+   ],
+   "at": [
+    -0.05,
+    0.98,
+    0
+   ]
+  },
+  {
+   "id": "rearSeat",
+   "use": "items/modern/components/seat",
+   "at": [
+    -0.8,
+    1.0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "w": 1.15,
+    "d": 0.45,
+    "h": 0.42,
+    "back": 0.5,
+    "headrest": 0,
+    "pedestal": 1
+   },
+   "materials": {
+    "cover": "seat",
+    "frame": "inside"
+   }
+  },
+  {
+   "id": "frontSeat",
+   "use": "items/modern/components/seat",
+   "at": [
+    0.7,
+    1.0,
+    0,
+    180,
+    0,
+    0
+   ],
+   "params": {
+    "w": 1.15,
+    "d": 0.45,
+    "h": 0.42,
+    "back": 0.5,
+    "headrest": 0,
+    "pedestal": 1
+   },
+   "materials": {
+    "cover": "seat",
+    "frame": "inside"
+   }
+  },
+  {
+   "id": "jumpSeat",
+   "type": "box",
+   "material": "seat",
+   "size": [
+    0.36,
+    0.08,
+    1.15
+   ],
+   "at": [
+    0.0,
+    1.38,
+    0
+   ]
+  },
+  {
+   "id": "strap",
+   "type": "box",
+   "material": "leather",
+   "size": [
+    0.03,
+    0.12,
+    1.2
+   ],
+   "at": [
+    -0.12,
+    1.75,
+    0
+   ]
+  },
+  {
+   "id": "belt",
+   "type": "sweep",
+   "material": "trim",
+   "path": [
+    [
+     -0.95,
+     1.6,
+     0.665
+    ],
+    [
+     -0.65,
+     1.6,
+     0.685
+    ],
+    [
+     -0.37,
+     1.6,
+     0.6872
+    ]
+   ],
+   "seg": 3,
+   "mirror": "z",
+   "r": 0.014
+  },
+  {
+   "id": "beltF",
+   "type": "sweep",
+   "material": "trim",
+   "path": [
+    [
+     0.37,
+     1.6,
+     0.6872
+    ],
+    [
+     0.6,
+     1.6,
+     0.685
+    ],
+    [
+     0.85,
+     1.6,
+     0.665
+    ]
+   ],
+   "seg": 3,
+   "mirror": "z",
+   "r": 0.014
+  },
+  {
+   "id": "curtain",
+   "type": "sweep",
+   "material": "leather",
+   "path": [
+    [
+     -0.8,
+     2.17,
+     0.67
+    ],
+    [
+     -0.45,
+     2.17,
+     0.67
+    ]
+   ],
+   "seg": 1,
+   "at": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     1.25,
+     0,
+     0
+    ]
+   ],
+   "mirror": "z",
+   "r": 0.035
+  },
+  {
+   "id": "roofRail",
+   "type": "box",
+   "material": "black",
+   "size": [
+    1.9,
+    0.02,
+    0.02
+   ],
+   "at": [
+    -0.05,
+    2.62,
+    0.6
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "roofRailEnd",
+   "type": "box",
+   "material": "black",
+   "size": [
+    0.02,
+    0.02,
+    1.2
+   ],
+   "at": [
+    [
+     0.9,
+     2.62,
+     0
+    ],
+    [
+     -1.0,
+     2.62,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "railPost",
+   "type": "rod",
+   "material": "black",
+   "r": 0.01,
+   "from": [
+    0,
+    2.36,
+    0
+   ],
+   "to": [
+    0,
+    2.62,
+    0
+   ],
+   "sides": 4,
+   "along": {
+    "n": 6,
+    "from": [
+     -1.0,
+     0,
+     0.6
+    ],
+    "to": [
+     0.9,
+     0,
+     0.6
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "trunk",
+   "type": "box",
+   "material": "trunk",
+   "size": [
+    0.8,
+    0.42,
+    0.5
+   ],
+   "at": [
+    -0.45,
+    2.58,
+    0.25
+   ]
+  },
+  {
+   "id": "trunkBand",
+   "type": "box",
+   "material": "iron",
+   "size": [
+    0.03,
+    0.43,
+    0.51
+   ],
+   "at": [
+    [
+     -0.7,
+     2.58,
+     0.25
+    ],
+    [
+     -0.2,
+     2.58,
+     0.25
+    ]
+   ]
+  },
+  {
+   "id": "trunk2",
+   "type": "box",
+   "material": "trunk2",
+   "size": [
+    0.6,
+    0.3,
+    0.45
+   ],
+   "at": [
+    0.25,
+    2.52,
+    -0.3,
+    8,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "bag",
+   "type": "sphere",
+   "material": "bag",
+   "r": 0.18,
+   "at": [
+    -0.6,
+    2.5,
+    -0.35
+   ],
+   "stretch": [
+    1.6,
+    0.9,
+    1.0
+   ],
+   "sides": 10
+  },
+  {
+   "id": "frontBoot",
+   "type": "box",
+   "material": "leather",
+   "size": [
+    0.45,
+    0.92,
+    1.25
+   ],
+   "at": [
+    1.25,
+    1.83,
+    0
+   ]
+  },
+  {
+   "id": "boxSeat",
+   "type": "box",
+   "material": "seat",
+   "size": [
+    0.42,
+    0.12,
+    1.35
+   ],
+   "at": [
+    1.2,
+    2.34,
+    0
+   ]
+  },
+  {
+   "id": "boxBack",
+   "type": "box",
+   "material": "seat",
+   "size": [
+    0.06,
+    0.3,
+    1.35
+   ],
+   "at": [
+    0.98,
+    2.52,
+    0
+   ]
+  },
+  {
+   "id": "boxRail",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     1.0,
+     2.42,
+     0.7
+    ],
+    [
+     1.0,
+     2.62,
+     0.7
+    ],
+    [
+     1.4,
+     2.6,
+     0.7
+    ]
+   ],
+   "seg": 2,
+   "mirror": "z",
+   "r": 0.012
+  },
+  {
+   "id": "footboard",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.42,
+    0.04,
+    1.3
+   ],
+   "at": [
+    1.68,
+    1.72,
+    0
+   ]
+  },
+  {
+   "id": "toeboard",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.3,
+    0.04,
+    1.3
+   ],
+   "at": [
+    1.93,
+    1.82,
+    0,
+    0,
+    0,
+    55
+   ]
+  },
+  {
+   "id": "footIron",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.015,
+   "from": [
+    1.48,
+    1.45,
+    0.62
+   ],
+   "to": [
+    1.88,
+    1.72,
+    0.62
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "brake",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.018,
+   "from": [
+    1.25,
+    1.45,
+    0.72
+   ],
+   "to": [
+    1.4,
+    2.4,
+    0.74
+   ],
+   "sides": 6
+  },
+  {
+   "id": "brakeBlock",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.12,
+    0.1,
+    0.08
+   ],
+   "at": [
+    -0.43,
+    0.94,
+    0.78
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "brakeBar",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.02,
+   "from": [
+    -0.43,
+    0.94,
+    -0.78
+   ],
+   "to": [
+    -0.43,
+    0.94,
+    0.78
+   ],
+   "sides": 6
+  },
+  {
+   "id": "bootDeck",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.5,
+    0.05,
+    1.2
+   ],
+   "at": [
+    -1.4,
+    1.36,
+    0
+   ]
+  },
+  {
+   "id": "bootApron",
+   "type": "box",
+   "material": "leather",
+   "size": [
+    0.5,
+    0.65,
+    1.22
+   ],
+   "at": [
+    -1.38,
+    1.7,
+    0,
+    0,
+    0,
+    12
+   ]
+  },
+  {
+   "id": "bootIron",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.015,
+   "from": [
+    -1.15,
+    1.6,
+    0.58
+   ],
+   "to": [
+    -1.65,
+    1.36,
+    0.58
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "bootChain",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.008,
+   "from": [
+    -1.15,
+    2.1,
+    0.58
+   ],
+   "to": [
+    -1.63,
+    1.4,
+    0.58
+   ],
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "lamp",
+   "use": "items/modern/components/carriage-lamp",
+   "at": [
+    1.0,
+    1.95,
+    0.66,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "materials": {
+    "lbody": "black",
+    "lglass": "lamp",
+    "lmetal": "brass"
+   }
+  },
+  {
+   "id": "pole",
+   "type": "rod",
+   "material": "gear",
+   "r": 0.045,
+   "from": [
+    1.25,
+    0.61,
+    0
+   ],
+   "to": [
+    4.45,
+    1.0,
+    0
+   ],
+   "sides": 8,
+   "r0": 0.05,
+   "r1": 0.035
+  },
+  {
+   "id": "poleYoke",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.07,
+    0.07,
+    1.0
+   ],
+   "at": [
+    4.33,
+    0.99,
+    0
+   ]
+  },
+  {
+   "id": "poleTip",
+   "type": "sphere",
+   "material": "iron",
+   "r": 0.04,
+   "at": [
+    4.45,
+    1.0,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "poleEvener",
+   "type": "rod",
+   "material": "gear",
+   "r": 0.035,
+   "from": [
+    1.7,
+    0.69,
+    -0.6
+   ],
+   "to": [
+    1.7,
+    0.69,
+    0.6
+   ],
+   "sides": 6
+  },
+  {
+   "id": "poleSwingle",
+   "type": "rod",
+   "material": "gear",
+   "r": 0.025,
+   "from": [
+    1.87,
+    0.69,
+    -0.3
+   ],
+   "to": [
+    1.87,
+    0.69,
+    0.3
+   ],
+   "sides": 6,
+   "at": [
+    [
+     0,
+     0,
+     0.5
+    ],
+    [
+     0,
+     0,
+     -0.5
+    ]
+   ]
+  },
+  {
+   "id": "poleLeadEvener",
+   "type": "rod",
+   "material": "gear",
+   "r": 0.03,
+   "from": [
+    4.55,
+    1.0,
+    -0.6
+   ],
+   "to": [
+    4.55,
+    1.0,
+    0.6
+   ],
+   "sides": 6
+  },
+  {
+   "id": "poleLeadSwingle",
+   "type": "rod",
+   "material": "gear",
+   "r": 0.022,
+   "from": [
+    4.7,
+    1.0,
+    -0.3
+   ],
+   "to": [
+    4.7,
+    1.0,
+    0.3
+   ],
+   "sides": 6,
+   "at": [
+    [
+     0,
+     0,
+     0.5
+    ],
+    [
+     0,
+     0,
+     -0.5
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    1.2,
+    2.42,
+    -0.3
+   ],
+   "data": {
+    "face": 0
+   }
+  },
+  {
+   "role": "seat",
+   "at": [
+    -0.8,
+    1.42,
+    0
+   ],
+   "data": {
+    "face": 0
+   }
+  }
+ ]
+}

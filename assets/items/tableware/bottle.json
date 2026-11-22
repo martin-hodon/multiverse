@@ -1,0 +1,310 @@
+{
+ "kind": "item",
+ "name": "Bottle",
+ "category": "tableware",
+ "era": "1500-2030",
+ "region": "Europe",
+ "_about": "a bottle: a corked wine bottle of dark green or brown glass, a paper label on some (style wine, `label`), or a salt-glazed stoneware Bartmann bottle, round-bellied, a loop handle at -x and the bearded mask on its neck at +x (stoneware)",
+ "params": {
+  "style": {
+   "pick": [
+    "wine",
+    "wine",
+    "stoneware"
+   ]
+  },
+  "label": {
+   "pick": [
+    0,
+    1
+   ]
+  }
+ },
+ "materials": {
+  "glass": {
+   "pick": [
+    "glass-green",
+    "glass",
+    "glass",
+    "amber"
+   ]
+  },
+  "cork": "pine",
+  "label": {
+   "pick": [
+    "paint-cream",
+    "faience-white"
+   ]
+  },
+  "ware": "stoneware"
+ },
+ "parts": [
+  {
+   "id": "wine",
+   "type": "lathe",
+   "material": "glass",
+   "profile": [
+    [
+     0,
+     0.004
+    ],
+    [
+     0.03,
+     0
+    ],
+    [
+     0.036,
+     0.004
+    ],
+    [
+     0.037,
+     0.19
+    ],
+    [
+     0.034,
+     0.21
+    ],
+    [
+     0.022,
+     0.24
+    ],
+    [
+     0.0155,
+     0.265
+    ],
+    [
+     0.0145,
+     0.288
+    ],
+    [
+     0.017,
+     0.29
+    ],
+    [
+     0.017,
+     0.298
+    ],
+    [
+     0.012,
+     0.3
+    ],
+    [
+     0,
+     0.3
+    ]
+   ],
+   "sides": 14,
+   "when": {
+    "style": "wine"
+   }
+  },
+  {
+   "id": "cork",
+   "type": "lathe",
+   "material": "cork",
+   "profile": [
+    [
+     0.012,
+     0.3
+    ],
+    [
+     0.012,
+     0.31
+    ],
+    [
+     0,
+     0.31
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "wine"
+   }
+  },
+  {
+   "id": "labelBand",
+   "type": "lathe",
+   "material": "label",
+   "profile": [
+    [
+     0.0375,
+     0.07
+    ],
+    [
+     0.0375,
+     0.15
+    ]
+   ],
+   "sides": 14,
+   "caps": false,
+   "when": {
+    "style": "wine",
+    "label": 1
+   }
+  },
+  {
+   "id": "bartmann",
+   "type": "lathe",
+   "material": "ware",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.045,
+     0
+    ],
+    [
+     0.05,
+     0.008
+    ],
+    [
+     0.073,
+     0.06
+    ],
+    [
+     0.08,
+     0.1
+    ],
+    [
+     0.07,
+     0.15
+    ],
+    [
+     0.042,
+     0.182
+    ],
+    [
+     0.023,
+     0.198
+    ],
+    [
+     0.021,
+     0.222
+    ],
+    [
+     0.026,
+     0.23
+    ],
+    [
+     0.02,
+     0.233
+    ],
+    [
+     0,
+     0.23
+    ]
+   ],
+   "sides": 14,
+   "when": {
+    "style": "stoneware"
+   }
+  },
+  {
+   "id": "handleS",
+   "type": "sweep",
+   "material": "ware",
+   "path": [
+    [
+     -0.022,
+     0.21,
+     0
+    ],
+    [
+     -0.05,
+     0.208,
+     0
+    ],
+    [
+     -0.064,
+     0.18,
+     0
+    ],
+    [
+     -0.058,
+     0.162,
+     0
+    ]
+   ],
+   "sides": 5,
+   "when": {
+    "style": "stoneware"
+   },
+   "seg": 3,
+   "r": 0.007
+  },
+  {
+   "id": "mask",
+   "type": "sphere",
+   "material": "ware",
+   "r": 0.022,
+   "at": [
+    0.037,
+    0.178,
+    0
+   ],
+   "sides": 8,
+   "stretch": [
+    0.35,
+    1.1,
+    0.9
+   ],
+   "when": {
+    "style": "stoneware"
+   }
+  },
+  {
+   "id": "stopper",
+   "type": "lathe",
+   "material": "cork",
+   "profile": [
+    [
+     0.017,
+     0.226
+    ],
+    [
+     0.017,
+     0.238
+    ],
+    [
+     0,
+     0.238
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "stoneware"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.14,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

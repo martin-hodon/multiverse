@@ -7,7 +7,7 @@
 // A definition stands on others (`use`, defs.js) and is made of PARTS -- primitives (a rod, a lathe-turned profile, a
 // box, a sweep along a curve, a blade, a plate, a shield) and COMPONENTS (another item asked for by path, with its own
 // params: a turned leg, a pommel, a crossguard, an axe head). A HOLD says where a hand closes on it.
-import { evalValue } from "./expr.js";
+import { evalValue, SEED } from "./expr.js";
 import { flatten, isPlain } from "./defs.js";
 import { earClip } from "./arch/build.js";
 import { faceGeometry } from "./face.js";
@@ -15,12 +15,9 @@ import { hairGeometry } from "./hair.js";
 import { feathersGeometry } from "./feathers.js";
 import { petalsGeometry } from "./petals.js";
 import { strandGeometry, collarGeometry, bandGeometry, onFrames } from "./jewelry.js";   // what is worn on the body, on guides from it   // a whorl of petals (a flower, its sepals, a leaf pair)
+import { rng1 as rng } from "./rng.js";
 
 const DEG = Math.PI / 180;
-function rng(seed) {
-  let a = (seed >>> 0) || 1;
-  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-}
 
 // ---- PARAMS ---------------------------------------------------------------------------------------------------------
 // A param is a number, an expression over the params before it, a word ("cross", "oak"), a RANGE [lo, hi] -- a
@@ -37,8 +34,8 @@ function drawValue(v, P, r) {
   if (isPlain(v) && Array.isArray(v.pick)) return drawValue(v.pick[Math.floor(r() * v.pick.length) % v.pick.length], P, r);
   return typeof v === "string" || typeof v === "number" ? val(v, P) : v;
 }
-function paramsOf(def, over, r) {
-  const P = {};
+function paramsOf(def, over, r, seed) {
+  const P = { [SEED]: seed };   // (the seed rides with the params, unseen as a key, for expressions' rnd(...): expr.js)
   const all = { ...(def.params ?? {}), ...over };
   for (const [k, v] of Object.entries(all)) P[k] = drawValue(v, P, r);
   return P;
@@ -51,7 +48,7 @@ function passes(when, P) {
   return (Array.isArray(when) ? when : [when]).every((n) => !!P[n]);
 }
 // a part's numbers resolved (its words -- type, material, use, shape, charge -- kept as they are)
-const WORDS = new Set(["id", "type", "material", "rimMaterial", "backMaterial", "materials", "use", "shape", "charge", "_about", "role", "when", "name", "params", "mirror", "tips", "throatMaterial", "fit", "bead", "kind", "ground"]);
+const WORDS = new Set(["id", "type", "material", "rimMaterial", "backMaterial", "materials", "use", "shape", "charge", "_about", "role", "when", "name", "params", "mirror", "tips", "throatMaterial", "fit", "bead", "kind", "ground", "parts", "bare", "by"]);
 function resolvePart(p, P) {
   const out = {};
   for (const [k, v] of Object.entries(p)) {
@@ -86,6 +83,11 @@ function placeM(at = [0, 0, 0], s = 1) {
   return M;
 }
 const MIRROR_X = [-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0], MIRROR_Z = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0];
+// a turn of `a` radians about the unit axis u (Rodrigues), as a 3x4 with no offset -- a hinge's
+function axisM([x, y, z], a) {
+  const c = Math.cos(a), s = Math.sin(a), t = 1 - c;
+  return [t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0, t * x * y + s * z, t * y * y + c, t * y * z - s * x, 0, t * x * z - s * y, t * y * z + s * x, t * z * z + c, 0];
+}
 // a part's placements: `at` (one or a list), `along` { n, from, to } (n copies evenly from..to, their own yaw etc. from
 // `at`'s), `around` { n, r, plane: "xz" (a ring on the floor: legs, spokes, flanges -- each turned to face out) or "xy"
 // (a ring upright: studs round a shield, numerals round a dial), start, span } , `mirror` "x" (each also reflected
@@ -168,7 +170,11 @@ const sidesFor = (r, P, min = 5, max = 32) => Math.max(min, Math.min(max, Math.r
 // LATHE: a profile [[r, y], ...] turned about the y axis. Each profile segment is a band of its own (its normal from
 // its own slope: turned work has its edges -- a bead, a fillet, a cup -- where the profile turns). Caps where the
 // profile starts or ends off the axis. uv: along the profile (the grain runs along a turned leg), round the ring.
-function lathe(e, profile, sides, { capLo = true, capHi = true, faceted = false, wrap = null, disc = null } = {}) {
+function lathe(e, profile, sides, { capLo = true, capHi = true, faceted = false, wrap = null, disc = null, arc = null, smooth = false } = {}) {
+  // (`smooth`: its bands shade as one round body, except at a real turn -- a ball, a gourd)
+  // (`arc` [a0, a1] degrees: only that span round -- a beach ball's gore, an orange's segment; no caps)
+  const A0 = arc ? arc[0] * Math.PI / 180 : 0, SPAN = arc ? (arc[1] - arc[0]) * Math.PI / 180 : Math.PI * 2;
+  if (arc) capLo = capHi = false;
   // (`wrap` [W, H]: a painted pot -- one tile round it and along its whole profile, lip to foot, its y up: a picture, not a grain;
   // `disc` R: a unit tile seen from above, R the radius it reaches, its top toward -z: a cup's round picture)
   const total = wrap ? profile.reduce((a, q, i) => i ? a + Math.hypot(q[0] - profile[i - 1][0], q[1] - profile[i - 1][1]) : 0, 0) : 0;
@@ -181,7 +187,7 @@ function lathe(e, profile, sides, { capLo = true, capHi = true, faceted = false,
     const nr = dy / len, ny = -dr / len, rm = Math.max((r0 + r1) / 2, 1e-4);
     if (faceted) {   // (flat faces round: a square leg, an octagonal post -- each face its own normal, not smoothed round)
       for (let i = 0; i < sides; i++) {
-        const a0 = i / sides * Math.PI * 2, a1 = (i + 1) / sides * Math.PI * 2, am = (a0 + a1) / 2, n = [nr * Math.cos(am) / Math.cos(Math.PI / sides), ny, nr * Math.sin(am) / Math.cos(Math.PI / sides)];
+        const a0 = A0 + i / sides * SPAN, a1 = A0 + (i + 1) / sides * SPAN, am = (a0 + a1) / 2, n = [nr * Math.cos(am) / Math.cos(Math.PI / sides), ny, nr * Math.sin(am) / Math.cos(Math.PI / sides)];
         const q = [[r0, y0, a0, along], [r0, y0, a1, along], [r1, y1, a1, along + len], [r1, y1, a0, along + len]].map(([r, y, a, u]) => e.vert([r * Math.cos(a), y, r * Math.sin(a)], n, [u, a * rm]));
         e.quad(q[0], q[1], q[2], q[3]);
       }
@@ -189,10 +195,10 @@ function lathe(e, profile, sides, { capLo = true, capHi = true, faceted = false,
     }
     const ring0 = [], ring1 = [];
     const slope = (j) => { const q0 = profile[j], q1 = profile[j + 1]; if (!q1 || j < 0) return null; const l = Math.hypot(q1[0] - q0[0], q1[1] - q0[1]); return l < 1e-9 ? null : [(q1[1] - q0[1]) / l, -(q1[0] - q0[0]) / l]; };
-    const eased = (o) => { if (!o || !wrap) return [nr, ny]; const d = nr * o[0] + ny * o[1], x = nr + o[0], z = ny + o[1], l = Math.hypot(x, z); return d > .6 ? [x / l, z / l] : [nr, ny]; };   // (a thrown pot's body has no edges: its bands shade as one, except at a real turn: the lip, the foot)
+    const eased = (o) => { if (!o || !(wrap || smooth)) return [nr, ny]; const d = nr * o[0] + ny * o[1], x = nr + o[0], z = ny + o[1], l = Math.hypot(x, z); return d > .6 ? [x / l, z / l] : [nr, ny]; };   // (a thrown pot's body has no edges: its bands shade as one, except at a real turn: the lip, the foot)
     const [n0r, n0y] = eased(slope(k - 1)), [n1r, n1y] = eased(slope(k + 1));
     for (let i = 0; i <= sides; i++) {
-      const a = i / sides * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
+      const a = A0 + i / sides * SPAN, c = Math.cos(a), s = Math.sin(a);
       const uv = (r, u) => disc ? [r * c / (2 * disc), -r * s / (2 * disc)] : wrap ? wrapUV(a, u) : [u, a * rm];
       ring0.push(e.vert([r0 * c, y0, r0 * s], [n0r * c, n0y, n0r * s], uv(r0, along)));
       ring1.push(e.vert([r1 * c, y1, r1 * s], [n1r * c, n1y, n1r * s], uv(r1, along + len)));
@@ -275,7 +281,7 @@ const norm = (a) => { const l = Math.hypot(...a) || 1; return a.map((v) => v / l
 // horn), or a rectangle (`section` [w, h]: a strap, a chair's bent back rail, a bow's flat limb; `up` says which way
 // its h faces). `closed`: a ring. uv: along the curve, round the section.
 function sweep(e, p, P) {
-  const closed = !!p.closed, seg = Math.max(2, Math.round((p.seg ?? 6) * (P.detail ?? 1)));
+  const closed = !!p.closed, seg = p.exact ? 1 : Math.max(2, Math.round((p.seg ?? 6) * (P.detail ?? 1)));   // (exact: through the path's own points, no spline between -- ring `smooth: false`)
   const C = curveThrough(p.path, seg, closed), n = C.length;
   const rAt = (i) => {
     if (!p.radii) return p.r ?? .01;
@@ -285,6 +291,9 @@ function sweep(e, p, P) {
   // frames by parallel transport from the first normal (or `up`)
   const T = C.map((_, i) => norm(sub(C[closed ? (i + 1) % n : Math.min(n - 1, i + 1)], C[closed ? (i - 1 + n) % n : Math.max(0, i - 1)])));
   let N0 = p.up ? p.up.slice() : Math.abs(T[0][1]) < .9 ? [0, 1, 0] : [1, 0, 0];
+  // (an `up` along the first tangent -- a hull's keel beam starting straight down its sternpost, through the stations
+  //  themselves -- has no part across it: the section then fell flat to nothing. Another axis instead)
+  if (Math.hypot(...sub(N0, T[0].map((v) => v * dot(N0, T[0])))) < 1e-6) N0 = Math.abs(T[0][0]) < .9 ? [1, 0, 0] : [0, 0, 1];
   N0 = norm(sub(N0, T[0].map((v) => v * dot(N0, T[0]))));
   const Ns = [N0];
   for (let i = 1; i < n; i++) {
@@ -332,6 +341,126 @@ function sweep(e, p, P) {
       : (() => { const s = S, r = rAt(i);
           return Array.from({ length: s }, (_, k) => { const a = k / s * Math.PI * 2;
             return e.vert([0, 1, 2].map((q) => C[i][q] + (Ns[i][q] * Math.cos(a) + Bs[i][q] * Math.sin(a)) * r), t, [Math.cos(a) * r, Math.sin(a) * r]); }); })();
+    for (let k = 0; k < ring.length; k++) e.tri(c, ring[k], ring[(k + 1) % ring.length]);
+  }
+}
+
+// LOFT (2026-11-20, the modern age's bodies: a car's, a bus's, a carriage's, a fuselage, a locomotive's hood, a fridge's
+// rounded cabinet): ROUNDED-RECTANGLE SECTIONS ALONG +x, smoothed between `stations` -- each [x, hw, y0, y1, tw?]: its
+// half-width at the waist, its bottom and top, and its half-width at the top (`tw`, less: the sides lean in, a car's
+// glasshouse; default hw). `round` the corners' radius ([bottom, top], or one; shrunk where a section is too small),
+// `corner` its samples. HOLES -- the windows, the doors -- are cut through the SIDES: `holes` [{ x: [a, b], y: [a, b],
+// side: "both" | "right" (+z, starboard as on a ship) | "left" (-z) }], and through the ends (`caps` [back, front]: true a flat end, false open) none; their
+// edges are rows and columns of the grid, so a hole is exactly its rectangle (a bus's door, a carriage's windows: you
+// look in at the seats); `arches` [[x, y, r]] round notches up into both sides (a wheel's). `double`: the shell seen
+// from inside too (a bus, a cabin). uv: x along, the girth round.
+function loft(e, p, P) {
+  const St = p.stations.map((s) => Array.isArray(s) ? { x: s[0], hw: s[1], y0: s[2], y1: s[3], tw: s[4] ?? s[1] } : { tw: s.hw, ...s });
+  const R = Array.isArray(p.round) ? p.round : [p.round ?? .05, p.round ?? .05], m = Math.max(1, Math.round((p.corner ?? 3) * (P.detail ?? 1)));
+  const holes = (p.holes ?? []).map((h) => ({ side: "both", y: [-1e9, 1e9], ...h }));
+  // ONLY [{x, y, side, all}]: the loft kept just inside these (the rest cut) -- a door cut out of the very body it closes,
+  // the same stations, so it fits its hole exactly (`all`: its flat top and bottom too: a lid, a tailgate's roof)
+  // BARE ["bottom", "top"]: that flat face left off -- a shell open below (a car's body: the floor pan is its own)
+  const only = (p.only ?? []).map((h) => ({ side: "both", y: [-1e9, 1e9], ...h })), bare = new Set(p.bare ?? []);
+  // (the x samples: each span `seg` pieces, plus every hole's two ends, exactly)
+  const seg = Math.max(1, Math.round((p.seg ?? 4) * (P.detail ?? 1)));
+  const xs0 = St.map((s) => s.x), xs = new Set();
+  for (let i = 0; i + 1 < St.length; i++) for (let k = 0; k < seg; k++) xs.add(+(xs0[i] + (xs0[i + 1] - xs0[i]) * k / seg).toFixed(5));
+  xs.add(xs0[xs0.length - 1]);
+  for (const h of [...holes, ...only]) for (const x of h.x) if (x > xs0[0] && x < xs0[xs0.length - 1]) xs.add(+x.toFixed(5));
+  // (ARCHES [[x, y, r], ...]: a round notch cut up into both sides -- a wheel's arch -- the grid fine across it)
+  const arches = p.arches ?? [];
+  for (const [ax, , ar] of arches) for (let k = 0; k <= 16; k++) { const x = ax - ar + 2 * ar * k / 16; if (x > xs0[0] && x < xs0[xs0.length - 1]) xs.add(+x.toFixed(5)); }
+  const X = [...xs].sort((a, b) => a - b);
+  // (a station's values at any x: Catmull-Rom through the stations, in the span's own t)
+  const at = (x) => {
+    let i = 0; while (i < St.length - 2 && x > St[i + 1].x) i++;
+    const t = (x - St[i].x) / Math.max(1e-9, St[i + 1].x - St[i].x), g = (k) => St[Math.max(0, Math.min(St.length - 1, k))];
+    const a = g(i - 1), b = g(i), c = g(i + 1), d = g(i + 2), cr = (k) => b[k] + .5 * t * (c[k] - a[k] + t * (2 * a[k] - 5 * b[k] + 4 * c[k] - d[k] + t * (3 * (b[k] - c[k]) + d[k] - a[k])));
+    return { x, hw: Math.max(.002, cr("hw")), y0: cr("y0"), y1: cr("y1"), tw: Math.max(.002, cr("tw")) };
+  };
+  // (the heights the sides are cut at: every hole's sill and head -- the same list for every section, so the rows match)
+  const Hy = [...new Set([...[...holes, ...only].flatMap((h) => h.y).filter((y) => Math.abs(y) < 1e8), ...arches.flatMap(([, ay, ar]) => Array.from({ length: 7 }, (_, k) => +(ay + ar * Math.sin(k / 6 * Math.PI / 2)).toFixed(5)))])].sort((a, b) => a - b);
+  // A SECTION: points round from the bottom's middle (z 0) out to +z, up the side, over the top to its middle, then the
+  // same mirrored to -z -- [y, z, side?] where side marks the points on the flat side (a hole cuts only between those)
+  const section = (s) => {
+    const hgt = s.y1 - s.y0, rb = Math.min(R[0], s.hw * .98, hgt * .49), rt = Math.min(R[1], s.tw * .98, hgt * .49);
+    const half = [[s.y0, 0]];
+    for (let k = 0; k <= m; k++) { const a = -Math.PI / 2 + k / m * Math.PI / 2; half.push([s.y0 + rb + Math.sin(a) * rb, s.hw - rb + Math.cos(a) * rb]); }
+    const ya = s.y0 + rb, yb = s.y1 - rt, zAt = (y) => s.hw + (s.tw - s.hw) * (y - ya) / Math.max(1e-9, yb - ya);
+    for (const y of Hy) half.push([Math.max(ya + 1e-4, Math.min(yb - 1e-4, y)), zAt(Math.max(ya, Math.min(yb, y)))]);
+    for (let k = 0; k <= m; k++) { const a = k / m * Math.PI / 2; half.push([s.y1 - rt + Math.sin(a) * rt, s.tw - rt + Math.cos(a) * rt]); }
+    half.push([s.y1, 0]);
+    return [...half.slice(0, -1), ...half.slice(1).reverse().map(([y, z]) => [y, -z])];   // (round: +z half up, then -z half down)
+  };
+  const rows = X.map((x) => section(at(x))), nP = rows[0].length;
+  // the girth for uv
+  const vOf = rows.map((r) => { const v = [0]; for (let k = 1; k < r.length; k++) v.push(v[k - 1] + Math.hypot(r[k][0] - r[k - 1][0], r[k][1] - r[k - 1][1])); return v; });
+  const inHole = (i, k) => {
+    const xc = (X[i] + X[i + 1]) / 2, y0 = rows[i][k][0], y1 = rows[i][(k + 1) % nP][0], yc = (y0 + y1) / 2, zc = (rows[i][k][1] + rows[i][(k + 1) % nP][1]) / 2;
+    const flatQ = Math.abs(y1 - y0) < 1e-6;
+    // (a region: between its x's and y's, on its side; `z` [a, b]: only that far out from the middle -- the cabin's opening
+    //  in a body's top, not its shoulders; `all`: its flat top or bottom too, else only the sides are cut)
+    const inR = (h) => xc > h.x[0] && xc < h.x[1] && yc > h.y[0] && yc < h.y[1] && (h.side === "both" || (h.side === "right") === (zc > 0))
+      && (!h.z || (Math.abs(zc) > h.z[0] && Math.abs(zc) < h.z[1])) && (!flatQ || !!h.all);
+    if (only.length && !only.some(inR)) return true;   // (outside the piece kept)
+    if (flatQ && bare.size) { const s = at(xc); if (bare.has(yc < (s.y0 + s.y1) / 2 ? "bottom" : "top")) return true; }
+    if (flatQ) return holes.some(inR);   // (a flat bottom or top: a hole only if it says `all`)
+    if (arches.some(([ax, ay, ar]) => (xc - ax) ** 2 + (yc - ay) ** 2 < ar * ar)) return true;
+    return holes.some(inR);
+  };
+  const cut = X.slice(0, -1).map((_, i) => rows[i].map((_, k) => inHole(i, k)));
+  // (an ARCH's edge is cut along the grid, so it would show steps: every point at the cut's edge inside an arch's circle
+  // -- one that a kept quad still uses -- slides out along the radius onto the circle, and the notch's rim runs round)
+  const snap = (i, k, x, y) => {
+    for (const [ax, ay, ar] of arches) {
+      const d = Math.hypot(x - ax, y - ay);
+      if (d >= ar - 1e-6 || d < 1e-6) continue;
+      const kept = [[i - 1, k - 1], [i - 1, k], [i, k - 1], [i, k]].some(([a, b]) => a >= 0 && a < cut.length && !cut[a][(b + nP) % nP]);
+      // (not below the section's bottom, though: a point low in the bottom's rounded corner, slid out along the radius,
+      //  went down past it to the circle's foot -- a spike of skin hanging round the wheel to the ground (a bus's
+      //  lining, a car's sill); it slides along x to the circle instead, at its own height (2026-11-22))
+      if (kept) { const yr = ay + (y - ay) * ar / d; if (yr >= at(x).y0 - 1e-6) return [ax + (x - ax) * ar / d, yr];
+        return [ax + Math.sign(x - ax || 1) * Math.sqrt(Math.max(0, ar * ar - (y - ay) ** 2)), y]; }
+    }
+    return [x, y];
+  };
+  const pos = (i, k) => { const [x, y] = arches.length ? snap(i, k, X[i], rows[i][k][0]) : [X[i], rows[i][k][0]]; return [x, y, rows[i][k][1]]; };
+  // smooth normals from the grid's neighbours (round the girth closed: the last point is the first again)
+  const ids = rows.map((_, i) => rows[i].map((_, k) => {
+    const a = pos(Math.min(X.length - 1, i + 1), k), b = pos(Math.max(0, i - 1), k), c = pos(i, (k + 1) % (nP)), d = pos(i, (k - 1 + nP) % nP);
+    let n = norm(cross(sub(a, b), sub(c, d)));
+    const mid = [X[i], (at(X[i]).y0 + at(X[i]).y1) / 2, 0];
+    if (dot(n, sub(pos(i, k), mid)) < 0) n = n.map((v) => -v);
+    return e.vert(pos(i, k), n, [X[i], vOf[i][k]]);
+  }));
+  for (let i = 0; i + 1 < X.length; i++) for (let k = 0; k < nP; k++) if (!cut[i][k]) e.quad(ids[i][k], ids[i][(k + 1) % nP], ids[i + 1][(k + 1) % nP], ids[i + 1][k]);
+  const caps = Array.isArray(p.caps) ? p.caps : [p.caps !== false, p.caps !== false];   // (with `only`: an end's cap kept where a region reaches it)
+  for (const [i, sgn, on] of [[0, -1, caps[0]], [X.length - 1, 1, caps[1]]]) {
+    if (!on) continue;
+    // (a cap is cut as the sides are, but only by height: its outline clipped to the band of y that the `only` regions
+    //  reaching this end keep, less `all` holes reaching it from above or below -- a hatch's tailgate takes the upper
+    //  part of the body's rear face, the body keeps the lower)
+    const xe = X[i], reach = (h) => h.x[0] <= xe + 1e-6 && h.x[1] >= xe - 1e-6;
+    let lo = -Infinity, hi = Infinity;
+    const keep = only.filter(reach);
+    if (only.length) { if (!keep.length) continue; lo = Math.min(...keep.map((h) => h.y[0])); hi = Math.max(...keep.map((h) => h.y[1])); }
+    for (const h of holes) if (h.all && reach(h) && !h.z) { const s = at(xe); if (h.y[1] >= s.y1) hi = Math.min(hi, h.y[0]); else if (h.y[0] <= s.y0) lo = Math.max(lo, h.y[1]); }
+    let poly = rows[i].map(([y, z]) => [y, z]);
+    for (const [lim, side] of [[lo, 1], [hi, -1]]) {   // (Sutherland-Hodgman against y >= lo, then y <= hi)
+      if (!isFinite(lim)) continue;
+      const inside = (q) => side * (q[0] - lim) >= 0, out = [];
+      for (let k = 0; k < poly.length; k++) {
+        const a = poly[k], b = poly[(k + 1) % poly.length];
+        if (inside(a)) out.push(a);
+        if (inside(a) !== inside(b)) { const t = (lim - a[0]) / (b[0] - a[0]); out.push([lim, a[1] + (b[1] - a[1]) * t]); }
+      }
+      poly = out;
+    }
+    if (poly.length < 3) continue;
+    const cy = poly.reduce((s, q) => s + q[0], 0) / poly.length, cz = poly.reduce((s, q) => s + q[1], 0) / poly.length;
+    const c = e.vert([xe, cy, cz], [sgn, 0, 0], [cz, cy]);
+    const ring = poly.map(([y, z]) => e.vert([xe, y, z], [sgn, 0, 0], [z, y]));
     for (let k = 0; k < ring.length; k++) e.tri(c, ring[k], ring[(k + 1) % ring.length]);
   }
 }
@@ -418,7 +547,9 @@ function shield(sinkOf, M, p, P) {
   const zOf = (x, y) => (bend > 0 ? Math.sqrt(Math.max(0, bend * bend - x * x)) - bend : 0) + dish * Math.max(0, 1 - (x / (w / 2)) ** 2 - (y / (h / 2)) ** 2);
   const nOf = (x, y) => { const e = 1e-3; return norm([zOf(x - e, y) - zOf(x + e, y), zOf(x, y - e) - zOf(x, y + e), 2 * e]); };
   // rings from the outline in to the middle: the first band as wide as the rim (the rim's own material)
-  const K = Math.max(4, Math.round(8 * (P.detail ?? 1))), size = Math.min(w, h) / 2, sRim = rimW > 0 ? 1 - rimW / size : 1;
+  // (a FLAT face -- no bend, no dish -- is one fan in from the rim: the rings only follow a curve, and its uv is the
+  //  plane's own, so the painting is the same; 2026-11-22: a round shield 1172 -> 500 triangles, a longship's row of 32)
+  const K = !(bend > 0) && !dish ? 1 : Math.max(4, Math.round(8 * (P.detail ?? 1))), size = Math.min(w, h) / 2, sRim = rimW > 0 ? 1 - rimW / size : 1;
   const scales = rimW > 0 ? [1, sRim, ...Array.from({ length: K }, (_, k) => sRim * (1 - (k + 1) / K))] : Array.from({ length: K + 1 }, (_, k) => 1 - k / K);
   const face = emitter(sinkOf(p.material ?? "face", { W: w, H: h }), M), rim = rimW > 0 ? emitter(sinkOf(p.rimMaterial ?? "rim"), M) : face;
   const back = emitter(sinkOf(p.backMaterial ?? "back"), M);
@@ -458,6 +589,9 @@ function shield(sinkOf, M, p, P) {
 //   both sheer lines; `keelBeam` [w, h] a keel and stem and sternpost proud of the skin; `thwarts` { n, y, w, from, to }
 //   benches across an open boat; `ribs` { n, w } frames inside (an open boat's). uv: along the hull (a planked
 //   pattern runs fore and aft), down the section.
+//   `lean` (2026-11-22): the rail, the keel beam and the ribs go through the stations themselves (no spline between:
+//   the stations already follow the lines -- half their triangles), and `double` turns only the skin and its transoms
+//   (the rail, keel, ribs and thwarts are closed solids, the decks two-sided already: turned, their backs lay inside them).
 const lineAt = (line, t) => {
   if (typeof line === "number") return line;
   for (let k = 1; k < line.length; k++) if (t <= line[k][0] + 1e-9) { const f = (t - line[k - 1][0]) / Math.max(1e-9, line[k][0] - line[k - 1][0]); return line[k - 1][1] + (line[k][1] - line[k - 1][1]) * Math.max(0, Math.min(1, f)); }
@@ -469,7 +603,7 @@ function hull(sinkOf, M, p, P) {
   const plan = p.plan ?? [[0, 0], [.08, .38], [.3, .9], [.55, 1], [.8, .7], [.95, .25], [1, 0]];
   const full = p.fullness ?? .5, tumble = p.tumblehome ?? 0;
   const nS = Math.max(8, Math.round((p.stations ?? 28) * (P.detail ?? 1))), m = Math.max(3, Math.round((p.sides ?? 7) * (P.detail ?? 1)));
-  const e = emitter(sinkOf(p.material ?? "planks"), M);
+  const skin = sinkOf(p.material ?? "planks"), e = emitter(skin, M), lean = !!p.lean, sv0 = skin.pos.length / 3, si0 = skin.idx.length;
   // a section point: phi 0 at the gunwale .. pi/2 at the keel, on a quarter superellipse of exponent n (1 a V, 2 round, big a box)
   const n = 1 + 4 * Math.max(0, Math.min(1, lineAt(full, .5)));
   const at = (t, s, side) => {   // s: -1 (port gunwale) .. 0 (keel) .. 1 (starboard gunwale)
@@ -498,6 +632,11 @@ function hull(sinkOf, M, p, P) {
     const ring = grid[i].map((q) => e.vert(q, [sgn, 0, 0], [q[2], q[1]]));
     for (let jj = 0; jj < 2 * m; jj++) e.tri(c, ring[jj], ring[jj + 1]);
   }
+  if (lean && p.double) {   // (lean: the skin's back, turned, here -- the part's own `double` is skipped for a lean hull)
+    const sv1 = skin.pos.length / 3, si1 = skin.idx.length, off = sv1 - sv0;
+    for (let v = sv0; v < sv1; v++) { skin.pos.push(skin.pos[v * 3], skin.pos[v * 3 + 1], skin.pos[v * 3 + 2]); skin.nor.push(-skin.nor[v * 3], -skin.nor[v * 3 + 1], -skin.nor[v * 3 + 2]); skin.uv.push(skin.uv[v * 2], skin.uv[v * 2 + 1]); }
+    for (let i = si0; i < si1; i += 3) skin.idx.push(skin.idx[i] + off, skin.idx[i + 2] + off, skin.idx[i + 1] + off);
+  }
   // the half-width of the section at station t at height y (for a deck, a thwart)
   const widthAt = (t, y) => {
     const ky = lineAt(keel, t), sy = lineAt(sheer, t);
@@ -517,13 +656,13 @@ function hull(sinkOf, M, p, P) {
   }
   if (p.rail) {   // the gunwale: a round rod along each sheer line
     const er = emitter(sinkOf(p.railMaterial ?? "wood"), M);
-    for (const sgn of [-1, 1]) sweep(er, { path: grid.map((row) => row[sgn < 0 ? 0 : 2 * m]), r: p.rail, seg: 1, sides: 6 }, P);
+    for (const sgn of [-1, 1]) sweep(er, { path: grid.map((row) => row[sgn < 0 ? 0 : 2 * m]), r: p.rail, seg: 1, sides: 6, exact: lean }, P);
   }
   if (p.keelBeam) {   // the keel with its stem and sternpost: a square section along the bottom line and up the ends
     const [w, h] = p.keelBeam, ek = emitter(sinkOf(p.keelMaterial ?? "wood"), M), path = [];
     for (let i = 0; i <= nS; i++) { const t = i / nS; path.push([t * L, lineAt(keel, t) - h * .5, 0]); }
     const stern = [[0, lineAt(sheer, 0) + (p.postRise ?? 0), 0]], bow = [[L, lineAt(sheer, 1) + (p.postRise ?? 0), 0]];
-    sweep(ek, { path: [...stern, ...path, ...bow], section: [w, h], up: [0, 1, 0], seg: 1 }, P);
+    sweep(ek, { path: [...stern, ...path, ...bow], section: [w, h], up: [0, 1, 0], seg: 1, exact: lean }, P);
   }
   if (p.thwarts) {   // benches across an open boat, `n` of them from..to at height y (the half-width there), w wide
     const { n: nT = 3, y = D * .6, w = .2, from = .15, to = .85, thick = .03 } = p.thwarts;
@@ -537,7 +676,7 @@ function hull(sinkOf, M, p, P) {
     for (let i = 0; i < nR; i++) {
       const t = from + (to - from) * i / Math.max(1, nR - 1), path = [];
       for (let j = -m; j <= m; j++) { const q = at(t, j / m); path.push([q[0], q[1] + w * .4, q[2] * (1 - .01)]); }
-      sweep(er, { path, section: [w, w * .8], up: [0, 1, 0], seg: 1 }, P);
+      sweep(er, { path, section: [w, w * .8], up: [0, 1, 0], seg: 1, exact: lean }, P);
     }
   }
 }
@@ -602,20 +741,20 @@ export function materialOf(ref, lib, extraParams = null) {
   else if (typeof ref === "string" && /^#[0-9a-fA-F]{6}$/.test(ref)) m = { pattern: "materials/paint", palette: [ref, ref, ref, ref] };
   else m = lib[ref] ? { ...lib[ref] } : { pattern: "materials/paint", palette: ["#9a8a70", "#9a8a70", "#9a8a70", "#9a8a70"], missing: ref };
   if (extraParams && m.fit) m.params = { ...(m.params ?? {}), ...extraParams };
-  const key = `${m.pattern}|${JSON.stringify(m.palette ?? null)}|${m.scale ?? 1}|${JSON.stringify(m.params ?? null)}`;
-  return { key, pattern: m.pattern, palette: m.palette, scale: m.scale ?? 1, params: m.params, side: m.side };
+  const key = `${m.pattern}|${JSON.stringify(m.palette ?? null)}|${m.scale ?? 1}|${JSON.stringify(m.params ?? null)}${m.opacity < 1 ? "|op" + m.opacity : ""}`;
+  return { key, pattern: m.pattern, palette: m.palette, scale: m.scale ?? 1, params: m.params, side: m.side, ...(m.opacity < 1 ? { opacity: m.opacity } : {}) };   // (opacity: see-through -- a window's glass)
 }
 
 // ---- BUILDING ---------------------------------------------------------------------------------------------------------
 // def: an item definition (or its path in the bank); bank: path -> definition; lib: the materials library.
 //   seed: which one of its kind (its ranges and picks); params: the caller's own; materials: the caller's roles
 // -> { name, groups: [{ material, roles, pos, nor, uv, idx }], hold, markers, bounds, params }
-export function buildItem(def0, bank, lib, { seed = 1, params = {}, materials = {}, M = I3(), into = null, depth = 0 } = {}) {
+export function buildItem(def0, bank, lib, { seed = 1, params = {}, materials = {}, M = I3(), into = null, depth = 0, split = false, joints = null } = {}) {
   const def = typeof def0 === "string" ? bank.get(def0) : def0;
   if (!def) throw new Error(`items: no definition "${def0}"`);
   if (depth > 8) throw new Error("items: components nested too deep (one using itself?)");
   const flat = flatten(def, bank), r = rng(seed * 7919 + 17);
-  const P = paramsOf(flat, params, r);
+  const P = paramsOf(flat, params, r, seed);
   // the roles: the definition's own, drawn by the seed where it gives a choice, under the caller's
   // (a pick may stand anywhere in a material: a shield's heraldry picks its division and its tinctures)
   const drawn = (v) => isPlain(v) && Array.isArray(v.pick) ? drawn(v.pick[Math.floor(r() * v.pick.length) % v.pick.length])
@@ -639,12 +778,55 @@ export function buildItem(def0, bank, lib, { seed = 1, params = {}, materials = 
     const g = out.groups.get(mat.key); g.roles.add(role);   // (which roles drew into it: heads.js shades a face's lips flat by theirs)
     return g;
   };
-  for (const p0 of flat.parts ?? []) {
+  const J = joints ?? [];   // (the hinged pieces, split out: buildItem(..., { split: true }) -> built.joints)
+  // (`each`: n, or { n, as }: the part laid n times, each copy seeing its index `i` (0..n-1) and share `i_t` (0..1) in
+  //  its expressions -- a ship's shrouds fanning from one masthead to the rail, each id `<id>#i`)
+  const EACH = (flat.parts ?? []).flatMap((q) => {
+    if (q.each == null) return [[q, P]];
+    const e = isPlain(q.each) ? q.each : { n: q.each }, n = Math.max(0, Math.round(+val(e.n, P) || 0)), as = e.as ?? "i";
+    // (a `when` may name each copy's own param: "w{i}" -> w0, w1, .. -- a footbridge's bays, each side left open by its own)
+    const tag = "{" + as + "}", sub = (w, i) => typeof w === "string" ? w.split(tag).join(i) : Array.isArray(w) ? w.map((x) => sub(x, i))
+      : isPlain(w) ? Object.fromEntries(Object.entries(w).map(([k, v]) => [sub(k, i), v])) : w;
+    return Array.from({ length: n }, (_, i) => [{ ...q, id: `${q.id}#${i}`, ...(q.when !== undefined ? { when: sub(q.when, i) } : {}) }, { ...P, [as]: i, [as + "_t"]: n > 1 ? i / (n - 1) : .5 }]);
+  });
+  for (const [p0, P] of EACH) {
     if (!passes(p0.when, P)) continue;
+    if (p0.inside && !split && !(+P.open > 0)) continue;   // (seen only open -- a fridge's shelves, a drawer's tray: a static shut build, the game's, leaves it out)
     const p = resolvePart(p0, P);
+    let nth = 0;
     for (const PM of placementsOf(p, M, P)) {
+      if (p.type === "hinge" || p.type === "slide") {   // A HINGE: its `parts`, written in the parent's frame, turned about
+        // `pivot` round `axis` by `max` degrees times its share open (`open`, else the item's `open` param, 0..1) -- a car's
+        // door, a bonnet, a lid; A SLIDE: moved by `move` [x, y, z] times that share -- a van's side door, a drawer.
+        // split: built closed into a piece of their own (built.joints: the pivot, the axis and angle or the move) for the
+        // viewer to swing
+        const piv = p.pivot ?? [0, 0, 0], a0 = p.axis ?? [0, 1, 0], la = Math.hypot(...a0) || 1, ax = a0.map((v) => v / la);
+        // (`range` [a, b]: the joint moves only while the share runs from a to b -- a sliding door out first, then back)
+        const rg = p.range ?? [0, 1], sub = (t) => Math.max(0, Math.min(1, (t - rg[0]) / ((rg[1] - rg[0]) || 1)));
+        // (`by`: the param that turns it instead of `open`, SIGNED -1..1 -- a front wheel's `by: "steer"`, +1 full lock
+        //  to the left (+x toward -z); straight at 0; the viewer's open toggle leaves it alone)
+        const raw = p.by ? Math.max(-1, Math.min(1, +P[p.by] || 0)) : Math.max(0, Math.min(1, +(p.open ?? P.open ?? 0) || 0));
+        const share = p.by ? raw : sub(raw), ang = split ? 0 : (p.max ?? 90) * DEG * share;
+        const T = (v) => [1, 0, 0, v[0], 0, 1, 0, v[1], 0, 0, 1, v[2]], R = axisM(ax, ang), mv = p.move ?? [0, 0, 0];
+        const HM = p.type === "slide" ? mul(PM, T(mv.map((v) => split ? 0 : v * share))) : mul(PM, mul(T(piv), mul(R, T(piv.map((v) => -v)))));
+        // (a part marked `inside` -- a drawer's tray, a door's card -- is seen only open: a static build, shut, leaves it out)
+        const leaf = { name: p.id, parts: (p0.parts ?? []).filter((q) => split || share !== 0 || !q.inside), markers: p0.markers };
+        const args = { seed, params: P, materials: roles, M: HM, depth: depth + 1, split, joints: J };
+        if (!split) { buildItem(leaf, bank, lib, { ...args, into: out }); continue; }
+        const piece = { groups: new Map(), markers: out.markers, guides: out.guides }, kids = [];   // (kids: hinges on this one -- a jack-knife door's second leaf)
+        buildItem(leaf, bank, lib, { ...args, into: piece, joints: kids });
+        const det = PM[0] * (PM[5] * PM[10] - PM[6] * PM[9]) - PM[1] * (PM[4] * PM[10] - PM[6] * PM[8]) + PM[2] * (PM[4] * PM[9] - PM[5] * PM[8]);
+        const wa = [0, 1, 2].map((r) => PM[r * 4] * ax[0] + PM[r * 4 + 1] * ax[1] + PM[r * 4 + 2] * ax[2]), lw = Math.hypot(...wa) || 1;
+        const wm = [0, 1, 2].map((r) => PM[r * 4] * mv[0] + PM[r * 4 + 1] * mv[1] + PM[r * 4 + 2] * mv[2]);   // (a slide's move, turned as the item is)
+        J.push({ id: p.id + (nth++ ? "~" + nth : ""), pivot: [0, 1, 2].map((r) => PM[r * 4] * piv[0] + PM[r * 4 + 1] * piv[1] + PM[r * 4 + 2] * piv[2] + PM[r * 4 + 3]),
+                 axis: wa.map((v) => v / lw * Math.sign(det || 1)), max: p.type === "slide" ? 0 : (p.max ?? 90) * DEG, ...(p.type === "slide" ? { move: wm } : {}), ...(p.range ? { range: p.range } : {}), ...(p.by ? { by: p.by } : {}), open: raw, groups: piece.groups, ...(kids.length ? { kids } : {}) });
+        continue;
+      }
       if (p.type === "component" || p.use) {
-        buildItem(p.use, bank, lib, { seed: seed + (p.seed ?? 0), params: p.params ? deep(p.params, P) : {}, materials: { ...roles, ...(p.materials ?? {}) }, M: PM, into: out, depth: depth + 1 });
+        const j0 = J.length;
+        buildItem(p.use, bank, lib, { seed: seed + (p.seed ?? 0), params: { ...(P.open != null ? { open: P.open } : {}), ...(p.params ? deep(p.params, P) : {}) }, materials: { ...roles, ...(p.materials ?? {}) }, M: PM, into: out, depth: depth + 1, split, joints: J });   // (`open` rides down: a chest's drawers)
+        const tag = p.id + (nth++ ? "~" + nth : "");   // (its joints named under the part that placed it: "drawers~3.drawer")
+        for (let i = j0; i < J.length; i++) J[i].id = tag + "." + J[i].id;
         continue;
       }
       if (p.type === "shield") { shield(sinkOf, PM, p, P); continue; }
@@ -660,7 +842,7 @@ export function buildItem(def0, bank, lib, { seed = 1, params = {}, materials = 
         if (p.type === "hull") hull(sinkAll, PM, p, P); else if (p.type === "sail") sail(sinkAll, PM, p, P);
         else if (p.type === "feathers") feathersGeometry(p, P, (role) => emitter(sinkAll(role), PM));
         else if (p.type === "petals") petalsGeometry(p, P, (role) => emitter(sinkAll(role), PM)); else face(sinkAll, PM, p, P, out);
-        if (p.double || p.type === "sail" || p.type === "hair" || p.type === "feathers" || p.type === "petals") for (const sk of sinks) {
+        if ((p.double && !(p.type === "hull" && p.lean)) || p.type === "sail" || p.type === "hair" || p.type === "feathers" || p.type === "petals") for (const sk of sinks) {
           const [v0, i0] = marks.get(sk) ?? [0, 0], v1 = sk.pos.length / 3, i1 = sk.idx.length, off = v1 - v0;
           for (let v = v0; v < v1; v++) { sk.pos.push(sk.pos[v * 3], sk.pos[v * 3 + 1], sk.pos[v * 3 + 2]); sk.nor.push(-sk.nor[v * 3], -sk.nor[v * 3 + 1], -sk.nor[v * 3 + 2]); sk.uv.push(sk.uv[v * 2], sk.uv[v * 2 + 1]); }
           for (let i = i0; i < i1; i += 3) sk.idx.push(sk.idx[i] + off, sk.idx[i + 2] + off, sk.idx[i + 1] + off);
@@ -670,7 +852,8 @@ export function buildItem(def0, bank, lib, { seed = 1, params = {}, materials = 
       const sk = sinkOf(p.material ?? "wood"), v0 = sk.pos.length / 3, i0 = sk.idx.length;
       const e = emitter(sk, PM);
       switch (p.type) {
-        case "lathe": lathe(e, p.profile, p.sides ?? sidesFor(Math.max(...p.profile.map((q) => q[0])), P), { capLo: p.caps !== false, capHi: p.caps !== false, faceted: !!p.faceted, wrap: p.wrap ?? null, disc: p.disc ?? null }); break;
+        // (lathe `caps` "top" / "bottom": only that one -- a cask's head, whose underside is inside the cask)
+        case "lathe": lathe(e, p.profile, p.sides ?? sidesFor(Math.max(...p.profile.map((q) => q[0])), P), { capLo: p.caps !== false && p.caps !== "top", capHi: p.caps !== false && p.caps !== "bottom", faceted: !!p.faceted, wrap: p.wrap ?? null, disc: p.disc ?? null, arc: p.arc ?? null, smooth: !!p.smooth }); break;
         case "rod": {
           const from = p.from ?? [0, 0, 0], to = p.to ?? [0, p.length ?? 1, 0], d = sub(to, from), L = Math.hypot(...d);
           const r0 = p.r0 ?? p.r ?? .01, r1 = p.r1 ?? p.r ?? r0;
@@ -689,13 +872,17 @@ export function buildItem(def0, bank, lib, { seed = 1, params = {}, materials = 
           box(e, p.size, puffy ? p.round ?? 0 : 0, P); break;
         }
         case "sweep": sweep(e, p, P); break;
-        case "ring": {   // a torus: `r` round, `tube` thick
-          const k = Math.max(8, Math.min(24, Math.round((12 + 60 * p.r) * (P.detail ?? 1))));   // (round the ring: 12 a small one, 24 from a 20 cm radius)
-          sweep(e, { path: Array.from({ length: k }, (_, i) => [p.r * Math.cos(i / k * Math.PI * 2), 0, p.r * Math.sin(i / k * Math.PI * 2)]), r: p.tube ?? .01, closed: true, seg: 1, sides: p.sides }, P);
+        case "ring": {   // a torus: `r` round, `tube` thick, `sides` round its section
+          // (round the ring: 12 a small one, 24 from a 20 cm radius -- each span then split in two by the sweep's spline,
+          //  so 24..48 stations. `smooth: false` (2026-11-22) keeps to the stations themselves, `stations` how many: a
+          //  cord or a hoop at `sides` 6 and 12..16 stations is 144..192 triangles, where the smoothed one was 300..800)
+          const k = p.stations ?? Math.max(8, Math.min(24, Math.round((12 + 60 * p.r) * (P.detail ?? 1))));
+          sweep(e, { path: Array.from({ length: k }, (_, i) => [p.r * Math.cos(i / k * Math.PI * 2), 0, p.r * Math.sin(i / k * Math.PI * 2)]), r: p.tube ?? .01, closed: true, seg: 1, sides: p.sides, exact: p.smooth === false }, P);
           break;
         }
         case "blade": blade(e, p); break;
         case "plate": plate(e, p); break;
+        case "loft": loft(e, p, P); break;
         default: throw new Error(`items: no part type "${p.type}"`);
       }
       if (p.double) {   // a thin shell seen from both sides (a cup guard, a canopy, a sail): its back, turned
@@ -711,14 +898,20 @@ export function buildItem(def0, bank, lib, { seed = 1, params = {}, materials = 
   }
   if (into) return into;
   // ---- the result: arrays, bounds, the hold
-  const groups = [...out.groups.values()].filter((g) => g.idx.length).map((g) => ({
+  const typed = (map) => [...map.values()].filter((g) => g.idx.length).map((g) => ({
     material: g.material, roles: g.roles, pos: new Float32Array(g.pos), nor: new Float32Array(g.nor), uv: new Float32Array(g.uv),   // (roles: which drew into it -- heads.js shades the lips flat and the hair as hair by them)
     idx: (g.pos.length / 3 > 65535 ? Uint32Array : Uint16Array).from(g.idx) }));
+  const jt = (j) => ({ ...j, groups: typed(j.groups), ...(j.kids ? { kids: j.kids.map(jt) } : {}) });
+  const groups = typed(out.groups), jointsOut = J.map(jt);
+  const allJ = (L) => L.flatMap((j) => [...j.groups, ...allJ(j.kids ?? [])]);   // (every hinged piece's groups, kids and all)
+  // (each group knows the item it came from -- `src`, not enumerable, so nothing that copies or compares the arrays sees
+  //  it: the game's in-game budget walk, architecture.js itemBudget, sums the drawn triangles by item with it)
+  for (const g of [...groups, ...allJ(jointsOut)]) Object.defineProperty(g, "src", { value: typeof def0 === "string" ? def0 : flat.name ?? "item" });
   const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
-  for (const g of groups) for (let i = 0; i < g.pos.length; i += 3) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], g.pos[i + k]); hi[k] = Math.max(hi[k], g.pos[i + k]); }
+  for (const g of [...groups, ...allJ(jointsOut)]) for (let i = 0; i < g.pos.length; i += 3) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], g.pos[i + k]); hi[k] = Math.max(hi[k], g.pos[i + k]); }
   const hold = flat.hold ? deep(flat.hold, P) : null;
-  return { name: flat.name ?? String(def0), kind: flat.category ?? null, era: flat.era ?? null, groups, markers: out.markers, guides: out.guides ?? [], bounds: { lo, hi }, hold, params: P,
-           tris: groups.reduce((s, g) => s + g.idx.length / 3, 0) };
+  return { name: flat.name ?? String(def0), kind: flat.category ?? null, era: flat.era ?? null, groups, joints: jointsOut, markers: out.markers, guides: out.guides ?? [], bounds: { lo, hi }, hold, params: P,
+           tris: [...groups, ...allJ(jointsOut)].reduce((s, g) => s + g.idx.length / 3, 0) };
 }
 
 // ---- HOLDING IT --------------------------------------------------------------------------------------------------------
@@ -749,7 +942,7 @@ export function transformGroups(groups, M) {
       pos[i] = M[0] * x + M[1] * y + M[2] * z + M[3]; pos[i + 1] = M[4] * x + M[5] * y + M[6] * z + M[7]; pos[i + 2] = M[8] * x + M[9] * y + M[10] * z + M[11];
       nor[i] = M[0] * a + M[1] * b + M[2] * c; nor[i + 1] = M[4] * a + M[5] * b + M[6] * c; nor[i + 2] = M[8] * a + M[9] * b + M[10] * c;
     }
-    return { ...g, pos, nor };
+    return Object.defineProperty({ ...g, pos, nor }, "src", { value: g.src });
   });
 }
 

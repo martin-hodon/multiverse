@@ -2,95 +2,377 @@
  "kind": "item",
  "name": "Drawer front",
  "category": "component",
- "_about": "a drawer's front, `w` by `h`, flush in its case (its face at 0, looking +z), with one knob in the middle or two (knobs), or ring pulls (pull 'ring')",
+ "_about": "a drawer, `w` by `h`, its face at 0 looking +z -- a SLIDE: the front and its tray (bottom, sides, back; `depth` deep, `inside`: left out of a shut static build) pull out toward +z by `travel` of the depth with the item's open. `front` 'joinery' (a flush wooden front, its back at -0.02, with one knob in the middle or two (knobs), or ring pulls (pull 'ring')) or 'slab' (modern/components/slab-door, `t` thick from `back`: its pull 'hbar', 'vbar', 'knob', 'lip', 'grip' or 'none' at hx, hy, hl long; a bar's `stand`, `r`, `sides` and its posts' `pr`, `psides`, `inset` passed on to modern/components/bar-handle; the grip `gh` high and `gd` proud; `frame` > 0: a shaker front, its stiles and rails that wide, its sunk panel role panel -- the front unless the use maps it). The tray starts at `back` (where the front's back is): its floor `floor` thick and `lift` above the front's bottom edge, its sides and back `wall` thick and `rise` of h high, `gap` in from the front's ends; role `tray` (the wood by default). `stock` 1: two packs in it (roles goods, goods2 -- a freezer's), 'sheet': a baking sheet on its floor (role goods -- a cooker's), 'powder': two dividers (role tray) and powder in the widest compartment (role goods -- a washing machine's detergent drawer), 'veg': three heads of veg (role goods) and two tomatoes (role goods2) on its floor (a fridge's crisper)",
  "params": {
   "w": 0.8,
   "h": 0.18,
   "knobs": 2,
   "pull": "knob",
-  "lip": 0.008
+  "lip": 0.008,
+  "depth": 0.36,
+  "front": "joinery",
+  "travel": 0.8,
+  "back": -0.02,
+  "t": 0.018,
+  "hx": 0,
+  "hy": 0,
+  "hl": 0.16,
+  "floor": 0.01,
+  "lift": 0.015,
+  "wall": 0.012,
+  "rise": 0.7,
+  "gap": 0.025,
+  "stock": 0,
+  "stand": 0.028,
+  "r": 0.0065,
+  "sides": 8,
+  "frame": 0,
+  "pr": 0.005,
+  "psides": 6,
+  "inset": 0.012,
+  "gh": 0.02,
+  "gd": 0.007
  },
  "materials": {
   "wood": "mahogany",
-  "metal": "brass"
+  "metal": "brass",
+  "tray": "wood",
+  "goods": "#c9c1ad",
+  "goods2": "#3a6fb0"
  },
  "parts": [
   {
-   "id": "front",
-   "type": "box",
-   "material": "wood",
-   "size": [
-    "w",
-    "h",
-    0.02
+   "id": "drawer",
+   "type": "slide",
+   "move": [
+    0,
+    0,
+    "depth * travel"
    ],
-   "round": "lip",
-   "at": [
-    0,
-    0,
-    -0.01
+   "parts": [
+    {
+     "id": "front",
+     "type": "box",
+     "material": "wood",
+     "size": [
+      "w",
+      "h",
+      0.02
+     ],
+     "round": "lip",
+     "at": [
+      0,
+      0,
+      -0.01
+     ],
+     "when": {
+      "front": "joinery"
+     }
+    },
+    {
+     "id": "knob1",
+     "use": "items/components/knob",
+     "when": {
+      "front": "joinery",
+      "pull": "knob",
+      "knobs": 1
+     },
+     "at": [
+      0,
+      0,
+      0
+     ],
+     "params": {
+      "r": "h * 0.07"
+     }
+    },
+    {
+     "id": "knob2",
+     "use": "items/components/knob",
+     "when": {
+      "front": "joinery",
+      "pull": "knob",
+      "knobs": 2
+     },
+     "at": [
+      [
+       "0 - w * 0.27",
+       0,
+       0
+      ],
+      [
+       "w * 0.27",
+       0,
+       0
+      ]
+     ],
+     "params": {
+      "r": "h * 0.07"
+     }
+    },
+    {
+     "id": "rings",
+     "use": "items/components/ring-pull",
+     "when": {
+      "front": "joinery",
+      "pull": "ring"
+     },
+     "at": [
+      [
+       "0 - w * 0.27",
+       "h * 0.15",
+       0
+      ],
+      [
+       "w * 0.27",
+       "h * 0.15",
+       0
+      ]
+     ],
+     "params": {
+      "r": "h * 0.12"
+     }
+    },
+    {
+     "id": "slab",
+     "use": "items/modern/components/slab-door",
+     "when": {
+      "front": "slab"
+     },
+     "at": [
+      0,
+      0,
+      "back"
+     ],
+     "params": {
+      "w": "w",
+      "h": "h",
+      "t": "t",
+      "pull": "pull",
+      "hx": "hx",
+      "hy": "hy",
+      "hl": "hl",
+      "stand": "stand",
+      "r": "r",
+      "sides": "sides",
+      "frame": "frame",
+      "pr": "pr",
+      "psides": "psides",
+      "inset": "inset",
+      "gh": "gh",
+      "gd": "gd"
+     }
+    },
+    {
+     "id": "trayBottom",
+     "type": "box",
+     "material": "tray",
+     "size": [
+      "w - gap * 2",
+      "floor",
+      "depth"
+     ],
+     "at": [
+      0,
+      "0 - h / 2 + lift + floor / 2",
+      "back - depth / 2"
+     ],
+     "inside": true
+    },
+    {
+     "id": "traySides",
+     "type": "box",
+     "material": "tray",
+     "size": [
+      "wall",
+      "h * rise",
+      "depth"
+     ],
+     "at": [
+      "w / 2 - gap - wall / 2",
+      "0 - h / 2 + lift + h * rise / 2",
+      "back - depth / 2"
+     ],
+     "mirror": "x",
+     "inside": true
+    },
+    {
+     "id": "trayBack",
+     "type": "box",
+     "material": "tray",
+     "size": [
+      "w - gap * 2",
+      "h * rise",
+      "wall"
+     ],
+     "at": [
+      0,
+      "0 - h / 2 + lift + h * rise / 2",
+      "back - depth + wall / 2"
+     ],
+     "inside": true
+    },
+    {
+     "id": "packs",
+     "type": "box",
+     "material": "goods",
+     "size": [
+      0.2,
+      0.05,
+      0.16
+     ],
+     "at": [
+      [
+       "0 - w * 0.22",
+       "0 - h / 2 + lift + floor + 0.025",
+       "back - depth * 0.24"
+      ],
+      [
+       "w * 0.17",
+       "0 - h / 2 + lift + floor + 0.025",
+       "back - depth * 0.69"
+      ]
+     ],
+     "when": {
+      "stock": 1
+     },
+     "inside": true
+    },
+    {
+     "id": "pack2",
+     "type": "box",
+     "material": "goods2",
+     "size": [
+      0.14,
+      0.09,
+      0.12
+     ],
+     "at": [
+      "w * 0.26",
+      "0 - h / 2 + lift + floor + 0.045",
+      "back - depth * 0.44"
+     ],
+     "when": {
+      "stock": 1
+     },
+     "inside": true
+    },
+    {
+     "id": "sheet",
+     "type": "box",
+     "material": "goods",
+     "size": [
+      "w - gap * 2 - 0.1",
+      0.015,
+      "depth - 0.07"
+     ],
+     "at": [
+      0,
+      "0 - h / 2 + lift + floor + 0.0075",
+      "back - depth / 2"
+     ],
+     "when": {
+      "stock": "sheet"
+     },
+     "inside": true
+    },
+    {
+     "id": "dividers",
+     "type": "box",
+     "material": "tray",
+     "size": [
+      0.005,
+      "h * rise - 0.01",
+      "depth * 0.8"
+     ],
+     "at": [
+      [
+       "w * 0.105",
+       "0 - h / 2 + lift + floor + (h * rise - 0.01) / 2",
+       "back - depth * 0.4"
+      ],
+      [
+       "0 - w * 0.184",
+       "0 - h / 2 + lift + floor + (h * rise - 0.01) / 2",
+       "back - depth * 0.4"
+      ]
+     ],
+     "when": {
+      "stock": "powder"
+     },
+     "inside": true
+    },
+    {
+     "id": "powder",
+     "type": "box",
+     "material": "goods",
+     "size": [
+      "w * 0.37",
+      0.012,
+      "depth * 0.64"
+     ],
+     "at": [
+      "w * 0.295",
+      "0 - h / 2 + lift + floor + 0.006",
+      "back - depth * 0.45"
+     ],
+     "when": {
+      "stock": "powder"
+     },
+     "inside": true
+    },
+    {
+     "id": "veg",
+     "type": "sphere",
+     "material": "goods",
+     "r": 0.045,
+     "sides": 8,
+     "at": [
+      [
+       "0 - w * 0.25",
+       "0 - h / 2 + lift + floor + 0.045",
+       "back - depth * 0.25"
+      ],
+      [
+       "w * 0.21",
+       "0 - h / 2 + lift + floor + 0.045",
+       "back - depth * 0.46"
+      ],
+      [
+       "0 - w * 0.1",
+       "0 - h / 2 + lift + floor + 0.045",
+       "back - depth * 0.67"
+      ]
+     ],
+     "when": {
+      "stock": "veg"
+     },
+     "inside": true
+    },
+    {
+     "id": "tomato",
+     "type": "sphere",
+     "material": "goods2",
+     "r": 0.032,
+     "sides": 8,
+     "at": [
+      [
+       "w * 0.1",
+       "0 - h / 2 + lift + floor + 0.032",
+       "back - depth * 0.2"
+      ],
+      [
+       "w * 0.31",
+       "0 - h / 2 + lift + floor + 0.032",
+       "back - depth * 0.28"
+      ]
+     ],
+     "when": {
+      "stock": "veg"
+     },
+     "inside": true
+    }
    ]
-  },
-  {
-   "id": "knob1",
-   "use": "items/components/knob",
-   "when": {
-    "pull": "knob",
-    "knobs": 1
-   },
-   "at": [
-    0,
-    0,
-    0
-   ],
-   "params": {
-    "r": "h * 0.07"
-   }
-  },
-  {
-   "id": "knob2",
-   "use": "items/components/knob",
-   "when": {
-    "pull": "knob",
-    "knobs": 2
-   },
-   "at": [
-    [
-     "0 - w * 0.27",
-     0,
-     0
-    ],
-    [
-     "w * 0.27",
-     0,
-     0
-    ]
-   ],
-   "params": {
-    "r": "h * 0.07"
-   }
-  },
-  {
-   "id": "rings",
-   "use": "items/components/ring-pull",
-   "when": {
-    "pull": "ring"
-   },
-   "at": [
-    [
-     "0 - w * 0.27",
-     "h * 0.15",
-     0
-    ],
-    [
-     "w * 0.27",
-     "h * 0.15",
-     0
-    ]
-   ],
-   "params": {
-    "r": "h * 0.12"
-   }
   }
  ]
 }

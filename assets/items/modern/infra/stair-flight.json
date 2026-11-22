@@ -1,0 +1,152 @@
+{
+ "kind": "item",
+ "name": "Stair flight",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a straight stair: 17 cm risers on 29 cm treads, rising toward +x from its foot at the origin to a height H (its top edge at x 1.7 H), w wide, a sloping slab under it, stringers and handrails both sides",
+ "params": {
+  "H": 3.4,
+  "w": 2.0
+ },
+ "materials": {
+  "stepMat": "#a9a59c",
+  "stairSide": "#8d8a84",
+  "handrail": "steel"
+ },
+ "parts": [
+  {
+   "id": "step",
+   "type": "box",
+   "material": "stepMat",
+   "size": [
+    "H * 1.7 / (H / 0.17)",
+    0.17,
+    "w"
+   ],
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "along": {
+    "n": "H / 0.17",
+    "from": [
+     "H * 1.7 / (H / 0.17) / 2",
+     0.085,
+     0
+    ],
+    "to": [
+     "H * 1.7 - H * 1.7 / (H / 0.17) / 2",
+     "H - 0.085",
+     0
+    ]
+   }
+  },
+  {
+   "id": "string",
+   "type": "plate",
+   "material": "stairSide",
+   "outline": [
+    [
+     0,
+     0
+    ],
+    [
+     0.35,
+     0
+    ],
+    [
+     "H * 1.7",
+     "H - 0.35"
+    ],
+    [
+     "H * 1.7",
+     "H + 0.08"
+    ],
+    [
+     "H * 1.7 - 0.25",
+     "H + 0.08"
+    ],
+    [
+     -0.25,
+     0.08
+    ]
+   ],
+   "thick": 0.08,
+   "mirror": "z",
+   "at": [
+    0,
+    0,
+    "w / 2 + 0.04"
+   ]
+  },
+  {
+   "id": "rail",
+   "type": "rod",
+   "material": "handrail",
+   "r": 0.025,
+   "from": [
+    -0.2,
+    1.0,
+    "w / 2 + 0.02"
+   ],
+   "to": [
+    "H * 1.7",
+    "H + 1.0",
+    "w / 2 + 0.02"
+   ],
+   "sides": 8,
+   "mirror": "z"
+  },
+  {
+   "id": "baluster",
+   "type": "rod",
+   "material": "handrail",
+   "r": 0.018,
+   "from": [
+    0,
+    0.08,
+    "w / 2 + 0.02"
+   ],
+   "to": [
+    0,
+    1.0,
+    "w / 2 + 0.02"
+   ],
+   "sides": 6,
+   "along": {
+    "n": "H / 0.8 + 1",
+    "from": [
+     0,
+     0,
+     0
+    ],
+    "to": [
+     "H * 1.7",
+     "H",
+     0
+    ]
+   },
+   "mirror": "z"
+  },
+  {
+   "id": "under",
+   "type": "box",
+   "material": "stairSide",
+   "size": [
+    "H * 1.972",
+    0.2,
+    "w"
+   ],
+   "at": [
+    "H * 0.85 + 0.05",
+    "H / 2 - 0.16",
+    0,
+    0,
+    0,
+    30.47
+   ]
+  }
+ ]
+}

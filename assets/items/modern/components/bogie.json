@@ -1,0 +1,176 @@
+{
+ "kind": "item",
+ "name": "Bogie",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a two-axle railway bogie: four flanged wheels on two axles, the side frames with their springs -- for the standard gauge",
+ "params": {
+  "r": 0.46,
+  "g": 1.435,
+  "base": 2.5
+ },
+ "materials": {
+  "wheel": "steel",
+  "frame": "paint-black",
+  "spring": "steel-blue"
+ },
+ "parts": [
+  {
+   "id": "wheels",
+   "type": "lathe",
+   "material": "wheel",
+   "profile": [
+    [
+     "0",
+     "-0.07"
+    ],
+    [
+     "r + 0.025",
+     "-0.07"
+    ],
+    [
+     "r + 0.025",
+     "-0.05"
+    ],
+    [
+     "r",
+     "-0.04"
+    ],
+    [
+     "r * 0.97",
+     "0.07"
+    ],
+    [
+     0,
+     "0.07"
+    ]
+   ],
+   "sides": 20,
+   "at": [
+    [
+     "-base / 2",
+     "r",
+     "g / 2",
+     0,
+     -90,
+     0
+    ],
+    [
+     "base / 2",
+     "r",
+     "g / 2",
+     0,
+     -90,
+     0
+    ],
+    [
+     "-base / 2",
+     "r",
+     "-g / 2",
+     0,
+     90,
+     0
+    ],
+    [
+     "base / 2",
+     "r",
+     "-g / 2",
+     0,
+     90,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "axle",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.06,
+   "from": [
+    "0",
+    "r",
+    "-g / 2"
+   ],
+   "to": [
+    "0",
+    "r",
+    "g / 2"
+   ],
+   "sides": 8,
+   "at": [
+    [
+     "-base / 2",
+     0,
+     0
+    ],
+    [
+     "base / 2",
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "side",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "base + 0.6",
+    0.22,
+    0.12
+   ],
+   "at": [
+    0,
+    "r + 0.05",
+    "g / 2 + 0.13"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "bolster",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.4,
+    0.2,
+    "g + 0.3"
+   ],
+   "at": [
+    0,
+    "r + 0.2",
+    0
+   ]
+  },
+  {
+   "id": "coil",
+   "type": "rod",
+   "material": "spring",
+   "r": 0.09,
+   "from": [
+    0,
+    "r + 0.12",
+    "g / 2 + 0.13"
+   ],
+   "to": [
+    0,
+    "r + 0.34",
+    "g / 2 + 0.13"
+   ],
+   "sides": 10,
+   "at": [
+    [
+     "-0.25",
+     0,
+     0
+    ],
+    [
+     "0.25",
+     0,
+     0
+    ]
+   ],
+   "mirror": "z"
+  }
+ ]
+}

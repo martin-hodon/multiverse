@@ -1,0 +1,299 @@
+{
+ "kind": "item",
+ "name": "Recorder",
+ "category": "tool",
+ "era": "1300-1900",
+ "region": "Europe",
+ "_about": "the recorder: a turned pipe in three joints -- the head with its beak and window, the body with seven finger holes before and the thumb hole behind, the bell-flared foot -- from a descant to an alto (`L`), ivory rings at the joints on some",
+ "params": {
+  "L": [
+   0.31,
+   0.46
+  ],
+  "rings": {
+   "pick": [
+    0,
+    0,
+    1
+   ]
+  }
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "ash",
+    "cherry",
+    "walnut",
+    "ebony"
+   ]
+  },
+  "dark": "mouth-dark",
+  "ring": "ivory"
+ },
+ "parts": [
+  {
+   "id": "pipe",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.012,
+     0
+    ],
+    [
+     0.0158,
+     "L * 0.02"
+    ],
+    [
+     0.0162,
+     "L * 0.05"
+    ],
+    [
+     0.0138,
+     "L * 0.09"
+    ],
+    [
+     0.0118,
+     "L * 0.125"
+    ],
+    [
+     0.0136,
+     "L * 0.135"
+    ],
+    [
+     0.0136,
+     "L * 0.15"
+    ],
+    [
+     0.0115,
+     "L * 0.16"
+    ],
+    [
+     0.0122,
+     "L * 0.4"
+    ],
+    [
+     0.0132,
+     "L * 0.68"
+    ],
+    [
+     0.0152,
+     "L * 0.7"
+    ],
+    [
+     0.0168,
+     "L * 0.73"
+    ],
+    [
+     0.0168,
+     "L * 0.94"
+    ],
+    [
+     0.015,
+     "L * 0.975"
+    ],
+    [
+     0.0095,
+     "L"
+    ],
+    [
+     0,
+     "L"
+    ]
+   ],
+   "sides": 14
+  },
+  {
+   "id": "window",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.009,
+    0.007,
+    0.004
+   ],
+   "at": [
+    0,
+    "L * 0.885",
+    0.0155
+   ]
+  },
+  {
+   "id": "beak",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.02,
+    "L * 0.05",
+    0.012
+   ],
+   "at": [
+    0,
+    "L * 0.97",
+    -0.006
+   ],
+   "round": 0.004
+  },
+  {
+   "id": "holes",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.0026,
+   "from": [
+    0,
+    0,
+    0.0112
+   ],
+   "to": [
+    0,
+    0,
+    0.0142
+   ],
+   "sides": 8,
+   "at": [
+    [
+     0,
+     "L * 0.62",
+     0
+    ],
+    [
+     0,
+     "L * 0.555",
+     0
+    ],
+    [
+     0,
+     "L * 0.49",
+     0
+    ],
+    [
+     0,
+     "L * 0.415",
+     0
+    ],
+    [
+     0,
+     "L * 0.35",
+     0
+    ],
+    [
+     0,
+     "L * 0.285",
+     0
+    ],
+    [
+     0,
+     "L * 0.21",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "thumb",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.0028,
+   "from": [
+    0,
+    0,
+    -0.0118
+   ],
+   "to": [
+    0,
+    0,
+    -0.0145
+   ],
+   "sides": 8,
+   "at": [
+    0,
+    "L * 0.655",
+    0
+   ]
+  },
+  {
+   "id": "rings",
+   "type": "lathe",
+   "material": "ring",
+   "profile": [
+    [
+     0.0176,
+     0.0
+    ],
+    [
+     0.0167,
+     0.0016
+    ],
+    [
+     0.0149,
+     0.0016
+    ],
+    [
+     0.014,
+     0.0
+    ],
+    [
+     0.0149,
+     -0.0016
+    ],
+    [
+     0.0167,
+     -0.0016
+    ],
+    [
+     0.0176,
+     -0.0
+    ]
+   ],
+   "sides": 10,
+   "caps": false,
+   "when": "rings",
+   "at": [
+    [
+     0,
+     "L * 0.7",
+     0
+    ],
+    [
+     0,
+     "L * 0.142",
+     0
+    ]
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.12,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    -0.35,
+    1,
+    0
+   ],
+   "face": [
+    1,
+    0.35,
+    0
+   ]
+  },
+  "follow": 0,
+  "rest": "body"
+ }
+}

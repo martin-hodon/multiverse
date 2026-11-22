@@ -1,0 +1,250 @@
+{
+ "kind": "item",
+ "name": "Chain",
+ "category": "tool",
+ "era": "any",
+ "region": "everywhere",
+ "_about": "a forged iron chain hanging from the ring at its top, `n` links each across the last, `link` metres long, a hook at its lower end just over the floor (the origin)",
+ "params": {
+  "n": {
+   "pick": [
+    12,
+    16,
+    20,
+    24
+   ]
+  },
+  "link": [
+   0.055,
+   0.075
+  ]
+ },
+ "materials": {
+  "iron": {
+   "pick": [
+    "iron",
+    "iron",
+    "steel"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "linksA",
+   "type": "lathe",
+   "material": "iron",
+   "profile": [
+    [
+     "(link * 0.32) + (link * 0.1) * 1.0",
+     "(link * 0.1) * 0.0"
+    ],
+    [
+     "(link * 0.32) + (link * 0.1) * 0.0",
+     "(link * 0.1) * 1.0"
+    ],
+    [
+     "(link * 0.32) + (link * 0.1) * -1.0",
+     "(link * 0.1) * 0.0"
+    ],
+    [
+     "(link * 0.32) + (link * 0.1) * -0.0",
+     "(link * 0.1) * -1.0"
+    ],
+    [
+     "(link * 0.32) + (link * 0.1) * 1.0",
+     "(link * 0.1) * -0.0"
+    ]
+   ],
+   "sides": 7,
+   "caps": false,
+   "stretch": [
+    1,
+    1.55,
+    1
+   ],
+   "along": {
+    "n": "n / 2",
+    "from": [
+     0,
+     "0.06 + link * (0.5 + 0)",
+     0
+    ],
+    "to": [
+     0,
+     "0.06 + link * (n - 1.5 + 0)",
+     0
+    ]
+   },
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "linksB",
+   "type": "lathe",
+   "material": "iron",
+   "profile": [
+    [
+     "(link * 0.32) + (link * 0.1) * 1.0",
+     "(link * 0.1) * 0.0"
+    ],
+    [
+     "(link * 0.32) + (link * 0.1) * 0.0",
+     "(link * 0.1) * 1.0"
+    ],
+    [
+     "(link * 0.32) + (link * 0.1) * -1.0",
+     "(link * 0.1) * 0.0"
+    ],
+    [
+     "(link * 0.32) + (link * 0.1) * -0.0",
+     "(link * 0.1) * -1.0"
+    ],
+    [
+     "(link * 0.32) + (link * 0.1) * 1.0",
+     "(link * 0.1) * -0.0"
+    ]
+   ],
+   "sides": 7,
+   "caps": false,
+   "stretch": [
+    1,
+    1.55,
+    1
+   ],
+   "along": {
+    "n": "n / 2",
+    "from": [
+     0,
+     "0.06 + link * (0.5 + 1)",
+     0
+    ],
+    "to": [
+     0,
+     "0.06 + link * (n - 1.5 + 1)",
+     0
+    ]
+   },
+   "at": [
+    0,
+    0,
+    0,
+    90,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "topRing",
+   "type": "lathe",
+   "material": "iron",
+   "profile": [
+    [
+     "(link * 0.6) + (link * 0.13) * 1.0",
+     "(link * 0.13) * 0.0"
+    ],
+    [
+     "(link * 0.6) + (link * 0.13) * 0.0",
+     "(link * 0.13) * 1.0"
+    ],
+    [
+     "(link * 0.6) + (link * 0.13) * -1.0",
+     "(link * 0.13) * 0.0"
+    ],
+    [
+     "(link * 0.6) + (link * 0.13) * -0.0",
+     "(link * 0.13) * -1.0"
+    ],
+    [
+     "(link * 0.6) + (link * 0.13) * 1.0",
+     "(link * 0.13) * -0.0"
+    ]
+   ],
+   "sides": 10,
+   "caps": false,
+   "at": [
+    0,
+    "0.06 + link * (n - 0.2)",
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "hook",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     0,
+     "0.06 + link * 0.2",
+     0
+    ],
+    [
+     0,
+     0.045,
+     0
+    ],
+    [
+     0.01,
+     0.012,
+     0
+    ],
+    [
+     0.04,
+     0.012,
+     0
+    ],
+    [
+     0.05,
+     0.04,
+     0
+    ]
+   ],
+   "radii": [
+    0.008,
+    0.009,
+    0.009,
+    0.007,
+    0.004
+   ],
+   "sides": 6,
+   "seg": 3
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   "0.06 + link * (n - 0.2)",
+   0
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    1,
+    0,
+    0
+   ],
+   "face": [
+    0,
+    0,
+    1
+   ]
+  }
+ }
+}

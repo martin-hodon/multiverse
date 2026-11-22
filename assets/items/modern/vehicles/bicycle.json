@@ -1,0 +1,574 @@
+{
+ "kind": "item",
+ "name": "Bicycle",
+ "category": "vehicle",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a town bicycle, the diamond frame: its tubes, the fork, two wire-spoked wheels, the saddle on its post, a swept handlebar, the chainset, chain and pedals, mudguard and rack",
+ "params": {
+  "fenders": 1
+ },
+ "materials": {
+  "frame": {
+   "pick": [
+    "paint-green",
+    "paint-navy",
+    "paint-red",
+    "paint-black",
+    "paint-cream"
+   ]
+  },
+  "paint": "paint-black",
+  "chrome": "chrome",
+  "saddle": "leather-dark",
+  "grip": "leather-dark",
+  "chain": "steel",
+  "trim": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "rear",
+   "use": "items/modern/components/spoked-wheel",
+   "at": [
+    -0.52,
+    0.35,
+    0
+   ],
+   "params": {
+    "r": 0.35
+   }
+  },
+  {
+   "id": "front",
+   "use": "items/modern/components/spoked-wheel",
+   "at": [
+    0.55,
+    0.35,
+    0
+   ],
+   "params": {
+    "r": 0.35
+   }
+  },
+  {
+   "id": "seatTube",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.016,
+   "from": [
+    0,
+    0.3,
+    0
+   ],
+   "to": [
+    -0.13,
+    0.86,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "topTube",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.016,
+   "from": [
+    -0.1,
+    0.8,
+    0
+   ],
+   "to": [
+    0.4,
+    0.84,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "downTube",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.02,
+   "from": [
+    0,
+    0.3,
+    0
+   ],
+   "to": [
+    0.45,
+    0.66,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "headTube",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.022,
+   "from": [
+    0.39,
+    0.87,
+    0
+   ],
+   "to": [
+    0.46,
+    0.63,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "chainstay",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.01,
+   "from": [
+    0,
+    0.3,
+    0.04
+   ],
+   "to": [
+    -0.52,
+    0.35,
+    0.05
+   ],
+   "sides": 8,
+   "mirror": "z"
+  },
+  {
+   "id": "seatstay",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.009,
+   "from": [
+    -0.11,
+    0.79,
+    0.03
+   ],
+   "to": [
+    -0.52,
+    0.35,
+    0.05
+   ],
+   "sides": 8,
+   "mirror": "z"
+  },
+  {
+   "id": "fork",
+   "type": "sweep",
+   "material": "frame",
+   "path": [
+    [
+     0.46,
+     0.63,
+     0.045
+    ],
+    [
+     0.5,
+     0.48,
+     0.05
+    ],
+    [
+     0.555,
+     0.36,
+     0.05
+    ]
+   ],
+   "mirror": "z",
+   "r": 0.012
+  },
+  {
+   "id": "post",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.013,
+   "from": [
+    -0.12,
+    0.84,
+    0
+   ],
+   "to": [
+    -0.16,
+    0.97,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "saddle",
+   "type": "sphere",
+   "material": "saddle",
+   "r": 0.1,
+   "at": [
+    -0.19,
+    0.985,
+    0
+   ],
+   "stretch": [
+    1.4,
+    0.32,
+    0.85
+   ],
+   "sides": 12
+  },
+  {
+   "id": "saddleNose",
+   "type": "sphere",
+   "material": "saddle",
+   "r": 0.05,
+   "at": [
+    -0.08,
+    0.98,
+    0
+   ],
+   "stretch": [
+    1.6,
+    0.6,
+    0.9
+   ],
+   "sides": 10
+  },
+  {
+   "id": "stem",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.013,
+   "from": [
+    0.39,
+    0.87,
+    0
+   ],
+   "to": [
+    0.36,
+    1.0,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "bar",
+   "type": "sweep",
+   "material": "chrome",
+   "path": [
+    [
+     0.25,
+     1.02,
+     -0.28
+    ],
+    [
+     0.33,
+     1.0,
+     -0.2
+    ],
+    [
+     0.36,
+     1.0,
+     0
+    ],
+    [
+     0.33,
+     1.0,
+     0.2
+    ],
+    [
+     0.25,
+     1.02,
+     0.28
+    ]
+   ],
+   "r": 0.011
+  },
+  {
+   "id": "grip",
+   "type": "rod",
+   "material": "grip",
+   "r": 0.017,
+   "from": [
+    0.27,
+    1.02,
+    0.2
+   ],
+   "to": [
+    0.24,
+    1.02,
+    0.3
+   ],
+   "sides": 8,
+   "mirror": "z"
+  },
+  {
+   "id": "chainring",
+   "type": "ring",
+   "material": "chrome",
+   "r": 0.095,
+   "tube": 0.006,
+   "at": [
+    0,
+    0.3,
+    0.07,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "sprocket",
+   "type": "ring",
+   "material": "chrome",
+   "r": 0.04,
+   "tube": 0.005,
+   "at": [
+    -0.52,
+    0.35,
+    0.07,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "chain",
+   "type": "sweep",
+   "material": "chain",
+   "path": [
+    [
+     0,
+     0.395,
+     0.07
+    ],
+    [
+     -0.52,
+     0.39,
+     0.07
+    ],
+    [
+     -0.56,
+     0.35,
+     0.07
+    ],
+    [
+     -0.52,
+     0.31,
+     0.07
+    ],
+    [
+     0,
+     0.205,
+     0.07
+    ],
+    [
+     0.095,
+     0.3,
+     0.07
+    ]
+   ],
+   "closed": true,
+   "r": 0.004
+  },
+  {
+   "id": "crank",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.009,
+   "from": [
+    0,
+    0.3,
+    0.085
+   ],
+   "to": [
+    0.1,
+    0.14,
+    0.085
+   ],
+   "sides": 8
+  },
+  {
+   "id": "crankL",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.009,
+   "from": [
+    0,
+    0.3,
+    -0.06
+   ],
+   "to": [
+    -0.1,
+    0.46,
+    -0.06
+   ],
+   "sides": 8
+  },
+  {
+   "id": "pedal",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.09,
+    0.02,
+    0.08
+   ],
+   "at": [
+    [
+     0.1,
+     0.14,
+     0.14
+    ],
+    [
+     -0.1,
+     0.46,
+     -0.12
+    ]
+   ]
+  },
+  {
+   "id": "axleBB",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.012,
+   "from": [
+    0,
+    0.3,
+    -0.07
+   ],
+   "to": [
+    0,
+    0.3,
+    0.09
+   ],
+   "sides": 8
+  },
+  {
+   "id": "fender",
+   "type": "sweep",
+   "material": "paint",
+   "path": [
+    [
+     -0.22,
+     0.55,
+     0
+    ],
+    [
+     -0.52,
+     0.75,
+     0
+    ],
+    [
+     -0.84,
+     0.51,
+     0
+    ]
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "when": "fenders",
+   "section": [
+    0.05,
+    0.006
+   ]
+  },
+  {
+   "id": "rack",
+   "type": "box",
+   "material": "chrome",
+   "size": [
+    0.34,
+    0.012,
+    0.14
+   ],
+   "at": [
+    -0.5,
+    0.79,
+    0
+   ],
+   "when": "fenders"
+  },
+  {
+   "id": "rackStay",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.006,
+   "from": [
+    -0.64,
+    0.785,
+    0.07
+   ],
+   "to": [
+    -0.52,
+    0.35,
+    0.06
+   ],
+   "sides": 4,
+   "mirror": "z",
+   "when": "fenders"
+  },
+  {
+   "id": "rackArm",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.006,
+   "from": [
+    -0.34,
+    0.785,
+    0.06
+   ],
+   "to": [
+    -0.12,
+    0.8,
+    0.03
+   ],
+   "sides": 4,
+   "mirror": "z",
+   "when": "fenders"
+  },
+  {
+   "id": "fenderF",
+   "type": "sweep",
+   "material": "paint",
+   "path": [
+    [
+     0.29,
+     0.57,
+     0
+    ],
+    [
+     0.55,
+     0.75,
+     0
+    ],
+    [
+     0.85,
+     0.55,
+     0
+    ]
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "when": "fenders",
+   "section": [
+    0.05,
+    0.006
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    -0.17,
+    1.0,
+    0
+   ],
+   "data": {
+    "face": 0
+   }
+  }
+ ]
+}

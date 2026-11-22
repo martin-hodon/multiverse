@@ -1,0 +1,422 @@
+{
+ "kind": "item",
+ "name": "Pedestrian light",
+ "category": "street",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a pedestrian signal on its own 3 m pole at the far side of a crossing: the red man standing and the green man walking, 200 mm squares, hooded, facing +x at 2.2 m; a yellow push-button box at 1.1 m. `phase` as the traffic's: the green man shows on red.",
+ "params": {
+  "phase": {
+   "pick": [
+    "red",
+    "green"
+   ]
+  }
+ },
+ "materials": {
+  "pole": "paint-grey",
+  "push": "paint-yellow",
+  "cap": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "pole",
+   "use": "items/modern/components/pole",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "h": 2.85,
+    "r": 0.057,
+    "base": "none"
+   }
+  },
+  {
+   "id": "ped",
+   "use": "items/modern/components/signal-head",
+   "at": [
+    0.075,
+    2.25,
+    0
+   ],
+   "params": {
+    "kind": "ped",
+    "phase": "phase"
+   }
+  },
+  {
+   "id": "bracket",
+   "type": "box",
+   "material": "pole",
+   "size": [
+    0.09,
+    0.05,
+    0.08
+   ],
+   "at": [
+    [
+     0.03,
+     2.45,
+     0
+    ],
+    [
+     0.03,
+     2.05,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "pushBox",
+   "type": "box",
+   "material": "push",
+   "size": [
+    0.11,
+    0.24,
+    0.07
+   ],
+   "at": [
+    0,
+    1.1,
+    0.07
+   ],
+   "round": 0.012
+  },
+  {
+   "id": "pushStrap",
+   "type": "box",
+   "material": "pole",
+   "size": [
+    0.12,
+    0.03,
+    0.12
+   ],
+   "at": [
+    [
+     0,
+     1.18,
+     0.02
+    ],
+    [
+     0,
+     1.02,
+     0.02
+    ]
+   ]
+  },
+  {
+   "id": "waitLamp",
+   "type": "box",
+   "material": "#2a2a2a",
+   "size": [
+    0.07,
+    0.04,
+    0.004
+   ],
+   "at": [
+    0,
+    1.16,
+    0.106
+   ]
+  },
+  {
+   "id": "wait0_0",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     -0.0287,
+     1.1727,
+     0.109
+    ],
+    [
+     -0.0239,
+     1.1473,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait0_1",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     -0.0247,
+     1.1473,
+     0.109
+    ],
+    [
+     -0.0193,
+     1.1661,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait0_2",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     -0.0203,
+     1.1661,
+     0.109
+    ],
+    [
+     -0.0149,
+     1.1473,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait0_3",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     -0.0157,
+     1.1473,
+     0.109
+    ],
+    [
+     -0.0109,
+     1.1727,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait1_0",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     -0.0078,
+     1.1473,
+     0.109
+    ],
+    [
+     -0.0004,
+     1.1727,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait1_1",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     -0.0014,
+     1.1727,
+     0.109
+    ],
+    [
+     0.006,
+     1.1473,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait1_2",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     -0.0066,
+     1.1563,
+     0.109
+    ],
+    [
+     0.0048,
+     1.1563,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait2_0",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     0.0112,
+     1.1472,
+     0.109
+    ],
+    [
+     0.0112,
+     1.1728,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait3_0",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     0.0147,
+     1.171,
+     0.109
+    ],
+    [
+     0.0306,
+     1.171,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "wait3_1",
+   "type": "sweep",
+   "material": "lamp-amber",
+   "path": [
+    [
+     0.0227,
+     1.1728,
+     0.109
+    ],
+    [
+     0.0227,
+     1.1472,
+     0.109
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "closed": false,
+   "seg": 2,
+   "section": [
+    0.0035,
+    0.002
+   ]
+  },
+  {
+   "id": "button",
+   "type": "rod",
+   "material": "#d8d8d8",
+   "r": 0.017,
+   "from": [
+    0,
+    1.07,
+    0.104
+   ],
+   "to": [
+    0,
+    1.07,
+    0.112
+   ],
+   "sides": 12
+  }
+ ]
+}

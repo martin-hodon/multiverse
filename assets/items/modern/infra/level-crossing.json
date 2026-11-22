@@ -1,0 +1,300 @@
+{
+ "kind": "item",
+ "name": "Level crossing",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a level crossing, 20 x 20 m: track along x (ports x +-10, rail top 0.642) and the two-lane road along z (ports z +-10, asphalt at 0.02), the road laid in concrete panels flush with the rails and ramped down each side, stop lines, and a half barrier with St Andrew's cross and flashers on each approach's right (`down`: lowered).",
+ "params": {
+  "down": 1
+ },
+ "materials": {
+  "ballast": "#7d7872",
+  "sleeper": "concrete",
+  "rail": "steel",
+  "clip": "#3a3c3f",
+  "asphalt": "asphalt",
+  "line": "tarmac-line",
+  "kerb": "#9b9a95",
+  "pave": "#b3afa6",
+  "joint": "#8a877f",
+  "grate": "#2a2b2d",
+  "panel": "#8f8c86",
+  "earth": "#7a6a52"
+ },
+ "parts": [
+  {
+   "id": "trackA",
+   "use": "items/modern/infra/track-straight",
+   "at": [
+    -5,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "trackB",
+   "use": "items/modern/infra/track-straight",
+   "at": [
+    5,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "panelIn",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    7.0,
+    0.258,
+    1.347
+   ],
+   "at": [
+    0.0,
+    0.509,
+    0.0
+   ]
+  },
+  {
+   "id": "panelOut",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    7.0,
+    0.258,
+    1.5865
+   ],
+   "at": [
+    0.0,
+    0.509,
+    1.6067
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "rampP",
+   "type": "box",
+   "material": "asphalt",
+   "size": [
+    7.0,
+    0.3,
+    4.6413
+   ],
+   "at": [
+    0,
+    0.179,
+    4.7,
+    0,
+    7.6517,
+    0
+   ]
+  },
+  {
+   "id": "rampPBank",
+   "type": "box",
+   "material": "earth",
+   "size": [
+    10.0,
+    0.6,
+    4.6413
+   ],
+   "at": [
+    0,
+    -0.071,
+    4.7,
+    0,
+    7.6517,
+    0
+   ]
+  },
+  {
+   "id": "rampPFlat",
+   "type": "box",
+   "material": "asphalt",
+   "size": [
+    7.0,
+    0.14,
+    3.0
+   ],
+   "at": [
+    0.0,
+    -0.05,
+    8.5
+   ]
+  },
+  {
+   "id": "rampPLine",
+   "type": "box",
+   "material": "line",
+   "size": [
+    0.12,
+    0.004,
+    3.0
+   ],
+   "at": [
+    0,
+    0.022,
+    8.5
+   ]
+  },
+  {
+   "id": "rampPEdge",
+   "type": "box",
+   "material": "line",
+   "size": [
+    0.12,
+    0.004,
+    3.0
+   ],
+   "at": [
+    3.2,
+    0.022,
+    8.5
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "rampPStop",
+   "type": "box",
+   "material": "line",
+   "size": [
+    3.5,
+    0.004,
+    0.4
+   ],
+   "at": [
+    1.75,
+    0.022,
+    8.6
+   ]
+  },
+  {
+   "id": "rampN",
+   "type": "box",
+   "material": "asphalt",
+   "size": [
+    7.0,
+    0.3,
+    4.6413
+   ],
+   "at": [
+    0,
+    0.179,
+    -4.7,
+    0,
+    -7.6517,
+    0
+   ]
+  },
+  {
+   "id": "rampNBank",
+   "type": "box",
+   "material": "earth",
+   "size": [
+    10.0,
+    0.6,
+    4.6413
+   ],
+   "at": [
+    0,
+    -0.071,
+    -4.7,
+    0,
+    -7.6517,
+    0
+   ]
+  },
+  {
+   "id": "rampNFlat",
+   "type": "box",
+   "material": "asphalt",
+   "size": [
+    7.0,
+    0.14,
+    3.0
+   ],
+   "at": [
+    0.0,
+    -0.05,
+    -8.5
+   ]
+  },
+  {
+   "id": "rampNLine",
+   "type": "box",
+   "material": "line",
+   "size": [
+    0.12,
+    0.004,
+    3.0
+   ],
+   "at": [
+    0,
+    0.022,
+    -8.5
+   ]
+  },
+  {
+   "id": "rampNEdge",
+   "type": "box",
+   "material": "line",
+   "size": [
+    0.12,
+    0.004,
+    3.0
+   ],
+   "at": [
+    3.2,
+    0.022,
+    -8.5
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "rampNStop",
+   "type": "box",
+   "material": "line",
+   "size": [
+    3.5,
+    0.004,
+    0.4
+   ],
+   "at": [
+    -1.75,
+    0.022,
+    -8.6
+   ]
+  },
+  {
+   "id": "barrierA",
+   "use": "items/modern/infra/crossing-barrier",
+   "at": [
+    4.4,
+    0,
+    7.4,
+    -90,
+    0,
+    0
+   ],
+   "params": {
+    "down": "down"
+   }
+  },
+  {
+   "id": "barrierB",
+   "use": "items/modern/infra/crossing-barrier",
+   "at": [
+    -4.4,
+    0,
+    -7.4,
+    90,
+    0,
+    0
+   ],
+   "params": {
+    "down": "down"
+   }
+  }
+ ]
+}

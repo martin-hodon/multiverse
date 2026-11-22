@@ -19,8 +19,33 @@ REPO = "/home/martin/store/apps/multiverse/"
 R = REPO + "assets/creatures/"
 
 def load(path):
-    """a species as it is now (path under assets/creatures, no extension)"""
-    return json.load(open(R + path + ".json"))
+    """a species as it is now (path under assets/creatures, no extension) -- its brush BUNDLES (2026-11-22, `strands`:
+    a horse's locks) made back into their tubes, as bodyspec.js brushStrands makes them, so a script reworks them one
+    by one (bundle() puts runs of them back into one shape)"""
+    d = json.load(open(R + path + ".json"))
+    if isinstance(d.get("sculpt"), dict) and any(q.get("type") == "brush" and "strands" in q for q in d["sculpt"].get("shape", [])):
+        d["sculpt"]["shape"] = [t for q in d["sculpt"]["shape"] for t in (unstrand(q) if q.get("type") == "brush" and "strands" in q else [q])]
+    return d
+
+def unstrand(b):
+    """a bundle's tubes or horns (bodyspec.js brushStrands)"""
+    skip = ("strands", "items", "kind", "tuft", "first", "step", "per", "groups", "palette", "pick", "type", "id")
+    rest = {k: v for k, v in b.items() if k not in skip}; pre = b.get("tuft") or b.get("id") or "brush"
+    out = []
+    for i, own in enumerate([{"pts": q} for q in b["strands"]] if "strands" in b else b["items"]):
+        q = {"id": f"{pre}{b['groups'][i // b['per']]}_{i % b['per']}" if b.get("per") else f"{pre}{b.get('first', 0) + i * b.get('step', 1)}",
+             "type": b.get("kind", "tube")}
+        if "bone" in rest: q["bone"] = rest["bone"]
+        q.update(own); q.update({k: v for k, v in rest.items() if k != "bone"})
+        if b.get("palette") and b.get("pick"): q["color"] = b["palette"].get(str(b["pick"][i]), b.get("color"))
+        out.append(q)
+    return out
+
+def bundle(d, only, mn=10):
+    """runs of like tubes or horns whose ids match `only` as one brush bundle each (sharp/runs2brush.py)"""
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "sharp")); import runs2brush
+    d["sculpt"]["shape"] = runs2brush.convert(d["sculpt"]["shape"], mn, only)[0]
+    return d
 
 def save(path, d):
     d = copy.deepcopy(d)
@@ -82,7 +107,15 @@ def scale_shape(s, f):
     t = s.get("type", "ell")
     for k in ("c", "r", "k", "kc", "round", "a", "b", "ra", "rb", "thick", "rim", "innerRim", "len", "gap", "bury", "at"):   # (not rowLen: a share)
         if k in s and k != "at" or (k == "at" and t == "whiskers"): s[k] = _mul(s[k], f)
-    if t in ("tube", "sweep", "horn", "membrane") and "pts" in s: s["pts"] = _pts(s["pts"], f)
+    if t in ("tube", "sweep", "horn", "membrane", "sheet") and "pts" in s: s["pts"] = _pts(s["pts"], f)
+    if t == "brush":   # (2026-11-22, bodyspec.js brushTufts: its lines, the rows' offsets across and the bow; r, k, bury above)
+        for k in ("roots", "tips"):
+            if k in s: s[k] = _pts(s[k], f, 3)
+        if "lift" in s: s["lift"] = _mul(s["lift"], f)
+        if "strands" in s: s["strands"] = [_pts(q, f) for q in s["strands"]]   # (a bundle's: every point and radius)
+        for q in s.get("items", []):   # (a bundle's items: each a shape's own keys, scaled as one of its kind)
+            t2 = {"type": s.get("kind", "tube"), **q}; scale_shape(t2, f); q.update({k: v for k, v in t2.items() if k != "type"})
+        if "rows" in s: s["rows"] = [[a, z * f, l] for a, z, l in s["rows"]]
     if t == "fin":
         if "root" in s: s["root"] = _pts(s["root"], f, 3)
         if "edge" in s: s["edge"] = _pts(s["edge"], f, 3)
@@ -137,6 +170,9 @@ def stretch(d, fx=1.0, fy=1.0, fz=1.0, about=None):
         if "pts" in s: s["pts"] = [P(p, 3) for p in s["pts"]]
         if "root" in s: s["root"] = [P(p) for p in s["root"]]
         if "edge" in s: s["edge"] = [P(p) for p in s["edge"]]
+        for k in ("roots", "tips"):   # (a brush's lines)
+            if k in s: s[k] = [P(p) for p in s[k]]
+        if "strands" in s: s["strands"] = [[P(p, 3) for p in q] for q in s["strands"]]
         if s.get("type") == "whiskers" and "at" in s: s["at"] = P(s["at"])
     e = d["sculpt"].get("eyes")
     if e:
@@ -179,8 +215,9 @@ def move(d, id, dx=0, dy=0, dz=0):
     for k in ("c", "a", "b"):
         if k in s and isinstance(s[k], list) and isinstance(s[k][0], (int, float)): s[k] = [s[k][i] + v[i] for i in range(3)]
     if "pts" in s: s["pts"] = [[p[i] + v[i] if i < 3 else p[i] for i in range(len(p))] for p in s["pts"]]
-    for k in ("root", "edge"):
+    for k in ("root", "edge", "roots", "tips"):   # (a fin's lines; a brush's, 2026-11-22)
         if k in s: s[k] = [[p[i] + v[i] if i < 3 else p[i] for i in range(len(p))] for p in s[k]]
+    if "strands" in s: s["strands"] = [[[p[i] + v[i] if i < 3 else p[i] for i in range(len(p))] for p in q] for q in s["strands"]]
     if s.get("type") == "whiskers" and "at" in s: s["at"] = [s["at"][i] + v[i] for i in range(3)]
     return s
 def move_all(d, pat, dx=0, dy=0, dz=0):

@@ -1,0 +1,689 @@
+{
+ "kind": "item",
+ "name": "Bathtub",
+ "category": "furniture",
+ "era": "1850-2030",
+ "region": "everywhere",
+ "_about": "a bathtub, its length along x and its front +z: a cast-iron double-ended roll-top on four claw-and-ball feet, painted outside and enamelled within, the taps at +x (style clawfoot), or a modern built-in acrylic tub in its panelled apron and deck, a mixer tap at -x (built-in); filled with `water`",
+ "params": {
+  "style": {
+   "pick": [
+    "clawfoot",
+    "clawfoot",
+    "built-in"
+   ]
+  },
+  "water": {
+   "pick": [
+    0,
+    0,
+    1
+   ]
+  }
+ },
+ "materials": {
+  "outside": {
+   "pick": [
+    "paint-white",
+    "paint-black",
+    "paint-navy",
+    "paint-maroon",
+    "paint-cream",
+    "copper-bright"
+   ]
+  },
+  "enamel": "paint-white",
+  "foot": {
+   "pick": [
+    "brass",
+    "chrome",
+    "iron",
+    "gilt"
+   ]
+  },
+  "chrome": "chrome",
+  "panel": "plastic-white",
+  "water": "glass-light",
+  "dark": "mouth-dark"
+ },
+ "parts": [
+  {
+   "id": "outer",
+   "type": "lathe",
+   "material": "outside",
+   "profile": [
+    [
+     0,
+     0.17
+    ],
+    [
+     0.24,
+     0.17
+    ],
+    [
+     0.31,
+     0.2
+    ],
+    [
+     0.35,
+     0.28
+    ],
+    [
+     0.37,
+     0.45
+    ],
+    [
+     0.383,
+     0.6
+    ],
+    [
+     0.395,
+     0.635
+    ],
+    [
+     0.4,
+     0.655
+    ],
+    [
+     0.392,
+     0.672
+    ],
+    [
+     0.376,
+     0.672
+    ]
+   ],
+   "sides": 20,
+   "stretch": [
+    2.12,
+    1,
+    1
+   ],
+   "caps": false,
+   "when": {
+    "style": "clawfoot"
+   }
+  },
+  {
+   "id": "inner",
+   "type": "lathe",
+   "material": "enamel",
+   "profile": [
+    [
+     0.376,
+     0.672
+    ],
+    [
+     0.36,
+     0.6
+    ],
+    [
+     0.345,
+     0.45
+    ],
+    [
+     0.32,
+     0.3
+    ],
+    [
+     0.28,
+     0.215
+    ],
+    [
+     0.2,
+     0.195
+    ],
+    [
+     0,
+     0.195
+    ]
+   ],
+   "sides": 20,
+   "stretch": [
+    2.12,
+    1,
+    1
+   ],
+   "when": {
+    "style": "clawfoot"
+   }
+  },
+  {
+   "id": "waterC",
+   "type": "lathe",
+   "material": "water",
+   "profile": [
+    [
+     0.35,
+     0.47
+    ],
+    [
+     0,
+     0.47
+    ]
+   ],
+   "sides": 20,
+   "stretch": [
+    2.12,
+    1,
+    1
+   ],
+   "when": {
+    "style": "clawfoot",
+    "water": 1
+   }
+  },
+  {
+   "id": "legs",
+   "type": "sweep",
+   "material": "foot",
+   "path": [
+    [
+     0,
+     0.2,
+     0
+    ],
+    [
+     0.03,
+     0.12,
+     0
+    ],
+    [
+     0.06,
+     0.05,
+     0
+    ],
+    [
+     0.07,
+     0.03,
+     0
+    ]
+   ],
+   "radii": [
+    0.035,
+    0.03,
+    0.022,
+    0.02
+   ],
+   "sides": 7,
+   "at": [
+    [
+     -0.52,
+     0,
+     -0.2,
+     180,
+     0,
+     0
+    ],
+    [
+     -0.52,
+     0,
+     0.2,
+     180,
+     0,
+     0
+    ],
+    [
+     0.52,
+     0,
+     -0.2,
+     0,
+     0,
+     0
+    ],
+    [
+     0.52,
+     0,
+     0.2,
+     0,
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "style": "clawfoot"
+   },
+   "seg": 3
+  },
+  {
+   "id": "balls",
+   "type": "sphere",
+   "material": "foot",
+   "r": 0.03,
+   "at": [
+    [
+     -0.595,
+     0.03,
+     -0.2
+    ],
+    [
+     -0.595,
+     0.03,
+     0.2
+    ],
+    [
+     0.595,
+     0.03,
+     -0.2
+    ],
+    [
+     0.595,
+     0.03,
+     0.2
+    ]
+   ],
+   "sides": 7,
+   "when": {
+    "style": "clawfoot"
+   }
+  },
+  {
+   "id": "plug",
+   "type": "lathe",
+   "material": "dark",
+   "profile": [
+    [
+     0.022,
+     0.197
+    ],
+    [
+     0,
+     0.197
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "clawfoot"
+   },
+   "at": [
+    -0.45,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "tapPosts",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.012,
+   "from": [
+    0.79,
+    0.66,
+    -0.06
+   ],
+   "to": [
+    0.79,
+    0.76,
+    -0.06
+   ],
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0.12
+    ]
+   ],
+   "when": {
+    "style": "clawfoot"
+   }
+  },
+  {
+   "id": "spout",
+   "type": "sweep",
+   "material": "chrome",
+   "path": [
+    [
+     0.79,
+     0.76,
+     0.0
+    ],
+    [
+     0.79,
+     0.81,
+     0.0
+    ],
+    [
+     0.75,
+     0.82,
+     0.0
+    ],
+    [
+     0.72,
+     0.77,
+     0.0
+    ]
+   ],
+   "sides": 7,
+   "when": {
+    "style": "clawfoot"
+   },
+   "seg": 3,
+   "r": 0.011
+  },
+  {
+   "id": "tapBar",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.01,
+   "from": [
+    0.79,
+    0.76,
+    -0.06
+   ],
+   "to": [
+    0.79,
+    0.76,
+    0.06
+   ],
+   "sides": 6,
+   "when": {
+    "style": "clawfoot"
+   }
+  },
+  {
+   "id": "tapHeads",
+   "type": "box",
+   "material": "chrome",
+   "size": [
+    0.05,
+    0.012,
+    0.012
+   ],
+   "at": [
+    [
+     0.79,
+     0.775,
+     -0.06
+    ],
+    [
+     0.79,
+     0.775,
+     0.06
+    ]
+   ],
+   "when": {
+    "style": "clawfoot"
+   }
+  },
+  {
+   "id": "basin",
+   "type": "loft",
+   "material": "panel",
+   "stations": [
+    [
+     -0.76,
+     0.24,
+     0.12,
+     0.54,
+     0.32
+    ],
+    [
+     -0.64,
+     0.27,
+     0.07,
+     0.54,
+     0.335
+    ],
+    [
+     0.55,
+     0.27,
+     0.07,
+     0.54,
+     0.335
+    ],
+    [
+     0.72,
+     0.22,
+     0.14,
+     0.54,
+     0.32
+    ]
+   ],
+   "round": 0.16,
+   "bare": [
+    "top"
+   ],
+   "double": true,
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "apron",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    1.7,
+    0.53,
+    0.02
+   ],
+   "at": [
+    0,
+    0.265,
+    0.365
+   ],
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "ends",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    0.02,
+    0.53,
+    0.74
+   ],
+   "at": [
+    [
+     -0.84,
+     0.265,
+     0
+    ],
+    [
+     0.84,
+     0.265,
+     0
+    ]
+   ],
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "deckFront",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    1.7,
+    0.03,
+    0.11
+   ],
+   "at": [
+    0,
+    0.545,
+    0.32
+   ],
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "deckBack",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    1.7,
+    0.03,
+    0.11
+   ],
+   "at": [
+    0,
+    0.545,
+    -0.32
+   ],
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "deckEnds",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    0.15,
+    0.03,
+    0.75
+   ],
+   "at": [
+    [
+     -0.775,
+     0.545,
+     0
+    ],
+    [
+     0.775,
+     0.545,
+     0
+    ]
+   ],
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "plinth",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    1.66,
+    0.06,
+    0.02
+   ],
+   "at": [
+    0,
+    0.03,
+    0.355
+   ],
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "waterBox",
+   "type": "box",
+   "material": "water",
+   "size": [
+    1.36,
+    0.004,
+    0.62
+   ],
+   "at": [
+    -0.03,
+    0.42,
+    0
+   ],
+   "when": {
+    "style": "built-in",
+    "water": 1
+   }
+  },
+  {
+   "id": "mixer",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.014,
+   "from": [
+    -0.78,
+    0.56,
+    0
+   ],
+   "to": [
+    -0.78,
+    0.64,
+    0
+   ],
+   "sides": 8,
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "mixerSpout",
+   "type": "sweep",
+   "material": "chrome",
+   "path": [
+    [
+     -0.78,
+     0.64,
+     0
+    ],
+    [
+     -0.76,
+     0.66,
+     0
+    ],
+    [
+     -0.7,
+     0.66,
+     0
+    ]
+   ],
+   "sides": 7,
+   "when": {
+    "style": "built-in"
+   },
+   "seg": 3,
+   "r": 0.011
+  },
+  {
+   "id": "lever",
+   "type": "box",
+   "material": "chrome",
+   "size": [
+    0.05,
+    0.01,
+    0.015
+   ],
+   "at": [
+    -0.8,
+    0.672,
+    0
+   ],
+   "when": {
+    "style": "built-in"
+   }
+  },
+  {
+   "id": "drain",
+   "type": "lathe",
+   "material": "chrome",
+   "profile": [
+    [
+     0.025,
+     0.073
+    ],
+    [
+     0,
+     0.073
+    ]
+   ],
+   "sides": 8,
+   "when": {
+    "style": "built-in"
+   },
+   "at": [
+    -0.55,
+    0,
+    0
+   ]
+  }
+ ]
+}

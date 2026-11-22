@@ -1,0 +1,154 @@
+{
+  "name": "shrew",
+  "_about": "a COMMON SHREW (2026-11-21, tools/creaturegen/rework/small/shrew.py, slib.py's quadruped template): 7 cm head-body, a small cylindrical insect-eater on short legs; the head drawn out into a long narrow pointed snout well past the chin, bristling with whiskers, the nose pink-brown; minute bead eyes, the ears hidden in the fur; a 4 cm tail of even thickness; tricoloured -- a dark brown back, paler brown flanks, a grey-white belly -- the red-tipped teeth, small pale feet. Coats: common, pygmy (0.75x, browner), water shrew (1.3x, black above and white below)",
+  "kind": "mammal",
+  "headForm": "rodent",
+  "shy": 4,
+  "print": "paw",
+  "headTurn": 30,
+  "rear": [-0.014, 0.017, 0, 0.022, 0.0135, 0.014],
+  "front": [0.009, 0.0165, 0, 0.019, 0.012, 0.0125],
+  "neck": [0.0204, 0.0177, 0, 0.0183, 0.0173, 0, 0.009, 0.009],
+  "head": [0.025, 0.0195, 0, 0.0112],
+  "muzzle": [0.0427, 0.016, 0, 0.005, 0.0045, 0.0045],
+  "nose": [0.0535, 0.0138, 0, 0.0013],
+  "ears": [0.021, 0.026, 0.0065, 0.019, 0.029, 0.009, 0.003, 0.002],
+  "eyes": [0.0315, 0.0218, 0.0062, 0.0009],
+  "legs": {
+    "front": [0.012, 0.0165, 0.0075, 0.0028],
+    "hind": [-0.02, 0.0168, 0.0095, 0.0028],
+    "radii": [0.0045, 0.0026, 0.0017],
+    "foot": [0.0038, 0.0015, 0.0022],
+    "ankle": 0.0021
+  },
+  "tail": {
+    "c": [-0.007, -0.1816],
+    "R": 0.2005,
+    "a0": 1.7104,
+    "a1": 1.9199,
+    "r1": 0.0019,
+    "r2": 0.0013,
+    "n": 6,
+    "sway": 20,
+    "speed": 0.8
+  },
+  "coats": [
+    {
+      "name": "common shrew"
+    },
+    {
+      "name": "common shrew"
+    },
+    {
+      "name": "pygmy shrew",
+      "scale": 0.75,
+      "body": "#6a4e3a",
+      "front": "#6c503c",
+      "head": "#6a4e3a",
+      "flank": "#8a6a50",
+      "muzzle": "#6e5240",
+      "tail": "#6a4e3a"
+    },
+    {
+      "name": "water shrew",
+      "scale": 1.3,
+      "body": "#1e1c1c",
+      "front": "#201e1e",
+      "head": "#1e1c1c",
+      "cheek": "#2a2626",
+      "flank": "#24201f",
+      "muzzle": "#2a2626",
+      "pad": "#3a3434",
+      "belly": "#d8d4cc",
+      "chin": "#dcd8d0",
+      "tail": "#2a2626",
+      "foot": "#a89890",
+      "hand": "#a89890"
+    }
+  ],
+  "c": {
+    "body": "#46382e",
+    "front": "#4a3b30",
+    "head": "#46382e",
+    "cheek": "#6a5442",
+    "flank": "#7a604a",
+    "belly": "#b0a898",
+    "muzzle": "#4e3e32",
+    "pad": "#5e4a3c",
+    "chin": "#a8a090",
+    "nose": "#8a6260",
+    "tooth": "#9a3a26",
+    "ear": "#46382e",
+    "earIn": "#6a5040",
+    "leg": "#6a5a4e",
+    "foot": "#c8b0a0",
+    "hand": "#c8b0a0",
+    "tail": "#4e3e32",
+    "lid": "#1a1410",
+    "eye": "#0a0606",
+    "whisker": "#bcb2a6"
+  },
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [4600, 1200],
+      "focus": {
+        "head": 7,
+        "footFL": 2,
+        "footHL": 2
+      }
+    },
+    "shape": [
+      {"id": "rump", "type": "ell", "c": [-0.014, 0.0172, 0], "r": [0.023, 0.0138, 0.0142], "k": 0.007, "color": "@body"},
+      {"id": "loin", "type": "ell", "c": [-0.002, 0.0178, 0], "r": [0.02, 0.0135, 0.0135], "k": 0.007, "color": "@body"},
+      {"id": "chest", "type": "ell", "c": [0.011, 0.0165, 0], "r": [0.016, 0.0118, 0.012], "k": 0.006, "color": "@front"},
+      {"id": "belly", "type": "ell", "c": [-0.002, 0.009, 0], "r": [0.026, 0.006, 0.0098], "k": 0.004, "color": "@belly", "kc": 0.0016},
+      {"id": "flank", "type": "ell", "op": "paint", "c": [-0.003, 0.0135, 0.0105], "r": [0.03, 0.0045, 0.006], "kc": 0.0025, "color": "@flank", "mirror": true},
+      {"id": "arm", "type": "cone", "bone": "legFLu", "a": [0.0134, 0.0197, 0.007], "b": [0.012, 0.014, 0.007], "ra": 0.005, "rb": 0.0026, "k": 0.0021, "color": "@front", "mirror": true, "hair": 0.3},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.012, 0.014, 0.007], "b": [0.014, 0.0034, 0.007], "ra": 0.0026, "rb": 0.0015, "k": 0.0008, "color": "@leg", "mirror": true},
+      {"id": "paw", "type": "ell", "bone": "footFL", "c": [0.015, 0.0016, 0.007], "r": [0.0024, 0.0015, 0.0018], "k": 0.0007, "color": "@foot", "mirror": true},
+      {"id": "toeF0", "type": "cone", "bone": "footFL", "a": [0.0159, 0.001, 0.0061], "b": [0.0175, 0.0007, 0.0053], "ra": 0.0004, "rb": 0.0003, "k": 0.0002, "color": "@hand", "mirror": true, "kc": 0.0001},
+      {"id": "toeF1", "type": "cone", "bone": "footFL", "a": [0.0159, 0.001, 0.0067], "b": [0.0178, 0.0007, 0.0065], "ra": 0.0004, "rb": 0.0003, "k": 0.0002, "color": "@hand", "mirror": true, "kc": 0.0001},
+      {"id": "toeF2", "type": "cone", "bone": "footFL", "a": [0.0159, 0.001, 0.0073], "b": [0.0178, 0.0007, 0.0076], "ra": 0.0004, "rb": 0.0003, "k": 0.0002, "color": "@hand", "mirror": true, "kc": 0.0001},
+      {"id": "toeF3", "type": "cone", "bone": "footFL", "a": [0.0159, 0.001, 0.0079], "b": [0.0175, 0.0007, 0.0086], "ra": 0.0004, "rb": 0.0003, "k": 0.0002, "color": "@hand", "mirror": true, "kc": 0.0001},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-0.0198, 0.0163, 0.009], "r": [0.0022, 0.0027, 0.0047], "k": 0.0048, "color": "@body", "rot": [0, 0, 20], "mirror": true, "hair": 0.3},
+      {"id": "shin", "type": "cone", "bone": "legHLl", "a": [-0.02, 0.0141, 0.009], "b": [-0.0191, 0.0031, 0.009], "ra": 0.0029, "rb": 0.0017, "k": 0.0008, "color": "@leg", "mirror": true},
+      {"id": "hfoot", "type": "ell", "bone": "footHL", "c": [-0.0157, 0.0015, 0.009], "r": [0.0076, 0.0016, 0.0018], "k": 0.0007, "color": "@foot", "mirror": true},
+      {"id": "toeH0", "type": "cone", "bone": "footHL", "a": [-0.0119, 0.001, 0.008], "b": [-0.0101, 0.0008, 0.0072], "ra": 0.0005, "rb": 0.0004, "k": 0.0002, "color": "@foot", "mirror": true, "kc": 0.0001},
+      {"id": "toeH1", "type": "cone", "bone": "footHL", "a": [-0.0119, 0.001, 0.0085], "b": [-0.0099, 0.0008, 0.0081], "ra": 0.0005, "rb": 0.0004, "k": 0.0002, "color": "@foot", "mirror": true, "kc": 0.0001},
+      {"id": "toeH2", "type": "cone", "bone": "footHL", "a": [-0.0119, 0.001, 0.009], "b": [-0.0096, 0.0008, 0.009], "ra": 0.0005, "rb": 0.0004, "k": 0.0002, "color": "@foot", "mirror": true, "kc": 0.0001},
+      {"id": "toeH3", "type": "cone", "bone": "footHL", "a": [-0.0119, 0.001, 0.0095], "b": [-0.0099, 0.0008, 0.0099], "ra": 0.0005, "rb": 0.0004, "k": 0.0002, "color": "@foot", "mirror": true, "kc": 0.0001},
+      {"id": "toeH4", "type": "cone", "bone": "footHL", "a": [-0.0119, 0.001, 0.01], "b": [-0.0101, 0.0008, 0.0109], "ra": 0.0005, "rb": 0.0004, "k": 0.0002, "color": "@foot", "mirror": true, "kc": 0.0001},
+      {"id": "neck", "type": "ell", "bone": "neck", "c": [0.022, 0.0184, 0.0], "r": [0.0118, 0.0103, 0.0103], "k": 0.0045, "color": "@body", "hair": 0.3},
+      {"id": "throat", "type": "ell", "bone": "neck", "c": [0.0227, 0.0135, 0.0], "r": [0.009, 0.0056, 0.0078], "k": 0.0034, "color": "@belly", "kc": 0.0017},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.0244, 0.0204, 0], "r": [0.0112, 0.0085, 0.0088], "k": 0.0034, "color": "@head", "hair": 0.3},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [0.029, 0.0165, 0.004], "r": [0.0065, 0.0055, 0.0045], "k": 0.0028, "color": "@cheek", "mirror": true},
+      {"id": "snout", "type": "cone", "bone": "head", "a": [0.029, 0.0183, 0], "b": [0.0521, 0.0137, 0], "ra": 0.005, "rb": 0.0015, "k": 0.001, "color": "@muzzle", "kc": 0.0004},
+      {"id": "bridge", "type": "ell", "bone": "head", "c": [0.0394, 0.0181, 0.0], "r": [0.0118, 0.0025, 0.0031], "k": 0.0008, "color": "@head", "rot": [0, 0, -11.3481], "kc": 0.0003},
+      {"id": "whiskerPad", "type": "ell", "bone": "head", "c": [0.05, 0.0133, 0.001], "r": [0.002, 0.0015, 0.0014], "k": 0.0004, "color": "@pad", "mirror": true, "kc": 0.0002},
+      {"id": "noseTip", "type": "ell", "bone": "head", "c": [0.0535, 0.0138, 0], "r": [0.0011, 0.0012, 0.0014], "k": 0.0004, "color": "@nose", "kc": 0.0002, "wet": 0.25},
+      {"id": "lip", "type": "ell", "bone": "head", "c": [0.051, 0.0124, 0], "r": [0.0014, 0.0008, 0.0016], "k": 0.0003, "color": "@pad", "kc": 0.0001},
+      {"id": "jaw", "type": "ell", "bone": "head", "c": [0.0401, 0.013, 0.0], "r": [0.0099, 0.0019, 0.0027], "k": 0.0006, "color": "@chin", "rot": [0, 0, -5.6741], "kc": 0.0002},
+      {"id": "tooth", "type": "ell", "bone": "head", "c": [0.0515, 0.0117, 0.0003], "r": [0.0004, 0.0006, 0.0002], "k": 0.0003, "color": "@tooth", "rot": [0, 0, -10], "mirror": true, "kc": 0.0001},
+      {"id": "whiskers", "type": "whiskers", "bone": "head", "at": [0.05, 0.0133, 0.0023], "dir": [-0.2, -0.05, 1], "rows": 4, "per": 4, "gap": [0.0008, 0.0006], "fan": [16, -18], "sweep": [-8, 30], "len": [0.009, 0.015], "rowLen": [1, 0.75], "droop": 0.1, "curl": 0.04, "r": 0.0001, "color": "@whisker", "seed": 7, "normal": [-0.0994, -0.0497, 0.9938]},
+      {"id": "tail", "type": "sweep", "bones": ["tail"], "pts": [[-0.0326, 0.0173, 0.0, 0.0019], [-0.0349, 0.017, 0.0, 0.0019], [-0.0379, 0.0166, 0.0, 0.0018], [-0.0408, 0.0161, 0.0, 0.0017], [-0.0438, 0.0155, 0.0, 0.0016], [-0.0467, 0.015, 0.0, 0.0016], [-0.0497, 0.0144, 0.0, 0.0015], [-0.0526, 0.0137, 0.0, 0.0014], [-0.0555, 0.013, 0.0, 0.0014], [-0.0584, 0.0123, 0.0, 0.0014], [-0.0613, 0.0115, 0.0, 0.0014], [-0.0642, 0.0106, 0.0, 0.0013], [-0.067, 0.0097, 0.0, 0.0013], [-0.0699, 0.0088, 0.0, 0.0013], [-0.0727, 0.0079, 0.0, 0.0013], [-0.0756, 0.0069, 0.0, 0.0013]], "k": 0.0008, "kc": 0.0002, "color": "@tail"},
+      {"id": "tailUnder", "type": "ell", "op": "paint", "bone": "tail", "c": [-0.0555, 0.0114, 0.0], "r": [0.024, 0.0012, 0.0025], "kc": 0.0008, "color": "@flank", "rot": [0, 0, -8]}
+    ],
+    "eyes": {
+      "at": [0.0315, 0.0218, 0.0062],
+      "from": [0.0261, 0.0201, 0],
+      "r": 0.0009,
+      "iris": "@eye",
+      "pupil": "round",
+      "lid": "@lid",
+      "sink": 0.45,
+      "socket": 1.05,
+      "color": "#0a0706"
+    },
+    "shade": {
+      "back": 0.9,
+      "belly": 1.12,
+      "on": "@body"
+    }
+  }
+}

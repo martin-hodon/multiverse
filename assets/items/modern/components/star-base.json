@@ -1,0 +1,220 @@
+{
+ "kind": "item",
+ "name": "Five-star base",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "the five-star base of a swivel chair: tapered arms from a hub, a twin-wheeled castor at each arm's end, the socket for the gas lift -- on the floor, about y",
+ "params": {
+  "R": 0.33,
+  "n": 5,
+  "top": 0.12,
+  "cr": 0.025
+ },
+ "materials": {
+  "frame": "plastic-black",
+  "wheel": "plastic-black",
+  "hub": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "arm",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.024,
+   "from": [
+    0.02,
+    "top - 0.01",
+    0
+   ],
+   "to": [
+    "R",
+    "top - 0.03",
+    0
+   ],
+   "sides": 6,
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "around": {
+    "n": "n",
+    "r": 0
+   },
+   "r1": 0.014
+  },
+  {
+   "id": "armTip",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.05,
+    0.022,
+    0.03
+   ],
+   "at": [
+    "R - 0.01",
+    "top - 0.035",
+    0
+   ],
+   "around": {
+    "n": "n",
+    "r": 0
+   }
+  },
+  {
+   "id": "hub",
+   "type": "lathe",
+   "material": "hub",
+   "profile": [
+    [
+     0.03,
+     "top - 0.06"
+    ],
+    [
+     0.05,
+     "top - 0.045"
+    ],
+    [
+     0.05,
+     "top"
+    ],
+    [
+     0.032,
+     "top + 0.01"
+    ],
+    [
+     0,
+     "top + 0.01"
+    ]
+   ],
+   "sides": 12,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "stem",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.006,
+   "from": [
+    "R",
+    "top - 0.045",
+    0
+   ],
+   "to": [
+    "R",
+    0.05,
+    0
+   ],
+   "sides": 6,
+   "around": {
+    "n": "n",
+    "r": 0
+   }
+  },
+  {
+   "id": "fork",
+   "type": "box",
+   "material": "wheel",
+   "size": [
+    0.04,
+    0.03,
+    0.036
+   ],
+   "at": [
+    "R - 0.012",
+    0.045,
+    0
+   ],
+   "around": {
+    "n": "n",
+    "r": 0
+   }
+  },
+  {
+   "id": "castor",
+   "type": "lathe",
+   "material": "wheel",
+   "profile": [
+    [
+     0,
+     -0.024
+    ],
+    [
+     0.022,
+     -0.024
+    ],
+    [
+     "cr",
+     -0.02
+    ],
+    [
+     "cr",
+     -0.004
+    ],
+    [
+     0,
+     -0.004
+    ]
+   ],
+   "around": {
+    "n": "n",
+    "r": "R - 0.018"
+   },
+   "sides": 12,
+   "at": [
+    0,
+    "cr",
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "castorB",
+   "type": "lathe",
+   "material": "wheel",
+   "profile": [
+    [
+     0,
+     0.004
+    ],
+    [
+     "cr",
+     0.004
+    ],
+    [
+     "cr",
+     0.02
+    ],
+    [
+     0.022,
+     0.024
+    ],
+    [
+     0,
+     0.024
+    ]
+   ],
+   "around": {
+    "n": "n",
+    "r": "R - 0.018"
+   },
+   "sides": 12,
+   "at": [
+    0,
+    "cr",
+    0,
+    0,
+    90,
+    0
+   ]
+  }
+ ]
+}

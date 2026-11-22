@@ -52,10 +52,11 @@ def crescent(R, r, n=8):   # a crescent hanging under its top: the bottom halves
 
 
 # a gem set in gold: a dome of the stone in a gold rim, facing out of the surface (lathe axis y turned to z)
-def gem(at_on, r, stone="gem", rim="metal", scale=None):
-    sc = {"scale": scale} if scale else {}
-    return [{"id": "setting", "type": "lathe", "material": rim, "profile": [[0, 0], [r * 1.25, 0], [r * 1.25, r * .5], [0, r * .5]], "sides": 8, "on": at_on, "at": [0, 0, 0, 0, 90, 0], **sc},
-            {"id": "stone", "type": "lathe", "material": stone, "profile": dome(r, r * .8), "sides": 8, "on": at_on, "at": [0, 0, r * .45, 0, 90, 0], **sc}]
+# (`small`, 2026-11-22: a 4 mm cabochon round a head -- six sides, its dome two steps; was 128 triangles a gem, now 72)
+def gem(at_on, r, stone="gem", rim="metal", scale=None, small=False):
+    sc, k = {"scale": scale} if scale else {}, 6 if small else 8
+    return [{"id": "setting", "type": "lathe", "material": rim, "profile": [[0, 0], [r * 1.25, 0], [r * 1.25, r * .5], [0, r * .5]], "sides": k, "on": at_on, "at": [0, 0, 0, 0, 90, 0], **sc},
+            {"id": "stone", "type": "lathe", "material": stone, "profile": dome(r, r * .8, 2 if small else 4), "sides": k, "on": at_on, "at": [0, 0, r * .45, 0, 90, 0], **sc}]
 
 
 NECK, HEAD, EARS = {}, {}, {}
@@ -167,9 +168,9 @@ NECK["lunula"] = item("Lunula", "a Bronze Age gold lunula: a thin crescent beate
     {"gold": {"metal": "gold", "edge": "gilt"}}, "bronze age", "Ireland")
 
 # ======================= HEADWEAR (fit "head": levels are heights on the canonical head) ===========================
-LEAF_L = lance(0.026, 0.009, 5)
-def wreath(material_leaf, n=26, lv=(0.07, 0.044), size=1.0):
-    out = [{"id": "stem", "type": "band", "fit": "head", "level": list(lv), "width": 0.004, "thick": 0.0025, "lift": 0.001, "material": "stem"}]
+LEAF_L = lance(0.026, 0.009, 4)   # (2026-11-22: 8 points round a leaf, 22 leaves a row pair -- were 10 and 26; the band 10 degrees a step)
+def wreath(material_leaf, n=22, lv=(0.07, 0.044), size=1.0):
+    out = [{"id": "stem", "type": "band", "fit": "head", "level": list(lv), "width": 0.004, "thick": 0.0025, "lift": 0.001, "material": "stem", "step": 10}]
     L = [[r6(x * size), r6(y * size)] for x, y in LEAF_L]
     for side, (a, b), roll0 in (("R", (8, 172), 180), ("L", (-172, -8), 0)):
         for k, (dl, tilt) in enumerate(((0.004, 28), (-0.004, -28))):
@@ -201,21 +202,21 @@ HEAD["laurel-wreath"] = item("Laurel wreath", "a wreath of laurel or olive leave
     "classical", "Greece, Rome", {"scale": 1})
 
 HEAD["circlet"] = item("Circlet", "a medieval circlet: a gold band round the head set with cabochons -- rubies, sapphires and emeralds in turn",
-    [{"id": "band", "type": "band", "fit": "head", "level": [0.074, 0.058], "width": 0.01, "thick": 0.0025, "material": "metal"},
+    [{"id": "band", "type": "band", "fit": "head", "level": [0.074, 0.058], "width": 0.01, "thick": 0.0025, "material": "metal", "step": 10},
      *[dict(g, id=g["id"] + " " + str(k)) for k, s in enumerate(["gem1", "gem2", "gem3"]) for g in
-       gem({"fit": "head", "ring": {"n": 3, "from": -150 + 30 * k, "to": 150 - 60 + 30 * k}, "level": [0.074, 0.058], "lift": 0.002}, 0.0042, stone=s, scale="scale")]],
+       gem({"fit": "head", "ring": {"n": 3, "from": -150 + 30 * k, "to": 150 - 60 + 30 * k}, "level": [0.074, 0.058], "lift": 0.002}, 0.0042, stone=s, scale="scale", small=True)]],
     {"gold": {"metal": "gold", "gem1": "ruby", "gem2": "sapphire", "gem3": "emerald"}, "silver": {"metal": "silver", "gem1": "garnet", "gem2": "pearl", "gem3": "sapphire"}},
     "medieval", "Europe", {"scale": 1})
 
 FLEUR = [[0, 0.03], [0.004, 0.022], [0.0035, 0.014], [0.012, 0.022], [0.016, 0.016], [0.011, 0.008], [0.006, 0.006], [0.008, 0.0], [-0.008, 0.0], [-0.006, 0.006], [-0.011, 0.008], [-0.016, 0.016], [-0.012, 0.022], [-0.0035, 0.014], [-0.004, 0.022]]
 HEAD["coronet"] = item("Coronet", "a coronet: a gold band with fleurons -- lily-flowers -- standing up round it and a jewel under each",
-    [{"id": "band", "type": "band", "fit": "head", "level": [0.072, 0.062], "width": 0.014, "thick": 0.003, "material": "metal"},
+    [{"id": "band", "type": "band", "fit": "head", "level": [0.072, 0.062], "width": 0.014, "thick": 0.003, "material": "metal", "step": 10},
      {"id": "fleuron", "type": "plate", "material": "metal", "thick": 0.003, "outline": FLEUR, "scale": "scale", "on": {"fit": "head", "ring": {"n": 8, "from": -180, "to": 180}, "level": [0.079, 0.069], "lift": 0.004}},
-     *gem({"fit": "head", "ring": {"n": 8, "from": -180, "to": 180}, "level": [0.072, 0.062], "lift": 0.003}, 0.0035, stone="gem", scale="scale")],
+     *gem({"fit": "head", "ring": {"n": 8, "from": -180, "to": 180}, "level": [0.072, 0.062], "lift": 0.003}, 0.0035, stone="gem", scale="scale", small=True)],
     {"ruby": {"metal": "gold", "gem": "ruby"}, "sapphire": {"metal": "gold", "gem": "sapphire"}}, "late medieval", "Europe", {"scale": 1})
 
 HEAD["flower-chaplet"] = item("Flower chaplet", "a chaplet of flowers: fresh blooms bound on a green cord round the head -- a May Day or a wedding (the flower assets themselves)",
-    [{"id": "cord", "type": "band", "fit": "head", "level": [0.076, 0.05], "width": 0.004, "thick": 0.003, "material": "stem"},
+    [{"id": "cord", "type": "band", "fit": "head", "level": [0.076, 0.05], "width": 0.004, "thick": 0.003, "material": "stem", "step": 10},
      {"id": "bloom", "use": "bloom", "scale": "scale * 0.45", "on": {"fit": "head", "ring": {"n": 11, "from": -165, "to": 165}, "level": [0.076, 0.05], "lift": 0.002}, "at": [0, 0, 0, 0, 90, 0]}],
     {"green": {"stem": "stem-green"}}, "medieval", "Europe",
     {"scale": 1, "bloom": {"pick": ["items/flowers/blooms/daisy", "items/flowers/blooms/rose", "items/flowers/blooms/cornflower", "items/flowers/blooms/buttercup"]}})

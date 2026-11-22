@@ -1,0 +1,235 @@
+{
+ "kind": "item",
+ "name": "Carriage wheel",
+ "category": "components",
+ "era": "1750-1910",
+ "region": "everywhere",
+ "_about": "a dished carriage wheel: tapered spokes from the turned nave to the wooden felloe, the iron tyre shrunk on, iron bands and a brass cap on the nave -- the axle along z, the outside at +z",
+ "params": {
+  "r": 0.7,
+  "n": 14,
+  "w": 0.055,
+  "f": 0.07,
+  "sr": 0.018,
+  "hr": 0.1,
+  "hl": 0.3,
+  "dish": 0.035
+ },
+ "materials": {
+  "cwood": "#8a2a22",
+  "ciron": "#2b2a28",
+  "ccap": "brass"
+ },
+ "parts": [
+  {
+   "id": "tyre",
+   "type": "lathe",
+   "material": "ciron",
+   "profile": [
+    [
+     "r - 0.012",
+     "-w / 2"
+    ],
+    [
+     "r",
+     "-w / 2"
+    ],
+    [
+     "r",
+     "w / 2"
+    ],
+    [
+     "r - 0.012",
+     "w / 2"
+    ],
+    [
+     "r - 0.012",
+     "-w / 2"
+    ]
+   ],
+   "caps": false,
+   "sides": 36,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "felloe",
+   "type": "lathe",
+   "material": "cwood",
+   "profile": [
+    [
+     "r - 0.012 - f",
+     "-w * 0.42"
+    ],
+    [
+     "r - 0.011",
+     "-w * 0.42"
+    ],
+    [
+     "r - 0.011",
+     "w * 0.42"
+    ],
+    [
+     "r - 0.012 - f",
+     "w * 0.42"
+    ],
+    [
+     "r - 0.012 - f",
+     "-w * 0.42"
+    ]
+   ],
+   "caps": false,
+   "sides": 36,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "spoke",
+   "type": "rod",
+   "material": "cwood",
+   "r": 0.018,
+   "from": [
+    "hr * 0.85",
+    0,
+    "-dish"
+   ],
+   "to": [
+    "r - f",
+    0,
+    0
+   ],
+   "sides": 6,
+   "r0": "sr * 1.25",
+   "r1": "sr * 0.8",
+   "around": {
+    "n": "n",
+    "r": 0,
+    "plane": "xy"
+   }
+  },
+  {
+   "id": "nave",
+   "type": "lathe",
+   "material": "cwood",
+   "profile": [
+    [
+     0,
+     "-hl * 0.5 - dish"
+    ],
+    [
+     "hr * 0.72",
+     "-hl * 0.5 - dish"
+    ],
+    [
+     "hr",
+     "-hl * 0.18 - dish"
+    ],
+    [
+     "hr",
+     "hl * 0.05 - dish"
+    ],
+    [
+     "hr * 0.78",
+     "hl * 0.32 - dish"
+    ],
+    [
+     "hr * 0.6",
+     "hl * 0.5 - dish"
+    ],
+    [
+     0,
+     "hl * 0.5 - dish"
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "band",
+   "type": "ring",
+   "material": "ciron",
+   "r": "hr * 0.98",
+   "tube": "hr * 0.08",
+   "at": [
+    0,
+    0,
+    "-hl * 0.18 - dish",
+    0,
+    90,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "band2",
+   "type": "ring",
+   "material": "ciron",
+   "r": "hr * 0.7",
+   "tube": "hr * 0.08",
+   "at": [
+    0,
+    0,
+    "hl * 0.4 - dish",
+    0,
+    90,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "cap",
+   "type": "lathe",
+   "material": "ccap",
+   "profile": [
+    [
+     0,
+     "hl * 0.5 - dish"
+    ],
+    [
+     "hr * 0.55",
+     "hl * 0.5 - dish"
+    ],
+    [
+     "hr * 0.5",
+     "hl * 0.62 - dish"
+    ],
+    [
+     "hr * 0.3",
+     "hl * 0.68 - dish"
+    ],
+    [
+     0,
+     "hl * 0.69 - dish"
+    ]
+   ],
+   "sides": 12,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  }
+ ]
+}

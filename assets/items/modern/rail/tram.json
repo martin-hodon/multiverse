@@ -1,0 +1,1632 @@
+{
+ "kind": "item",
+ "name": "Tram",
+ "category": "vehicle",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a two-section low-floor tram (Combino / Citadis kind, 1996-), 26 m long, 2.4 m wide, 3.3 m to the roof, the floor 0.35 m: two hollow lofted sections with raked noses and windscreens, window bands, two double doors a side (plug sliding leaves: `open` slides them out and along), the articulation's bellows, a bogie under each section in its wheel arches; inside the floor, seats in facing pairs and over the wheel housings, grab poles and rails, lights, the cabs with their driver's seats and desks; a pantograph and the roof's equipment",
+ "params": {
+  "open": 0
+ },
+ "materials": {
+  "paint": {
+   "pick": [
+    "paint-red",
+    "paint-yellow",
+    "#1f6fb2",
+    "paint-white",
+    "#2c6e49",
+    "paint-silver"
+   ]
+  },
+  "glass": "glass",
+  "trim": "plastic-black",
+  "bellows": "rubber",
+  "frame": "paint-black",
+  "lining": "#d9d6ce",
+  "floorc": "#4a4c50",
+  "pole": "paint-yellow",
+  "lamp": "lamp",
+  "screen": "#e09a1a",
+  "roofc": "paint-grey",
+  "cover": {
+   "pick": [
+    "upholstery",
+    "upholstery-red",
+    "upholstery-grey"
+   ]
+  },
+  "steel": "steel"
+ },
+ "parts": [
+  {
+   "id": "bellows",
+   "type": "loft",
+   "material": "bellows",
+   "stations": [
+    [
+     -0.3,
+     1.12,
+     0.3,
+     3.12
+    ],
+    [
+     0.3,
+     1.12,
+     0.3,
+     3.12
+    ]
+   ],
+   "round": 0.2,
+   "double": true,
+   "seg": 1,
+   "caps": false
+  },
+  {
+   "id": "joint",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.7,
+    0.06,
+    1.6
+   ],
+   "at": [
+    0,
+    0.33,
+    0
+   ]
+  },
+  {
+   "id": "bodyA",
+   "type": "loft",
+   "material": "paint",
+   "stations": [
+    [
+     0.28,
+     1.2,
+     0.2,
+     3.3
+    ],
+    [
+     11.7,
+     1.2,
+     0.2,
+     3.3
+    ],
+    [
+     12.45,
+     1.18,
+     0.23,
+     3.22,
+     1.08
+    ],
+    [
+     12.95,
+     1.1,
+     0.26,
+     3.0,
+     0.95
+    ],
+    [
+     13.15,
+     0.98,
+     0.3,
+     2.72,
+     0.8
+    ]
+   ],
+   "round": [
+    0.1,
+    0.36
+   ],
+   "seg": 2,
+   "corner": 5,
+   "double": true,
+   "arches": [
+    [
+     6.1,
+     0.33,
+     0.44
+    ],
+    [
+     7.9,
+     0.33,
+     0.44
+    ]
+   ],
+   "holes": [
+    {
+     "x": [
+      1.25,
+      2.55
+     ],
+     "y": [
+      0.38,
+      2.62
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      9.05,
+      10.35
+     ],
+     "y": [
+      0.38,
+      2.62
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      2.75,
+      4.45
+     ],
+     "y": [
+      1.05,
+      2.78
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      4.65,
+      6.35
+     ],
+     "y": [
+      1.05,
+      2.78
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      6.55,
+      8.85
+     ],
+     "y": [
+      1.05,
+      2.78
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      10.55,
+      11.45
+     ],
+     "y": [
+      1.05,
+      2.78
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      11.75,
+      12.35
+     ],
+     "y": [
+      1.15,
+      2.6
+     ],
+     "side": "both"
+    }
+   ],
+   "caps": [
+    false,
+    true
+   ]
+  },
+  {
+   "id": "skirtA",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    12.0,
+    0.16,
+    0.02
+   ],
+   "at": [
+    6.4,
+    0.3,
+    1.204
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "windscreenA",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    0.02,
+    1.3,
+    1.5
+   ],
+   "at": [
+    13.16,
+    1.68,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "destA",
+   "type": "box",
+   "material": "screen",
+   "size": [
+    0.02,
+    0.14,
+    0.9
+   ],
+   "at": [
+    13.165,
+    2.48,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "headA",
+   "use": "items/modern/components/lamp",
+   "at": [
+    13.16,
+    0.72,
+    0.6,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "shape": "square",
+    "r": 0.11,
+    "h": 0.08
+   }
+  },
+  {
+   "id": "tailA",
+   "use": "items/modern/components/lamp",
+   "at": [
+    13.16,
+    0.9,
+    0.6,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "shape": "square",
+    "r": 0.06,
+    "h": 0.05
+   },
+   "materials": {
+    "lens": "lamp-red"
+   }
+  },
+  {
+   "id": "couplerA",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.25,
+    0.25,
+    0.6
+   ],
+   "at": [
+    13.22,
+    0.5,
+    0
+   ]
+  },
+  {
+   "id": "bogie0",
+   "use": "items/modern/components/bogie",
+   "at": [
+    7.0,
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.33,
+    "base": 1.8
+   }
+  },
+  {
+   "id": "wheelHouseA",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    2.5,
+    0.42,
+    2.3
+   ],
+   "at": [
+    7.0,
+    0.56,
+    0
+   ]
+  },
+  {
+   "id": "leafA",
+   "each": 4,
+   "type": "slide",
+   "move": [
+    0,
+    0,
+    0.055
+   ],
+   "parts": [
+    {
+     "id": "leaf",
+     "type": "slide",
+     "move": [
+      "-0.655 + 1.31 * floor(i / 2)",
+      0,
+      0
+     ],
+     "parts": [
+      {
+       "id": "leaf",
+       "type": "box",
+       "material": "paint",
+       "size": [
+        0.645,
+        2.22,
+        0.05
+       ],
+       "at": [
+        "1.5775 + 0.645 * floor(i / 2) + 7.8 * (i - 2 * floor(i / 2))",
+        1.49,
+        1.205
+       ]
+      },
+      {
+       "id": "leafGlass",
+       "type": "box",
+       "material": "glass",
+       "size": [
+        0.405,
+        0.7992,
+        0.012
+       ],
+       "at": [
+        "1.5775 + 0.645 * floor(i / 2) + 7.8 * (i - 2 * floor(i / 2))",
+        1.8452,
+        1.235
+       ]
+      }
+     ],
+     "range": [
+      0.25,
+      1
+     ]
+    }
+   ],
+   "range": [
+    0,
+    0.25
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "poleA",
+   "type": "rod",
+   "material": "pole",
+   "r": 0.02,
+   "from": [
+    0,
+    0.35,
+    0
+   ],
+   "to": [
+    0,
+    3.25,
+    0
+   ],
+   "sides": 8,
+   "at": [
+    [
+     1.25,
+     0,
+     0.75
+    ],
+    [
+     1.25,
+     0,
+     -0.75
+    ],
+    [
+     2.55,
+     0,
+     0.75
+    ],
+    [
+     2.55,
+     0,
+     -0.75
+    ],
+    [
+     9.05,
+     0,
+     0.75
+    ],
+    [
+     9.05,
+     0,
+     -0.75
+    ],
+    [
+     10.35,
+     0,
+     0.75
+    ],
+    [
+     10.35,
+     0,
+     -0.75
+    ]
+   ]
+  },
+  {
+   "id": "railA",
+   "type": "rod",
+   "material": "pole",
+   "r": 0.017,
+   "from": [
+    1.0,
+    2.0,
+    0.42
+   ],
+   "to": [
+    11.0,
+    2.0,
+    0.42
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "seatsAA",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    6.25,
+    0.77,
+    0.62,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "seatsBA",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    7.75,
+    0.77,
+    0.62,
+    180,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "seatsCA",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    3.6,
+    0.35,
+    0.62,
+    180,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "seatsDA",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    4.6,
+    0.35,
+    0.62,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "seatsEA",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    10.9,
+    0.35,
+    0.62,
+    180,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "floorA",
+   "type": "box",
+   "material": "floorc",
+   "size": [
+    12.6,
+    0.06,
+    2.32
+   ],
+   "at": [
+    6.15,
+    0.32,
+    0
+   ]
+  },
+  {
+   "id": "lightsA",
+   "type": "box",
+   "material": "lamp",
+   "size": [
+    10.5,
+    0.03,
+    0.3
+   ],
+   "at": [
+    6.0,
+    3.24,
+    0.55
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "cabWallA",
+   "type": "plate",
+   "material": "lining",
+   "outline": [
+    [
+     -0.35,
+     0.2399
+    ],
+    [
+     -1.1001,
+     0.2399
+    ],
+    [
+     -1.1156,
+     0.2419
+    ],
+    [
+     -1.1301,
+     0.2479
+    ],
+    [
+     -1.1425,
+     0.2574
+    ],
+    [
+     -1.152,
+     0.2699
+    ],
+    [
+     -1.158,
+     0.2843
+    ],
+    [
+     -1.1601,
+     0.2999
+    ],
+    [
+     -1.1605,
+     2.9403
+    ],
+    [
+     -1.1496,
+     3.0232
+    ],
+    [
+     -1.1176,
+     3.1003
+    ],
+    [
+     -1.0668,
+     3.1666
+    ],
+    [
+     -1.0005,
+     3.2175
+    ],
+    [
+     -0.9233,
+     3.2494
+    ],
+    [
+     -0.8405,
+     3.2603
+    ],
+    [
+     -0.0,
+     3.2603
+    ],
+    [
+     0.8405,
+     3.2603
+    ],
+    [
+     0.9233,
+     3.2494
+    ],
+    [
+     1.0005,
+     3.2175
+    ],
+    [
+     1.0668,
+     3.1666
+    ],
+    [
+     1.1176,
+     3.1003
+    ],
+    [
+     1.1496,
+     3.0232
+    ],
+    [
+     1.1605,
+     2.9403
+    ],
+    [
+     1.1601,
+     0.2999
+    ],
+    [
+     1.158,
+     0.2843
+    ],
+    [
+     1.152,
+     0.2699
+    ],
+    [
+     1.1425,
+     0.2574
+    ],
+    [
+     1.1301,
+     0.2479
+    ],
+    [
+     1.1156,
+     0.2419
+    ],
+    [
+     1.1001,
+     0.2399
+    ],
+    [
+     0.35,
+     0.2399
+    ],
+    [
+     0.35,
+     2.3
+    ],
+    [
+     -0.35,
+     2.3
+    ]
+   ],
+   "thick": 0.05,
+   "at": [
+    11.6,
+    0,
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "driverA",
+   "use": "items/modern/components/seat",
+   "at": [
+    12.15,
+    0.35,
+    0,
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.5,
+    "h": 0.5,
+    "arms": 1,
+    "pedestal": 1
+   }
+  },
+  {
+   "id": "deskA",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.45,
+    0.9,
+    1.5
+   ],
+   "at": [
+    12.75,
+    0.8,
+    0
+   ]
+  },
+  {
+   "id": "roofBoxA",
+   "type": "box",
+   "material": "roofc",
+   "size": [
+    3.2,
+    0.35,
+    1.7
+   ],
+   "at": [
+    8.6,
+    3.45,
+    0
+   ]
+  },
+  {
+   "id": "hvacA",
+   "type": "box",
+   "material": "roofc",
+   "size": [
+    2.0,
+    0.3,
+    1.6
+   ],
+   "at": [
+    2.4,
+    3.43,
+    0
+   ]
+  },
+  {
+   "id": "bodyB",
+   "type": "loft",
+   "material": "paint",
+   "stations": [
+    [
+     -13.15,
+     0.98,
+     0.3,
+     2.72,
+     0.8
+    ],
+    [
+     -12.95,
+     1.1,
+     0.26,
+     3.0,
+     0.95
+    ],
+    [
+     -12.45,
+     1.18,
+     0.23,
+     3.22,
+     1.08
+    ],
+    [
+     -11.7,
+     1.2,
+     0.2,
+     3.3
+    ],
+    [
+     -0.28,
+     1.2,
+     0.2,
+     3.3
+    ]
+   ],
+   "round": [
+    0.1,
+    0.36
+   ],
+   "seg": 2,
+   "corner": 5,
+   "double": true,
+   "arches": [
+    [
+     -6.1,
+     0.33,
+     0.44
+    ],
+    [
+     -7.9,
+     0.33,
+     0.44
+    ]
+   ],
+   "holes": [
+    {
+     "x": [
+      -2.55,
+      -1.25
+     ],
+     "y": [
+      0.38,
+      2.62
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -10.35,
+      -9.05
+     ],
+     "y": [
+      0.38,
+      2.62
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -4.45,
+      -2.75
+     ],
+     "y": [
+      1.05,
+      2.78
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -6.35,
+      -4.65
+     ],
+     "y": [
+      1.05,
+      2.78
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -8.85,
+      -6.55
+     ],
+     "y": [
+      1.05,
+      2.78
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -11.45,
+      -10.55
+     ],
+     "y": [
+      1.05,
+      2.78
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -12.35,
+      -11.75
+     ],
+     "y": [
+      1.15,
+      2.6
+     ],
+     "side": "both"
+    }
+   ],
+   "caps": [
+    true,
+    false
+   ]
+  },
+  {
+   "id": "skirtB",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    12.0,
+    0.16,
+    0.02
+   ],
+   "at": [
+    -6.4,
+    0.3,
+    1.204
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "windscreenB",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    0.02,
+    1.3,
+    1.5
+   ],
+   "at": [
+    -13.16,
+    1.68,
+    0,
+    180,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "destB",
+   "type": "box",
+   "material": "screen",
+   "size": [
+    0.02,
+    0.14,
+    0.9
+   ],
+   "at": [
+    -13.165,
+    2.48,
+    0,
+    180,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "headB",
+   "use": "items/modern/components/lamp",
+   "at": [
+    -13.16,
+    0.72,
+    0.6,
+    180,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "shape": "square",
+    "r": 0.11,
+    "h": 0.08
+   }
+  },
+  {
+   "id": "tailB",
+   "use": "items/modern/components/lamp",
+   "at": [
+    -13.16,
+    0.9,
+    0.6,
+    180,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "shape": "square",
+    "r": 0.06,
+    "h": 0.05
+   },
+   "materials": {
+    "lens": "lamp-red"
+   }
+  },
+  {
+   "id": "couplerB",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.25,
+    0.25,
+    0.6
+   ],
+   "at": [
+    -13.22,
+    0.5,
+    0
+   ]
+  },
+  {
+   "id": "bogie0",
+   "use": "items/modern/components/bogie",
+   "at": [
+    -7.0,
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.33,
+    "base": 1.8
+   }
+  },
+  {
+   "id": "wheelHouseB",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    2.5,
+    0.42,
+    2.3
+   ],
+   "at": [
+    -7.0,
+    0.56,
+    0
+   ]
+  },
+  {
+   "id": "leafB",
+   "each": 4,
+   "type": "slide",
+   "move": [
+    0,
+    0,
+    0.055
+   ],
+   "parts": [
+    {
+     "id": "leaf",
+     "type": "slide",
+     "move": [
+      "0.655 - 1.31 * floor(i / 2)",
+      0,
+      0
+     ],
+     "parts": [
+      {
+       "id": "leaf",
+       "type": "box",
+       "material": "paint",
+       "size": [
+        0.645,
+        2.22,
+        0.05
+       ],
+       "at": [
+        "-1.5775 - 0.645 * floor(i / 2) - 7.8 * (i - 2 * floor(i / 2))",
+        1.49,
+        1.205
+       ]
+      },
+      {
+       "id": "leafGlass",
+       "type": "box",
+       "material": "glass",
+       "size": [
+        0.405,
+        0.7992,
+        0.012
+       ],
+       "at": [
+        "-1.5775 - 0.645 * floor(i / 2) - 7.8 * (i - 2 * floor(i / 2))",
+        1.8452,
+        1.235
+       ]
+      }
+     ],
+     "range": [
+      0.25,
+      1
+     ]
+    }
+   ],
+   "range": [
+    0,
+    0.25
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "poleB",
+   "type": "rod",
+   "material": "pole",
+   "r": 0.02,
+   "from": [
+    0,
+    0.35,
+    0
+   ],
+   "to": [
+    0,
+    3.25,
+    0
+   ],
+   "sides": 8,
+   "at": [
+    [
+     -1.25,
+     0,
+     0.75
+    ],
+    [
+     -1.25,
+     0,
+     -0.75
+    ],
+    [
+     -2.55,
+     0,
+     0.75
+    ],
+    [
+     -2.55,
+     0,
+     -0.75
+    ],
+    [
+     -9.05,
+     0,
+     0.75
+    ],
+    [
+     -9.05,
+     0,
+     -0.75
+    ],
+    [
+     -10.35,
+     0,
+     0.75
+    ],
+    [
+     -10.35,
+     0,
+     -0.75
+    ]
+   ]
+  },
+  {
+   "id": "railB",
+   "type": "rod",
+   "material": "pole",
+   "r": 0.017,
+   "from": [
+    -1.0,
+    2.0,
+    0.42
+   ],
+   "to": [
+    -11.0,
+    2.0,
+    0.42
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "seatsAB",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    -6.25,
+    0.77,
+    0.62,
+    180,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "seatsBB",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    -7.75,
+    0.77,
+    0.62,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "seatsCB",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    -3.6,
+    0.35,
+    0.62,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "seatsDB",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    -4.6,
+    0.35,
+    0.62,
+    180,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "seatsEB",
+   "use": "items/modern/components/seat-row",
+   "at": [
+    -10.9,
+    0.35,
+    0.62,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "params": {
+    "n": 2,
+    "w": 0.46,
+    "h": 0.45,
+    "back": 0.6,
+    "arms": 0,
+    "headrest": 0
+   }
+  },
+  {
+   "id": "floorB",
+   "type": "box",
+   "material": "floorc",
+   "size": [
+    12.6,
+    0.06,
+    2.32
+   ],
+   "at": [
+    -6.15,
+    0.32,
+    0
+   ]
+  },
+  {
+   "id": "lightsB",
+   "type": "box",
+   "material": "lamp",
+   "size": [
+    10.5,
+    0.03,
+    0.3
+   ],
+   "at": [
+    -6.0,
+    3.24,
+    0.55
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "cabWallB",
+   "type": "plate",
+   "material": "lining",
+   "outline": [
+    [
+     -0.35,
+     0.2399
+    ],
+    [
+     -1.1001,
+     0.2399
+    ],
+    [
+     -1.1156,
+     0.2419
+    ],
+    [
+     -1.1301,
+     0.2479
+    ],
+    [
+     -1.1425,
+     0.2574
+    ],
+    [
+     -1.152,
+     0.2699
+    ],
+    [
+     -1.158,
+     0.2843
+    ],
+    [
+     -1.1601,
+     0.2999
+    ],
+    [
+     -1.1605,
+     2.9403
+    ],
+    [
+     -1.1496,
+     3.0232
+    ],
+    [
+     -1.1176,
+     3.1003
+    ],
+    [
+     -1.0668,
+     3.1666
+    ],
+    [
+     -1.0005,
+     3.2175
+    ],
+    [
+     -0.9233,
+     3.2494
+    ],
+    [
+     -0.8405,
+     3.2603
+    ],
+    [
+     -0.0,
+     3.2603
+    ],
+    [
+     0.8405,
+     3.2603
+    ],
+    [
+     0.9233,
+     3.2494
+    ],
+    [
+     1.0005,
+     3.2175
+    ],
+    [
+     1.0668,
+     3.1666
+    ],
+    [
+     1.1176,
+     3.1003
+    ],
+    [
+     1.1496,
+     3.0232
+    ],
+    [
+     1.1605,
+     2.9403
+    ],
+    [
+     1.1601,
+     0.2999
+    ],
+    [
+     1.158,
+     0.2843
+    ],
+    [
+     1.152,
+     0.2699
+    ],
+    [
+     1.1425,
+     0.2574
+    ],
+    [
+     1.1301,
+     0.2479
+    ],
+    [
+     1.1156,
+     0.2419
+    ],
+    [
+     1.1001,
+     0.2399
+    ],
+    [
+     0.35,
+     0.2399
+    ],
+    [
+     0.35,
+     2.3
+    ],
+    [
+     -0.35,
+     2.3
+    ]
+   ],
+   "thick": 0.05,
+   "at": [
+    -11.6,
+    0,
+    0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "driverB",
+   "use": "items/modern/components/seat",
+   "at": [
+    -12.15,
+    0.35,
+    0,
+    180,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.5,
+    "h": 0.5,
+    "arms": 1,
+    "pedestal": 1
+   }
+  },
+  {
+   "id": "deskB",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.45,
+    0.9,
+    1.5
+   ],
+   "at": [
+    -12.75,
+    0.8,
+    0
+   ]
+  },
+  {
+   "id": "roofBoxB",
+   "type": "box",
+   "material": "roofc",
+   "size": [
+    3.2,
+    0.35,
+    1.7
+   ],
+   "at": [
+    -8.6,
+    3.45,
+    0
+   ]
+  },
+  {
+   "id": "hvacB",
+   "type": "box",
+   "material": "roofc",
+   "size": [
+    2.0,
+    0.3,
+    1.6
+   ],
+   "at": [
+    -2.4,
+    3.43,
+    0
+   ]
+  },
+  {
+   "id": "panto",
+   "use": "items/modern/components/pantograph",
+   "at": [
+    5.0,
+    3.28,
+    0
+   ],
+   "params": {
+    "h": 1.35
+   }
+  },
+  {
+   "id": "pantoBase",
+   "type": "box",
+   "material": "roofc",
+   "size": [
+    2.0,
+    0.08,
+    1.4
+   ],
+   "at": [
+    5.0,
+    3.32,
+    0
+   ]
+  }
+ ]
+}

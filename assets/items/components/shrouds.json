@@ -1,0 +1,88 @@
+{
+ "kind": "item",
+ "name": "Shrouds",
+ "category": "component",
+ "_about": "a mast's standing rigging, both sides, the mast at x = 0: n lower shrouds fanning from the masthead (y = top) to the rail (y = foot, z), abaft the mast to a little before it; with `rat` five ratlines across them; with `topmast` three topmast shrouds from ttop to the lower masthead's crosstrees (tfoot), spread by the mast's radius mr",
+ "params": {
+  "top": 10,
+  "foot": 2,
+  "z": 3,
+  "n": 4,
+  "r": 0.03,
+  "rat": 0,
+  "topmast": 0,
+  "ttop": 15,
+  "tfoot": 9,
+  "mr": 0.2
+ },
+ "materials": {
+  "rope": "rope"
+ },
+ "parts": [
+  {
+   "id": "shroud",
+   "type": "rod",
+   "material": "rope",
+   "each": "n",
+   "from": [
+    0,
+    "top",
+    0
+   ],
+   "to": [
+    "(top - foot) * (-0.2 + 0.3 * i / max(1, n - 1))",
+    "foot",
+    "z"
+   ],
+   "r": "r",
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "ratline",
+   "type": "rod",
+   "material": "rope",
+   "each": {
+    "n": 5,
+    "as": "j"
+   },
+   "when": "rat",
+   "r": 0.012,
+   "sides": 3,
+   "mirror": "z",
+   "from": [
+    "(top - foot) * -0.2 * (0.86 - 0.14 * j)",
+    "foot + (top - foot) * (0.14 + 0.14 * j)",
+    "z * (0.86 - 0.14 * j)"
+   ],
+   "to": [
+    "(top - foot) * 0.1 * (0.86 - 0.14 * j)",
+    "foot + (top - foot) * (0.14 + 0.14 * j)",
+    "z * (0.86 - 0.14 * j)"
+   ]
+  },
+  {
+   "id": "topshroud",
+   "type": "rod",
+   "material": "rope",
+   "each": {
+    "n": 3,
+    "as": "k"
+   },
+   "when": "topmast",
+   "from": [
+    0,
+    "ttop",
+    0
+   ],
+   "to": [
+    "mr * (-3 + 2.5 * k)",
+    "tfoot",
+    "mr * 4.4"
+   ],
+   "r": 0.02,
+   "sides": 4,
+   "mirror": "z"
+  }
+ ]
+}

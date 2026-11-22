@@ -15,18 +15,15 @@
 //      surface, each kept only when no quill already stands within a gap of it -- where the coat attribute holds and
 //      the coat's rule (its skirt, the rump's drop, the face's rise) allows. Each quill a thin pyramid leaning back, its
 //      skin its root's: it rides the body exactly where it stands.
-import { field, surfaceNets, simplify, finish, gradient, onSurface, mirrorOf, mirrorMesh, sweepCurve } from "./sculpt.js";
+import { field, surfaceNets, simplify, finish, gradient, onSurface, mirrorOf, mirrorMesh, sweepCurve, layDabs, scaleDabs } from "./sculpt.js";
 import { hornMesh, finMesh, sweepMesh } from "./sharp.js";
+import { rng1 as rng } from "./rng.js";
 
 const lin = (c) => (c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4);
 export function rgb(c, dflt = "#808080") {
   if (c == null) c = dflt;
   const n = typeof c === "number" ? c : parseInt(String(c).replace("#", ""), 16);
   return [lin(((n >> 16) & 255) / 255), lin(((n >> 8) & 255) / 255), lin((n & 255) / 255)];
-}
-function rng(seed) {
-  let a = (seed >>> 0) || 1;
-  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
 // a smooth value noise in 3D (the coat's mottle: a patch a centimetre or two across a shade darker or lighter)
 const hash3 = (i, j, k) => { let h = Math.imul(i, 374761393) + Math.imul(j, 668265263) + Math.imul(k, 2147483647); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
@@ -61,6 +58,7 @@ export const MOTTLE = { scale: 70, amount: .08 };   // (a body may say its own: 
 // buildBody is both passes, as it always was.
 export function buildBody(body, opts = {}) { return dressBody(body, buildShape(body, opts), opts); }
 
+const LAID = new WeakMap();   // (a body's dabs shape -> its marks laid: sculpt.js layDabs)
 // the body made ready to mesh or to dress: its shapes with their attributes, the seated ones moved onto the surface,
 // the eyes found on it and their sockets carved -- what both passes need, and cheap (no sampling)
 function ready(body) {
@@ -88,7 +86,9 @@ function ready(body) {
   };
   let prims = body.prims.map((p) => ({ ...p, attr: p.op === "sub" && p.color == null ? null : attrOf(p, p.color),
     // (a SWEEP's skin along its chain and its bands -- sculpt.js: its attributes where along it a point is nearest)
-    ...(p.type === "sweep" ? { chainIdx: p.chain?.map((b) => NA + bi(b)), bandsRGB: p.bands?.map(([a, b, c]) => [a, b, rgb(c)]) } : {}) }));
+    ...(p.type === "sweep" ? { chainIdx: p.chain?.map((b) => NA + bi(b)), bandsRGB: p.bands?.map(([a, b, c]) => [a, b, rgb(c)]) } : {}),
+    // (a SHEET's skin, point by point -- sculpt.js prepareSheet: its bones' slots, eased across the nearest face)
+    ...(p.type === "sheet" && p.bones && p.skin ? { skinIdx: p.bones.map((b) => NA + bi(b)), ownIdx: NA + bi(p.bone) } : {}) }));
   // ---- the SEATED shapes (an ear): on the surface the others make ----
   if (prims.some((p) => p.seat)) {
     const Fs = field(prims.filter((p) => !p.seat), A);
@@ -98,6 +98,17 @@ function ready(body) {
       return { ...p, c: S.map((v, k) => v + n[k] * size * (p.seat.out ?? .3)) };
     });
   }
+  // ---- a coat's MARKS (a `dabs` shape: sculpt.js layDabs): each laid where its ray leaves the skin the shapes make, the
+  //  set kept ONE primitive of the field (its marks its `items`) ----
+  let shapeDist = null;
+  const dabDist = () => shapeDist ?? (shapeDist = field(prims.filter((p) => p.op !== "paint"), 0).dist);
+  //  (laid once a body: its shape and its dress both ask)
+  if (prims.some((p) => p.type === "dabs")) prims = prims.map((p, i) => {
+    if (p.type !== "dabs") return p;
+    const src = body.prims[i], laid = LAID.get(src) ?? layDabs(p, dabDist(), M.cell);
+    LAID.set(src, laid);
+    return { ...p, items: laid.map((q) => ({ ...q, attr: attrOf(q, q.color) })) };
+  });
   // ---- the eyes: on the surface as it is ----
   const F0 = field(prims, A, { sharp: NA }), eyes = [], sockets = [];
   for (const e of body.eyes ?? []) {
@@ -109,7 +120,7 @@ function ready(body) {
   }
   const placed = prims;
   prims = [...prims, ...sockets];
-  return { nb, PO, A, bi, M, placed, sockets, prims, eyes, F: field(prims, A, { sharp: NA }) };
+  return { nb, PO, A, bi, M, placed, sockets, prims, eyes, dabDist, F: field(prims, A, { sharp: NA }) };
 }
 
 // THE SHAPE: { cell (the grid it was meshed on: a body at another size scales it by its own cell over this), lods:
@@ -172,7 +183,11 @@ function paintPrims(R, look, cell) {
   const out = [], col = (p, c) => ({ ...p, attr: p.op === "sub" && c == null ? null : rgb(c) });
   let j = 0;
   for (const p of R.placed) if (p.op !== "paint") out.push(col(p, look.colors[j++]));
-  for (const p of look.paints) out.push(col(scaleLen(p, cell), p.color));
+  for (const p of look.paints) {
+    const q = col(scaleLen(p, cell), p.color);
+    if (q.type === "dabs") q.items = layDabs(q, R.dabDist(), cell).map((m) => ({ ...m, attr: rgb(m.color) }));   // (its marks laid on this shape)
+    out.push(q);
+  }
   R.sockets.forEach((s, i) => out.push({ ...s, attr: look.lids[i] != null ? rgb(look.lids[i]) : null }));
   return out;
 }
@@ -217,6 +232,7 @@ export function scaleLen(v, f, len = false) {
   if (Array.isArray(v)) return v.map((x) => scaleLen(x, f, len));
   if (!v || typeof v !== "object") return v;
   const o = {};
+  if (v.type === "dabs") return { ...scaleDabs(v, f), items: undefined };   // (a coat's marks: its s, sizes and points, never its angles)
   for (const [k, x] of Object.entries(v)) o[k] = scaleLen(x, f, len || LEN.has(k));
   return o;
 }
@@ -341,7 +357,7 @@ export const COAT_PATS = new Set([3, 4, 5, 18, 21, 22, 26, 35, 63]);
 function frameOf(p) {
   let o, u;
   if (p.type === "cone") { o = p.a; u = nrm(p.b.map((v, k) => v - p.a[k])); }
-  else if (p.type === "tube" || p.type === "sweep") { o = p.pts[0].slice(0, 3); u = nrm(p.pts[p.pts.length - 1].slice(0, 3).map((v, k) => v - o[k])); }
+  else if (p.type === "tube" || p.type === "sweep" || p.type === "sheet") { o = p.pts[0].slice(0, 3); u = nrm(p.pts[p.pts.length - 1].slice(0, 3).map((v, k) => v - o[k])); }
   else if (p.type === "tri") { o = p.a; u = nrm(p.b.map((v, k) => v - p.a[k])); }
   else if (p.type === "ell" && p.axes) { o = p.c; u = p.axes[p.r.indexOf(Math.max(...p.r))]; }
   else if (p.type === "horn") { o = p.pts[0].slice(0, 3); u = nrm(p.pts[p.pts.length - 1].slice(0, 3).map((v, k) => v - o[k])); }
@@ -355,7 +371,7 @@ function frameOf(p) {
     const side = [0, 0, Math.sign(cz)], d = u[2] * side[2];
     v = nrm([-u[0] * d, -u[1] * d, side[2] - u[2] * d]); w = crs(u, v);
   }
-  const r = p.type === "cone" ? (p.ra + p.rb) / 2 : p.type === "tube" || p.type === "horn" || p.type === "sweep" ? p.pts.reduce((s, q) => s + q[3], 0) / p.pts.length
+  const r = p.type === "cone" ? (p.ra + p.rb) / 2 : p.type === "tube" || p.type === "horn" || p.type === "sweep" || p.type === "sheet" ? p.pts.reduce((s, q) => s + q[3], 0) / p.pts.length
           : p.type === "fin" ? p.thick ?? .02
           : p.type === "ell" ? Math.min(...p.r) : p.r ?? .05;
   return { o, u, v, w, r };

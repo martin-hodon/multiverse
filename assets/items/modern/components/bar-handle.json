@@ -1,0 +1,127 @@
+{
+ "kind": "item",
+ "name": "Bar handle",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a bar handle: a round bar on two posts standing off the face it is fixed to (+z), across or upright -- a slab door's, an appliance's",
+ "params": {
+  "l": 0.16,
+  "stand": 0.028,
+  "r": 0.0065,
+  "pr": 0.005,
+  "inset": 0.012,
+  "sides": 8,
+  "psides": 6,
+  "along": "across"
+ },
+ "materials": {
+  "metal": "aluminium"
+ },
+ "parts": [
+  {
+   "id": "bar",
+   "type": "rod",
+   "material": "metal",
+   "r": "r",
+   "from": [
+    "0 - l / 2",
+    0,
+    "stand"
+   ],
+   "to": [
+    "l / 2",
+    0,
+    "stand"
+   ],
+   "sides": "sides",
+   "when": {
+    "along": "across"
+   }
+  },
+  {
+   "id": "barPost",
+   "type": "rod",
+   "material": "metal",
+   "r": "pr",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    0,
+    "stand"
+   ],
+   "sides": "psides",
+   "at": [
+    [
+     "0 - l / 2 + inset",
+     0,
+     0
+    ],
+    [
+     "l / 2 - inset",
+     0,
+     0
+    ]
+   ],
+   "when": {
+    "along": "across"
+   }
+  },
+  {
+   "id": "vbar",
+   "type": "rod",
+   "material": "metal",
+   "r": "r",
+   "from": [
+    0,
+    "0 - l / 2",
+    "stand"
+   ],
+   "to": [
+    0,
+    "l / 2",
+    "stand"
+   ],
+   "sides": "sides",
+   "when": {
+    "along": "upright"
+   }
+  },
+  {
+   "id": "vbarPost",
+   "type": "rod",
+   "material": "metal",
+   "r": "pr",
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    0,
+    "stand"
+   ],
+   "sides": "psides",
+   "at": [
+    [
+     0,
+     "0 - l / 2 + inset",
+     0
+    ],
+    [
+     0,
+     "l / 2 - inset",
+     0
+    ]
+   ],
+   "when": {
+    "along": "upright"
+   }
+  }
+ ]
+}

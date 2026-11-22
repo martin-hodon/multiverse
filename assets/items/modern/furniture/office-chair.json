@@ -1,0 +1,308 @@
+{
+ "kind": "item",
+ "name": "Office chair",
+ "category": "furniture/seat",
+ "era": "1975-2030",
+ "region": "everywhere",
+ "_about": "an office swivel chair: a five-star base on twin-wheeled castors, the gas lift, the tilt mechanism under the moulded seat and its cushion, a padded back on a curved spine, two T-shaped armrests -- facing +z, the seat at 0.48 m",
+ "params": {},
+ "materials": {
+  "cover": {
+   "pick": [
+    "upholstery-grey",
+    "upholstery",
+    "#2b2c30",
+    "upholstery-red"
+   ]
+  },
+  "frame": "plastic-black",
+  "chrome": "chrome"
+ },
+ "parts": [
+  {
+   "id": "base",
+   "use": "items/modern/components/star-base",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "R": 0.33,
+    "n": 5,
+    "top": 0.12
+   }
+  },
+  {
+   "id": "sleeve",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.026,
+   "from": [
+    0,
+    0.12,
+    0
+   ],
+   "to": [
+    0,
+    0.3,
+    0
+   ],
+   "sides": 12
+  },
+  {
+   "id": "piston",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.014,
+   "from": [
+    0,
+    0.29,
+    0
+   ],
+   "to": [
+    0,
+    0.38,
+    0
+   ],
+   "sides": 10
+  },
+  {
+   "id": "mechanism",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.2,
+    0.05,
+    0.24
+   ],
+   "at": [
+    0,
+    0.39,
+    0
+   ]
+  },
+  {
+   "id": "lever",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.006,
+   "from": [
+    0.09,
+    0.39,
+    0.05
+   ],
+   "to": [
+    0.2,
+    0.37,
+    0.09
+   ],
+   "sides": 5
+  },
+  {
+   "id": "shell",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.5,
+    0.03,
+    0.48
+   ],
+   "at": [
+    0,
+    0.425,
+    0
+   ]
+  },
+  {
+   "id": "cushion",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.5,
+    0.075,
+    0.47
+   ],
+   "at": [
+    0,
+    0.465,
+    0.005
+   ],
+   "round": 0.035
+  },
+  {
+   "id": "spine",
+   "type": "sweep",
+   "material": "frame",
+   "path": [
+    [
+     0,
+     0.41,
+     -0.08
+    ],
+    [
+     0,
+     0.42,
+     -0.24
+    ],
+    [
+     0,
+     0.5,
+     -0.31
+    ],
+    [
+     0,
+     0.66,
+     -0.33
+    ]
+   ],
+   "up": [
+    1,
+    0,
+    0
+   ],
+   "section": [
+    0.022,
+    0.07
+   ]
+  },
+  {
+   "id": "backShell",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.44,
+    0.52,
+    0.03
+   ],
+   "at": [
+    0,
+    0.85,
+    -0.315,
+    0,
+    -8,
+    0
+   ]
+  },
+  {
+   "id": "back",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.44,
+    0.52,
+    0.065
+   ],
+   "at": [
+    0,
+    0.85,
+    -0.272,
+    0,
+    -8,
+    0
+   ],
+   "round": 0.03
+  },
+  {
+   "id": "lumbar",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.4,
+    0.14,
+    0.04
+   ],
+   "at": [
+    0,
+    0.69,
+    -0.24,
+    0,
+    -8,
+    0
+   ],
+   "round": 0.02
+  },
+  {
+   "id": "armPost",
+   "type": "sweep",
+   "material": "frame",
+   "path": [
+    [
+     0.18,
+     0.41,
+     -0.02
+    ],
+    [
+     0.25,
+     0.43,
+     -0.02
+    ],
+    [
+     0.27,
+     0.5,
+     -0.02
+    ],
+    [
+     0.27,
+     0.64,
+     -0.02
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "mirror": "x",
+   "section": [
+    0.022,
+    0.05
+   ]
+  },
+  {
+   "id": "armPad",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.075,
+    0.03,
+    0.26
+   ],
+   "at": [
+    0.27,
+    0.655,
+    0.0
+   ],
+   "mirror": "x"
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": 0.5,
+    "d": 0.47,
+    "top": 0.48
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     0.0,
+     0.48,
+     0.0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5708
+   }
+  }
+ ]
+}

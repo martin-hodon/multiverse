@@ -1,0 +1,225 @@
+{
+ "kind": "item",
+ "name": "Locomotive wheel",
+ "category": "components",
+ "era": "1830-1960",
+ "region": "everywhere",
+ "_about": "a cast spoked locomotive wheel: the flanged tyre, n spokes, the hub, the crank pin at `crank` and the counterweight opposite -- the axle along z, the outside face at +z, the flange inside",
+ "params": {
+  "r": 0.85,
+  "n": 16,
+  "crank": 0.3,
+  "weight": 1
+ },
+ "materials": {
+  "wheel": "paint-black",
+  "tyre": "steel",
+  "pin": "steel"
+ },
+ "parts": [
+  {
+   "id": "tyre",
+   "type": "lathe",
+   "material": "tyre",
+   "profile": [
+    [
+     "r * 0.86",
+     -0.07
+    ],
+    [
+     "r + 0.035",
+     -0.07
+    ],
+    [
+     "r + 0.035",
+     -0.05
+    ],
+    [
+     "r",
+     -0.035
+    ],
+    [
+     "r",
+     0.07
+    ],
+    [
+     "r * 0.86",
+     0.07
+    ],
+    [
+     "r * 0.86",
+     -0.07
+    ]
+   ],
+   "caps": false,
+   "sides": 28,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "rim",
+   "type": "lathe",
+   "material": "wheel",
+   "profile": [
+    [
+     "r * 0.86",
+     -0.05
+    ],
+    [
+     "r * 0.78",
+     -0.05
+    ],
+    [
+     "r * 0.78",
+     0.05
+    ],
+    [
+     "r * 0.86",
+     0.05
+    ]
+   ],
+   "caps": false,
+   "sides": 28,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "spoke",
+   "type": "box",
+   "material": "wheel",
+   "size": [
+    "r * 0.62",
+    "r * 0.09",
+    0.06
+   ],
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "around": {
+    "n": "n",
+    "r": "r * 0.47",
+    "plane": "xy"
+   }
+  },
+  {
+   "id": "hub",
+   "type": "lathe",
+   "material": "wheel",
+   "profile": [
+    [
+     0,
+     0.1
+    ],
+    [
+     "r * 0.2",
+     0.1
+    ],
+    [
+     "r * 0.22",
+     0.0
+    ],
+    [
+     "r * 0.2",
+     -0.06
+    ],
+    [
+     0,
+     -0.06
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "boss",
+   "type": "rod",
+   "material": "wheel",
+   "r": "r * 0.12",
+   "from": [
+    "crank",
+    0,
+    0
+   ],
+   "to": [
+    "crank",
+    0,
+    0.09
+   ],
+   "sides": 10,
+   "when": "crank"
+  },
+  {
+   "id": "pin",
+   "type": "rod",
+   "material": "pin",
+   "r": 0.05,
+   "from": [
+    "crank",
+    0,
+    0.09
+   ],
+   "to": [
+    "crank",
+    0,
+    0.22
+   ],
+   "sides": 8,
+   "when": "crank"
+  },
+  {
+   "id": "weight",
+   "type": "plate",
+   "material": "wheel",
+   "outline": [
+    [
+     "r * 0.78 * cos(2.6)",
+     "r * 0.78 * sin(2.6)"
+    ],
+    [
+     "r * 0.78 * cos(3.14)",
+     0
+    ],
+    [
+     "r * 0.78 * cos(3.68)",
+     "r * 0.78 * sin(3.68)"
+    ],
+    [
+     "r * 0.4 * cos(3.4)",
+     "r * 0.4 * sin(3.4)"
+    ],
+    [
+     "r * 0.4 * cos(2.88)",
+     "r * 0.4 * sin(2.88)"
+    ]
+   ],
+   "thick": 0.1,
+   "when": "weight",
+   "at": [
+    0,
+    0,
+    0.01
+   ]
+  }
+ ]
+}

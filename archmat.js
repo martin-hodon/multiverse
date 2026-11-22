@@ -650,8 +650,9 @@ export function finishMaterial(r, side, open = false, geo = null) {   // open: a
   }
   const footKnown = outside && !pud && r.align !== "part" && !r.offset && !r.map && !r.turn;   // (finishShade's grime: the pattern's v is the height)
   const bare = BARE_OF_MOSS.test(r.pattern ?? "") || BARE_OF_MOSS.test(r.palette ?? "");   // (metal and glaze: nothing roots on them)
-  const key = TILE_ARRAY ? `array|${side ?? ""}${outside ? "" : "|dry"}${open ? "|open" : ""}${pud ? "|pud" : ""}${footKnown ? "|foot" : ""}${bare ? "|bare" : ""}`
-                         : finishKey(r) + "|" + (r.scale ?? 1) + "|" + (side ?? "") + (outside ? "" : "|dry") + (open ? "|open" : "") + (pud ? "|pud" : "") + (footKnown ? "|foot" : "") + (bare ? "|bare" : "");
+  const see = r.opacity < 1 ? `|op${r.opacity}` : "";   // (see-through: a window's glass -- drawn after the solid, writing no depth)
+  const key = TILE_ARRAY ? `array|${side ?? ""}${outside ? "" : "|dry"}${open ? "|open" : ""}${pud ? "|pud" : ""}${footKnown ? "|foot" : ""}${bare ? "|bare" : ""}${see}`
+                         : finishKey(r) + "|" + (r.scale ?? 1) + "|" + (side ?? "") + (outside ? "" : "|dry") + (open ? "|open" : "") + (pud ? "|pud" : "") + (footKnown ? "|foot" : "") + (bare ? "|bare" : "") + see;
   let mat = finishMats.get(key);
   if (!mat) {
     const c = finishColour(r);
@@ -662,6 +663,7 @@ export function finishMaterial(r, side, open = false, geo = null) {   // open: a
                                   // (a wall's height over the building's ground is its pattern's v -- architecture.js face mapping -- unless the
                                   //  pattern is laid from each part's foot, `align: part`, or moved: then not known)
                                   foot: footKnown ? attribute("aUV", "vec2").y : float(-1), moss: float(bare ? 0 : 1) }).mul(landShade());
+    if (see) { mat.transparent = true; mat.opacity = r.opacity; mat.depthWrite = false; }
     mat.userData.finish = key;
     finishMats.set(key, mat);
   }

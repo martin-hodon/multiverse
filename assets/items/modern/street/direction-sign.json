@@ -1,0 +1,73 @@
+{
+ "kind": "item",
+ "name": "Direction sign",
+ "category": "street",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a direction sign on two galvanised posts: a green board 1.4 x 0.7 m with a white border, a white arrow ahead and two destinations in white capitals, clamped by rails to two 76 mm posts 0.9 m apart, its middle 2.5 m up. It looks along +x.",
+ "params": {},
+ "materials": {
+  "pole": "steel",
+  "cap": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "post",
+   "use": "items/modern/components/pole",
+   "at": [
+    [
+     0,
+     0,
+     -0.45
+    ],
+    [
+     0,
+     0,
+     0.45
+    ]
+   ],
+   "params": {
+    "h": 2.88,
+    "r": 0.038,
+    "base": "none"
+   }
+  },
+  {
+   "id": "face",
+   "use": "items/modern/components/sign-face",
+   "at": [
+    0.06,
+    2.5,
+    0,
+    90,
+    0,
+    0
+   ],
+   "params": {
+    "sign": "direction"
+   }
+  },
+  {
+   "id": "rail",
+   "type": "box",
+   "material": "pole",
+   "size": [
+    0.025,
+    0.04,
+    1.2
+   ],
+   "at": [
+    [
+     0.037,
+     2.3,
+     0
+    ],
+    [
+     0.037,
+     2.7,
+     0
+    ]
+   ]
+  }
+ ]
+}

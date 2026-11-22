@@ -2,17 +2,21 @@
  "kind": "item",
  "name": "Frame-and-panel door",
  "category": "component",
- "_about": "a cupboard's door as a joiner makes it: two stiles and two rails round a thinner panel set back in them; its face at 0 looking +z, `w` by `h`; a knob by its opening edge (side -1 left, 1 right)",
+ "_about": "a cupboard's door as a joiner makes it: two stiles and two rails round a thinner panel set back in them; its face at z 0 looking +z (`anchor` 1, the default; 0: its back at z 0 and its face at t, as modern/components/slab-door stands), `w` by `h`; a knob by its opening edge (side -1 left, 1 right; `knob` 0: none -- the modern slab-door's shaker front puts its own pull); the panel is role `panel` (its own `wood` unless the user maps it: a darker or other sunk panel) -- `swing` 1: HINGED at the edge away from its knob (side), opening out toward +z with the item's `open`",
  "params": {
   "w": 0.45,
   "h": 0.9,
   "s": 0.06,
   "t": 0.022,
   "side": 1,
-  "arch": 0
+  "arch": 0,
+  "swing": 0,
+  "anchor": 1,
+  "knob": 1
  },
  "materials": {
   "wood": "oak",
+  "panel": "wood",
   "metal": "iron"
  },
  "parts": [
@@ -29,14 +33,17 @@
     [
      "0 - w / 2 + s / 2",
      0,
-     "0 - t / 2"
+     "t * (1 - anchor) - t / 2"
     ],
     [
      "w / 2 - s / 2",
      0,
-     "0 - t / 2"
+     "t * (1 - anchor) - t / 2"
     ]
-   ]
+   ],
+   "when": {
+    "swing": 0
+   }
   },
   {
    "id": "rails",
@@ -51,19 +58,22 @@
     [
      0,
      "h / 2 - s / 2",
-     "0 - t / 2"
+     "t * (1 - anchor) - t / 2"
     ],
     [
      0,
      "0 - h / 2 + s / 2",
-     "0 - t / 2"
+     "t * (1 - anchor) - t / 2"
     ]
-   ]
+   ],
+   "when": {
+    "swing": 0
+   }
   },
   {
    "id": "panel",
    "type": "box",
-   "material": "wood",
+   "material": "panel",
    "size": [
     "w - 2 * s + 0.01",
     "h - 2 * s + 0.01",
@@ -73,8 +83,11 @@
    "at": [
     0,
     0,
-    "0 - t * 0.6"
-   ]
+    "t * (1 - anchor) - t * 0.6"
+   ],
+   "when": {
+    "swing": 0
+   }
   },
   {
    "id": "knob",
@@ -82,11 +95,110 @@
    "at": [
     "(w / 2 - s / 2) * side",
     0,
-    0
+    "t * (1 - anchor)"
    ],
    "params": {
     "r": 0.013
+   },
+   "when": {
+    "swing": 0,
+    "knob": 1
    }
+  },
+  {
+   "id": "leaf",
+   "type": "hinge",
+   "when": {
+    "swing": 1
+   },
+   "pivot": [
+    "0 - w / 2 * side",
+    0,
+    "t * (1 - anchor)"
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": "0 - 105 * side",
+   "parts": [
+    {
+     "id": "stiles",
+     "type": "box",
+     "material": "wood",
+     "size": [
+      "s",
+      "h",
+      "t"
+     ],
+     "at": [
+      [
+       "0 - w / 2 + s / 2",
+       0,
+       "t * (1 - anchor) - t / 2"
+      ],
+      [
+       "w / 2 - s / 2",
+       0,
+       "t * (1 - anchor) - t / 2"
+      ]
+     ]
+    },
+    {
+     "id": "rails",
+     "type": "box",
+     "material": "wood",
+     "size": [
+      "w - 2 * s",
+      "s",
+      "t"
+     ],
+     "at": [
+      [
+       0,
+       "h / 2 - s / 2",
+       "t * (1 - anchor) - t / 2"
+      ],
+      [
+       0,
+       "0 - h / 2 + s / 2",
+       "t * (1 - anchor) - t / 2"
+      ]
+     ]
+    },
+    {
+     "id": "panel",
+     "type": "box",
+     "material": "panel",
+     "size": [
+      "w - 2 * s + 0.01",
+      "h - 2 * s + 0.01",
+      "t * 0.5"
+     ],
+     "round": 0.004,
+     "at": [
+      0,
+      0,
+      "t * (1 - anchor) - t * 0.6"
+     ]
+    },
+    {
+     "id": "knob",
+     "use": "items/components/knob",
+     "at": [
+      "(w / 2 - s / 2) * side",
+      0,
+      "t * (1 - anchor)"
+     ],
+     "params": {
+      "r": 0.013
+     },
+     "when": {
+      "knob": 1
+     }
+    }
+   ]
   }
  ]
 }

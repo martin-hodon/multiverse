@@ -1,0 +1,184 @@
+{
+ "kind": "item",
+ "name": "Chopping block",
+ "category": "furniture",
+ "era": "any",
+ "region": "Europe",
+ "_about": "a butcher's block: a round of a great trunk on three splayed legs, end grain up and worn hollow in the middle, bound with two iron bands, the scraper lying on it",
+ "params": {
+  "R": [
+   0.36,
+   0.4
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "oak-grey"
+   ]
+  },
+  "endgrain": {
+   "pick": [
+    "pine",
+    "ash"
+   ]
+  },
+  "iron": "iron",
+  "steel": "steel"
+ },
+ "parts": [
+  {
+   "id": "block",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0,
+     0.34
+    ],
+    [
+     "R",
+     0.34
+    ],
+    [
+     "R + 0.01",
+     0.5
+    ],
+    [
+     "R",
+     0.79
+    ],
+    [
+     0,
+     0.79
+    ]
+   ],
+   "sides": 16,
+   "faceted": true
+  },
+  {
+   "id": "top",
+   "type": "lathe",
+   "material": "endgrain",
+   "profile": [
+    [
+     "R - 0.01",
+     0.79
+    ],
+    [
+     "R - 0.01",
+     0.802
+    ],
+    [
+     "R * 0.6",
+     0.797
+    ],
+    [
+     "R * 0.25",
+     0.788
+    ],
+    [
+     0,
+     0.786
+    ]
+   ],
+   "sides": 16
+  },
+  {
+   "id": "bands",
+   "type": "lathe",
+   "material": "iron",
+   "profile": [
+    [
+     "R + 0.003 + 0",
+     -0.0175
+    ],
+    [
+     "R + 0.003 + 0.005",
+     -0.0125
+    ],
+    [
+     "R + 0.003 + 0.005",
+     0.0125
+    ],
+    [
+     "R + 0.003 + 0",
+     0.0175
+    ]
+   ],
+   "sides": 16,
+   "caps": false,
+   "at": [
+    [
+     0,
+     0.42,
+     0
+    ],
+    [
+     0,
+     0.74,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "legs",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.05,
+   "from": [
+    "R * 0.5",
+    0.36,
+    0
+   ],
+   "to": [
+    "R * 0.85",
+    0,
+    0
+   ],
+   "sides": 8,
+   "r1": 0.04,
+   "around": {
+    "n": 3,
+    "r": 0
+   }
+  },
+  {
+   "id": "scraper",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.12,
+    0.004,
+    0.09
+   ],
+   "at": [
+    0.12,
+    0.8,
+    0.1,
+    20,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "scraperGrip",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.13,
+    0.025,
+    0.03
+   ],
+   "at": [
+    0.13,
+    0.815,
+    0.155,
+    20,
+    0,
+    0
+   ]
+  }
+ ]
+}

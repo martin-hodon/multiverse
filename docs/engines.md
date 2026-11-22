@@ -1911,8 +1911,8 @@ face. A `"kind": "sculpt"` creature is not parts at all.
 - **Drawing** (bodies.js): built once per species (hedgehog: ~2 s in the browser, logged), each animal a SkinnedMesh over
   the shared geometry; three's skinning reads `skeleton.boneMatrices`, which place() writes straight from the frames
   skeleton.js keeps for such an animal (`an._bm`): bone j = W_j * S(f) * T(-rest_j), f the animal's size against the
-  definition's. Past `mesh.far` the far geometry. Material: heads.js faceMaterial with the manes' softer sheen.
-  Callers: index.html, menagerie.html, assets.html (`createBodies(scene)`, `bodies.place(herds, camera.position)`).
+  definition's. Past `mesh.far` the far geometry, a few dozen pixels across the very far one, under a few pixels none ("A herd at a distance", below). Material: heads.js faceMaterial with the manes' softer sheen.
+  Callers: index.html, menagerie.html, assets.html (`createBodies(scene)`, `bodies.place(herds, camera.position, camera)` -- the camera for the pixel sizes; without it a 45-degree, 800-pixel view is assumed).
 
 ### Every other creature, converted (2026-11-04)
 
@@ -2128,6 +2128,119 @@ comes it would pop visibly to another animal -- and the real one now comes in we
 Sharing samples per prim across species does not work either (the grids, cells and prims differ); what CAN be shared,
 looks of one definition with the same field, already is (shapeSpec, above).
 
+
+### A herd at a distance: the very far mesh and the hidden speck (2026-11-22)
+
+After the pregen re-run a medieval world (seed 7) drew 211 sculpted bodies from 40 m outside the crowd -- 971,000 of
+the frame's triangles -- and nearly all of them were 100-450 m away: median 6 pixels across, 37 % under 4, 145 beyond
+200 m. The far mesh is no help out there: a horse's is 2200 triangles of body and 8600 of tubes (mane, tail strands),
+an owl's 4360. Measured (headless, `?fps=max`): hiding those meshes saved 4.7 ms of CPU (about 22 us a skinned draw:
+three's per-object state and bone upload) and 4.7 ms of GPU; their bone writes 1.4 ms more; posing the figures 3.6 ms.
+
+**The very far mesh** (bodyfar.js `withVeryFar`, `VFAR` `{ share: .35, min: 500, max: 1800, cells: 48, anchor: 400 }`):
+a third geometry made from the DRESSED far mesh where the dress is made (bodyworker.js, and bodies.js's no-worker
+fallback), so the baked shapes and their hash (bodymesh.js, sculpt.js, sharp.js) are untouched and nothing in pregen/
+changes. The body's own surface is simplified again (sculpt.js `simplify`, to 35 % of the far mesh's surface, 500..1800
+triangles) with its colour boundaries held (`paintAnchors`, as bodymesh.js holds them: a vertex whose paint steps from
+its neighbour's is anchored, `anchor` times the step times the mean squared edge) and its normals made again from the
+coarser surface (copying the far mesh's made it look faceted); each vertex kept takes the paint and skin of the one it
+was. The eyes and the details are CLUSTERED on a 48-cell grid across the body's box (a strand thinner than a cell goes,
+a wing, an ear or a fin keeps its outline); the coat (quills) is left out -- a sheep's fleece is not a coat but its
+surface, kept. Not 20 % smaller than the far mesh: none. Horse 10,848 -> 1432, sheep 3200 -> 810, cow 4420 -> 1031,
+chicken 3276 -> 1757. A dressed body cached in IndexedDB without one (`vfar` unset) is dressed again once.
+
+**Which mesh** (bodies.js `BODY_LOD` `{ vfar: 12, hide: 2.5, band: 1.2, near: .92 }`), per body each frame, from its
+size on screen (`px` = 2 R f / d, R the far mesh's bounding radius, f the pixels per radian of the camera):
+near until `mesh.far` -- back to near only under 0.92 of it; the far mesh; the very far one under 12 pixels (back to the
+far one above 12 x 1.2); and under 2.5 pixels (back above 3) NOTHING -- for a figure that is one body, standing still
+(`!an.moving`): it is marked `an._tiny`, composite.js stops easing and posing it (its last pose stands), place() hides it.
+When it grows past the band again it is posed first and drawn from the next frame, so it never shows a stale pose. A
+moving speck stays drawn on the very far mesh (it would otherwise blink as it walks). The near and the far meshes and
+`mesh.far` are as they were: a close-up is pixel for pixel what it was. 12 pixels is a sheep at ~125 m, a horse at
+~220 m, a pig at ~120 m, a chicken at ~50 m: a herd in a field 25-60 m off is on the far mesh, as before.
+`BODY_LOD.force` (a level, or null) puts every body on that mesh: for the checks (same frame, levels on and off).
+
+*The first tuning was too coarse.* A seventh to a quarter of the surface, 32-40 cells and the switch at 24-28 px put the
+sheep 25-60 m off on the very far mesh, and there they were flat white slabs -- the black faces and the legs' colour
+smeared into the fleece (the simplify did not hold the colour boundaries), faceted by copied normals, the head and legs
+thinned. The silhouette itself survived (rendered from the dumped meshes); the paint and the shading did not, and at
+20-50 px that reads as a different animal. Hence the anchors, the new normals, a bigger budget and the switch at 12 px,
+where a cow's patches are two pixels and their smearing is not seen.
+
+Also: place() skips the bone write when the frames have not changed since the last write (skeleton.js counts its writes
+in `an._bmN`; a figure posed every 2nd or 4th frame far off); composite.js no longer marks dirty or uploads the part
+rows of a figure that is ALL bones of its body (a sculpted animal on its own: its parts are not drawn by the composite).
+
+Measured (headless, uncapped `?fps=max`, the levels OFF and ON alternated three times in one session at each view, medians
+of nine readings -- the machine was shared, so A/B runs in separate sessions drifted by more than the effect):
+
+| view | body triangles off -> on | ms a frame | cpu | gpu | draws |
+|---|---|---|---|---|---|
+| seed 7, 40 m outside the crowd | 974k -> 424k | 63 -> 58 | 30.9 -> 28.2 | 22.0 -> 19.9 | 1471 -> 1424 |
+| seed 7, the crowd's middle | 829k -> 373k | 62 -> 57 | 29.1 -> 26.5 | 23.2 -> 21.2 | 1253 -> 1209 |
+| recorded world, 40 m out | 1.43M -> 742k | 59 -> 53 | 28.2 -> 25.1 | 22.3 -> 19.2 | 1110 -> 1042 |
+| recorded world, middle | 1.25M -> 685k | 58 -> 54 | 26.6 -> 25.0 | 22.5 -> 20.3 | 966 -> 916 |
+
+(The first, too coarse tuning took seed 7's 40 m view to 137k body triangles and 80 -> 65 ms against the old code.)
+The herd renders, the same frame with the levels on and on the far mesh only: sheep at 25, 60, 120, 200 m, and a staged
+row of horses, a cow, pigs and chickens at 25-130 m -- alike; at 25-60 m every one of them is on the far mesh.
+What is left of the creatures' cost is the ~160 skinned draws (about 3.5 ms of CPU) and the posing.
+*Not done:* posing the very far figures less often (choppy at 20 px).
+
+### Far and very far bodies batched: one object, not two hundred (2026-11-22)
+
+**Where a frame's draws go** (seed 7 medieval, orbit camera, headless, `?fps=max`; counted by wrapping three's
+`backend.draw` and splitting by object, a frame ending at the game's `renderer.info.reset()` -- three's own rAF loop
+resets `info` too, so `info.render.drawCalls` read from outside is a fraction of a frame). three counts every BatchedMesh
+COPY as a draw call, so the count is dominated by the batched pools, which are cheap a copy; the OBJECTS (a render
+object, a bind group, ~20 us of CPU each) were dominated by the creatures:
+
+| view | three's draws | flowers + mushrooms (batched copies) | far heads (copies) | body L2 / L1 objects | plants |
+|---|---|---|---|---|---|
+| zoo, 30 m | 998 | 457 + 133 | 43 | 54 / 42 | 44 |
+| zoo, 120 m | 908 | 160 + 264 | 121 | 105 / 67 | 44 |
+| zoo, 300 m | 1449 | 378 + 423 | 154 | 188 / 46 | 42 |
+| farm, 60 m | 340 | 67 + 29 | 29 | 15 / 14 | 48 |
+| overview, 70 m up | 1617 | 484 + 388 | 190 | 195 / 35 | 42 |
+
+And the very far bodies were nearly all DIFFERENT looks: the zoo keeps one of each of ~130 species, so 217 bodies were
+132 looks -- instancing per look alone would have saved a third.
+
+**Now** (bodies.js `BATCH`, "FEWER DRAWS PAST THE NEAR MESH"): every very far body (level 2) of every look is a copy in
+ONE BatchedMesh (batchpool.js, a new `setup` option turns off per-copy culling and sorting); each look's very far mesh is
+added on first use with eight vertex attributes (position, normal, skin weight and index, uv, colour, hair and wet
+masks: WebGPU's limit of eight vertex buffers) and its five pattern slots in a storage buffer (PAT, read by
+`vertexIndex`). Every far body (level 1) of a look is one instanced draw (a plain Mesh with `count`, an instanced `aBone`):
+the far meshes are 5-10x the very far ones, too big to copy every look's into the batch. Both skin in the vertex shader
+(`skinAll`, a `void` Fn called from the material's `setupPosition`, as three's own skinning is -- a non-void Fn's
+assignments never reach the stack and the bodies vanished) from one storage buffer of bone matrices (BONES), each body
+record's run of nb written exactly as its skeleton's were and uploaded by update ranges only when posed. A BatchedMesh
+copy finds its run in its own matrix's element 15 (the matrix otherwise identity; that element only reaches w). Near
+and half-drawn bodies stay SkinnedMeshes; `BODY_LOD.batch = 9` puts everything back on them.
+
+Checked the same instant both ways (one task: `batch` 9, 9, 1, 1, 9, each `place()` + `render()` + `toDataURL`, the
+renders compared at the same parity, each over an opaque backing -- the canvas's alpha in the foliage let the live
+frame show through): at 30, 120 and 300 m from the zoo, a farm, the village and an overview the batched picture is the
+skinned one to the pixel but for at most ONE pixel a view over 24/765 (max 101: the weighted bone sum is added in
+another order, a silhouette edge rounds the other way); two skinned renders are identical. (The first version drew nothing at all: the shadows stood empty.)
+
+Measured over the same path, before (batch 9) -> after:
+
+| view | objects drawn (top rows) | three's draws | triangles | ms a frame | cpu | gpu |
+|---|---|---|---|---|---|---|
+| zoo, 30 m | 216 -> 156 | 998 -> 992 | 2.16M -> 2.13M | 75.3 -> 73.2 | 28.9 -> 27.3 | 34.4 -> 34.7 |
+| zoo, 120 m | 300 -> 185 | 908 -> 898 | 2.86M -> 2.79M | 108.3 -> 104.3 | 38.8 -> 35.1 | 59.5 -> 59.1 |
+| zoo, 300 m | 362 -> 175 | 1449 -> 1449 | 3.57M -> 3.57M | 105.1 -> 98.6 | 44.9 -> 36.2 | 51.0 -> 51.0 |
+| farm, 60 m | 128 -> 111 | 340 -> 337 | 1.16M -> 1.15M | 51.0 -> 50.0 | 20.9 -> 20.5 | 22.4 -> 22.6 |
+| village, 80 m | 83 -> 79 | 372 -> 370 | 0.96M -> 0.95M | 40.2 -> 42.7 | 17.5 -> 16.0 | 18.1 -> 18.5 |
+| overview | 368 -> 173 | 1617 -> 1623 | 3.86M -> 3.85M | 113.3 -> 106.0 | 44.6 -> 40.5 | 55.1 -> 54.8 |
+
+(Separate sessions on a shared machine: the cpu column is the readout's, the ms the median frame.) three's draw count
+barely moves -- a batched copy is still one of its draws -- but the objects it walks fall by up to half and the CPU by
+4-9 ms where the herds are far. The GPU is unchanged (the same triangles). **What is left of the count** is the batched
+meadow: flowers and mushrooms, 100-900 copies, each its own `drawIndexed` in three's WebGPU BatchedMesh path, and the far
+heads (up to 190). Collapsing consecutive copies of one shape into one instanced `drawIndexed` (their `instance_index`
+is the draw id three's batch shader reads) would cut those; not done.
 
 ### A sculpted body inside a bigger figure (2026-11-08)
 

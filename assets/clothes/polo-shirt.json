@@ -1,0 +1,53 @@
+{
+  "name": "Polo shirt",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "the polo shirt (René Lacoste's tennis shirt, 1926): cotton piqué, a soft turned-down collar over a buttoned placket of two or three buttons, short sleeves with ribbed bands, worn out over the trousers",
+  "thick": 0.0035,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "navy"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip + 0.03",
+        "neckline": "v",
+        "neckFront": 0.075,
+        "neckBack": 0.004,
+        "neckWidth": 9
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "biceps - 0.05"
+      }
+    },
+    {
+      "use": "clothes/components/collar",
+      "params": {
+        "height": 0.028,
+        "drop": 0.015,
+        "flare": 0.6,
+        "gap": 22
+      }
+    }
+  ],
+  "pieces": [
+    {
+      "name": "mouth",
+      "kind": "hang",
+      "on": "arm",
+      "from": "biceps - 0.075",
+      "to": "biceps + 0.02",
+      "flare": 0.08,
+      "fabric": "main",
+      "pleats": 0
+    }
+  ]
+}

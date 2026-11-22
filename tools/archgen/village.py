@@ -77,8 +77,10 @@ def furniture():
                              "jambs": box(0.2, 0.6, 1.25, [[-0.7, 0.45, -0.1, 0], [0.7, 0.45, -0.1, 0]]),
                              "flue": box(0.8, 0.4, 0.7, [0, 2.2, -0.2, 0]),
                              "fireback": box(1.2, 0.04, 1.25, [0, 0.45, -0.38, 0]),
-                             "fire": marker("fire", [0, 0.46, 0.05, 0], r=0.25, h=0.5)},
-                   "build": ["hearth", "jambs", "hood", "flue", "fireback", "fire"]}
+                             "fire": marker("fire", [0, 0.46, 0.05, 0], r=0.25, h=0.5),
+                             # the pot over it, on its chain from the hood (items/tableware/cauldron, tools/craftgen.py)
+                             "cauldron": item("items/tableware/cauldron", [0, 0.45, 0.05, 0], {"mount": "chain", "lift": 0.15, "top": 1.25}, solid=False)},
+                   "build": ["hearth", "jambs", "hood", "flue", "fireback", "fire", "cauldron"]}
     F["chest"] = {"name": "Chest", "_about": "a six-board chest bound with iron (items/furniture/plank-chest)", "params": {"detail": 4, "look": 1},
                   "parts": {"chest": item("items/furniture/plank-chest", [0, 0, 0, 0], {"w": 0.95}, seed="look")}, "build": ["chest"]}
     F["barrels"] = {"name": "Barrels", "_about": "a row of casks on their ends (items/furniture/cask), a cellar's or a cooper's",
@@ -98,15 +100,13 @@ def furniture():
     hang = lambda path, x, y, z, L, a=0, **k: item(path, [x, round(y - L, 3), z, a], solid=False, **k)
     def rack(name, x, z, w, y=1.55, a=0):   # a board on the wall with pegs, the tools hung from it
         return {f"{name}": box(w, 0.04, 0.12, [x, y, z, a]), f"{name} pegs": box(0.03, 0.08, 0.03, [[x + (i - 1.5) * w / 4, y + 0.05, z + 0.05, a] for i in range(4)])}
-    F["smithy"] = trade("Smithy", "the brick forge against the back wall, its fire under a hood and chimney, the bellows beside it; the anvil on its stump mid-room, the quench tub, iron stock leaning by the wall, the tools on their rack",
+    F["smithy"] = trade("Smithy", "the brick forge against the back wall, its fire under a hood and chimney, the great bellows on its stand beside it, piped into the fire; the anvil on its stump mid-room, the quench tub, iron stock leaning by the wall, the tools on their rack",
                         {"forge brick": box(1.9, 1.2, 0.9, [0.6, 0, -1.3, 0]), "forge hearth iron": box(1.2, 0.7, 0.04, [0.6, 0.9, -1.2, 0]),
                          "coals": marker("fire", [0.6, 0.94, -1.2, 0], r=0.22, h=0.45),
                          "hood brick": box(2.1, 1.3, 0.6, [0.6, 2.0, -1.3, 0]), "chimney brick": box(0.8, 0.7, 0.4, [0.6, 2.6, -1.4, 0]),
-                         "bellows leather": box(0.55, 0.9, 0.22, [1.85, 0.75, -1.1, 0]), "bellows board": box(0.6, 0.95, 0.04, [1.85, 0.97, -1.1, 0]),
-                         "bellows stand": box(0.5, 0.6, 0.75, [1.85, 0, -1.1, 0]),
-                         "stump": col(0.3, 0.55, [-0.5, 0, 0.1, 0], sides=8, taper=0.9),
-                         "anvil foot iron": box(0.34, 0.24, 0.1, [-0.5, 0.55, 0.1, 0]), "anvil waist iron": box(0.2, 0.15, 0.12, [-0.5, 0.65, 0.1, 0]),
-                         "anvil face iron": box(0.5, 0.2, 0.12, [-0.53, 0.77, 0.1, 0]), "anvil horn iron": box(0.16, 0.11, 0.08, [-0.2, 0.8, 0.1, 0]),
+                         # (the craft items, tools/craftgen.py: the bellows' nozzle turned to the back wall, its pipe bent into the forge)
+                         "bellows": item("items/furniture/bellows", [1.85, 0, -1.1, PI2f], {"pipe": 0.3}),
+                         "anvil": item("items/furniture/anvil", [-0.5, 0, 0.1, 0]),
                          "hammer": item("items/tools/hammer", [-0.62, 0.89, 0.05, 0.3], solid=False),
                          "quench": item("items/furniture/cask", [-1.4, 0, -1.2, 0], {"h": 0.6, "r": 0.34}),
                          "stock iron": box(0.03, 0.03, 1.4, [[-1.65 + k * 0.06, 0, -0.4 + k * 0.04, 0] for k in range(5)]),
@@ -119,7 +119,7 @@ def furniture():
                          "oven mouth iron": box(0.5, 0.04, 0.35, [0.5, 0.3, -0.44, 0]),
                          "glow": marker("fire", [0.5, 0.35, -0.5, 0], r=0.2, h=0.3),
                          "firewood": box(0.6, 0.35, 0.12, [[1.65, k * 0.12, -1.3 + (k % 2) * 0.05, 1.5707963] for k in range(5)]),
-                         "peel": box(0.05, 0.3, 1.8, [-0.45, 0, -1.55, 0]), "peel blade": box(0.32, 0.02, 0.36, [-0.45, 0.02, -1.42, 0]),
+                         "peel": item("items/tools/oven-peel", [-0.45, 0, -1.25, -PI2f], {"lean": 12}, solid=False),   # (leant on the back wall)
                          "table": item("items/furniture/kitchen-table", [-0.4, 0, 0.3, 0], {"L": 1.6, "d": 0.8, "h": 0.85}, markers=False),
                          "dough": col(0.17, 0.08, [[-0.8, 0.85, 0.3, 0], [-0.35, 0.85, 0.2, 0]], sides=8, taper=0.7),
                          "loaves": item("items/food/round-loaf", [[0.05, 0.85, 0.35, 0], [0.25, 0.85, 0.15, 1.2]], solid=False),
@@ -128,8 +128,7 @@ def furniture():
                          "bread": item("items/food/bread", [[-1.1 + k * 0.28, 1.14, 1.5, 0] for k in range(5)] + [[-1.0 + k * 0.3, 1.54, 1.5, 0] for k in range(4)], solid=False)},
                         (-0.4, 0, 1.25, 1.5707963, "knead", None, "stand"))
     F["pottery"] = trade("Pottery", "the kick wheel with the clay on its head and the potter's stool; a small brick kiln in the corner; shelves of pots, jugs and jars drying; the clay tub",
-                         {"wheel": col(0.36, 0.5, [0.2, 0, 0, 0], sides=12), "wheel head clay": col(0.24, 0.06, [0.2, 0.5, 0, 0], sides=12),
-                          "pot clay": col(0.1, 0.16, [0.2, 0.56, 0, 0], sides=10, taper=0.75),
+                         {"wheel": item("items/furniture/kick-wheel", [0.2, 0, 0, 0]),   # (the pot on its head is the item's)
                           "stool": item("items/furniture/stool", [-0.6, 0, 0, 0], {"h": 0.45}, markers=False),
                           "kiln brick": col(0.55, 1.1, [1.3, 0, -1.25, 0], sides=12), "kiln dome brick": {"type": "dome", "sides": 12, "radius": 0.55, "thickness": 0, "head": {"profile": "semicircular"}, "at": [[1.3, 1.1, -1.25, 0]]},
                           "glow": marker("fire", [1.3, 0.25, -0.72, 0], r=0.12, h=0.22),
@@ -141,11 +140,7 @@ def furniture():
                           "jugs": item("items/tableware/jug", [[1.4, 0, 0.5, 0], [1.2, 0, 0.75, 1.0], [1.5, 0, 0.85, 2.0]], solid=False),
                           "tub": item("items/furniture/cask", [-1.4, 0, 0.6, 0], {"h": 0.45, "r": 0.32})},
                          (-0.6, 0.47, 0, 0, "knead", None, "sit"))
-    loom = {"loom posts": box(0.09, 0.09, 1.6, [[x, 0, z, 0] for x in (-0.9, 0.9) for z in (-1.2, 0.05)]),
-            "loom top": box(1.95, 1.4, 0.09, [0, 1.6, -0.58, 0]), "loom rails": box(0.08, 1.3, 0.08, [[-0.9, 0.15, -0.58, 0], [0.9, 0.15, -0.58, 0]]),
-            "warp beam": col(0.06, 1.7, [0, 0.85, -1.15, 0], sides=6), "breast beam": box(1.8, 0.1, 0.1, [0, 0.8, 0.05, 0]),
-            "warp cloth": box(1.5, 1.1, 0.012, [0, 0.83, -0.55, 0]), "web cloth": box(1.5, 0.35, 0.02, [0, 0.82, -0.1, 0]),
-            "heddles": box(1.6, 0.05, 0.5, [0, 1.0, -0.6, 0]), "treadles": box(0.12, 0.7, 0.04, [[-0.3 + k * 0.2, 0.08, -0.3, 0] for k in range(4)])}
+    loom = {"loom": item("items/furniture/floor-loom", [0, 0, -0.575, 0])}   # (tools/craftgen.py: the weaver at its +z)
     F["weaver"] = trade("Weaver", "a floor loom -- its frame, the warp running back to the warp beam, the woven cloth on the breast beam, heddles and treadles -- the weaver on its bench; the spinning wheel, baskets of wool, hanks of yarn hung up",
                         {**loom, "bench": item("items/furniture/bench", [0, 0, 0.55, 0], {"L": 1.4, "d": 0.35}, markers=False),
                          "wheel": item("items/furniture/spinning-wheel", [1.35, 0, -1.0, 0]),
@@ -156,23 +151,21 @@ def furniture():
                         (0, 0.47, 0.55, 1.5707963, "weave", None, "sit"))
     F["tailor"] = trade("Tailor", "the cutting table with a length of cloth laid out and the shears on it, bolts of cloth in their colours on the shelves behind, a garment on its form, the stool",
                         {"table": item("items/furniture/trestle-table", [0, 0, -0.2, 0], {"L": 1.8, "d": 0.9, "h": 0.85}, markers=False),
-                         "laid cloth": box(1.2, 0.7, 0.01, [-0.1, 0.85, -0.2, 0.08]), "shears iron": box(0.03, 0.22, 0.012, [[0.55, 0.86, -0.15, 0.4], [0.57, 0.86, -0.15, -0.3]]),
+                         "laid cloth": box(1.2, 0.7, 0.01, [-0.1, 0.85, -0.2, 0.08]), "shears": item("items/tools/shears", [0.55, 0.86, -0.15, 0.4], solid=False),
                          "shelf": box(2.0, 0.45, 0.04, [[0, 0.8, -1.55, 0], [0, 1.45, -1.55, 0]]), "shelf posts": box(0.05, 0.45, 1.9, [[-0.98, 0, -1.55, 0], [0.98, 0, -1.55, 0]]),
                          "bolts madder": col(0.12, 0.6, [[-0.75, 0.84, -1.55, 0], [0.15, 1.49, -1.55, 0]], sides=8),
                          "bolts woad": col(0.12, 0.6, [[-0.45, 0.84, -1.55, 0], [0.45, 1.49, -1.55, 0]], sides=8),
                          "bolts weld": col(0.12, 0.6, [[-0.15, 0.84, -1.55, 0], [-0.75, 1.49, -1.55, 0]], sides=8),
                          "bolts linen": col(0.12, 0.6, [[0.15, 0.84, -1.55, 0], [0.75, 1.49, -1.55, 0]], sides=8),
                          "bolts russet": col(0.12, 0.6, [[0.45, 0.84, -1.55, 0], [0.75, 0.84, -1.55, 0], [-0.45, 1.49, -1.55, 0]], sides=8),
-                         "form stand": col(0.03, 1.0, [1.35, 0, 0.6, 0], sides=6), "form foot": col(0.22, 0.05, [1.35, 0, 0.6, 0], sides=8),
-                         "garment madder": col(0.2, 0.62, [1.35, 0.95, 0.6, 0], sides=10, taper=1.25),
+                         "form": item("items/furniture/dress-form", [1.35, 0, 0.6, -1.99]),   # (a garment on it, facing the room)
                          "stool": item("items/furniture/stool", [0.9, 0, 0.6, 0], {"h": 0.5}, markers=False)},
                         (0, 0, 0.9, 1.5707963, "sew", None, "stand"))
     F["carpenter"] = trade("Carpenter", "the joiner's bench on its legs with a vice and the work on it, a sawhorse, planks and boards stacked against the wall, the tools on their rack, shavings on the floor",
-                           {"bench legs": box(0.1, 0.1, 0.78, [[x, 0, z, 0] for x in (-0.95, 0.95) for z in (-0.52, -0.08)]), "bench top": box(2.2, 0.6, 0.1, [0, 0.78, -0.3, 0]),
-                            "bench rails": box(1.9, 0.06, 0.08, [[0, 0.2, -0.52, 0], [0, 0.2, -0.08, 0]]), "vice": box(0.3, 0.12, 0.25, [-0.95, 0.62, 0.02, 0]),
+                           {"bench": item("items/furniture/workbench", [0, 0, -0.3, 0]),   # (tools/craftgen.py: its leg vice at the front left)
                             "workpiece": box(0.9, 0.22, 0.04, [0.2, 0.88, -0.3, 0]),
                             "mallet": item("items/tools/mallet", [0.85, 0.88, -0.3, 0], solid=False),
-                            "sawhorse": box(0.08, 0.08, 0.6, [[x, 0, 1.0, 0] for x in (-1.0, -0.2)]), "sawhorse top": box(1.0, 0.1, 0.1, [-0.6, 0.6, 1.0, 0]),
+                            "sawhorse": item("items/furniture/sawhorse", [-0.6, 0, 1.0, 0]),
                             "plank": box(1.5, 0.25, 0.04, [-0.6, 0.7, 1.0, 0]),
                             "planks": box(0.28, 2.6, 0.05, [[-1.55 + k * 0.03, k * 0.05, -0.3, 0] for k in range(6)]),
                             "boards": box(0.04, 0.3, 2.0, [[1.55 - k * 0.05, 0, -1.3 + k * 0.2, 0] for k in range(4)]),
@@ -190,7 +183,7 @@ def furniture():
                         (-0.2, 0, 0.85, 1.5707963, "hammer", "hammer", "stand"))
     F["butcher"] = trade("Butcher", "the counter at the front with its board and a joint on it, the chopping block behind, the meat rail with its hooks and the hams, sausages and flitches hanging from it",
                          {"counter": box(2.4, 0.7, 0.9, [0, 0, 0.9, 0]), "counter top": box(2.5, 0.8, 0.06, [0, 0.9, 0.9, 0]),
-                          "block": col(0.4, 0.8, [0.3, 0, -0.4, 0], sides=12), "cleaver": item("items/tools/cleaver", [0.35, 0.8, -0.4, 0.5], solid=False),
+                          "block": item("items/furniture/chopping-block", [0.3, 0, -0.4, 0]), "cleaver": item("items/tools/cleaver", [0.35, 0.83, -0.4, 0.5], solid=False),
                           "joint meat": box(0.35, 0.25, 0.14, [-0.5, 0.96, 0.95, 0.3]),
                           "rail iron": box(2.4, 0.06, 0.06, [0, 2.1, -1.4, 0]), "rail posts": box(0.06, 0.06, 2.16, [[-1.2, 0, -1.4, 0], [1.2, 0, -1.4, 0]]),
                           "hooks iron": box(0.015, 0.015, 0.12, [[-0.9 + k * 0.36, 1.98, -1.4, 0] for k in range(6)]),

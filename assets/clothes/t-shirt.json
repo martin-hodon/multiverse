@@ -1,0 +1,54 @@
+{
+  "name": "T-shirt",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "the t-shirt (the US Navy's undershirt of 1913, outerwear from the 1950s): cotton jersey, a ribbed crew neck, short sleeves to mid upper arm standing a little off it, to the hips and worn out over the trousers (on its own: a sweater or a hoodie is worn instead of it, its sleeves' mouths would stand out through theirs)",
+  "thick": 0.003,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "cotton-white"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip + 0.035",
+        "neckline": "round",
+        "neckFront": 0.018,
+        "neckBack": 0.004
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "biceps - 0.05"
+      }
+    },
+    {
+      "use": "clothes/components/patch",
+      "params": {
+        "from": "collar - 0.01",
+        "to": "collar + 0.012",
+        "thick": 0.005,
+        "neckline": "round",
+        "neckFront": 0.012,
+        "neckBack": 0.0
+      }
+    }
+  ],
+  "pieces": [
+    {
+      "name": "mouth",
+      "kind": "hang",
+      "on": "arm",
+      "from": "biceps - 0.075",
+      "to": "biceps + 0.03",
+      "flare": 0.08,
+      "fabric": "main",
+      "pleats": 0
+    }
+  ]
+}

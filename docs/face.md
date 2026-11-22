@@ -146,6 +146,31 @@ lips take the light as the skin does). The params are the attributes; the form e
 
 - `detail` (the item's; the game's heads `config.json people.faceDetail`, 1): below .75 the frame itself (~620
   triangles), 1 one split (~2,500 with the eyes, brows, ears, neck: ~3,600), 1.5 two, 1.9 three. 19 rows x 22 columns round the head.
+- **Far heads** (2026-11-22, heads.js `FAR`, `DETAIL.far`): a head more than 10 m from the eye is drawn from a far
+  shape -- the same face, hair and jewels at `detail` .7 (the frame itself: a man's 4014 triangles 1776, a woman's 4250
+  2012 with a bun; a carved head 1 for its 1.5) -- and near again inside 8 m (the gap keeps a person on the line from
+  flickering). Only the game passes the eye (`heads.place(herds, camera.position)`); the viewers draw every head near.
+  The far shapes come from pregen/ like the near ones (`recordFace` records both; family `...|far@0.7`) or are built
+  in a worker (faceworker.js: every shape asked for is posted at once and it queues them; it also works out the
+  cavity darkening and smoothed normals over facecavity.js, so the main thread only indexes and uploads, ~4 ms a far
+  colouring, one a frame -- `FAR.perFrame`); without a worker, in idle time. Until a far shape has come the head
+  stays near. `FAR.seeds` (16: every seed) is how many far faces a family has -- 1 would halve the worker's time (a
+  town's 190 shapes are 90 families) but a face would change its jaw and eyes as it crossed the line. Far geometry
+  is indexed and lives in its own pre-sized pools (`heads far`, batchpool.js `verts` / `indices`): growing the near
+  pool to take it stalled a frame for over a second. Near heads are exactly as before (same keys, same builds).
+  (2026-11-22) THE SAME SEED NEAR AND FAR: a face pregen/ has not got takes another seed of its family -- and near
+  and far did that each by its own family's list (the n-th of each), which need not be the same seed, so a stand-in
+  face changed at 10 m after all. The manifest's face entries now say their `seed` (pregen.html, the world
+  fragments), and heads.js `cachedKey` takes one seed for both forms: the face's own where the cache has it near and
+  far, else one of the seeds it has in both, by the face's seed. Old entries without a seed are taken as before.
+  FAR.seeds stays 16 (measured 2026-11-22, after build/pregen.py): pregen/ holds 855 far shapes in 370 families (33 MB
+  of its 91 MB of faces; most families have one seed, the most 16). In a recorded world no far head is built at all;
+  in another (medieval seed 7) 27 are, 1.3 s in the worker, against 170 and 5.0 s with the cache stale. FAR.seeds 1
+  would keep 370 far shapes (~14 MB, 19 MB less) and build at most one a missing family (4 in seed 7, ~0.2 s, off the
+  main thread) -- and every member of a family would wear one face past 10 m. Neither number is felt in play; the
+  faces telling apart is, so 16.
+  Medieval seed 7: of 125 heads drawn at the walk's end 106 were far; 170 far shapes, ~5 s of
+  worker time, done ~5 s after the world is ready (re-running build/pregen.py makes that 0).
 - The kinds (`tools/facegen.py`, then `tools/hairgen.py` for their hair) are ranges over the attributes: the man's
   lower jaw angle and brow, the woman's arched brows and obtuse nasolabial angle, the child's small face in a large
   cranium, the elder's hollow cheeks (`chubCheek` below 0) and deep eyes, the beast-man's massive jaw.

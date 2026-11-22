@@ -4,7 +4,7 @@
  "category": "furniture/storage",
  "era": "1400-1650",
  "region": "Europe",
- "_about": "an aumbry: a tall joined cupboard on stiles for legs, two panelled doors with iron hinges, a moulded cornice",
+ "_about": "an aumbry: a tall joined cupboard on stiles for legs, two panelled doors with iron hinges, a moulded cornice -- hollow: two shelves (bowls below; pewter plates stood against the back and a jug above), the doors hinged at the outer edges (`open`)",
  "params": {
   "w": [
    0.9,
@@ -14,7 +14,8 @@
   "h": [
    1.4,
    1.6
-  ]
+  ],
+  "open": 0
  },
  "materials": {
   "wood": "oak",
@@ -22,18 +23,167 @@
  },
  "parts": [
   {
-   "id": "case",
+   "id": "back",
    "type": "box",
    "material": "wood",
    "size": [
     "w",
-    "h - 0.12",
-    "d"
+    "(h - 0.12)",
+    0.02
    ],
    "at": [
     0,
     "0.08 + (h - 0.12) / 2",
+    "0 - d / 2 + 0.01"
+   ]
+  },
+  {
+   "id": "sides",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.025,
+    "(h - 0.12)",
+    "d"
+   ],
+   "at": [
+    "w / 2 - 0.0125",
+    "0.08 + (h - 0.12) / 2",
     0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "floorTop",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.025,
+    "d"
+   ],
+   "at": [
+    [
+     0,
+     "0.12 + 0.0125",
+     0
+    ],
+    [
+     0,
+     "0.08 + (h - 0.12) - 0.0125",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "base",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.05",
+    0.05,
+    "d"
+   ],
+   "at": [
+    0,
+    "0.08 + 0.025",
+    0
+   ]
+  },
+  {
+   "id": "frieze back",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.12,
+    "d"
+   ],
+   "at": [
+    0,
+    "h - 0.12",
+    0
+   ]
+  },
+  {
+   "id": "shelves",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.05",
+    0.02,
+    "d - 0.04"
+   ],
+   "at": [
+    [
+     0,
+     "0.12 + (h - 0.35) * 0.36",
+     -0.01
+    ],
+    [
+     0,
+     "0.12 + (h - 0.35) * 0.7",
+     -0.01
+    ]
+   ]
+  },
+  {
+   "id": "plates",
+   "use": "items/tableware/plate",
+   "params": {
+    "style": "pewter",
+    "R": 0.1
+   },
+   "at": [
+    [
+     "0 - w * 0.3",
+     "0.12 + (h - 0.35) * 0.7 + 0.12",
+     "0 - d / 2 + 0.045",
+     0,
+     75,
+     0
+    ],
+    [
+     "0 - w * 0.12",
+     "0.12 + (h - 0.35) * 0.7 + 0.12",
+     "0 - d / 2 + 0.045",
+     0,
+     75,
+     0
+    ],
+    [
+     "w * 0.06",
+     "0.12 + (h - 0.35) * 0.7 + 0.12",
+     "0 - d / 2 + 0.045",
+     0,
+     75,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "jug",
+   "use": "items/tableware/jug",
+   "at": [
+    "w * 0.26",
+    "0.12 + (h - 0.35) * 0.7 + 0.01",
+    0
+   ]
+  },
+  {
+   "id": "bowls",
+   "use": "items/tableware/bowl",
+   "at": [
+    [
+     "0 - w * 0.2",
+     "0.12 + (h - 0.35) * 0.36 + 0.01",
+     0
+    ],
+    [
+     "w * 0.15",
+     "0.12 + (h - 0.35) * 0.36 + 0.01",
+     0
+    ]
    ]
   },
   {
@@ -64,58 +214,17 @@
    "params": {
     "w": "w / 2 - 0.05",
     "h": "h - 0.35",
-    "s": 0.06
+    "s": 0.06,
+    "swing": 1,
+    "side": 1
    },
    "at": [
-    [
-     "0 - w / 4 + 0.01",
-     "0.12 + (h - 0.35) / 2 + 0.06",
-     "d / 2 + 0.001",
-     0
-    ],
-    [
-     "w / 4 - 0.01",
-     "0.12 + (h - 0.35) / 2 + 0.06",
-     "d / 2 + 0.001",
-     0
-    ]
-   ]
-  },
-  {
-   "id": "hinges",
-   "use": "items/components/strap",
-   "params": {
-    "L": 0.18,
-    "w": 0.03
-   },
-   "at": [
-    [
-     "0 - w / 2 + 0.14",
-     "h * 0.7",
-     "d / 2 + 0.024"
-    ],
-    [
-     "0 - w / 2 + 0.14",
-     "h * 0.25",
-     "d / 2 + 0.024"
-    ],
-    [
-     "w / 2 - 0.14",
-     "h * 0.7",
-     "d / 2 + 0.024",
-     0,
-     0,
-     180
-    ],
-    [
-     "w / 2 - 0.14",
-     "h * 0.25",
-     "d / 2 + 0.024",
-     0,
-     0,
-     180
-    ]
-   ]
+    "0 - w / 4 + 0.01",
+    "0.12 + (h - 0.35) / 2 + 0.06",
+    "d / 2 + 0.001",
+    0
+   ],
+   "mirror": "x"
   },
   {
    "id": "cornice",

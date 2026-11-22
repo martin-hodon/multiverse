@@ -1,0 +1,388 @@
+{
+ "kind": "item",
+ "name": "Toilet",
+ "category": "furniture",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a close-coupled toilet, its back at -z against the wall: the pedestal pan, the water in its trap, the seat, the lid hinged at the back (`open` lifts it), the cistern with its lid and the flush button",
+ "params": {
+  "open": 0
+ },
+ "materials": {
+  "ware": {
+   "pick": [
+    "paint-white",
+    "paint-white",
+    "faience-white"
+   ]
+  },
+  "seat": {
+   "pick": [
+    "plastic-white",
+    "plastic-white",
+    "oak",
+    "paint-black"
+   ]
+  },
+  "chrome": "chrome",
+  "water": "glass-light"
+ },
+ "parts": [
+  {
+   "id": "pan",
+   "type": "lathe",
+   "material": "ware",
+   "profile": [
+    [
+     0.115,
+     0
+    ],
+    [
+     0.122,
+     0.01
+    ],
+    [
+     0.105,
+     0.05
+    ],
+    [
+     0.1,
+     0.17
+    ],
+    [
+     0.125,
+     0.28
+    ],
+    [
+     0.162,
+     0.355
+    ],
+    [
+     0.18,
+     0.392
+    ],
+    [
+     0.18,
+     0.4
+    ],
+    [
+     0.15,
+     0.4
+    ],
+    [
+     0.14,
+     0.37
+    ],
+    [
+     0.1,
+     0.3
+    ],
+    [
+     0.06,
+     0.245
+    ],
+    [
+     0,
+     0.235
+    ]
+   ],
+   "sides": 20,
+   "stretch": [
+    1,
+    1,
+    1.32
+   ],
+   "at": [
+    0,
+    0,
+    0.04
+   ]
+  },
+  {
+   "id": "water",
+   "type": "lathe",
+   "material": "water",
+   "profile": [
+    [
+     0.075,
+     0.27
+    ],
+    [
+     0,
+     0.27
+    ]
+   ],
+   "sides": 12,
+   "stretch": [
+    1,
+    1,
+    1.2
+   ],
+   "at": [
+    0,
+    0,
+    0.0
+   ]
+  },
+  {
+   "id": "neck",
+   "type": "box",
+   "material": "ware",
+   "size": [
+    0.22,
+    0.12,
+    0.14
+   ],
+   "at": [
+    0,
+    0.34,
+    -0.19
+   ]
+  },
+  {
+   "id": "cistern",
+   "type": "box",
+   "material": "ware",
+   "size": [
+    0.38,
+    0.36,
+    0.16
+   ],
+   "at": [
+    0,
+    0.58,
+    -0.27
+   ],
+   "round": 0.02
+  },
+  {
+   "id": "cisternLid",
+   "type": "box",
+   "material": "ware",
+   "size": [
+    0.4,
+    0.025,
+    0.18
+   ],
+   "at": [
+    0,
+    0.772,
+    -0.27
+   ]
+  },
+  {
+   "id": "button",
+   "type": "lathe",
+   "material": "chrome",
+   "profile": [
+    [
+     0.02,
+     0.784
+    ],
+    [
+     0.02,
+     0.79
+    ],
+    [
+     0,
+     0.79
+    ]
+   ],
+   "sides": 10,
+   "at": [
+    0,
+    0,
+    -0.27
+   ]
+  },
+  {
+   "id": "seatRing",
+   "type": "lathe",
+   "material": "seat",
+   "profile": [
+    [
+     0.176,
+     0.0
+    ],
+    [
+     0.164,
+     0.0208
+    ],
+    [
+     0.14,
+     0.0208
+    ],
+    [
+     0.128,
+     0.0
+    ],
+    [
+     0.14,
+     -0.0208
+    ],
+    [
+     0.164,
+     -0.0208
+    ],
+    [
+     0.176,
+     -0.0
+    ]
+   ],
+   "sides": 20,
+   "caps": false,
+   "stretch": [
+    1,
+    0.42,
+    1.38
+   ],
+   "at": [
+    0,
+    0.413,
+    0.045
+   ]
+  },
+  {
+   "id": "hingeBlocks",
+   "type": "box",
+   "material": "chrome",
+   "size": [
+    0.03,
+    0.02,
+    0.035
+   ],
+   "at": [
+    [
+     -0.08,
+     0.413,
+     -0.175
+    ],
+    [
+     0.08,
+     0.413,
+     -0.175
+    ]
+   ]
+  },
+  {
+   "id": "lid",
+   "type": "hinge",
+   "pivot": [
+    0,
+    0.432,
+    -0.175
+   ],
+   "axis": [
+    -1,
+    0,
+    0
+   ],
+   "max": 88,
+   "parts": [
+    {
+     "id": "lidBoard",
+     "type": "plate",
+     "material": "seat",
+     "outline": [
+      [
+       0.0,
+       0.199
+      ],
+      [
+       0.0609,
+       0.1843
+      ],
+      [
+       0.1144,
+       0.1419
+      ],
+      [
+       0.1542,
+       0.077
+      ],
+      [
+       0.1753,
+       -0.0026
+      ],
+      [
+       0.1753,
+       -0.0874
+      ],
+      [
+       0.1542,
+       -0.167
+      ],
+      [
+       0.1144,
+       -0.2319
+      ],
+      [
+       0.0609,
+       -0.2743
+      ],
+      [
+       0.0,
+       -0.289
+      ],
+      [
+       -0.0609,
+       -0.2743
+      ],
+      [
+       -0.1144,
+       -0.2319
+      ],
+      [
+       -0.1542,
+       -0.167
+      ],
+      [
+       -0.1753,
+       -0.0874
+      ],
+      [
+       -0.1753,
+       -0.0026
+      ],
+      [
+       -0.1542,
+       0.077
+      ],
+      [
+       -0.1144,
+       0.1419
+      ],
+      [
+       -0.0609,
+       0.1843
+      ]
+     ],
+     "thick": 0.018,
+     "at": [
+      0,
+      0.432,
+      0.0,
+      0.0,
+      -90.0,
+      0.0
+     ]
+    }
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": 0.36,
+    "d": 0.4,
+    "top": 0.43
+   }
+  }
+ ]
+}

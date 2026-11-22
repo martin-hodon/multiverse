@@ -58,6 +58,7 @@ def ridge_at(t):   # (a point along the ridge polyline by its share of the lengt
             return [pts[i][j] + (pts[i + 1][j] - pts[i][j]) * u for j in range(4)], [pts[i + 1][j] - pts[i][j] for j in range(3)]
         s -= L_
 n = 30
+roots, tips = [], []   # (2026-11-22: ONE `brush` shape -- bodyspec.js brushTufts, `each`: a tuft at every root -- where 90 tubes were)
 for i in range(n):
     t = (i + .5) / n
     p, dirv = ridge_at(t)
@@ -68,11 +69,11 @@ for i in range(n):
     lean = -.35   # (leaning back toward the withers)
     base = [p[0], p[1] - .01, 0]
     top = [base[0] + (nx + lean * ux) * h, base[1] + (ny + lean * uy) * h, 0]
-    mid = [(base[0] + top[0]) / 2, (base[1] + top[1]) / 2 + .004, 0]
-    for side, z in ((0, 0.0), (1, .011), (2, -.011)):
-        add(d, {"id": f"brush{i}{'abc'[side]}", "type": "tube", "bone": "neck",
-                "pts": [[round(base[0], 4), round(base[1], 4), z, .0105], [round(mid[0], 4), round(mid[1], 4), z * 1.2, .0085], [round(top[0], 4), round(top[1], 4), z * 1.4, .0045]],
-                "k": 0.004, "color": "@mane", "hair": .6})
+    roots.append([round(base[0], 4), round(base[1], 4), 0]); tips.append([round(top[0], 4), round(top[1], 4), 0])
+# (each tuft three bristles, across the crest at z 0, +-.011 fanning to 1.4x at the tip; the middle point bowed 4 mm up)
+add(d, {"id": "brush", "type": "brush", "bone": "neck", "each": True, "roots": roots, "tips": tips,
+        "rows": [[0, 0, 1], [0, .011, 1], [0, -.011, 1]], "at": [0, .5, 1], "r": [.0105, .0085, .0045], "spread": [1, 1.2, 1.4],
+        "lift": [0, .004, 0], "k": 0.004, "color": "@mane", "hair": .6})
 
 # ---- the tail: the horse's hanging falls gone; a thin tube from the dock to above the hocks on the tail bone, a tuft at its end
 drop(d, "tailFall", "tailFall2")

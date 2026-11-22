@@ -1,0 +1,184 @@
+{
+ "kind": "item",
+ "name": "Parking meter",
+ "category": "street",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a single-space parking meter of the classic pattern: a cast head (0.16 wide, 0.3 tall) on a 1.1 m steel post, a domed window over the dial and its red expired flag at the front (+x), the coin slot and the handle to turn on the right.",
+ "params": {},
+ "materials": {
+  "head": {
+   "pick": [
+    "paint-grey",
+    "paint-silver",
+    "paint-black"
+   ]
+  },
+  "pole": "steel",
+  "cap": "plastic-black",
+  "glass": "glass-light",
+  "flag": "lamp-red",
+  "dark": "#121212",
+  "dial": "plastic-white"
+ },
+ "parts": [
+  {
+   "id": "post",
+   "use": "items/modern/components/pole",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "h": 1.12,
+    "r": 0.03,
+    "base": "none",
+    "cap": 0
+   }
+  },
+  {
+   "id": "housing",
+   "type": "box",
+   "material": "head",
+   "size": [
+    0.13,
+    0.2,
+    0.16
+   ],
+   "at": [
+    0,
+    1.22,
+    0
+   ],
+   "round": 0.015
+  },
+  {
+   "id": "top",
+   "type": "rod",
+   "material": "head",
+   "r": 0.08,
+   "from": [
+    -0.065,
+    1.32,
+    0
+   ],
+   "to": [
+    0.065,
+    1.32,
+    0
+   ],
+   "sides": 18
+  },
+  {
+   "id": "base",
+   "type": "box",
+   "material": "head",
+   "size": [
+    0.11,
+    0.05,
+    0.12
+   ],
+   "at": [
+    0,
+    1.115,
+    0
+   ],
+   "round": 0.01
+  },
+  {
+   "id": "dial",
+   "type": "box",
+   "material": "dial",
+   "size": [
+    0.006,
+    0.09,
+    0.11
+   ],
+   "at": [
+    0.066,
+    1.33,
+    0
+   ]
+  },
+  {
+   "id": "flag",
+   "type": "box",
+   "material": "flag",
+   "size": [
+    0.004,
+    0.035,
+    0.05
+   ],
+   "at": [
+    0.07,
+    1.31,
+    0.02
+   ]
+  },
+  {
+   "id": "window",
+   "type": "sphere",
+   "material": "glass",
+   "r": 0.08,
+   "at": [
+    0.06,
+    1.33,
+    0
+   ],
+   "stretch": [
+    0.35,
+    0.8,
+    0.8
+   ],
+   "sides": 16
+  },
+  {
+   "id": "slot",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.004,
+    0.008,
+    0.04
+   ],
+   "at": [
+    0.066,
+    1.2,
+    0
+   ]
+  },
+  {
+   "id": "handleHub",
+   "type": "rod",
+   "material": "head",
+   "r": 0.02,
+   "from": [
+    0,
+    1.2,
+    0.08
+   ],
+   "to": [
+    0,
+    1.2,
+    0.095
+   ],
+   "sides": 10
+  },
+  {
+   "id": "handle",
+   "type": "box",
+   "material": "pole",
+   "size": [
+    0.06,
+    0.015,
+    0.012
+   ],
+   "at": [
+    0,
+    1.2,
+    0.1
+   ]
+  }
+ ]
+}

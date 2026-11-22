@@ -1,0 +1,246 @@
+{
+ "kind": "item",
+ "name": "Buffer stop",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "the end of a line: 10 m of track (TILE 10 m, its one port at x -5; trains come from -x) with a buffer stop at x 3 -- a frame of bent rails with raking struts, a red-and-white buffer beam carrying two sprung buffers 1.06 m above the rail and 1.75 m apart, a red lamp on top.",
+ "params": {},
+ "materials": {
+  "frame": "#2d2f31",
+  "beamRed": "paint-red",
+  "beamWhite": "paint-white",
+  "bufferFace": "steel"
+ },
+ "parts": [
+  {
+   "id": "track",
+   "use": "items/modern/infra/track-straight",
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "post",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.15,
+    1.31,
+    0.12
+   ],
+   "at": [
+    3.1,
+    1.297,
+    0.7535
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "strut",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.07,
+   "from": [
+    5.2,
+    0.642,
+    0.7535
+   ],
+   "to": [
+    3.2,
+    1.902,
+    0.7535
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "strut2",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.06,
+   "from": [
+    4.4,
+    0.642,
+    0.7535
+   ],
+   "to": [
+    3.2,
+    1.402,
+    0.7535
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "beam",
+   "type": "box",
+   "material": "beamRed",
+   "size": [
+    0.3,
+    0.5,
+    2.6
+   ],
+   "at": [
+    3.0,
+    1.702,
+    0
+   ]
+  },
+  {
+   "id": "band",
+   "type": "box",
+   "material": "beamWhite",
+   "size": [
+    0.31,
+    0.51,
+    0.3
+   ],
+   "at": [
+    [
+     3.0,
+     1.702,
+     -0.9
+    ],
+    [
+     3.0,
+     1.702,
+     -0.3
+    ],
+    [
+     3.0,
+     1.702,
+     0.3
+    ],
+    [
+     3.0,
+     1.702,
+     0.9
+    ]
+   ]
+  },
+  {
+   "id": "buffer",
+   "type": "lathe",
+   "material": "frame",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.12,
+     0
+    ],
+    [
+     0.12,
+     0.3
+    ],
+    [
+     0.08,
+     0.3
+    ],
+    [
+     0.08,
+     0.45
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    2.85,
+    1.702,
+    0.875,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "bufferHead",
+   "type": "lathe",
+   "material": "bufferFace",
+   "profile": [
+    [
+     0,
+     -0.03
+    ],
+    [
+     0.22,
+     -0.03
+    ],
+    [
+     0.22,
+     0.03
+    ],
+    [
+     0,
+     0.03
+    ]
+   ],
+   "sides": 16,
+   "mirror": "z",
+   "at": [
+    2.38,
+    1.702,
+    0.875,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "lampPost",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.03,
+   "from": [
+    3.0,
+    1.952,
+    0
+   ],
+   "to": [
+    3.0,
+    2.302,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "lamp",
+   "use": "items/modern/components/lamp",
+   "at": [
+    2.92,
+    2.402,
+    0,
+    180,
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.09
+   },
+   "materials": {
+    "lens": "lamp-red",
+    "bezel": "frame"
+   }
+  },
+  {
+   "id": "lampBox",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.14,
+    0.24,
+    0.24
+   ],
+   "at": [
+    3.0,
+    2.402,
+    0
+   ]
+  }
+ ]
+}

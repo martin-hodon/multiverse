@@ -3,7 +3,7 @@
  "name": "Book",
  "category": "tool",
  "era": "700-1900",
- "_about": "a bound book: boards covered in leather, the pages between, brass clasps",
+ "_about": "a bound book: two leather-covered boards, the rounded spine with three raised bands, the page block between (its fore-edge at +x), two brass clasps",
  "params": {},
  "materials": {
   "cover": {
@@ -18,19 +18,71 @@
  },
  "parts": [
   {
-   "id": "cover",
+   "id": "boards",
    "type": "box",
    "material": "cover",
    "size": [
-    0.17,
+    0.165,
     0.24,
-    0.05
+    0.007
    ],
-   "round": 0.005,
+   "round": 0.002,
    "at": [
-    0,
+    0.003,
     0.12,
+    0.0215
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "spine",
+   "type": "rod",
+   "material": "cover",
+   "r": 0.025,
+   "from": [
+    -0.078,
+    0.0,
     0
+   ],
+   "to": [
+    -0.078,
+    0.24,
+    0
+   ],
+   "sides": 10
+  },
+  {
+   "id": "bands",
+   "type": "rod",
+   "material": "cover",
+   "r": 0.0275,
+   "from": [
+    -0.078,
+    0,
+    0
+   ],
+   "to": [
+    -0.078,
+    0.008,
+    0
+   ],
+   "sides": 10,
+   "at": [
+    [
+     0,
+     0.066,
+     0
+    ],
+    [
+     0,
+     0.116,
+     0
+    ],
+    [
+     0,
+     0.166,
+     0
+    ]
    ]
   },
   {
@@ -38,12 +90,13 @@
    "type": "box",
    "material": "pages",
    "size": [
-    0.16,
-    0.225,
-    0.04
+    0.158,
+    0.228,
+    0.036
    ],
+   "round": 0.003,
    "at": [
-    0.008,
+    0.004,
     0.12,
     0
    ]

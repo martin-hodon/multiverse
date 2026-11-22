@@ -4,7 +4,7 @@
  "category": "furniture/seat",
  "era": "800-1900",
  "region": "Middle East",
- "_about": "the divan of a Muslim house: a low platform along the wall, a long cushion on it, bolsters against the wall behind -- the room's seat by day, and a bed by night; sat on cross-legged or with the feet down, the back to the wall (+z its front)",
+ "_about": "the divan of a Muslim house: a low platform along the wall, a long cushion on it, bolsters against the wall behind and a round one at each end, the cushion's cloth hanging over the platform's front with a fringe -- the room's seat by day, and a bed by night; sat on cross-legged or with the feet down, the back to the wall (+z its front)",
  "params": {
   "L": [
    1.8,
@@ -107,6 +107,66 @@
      -12,
      0
     ]
+   ]
+  },
+  {
+   "id": "endBolster",
+   "type": "rod",
+   "material": "bolster",
+   "r": 0.11,
+   "from": [
+    "0 - L / 2 + 0.13",
+    "h + 0.11",
+    "0 - d / 2 + 0.12"
+   ],
+   "to": [
+    "0 - L / 2 + 0.13",
+    "h + 0.11",
+    "d / 2 - 0.06"
+   ],
+   "sides": 14,
+   "mirror": "x"
+  },
+  {
+   "id": "endCap",
+   "type": "sphere",
+   "material": "cushion",
+   "r": 0.035,
+   "at": [
+    "0 - L / 2 + 0.13",
+    "h + 0.11",
+    "d / 2 - 0.05"
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "drape",
+   "type": "box",
+   "material": "cushion",
+   "size": [
+    "L + 0.01",
+    0.2,
+    0.012
+   ],
+   "at": [
+    0,
+    "h - 0.16",
+    "d / 2 + 0.006"
+   ]
+  },
+  {
+   "id": "fringe",
+   "type": "box",
+   "material": "bolster",
+   "size": [
+    "L + 0.01",
+    0.035,
+    0.016
+   ],
+   "at": [
+    0,
+    "h - 0.27",
+    "d / 2 + 0.008"
    ]
   }
  ],

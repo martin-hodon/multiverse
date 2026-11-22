@@ -4,7 +4,7 @@
  "category": "furniture/storage",
  "era": "1650-1780",
  "region": "France & the Low Countries",
- "_about": "the great Baroque wardrobe: two tall panelled doors between fluted pilasters, a deep moulded cornice, a drawer in its base, on bun feet",
+ "_about": "the great Baroque wardrobe: two tall panelled doors between fluted pilasters, a deep moulded cornice, a drawer in its base, on bun feet -- hollow: shelves of folded linen on the left, coats on a rail on the right, the doors hinged at the outer edges (`open`)",
  "params": {
   "w": [
    1.6,
@@ -14,7 +14,8 @@
   "h": [
    2.1,
    2.3
-  ]
+  ],
+  "open": 0
  },
  "materials": {
   "wood": {
@@ -24,22 +25,211 @@
     "cherry"
    ]
   },
-  "metal": "brass"
+  "metal": "brass",
+  "linen": "linen",
+  "cloth": {
+   "pick": [
+    "#3b4a63",
+    "#5a3b2e",
+    "#4a4a3a"
+   ]
+  }
  },
  "parts": [
   {
-   "id": "case",
+   "id": "back",
    "type": "box",
    "material": "wood",
    "size": [
     "w",
-    "h - 0.3",
-    "d"
+    "(h - 0.3)",
+    0.02
    ],
    "at": [
     0,
     "0.12 + (h - 0.3) / 2",
+    "0 - d / 2 + 0.01"
+   ]
+  },
+  {
+   "id": "sides",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.025,
+    "(h - 0.3)",
+    "d"
+   ],
+   "at": [
+    "w / 2 - 0.0125",
+    "0.12 + (h - 0.3) / 2",
     0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "floorTop",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.025,
+    "d"
+   ],
+   "at": [
+    [
+     0,
+     "0.3 + 0.0125",
+     0
+    ],
+    [
+     0,
+     "0.12 + (h - 0.3) - 0.0125",
+     0
+    ]
+   ]
+  },
+  {
+   "id": "plinthBox",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w",
+    0.18,
+    "d"
+   ],
+   "at": [
+    0,
+    "0.12 + 0.09",
+    0
+   ]
+  },
+  {
+   "id": "midWall",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.02,
+    "h - 0.62",
+    "d - 0.04"
+   ],
+   "at": [
+    0,
+    "0.3 + (h - 0.62) / 2",
+    -0.01
+   ]
+  },
+  {
+   "id": "shelves",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w / 2 - 0.05",
+    0.02,
+    "d - 0.06"
+   ],
+   "at": [
+    [
+     "0 - w / 4",
+     "0.3 + (h - 0.62) * 0.33",
+     -0.02
+    ],
+    [
+     "0 - w / 4",
+     "0.3 + (h - 0.62) * 0.66",
+     -0.02
+    ]
+   ]
+  },
+  {
+   "id": "rail",
+   "type": "rod",
+   "material": "metal",
+   "r": 0.012,
+   "from": [
+    "0.02",
+    "h - 0.55",
+    "-0.03"
+   ],
+   "to": [
+    "w / 2 - 0.03",
+    "h - 0.55",
+    "-0.03"
+   ],
+   "sides": 8
+  },
+  {
+   "id": "linen",
+   "type": "box",
+   "material": "linen",
+   "round": 0.02,
+   "size": [
+    "w / 2 - 0.16",
+    0.12,
+    "d * 0.6"
+   ],
+   "at": [
+    [
+     "0 - w / 4",
+     "0.3 + (h - 0.62) * 0.33 + 0.07",
+     -0.04
+    ],
+    [
+     "0 - w / 4",
+     "0.3 + (h - 0.62) * 0.66 + 0.07",
+     -0.04
+    ],
+    [
+     "0 - w / 4",
+     "0.33 + 0.06",
+     -0.04
+    ]
+   ]
+  },
+  {
+   "id": "coats",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    0.09,
+    0.95,
+    0.42
+   ],
+   "round": 0.035,
+   "at": [
+    [
+     "0.2",
+     "h - 1.05",
+     "-0.03",
+     0,
+     0,
+     0
+    ],
+    [
+     "0.34",
+     "h - 1.08",
+     "-0.03"
+    ],
+    [
+     "0.48",
+     "h - 1.0",
+     "-0.03"
+    ]
+   ]
+  },
+  {
+   "id": "muntin",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.07,
+    "h - 0.62",
+    0.03
+   ],
+   "at": [
+    0,
+    "0.3 + (h - 0.62) / 2 + 0.02",
+    "d / 2 + 0.006"
    ]
   },
   {
@@ -49,23 +239,15 @@
     "w": "w / 2 - 0.12",
     "h": "h - 0.62",
     "s": 0.08,
-    "side": 1
+    "side": 1,
+    "swing": 1
    },
    "at": [
-    [
-     "0 - w / 4 + 0.03",
-     "0.3 + (h - 0.62) / 2 + 0.02",
-     "d / 2 + 0.001"
-    ],
-    [
-     "w / 4 - 0.03",
-     "0.3 + (h - 0.62) / 2 + 0.02",
-     "d / 2 + 0.001",
-     0,
-     0,
-     0
-    ]
-   ]
+    "0 - w / 4 + 0.03",
+    "0.3 + (h - 0.62) / 2 + 0.02",
+    "d / 2 + 0.001"
+   ],
+   "mirror": "x"
   },
   {
    "id": "pilasters",

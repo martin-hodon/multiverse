@@ -1,0 +1,567 @@
+{
+ "kind": "item",
+ "name": "Washstand",
+ "category": "furniture",
+ "era": "1780-1930",
+ "region": "Europe",
+ "_about": "a 19th-century washstand: a marble or wooden top on four legs, a splashback, a lower shelf, a towel rail at each end with a towel on one; on it the wash basin with the ewer standing in it, and a soap dish -- its front +z",
+ "params": {
+  "water": {
+   "pick": [
+    0,
+    1
+   ]
+  }
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "mahogany",
+    "walnut",
+    "oak",
+    "pine"
+   ]
+  },
+  "top": {
+   "pick": [
+    "marble",
+    "marble",
+    "marble-grey",
+    "mahogany"
+   ]
+  },
+  "ware": {
+   "pick": [
+    "faience-white",
+    "paint-white",
+    "faience-blue"
+   ]
+  },
+  "band": {
+   "pick": [
+    "enamel-blue",
+    "faience-green",
+    "gilt"
+   ]
+  },
+  "towel": {
+   "pick": [
+    "linen",
+    "canvas"
+   ]
+  },
+  "water": "glass-light",
+  "soap": "paint-cream"
+ },
+ "parts": [
+  {
+   "id": "legs",
+   "use": "items/components/turned-leg",
+   "at": [
+    [
+     -0.4,
+     0,
+     -0.2
+    ],
+    [
+     -0.4,
+     0,
+     0.2
+    ],
+    [
+     0.4,
+     0,
+     -0.2
+    ],
+    [
+     0.4,
+     0,
+     0.2
+    ]
+   ],
+   "params": {
+    "h": 0.75,
+    "r": 0.022,
+    "style": "baluster",
+    "block": 0.12
+   }
+  },
+  {
+   "id": "apron",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.82,
+    0.08,
+    0.42
+   ],
+   "at": [
+    0,
+    0.71,
+    0
+   ]
+  },
+  {
+   "id": "top",
+   "type": "box",
+   "material": "top",
+   "size": [
+    0.9,
+    0.03,
+    0.5
+   ],
+   "at": [
+    0,
+    0.765,
+    0
+   ]
+  },
+  {
+   "id": "splashback",
+   "type": "plate",
+   "material": "top",
+   "outline": [
+    [
+     -0.45,
+     0
+    ],
+    [
+     0.45,
+     0
+    ],
+    [
+     0.45,
+     0.16
+    ],
+    [
+     0.3,
+     0.2
+    ],
+    [
+     0.1,
+     0.22
+    ],
+    [
+     -0.1,
+     0.22
+    ],
+    [
+     -0.3,
+     0.2
+    ],
+    [
+     -0.45,
+     0.16
+    ]
+   ],
+   "thick": 0.02,
+   "at": [
+    0,
+    0.78,
+    -0.24
+   ]
+  },
+  {
+   "id": "shelf",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.82,
+    0.02,
+    0.42
+   ],
+   "at": [
+    0,
+    0.18,
+    0
+   ]
+  },
+  {
+   "id": "rails",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.012,
+   "from": [
+    0,
+    0,
+    -0.18
+   ],
+   "to": [
+    0,
+    0,
+    0.18
+   ],
+   "sides": 6,
+   "at": [
+    [
+     -0.49,
+     0.7,
+     0
+    ],
+    [
+     0.49,
+     0.7,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "railBrackets",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.08,
+    0.03,
+    0.02
+   ],
+   "at": [
+    [
+     -0.46,
+     0.7,
+     -0.18
+    ],
+    [
+     -0.46,
+     0.7,
+     0.18
+    ],
+    [
+     0.46,
+     0.7,
+     -0.18
+    ],
+    [
+     0.46,
+     0.7,
+     0.18
+    ]
+   ]
+  },
+  {
+   "id": "towel",
+   "type": "box",
+   "material": "towel",
+   "size": [
+    0.008,
+    0.45,
+    0.28
+   ],
+   "at": [
+    0.497,
+    0.49,
+    0
+   ]
+  },
+  {
+   "id": "towelFold",
+   "type": "box",
+   "material": "towel",
+   "size": [
+    0.03,
+    0.012,
+    0.28
+   ],
+   "at": [
+    0.49,
+    0.708,
+    0
+   ]
+  },
+  {
+   "id": "basin",
+   "type": "lathe",
+   "material": "ware",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.09,
+     0
+    ],
+    [
+     0.12,
+     0.02
+    ],
+    [
+     0.17,
+     0.065
+    ],
+    [
+     0.2,
+     0.1
+    ],
+    [
+     0.215,
+     0.11
+    ],
+    [
+     0.209,
+     0.11
+    ],
+    [
+     0.194,
+     0.1
+    ],
+    [
+     0.164,
+     0.065
+    ],
+    [
+     0.114,
+     0.02
+    ],
+    [
+     0.096,
+     0.008
+    ],
+    [
+     0,
+     0.008
+    ]
+   ],
+   "sides": 22,
+   "at": [
+    0,
+    0.78,
+    0.02
+   ]
+  },
+  {
+   "id": "basinBand",
+   "type": "lathe",
+   "material": "band",
+   "profile": [
+    [
+     0.2065,
+     0.876
+    ],
+    [
+     0.2125,
+     0.886
+    ]
+   ],
+   "sides": 22,
+   "caps": false,
+   "at": [
+    0,
+    0,
+    0.02
+   ]
+  },
+  {
+   "id": "water",
+   "type": "lathe",
+   "material": "water",
+   "profile": [
+    [
+     0.1467,
+     0.05
+    ],
+    [
+     0,
+     0.05
+    ]
+   ],
+   "sides": 16,
+   "at": [
+    0,
+    0.78,
+    0.02
+   ],
+   "when": "water"
+  },
+  {
+   "id": "ewer",
+   "type": "lathe",
+   "material": "ware",
+   "profile": [
+    [
+     0.06,
+     0
+    ],
+    [
+     0.065,
+     0.008
+    ],
+    [
+     0.06,
+     0.02
+    ],
+    [
+     0.075,
+     0.08
+    ],
+    [
+     0.08,
+     0.14
+    ],
+    [
+     0.07,
+     0.2
+    ],
+    [
+     0.055,
+     0.24
+    ],
+    [
+     0.052,
+     0.27
+    ],
+    [
+     0.06,
+     0.3
+    ],
+    [
+     0.055,
+     0.3
+    ],
+    [
+     0,
+     0.3
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    0,
+    0.788,
+    0.02
+   ]
+  },
+  {
+   "id": "ewerBand",
+   "type": "lathe",
+   "material": "band",
+   "profile": [
+    [
+     0.0802,
+     0.908
+    ],
+    [
+     0.0802,
+     0.938
+    ]
+   ],
+   "sides": 14,
+   "caps": false,
+   "at": [
+    0,
+    0,
+    0.02
+   ]
+  },
+  {
+   "id": "lip",
+   "type": "plate",
+   "material": "ware",
+   "outline": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.06,
+     0.03
+    ],
+    [
+     0.0,
+     0.04
+    ]
+   ],
+   "thick": 0.04,
+   "at": [
+    0.04,
+    1.058,
+    0.02
+   ]
+  },
+  {
+   "id": "ewerHandle",
+   "type": "sweep",
+   "material": "ware",
+   "path": [
+    [
+     -0.05,
+     1.05,
+     0.02
+    ],
+    [
+     -0.1,
+     1.04,
+     0.02
+    ],
+    [
+     -0.11,
+     0.95,
+     0.02
+    ],
+    [
+     -0.075,
+     0.88,
+     0.02
+    ]
+   ],
+   "sides": 6,
+   "seg": 3,
+   "r": 0.009
+  },
+  {
+   "id": "soapDish",
+   "type": "lathe",
+   "material": "ware",
+   "profile": [
+    [
+     0,
+     0.78
+    ],
+    [
+     0.05,
+     0.78
+    ],
+    [
+     0.055,
+     0.795
+    ],
+    [
+     0.048,
+     0.795
+    ],
+    [
+     0.044,
+     0.786
+    ],
+    [
+     0,
+     0.786
+    ]
+   ],
+   "sides": 12,
+   "stretch": [
+    1.3,
+    1,
+    1
+   ],
+   "at": [
+    0.33,
+    0,
+    0.08
+   ]
+  },
+  {
+   "id": "soapBar",
+   "type": "box",
+   "material": "soap",
+   "size": [
+    0.07,
+    0.02,
+    0.045
+   ],
+   "at": [
+    0.33,
+    0.796,
+    0.08
+   ]
+  }
+ ]
+}

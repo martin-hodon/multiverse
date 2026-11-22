@@ -4,10 +4,25 @@
 // the lower one says what it is in terms of names, the higher one says what those names are.
 //
 // No eval and no library: names, numbers, + - * / and brackets, and a few functions -- min(a, b, ...), max(...),
-// floor(a), ceil(a), round(a), abs(a), atan2(y, x), sin, cos, sqrt -- for a count that must follow the detail level but stay within what the shape
+// floor(a), ceil(a), round(a), abs(a), atan2(y, x), sin, cos, sqrt, rnd(...) (a seeded draw: below) -- for a count that must follow the detail level but stay within what the shape
 // allows. A name may itself hold an expression (params are resolved as they are reached), so a param may be
 // written in terms of another.
 const FNS = { min: Math.min, max: Math.max, floor: Math.floor, ceil: Math.ceil, round: Math.round, atan2: Math.atan2, abs: Math.abs, sin: Math.sin, cos: Math.cos, sqrt: Math.sqrt };
+// A SEEDED DRAW (2026-11-22): rnd(a, b, ...) is a number in [0, 1) hashed from its arguments and the seed the params
+// carry under SEED (items.js: the item's seed) -- the same arguments, the same number, on every run and machine (an
+// integer hash, no Math.random). Each copy of an `each` run draws its own by its index: "0.02 + 0.025 * rnd(i, 1)";
+// two parts asking with the same arguments get the same number (a book's width, where its neighbour starts).
+// (arguments are taken to a millionth, so i_t draws as well as i; without a SEED the seed is 0)
+export const SEED = Symbol("seed");
+export function rnd(seed, args) {
+  let h = Math.imul((seed | 0) ^ 0x2545f491, 0x9e3779b1);
+  for (const a of args) {
+    h = Math.imul(h ^ Math.round(a * 1e6), 0x85ebca6b); h ^= h >>> 13;
+    h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16;
+  }
+  h = Math.imul(h ^ h >>> 15, 0x2c1b3c6d); h ^= h >>> 12;
+  return (h >>> 0) / 4294967296;
+}
 export function evalExpr(src, params) {
   let i = 0;
   const ws = () => { while (i < src.length && src[i] === " ") i++; };
@@ -21,11 +36,11 @@ export function evalExpr(src, params) {
     if (tok === "") throw new Error(`cannot read "${src}" at ${i}`);
     if (/^[0-9.]+$/.test(tok)) return parseFloat(tok);
     ws();
-    if (src[i] === "(" && tok in FNS) {
+    if (src[i] === "(" && (tok in FNS || tok === "rnd")) {
       i++; const args = [sum()];
       for (ws(); src[i] === ","; ws()) { i++; args.push(sum()); }
       if (src[i] !== ")") throw new Error(`missing ) in "${src}"`);
-      i++; return FNS[tok](...args);
+      i++; return tok === "rnd" ? rnd(params[SEED] ?? 0, args) : FNS[tok](...args);
     }
     if (!(tok in params)) throw new Error(`"${tok}" is not a parameter (in "${src}")`);
     return evalNum(params[tok], params);

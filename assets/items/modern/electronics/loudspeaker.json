@@ -1,0 +1,368 @@
+{
+ "kind": "item",
+ "name": "Loudspeaker",
+ "category": "electronics",
+ "era": "1970-2030",
+ "region": "everywhere",
+ "_about": "a floor-standing loudspeaker, 20 x 30 x 100 cm: a veneered cabinet on a plinth and spikes, a black baffle with a dome tweeter, two 16 cm cones in their rubber surrounds, a bass port -- facing +x",
+ "params": {},
+ "materials": {
+  "cabinet": {
+   "pick": [
+    "walnut",
+    "oak",
+    "#1f1f22",
+    "paint-white"
+   ]
+  },
+  "baffle": "#151517",
+  "cone": "#55575c",
+  "surround": "#232326",
+  "trim": "aluminium",
+  "dome": "#3b3d42",
+  "plinth": "#1a1a1c",
+  "port": "#060607"
+ },
+ "parts": [
+  {
+   "id": "cabinet",
+   "type": "box",
+   "material": "cabinet",
+   "size": [
+    0.3,
+    0.95,
+    0.2
+   ],
+   "at": [
+    0,
+    0.52,
+    0
+   ]
+  },
+  {
+   "id": "baffle",
+   "type": "box",
+   "material": "baffle",
+   "size": [
+    0.006,
+    0.94,
+    0.19
+   ],
+   "at": [
+    0.152,
+    0.52,
+    0
+   ]
+  },
+  {
+   "id": "plinth",
+   "type": "box",
+   "material": "plinth",
+   "size": [
+    0.34,
+    0.025,
+    0.26
+   ],
+   "at": [
+    0,
+    0.0325,
+    0
+   ]
+  },
+  {
+   "id": "spike",
+   "type": "lathe",
+   "material": "trim",
+   "profile": [
+    [
+     0.008,
+     0.02
+    ],
+    [
+     0.001,
+     0
+    ]
+   ],
+   "sides": 6,
+   "at": [
+    [
+     0.15,
+     0,
+     0.11
+    ],
+    [
+     0.15,
+     0,
+     -0.11
+    ],
+    [
+     -0.15,
+     0,
+     0.11
+    ],
+    [
+     -0.15,
+     0,
+     -0.11
+    ]
+   ]
+  },
+  {
+   "id": "tweetPlate",
+   "type": "lathe",
+   "material": "baffle",
+   "profile": [
+    [
+     0,
+     0.004
+    ],
+    [
+     0.038,
+     0.004
+    ],
+    [
+     0.04,
+     0
+    ]
+   ],
+   "sides": 16,
+   "at": [
+    0.155,
+    0.89,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "tweeter",
+   "type": "lathe",
+   "material": "dome",
+   "profile": [
+    [
+     0,
+     0.016
+    ],
+    [
+     0.01,
+     0.013
+    ],
+    [
+     0.014,
+     0.006
+    ],
+    [
+     0.015,
+     0.004
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    0.155,
+    0.89,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "woofer",
+   "type": "lathe",
+   "material": "cone",
+   "profile": [
+    [
+     0,
+     -0.0022
+    ],
+    [
+     0.0187,
+     -0.0037
+    ],
+    [
+     0.0225,
+     -0.0097
+    ],
+    [
+     0.0615,
+     -0.003
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 20,
+   "at": [
+    0.166,
+    0.72,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "wooferSurround",
+   "type": "lathe",
+   "material": "surround",
+   "profile": [
+    [
+     0.06,
+     -0.0034
+    ],
+    [
+     0.066,
+     0.002
+    ],
+    [
+     0.072,
+     -0.004
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 20,
+   "at": [
+    0.166,
+    0.72,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "wooferTrim",
+   "type": "ring",
+   "material": "trim",
+   "r": 0.075,
+   "tube": 0.005,
+   "at": [
+    0.166,
+    0.72,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "woofer2",
+   "type": "lathe",
+   "material": "cone",
+   "profile": [
+    [
+     0,
+     -0.0022
+    ],
+    [
+     0.0187,
+     -0.0037
+    ],
+    [
+     0.0225,
+     -0.0097
+    ],
+    [
+     0.0615,
+     -0.003
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 20,
+   "at": [
+    0.166,
+    0.52,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "woofer2Surround",
+   "type": "lathe",
+   "material": "surround",
+   "profile": [
+    [
+     0.06,
+     -0.0034
+    ],
+    [
+     0.066,
+     0.002
+    ],
+    [
+     0.072,
+     -0.004
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 20,
+   "at": [
+    0.166,
+    0.52,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "woofer2Trim",
+   "type": "ring",
+   "material": "trim",
+   "r": 0.075,
+   "tube": 0.005,
+   "at": [
+    0.166,
+    0.52,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "port",
+   "type": "ring",
+   "material": "trim",
+   "r": 0.026,
+   "tube": 0.004,
+   "at": [
+    0.156,
+    0.16,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "portHole",
+   "type": "lathe",
+   "material": "port",
+   "profile": [
+    [
+     0,
+     0.0
+    ],
+    [
+     0.024,
+     0.0
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    0.156,
+    0.16,
+    0,
+    0,
+    0,
+    -90
+   ]
+  }
+ ]
+}

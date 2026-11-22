@@ -1,0 +1,148 @@
+{
+ "kind": "item",
+ "name": "Runway",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a runway segment, 50 m (TILE 50 m: ports x +-25, the runway along x): 45 m wide between 7.5 m shoulders, white edge lines, the centre line's 30 m stripe (its 20 m gap split between tiles), flush centre-line lights every 12.5 m, elevated edge lights.",
+ "params": {},
+ "materials": {
+  "asphalt": "asphalt",
+  "shoulder": "#57585b",
+  "white": "tarmac-line",
+  "yellow": "paint-yellow",
+  "edgeLamp": "lamp",
+  "blueLamp": "#3a6cff",
+  "greenLamp": "lamp-green",
+  "redLamp": "lamp-red",
+  "lampPost": "#c9b23a",
+  "grass": "#5d7f3a"
+ },
+ "parts": [
+  {
+   "id": "runway",
+   "type": "box",
+   "material": "asphalt",
+   "size": [
+    50.0,
+    0.35,
+    45.0
+   ],
+   "at": [
+    0.0,
+    -0.125,
+    0.0
+   ]
+  },
+  {
+   "id": "shoulder",
+   "type": "box",
+   "material": "shoulder",
+   "size": [
+    50.0,
+    0.34,
+    7.5
+   ],
+   "at": [
+    0.0,
+    -0.13,
+    26.25
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "edge",
+   "type": "box",
+   "material": "white",
+   "size": [
+    50.0,
+    0.004,
+    0.9
+   ],
+   "at": [
+    0,
+    0.052,
+    22.05
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "centre",
+   "type": "box",
+   "material": "white",
+   "size": [
+    30,
+    0.004,
+    0.9
+   ],
+   "at": [
+    0,
+    0.052,
+    0
+   ]
+  },
+  {
+   "id": "cLight",
+   "type": "box",
+   "material": "edgeLamp",
+   "size": [
+    0.3,
+    0.012,
+    0.3
+   ],
+   "at": [
+    [
+     -18.75,
+     0.055,
+     0
+    ],
+    [
+     -6.25,
+     0.055,
+     0
+    ],
+    [
+     6.25,
+     0.055,
+     0
+    ],
+    [
+     18.75,
+     0.055,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "edgePost",
+   "type": "rod",
+   "material": "lampPost",
+   "r": 0.04,
+   "from": [
+    0,
+    0.04,
+    24.0
+   ],
+   "to": [
+    0,
+    0.35,
+    24.0
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "edgeLight",
+   "type": "sphere",
+   "material": "edgeLamp",
+   "r": 0.09,
+   "at": [
+    0,
+    0.4,
+    24.0
+   ],
+   "mirror": "z",
+   "sides": 10
+  }
+ ]
+}

@@ -1,17 +1,27 @@
-# the snake's coats and variants: girth, the grass snake's bars and collar gated, the patterns (snakemarks.mjs) as paints
+# the snake's coats and variants: girth, the grass snake's bars and collar gated, the patterns (snakemarks.mjs) as dabs
+# (python3 snakejson.py --marks MARKS.json ASSET.json: only the marks swapped, the asset otherwise as it is)
 import json, sys
 sys.path.insert(0, sys.argv[0].rsplit('/', 1)[0])
 from jfmt import dumps
 src, marks, dst = sys.argv[1], sys.argv[2], sys.argv[3]
-d = json.load(open(src))
 M = json.load(open(marks))
+if src == "--marks":   # (only the marks again: the asset's own marks -- pz_* -- swapped for the new ones, the rest as it is)
+    d = json.load(open(dst))
+    d['_about'] = d['_about'].replace("The patterns are PAINTS (op paint: colour only, no shape) laid along the rest pose's curve by a script, written with girth so they stay on the skin.",
+        "The patterns are DABS (a `dabs` shape a pattern, 2026-11-21: rows along the trunk's own centreline, laid on the skin by the engine at any girth; the head's few marks paints snapped onto it).")
+    d['sculpt']['shape'] = [q for q in d['sculpt']['shape'] if not q['id'].startswith('pz_')] + M
+    open(dst, 'w').write(dumps(d))
+    print('shapes', len(d['sculpt']['shape']), 'bytes', len(dumps(d)))
+    sys.exit()
+d = json.load(open(src))
 f4 = lambda x: float('%.5g' % x)
 d['_about'] = d['_about'].split(' || ')[0] + (" || COATS AND VARIANTS (2026-11-06): params girth (the trunk's thickness, the neck less, the "
   "belly kept on the ground), bars and collar (the grass snake's), zig (an adder's zig-zag, flank spots, the X on its crown, the stripe behind the "
   "eye), dots (a smooth snake's paired spots, dark crown, eye stripe), saddles (a corn snake's red saddles edged black, flank blotches, a chequered "
   "belly), rings (a coral snake's red-yellow-black), blotch (a python's), slit (a vertical pupil); colours mark (the dark of a pattern), fill "
-  "(its inside: a saddle's red, a python's brown), band (a coral snake's yellow), head (the head's top, else body). The patterns are PAINTS "
-  "(op paint: colour only, no shape) laid along the rest pose's curve by a script, written with girth so they stay on the skin. Coats: the "
+  "(its inside: a saddle's red, a python's brown), band (a coral snake's yellow), head (the head's top, else body). The patterns are DABS "
+  "(a `dabs` shape a pattern, 2026-11-21: rows along the trunk's own centreline, laid on the skin by the engine at any girth; the head's "
+  "few marks paints snapped onto it). Coats: the "
   "temperate ones the meadow picks from; variants: the exotic ones (asset manager only)")
 P = {"girth": 1, "bars": True, "collar": True, "zig": False, "dots": False, "saddles": False, "rings": False, "blotch": False, "slit": False}
 d = {**{k: d[k] for k in ('name', '_about', 'kind')}, 'params': P, **{k: v for k, v in d.items() if k not in ('name', '_about', 'kind', 'params')}}

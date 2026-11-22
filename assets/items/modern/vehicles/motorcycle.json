@@ -1,0 +1,1088 @@
+{
+ "kind": "item",
+ "name": "Motorcycle",
+ "category": "vehicle",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a standard road motorcycle (a naked 600-900 cc, 2.1 m long, wheelbase 1.42 m, seat 0.82 m): cast wheels with brake discs, telescopic forks, twin-spar frame, an inline four leaning forward with its radiator, four headers to a muffler on the right, swingarm and shock, chain, tank, seat and tail, a round headlamp, bars with mirrors -- its paint drawn by the seed",
+ "params": {
+  "steer": 0
+ },
+ "materials": {
+  "paint": {
+   "pick": [
+    "paint-red",
+    "paint-black",
+    "paint-blue",
+    "paint-orange",
+    "paint-white",
+    "paint-green"
+   ]
+  },
+  "chrome": "chrome",
+  "fork": "gunmetal",
+  "alu": "aluminium",
+  "trim": "plastic-black",
+  "seat": "leather-dark",
+  "engine": "#6c6f74",
+  "engineDark": "gunmetal",
+  "exhaust": "steel",
+  "steel": "steel",
+  "spring": "#c43a1a",
+  "plateW": "plastic-white",
+  "screen": "screen"
+ },
+ "parts": [
+  {
+   "id": "rear",
+   "use": "items/modern/components/cast-wheel",
+   "at": [
+    -0.71,
+    0.31,
+    0
+   ],
+   "params": {
+    "r": 0.31,
+    "t": 0.07,
+    "wd": 0.18,
+    "discs": 1,
+    "discR": 0.11
+   }
+  },
+  {
+   "id": "steer",
+   "type": "hinge",
+   "pivot": [
+    0.43,
+    1.0,
+    0
+   ],
+   "axis": [
+    -0.359,
+    0.933,
+    0
+   ],
+   "max": 30,
+   "parts": [
+    {
+     "id": "front",
+     "use": "items/modern/components/cast-wheel",
+     "at": [
+      0.71,
+      0.3,
+      0
+     ],
+     "params": {
+      "r": 0.3,
+      "t": 0.055,
+      "wd": 0.12,
+      "discs": 2,
+      "discR": 0.15
+     }
+    },
+    {
+     "id": "stanchion",
+     "type": "rod",
+     "material": "chrome",
+     "r": 0.021,
+     "from": [
+      0.43,
+      1.0,
+      0.1
+     ],
+     "to": [
+      0.575,
+      0.64,
+      0.1
+     ],
+     "sides": 10,
+     "mirror": "z"
+    },
+    {
+     "id": "forkLeg",
+     "type": "rod",
+     "material": "fork",
+     "r": 0.031,
+     "from": [
+      0.56,
+      0.68,
+      0.1
+     ],
+     "to": [
+      0.71,
+      0.3,
+      0.1
+     ],
+     "sides": 10,
+     "mirror": "z"
+    },
+    {
+     "id": "yokeT",
+     "type": "box",
+     "material": "alu",
+     "size": [
+      0.09,
+      0.03,
+      0.27
+     ],
+     "at": [
+      0.43,
+      1.0,
+      0,
+      0,
+      0,
+      -22
+     ]
+    },
+    {
+     "id": "yokeB",
+     "type": "box",
+     "material": "alu",
+     "size": [
+      0.09,
+      0.04,
+      0.27
+     ],
+     "at": [
+      0.48,
+      0.87,
+      0,
+      0,
+      0,
+      -22
+     ]
+    },
+    {
+     "id": "bar",
+     "type": "sweep",
+     "material": "chrome",
+     "path": [
+      [
+       0.36,
+       1.1,
+       -0.37
+      ],
+      [
+       0.4,
+       1.07,
+       -0.18
+      ],
+      [
+       0.42,
+       1.06,
+       0
+      ],
+      [
+       0.4,
+       1.07,
+       0.18
+      ],
+      [
+       0.36,
+       1.1,
+       0.37
+      ]
+     ],
+     "r": 0.011
+    },
+    {
+     "id": "grip",
+     "type": "rod",
+     "material": "trim",
+     "r": 0.017,
+     "from": [
+      0.37,
+      1.095,
+      0.27
+     ],
+     "to": [
+      0.355,
+      1.105,
+      0.38
+     ],
+     "sides": 8,
+     "mirror": "z"
+    },
+    {
+     "id": "lever",
+     "type": "box",
+     "material": "alu",
+     "size": [
+      0.17,
+      0.012,
+      0.02
+     ],
+     "at": [
+      0.43,
+      1.1,
+      0.3,
+      15,
+      0,
+      0
+     ],
+     "mirror": "z"
+    },
+    {
+     "id": "clocks",
+     "type": "box",
+     "material": "trim",
+     "size": [
+      0.05,
+      0.1,
+      0.18
+     ],
+     "at": [
+      0.47,
+      1.1,
+      0,
+      0,
+      0,
+      -30
+     ]
+    },
+    {
+     "id": "clockFace",
+     "type": "box",
+     "material": "screen",
+     "size": [
+      0.005,
+      0.08,
+      0.15
+     ],
+     "at": [
+      0.445,
+      1.11,
+      0,
+      0,
+      0,
+      -30
+     ]
+    },
+    {
+     "id": "lampShell",
+     "type": "sphere",
+     "material": "trim",
+     "r": 0.1,
+     "at": [
+      0.56,
+      0.93,
+      0
+     ],
+     "stretch": [
+      0.9,
+      1,
+      1
+     ],
+     "sides": 12
+    },
+    {
+     "id": "head",
+     "use": "items/modern/components/lamp",
+     "at": [
+      0.64,
+      0.93,
+      0
+     ],
+     "params": {
+      "r": 0.085
+     }
+    },
+    {
+     "id": "indF",
+     "type": "box",
+     "material": "lamp-amber",
+     "size": [
+      0.05,
+      0.03,
+      0.03
+     ],
+     "at": [
+      0.57,
+      0.93,
+      0.17
+     ],
+     "mirror": "z"
+    },
+    {
+     "id": "guardF",
+     "type": "sweep",
+     "material": "paint",
+     "path": [
+      [
+       0.4419,
+       0.525,
+       0
+      ],
+      [
+       0.5061,
+       0.5845,
+       0
+      ],
+      [
+       0.5831,
+       0.6262,
+       0
+      ],
+      [
+       0.6681,
+       0.6475,
+       0
+      ],
+      [
+       0.7557,
+       0.647,
+       0
+      ],
+      [
+       0.8404,
+       0.6248,
+       0
+      ],
+      [
+       0.917,
+       0.5823,
+       0
+      ],
+      [
+       0.9806,
+       0.522,
+       0
+      ],
+      [
+       1.0272,
+       0.4479,
+       0
+      ]
+     ],
+     "up": [
+      0,
+      1,
+      0
+     ],
+     "section": [
+      0.14,
+      0.006
+     ]
+    },
+    {
+     "id": "mirror",
+     "use": "items/modern/components/wing-mirror",
+     "at": [
+      0.37,
+      1.1,
+      0.28
+     ],
+     "mirror": "z",
+     "params": {
+      "ax": -0.03,
+      "ay": 0.13,
+      "az": 0.1,
+      "w": 0.12,
+      "h": 0.07,
+      "d": 0.035,
+      "out": 1,
+      "armR": 0.007
+     }
+    }
+   ],
+   "by": "steer"
+  },
+  {
+   "id": "headTube",
+   "type": "rod",
+   "material": "alu",
+   "r": 0.032,
+   "from": [
+    0.415,
+    1.04,
+    0
+   ],
+   "to": [
+    0.49,
+    0.845,
+    0
+   ],
+   "sides": 10
+  },
+  {
+   "id": "spar",
+   "type": "sweep",
+   "material": "alu",
+   "path": [
+    [
+     0.44,
+     0.94,
+     0.02
+    ],
+    [
+     0.34,
+     0.92,
+     0.035
+    ],
+    [
+     0.24,
+     0.87,
+     0.15
+    ],
+    [
+     0.02,
+     0.76,
+     0.15
+    ],
+    [
+     -0.1,
+     0.62,
+     0.14
+    ],
+    [
+     -0.1,
+     0.4,
+     0.13
+    ]
+   ],
+   "mirror": "z",
+   "r": 0.027
+  },
+  {
+   "id": "tank",
+   "type": "loft",
+   "material": "paint",
+   "stations": [
+    [
+     -0.08,
+     0.1,
+     0.83,
+     0.98,
+     0.08
+    ],
+    [
+     0.04,
+     0.16,
+     0.8,
+     1.07,
+     0.12
+    ],
+    [
+     0.25,
+     0.17,
+     0.8,
+     1.1,
+     0.13
+    ],
+    [
+     0.33,
+     0.09,
+     0.88,
+     1.01,
+     0.06
+    ]
+   ],
+   "round": [
+    0.05,
+    0.08
+   ],
+   "seg": 4
+  },
+  {
+   "id": "seat",
+   "type": "loft",
+   "material": "seat",
+   "stations": [
+    [
+     -0.6,
+     0.09,
+     0.89,
+     0.99,
+     0.07
+    ],
+    [
+     -0.4,
+     0.14,
+     0.85,
+     0.93,
+     0.12
+    ],
+    [
+     -0.06,
+     0.12,
+     0.85,
+     0.93,
+     0.1
+    ]
+   ],
+   "round": 0.035,
+   "seg": 3
+  },
+  {
+   "id": "tail",
+   "type": "loft",
+   "material": "paint",
+   "stations": [
+    [
+     -0.87,
+     0.06,
+     0.93,
+     0.99,
+     0.05
+    ],
+    [
+     -0.42,
+     0.12,
+     0.77,
+     0.89,
+     0.1
+    ]
+   ],
+   "round": 0.03,
+   "seg": 3
+  },
+  {
+   "id": "sidePanel",
+   "type": "box",
+   "material": "paint",
+   "size": [
+    0.36,
+    0.17,
+    0.26
+   ],
+   "at": [
+    -0.28,
+    0.76,
+    0
+   ]
+  },
+  {
+   "id": "tailLamp",
+   "type": "box",
+   "material": "lamp-red",
+   "size": [
+    0.02,
+    0.04,
+    0.08
+   ],
+   "at": [
+    -0.875,
+    0.96,
+    0
+   ]
+  },
+  {
+   "id": "indR",
+   "type": "box",
+   "material": "lamp-amber",
+   "size": [
+    0.05,
+    0.03,
+    0.03
+   ],
+   "at": [
+    -0.8,
+    0.9,
+    0.1
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "hugger",
+   "type": "rod",
+   "material": "trim",
+   "r": 0.012,
+   "from": [
+    -0.75,
+    0.9,
+    0
+   ],
+   "to": [
+    -0.85,
+    0.72,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "plate",
+   "type": "box",
+   "material": "plateW",
+   "size": [
+    0.01,
+    0.13,
+    0.19
+   ],
+   "at": [
+    -0.86,
+    0.68,
+    0,
+    0,
+    0,
+    -15
+   ]
+  },
+  {
+   "id": "crankcase",
+   "type": "box",
+   "material": "engine",
+   "size": [
+    0.46,
+    0.25,
+    0.34
+   ],
+   "at": [
+    0.02,
+    0.43,
+    0
+   ]
+  },
+  {
+   "id": "block",
+   "type": "box",
+   "material": "engine",
+   "size": [
+    0.2,
+    0.28,
+    0.36
+   ],
+   "at": [
+    0.21,
+    0.66,
+    0,
+    0,
+    0,
+    -25
+   ]
+  },
+  {
+   "id": "fins",
+   "type": "box",
+   "material": "engine",
+   "size": [
+    0.22,
+    0.012,
+    0.38
+   ],
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    -25
+   ],
+   "along": {
+    "n": 4,
+    "from": [
+     0.17,
+     0.58,
+     0
+    ],
+    "to": [
+     0.23,
+     0.72,
+     0
+    ]
+   }
+  },
+  {
+   "id": "cylHead",
+   "type": "box",
+   "material": "engineDark",
+   "size": [
+    0.19,
+    0.09,
+    0.38
+   ],
+   "at": [
+    0.27,
+    0.81,
+    0,
+    0,
+    0,
+    -25
+   ]
+  },
+  {
+   "id": "radiator",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.04,
+    0.28,
+    0.36
+   ],
+   "at": [
+    0.37,
+    0.64,
+    0,
+    0,
+    0,
+    -12
+   ]
+  },
+  {
+   "id": "clutch",
+   "type": "lathe",
+   "material": "engine",
+   "profile": [
+    [
+     0,
+     0.04
+    ],
+    [
+     0.09,
+     0.04
+    ],
+    [
+     0.1,
+     0
+    ],
+    [
+     0.1,
+     -0.02
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    -0.02,
+    0.44,
+    0.17,
+    0,
+    -90,
+    0
+   ]
+  },
+  {
+   "id": "header0",
+   "type": "sweep",
+   "material": "exhaust",
+   "path": [
+    [
+     0.33,
+     0.73,
+     -0.13
+    ],
+    [
+     0.4,
+     0.58,
+     -0.143
+    ],
+    [
+     0.34,
+     0.3,
+     -0.104
+    ],
+    [
+     0.15,
+     0.2,
+     0.04
+    ]
+   ],
+   "r": 0.017
+  },
+  {
+   "id": "header1",
+   "type": "sweep",
+   "material": "exhaust",
+   "path": [
+    [
+     0.33,
+     0.73,
+     -0.05
+    ],
+    [
+     0.4,
+     0.58,
+     -0.055
+    ],
+    [
+     0.34,
+     0.3,
+     -0.04
+    ],
+    [
+     0.15,
+     0.2,
+     0.04
+    ]
+   ],
+   "r": 0.017
+  },
+  {
+   "id": "header2",
+   "type": "sweep",
+   "material": "exhaust",
+   "path": [
+    [
+     0.33,
+     0.73,
+     0.05
+    ],
+    [
+     0.4,
+     0.58,
+     0.055
+    ],
+    [
+     0.34,
+     0.3,
+     0.04
+    ],
+    [
+     0.15,
+     0.2,
+     0.04
+    ]
+   ],
+   "r": 0.017
+  },
+  {
+   "id": "header3",
+   "type": "sweep",
+   "material": "exhaust",
+   "path": [
+    [
+     0.33,
+     0.73,
+     0.13
+    ],
+    [
+     0.4,
+     0.58,
+     0.143
+    ],
+    [
+     0.34,
+     0.3,
+     0.104
+    ],
+    [
+     0.15,
+     0.2,
+     0.04
+    ]
+   ],
+   "r": 0.017
+  },
+  {
+   "id": "collector",
+   "type": "rod",
+   "material": "exhaust",
+   "r": 0.035,
+   "from": [
+    0.15,
+    0.2,
+    0.04
+   ],
+   "to": [
+    -0.2,
+    0.3,
+    0.17
+   ],
+   "sides": 10
+  },
+  {
+   "id": "muffler",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.06,
+   "from": [
+    -0.22,
+    0.34,
+    0.2
+   ],
+   "to": [
+    -0.62,
+    0.56,
+    0.2
+   ],
+   "sides": 12,
+   "r0": 0.055,
+   "r1": 0.07
+  },
+  {
+   "id": "swingarm",
+   "type": "rod",
+   "material": "alu",
+   "r": 0.028,
+   "from": [
+    -0.1,
+    0.42,
+    0.13
+   ],
+   "to": [
+    -0.71,
+    0.31,
+    0.12
+   ],
+   "sides": 8,
+   "mirror": "z"
+  },
+  {
+   "id": "shock",
+   "type": "rod",
+   "material": "steel",
+   "r": 0.018,
+   "from": [
+    -0.13,
+    0.8,
+    0
+   ],
+   "to": [
+    -0.32,
+    0.46,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "spring",
+   "type": "rod",
+   "material": "spring",
+   "r": 0.035,
+   "from": [
+    -0.17,
+    0.72,
+    0
+   ],
+   "to": [
+    -0.28,
+    0.53,
+    0
+   ],
+   "sides": 10
+  },
+  {
+   "id": "sprocketF",
+   "type": "ring",
+   "material": "steel",
+   "r": 0.045,
+   "tube": 0.007,
+   "at": [
+    -0.02,
+    0.38,
+    0.16,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "sprocketR",
+   "type": "ring",
+   "material": "steel",
+   "r": 0.1,
+   "tube": 0.007,
+   "at": [
+    -0.71,
+    0.31,
+    0.155,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "chain",
+   "type": "sweep",
+   "material": "steel",
+   "path": [
+    [
+     -0.02,
+     0.425,
+     0.16
+    ],
+    [
+     -0.71,
+     0.41,
+     0.155
+    ],
+    [
+     -0.81,
+     0.31,
+     0.155
+    ],
+    [
+     -0.71,
+     0.21,
+     0.155
+    ],
+    [
+     -0.02,
+     0.335,
+     0.16
+    ],
+    [
+     0.025,
+     0.38,
+     0.16
+    ]
+   ],
+   "closed": true,
+   "r": 0.006
+  },
+  {
+   "id": "peg",
+   "type": "rod",
+   "material": "alu",
+   "r": 0.014,
+   "from": [
+    -0.1,
+    0.36,
+    0.12
+   ],
+   "to": [
+    -0.1,
+    0.36,
+    0.24
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "pegR",
+   "type": "rod",
+   "material": "alu",
+   "r": 0.012,
+   "from": [
+    -0.4,
+    0.5,
+    0.12
+   ],
+   "to": [
+    -0.4,
+    0.5,
+    0.22
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "stand",
+   "type": "rod",
+   "material": "steel",
+   "r": 0.012,
+   "from": [
+    -0.05,
+    0.33,
+    -0.15
+   ],
+   "to": [
+    -0.32,
+    0.3,
+    -0.17
+   ],
+   "sides": 6
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    -0.25,
+    0.93,
+    0
+   ],
+   "data": {
+    "face": 0
+   }
+  }
+ ]
+}

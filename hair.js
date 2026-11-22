@@ -8,6 +8,7 @@
 // (assets/items/hair/*.json), on the face it belongs to (a face definition names its `hairstyle`).
 import { headGrid } from "./face.js";
 import { thornLattice } from "./thorns.js";   // the spikes' lattice (shared with manes.js)
+import { rng1 as rng } from "./rng.js";
 
 const DEG = Math.PI / 180;
 const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
@@ -15,10 +16,6 @@ const mul = (a, k) => [a[0] * k, a[1] * k, a[2] * k], dot = (a, b) => a[0] * b[0
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 const norm = (a) => { const l = Math.hypot(...a) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
 const lerp = (a, b, t) => a + (b - a) * t;
-function rng(seed) {
-  let a = (seed >>> 0) || 1;
-  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-}
 
 // a STRAND GROUP (a style's `strands` entry), every number in metres unless said:
 //   region: { y: [lo, hi] (heights on the head, in the face's frame: the crown is +.10, the nape -.06), th: [from, to]

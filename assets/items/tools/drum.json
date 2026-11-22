@@ -1,0 +1,510 @@
+{
+ "kind": "item",
+ "name": "Drum",
+ "category": "tool",
+ "era": "1200-2030",
+ "region": "everywhere",
+ "_about": "a drum, its heads up: a medieval tabor, a deep wooden shell with two skin heads on their hoops, the cord laced in Vs between them, the snare across the top and its stick (style tabor), or a modern snare drum, its shell lacquered or chrome, chrome hoops, the lugs and tension rods, the strainer, two sticks on it (snare)",
+ "params": {
+  "style": {
+   "pick": [
+    "tabor",
+    "snare"
+   ]
+  }
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "ash",
+    "walnut"
+   ]
+  },
+  "skin": "paint-cream",
+  "cord": {
+   "pick": [
+    "hemp",
+    "cord-red"
+   ]
+  },
+  "gut": "gut",
+  "stick": {
+   "pick": [
+    "ash",
+    "birch"
+   ]
+  },
+  "shell": {
+   "pick": [
+    "chrome",
+    "paint-red",
+    "paint-navy",
+    "lacquer-black",
+    "walnut"
+   ]
+  },
+  "chrome": "chrome",
+  "head": {
+   "pick": [
+    "plastic-white",
+    "paint-cream"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "shellT",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0.15,
+     0.012
+    ],
+    [
+     0.15,
+     0.188
+    ]
+   ],
+   "sides": 16,
+   "caps": false,
+   "double": true,
+   "when": {
+    "style": "tabor"
+   }
+  },
+  {
+   "id": "skins",
+   "type": "lathe",
+   "material": "skin",
+   "profile": [
+    [
+     0.152,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "sides": 16,
+   "when": {
+    "style": "tabor"
+   },
+   "at": [
+    [
+     0,
+     0.012,
+     0
+    ],
+    [
+     0,
+     0.188,
+     0,
+     0,
+     180,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "hoopsT",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0.15,
+     -0.011
+    ],
+    [
+     0.157,
+     -0.004
+    ],
+    [
+     0.157,
+     0.004
+    ],
+    [
+     0.15,
+     0.011
+    ]
+   ],
+   "sides": 16,
+   "caps": false,
+   "when": {
+    "style": "tabor"
+   },
+   "at": [
+    [
+     0,
+     0.011,
+     0
+    ],
+    [
+     0,
+     0.189,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "laceA",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.002,
+   "from": [
+    0.157,
+    0.18,
+    0
+   ],
+   "to": [
+    0.145,
+    0.02,
+    -0.0601
+   ],
+   "sides": 3,
+   "around": {
+    "n": 8,
+    "r": 0
+   },
+   "when": {
+    "style": "tabor"
+   }
+  },
+  {
+   "id": "laceB",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.002,
+   "from": [
+    0.157,
+    0.18,
+    0
+   ],
+   "to": [
+    0.145,
+    0.02,
+    0.0601
+   ],
+   "sides": 3,
+   "around": {
+    "n": 8,
+    "r": 0
+   },
+   "when": {
+    "style": "tabor"
+   }
+  },
+  {
+   "id": "snareT",
+   "type": "rod",
+   "material": "gut",
+   "r": 0.0012,
+   "from": [
+    -0.15,
+    0.2015,
+    0.01
+   ],
+   "to": [
+    0.15,
+    0.2015,
+    0.01
+   ],
+   "sides": 3,
+   "when": {
+    "style": "tabor"
+   }
+  },
+  {
+   "id": "stickT",
+   "type": "rod",
+   "material": "stick",
+   "r": 0.008,
+   "from": [
+    -0.03,
+    0.21,
+    0.1
+   ],
+   "to": [
+    0.3,
+    0.21,
+    0.17
+   ],
+   "sides": 6,
+   "r1": 0.006,
+   "when": {
+    "style": "tabor"
+   }
+  },
+  {
+   "id": "strapT",
+   "type": "sweep",
+   "material": "cord",
+   "path": [
+    [
+     -0.158,
+     0.17,
+     0
+    ],
+    [
+     -0.1,
+     0.48,
+     0.1
+    ],
+    [
+     0.1,
+     0.48,
+     0.1
+    ],
+    [
+     0.158,
+     0.17,
+     0
+    ]
+   ],
+   "when": {
+    "style": "tabor"
+   },
+   "seg": 3,
+   "section": [
+    0.025,
+    0.003
+   ]
+  },
+  {
+   "id": "shellS",
+   "type": "lathe",
+   "material": "shell",
+   "profile": [
+    [
+     0.178,
+     0.01
+    ],
+    [
+     0.178,
+     0.13
+    ]
+   ],
+   "sides": 20,
+   "caps": false,
+   "double": true,
+   "when": {
+    "style": "snare"
+   }
+  },
+  {
+   "id": "headS",
+   "type": "lathe",
+   "material": "head",
+   "profile": [
+    [
+     0.179,
+     0.135
+    ],
+    [
+     0,
+     0.135
+    ]
+   ],
+   "sides": 20,
+   "when": {
+    "style": "snare"
+   }
+  },
+  {
+   "id": "bottomS",
+   "type": "lathe",
+   "material": "head",
+   "profile": [
+    [
+     0.179,
+     0.005
+    ],
+    [
+     0,
+     0.005
+    ]
+   ],
+   "sides": 20,
+   "when": {
+    "style": "snare"
+   },
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    180,
+    0
+   ]
+  },
+  {
+   "id": "hoopsS",
+   "type": "lathe",
+   "material": "chrome",
+   "profile": [
+    [
+     0.18,
+     -0.009
+    ],
+    [
+     0.185,
+     -0.004
+    ],
+    [
+     0.185,
+     0.004
+    ],
+    [
+     0.18,
+     0.009
+    ]
+   ],
+   "sides": 20,
+   "caps": false,
+   "when": {
+    "style": "snare"
+   },
+   "at": [
+    [
+     0,
+     0.007,
+     0
+    ],
+    [
+     0,
+     0.133,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "lugs",
+   "type": "box",
+   "material": "chrome",
+   "size": [
+    0.018,
+    0.05,
+    0.016
+   ],
+   "at": [
+    0.188,
+    0.07,
+    0
+   ],
+   "around": {
+    "n": 8,
+    "r": 0
+   },
+   "when": {
+    "style": "snare"
+   }
+  },
+  {
+   "id": "rods",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.0025,
+   "from": [
+    0.19,
+    0.0,
+    0
+   ],
+   "to": [
+    0.19,
+    0.14,
+    0
+   ],
+   "sides": 4,
+   "around": {
+    "n": 8,
+    "r": 0,
+    "start": 22.5
+   },
+   "when": {
+    "style": "snare"
+   }
+  },
+  {
+   "id": "strainer",
+   "type": "box",
+   "material": "chrome",
+   "size": [
+    0.03,
+    0.04,
+    0.02
+   ],
+   "at": [
+    0,
+    0.06,
+    0.19
+   ],
+   "when": {
+    "style": "snare"
+   }
+  },
+  {
+   "id": "sticksS",
+   "type": "rod",
+   "material": "stick",
+   "r": 0.0075,
+   "from": [
+    -0.15,
+    0.145,
+    -0.06
+   ],
+   "to": [
+    0.24,
+    0.145,
+    0.05
+   ],
+   "sides": 6,
+   "r1": 0.005,
+   "at": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0.015,
+     0.04
+    ]
+   ],
+   "when": {
+    "style": "snare"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.48,
+   0.1
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    1,
+    0,
+    0
+   ],
+   "face": [
+    0,
+    0,
+    1
+   ]
+  }
+ }
+}

@@ -1,0 +1,124 @@
+{
+ "kind": "item",
+ "name": "Steering wheel",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a steering wheel: the rim, three spokes, the padded boss facing the driver (-x), the column running forward into the dash -- tilted by its parent",
+ "params": {
+  "R": 0.19,
+  "tube": 0.016,
+  "col": 0.3
+ },
+ "materials": {
+  "rim": "plastic-black",
+  "hub": "plastic-black",
+  "column": "plastic-grey"
+ },
+ "parts": [
+  {
+   "id": "rim",
+   "type": "ring",
+   "material": "rim",
+   "r": "R",
+   "tube": "tube",
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    90
+   ],
+   "sides": 8
+  },
+  {
+   "id": "spokeD",
+   "type": "rod",
+   "material": "hub",
+   "r": 0.016,
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "-R",
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "spokeS",
+   "type": "rod",
+   "material": "hub",
+   "r": 0.016,
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    0,
+    "R * 0.17",
+    "R * 0.98"
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "boss",
+   "type": "lathe",
+   "material": "hub",
+   "profile": [
+    [
+     0,
+     -0.035
+    ],
+    [
+     "R * 0.3",
+     -0.03
+    ],
+    [
+     "R * 0.34",
+     0.0
+    ],
+    [
+     "R * 0.26",
+     0.04
+    ],
+    [
+     0,
+     0.04
+    ]
+   ],
+   "sides": 12,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "column",
+   "type": "rod",
+   "material": "column",
+   "r": 0.035,
+   "from": [
+    0.03,
+    0,
+    0
+   ],
+   "to": [
+    "col",
+    0,
+    0
+   ],
+   "sides": 8
+  }
+ ]
+}

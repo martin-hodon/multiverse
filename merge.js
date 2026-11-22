@@ -102,7 +102,7 @@ export function mergeStatic(root, { minGroup = 2 } = {}) {
     }
     for (const group of buckets.values()) {
       if (group.length < minGroup) continue;
-      const m = new THREE.Mesh(concat(group.map((o) => o.geometry)), group[0].material);
+      const m = new THREE.Mesh(itemsKept(concat(group.map((o) => o.geometry)), group.map((o) => o.geometry)), group[0].material);
       m.layers.mask = group[0].layers.mask;
       m.renderOrder = group[0].renderOrder;
       m.frustumCulled = group[0].frustumCulled;
@@ -117,6 +117,12 @@ export function mergeStatic(root, { minGroup = 2 } = {}) {
   walk(root);
   root.traverse((o) => { if (o.isMesh && !o.isInstancedMesh) stats.after++; });
   return stats;
+}
+
+// (the items' triangles the merged geometries carried -- userData.items, architecture.js itemBudget -- summed into the join)
+function itemsKept(geo, from) {
+  for (const g of from) for (const [p, t] of Object.entries(g.userData?.items ?? {})) (geo.userData.items ??= {})[p] = (geo.userData.items[p] ?? 0) + t;
+  return geo;
 }
 
 // ACROSS PARENTS: whole streets into one mesh.
@@ -173,7 +179,7 @@ export function mergeAcross(scene, groups, { cell = 96, variant = () => null } =
   for (const list of buckets.values()) {
     if (list.length < 2) { stats.after += list.length; continue; }
     const first = list[0].o, twin = variant(first.material);
-    const geo = concat(list.map((e) => e.o.geometry)), pos = geo.attributes.position;
+    const geo = itemsKept(concat(list.map((e) => e.o.geometry)), list.map((e) => e.o.geometry)), pos = geo.attributes.position;
     if (twin) geo.setAttribute("aLocal", new THREE.BufferAttribute(pos.array.slice(), 3));   // the pattern's frame: the local positions, verbatim
     let v = 0;
     for (const e of list) {

@@ -4,7 +4,7 @@
  "category": "furniture/storage",
  "era": "1400-1700",
  "region": "China",
- "_about": "the Ming round-corner cabinet: splayed a little like the legs of a horse, round posts, two doors meeting on a central stile, a brass face plate and lock",
+ "_about": "the Ming round-corner cabinet: splayed a little like the legs of a horse, round posts, two doors meeting on a central stile, a brass face plate and lock -- hollow: the doors (each with its half of the face plate) hinged at the outer posts and swung out by `open` onto a shelf of thread-bound books, scroll boxes and a porcelain jar",
  "params": {
   "w": [
    0.85,
@@ -14,7 +14,8 @@
   "h": [
    1.6,
    1.8
-  ]
+  ],
+  "open": 0
  },
  "materials": {
   "wood": {
@@ -25,7 +26,16 @@
     "lacquer-red"
    ]
   },
-  "metal": "brass"
+  "metal": "brass",
+  "book": "#2d3a4a",
+  "wrap": "#7a3a2a",
+  "paper": "#e3d8bc",
+  "porcelain": {
+   "pick": [
+    "#dfe6ee",
+    "#3c5f9a"
+   ]
+  }
  },
  "parts": [
   {
@@ -33,7 +43,7 @@
    "type": "lathe",
    "material": "wood",
    "faceted": true,
-   "sides": 4,
+   "sides": 3,
    "stretch": [
     "w / d",
     1,
@@ -56,7 +66,305 @@
      "d * 0.69",
      "h - 0.02"
     ]
+   ],
+   "arc": [
+    180,
+    450
+   ],
+   "caps": false
+  },
+  {
+   "id": "lining",
+   "type": "lathe",
+   "material": "wood",
+   "faceted": true,
+   "sides": 3,
+   "arc": [
+    180,
+    450
+   ],
+   "caps": false,
+   "stretch": [
+    "w / d",
+    1,
+    1
+   ],
+   "at": [
+    0,
+    0,
+    0,
+    45,
+    0,
+    0
+   ],
+   "profile": [
+    [
+     "d * 0.69 - 0.03",
+     "h - 0.02"
+    ],
+    [
+     "d * 0.74 - 0.03",
+     0.3
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.02",
+    0.02,
+    "d - 0.02"
+   ],
+   "at": [
+    0,
+    0.29,
+    0
    ]
+  },
+  {
+   "id": "frame top",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.02",
+    0.13,
+    0.025
+   ],
+   "at": [
+    0,
+    "h - 0.085",
+    "d * 0.69 * 0.7071 - 0.0125"
+   ]
+  },
+  {
+   "id": "frame bottom",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w + 0.02",
+    0.18,
+    0.025
+   ],
+   "at": [
+    0,
+    0.21,
+    "d * 0.74 * 0.7071 - 0.0125"
+   ]
+  },
+  {
+   "id": "frame stiles",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w * 0.06",
+    "h - 0.45",
+    0.025
+   ],
+   "at": [
+    "w / 2 - 0.035 + w * 0.03",
+    "0.3 + (h - 0.45) / 2",
+    "d * 0.715 * 0.7071 - 0.0125"
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "stile",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.05,
+    "h - 0.45",
+    0.02
+   ],
+   "at": [
+    0,
+    "0.3 + (h - 0.45) / 2",
+    "d / 2 - 0.025"
+   ]
+  },
+  {
+   "id": "shelf",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.08",
+    0.02,
+    "d - 0.08"
+   ],
+   "at": [
+    0,
+    "0.3 + (h - 0.45) * 0.55",
+    -0.01
+   ],
+   "inside": true
+  },
+  {
+   "id": "books",
+   "type": "box",
+   "material": "book",
+   "size": [
+    0.2,
+    0.03,
+    0.27
+   ],
+   "at": [
+    [
+     -0.25,
+     "0.33",
+     -0.03
+    ],
+    [
+     -0.25,
+     "0.362",
+     -0.03,
+     4,
+     0,
+     0
+    ],
+    [
+     -0.25,
+     "0.394",
+     -0.03,
+     -3,
+     0,
+     0
+    ],
+    [
+     -0.25,
+     "0.426",
+     -0.03,
+     2,
+     0,
+     0
+    ],
+    [
+     -0.02,
+     "0.33",
+     -0.02,
+     90,
+     0,
+     0
+    ],
+    [
+     -0.02,
+     "0.362",
+     -0.02,
+     93,
+     0,
+     0
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "wrappers",
+   "type": "box",
+   "material": "wrap",
+   "size": [
+    0.21,
+    0.13,
+    0.28
+   ],
+   "at": [
+    [
+     "0.24",
+     "0.3 + (h - 0.45) * 0.55 + 0.075",
+     -0.03
+    ],
+    [
+     "0.24",
+     "0.3 + (h - 0.45) * 0.55 + 0.205",
+     -0.03,
+     6,
+     0,
+     0
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "scrolls",
+   "type": "rod",
+   "material": "paper",
+   "r": 0.028,
+   "from": [
+    0,
+    0,
+    -0.15
+   ],
+   "to": [
+    0,
+    0,
+    0.12
+   ],
+   "sides": 8,
+   "at": [
+    [
+     -0.3,
+     "0.3 + (h - 0.45) * 0.55 + 0.04",
+     0
+    ],
+    [
+     -0.24,
+     "0.3 + (h - 0.45) * 0.55 + 0.04",
+     0
+    ],
+    [
+     -0.27,
+     "0.3 + (h - 0.45) * 0.55 + 0.088",
+     0
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "jar",
+   "type": "lathe",
+   "material": "porcelain",
+   "sides": 12,
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.06,
+     0
+    ],
+    [
+     0.1,
+     0.08
+    ],
+    [
+     0.105,
+     0.15
+    ],
+    [
+     0.06,
+     0.22
+    ],
+    [
+     0.045,
+     0.24
+    ],
+    [
+     0.05,
+     0.26
+    ],
+    [
+     0,
+     0.26
+    ]
+   ],
+   "at": [
+    0.05,
+    "0.3 + (h - 0.45) * 0.55 + 0.01",
+    -0.03
+   ],
+   "inside": true
   },
   {
    "id": "posts",
@@ -107,38 +415,50 @@
   },
   {
    "id": "doors",
-   "use": "items/components/panel-door",
-   "params": {
-    "w": "w / 2 - 0.05",
-    "h": "h - 0.45",
-    "s": 0.05
-   },
-   "at": [
-    [
-     "0 - w / 4 + 0.01",
-     "0.3 + (h - 0.45) / 2",
-     "d / 2 + 0.01"
-    ],
-    [
-     "w / 4 - 0.01",
-     "0.3 + (h - 0.45) / 2",
-     "d / 2 + 0.01"
-    ]
-   ]
-  },
-  {
-   "id": "face plate",
-   "type": "box",
-   "material": "metal",
-   "size": [
-    0.12,
-    0.2,
-    0.004
+   "type": "hinge",
+   "pivot": [
+    "0 - w / 2 + 0.035",
+    "h / 2",
+    "d / 2 + 0.01"
    ],
-   "at": [
+   "axis": [
     0,
-    "h * 0.5",
-    "d / 2 + 0.035"
+    1,
+    0
+   ],
+   "max": -105,
+   "mirror": "x",
+   "parts": [
+    {
+     "id": "door",
+     "use": "items/components/panel-door",
+     "params": {
+      "w": "w / 2 - 0.05",
+      "h": "h - 0.45",
+      "s": 0.05,
+      "side": 1
+     },
+     "at": [
+      "0 - w / 4 + 0.01",
+      "0.3 + (h - 0.45) / 2",
+      "d / 2 + 0.01"
+     ]
+    },
+    {
+     "id": "face plate",
+     "type": "box",
+     "material": "metal",
+     "size": [
+      0.058,
+      0.2,
+      0.004
+     ],
+     "at": [
+      -0.031,
+      "h * 0.5",
+      "d / 2 + 0.035"
+     ]
+    }
    ]
   },
   {

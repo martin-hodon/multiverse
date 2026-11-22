@@ -1,0 +1,187 @@
+{
+ "kind": "item",
+ "name": "TV stand",
+ "category": "furniture/storage",
+ "era": "1960-2030",
+ "region": "everywhere",
+ "_about": "a low media unit, 1.6 m wide, 0.42 m deep, 0.5 m high: a carcass on four tapered legs, a push-to-open flap door at each end, an open middle bay with a shelf",
+ "params": {},
+ "materials": {
+  "carcass": {
+   "pick": [
+    "walnut",
+    "oak",
+    "plastic-white",
+    "#2a2a2c"
+   ]
+  },
+  "front": {
+   "pick": [
+    "walnut",
+    "oak",
+    "plastic-white",
+    "#4b5059"
+   ]
+  },
+  "wood": "oak",
+  "back": "#2a2a2c",
+  "metal": "aluminium"
+ },
+ "parts": [
+  {
+   "id": "top",
+   "type": "box",
+   "material": "carcass",
+   "size": [
+    1.6,
+    0.02,
+    0.42
+   ],
+   "at": [
+    0,
+    0.49,
+    0
+   ]
+  },
+  {
+   "id": "bottom",
+   "type": "box",
+   "material": "carcass",
+   "size": [
+    1.6,
+    0.02,
+    0.42
+   ],
+   "at": [
+    0,
+    0.13,
+    0
+   ]
+  },
+  {
+   "id": "side",
+   "type": "box",
+   "material": "carcass",
+   "size": [
+    0.02,
+    0.38,
+    0.42
+   ],
+   "at": [
+    0.79,
+    0.31,
+    0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "divider",
+   "type": "box",
+   "material": "carcass",
+   "size": [
+    0.02,
+    0.34,
+    0.4
+   ],
+   "at": [
+    0.31,
+    0.31,
+    -0.01
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "shelf",
+   "type": "box",
+   "material": "carcass",
+   "size": [
+    0.6,
+    0.016,
+    0.38
+   ],
+   "at": [
+    0,
+    0.31,
+    -0.02
+   ]
+  },
+  {
+   "id": "back",
+   "type": "box",
+   "material": "back",
+   "size": [
+    1.56,
+    0.34,
+    0.005
+   ],
+   "at": [
+    0,
+    0.31,
+    -0.207
+   ]
+  },
+  {
+   "id": "flap",
+   "use": "items/modern/components/slab-door",
+   "at": [
+    -0.55,
+    0.31,
+    0.192
+   ],
+   "mirror": "x",
+   "params": {
+    "w": 0.456,
+    "h": 0.336,
+    "pull": "lip",
+    "hx": 0.0,
+    "hy": 0.0,
+    "hl": 0.16
+   }
+  },
+  {
+   "id": "legs",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.018,
+   "from": [
+    0,
+    0.12,
+    0
+   ],
+   "to": [
+    0.015,
+    0,
+    0.015
+   ],
+   "sides": 8,
+   "r0": 0.018,
+   "r1": 0.012,
+   "at": [
+    [
+     0.72,
+     0,
+     0.15,
+     0
+    ],
+    [
+     0.72,
+     0,
+     -0.15,
+     90
+    ],
+    [
+     -0.72,
+     0,
+     -0.15,
+     180
+    ],
+    [
+     -0.72,
+     0,
+     0.15,
+     270
+    ]
+   ]
+  }
+ ]
+}

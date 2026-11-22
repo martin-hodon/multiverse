@@ -1,0 +1,661 @@
+{
+ "kind": "item",
+ "name": "Gig",
+ "category": "carriage",
+ "era": "1780-1910",
+ "region": "Europe, North America",
+ "_about": "a gig (~1780-1910): the light two-wheeler for one horse -- a box body with its seat for two and the lazy-back rail, slung on springs over the axle; the curved leather dash, the footboard, a whip in its socket, lamps; 1.45 m wheels on a 1.5 m track, the shafts running under the body",
+ "params": {},
+ "materials": {
+  "paint": {
+   "pick": [
+    "#c9a64a",
+    "#20304f",
+    "#5a1a16",
+    "#1d2d22",
+    "#1c1c1e"
+   ]
+  },
+  "trim": "#1c1c1e",
+  "gear": {
+   "pick": [
+    "#7a1e1a",
+    "#1c1c1e",
+    "#c9a64a"
+   ]
+  },
+  "cushion": {
+   "pick": [
+    "upholstery-red",
+    "#3c4a5a",
+    "#5a4632",
+    "leather"
+   ]
+  },
+  "iron": "#2b2a28",
+  "brass": "brass",
+  "black": "#19191a",
+  "lamp": "lamp",
+  "leather": "leather-dark",
+  "inside": "#3a2a20"
+ },
+ "parts": [
+  {
+   "id": "wheel",
+   "use": "items/modern/components/carriage-wheel",
+   "at": [
+    0.0,
+    0.72,
+    0.75
+   ],
+   "mirror": "z",
+   "params": {
+    "r": 0.72,
+    "n": 14,
+    "w": 0.04,
+    "f": 0.055,
+    "hr": 0.085,
+    "hl": 0.26,
+    "sr": 0.015
+   },
+   "materials": {
+    "cwood": "gear",
+    "ciron": "iron",
+    "ccap": "brass"
+   }
+  },
+  {
+   "id": "axle",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.026,
+   "from": [
+    0,
+    0.72,
+    -0.75
+   ],
+   "to": [
+    0,
+    0.72,
+    0.75
+   ],
+   "sides": 8
+  },
+  {
+   "id": "springLo",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     -0.375,
+     0.86,
+     0.5
+    ],
+    [
+     -0.3248,
+     0.805,
+     0.5
+    ],
+    [
+     -0.1875,
+     0.7647,
+     0.5
+    ],
+    [
+     -0.0,
+     0.75,
+     0.5
+    ],
+    [
+     0.1875,
+     0.7647,
+     0.5
+    ],
+    [
+     0.3248,
+     0.805,
+     0.5
+    ],
+    [
+     0.375,
+     0.86,
+     0.5
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "seg": 2,
+   "mirror": "z",
+   "section": [
+    0.03,
+    0.05
+   ]
+  },
+  {
+   "id": "springHi",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     0.375,
+     0.86,
+     0.5
+    ],
+    [
+     0.3248,
+     0.915,
+     0.5
+    ],
+    [
+     0.1875,
+     0.9553,
+     0.5
+    ],
+    [
+     0.0,
+     0.97,
+     0.5
+    ],
+    [
+     -0.1875,
+     0.9553,
+     0.5
+    ],
+    [
+     -0.3248,
+     0.915,
+     0.5
+    ],
+    [
+     -0.375,
+     0.86,
+     0.5
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "seg": 2,
+   "mirror": "z",
+   "section": [
+    0.03,
+    0.05
+   ]
+  },
+  {
+   "id": "springClip",
+   "type": "box",
+   "material": "iron",
+   "size": [
+    0.08,
+    0.05,
+    0.07
+   ],
+   "at": [
+    [
+     0.0,
+     0.77,
+     0.5
+    ],
+    [
+     0.0,
+     0.95,
+     0.5
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "shaftUnder",
+   "type": "sweep",
+   "material": "gear",
+   "path": [
+    [
+     -0.85,
+     0.97,
+     0.55
+    ],
+    [
+     0.5,
+     0.97,
+     0.55
+    ]
+   ],
+   "seg": 1,
+   "mirror": "z",
+   "r": 0.035
+  },
+  {
+   "id": "shaft",
+   "type": "sweep",
+   "material": "gear",
+   "path": [
+    [
+     0.5,
+     0.97,
+     0.55
+    ],
+    [
+     1.985,
+     1.07,
+     0.46
+    ],
+    [
+     3.2,
+     1.05,
+     0.33
+    ]
+   ],
+   "radii": [
+    0.035,
+    0.0333,
+    0.0245
+   ],
+   "seg": 5,
+   "mirror": "z"
+  },
+  {
+   "id": "shaftTip",
+   "type": "sphere",
+   "material": "iron",
+   "r": 0.0315,
+   "at": [
+    3.2,
+    1.05,
+    0.33
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "shaftBar",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.07,
+    0.07,
+    1.1
+   ],
+   "at": [
+    0.85,
+    0.99,
+    0
+   ]
+  },
+  {
+   "id": "shaftSwingle",
+   "type": "rod",
+   "material": "gear",
+   "r": 0.025,
+   "from": [
+    0.96,
+    0.99,
+    -0.33
+   ],
+   "to": [
+    0.96,
+    0.99,
+    0.33
+   ],
+   "sides": 6
+  },
+  {
+   "id": "shaftTug",
+   "type": "ring",
+   "material": "iron",
+   "r": 0.05,
+   "tube": 0.008,
+   "at": [
+    1.985,
+    1.1,
+    0.46,
+    0,
+    0,
+    90
+   ],
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "crossbar",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.06,
+    0.06,
+    1.12
+   ],
+   "at": [
+    -0.85,
+    0.97,
+    0
+   ]
+  },
+  {
+   "id": "body",
+   "type": "box",
+   "material": "paint",
+   "size": [
+    0.8,
+    0.4,
+    1.0
+   ],
+   "at": [
+    -0.1,
+    1.22,
+    0
+   ]
+  },
+  {
+   "id": "panel",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.7,
+    0.3,
+    0.012
+   ],
+   "at": [
+    -0.1,
+    1.22,
+    0.505
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "cushion",
+   "type": "box",
+   "material": "cushion",
+   "size": [
+    0.48,
+    0.1,
+    1.0
+   ],
+   "at": [
+    -0.12,
+    1.47,
+    0
+   ]
+  },
+  {
+   "id": "lazyBack",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     -0.4,
+     1.44,
+     0.52
+    ],
+    [
+     -0.48,
+     1.72,
+     0.52
+    ],
+    [
+     -0.46,
+     1.8,
+     0.3
+    ],
+    [
+     -0.46,
+     1.8,
+     -0.3
+    ],
+    [
+     -0.48,
+     1.72,
+     -0.52
+    ],
+    [
+     -0.4,
+     1.44,
+     -0.52
+    ]
+   ],
+   "seg": 3,
+   "r": 0.012
+  },
+  {
+   "id": "backPad",
+   "type": "box",
+   "material": "cushion",
+   "size": [
+    0.05,
+    0.25,
+    0.75
+   ],
+   "at": [
+    -0.47,
+    1.7,
+    0,
+    0,
+    0,
+    10
+   ]
+  },
+  {
+   "id": "seatRail",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     -0.3,
+     1.44,
+     0.52
+    ],
+    [
+     -0.3,
+     1.62,
+     0.53
+    ],
+    [
+     0.1,
+     1.6,
+     0.53
+    ]
+   ],
+   "seg": 2,
+   "mirror": "z",
+   "r": 0.01
+  },
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "gear",
+   "size": [
+    0.6,
+    0.04,
+    0.95
+   ],
+   "at": [
+    0.6,
+    1.02,
+    0
+   ]
+  },
+  {
+   "id": "dash",
+   "type": "sweep",
+   "material": "leather",
+   "path": [
+    [
+     0.88,
+     1.02,
+     0
+    ],
+    [
+     0.98,
+     1.27,
+     0
+    ],
+    [
+     1.1,
+     1.5,
+     0
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "seg": 3,
+   "section": [
+    0.02,
+    0.95
+   ]
+  },
+  {
+   "id": "dashIron",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     0.88,
+     1.0,
+     0.48
+    ],
+    [
+     0.98,
+     1.27,
+     0.48
+    ],
+    [
+     1.1,
+     1.52,
+     0.48
+    ]
+   ],
+   "seg": 3,
+   "mirror": "z",
+   "r": 0.008
+  },
+  {
+   "id": "step",
+   "type": "box",
+   "material": "iron",
+   "size": [
+    0.16,
+    0.02,
+    0.12
+   ],
+   "at": [
+    0.3,
+    0.45,
+    0.65
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "stepIron",
+   "type": "rod",
+   "material": "iron",
+   "r": 0.01,
+   "from": [
+    0.3,
+    0.45,
+    0.62
+   ],
+   "to": [
+    0.35,
+    0.97,
+    0.56
+   ],
+   "sides": 4,
+   "mirror": "z"
+  },
+  {
+   "id": "lamp",
+   "use": "items/modern/components/carriage-lamp",
+   "at": [
+    0.3,
+    1.32,
+    0.52,
+    0,
+    0,
+    0
+   ],
+   "mirror": "z",
+   "materials": {
+    "lbody": "black",
+    "lglass": "lamp",
+    "lmetal": "brass"
+   }
+  },
+  {
+   "id": "whip",
+   "type": "sweep",
+   "material": "black",
+   "path": [
+    [
+     0.25,
+     1.44,
+     0.5
+    ],
+    [
+     0.4,
+     2.32,
+     0.6
+    ],
+    [
+     0.9,
+     2.92,
+     0.7
+    ]
+   ],
+   "radii": [
+    0.012,
+    0.008,
+    0.003
+   ],
+   "seg": 4
+  },
+  {
+   "id": "whipSocket",
+   "type": "rod",
+   "material": "black",
+   "r": 0.02,
+   "from": [
+    0.24,
+    1.27,
+    0.5
+   ],
+   "to": [
+    0.26,
+    1.52,
+    0.5
+   ],
+   "sides": 6
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    -0.12,
+    1.52,
+    -0.25
+   ],
+   "data": {
+    "face": 0
+   }
+  },
+  {
+   "role": "seat",
+   "at": [
+    -0.12,
+    1.52,
+    0.25
+   ],
+   "data": {
+    "face": 0
+   }
+  }
+ ]
+}

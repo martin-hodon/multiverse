@@ -1,0 +1,765 @@
+{
+ "kind": "item",
+ "name": "Floor loom",
+ "category": "furniture",
+ "era": "1100-1900",
+ "region": "Europe",
+ "_about": "a treadle floor loom: side frames and the castle over the middle, two heddle shafts hung from its pulley roller, the batten and reed swinging from its top, the warp from the warp beam at the back over the back beam through the heddles -- the shed open, half the threads up and half down -- to the fell of the cloth, the woven cloth over the breast beam and wound onto the cloth beam, four treadles, the shuttle in the shed; the weaver sits at +z",
+ "params": {},
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "ash",
+    "pine"
+   ]
+  },
+  "warp": {
+   "pick": [
+    "linen",
+    "wool"
+   ]
+  },
+  "cloth": {
+   "pick": [
+    "wool",
+    "linen",
+    "damask-red",
+    "velvet-green",
+    "damask-blue"
+   ]
+  },
+  "cord": "hemp",
+  "iron": "iron"
+ },
+ "parts": [
+  {
+   "id": "posts",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.09,
+    0.95,
+    0.09
+   ],
+   "at": [
+    [
+     -0.9,
+     0.475,
+     0.6
+    ],
+    [
+     -0.9,
+     0.475,
+     -0.6
+    ],
+    [
+     0.9,
+     0.475,
+     0.6
+    ],
+    [
+     0.9,
+     0.475,
+     -0.6
+    ]
+   ]
+  },
+  {
+   "id": "castlePosts",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.09,
+    1.75,
+    0.09
+   ],
+   "at": [
+    [
+     -0.9,
+     0.875,
+     -0.05
+    ],
+    [
+     0.9,
+     0.875,
+     -0.05
+    ]
+   ]
+  },
+  {
+   "id": "castleTop",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.92,
+    0.1,
+    0.12
+   ],
+   "at": [
+    0,
+    1.75,
+    -0.05
+   ]
+  },
+  {
+   "id": "lowRails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.08,
+    0.08,
+    1.29
+   ],
+   "at": [
+    [
+     -0.9,
+     0.12,
+     0
+    ],
+    [
+     0.9,
+     0.12,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "topRails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.08,
+    0.09,
+    1.29
+   ],
+   "at": [
+    [
+     -0.9,
+     0.92,
+     0
+    ],
+    [
+     0.9,
+     0.92,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "breastBeam",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.8,
+    0.1,
+    0.1
+   ],
+   "at": [
+    0,
+    0.85,
+    0.6
+   ]
+  },
+  {
+   "id": "backBeam",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.8,
+    0.09,
+    0.09
+   ],
+   "at": [
+    0,
+    0.87,
+    -0.6
+   ]
+  },
+  {
+   "id": "warpBeam",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.045,
+   "from": [
+    -0.9,
+    0.45,
+    -0.55
+   ],
+   "to": [
+    0.9,
+    0.45,
+    -0.55
+   ],
+   "sides": 10,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "warpRoll",
+   "type": "rod",
+   "material": "warp",
+   "r": 0.1,
+   "from": [
+    -0.65,
+    0.45,
+    -0.55
+   ],
+   "to": [
+    0.65,
+    0.45,
+    -0.55
+   ],
+   "sides": 14
+  },
+  {
+   "id": "clothBeam",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.045,
+   "from": [
+    -0.9,
+    0.4,
+    0.52
+   ],
+   "to": [
+    0.9,
+    0.4,
+    0.52
+   ],
+   "sides": 10
+  },
+  {
+   "id": "clothRoll",
+   "type": "rod",
+   "material": "cloth",
+   "r": 0.075,
+   "from": [
+    -0.65,
+    0.4,
+    0.52
+   ],
+   "to": [
+    0.65,
+    0.4,
+    0.52
+   ],
+   "sides": 14
+  },
+  {
+   "id": "ratchet",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     0.95,
+     0.45,
+     -0.55
+    ],
+    [
+     0.95,
+     0.45,
+     -0.5499
+    ]
+   ],
+   "sides": 10,
+   "r": 0.08
+  },
+  {
+   "id": "warpBack",
+   "type": "rod",
+   "material": "warp",
+   "r": 0.0012,
+   "from": [
+    0,
+    0.55,
+    -0.54
+   ],
+   "to": [
+    0,
+    0.915,
+    -0.6
+   ],
+   "sides": 3,
+   "along": {
+    "n": 36,
+    "from": [
+     -0.6,
+     0,
+     0
+    ],
+    "to": [
+     0.6,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "warpRun",
+   "type": "rod",
+   "material": "warp",
+   "r": 0.0012,
+   "from": [
+    0,
+    0.915,
+    -0.6
+   ],
+   "to": [
+    0,
+    0.85,
+    -0.05
+   ],
+   "sides": 3,
+   "along": {
+    "n": 36,
+    "from": [
+     -0.6,
+     0,
+     0
+    ],
+    "to": [
+     0.6,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "shedUp",
+   "type": "rod",
+   "material": "warp",
+   "r": 0.0012,
+   "from": [
+    0,
+    0.88,
+    -0.05
+   ],
+   "to": [
+    0,
+    0.885,
+    0.3
+   ],
+   "sides": 3,
+   "along": {
+    "n": 18,
+    "from": [
+     -0.6,
+     0,
+     0
+    ],
+    "to": [
+     0.57,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "shedDown",
+   "type": "rod",
+   "material": "warp",
+   "r": 0.0012,
+   "from": [
+    0,
+    0.82,
+    -0.05
+   ],
+   "to": [
+    0,
+    0.885,
+    0.3
+   ],
+   "sides": 3,
+   "along": {
+    "n": 18,
+    "from": [
+     -0.57,
+     0,
+     0
+    ],
+    "to": [
+     0.6,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "web",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    1.2,
+    0.006,
+    0.35
+   ],
+   "at": [
+    0,
+    0.89,
+    0.47
+   ]
+  },
+  {
+   "id": "webDown",
+   "type": "box",
+   "material": "cloth",
+   "size": [
+    1.2,
+    0.42,
+    0.006
+   ],
+   "at": [
+    0,
+    0.69,
+    0.655
+   ]
+  },
+  {
+   "id": "shaftBars",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.36,
+    0.025,
+    0.02
+   ],
+   "at": [
+    [
+     0,
+     0.62,
+     -0.08
+    ],
+    [
+     0,
+     0.62,
+     -0.02
+    ],
+    [
+     0,
+     1.08,
+     -0.08
+    ],
+    [
+     0,
+     1.08,
+     -0.02
+    ]
+   ]
+  },
+  {
+   "id": "heddles",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.0009,
+   "from": [
+    0,
+    0.62,
+    0
+   ],
+   "to": [
+    0,
+    1.08,
+    0
+   ],
+   "sides": 3,
+   "at": [
+    [
+     0,
+     0,
+     -0.08
+    ],
+    [
+     0,
+     0,
+     -0.02
+    ]
+   ],
+   "along": {
+    "n": 30,
+    "from": [
+     -0.62,
+     0,
+     0
+    ],
+    "to": [
+     0.62,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "roller",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.04,
+   "from": [
+    -0.75,
+    1.6,
+    -0.05
+   ],
+   "to": [
+    0.75,
+    1.6,
+    -0.05
+   ],
+   "sides": 10
+  },
+  {
+   "id": "shaftCords",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.003,
+   "from": [
+    0,
+    1.6,
+    -0.05
+   ],
+   "to": [
+    0,
+    1.08,
+    0
+   ],
+   "sides": 4,
+   "at": [
+    [
+     -0.5,
+     0,
+     -0.03
+    ],
+    [
+     0.5,
+     0,
+     -0.03
+    ],
+    [
+     -0.5,
+     0,
+     0.03
+    ],
+    [
+     0.5,
+     0,
+     0.03
+    ]
+   ]
+  },
+  {
+   "id": "swordL",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.9617,
+    0.04
+   ],
+   "at": [
+    -0.82,
+    1.26,
+    0.14,
+    0.0,
+    -16.9275,
+    180.0
+   ]
+  },
+  {
+   "id": "swordR",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.9617,
+    0.04
+   ],
+   "at": [
+    0.82,
+    1.26,
+    0.14,
+    0.0,
+    -16.9275,
+    180.0
+   ]
+  },
+  {
+   "id": "battenBar",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.7,
+    0.07,
+    0.07
+   ],
+   "at": [
+    0,
+    0.8,
+    0.28
+   ]
+  },
+  {
+   "id": "battenCap",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.7,
+    0.04,
+    0.05
+   ],
+   "at": [
+    0,
+    0.99,
+    0.23
+   ]
+  },
+  {
+   "id": "reed",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.0012,
+   "from": [
+    0,
+    0.835,
+    0.27
+   ],
+   "to": [
+    0,
+    0.97,
+    0.235
+   ],
+   "sides": 3,
+   "along": {
+    "n": 40,
+    "from": [
+     -0.68,
+     0,
+     0
+    ],
+    "to": [
+     0.68,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "treadleBar",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.025,
+   "from": [
+    -0.4,
+    0.05,
+    -0.45
+   ],
+   "to": [
+    0.4,
+    0.05,
+    -0.45
+   ],
+   "sides": 8
+  },
+  {
+   "id": "treadles",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.8721,
+    0.03
+   ],
+   "at": [
+    [
+     -0.3,
+     0.08,
+     -0.015,
+     90.0,
+     0.0,
+     86.0548
+    ],
+    [
+     -0.1,
+     0.08,
+     -0.015,
+     90.0,
+     0.0,
+     86.0548
+    ],
+    [
+     0.1,
+     0.08,
+     -0.015,
+     90.0,
+     0.0,
+     86.0548
+    ],
+    [
+     0.3,
+     0.08,
+     -0.015,
+     90.0,
+     0.0,
+     86.0548
+    ]
+   ]
+  },
+  {
+   "id": "treadleCords",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.003,
+   "from": [
+    0,
+    0.1,
+    -0.05
+   ],
+   "to": [
+    0,
+    0.62,
+    -0.05
+   ],
+   "sides": 4,
+   "at": [
+    [
+     -0.3,
+     0,
+     0
+    ],
+    [
+     -0.1,
+     0,
+     0
+    ],
+    [
+     0.1,
+     0,
+     0
+    ],
+    [
+     0.3,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "shuttle",
+   "type": "sphere",
+   "material": "wood",
+   "r": 0.04,
+   "at": [
+    0.15,
+    0.865,
+    0.2
+   ],
+   "sides": 8,
+   "stretch": [
+    3.2,
+    0.45,
+    0.5
+   ]
+  }
+ ]
+}

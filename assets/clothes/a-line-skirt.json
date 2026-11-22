@@ -1,0 +1,38 @@
+{
+  "name": "A-line skirt",
+  "kind": "garment",
+  "layer": 2,
+  "_about": "an A-line skirt (Dior's line of 1955, everyone's since the 1960s): from the natural waist to the knee, flaring evenly, a narrow waistband -- worn with a blouse tucked in",
+  "skirted": true,
+  "thick": 0.004,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "navy"
+    }
+  },
+  "params": {
+    "length": "knee + 0.02"
+  },
+  "use": [
+    {
+      "use": "clothes/components/skirt",
+      "params": {
+        "from": "waist",
+        "to": "length",
+        "flare": 0.2,
+        "pleats": 6,
+        "cling": 0.5
+      }
+    },
+    {
+      "use": "clothes/components/patch",
+      "params": {
+        "from": "waist - 0.03",
+        "to": "waist + 0.005",
+        "thick": 0.006
+      }
+    }
+  ]
+}

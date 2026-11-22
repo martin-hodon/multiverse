@@ -383,15 +383,67 @@ export function itemGeometry(g) {
   geo.setAttribute("aUV", new THREE.BufferAttribute(g.uv, 2));
   geo.setIndex(new THREE.BufferAttribute(g.idx, 1));
   geo.computeBoundingSphere();
+  if (g.src) geo.userData.items = { [g.src]: g.idx.length / 3 };   // (which item's triangles these are: itemBudget)
   return geo;
 }
+// THE IN-GAME BUDGET (2026-11-22, docs/items.md): the triangles the scene holds, by the item they came from -- every
+// geometry made of items carries `userData.items` { path: triangles of one copy } (itemGeometry, itemMeshes' merged
+// furniture, tools.js paintedGeometry), a batched pool its shapes' (batchpool.js `userData.geos`). Walks the scene:
+// { items: { path: { tris, copies } }, other: { name: tris }, total, inView } -- `view` (a camera) counts only what
+// stands in its frustum (a building by its bounding sphere; an instanced or batched copy as three culls it, or not at all).
+export function itemBudget(scene, view = null) {
+  const items = {}, other = {}, fr = new THREE.Frustum(), sph = new THREE.Sphere(), M = new THREE.Matrix4();
+  if (view) { view.updateMatrixWorld(); fr.setFromProjectionMatrix(M.multiplyMatrices(view.projectionMatrix, view.matrixWorldInverse)); }
+  let total = 0;
+  const seen = (o) => { for (let p = o; p; p = p.parent) if (!p.visible) return false; return true; };
+  const add = (map, k) => { for (const [p, t] of Object.entries(map)) { const e = items[p] ??= { tris: 0, copies: 0 }; e.tris += t * k; e.copies += k; } };
+  scene.traverse((o) => {
+    if (!(o.isMesh || o.isInstancedMesh || o.isBatchedMesh) || !seen(o)) return;
+    const geo = o.geometry, per = (geo?.index?.count ?? geo?.attributes?.position?.count ?? 0) / 3;
+    if (o.isBatchedMesh) {
+      const geos = o.userData.geos ?? [], info = o._instanceInfo ?? [];
+      for (let i = 0; i < info.length; i++) { const f = info[i]; if (!f?.active || !f.visible) continue;
+        const g = geos[f.geometryIndex]; if (!g) continue;
+        if (view) { o.getMatrixAt(i, M); if (!g.boundingSphere) g.computeBoundingSphere(); sph.copy(g.boundingSphere).applyMatrix4(M.premultiply(o.matrixWorld)); if (!fr.intersectsSphere(sph)) continue; }
+        const t = (g.index?.count ?? g.attributes.position.count) / 3; total += t;
+        if (g.userData.items) add(g.userData.items, 1); else other[o.name || "batched"] = (other[o.name || "batched"] ?? 0) + t; }
+      return;
+    }
+    let k = o.isInstancedMesh ? o.count : geo?.instanceCount ?? 1;
+    if (!isFinite(k)) k = 1;
+    if (view && o.frustumCulled && !o.isInstancedMesh) { if (!geo.boundingSphere) geo.computeBoundingSphere(); sph.copy(geo.boundingSphere).applyMatrix4(o.matrixWorld); if (!fr.intersectsSphere(sph)) return; }
+    total += per * k;
+    if (geo.userData.items) add(geo.userData.items, k);
+    else { let r = o, name = o.name || geo.type; while (r.parent && r.parent.parent) { r = r.parent; if (r.name) name = r.name; } other[name] = (other[name] ?? 0) + per * k; }
+  });
+  return { items, other, total };
+}
 // (geo: the geometry it is for -- the tile array gives it its slot: archmat.js finishMaterial)
-export const itemMaterial = (m, open = false, geo = null) => finishMaterial({ pattern: m.pattern, palette: m.palette, scale: m.scale, params: m.params }, m.side, open, geo);
+export const itemMaterial = (m, open = false, geo = null) => finishMaterial({ pattern: m.pattern, palette: m.palette, scale: m.scale, params: m.params, ...(m.opacity < 1 ? { opacity: m.opacity } : {}) }, m.side, open, geo);
 const itemMesh = (g, Mesh = THREE.Mesh, ...rest) => { const geo = itemGeometry(g); return new Mesh(geo, itemMaterial(g.material, false, geo), ...rest); };
 export function itemObject(built) {
   const out = new THREE.Group();
   out.name = built.name ?? "item";
   for (const g of built.groups) out.add(itemMesh(g));
+  // ITS HINGED PIECES (built with split: items.js hinge -- a car's doors, its bonnet): each in a pivot of its own, turned
+  // by setOpen(share 0..1, which: an id's start or all) about its axis
+  // (a joint's kids -- hinges on a hinged piece, a jack-knife door's second leaf -- ride in its pivot: their pivots and
+  // axes are given as the item stands shut, so each sits at its pivot less its parent's)
+  const axisV = new THREE.Vector3(), joints = [];
+  const mount = (list, into, at) => { for (const j of list) {
+    const pv = new THREE.Group(); pv.name = j.id; const base = j.pivot.map((v, i) => v - at[i]); pv.position.set(...base);
+    for (const g of j.groups) { const m = itemMesh(g); m.position.set(-j.pivot[0], -j.pivot[1], -j.pivot[2]); pv.add(m); }
+    into.add(pv); joints.push({ ...j, base, group: pv });
+    mount(j.kids ?? [], pv, j.pivot);
+  } };
+  mount(built.joints ?? [], out, [0, 0, 0]);
+  out.userData.joints = joints;
+  // (a joint with a `by` -- a front wheel's steer -- is turned by setDrive(name, -1..1), not by setOpen)
+  const put = (j, t0) => { const r = j.range ?? [0, 1], t = j.by ? Math.max(-1, Math.min(1, t0)) : Math.max(0, Math.min(1, (t0 - r[0]) / ((r[1] - r[0]) || 1))); return j.move ? j.group.position.set(j.base[0] + j.move[0] * t, j.base[1] + j.move[1] * t, j.base[2] + j.move[2] * t)   // (a slide)
+                               : j.group.quaternion.setFromAxisAngle(axisV.set(...j.axis), j.max * t); };
+  out.userData.setOpen = (t, which = null) => { for (const j of joints) if (!j.by && (!which || j.id.startsWith(which))) put(j, t); };
+  out.userData.setDrive = (name, t) => { for (const j of joints) if (j.by === name) put(j, t); };
+  for (const j of joints) put(j, j.open ?? 0);
   return out;
 }
 // AN ITEM OUT OF THE CATALOGUE (assets/items), by path: as one group (itemGroup: a barge, a water wheel, a cart's body)
@@ -826,6 +878,7 @@ function itemMeshes(asm, open = false) {
       let o = by.get(g.material.key);
       if (!o) by.set(g.material.key, o = { material: g.material, copies: [], verts: 0, idx: 0 });
       o.copies.push([g, Math.cos(a), Math.sin(a), X, Y, Z]); o.verts += g.pos.length / 3; o.idx += g.idx.length;
+      if (g.src) (o.src ??= {})[g.src] = (o.src[g.src] ?? 0) + g.idx.length / 3;
     }
   }
   return [...by.values()].map((o) => {
@@ -844,7 +897,7 @@ function itemMeshes(asm, open = false) {
       v += n; t += g.idx.length;
     }
     const geo = itemGeometry({ pos, nor, uv, idx }), m = new THREE.Mesh(geo, itemMaterial(o.material, open, geo));
-    m.name = "items";
+    m.name = "items"; if (o.src) geo.userData.items = o.src;   // (itemBudget: every copy's triangles, by item)
     return m;
   });
 }

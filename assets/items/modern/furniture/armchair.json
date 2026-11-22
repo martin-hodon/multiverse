@@ -1,0 +1,206 @@
+{
+ "kind": "item",
+ "name": "Armchair (modern)",
+ "category": "furniture/seat",
+ "era": "1950-2030",
+ "region": "everywhere",
+ "_about": "an upholstered armchair of the late 20th century, 0.88 m square: square arms, one seat and one back cushion, tapered wooden legs -- its back toward -z, the seat at 0.47 m",
+ "params": {},
+ "materials": {
+  "cover": {
+   "pick": [
+    "upholstery-grey",
+    "upholstery",
+    "upholstery-red",
+    "wool",
+    "#7d8a6a",
+    "#b7ab96"
+   ]
+  },
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.5,
+    0.26,
+    0.85
+   ],
+   "at": [
+    0,
+    0.25,
+    -0.015
+   ]
+  },
+  {
+   "id": "arm",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.2,
+    0.5,
+    0.88
+   ],
+   "at": [
+    0.34,
+    0.37,
+    0
+   ],
+   "round": 0.03,
+   "mirror": "x"
+  },
+  {
+   "id": "backFrame",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.49,
+    0.68,
+    0.17
+   ],
+   "at": [
+    0,
+    0.46,
+    -0.355
+   ]
+  },
+  {
+   "id": "seatCushion",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.468,
+    0.14,
+    0.69
+   ],
+   "at": [
+    0,
+    0.43,
+    0.075
+   ],
+   "round": 0.03,
+   "along": {
+    "n": 1,
+    "from": [
+     0.0,
+     0,
+     0
+    ],
+    "to": [
+     0.0,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "backCushion",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.464,
+    0.44,
+    0.2
+   ],
+   "at": [
+    0,
+    0.71,
+    -0.19,
+    0,
+    -10,
+    0
+   ],
+   "round": 0.035,
+   "along": {
+    "n": 1,
+    "from": [
+     0.0,
+     0,
+     0
+    ],
+    "to": [
+     0.0,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "legs",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.022,
+   "from": [
+    0,
+    0.13,
+    0
+   ],
+   "to": [
+    0.02,
+    0,
+    0.02
+   ],
+   "sides": 8,
+   "r0": 0.022,
+   "r1": 0.014,
+   "at": [
+    [
+     0.36,
+     0,
+     0.36,
+     0
+    ],
+    [
+     0.36,
+     0,
+     -0.36,
+     90
+    ],
+    [
+     -0.36,
+     0,
+     -0.36,
+     180
+    ],
+    [
+     -0.36,
+     0,
+     0.36,
+     270
+    ]
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": 0.48,
+    "d": 0.68,
+    "top": 0.47
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     0.0,
+     0.47,
+     0.1
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5708
+   }
+  }
+ ]
+}

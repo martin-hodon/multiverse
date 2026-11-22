@@ -142,6 +142,9 @@ export function mineDoc(plan, { ore = "silver", ground = null } = {}) {
   const box = (w, l, h, ps, k = {}) => ({ type: "box", width: R(w), length: R(l), height: R(h), at: pts(ps), ...k });
   const rect = (name, x0, x1, z0, z1, y, h, k = {}) => { parts[name] = box(x1 - x0, z1 - z0, h, [[(x0 + x1) / 2, y, (z0 + z1) / 2]], k); };
   const item = (path, ps, k = {}) => ({ type: "item", item: path, at: pts(ps), ...k });
+  // the miners' FROG LAMPS (items/tools/frog-lamp): each hung by its spike driven into the rock, its flame -- the item's
+  // origin, and the light (its `fire` marker) -- LAMP_OUT from the wall; [x, y, z, a] with `a` turning its spike to the wall
+  const LAMP_OUT = .15, lamps = (ps) => item("items/tools/frog-lamp", ps, { solid: false });
   const marker = (role, ps, data) => ({ type: "marker", role, at: pts(ps), data });
   const minus = (r, holes) => {   // a rectangle (x0, x1, z0, z1) less some inside it: strips of what is left
     const xs = [...new Set([r[0], r[1], ...holes.flatMap((h) => [h[0], h[1]])])].sort((a, b) => a - b), out = [];
@@ -245,7 +248,7 @@ export function mineDoc(plan, { ore = "silver", ground = null } = {}) {
     parts["adit set caps"] = { ...box(.16, GW - .04, .16, xs.map((x) => [x, Yb + GH - .16, 0])), when: TIMBERED };
     rect("adit track", 5.8, XP, -.42, -.3, Yb, .04); rect("adit track 2", 5.8, XP, .3, .42, Yb, .04);
     TIMBER.push("adit set posts", "adit set caps", "adit track", "adit track 2");
-    parts["adit lamps"] = marker("fire", xs.filter((_, i) => i % 4 === 2).map((x) => [x, Yb + 1.75, -w + .03]), { r: .035, h: .09, candle: true });
+    parts["adit lamps"] = lamps(xs.filter((_, i) => i % 4 === 2).map((x) => [x, Yb + 1.75, -w + LAMP_OUT, -PI2]));
     // the portal: a headwall of rubble stone round the adit's mouth, its wings, the timber door set in the opening
     rect("adit portal pier 0", XB, XP + .5, -2.6, -w, h0, 3.4); rect("adit portal pier 1", XB, XP + .5, w, 2.6, h0, 3.4);
     rect("adit portal lintel", XB, XP + .5, -w, w, h0 + GH, 3.4 - GH);
@@ -280,18 +283,15 @@ export function mineDoc(plan, { ore = "silver", ground = null } = {}) {
                              faces: { 0: [{ at: 1.4, width: 1.3, sill: 0, springing: 2.0, head: { profile: "flat" }, glass: false }],
                                       2: [{ at: 0, width: .8, sill: 1.0, springing: 1.7, head: { profile: "flat" }, glass: false }] } };
     parts["shaft house roof"] = { type: "roof", form: "gable", width: 5.6, length: 6.9, pitch: 40, overhang: .2, at: pts([[0, h0 + 2.6, 0, PI2]]) };
-    // the windlass: two posts beyond the collar, the drum over the shaft, its axle, a crank at each end (one hanging, one
-    // standing: the two men's strokes half a turn apart), the grips out from the arms' far ends
-    parts["windlass posts"] = box(.18, .18, 1.25, [[0, h0, -1.25], [0, h0, 1.25]]);
-    parts["windlass drum"] = box(.28, 2.7, .28, [[0, h0 + .92, 0]]);
-    parts["windlass axle"] = box(.08, 2.9, .08, [[0, h0 + 1.02, 0]]);
-    parts["windlass cranks"] = box(.06, .06, .4, [[0, h0 + .7, -1.42], [0, h0 + 1.02, 1.42]]);
-    parts["windlass handles"] = box(.05, .24, .05, [[0, h0 + .7, -1.55], [0, h0 + 1.37, 1.55]]);
-    TIMBER.push("windlass posts", "windlass drum", "windlass axle", "windlass cranks", "windlass handles");
-    parts["ropes"] = { type: "column", radius: .014, height: R(h0 + .92 - (Yb + .6)), sides: 5, at: pts([[.3, Yb + .6, 0]]) };
-    parts["rope up"] = { type: "column", radius: .014, height: 2.4, sides: 5, at: pts([[-.3, h0 - 1.5, 0]]) };
-    parts["kibbles"] = item("items/tools/bucket", [[.3, Yb, 0], [-.3, h0 - 1.9, 0]], { solid: false });
-    parts["windlass men"] = marker("spot", [[.2, h0, -1.75], [-.2, h0, 1.75]], { pose: "stand", work: 1, gesture: "lift", face: [PI2, -PI2], crew: "miner" });
+    // the windlass (items/furniture/windlass, tools/craftgen.py): two braced posts beyond the collar, the drum over the
+    // shaft on its axle (1.06 up), a crank at each end -- one hanging, one standing: the two men's strokes half a turn
+    // apart. A rope off each side of the drum (r .15): the full kibble down at the shaft bottom, the empty one coming up
+    parts["windlass"] = item("items/furniture/windlass", [[0, h0, 0]]);
+    parts["ropes"] = { type: "column", radius: .014, height: R(h0 + 1.06 - (Yb + .84)), sides: 5, at: pts([[.16, Yb + .84, 0]]) };
+    parts["rope up"] = { type: "column", radius: .014, height: R(1.06 + 1.06), sides: 5, at: pts([[-.16, h0 - 1.06, 0]]) };
+    parts["kibbles"] = item("items/tools/kibble", [[.16, Yb, 0]], { solid: false, params: { full: 1 } });
+    parts["kibble up"] = item("items/tools/kibble", [[-.16, h0 - 1.9, 0]], { solid: false, seed: 2 });
+    parts["windlass men"] = marker("spot", [[.2, h0, -1.95], [-.2, h0, 1.95]], { pose: "stand", work: 1, gesture: "lift", face: [PI2, -PI2], crew: "miner" });
     // the walking shaft: inside x 6 .. 10.7, z -1.2 .. 1.2; flights of 10 steps 25 cm on 25 cm, turning on landings at each
     // end (each landing as deep as a flight is wide); an even number of them, so the last lands by the chamber's east wall
     const NF = Math.round((h0 - Yb) / LS);
@@ -329,7 +329,7 @@ export function mineDoc(plan, { ore = "silver", ground = null } = {}) {
   // (an adit's chamber: the adit comes in through the east wall, no shaft through the ceiling)
   room("shaft bottom", Yb, -3.0, 5.8, -3.0, 3.0, 3.0, [adit ? ["e", -GW / 2, GW / 2, GH] : ["e", Z0, Z0 + SW, 2.3], ["n", -2.3, -.7, GH], ["s", .7, 2.3, GH]], adit ? [] : [[-HX - .2, HX + .2, -HZ - .2, HZ + .2]]);
   parts["hooker"] = marker("spot", [[1.2, Yb, 0]], { pose: "stand", work: 1, gesture: "lift", face: PI, crew: "miner" });
-  parts["shaft bottom lamps"] = marker("fire", [[-2.9, Yb + 1.9, -1.5], [5.7, Yb + 1.9, 2.0]], { r: .035, h: .09, candle: true });
+  parts["shaft bottom lamps"] = lamps([[-3.0 + LAMP_OUT, Yb + 1.9, -1.5, 0], [5.8 - LAMP_OUT, Yb + 1.9, 2.0, PI]]);
   parts["shaft bottom cart"] = { type: "component", use: "components/mine-cart", at: pts([[-1.5, Yb, 1.8]]) };
   const s1 = gallery("main gallery", GALLERIES.main.c, MINE.MAIN, plan.main), s2 = gallery("side gallery", GALLERIES.side.c, MINE.SIDE, plan.side);
   const YN = plan.main.at(-1), YS = plan.side.at(-1);   // (the stopes: where the galleries arrive)
@@ -351,8 +351,8 @@ export function mineDoc(plan, { ore = "silver", ground = null } = {}) {
   const mid = (sets) => sets[Math.floor(sets.length / 2)] ?? [0, Yb];
   const [cm, cs] = [mid(s1), mid(s2)];
   parts["carts"] = { type: "component", use: "components/mine-cart", at: pts([[-1.5, YN, 31.4], [-1.5, cm[1], cm[0]], [1.5, cs[1], cs[0]]]) };
-  parts["gallery lamps"] = marker("fire", [...s1.filter((_, i) => i % 4 === 0).map(([z, y]) => [-2.27, y + 1.75, z]), ...s2.filter((_, i) => i % 4 === 0).map(([z, y]) => [.77, y + 1.75, z]),
-                                           [-4.9, YN + 2.0, 32.0], [1.9, YN + 2.0, 34.5], [-1.9, YS + 2.0, -21.0], [4.9, YS + 2.0, -24.5]], { r: .035, h: .09, candle: true });
+  parts["gallery lamps"] = lamps([...s1.filter((_, i) => i % 4 === 0).map(([z, y]) => [-2.3 + LAMP_OUT, y + 1.75, z, 0]), ...s2.filter((_, i) => i % 4 === 0).map(([z, y]) => [.7 + LAMP_OUT, y + 1.75, z, 0]),
+                                  [-5 + LAMP_OUT, YN + 2.0, 32.0, 0], [2 - LAMP_OUT, YN + 2.0, 34.5, PI], [-2 + LAMP_OUT, YS + 2.0, -21.0, 0], [5 - LAMP_OUT, YS + 2.0, -24.5, PI]]);
   parts["lanterns"] = item("items/tools/lantern", [[-4.5, YN, 31.0], [4.4, YS, -21.0]], { solid: false });
 
   // ---- into the site's frame: the yard's middle the origin, turned `dir` quarter turns ----------------------------------

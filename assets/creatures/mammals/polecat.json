@@ -1,0 +1,155 @@
+{
+  "name": "polecat",
+  "kind": "mammal",
+  "headForm": "rodent",
+  "shy": 5,
+  "graze": 0.25,
+  "print": "paw",
+  "headTurn": 26,
+  "rear": [-0.1, 0.084, 0.0, 0.11, 0.032, 0.033],
+  "front": [0.04, 0.08, 0.0, 0.084, 0.031, 0.031],
+  "neck": [0.09, 0.086, 0.0, 0.14, 0.094, 0.0, 0.024, 0.022],
+  "head": [0.162, 0.098, 0.0, 0.023],
+  "muzzle": [0.176, 0.094, 0.0, 0.204, 0.087, 0.0, 0.017, 0.009],
+  "nose": [0.2052, 0.087, 0.0, 0.0044],
+  "ears": [0.15, 0.117, 0.017, 0.147, 0.125, 0.021, 0.0084, 0.0072],
+  "eyes": [0.185, 0.105, 0.015, 0.0036],
+  "legs": {
+    "front": [0.06, 0.062, 0.019, 0.023],
+    "hind": [-0.144, 0.07, 0.021, 0.027],
+    "radii": [0.013, 0.009, 0.007],
+    "foot": [0.013, 0.005, 0.0084],
+    "ankle": 0.007,
+    "kneeH": -1
+  },
+  "tail": {
+    "c": [-0.2148, -0.1009],
+    "R": 0.2,
+    "a0": 1.5,
+    "a1": 2.2,
+    "r1": 0.012,
+    "r2": 0.009,
+    "n": 4,
+    "sway": 14,
+    "speed": 0.7
+  },
+  "hop": {
+    "period": 0.3,
+    "h": 0.02,
+    "sync": true
+  },
+  "flex": 16,
+  "flexPh": 2.5,
+  "upright": {
+    "deg": 72,
+    "fold": 0.9
+  },
+  "gaits": {
+    "walk": {
+      "offsets": [-2.2, -2.0, -3.0, -2.8],
+      "stride": 0.022,
+      "lift": 0.018,
+      "bob": 0.0,
+      "pitch": 0.14,
+      "pitchPh": 0.8
+    },
+    "run": {
+      "offsets": [-2.2, -2.0, -3.0, -2.8],
+      "stride": 0.03,
+      "lift": 0.024,
+      "bob": 0.0,
+      "pitch": 0.2,
+      "pitchPh": 0.8
+    }
+  },
+  "c": {
+    "body": "#3a2a20",
+    "muzzle": "#e8e0d0",
+    "ear": "#3a2a20",
+    "leg": "#1a1410",
+    "tail": "#1e1612",
+    "eye": "#060404",
+    "nose": "#2a1a16",
+    "belly": "#2a201a",
+    "paw": "#1a1410",
+    "lid": "#100a08",
+    "whisker": "#d8d0c4",
+    "whiskerW": "#d8d0c4",
+    "white": "#e8e0d0",
+    "face": "#6a5a48",
+    "mask": "#1a1410",
+    "dark": "#22180f",
+    "under": "#8e7650",
+    "earIn": "#4a3a2e"
+  },
+  "_about": "THE EUROPEAN POLECAT (2026-11-21, tools/creaturegen/rework/carn/polecat.py): built from the least weasel (its rig and sculpt) at 2.0 and reshaped -- the trunk 20% thicker and arched over the loin, stouter legs; a broader, blunter head (cranium and cheeks widened, the muzzle shortened to .92), small round white-rimmed ears; a 14 cm dark, slightly bushy tail (one sweep); dark brown with the creamy underfur showing low on the flanks (paints), near-black legs, chest and tail; the bandit face: a dark mask across the eyes and bridge on a pale face, white muzzle, chin, cheek patches and a white band across the brow (paints). The weasel's own coat pattern (fixed to its size) is replaced by agouti fur and paints. Written whole by its script.",
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [8000, 2600],
+      "cell": 0.0024,
+      "focus": {
+        "head": 4
+      }
+    },
+    "shape": [
+      {"id": "rump", "type": "ell", "c": [-0.144, 0.091, 0.0], "r": [0.0756, 0.0382, 0.0389], "rot": [0, 0, -4], "k": 0.024, "color": "@body", "hair": 0.1, "pat": "agouti"},
+      {"id": "loin", "type": "ell", "c": [-0.076, 0.095, 0.0], "r": [0.0798, 0.0395, 0.0386], "rot": [0, 0, 2], "k": 0.024, "color": "@body", "hair": 0.1, "pat": "agouti"},
+      {"id": "waist", "type": "ell", "bone": "body2", "c": [-0.004, 0.084, 0.0], "r": [0.068, 0.034, 0.0349], "rot": [0, 0, 4], "k": 0.024, "color": "@body", "hair": 0.1, "pat": "agouti"},
+      {"id": "chest", "type": "ell", "bone": "body3", "c": [0.06, 0.081, 0.0], "r": [0.056, 0.0332, 0.0327], "rot": [0, 0, 2], "k": 0.024, "color": "@dark", "hair": 0.1, "pat": "agouti"},
+      {"id": "neck", "type": "tube", "bone": "neck", "pts": [[0.092, 0.083, 0.0, 0.0244], [0.116, 0.0894, 0.0, 0.0212], [0.14, 0.095, 0.0, 0.0196]], "k": 0.02, "color": "@body", "hair": 0.1, "pat": "agouti"},
+      {"id": "cranium", "type": "ell", "bone": "head", "c": [0.1573, 0.0988, 0.0], "r": [0.0341, 0.0173, 0.0258], "rot": [0, 0, -4], "k": 0.0151, "color": "@body", "hair": 0.1, "pat": "agouti"},
+      {"id": "cheek", "type": "ell", "bone": "head", "c": [0.1702, 0.0923, 0.0112], "r": [0.0261, 0.0128, 0.0119], "rot": [0, 0, -6], "k": 0.0108, "color": "@face", "hair": 0.1, "pat": "agouti", "mirror": true},
+      {"id": "muzzle", "type": "cone", "bone": "head", "a": [0.1789, 0.0966, 0.0], "b": [0.2071, 0.0877, 0.0], "ra": 0.0147, "rb": 0.0078, "k": 0.0108, "color": "@white", "hair": 0.1, "pat": "agouti"},
+      {"id": "jaw", "type": "ell", "bone": "head", "c": [0.1886, 0.0828, 0.0], "r": [0.0184, 0.006, 0.0091], "rot": [0, 0, -10], "k": 0.0086, "color": "@white", "hair": 0.1, "pat": "agouti"},
+      {"id": "nose", "type": "ell", "bone": "head", "c": [0.2129, 0.0879, 0.0], "r": [0.0045, 0.0053, 0.0065], "k": 0.0032, "kc": 0.0017, "color": "@nose", "wet": 0.3},
+      {"id": "whiskers", "type": "whiskers", "bone": "head", "at": [0.1987, 0.0901, 0.0104], "dir": [-0.2, -0.05, 1], "rows": 3, "per": 3, "gap": [0.0048, 0.0039], "fan": [14, -16], "sweep": [-8, 30], "len": [0.0253, 0.0393], "rowLen": [1, 0.75], "droop": 0.1, "curl": 0.04, "r": 0.0006, "color": "@whisker", "seed": 7, "normal": [0.616, -0.053, 0.786]},
+      {"id": "ear", "type": "fin", "bone": "earL", "root": [[0.1434, 0.1068, 0.0193], [0.1461, 0.1105, 0.0157]], "edge": [[0.1425, 0.1056, 0.0207], [0.1416, 0.1073, 0.0254], [0.1413, 0.1077, 0.0263], [0.1411, 0.1083, 0.0268], [0.1411, 0.1091, 0.0272], [0.1411, 0.1099, 0.0272], [0.1413, 0.1109, 0.0272], [0.1416, 0.112, 0.027], [0.1423, 0.1134, 0.0263], [0.1436, 0.1159, 0.0243], [0.1452, 0.1173, 0.0214], [0.1459, 0.1177, 0.0198], [0.1466, 0.1177, 0.0186], [0.147, 0.1175, 0.0177], [0.1472, 0.1173, 0.0168], [0.1475, 0.1167, 0.0161], [0.1477, 0.1161, 0.0155], [0.1477, 0.1153, 0.0152], [0.147, 0.112, 0.0145]], "thick": 0.0013, "slope": 0.3, "face": [0.8956, -0.1285, 0.426], "cup": 0.45, "color": "@ear", "mirror": true, "fair": {"r": 0.0022, "sink": 3}, "inner": "@earIn", "rimColor": "@white", "rim": 0.0032},
+      {"id": "arm", "type": "cone", "bone": "legFLu", "a": [0.056, 0.074, 0.019], "b": [0.06, 0.0388, 0.019], "ra": 0.0143, "rb": 0.0097, "k": 0.01, "color": "@leg", "mirror": true, "hair": 0.1, "pat": "agouti"},
+      {"id": "forearm", "type": "cone", "bone": "legFLl", "a": [0.06, 0.0388, 0.019], "b": [0.0638, 0.0106, 0.019], "ra": 0.0097, "rb": 0.0074, "k": 0.006, "color": "@leg", "mirror": true, "hair": 0.1, "pat": "agouti"},
+      {"id": "paw", "type": "ell", "bone": "footFL", "c": [0.0714, 0.0048, 0.019], "r": [0.0114, 0.0048, 0.0079], "k": 0.006, "color": "@leg", "mirror": true, "hair": 0.1, "pat": "agouti"},
+      {"id": "thigh", "type": "ell", "bone": "legHLu", "c": [-0.14, 0.072, 0.019], "r": [0.0242, 0.0264, 0.0143], "rot": [0, 0, 16], "k": 0.012, "color": "@leg", "mirror": true, "hair": 0.1, "pat": "agouti"},
+      {"id": "shank", "type": "cone", "bone": "legHLl", "a": [-0.142, 0.0462, 0.018], "b": [-0.1402, 0.0092, 0.018], "ra": 0.0101, "rb": 0.0071, "k": 0.006, "color": "@leg", "mirror": true, "hair": 0.1, "pat": "agouti"},
+      {"id": "foot", "type": "ell", "bone": "footHL", "c": [-0.1302, 0.0048, 0.018], "r": [0.0151, 0.0048, 0.0079], "k": 0.006, "color": "@leg", "mirror": true, "hair": 0.1, "pat": "agouti"},
+      {"id": "tail", "type": "sweep", "bones": ["tail"], "pts": [[-0.2007, 0.0986, 0, 0.011], [-0.2162, 0.0991, 0, 0.0124], [-0.2318, 0.0984, 0, 0.0136], [-0.2472, 0.0965, 0, 0.0145], [-0.2624, 0.0934, 0, 0.0149], [-0.2774, 0.0891, 0, 0.015], [-0.292, 0.0837, 0, 0.015], [-0.3061, 0.0771, 0, 0.0144], [-0.3196, 0.0695, 0, 0.0114], [-0.3325, 0.0608, 0, 0.006]], "k": 0.008, "kc": 0.004, "hair": 0.15, "color": "@tail", "fleece": {"amp": 0.0015, "size": 0.006}},
+      {"id": "under0", "type": "ell", "op": "paint", "c": [-0.004, 0.0789, 0.0389], "r": [0.0544, 0.0136, 0.022], "kc": 0.014, "color": "@under", "mirror": true},
+      {"id": "under1", "type": "ell", "op": "paint", "c": [-0.076, 0.0891, 0.0426], "r": [0.0638, 0.0158, 0.022], "kc": 0.014, "color": "@under", "mirror": true},
+      {"id": "under2", "type": "ell", "op": "paint", "c": [-0.144, 0.0853, 0.0429], "r": [0.0605, 0.0153, 0.022], "kc": 0.014, "color": "@under", "mirror": true},
+      {"id": "mask", "type": "ell", "op": "paint", "c": [0.1856, 0.1029, 0.0162], "r": [0.017, 0.009, 0.014], "kc": 0.003, "color": "@mask", "rot": [0, 0, -10], "mirror": true, "bone": "head"},
+      {"id": "bridge", "type": "ell", "op": "paint", "c": [0.1926, 0.1079, 0], "r": [0.012, 0.006, 0.008], "kc": 0.003, "color": "@mask", "rot": [0, 0, -15], "bone": "head"},
+      {"id": "brow", "type": "ell", "op": "paint", "c": [0.1766, 0.1139, 0.0], "r": [0.006, 0.0065, 0.04], "kc": 0.003, "color": "@white", "rot": [0, 0, -20], "bone": "head"},
+      {"id": "cheekW", "type": "ell", "op": "paint", "c": [0.1826, 0.0899, 0.0202], "r": [0.014, 0.006, 0.012], "kc": 0.003, "color": "@white", "rot": [0, 0, 10], "mirror": true, "bone": "head"}
+    ],
+    "eyes": {
+      "at": [0.1886, 0.1039, 0.0162],
+      "from": [0.1616, 0.1005, 0.0],
+      "r": 0.0041,
+      "iris": "@eye",
+      "pupil": "round",
+      "lid": "@lid",
+      "sink": 0.5,
+      "socket": 0.9
+    }
+  },
+  "headScale": 1.08,
+  "coats": [
+    {
+      "name": "dark (wild)"
+    },
+    {
+      "name": "dark (wild)"
+    },
+    {
+      "name": "pale (steppe-like)",
+      "body": "#6a5440",
+      "under": "#d4c090",
+      "face": "#8a7a64"
+    },
+    {
+      "name": "dusky",
+      "body": "#2a2018",
+      "under": "#8a7450"
+    }
+  ],
+  "_coats": "COATS: the wild dark polecat mostly; paler, yellower animals (the underfur showing more) and dusky ones"
+}

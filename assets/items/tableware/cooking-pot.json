@@ -1,0 +1,804 @@
+{
+ "kind": "item",
+ "name": "Cooking pot",
+ "category": "tableware",
+ "era": "-3000-2030",
+ "region": "everywhere",
+ "_about": "a cooking pot: an earthen one with a rolled rim and two lugs (style earthen), a straight-sided copper marmite with riveted handles (copper) or a modern steel saucepan with a long handle along +x (saucepan); its lid on (`lid`), hinged at its far edge and tipped up by `open` onto the stew in it (`fill`)",
+ "params": {
+  "style": {
+   "pick": [
+    "earthen",
+    "earthen",
+    "copper",
+    "saucepan"
+   ]
+  },
+  "lid": {
+   "pick": [
+    0,
+    1
+   ]
+  },
+  "fill": {
+   "pick": [
+    0,
+    1,
+    1
+   ]
+  },
+  "open": 0
+ },
+ "materials": {
+  "clay": {
+   "pick": [
+    "terracotta",
+    "terracotta",
+    "stoneware"
+   ]
+  },
+  "copper": "copper-bright",
+  "steel": "steel",
+  "iron": "iron",
+  "grip": "plastic-black",
+  "stew": {
+   "pick": [
+    "crust-dark",
+    "bean",
+    "carrot",
+    "pea"
+   ]
+  },
+  "brass": "brass"
+ },
+ "parts": [
+  {
+   "id": "earthen",
+   "type": "lathe",
+   "material": "clay",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.07,
+     0
+    ],
+    [
+     0.1,
+     0.018
+    ],
+    [
+     0.121,
+     0.06
+    ],
+    [
+     0.127,
+     0.1
+    ],
+    [
+     0.117,
+     0.145
+    ],
+    [
+     0.097,
+     0.172
+    ],
+    [
+     0.095,
+     0.186
+    ],
+    [
+     0.104,
+     0.2
+    ],
+    [
+     0.097,
+     0.2
+    ],
+    [
+     0.088,
+     0.186
+    ],
+    [
+     0.09,
+     0.172
+    ],
+    [
+     0.11,
+     0.145
+    ],
+    [
+     0.12,
+     0.1
+    ],
+    [
+     0.114,
+     0.06
+    ],
+    [
+     0.093,
+     0.018
+    ],
+    [
+     0.0747,
+     0.007
+    ],
+    [
+     0,
+     0.007
+    ]
+   ],
+   "sides": 16,
+   "when": {
+    "style": "earthen"
+   }
+  },
+  {
+   "id": "stewE",
+   "type": "lathe",
+   "material": "stew",
+   "profile": [
+    [
+     0.1127,
+     0.13
+    ],
+    [
+     0,
+     0.13
+    ]
+   ],
+   "sides": 12,
+   "when": {
+    "style": "earthen",
+    "lid": [
+     0
+    ]
+   }
+  },
+  {
+   "id": "stewEIn",
+   "type": "lathe",
+   "material": "stew",
+   "profile": [
+    [
+     0.1127,
+     0.13
+    ],
+    [
+     0,
+     0.13
+    ]
+   ],
+   "sides": 12,
+   "when": {
+    "style": "earthen",
+    "lid": 1
+   },
+   "inside": true
+  },
+  {
+   "id": "rimE",
+   "type": "lathe",
+   "material": "clay",
+   "profile": [
+    [
+     0.11,
+     0.0
+    ],
+    [
+     0.107,
+     0.0052
+    ],
+    [
+     0.101,
+     0.0052
+    ],
+    [
+     0.098,
+     0.0
+    ],
+    [
+     0.101,
+     -0.0052
+    ],
+    [
+     0.107,
+     -0.0052
+    ],
+    [
+     0.11,
+     -0.0
+    ]
+   ],
+   "sides": 16,
+   "caps": false,
+   "when": {
+    "style": "earthen"
+   },
+   "at": [
+    0,
+    0.198,
+    0
+   ]
+  },
+  {
+   "id": "lugs",
+   "type": "sweep",
+   "material": "clay",
+   "path": [
+    [
+     0.112,
+     0.168,
+     0
+    ],
+    [
+     0.142,
+     0.165,
+     0
+    ],
+    [
+     0.15,
+     0.148,
+     0
+    ],
+    [
+     0.12,
+     0.135,
+     0
+    ]
+   ],
+   "sides": 5,
+   "mirror": "x",
+   "when": {
+    "style": "earthen"
+   },
+   "seg": 3,
+   "r": 0.008
+  },
+  {
+   "id": "lidE",
+   "type": "hinge",
+   "pivot": [
+    -0.104,
+    0.2,
+    0
+   ],
+   "axis": [
+    0,
+    0,
+    1
+   ],
+   "max": 75,
+   "parts": [
+    {
+     "id": "lidE",
+     "type": "lathe",
+     "material": "clay",
+     "profile": [
+      [
+       0.103,
+       0.2
+      ],
+      [
+       0.103,
+       0.206
+      ],
+      [
+       0.07,
+       0.222
+      ],
+      [
+       0.025,
+       0.232
+      ],
+      [
+       0.02,
+       0.244
+      ],
+      [
+       0.014,
+       0.25
+      ],
+      [
+       0,
+       0.25
+      ]
+     ],
+     "sides": 16
+    }
+   ],
+   "when": {
+    "style": "earthen",
+    "lid": 1
+   }
+  },
+  {
+   "id": "copper",
+   "type": "lathe",
+   "material": "copper",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.118,
+     0
+    ],
+    [
+     0.128,
+     0.008
+    ],
+    [
+     0.13,
+     0.17
+    ],
+    [
+     0.134,
+     0.18
+    ],
+    [
+     0.1305,
+     0.18
+    ],
+    [
+     0.1265,
+     0.17
+    ],
+    [
+     0.1245,
+     0.008
+    ],
+    [
+     0.1189,
+     0.0035
+    ],
+    [
+     0,
+     0.0035
+    ]
+   ],
+   "sides": 20,
+   "when": {
+    "style": "copper"
+   }
+  },
+  {
+   "id": "stewC",
+   "type": "lathe",
+   "material": "stew",
+   "profile": [
+    [
+     0.1253,
+     0.12
+    ],
+    [
+     0,
+     0.12
+    ]
+   ],
+   "sides": 12,
+   "when": {
+    "style": "copper",
+    "lid": [
+     0
+    ]
+   }
+  },
+  {
+   "id": "stewCIn",
+   "type": "lathe",
+   "material": "stew",
+   "profile": [
+    [
+     0.1253,
+     0.12
+    ],
+    [
+     0,
+     0.12
+    ]
+   ],
+   "sides": 12,
+   "when": {
+    "style": "copper",
+    "lid": 1
+   },
+   "inside": true
+  },
+  {
+   "id": "handlesC",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     0.13,
+     0.152,
+     -0.04
+    ],
+    [
+     0.165,
+     0.157,
+     -0.032
+    ],
+    [
+     0.172,
+     0.157,
+     0
+    ],
+    [
+     0.165,
+     0.157,
+     0.032
+    ],
+    [
+     0.13,
+     0.152,
+     0.04
+    ]
+   ],
+   "sides": 5,
+   "mirror": "x",
+   "when": {
+    "style": "copper"
+   },
+   "seg": 3,
+   "r": 0.006
+  },
+  {
+   "id": "rivetsC",
+   "type": "box",
+   "material": "brass",
+   "size": [
+    0.004,
+    0.024,
+    0.012
+   ],
+   "at": [
+    [
+     0.131,
+     0.152,
+     0.04
+    ],
+    [
+     0.131,
+     0.152,
+     -0.04
+    ],
+    [
+     -0.131,
+     0.152,
+     0.04
+    ],
+    [
+     -0.131,
+     0.152,
+     -0.04
+    ]
+   ],
+   "when": {
+    "style": "copper"
+   }
+  },
+  {
+   "id": "lidC",
+   "type": "hinge",
+   "pivot": [
+    -0.136,
+    0.18,
+    0
+   ],
+   "axis": [
+    0,
+    0,
+    1
+   ],
+   "max": 75,
+   "parts": [
+    {
+     "id": "lidC",
+     "type": "lathe",
+     "material": "copper",
+     "profile": [
+      [
+       0.136,
+       0.18
+      ],
+      [
+       0.136,
+       0.186
+      ],
+      [
+       0.1,
+       0.194
+      ],
+      [
+       0.03,
+       0.2
+      ],
+      [
+       0,
+       0.2
+      ]
+     ],
+     "sides": 20
+    },
+    {
+     "id": "lidLoop",
+     "type": "sweep",
+     "material": "brass",
+     "path": [
+      [
+       -0.03,
+       0.199,
+       0
+      ],
+      [
+       -0.025,
+       0.222,
+       0
+      ],
+      [
+       0.025,
+       0.222,
+       0
+      ],
+      [
+       0.03,
+       0.199,
+       0
+      ]
+     ],
+     "sides": 5,
+     "seg": 3,
+     "r": 0.0045
+    }
+   ],
+   "when": {
+    "style": "copper",
+    "lid": 1
+   }
+  },
+  {
+   "id": "saucepan",
+   "type": "lathe",
+   "material": "steel",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.085,
+     0
+    ],
+    [
+     0.09,
+     0.006
+    ],
+    [
+     0.09,
+     0.105
+    ],
+    [
+     0.093,
+     0.11
+    ],
+    [
+     0.0905,
+     0.11
+    ],
+    [
+     0.0875,
+     0.105
+    ],
+    [
+     0.0875,
+     0.006
+    ],
+    [
+     0.0846,
+     0.0025
+    ],
+    [
+     0,
+     0.0025
+    ]
+   ],
+   "sides": 20,
+   "when": {
+    "style": "saucepan"
+   }
+  },
+  {
+   "id": "stewS",
+   "type": "lathe",
+   "material": "stew",
+   "profile": [
+    [
+     0.0869,
+     0.075
+    ],
+    [
+     0,
+     0.075
+    ]
+   ],
+   "sides": 12,
+   "when": {
+    "style": "saucepan",
+    "lid": [
+     0
+    ]
+   }
+  },
+  {
+   "id": "stewSIn",
+   "type": "lathe",
+   "material": "stew",
+   "profile": [
+    [
+     0.0869,
+     0.075
+    ],
+    [
+     0,
+     0.075
+    ]
+   ],
+   "sides": 12,
+   "when": {
+    "style": "saucepan",
+    "lid": 1
+   },
+   "inside": true
+  },
+  {
+   "id": "strap",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.07,
+    0.006,
+    0.02
+   ],
+   "at": [
+    0.115,
+    0.096,
+    0,
+    0,
+    0,
+    12
+   ],
+   "when": {
+    "style": "saucepan"
+   }
+  },
+  {
+   "id": "grip",
+   "type": "rod",
+   "material": "grip",
+   "r": 0.013,
+   "from": [
+    0.15,
+    0.11,
+    0
+   ],
+   "to": [
+    0.31,
+    0.144,
+    0
+   ],
+   "sides": 8,
+   "r1": 0.016,
+   "stretch": [
+    1,
+    0.8,
+    1
+   ],
+   "when": {
+    "style": "saucepan"
+   }
+  },
+  {
+   "id": "lidS",
+   "type": "hinge",
+   "pivot": [
+    -0.095,
+    0.11,
+    0
+   ],
+   "axis": [
+    0,
+    0,
+    1
+   ],
+   "max": 75,
+   "parts": [
+    {
+     "id": "lidS",
+     "type": "lathe",
+     "material": "steel",
+     "profile": [
+      [
+       0.095,
+       0.11
+      ],
+      [
+       0.095,
+       0.115
+      ],
+      [
+       0.06,
+       0.125
+      ],
+      [
+       0,
+       0.128
+      ]
+     ],
+     "sides": 20
+    },
+    {
+     "id": "knobS",
+     "type": "lathe",
+     "material": "grip",
+     "profile": [
+      [
+       0.012,
+       0.127
+      ],
+      [
+       0.016,
+       0.135
+      ],
+      [
+       0.018,
+       0.145
+      ],
+      [
+       0,
+       0.148
+      ]
+     ],
+     "sides": 8
+    }
+   ],
+   "when": {
+    "style": "saucepan",
+    "lid": 1
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.2,
+   0
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    0,
+    0,
+    1
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

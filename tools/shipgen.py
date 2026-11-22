@@ -90,10 +90,12 @@ COMPONENTS["crab-claw-sail"] = comp("Crab-claw sail", "the Oceanic sail: two spa
     {"id": "furled", "type": "rod", "when": {"set": "furled"}, "material": "cloth", "from": [0, 0, "r * 2"], "to": ["-l * 0.95 * cos(lift * 0.017453)", "l * 0.95 * sin(lift * 0.017453)", "r * 2"], "r": "r * 2.4", "sides": 8},
 ])
 
-COMPONENTS["oar"] = comp("Oar", "an oar l long along +x from its handle at the origin: a round loom and a flat blade at its end",
-    {"l": 4, "r": 0.03, "bladeL": "l * 0.28", "bladeW": 0.15}, {"wood": "ash"}, [
-    {"id": "loom", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": ["l - bladeL", 0, 0], "r0": "r", "r1": "r * 0.9"},
-    {"id": "blade", "type": "box", "material": "wood", "size": ["bladeL", 0.02, "bladeW"], "at": ["l - bladeL / 2", 0, 0]},
+# (2026-11-22: the ONE oar -- the ships' banks, the gondola's, the yuloh, the canoe's paddle, and propgen's fisher-oar,
+#  which places it along z with its own loom and blade colours; the new params' defaults keep the ships' oars as they were)
+COMPONENTS["oar"] = comp("Oar", "an oar l long along +x from its handle at the origin: a round loom (`r` at the handle, `taper` of it at its end, `loomL` long -- to the blade by default, `sides` by its radius unless given) and a flat blade at its end (`bladeL` long, `bladeW` wide, `bladeT` thick; role `blade`, the oar's wood unless the user names it)",
+    {"l": 4, "r": 0.03, "bladeL": "l * 0.28", "bladeW": 0.15, "bladeT": 0.02, "loomL": "l - bladeL", "taper": 0.9, "sides": None}, {"wood": "ash", "blade": "wood"}, [
+    {"id": "loom", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": ["loomL", 0, 0], "r0": "r", "r1": "r * taper", "sides": "sides"},
+    {"id": "blade", "type": "box", "material": "blade", "size": ["bladeL", "bladeT", "bladeW"], "at": ["l - bladeL / 2", 0, 0]},
 ])
 
 COMPONENTS["oars"] = comp("Oars", "a bank of n oars a side, from x = from to x = to at the gunwale's height y and half-breadth z, on both sides; `state` out (thrust out and down `dip` degrees, as rowing) or shipped (run in and laid fore and aft along the inside of the gunwale, the blades forward, as a ship lies at a quay or sails)",
@@ -104,10 +106,13 @@ COMPONENTS["oars"] = comp("Oars", "a bank of n oars a side, from x = from to x =
      "at": [0, 0, 0, 0, 0, 2], "mirror": "z"},
 ])
 
-COMPONENTS["steering-oar"] = comp("Steering oar", "a side rudder: a broad-bladed oar hung down the starboard quarter, its tiller across the ship",
+# (2026-11-22: the oar above, hung blade down -- its handle at l * 0.25 up, rolled -90 so its +x runs down -y; it is
+#  1.1 l long, the loom .65 l of it tapering to .9, the blade the lower .6 l, bladeW across x (the oar's thickness, turned)
+#  and 5 cm thick (the oar's width); only the tiller is its own)
+COMPONENTS["steering-oar"] = comp("Steering oar", "a side rudder: a broad-bladed oar (components/oar, hung blade down) down the starboard quarter, its tiller across the ship",
     {"l": 3.2, "r": 0.05, "bladeW": 0.42}, {"wood": "oak"}, [
-    {"id": "loom", "type": "rod", "material": "wood", "from": [0, "l * 0.25", 0], "to": [0, "-l * 0.4", 0], "r0": "r", "r1": "r * 0.9"},
-    {"id": "blade", "type": "box", "material": "wood", "size": ["bladeW", "l * 0.6", 0.05], "at": [0, "-l * 0.55", 0]},
+    {"id": "oar", "use": "items/components/oar", "at": [0, "l * 0.25", 0, 0, 0, -90],
+     "params": {"l": "l * 1.1", "r": "r", "loomL": "l * 0.65", "bladeL": "l * 0.6", "bladeT": "bladeW", "bladeW": 0.05}},
     {"id": "tiller", "type": "rod", "material": "wood", "from": [0, "l * 0.2", 0], "to": [0, "l * 0.25", "-l * 0.35"], "r": "r * 0.6"},
 ])
 
@@ -162,12 +167,12 @@ COMPONENTS["outrigger"] = comp("Outrigger", "a float l long lying `out` to starb
     {"id": "float", "type": "lathe", "material": "wood", "at": ["-l / 2", "-0.3", "out", 0, 0, -90],
      "profile": [[0, 0], ["r * 0.7", "l * 0.12"], ["r", "l * 0.5"], ["r * 0.7", "l * 0.88"], [0, "l"]]},
     {"id": "boom", "type": "rod", "material": "wood", "from": [0, 0, 0], "to": [0, "-0.2", "out"], "r": "boomR", "along": {"n": "booms", "from": ["-span / 2", 0, 0], "to": ["span / 2", 0, 0]}},
-    {"id": "lashing", "type": "ring", "material": "rope", "r": "boomR * 1.6", "tube": "boomR * 0.4", "along": {"n": "booms", "from": ["-span / 2", "-0.2", "out"], "to": ["span / 2", "-0.2", "out"]}},
+    {"id": "lashing", "type": "ring", "material": "rope", "r": "boomR * 1.6", "tube": "boomR * 0.4", "along": {"n": "booms", "from": ["-span / 2", "-0.2", "out"], "to": ["span / 2", "-0.2", "out"]}, "smooth": False, "stations": 12, "sides": 6},
 ])
 
 COMPONENTS["anchor"] = comp("Anchor", "an anchor h tall hanging by its ring at the origin: a shank, two curved arms with flukes, a wooden stock across the top",
     {"h": 2.2}, {"metal": "iron", "wood": "oak"}, [
-    {"id": "ring", "type": "ring", "material": "metal", "r": "h * 0.07", "tube": "h * 0.012", "at": [0, "-h * 0.07", 0, 90, 0, 0]},
+    {"id": "ring", "type": "ring", "material": "metal", "r": "h * 0.07", "tube": "h * 0.012", "at": [0, "-h * 0.07", 0, 90, 0, 0], "smooth": False, "stations": 12, "sides": 6},
     {"id": "shank", "type": "rod", "material": "metal", "from": [0, "-h * 0.12", 0], "to": [0, "-h", 0], "r": "h * 0.02"},
     {"id": "arm", "type": "sweep", "material": "metal", "path": [[0, "-h", 0], ["h * 0.18", "-h * 0.96", 0], ["h * 0.34", "-h * 0.8", 0]], "r": "h * 0.02", "mirror": "x"},
     {"id": "fluke", "type": "plate", "material": "metal", "thick": "h * 0.012", "at": ["h * 0.34", "-h * 0.8", 0], "outline": [[0, 0], ["-h * 0.12", "-h * 0.1"], ["h * 0.02", "-h * 0.16"]], "mirror": "x"},
@@ -185,11 +190,26 @@ COMPONENTS["cannon"] = comp("Cannon", "a ship's gun on its carriage, its muzzle 
     {"id": "truck fore", "type": "lathe", "material": "wood", "at": ["-l * 0.05", "bore * 0.8", "bore * 1.8", 0, 0, 0], "profile": [["bore * 0.8", "-bore * 0.3"], ["bore * 0.8", "bore * 0.3"]], "sides": 10, "mirror": "z"},
 ])
 
-COMPONENTS["gun-row"] = comp("Gun row", "a broadside: n gun ports along a side from x = from to x = to at height y in a hull of half-breadth z, each a dark port with a muzzle out of it -- on both sides",
-    {"n": 10, "from": 4, "to": 40, "y": 3, "z": 5, "bore": 0.11, "reach": 0.5}, {"metal": "iron", "port": "#1a1612"}, [
+COMPONENTS["gun-row"] = comp("Gun row", "a broadside: n gun ports along a side from x = from to x = to at height y in a hull of half-breadth z, each a dark port with its lid hinged at the top and a gun behind it -- on both sides. `open` (default 1: at sea, cleared for action): over its first half the lids swing up and out, over the second the guns run out through the ports",
+    {"n": 10, "from": 4, "to": 40, "y": 3, "z": 5, "bore": 0.11, "reach": 0.5, "open": 1}, {"metal": "iron", "port": "#1a1612", "lid": "#5a3a22"}, [
     {"id": "port", "type": "box", "material": "port", "size": ["bore * 6", "bore * 5.5", 0.05], "along": {"n": "n", "from": ["from", "y", "z"], "to": ["to", "y", "z"]}, "mirror": "z"},
-    {"id": "muzzle", "type": "rod", "material": "metal", "from": [0, 0, 0], "to": [0, 0, "reach"], "r0": "bore * 1.35", "r1": "bore * 1.25",
-     "along": {"n": "n", "from": ["from", "y", "z - 0.1"], "to": ["to", "y", "z - 0.1"]}, "mirror": "z"},
+    # (the lid, hinged along the port's top edge: up and out over the first half of `open`)
+    {"id": "lid", "type": "hinge", "pivot": [0, "bore * 2.95", "0.04"], "axis": [1, 0, 0], "max": -80, "range": [0, 0.5],
+     "along": {"n": "n", "from": ["from", "y", "z"], "to": ["to", "y", "z"]}, "mirror": "z",
+     "parts": [{"id": "lidBoard", "type": "box", "material": "lid", "size": ["bore * 6.4", "bore * 5.9", 0.06], "at": [0, 0, 0.04]}]},
+    # (the gun, run in behind the shut lid: out through the port over the second half)
+    {"id": "gun", "type": "slide", "move": [0, 0, "reach + 0.05"], "range": [0.5, 1],
+     "along": {"n": "n", "from": ["from", "y", "z - 0.15 - reach"], "to": ["to", "y", "z - 0.15 - reach"]}, "mirror": "z",
+     "parts": [{"id": "muzzle", "type": "rod", "material": "metal", "from": [0, 0, 0], "to": [0, 0, "reach"], "r0": "bore * 1.35", "r1": "bore * 1.25"}]},
+])
+
+COMPONENTS["shrouds"] = comp("Shrouds", "a mast's standing rigging, both sides, the mast at x = 0: n lower shrouds fanning from the masthead (y = top) to the rail (y = foot, z), abaft the mast to a little before it; with `rat` five ratlines across them; with `topmast` three topmast shrouds from ttop to the lower masthead's crosstrees (tfoot), spread by the mast's radius mr",
+    {"top": 10, "foot": 2, "z": 3, "n": 4, "r": 0.03, "rat": 0, "topmast": 0, "ttop": 15, "tfoot": 9, "mr": 0.2}, {"rope": "rope"}, [
+    {"id": "shroud", "type": "rod", "material": "rope", "each": "n", "from": [0, "top", 0], "to": ["(top - foot) * (-0.2 + 0.3 * i / max(1, n - 1))", "foot", "z"], "r": "r", "sides": 4, "mirror": "z"},
+    {"id": "ratline", "type": "rod", "material": "rope", "each": {"n": 5, "as": "j"}, "when": "rat", "r": 0.012, "sides": 3, "mirror": "z",
+     "from": ["(top - foot) * -0.2 * (0.86 - 0.14 * j)", "foot + (top - foot) * (0.14 + 0.14 * j)", "z * (0.86 - 0.14 * j)"],
+     "to": ["(top - foot) * 0.1 * (0.86 - 0.14 * j)", "foot + (top - foot) * (0.14 + 0.14 * j)", "z * (0.86 - 0.14 * j)"]},
+    {"id": "topshroud", "type": "rod", "material": "rope", "each": {"n": 3, "as": "k"}, "when": "topmast", "from": [0, "ttop", 0], "to": ["mr * (-3 + 2.5 * k)", "tfoot", "mr * 4.4"], "r": 0.02, "sides": 4, "mirror": "z"},
 ])
 
 COMPONENTS["ram"] = comp("Ram", "the bronze beak at a war galley's stem, at the waterline, thrust `l` forward of the origin",
@@ -300,7 +320,9 @@ def stay(a, b, r=0.02):
 
 
 def hull(L, B, D, **kw):
-    return {"id": "hull", "type": "hull", "material": "planks", "length": L, "beam": B, "depth": D, **kw}
+    # (`lean`, 2026-11-22: the rail, keel beam and ribs through the stations themselves, and a `double` hull's back on
+    #  its skin alone -- items.js hull; a knarr's hull 10072 -> 3816 triangles, a cog's 2772 -> 1860, nothing seen lost)
+    return {"id": "hull", "type": "hull", "material": "planks", "length": L, "beam": B, "depth": D, **kw, "lean": True}
 
 
 def ship(name, era, region, about, params, materials, parts, **extra):
@@ -336,7 +358,7 @@ SHIPS["reed-boat"] = ship("Reed boat", "-4000-1900", "Egypt, Mesopotamia, Lake T
     hull("L", "B", "D", fullness=0.45, stations=20, sides=6, plan=[[0, 0.02], [0.2, 0.75], [0.5, 1], [0.8, 0.75], [1, 0.02]],
          keel=[[0, "D * 1.3"], [0.1, "D * 0.3"], [0.3, 0], [0.7, 0], [0.9, "D * 0.3"], [1, "D * 1.3"]],
          sheer=[[0, "D * 2.1"], [0.15, "D * 1.2"], [0.5, "D"], [0.85, "D * 1.2"], [1, "D * 2.1"]], rail="B * 0.13", railMaterial="wood"),
-    {"id": "lashing", "type": "ring", "material": "rope", "r": "B * 0.5", "tube": 0.02, "along": {"n": 6, "from": ["L * 0.2", "D * 0.65", 0], "to": ["L * 0.8", "D * 0.65", 0]}, "at": [0, 0, 0, 90, 0, 0]},
+    {"id": "lashing", "type": "ring", "material": "rope", "r": "B * 0.5", "tube": 0.02, "along": {"n": 6, "from": ["L * 0.2", "D * 0.65", 0], "to": ["L * 0.8", "D * 0.65", 0]}, "at": [0, 0, 0, 90, 0, 0], "smooth": False, "stations": 16, "sides": 6},
 ])
 
 SHIPS["egyptian-boat"] = ship("Egyptian river boat", "-2500--500", "Egypt", "the Nile's timber boat of the pharaohs: a papyriform hull with both ends rising, a broad low sail on a single mast, two steering oars over the stern quarters and a shelter of a deckhouse",
@@ -552,7 +574,7 @@ SHIPS["sampan"] = ship("Sampan", "1000-1900", "China, South-East Asia", "the riv
          thwarts={"n": 2, "y": "D * 0.6", "w": 0.2, "from": 0.2, "to": 0.4}, deck=[{"y": "D * 0.35", "from": 0.1, "to": 0.9}]),
     {"id": "shelter", "type": "lathe", "material": "cloth", "double": True, "caps": False, "at": ["L * 0.65", "D * 0.4", 0, 0, 0, -90], "sides": 14,
      "profile": [["B * 0.48", 0], ["B * 0.48", "L * 0.3"]]},
-    {"id": "hoop", "type": "ring", "material": "wood", "r": "B * 0.49", "tube": 0.02, "at": ["L * 0.5", "D * 0.4", 0, 0, 0, 90], "along": {"n": 4, "from": [0, 0, 0], "to": ["L * 0.3", 0, 0]}},
+    {"id": "hoop", "type": "ring", "material": "wood", "r": "B * 0.49", "tube": 0.02, "at": ["L * 0.5", "D * 0.4", 0, 0, 0, 90], "along": {"n": 4, "from": [0, 0, 0], "to": ["L * 0.3", 0, 0]}, "smooth": False, "stations": 24, "sides": 6},
     {"id": "yuloh", "use": "items/components/oar", "params": {"l": "L * 0.6", "r": 0.035, "bladeW": 0.2}, "at": ["L * 0.08", "D * 1.1", 0, 180, 0, 25]},
 ])
 
@@ -731,7 +753,7 @@ SHIPS["ship-of-the-line"] = ship("Ship of the line", "1700-1800", "England, Fran
     stay(["L * 0.5", "D * 0.9 + mastH * 1.85", 0], ["L * 0.8", "D * 1.2 + mastH * 1.3", 0]), stay(["L * 0.8", "D * 1.2 + mastH * 1.62", 0], ["L * 1.35", "D * 1.24", 0]),
     stay(["L * 0.5", "D * 0.9 + mastH * 1.5", 0], ["L * 0.17", "D * 1.45 + mastH * 1.0", 0]),
     {"id": "anchor", "use": "items/components/anchor", "params": {"h": "D * 0.5"}, "at": ["L * 0.86", "D * 0.95", "B * 0.5"], "mirror": "z"},
-    {"id": "boats", "type": "hull", "material": "planks", "length": "L * 0.16", "beam": "B * 0.2", "depth": "B * 0.09", "fullness": 0.5, "stations": 10, "sides": 4, "plan": [[0, 0.4], [0.2, 0.85], [0.5, 1], [0.8, 0.7], [1, 0.03]], "at": ["L * 0.45", "D * 0.93", 0]},
+    {"id": "boats", "type": "hull", "material": "planks", "length": "L * 0.16", "beam": "B * 0.2", "depth": "B * 0.09", "fullness": 0.5, "stations": 10, "sides": 4, "plan": [[0, 0.4], [0.2, 0.85], [0.5, 1], [0.8, 0.7], [1, 0.03]], "at": ["L * 0.45", "D * 0.93", 0], "lean": True},
 ])
 
 SHIPS["frigate"] = ship("Frigate", "1750-1800", "England, France, America", "a frigate: one gun deck, fast and weatherly, a full ship rig in three tiers, the eyes of the fleet",
@@ -1018,25 +1040,12 @@ def fit_out(name, sh):
             top = ex(y, mul(h, 0.97))
             foot = Ln.sheer_at(t)
             z = Ln.hb_top(t)
-            rise = f"(({top}) - ({foot}))"
-            for i in range(n):
-                k = -0.2 + 0.3 * i / max(1, n - 1)   # (from abaft the mast to a little before it)
-                parts.append({"id": f"shroud {x} {i}", "type": "rod", "material": "rope", "from": [x, top, 0],
-                              "to": [ex(x, f"{rise} * {round(k, 3)}"), foot, z if not zoff else ex(zoff, z)], "r": round(max(0.015, min(0.05, (r if _num(r) else 0.2) * 0.12)), 3), "sides": 4, "mirror": "z"})
-            if n >= 3:   # RATLINES (a hint): five rungs across the shrouds a side, from the aftmost to the foremost
-                k0, k1 = -0.2, 0.1
-                for j, fr in enumerate((0.14, 0.28, 0.42, 0.56, 0.7)):
-                    yy = f"({foot}) + {rise} * {fr}"
-                    zr = mul(z if not zoff else ex(zoff, z), round(1 - fr, 3))
-                    parts.append({"id": f"ratline {x} {j}", "type": "rod", "material": "rope", "r": 0.012, "sides": 3, "mirror": "z",
-                                  "from": [ex(x, f"{rise} * {round(k0 * (1 - fr), 3)}"), yy, zr], "to": [ex(x, f"{rise} * {round(k1 * (1 - fr), 3)}"), yy, zr]})
-            if p["params"].get("top") == "topmast":
-                tH = p["params"].get("topH", 0.5)
-                ttop = ex(y, mul(h, round(0.97 * (1 + tH), 3)))
-                tfoot = ex(y, mul(h, 0.9))
-                for i in range(3):
-                    parts.append({"id": f"topshroud {x} {i}", "type": "rod", "material": "rope", "from": [x, ttop, 0],
-                                  "to": [ex(x, f"{r} * {round(-3 + 2.5 * i, 2)}"), tfoot, f"{r} * 4.4"], "r": 0.02, "sides": 4, "mirror": "z"})
+            topm = p["params"].get("top") == "topmast"
+            tH = p["params"].get("topH", 0.5)
+            parts.append({"id": f"shrouds {x}", "use": "items/components/shrouds", "at": [x, 0, 0], "params": {
+                "top": top, "foot": foot, "z": z if not zoff else ex(zoff, z), "n": n, "r": round(max(0.015, min(0.05, (r if _num(r) else 0.2) * 0.12)), 3),
+                "rat": 1 if n >= 3 else 0, "topmast": 1 if topm else 0,
+                **({"ttop": ex(y, mul(h, round(0.97 * (1 + tH), 3))), "tfoot": ex(y, mul(h, 0.9)), "mr": r} if topm else {})}})
     sh["parts"].extend(parts)
     sh["markers"] = mk + sh.get("markers", [])
     sh["params"].setdefault("wl", wl)
@@ -1483,7 +1492,7 @@ def main():
     if missing and "--index" in sys.argv:
         for cat, p in missing:
             cats[cat]["paths"].append(p)
-        json.dump(index, open(ipath, "w"), indent=2, ensure_ascii=False)
+        open(ipath, "w").write(json.dumps(index, indent=2, ensure_ascii=False) + "\n")
         print("index: appended", len(missing))
     elif missing:
         print("index.json lacks (add them):", ", ".join(p for _, p in missing))

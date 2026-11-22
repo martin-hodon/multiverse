@@ -1,0 +1,215 @@
+{
+ "kind": "item",
+ "name": "Desk (modern)",
+ "category": "furniture/table",
+ "era": "1960-2030",
+ "region": "everywhere",
+ "_about": "an office desk, 1.4 x 0.7 m and 0.75 m high: a laminate top on two square steel frames with feet, a modesty panel, a three-drawer pedestal under its right end, a cable grommet -- its user sits on the +z side",
+ "params": {
+  "open": 0
+ },
+ "materials": {
+  "top": {
+   "pick": [
+    "plastic-white",
+    "oak",
+    "#d8d2c4",
+    "plastic-grey"
+   ]
+  },
+  "steel": {
+   "pick": [
+    "paint-black",
+    "aluminium",
+    "paint-white"
+   ]
+  },
+  "front": "plastic-white",
+  "metal": "aluminium",
+  "grommet": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "top",
+   "type": "box",
+   "material": "top",
+   "size": [
+    1.4,
+    0.025,
+    0.7
+   ],
+   "at": [
+    0,
+    0.7375,
+    0
+   ]
+  },
+  {
+   "id": "legs",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.04,
+    0.725,
+    0.04
+   ],
+   "at": [
+    [
+     0.66,
+     0.3625,
+     0.29
+    ],
+    [
+     0.66,
+     0.3625,
+     -0.29
+    ]
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "foot",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.05,
+    0.025,
+    0.64
+   ],
+   "at": [
+    0.66,
+    0.0125,
+    0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "bearer",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.04,
+    0.04,
+    0.6
+   ],
+   "at": [
+    0.66,
+    0.705,
+    0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "rail",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    1.28,
+    0.05,
+    0.03
+   ],
+   "at": [
+    0,
+    0.7,
+    -0.28
+   ]
+  },
+  {
+   "id": "modesty",
+   "type": "box",
+   "material": "top",
+   "size": [
+    1.24,
+    0.34,
+    0.012
+   ],
+   "at": [
+    0,
+    0.51,
+    -0.26
+   ]
+  },
+  {
+   "id": "pedestal",
+   "type": "box",
+   "material": "front",
+   "size": [
+    0.4,
+    0.6,
+    0.56
+   ],
+   "at": [
+    0.42,
+    0.33,
+    -0.05
+   ]
+  },
+  {
+   "id": "drawers",
+   "use": "items/components/drawer",
+   "at": [
+    [
+     0.42,
+     0.535,
+     0.23
+    ],
+    [
+     0.42,
+     0.385,
+     0.23
+    ],
+    [
+     0.42,
+     0.175,
+     0.23
+    ]
+   ],
+   "params": {
+    "front": "slab",
+    "w": 0.39,
+    "h": 0.145,
+    "pull": "hbar",
+    "hx": 0.0,
+    "hy": 0.0,
+    "hl": 0.13,
+    "depth": 0.42,
+    "back": 0,
+    "floor": 0.012,
+    "lift": 0.024,
+    "gap": 0.03,
+    "rise": 0.62
+   },
+   "materials": {
+    "tray": "#d9d5cc"
+   }
+  },
+  {
+   "id": "grommet",
+   "type": "ring",
+   "material": "grommet",
+   "r": 0.03,
+   "tube": 0.006,
+   "at": [
+    -0.5,
+    0.752,
+    -0.27
+   ]
+  }
+ ],
+ "markers": [
+  {
+   "role": "spot",
+   "at": [
+    [
+     -0.1,
+     0.46,
+     0.65
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": 1.5708
+   }
+  }
+ ]
+}

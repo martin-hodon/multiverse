@@ -148,7 +148,7 @@ def grooves():
     return out
 
 def markings():
-    P = Painter(SP, SH)
+    P = Painter(SP, SH, axis=axis)
     rng = random.Random(7)
     # BANDED: broad black crossbands over the back, ragged; black rings round the tail; black flecks in the pink
     BANDS = [(0.100, 0.032), (0.034, 0.022), (-0.030, 0.022), (-0.094, 0.022), (-0.150, 0.015), (-0.193, 0.014), (-0.236, 0.014), (-0.284, 0.022)]

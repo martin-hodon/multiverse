@@ -54,7 +54,45 @@
 //              to 0 at its last point: a tail to a tip; otherwise its end is rounded), bands: [[s0, s1, colour], ...] (rings of colour between those
 //              shares of its length: a ringed tail, a dark tip), bandEdge (their soft edge, metres), thin (cells:
 //              where its radius falls under that many grid cells it is drawn as an exact tube, sharp.js sweepMesh,
-//              joined into the field part over 2 radii; default 2) };
+//              joined into the field part over 2 radii; default 2) } |
+//            dabs (A COAT'S MARKS AS ONE SHAPE, 2026-11-21: sculpt.js layDabs -- a snake's saddles, a lizard's bands, a
+//              salamander's spots, where each used to be an op "paint" shape of its own: always a paint; each mark laid
+//              on the skin the other shapes make when the body is meshed -- where a RAY leaves it -- so it rides any
+//              girth; in the field the set is one primitive, a grid over its marks) {
+//              marks: [ [s, phi, la, lr, rot, colour, { kc, depth, box, bone, r }] (a SPOT on the axis: s along it,
+//                         phi degrees round from up -- + to the animal's left -- la x lr its half-sizes along x round the
+//                         skin, rot degrees turned in the skin; trailing ones may go) |
+//                       { ring: [s0, s1] } (a band right round: an ellipsoid on the axis 2.2 R across) |
+//                       { stroke: [[s, phi], ...], w } (a band along the skin through those) |
+//                       { rays: [[o, d], ...], w } (one through where each ray leaves it: off the axis -- a lip line) |
+//                       { o, d, la, lr, along, rot, r } (a spot where a ray of its own leaves the skin: a mark on the head)
+//                       -- each may name its own color, kc, depth, box, bone ],
+//              axis: [[x, y, z, R], ...] (the line the rows are measured on, its points as any shape's -- "$seg1",
+//                [ "$body", dx, dy, dz, r ], girth expressions -- R its radius there, optional) with along: [1, 0, 0]
+//                (STRAIGHT: s a coordinate along that direction, the axis a polyline over it, rays square to it -- a
+//                lizard's x) or without (CURVED: s the arc length from its first point, the head end, through a spline,
+//                the frame carried from `up` -- a snake's centreline), aspect (a ray's elliptic lean, a flattened body),
+//              color (the marks' default), kc (metres; default soft x the smaller half-size, soft default .18; a ring
+//                .05 R, a stroke .2 w), depth (into the body: a share of R -- the axis's, a mark's r, else the ray's
+//                length -- or [f, m, g]: max(f x the smaller half-size, g x the bigger) + m metres; default
+//                min(1.3 R, max(.6 small, .7 big^2 / R) + .02 R)), box (marks as boxes: a diamond), reach (how far a ray
+//                looks, metres, default .5), forward (an object mark's long axis, default [1, 0, 0]), when, mirror
+//                (its twin's phi and rot turned), bone (default body; the pictures read a mark's part from it) };
+//              written by tools/creaturegen/herps/dabs.py (README "Coat marks as dabs")
+//            sheet (A FAN OF FACES AS ONE SHAPE, 2026-11-21: sculpt.js prepareSheet -- a manta's wing, a flipper:
+//              { pts: [[x, y, z, r], ...], tris: [i, j, k, ...] (faces, by point), bones + skin (optional: skin[i]
+//              the index into bones of point i -- the weights eased across the nearest face), ids (optional
+//              [prefix, first]: face j's id prefix + (first + j), default id_j) }: the union of its
+//              faces, each r thick, blended by k as one primitive; thin, its faces become tri details; the pictures
+//              expand it with sculpt.js sheetsLaid. Written by sealib.sheet (README "Fins as sheets, manes as brushes")
+//            brush (A BRUSH MANE AS ONE SHAPE, 2026-11-21: brushTufts below -- made into its tubes before anything
+//              else sees it: { roots, tips (polylines), n, rows [[shift, dz, len]], r, spread, bury, vary, seed,
+//              palette + pick | color, each/first/tuft/lift, lean/jog (2026-11-22: each tuft's own lean and place) });
+//              written by tools/creaturegen/var/mane/mane.py (the zebra's). Or a BUNDLE (2026-11-22, brushStrands):
+//              { strands: [pts, ...] (tubes; kind: "horn" for horns) | items: [{ own keys }, ...] (kind: "fin" ...),
+//              the shared keys once, first/step or per + groups for the ids } -- made back into exactly the shapes it
+//              was: a horse's locks, a bee's pile, a mosquito's antenna whorls, a butterfly's pattern panels
+//              (tools/creaturegen/sharp/runs2brush.py)
 //            bone (the rig bone it rides, default body: an unknown one throws, listing them all), k (its blend, default
 //            0), kc (its paint's, default k x paint), op: "sub" (carved, after everything) | "paint" (no shape: the surface inside it takes its colour, kc either side of its edge -- a snake's rings and saddles), color, wet, hair, coat,
 //            fleece, mirror (and its twin across z on the twin bone), seat (as above), id (to be merged by);
@@ -121,7 +159,7 @@
 //   samples, default 36), across (rows root to rim, default 7) } -- fins, flukes, flippers, ears, crests, frills, wattles
 import { KINDS } from "./creatures.js";
 import { sharpPoints } from "./sharp.js";
-import { sweepCurve } from "./sculpt.js";
+import { sweepCurve, twinDabs, scaleDabs, sheetTris } from "./sculpt.js";
 
 const sub = (a, b) => a.map((v, i) => v - b[i]);
 // the bone a mirrored shape takes on the other side: legFLu -> legFRu, footHL -> footHR, earL -> earR, earLIn -> earRIn,
@@ -152,6 +190,7 @@ const twin = (p) => {
   if (p.rootBone) q.rootBone = twinBone(p.rootBone);
   if (p.patFrame) q.patFrame = { ...p.patFrame, o: z(p.patFrame.o), u: z(p.patFrame.u), v: z(p.patFrame.v) };
   if (p.seed !== undefined) q.seed = p.seed + 101;
+  if (p.type === "dabs") Object.assign(q, twinDabs(p));   // (a coat's marks: the axis reflected, each phi and rot turned)
   return q;
 };
 const xRange = (p) => {
@@ -159,7 +198,7 @@ const xRange = (p) => {
   if (p.type === "sphere") return [p.c[0] - p.r, p.c[0] + p.r];
   if (p.type === "ell" || p.type === "box") return [p.c[0] - Math.max(...p.r), p.c[0] + Math.max(...p.r)];
   if (p.type === "cone") return [Math.min(p.a[0] - p.ra, p.b[0] - p.rb), Math.max(p.a[0] + p.ra, p.b[0] + p.rb)];
-  if (p.type === "tube" || p.type === "sweep") return [Math.min(...p.pts.map((q) => q[0] - q[3])), Math.max(...p.pts.map((q) => q[0] + q[3]))];
+  if (p.type === "tube" || p.type === "sweep" || p.type === "sheet") return [Math.min(...p.pts.map((q) => q[0] - q[3])), Math.max(...p.pts.map((q) => q[0] + q[3]))];
   if (p.type === "horn" || p.type === "fin") { const Q = sharpPoints(p); return [Math.min(...Q.map((q) => q[0] - q[3])), Math.max(...Q.map((q) => q[0] + q[3]))]; }
   return null;
 };
@@ -194,7 +233,7 @@ export function sculpted(d) {
     });
   }
   // (the legs come AFTER the body's own shapes: they blend into a trunk that is there)
-  const own = shape.flatMap((p) => (p.type === "whiskers" ? whiskerStrands(p) : [p])).flatMap((p) => (p.mirror ? [{ ...p, mirror: undefined }, twin(p)] : [p]));
+  const own = shape.flatMap((p) => (p.type === "whiskers" ? whiskerStrands(p) : p.type === "brush" ? brushTufts(p) : [p])).flatMap((p) => (p.mirror ? [{ ...p, mirror: undefined }, twin(p)] : [p]));
   const sharp = own.filter((p) => SHARP.has(p.type)), own2 = own.filter((p) => !SHARP.has(p.type));
   const all = [...own2.filter((p) => p.op !== "sub" && p.op !== "paint"), ...prims, ...own2.filter((p) => p.op === "sub"), ...own2.filter((p) => p.op === "paint")];
   const ids = parts.map((p) => p.id);
@@ -406,7 +445,7 @@ function convert(def) {
   let own = [];
   if (SC) {
     const joint = jointsOf(parts, index, W, local, centreOf);
-    own = (SC.shape ?? []).flatMap((p) => (p.type === "whiskers" ? whiskerStrands({ ...p, at: point(p.at, joint) }) : [p]))   // (a face's whiskers: strands)
+    own = (SC.shape ?? []).flatMap((p) => (p.type === "whiskers" ? whiskerStrands({ ...p, at: point(p.at, joint) }) : p.type === "brush" ? brushTufts(p) : [p]))   // (a face's whiskers: strands; a brush mane: its tufts)
       .map((p, j) => placeShape(p, j, joint, def.name, animalFrame, SC))
       .flatMap((p) => (p.mirror ? [{ ...p, mirror: undefined }, twin(p)] : [p]));
     for (const p of own) {
@@ -433,13 +472,15 @@ function convert(def) {
   if (!SC?.mesh?.cell && vol / cell ** 3 > CONVERT.maxCells) cell = Math.cbrt(vol / CONVERT.maxCells);
   const prims = [], details = [];
   for (const q of all) {
+    if (q.type === "dabs") { prims.push(q); continue; }   // (a coat's marks: as they are -- their kc is their own)
     if (q.type === "feathers" || q.type === "membrane" || SHARP.has(q.type)) { details.push(q); continue; }
     if (q.type === "sweep") {   // (a SWEEP: in the field where the grid can draw it, its too-thin end drawn as it is -- splitSweep)
       for (const h of splitSweep(q, cell)) if (h.detail) details.push(h); else prims.push({ ...h, kc: h.kc ?? h.k * CONVERT.paint });
       continue;
     }
     if (q.op !== "sub" && q.op !== "paint" && q.type !== "box" && q.rmax < cell * CONVERT.thin) {   // too thin for the grid: drawn as it is
-      if (q.rmax > cell * .15 || q.type === "tri") details.push(q);
+      if (q.type === "sheet") details.push(...sheetTris(q));   // (a sheet: its faces, each a two-sided plate)
+      else if (q.rmax > cell * .15 || q.type === "tri") details.push(q);
       continue;
     }
     const pr = { ...q, kc: q.kc ?? q.k * CONVERT.paint };
@@ -448,7 +489,10 @@ function convert(def) {
     prims.push(pr);
   }
   const ext = Math.max(hi[0] - lo[0], hi[2] - lo[2]) / 2;
-  const near = Math.round(Math.min(CONVERT.near[1], Math.max(CONVERT.near[0], 1000 + 22 * prims.length)));
+  // (each of a dabs shape's marks counts as the paint it once was a shape of its own, a sheet's faces as the tris they
+  //  were: the budget as it was)
+  const nPrims = prims.reduce((n, q) => n + (q.type === "dabs" ? q.marks.length : q.type === "sheet" ? q.tris.length / 3 : 1), 0);
+  const near = Math.round(Math.min(CONVERT.near[1], Math.max(CONVERT.near[0], 1000 + 22 * nPrims)));
   // (the authored eyes: like the hedgehog's, mirrored -- on the head unless they say)
   let eyeList = eyes.map((e) => ({ ...e, lid: darker(parts[e.lidOf]?.color ?? 0x404040, .55), sink: .3, socket: 1.18 }));
   if (SC?.eyes) {
@@ -508,6 +552,10 @@ function scaleOverlay(o, f) {
   const walk = (v) => {
     if (Array.isArray(v)) return v.map(walk);
     if (!v || typeof v !== "object") return v;
+    if (v.type === "dabs") return scaleDabs(v, f);   // (a coat's marks: s, sizes and points, never an angle)
+    if (v.type === "brush" && (v.strands || v.items)) { const { strands, type, ...o } = v; return { ...walk(o), type, ...(strands ? { strands: sclNum(strands, f) } : {}) }; }   // (a bundle: its points, and the rest as each strand's)
+    if (v.type === "brush") return { ...v, roots: sclNum(v.roots, f), tips: sclNum(v.tips, f), r: sclNum(v.r, f), bury: sclNum(v.bury, f), lift: sclNum(v.lift, f), k: sclNum(v.k, f),
+                                     ...(v.kc != null ? { kc: v.kc * f } : {}), ...(v.rows ? { rows: v.rows.map(([a, z, l]) => [a, z * f, l]) } : {}) };   // (a brush mane: its lines, radii and rows' offsets)
     const out = {};
     for (const [k, x] of Object.entries(v)) out[k] = GEO.has(k) || (k === "fair" && typeof x === "number") ? sclNum(x, f)
       : k === "swell" && Array.isArray(x) ? x.map((y, i) => (i < 2 ? y * f : y)) : walk(x);   // (a fin's `fair`: its radius, or { r, ... })
@@ -594,6 +642,69 @@ export function whiskerStrands(w) {
   }
   return out;
 }
+// A BRUSH (2026-11-21): one shape for a mane that stands up stiff -- a zebra's, a donkey's: rows of short bristles
+// along the crest, each one a thin `tube` (too thin for the grid, a detail; or blended, if it is thick enough), made
+// here from a few numbers where they were a shape each (the zebra's 198). Its tufts stand between two lines: `roots`
+// (where they stand, [[x, y, z], ...] evenly along it: point j at u = j / (count - 1)) and `tips` (where the tallest
+// reach, one a root point: the lean and the brush's top line are theirs). n tufts a row; rows: [[shift, dz, len], ...]
+// (each row's tuft i at u = (i + shift) / n, set dz metres across, its length that share of the root-to-tip line;
+// default [[.5, 0, 1]]); at (the tube's points, shares of its length: default [0, .5, 1]) after `bury` (metres: one
+// more point that far back down its line, inside the body); r (one radius a point, the buried one first), spread (the
+// dz times this at each point: a brush fanning out to its tips; default 1); vary (each tuft's length +- that share,
+// seeded by `seed`); color, or palette ({ "0": colour, "1": ... }) and pick (each tuft's key into it, tuft i of row k
+// at i x rows + k); everything else (bone, k, hair, when ...) each tube's. The tubes are id + i + "abc..."[k].
+// each: true (2026-11-22) -- a tuft at every root point instead (tuft i at roots[i], to tips[i]; n and shift unused:
+// the donkey's and the wildebeest's, measured tuft by tuft); first (the tufts' numbering starts there: a mane in two
+// brushes on two bones), tuft (the tubes' id, default the brush's own: two brushes making one run of ids); lift (metres up, y, at each point as r is indexed: a bristle bowed, not straight)
+// (2026-11-22) lean: [along, across] -- each tuft tipped by up to that share of its length along the crest and across
+// it (z), seeded as vary is; jog: each tuft's place along the crest +- that share of the spacing (not a comb's teeth).
+// Neither is drawn unless set, so a brush without them comes out as it did
+export function brushTufts(b) {
+  if (b.strands || b.items) return brushStrands(b);
+  const R = b.roots, Tp = b.tips, m = R.length;
+  if (!(m >= 2) || Tp?.length !== m) throw new Error(`brush ${b.id ?? ""}: roots (2 points or more) and as many tips`);
+  const rows = b.rows ?? [[.5, 0, 1]], n = b.each ? m : b.n ?? m, at = b.at ?? [0, .5, 1], bury = b.bury ?? 0;
+  const rr = [b.r ?? .005].flat(), sp = [b.spread ?? 1].flat(), lf = [b.lift ?? 0].flat(), vary = b.vary ?? 0, first = b.first ?? 0;
+  const lineAt = (L, u) => { const x = Math.max(0, Math.min(1, u)) * (m - 1), j = Math.min(m - 2, Math.floor(x)), t = x - j; return [0, 1, 2].map((k) => (L[j][k] ?? 0) + ((L[j + 1][k] ?? 0) - (L[j][k] ?? 0)) * t); };
+  let seed = (b.seed ?? 1) * 2654435761 >>> 0;
+  const rnd = () => { seed = (seed + 0x6D2B79F5) >>> 0; let t = seed; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296 * 2 - 1; };
+  const { roots, tips, rows: _r, n: _n, at: _a, bury: _b, r: _rr, spread, lift, each, first: _f, tuft, vary: _v, seed: _s, palette, pick, lean: _l, jog: _j, ...rest } = b;
+  const [la, lc] = [b.lean ?? 0].flat().concat([0]).slice(0, 2), jog = b.jog ?? 0;
+  const out = [];
+  for (let i = 0; i < n; i++) for (const [k, [shift, dz, len]] of rows.entries()) {
+    const u = b.each ? i / (m - 1) : (i + shift + (jog ? jog * rnd() : 0)) / n, o = b.each ? R[i].slice(0, 3) : lineAt(R, u), e = b.each ? Tp[i].slice(0, 3) : lineAt(Tp, u), f = (len ?? 1) * (1 + vary * rnd());
+    const d = [0, 1, 2].map((c) => (e[c] - o[c]) * f), dl = len3(d) || 1;
+    if (la || lc) {   // (each tuft's own lean: tipped along the crest by la, across it by lc, shares of its length -- one draw each)
+      const tA = lineAt(R, Math.min(1, u + .01)).map((v, c) => v - lineAt(R, Math.max(0, u - .01))[c]), tl = len3(tA) || 1, wa = la * rnd(), wc = lc * rnd();
+      for (let c = 0; c < 3; c++) d[c] += dl * (wa * tA[c] / tl + wc * (c === 2 ? 1 : 0));
+    }
+    const pts = [];
+    const at_ = (L, j) => L[Math.min(j, L.length - 1)];
+    const put = (P, j) => pts.push([P[0], P[1] + (at_(lf, j) ?? 0), P[2] + dz * (at_(sp, j) ?? 1), at_(rr, j)]);
+    if (bury) put(o.map((v, c) => v - d[c] / dl * bury), 0);
+    at.forEach((t, j) => put(o.map((v, c) => v + d[c] * t), j + (bury ? 1 : 0)));
+    const ti = i * rows.length + k, colour = palette && pick ? palette[String(pick[ti])] ?? b.color : b.color;
+    out.push({ ...rest, type: "tube", id: `${tuft ?? b.id ?? "brush"}${first + i}${"abcdefgh"[k] ?? k}`, pts, color: colour });
+  }
+  return out;
+}
+// STRANDS (2026-11-22): a brush that is a bundle -- `strands: [pts, pts, ...]` (each a tube's or a horn's own points,
+// [x, y, z, r] as it would have them), `kind` ("tube", default, or "horn"), everything else (bone, k, sides, mirror,
+// when ...) each one's; colour as for tufts (color, or palette + pick, one key a strand). Ids: tuft (default the
+// brush's id) + (first + i x step, step default 1: a pony's near-side locks run lkL32, lkL30 ... lkL0); or with `per` (strands a group) and `groups` (the groups' numbers) tuft + groups[i / per]
+// + "_" + i % per -- a mosquito's antenna whorls, antMHair1_0 ... antMHair12_5. For runs whose points no rule makes:
+// a horse's locks (draped over the neck as probed), a bumblebee's pile -- one shape a run, the same tubes and horns.
+// Or `items: [{...}, ...]` in place of strands -- each one's own keys over the shared ones (a butterfly's wing pattern:
+// `kind: "fin"`, each panel its root, edge and colour)
+export function brushStrands(b) {
+  const { strands, items, kind, tuft, first = 0, step = 1, per, groups, palette, pick, type: _t, id, ...rest } = b, pre = tuft ?? id ?? "brush";
+  const list = strands ? strands.map((pts) => ({ pts })) : items;
+  if (strands && strands.some((q) => !Array.isArray(q) || q.length < 2)) throw new Error(`brush ${id ?? ""}: strands are point lists`);
+  if (!Array.isArray(list) || list.some((q) => !q || typeof q !== "object")) throw new Error(`brush ${id ?? ""}: strands (point lists) or items (each one's own keys)`);
+  if (per && !(groups?.length * per >= list.length)) throw new Error(`brush ${id ?? ""}: groups x per must cover the strands`);
+  return list.map((own, i) => ({ ...rest, type: kind ?? "tube", id: per ? `${pre}${groups[Math.floor(i / per)]}_${i % per}` : `${pre}${first + i * step}`, ...own,
+    ...(palette && pick ? { color: palette[String(pick[i])] ?? b.color } : {}) }));
+}
 // an authored primitive made ready for the field: its points placed, its extent, its pattern and its paint's blend
 function placeShape(p0, j, joint, name, animalFrame, SC) {
   const P = (v) => (v == null ? v : point(v, joint));
@@ -608,7 +719,24 @@ function placeShape(p0, j, joint, name, animalFrame, SC) {
   if (p.type === "horn" && !(p.pts?.length >= 2)) throw new Error(`${name}: horn ${p.id ?? j} needs pts (2 or more: its root, ..., its tip)`);
   if (p.seat) p.seat = { ...p.seat, ...(p.seat.from ? { from: P(p.seat.from) } : {}) };
   const t = p.type;
-  if (!["sphere", "ell", "cone", "tube", "sweep", "box", "tri", "feathers", "membrane", "horn", "fin"].includes(t)) throw new Error(`${name}: sculpt shape ${j} is a "${t}" -- the types are sphere, ell, cone, tube, sweep, box, tri, feathers, membrane, horn, fin`);
+  if (t === "dabs") {   // (a coat's MARKS, one shape: laid on the skin when the body is meshed -- bodymesh.js ready, sculpt.js layDabs)
+    if (!Array.isArray(p.marks)) throw new Error(`${name}: dabs ${p.id ?? j} needs marks`);
+    if (p.axis) p.axis = p.axis.map((q) => P(q));
+    if (p.marks.some((m) => !Array.isArray(m) && !m.ring && !m.stroke && !m.rays && !(m.o && m.d)) || (!p.axis && p.marks.some((m) => Array.isArray(m) || m.ring || m.stroke)))
+      throw new Error(`${name}: dabs ${p.id ?? j}: a mark is [s, phi, la, lr, ...] on its axis, { ring }, { stroke }, { rays } or { o, d, la, lr }`);
+    p.op = "paint"; p.rmin = p.rmax = 0; p.k = 0; p.color = p.color ?? 0x808080;
+    return p;
+  }
+  if (!["sphere", "ell", "cone", "tube", "sweep", "box", "tri", "sheet", "feathers", "membrane", "horn", "fin"].includes(t)) throw new Error(`${name}: sculpt shape ${j} is a "${t}" -- the types are sphere, ell, cone, tube, sweep, box, tri, sheet, feathers, membrane, horn, fin, dabs, brush`);
+  if (t === "sheet") {   // (faces sharing their corners, thickened as one -- sculpt.js prepareSheet)
+    const n = p.pts?.length ?? 0;
+    if (!n || !p.tris?.length || p.tris.length % 3 || p.tris.some((v) => !(v >= 0 && v < n))) throw new Error(`${name}: sheet ${p.id ?? j} needs pts and tris (3 a face, each an index into pts)`);
+    if (p.ids !== undefined && !(Array.isArray(p.ids) && typeof p.ids[0] === "string" && Number.isInteger(p.ids[1]))) throw new Error(`${name}: sheet ${p.id ?? j}: ids is [prefix, first number]`);
+    if (p.bones || p.skin) {
+      if (!p.bones?.length || p.skin?.length !== n || p.skin.some((b) => !(b >= 0 && b < p.bones.length))) throw new Error(`${name}: sheet ${p.id ?? j}: bones, and a skin entry a point (an index into bones)`);
+      p.bone = p.bones[p.skin[0]];
+    }
+  }
   if (t === "sweep") sweepSkin(p, joint, name, j);
   if (t === "membrane") patOf(p, P, animalFrame);   // (its coat pattern, as any shape's: it returns before the rest)
   if (t === "membrane") {   // (a skin stretched between bones, each vertex on its own: bodymesh.js membraneMesh)
@@ -634,7 +762,7 @@ function placeShape(p0, j, joint, name, animalFrame, SC) {
     p.axes = [[R[0], R[1], R[2]], [R[4], R[5], R[6]], [R[8], R[9], R[10]]];
     delete p.rot;
   }
-  const rs = t === "sphere" ? [p.r] : t === "ell" || t === "box" ? p.r : t === "cone" ? [p.ra, p.rb] : t === "tube" || t === "horn" || t === "sweep" ? p.pts.map((q) => q[3]) : t === "fin" ? [p.thick ?? .01] : [p.r ?? .01];
+  const rs = t === "sphere" ? [p.r] : t === "ell" || t === "box" ? p.r : t === "cone" ? [p.ra, p.rb] : t === "tube" || t === "horn" || t === "sweep" || t === "sheet" ? p.pts.map((q) => q[3]) : t === "fin" ? [p.thick ?? .01] : [p.r ?? .01];
   p.rmin = Math.min(...rs); p.rmax = Math.max(...rs);
   p.k = p.k ?? 0;
   if (p.kc === undefined) p.kc = p.k * (SC.paint ?? .5);
@@ -793,6 +921,7 @@ function areaOf(q) {
   if (q.type === "box") { const [a, b, c] = q.r; return 8 * (a * b + b * c + a * c); }
   if (q.type === "ell") { const [a, b, c] = q.r, P = 1.6; return 4 * Math.PI * (((a * b) ** P + (a * c) ** P + (b * c) ** P) / 3) ** (1 / P); }
   if (q.type === "tri") { const u = q.b.map((v, k) => v - q.a[k]), w = q.c.map((v, k) => v - q.a[k]); return len3([u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]]); }
+  if (q.type === "sheet") return sheetTris(q).reduce((s, t) => s + areaOf(t), 0);
   if (q.type === "tube" || q.type === "sweep") { let s = 0; for (let j = 1; j < q.pts.length; j++) s += 2 * Math.PI * (q.pts[j][3] + q.pts[j - 1][3]) / 2 * len3(q.pts[j].map((v, k) => v - q.pts[j - 1][k]).slice(0, 3)); return s; }
   const L = len3(q.a.map((v, k) => v - q.b[k])), r = (q.ra + q.rb) / 2;
   return 2 * Math.PI * r * L + 2 * Math.PI * (q.ra * q.ra + q.rb * q.rb);
@@ -801,7 +930,7 @@ function boundsOf(q) {
   const pts = q.type === "ell" || q.type === "sphere" ? [q.c.map((v) => v - q.rmax), q.c.map((v) => v + q.rmax)]
             : q.type === "box" ? [q.c.map((v) => v - len3(q.r)), q.c.map((v) => v + len3(q.r))]
             : q.type === "tri" ? [q.a, q.b, q.c].flatMap((P) => [P.map((v) => v - q.r), P.map((v) => v + q.r)])
-            : q.type === "tube" || q.type === "sweep" ? q.pts.flatMap((P) => [P.slice(0, 3).map((v) => v - P[3]), P.slice(0, 3).map((v) => v + P[3])])
+            : q.type === "tube" || q.type === "sweep" || q.type === "sheet" ? q.pts.flatMap((P) => [P.slice(0, 3).map((v) => v - P[3]), P.slice(0, 3).map((v) => v + P[3])])
             : [q.a.map((v) => v - q.ra), q.a.map((v) => v + q.ra), q.b.map((v) => v - q.rb), q.b.map((v) => v + q.rb)];
   return [[0, 1, 2].map((k) => Math.min(...pts.map((P) => P[k]))), [0, 1, 2].map((k) => Math.max(...pts.map((P) => P[k])))];
 }

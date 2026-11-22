@@ -222,7 +222,8 @@
    ]
   },
   {
-   "id": "load 0 cask 1",
+   "id": "load 0 cask",
+   "each": 5,
    "use": "items/furniture/cask",
    "params": {
     "r": 0.35,
@@ -230,8 +231,8 @@
     "bulge": 0.171
    },
    "at": [
-    -0.95,
-    1.2,
+    "-0.95 + 0.375 * floor(i / 3) + 0.75 * (i - 3 * floor(i / 3))",
+    "1.2 + 0.6062 * floor(i / 3)",
     -0.475,
     0,
     90,
@@ -240,10 +241,11 @@
    "when": {
     "load": 0
    },
-   "seed": 0
+   "seed": "i"
   },
   {
-   "id": "load 0 cask 2",
+   "id": "load 1 cask",
+   "each": 2,
    "use": "items/furniture/cask",
    "params": {
     "r": 0.35,
@@ -251,119 +253,18 @@
     "bulge": 0.171
    },
    "at": [
-    -0.2,
-    1.2,
-    -0.475,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 0
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 0 cask 3",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.35,
-    "h": 0.95,
-    "bulge": 0.171
-   },
-   "at": [
-    0.55,
-    1.2,
-    -0.475,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 0
-   },
-   "seed": 2
-  },
-  {
-   "id": "load 0 cask 4",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.35,
-    "h": 0.95,
-    "bulge": 0.171
-   },
-   "at": [
-    -0.575,
-    1.8062,
-    -0.475,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 0
-   },
-   "seed": 3
-  },
-  {
-   "id": "load 0 cask 5",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.35,
-    "h": 0.95,
-    "bulge": 0.171
-   },
-   "at": [
-    0.175,
-    1.8062,
-    -0.475,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 0
-   },
-   "seed": 4
-  },
-  {
-   "id": "load 1 cask 1",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.35,
-    "h": 0.95,
-    "bulge": 0.171
-   },
-   "at": [
-    -0.85,
+    "-0.85 + 0.75 * i",
     0.85,
     0
    ],
    "when": {
     "load": 1
    },
-   "seed": 0
+   "seed": "i"
   },
   {
    "id": "load 1 cask 2",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.35,
-    "h": 0.95,
-    "bulge": 0.171
-   },
-   "at": [
-    -0.1,
-    0.85,
-    0
-   ],
-   "when": {
-    "load": 1
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 1 cask 3",
+   "each": 3,
    "use": "items/furniture/cask",
    "params": {
     "r": 0.21,
@@ -373,15 +274,16 @@
    "at": [
     0.55,
     0.85,
-    0.4
+    "0.4 - 0.4 * i"
    ],
    "when": {
     "load": 1
    },
-   "seed": 2
+   "seed": "2 + i"
   },
   {
-   "id": "load 1 cask 4",
+   "id": "load 2 cask",
+   "each": 9,
    "use": "items/furniture/cask",
    "params": {
     "r": 0.21,
@@ -389,197 +291,18 @@
     "bulge": 0.19
    },
    "at": [
-    0.55,
+    "-1 + 0.45 * floor(i / 3)",
     0.85,
-    0
-   ],
-   "when": {
-    "load": 1
-   },
-   "seed": 3
-  },
-  {
-   "id": "load 1 cask 5",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    0.55,
-    0.85,
-    -0.4
-   ],
-   "when": {
-    "load": 1
-   },
-   "seed": 4
-  },
-  {
-   "id": "load 2 cask 1",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -1,
-    0.85,
-    0.45
+    "0.45 - 0.45 * (i - 3 * floor(i / 3))"
    ],
    "when": {
     "load": 2
    },
-   "seed": 0
+   "seed": "i"
   },
   {
    "id": "load 2 cask 2",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -1,
-    0.85,
-    0
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 2 cask 3",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -1,
-    0.85,
-    -0.45
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 2
-  },
-  {
-   "id": "load 2 cask 4",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -0.55,
-    0.85,
-    0.45
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 3
-  },
-  {
-   "id": "load 2 cask 5",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -0.55,
-    0.85,
-    0
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 4
-  },
-  {
-   "id": "load 2 cask 6",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -0.55,
-    0.85,
-    -0.45
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 5
-  },
-  {
-   "id": "load 2 cask 7",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -0.1,
-    0.85,
-    0.45
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 6
-  },
-  {
-   "id": "load 2 cask 8",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -0.1,
-    0.85,
-    0
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 7
-  },
-  {
-   "id": "load 2 cask 9",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    -0.1,
-    0.85,
-    -0.45
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 8
-  },
-  {
-   "id": "load 2 cask 10",
+   "each": 2,
    "use": "items/furniture/cask",
    "params": {
     "r": 0.21,
@@ -589,37 +312,20 @@
    "at": [
     0.35,
     0.85,
-    0.2
+    "0.2 - 0.4 * i"
    ],
    "when": {
     "load": 2
    },
-   "seed": 9
+   "seed": "9 + i"
   },
   {
-   "id": "load 2 cask 11",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.21,
-    "h": 0.55,
-    "bulge": 0.19
-   },
-   "at": [
-    0.35,
-    0.85,
-    -0.2
-   ],
-   "when": {
-    "load": 2
-   },
-   "seed": 10
-  },
-  {
-   "id": "load 3 sack 1",
+   "id": "load 3 sack",
+   "each": 9,
    "use": "items/tools/sack",
    "at": [
-    -1.15,
-    0.85,
+    "-1.15 + 0.26 * floor(i / 5) + 0.52 * (i - 5 * floor(i / 5))",
+    "0.85 + 0.4 * floor(i / 5)",
     0,
     90,
     0,
@@ -630,127 +336,8 @@
    }
   },
   {
-   "id": "load 3 sack 2",
-   "use": "items/tools/sack",
-   "at": [
-    -0.63,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 3
-   }
-  },
-  {
-   "id": "load 3 sack 3",
-   "use": "items/tools/sack",
-   "at": [
-    -0.11,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 3
-   }
-  },
-  {
-   "id": "load 3 sack 4",
-   "use": "items/tools/sack",
-   "at": [
-    0.41,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 3
-   }
-  },
-  {
-   "id": "load 3 sack 5",
-   "use": "items/tools/sack",
-   "at": [
-    0.93,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 3
-   }
-  },
-  {
-   "id": "load 3 sack 6",
-   "use": "items/tools/sack",
-   "at": [
-    -0.89,
-    1.25,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 3
-   }
-  },
-  {
-   "id": "load 3 sack 7",
-   "use": "items/tools/sack",
-   "at": [
-    -0.37,
-    1.25,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 3
-   }
-  },
-  {
-   "id": "load 3 sack 8",
-   "use": "items/tools/sack",
-   "at": [
-    0.15,
-    1.25,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 3
-   }
-  },
-  {
-   "id": "load 3 sack 9",
-   "use": "items/tools/sack",
-   "at": [
-    0.67,
-    1.25,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 3
-   }
-  },
-  {
-   "id": "load 4 cask 1",
+   "id": "load 4 cask",
+   "each": 2,
    "use": "items/furniture/cask",
    "params": {
     "r": 0.35,
@@ -758,7 +345,7 @@
     "bulge": 0.171
    },
    "at": [
-    -0.95,
+    "-0.95 + 0.75 * i",
     1.2,
     -0.475,
     0,
@@ -768,34 +355,14 @@
    "when": {
     "load": 4
    },
-   "seed": 0
+   "seed": "i"
   },
   {
-   "id": "load 4 cask 2",
-   "use": "items/furniture/cask",
-   "params": {
-    "r": 0.35,
-    "h": 0.95,
-    "bulge": 0.171
-   },
-   "at": [
-    -0.2,
-    1.2,
-    -0.475,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 4
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 4 sack 3",
+   "id": "load 4 sack",
+   "each": 2,
    "use": "items/tools/sack",
    "at": [
-    0.45,
+    "0.45 + 0.52 * i",
     0.85,
     0,
     90,
@@ -807,28 +374,14 @@
    }
   },
   {
-   "id": "load 4 sack 4",
-   "use": "items/tools/sack",
-   "at": [
-    0.97,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 4
-   }
-  },
-  {
-   "id": "load 5 sheaf 1",
+   "id": "load 5 sheaf",
+   "each": 10,
    "use": "items/tools/sheaf",
    "at": [
-    -1.22,
+    "-1.22 + 0.28 * i",
     0.85,
     0,
-    -90,
+    "-90 + 180 * (i - 2 * floor(i / 2))",
     0,
     0
    ],
@@ -838,12 +391,13 @@
   },
   {
    "id": "load 5 sheaf 2",
+   "each": 9,
    "use": "items/tools/sheaf",
    "at": [
-    -0.94,
-    0.85,
+    "-1.08 + 0.28 * i",
+    1.07,
     0,
-    90,
+    "90 - 180 * (i - 2 * floor(i / 2))",
     0,
     0
    ],
@@ -853,12 +407,13 @@
   },
   {
    "id": "load 5 sheaf 3",
+   "each": 8,
    "use": "items/tools/sheaf",
    "at": [
-    -0.66,
-    0.85,
+    "-0.94 + 0.28 * i",
+    1.29,
     0,
-    -90,
+    "-90 + 180 * (i - 2 * floor(i / 2))",
     0,
     0
    ],
@@ -868,462 +423,13 @@
   },
   {
    "id": "load 5 sheaf 4",
+   "each": 7,
    "use": "items/tools/sheaf",
    "at": [
-    -0.38,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 5",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.1,
-    0.85,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 6",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.18,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 7",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.46,
-    0.85,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 8",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.74,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 9",
-   "use": "items/tools/sheaf",
-   "at": [
-    1.02,
-    0.85,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 10",
-   "use": "items/tools/sheaf",
-   "at": [
-    1.3,
-    0.85,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 11",
-   "use": "items/tools/sheaf",
-   "at": [
-    -1.08,
-    1.07,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 12",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.8,
-    1.07,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 13",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.52,
-    1.07,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 14",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.24,
-    1.07,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 15",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.04,
-    1.07,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 16",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.32,
-    1.07,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 17",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.6,
-    1.07,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 18",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.88,
-    1.07,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 19",
-   "use": "items/tools/sheaf",
-   "at": [
-    1.16,
-    1.07,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 20",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.94,
-    1.29,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 21",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.66,
-    1.29,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 22",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.38,
-    1.29,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 23",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.1,
-    1.29,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 24",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.18,
-    1.29,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 25",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.46,
-    1.29,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 26",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.74,
-    1.29,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 27",
-   "use": "items/tools/sheaf",
-   "at": [
-    1.02,
-    1.29,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 28",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.8,
+    "-0.8 + 0.28 * i",
     1.51,
     0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 29",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.52,
-    1.51,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 30",
-   "use": "items/tools/sheaf",
-   "at": [
-    -0.24,
-    1.51,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 31",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.04,
-    1.51,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 32",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.32,
-    1.51,
-    0,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 33",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.6,
-    1.51,
-    0,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 5
-   }
-  },
-  {
-   "id": "load 5 sheaf 34",
-   "use": "items/tools/sheaf",
-   "at": [
-    0.88,
-    1.51,
-    0,
-    90,
+    "90 - 180 * (i - 2 * floor(i / 2))",
     0,
     0
    ],
@@ -1350,180 +456,38 @@
    }
   },
   {
+   "id": "load 6 transport-amphora",
+   "each": 6,
+   "use": "items/tools/transport-amphora",
+   "at": [
+    "-1.16 + 0.36 * i",
+    1.12,
+    "0.37 - 0.74 * (i - 2 * floor(i / 2))",
+    "-90 + 180 * (i - 2 * floor(i / 2))",
+    0,
+    0
+   ],
+   "when": {
+    "load": 6
+   },
+   "seed": "1 + i"
+  },
+  {
    "id": "load 6 transport-amphora 2",
+   "each": 5,
    "use": "items/tools/transport-amphora",
    "at": [
-    -1.16,
-    1.12,
-    0.37,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 6 transport-amphora 3",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    -0.8,
-    1.12,
-    -0.37,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 2
-  },
-  {
-   "id": "load 6 transport-amphora 4",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    -0.44,
-    1.12,
-    0.37,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 3
-  },
-  {
-   "id": "load 6 transport-amphora 5",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    -0.08,
-    1.12,
-    -0.37,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 4
-  },
-  {
-   "id": "load 6 transport-amphora 6",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    0.28,
-    1.12,
-    0.37,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 5
-  },
-  {
-   "id": "load 6 transport-amphora 7",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    0.64,
-    1.12,
-    -0.37,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 6
-  },
-  {
-   "id": "load 6 transport-amphora 8",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    -0.98,
+    "-0.98 + 0.36 * i",
     1.41,
-    -0.37,
-    90,
+    "-0.37 + 0.74 * (i - 2 * floor(i / 2))",
+    "90 - 180 * (i - 2 * floor(i / 2))",
     0,
     0
    ],
    "when": {
     "load": 6
    },
-   "seed": 7
-  },
-  {
-   "id": "load 6 transport-amphora 9",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    -0.62,
-    1.41,
-    0.37,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 8
-  },
-  {
-   "id": "load 6 transport-amphora 10",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    -0.26,
-    1.41,
-    -0.37,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 9
-  },
-  {
-   "id": "load 6 transport-amphora 11",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    0.1,
-    1.41,
-    0.37,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 10
-  },
-  {
-   "id": "load 6 transport-amphora 12",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    0.46,
-    1.41,
-    -0.37,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 6
-   },
-   "seed": 11
+   "seed": "7 + i"
   },
   {
    "id": "load 7 straw",
@@ -1560,68 +524,21 @@
    "seed": 1
   },
   {
-   "id": "load 7 transport-amphora 3",
+   "id": "load 7 transport-amphora",
+   "each": 4,
    "use": "items/tools/transport-amphora",
    "at": [
-    0.1792,
-    1.12,
-    -0.37,
-    90,
+    "0.1792 - 0.18 * floor(i / 2) + 0.36 * (i - 2 * floor(i / 2))",
+    "1.12 + 0.29 * floor(i / 2)",
+    "-0.37 + 0.74 * (i - 2 * floor(i / 2))",
+    "90 - 180 * (i - 2 * floor(i / 2))",
     0,
     0
    ],
    "when": {
     "load": 7
    },
-   "seed": 2
-  },
-  {
-   "id": "load 7 transport-amphora 4",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    0.5392,
-    1.12,
-    0.37,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 7
-   },
-   "seed": 3
-  },
-  {
-   "id": "load 7 transport-amphora 5",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    -0.0008,
-    1.41,
-    -0.37,
-    90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 7
-   },
-   "seed": 4
-  },
-  {
-   "id": "load 7 transport-amphora 6",
-   "use": "items/tools/transport-amphora",
-   "at": [
-    0.3592,
-    1.41,
-    0.37,
-    -90,
-    0,
-    0
-   ],
-   "when": {
-    "load": 7
-   },
-   "seed": 5
+   "seed": "2 + i"
   },
   {
    "id": "load 7 sack 7",
@@ -1657,114 +574,53 @@
    }
   },
   {
+   "id": "load 8 storage-jar",
+   "each": 4,
+   "use": "items/tools/storage-jar",
+   "at": [
+    "-0.98 + 0.48 * floor(i / 2)",
+    0.87,
+    "-0.35 + 0.7 * (i - 2 * floor(i / 2))"
+   ],
+   "when": {
+    "load": 8
+   },
+   "seed": "1 + i"
+  },
+  {
+   "id": "load 8 hamper",
+   "each": 2,
+   "use": "items/tools/hamper",
+   "at": [
+    -0.02,
+    0.87,
+    "-0.35 + 0.7 * i"
+   ],
+   "when": {
+    "load": 8
+   },
+   "seed": "5 + i"
+  },
+  {
    "id": "load 8 storage-jar 2",
-   "use": "items/tools/storage-jar",
-   "at": [
-    -0.98,
-    0.87,
-    -0.35
-   ],
-   "when": {
-    "load": 8
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 8 storage-jar 3",
-   "use": "items/tools/storage-jar",
-   "at": [
-    -0.98,
-    0.87,
-    0.35
-   ],
-   "when": {
-    "load": 8
-   },
-   "seed": 2
-  },
-  {
-   "id": "load 8 storage-jar 4",
-   "use": "items/tools/storage-jar",
-   "at": [
-    -0.5,
-    0.87,
-    -0.35
-   ],
-   "when": {
-    "load": 8
-   },
-   "seed": 3
-  },
-  {
-   "id": "load 8 storage-jar 5",
-   "use": "items/tools/storage-jar",
-   "at": [
-    -0.5,
-    0.87,
-    0.35
-   ],
-   "when": {
-    "load": 8
-   },
-   "seed": 4
-  },
-  {
-   "id": "load 8 hamper 6",
-   "use": "items/tools/hamper",
-   "at": [
-    -0.02,
-    0.87,
-    -0.35
-   ],
-   "when": {
-    "load": 8
-   },
-   "seed": 5
-  },
-  {
-   "id": "load 8 hamper 7",
-   "use": "items/tools/hamper",
-   "at": [
-    -0.02,
-    0.87,
-    0.35
-   ],
-   "when": {
-    "load": 8
-   },
-   "seed": 6
-  },
-  {
-   "id": "load 8 storage-jar 8",
+   "each": 2,
    "use": "items/tools/storage-jar",
    "at": [
     0.46,
     0.87,
-    -0.35
+    "-0.35 + 0.7 * i"
    ],
    "when": {
     "load": 8
    },
-   "seed": 7
+   "seed": "7 + i"
   },
   {
-   "id": "load 8 storage-jar 9",
-   "use": "items/tools/storage-jar",
-   "at": [
-    0.46,
-    0.87,
-    0.35
-   ],
-   "when": {
-    "load": 8
-   },
-   "seed": 8
-  },
-  {
-   "id": "load 9 bale 1",
+   "id": "load 9 bale",
+   "each": 3,
    "use": "items/tools/bale",
    "at": [
-    -0.84,
+    "-0.84 + 0.58 * i",
     0.85,
     0,
     0,
@@ -1774,45 +630,14 @@
    "when": {
     "load": 9
    },
-   "seed": 0
+   "seed": "i"
   },
   {
    "id": "load 9 bale 2",
+   "each": 3,
    "use": "items/tools/bale",
    "at": [
-    -0.26,
-    0.85,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 9
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 9 bale 3",
-   "use": "items/tools/bale",
-   "at": [
-    0.32,
-    0.85,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 9
-   },
-   "seed": 2
-  },
-  {
-   "id": "load 9 bale 4",
-   "use": "items/tools/bale",
-   "at": [
-    -0.78,
+    "-0.78 + 0.62 * i",
     1.35,
     0,
     0,
@@ -1822,49 +647,20 @@
    "when": {
     "load": 9
    },
-   "seed": 3
-  },
-  {
-   "id": "load 9 bale 5",
-   "use": "items/tools/bale",
-   "at": [
-    -0.16,
-    1.35,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 9
-   },
-   "seed": 4
-  },
-  {
-   "id": "load 9 bale 6",
-   "use": "items/tools/bale",
-   "at": [
-    0.46,
-    1.35,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 9
-   },
-   "seed": 5
+   "seed": "3 + i"
   },
   {
    "id": "load 10 crate 1",
    "use": "items/tools/crate",
+   "params": {
+    "lift": 0
+   },
    "at": [
     -0.887,
     0.85,
     0,
-    0,
     90,
+    0,
     0
    ],
    "when": {
@@ -1875,12 +671,15 @@
   {
    "id": "load 10 crate 2",
    "use": "items/tools/crate",
+   "params": {
+    "lift": 88
+   },
    "at": [
     -0.287,
     0.85,
     0,
-    0,
     90,
+    0,
     0
    ],
    "when": {
@@ -1895,8 +694,8 @@
     -0.787,
     1.35,
     0,
-    0,
     90,
+    0,
     0
    ],
    "when": {
@@ -1920,56 +719,18 @@
    }
   },
   {
-   "id": "load 11 tub 1",
+   "id": "load 11 tub",
+   "each": 4,
    "use": "items/tools/tub",
    "at": [
-    -0.976,
+    "-0.976 + 0.56 * floor(i / 2)",
     0.85,
-    -0.32
+    "-0.32 + 0.64 * (i - 2 * floor(i / 2))"
    ],
    "when": {
     "load": 11
    },
-   "seed": 0
-  },
-  {
-   "id": "load 11 tub 2",
-   "use": "items/tools/tub",
-   "at": [
-    -0.976,
-    0.85,
-    0.32
-   ],
-   "when": {
-    "load": 11
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 11 tub 3",
-   "use": "items/tools/tub",
-   "at": [
-    -0.416,
-    0.85,
-    -0.32
-   ],
-   "when": {
-    "load": 11
-   },
-   "seed": 2
-  },
-  {
-   "id": "load 11 tub 4",
-   "use": "items/tools/tub",
-   "at": [
-    -0.416,
-    0.85,
-    0.32
-   ],
-   "when": {
-    "load": 11
-   },
-   "seed": 3
+   "seed": "i"
   },
   {
    "id": "load 11 bale 5",
@@ -1988,11 +749,12 @@
    "seed": 4
   },
   {
-   "id": "load 12 straw-bale 1",
+   "id": "load 12 straw-bale",
+   "each": 7,
    "use": "items/tools/straw-bale",
    "at": [
-    -0.935,
-    0.85,
+    "-0.935 + 0.225 * floor(i / 4) + 0.45 * (i - 4 * floor(i / 4))",
+    "0.85 + 0.39 * floor(i / 4)",
     0,
     0,
     90,
@@ -2001,109 +763,14 @@
    "when": {
     "load": 12
    },
-   "seed": 0
+   "seed": "i"
   },
   {
    "id": "load 12 straw-bale 2",
+   "each": 2,
    "use": "items/tools/straw-bale",
    "at": [
-    -0.485,
-    0.85,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 12
-   },
-   "seed": 1
-  },
-  {
-   "id": "load 12 straw-bale 3",
-   "use": "items/tools/straw-bale",
-   "at": [
-    -0.035,
-    0.85,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 12
-   },
-   "seed": 2
-  },
-  {
-   "id": "load 12 straw-bale 4",
-   "use": "items/tools/straw-bale",
-   "at": [
-    0.415,
-    0.85,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 12
-   },
-   "seed": 3
-  },
-  {
-   "id": "load 12 straw-bale 5",
-   "use": "items/tools/straw-bale",
-   "at": [
-    -0.71,
-    1.24,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 12
-   },
-   "seed": 4
-  },
-  {
-   "id": "load 12 straw-bale 6",
-   "use": "items/tools/straw-bale",
-   "at": [
-    -0.26,
-    1.24,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 12
-   },
-   "seed": 5
-  },
-  {
-   "id": "load 12 straw-bale 7",
-   "use": "items/tools/straw-bale",
-   "at": [
-    0.19,
-    1.24,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 12
-   },
-   "seed": 6
-  },
-  {
-   "id": "load 12 straw-bale 8",
-   "use": "items/tools/straw-bale",
-   "at": [
-    -0.485,
+    "-0.485 + 0.45 * i",
     1.63,
     0,
     0,
@@ -2113,23 +780,7 @@
    "when": {
     "load": 12
    },
-   "seed": 7
-  },
-  {
-   "id": "load 12 straw-bale 9",
-   "use": "items/tools/straw-bale",
-   "at": [
-    -0.035,
-    1.63,
-    0,
-    0,
-    90,
-    0
-   ],
-   "when": {
-    "load": 12
-   },
-   "seed": 8
+   "seed": "7 + i"
   }
  ]
 }

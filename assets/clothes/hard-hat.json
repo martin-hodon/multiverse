@@ -1,0 +1,58 @@
+{
+  "name": "Hard hat",
+  "kind": "garment",
+  "layer": 7,
+  "_about": "the safety helmet (the hard hat: E. W. Bullard, 1919; HDPE since the 1950s): a domed shell raised off the head on its harness, a ridge fore and aft, a short peak over the brow and a narrow rim round it",
+  "head": true,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "hardhat-yellow"
+    },
+    "peak": {
+      "pattern": "fabrics/plain",
+      "palette": "hardhat-yellow"
+    },
+    "plume": {
+      "pattern": "fabrics/plain",
+      "palette": "hardhat-yellow"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/cap",
+      "params": {
+        "radius": 1.3,
+        "brow": 0.55
+      }
+    },
+    {
+      "use": "clothes/components/crest",
+      "params": {
+        "rise": 0.55,
+        "back": -0.18,
+        "radius": 0.98,
+        "thick": 0.09
+      }
+    }
+  ],
+  "pieces": [
+    {
+      "name": "rim",
+      "kind": "brim",
+      "centre": [
+        0.18,
+        0.5
+      ],
+      "axis": [
+        -0.06,
+        -1,
+        0
+      ],
+      "radius": 1.42,
+      "thickness": 0.07,
+      "fabric": "peak"
+    }
+  ]
+}

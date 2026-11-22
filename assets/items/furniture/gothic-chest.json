@@ -4,18 +4,20 @@
  "category": "furniture/storage",
  "era": "1350-1550",
  "region": "Europe",
- "_about": "a joined chest of the late Middle Ages: four stout posts and a panelled front between them, the panels carved, the lid overhanging",
+ "_about": "a joined chest of the late Middle Ages: four stout posts and a panelled front between them, the panels carved, the lid overhanging -- hollow: floor and walls inside the posts and panels, folded linen inside, the lid hinged at the back edge, opened by `open`",
  "params": {
   "w": [
    1.1,
    1.4
   ],
   "d": 0.52,
-  "h": 0.66
+  "h": 0.66,
+  "open": 0
  },
  "materials": {
   "wood": "oak",
-  "metal": "iron"
+  "metal": "iron",
+  "linen": "linen"
  },
  "parts": [
   {
@@ -50,19 +52,51 @@
    ]
   },
   {
-   "id": "body",
+   "id": "floor",
    "type": "box",
    "material": "wood",
    "size": [
     "w - 0.1",
-    "h - 0.18",
+    0.025,
     "d - 0.08"
    ],
    "at": [
     0,
-    "0.12 + (h - 0.18) / 2",
+    0.1325,
     0
    ]
+  },
+  {
+   "id": "walls",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.1",
+    "h - 0.15",
+    0.025
+   ],
+   "at": [
+    0,
+    "0.12 + (h - 0.15) / 2",
+    "d / 2 - 0.0525"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "endWalls",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.025,
+    "h - 0.15",
+    "d - 0.08"
+   ],
+   "at": [
+    "w / 2 - 0.0625",
+    "0.12 + (h - 0.15) / 2",
+    0
+   ],
+   "mirror": "x"
   },
   {
    "id": "panels",
@@ -87,22 +121,6 @@
    }
   },
   {
-   "id": "lid",
-   "type": "box",
-   "material": "wood",
-   "size": [
-    "w + 0.04",
-    0.04,
-    "d + 0.04"
-   ],
-   "round": 0.008,
-   "at": [
-    0,
-    "h - 0.01",
-    0
-   ]
-  },
-  {
    "id": "lock",
    "type": "box",
    "material": "metal",
@@ -115,6 +133,81 @@
     0,
     "h - 0.1",
     "d / 2 - 0.01"
+   ]
+  },
+  {
+   "id": "linen",
+   "type": "box",
+   "material": "linen",
+   "size": [
+    "w * 0.36",
+    0.16,
+    "d * 0.62"
+   ],
+   "round": 0.02,
+   "at": [
+    [
+     "0 - w * 0.2",
+     "0.145 + 0.08",
+     0
+    ],
+    [
+     "w * 0.2",
+     "0.145 + 0.08",
+     0.02
+    ]
+   ]
+  },
+  {
+   "id": "linenTop",
+   "type": "box",
+   "material": "linen",
+   "size": [
+    "w * 0.3",
+    "0.06",
+    "d * 0.5"
+   ],
+   "round": 0.02,
+   "at": [
+    "0 - w * 0.17",
+    "0.145 + 0.19",
+    0,
+    8,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "lid",
+   "type": "hinge",
+   "pivot": [
+    0,
+    "h - 0.03",
+    "0 - d / 2 - 0.02"
+   ],
+   "axis": [
+    1,
+    0,
+    0
+   ],
+   "max": -100,
+   "parts": [
+    {
+     "id": "lid",
+     "type": "box",
+     "material": "wood",
+     "size": [
+      "w + 0.04",
+      0.04,
+      "d + 0.04"
+     ],
+     "round": 0.008,
+     "at": [
+      0,
+      "h - 0.01",
+      0
+     ]
+    }
    ]
   }
  ]

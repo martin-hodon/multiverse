@@ -51,7 +51,7 @@ def cornucopia():
     fruit = [("grapes", [-0.02, 0.02, 0.01], [0, 0, 40]), ("apple", [0.04, 0.01, 0.03], [0, 0, -10]),
              ("pear", [0.0, 0.03, -0.04], [0, 0, 15]), ("pomegranate", [0.035, 0.0, -0.03], [0, 0, 0])]
     parts = [{"id": "horn", "type": "sweep", "material": "horn", "radii": [0.004, 0.016, 0.03, 0.05, 0.072], "path": path},
-             {"id": "rim", "type": "ring", "material": "horn", "r": 0.072, "tube": 0.008, "at": [*mouth, 0, 0, tilt]}]
+             {"id": "rim", "type": "ring", "material": "horn", "r": 0.072, "tube": 0.008, "at": [*mouth, 0, 0, tilt], "smooth": False, "stations": 16, "sides": 6}]
     for name, off, rot in fruit:
         parts.append({"id": name, "use": "items/food/" + name, "at": [round(mouth[0] + off[0], 3), round(mouth[1] + off[1] - 0.03, 3), round(off[2], 3), *rot]})
     return item("Cornucopia", "-800-1900", "the horn of plenty: a goat's horn curling to its point, its mouth heaped with fruit -- carried by Abundance, Fortune, a river god",
@@ -77,7 +77,7 @@ def wreath():
     for i in range(n):
         a = 360 * i / n
         at.append([round(R * math.cos(math.radians(a)), 4), 0, round(-R * math.sin(math.radians(a)), 4), 0, a, 0])
-    parts = [{"id": "ring", "type": "ring", "material": "stem", "r": R, "tube": 0.005},
+    parts = [{"id": "ring", "type": "ring", "material": "stem", "r": R, "tube": 0.005, "smooth": False, "stations": 16, "sides": 6},
              {"id": "sprigs", "type": "feathers", "material": "leaf", "n": 4, "shape": "pointed", "lift": 0.002, "droop": 0.2,
               "lead": 1, "roots": [[0, -0.02], [0, 0.03]], "dir": [-45, 45], "length": [0.05, 0.045], "width": [0.018, 0.016], "at": at}]
     return item("Victor's wreath", "-800-1900", "a wreath of laurel held out to crown a victor -- Victory's, Fame's: sprigs of leaves round a ring",
@@ -91,7 +91,7 @@ def patera():
     R = 0.1
     parts = [{"id": "dish", "type": "lathe", "material": "metal", "double": True, "caps": False,
               "profile": [[0, 0.024], [0.012, 0.022], [0.02, 0.012], [0.03, 0.005], [0.06, 0.008], [0.088, 0.02], [R, 0.03]]},
-             {"id": "rim", "type": "ring", "material": "metal", "r": R, "tube": 0.0035, "at": [0, 0.03, 0]},
+             {"id": "rim", "type": "ring", "material": "metal", "r": R, "tube": 0.0035, "at": [0, 0.03, 0], "smooth": False, "stations": 24, "sides": 6},
              {"id": "tongues", "type": "box", "material": "metal", "size": [0.03, 0.006, 0.011], "round": 0.003,
               "around": {"n": 14, "r": 0.052, "plane": "xz"}, "at": [0, 0.009, 0]}]
     return item("Patera", "-800-500", "the libation dish: a shallow bowl round a raised boss, tongues radiating round it -- poured from by a priest, a god, an emperor at the altar",
@@ -137,7 +137,7 @@ def trident():
 # the opposite ways (one the other's mirror across the staff: they cross before it and behind), their heads meeting
 # under the wings
 def caduceus():
-    L, turns, n = 0.56, 2.5, 26
+    L, turns, n = 0.56, 2.5, 26   # (2026-11-22: the path already 10 points a turn -- the sweep 2 rings a step between, not 6)
     path = []
     for i in range(n + 1):
         f = i / n
@@ -152,7 +152,7 @@ def caduceus():
             "at": [0, L - 0.035, 0, 0, 0, -90], "mirror": "z"}
     parts = [{"id": "staff", "type": "rod", "material": "staff", "from": [0, 0, 0], "to": [0, L, 0], "r": 0.008, "sides": 8},
              {"id": "knob", "type": "sphere", "material": "metal", "r": 0.015, "at": [0, L, 0]},
-             {"id": "snakes", "type": "sweep", "material": "snake", "radii": radii, "path": path, "mirror": "z"},
+             {"id": "snakes", "type": "sweep", "material": "snake", "radii": radii, "path": path, "seg": 2, "mirror": "z"},
              {"id": "wings", **wing}]
     return item("Caduceus", "-800-1900", "the herald's wand: a staff, two snakes wound up it to meet under a pair of wings -- Hermes's, Mercury's, a herald's",
                 {}, {"staff": {"pick": ["gold", "ivory"]}, "metal": "gold", "snake": "bronze", "feather": "gold"}, parts,
@@ -163,9 +163,11 @@ if __name__ == "__main__":
     ipath = os.path.join(ROOT, "assets", "index.json")
     index = json.load(open(ipath))
     tools = next(c for c in index["categories"] if c["name"] == "Items: tools")
+    added = False
     for key, doc in [("palm-frond", palm()), ("cornucopia", cornucopia()), ("scroll", scroll()), ("victor-wreath", wreath()),
                      ("patera", patera()), ("lyre", lyre()), ("trident", trident()), ("caduceus", caduceus())]:
         write("tools/" + key, doc)
-        if "items/tools/" + key not in tools["paths"]: tools["paths"].append("items/tools/" + key)   # (the catalogue lists it)
+        if "items/tools/" + key not in tools["paths"]: tools["paths"].append("items/tools/" + key); added = True   # (the catalogue lists it)
         print("items/tools/" + key)
-    json.dump(index, open(ipath, "w"), indent=2, ensure_ascii=False)
+    if added:   # (only when something is new, and in the file's own format: index.json is indent 2 with a final newline)
+        open(ipath, "w").write(json.dumps(index, indent=2, ensure_ascii=False) + "\n")

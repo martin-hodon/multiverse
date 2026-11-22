@@ -1,0 +1,130 @@
+{
+ "kind": "item",
+ "name": "Seat",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "an upholstered seat on a frame: the cushion, the back raked back, a headrest, armrests if asked -- its front at +x, the cushion's top at h",
+ "params": {
+  "w": 0.5,
+  "d": 0.5,
+  "h": 0.45,
+  "back": 0.6,
+  "headrest": 1,
+  "arms": 0,
+  "pedestal": 1,
+  "grab": 0
+ },
+ "materials": {
+  "cover": "upholstery",
+  "frame": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "cushion",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    "d",
+    0.12,
+    "w"
+   ],
+   "at": [
+    0,
+    "h - 0.06",
+    0
+   ],
+   "round": 0.04
+  },
+  {
+   "id": "back",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.12,
+    "back",
+    "w"
+   ],
+   "at": [
+    "-d / 2 + 0.02",
+    "h + back / 2 - 0.04",
+    0,
+    0,
+    0,
+    12
+   ],
+   "round": 0.04
+  },
+  {
+   "id": "headrest",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.1,
+    0.2,
+    "w * 0.55"
+   ],
+   "at": [
+    "-d / 2 - 0.06",
+    "h + back + 0.08",
+    0,
+    0,
+    0,
+    12
+   ],
+   "round": 0.04,
+   "when": "headrest"
+  },
+  {
+   "id": "arm",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "d * 0.8",
+    0.05,
+    0.05
+   ],
+   "at": [
+    0,
+    "h + 0.14",
+    "w / 2 + 0.02"
+   ],
+   "mirror": "z",
+   "when": "arms"
+  },
+  {
+   "id": "pedestal",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "d * 0.6",
+    "h - 0.12",
+    "w * 0.6"
+   ],
+   "at": [
+    0,
+    "(h - 0.12) / 2",
+    0
+   ],
+   "when": "pedestal"
+  },
+  {
+   "id": "grab",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.012,
+   "from": [
+    "-d / 2 - 0.02",
+    "h + back - 0.02",
+    "-w * 0.35"
+   ],
+   "to": [
+    "-d / 2 - 0.02",
+    "h + back - 0.02",
+    "w * 0.35"
+   ],
+   "sides": 6,
+   "when": "grab"
+  }
+ ]
+}

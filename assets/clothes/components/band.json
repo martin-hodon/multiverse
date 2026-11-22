@@ -1,0 +1,56 @@
+{
+  "name": "Band",
+  "kind": "component",
+  "_about": "A BAND sewn on the torso in its TRIM cloth: reflective tape, a drawcord, a pocket square, a zip -- from `from` to `to`, closed round it or (`open`) over `span` degrees about `centre` (0 the front, 90 the left), `thick` standing proud; a `neckline` cut from it when it says (a rib round the collar). Used AFTER the body it lies on: a garment's own pieces lie under its components' (clothes.js piecesOf lists them first).",
+  "params": {
+    "from": "waist",
+    "to": "hip",
+    "open": false,
+    "centre": 0,
+    "span": 360,
+    "thick": 0.004,
+    "neckline": "none",
+    "neckFront": 0,
+    "neckBack": 0,
+    "neckWidth": 60,
+    "pleats": 0
+  },
+  "pieces": [
+    {
+      "name": "band",
+      "unless": "open",
+      "on": "torso",
+      "from": "from",
+      "to": "to",
+      "fabric": "trim",
+      "thick": "thick",
+      "pleats": "pleats",
+      "opening": {
+        "neckline": "neckline",
+        "front": "neckFront",
+        "back": "neckBack",
+        "width": "neckWidth"
+      }
+    },
+    {
+      "name": "band",
+      "if": "open",
+      "on": "torso",
+      "from": "from",
+      "to": "to",
+      "wrap": [
+        "centre",
+        "span"
+      ],
+      "fabric": "trim",
+      "thick": "thick",
+      "pleats": "pleats",
+      "opening": {
+        "neckline": "neckline",
+        "front": "neckFront",
+        "back": "neckBack",
+        "width": "neckWidth"
+      }
+    }
+  ]
+}

@@ -341,7 +341,8 @@ null, `createFreight` as before). Three steps, called from index.html:
 - `createHarbourLife` -- after the freight. The culture's fleet (ships.json `cultures[period]`, else a dress style,
   else `default`): 2-4 ships moored at the longest berths that fit them (length range and draught against the berth's
   length and depth; one berth kept free), each built twice from its item -- `moored` (sails furled, oars shipped) and its
-  going state (`sailing`, `rowing` or `under way` from `drive`) -- and swapped; the gangplank (items/components/
+  going state (`sailing`, `rowing` or `under way` from `drive`) -- and swapped (2026-11-22: the going state only when
+  the ship first casts off, harbour.js `variant`: 7-22 ms then, instead of every hull twice at load and in the GPU); the gangplank (items/components/
   gangplank, stretched) from the rail on the quay side to a step inland of the quay face. 1-3 more sail or row the
   lane (`SEA.lanes[0]`) with a little heel under sail, pitch and roll, and a wake each (wakes.js, the same as swimmers').
   A sea's ship that has gone over the horizon (an open lane's end) comes back after 25-60 s and -- when the port's timer

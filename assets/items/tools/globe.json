@@ -1,0 +1,937 @@
+{
+ "kind": "item",
+ "name": "Globe",
+ "category": "tool",
+ "era": "1500-2030",
+ "region": "everywhere",
+ "_about": "a schoolroom globe on its stand: a turned base and stem, the brass meridian ring holding the ball by its poles, the axis tilted 23.5 degrees, the seas and the continents in two or three colours",
+ "params": {},
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "mahogany",
+    "ebony",
+    "oak"
+   ]
+  },
+  "brass": "brass",
+  "sea": {
+   "pick": [
+    "faience-blue",
+    "paint-cream",
+    "enamel-blue"
+   ]
+  },
+  "land0": {
+   "pick": [
+    "faience-yellow",
+    "paint-cream",
+    "leaf-light"
+   ]
+  },
+  "land1": {
+   "pick": [
+    "faience-green",
+    "apple-green",
+    "faience-red"
+   ]
+  },
+  "land2": {
+   "pick": [
+    "paint-orange",
+    "faience-yellow",
+    "apple-red"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.11,
+     0
+    ],
+    [
+     0.11,
+     0.015
+    ],
+    [
+     0.09,
+     0.03
+    ],
+    [
+     0.04,
+     0.045
+    ],
+    [
+     0.025,
+     0.06
+    ],
+    [
+     0,
+     0.06
+    ]
+   ],
+   "sides": 14
+  },
+  {
+   "id": "stem",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0.018,
+     0.06
+    ],
+    [
+     0.014,
+     0.1
+    ],
+    [
+     0.022,
+     0.12
+    ],
+    [
+     0.014,
+     0.14
+    ],
+    [
+     0.012,
+     0.155
+    ],
+    [
+     0,
+     0.155
+    ]
+   ],
+   "sides": 10
+  },
+  {
+   "id": "ball",
+   "type": "sphere",
+   "material": "sea",
+   "r": 0.15,
+   "at": [
+    0,
+    0.32,
+    0
+   ],
+   "sides": 18
+  },
+  {
+   "id": "land0",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0548,
+     0.1428
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    21.5668,
+    31.2298,
+    37.3201
+   ]
+  },
+  {
+   "id": "land1",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0396,
+     0.1478
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    33.5343,
+    46.3677,
+    42.4794
+   ]
+  },
+  {
+   "id": "land2",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.037,
+     0.1485
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    15.128,
+    17.0137,
+    42.7361
+   ]
+  },
+  {
+   "id": "land3",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0213,
+     0.1515
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    8.7157,
+    8.0991,
+    47.417
+   ]
+  },
+  {
+   "id": "land4",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.0266,
+     0.1507
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    1.9204,
+    11.297,
+    9.7129
+   ]
+  },
+  {
+   "id": "land5",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0186,
+     0.1519
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    77.1181,
+    -3.206,
+    76.2585
+   ]
+  },
+  {
+   "id": "land6",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0107,
+     0.1526
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    93.5785,
+    0.7249,
+    78.5632
+   ]
+  },
+  {
+   "id": "land7",
+   "type": "lathe",
+   "material": "land1",
+   "profile": [
+    [
+     0.0447,
+     0.1463
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -58.9114,
+    11.6831,
+    -83.0387
+   ]
+  },
+  {
+   "id": "land8",
+   "type": "lathe",
+   "material": "land1",
+   "profile": [
+    [
+     0.0318,
+     0.1497
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -51.02,
+    -10.8282,
+    -98.644
+   ]
+  },
+  {
+   "id": "land9",
+   "type": "lathe",
+   "material": "land1",
+   "profile": [
+    [
+     0.0186,
+     0.1519
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -36.6711,
+    -28.6409,
+    -122.7707
+   ]
+  },
+  {
+   "id": "land10",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.0266,
+     0.1507
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    2.1129,
+    -7.3855,
+    -16.0143
+   ]
+  },
+  {
+   "id": "land11",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.0266,
+     0.1507
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    0.8473,
+    -13.5501,
+    -3.6118
+   ]
+  },
+  {
+   "id": "land12",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.008,
+     0.1528
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -0.3805,
+    1.7213,
+    -12.4684
+   ]
+  },
+  {
+   "id": "land13",
+   "type": "lathe",
+   "material": "land1",
+   "profile": [
+    [
+     0.0498,
+     0.1447
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    16.9747,
+    -10.3412,
+    -59.5412
+   ]
+  },
+  {
+   "id": "land14",
+   "type": "lathe",
+   "material": "land1",
+   "profile": [
+    [
+     0.0344,
+     0.1491
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    24.958,
+    -3.392,
+    -82.7551
+   ]
+  },
+  {
+   "id": "land15",
+   "type": "lathe",
+   "material": "land1",
+   "profile": [
+    [
+     0.0422,
+     0.1471
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    9.2047,
+    -10.1596,
+    -42.5734
+   ]
+  },
+  {
+   "id": "land16",
+   "type": "lathe",
+   "material": "land1",
+   "profile": [
+    [
+     0.0213,
+     0.1515
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    21.7662,
+    2.5691,
+    -96.4051
+   ]
+  },
+  {
+   "id": "land17",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0622,
+     0.1398
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -15.6001,
+    -31.7359,
+    27.9597
+   ]
+  },
+  {
+   "id": "land18",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0447,
+     0.1463
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -32.1965,
+    -35.7543,
+    47.1388
+   ]
+  },
+  {
+   "id": "land19",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0292,
+     0.1502
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -5.8657,
+    -57.7083,
+    6.9293
+   ]
+  },
+  {
+   "id": "land20",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.0213,
+     0.1515
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    87.3213,
+    1.0913,
+    -67.8507
+   ]
+  },
+  {
+   "id": "land21",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0396,
+     0.1478
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -11.5414,
+    -13.3703,
+    41.4469
+   ]
+  },
+  {
+   "id": "land22",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.0266,
+     0.1507
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    25.8983,
+    -33.0798,
+    -41.6555
+   ]
+  },
+  {
+   "id": "land23",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.016,
+     0.1522
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    107.0927,
+    -2.4001,
+    -82.2448
+   ]
+  },
+  {
+   "id": "land24",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.008,
+     0.1528
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -30.3967,
+    -11.4965,
+    71.2344
+   ]
+  },
+  {
+   "id": "land25",
+   "type": "lathe",
+   "material": "land1",
+   "profile": [
+    [
+     0.0344,
+     0.1491
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    -24.8711,
+    33.3027,
+    139.8257
+   ]
+  },
+  {
+   "id": "land26",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.0344,
+     0.1491
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 8,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    0.0,
+    -0.0,
+    -151.5
+   ]
+  },
+  {
+   "id": "land27",
+   "type": "lathe",
+   "material": "land0",
+   "profile": [
+    [
+     0.0107,
+     0.1526
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    111.456,
+    4.6274,
+    -101.5999
+   ]
+  },
+  {
+   "id": "land28",
+   "type": "lathe",
+   "material": "land2",
+   "profile": [
+    [
+     0.008,
+     0.1528
+    ],
+    [
+     0,
+     0.153
+    ]
+   ],
+   "sides": 6,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    43.7025,
+    2.2732,
+    -92.3766
+   ]
+  },
+  {
+   "id": "meridian",
+   "type": "lathe",
+   "material": "brass",
+   "profile": [
+    [
+     0.169,
+     0.0
+    ],
+    [
+     0.1665,
+     0.0043
+    ],
+    [
+     0.1615,
+     0.0043
+    ],
+    [
+     0.159,
+     0.0
+    ],
+    [
+     0.1615,
+     -0.0043
+    ],
+    [
+     0.1665,
+     -0.0043
+    ],
+    [
+     0.169,
+     -0.0
+    ]
+   ],
+   "sides": 24,
+   "caps": false,
+   "at": [
+    0,
+    0.32,
+    0,
+    0,
+    90,
+    -23.5
+   ]
+  },
+  {
+   "id": "arm",
+   "type": "sweep",
+   "material": "brass",
+   "path": [
+    [
+     0,
+     0.155,
+     0
+    ],
+    [
+     0,
+     0.158,
+     0
+    ]
+   ],
+   "sides": 6,
+   "seg": 3,
+   "r": 0.007
+  },
+  {
+   "id": "pins",
+   "type": "rod",
+   "material": "brass",
+   "r": 0.004,
+   "from": [
+    0.0646,
+    0.1714,
+    0
+   ],
+   "to": [
+    -0.0646,
+    0.4686,
+    0
+   ],
+   "sides": 5
+  }
+ ]
+}

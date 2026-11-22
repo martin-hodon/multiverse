@@ -2,15 +2,20 @@
  "kind": "item",
  "name": "Oar",
  "category": "component",
- "_about": "an oar l long along +x from its handle at the origin: a round loom and a flat blade at its end",
+ "_about": "an oar l long along +x from its handle at the origin: a round loom (`r` at the handle, `taper` of it at its end, `loomL` long -- to the blade by default, `sides` by its radius unless given) and a flat blade at its end (`bladeL` long, `bladeW` wide, `bladeT` thick; role `blade`, the oar's wood unless the user names it)",
  "params": {
   "l": 4,
   "r": 0.03,
   "bladeL": "l * 0.28",
-  "bladeW": 0.15
+  "bladeW": 0.15,
+  "bladeT": 0.02,
+  "loomL": "l - bladeL",
+  "taper": 0.9,
+  "sides": null
  },
  "materials": {
-  "wood": "ash"
+  "wood": "ash",
+  "blade": "wood"
  },
  "parts": [
   {
@@ -23,20 +28,21 @@
     0
    ],
    "to": [
-    "l - bladeL",
+    "loomL",
     0,
     0
    ],
    "r0": "r",
-   "r1": "r * 0.9"
+   "r1": "r * taper",
+   "sides": "sides"
   },
   {
    "id": "blade",
    "type": "box",
-   "material": "wood",
+   "material": "blade",
    "size": [
     "bladeL",
-    0.02,
+    "bladeT",
     "bladeW"
    ],
    "at": [

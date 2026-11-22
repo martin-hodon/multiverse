@@ -25,6 +25,7 @@
 //   pt.list           // [{ an, anchors, R, v, ... }] (the debug panel); pt.peek(i, T): where one is at clock T
 import { createComposite } from "./composite.js";
 import { makePteranodon } from "./species.js";
+import { lcg as rng } from "./rng.js";
 
 export const PTERO = {
   n: { water: 3, land: 2 },
@@ -49,7 +50,6 @@ export const PTERO = {
 const TAU = Math.PI * 2;
 const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 const lerp = (a, b, t) => a + (b - a) * t;
-const rng = (seed) => { let s = (seed >>> 0) || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; };
 const hash = (a, b) => { let h = (Math.imul(a | 0, 2654435761) ^ Math.imul((b | 0) + 0x9e37, 1597334677)) >>> 0; h = Math.imul(h ^ (h >>> 15), 2246822519) >>> 0; return ((h ^ (h >>> 13)) >>> 0) / 4294967296; };
 function segDist(x, z, a, b) {
   const ex = b[0] - a[0], ez = b[1] - a[1], l2 = ex * ex + ez * ez || 1, t = Math.max(0, Math.min(1, ((x - a[0]) * ex + (z - a[1]) * ez) / l2));

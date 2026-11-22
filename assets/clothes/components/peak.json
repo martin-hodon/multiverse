@@ -1,0 +1,29 @@
+{
+  "name": "Peak",
+  "kind": "component",
+  "_about": "A PEAK: a stiff bill or rim -- a disc (clothes.js `brim`) of `radius` cranium radii centred `forward` of the head's middle at `at` high, tilted down at the front (its axis [-.18, -1, 0]: clothes.js takes a brim's axis as written, not as an expression -- a level rim is a piece of its own); its back half lies inside the crown it is sewn to, so only the bill shows: a baseball cap's, a hard hat's rim.",
+  "params": {
+    "forward": 0.85,
+    "at": 0.42,
+    "radius": 0.95,
+    "thick": 0.06
+  },
+  "pieces": [
+    {
+      "name": "peak",
+      "kind": "brim",
+      "centre": [
+        "forward",
+        "at"
+      ],
+      "axis": [
+        -0.18,
+        -1,
+        0
+      ],
+      "radius": "radius",
+      "thickness": "thick",
+      "fabric": "peak"
+    }
+  ]
+}

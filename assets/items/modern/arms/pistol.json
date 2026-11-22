@@ -1,0 +1,469 @@
+{
+ "kind": "item",
+ "name": "Self-loading pistol",
+ "category": "weapon/firearm",
+ "era": "1982-2030",
+ "region": "everywhere",
+ "_about": "a polymer-framed self-loading service pistol (9 mm, the 1980s on): a squared steel slide with its rear serrations, ejection port and sights, a polymer frame with a rail under the dust cover, a grip raked 22 degrees round its 17-round magazine, a squared trigger guard. 186 mm long, 138 mm high, 30 mm wide; 0.7 kg loaded.",
+ "params": {},
+ "materials": {
+  "metal": "gunmetal",
+  "barrel": "steel",
+  "frame": {
+   "pick": [
+    "polymer",
+    "polymer",
+    "olive-drab",
+    "#8a7a5a"
+   ]
+  },
+  "texture": "polymer",
+  "dark": "#131416"
+ },
+ "parts": [
+  {
+   "id": "slide",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.186,
+    0.03,
+    0.0255
+   ],
+   "at": [
+    0.072,
+    0.007,
+    0
+   ],
+   "round": 0.003
+  },
+  {
+   "id": "slideTop",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.186,
+    0.004,
+    0.019
+   ],
+   "at": [
+    0.072,
+    0.0225,
+    0
+   ],
+   "round": 0.0015
+  },
+  {
+   "id": "serr",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.0016,
+    0.022,
+    0.0262
+   ],
+   "at": [
+    0,
+    0.007,
+    0
+   ],
+   "along": {
+    "n": 7,
+    "from": [
+     -0.015,
+     0,
+     0
+    ],
+    "to": [
+     0.0,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "port",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.03,
+    0.008,
+    0.002
+   ],
+   "at": [
+    0.04,
+    0.0185,
+    0.0125
+   ]
+  },
+  {
+   "id": "hood",
+   "type": "box",
+   "material": "barrel",
+   "size": [
+    0.026,
+    0.006,
+    0.004
+   ],
+   "at": [
+    0.04,
+    0.019,
+    0.0115
+   ]
+  },
+  {
+   "id": "muzzle",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.0048,
+   "from": [
+    0.1632,
+    0.004,
+    0
+   ],
+   "to": [
+    0.166,
+    0.004,
+    0
+   ],
+   "sides": 10
+  },
+  {
+   "id": "frontSight",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.004,
+    0.0055,
+    0.0035
+   ],
+   "at": [
+    0.155,
+    0.026,
+    0
+   ]
+  },
+  {
+   "id": "rearSight",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.008,
+    0.0055,
+    0.009
+   ],
+   "at": [
+    -0.009,
+    0.026,
+    0.0062
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "frame",
+   "type": "plate",
+   "material": "frame",
+   "outline": [
+    [
+     0.151,
+     -0.008
+    ],
+    [
+     0.153,
+     -0.024
+    ],
+    [
+     0.052,
+     -0.024
+    ],
+    [
+     0.004,
+     -0.024
+    ],
+    [
+     -0.004,
+     -0.034
+    ],
+    [
+     -0.022,
+     -0.075
+    ],
+    [
+     -0.037,
+     -0.114
+    ],
+    [
+     -0.038,
+     -0.123
+    ],
+    [
+     -0.071,
+     -0.121
+    ],
+    [
+     -0.069,
+     -0.106
+    ],
+    [
+     -0.052,
+     -0.05
+    ],
+    [
+     -0.044,
+     -0.024
+    ],
+    [
+     -0.037,
+     -0.012
+    ],
+    [
+     -0.03,
+     -0.008
+    ]
+   ],
+   "thick": 0.028,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "gripPanel",
+   "type": "plate",
+   "material": "texture",
+   "outline": [
+    [
+     -0.007,
+     -0.038
+    ],
+    [
+     -0.034,
+     -0.11
+    ],
+    [
+     -0.066,
+     -0.108
+    ],
+    [
+     -0.05,
+     -0.05
+    ],
+    [
+     -0.042,
+     -0.03
+    ]
+   ],
+   "thick": 0.0305,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "railSlot",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.003,
+    0.003,
+    0.0285
+   ],
+   "at": [
+    0,
+    -0.0235,
+    0
+   ],
+   "along": {
+    "n": 3,
+    "from": [
+     0.09,
+     0,
+     0
+    ],
+    "to": [
+     0.13,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "guard",
+   "type": "sweep",
+   "material": "frame",
+   "path": [
+    [
+     0.052,
+     -0.023,
+     0
+    ],
+    [
+     0.053,
+     -0.047,
+     0
+    ],
+    [
+     0.045,
+     -0.056,
+     0
+    ],
+    [
+     0.008,
+     -0.056,
+     0
+    ],
+    [
+     -0.004,
+     -0.044,
+     0
+    ],
+    [
+     -0.008,
+     -0.033,
+     0
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "seg": 4,
+   "section": [
+    0.004,
+    0.012
+   ]
+  },
+  {
+   "id": "trigger",
+   "type": "plate",
+   "material": "frame",
+   "outline": [
+    [
+     0.022,
+     -0.024
+    ],
+    [
+     0.023,
+     -0.035
+    ],
+    [
+     0.019,
+     -0.0438
+    ],
+    [
+     0.014,
+     -0.046
+    ],
+    [
+     0.017,
+     -0.0405
+    ],
+    [
+     0.017,
+     -0.0317
+    ],
+    [
+     0.016,
+     -0.024
+    ]
+   ],
+   "thick": 0.006,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "baseplate",
+   "type": "plate",
+   "material": "frame",
+   "outline": [
+    [
+     -0.035,
+     -0.121
+    ],
+    [
+     -0.037,
+     -0.13
+    ],
+    [
+     -0.073,
+     -0.128
+    ],
+    [
+     -0.072,
+     -0.12
+    ]
+   ],
+   "thick": 0.026,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "slideStop",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.016,
+    0.003,
+    0.003
+   ],
+   "at": [
+    0.03,
+    -0.009,
+    -0.0145
+   ]
+  },
+  {
+   "id": "takedown",
+   "type": "box",
+   "material": "metal",
+   "size": [
+    0.006,
+    0.006,
+    0.0305
+   ],
+   "at": [
+    0.06,
+    -0.013,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   -0.04,
+   -0.07,
+   0
+  ],
+  "axis": [
+   0.41,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0,
+    -1,
+    0.3
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

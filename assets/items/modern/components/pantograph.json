@@ -1,0 +1,326 @@
+{
+ "kind": "item",
+ "name": "Pantograph",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a single-arm pantograph: the base frame on four ceramic insulators, the lower arm's two tubes to the knee, the upper arm back to the head, the pan head's contact bars and horns, ~1.95 m across -- raised to h above the roof",
+ "params": {
+  "h": 1.6,
+  "ky0": "0.42 + (h - 0.5) * 0.42"
+ },
+ "materials": {
+  "frame": "#3a3d40",
+  "arm": "steel",
+  "insulator": "#7a3a24",
+  "carbon": "#1c1c1c"
+ },
+ "parts": [
+  {
+   "id": "insulator",
+   "type": "lathe",
+   "material": "insulator",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.05,
+     0
+    ],
+    [
+     0.05,
+     0.04
+    ],
+    [
+     0.09,
+     0.06
+    ],
+    [
+     0.05,
+     0.09
+    ],
+    [
+     0.09,
+     0.12
+    ],
+    [
+     0.05,
+     0.15
+    ],
+    [
+     0.09,
+     0.18
+    ],
+    [
+     0.05,
+     0.21
+    ],
+    [
+     0.05,
+     0.26
+    ],
+    [
+     0,
+     0.26
+    ]
+   ],
+   "sides": 8,
+   "at": [
+    [
+     -0.7,
+     0,
+     -0.42
+    ],
+    [
+     0.7,
+     0,
+     -0.42
+    ],
+    [
+     -0.7,
+     0,
+     0.42
+    ],
+    [
+     0.7,
+     0,
+     0.42
+    ]
+   ]
+  },
+  {
+   "id": "base",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    1.6,
+    0.08,
+    0.12
+   ],
+   "at": [
+    0,
+    0.3,
+    0.42
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "baseX",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.12,
+    0.08,
+    0.96
+   ],
+   "at": [
+    [
+     -0.7,
+     0.3,
+     0
+    ],
+    [
+     0.7,
+     0.3,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "hinge",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.05,
+   "from": [
+    -0.62,
+    0.38,
+    -0.36
+   ],
+   "to": [
+    -0.62,
+    0.38,
+    0.36
+   ],
+   "sides": 8
+  },
+  {
+   "id": "lower",
+   "type": "rod",
+   "material": "arm",
+   "r": 0.035,
+   "from": [
+    -0.62,
+    0.38,
+    0.3
+   ],
+   "to": [
+    "0.75",
+    "0.42 + (h - 0.5) * 0.42",
+    0.1
+   ],
+   "sides": 8,
+   "mirror": "z"
+  },
+  {
+   "id": "knee",
+   "type": "rod",
+   "material": "arm",
+   "r": 0.03,
+   "from": [
+    "0.75",
+    "0.42 + (h - 0.5) * 0.42",
+    -0.12
+   ],
+   "to": [
+    "0.75",
+    "0.42 + (h - 0.5) * 0.42",
+    0.12
+   ],
+   "sides": 8
+  },
+  {
+   "id": "upper",
+   "type": "rod",
+   "material": "arm",
+   "r": 0.03,
+   "from": [
+    "0.75",
+    "0.42 + (h - 0.5) * 0.42",
+    0
+   ],
+   "to": [
+    -0.05,
+    "h - 0.1",
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "tie",
+   "type": "rod",
+   "material": "arm",
+   "r": 0.012,
+   "from": [
+    -0.45,
+    0.36,
+    0
+   ],
+   "to": [
+    -0.2,
+    "h - 0.16",
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "damper",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.03,
+   "from": [
+    -0.35,
+    0.36,
+    0.2
+   ],
+   "to": [
+    0.1,
+    "0.36 + (ky0 - 0.36) * 0.5",
+    0.16
+   ],
+   "sides": 8,
+   "when": "h"
+  },
+  {
+   "id": "headPost",
+   "type": "rod",
+   "material": "arm",
+   "r": 0.02,
+   "from": [
+    -0.05,
+    "h - 0.14",
+    -0.55
+   ],
+   "to": [
+    -0.05,
+    "h - 0.14",
+    0.55
+   ],
+   "sides": 6
+  },
+  {
+   "id": "bow",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.012,
+   "from": [
+    -0.05,
+    "h - 0.12",
+    0
+   ],
+   "to": [
+    0.15,
+    "h - 0.04",
+    0
+   ],
+   "sides": 6,
+   "mirror": "x"
+  },
+  {
+   "id": "bar",
+   "type": "sweep",
+   "material": "frame",
+   "path": [
+    [
+     0.15,
+     "h - 0.2",
+     -0.98
+    ],
+    [
+     0.15,
+     "h - 0.04",
+     -0.78
+    ],
+    [
+     0.15,
+     "h - 0.01",
+     -0.55
+    ],
+    [
+     0.15,
+     "h - 0.01",
+     0.55
+    ],
+    [
+     0.15,
+     "h - 0.04",
+     0.78
+    ],
+    [
+     0.15,
+     "h - 0.2",
+     0.98
+    ]
+   ],
+   "mirror": "x",
+   "r": 0.022
+  },
+  {
+   "id": "strip",
+   "type": "box",
+   "material": "carbon",
+   "size": [
+    0.05,
+    0.03,
+    1.15
+   ],
+   "at": [
+    0.15,
+    "h + 0.02",
+    0
+   ],
+   "mirror": "x"
+  }
+ ]
+}

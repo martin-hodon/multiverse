@@ -151,7 +151,7 @@ def grooves():
     return out
 
 def markings():
-    P = Painter(SP, SH)
+    P = Painter(SP, SH, axis=axis)
     for sg, S_, seed in ((1, "L", 3), (-1, "R", 8)):
         rng = random.Random(seed)
         # (every coat) the eyelid's and the parotoid's patches, a fleck on the snout

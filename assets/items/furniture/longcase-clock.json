@@ -4,14 +4,15 @@
  "category": "furniture/other",
  "era": "1680-1800",
  "region": "England & the Low Countries",
- "_about": "the tall-case clock: a hood over the brass dial, the pendulum's trunk with its door, a plinth; finials on its pediment",
+ "_about": "the tall-case clock: a hood over the brass dial, the pendulum's trunk with its door, a plinth; finials on its pediment -- hollow: the trunk door (swing 1) opens with `open` onto the brass pendulum and the two driving weights hanging on their cords",
  "params": {
   "w": 0.5,
   "d": 0.28,
   "h": [
    2.1,
    2.3
-  ]
+  ],
+  "open": 0
  },
  "materials": {
   "wood": {
@@ -24,7 +25,9 @@
   },
   "dial": "brass",
   "face": "ivory",
-  "metal": "brass"
+  "metal": "brass",
+  "lining": "#3a2a1e",
+  "cord": "#c8b890"
  },
  "parts": [
   {
@@ -43,19 +46,312 @@
    ]
   },
   {
-   "id": "trunk",
+   "id": "trunk back",
    "type": "box",
    "material": "wood",
    "size": [
     "w - 0.1",
-    "h - 0.95",
-    "d - 0.06"
+    "(h - 0.95)",
+    0.02
    ],
    "at": [
     0,
     "0.45 + (h - 0.95) / 2",
-    -0.02
+    -0.12
    ]
+  },
+  {
+   "id": "trunk sides",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.02,
+    "(h - 0.95)",
+    "d - 0.06"
+   ],
+   "at": [
+    "w / 2 - 0.06",
+    "0.45 + (h - 0.95) / 2",
+    -0.02
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "trunk stiles",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.05,
+    "(h - 0.95)",
+    0.02
+   ],
+   "at": [
+    "w / 2 - 0.075",
+    "0.45 + (h - 0.95) / 2",
+    0.08
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "trunk rails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    "w - 0.2",
+    0.1,
+    0.02
+   ],
+   "at": [
+    [
+     0,
+     0.5,
+     0.08
+    ],
+    [
+     0,
+     "h - 0.55",
+     0.08
+    ]
+   ]
+  },
+  {
+   "id": "lining",
+   "type": "box",
+   "material": "lining",
+   "size": [
+    "w - 0.15",
+    "(h - 0.95)",
+    0.005
+   ],
+   "at": [
+    0,
+    "0.45 + (h - 0.95) / 2",
+    -0.107
+   ],
+   "inside": true
+  },
+  {
+   "id": "seat board",
+   "type": "box",
+   "material": "lining",
+   "size": [
+    "w - 0.14",
+    0.02,
+    "d - 0.1"
+   ],
+   "at": [
+    0,
+    "h - 0.51",
+    -0.02
+   ],
+   "inside": true
+  },
+  {
+   "id": "pendulum rod",
+   "type": "rod",
+   "material": "metal",
+   "r": 0.004,
+   "from": [
+    0,
+    "h - 0.52",
+    -0.06
+   ],
+   "to": [
+    0,
+    0.95,
+    -0.06
+   ],
+   "sides": 6,
+   "inside": true
+  },
+  {
+   "id": "bob",
+   "type": "lathe",
+   "material": "metal",
+   "sides": 16,
+   "at": [
+    0,
+    0.93,
+    -0.06,
+    0,
+    90,
+    0
+   ],
+   "profile": [
+    [
+     0,
+     -0.008
+    ],
+    [
+     0.06,
+     -0.004
+    ],
+    [
+     0.06,
+     0.004
+    ],
+    [
+     0,
+     0.008
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "cords",
+   "type": "rod",
+   "material": "cord",
+   "r": 0.002,
+   "from": [
+    0,
+    "h - 0.52",
+    0
+   ],
+   "to": [
+    0,
+    "h - 1.0",
+    0
+   ],
+   "sides": 4,
+   "at": [
+    [
+     -0.1,
+     0,
+     -0.02
+    ],
+    [
+     0.1,
+     0,
+     -0.02
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "pulleys",
+   "type": "lathe",
+   "material": "metal",
+   "sides": 10,
+   "at": [
+    [
+     -0.1,
+     "h - 1.0",
+     -0.02,
+     0,
+     0,
+     90
+    ],
+    [
+     0.1,
+     "h - 1.0",
+     -0.02,
+     0,
+     0,
+     90
+    ]
+   ],
+   "profile": [
+    [
+     0,
+     -0.006
+    ],
+    [
+     0.02,
+     -0.006
+    ],
+    [
+     0.02,
+     0.006
+    ],
+    [
+     0,
+     0.006
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "weights",
+   "type": "lathe",
+   "material": "metal",
+   "sides": 12,
+   "at": [
+    [
+     -0.1,
+     "h - 1.28",
+     -0.02
+    ],
+    [
+     0.1,
+     "h - 1.28",
+     -0.02
+    ]
+   ],
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.03,
+     0
+    ],
+    [
+     0.032,
+     0.01
+    ],
+    [
+     0.032,
+     0.24
+    ],
+    [
+     0.03,
+     0.25
+    ],
+    [
+     0.006,
+     0.25
+    ],
+    [
+     0.006,
+     0.27
+    ],
+    [
+     0,
+     0.27
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "weight hooks",
+   "type": "rod",
+   "material": "metal",
+   "r": 0.003,
+   "from": [
+    0,
+    "h - 1.01",
+    -0.02
+   ],
+   "to": [
+    0,
+    "h - 1.03",
+    -0.02
+   ],
+   "sides": 4,
+   "at": [
+    [
+     -0.1,
+     0,
+     0
+    ],
+    [
+     0.1,
+     0,
+     0
+    ]
+   ],
+   "inside": true
   },
   {
    "id": "door",
@@ -64,7 +360,8 @@
     "w": "w - 0.2",
     "h": "h - 1.15",
     "s": 0.05,
-    "side": 1
+    "side": 1,
+    "swing": 1
    },
    "at": [
     0,

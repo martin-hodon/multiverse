@@ -37,6 +37,9 @@ definitions it is made of (faces, hair, jewelry, the blooms, the materials). The
 the world draws them -- every style of dress, every kind, `?faces=N` seeds of each (18) -- and keeps the heads they
 would wear. A person whose exact head is not there gets another of its FAMILY (same kind, hair and what is worn: a
 different seed's face); a family not there at all is built at startup as before. Each run keeps another random lot.
+Each recorded face also records its FAR shape (2026-11-22: heads.js `FAR`, the same head at `detail` .7 for those more
+than 10 m away; its family ends `|far@0.7`). The game takes those like the near ones; one not in the cache is built
+in a worker (faceworker.js), never at startup or on the main thread.
 
 THE WORLDS. After that first pass `pregen.py` opens the game itself (`--worlds N`), as
 `index.html?pregenrecord=1`: a world built as always, with `pregen.js` recording (RECORD_WORLD) whatever it
@@ -79,6 +82,7 @@ in architecture.js, and every tweak to a look (the roofs' moss, the grain's gust
     python3 build/pregen.py --resume                 # carry on a run that stopped, from the parts it had finished
     python3 build/pregen.py --worlds-only --worlds 4 # only record worlds, into the cache as it is
     python3 build/pregen.py --bodies                 # only bake the creatures' shapes -> pregen/shapes/ (docs/engines.md "Faster shapes, baked shapes")
+    # (2026-11-22: the very far body mesh, bodyfar.js, is made from the dressed far mesh at run time -- it is not baked, and the shapes' hash does not cover it)
 
 It opens `pregen.html` headless (build/headless.py, shared with build/textures.py) ONE PART AT A TIME -- six
 landmarks, the towns' tiles, the items, the wings, the faces, the fabrics (`pregen.html?part=list` names them) --
@@ -124,3 +128,36 @@ works over the surface's own points once each (same position, normal and kind), 
 stands for -- the same sums, to 1e-16 -- and a carved shape's smoothed normals are kept like a living face's. Ready
 at 36 s. Most of what is left is the cache being stale (pattern tiles 8 s, wall fields 5 s, faces 4 s: the sources
 it hashes changed since the last `build/pregen.py`).
+
+## Re-run, 2026-11-22
+
+Before: the manifest of 2026-11-02, tiles, buildings, faces and wings stale (the game ignored them: "made by other
+code"), pregen/shapes/ baked by other mesher code -- only the two worlds' maps were taken. `python3 build/pregen.py`
+(full: the parts, the bodies, four worlds) ran in 734 s for the parts plus about 4 x 70 s for the worlds, browser peak
+3.7 GB (a world), 0 errors.
+
+| | 2026-11-02 | 2026-11-22 | why |
+|---|---|---|---|
+| total | 215 MB | 412 MB | |
+| buildings + fields | 71.5 + 12.3 MB, 80 buildings | 142 + 29 MB, 105 | 22 landmarks added since (Grand Palace 7.9 MB, Alhambra 7.8, Park Guell 6.3, Cordoba 5.7, Hohenzollern 5.6 ...); 4 world towns for 2 |
+| tiles | 69.5 MB, 523 | 87 MB, 1016 | the landmarks' and the worlds' tiles (the items' are 523 alone) |
+| faces | 29.8 MB, 412 | 91 MB, 1710 | the far shapes (855, 33 MB -- none before: they did not exist on 2026-11-02) and their near twins (855, 58 MB); 370 families |
+| shapes | 28.8 MB, 217 | 64 MB, 446 | the species rework and the insects (166 bodies a medieval town draws) |
+| maps | 2 | 4 | worlds 1181487403, 547745597, 1340756457, 584735322 (the two old ones gone with their towns) |
+
+Each face entry now says its `seed` (pregen.html, the world fragments): heads.js takes the same seed for a stand-in
+face's near and far forms (docs/face.md, Far heads).
+
+Loads (headless real GPU, scratch harness: 9 s from `ready`, a 16 s walk through the biggest crowd, an 8 s spin):
+
+| | ready | near heads built | far built in the worker | made from scratch |
+|---|---|---|---|---|
+| medieval seed 7, stale cache | 42.6 s | 171 (4.1 s) | 170 (5.0 s) | everything |
+| medieval seed 7, fresh cache | 31.0 s | 27 (0.9 s) | 27 (1.3 s) | 58 entries: the map, the mine, 4 face families near and far (not a recorded world) |
+| a recorded world (no ?seed) | 15.3 s | 0 | 0 | nothing |
+
+Frame times, seed 7: load mean 45 → 65 ms, walk mean 37 → 54 ms (p50 33 → 50), spin 25 → 32 ms. Not the cache's
+cost: with the shapes baked every creature is there from the start -- 166 bodies against 43 the stale run had built
+by its end, 169 skinned meshes and 750k triangles drawn against 60 and 303k (the scene 3.31M → 3.96M at the walk's
+start). Near the crowd the frames are the same or better (34 → 31 ms at 20 m, 28 → 27 at the crowd). In a recorded
+world: load mean 36 ms, walk 49, spin 27, nothing built.

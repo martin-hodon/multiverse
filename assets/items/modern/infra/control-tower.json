@@ -1,0 +1,961 @@
+{
+ "kind": "item",
+ "name": "Control tower",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "an airport control tower, 47 m to the radar: a concrete shaft 7 m across on a two-storey base building, a wider equipment floor, the cab at 40.5 m with sixteen panes leaning outward between mullions, consoles with screens and chairs inside, a roof with antennas, a rotating radar and a beacon. Origin at the shaft's foot.",
+ "params": {},
+ "materials": {
+  "baseMat": "#c9c5bc",
+  "glazing": "glass",
+  "roofMat": "#4f565d",
+  "concreteT": "concrete",
+  "floorT": "#6b6f75",
+  "frameT": "#3a4046",
+  "ceilingT": "#dcdcd6",
+  "radarMat": "paint-white",
+  "redLamp": "lamp-red",
+  "consoleMat": "#4a4f57",
+  "doorMat": "#3a4046"
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "box",
+   "material": "baseMat",
+   "size": [
+    18,
+    7.0,
+    12
+   ],
+   "at": [
+    -3.0,
+    3.5,
+    0.0
+   ]
+  },
+  {
+   "id": "baseWin",
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    18.1,
+    1.8,
+    12.1
+   ],
+   "at": [
+    -3.0,
+    1.9,
+    0.0
+   ]
+  },
+  {
+   "id": "baseWin2",
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    18.1,
+    1.8,
+    12.1
+   ],
+   "at": [
+    -3.0,
+    5.1,
+    0.0
+   ]
+  },
+  {
+   "id": "baseRoof",
+   "type": "box",
+   "material": "roofMat",
+   "size": [
+    18.6,
+    0.3,
+    12.6
+   ],
+   "at": [
+    -3.0,
+    7.15,
+    0.0
+   ]
+  },
+  {
+   "id": "shaft",
+   "type": "lathe",
+   "material": "concreteT",
+   "profile": [
+    [
+     3.6,
+     0
+    ],
+    [
+     3.6,
+     7.3
+    ],
+    [
+     3.5,
+     7.3
+    ],
+    [
+     3.2,
+     36.0
+    ],
+    [
+     3.6,
+     38.0
+    ]
+   ],
+   "sides": 28,
+   "caps": false,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "slot",
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    0.2,
+    26.0,
+    0.8
+   ],
+   "at": [
+    3.35,
+    20.5,
+    0,
+    0,
+    0,
+    0.5
+   ]
+  },
+  {
+   "id": "equip",
+   "type": "lathe",
+   "material": "concreteT",
+   "profile": [
+    [
+     3.6,
+     38.0
+    ],
+    [
+     6.2,
+     38.6
+    ],
+    [
+     6.2,
+     40.2
+    ],
+    [
+     6.6,
+     40.4
+    ],
+    [
+     6.6,
+     40.5
+    ]
+   ],
+   "sides": 16,
+   "faceted": true,
+   "caps": false,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "equipWin",
+   "type": "lathe",
+   "material": "glazing",
+   "profile": [
+    [
+     6.22,
+     39.0
+    ],
+    [
+     6.22,
+     39.8
+    ]
+   ],
+   "sides": 16,
+   "faceted": true,
+   "caps": false,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "cabFloor",
+   "type": "lathe",
+   "material": "floorT",
+   "profile": [
+    [
+     6.6,
+     40.5
+    ],
+    [
+     0,
+     40.5
+    ]
+   ],
+   "sides": 16,
+   "faceted": true,
+   "caps": false,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "sill",
+   "type": "lathe",
+   "material": "frameT",
+   "profile": [
+    [
+     6.6,
+     40.5
+    ],
+    [
+     6.6,
+     41.4
+    ],
+    [
+     6.5,
+     41.4
+    ]
+   ],
+   "sides": 16,
+   "faceted": true,
+   "caps": false,
+   "double": true,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "cabGlass",
+   "type": "lathe",
+   "material": "glazing",
+   "profile": [
+    [
+     6.5,
+     41.4
+    ],
+    [
+     7.1,
+     44.7
+    ]
+   ],
+   "sides": 16,
+   "faceted": true,
+   "caps": false,
+   "double": true,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "mullion",
+   "type": "rod",
+   "material": "frameT",
+   "r": 0.07,
+   "from": [
+    6.5,
+    41.4,
+    0
+   ],
+   "to": [
+    7.1,
+    44.7,
+    0
+   ],
+   "sides": 6,
+   "around": {
+    "n": 16,
+    "r": 0
+   }
+  },
+  {
+   "id": "roofT",
+   "type": "lathe",
+   "material": "roofMat",
+   "profile": [
+    [
+     7.4,
+     44.7
+    ],
+    [
+     7.4,
+     45.3
+    ],
+    [
+     5.0,
+     45.6
+    ],
+    [
+     0,
+     45.6
+    ]
+   ],
+   "sides": 16,
+   "faceted": true,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "ceilingT",
+   "type": "lathe",
+   "material": "ceilingT",
+   "profile": [
+    [
+     0,
+     44.69
+    ],
+    [
+     7.1,
+     44.69
+    ]
+   ],
+   "sides": 16,
+   "faceted": true,
+   "caps": false,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "roofRail",
+   "type": "ring",
+   "material": "frameT",
+   "r": 6.6,
+   "tube": 0.03,
+   "at": [
+    0,
+    46.7,
+    0
+   ]
+  },
+  {
+   "id": "radarMast",
+   "type": "rod",
+   "material": "frameT",
+   "r": 0.18,
+   "from": [
+    0,
+    45.6,
+    0
+   ],
+   "to": [
+    0,
+    49.2,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "radar",
+   "type": "box",
+   "material": "radarMat",
+   "size": [
+    0.6,
+    1.0,
+    5.0
+   ],
+   "at": [
+    0,
+    49.7,
+    0,
+    20,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "ant",
+   "type": "rod",
+   "material": "frameT",
+   "r": 0.04,
+   "from": [
+    3.5,
+    45.6,
+    0
+   ],
+   "to": [
+    3.5,
+    48.7,
+    0
+   ],
+   "sides": 6,
+   "around": {
+    "n": 3,
+    "r": 0,
+    "start": 30
+   }
+  },
+  {
+   "id": "beacon",
+   "type": "sphere",
+   "material": "redLamp",
+   "r": 0.15,
+   "at": [
+    0,
+    50.3,
+    0
+   ],
+   "sides": 10
+  },
+  {
+   "id": "console",
+   "type": "box",
+   "material": "consoleMat",
+   "size": [
+    0.9,
+    0.9,
+    2.6
+   ],
+   "at": [
+    [
+     5.2962,
+     40.95,
+     -1.0535,
+     11.25,
+     0,
+     0
+    ],
+    [
+     3.0001,
+     40.95,
+     -4.4899,
+     56.25,
+     0,
+     0
+    ],
+    [
+     -1.0535,
+     40.95,
+     -5.2962,
+     101.25,
+     0,
+     0
+    ],
+    [
+     -4.4899,
+     40.95,
+     -3.0001,
+     146.25,
+     0,
+     0
+    ],
+    [
+     -5.2962,
+     40.95,
+     1.0535,
+     191.25,
+     0,
+     0
+    ],
+    [
+     -3.0001,
+     40.95,
+     4.4899,
+     236.25,
+     0,
+     0
+    ],
+    [
+     1.0535,
+     40.95,
+     5.2962,
+     281.25,
+     0,
+     0
+    ],
+    [
+     4.4899,
+     40.95,
+     3.0001,
+     326.25,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "cscreen0",
+   "use": "items/modern/components/screen",
+   "at": [
+    5.0307,
+    41.7,
+    -0.3379,
+    191.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen1",
+   "use": "items/modern/components/screen",
+   "at": [
+    4.7771,
+    41.7,
+    -1.613,
+    191.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen2",
+   "use": "items/modern/components/screen",
+   "at": [
+    3.3183,
+    41.7,
+    -3.7962,
+    236.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen3",
+   "use": "items/modern/components/screen",
+   "at": [
+    2.2374,
+    41.7,
+    -4.5185,
+    236.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen4",
+   "use": "items/modern/components/screen",
+   "at": [
+    -0.3379,
+    41.7,
+    -5.0307,
+    281.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen5",
+   "use": "items/modern/components/screen",
+   "at": [
+    -1.613,
+    41.7,
+    -4.7771,
+    281.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen6",
+   "use": "items/modern/components/screen",
+   "at": [
+    -3.7962,
+    41.7,
+    -3.3183,
+    326.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen7",
+   "use": "items/modern/components/screen",
+   "at": [
+    -4.5185,
+    41.7,
+    -2.2374,
+    326.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen8",
+   "use": "items/modern/components/screen",
+   "at": [
+    -5.0307,
+    41.7,
+    0.3379,
+    371.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen9",
+   "use": "items/modern/components/screen",
+   "at": [
+    -4.7771,
+    41.7,
+    1.613,
+    371.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen10",
+   "use": "items/modern/components/screen",
+   "at": [
+    -3.3183,
+    41.7,
+    3.7962,
+    416.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen11",
+   "use": "items/modern/components/screen",
+   "at": [
+    -2.2374,
+    41.7,
+    4.5185,
+    416.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen12",
+   "use": "items/modern/components/screen",
+   "at": [
+    0.3379,
+    41.7,
+    5.0307,
+    461.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen13",
+   "use": "items/modern/components/screen",
+   "at": [
+    1.613,
+    41.7,
+    4.7771,
+    461.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen14",
+   "use": "items/modern/components/screen",
+   "at": [
+    3.7962,
+    41.7,
+    3.3183,
+    506.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "cscreen15",
+   "use": "items/modern/components/screen",
+   "at": [
+    4.5185,
+    41.7,
+    2.2374,
+    506.25,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.35
+   }
+  },
+  {
+   "id": "chair0",
+   "use": "items/modern/components/seat",
+   "at": [
+    4.0212,
+    40.5,
+    -0.7999,
+    11.25,
+    0,
+    0
+   ],
+   "params": {
+    "h": 0.5,
+    "w": 0.5,
+    "headrest": 0
+   },
+   "materials": {
+    "cover": "#30343a",
+    "frame": "#222222"
+   }
+  },
+  {
+   "id": "chair1",
+   "use": "items/modern/components/seat",
+   "at": [
+    2.2778,
+    40.5,
+    -3.409,
+    56.25,
+    0,
+    0
+   ],
+   "params": {
+    "h": 0.5,
+    "w": 0.5,
+    "headrest": 0
+   },
+   "materials": {
+    "cover": "#30343a",
+    "frame": "#222222"
+   }
+  },
+  {
+   "id": "chair2",
+   "use": "items/modern/components/seat",
+   "at": [
+    -0.7999,
+    40.5,
+    -4.0212,
+    101.25,
+    0,
+    0
+   ],
+   "params": {
+    "h": 0.5,
+    "w": 0.5,
+    "headrest": 0
+   },
+   "materials": {
+    "cover": "#30343a",
+    "frame": "#222222"
+   }
+  },
+  {
+   "id": "chair3",
+   "use": "items/modern/components/seat",
+   "at": [
+    -3.409,
+    40.5,
+    -2.2778,
+    146.25,
+    0,
+    0
+   ],
+   "params": {
+    "h": 0.5,
+    "w": 0.5,
+    "headrest": 0
+   },
+   "materials": {
+    "cover": "#30343a",
+    "frame": "#222222"
+   }
+  },
+  {
+   "id": "chair4",
+   "use": "items/modern/components/seat",
+   "at": [
+    -4.0212,
+    40.5,
+    0.7999,
+    191.25,
+    0,
+    0
+   ],
+   "params": {
+    "h": 0.5,
+    "w": 0.5,
+    "headrest": 0
+   },
+   "materials": {
+    "cover": "#30343a",
+    "frame": "#222222"
+   }
+  },
+  {
+   "id": "chair5",
+   "use": "items/modern/components/seat",
+   "at": [
+    -2.2778,
+    40.5,
+    3.409,
+    236.25,
+    0,
+    0
+   ],
+   "params": {
+    "h": 0.5,
+    "w": 0.5,
+    "headrest": 0
+   },
+   "materials": {
+    "cover": "#30343a",
+    "frame": "#222222"
+   }
+  },
+  {
+   "id": "chair6",
+   "use": "items/modern/components/seat",
+   "at": [
+    0.7999,
+    40.5,
+    4.0212,
+    281.25,
+    0,
+    0
+   ],
+   "params": {
+    "h": 0.5,
+    "w": 0.5,
+    "headrest": 0
+   },
+   "materials": {
+    "cover": "#30343a",
+    "frame": "#222222"
+   }
+  },
+  {
+   "id": "chair7",
+   "use": "items/modern/components/seat",
+   "at": [
+    3.409,
+    40.5,
+    2.2778,
+    326.25,
+    0,
+    0
+   ],
+   "params": {
+    "h": 0.5,
+    "w": 0.5,
+    "headrest": 0
+   },
+   "materials": {
+    "cover": "#30343a",
+    "frame": "#222222"
+   }
+  },
+  {
+   "id": "core",
+   "type": "lathe",
+   "material": "concreteT",
+   "profile": [
+    [
+     1.6,
+     40.5
+    ],
+    [
+     1.6,
+     44.7
+    ]
+   ],
+   "sides": 12,
+   "caps": false,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "door",
+   "type": "box",
+   "material": "doorMat",
+   "size": [
+    0.05,
+    2.4,
+    2.0
+   ],
+   "at": [
+    6.075,
+    1.2,
+    0.0
+   ]
+  }
+ ]
+}

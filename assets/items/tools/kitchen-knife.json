@@ -1,0 +1,264 @@
+{
+ "kind": "item",
+ "name": "Kitchen knife",
+ "category": "tool",
+ "era": "any",
+ "region": "everywhere",
+ "_about": "a kitchen knife, the handle up +y and its edge toward +x: a chef's knife with a broad blade curving to the tip, a bolster and a riveted black handle (style chef), or an old one with a narrow iron blade, wooden scales and brass rivets (old)",
+ "params": {
+  "style": {
+   "pick": [
+    "chef",
+    "old"
+   ]
+  }
+ },
+ "materials": {
+  "steel": "steel",
+  "iron": "iron",
+  "handle": {
+   "pick": [
+    "plastic-black",
+    "walnut",
+    "ebony"
+   ]
+  },
+  "scales": {
+   "pick": [
+    "walnut",
+    "oak",
+    "bone",
+    "horn"
+   ]
+  },
+  "rivet": "brass"
+ },
+ "parts": [
+  {
+   "id": "blade",
+   "type": "plate",
+   "material": "steel",
+   "outline": [
+    [
+     -0.004,
+     0.115
+    ],
+    [
+     0.042,
+     0.115
+    ],
+    [
+     0.043,
+     0.16
+    ],
+    [
+     0.036,
+     0.23
+    ],
+    [
+     0.02,
+     0.28
+    ],
+    [
+     -0.004,
+     0.32
+    ],
+    [
+     -0.004,
+     0.2
+    ]
+   ],
+   "thick": 0.0022,
+   "when": {
+    "style": "chef"
+   }
+  },
+  {
+   "id": "bolster",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.046,
+    0.012,
+    0.01
+   ],
+   "at": [
+    0.018,
+    0.112,
+    0
+   ],
+   "when": {
+    "style": "chef"
+   }
+  },
+  {
+   "id": "handleC",
+   "type": "box",
+   "material": "handle",
+   "size": [
+    0.026,
+    0.11,
+    0.017
+   ],
+   "at": [
+    0.01,
+    0.052,
+    0
+   ],
+   "when": {
+    "style": "chef"
+   }
+  },
+  {
+   "id": "rivetsC",
+   "type": "rod",
+   "material": "steel",
+   "r": 0.0028,
+   "from": [
+    0,
+    0,
+    -0.009
+   ],
+   "to": [
+    0,
+    0,
+    0.009
+   ],
+   "sides": 6,
+   "at": [
+    [
+     0.01,
+     0.025,
+     0
+    ],
+    [
+     0.01,
+     0.055,
+     0
+    ],
+    [
+     0.01,
+     0.085,
+     0
+    ]
+   ],
+   "when": {
+    "style": "chef"
+   }
+  },
+  {
+   "id": "bladeO",
+   "type": "plate",
+   "material": "iron",
+   "outline": [
+    [
+     -0.003,
+     0.105
+    ],
+    [
+     0.022,
+     0.105
+    ],
+    [
+     0.021,
+     0.2
+    ],
+    [
+     0.014,
+     0.25
+    ],
+    [
+     -0.003,
+     0.275
+    ],
+    [
+     -0.003,
+     0.2
+    ]
+   ],
+   "thick": 0.0025,
+   "when": {
+    "style": "old"
+   }
+  },
+  {
+   "id": "scales",
+   "type": "box",
+   "material": "scales",
+   "size": [
+    0.022,
+    0.105,
+    0.016
+   ],
+   "at": [
+    0.008,
+    0.052,
+    0
+   ],
+   "when": {
+    "style": "old"
+   }
+  },
+  {
+   "id": "rivetsO",
+   "type": "rod",
+   "material": "rivet",
+   "r": 0.0028,
+   "from": [
+    0,
+    0,
+    -0.0085
+   ],
+   "to": [
+    0,
+    0,
+    0.0085
+   ],
+   "sides": 6,
+   "at": [
+    [
+     0.008,
+     0.02,
+     0
+    ],
+    [
+     0.008,
+     0.075,
+     0
+    ]
+   ],
+   "when": {
+    "style": "old"
+   }
+  }
+ ],
+ "hold": {
+  "grip": [
+   0.01,
+   0.055,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   1,
+   0,
+   0
+  ],
+  "carry": {
+   "axis": [
+    0.1,
+    -1,
+    0
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

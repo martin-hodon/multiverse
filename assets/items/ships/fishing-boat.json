@@ -127,7 +127,8 @@
    "ribs": {
     "n": 8,
     "w": 0.05
-   }
+   },
+   "lean": true
   },
   {
    "id": "mast L * 0.62",
@@ -210,22 +211,22 @@
    ]
   },
   {
-   "id": "shroud L * 0.62 0",
-   "type": "rod",
-   "material": "rope",
-   "from": [
+   "id": "shrouds L * 0.62",
+   "use": "items/components/shrouds",
+   "at": [
     "L * 0.62",
-    "D * 0.15 + (mastH) * 0.97",
+    0,
     0
    ],
-   "to": [
-    "L * 0.62 + ((D * 0.15 + (mastH) * 0.97) - (D * 1.072)) * -0.2",
-    "D * 1.072",
-    "(B * 0.5) * 0.8786"
-   ],
-   "r": 0.015,
-   "sides": 4,
-   "mirror": "z"
+   "params": {
+    "top": "D * 0.15 + (mastH) * 0.97",
+    "foot": "D * 1.072",
+    "z": "(B * 0.5) * 0.8786",
+    "n": 1,
+    "r": 0.015,
+    "rat": 0,
+    "topmast": 0
+   }
   }
  ],
  "markers": [

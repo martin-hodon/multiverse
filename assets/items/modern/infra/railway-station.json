@@ -1,0 +1,313 @@
+{
+ "kind": "item",
+ "name": "Railway station",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a through railway station, 120 x 60 m, composed of the infrastructure pieces: the station building on the town side (-z), its side platform P1 and an island platform P2 (100 m, 0.76 m over the rail) serving tracks T1 and T2, a through line T3; the glazed train shed over the middle 60 m, platform canopies beyond it, the covered footbridge at x 40 with stairs to both platforms and down to the far side, signals at the ends. Tracks along x at z -10.35, 0.95, 5.45 (rail top 0.642).",
+ "params": {},
+ "materials": {
+  "sigMast": "#5a6067",
+  "sigHead": "#1e2022"
+ },
+ "parts": [
+  {
+   "id": "building",
+   "use": "items/modern/infra/station-hall",
+   "at": [
+    0,
+    0,
+    -25.0,
+    90,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "track0",
+   "each": 12,
+   "use": "items/modern/infra/track-straight",
+   "at": [
+    "-55 + 10 * i",
+    0,
+    -10.35
+   ],
+   "params": {
+    "clips": 0
+   }
+  },
+  {
+   "id": "track1",
+   "each": 12,
+   "use": "items/modern/infra/track-straight",
+   "at": [
+    "-55 + 10 * i",
+    0,
+    0.95
+   ],
+   "params": {
+    "clips": 0
+   }
+  },
+  {
+   "id": "track2",
+   "each": 12,
+   "use": "items/modern/infra/track-straight",
+   "at": [
+    "-55 + 10 * i",
+    0,
+    5.45
+   ],
+   "params": {
+    "clips": 0
+   }
+  },
+  {
+   "id": "p1",
+   "each": 2,
+   "use": "items/modern/infra/platform",
+   "at": [
+    "-45 + 10 * i",
+    0,
+    -15.0
+   ],
+   "params": {
+    "W": 6.0,
+    "island": 0,
+    "canopy": 1,
+    "cz": -1.9,
+    "rz": 1.4,
+    "benches": 1,
+    "board": 1,
+    "fence": 0
+   }
+  },
+  {
+   "id": "p1 2",
+   "each": 6,
+   "use": "items/modern/infra/platform",
+   "at": [
+    "-25 + 10 * i",
+    0,
+    -15.0
+   ],
+   "params": {
+    "W": 6.0,
+    "island": 0,
+    "canopy": 0,
+    "cz": -1.9,
+    "rz": 1.4,
+    "benches": 1,
+    "board": 1,
+    "fence": 0
+   }
+  },
+  {
+   "id": "p1 3",
+   "each": 2,
+   "use": "items/modern/infra/platform",
+   "at": [
+    "35 + 10 * i",
+    0,
+    -15.0
+   ],
+   "params": {
+    "W": 6.0,
+    "island": 0,
+    "canopy": 0,
+    "cz": -1.9,
+    "rz": 1.4,
+    "benches": 0,
+    "board": 1,
+    "fence": 0
+   }
+  },
+  {
+   "id": "p2",
+   "each": 2,
+   "use": "items/modern/infra/platform",
+   "at": [
+    "-45 + 10 * i",
+    0,
+    -4.7
+   ],
+   "params": {
+    "W": 8.0,
+    "island": 1,
+    "canopy": 1,
+    "cz": 0,
+    "rz": 0,
+    "benches": 1,
+    "board": 1
+   }
+  },
+  {
+   "id": "p2 2",
+   "each": 6,
+   "use": "items/modern/infra/platform",
+   "at": [
+    "-25 + 10 * i",
+    0,
+    -4.7
+   ],
+   "params": {
+    "W": 8.0,
+    "island": 1,
+    "canopy": 0,
+    "cz": 0,
+    "rz": 0,
+    "benches": 1,
+    "board": 1
+   }
+  },
+  {
+   "id": "p2 3",
+   "each": 2,
+   "use": "items/modern/infra/platform",
+   "at": [
+    "35 + 10 * i",
+    0,
+    -4.7
+   ],
+   "params": {
+    "W": 8.0,
+    "island": 1,
+    "canopy": 0,
+    "cz": 0,
+    "rz": 0,
+    "benches": 0,
+    "board": 1
+   }
+  },
+  {
+   "id": "shed",
+   "use": "items/modern/infra/train-shed",
+   "at": [
+    0,
+    0,
+    -4.5
+   ]
+  },
+  {
+   "id": "footbridge",
+   "use": "items/modern/infra/footbridge",
+   "at": [
+    40,
+    0,
+    -2.95
+   ],
+   "params": {
+    "D": 6.6,
+    "endA": 0,
+    "endB": 1,
+    "mid": 1,
+    "mz": -1.75,
+    "w0": 0,
+    "w3": 0
+   }
+  },
+  {
+   "id": "stairP1",
+   "use": "items/modern/infra/stair-flight",
+   "at": [
+    29.66,
+    1.4,
+    -15.2
+   ],
+   "params": {
+    "H": 5.2,
+    "w": 2.2
+   }
+  },
+  {
+   "id": "stairP2",
+   "use": "items/modern/infra/stair-flight",
+   "at": [
+    29.66,
+    1.4,
+    -4.7
+   ],
+   "params": {
+    "H": 5.2,
+    "w": 2.2
+   }
+  },
+  {
+   "id": "sigMast",
+   "each": 4,
+   "type": "rod",
+   "material": "sigMast",
+   "r": 0.08,
+   "from": [
+    "52 - 104 * floor(i / 2)",
+    0,
+    "-12.55 + 15.7 * (i - 2 * floor(i / 2))"
+   ],
+   "to": [
+    "52 - 104 * floor(i / 2)",
+    4.6,
+    "-12.55 + 15.7 * (i - 2 * floor(i / 2))"
+   ],
+   "sides": 8
+  },
+  {
+   "id": "sigHead",
+   "each": 4,
+   "type": "box",
+   "material": "sigHead",
+   "size": [
+    0.2,
+    1.1,
+    0.5
+   ],
+   "at": [
+    "52 - 104 * floor(i / 2)",
+    4.6,
+    "-12.55 + 15.7 * (i - 2 * floor(i / 2))",
+    "180 - 180 * floor(i / 2)",
+    0,
+    0
+   ]
+  },
+  {
+   "id": "sigLamp",
+   "each": 4,
+   "use": "items/modern/components/lamp",
+   "at": [
+    "51.89 - 103.78 * floor(i / 2)",
+    4.9,
+    "-12.55 + 15.7 * (i - 2 * floor(i / 2))",
+    "180 - 180 * floor(i / 2)",
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.08
+   },
+   "materials": {
+    "lens": "lamp-green",
+    "bezel": "sigHead"
+   }
+  },
+  {
+   "id": "sigLampR",
+   "each": 4,
+   "use": "items/modern/components/lamp",
+   "at": [
+    "51.89 - 103.78 * floor(i / 2)",
+    4.35,
+    "-12.55 + 15.7 * (i - 2 * floor(i / 2))",
+    "180 - 180 * floor(i / 2)",
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.08
+   },
+   "materials": {
+    "lens": "#3a1414",
+    "bezel": "sigHead"
+   }
+  }
+ ]
+}

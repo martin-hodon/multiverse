@@ -1,0 +1,79 @@
+{
+ "kind": "item",
+ "name": "Wing mirror",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a wing mirror: an arm from its mount, the housing, the glass on its back looking behind -- a car's on a short arm, a bus's hanging from a long one",
+ "params": {
+  "ax": 0.0,
+  "ay": 0.0,
+  "az": 0.14,
+  "w": 0.2,
+  "h": 0.12,
+  "d": 0.08,
+  "out": 1,
+  "hang": 0,
+  "armR": 0.016
+ },
+ "materials": {
+  "shell": "plastic-black",
+  "arm": "plastic-black",
+  "glass": "#b8c6d0"
+ },
+ "parts": [
+  {
+   "id": "arm",
+   "type": "sweep",
+   "material": "arm",
+   "path": [
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     "ax * 0.45",
+     "ay",
+     "az * 0.55"
+    ],
+    [
+     "ax",
+     "ay",
+     "az"
+    ]
+   ],
+   "r": "armR"
+  },
+  {
+   "id": "housing",
+   "type": "box",
+   "material": "shell",
+   "size": [
+    "d",
+    "h",
+    "w"
+   ],
+   "at": [
+    "ax + d * 0.2",
+    "ay - h / 2 * hang",
+    "az + w / 2 * out"
+   ]
+  },
+  {
+   "id": "glass",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    0.006,
+    "h * 0.84",
+    "w * 0.88"
+   ],
+   "at": [
+    "ax + d * 0.2 - d / 2 - 0.003",
+    "ay - h / 2 * hang",
+    "az + w / 2 * out"
+   ]
+  }
+ ]
+}

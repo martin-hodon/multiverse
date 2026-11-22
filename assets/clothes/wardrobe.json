@@ -76,7 +76,27 @@
   "loincloth": true,
   "sarafan": true,
   "kokoshnik": true,
-  "fur-hat": true
+  "fur-hat": true,
+  "jeans": true,
+  "shorts": true,
+  "suit-trousers": true,
+  "t-shirt": true,
+  "polo-shirt": true,
+  "dress-shirt": true,
+  "tie": true,
+  "sweater": true,
+  "hoodie": true,
+  "suit-jacket": true,
+  "puffer-jacket": true,
+  "trench-coat": true,
+  "hi-vis-vest": true,
+  "day-dress": true,
+  "a-line-skirt": true,
+  "sneakers": true,
+  "work-boots": true,
+  "baseball-cap": true,
+  "beanie": true,
+  "hard-hat": true
  },
  "people": {
   "man": [
@@ -1492,6 +1512,128 @@
     },
     {
      "garment": "shoes"
+    }
+   ]
+  },
+  "office-worker": {
+   "_about": "an office worker of today: a white shirt and a tie, the suit's trousers and jacket in charcoal, black shoes",
+   "wear": [
+    {
+     "garment": "dress-shirt",
+     "fabrics": {
+      "main": [
+       "plain:cotton-white"
+      ]
+     }
+    },
+    {
+     "garment": "suit-trousers",
+     "fabrics": {
+      "main": [
+       "plain:charcoal"
+      ]
+     }
+    },
+    {
+     "garment": "tie",
+     "fabrics": {
+      "main": [
+       "plain:silk-red"
+      ]
+     }
+    },
+    {
+     "garment": "suit-jacket",
+     "fabrics": {
+      "main": [
+       "plain:charcoal"
+      ]
+     }
+    },
+    {
+     "garment": "shoes",
+     "fabrics": {
+      "main": [
+       "leather:black"
+      ]
+     }
+    }
+   ]
+  },
+  "casual": {
+   "_about": "casual dress of today: a grey hoodie over blue jeans, white sneakers, a baseball cap",
+   "wear": [
+    {
+     "garment": "jeans",
+     "fabrics": {
+      "main": [
+       "twill:denim"
+      ]
+     }
+    },
+    {
+     "garment": "hoodie",
+     "fabrics": {
+      "main": [
+       "plain:heather-grey"
+      ]
+     }
+    },
+    {
+     "garment": "sneakers",
+     "fabrics": {
+      "main": [
+       "leather:sneaker-white"
+      ]
+     }
+    },
+    {
+     "garment": "baseball-cap",
+     "fabrics": {
+      "main": [
+       "plain:navy"
+      ]
+     }
+    }
+   ]
+  },
+  "construction-worker": {
+   "_about": "a construction worker: a t-shirt, jeans, the hi-vis vest, laced work boots and a yellow hard hat",
+   "wear": [
+    {
+     "garment": "t-shirt",
+     "fabrics": {
+      "main": [
+       "plain:heather-grey"
+      ]
+     }
+    },
+    {
+     "garment": "jeans",
+     "fabrics": {
+      "main": [
+       "twill:denim"
+      ]
+     }
+    },
+    {
+     "garment": "hi-vis-vest",
+     "fabrics": {
+      "main": [
+       "plain:hivis-yellow"
+      ]
+     }
+    },
+    {
+     "garment": "work-boots"
+    },
+    {
+     "garment": "hard-hat",
+     "fabrics": {
+      "main": [
+       "plain:hardhat-yellow"
+      ]
+     }
     }
    ]
   }
@@ -7058,6 +7200,681 @@
      "work": true
     }
    ]
+  },
+  "modern": {
+   "_about": "the twentieth and twenty-first centuries (tools/modern/clothesgen.py): the office's suit, shirt and tie, jeans and a t-shirt, the hoodie, the puffer and the trench coat, the day dress and the skirt, sneakers, the baseball cap and the beanie; the worker's hi-vis vest and hard hat",
+   "man": [
+    {
+     "name": "office",
+     "weight": 2,
+     "wear": [
+      {
+       "garment": "dress-shirt",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:cotton-white",
+         "plain:cotton-white",
+         "plain:shirt-blue",
+         "pinstripe:shirt-blue",
+         "checks:shirt-blue"
+        ]
+       }
+      },
+      {
+       "garment": "suit-trousers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:charcoal",
+         "plain:navy",
+         "plain:suit-grey",
+         "pinstripe:navy",
+         "pinstripe:charcoal",
+         "twill:suit-grey",
+         "plain:black"
+        ]
+       }
+      },
+      {
+       "garment": "tie",
+       "p": 0.6,
+       "fabrics": {
+        "main": [
+         "plain:silk-red",
+         "plain:navy",
+         "plain:burgundy",
+         "stripes:stripe-madder",
+         "dots:navy",
+         "plain:silk-black",
+         "damask:damask-blue"
+        ]
+       }
+      },
+      {
+       "garment": "suit-jacket",
+       "p": 0.75,
+       "fabrics": {
+        "main": [
+         "plain:charcoal",
+         "plain:navy",
+         "plain:suit-grey",
+         "pinstripe:navy",
+         "pinstripe:charcoal",
+         "twill:suit-grey",
+         "plain:black"
+        ]
+       }
+      },
+      {
+       "garment": "shoes",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:leather-dark",
+         "plain:black",
+         "leather:black"
+        ]
+       }
+      },
+      {
+       "garment": "trench-coat",
+       "p": 0.15,
+       "fabrics": {
+        "main": [
+         "twill:trench",
+         "twill:trench",
+         "plain:camel",
+         "plain:charcoal",
+         "plain:navy"
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "name": "casual",
+     "weight": 4,
+     "wear": [
+      {
+       "garment": [
+        "t-shirt",
+        "t-shirt",
+        "t-shirt",
+        "polo-shirt",
+        "sweater",
+        "hoodie"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:cotton-white",
+         "plain:black",
+         "plain:heather-grey",
+         "plain:navy",
+         "plain:tee-red",
+         "plain:tee-green",
+         "plain:mustard",
+         "plain:teal",
+         "hoops:navy",
+         "plain:heather-grey",
+         "plain:navy",
+         "plain:burgundy",
+         "plain:olive",
+         "plain:camel",
+         "plain:charcoal",
+         "lozenge:wool-white",
+         "plain:mustard"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "jeans",
+        "jeans",
+        "suit-trousers",
+        "shorts"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "twill:denim",
+         "twill:denim",
+         "twill:denim-light",
+         "twill:denim-black",
+         "twill:khaki",
+         "twill:olive"
+        ]
+       }
+      },
+      {
+       "garment": "puffer-jacket",
+       "p": 0.12,
+       "fabrics": {
+        "main": [
+         "hoops:navy",
+         "hoops:black",
+         "hoops:tee-red",
+         "hoops:olive",
+         "hoops:mustard"
+        ]
+       }
+      },
+      {
+       "garment": "sneakers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:sneaker-white",
+         "leather:sneaker-white",
+         "plain:black",
+         "plain:navy",
+         "plain:tee-red"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "baseball-cap",
+        "baseball-cap",
+        "beanie"
+       ],
+       "p": 0.25,
+       "fabrics": {
+        "main": [
+         "plain:navy",
+         "plain:black",
+         "plain:tee-red",
+         "plain:cotton-white",
+         "plain:khaki",
+         "plain:tee-green"
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "name": "worker",
+     "weight": 2,
+     "work": true,
+     "wear": [
+      {
+       "garment": [
+        "t-shirt",
+        "t-shirt",
+        "sweater"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:heather-grey",
+         "plain:navy",
+         "plain:black",
+         "plain:olive",
+         "plain:cotton-white"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "jeans",
+        "suit-trousers"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "twill:denim",
+         "twill:khaki",
+         "twill:navy",
+         "twill:olive",
+         "plain:charcoal"
+        ]
+       }
+      },
+      {
+       "garment": "hi-vis-vest",
+       "p": 0.8,
+       "fabrics": {
+        "main": [
+         "plain:hivis-yellow",
+         "plain:hivis-yellow",
+         "plain:hivis-orange"
+        ]
+       }
+      },
+      {
+       "garment": "work-boots",
+       "p": 1
+      },
+      {
+       "garment": "hard-hat",
+       "p": 0.7,
+       "fabrics": {
+        "main": [
+         "plain:hardhat-yellow",
+         "plain:hardhat-white",
+         "plain:hivis-orange"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "woman": [
+    {
+     "name": "office",
+     "weight": 2,
+     "wear": [
+      {
+       "garment": "dress-shirt",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:cotton-white",
+         "plain:cotton-white",
+         "plain:shirt-blue",
+         "pinstripe:shirt-blue",
+         "checks:shirt-blue",
+         "plain:rose"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "a-line-skirt",
+        "suit-trousers"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:charcoal",
+         "plain:navy",
+         "plain:suit-grey",
+         "pinstripe:navy",
+         "pinstripe:charcoal",
+         "twill:suit-grey",
+         "plain:black",
+         "plain:camel"
+        ]
+       }
+      },
+      {
+       "garment": "suit-jacket",
+       "p": 0.6,
+       "fabrics": {
+        "main": [
+         "plain:charcoal",
+         "plain:navy",
+         "plain:suit-grey",
+         "pinstripe:navy",
+         "pinstripe:charcoal",
+         "twill:suit-grey",
+         "plain:black"
+        ]
+       }
+      },
+      {
+       "garment": "shoes",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:leather-dark",
+         "plain:black",
+         "leather:black"
+        ]
+       }
+      },
+      {
+       "garment": "trench-coat",
+       "p": 0.2,
+       "fabrics": {
+        "main": [
+         "twill:trench",
+         "twill:trench",
+         "plain:camel",
+         "plain:charcoal",
+         "plain:navy"
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "name": "dress",
+     "weight": 2,
+     "wear": [
+      {
+       "garment": "day-dress",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:teal",
+         "plain:navy",
+         "plain:burgundy",
+         "dots:navy",
+         "plain:rose",
+         "checks:tee-red",
+         "plain:black",
+         "plain:mustard"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "shoes",
+        "sneakers"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:leather-dark",
+         "plain:black",
+         "leather:black"
+        ]
+       }
+      },
+      {
+       "garment": "trench-coat",
+       "p": 0.15,
+       "fabrics": {
+        "main": [
+         "twill:trench",
+         "twill:trench",
+         "plain:camel",
+         "plain:charcoal",
+         "plain:navy"
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "name": "casual",
+     "weight": 4,
+     "wear": [
+      {
+       "garment": [
+        "t-shirt",
+        "t-shirt",
+        "t-shirt",
+        "polo-shirt",
+        "sweater",
+        "hoodie"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:cotton-white",
+         "plain:black",
+         "plain:heather-grey",
+         "plain:navy",
+         "plain:tee-red",
+         "plain:tee-green",
+         "plain:mustard",
+         "plain:teal",
+         "hoops:navy",
+         "plain:heather-grey",
+         "plain:navy",
+         "plain:burgundy",
+         "plain:olive",
+         "plain:camel",
+         "plain:charcoal",
+         "lozenge:wool-white",
+         "plain:mustard",
+         "plain:rose"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "jeans",
+        "jeans",
+        "a-line-skirt",
+        "shorts"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "twill:denim",
+         "twill:denim",
+         "twill:denim-light",
+         "twill:denim-black"
+        ]
+       }
+      },
+      {
+       "garment": "puffer-jacket",
+       "p": 0.12,
+       "fabrics": {
+        "main": [
+         "hoops:navy",
+         "hoops:black",
+         "hoops:tee-red",
+         "hoops:olive",
+         "hoops:mustard"
+        ]
+       }
+      },
+      {
+       "garment": "sneakers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:sneaker-white",
+         "leather:sneaker-white",
+         "plain:black",
+         "plain:navy",
+         "plain:tee-red"
+        ]
+       }
+      },
+      {
+       "garment": "beanie",
+       "p": 0.1,
+       "fabrics": {
+        "main": [
+         "plain:burgundy",
+         "plain:charcoal",
+         "plain:navy",
+         "plain:mustard",
+         "plain:olive"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "boy": [
+    {
+     "name": "child",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": [
+        "t-shirt",
+        "t-shirt",
+        "polo-shirt",
+        "hoodie"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:cotton-white",
+         "plain:black",
+         "plain:heather-grey",
+         "plain:navy",
+         "plain:tee-red",
+         "plain:tee-green",
+         "plain:mustard",
+         "plain:teal",
+         "hoops:navy",
+         "plain:tee-red"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "jeans",
+        "shorts",
+        "shorts"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "twill:denim",
+         "twill:denim",
+         "twill:denim-light",
+         "twill:denim-black",
+         "twill:khaki",
+         "twill:navy"
+        ]
+       }
+      },
+      {
+       "garment": "sneakers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:sneaker-white",
+         "leather:sneaker-white",
+         "plain:black",
+         "plain:navy",
+         "plain:tee-red"
+        ]
+       }
+      },
+      {
+       "garment": "baseball-cap",
+       "p": 0.3,
+       "fabrics": {
+        "main": [
+         "plain:navy",
+         "plain:black",
+         "plain:tee-red",
+         "plain:cotton-white",
+         "plain:khaki",
+         "plain:tee-green"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "girl": [
+    {
+     "name": "child",
+     "weight": 2,
+     "wear": [
+      {
+       "garment": [
+        "t-shirt",
+        "t-shirt",
+        "sweater",
+        "hoodie"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:cotton-white",
+         "plain:black",
+         "plain:heather-grey",
+         "plain:navy",
+         "plain:tee-red",
+         "plain:tee-green",
+         "plain:mustard",
+         "plain:teal",
+         "hoops:navy",
+         "plain:rose"
+        ]
+       }
+      },
+      {
+       "garment": [
+        "jeans",
+        "a-line-skirt",
+        "shorts"
+       ],
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "twill:denim",
+         "twill:denim",
+         "twill:denim-light",
+         "twill:denim-black",
+         "plain:rose",
+         "checks:tee-red"
+        ]
+       }
+      },
+      {
+       "garment": "sneakers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:sneaker-white",
+         "leather:sneaker-white",
+         "plain:black",
+         "plain:navy",
+         "plain:tee-red"
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "name": "dress",
+     "weight": 1,
+     "wear": [
+      {
+       "garment": "day-dress",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "plain:teal",
+         "plain:navy",
+         "plain:burgundy",
+         "dots:navy",
+         "plain:rose",
+         "checks:tee-red",
+         "plain:black",
+         "plain:mustard"
+        ]
+       }
+      },
+      {
+       "garment": "sneakers",
+       "p": 1,
+       "fabrics": {
+        "main": [
+         "leather:sneaker-white",
+         "leather:sneaker-white",
+         "plain:black",
+         "plain:navy",
+         "plain:tee-red"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "hair": {
+    "man": [
+     "short",
+     "short",
+     "crop",
+     "curly",
+     "spiky-up",
+     "crop"
+    ],
+    "woman": [
+     "ponytail",
+     "bob",
+     "long",
+     "shoulder",
+     "bun",
+     "long-wavy"
+    ]
+   }
   }
  }
 }

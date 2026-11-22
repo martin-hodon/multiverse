@@ -1,0 +1,145 @@
+{
+  "name": "teddy-bear",
+  "_about": "a TEDDY BEAR (2026-11-21, tools/creaturegen/rework/bigmam/teddy_bear.py: a plush toy built from scratch -- no longer a shrunk brown bear): 32 cm tall, SITTING, the round bottom on the ground and the stubby legs straight out in front with oval felt soles; a round pear of a body with a little tummy, stubby arms with felt paw pads; a big round head with round cupped ears, a pale muzzle with a seam down it, a stitched nose and mouth, two shiny black button eyes; golden mohair. Its legs are tiny hidden bones: it does not walk on them, only its head turns. Coats: golden, honey, cream, chocolate, grey",
+  "kind": "mammal",
+  "headForm": false,
+  "shy": 0,
+  "graze": 0.9,
+  "rest": 0.9,
+  "print": "paw",
+  "headTurn": 14,
+  "rear": [-0.02, 0.07, 0, 0.06, 0.05, 0.06],
+  "front": [0.0, 0.12, 0, 0.05, 0.05, 0.06],
+  "neck": [-0.005, 0.17, 0, -0.005, 0.2, 0, 0.045, 0.045],
+  "head": [0.0, 0.245, 0, 0.07],
+  "muzzle": [0.04, 0.232, 0, 0.09, 0.228, 0, 0.03, 0.022],
+  "nose": [0.1, 0.236, 0, 0.008],
+  "ears": [-0.005, 0.3, 0.05, -0.005, 0.32, 0.06, 0.02, 0.02],
+  "eyes": [0.058, 0.262, 0.032, 0.009],
+  "legs": {
+    "front": [0.01, 0.04, 0.03, 0.012],
+    "hind": [-0.03, 0.04, 0.03, 0.012],
+    "radii": [0.01, 0.008, 0.006],
+    "foot": [0.008, 0.004, 0.006],
+    "ankle": 0.004
+  },
+  "tail": {
+    "c": [-0.07, 0.06],
+    "R": 0.01,
+    "a0": 3.0,
+    "a1": 3.3,
+    "r1": 0.008,
+    "r2": 0.006,
+    "n": 1,
+    "sway": 0,
+    "speed": 0.1
+  },
+  "gaits": {
+    "walk": {
+      "stride": 0.03,
+      "lift": 0.0,
+      "bob": 0.0
+    },
+    "run": {
+      "stride": 0.04,
+      "lift": 0.0
+    }
+  },
+  "coats": [
+    {
+      "name": "golden"
+    },
+    {
+      "name": "honey",
+      "body": "#b07a3a",
+      "pale": "#dcb880",
+      "seam": "#7a5428"
+    },
+    {
+      "name": "cream",
+      "body": "#e8d8b8",
+      "pale": "#f4ead6",
+      "pad": "#c8a878",
+      "seam": "#b8a07a"
+    },
+    {
+      "name": "chocolate",
+      "body": "#6a4630",
+      "pale": "#c8a478",
+      "pad": "#d8b88a",
+      "seam": "#4a3020"
+    },
+    {
+      "name": "grey",
+      "body": "#9a9690",
+      "pale": "#d8d4cc",
+      "pad": "#e0d8c8",
+      "seam": "#706c66"
+    }
+  ],
+  "c": {
+    "body": "#c8964a",
+    "pale": "#e8cc94",
+    "pad": "#ead6a8",
+    "nose": "#2a1a12",
+    "seam": "#9a6e34",
+    "eye": "#050404",
+    "leg": "#c8964a",
+    "foot": "#c8964a",
+    "tail": "#c8964a",
+    "muzzle": "#e8cc94",
+    "ear": "#c8964a",
+    "lid": "#9a6e34"
+  },
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [4800, 1500],
+      "focus": {
+        "head": 4
+      }
+    },
+    "shape": [
+      {"id": "torso", "type": "ell", "c": [-0.02, 0.11, 0], "r": [0.07, 0.085, 0.08], "k": 0.03, "color": "@body", "rot": [0, 0, 8], "hair": 0.85, "pat": "agouti"},
+      {"id": "seat", "type": "ell", "c": [-0.025, 0.055, 0], "r": [0.075, 0.05, 0.085], "k": 0.03, "color": "@body", "hair": 0.85, "pat": "agouti"},
+      {"id": "tummy", "type": "ell", "c": [0.018, 0.095, 0], "r": [0.05, 0.06, 0.065], "k": 0.03, "color": "@body", "hair": 0.85, "pat": "agouti"},
+      {"id": "tummyPatch", "type": "ell", "op": "paint", "c": [0.05, 0.1, 0], "r": [0.03, 0.045, 0.045], "kc": 0.01, "color": "@pale"},
+      {"id": "leg", "type": "cone", "a": [-0.005, 0.045, 0.045], "b": [0.1, 0.034, 0.062], "ra": 0.036, "rb": 0.031, "k": 0.02, "color": "@body", "mirror": true, "hair": 0.85, "pat": "agouti"},
+      {"id": "foot", "type": "ell", "c": [0.108, 0.036, 0.063], "r": [0.018, 0.034, 0.03], "k": 0.012, "color": "@body", "mirror": true, "hair": 0.85, "pat": "agouti"},
+      {"id": "sole", "type": "ell", "c": [0.124, 0.037, 0.064], "r": [0.006, 0.027, 0.022], "k": 0.006, "color": "@pad", "mirror": true, "kc": 0.003, "hair": 0.1},
+      {"id": "soleSeam", "type": "ell", "op": "paint", "c": [0.127, 0.037, 0.064], "r": [0.004, 0.029, 0.024], "kc": 0.0012, "color": "@seam", "mirror": true},
+      {"id": "arm", "type": "cone", "a": [-0.01, 0.15, 0.062], "b": [0.045, 0.085, 0.085], "ra": 0.028, "rb": 0.024, "k": 0.016, "color": "@body", "mirror": true, "hair": 0.85, "pat": "agouti"},
+      {"id": "paw", "type": "sphere", "c": [0.05, 0.08, 0.088], "r": 0.025, "k": 0.01, "color": "@body", "mirror": true, "hair": 0.85, "pat": "agouti"},
+      {"id": "palm", "type": "ell", "c": [0.062, 0.074, 0.093], "r": [0.012, 0.016, 0.014], "k": 0.004, "color": "@pad", "rot": [0, -30, 40], "mirror": true, "kc": 0.002, "hair": 0.1},
+      {"id": "neckFill", "type": "ell", "bone": "neck", "c": [-0.005, 0.18, 0], "r": [0.045, 0.03, 0.05], "k": 0.025, "color": "@body", "hair": 0.85, "pat": "agouti"},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.0, 0.25, 0], "r": [0.068, 0.066, 0.072], "k": 0.02, "color": "@body", "hair": 0.85, "pat": "agouti"},
+      {"id": "cheeks", "type": "ell", "bone": "head", "c": [0.02, 0.232, 0], "r": [0.05, 0.045, 0.068], "k": 0.02, "color": "@body", "hair": 0.85, "pat": "agouti"},
+      {"id": "muzzle", "type": "ell", "bone": "head", "c": [0.068, 0.229, 0], "r": [0.034, 0.027, 0.034], "k": 0.012, "color": "@pale", "kc": 0.005, "hair": 0.7, "pat": "agouti"},
+      {"id": "nose", "type": "ell", "bone": "head", "c": [0.1, 0.24, 0], "r": [0.006, 0.01, 0.015], "k": 0.003, "color": "@nose", "rot": [0, 0, -20], "kc": 0.001, "hair": 0.0},
+      {"id": "mouthV", "type": "ell", "op": "paint", "bone": "head", "c": [0.1, 0.222, 0], "r": [0.004, 0.009, 0.0014], "kc": 0.0008, "color": "@nose"},
+      {"id": "mouthL", "type": "ell", "op": "paint", "bone": "head", "c": [0.096, 0.213, 0.008], "r": [0.004, 0.0014, 0.01], "kc": 0.0008, "color": "@nose", "rot": [0, 30, -15], "mirror": true},
+      {"id": "seamM", "type": "ell", "op": "paint", "bone": "head", "c": [0.03, 0.27, 0], "r": [0.052, 0.055, 0.0012], "kc": 0.0008, "color": "@seam"},
+      {"id": "seamC", "type": "ell", "op": "paint", "bone": "head", "c": [-0.01, 0.29, 0], "r": [0.06, 0.03, 0.0012], "kc": 0.0008, "color": "@seam"},
+      {"id": "ear", "type": "ell", "bone": "head", "c": [-0.006, 0.305, 0.052], "r": [0.012, 0.027, 0.027], "k": 0.008, "color": "@body", "rot": [25, 0, 0], "mirror": true, "hair": 0.85, "pat": "agouti"},
+      {"id": "earIn", "type": "ell", "bone": "head", "c": [0.004, 0.304, 0.054], "r": [0.005, 0.018, 0.018], "k": 0.004, "color": "@pad", "rot": [25, 0, 0], "mirror": true, "kc": 0.002, "op": "sub"},
+      {"id": "earInC", "type": "ell", "op": "paint", "bone": "head", "c": [0.004, 0.304, 0.054], "r": [0.01, 0.019, 0.019], "kc": 0.002, "color": "@pad", "rot": [25, 0, 0], "mirror": true},
+      {"id": "tail", "type": "sphere", "c": [-0.098, 0.05, 0], "r": 0.016, "k": 0.01, "color": "@body", "hair": 0.85, "pat": "agouti"}
+    ],
+    "eyes": {
+      "at": [0.06, 0.262, 0.03],
+      "from": [0.0, 0.255, 0.0],
+      "r": 0.0085,
+      "iris": "#050404",
+      "color": "#050404",
+      "pupil": "round",
+      "lid": false,
+      "sink": 0.25,
+      "socket": 0.9
+    },
+    "shade": {
+      "back": 1.0,
+      "belly": 1.04,
+      "on": "@body"
+    }
+  }
+}

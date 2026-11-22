@@ -68,11 +68,21 @@ class Painter:
     """markings as PAINTS (op paint: colour only), each an ellipsoid laid on the probed skin.
     A mark: around a ray from an axis point `o` out in direction `d` (the skin point found on it), its long axis `along`
     (projected into the skin's tangent plane), half-sizes la (along) x lr (across), `depth` into the body."""
-    def __init__(self, sp, SH):
+    def __init__(self, sp, SH, axis=None):
+        """axis (the body's axis, x -> [x, y, z]): the marks written as `dabs` shapes (herps/dabs.py), laid by the engine --
+        rays from it square to x as rows; without it each mark is probed here and written as a paint of its own"""
         self.sp, self.SH, self.M = sp, SH, []
+        self.D = None
+        if axis:
+            from dabs import Dabs
+            self.D = Dabs(axis_fn=axis, soft=.15, depth=[.6, .0005])   # (this painter's rules: kc .15, depth .6 the smaller half-size + .5 mm)
     def mark(self, id_, o, d, la, lr, col, bone, along=(1, 0, 0), depth=None, when=None, k=None, kc=None, mirror=False):
+        if self.D:
+            assert depth is None, "a dabs mark's depth is the engine's"
+            return self.D.ray(list(o), nrm(d), la, lr, col, along=list(along), when=when, mirror=mirror, kc=kc if kc is not None else k, bone=bone)
         self.M.append(dict(id=id_, o=list(o), d=nrm(d), la=la, lr=lr, col=col, bone=bone, along=list(along), depth=depth, when=when, k=k, kc=kc, mirror=mirror))
     def lay(self, reach=0.2):
+        if self.D: self.D.reach = reach; return self.D.shapes()
         if not self.M: return []
         hits = rays_hits(self.sp, self.SH, [[m["o"], add(m["o"], m["d"], reach)] for m in self.M])
         ok = [(m, h) for m, h in zip(self.M, hits) if h]

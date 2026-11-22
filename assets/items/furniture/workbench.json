@@ -1,0 +1,448 @@
+{
+ "kind": "item",
+ "name": "Workbench",
+ "category": "furniture",
+ "era": "1600-1950",
+ "region": "Europe",
+ "_about": "a joiner's workbench: a thick top on four square legs with stretchers and a shelf under it, a leg vice at the front left (the chop, its wooden screw and tommy bar, the parallel guide), dog holes along the front, a planing stop at the right end, a holdfast, a drawer, a jack plane on the top -- 2.2 m long, its front +z",
+ "params": {},
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "ash",
+    "pine"
+   ]
+  },
+  "top": {
+   "pick": [
+    "oak",
+    "planks"
+   ]
+  },
+  "iron": "iron",
+  "dark": "mouth-dark",
+  "steel": "steel"
+ },
+ "parts": [
+  {
+   "id": "top",
+   "type": "box",
+   "material": "top",
+   "size": [
+    2.2,
+    0.1,
+    0.6
+   ],
+   "at": [
+    0,
+    0.83,
+    0
+   ]
+  },
+  {
+   "id": "legs",
+   "use": "items/components/square-leg",
+   "at": [
+    [
+     -0.95,
+     0,
+     -0.22
+    ],
+    [
+     -0.95,
+     0,
+     0.22
+    ],
+    [
+     0.95,
+     0,
+     -0.22
+    ],
+    [
+     0.95,
+     0,
+     0.22
+    ]
+   ],
+   "params": {
+    "h": 0.78,
+    "w": 0.1,
+    "taper": 1
+   }
+  },
+  {
+   "id": "stretchers",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.8,
+    0.08,
+    0.06
+   ],
+   "at": [
+    [
+     0,
+     0.2,
+     -0.22
+    ],
+    [
+     0,
+     0.2,
+     0.22
+    ]
+   ]
+  },
+  {
+   "id": "endRails",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.08,
+    0.44
+   ],
+   "at": [
+    [
+     -0.95,
+     0.2,
+     0
+    ],
+    [
+     -0.95,
+     0.74,
+     0
+    ],
+    [
+     0.95,
+     0.2,
+     0
+    ],
+    [
+     0.95,
+     0.74,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "shelf",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.84,
+    0.025,
+    0.44
+   ],
+   "at": [
+    0,
+    0.255,
+    0
+   ]
+  },
+  {
+   "id": "shelfBoards",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    1.2,
+    0.03,
+    0.15
+   ],
+   "at": [
+    [
+     0.1,
+     0.283,
+     -0.08
+    ],
+    [
+     0.05,
+     0.313,
+     -0.07
+    ]
+   ]
+  },
+  {
+   "id": "chop",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.2,
+    0.78,
+    0.07
+   ],
+   "at": [
+    -0.95,
+    0.47,
+    0.34
+   ]
+  },
+  {
+   "id": "screw",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.03,
+   "from": [
+    -0.95,
+    0.72,
+    0.15
+   ],
+   "to": [
+    -0.95,
+    0.72,
+    0.46
+   ],
+   "sides": 10
+  },
+  {
+   "id": "boss",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0.05,
+     0
+    ],
+    [
+     0.05,
+     0.05
+    ],
+    [
+     0.032,
+     0.07
+    ],
+    [
+     0,
+     0.07
+    ]
+   ],
+   "sides": 12,
+   "at": [
+    -0.95,
+    0.72,
+    0.375,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "tommyBar",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.013,
+   "from": [
+    -1.15,
+    0.72,
+    0.43
+   ],
+   "to": [
+    -0.75,
+    0.72,
+    0.43
+   ],
+   "sides": 8
+  },
+  {
+   "id": "guide",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.04,
+    0.35
+   ],
+   "at": [
+    -0.95,
+    0.12,
+    0.2
+   ]
+  },
+  {
+   "id": "guidePeg",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.012,
+   "from": [
+    -0.95,
+    0.1,
+    0.1
+   ],
+   "to": [
+    -0.95,
+    0.17,
+    0.1
+   ],
+   "sides": 6
+  },
+  {
+   "id": "dogHoles",
+   "type": "box",
+   "material": "dark",
+   "size": [
+    0.022,
+    0.002,
+    0.022
+   ],
+   "at": [
+    0,
+    0.8805,
+    0.23
+   ],
+   "along": {
+    "n": 7,
+    "from": [
+     -0.55,
+     0,
+     0
+    ],
+    "to": [
+     0.95,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "stop",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.06,
+    0.035,
+    0.06
+   ],
+   "at": [
+    1.02,
+    0.897,
+    0.05
+   ]
+  },
+  {
+   "id": "holdfast",
+   "type": "sweep",
+   "material": "iron",
+   "path": [
+    [
+     0.3,
+     0.76,
+     -0.12
+    ],
+    [
+     0.3,
+     0.99,
+     -0.12
+    ],
+    [
+     0.34,
+     1.015,
+     -0.12
+    ],
+    [
+     0.46,
+     0.94,
+     -0.12
+    ],
+    [
+     0.5,
+     0.89,
+     -0.12
+    ]
+   ],
+   "r": 0.01
+  },
+  {
+   "id": "drawer",
+   "use": "items/components/drawer",
+   "at": [
+    0.45,
+    0.71,
+    0.28
+   ],
+   "params": {
+    "w": 0.55,
+    "h": 0.12,
+    "knobs": 1
+   }
+  },
+  {
+   "id": "drawerCase",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.62,
+    0.15,
+    0.04
+   ],
+   "at": [
+    0.45,
+    0.71,
+    0.25
+   ]
+  },
+  {
+   "id": "planeBody",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.36,
+    0.07,
+    0.065
+   ],
+   "at": [
+    -0.35,
+    0.915,
+    -0.1,
+    15,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "planeTote",
+   "type": "sweep",
+   "material": "wood",
+   "path": [
+    [
+     -0.43,
+     0.95,
+     -0.08
+    ],
+    [
+     -0.46,
+     1.01,
+     -0.075
+    ],
+    [
+     -0.41,
+     1.01,
+     -0.065
+    ],
+    [
+     -0.39,
+     0.95,
+     -0.06
+    ]
+   ],
+   "r": 0.012
+  },
+  {
+   "id": "planeIron",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.008,
+    0.06,
+    0.05
+   ],
+   "at": [
+    -0.33,
+    0.97,
+    -0.105,
+    15,
+    0,
+    -50
+   ]
+  }
+ ]
+}

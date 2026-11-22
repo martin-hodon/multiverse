@@ -1,6 +1,8 @@
-// the snake's coat marks (rings, saddles, zig-zag, spots), laid on its rest-pose surface: op "paint" shapes, written out as JSON
+// the snake's coat marks (rings, saddles, zig-zag, spots): a `dabs` shape a pattern (bodyspec.js header, sculpt.js layDabs:
+// rows [s, phi, along, round, rot] measured on the trunk's own centreline -- the tubes' points, girth and all -- each laid
+// on the skin by the engine), and the head's few marks as paints snapped onto it; written out as JSON (snakejson.py)
 import "./shim.mjs";
-import { writeFileSync } from "fs";
+import { writeFileSync, readFileSync } from "fs";
 const R0 = "/home/martin/store/apps/multiverse/";
 const S = await import(R0 + "species.js"), B = await import(R0 + "bodyspec.js"), F = await import(R0 + "sculpt.js");
 const o = B.sculptOf(S.A("snake")).sculpted;
@@ -40,27 +42,40 @@ function onBody(s, phi) {
 }
 const out = [];
 let n = 0;
-// a frame (three unit columns) as Euler XYZ degrees (sculpt.js rotM: three.js's order)
-const ax3 = ([e1, e2, e3]) => { const y = Math.asin(Math.max(-1, Math.min(1, e3[0]))), x = Math.atan2(-e3[1], e3[2]), z = Math.atan2(-e2[0], e1[0]);
-  return [x, y, z].map((a) => +(a * 180 / Math.PI).toFixed(1)); };
-// a blotch: centred on the surface, `al` along, `ar` round (radians of the girth), `rn` deep
-function blotch(when, color, s, phi, al, ar, { rn = null, rot = 0, kc = .0007 } = {}) {
-  const b = onBody(s, phi), e1 = b.T.map((t, k) => t * Math.cos(rot) + cross(b.N, b.T)[k] * Math.sin(rot)), e2 = b.N, e3 = cross(e1, e2);
-  out.push({ id: `pz_${when}${n++}`, when, op: "paint", type: "ell", bone: boneAt(s), c: b.c,
-    r: [f5(al), `${f5(rn ?? b.r * .8)}*girth`, `${f5(ar * b.r)}*girth`], rot: ax3([e1, e2, e3]), kc, color });
+// THE SETS: one a pattern (its `when`), on the axis the trunk's tubes are drawn through -- their points as written (joints
+// and girth: the marks ride the body however thick), the engine's spline through them; s along it from the head end
+const RAW = JSON.parse(readFileSync(R0 + "assets/creatures/others/snake.json")).sculpt.shape, rawId = (id) => RAW.find((p) => p.id === id);
+const AXIS = [...rawId("front").pts, ...[1, 2, 3, 4, 5, 6, 7].flatMap((i) => [rawId("seg" + i).pts[2], rawId("seg" + i).pts[3]])];
+const EC = F.sweepCurve({ pts: ctl.map((q) => q.slice(0, 4)) });
+// (s along this script's own line -> along the engine's: the nearest point of its curve)
+function sE(s) {
+  const p = axis(s).A, X = EC.X;
+  let bi = 0, bd = Infinity;
+  for (let i = 0; i < X.length; i++) { const d = Math.hypot(X[i][0] - p[0], X[i][1] - p[1], X[i][2] - p[2]); if (d < bd) { bd = d; bi = i; } }
+  let best = EC.S[bi], bd2 = bd;
+  for (const j of [bi - 1, bi + 1]) {
+    if (j < 0 || j >= X.length) continue;
+    const A = X[Math.min(bi, j)], B = X[Math.max(bi, j)], AB = B.map((v, k) => v - A[k]), L2 = AB[0] ** 2 + AB[1] ** 2 + AB[2] ** 2;
+    const t = Math.max(0, Math.min(1, ((p[0] - A[0]) * AB[0] + (p[1] - A[1]) * AB[1] + (p[2] - A[2]) * AB[2]) / (L2 || 1)));
+    const d = Math.hypot(...[0, 1, 2].map((k) => A[k] + AB[k] * t - p[k]));
+    if (d < bd2) { bd2 = d; best = EC.S[Math.min(bi, j)] + t * Math.sqrt(L2); }
+  }
+  return +best.toFixed(5);
 }
-// a ring right round: an ellipsoid on the axis, twice the girth across (its band on the surface ~.87 of its length)
-function ring(when, color, s0, s1, kc = .0007) {
-  const s = (s0 + s1) / 2, b = axis(s), half = (s1 - s0) / 2 / .866, c = b.A.map((a, k) => gx(a - b.U[k] * b.r, b.U[k] * b.r));
-  out.push({ id: `pz_${when}${n++}`, when, op: "paint", type: "ell", bone: boneAt(s), c, r: [f5(half), `${f5(2.1 * b.r)}*girth`, `${f5(2.1 * b.r)}*girth`],
-    rot: ax3([b.T, b.U, b.S]), kc, color });
+const SETS = new Map();
+const set = (when) => SETS.get(when) ?? SETS.set(when, { id: `pz_${when}`, when, type: "dabs", axis: AXIS, depth: .8, kc: .0007, marks: [], cols: [] }).get(when);
+const mark = (when, color, m) => { const q = set(when); q.marks.push(m); q.cols.push(color); };
+const deg = (a) => +(a * 180 / Math.PI).toFixed(2);
+// a blotch: `al` along, `ar` round (radians of the girth), .8 of the girth deep (phi: this script's side is the engine's other)
+function blotch(when, color, s, phi, al, ar, { rot = 0 } = {}) {
+  const row = [sE(s), deg(-phi), f5(al), `${f5(ar * axis(s).r)}*girth`];
+  if (rot) row.push(deg(rot));
+  mark(when, color, row);
 }
-// a stroke: a tube along the surface between (s, phi) points, `w` wide
-function stroke(when, color, pts, w, kc = .0006) {
-  const P = pts.map(([s, phi]) => onBody(s, phi));
-  out.push({ id: `pz_${when}${n++}`, when, op: "paint", type: "tube", bone: boneAt(pts[0][0]),
-    pts: P.map((b) => [...b.c, `${f5(w / 2)}*girth`]), kc, color });
-}
+// a ring right round
+function ring(when, color, s0, s1) { const m = sE((s0 + s1) / 2), h = (s1 - s0) / 2; mark(when, color, { ring: [+(m - h).toFixed(5), +(m + h).toFixed(5)] }); }
+// a stroke: a band along the surface through (s, phi) points, `w` wide
+function stroke(when, color, pts, w, kc = .0006) { mark(when, color, { stroke: pts.map(([s, phi]) => [sE(s), deg(-phi)]), w: `${f5(w)}*girth`, kc }); }
 // on the head (no girth): points snapped onto it from a guess
 const hp = (p) => snap(p).map(f5);
 function hstroke(when, color, pts, w, kc = .0005) { out.push({ id: `pz_${when}${n++}`, when, op: "paint", type: "tube", bone: "head", pts: pts.map((p) => [...hp(p), w / 2]), kc, color }); }
@@ -138,5 +153,12 @@ const D2R = Math.PI / 180;
   hblot("blotch", "@fill", [.737, .032, 0], [.026, .0062, .0078]);
   for (const z of [1, -1]) hstroke("blotch", "@mark", [[.76, .025, .0135 * z], [.73, .021, .0165 * z], [.705, .02, .016 * z]], .005);
 }
-writeFileSync(process.argv[2], JSON.stringify(out));
-console.log("marks", out.length, "length", LEN.toFixed(3), Object.entries(out.reduce((m, q) => (m[q.when] = (m[q.when] ?? 0) + 1, m), {})));
+// (each set in its commonest colour, a mark naming its own only where it differs)
+const sets = [...SETS.values()].map(({ cols, ...q }) => {
+  const cnt = {}; for (const c of cols) cnt[c] = (cnt[c] ?? 0) + 1;
+  const col = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+  const marks = q.marks.map((m, i) => (cols[i] === col ? m : Array.isArray(m) ? [...m, ...(m.length < 5 ? [0] : []), cols[i]] : { ...m, color: cols[i] }));
+  return { id: q.id, when: q.when, type: "dabs", color: col, axis: q.axis, depth: q.depth, kc: q.kc, marks };
+});
+writeFileSync(process.argv[2], JSON.stringify([...sets, ...out]));
+console.log("sets", sets.length, "marks", sets.reduce((a, q) => a + q.marks.length, 0), "head paints", out.length, "length", LEN.toFixed(3));

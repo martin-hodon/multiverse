@@ -1,0 +1,946 @@
+{
+ "kind": "item",
+ "name": "Covered goods wagon",
+ "category": "vehicle",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a covered goods wagon on two bogies (Gabs / Habis type), 18 m over buffers, 2.83 m wide, 4.0 m high: steel sides with their stanchions, two sliding doors a side on their rails (`open`: out and toward the ends, onto the hollow inside -- plank floor, battens, a light load of pallets and sacks), the arched roof, ribbed ends, solebars, Y25 bogies, buffers and hooks",
+ "params": {
+  "open": 0
+ },
+ "materials": {
+  "paint": {
+   "pick": [
+    "#6b3a2a",
+    "#5a2e24",
+    "#7a4630",
+    "#4f4a44"
+   ]
+  },
+  "door": "#4a2a20",
+  "frame": "paint-black",
+  "plate": "#d8d4c8",
+  "steel": "steel",
+  "buffer": "steel",
+  "planks": "planks",
+  "carton": "#b08a5c",
+  "sacking": "hemp"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "loft",
+   "material": "paint",
+   "stations": [
+    [
+     -8.4,
+     1.41,
+     1.2,
+     4.0
+    ],
+    [
+     8.4,
+     1.41,
+     1.2,
+     4.0
+    ]
+   ],
+   "round": [
+    0.03,
+    0.55
+   ],
+   "seg": 1,
+   "corner": 5,
+   "double": true,
+   "holes": [
+    {
+     "x": [
+      1.65,
+      4.0
+     ],
+     "y": [
+      1.32,
+      3.65
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      -4.0,
+      -1.65
+     ],
+     "y": [
+      1.32,
+      3.65
+     ],
+     "side": "both"
+    }
+   ]
+  },
+  {
+   "id": "rib",
+   "type": "box",
+   "material": "paint",
+   "size": [
+    0.1,
+    2.15,
+    0.06
+   ],
+   "at": [
+    [
+     -7.8,
+     2.305,
+     1.44
+    ],
+    [
+     -6.6,
+     2.305,
+     1.44
+    ],
+    [
+     -5.4,
+     2.305,
+     1.44
+    ],
+    [
+     -1.2,
+     2.305,
+     1.44
+    ],
+    [
+     0,
+     2.305,
+     1.44
+    ],
+    [
+     1.2,
+     2.305,
+     1.44
+    ],
+    [
+     5.4,
+     2.305,
+     1.44
+    ],
+    [
+     6.6,
+     2.305,
+     1.44
+    ],
+    [
+     7.8,
+     2.305,
+     1.44
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "ribEnd",
+   "type": "box",
+   "material": "paint",
+   "size": [
+    0.06,
+    2.2,
+    0.1
+   ],
+   "at": [
+    [
+     8.43,
+     2.3,
+     -0.95
+    ],
+    [
+     8.43,
+     2.3,
+     -0.32
+    ],
+    [
+     8.43,
+     2.3,
+     0.32
+    ],
+    [
+     8.43,
+     2.3,
+     0.95
+    ],
+    [
+     -8.43,
+     2.3,
+     -0.95
+    ],
+    [
+     -8.43,
+     2.3,
+     -0.32
+    ],
+    [
+     -8.43,
+     2.3,
+     0.32
+    ],
+    [
+     -8.43,
+     2.3,
+     0.95
+    ]
+   ]
+  },
+  {
+   "id": "doorROut",
+   "type": "slide",
+   "move": [
+    0,
+    0,
+    0.04
+   ],
+   "parts": [
+    {
+     "id": "doorR",
+     "type": "slide",
+     "move": [
+      -2.4,
+      0,
+      0
+     ],
+     "parts": [
+      {
+       "id": "panel",
+       "type": "box",
+       "material": "door",
+       "size": [
+        3.4,
+        2.5,
+        0.06
+       ],
+       "at": [
+        -3.3,
+        2.53,
+        1.48
+       ]
+      },
+      {
+       "id": "rib",
+       "type": "box",
+       "material": "door",
+       "size": [
+        0.07,
+        2.5,
+        0.05
+       ],
+       "at": [
+        [
+         -4.4,
+         2.53,
+         1.53
+        ],
+        [
+         -3.3,
+         2.53,
+         1.53
+        ],
+        [
+         -2.2,
+         2.53,
+         1.53
+        ]
+       ]
+      },
+      {
+       "id": "handle",
+       "type": "box",
+       "material": "frame",
+       "size": [
+        0.05,
+        0.6,
+        0.05
+       ],
+       "at": [
+        -1.75,
+        2.4,
+        1.54
+       ]
+      }
+     ],
+     "range": [
+      0.2,
+      1
+     ]
+    }
+   ],
+   "range": [
+    0,
+    0.2
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "doorFOut",
+   "type": "slide",
+   "move": [
+    0,
+    0,
+    0.04
+   ],
+   "parts": [
+    {
+     "id": "doorF",
+     "type": "slide",
+     "move": [
+      2.4,
+      0,
+      0
+     ],
+     "parts": [
+      {
+       "id": "panel",
+       "type": "box",
+       "material": "door",
+       "size": [
+        3.4,
+        2.5,
+        0.06
+       ],
+       "at": [
+        3.3,
+        2.53,
+        1.48
+       ]
+      },
+      {
+       "id": "rib",
+       "type": "box",
+       "material": "door",
+       "size": [
+        0.07,
+        2.5,
+        0.05
+       ],
+       "at": [
+        [
+         2.2,
+         2.53,
+         1.53
+        ],
+        [
+         3.3,
+         2.53,
+         1.53
+        ],
+        [
+         4.4,
+         2.53,
+         1.53
+        ]
+       ]
+      },
+      {
+       "id": "handle",
+       "type": "box",
+       "material": "frame",
+       "size": [
+        0.05,
+        0.6,
+        0.05
+       ],
+       "at": [
+        1.75,
+        2.4,
+        1.54
+       ]
+      }
+     ],
+     "range": [
+      0.2,
+      1
+     ]
+    }
+   ],
+   "range": [
+    0,
+    0.2
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "doorRailTop",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.04,
+   "from": [
+    -7.6,
+    3.82,
+    1.49
+   ],
+   "to": [
+    7.6,
+    3.82,
+    1.49
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "doorRailBot",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    15.2,
+    0.08,
+    0.1
+   ],
+   "at": [
+    0,
+    1.24,
+    1.48
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "floorIn",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    16.7,
+    0.04,
+    2.72
+   ],
+   "at": [
+    0,
+    1.25,
+    0
+   ],
+   "inside": true
+  },
+  {
+   "id": "battens",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    16.5,
+    0.08,
+    0.04
+   ],
+   "at": [
+    [
+     0,
+     2.2,
+     1.37
+    ],
+    [
+     0,
+     3.0,
+     1.37
+    ]
+   ],
+   "mirror": "z",
+   "inside": true
+  },
+  {
+   "id": "pallet",
+   "type": "box",
+   "material": "planks",
+   "size": [
+    1.2,
+    0.14,
+    0.8
+   ],
+   "at": [
+    [
+     -6.6,
+     1.34,
+     -0.5
+    ],
+    [
+     -6.6,
+     1.34,
+     0.5
+    ],
+    [
+     -5.2,
+     1.34,
+     -0.5
+    ],
+    [
+     6.4,
+     1.34,
+     0.45
+    ],
+    [
+     5.0,
+     1.34,
+     -0.5
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "cartons",
+   "type": "box",
+   "material": "carton",
+   "size": [
+    1.15,
+    0.9,
+    0.78
+   ],
+   "at": [
+    [
+     -6.6,
+     1.86,
+     -0.5
+    ],
+    [
+     -6.6,
+     1.86,
+     0.5
+    ],
+    [
+     -5.2,
+     1.86,
+     -0.5
+    ],
+    [
+     6.4,
+     1.86,
+     0.45
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "cartonsTop",
+   "type": "box",
+   "material": "carton",
+   "size": [
+    1.1,
+    0.5,
+    0.74
+   ],
+   "at": [
+    [
+     -6.6,
+     2.56,
+     -0.5
+    ],
+    [
+     -6.6,
+     2.56,
+     0.5
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "sacks",
+   "type": "box",
+   "material": "sacking",
+   "size": [
+    0.85,
+    0.28,
+    0.5
+   ],
+   "at": [
+    [
+     5.0,
+     1.55,
+     -0.65
+    ],
+    [
+     5.0,
+     1.55,
+     -0.33
+    ],
+    [
+     5.0,
+     1.82,
+     -0.5,
+     8,
+     0,
+     0
+    ]
+   ],
+   "round": 0.1,
+   "inside": true
+  },
+  {
+   "id": "label",
+   "type": "box",
+   "material": "plate",
+   "size": [
+    1.6,
+    0.6,
+    0.012
+   ],
+   "at": [
+    -5.9,
+    1.8,
+    1.445
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "solebar",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    16.8,
+    0.32,
+    0.14
+   ],
+   "at": [
+    0,
+    1.08,
+    1.31
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "headstock",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.25,
+    0.42,
+    2.8
+   ],
+   "at": [
+    [
+     8.28,
+     1.08,
+     0
+    ],
+    [
+     -8.28,
+     1.08,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "bolsterC",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.5,
+    0.35,
+    2.2
+   ],
+   "at": [
+    [
+     6.2,
+     0.92,
+     0
+    ],
+    [
+     -6.2,
+     0.92,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "brakeCyl",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    1.2,
+    0.35,
+    0.4
+   ],
+   "at": [
+    0,
+    0.95,
+    0.4
+   ]
+  },
+  {
+   "id": "bogie0",
+   "use": "items/modern/components/bogie",
+   "at": [
+    6.2,
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.46,
+    "base": 1.8
+   }
+  },
+  {
+   "id": "bogie1",
+   "use": "items/modern/components/bogie",
+   "at": [
+    -6.2,
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.46,
+    "base": 1.8
+   }
+  },
+  {
+   "id": "bufBody0",
+   "type": "lathe",
+   "material": "frame",
+   "profile": [
+    [
+     0.13,
+     0
+    ],
+    [
+     0.1,
+     0.03
+    ],
+    [
+     0.1,
+     0.3
+    ],
+    [
+     0,
+     0.3
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    8.4,
+    1.06,
+    0.875,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "bufRam0",
+   "type": "lathe",
+   "material": "steel",
+   "profile": [
+    [
+     0.075,
+     0.28
+    ],
+    [
+     0.075,
+     0.5
+    ],
+    [
+     0,
+     0.5
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    8.4,
+    1.06,
+    0.875,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "bufHead0",
+   "type": "lathe",
+   "material": "buffer",
+   "profile": [
+    [
+     0,
+     0.5
+    ],
+    [
+     0.2,
+     0.5
+    ],
+    [
+     0.2,
+     0.54
+    ],
+    [
+     0.12,
+     0.57
+    ],
+    [
+     0,
+     0.575
+    ]
+   ],
+   "sides": 16,
+   "mirror": "z",
+   "at": [
+    8.4,
+    1.06,
+    0.875,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "hook0",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.32,
+    0.12,
+    0.08
+   ],
+   "at": [
+    8.56,
+    1.06,
+    0
+   ]
+  },
+  {
+   "id": "screw0",
+   "type": "rod",
+   "material": "steel",
+   "r": 0.025,
+   "from": [
+    8.7,
+    1.06,
+    0
+   ],
+   "to": [
+    8.7,
+    0.71,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "bufBody1",
+   "type": "lathe",
+   "material": "frame",
+   "profile": [
+    [
+     0.13,
+     0
+    ],
+    [
+     0.1,
+     0.03
+    ],
+    [
+     0.1,
+     0.3
+    ],
+    [
+     0,
+     0.3
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    -8.4,
+    1.06,
+    0.875,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "bufRam1",
+   "type": "lathe",
+   "material": "steel",
+   "profile": [
+    [
+     0.075,
+     0.28
+    ],
+    [
+     0.075,
+     0.5
+    ],
+    [
+     0,
+     0.5
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    -8.4,
+    1.06,
+    0.875,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "bufHead1",
+   "type": "lathe",
+   "material": "buffer",
+   "profile": [
+    [
+     0,
+     0.5
+    ],
+    [
+     0.2,
+     0.5
+    ],
+    [
+     0.2,
+     0.54
+    ],
+    [
+     0.12,
+     0.57
+    ],
+    [
+     0,
+     0.575
+    ]
+   ],
+   "sides": 16,
+   "mirror": "z",
+   "at": [
+    -8.4,
+    1.06,
+    0.875,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "hook1",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.32,
+    0.12,
+    0.08
+   ],
+   "at": [
+    -8.56,
+    1.06,
+    0
+   ]
+  },
+  {
+   "id": "screw1",
+   "type": "rod",
+   "material": "steel",
+   "r": 0.025,
+   "from": [
+    -8.7,
+    1.06,
+    0
+   ],
+   "to": [
+    -8.7,
+    0.71,
+    0
+   ],
+   "sides": 6
+  }
+ ]
+}

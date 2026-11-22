@@ -343,7 +343,7 @@ export function createVillageLife(world) {
     // who holds a tool now (at their work spot, standing, hands free): for tools.js to put it in their hand
     // ...and who walks the streets after dark: two in three carry a lantern, in the left hand (its glow: nightglow.js)
     holders: () => {
-      const out = vs.filter((v) => !v.down && !v.lane && v.at === v.work && v.work?.tool && !v.load).map((v) => ({ an: v.vr.walk, tool: v.work.tool, hand: v.hand, trade: v.work.s?.trade ?? null }));   // (trade: the workshop's -- a smithy's hammer throws sparks)
+      const out = vs.filter((v) => !v.down && !v.lane && v.at === v.work && v.work?.tool && !v.load).map((v) => ({ an: v.vr.walk, tool: v.work.tool, hand: v.hand, trade: v.work.s?.trade ?? null, bard: !!v.work.bard }));   // (trade: the workshop's -- a smithy's hammer throws sparks; bard: the fountain's player, whose instrument is the song's)
       if (isNight()) for (const v of vs) if (v.lane && v.lamp && !v.down && !v.load) out.push({ an: v.vr.walk, tool: "lantern", hand: v.handL, lamp: true });
       return out;
     },

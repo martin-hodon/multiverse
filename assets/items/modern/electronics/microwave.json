@@ -1,0 +1,615 @@
+{
+ "kind": "item",
+ "name": "Microwave",
+ "category": "electronics",
+ "era": "1975-2030",
+ "region": "everywhere",
+ "_about": "a countertop microwave oven, 48 x 28 x 36 cm: the cabinet on four feet, the door with its dark mesh window and a pull, hinged at its left edge and opening onto the lit cavity with its glass turntable, the control panel to its right (-z, the user facing it) with a display, a keypad and a dial -- facing +x",
+ "params": {
+  "open": 0
+ },
+ "materials": {
+  "body": {
+   "pick": [
+    "paint-silver",
+    "paint-white",
+    "plastic-black",
+    "steel"
+   ]
+  },
+  "door": "#1c1d20",
+  "window": "#2a3038",
+  "panel": "#26272b",
+  "display": "#0f2a1c",
+  "button": "plastic-grey",
+  "knob": "aluminium",
+  "foot": "rubber",
+  "cavity": "#d9d6cc",
+  "plate": "glass-light",
+  "roller": "plastic-grey",
+  "lamp": "lamp",
+  "bowl": {
+   "pick": [
+    "#e9e4d8",
+    "#c9d8e0",
+    "#d8b48a"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "cabinet",
+   "type": "loft",
+   "material": "body",
+   "stations": [
+    [
+     -0.18,
+     0.24,
+     0.012,
+     0.28
+    ],
+    [
+     0.167,
+     0.24,
+     0.012,
+     0.28
+    ]
+   ],
+   "round": [
+    0.005,
+    0.02
+   ],
+   "seg": 1,
+   "caps": [
+    true,
+    false
+   ]
+  },
+  {
+   "id": "foot",
+   "type": "box",
+   "material": "foot",
+   "size": [
+    0.03,
+    0.012,
+    0.03
+   ],
+   "at": [
+    [
+     0.14,
+     0.006,
+     0.2
+    ],
+    [
+     0.14,
+     0.006,
+     -0.2
+    ],
+    [
+     -0.14,
+     0.006,
+     0.2
+    ],
+    [
+     -0.14,
+     0.006,
+     -0.2
+    ]
+   ]
+  },
+  {
+   "id": "frameTop",
+   "type": "box",
+   "material": "body",
+   "size": [
+    0.012,
+    0.028,
+    0.44
+   ],
+   "at": [
+    0.161,
+    0.264,
+    0
+   ]
+  },
+  {
+   "id": "frameCorner",
+   "type": "rod",
+   "material": "body",
+   "r": 0.02,
+   "from": [
+    0.155,
+    0.26,
+    0.22
+   ],
+   "to": [
+    0.167,
+    0.26,
+    0.22
+   ],
+   "sides": 16,
+   "mirror": "z"
+  },
+  {
+   "id": "frameSill",
+   "type": "box",
+   "material": "body",
+   "size": [
+    0.012,
+    0.026,
+    0.474
+   ],
+   "at": [
+    0.161,
+    0.027,
+    0
+   ]
+  },
+  {
+   "id": "frameSide",
+   "type": "box",
+   "material": "body",
+   "size": [
+    0.012,
+    0.22,
+    0.012
+   ],
+   "at": [
+    0.161,
+    0.15,
+    0.231
+   ]
+  },
+  {
+   "id": "frameMid",
+   "type": "box",
+   "material": "body",
+   "size": [
+    0.012,
+    0.22,
+    0.142
+   ],
+   "at": [
+    0.161,
+    0.15,
+    -0.166
+   ]
+  },
+  {
+   "id": "cavityBack",
+   "type": "box",
+   "material": "cavity",
+   "size": [
+    0.006,
+    0.21,
+    0.32
+   ],
+   "at": [
+    -0.147,
+    0.145,
+    0.065
+   ]
+  },
+  {
+   "id": "cavityFloor",
+   "type": "box",
+   "material": "cavity",
+   "size": [
+    0.317,
+    0.006,
+    0.32
+   ],
+   "at": [
+    0.0085,
+    0.043,
+    0.065
+   ]
+  },
+  {
+   "id": "cavityRoof",
+   "type": "box",
+   "material": "cavity",
+   "size": [
+    0.317,
+    0.006,
+    0.32
+   ],
+   "at": [
+    0.0085,
+    0.247,
+    0.065
+   ]
+  },
+  {
+   "id": "cavitySide",
+   "type": "box",
+   "material": "cavity",
+   "size": [
+    0.317,
+    0.21,
+    0.006
+   ],
+   "at": [
+    [
+     0.0085,
+     0.145,
+     -0.092
+    ],
+    [
+     0.0085,
+     0.145,
+     0.222
+    ]
+   ]
+  },
+  {
+   "id": "lamp",
+   "type": "box",
+   "material": "lamp",
+   "size": [
+    0.04,
+    0.03,
+    0.002
+   ],
+   "at": [
+    -0.02,
+    0.21,
+    0.218
+   ],
+   "inside": true
+  },
+  {
+   "id": "roller",
+   "type": "ring",
+   "material": "roller",
+   "r": 0.07,
+   "tube": 0.006,
+   "at": [
+    0.0085,
+    0.052,
+    0.065
+   ],
+   "inside": true
+  },
+  {
+   "id": "turntable",
+   "type": "lathe",
+   "material": "plate",
+   "profile": [
+    [
+     0,
+     0.02
+    ],
+    [
+     0.13,
+     0.02
+    ],
+    [
+     0.135,
+     0.026
+    ],
+    [
+     0.137,
+     0.03
+    ],
+    [
+     0,
+     0.03
+    ]
+   ],
+   "sides": 24,
+   "inside": true,
+   "at": [
+    0.0085,
+    0.04,
+    0.065
+   ]
+  },
+  {
+   "id": "bowl",
+   "type": "lathe",
+   "material": "bowl",
+   "profile": [
+    [
+     0,
+     0.03
+    ],
+    [
+     0.05,
+     0.03
+    ],
+    [
+     0.07,
+     0.055
+    ],
+    [
+     0.075,
+     0.08
+    ],
+    [
+     0.07,
+     0.08
+    ],
+    [
+     0.064,
+     0.058
+    ],
+    [
+     0.045,
+     0.036
+    ],
+    [
+     0,
+     0.036
+    ]
+   ],
+   "sides": 14,
+   "inside": true,
+   "at": [
+    0.0185,
+    0.04,
+    0.085
+   ]
+  },
+  {
+   "id": "door",
+   "type": "hinge",
+   "pivot": [
+    0.17,
+    0,
+    0.235
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": -95,
+   "parts": [
+    {
+     "id": "door",
+     "type": "box",
+     "material": "door",
+     "size": [
+      0.014,
+      0.25,
+      0.34
+     ],
+     "at": [
+      0.177,
+      0.146,
+      0.065
+     ]
+    },
+    {
+     "id": "window",
+     "type": "box",
+     "material": "window",
+     "size": [
+      0.002,
+      0.17,
+      0.25
+     ],
+     "at": [
+      0.185,
+      0.148,
+      0.075
+     ]
+    },
+    {
+     "id": "pull",
+     "type": "box",
+     "material": "knob",
+     "size": [
+      0.016,
+      0.16,
+      0.014
+     ],
+     "at": [
+      0.19,
+      0.146,
+      -0.093
+     ]
+    },
+    {
+     "id": "doorLiner",
+     "type": "box",
+     "material": "cavity",
+     "size": [
+      0.003,
+      0.2,
+      0.31
+     ],
+     "at": [
+      0.1685,
+      0.145,
+      0.065
+     ],
+     "inside": true
+    }
+   ]
+  },
+  {
+   "id": "panel",
+   "type": "box",
+   "material": "panel",
+   "size": [
+    0.01,
+    0.25,
+    0.12
+   ],
+   "at": [
+    0.175,
+    0.146,
+    -0.172
+   ]
+  },
+  {
+   "id": "display",
+   "type": "box",
+   "material": "display",
+   "size": [
+    0.002,
+    0.025,
+    0.07
+   ],
+   "at": [
+    0.181,
+    0.235,
+    -0.172
+   ]
+  },
+  {
+   "id": "keys0",
+   "type": "box",
+   "material": "button",
+   "size": [
+    0.004,
+    0.014,
+    0.022
+   ],
+   "at": [
+    0.181,
+    0.195,
+    0
+   ],
+   "along": {
+    "n": 3,
+    "from": [
+     0,
+     0,
+     -0.202
+    ],
+    "to": [
+     0,
+     0,
+     -0.142
+    ]
+   }
+  },
+  {
+   "id": "keys1",
+   "type": "box",
+   "material": "button",
+   "size": [
+    0.004,
+    0.014,
+    0.022
+   ],
+   "at": [
+    0.181,
+    0.172,
+    0
+   ],
+   "along": {
+    "n": 3,
+    "from": [
+     0,
+     0,
+     -0.202
+    ],
+    "to": [
+     0,
+     0,
+     -0.142
+    ]
+   }
+  },
+  {
+   "id": "keys2",
+   "type": "box",
+   "material": "button",
+   "size": [
+    0.004,
+    0.014,
+    0.022
+   ],
+   "at": [
+    0.181,
+    0.149,
+    0
+   ],
+   "along": {
+    "n": 3,
+    "from": [
+     0,
+     0,
+     -0.202
+    ],
+    "to": [
+     0,
+     0,
+     -0.142
+    ]
+   }
+  },
+  {
+   "id": "keys3",
+   "type": "box",
+   "material": "button",
+   "size": [
+    0.004,
+    0.014,
+    0.022
+   ],
+   "at": [
+    0.181,
+    0.126,
+    0
+   ],
+   "along": {
+    "n": 3,
+    "from": [
+     0,
+     0,
+     -0.202
+    ],
+    "to": [
+     0,
+     0,
+     -0.142
+    ]
+   }
+  },
+  {
+   "id": "dial",
+   "type": "lathe",
+   "material": "knob",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.0218,
+     0
+    ],
+    [
+     0.0218,
+     0.004
+    ],
+    [
+     0.019,
+     0.0056
+    ],
+    [
+     0.0181,
+     0.016
+    ],
+    [
+     0,
+     0.016
+    ]
+   ],
+   "sides": 14,
+   "at": [
+    0.18,
+    0.06,
+    -0.172,
+    0,
+    0,
+    -90
+   ]
+  }
+ ]
+}

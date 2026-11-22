@@ -1,0 +1,151 @@
+{
+ "kind": "item",
+ "name": "Door leaf",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a glazed door leaf hinged at its edge (x = 0), w wide along +x and h high: the aluminium frame, a kick panel, the glass, a rubber seal on the closing edge, grab handles",
+ "params": {
+  "w": 0.32,
+  "h": 2.1,
+  "t": 0.04,
+  "s": 0.05,
+  "kick": 0.25,
+  "mid": 1.0,
+  "handle": 1
+ },
+ "materials": {
+  "frame": "aluminium",
+  "glass": "glass",
+  "seal": "rubber",
+  "handle": "chrome",
+  "kick": "plastic-grey"
+ },
+ "parts": [
+  {
+   "id": "stileH",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "s",
+    "h",
+    "t"
+   ],
+   "at": [
+    "s / 2",
+    "h / 2",
+    0
+   ]
+  },
+  {
+   "id": "stileF",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "s",
+    "h",
+    "t"
+   ],
+   "at": [
+    "w - s / 2",
+    "h / 2",
+    0
+   ]
+  },
+  {
+   "id": "railT",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "w - s * 2",
+    "s",
+    "t"
+   ],
+   "at": [
+    "w / 2",
+    "h - s / 2",
+    0
+   ]
+  },
+  {
+   "id": "railB",
+   "type": "box",
+   "material": "kick",
+   "size": [
+    "w - s * 2",
+    "kick",
+    "t"
+   ],
+   "at": [
+    "w / 2",
+    "kick / 2",
+    0
+   ]
+  },
+  {
+   "id": "railM",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "w - s * 2",
+    "s * 0.7",
+    "t"
+   ],
+   "at": [
+    "w / 2",
+    "mid",
+    0
+   ],
+   "when": "mid"
+  },
+  {
+   "id": "glass",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    "w - s * 2",
+    "h - s - kick",
+    "t * 0.35"
+   ],
+   "at": [
+    "w / 2",
+    "kick + (h - s - kick) / 2",
+    0
+   ]
+  },
+  {
+   "id": "seal",
+   "type": "box",
+   "material": "seal",
+   "size": [
+    0.03,
+    "h",
+    "t * 1.1"
+   ],
+   "at": [
+    "w + 0.012",
+    "h / 2",
+    0
+   ]
+  },
+  {
+   "id": "handle",
+   "type": "rod",
+   "material": "handle",
+   "r": 0.013,
+   "from": [
+    "w * 0.6",
+    "h * 0.35",
+    "t / 2 + 0.035"
+   ],
+   "to": [
+    "w * 0.6",
+    "h * 0.65",
+    "t / 2 + 0.035"
+   ],
+   "sides": 6,
+   "mirror": "z",
+   "when": "handle"
+  }
+ ]
+}

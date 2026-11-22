@@ -1,0 +1,146 @@
+{
+  "name": "sloth",
+  "_about": "a BROWN-THROATED THREE-TOED SLOTH (2026-11-21, tools/creaturegen/rework/bigmam/sloth.py, on bigA_lib's quadruped template -- no longer a scaled orangutan): 58 cm; a small round head, a flat pale face with a dark mask back from each small eye, a dark button nose, a faint upturned mouth, no ear flaps showing; shaggy coarse grey-brown hair with a greenish cast, a brown throat; arms far longer than the legs, three long curved hook claws on every limb; a stub tail. Hanging is beyond the rig, so it is in its slow ground crawl: belly low, limbs sprawled, elbows high and wide, the claws hooked into the ground ahead. Coats: grey-brown, green with algae, pale",
+  "kind": "mammal",
+  "headForm": false,
+  "shy": 2,
+  "print": "paw",
+  "headTurn": 25,
+  "rear": [-0.1, 0.17, 0, 0.145, 0.105, 0.125],
+  "front": [0.07, 0.175, 0, 0.14, 0.105, 0.125],
+  "neck": [0.2, 0.19, 0, 0.28, 0.235, 0, 0.065, 0.055],
+  "head": [0.315, 0.245, 0, 0.058],
+  "muzzle": [0.3491, 0.2345, 0, 0.03, 0.027, 0.027],
+  "nose": [0.37, 0.228, 0, 0.011],
+  "ears": [0.3, 0.27, 0.05, 0.3, 0.28, 0.055, 0.006, 0.004],
+  "eyes": [0.358, 0.262, 0.03, 0.0055],
+  "legs": {
+    "front": [0.14, 0.13, 0.2, 0.055],
+    "hind": [-0.15, 0.12, 0.2, 0.05],
+    "radii": [0.03, 0.022, 0.018],
+    "foot": [0.03, 0.012, 0.024],
+    "ankle": 0.0168
+  },
+  "tail": {
+    "c": [-0.1714, -0.0184],
+    "R": 0.2005,
+    "a0": 1.9199,
+    "a1": 2.0944,
+    "r1": 0.02,
+    "r2": 0.01,
+    "n": 2,
+    "sway": 4,
+    "speed": 0.3
+  },
+  "gaits": {
+    "walk": {
+      "stride": 0.08,
+      "lift": 0.03,
+      "bob": 0.005
+    }
+  },
+  "coats": [
+    {
+      "name": "grey-brown"
+    },
+    {
+      "name": "green with algae",
+      "body": "#76785a",
+      "back": "#6a7050",
+      "belly": "#6e6a4e",
+      "head": "#8e8c70"
+    },
+    {
+      "name": "pale",
+      "body": "#a0947a",
+      "back": "#968a6e",
+      "belly": "#8e7e64",
+      "head": "#b0a488"
+    }
+  ],
+  "c": {
+    "body": "#857a62",
+    "back": "#7a7258",
+    "belly": "#7a6a52",
+    "head": "#9a8e74",
+    "face": "#d6cab0",
+    "mask": "#2e221a",
+    "throat": "#6a4a30",
+    "nose": "#241c18",
+    "leg": "#857a62",
+    "foot": "#5a4c3c",
+    "hand": "#5a4c3c",
+    "claw": "#cfc2a6",
+    "lid": "#1a1410",
+    "eye": "#0a0605",
+    "muzzle": "#d6cab0",
+    "chin": "#d6cab0",
+    "pad": "#d6cab0",
+    "cheek": "#d6cab0",
+    "tail": "#857a62",
+    "tooth": "#e8e0d0",
+    "ear": "#857a62",
+    "earIn": "#5a4c3c",
+    "front": "#857a62",
+    "mouth": "#3a2a22"
+  },
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [6000, 1800],
+      "focus": {
+        "head": 6,
+        "footFL": 2,
+        "footHL": 2
+      }
+    },
+    "shape": [
+      {"id": "rump", "type": "ell", "c": [-0.1, 0.17, 0], "r": [0.145, 0.105, 0.125], "k": 0.05, "color": "@body", "frame": "body", "pat": "shag", "fleece": {"amp": 0.008, "size": 0.022}, "hair": 0.9},
+      {"id": "chest", "type": "ell", "c": [0.07, 0.175, 0], "r": [0.14, 0.105, 0.125], "k": 0.05, "color": "@body", "frame": "body", "pat": "shag", "fleece": {"amp": 0.008, "size": 0.022}, "hair": 0.9},
+      {"id": "back", "type": "ell", "c": [-0.02, 0.21, 0], "r": [0.19, 0.08, 0.105], "k": 0.05, "color": "@back", "frame": "body", "pat": "shag", "fleece": {"amp": 0.008, "size": 0.022}, "hair": 0.9},
+      {"id": "belly", "type": "ell", "c": [-0.02, 0.12, 0], "r": [0.17, 0.06, 0.1], "k": 0.04, "color": "@belly", "kc": 0.02, "hair": 0.9, "fleece": {"amp": 0.006, "size": 0.02}},
+      {"id": "neck", "type": "ell", "bone": "neck", "c": [0.246, 0.212, 0.0], "r": [0.0609, 0.0534, 0.0534], "k": 0.0232, "color": "@body", "hair": 0.9, "pat": "shag", "fleece": {"amp": 0.006, "size": 0.018}},
+      {"id": "throat", "type": "ell", "bone": "neck", "c": [0.2632, 0.1941, 0.0], "r": [0.0464, 0.029, 0.0406], "k": 0.0174, "color": "@throat", "kc": 0.0087, "hair": 0.9},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.305, 0.25, 0], "r": [0.058, 0.055, 0.06], "k": 0.0174, "color": "@head", "hair": 0.8, "fleece": {"amp": 0.004, "size": 0.014}},
+      {"id": "snout", "type": "cone", "bone": "head", "a": [0.335, 0.233, 0], "b": [0.3579, 0.2269, 0], "ra": 0.03, "rb": 0.022, "k": 0.0154, "color": "@face", "kc": 0.0055},
+      {"id": "noseTip", "type": "ell", "bone": "head", "c": [0.37, 0.228, 0], "r": [0.0083, 0.0075, 0.0094], "k": 0.0039, "color": "@nose", "kc": 0.0016, "wet": 0.25},
+      {"id": "jaw", "type": "ell", "bone": "head", "c": [0.346, 0.2115, 0.0], "r": [0.01, 0.0114, 0.0165], "k": 0.0088, "color": "@face", "rot": [0, 0, -7.4579], "kc": 0.0033},
+      {"id": "tail", "type": "sweep", "bones": ["tail"], "pts": [[-0.2175, 0.1782, 0.0, 0.02], [-0.24, 0.17, 0.0, 0.02], [-0.2455, 0.1679, 0.0, 0.0183], [-0.2508, 0.1657, 0.0, 0.0167], [-0.2562, 0.1633, 0.0, 0.015], [-0.2614, 0.1608, 0.0, 0.0133], [-0.2666, 0.1581, 0.0, 0.0117], [-0.2717, 0.1552, 0.0, 0.01]], "k": 0.008, "kc": 0.002, "color": "@body"},
+      {"id": "armUp", "type": "cone", "bone": "legFLu", "a": [0.14, 0.14, 0.07], "b": [0.19, 0.165, 0.215], "ra": 0.034, "rb": 0.024, "k": 0.0192, "color": "@leg", "mirror": true, "pat": "shag", "fleece": {"amp": 0.008, "size": 0.022}, "hair": 0.9},
+      {"id": "armLo", "type": "cone", "bone": "legFLl", "a": [0.19, 0.165, 0.215], "b": [0.345, 0.03, 0.2], "ra": 0.024, "rb": 0.018, "k": 0.0108, "color": "@leg", "mirror": true, "pat": "shag", "fleece": {"amp": 0.006, "size": 0.016}, "hair": 0.9},
+      {"id": "armHand", "type": "ell", "bone": "footFL", "c": [0.357, 0.026, 0.2], "r": [0.0234, 0.0144, 0.0198], "k": 0.009, "color": "@foot", "mirror": true, "hair": 0.8},
+      {"id": "armClaw0", "type": "horn", "bone": "footFL", "pts": [[0.3588, 0.028, 0.189, 0.0042], [0.3648, 0.028, 0.1892, 0.0038], [0.3894, 0.0407, 0.1899, 0.003], [0.4176, 0.0315, 0.1908, 0.002], [0.4295, 0.0069, 0.1911, 0.0]], "color": "@claw", "mirror": true, "aspect": 1.5, "up": [0, 1, 0], "fair": {"r": 0.002, "skin": 0.2}},
+      {"id": "armClaw1", "type": "horn", "bone": "footFL", "pts": [[0.3589, 0.028, 0.1991, 0.0042], [0.3648, 0.028, 0.2, 0.0038], [0.3925, 0.0424, 0.2041, 0.003], [0.4241, 0.032, 0.2089, 0.002], [0.4376, 0.004, 0.2109, 0.0]], "color": "@claw", "mirror": true, "aspect": 1.5, "up": [0, 1, 0], "fair": {"r": 0.002, "skin": 0.2}},
+      {"id": "armClaw2", "type": "horn", "bone": "footFL", "pts": [[0.359, 0.028, 0.2092, 0.0042], [0.3648, 0.028, 0.2108, 0.0038], [0.3886, 0.0407, 0.2172, 0.003], [0.4158, 0.0315, 0.2246, 0.002], [0.4273, 0.0069, 0.2277, 0.0]], "color": "@claw", "mirror": true, "aspect": 1.5, "up": [0, 1, 0], "fair": {"r": 0.002, "skin": 0.2}},
+      {"id": "legUp", "type": "cone", "bone": "legHLu", "a": [-0.15, 0.14, 0.08], "b": [-0.16, 0.12, 0.175], "ra": 0.042, "rb": 0.028, "k": 0.0224, "color": "@leg", "mirror": true, "pat": "shag", "fleece": {"amp": 0.008, "size": 0.022}, "hair": 0.9},
+      {"id": "legLo", "type": "cone", "bone": "legHLl", "a": [-0.16, 0.12, 0.175], "b": [-0.115, 0.03, 0.16], "ra": 0.028, "rb": 0.02, "k": 0.012, "color": "@leg", "mirror": true, "pat": "shag", "fleece": {"amp": 0.006, "size": 0.016}, "hair": 0.9},
+      {"id": "legHand", "type": "ell", "bone": "footHL", "c": [-0.103, 0.026, 0.16], "r": [0.026, 0.016, 0.022], "k": 0.01, "color": "@foot", "mirror": true, "hair": 0.8},
+      {"id": "legClaw0", "type": "horn", "bone": "footHL", "pts": [[-0.0988, 0.028, 0.1467, 0.0042], [-0.093, 0.028, 0.148, 0.0038], [-0.0765, 0.0367, 0.1518, 0.003], [-0.0576, 0.0304, 0.1561, 0.002], [-0.0496, 0.0135, 0.158, 0.0]], "color": "@claw", "mirror": true, "aspect": 1.5, "up": [0, 1, 0], "fair": {"r": 0.002, "skin": 0.2}},
+      {"id": "legClaw1", "type": "horn", "bone": "footHL", "pts": [[-0.0987, 0.028, 0.158, 0.0042], [-0.093, 0.028, 0.16, 0.0038], [-0.0748, 0.0379, 0.1664, 0.003], [-0.0541, 0.0307, 0.1736, 0.002], [-0.0452, 0.0115, 0.1767, 0.0]], "color": "@claw", "mirror": true, "aspect": 1.5, "up": [0, 1, 0], "fair": {"r": 0.002, "skin": 0.2}},
+      {"id": "legClaw2", "type": "horn", "bone": "footHL", "pts": [[-0.0984, 0.028, 0.1694, 0.0042], [-0.093, 0.028, 0.172, 0.0038], [-0.0777, 0.0367, 0.1792, 0.003], [-0.0602, 0.0304, 0.1874, 0.002], [-0.0527, 0.0135, 0.1909, 0.0]], "color": "@claw", "mirror": true, "aspect": 1.5, "up": [0, 1, 0], "fair": {"r": 0.002, "skin": 0.2}},
+      {"id": "faceDisc", "type": "ell", "bone": "head", "c": [0.332, 0.247, 0], "r": [0.03, 0.05, 0.054], "k": 0.02, "color": "@face", "kc": 0.008, "hair": 0.4},
+      {"id": "mask", "type": "ell", "op": "paint", "bone": "head", "c": [0.33, 0.258, 0.042], "r": [0.042, 0.011, 0.024], "kc": 0.004, "color": "@mask", "rot": [0, -20, -6], "mirror": true},
+      {"id": "brow", "type": "ell", "op": "paint", "bone": "head", "c": [0.34, 0.285, 0.022], "r": [0.02, 0.012, 0.03], "kc": 0.006, "color": "@face", "mirror": true},
+      {"id": "button", "type": "ell", "bone": "head", "c": [0.373, 0.233, 0], "r": [0.008, 0.009, 0.012], "k": 0.005, "color": "@nose", "kc": 0.002, "wet": 0.3},
+      {"id": "smile", "type": "ell", "op": "paint", "bone": "head", "c": [0.364, 0.21, 0.0], "r": [0.006, 0.0025, 0.016], "kc": 0.0015, "color": "@mouth", "rot": [0, 0, 8]},
+      {"id": "crownHair", "type": "ell", "bone": "head", "c": [0.3, 0.285, 0], "r": [0.05, 0.03, 0.055], "k": 0.02, "color": "@head", "fleece": {"amp": 0.005, "size": 0.014}, "hair": 0.9, "pat": "shag"},
+      {"id": "flank", "type": "ell", "c": [-0.02, 0.15, 0.09], "r": [0.17, 0.06, 0.05], "k": 0.04, "color": "@body", "mirror": true, "frame": "body", "pat": "shag", "fleece": {"amp": 0.008, "size": 0.022}, "hair": 0.9}
+    ],
+    "eyes": {
+      "at": [0.358, 0.262, 0.03],
+      "from": [0.3208, 0.2479, 0],
+      "r": 0.0055,
+      "iris": "@eye",
+      "pupil": "round",
+      "lid": "@lid",
+      "sink": 0.6,
+      "socket": 1.1,
+      "color": "#0a0706"
+    },
+    "shade": {
+      "back": 0.92,
+      "belly": 1.0,
+      "on": "@body"
+    }
+  }
+}

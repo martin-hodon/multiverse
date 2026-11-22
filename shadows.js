@@ -116,7 +116,7 @@ export function createShadows(scene) {
   mesh.name = "contact shadows"; mesh.renderOrder = 1; mesh.userData.noMerge = true;
   mesh.frustumCulled = false;   // (always round you: nothing to cull)
   scene.add(mesh);
-  const near = [];
+  const near = [], idx = [];   // (d², figure pairs; the ones shaded, by their index in it -- both kept from frame to frame)
   return {
     mesh,
     update(herds, camera, floorUnder, bodies = []) {
@@ -128,24 +128,22 @@ export function createShadows(scene) {
         if (d2 < R2) near.push(d2, an);
       }
       // the nearest first, if there are more than the pool holds
-      let n = near.length / 2;
-      if (n > SHADOWS.max) {
-        const order = Array.from({ length: n }, (_, i) => i).sort((a, b) => near[a * 2] - near[b * 2]).slice(0, SHADOWS.max);
-        const keep = order.map((i) => [near[i * 2], near[i * 2 + 1]]).flat(); near.length = 0; near.push(...keep); n = SHADOWS.max;
-      }
+      idx.length = 0;
+      for (let i = 0; i < near.length; i += 2) idx.push(i);
+      if (idx.length > SHADOWS.max) { idx.sort((a, b) => near[a] - near[b]); idx.length = SHADOWS.max; }
       let m = 0;
-      for (let i = 0; i < n; i++) {
-        const an = near[i * 2 + 1], x = an.position.x + an._bo[0], z = an.position.z + an._bo[2];
+      for (const i of idx) {
+        const dist = Math.sqrt(near[i]), an = near[i + 1], x = an.position.x + an._bo[0], z = an.position.z + an._bo[2];
         const fy = floorUnder(an, x, z, an._y0 + .3);
         const lift = Math.max(0, an._y0 - fy - .12), up = 1 - lift / SHADOWS.gap;   // (fainter the higher it is off the floor: a child on a swing, a leap)
         if (up <= 0) continue;   // (off the ground: flying, swimming)
         const fa = Math.cos(an.rotY), fb = -Math.sin(an.rotY);   // (its heading on the ground)
         const big = Math.max(an._fx, an._fz), small = Math.min(an._fx, an._fz);
         const a = Math.max(.85, big * 1.3 + .55), b = Math.max(.7, small * 1.3 + .5), y = Math.max(fy, Math.min(an._y0 - .05, fy + .1)) + SHADOWS.lift;   // (the spread is the bones' ends: the body's flesh and clothes and the shade past the feet added on; at its feet: paving and boards stand a little proud of the floor's height)
-        const fade = Math.min(1, (SHADOWS.near - Math.sqrt(near[i * 2])) / 10) * up;
+        const fade = Math.min(1, (SHADOWS.near - dist) / 10) * up;
         hard.fill(0, m * 4, m * 4 + 4); putBlob(pos, k, m++, x, y, z, a, b, fa, fb, fade);
         // ...and its sun shadow, from its feet away from the sun, where the sun reaches it
-        const sk = SUN.k.value * SHADOWS.cast * Math.min(1, (SHADOWS.castNear - Math.sqrt(near[i * 2])) / 8) * up;
+        const sk = SUN.k.value * SHADOWS.cast * Math.min(1, (SHADOWS.castNear - dist) / 8) * up;
         if (sk > .02 && an._y1 !== undefined) {
           const h = an._y1 - an._y0 + .1, L = h * SLOPE, w = Math.max(.16, .55 * Math.hypot(an._fx * AWAY[1], an._fz * AWAY[0]) + .12);
           if (sunAt(x, an._y0 + h * .5, z) > .5) hard.fill(1, m * 4, m * 4 + 4), putBlob(pos, k, m++, x + AWAY[0] * L * .5, y + .005, z + AWAY[1] * L * .5, L * .5 + w * .6, w, AWAY[0], AWAY[1], sk);

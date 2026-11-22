@@ -1,0 +1,594 @@
+{
+ "kind": "item",
+ "name": "Post box",
+ "category": "street",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a British pillar post box: a red cast-iron pillar 1.6 m tall and 0.55 m round on a black plinth, its domed cap overhanging, the posting aperture under its hood at 1.2 m, the outline of its door and a white collection plate on the front (+x); hollow, its door hinged at the left edge and swung out by `open` onto the letters and a parcel lying inside.",
+ "params": {
+  "open": 0
+ },
+ "materials": {
+  "body": "paint-red",
+  "base": "paint-black",
+  "slot": "#121212",
+  "plate": "plastic-white",
+  "inner": "#5a1414",
+  "paper": "#ece6d6",
+  "paper2": "#d8cfb4",
+  "parcel": "#a88458"
+ },
+ "parts": [
+  {
+   "id": "plinth",
+   "type": "lathe",
+   "material": "base",
+   "profile": [
+    [
+     0.3,
+     0
+    ],
+    [
+     0.3,
+     0.06
+    ],
+    [
+     0.28,
+     0.09
+    ]
+   ],
+   "sides": 28,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "pillarFoot",
+   "type": "lathe",
+   "material": "body",
+   "profile": [
+    [
+     0.28,
+     0.09
+    ],
+    [
+     0.27,
+     0.12
+    ],
+    [
+     0.27,
+     0.28
+    ]
+   ],
+   "sides": 32,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "pillar",
+   "type": "lathe",
+   "material": "body",
+   "profile": [
+    [
+     0.27,
+     0.28
+    ],
+    [
+     0.27,
+     1.06
+    ]
+   ],
+   "sides": 27,
+   "arc": [
+    30,
+    330
+   ],
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "pillarTop",
+   "type": "lathe",
+   "material": "body",
+   "profile": [
+    [
+     0.27,
+     1.06
+    ],
+    [
+     0.27,
+     1.3
+    ],
+    [
+     0.29,
+     1.33
+    ],
+    [
+     0.33,
+     1.37
+    ],
+    [
+     0.33,
+     1.41
+    ],
+    [
+     0.3,
+     1.43
+    ],
+    [
+     0.25,
+     1.5
+    ],
+    [
+     0.15,
+     1.57
+    ],
+    [
+     0,
+     1.6
+    ]
+   ],
+   "sides": 32,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "lining",
+   "type": "lathe",
+   "material": "inner",
+   "profile": [
+    [
+     0.258,
+     1.06
+    ],
+    [
+     0.258,
+     0.28
+    ]
+   ],
+   "sides": 27,
+   "arc": [
+    30,
+    330
+   ],
+   "inside": true,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "band",
+   "type": "lathe",
+   "material": "body",
+   "profile": [
+    [
+     0.278,
+     1.24
+    ],
+    [
+     0.278,
+     1.27
+    ]
+   ],
+   "caps": false,
+   "sides": 32,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "slot",
+   "type": "box",
+   "material": "slot",
+   "size": [
+    0.03,
+    0.025,
+    0.26
+   ],
+   "at": [
+    0.262,
+    1.18,
+    0
+   ]
+  },
+  {
+   "id": "hood",
+   "type": "box",
+   "material": "body",
+   "size": [
+    0.045,
+    0.018,
+    0.3
+   ],
+   "at": [
+    0.282,
+    1.203,
+    0,
+    0,
+    0,
+    -10
+   ]
+  },
+  {
+   "id": "doorSide2",
+   "type": "rod",
+   "material": "slot",
+   "r": 0.0035,
+   "from": [
+    0.2358,
+    0.28,
+    0.135
+   ],
+   "to": [
+    0.2358,
+    1.06,
+    0.135
+   ],
+   "sides": 4
+  },
+  {
+   "id": "door",
+   "type": "hinge",
+   "pivot": [
+    0.2338,
+    0.67,
+    0.135
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": -110,
+   "parts": [
+    {
+     "id": "face",
+     "type": "lathe",
+     "material": "body",
+     "profile": [
+      [
+       0.27,
+       0.282
+      ],
+      [
+       0.27,
+       1.058
+      ]
+     ],
+     "sides": 5,
+     "arc": [
+      -29.5,
+      29.5
+     ],
+     "at": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "id": "back",
+     "type": "lathe",
+     "material": "inner",
+     "profile": [
+      [
+       0.258,
+       1.058
+      ],
+      [
+       0.258,
+       0.282
+      ]
+     ],
+     "sides": 5,
+     "arc": [
+      -29.5,
+      29.5
+     ],
+     "inside": true,
+     "at": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "id": "edge",
+     "type": "box",
+     "material": "body",
+     "size": [
+      0.012,
+      0.776,
+      0.004
+     ],
+     "at": [
+      [
+       0.2298,
+       0.67,
+       -0.13,
+       29.5,
+       0,
+       0
+      ],
+      [
+       0.2298,
+       0.67,
+       0.13,
+       -29.5,
+       0,
+       0
+      ]
+     ],
+     "inside": true
+    },
+    {
+     "id": "doorSide",
+     "type": "rod",
+     "material": "slot",
+     "r": 0.0035,
+     "from": [
+      0.2358,
+      0.28,
+      -0.135
+     ],
+     "to": [
+      0.2358,
+      1.06,
+      -0.135
+     ],
+     "sides": 4
+    },
+    {
+     "id": "doorArc0",
+     "type": "sweep",
+     "material": "slot",
+     "path": [
+      [
+       0.2356,
+       0.28,
+       -0.136
+      ],
+      [
+       0.2556,
+       0.28,
+       -0.093
+      ],
+      [
+       0.2679,
+       0.28,
+       -0.0472
+      ],
+      [
+       0.272,
+       0.28,
+       0.0
+      ],
+      [
+       0.2679,
+       0.28,
+       0.0472
+      ],
+      [
+       0.2556,
+       0.28,
+       0.093
+      ],
+      [
+       0.2356,
+       0.28,
+       0.136
+      ]
+     ],
+     "seg": 2,
+     "r": 0.0035
+    },
+    {
+     "id": "doorArc1",
+     "type": "sweep",
+     "material": "slot",
+     "path": [
+      [
+       0.2356,
+       1.06,
+       -0.136
+      ],
+      [
+       0.2556,
+       1.06,
+       -0.093
+      ],
+      [
+       0.2679,
+       1.06,
+       -0.0472
+      ],
+      [
+       0.272,
+       1.06,
+       0.0
+      ],
+      [
+       0.2679,
+       1.06,
+       0.0472
+      ],
+      [
+       0.2556,
+       1.06,
+       0.093
+      ],
+      [
+       0.2356,
+       1.06,
+       0.136
+      ]
+     ],
+     "seg": 2,
+     "r": 0.0035
+    },
+    {
+     "id": "plate",
+     "type": "box",
+     "material": "plate",
+     "size": [
+      0.006,
+      0.11,
+      0.15
+     ],
+     "at": [
+      0.27,
+      0.92,
+      0
+     ]
+    },
+    {
+     "id": "lock",
+     "type": "box",
+     "material": "slot",
+     "size": [
+      0.004,
+      0.03,
+      0.02
+     ],
+     "at": [
+      0.272,
+      0.8,
+      -0.1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "letters",
+   "type": "box",
+   "material": "paper",
+   "size": [
+    0.16,
+    0.004,
+    0.11
+   ],
+   "at": [
+    [
+     -0.0079,
+     0.29,
+     -0.0559,
+     117.1682,
+     -5.1308,
+     0
+    ],
+    [
+     -0.0451,
+     0.314,
+     -0.0106,
+     12.574,
+     -4.9114,
+     0
+    ],
+    [
+     0.0316,
+     0.338,
+     0.0716,
+     103.8785,
+     -1.2398,
+     0
+    ],
+    [
+     -0.0312,
+     0.362,
+     -0.0612,
+     55.5267,
+     3.7935,
+     0
+    ],
+    [
+     0.0212,
+     0.386,
+     -0.07,
+     10.7282,
+     -3.5285,
+     0
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "letters2",
+   "type": "box",
+   "material": "paper2",
+   "size": [
+    0.22,
+    0.004,
+    0.11
+   ],
+   "at": [
+    [
+     0.0197,
+     0.302,
+     -0.0215,
+     10.4398,
+     0.0892,
+     0
+    ],
+    [
+     0.0052,
+     0.326,
+     0.0523,
+     22.2844,
+     -3.3211,
+     0
+    ],
+    [
+     0.0769,
+     0.35,
+     -0.0725,
+     154.5243,
+     -2.5247,
+     0
+    ],
+    [
+     -0.0265,
+     0.374,
+     0.0131,
+     115.0044,
+     -1.5312,
+     0
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "parcel",
+   "type": "box",
+   "material": "parcel",
+   "size": [
+    0.16,
+    0.08,
+    0.11
+   ],
+   "at": [
+    -0.08,
+    0.32,
+    0.05,
+    25,
+    0,
+    0
+   ],
+   "inside": true
+  }
+ ]
+}

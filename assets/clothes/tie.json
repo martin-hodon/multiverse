@@ -1,0 +1,39 @@
+{
+  "name": "Necktie",
+  "kind": "garment",
+  "layer": 1,
+  "_about": "the necktie (the four-in-hand, from the 1880s): a silk blade knotted under the shirt's collar, about 8 cm wide at its tip, to the belt -- over the shirt, under the jacket, its knot the narrow top",
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "silk-red"
+    }
+  },
+  "pieces": [
+    {
+      "name": "knot",
+      "on": "torso",
+      "from": "collar - 0.01",
+      "to": "collar + 0.03",
+      "wrap": [
+        0,
+        15
+      ],
+      "fabric": "main",
+      "thick": 0.009
+    },
+    {
+      "name": "blade",
+      "on": "torso",
+      "from": "collar + 0.03",
+      "to": "waist - 0.02",
+      "wrap": [
+        0,
+        21
+      ],
+      "fabric": "main",
+      "thick": 0.004
+    }
+  ]
+}

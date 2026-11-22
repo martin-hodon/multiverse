@@ -179,6 +179,24 @@ def fin(pts, r, color, bone=None, id="fin", k=None, mirror=False, pat=None, fram
                      pat=pat, frame=frame, mirror=True if mirror else None))
     return out
 
+def sheet(pts, r, color, bone=None, id="fin", k=None, mirror=False, pat=None, frame=None, kc=None, smooth=0, rays=False):
+    """fin()'s outline as ONE `sheet` shape (sculpt.js prepareSheet, 2026-11-21): its points (each with its half-thickness
+    r) and the same ear-clipped faces, thickened as one -- no rib where two faces meet. `bone` a function of x (or of the
+    point, `bone.point`): each POINT on its own bone (`bones` + `skin`), the weights eased across a face"""
+    tri = fin(pts, r, color, bone=None, id=id, k=k, mirror=mirror, pat=pat, frame=frame, kc=kc, smooth=smooth, rays=rays)
+    if smooth: pts = chaikin([list(p) for p in pts], smooth)
+    P = [list(p[:3]) for p in pts]
+    key = {tuple(p): i for i, p in enumerate(P)}
+    tris = [key[tuple(q[c])] for q in tri for c in "abc"]
+    q0 = tri[0]
+    out = S("sheet", id=id, bone=None if callable(bone) else bone, pts=[p + [r] for p in P], tris=tris, k=k, kc=kc, color=color,
+            pat=q0.get("pat"), frame=q0.get("frame"), mirror=True if mirror else None)
+    if callable(bone):
+        bs = [getattr(bone, "point", None)(p) if getattr(bone, "point", None) else bone(p[0]) for p in P]
+        names = list(dict.fromkeys(bs))
+        out["bones"] = names; out["skin"] = [names.index(b) for b in bs]
+    return out
+
 def arc(a, b, bulge, n):
     """points from a to b bowed by `bulge` (a vector at the middle)"""
     return [add(lerp(a, b, i / (n - 1)), mul(bulge, 4 * (i / (n - 1)) * (1 - i / (n - 1)))) for i in range(n)]

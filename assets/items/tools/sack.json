@@ -4,7 +4,7 @@
  "category": "tool",
  "era": "-500-1900",
  "region": "everywhere",
- "_about": "a grain sack lying on its side, tied at the neck -- the mill's, a cart's load, the barge's cargo",
+ "_about": "a grain sack lying on its side, tied at the neck -- the mill's, a cart's load, the barge's cargo: one turned profile (the full belly, the gathered waist, the tied-off ear) sagging flat under its own weight, a cord round the neck",
  "params": {},
  "materials": {
   "cloth": "#c4a672",
@@ -13,30 +13,115 @@
  "parts": [
   {
    "id": "sack",
-   "type": "sphere",
+   "type": "lathe",
    "material": "cloth",
-   "r": 0.3,
-   "sides": 10,
+   "sides": 12,
    "at": [
+    -0.495,
+    0.238,
     0,
-    0.24,
-    0
+    0,
+    0,
+    -90
    ],
    "stretch": [
-    1.65,
-    0.8,
-    0.95
+    1,
+    0.82,
+    0.98
+   ],
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.18,
+     0.012
+    ],
+    [
+     0.265,
+     0.07
+    ],
+    [
+     0.29,
+     0.22
+    ],
+    [
+     0.285,
+     0.62
+    ],
+    [
+     0.25,
+     0.8
+    ],
+    [
+     0.15,
+     0.91
+    ],
+    [
+     0.07,
+     0.96
+    ],
+    [
+     0.062,
+     1.0
+    ],
+    [
+     0.085,
+     1.05
+    ],
+    [
+     0.05,
+     1.1
+    ],
+    [
+     0,
+     1.11
+    ]
    ]
   },
   {
    "id": "neck",
-   "type": "sphere",
+   "type": "lathe",
    "material": "neck",
-   "r": 0.09,
-   "sides": 6,
+   "profile": [
+    [
+     0.082,
+     0.0
+    ],
+    [
+     0.075,
+     0.01212
+    ],
+    [
+     0.061,
+     0.01212
+    ],
+    [
+     0.054,
+     0.0
+    ],
+    [
+     0.061,
+     -0.01212
+    ],
+    [
+     0.075,
+     -0.01212
+    ],
+    [
+     0.082,
+     -0.0
+    ]
+   ],
+   "sides": 10,
+   "caps": false,
    "at": [
-    0.525,
-    0.28,
+    0.48,
+    0.238,
+    0,
+    0,
+    90,
     0
    ]
   }

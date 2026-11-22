@@ -124,11 +124,13 @@ def flipper(nm, P, chord0):
     ol = lambda inset, tmax: blade_outline(root, sdir, cdir, length, chord, le_off=lambda t: 0.2 * chord(t) * (1 - t), sweep=sweep, n=16, inset=inset, tmax=tmax)
     out = []
     span = lambda p: dot(sub(p, root), sdir) / length
+    # (2026-11-21: each layer ONE `sheet` -- sealib.sheet, sculpt.js prepareSheet -- where it was a `tri` a face, 32 a
+    # layer: the same outline and faces thickened as one; each POINT on the tip bone past .47 of the span, the skin eased
+    # across a face, where each face had the bone its middle lay on)
+    bone = lambda x: f"{nm}FL"
+    bone.point = lambda p: f"{nm}TL" if span(p) > 0.47 else f"{nm}FL"
     for li, (pts, r) in enumerate([(ol(0, 1.0), 0.011), (ol(0.38, 0.85), 0.022), (ol(0.62, 0.55), 0.034)]):
-        for sp in fin(pts, r, "@body", bone=f"{nm}FL", id=f"{nm}{li}_", k=0.01, mirror=True, pat=PAT):
-            c = [(sp["a"][k] + sp["b"][k] + sp["c"][k]) / 3 for k in range(3)]
-            if span(c) > 0.47: sp["bone"] = f"{nm}TL"
-            out.append(sp)
+        out.append(sheet(pts, r, "@body", bone=bone, id=f"{nm}{li}", k=0.01, mirror=True, pat=PAT))
     return out
 sh += flipper("fore", FORE, 0.36)
 sh += flipper("hind", HIND, 0.31)

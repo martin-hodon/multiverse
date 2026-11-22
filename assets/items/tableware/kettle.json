@@ -1,0 +1,527 @@
+{
+ "kind": "item",
+ "name": "Kettle",
+ "category": "tableware",
+ "era": "1700-2030",
+ "region": "everywhere",
+ "_about": "a kettle: a copper hob kettle, squat, a gooseneck spout at +x, a fixed arched handle over the domed lid (style copper), or an electric jug kettle on its power base, a water window, the handle at -x and a flip lid hinged at the back (electric; `open` lifts it)",
+ "params": {
+  "style": {
+   "pick": [
+    "copper",
+    "copper",
+    "electric"
+   ]
+  },
+  "open": 0
+ },
+ "materials": {
+  "copper": {
+   "pick": [
+    "copper-bright",
+    "copper-bright",
+    "brass"
+   ]
+  },
+  "wood": {
+   "pick": [
+    "ebony",
+    "walnut"
+   ]
+  },
+  "body": {
+   "pick": [
+    "steel",
+    "plastic-white",
+    "paint-red",
+    "paint-black"
+   ]
+  },
+  "plastic": "plastic-black",
+  "window": "glass-light",
+  "steel": "steel"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "lathe",
+   "material": "copper",
+   "profile": [
+    [
+     0.085,
+     0
+    ],
+    [
+     0.104,
+     0.01
+    ],
+    [
+     0.116,
+     0.05
+    ],
+    [
+     0.112,
+     0.095
+    ],
+    [
+     0.088,
+     0.13
+    ],
+    [
+     0.056,
+     0.148
+    ],
+    [
+     0.056,
+     0.15
+    ],
+    [
+     0,
+     0.15
+    ]
+   ],
+   "sides": 18,
+   "when": {
+    "style": "copper"
+   }
+  },
+  {
+   "id": "lid",
+   "type": "lathe",
+   "material": "copper",
+   "profile": [
+    [
+     0.058,
+     0.148
+    ],
+    [
+     0.058,
+     0.153
+    ],
+    [
+     0.04,
+     0.163
+    ],
+    [
+     0.012,
+     0.168
+    ],
+    [
+     0.011,
+     0.176
+    ],
+    [
+     0.017,
+     0.183
+    ],
+    [
+     0.01,
+     0.19
+    ],
+    [
+     0,
+     0.19
+    ]
+   ],
+   "sides": 14,
+   "when": {
+    "style": "copper"
+   }
+  },
+  {
+   "id": "spout",
+   "type": "sweep",
+   "material": "copper",
+   "path": [
+    [
+     0.095,
+     0.035,
+     0
+    ],
+    [
+     0.135,
+     0.055,
+     0
+    ],
+    [
+     0.165,
+     0.095,
+     0
+    ],
+    [
+     0.19,
+     0.14,
+     0
+    ],
+    [
+     0.205,
+     0.155,
+     0
+    ]
+   ],
+   "radii": [
+    0.019,
+    0.014,
+    0.011,
+    0.009,
+    0.008
+   ],
+   "sides": 8,
+   "when": {
+    "style": "copper"
+   },
+   "seg": 3
+  },
+  {
+   "id": "handle",
+   "type": "sweep",
+   "material": "copper",
+   "path": [
+    [
+     -0.075,
+     0.12,
+     0
+    ],
+    [
+     -0.085,
+     0.2,
+     0
+    ],
+    [
+     -0.04,
+     0.25,
+     0
+    ],
+    [
+     0.04,
+     0.25,
+     0
+    ],
+    [
+     0.085,
+     0.2,
+     0
+    ],
+    [
+     0.075,
+     0.12,
+     0
+    ]
+   ],
+   "sides": 6,
+   "when": {
+    "style": "copper"
+   },
+   "seg": 3,
+   "r": 0.0065
+  },
+  {
+   "id": "handleGrip",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.014,
+   "from": [
+    -0.05,
+    0.25,
+    0
+   ],
+   "to": [
+    0.05,
+    0.25,
+    0
+   ],
+   "sides": 8,
+   "when": {
+    "style": "copper"
+   }
+  },
+  {
+   "id": "foot",
+   "type": "lathe",
+   "material": "copper",
+   "profile": [
+    [
+     0.086,
+     -0.005
+    ],
+    [
+     0.089,
+     -0.002
+    ],
+    [
+     0.089,
+     0.002
+    ],
+    [
+     0.086,
+     0.005
+    ]
+   ],
+   "sides": 18,
+   "caps": false,
+   "when": {
+    "style": "copper"
+   },
+   "at": [
+    0,
+    0.004,
+    0
+   ]
+  },
+  {
+   "id": "base",
+   "type": "lathe",
+   "material": "plastic",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.098,
+     0
+    ],
+    [
+     0.098,
+     0.018
+    ],
+    [
+     0,
+     0.018
+    ]
+   ],
+   "sides": 18,
+   "when": {
+    "style": "electric"
+   }
+  },
+  {
+   "id": "jug",
+   "type": "lathe",
+   "material": "body",
+   "profile": [
+    [
+     0,
+     0.018
+    ],
+    [
+     0.082,
+     0.018
+    ],
+    [
+     0.086,
+     0.028
+    ],
+    [
+     0.08,
+     0.2
+    ],
+    [
+     0.072,
+     0.232
+    ],
+    [
+     0,
+     0.232
+    ]
+   ],
+   "sides": 18,
+   "when": {
+    "style": "electric"
+   }
+  },
+  {
+   "id": "window",
+   "type": "box",
+   "material": "window",
+   "size": [
+    0.012,
+    0.13,
+    0.03
+   ],
+   "at": [
+    0.07,
+    0.11,
+    0.045,
+    50,
+    0,
+    0
+   ],
+   "when": {
+    "style": "electric"
+   }
+  },
+  {
+   "id": "spoutLip",
+   "type": "plate",
+   "material": "body",
+   "outline": [
+    [
+     0.06,
+     0.205
+    ],
+    [
+     0.105,
+     0.236
+    ],
+    [
+     0.066,
+     0.236
+    ]
+   ],
+   "thick": 0.036,
+   "when": {
+    "style": "electric"
+   }
+  },
+  {
+   "id": "jugHandle",
+   "type": "sweep",
+   "material": "plastic",
+   "path": [
+    [
+     -0.075,
+     0.2,
+     0
+    ],
+    [
+     -0.13,
+     0.19,
+     0
+    ],
+    [
+     -0.135,
+     0.07,
+     0
+    ],
+    [
+     -0.082,
+     0.05,
+     0
+    ]
+   ],
+   "sides": 4,
+   "when": {
+    "style": "electric"
+   },
+   "seg": 3,
+   "section": [
+    0.03,
+    0.022
+   ]
+  },
+  {
+   "id": "switch",
+   "type": "box",
+   "material": "plastic",
+   "size": [
+    0.02,
+    0.01,
+    0.016
+   ],
+   "at": [
+    -0.12,
+    0.04,
+    0
+   ],
+   "when": {
+    "style": "electric"
+   }
+  },
+  {
+   "id": "flip",
+   "type": "hinge",
+   "pivot": [
+    -0.06,
+    0.234,
+    0
+   ],
+   "axis": [
+    0,
+    0,
+    1
+   ],
+   "max": 85,
+   "parts": [
+    {
+     "id": "flipLid",
+     "type": "lathe",
+     "material": "plastic",
+     "profile": [
+      [
+       0,
+       0.232
+      ],
+      [
+       0.066,
+       0.232
+      ],
+      [
+       0.064,
+       0.24
+      ],
+      [
+       0.04,
+       0.245
+      ],
+      [
+       0,
+       0.246
+      ]
+     ],
+     "sides": 16,
+     "when": {
+      "style": "electric"
+     }
+    },
+    {
+     "id": "lidButton",
+     "type": "box",
+     "material": "body",
+     "size": [
+      0.022,
+      0.005,
+      0.016
+     ],
+     "at": [
+      -0.045,
+      0.2475,
+      0
+     ],
+     "when": {
+      "style": "electric"
+     }
+    }
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.25,
+   0
+  ],
+  "axis": [
+   1,
+   0,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    0,
+    0,
+    1
+   ],
+   "face": [
+    1,
+    0,
+    0
+   ]
+  }
+ }
+}

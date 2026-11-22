@@ -1,0 +1,243 @@
+{
+ "kind": "item",
+ "name": "Sofa (modern)",
+ "category": "furniture/seat",
+ "era": "1950-2030",
+ "region": "everywhere",
+ "_about": "a three-seat sofa of the late 20th century, 2.12 m wide, 0.92 m deep: square upholstered arms and back, three seat cushions and three loose back cushions, a scatter cushion, four tapered wooden legs -- its back toward -z, the seat at 0.47 m",
+ "params": {},
+ "materials": {
+  "cover": {
+   "pick": [
+    "upholstery-grey",
+    "upholstery",
+    "upholstery-red",
+    "wool",
+    "#7d8a6a",
+    "#b7ab96"
+   ]
+  },
+  "accent": {
+   "pick": [
+    "velvet-green",
+    "velvet-blue",
+    "#c79a3e",
+    "linen"
+   ]
+  },
+  "wood": "oak"
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    1.74,
+    0.26,
+    0.89
+   ],
+   "at": [
+    0,
+    0.25,
+    -0.015
+   ]
+  },
+  {
+   "id": "arm",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.2,
+    0.5,
+    0.92
+   ],
+   "at": [
+    0.96,
+    0.37,
+    0
+   ],
+   "round": 0.03,
+   "mirror": "x"
+  },
+  {
+   "id": "backFrame",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    1.73,
+    0.68,
+    0.17
+   ],
+   "at": [
+    0,
+    0.46,
+    -0.375
+   ]
+  },
+  {
+   "id": "seatCushion",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.5613,
+    0.14,
+    0.73
+   ],
+   "at": [
+    0,
+    0.43,
+    0.075
+   ],
+   "round": 0.03,
+   "along": {
+    "n": 3,
+    "from": [
+     -0.5733,
+     0,
+     0
+    ],
+    "to": [
+     0.5733,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "backCushion",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.5573,
+    0.44,
+    0.2
+   ],
+   "at": [
+    0,
+    0.71,
+    -0.21,
+    0,
+    -10,
+    0
+   ],
+   "round": 0.035,
+   "along": {
+    "n": 3,
+    "from": [
+     -0.5733,
+     0,
+     0
+    ],
+    "to": [
+     0.5733,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "legs",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.022,
+   "from": [
+    0,
+    0.13,
+    0
+   ],
+   "to": [
+    0.02,
+    0,
+    0.02
+   ],
+   "sides": 8,
+   "r0": 0.022,
+   "r1": 0.014,
+   "at": [
+    [
+     0.98,
+     0,
+     0.38,
+     0
+    ],
+    [
+     0.98,
+     0,
+     -0.38,
+     90
+    ],
+    [
+     -0.98,
+     0,
+     -0.38,
+     180
+    ],
+    [
+     -0.98,
+     0,
+     0.38,
+     270
+    ]
+   ]
+  },
+  {
+   "id": "scatter",
+   "type": "box",
+   "material": "accent",
+   "size": [
+    0.42,
+    0.4,
+    0.15
+   ],
+   "at": [
+    -0.7,
+    0.69,
+    -0.16,
+    22,
+    -16,
+    6
+   ],
+   "round": 0.04
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": 1.72,
+    "d": 0.72,
+    "top": 0.47
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     -0.57,
+     0.47,
+     0.1
+    ],
+    [
+     0,
+     0.47,
+     0.1
+    ],
+    [
+     0.57,
+     0.47,
+     0.1
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5708
+   }
+  }
+ ]
+}

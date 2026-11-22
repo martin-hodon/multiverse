@@ -1,0 +1,50 @@
+{
+ "kind": "item",
+ "name": "Screen",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a flat screen facing +x: the dark glass in a thin bezel, the back a little thicker",
+ "params": {
+  "w": 0.6,
+  "h": 0.34,
+  "b": 0.012,
+  "t": 0.03
+ },
+ "materials": {
+  "glass": "screen",
+  "case": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "case",
+   "type": "box",
+   "material": "case",
+   "size": [
+    "t",
+    "h + b * 2",
+    "w + b * 2"
+   ],
+   "at": [
+    "-t / 2",
+    0,
+    0
+   ]
+  },
+  {
+   "id": "glass",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    0.004,
+    "h",
+    "w"
+   ],
+   "at": [
+    0.001,
+    0,
+    0
+   ]
+  }
+ ]
+}

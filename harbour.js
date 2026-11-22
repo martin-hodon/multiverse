@@ -221,12 +221,22 @@ export function createHarbourLife(H, { scene, SEA, freight, period, dress, seed 
     const stateP = (st) => { const s = T.states?.[st] ?? {}, o = { L }; if (takes.has("set")) o.set = s.set; if (takes.has("oars")) o.oars = s.oars; return o; };
     const go = /oar|paddle|pole/.test(S.drive) ? (S.drive.startsWith("sail") ? "under way" : "rowing") : "sailing";
     const root = new THREE.Object3D(); root.rotation.order = "YXZ"; root.name = S.name; scene.add(root);
+    // (the moored one built now -- its markers place everything -- and the other only when the ship first goes as it
+    //  (2026-11-22: `variant`, from show): a ship lying at its berth the whole visit never builds its sails' and oars'
+    //  twin, one under way at the start never its furled one until it moors; 7 to 22 ms a hull when it does)
     const sd = 11 + k * 17, variants = {};
-    for (const st of ["moored", go]) { const g = itemGroup(S.item, { seed: sd, params: stateP(st) }); g.userData.moves = true; root.add(g); variants[st] = g; }
-    const built = variants.moored.userData.built, mk = (role) => built.markers.filter((m) => m.role === role);
+    let xMid = 0, wl = 0, fix = null;
+    const variant = (st) => {
+      if (variants[st]) return variants[st];
+      const g = itemGroup(S.item, { seed: sd, params: stateP(st) }); g.userData.moves = true; g.position.set(-xMid, -wl, 0); g.visible = false;
+      root.add(g); variants[st] = g; fix?.(g);
+      return g;
+    };
+    const built = variant("moored").userData.built, mk = (role) => built.markers.filter((m) => m.role === role);
     const lo = built.bounds.lo, hi = built.bounds.hi, centre = S.frame === "centre";
-    const wlM = mk("waterline")[0], xMid = centre ? 0 : wlM?.at[0] ?? (lo[0] + hi[0]) / 2, wl = centre ? 0 : wlM?.at[1] ?? (hi[1] - lo[1]) * .3;
-    for (const g of Object.values(variants)) g.position.set(-xMid, -wl, 0);
+    const wlM = mk("waterline")[0];
+    xMid = centre ? 0 : wlM?.at[0] ?? (lo[0] + hi[0]) / 2; wl = centre ? 0 : wlM?.at[1] ?? (hi[1] - lo[1]) * .3;
+    variants.moored.position.set(-xMid, -wl, 0); variants.moored.visible = true;
     const planks = mk("gangplank").map((m) => ({ side: m.data.side, at: [m.at[0] - xMid, m.at[1] - wl, m.at[2]], deck: (m.data.deck ?? m.at[1]) - wl }));
     // (the hull's length and beam: the bounds' length; the beam from the planks' rail, the bounds take the oars and the yards)
     const Lh = hi[0] - lo[0], Bh = planks.length ? 2 * Math.max(...planks.map((q) => Math.abs(q.at[2]))) : hi[2] - lo[2] || S.beam || 3;
@@ -256,8 +266,9 @@ export function createHarbourLife(H, { scene, SEA, freight, period, dress, seed 
       for (let i = 0; i + 1 < ks.length; i++) { const a = i * 2, b = a + 2; idx.push(a, a + 1, b + 1, a, b + 1, b); }
       const geo = itemGeometry({ pos: new Float32Array(pos), nor: new Float32Array(nor), uv: new Float32Array(uv), idx: Uint16Array.from(idx) });
       const floor = new THREE.Mesh(geo, itemMaterial(gd.material, false, geo)); floor.name = `${S.name} hold floor`; floor.userData.moves = true; root.add(floor);
-      for (const v of Object.values(variants)) v.children.forEach((m, i) => { const g = gs[i];
+      fix = (v) => v.children.forEach((m, i) => { const g = gs[i];
         if (m.isMesh && g && g.material.side !== "double" && [...g.roles].some((r) => r === "planks" || r === "hull")) m.material = itemMaterial({ ...g.material, side: "double" }, false, m.geometry); });
+      for (const v of Object.values(variants)) fix(v);
     }
     const slots = [];
     for (const h of mk("hold")) {
@@ -268,7 +279,7 @@ export function createHarbourLife(H, { scene, SEA, freight, period, dress, seed 
     slots.length = Math.min(slots.length, PORT_LIFE.slots);
     const plank = itemGroup("items/components/gangplank"); plank.rotation.order = "YXZ"; plank.visible = false; plank.userData.moves = true; scene.add(plank);
     const sw = { position: new THREE.Vector3(0, -100, 0), rotY: 0, hidden: true, size: Math.max(1, Lh * .32) };
-    const ship = { id, name: S.name, spec: S, L: Lh, B: Bh, wl, root, variants, go, sail: /sail/.test(S.drive) && go !== "rowing", speed: (/sail/.test(S.drive) ? PORT_LIFE.speed.sail : PORT_LIFE.speed.oar) * (.9 + R() * .25),
+    const ship = { id, name: S.name, spec: S, L: Lh, B: Bh, wl, root, variants, variant, go, sail: /sail/.test(S.drive) && go !== "rowing", speed: (/sail/.test(S.drive) ? PORT_LIFE.speed.sail : PORT_LIFE.speed.oar) * (.9 + R() * .25),
                    planks, slots, plank, swimmer: sw, hold: [], state: "gone", berth: null, path: null, s: 0, x: 0, z: 0, yaw: 0, ph: R() * 6.28, t: 0, heel: R() < .5 ? 1 : -1,
                    moored: false, plankSide: null, deck, dry };
     // AS A MOVER (index.html collides, cartFloorsAt): a box round the hull -- its deck (an open hull's floor) to stand on,
@@ -290,7 +301,7 @@ export function createHarbourLife(H, { scene, SEA, freight, period, dress, seed 
     ships.push(ship);
     return ship;
   }
-  const show = (S, st) => { for (const [k, g] of Object.entries(S.variants)) g.visible = st === k; S.root.visible = !!st;
+  const show = (S, st) => { if (st) S.variant(st); for (const [k, g] of Object.entries(S.variants)) g.visible = st === k; S.root.visible = !!st;
     // (afloat it is a floor and a wall; its plank only while moored)
     if (!movers) return;
     const on = (k, want) => { const i = movers.indexOf(k); if (want && i < 0) movers.push(k); else if (!want && i >= 0) movers.splice(i, 1); };

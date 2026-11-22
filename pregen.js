@@ -28,7 +28,7 @@ export const SECTIONS = {
 };
 export const PREGEN_SOURCES = [...new Set(Object.values(SECTIONS).flat())];
 // what the game has fetched, by key -- and, while build/pregen.py runs, what it is recording. `ok`: the sections in
-// play; `faceIndex` the faces the cache has (key -> { file, family }), `faceFamilies` family -> keys
+// play; `faceIndex` the faces the cache has (key -> { file, family, seed }), `faceFamilies` family -> keys
 export const PREGEN = { tiles: new Map(), fabrics: new Map(), groups: new Map(), walls: new Map(), wings: new Map(), faceIndex: null, faceFamilies: new Map(),
                         ok: {}, manifest: null, record: null, active: false, misses: [] };
 // what the game had to make after all (pregen/ in play but without it): said once a second, so a stale cache is seen
@@ -286,7 +286,7 @@ export async function flushWorld() {
     frag.buildings[name] = e;
   }
   for (const [k, cv] of R.wings) if (cv && !m.wings?.[k]) { const f = `wings/${k}.png`; await put(f, await png(cv)); frag.wings[k] = f; }
-  for (const [k, e] of R.faces) if (!m.faces?.[k]) { const f = `faces/${k}.bin`; await put(f, await gzip(e.buf)); frag.faces[k] = { file: f, family: e.family }; }
+  for (const [k, e] of R.faces) if (!m.faces?.[k]) { const f = `faces/${k}.bin`; await put(f, await gzip(e.buf)); frag.faces[k] = { file: f, family: e.family, ...(e.seed !== undefined ? { seed: e.seed } : {}) }; }
   await put(`fragments/world-${Date.now()}-${Math.floor(Math.random() * 1e6)}.json`, JSON.stringify(frag));
   return { tiles: Object.keys(frag.tiles).length, wings: Object.keys(frag.wings).length, faces: Object.keys(frag.faces).length, maps: Object.keys(frag.maps).length,
            town: Object.values(frag.buildings).reduce((n, e) => n + Object.keys(e.groups).length, 0), used: frag.used.length };

@@ -28,13 +28,17 @@ function retire(old) {
   setTimeout(() => old.dispose(), RETIRE_MS);
 }
 
-export function batchPool(scene, material, { name = "batch pool", copies = 16 } = {}) {
-  let maxI = copies, maxV = 2048, maxX = 4096, usedV = 0, usedX = 0;
+// (verts, indices: the room it starts with -- heads.js's far heads, which come in their hundreds while the world runs,
+//  start large rather than grow, a new mesh each time, in the middle of a walk)
+// (setup: called on each BatchedMesh made, the first and every bigger one -- bodies.js turns off per-copy culling and sorting)
+export function batchPool(scene, material, { name = "batch pool", copies = 16, verts = 2048, indices = 4096, setup = null } = {}) {
+  let maxI = copies, maxV = verts, maxX = indices, usedV = 0, usedX = 0;
   const shapes = [], geos = [], copyOf = [];   // the shapes; each one's geometry; each copy's shape -- in the order added
   const make = () => {
     const m = new THREE.BatchedMesh(maxI, maxV, maxX, material);
     m.name = name; m.frustumCulled = false;   // (its copies roam: each culled on its own, perObjectFrustumCulled)
-    m.userData.noMerge = true; m.visible = false;
+    m.userData.noMerge = true; m.visible = false; m.userData.geos = geos;   // (its shapes, by index: architecture.js itemBudget)
+    setup?.(m);
     return m;
   };
   let mesh = make();

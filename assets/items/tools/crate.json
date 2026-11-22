@@ -4,8 +4,11 @@
  "category": "tool",
  "era": "1300-1900",
  "region": "Europe",
- "_about": "a wooden crate of boards nailed on corner battens, its lid nailed down -- 0.8 x 0.5 x 0.55 m, its long side along x; carried in the arms, stacked on carts",
- "params": {},
+ "_about": "a wooden crate of boards nailed on corner battens, its lid nailed down -- 0.8 x 0.5 x 0.55 m, its long side along x; three boards a side with gaps between (the dark lining showing), three lid boards, cleats across the ends; hollow, its lid prised up on its back edge by `open` (as far as `lift`, degrees) onto bottles and stoneware jugs packed in straw; carried in the arms, stacked on carts",
+ "params": {
+  "open": 0,
+  "lift": 105
+ },
  "materials": {
   "boards": {
    "pick": [
@@ -14,22 +17,347 @@
     "planks-grey"
    ]
   },
-  "batten": "#6a4e32"
+  "batten": "#6a4e32",
+  "inside": "#3b2d1f",
+  "straw": "straw",
+  "glass": "#3f6a3a",
+  "stoneware": "#b8a88a"
  },
  "parts": [
   {
-   "id": "box",
+   "id": "floor",
+   "type": "box",
+   "material": "inside",
+   "size": [
+    0.74,
+    0.02,
+    0.49
+   ],
+   "at": [
+    0,
+    0.025,
+    0
+   ]
+  },
+  {
+   "id": "liner",
+   "type": "box",
+   "material": "inside",
+   "size": [
+    0.74,
+    0.44,
+    0.01
+   ],
+   "at": [
+    0,
+    0.255,
+    0.24
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "liner ends",
+   "type": "box",
+   "material": "inside",
+   "size": [
+    0.01,
+    0.44,
+    0.47
+   ],
+   "at": [
+    0.365,
+    0.255,
+    0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "straw",
+   "type": "box",
+   "material": "straw",
+   "size": [
+    0.72,
+    0.1,
+    0.47
+   ],
+   "round": 0.04,
+   "at": [
+    0,
+    0.08,
+    0
+   ],
+   "inside": true
+  },
+  {
+   "id": "bottles",
+   "type": "lathe",
+   "material": "glass",
+   "sides": 8,
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.04,
+     0
+    ],
+    [
+     0.04,
+     0.2
+    ],
+    [
+     0.015,
+     0.26
+    ],
+    [
+     0.015,
+     0.3
+    ],
+    [
+     0,
+     0.3
+    ]
+   ],
+   "at": [
+    [
+     -0.25,
+     0.1,
+     -0.15
+    ],
+    [
+     -0.25,
+     0.1,
+     0
+    ],
+    [
+     -0.25,
+     0.1,
+     0.15
+    ],
+    [
+     -0.12,
+     0.1,
+     -0.15
+    ],
+    [
+     -0.12,
+     0.1,
+     0
+    ],
+    [
+     -0.12,
+     0.1,
+     0.15
+    ],
+    [
+     0.01,
+     0.1,
+     -0.15
+    ],
+    [
+     0.01,
+     0.1,
+     0
+    ],
+    [
+     0.01,
+     0.1,
+     0.15
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "jugs",
+   "type": "lathe",
+   "material": "stoneware",
+   "sides": 10,
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.07,
+     0
+    ],
+    [
+     0.09,
+     0.1
+    ],
+    [
+     0.08,
+     0.2
+    ],
+    [
+     0.04,
+     0.26
+    ],
+    [
+     0.045,
+     0.28
+    ],
+    [
+     0,
+     0.28
+    ]
+   ],
+   "at": [
+    [
+     0.19,
+     0.1,
+     -0.11
+    ],
+    [
+     0.2,
+     0.1,
+     0.12
+    ]
+   ],
+   "inside": true
+  },
+  {
+   "id": "straw top",
+   "type": "box",
+   "material": "straw",
+   "size": [
+    0.3,
+    0.06,
+    0.4
+   ],
+   "round": 0.025,
+   "at": [
+    -0.12,
+    0.33,
+    0,
+    0,
+    0,
+    6
+   ],
+   "inside": true
+  },
+  {
+   "id": "sides",
    "type": "box",
    "material": "boards",
    "size": [
     0.8,
-    0.5,
-    0.55
+    0.148,
+    0.02
    ],
    "at": [
+    [
+     0,
+     0.08,
+     0.265
+    ],
+    [
+     0,
+     0.25,
+     0.265
+    ],
+    [
+     0,
+     0.42,
+     0.265
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "ends",
+   "type": "box",
+   "material": "boards",
+   "size": [
+    0.02,
+    0.148,
+    0.51
+   ],
+   "at": [
+    [
+     0.39,
+     0.08,
+     0
+    ],
+    [
+     0.39,
+     0.25,
+     0
+    ],
+    [
+     0.39,
+     0.42,
+     0
+    ]
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "lid",
+   "type": "hinge",
+   "pivot": [
     0,
-    0.25,
+    0.5,
+    -0.27
+   ],
+   "axis": [
+    1,
+    0,
     0
+   ],
+   "max": "-lift",
+   "parts": [
+    {
+     "id": "lid",
+     "type": "box",
+     "material": "boards",
+     "size": [
+      0.8,
+      0.02,
+      0.175
+     ],
+     "at": [
+      [
+       0,
+       0.49,
+       -0.183
+      ],
+      [
+       0,
+       0.49,
+       0
+      ],
+      [
+       0,
+       0.49,
+       0.183
+      ]
+     ]
+    },
+    {
+     "id": "lid battens",
+     "type": "box",
+     "material": "batten",
+     "size": [
+      0.04,
+      0.02,
+      0.5
+     ],
+     "at": [
+      [
+       -0.3,
+       0.47,
+       0
+      ],
+      [
+       0.3,
+       0.47,
+       0
+      ]
+     ],
+     "inside": true
+    }
    ]
   },
   {
@@ -65,26 +393,27 @@
    ]
   },
   {
-   "id": "bands",
+   "id": "cleats",
    "type": "box",
    "material": "batten",
    "size": [
-    0.82,
+    0.03,
     0.05,
-    0.57
+    0.47
    ],
    "at": [
     [
-     0,
+     0.405,
      0.04,
      0
     ],
     [
-     0,
-     0.47,
+     0.405,
+     0.46,
      0
     ]
-   ]
+   ],
+   "mirror": "x"
   }
  ],
  "hold": {

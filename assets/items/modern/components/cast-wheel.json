@@ -1,0 +1,230 @@
+{
+ "kind": "item",
+ "name": "Cast wheel",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a motorcycle's cast wheel: the round-section tyre, the rim, cast spokes, the hub, brake discs and calipers -- the axle along z, a 17-inch rim on a 0.6 m tyre by default",
+ "params": {
+  "r": 0.3,
+  "t": 0.06,
+  "wd": 0.12,
+  "n": 6,
+  "hubR": 0.05,
+  "discR": 0.15,
+  "discs": 2
+ },
+ "materials": {
+  "tyre": "rubber",
+  "rim": "gunmetal",
+  "hub": "aluminium",
+  "disc": "steel",
+  "caliper": "#8a1c1c"
+ },
+ "parts": [
+  {
+   "id": "tyre",
+   "type": "ring",
+   "material": "tyre",
+   "r": "r - t",
+   "tube": "t",
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ],
+   "stretch": [
+    1,
+    1,
+    "wd / (t * 2)"
+   ],
+   "sides": 10
+  },
+  {
+   "id": "rim",
+   "type": "lathe",
+   "material": "rim",
+   "profile": [
+    [
+     "r - t * 1.9",
+     "-wd * 0.42"
+    ],
+    [
+     "r - t * 1.75",
+     "-wd * 0.42"
+    ],
+    [
+     "r - t * 1.75",
+     "wd * 0.42"
+    ],
+    [
+     "r - t * 1.9",
+     "wd * 0.42"
+    ]
+   ],
+   "sides": 28,
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "spoke",
+   "type": "box",
+   "material": "rim",
+   "size": [
+    "r - t * 1.9 - hubR",
+    0.03,
+    0.025
+   ],
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "around": {
+    "n": "n",
+    "r": "(r - t * 1.9 + hubR) / 2",
+    "plane": "xy"
+   }
+  },
+  {
+   "id": "hub",
+   "type": "rod",
+   "material": "hub",
+   "r": "hubR",
+   "from": [
+    0,
+    0,
+    "-wd * 0.55"
+   ],
+   "to": [
+    0,
+    0,
+    "wd * 0.55"
+   ],
+   "sides": 12
+  },
+  {
+   "id": "disc",
+   "type": "lathe",
+   "material": "disc",
+   "profile": [
+    [
+     "discR * 0.62",
+     -0.003
+    ],
+    [
+     "discR",
+     -0.003
+    ],
+    [
+     "discR",
+     0.003
+    ],
+    [
+     "discR * 0.62",
+     0.003
+    ]
+   ],
+   "sides": 24,
+   "mirror": "z",
+   "when": {
+    "discs": 2
+   },
+   "at": [
+    0,
+    0,
+    "wd * 0.5",
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "disc1",
+   "type": "lathe",
+   "material": "disc",
+   "profile": [
+    [
+     "discR * 0.62",
+     -0.003
+    ],
+    [
+     "discR",
+     -0.003
+    ],
+    [
+     "discR",
+     0.003
+    ],
+    [
+     "discR * 0.62",
+     0.003
+    ]
+   ],
+   "sides": 24,
+   "when": {
+    "discs": 1
+   },
+   "at": [
+    0,
+    0,
+    "-wd * 0.5",
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "caliper",
+   "type": "box",
+   "material": "caliper",
+   "size": [
+    0.09,
+    0.05,
+    0.04
+   ],
+   "at": [
+    "-discR * 0.66",
+    "discR * 0.66",
+    "wd * 0.5 + 0.02",
+    0,
+    0,
+    45
+   ],
+   "mirror": "z",
+   "when": {
+    "discs": 2
+   }
+  },
+  {
+   "id": "caliper1",
+   "type": "box",
+   "material": "caliper",
+   "size": [
+    0.07,
+    0.04,
+    0.04
+   ],
+   "at": [
+    "-discR * 0.66",
+    "discR * 0.66",
+    "-wd * 0.5 - 0.02",
+    0,
+    0,
+    45
+   ],
+   "when": {
+    "discs": 1
+   }
+  }
+ ]
+}

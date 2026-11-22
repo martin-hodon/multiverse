@@ -1,0 +1,153 @@
+{
+ "kind": "item",
+ "name": "Pole",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a round steel pole standing on the pavement: the tube, its cap, a bolted base flange if asked -- h tall, r round, its foot at the origin",
+ "params": {
+  "h": 2.9,
+  "r": 0.038,
+  "base": "none",
+  "cap": 1
+ },
+ "materials": {
+  "pole": "steel",
+  "cap": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "tube",
+   "type": "lathe",
+   "material": "pole",
+   "profile": [
+    [
+     "r",
+     0
+    ],
+    [
+     "r",
+     "h"
+    ]
+   ],
+   "caps": false,
+   "sides": 14,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "cap",
+   "type": "lathe",
+   "material": "cap",
+   "profile": [
+    [
+     "r * 1.08",
+     "h - 0.01"
+    ],
+    [
+     "r * 1.08",
+     "h + 0.01"
+    ],
+    [
+     "r * 0.6",
+     "h + r * 0.45"
+    ],
+    [
+     0,
+     "h + r * 0.5"
+    ]
+   ],
+   "sides": 14,
+   "when": "cap",
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "flange",
+   "type": "lathe",
+   "material": "pole",
+   "profile": [
+    [
+     "r * 2.6",
+     0
+    ],
+    [
+     "r * 2.6",
+     0.014
+    ],
+    [
+     "r * 1.1",
+     0.03
+    ],
+    [
+     "r",
+     0.06
+    ]
+   ],
+   "sides": 16,
+   "when": {
+    "base": "flange"
+   },
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "bolt",
+   "type": "sphere",
+   "material": "pole",
+   "r": 0.01,
+   "at": [
+    0,
+    0.016,
+    0
+   ],
+   "around": {
+    "n": 4,
+    "r": "r * 2.1",
+    "plane": "xz",
+    "start": 45
+   },
+   "sides": 6,
+   "when": {
+    "base": "flange"
+   }
+  },
+  {
+   "id": "collar",
+   "type": "lathe",
+   "material": "pole",
+   "profile": [
+    [
+     "r * 1.25",
+     0
+    ],
+    [
+     "r * 1.25",
+     0.012
+    ],
+    [
+     "r",
+     0.02
+    ]
+   ],
+   "sides": 14,
+   "when": {
+    "base": "none"
+   },
+   "at": [
+    0,
+    0,
+    0
+   ]
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+  "name": "Suit jacket",
+  "kind": "garment",
+  "layer": 3,
+  "_about": "the lounge-suit jacket (the sack coat of the 1860s, the office's from the 1920s): worsted wool, single breasted, buttoned at the waist, its lapels rolled back in a deep V over the shirt and tie, sleeves to the wrist bone (the shirt's cuff showing), to the top of the seat (a worn sheet: hung below the hips it had to clear the thighs and stood out a box), a white pocket square at the breast",
+  "thick": 0.005,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/plain",
+      "palette": "charcoal"
+    },
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "cotton-white"
+    }
+  },
+  "params": {
+    "length": "hip + 0.035"
+  },
+  "use": [
+    {
+      "use": "clothes/components/patch",
+      "params": {
+        "from": "collar - 0.01",
+        "to": "waist",
+        "thick": 0.009,
+        "open": true,
+        "centre": 0,
+        "span": 120,
+        "neckline": "v",
+        "neckFront": 0.23,
+        "neckBack": 0.0,
+        "neckWidth": 15
+      }
+    },
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "length",
+        "neckline": "v",
+        "neckFront": 0.24,
+        "neckBack": 0.004,
+        "neckWidth": 30
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist - 0.015"
+      }
+    },
+    {
+      "use": "clothes/components/band",
+      "params": {
+        "from": "armpit - 0.02",
+        "to": "armpit + 0.004",
+        "thick": 0.012,
+        "open": true,
+        "centre": 32,
+        "span": 11
+      }
+    }
+  ]
+}

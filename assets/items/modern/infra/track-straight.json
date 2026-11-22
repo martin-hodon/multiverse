@@ -1,0 +1,172 @@
+{
+ "kind": "item",
+ "name": "Track, straight",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "straight railway track, 10 m (TILE 10 m: ports at x +-5, the track along x): flat-bottomed rails on the standard gauge (1.435 m) on 16 concrete sleepers (2.6 m, 0.625 m apart) with their clips, on a ballast bed 4.6 m wide. The formation at y 0; the RAIL TOP at y 0.642 -- a train (its origin on the rail) stands there.",
+ "params": {
+  "clips": 1
+ },
+ "materials": {
+  "ballast": "#7d7872",
+  "sleeper": "concrete",
+  "rail": "steel",
+  "clip": "#3a3c3f"
+ },
+ "parts": [
+  {
+   "id": "ballast",
+   "type": "loft",
+   "material": "ballast",
+   "stations": [
+    [
+     -5.0,
+     2.3,
+     0,
+     0.4,
+     1.6
+    ],
+    [
+     5.0,
+     2.3,
+     0,
+     0.4,
+     1.6
+    ]
+   ],
+   "round": [
+    0.02,
+    0.06
+   ],
+   "seg": 1,
+   "corner": 2
+  },
+  {
+   "id": "sleeper",
+   "type": "box",
+   "material": "sleeper",
+   "size": [
+    0.26,
+    0.22,
+    2.6
+   ],
+   "at": [
+    0,
+    0.36,
+    0
+   ],
+   "along": {
+    "n": 16,
+    "from": [
+     -4.6875,
+     0,
+     0
+    ],
+    "to": [
+     4.6875,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "railFoot",
+   "type": "box",
+   "material": "rail",
+   "size": [
+    10.0,
+    0.012,
+    0.15
+   ],
+   "at": [
+    0.0,
+    0.476,
+    0.7535
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "railWeb",
+   "type": "box",
+   "material": "rail",
+   "size": [
+    10.0,
+    0.11,
+    0.017
+   ],
+   "at": [
+    0.0,
+    0.537,
+    0.7535
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "railHead",
+   "type": "box",
+   "material": "rail",
+   "size": [
+    10.0,
+    0.05,
+    0.072
+   ],
+   "at": [
+    0.0,
+    0.617,
+    0.7535
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "clip",
+   "type": "box",
+   "material": "clip",
+   "size": [
+    0.07,
+    0.04,
+    0.05
+   ],
+   "at": [
+    [
+     0,
+     0.49,
+     0.8585
+    ],
+    [
+     0,
+     0.49,
+     0.6485
+    ]
+   ],
+   "along": {
+    "n": 16,
+    "from": [
+     -4.6875,
+     0,
+     0
+    ],
+    "to": [
+     4.6875,
+     0,
+     0
+    ]
+   },
+   "mirror": "z",
+   "when": "clips"
+  }
+ ],
+ "markers": [
+  {
+   "role": "rail",
+   "at": [
+    0,
+    0.642,
+    0
+   ],
+   "data": {
+    "gauge": 1.435
+   }
+  }
+ ]
+}

@@ -1,0 +1,260 @@
+{
+ "kind": "item",
+ "name": "Flute",
+ "category": "tool",
+ "era": "1400-1900",
+ "region": "Europe",
+ "_about": "the transverse flute: a turned cylinder, stopped at its head, the embouchure hole near it and six finger holes down its length; a Renaissance flute plain, a baroque one in joints with ivory ferrules -- held out across the player's right",
+ "params": {
+  "ferrules": {
+   "pick": [
+    0,
+    1
+   ]
+  }
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "ash",
+    "cherry",
+    "walnut"
+   ]
+  },
+  "dark": "mouth-dark",
+  "ring": "ivory"
+ },
+ "parts": [
+  {
+   "id": "tube",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.0118,
+     0
+    ],
+    [
+     0.0118,
+     0.18
+    ],
+    [
+     0.0125,
+     0.186
+    ],
+    [
+     0.0125,
+     0.582
+    ],
+    [
+     0.013,
+     0.591
+    ],
+    [
+     0.0105,
+     0.6
+    ],
+    [
+     0,
+     0.6
+    ]
+   ],
+   "sides": 14
+  },
+  {
+   "id": "bore",
+   "type": "lathe",
+   "material": "dark",
+   "profile": [
+    [
+     0.0075,
+     -0.0005
+    ],
+    [
+     0,
+     -0.0005
+    ]
+   ],
+   "sides": 10
+  },
+  {
+   "id": "embouchure",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.0042,
+   "from": [
+    0,
+    0,
+    0.0115
+   ],
+   "to": [
+    0,
+    0,
+    0.0136
+   ],
+   "sides": 10,
+   "at": [
+    0,
+    0.543,
+    0
+   ],
+   "stretch": [
+    1,
+    1.25,
+    1
+   ]
+  },
+  {
+   "id": "holes",
+   "type": "rod",
+   "material": "dark",
+   "r": 0.0032,
+   "from": [
+    0,
+    0,
+    0.011
+   ],
+   "to": [
+    0,
+    0,
+    0.013
+   ],
+   "sides": 8,
+   "at": [
+    [
+     0,
+     0.372,
+     0
+    ],
+    [
+     0,
+     0.345,
+     0
+    ],
+    [
+     0,
+     0.318,
+     0
+    ],
+    [
+     0,
+     0.258,
+     0
+    ],
+    [
+     0,
+     0.231,
+     0
+    ],
+    [
+     0,
+     0.204,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "ferrules",
+   "type": "lathe",
+   "material": "ring",
+   "profile": [
+    [
+     0.0136,
+     -0.012
+    ],
+    [
+     0.0138,
+     0
+    ],
+    [
+     0.0136,
+     0.012
+    ]
+   ],
+   "sides": 14,
+   "caps": false,
+   "when": "ferrules",
+   "at": [
+    [
+     0,
+     0.186,
+     0
+    ],
+    [
+     0,
+     0.408,
+     0
+    ],
+    [
+     0,
+     0.576,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "cap",
+   "type": "lathe",
+   "material": "ring",
+   "profile": [
+    [
+     0.0128,
+     0
+    ],
+    [
+     0.0128,
+     0.008
+    ],
+    [
+     0.006,
+     0.012
+    ],
+    [
+     0,
+     0.012
+    ]
+   ],
+   "when": "ferrules",
+   "at": [
+    0,
+    0.6,
+    0
+   ]
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.17,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    0.15,
+    0.3,
+    -1
+   ],
+   "face": [
+    0.2,
+    1,
+    0
+   ]
+  },
+  "follow": 0,
+  "rest": "body"
+ }
+}

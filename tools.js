@@ -65,6 +65,7 @@ export function paintedGeometry(built, { flat = [], strands = null, wet = null, 
   geo.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3));
   if (strands) { geo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2)); geo.setAttribute("hairMask", new THREE.Float32BufferAttribute(mask, 1)); }
   if (wet) geo.setAttribute("wetMask", new THREE.Float32BufferAttribute(wets, 1));
+  for (const g of built.groups) if (g.src) (geo.userData.items ??= {})[g.src] = (geo.userData.items[g.src] ?? 0) + g.idx.length / 3;   // (architecture.js itemBudget)
   return geo;
 }
 
@@ -91,7 +92,8 @@ export const TOOL_ITEMS = {
   scythe: "items/tools/scythe", spade: "items/tools/spade", hoe: "items/tools/hoe", hammer: "items/tools/hammer",
   rod: "items/tools/fishing-rod", cleaver: "items/tools/cleaver", saw: "items/tools/saw", lute: "items/tools/lute",
   sword: "items/weapons/arming-sword", spear: "items/weapons/spear", bow: "items/weapons/longbow", shield: "items/shields/round",
-  lantern: "items/tools/lantern",
+  lantern: "items/tools/lantern", fiddle: "items/tools/fiddle", recorder: "items/tools/recorder", flute: "items/tools/flute",
+  harp: "items/tools/harp", lyre: "items/tools/lyre",
 };
 export function toolItem(tool) {
   const [name, s] = String(tool).split("#");

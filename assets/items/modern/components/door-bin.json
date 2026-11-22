@@ -1,0 +1,67 @@
+{
+ "kind": "item",
+ "name": "Door bin",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a fridge door's bin: the floor, a clear front lip and two ends -- open at the top, its lip at -x (into the cabinet), w across z, d deep, h high, the origin on the floor's middle",
+ "params": {
+  "w": 0.48,
+  "d": 0.09,
+  "h": 0.08,
+  "lip": 0.006,
+  "t": 0.008
+ },
+ "materials": {
+  "liner": "plastic-white",
+  "bin": "window-glass"
+ },
+ "parts": [
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "liner",
+   "size": [
+    "d",
+    "t",
+    "w"
+   ],
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "lip",
+   "type": "box",
+   "material": "bin",
+   "size": [
+    "lip",
+    "h",
+    "w"
+   ],
+   "at": [
+    "-(d + lip) / 2 + 0.001",
+    "(h - t) / 2",
+    0
+   ]
+  },
+  {
+   "id": "end",
+   "type": "box",
+   "material": "liner",
+   "size": [
+    "d",
+    "h",
+    "lip"
+   ],
+   "at": [
+    0,
+    "(h - t) / 2",
+    "w / 2 - lip / 2"
+   ],
+   "mirror": "z"
+  }
+ ]
+}

@@ -28,6 +28,7 @@ import * as THREE from "three";
 import { createComposite } from "./composite.js";
 import { sculptOf } from "./bodyspec.js";
 import { makeSeal, makeWalrus } from "./species.js";
+import { lcg as rng } from "./rng.js";
 
 export const HAULOUT = {
   // groups (a sea's, a lake's) and their sizes; spacing m along the shore; inland: the spots' range up from the
@@ -47,7 +48,6 @@ export const HAULOUT = {
 const TAU = Math.PI * 2;
 const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 const lerp = (a, b, t) => a + (b - a) * t;
-const rng = (seed) => { let s = (seed >>> 0) || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; };
 const hash = (a, b) => { let h = (Math.imul(a | 0, 2654435761) ^ Math.imul(b | 0, 1597334677)) >>> 0; h = Math.imul(h ^ (h >>> 15), 2246822519) >>> 0; return ((h ^ (h >>> 13)) >>> 0) / 4294967296; };
 const angTo = (a, b) => { let d = (b - a) % TAU; if (d > Math.PI) d -= TAU; if (d < -Math.PI) d += TAU; return d; };
 const headingOf = (dx, dz) => Math.atan2(-dz, dx);   // (rotY that turns the body's +x along (dx, dz): sealife.js's)

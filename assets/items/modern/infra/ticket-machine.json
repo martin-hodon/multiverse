@@ -1,0 +1,134 @@
+{
+ "kind": "item",
+ "name": "Ticket machine",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a ticket machine: a cabinet 1.8 m tall with a touch screen, keypad, card and coin slots and a ticket tray, facing +x",
+ "params": {},
+ "materials": {
+  "tmBody": {
+   "pick": [
+    "paint-red",
+    "paint-blue",
+    "#1f5f3a"
+   ]
+  },
+  "tmFace": "#2c2f33",
+  "hands": "paint-black",
+  "tmStripe": "paint-white"
+ },
+ "parts": [
+  {
+   "id": "cab",
+   "type": "box",
+   "material": "tmBody",
+   "size": [
+    0.45,
+    1.75,
+    0.8
+   ],
+   "at": [
+    -0.025,
+    0.875,
+    0.0
+   ]
+  },
+  {
+   "id": "hoodT",
+   "type": "box",
+   "material": "tmBody",
+   "size": [
+    0.55,
+    0.15,
+    0.84
+   ],
+   "at": [
+    0.025,
+    1.725,
+    0.0
+   ]
+  },
+  {
+   "id": "screen",
+   "use": "items/modern/components/screen",
+   "at": [
+    0.205,
+    1.25,
+    0,
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "w": 0.5,
+    "h": 0.4,
+    "t": 0.02
+   },
+   "materials": {
+    "case": "tmFace",
+    "glass": "screen"
+   }
+  },
+  {
+   "id": "pad",
+   "type": "box",
+   "material": "tmFace",
+   "size": [
+    0.06,
+    0.15,
+    0.5
+   ],
+   "at": [
+    0.23,
+    0.925,
+    0.0
+   ]
+  },
+  {
+   "id": "slot",
+   "type": "box",
+   "material": "hands",
+   "size": [
+    0.02,
+    0.06,
+    0.3
+   ],
+   "at": [
+    0.21,
+    0.63,
+    0.0
+   ]
+  },
+  {
+   "id": "tray",
+   "type": "box",
+   "material": "hands",
+   "size": [
+    0.04,
+    0.1,
+    0.4
+   ],
+   "at": [
+    0.21,
+    0.35,
+    0.0
+   ]
+  },
+  {
+   "id": "band",
+   "type": "box",
+   "material": "tmStripe",
+   "size": [
+    0.01,
+    0.07,
+    0.8
+   ],
+   "at": [
+    0.205,
+    1.585,
+    0.0
+   ]
+  }
+ ]
+}

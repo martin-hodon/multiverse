@@ -1,0 +1,700 @@
+{
+ "kind": "item",
+ "name": "Shipping container",
+ "category": "components",
+ "era": "1956-2030",
+ "region": "everywhere",
+ "_about": "an ISO freight container, L long (6.058 m a 20 ft, 12.192 m a 40 ft), 2.438 m wide, 2.591 m high: the corrugated walls, the corner posts and rails, two door leaves at -x with their locking bars, hinged just outside the corner posts and swung 265 degrees round flat against the sides by `open`, onto the hollow inside (its plank floor; a light load of pallets, a crate and drums unless `load` 0) -- or a plain block (full 0, ribs 0) for a stack's inner boxes",
+ "params": {
+  "L": 12.192,
+  "W": 2.438,
+  "H": 2.591,
+  "ribs": 44,
+  "both": 1,
+  "full": 1,
+  "load": 1
+ },
+ "materials": {
+  "cbox": "paint-red",
+  "cframe": "cbox",
+  "cbar": "steel",
+  "cfloor": "planks",
+  "cwood": "#9a7a52",
+  "ccarton": "#b08a5c",
+  "cdrum": "#2f5e8c"
+ },
+ "parts": [
+  {
+   "id": "block",
+   "type": "box",
+   "material": "cbox",
+   "size": [
+    "L - 0.02",
+    "H - 0.02",
+    "W - 0.04"
+   ],
+   "at": [
+    0,
+    "H / 2",
+    0
+   ],
+   "when": {
+    "full": [
+     0
+    ]
+   }
+  },
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "cfloor",
+   "size": [
+    "L - 0.04",
+    0.03,
+    "W - 0.06"
+   ],
+   "at": [
+    0,
+    0.12,
+    0
+   ],
+   "when": "full"
+  },
+  {
+   "id": "roof",
+   "type": "box",
+   "material": "cbox",
+   "size": [
+    "L - 0.02",
+    0.03,
+    "W - 0.04"
+   ],
+   "at": [
+    0,
+    "H - 0.025",
+    0
+   ],
+   "when": "full"
+  },
+  {
+   "id": "side",
+   "type": "box",
+   "material": "cbox",
+   "size": [
+    "L - 0.02",
+    "H - 0.02",
+    0.03
+   ],
+   "at": [
+    0,
+    "H / 2",
+    "W / 2 - 0.035"
+   ],
+   "mirror": "z",
+   "when": "full"
+  },
+  {
+   "id": "blind",
+   "type": "box",
+   "material": "cbox",
+   "size": [
+    0.03,
+    "H - 0.02",
+    "W - 0.04"
+   ],
+   "at": [
+    "L / 2 - 0.025",
+    "H / 2",
+    0
+   ],
+   "when": "full"
+  },
+  {
+   "id": "under",
+   "type": "box",
+   "material": "cframe",
+   "size": [
+    "L - 0.04",
+    0.1,
+    "W - 0.06"
+   ],
+   "at": [
+    0,
+    0.055,
+    0
+   ],
+   "when": "full"
+  },
+  {
+   "id": "ribR",
+   "type": "box",
+   "material": "cbox",
+   "size": [
+    "L / ribs * 0.42",
+    "H - 0.3",
+    0.05
+   ],
+   "at": [
+    0,
+    "H / 2",
+    "W / 2 - 0.032"
+   ],
+   "along": {
+    "n": "ribs",
+    "from": [
+     "-L / 2 + 0.3",
+     0,
+     0
+    ],
+    "to": [
+     "L / 2 - 0.3",
+     0,
+     0
+    ]
+   },
+   "when": "ribs"
+  },
+  {
+   "id": "ribL",
+   "type": "box",
+   "material": "cbox",
+   "size": [
+    "L / ribs * 0.42",
+    "H - 0.3",
+    0.05
+   ],
+   "at": [
+    0,
+    "H / 2",
+    "-W / 2 + 0.032"
+   ],
+   "along": {
+    "n": "ribs",
+    "from": [
+     "-L / 2 + 0.3",
+     0,
+     0
+    ],
+    "to": [
+     "L / 2 - 0.3",
+     0,
+     0
+    ]
+   },
+   "when": [
+    "ribs",
+    "both"
+   ]
+  },
+  {
+   "id": "roofRib",
+   "type": "box",
+   "material": "cbox",
+   "size": [
+    "L / ribs * 0.3",
+    0.03,
+    "W - 0.3"
+   ],
+   "at": [
+    0,
+    "H - 0.01",
+    0
+   ],
+   "along": {
+    "n": "ribs / 2",
+    "from": [
+     "-L / 2 + 0.4",
+     0,
+     0
+    ],
+    "to": [
+     "L / 2 - 0.4",
+     0,
+     0
+    ]
+   },
+   "when": [
+    "ribs",
+    "full"
+   ]
+  },
+  {
+   "id": "post",
+   "type": "box",
+   "material": "cframe",
+   "size": [
+    0.16,
+    "H",
+    0.16
+   ],
+   "at": [
+    [
+     "L / 2 - 0.08",
+     "H / 2",
+     "W / 2 - 0.08"
+    ],
+    [
+     "-L / 2 + 0.08",
+     "H / 2",
+     "W / 2 - 0.08"
+    ]
+   ],
+   "mirror": "z",
+   "when": "full"
+  },
+  {
+   "id": "rail",
+   "type": "box",
+   "material": "cframe",
+   "size": [
+    "L - 0.1",
+    0.12,
+    0.06
+   ],
+   "at": [
+    [
+     0,
+     "H - 0.06",
+     "W / 2 - 0.03"
+    ],
+    [
+     0,
+     0.08,
+     "W / 2 - 0.03"
+    ]
+   ],
+   "mirror": "z",
+   "when": "full"
+  },
+  {
+   "id": "endRail",
+   "type": "box",
+   "material": "cframe",
+   "size": [
+    0.07,
+    0.14,
+    "W - 0.1"
+   ],
+   "at": [
+    [
+     "L / 2 - 0.035",
+     "H - 0.07",
+     0
+    ],
+    [
+     "L / 2 - 0.035",
+     0.09,
+     0
+    ],
+    [
+     "-L / 2 + 0.035",
+     "H - 0.1",
+     0
+    ],
+    [
+     "-L / 2 + 0.035",
+     0.11,
+     0
+    ]
+   ],
+   "when": "full"
+  },
+  {
+   "id": "casting",
+   "type": "box",
+   "material": "cbar",
+   "size": [
+    0.18,
+    0.12,
+    0.17
+   ],
+   "at": [
+    [
+     "L / 2 - 0.09",
+     "H - 0.06",
+     "W / 2 - 0.085"
+    ],
+    [
+     "L / 2 - 0.09",
+     0.06,
+     "W / 2 - 0.085"
+    ],
+    [
+     "-L / 2 + 0.09",
+     "H - 0.06",
+     "W / 2 - 0.085"
+    ],
+    [
+     "-L / 2 + 0.09",
+     0.06,
+     "W / 2 - 0.085"
+    ]
+   ],
+   "mirror": "z",
+   "when": "full"
+  },
+  {
+   "id": "endRib",
+   "type": "box",
+   "material": "cbox",
+   "size": [
+    0.05,
+    "H - 0.35",
+    0.12
+   ],
+   "at": [
+    "L / 2 - 0.005",
+    "H / 2",
+    0
+   ],
+   "along": {
+    "n": 7,
+    "from": [
+     0,
+     0,
+     "-W / 2 + 0.4"
+    ],
+    "to": [
+     0,
+     0,
+     "W / 2 - 0.4"
+    ]
+   },
+   "when": "full"
+  },
+  {
+   "id": "door",
+   "type": "hinge",
+   "pivot": [
+    "-L / 2 - 0.03",
+    "H / 2",
+    "W / 2 + 0.035"
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": 265,
+   "parts": [
+    {
+     "id": "leaf",
+     "type": "box",
+     "material": "cbox",
+     "size": [
+      0.04,
+      "H - 0.26",
+      "W / 2 - 0.137"
+     ],
+     "at": [
+      "-L / 2 - 0.004",
+      "H / 2",
+      "W / 4 - 0.0615"
+     ]
+    },
+    {
+     "id": "rib",
+     "type": "box",
+     "material": "cbox",
+     "size": [
+      0.03,
+      0.06,
+      "W / 2 - 0.2"
+     ],
+     "at": [
+      "-L / 2 - 0.03",
+      0,
+      "W / 4 - 0.02"
+     ],
+     "along": {
+      "n": 5,
+      "from": [
+       0,
+       0.45,
+       0
+      ],
+      "to": [
+       0,
+       "H - 0.45",
+       0
+      ]
+     }
+    },
+    {
+     "id": "bar",
+     "type": "rod",
+     "material": "cbar",
+     "r": 0.016,
+     "from": [
+      "-L / 2 - 0.05",
+      0.14,
+      0
+     ],
+     "to": [
+      "-L / 2 - 0.05",
+      "H - 0.14",
+      0
+     ],
+     "sides": 6,
+     "at": [
+      [
+       0,
+       0,
+       0.2
+      ],
+      [
+       0,
+       0,
+       0.88
+      ]
+     ]
+    },
+    {
+     "id": "handle",
+     "type": "box",
+     "material": "cbar",
+     "size": [
+      0.03,
+      0.04,
+      0.28
+     ],
+     "at": [
+      [
+       "-L / 2 - 0.075",
+       1.05,
+       0.32
+      ],
+      [
+       "-L / 2 - 0.075",
+       1.05,
+       1.0
+      ]
+     ]
+    },
+    {
+     "id": "hinge",
+     "type": "box",
+     "material": "cbar",
+     "size": [
+      0.06,
+      0.1,
+      0.06
+     ],
+     "at": [
+      "-L / 2 - 0.02",
+      0,
+      "W / 2 - 0.13"
+     ],
+     "along": {
+      "n": 4,
+      "from": [
+       0,
+       0.35,
+       0
+      ],
+      "to": [
+       0,
+       "H - 0.35",
+       0
+      ]
+     }
+    },
+    {
+     "id": "inner",
+     "type": "box",
+     "material": "cbox",
+     "size": [
+      0.02,
+      "H - 0.3",
+      "W / 2 - 0.17"
+     ],
+     "at": [
+      "-L / 2 + 0.026",
+      "H / 2",
+      "W / 4 - 0.02"
+     ],
+     "inside": true
+    }
+   ],
+   "mirror": "z",
+   "when": "full"
+  },
+  {
+   "id": "pallet",
+   "type": "box",
+   "material": "cwood",
+   "size": [
+    1.2,
+    0.14,
+    1.0
+   ],
+   "at": [
+    [
+     "L / 2 - 0.75",
+     0.205,
+     -0.55
+    ],
+    [
+     "L / 2 - 0.75",
+     0.205,
+     0.55
+    ],
+    [
+     "L / 2 - 2.0",
+     0.205,
+     -0.55
+    ]
+   ],
+   "inside": true,
+   "when": [
+    "full",
+    "load"
+   ]
+  },
+  {
+   "id": "cartons",
+   "type": "box",
+   "material": "ccarton",
+   "size": [
+    1.16,
+    1.1,
+    0.96
+   ],
+   "at": [
+    [
+     "L / 2 - 0.75",
+     0.825,
+     -0.55
+    ],
+    [
+     "L / 2 - 0.75",
+     0.825,
+     0.55
+    ],
+    [
+     "L / 2 - 2.0",
+     0.825,
+     -0.55
+    ]
+   ],
+   "inside": true,
+   "when": [
+    "full",
+    "load"
+   ]
+  },
+  {
+   "id": "cartonsTop",
+   "type": "box",
+   "material": "ccarton",
+   "size": [
+    1.1,
+    0.5,
+    0.9
+   ],
+   "at": [
+    [
+     "L / 2 - 0.75",
+     1.63,
+     -0.55
+    ]
+   ],
+   "inside": true,
+   "when": [
+    "full",
+    "load"
+   ]
+  },
+  {
+   "id": "strap",
+   "type": "box",
+   "material": "cbar",
+   "size": [
+    0.02,
+    1.14,
+    1.0
+   ],
+   "at": [
+    [
+     "L / 2 - 0.75",
+     0.825,
+     -0.55
+    ],
+    [
+     "L / 2 - 0.75",
+     0.825,
+     0.55
+    ]
+   ],
+   "inside": true,
+   "when": [
+    "full",
+    "load"
+   ]
+  },
+  {
+   "id": "crate",
+   "type": "box",
+   "material": "cwood",
+   "size": [
+    1.0,
+    0.8,
+    0.8
+   ],
+   "at": [
+    "L / 2 - 2.0",
+    0.535,
+    0.6,
+    8,
+    0,
+    0
+   ],
+   "inside": true,
+   "when": [
+    "full",
+    "load"
+   ]
+  },
+  {
+   "id": "drum",
+   "type": "lathe",
+   "material": "cdrum",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.29,
+     0
+    ],
+    [
+     0.29,
+     0.88
+    ],
+    [
+     0,
+     0.88
+    ]
+   ],
+   "sides": 14,
+   "inside": true,
+   "when": [
+    "full",
+    "load"
+   ],
+   "at": [
+    [
+     "-L / 2 + 0.9",
+     0.135,
+     -0.7
+    ],
+    [
+     "-L / 2 + 1.5",
+     0.135,
+     -0.75
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "Trench coat",
+  "kind": "garment",
+  "layer": 5,
+  "_about": "the trench coat (Burberry's and Aquascutum's for the officers of 1914-18; a city coat since): khaki cotton gabardine, double-breasted to the waist, a wide collar turned out, a belt of its own cloth, and skirts to below the knee open at the front -- the overcoat, in charcoal or camel wool, is cut the same",
+  "thick": 0.006,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/twill",
+      "palette": "trench"
+    },
+    "buckle": {
+      "pattern": "fabrics/buckle",
+      "palette": "brass"
+    }
+  },
+  "params": {
+    "length": "knee + 0.08"
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "waist + 0.03",
+        "neckline": "v",
+        "neckFront": 0.16,
+        "neckBack": 0.004,
+        "neckWidth": 30
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist + 0.01"
+      }
+    },
+    {
+      "use": "clothes/components/collar",
+      "params": {
+        "height": 0.05,
+        "drop": 0.035,
+        "flare": 1.4,
+        "gap": 70
+      }
+    },
+    {
+      "use": "clothes/components/belt",
+      "params": {
+        "at": "waist + 0.01",
+        "width": 0.045
+      }
+    }
+  ],
+  "pieces": [
+    {
+      "name": "skirts",
+      "kind": "hang",
+      "on": "torso",
+      "from": "waist + 0.02",
+      "to": "length",
+      "flare": 0.16,
+      "fit": "flare",
+      "wrap": [
+        180,
+        338
+      ],
+      "fabric": "main",
+      "pleats": 6,
+      "cling": 0.35,
+      "trail": 8,
+      "lid": false
+    }
+  ]
+}

@@ -17,12 +17,12 @@
 //            normal into the water), harbourSite(town) (the best stretch to build a port on), route(a, b) and the
 //            sailing lanes over deep water
 // Game frame: x east, z SOUTH (the river runs east along z = riverZ(x), the town south of it), y up. Metres.
+import { rng } from "./rng.js";
 
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const smooth = (t) => { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); };
 const mix = (a, b, t) => a + (b - a) * t;
-const rng = (s) => { let a = s >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
 // (smooth value noise, 1-D and 2-D, -1..1)
 const hash = (i, j, s) => { let h = Math.imul(i, 374761393) + Math.imul(j, 668265263) + Math.imul(s, 2246822519); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 2147483648 - 1; };
 const noise2 = (x, z, s) => {

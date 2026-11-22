@@ -1,0 +1,111 @@
+{
+ "kind": "item",
+ "name": "Bench",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a platform or bus-stop bench, 1.8 m: slatted seat and back on two end frames, its front at +x, the seat 0.45 high",
+ "params": {},
+ "materials": {
+  "benchFrame": "#3b4045",
+  "benchSeat": {
+   "pick": [
+    "oak",
+    "#5a6e7c",
+    "#7b2c2c"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "leg",
+   "type": "box",
+   "material": "benchFrame",
+   "size": [
+    0.42,
+    0.42,
+    0.06
+   ],
+   "at": [
+    -0.02,
+    0.21,
+    0.75
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "backPost",
+   "type": "box",
+   "material": "benchFrame",
+   "size": [
+    0.05,
+    0.45,
+    0.06
+   ],
+   "at": [
+    -0.24,
+    0.66,
+    0.75,
+    0,
+    0,
+    12
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "slat",
+   "type": "box",
+   "material": "benchSeat",
+   "size": [
+    0.12,
+    0.03,
+    1.8
+   ],
+   "at": [
+    [
+     0.12,
+     0.44,
+     0
+    ],
+    [
+     -0.02,
+     0.44,
+     0
+    ],
+    [
+     -0.16,
+     0.44,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "backSlat",
+   "type": "box",
+   "material": "benchSeat",
+   "size": [
+    0.03,
+    0.12,
+    1.8
+   ],
+   "at": [
+    [
+     -0.25,
+     0.6,
+     0,
+     0,
+     0,
+     12
+    ],
+    [
+     -0.28,
+     0.76,
+     0,
+     0,
+     0,
+     12
+    ]
+   ]
+  }
+ ]
+}

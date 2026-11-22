@@ -77,9 +77,11 @@
   .fnote { color:var(--dim); font-style:italic; font-size:12px; padding:2px 0 4px; white-space:pre-wrap; }
   #hairOpts input[type=range] { width:56px; }
   #bar label { white-space:nowrap; }
+  /* (embedded in another page -- welle's visual pane: the model alone, turning; the full viewer is a link away) */
+  body.embed #list, body.embed #edit, body.embed #bar, body.embed #av { display:none !important; }   /* (#av: archview.js shows it inline) */
   #shade, #hairOpts { flex-wrap:wrap; row-gap:2px; }
   /* THE VARIANTS (assetvariants.js): a creature's coats and named variants, one picked in the bar and edited atop the form */
-  #varPick { font:inherit; max-width:230px; background:#1e2126; color:var(--ink); border:1px solid var(--line); border-radius:3px; padding:1px 4px; }
+  #varPick, #welle { font:inherit; max-width:230px; background:#1e2126; color:var(--ink); border:1px solid var(--line); border-radius:3px; padding:1px 4px; }
   #varPick.on { border-color:var(--hot); color:var(--hot); }
   .vpanel { border:1px solid var(--line); border-radius:4px; padding:6px 8px 8px; margin:2px 0 10px; background:#262a30; }
   .vpanel .vhead { display:flex; gap:4px; align-items:center; padding-bottom:4px; }
@@ -104,10 +106,13 @@
       <span id="what">—</span>
       <span id="stats" style="color:var(--dim)"></span>
       <span id="kin"></span>
+      <select id="welle" style="display:none" title="the lines of the notes (welle) naming it: one opens there"></select>
       <span style="flex:1"></span>
       <span id="det" style="color:var(--dim)">detail 1</span>
       <label><input type="checkbox" id="edges"> edges <span style="color:var(--dim)">(T)</span></label>
       <label><input type="checkbox" id="spin"> turn</label>
+      <label id="openOpt" style="display:none" title="its doors, lids and bonnet (items.js hinge) swung open"><input type="checkbox" id="openJ"> open <span style="color:var(--dim)">(O)</span></label>
+      <label id="steerOpt" style="display:none" title="its front wheels steered (items.js hinge `by`: steer, -1 full right .. 1 full left; [ and ] step it)">steer <input type="range" id="steerJ" min="-1" max="1" step="0.05" value="0" style="width:70px"></label>
       <label><input type="checkbox" id="walk"> walk</label>
       <label title="a beast that flies (a dragon, the manticore, the pegasus, the griffin): aloft, its wings beating"><input type="checkbox" id="fly"> fly</label>
       <label id="seasonOpt" style="display:none" title="a tree or the bush in leaf only, in flower (spring blossom, or its flowers), in fruit, or both (render.js SEASON; each species flowers or fruits on its own share of sprays, species.js season)">shown <select id="plantSeason"><option value="both">flowers + fruit</option><option value="flower">in flower</option><option value="fruit">in fruit</option><option value="leaf">leaf only</option></select></label>
@@ -216,7 +221,8 @@ import { registerPatterns, drawSheet, renderPattern, patternNames, PALETTES } fr
 import { bakeTiles } from "./textures.js";   // the older tiles (ashlar, marble, the orders' ornament...) a finish may still name as `pat`
 import { loadUses } from "./arch/assemble.js";   // a building's COMPONENTS (other definitions it `use`s), fetched before it is built
 import { gaitBase, beast } from "./species.js";   // (beast: a creature marked to be drawn sculpted, as the world draws it -- bodyspec.js)
-import { SKYSTEEDS, tuckLegs } from "./skysteeds.js";   // the pegasus and the griffin: on the ground their wings folded, `fly` takes them aloft as the game does
+import { SKYSTEEDS, tuckLegs } from "./skysteeds.js";
+import { PERCHERS } from "./perchers.js";   // (2026-11-21) the birds modelled aloft -- the eagle, the falcon, the macaw...: shown standing, `fly` takes them up   // the pegasus and the griffin: on the ground their wings folded, `fly` takes them aloft as the game does
 import { createArchView } from "./archview.js";   // CUTS through what is shown; a building's PARTS picked, framed, isolated, hidden; its LAYERS faded
 import { EXPRESSIONS, VISEMES } from "./face.js";
 import { drawSpecimen } from "./butterflies.js";
@@ -231,9 +237,11 @@ import { registerGlyphs, drawGlyphSheet, partNames, signCodes } from "./glyphs.j
 import { setQuads } from "./outline.js";
 import { attachRig, setJointModel, setAngles, ground } from "./joints.js";   // THE BODY IN MOTION: joints, positions, movements, exercises, reaching
 import { createLibrary, createMotion, rangeTimeline } from "./motion.js";
+import { welleLines } from "./welle.js";
 
 const $ = (id) => document.getElementById(id);
 const qp = new URLSearchParams(location.search);
+if (qp.get("embed")) { document.body.classList.add("embed"); $("spin").checked = true; }
 
 // ---- the world to show it in --------------------------------------------------------------------------------
 const renderer = new THREE.WebGPURenderer({ antialias: true });
@@ -749,7 +757,7 @@ function build(path, text) {
     if (jewelHead) look[site === "head" ? "headwear" : "earrings"] = path;
     const built = onHead && jewelHead ? buildItem("items/faces/woman", local, lib, { seed: itemSeed, params: { detail: itemDetail, fringe, ...look }, materials: mats })
       : onHead ? buildItem("items/faces/woman", local, lib, { seed: itemSeed, params: { detail: itemDetail, ...look, hairstyle: path, fringe, ...hairFaceParams(local, path) }, materials: mats })
-      : buildItem(path, local, lib, { seed: itemSeed, params: { detail: itemDetail, ...look, ...(isHair ? { fringe } : {}) }, ...(Object.keys(mats).length ? { materials: mats } : {}) });
+      : buildItem(path, local, lib, { seed: itemSeed, params: { detail: itemDetail, ...look, ...(isHair ? { fringe } : {}) }, ...(Object.keys(mats).length ? { materials: mats } : {}), split: true });
     if (onHead) built.name = def.name ?? built.name;
     $("shade").style.display = isFace ? "inline-flex" : "none";
     $("hairOpts").style.display = isFace || site ? "inline-flex" : "none";
@@ -777,6 +785,10 @@ function build(path, text) {
       lines.renderOrder = 5; mesh.add(lines);
     }
     stand.add(mesh);
+    const drives = new Set((mesh.userData.joints ?? []).map((j) => j.by).filter(Boolean));
+    $("openOpt").style.display = (mesh.userData.joints ?? []).some((j) => !j.by) ? "" : "none";
+    $("steerOpt").style.display = drives.has("steer") ? "" : "none";
+    openT = $("openJ").checked ? 1 : 0; mesh.userData.setOpen?.(openT); mesh.userData.setDrive?.("steer", +$("steerJ").value);
     const missing = [...new Set(built.groups.filter((g) => g.material.missing).map((g) => g.material.missing))];
     return { label: built.name + (built.era ? ` · ${built.era}` : ""),
              stats: `${built.tris.toLocaleString()} triangles · ${built.groups.length} materials${missing.length ? " · NO MATERIAL " + missing.join(", ") : ""} · ${built.bounds.hi.map((v, i) => (v - built.bounds.lo[i]).toFixed(2)).join(" x ")} m` +
@@ -829,8 +841,22 @@ function build(path, text) {
   //  ground its wings folded (PERCH, its own fit), aloft spread and beating with the legs tucked (tuckLegs); `fly` eases between)
   const steed = SKYSTEEDS[made.name] ?? null;
   if (steed) { an.perchFold = { fold: steed.fold, squeeze: steed.squeeze }; an.steedU = $("fly").checked ? 1 : 0; an.perch = 1 - an.steedU; an.wingT = 0; }
+  // (2026-11-21) A BIRD MODELLED ALOFT (perchers.js PERCHERS: no flight pose of its own, its rest the glide) is shown as the
+  //  game shows it sat: STANDING -- its wings folded (skeleton.js PERCH, its own fit), the body tipped up as its perch legs
+  //  were drawn for (footL perchPitch), its feet on the ground; `fly` takes it up, the wings out and beating
+  const pspec = !steed && !made.flight ? PERCHERS[made.name] ?? null : null;
+  let perched = null;
+  if (pspec) {
+    const byId = new Map(made.parts.map((q) => [q.id, q])), fb = byId.get("footL"), th = (fb?.perchPitch ?? pspec.pitch) * Math.PI / 180;
+    const ft = [0, 0]; for (let q = fb; q; q = q.parent ? byId.get(q.parent) : null) { ft[0] += q.pos?.[0] ?? 0; ft[1] += q.pos?.[1] ?? 0; }   // (the feet: the chain down from the figure's origin, which an.pitch turns about)
+    const lift = fb ? ft[0] * Math.sin(th) + ft[1] * Math.cos(th) : 0;
+    if (pspec.fold) an.perchFold = { fold: pspec.fold, squeeze: pspec.squeeze };
+    an.perch = an.legs = $("fly").checked ? 0 : 1; an.pitch = th * an.perch; an.perchR = .5; an.flyT = 0; an.wingT = 0;
+    perched = { th, lift, hz: made.fly?.hz ?? .5 };
+    an.position.y = -lift * an.perch;
+  }
   herd.update(0);
-  person = [{ an, base: gaitBase(made), steed }];
+  person = [{ an, base: gaitBase(made), steed, perched }];
   const vl = dress && variantList(def).find((v) => pickKey(v.pick) === pickKey(dress));
   return { label: (made.name ?? path) + (vl ? ` · ${vl.label}` : ""), stats: `${made.parts.length} parts` + (an.sculpted || made.sculpted ? " (sculpted: one skinned surface)" : "") };
 }
@@ -919,7 +945,8 @@ function frame(fly = false) {
   const box = assetBox();
   if (box.isEmpty()) box.set(new THREE.Vector3(-1, 0, -1), new THREE.Vector3(1, 2, 1));
   const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
-  const d = Math.max(size.x, size.y, size.z) * 1.5 + 1;
+  // (the margin grows with the thing up to a metre: a house as ever, an apple of 8 cm not a speck in the middle)
+  const big = Math.max(size.x, size.y, size.z), d = Math.max(.05, big * 1.5 + Math.min(1, big));   // (never 0: a box of no size, the eye not inside it)
   // a definition may ask to be seen SQUARE ON ("_view": "front"): a row of arch profiles is a drawing, and a
   // three-quarter view of it is a row of edges
   const from = front ? new THREE.Vector3(c.x, c.y + d * .12, c.z + d * 1.15) : new THREE.Vector3(c.x + d * .8, c.y + d * .45, c.z + d * .8);
@@ -1073,7 +1100,21 @@ function show(path) {
   if (tab === "form") makeForm();
   apply(path, $("json").value, { refit: true });
   history.replaceState(null, "", "?a=" + encodeURIComponent(path) + dressQuery());
+  notesOf(path);
 }
+// the notes' lines naming it (../welle's back.json): a list in the bar, one chosen opens welle at it
+function notesOf(path) {
+  const sel = $("welle"); sel.style.display = "none";
+  welleLines("model", path).then(({ lines: ls, total }) => {
+    if (current !== path || !ls.length) return;
+    sel.replaceChildren(new Option(`in the notes · ${total}`, ""), ...ls.map((l) => new Option(`${l.text} (${l.file})`, l.href)));
+    sel.style.display = "";
+  });
+}
+$("welle").onchange = (e) => {
+  const to = e.target.value; e.target.value = "";                      // (back here, the same line can be picked again)
+  if (to) location.href = to;
+};
 // ---- THE VARIANTS: a creature's coats and named variants (assetvariants.js). One is picked in the bar (null: the
 // definition as it is) and the stand shows the creature dressed in it; the form opens with it, its colours and params
 // against the base's, to change, add to, take out; a coat or a variant added, copied, renamed, deleted. The JSON stays
@@ -1191,6 +1232,7 @@ function edges(on) {
   grid.visible = !on;
 }
 $("edges").onchange = () => { edges($("edges").checked); if (current?.startsWith("items/")) apply(current, $("json").value); };   // (a face's guide lines come and go with its triangles)
+$("steerJ").oninput = () => mesh?.userData.setDrive?.("steer", +$("steerJ").value);   // (the front wheels steered live)
 $("finish").onchange = () => apply(current, $("json").value);
 // (a 2D canvas can lose its pixels when the GPU process resets -- as it may while WebGPU starts: draw the sheet again)
 $("sheet").addEventListener("contextrestored", () => { if (["pattern", "greek", "butterfly", "butterfly-shapes", "mural", ...glyphKinds].includes(kindOf.get(current))) apply(current, $("json").value); });
@@ -1198,6 +1240,8 @@ addEventListener("keydown", (e) => {
   if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
   if (e.key === "/") { e.preventDefault(); $("q").focus(); $("q").select(); return; }
   if (e.code === "KeyT") { $("edges").checked = !$("edges").checked; $("edges").onchange(); }
+  if (e.code === "KeyO" && $("openOpt").style.display !== "none") $("openJ").checked = !$("openJ").checked;
+  if ((e.key === "[" || e.key === "]") && $("steerOpt").style.display !== "none") { $("steerJ").value = Math.max(-1, Math.min(1, +$("steerJ").value + (e.key === "[" ? .25 : -.25))); $("steerJ").oninput(); }
   if (e.code === "KeyF") frame(true);
   if (e.code === "KeyV" && kindOf.get(current) === "creature") {   // (the next coat or variant; Shift: the one before)
     const keys = [...$("varPick").options].map((o) => o.value), i = keys.indexOf($("varPick").value);
@@ -1223,7 +1267,7 @@ const bodies = createBodies(stand, { shade: CONFIG.people?.faceShade ?? {} });
 const heads = createHeads(stand, { shade: CONFIG.people?.faceShade ?? {} });   // (every figure's mesh head: a person's, a winged one's, a statue's carved one)
 const jewels = createJewels(stand);   // (and what hangs round their necks: jewels.js)
 const clock = new THREE.Clock();
-let frames = 0;
+let frames = 0, openT = 0;
 renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), .1);
   if ($("spin").checked && person) for (const p of person) p.an.rotY += dt * .5;
@@ -1234,10 +1278,19 @@ renderer.setAnimationLoop(() => {
     if (performance.now() > motionStatsAt) { motionStatsAt = performance.now() + 250; $("stats").textContent = motionLine(); }
   }
   if ($("spin").checked && mesh) mesh.rotation.y += dt * .2;
+  if (mesh?.userData.joints?.length) {   // (the hinged pieces swinging toward open or shut)
+    const to = $("openJ").checked ? 1 : 0;
+    if (openT !== to) { openT = to > openT ? Math.min(1, openT + dt * 1.2) : Math.max(0, openT - dt * 1.2); mesh.userData.setOpen(openT * openT * (3 - 2 * openT)); }
+  }
   if (person) {
     tPose += dt;
     for (const p of person) { p.an.ampT = $("walk").checked && !$("fly").checked ? 1 : 0; if ($("walk").checked) p.an.animT = (p.an.animT ?? 0) + dt * 1.4 / p.base;
       if (p.an.parts?.flight) { p.an.flyT = $("fly").checked ? 1 : 0; if ($("fly").checked) p.an.wingT = (p.an.wingT ?? 0) + dt * 2.2; }
+      if (p.perched) {   // (a bird modelled aloft: down, sat as the game sits it -- PERCHERS; up, spread and beating)
+        const a = p.an, P = p.perched, up = $("fly").checked;
+        a.perch += Math.max(-dt * 1.5, Math.min(dt * 1.5, (up ? 0 : 1) - a.perch)); a.legs = a.perch; a.pitch = P.th * a.perch;
+        a.position.y = -P.lift * a.perch; if (a.perch < 1) a.wingT = (a.wingT ?? 0) + dt * P.hz;
+      }
       if (p.steed) {   // (skysteeds.js: wings out and beating -- its hard beats, as it climbs -- the legs tucked; down, the beat run on to level and the wings folded)
         const S = p.steed, a = p.an, lv = 1 / S.wingSpeed, up = $("fly").checked;
         a.steedU += Math.max(-dt * 1.6, Math.min(dt * 1.2, (up ? 1 : 0) - a.steedU));
@@ -1271,7 +1324,10 @@ if (qp.get("fly")) $("fly").checked = true;   // (?fly=1: shown aloft)
 show(qp.get("a") ?? index.categories.find((c) => c.kind === "creature").paths[0]);
 window.__assets = { show, build, bank, source, index, renderer, scene, camera, controls, nav, frame, standOn, view, get person() { return person; },
                     get bodies() { return bodies; }, assetBox,   // (a headless check: wait for bodies.ready(), frame by the asset's box)
-                    get dress() { return dress; }, pickDress, setTab };   // (dress: the coat or variant shown -- pickDress({ coat: 3 }) shows another)   // (person: the figures shown, for a headless check to pose)
+                    get dress() { return dress; }, pickDress, setTab,
+                    get tPose() { return tPose; }, set tPose(v) { tPose = v; },
+                    drive(name, t) { if (name === "steer") $("steerJ").value = t; mesh?.userData.setDrive?.(name, t); },   // (drive: a joint turned by its own param -- the front wheels' steer, -1..1)
+                    openAt(t) { $("openJ").checked = t >= .5; openT = $("openJ").checked ? 1 : 0; mesh?.userData.setOpen?.(t); } };   // (openAt: the doors held part-way -- a sliding door between out and back)   // (tPose: the figures' clock -- a headless check sets it, the page's own clock stopped, for the same pose run after run)   // (dress: the coat or variant shown -- pickDress({ coat: 3 }) shows another)   // (person: the figures shown, for a headless check to pose)
 </script>
 </body>
 </html>

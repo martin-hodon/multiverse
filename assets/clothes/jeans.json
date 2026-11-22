@@ -1,0 +1,32 @@
+{
+  "name": "Jeans",
+  "kind": "garment",
+  "layer": 1,
+  "_about": "blue jeans (Levi Strauss & Jacob Davis, 1873; everyone's trousers from the 1950s): heavy cotton denim, a 3/1 twill of indigo warp over white weft, five pockets, from the waist to the instep, a little loose, its waistband standing proud (the seat's patch pockets are left out: the figure engine reads six layers a part, and a hi-vis vest over a t-shirt over the jeans' seat spends them all)",
+  "thick": 0.005,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/twill",
+      "palette": "denim"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/hose",
+      "params": {
+        "from": "waist",
+        "to": "ankle + 0.015",
+        "feet": false
+      }
+    },
+    {
+      "use": "clothes/components/patch",
+      "params": {
+        "from": "waist - 0.005",
+        "to": "waist + 0.035",
+        "thick": 0.008
+      }
+    }
+  ]
+}

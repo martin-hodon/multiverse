@@ -10,7 +10,9 @@
 //   sphere { c, r }   ell { c, r: [a, b, c], rot?: [x, y, z] degrees }   cone { a, b, ra, rb } (a round cone: two spheres
 //   and the cone tangent to both)   tube { pts: [[x, y, z, r], ...] } (a Catmull-Rom spline through the points, its radius
 //   eased along it: a tail, a snout, a leg with its joints)   box { c, r: [a, b, c], round, rot? } (a rounded box)
-//   tri { a, b, c, r } (a triangle thickened by r: an ear, a fin)   -- and on any of them lumps: { amp, size } (a fleece)
+//   tri { a, b, c, r } (a triangle thickened by r: an ear, a fin)   sheet { pts: [[x, y, z, r], ...], tris } (many
+//   triangles sharing their corners, thickened as one: a fin, a manta's wing -- SHEETS below)   -- and on any of them
+//   lumps: { amp, size } (a fleece)
 // Each carries an ATTRIBUTE vector (`attr`: any numbers -- bodies.js puts colour, wetness, bone weights in it), blended
 // across the seam exactly as the distance is: where two pieces melt into each other, their colours and their bones do.
 //
@@ -271,6 +273,7 @@ function prepare(p) {
   const q = { k: Math.max(0, p.k ?? 0), sub: p.op === "sub", paint: p.op === "paint", at: p.attr ?? null, src: p };
   q.kc = Math.min(q.k, Math.max(0, p.kc ?? q.k));   // (its PAINT's blend: sharper than its shape's, if it says -- field's `sharp` attributes)
   if (q.paint) q.kc = Math.max(0, p.kc ?? 0);   // (a PAINT, op "paint": no shape at all -- the surface inside it takes its colour, softened kc either side of its edge)
+  if (p.type === "dabs") { q.paint = true; prepareDabs(p, q); return q; }   // (a coat's marks: one shape, DABS above)
   if (p.type === "sphere") { const c = p.c, r = p.r, c0 = c[0], c1 = c[1], c2 = c[2]; q.d = (x, y, z) => hyp3(x - c0, y - c1, z - c2) - r; q.bc = c; q.br = r; }
   else if (p.type === "ell") {
     // (the bound of Quilez's: |p/r| (|p/r| - 1) / |p/r^2| -- near the surface a distance, further off a fair one)
@@ -345,6 +348,7 @@ function prepare(p) {
     const lo = [0, 1, 2].map((k) => Math.min(...p.pts.map((t) => t[k] - t[3]))), hi = [0, 1, 2].map((k) => Math.max(...p.pts.map((t) => t[k] + t[3])));
     q.bc = lo.map((v, k) => (v + hi[k]) / 2); q.br = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) / 2;
   } else if (p.type === "sweep") prepareSweep(p, q);
+  else if (p.type === "sheet") prepareSheet(p, q);   // (a fin or a wing's membrane as ONE shape: SHEETS below)
   else if (p.type === "tri") {
     // a TRIANGLE thickened by r: a slab with rounded edges (an ear, a fin, a frill) -- Quilez's exact triangle distance
     const [A, B, C] = [p.a, p.b, p.c], r = p.r ?? 0;
@@ -383,6 +387,124 @@ function prepare(p) {
   return q;
 }
 
+// ---- SHEETS (2026-11-21): A FIN, A FLIPPER, A WING'S MEMBRANE AS ONE SHAPE ------------------------------------------
+// `{ type: "sheet", pts: [[x, y, z, r], ...], tris: [i, j, k, ...], bones?, skin?, k, color, ... }` -- a surface of
+// triangles sharing their corners (an outline ear-clipped, or a grid), each point with its own half-thickness r. It was
+// written as a `tri` shape a face (a manta's wing 177 of them, a plesiosaur's four flippers 192), each blended into the
+// last by its k: where two faces met, the smooth union of two slabs that agree swelled by up to k/4 -- a rib along every
+// inner edge (the "ribbed belly" of the manta). One sheet is the EXACT union of its faces: its distance the nearest
+// face's, less the thickness there (r eased across the face from its corners); blended into the body by its k as a
+// whole. Planar with one r, it is the outline thickened by r, however it is cut into faces.
+// Its SKIN: `bone`, or per point -- `bones` (ids) and `skin` (each point's index into them) -- the weights eased across
+// the nearest face from its corners (bodymesh.js ready gives `skinIdx`), so a wing bends smoothly along its span where
+// the faces each had one bone. Each face is skipped by its bounding sphere: only those that can be the nearest are measured.
+// (sheetTris: its faces as the tri shapes they were -- the detail mesher's, when it is too thin for the grid, and the
+// pictures' baker's: sheetsLaid)
+function triFoot(px, py, pz, ax, ay, az, bx, by, bz, cx, cy, cz, out) {   // (the nearest point of a triangle: its barycentric weights -- Ericson's)
+  const abx = bx - ax, aby = by - ay, abz = bz - az, acx = cx - ax, acy = cy - ay, acz = cz - az;
+  const apx = px - ax, apy = py - ay, apz = pz - az;
+  const d1 = abx * apx + aby * apy + abz * apz, d2 = acx * apx + acy * apy + acz * apz;
+  if (d1 <= 0 && d2 <= 0) { out[0] = 1; out[1] = 0; out[2] = 0; return; }
+  const bpx = px - bx, bpy = py - by, bpz = pz - bz, d3 = abx * bpx + aby * bpy + abz * bpz, d4 = acx * bpx + acy * bpy + acz * bpz;
+  if (d3 >= 0 && d4 <= d3) { out[0] = 0; out[1] = 1; out[2] = 0; return; }
+  const vc = d1 * d4 - d3 * d2;
+  if (vc <= 0 && d1 >= 0 && d3 <= 0) { const v = d1 / (d1 - d3); out[0] = 1 - v; out[1] = v; out[2] = 0; return; }
+  const cpx = px - cx, cpy = py - cy, cpz = pz - cz, d5 = abx * cpx + aby * cpy + abz * cpz, d6 = acx * cpx + acy * cpy + acz * cpz;
+  if (d6 >= 0 && d5 <= d6) { out[0] = 0; out[1] = 0; out[2] = 1; return; }
+  const vb = d5 * d2 - d1 * d6;
+  if (vb <= 0 && d2 >= 0 && d6 <= 0) { const w = d2 / (d2 - d6); out[0] = 1 - w; out[1] = 0; out[2] = w; return; }
+  const va = d3 * d6 - d5 * d4;
+  if (va <= 0 && d4 - d3 >= 0 && d5 - d6 >= 0) { const w = (d4 - d3) / ((d4 - d3) + (d5 - d6)); out[0] = 0; out[1] = 1 - w; out[2] = w; return; }
+  const den = 1 / (va + vb + vc), v = vb * den, w = vc * den;
+  out[0] = 1 - v - w; out[1] = v; out[2] = w;
+}
+function prepareSheet(p, q) {
+  const n = p.pts.length, X = new Float64Array(4 * n), nf = p.tris.length / 3;
+  p.pts.forEach((v, i) => { X[4 * i] = v[0]; X[4 * i + 1] = v[1]; X[4 * i + 2] = v[2] ?? 0; X[4 * i + 3] = v[3] ?? p.r ?? 0; });
+  // (the faces in order along the sheet's longest extent, so a run of G of them lies together: one sphere a run first)
+  const ext = [0, 1, 2].map((k) => Math.max(...p.pts.map((v) => v[k] ?? 0)) - Math.min(...p.pts.map((v) => v[k] ?? 0))), ax = ext.indexOf(Math.max(...ext));
+  const ctr = (f) => p.pts[p.tris[3 * f]][ax] + p.pts[p.tris[3 * f + 1]][ax] + p.pts[p.tris[3 * f + 2]][ax];
+  const order = [...Array(nf).keys()].sort((a, b) => ctr(a) - ctr(b)), T = new Int32Array(3 * nf);
+  order.forEach((f, i) => { T[3 * i] = p.tris[3 * f]; T[3 * i + 1] = p.tris[3 * f + 1]; T[3 * i + 2] = p.tris[3 * f + 2]; });
+  const fb = new Float64Array(4 * nf);   // (each face's bounding sphere: its centroid, out to its farthest corner and its thickest)
+  for (let f = 0; f < nf; f++) {
+    let cx = 0, cy = 0, cz = 0, r = 0, t = 0;
+    for (let j = 0; j < 3; j++) { const v = 4 * T[3 * f + j]; cx += X[v] / 3; cy += X[v + 1] / 3; cz += X[v + 2] / 3; }
+    for (let j = 0; j < 3; j++) { const v = 4 * T[3 * f + j]; r = Math.max(r, hyp3(X[v] - cx, X[v + 1] - cy, X[v + 2] - cz)); t = Math.max(t, X[v + 3]); }
+    fb[4 * f] = cx; fb[4 * f + 1] = cy; fb[4 * f + 2] = cz; fb[4 * f + 3] = (r + t) * (1 + 1e-9) + 1e-9;
+  }
+  const G = 6, ng = Math.ceil(nf / G), gb = new Float64Array(4 * ng);
+  for (let g = 0; g < ng; g++) {
+    const i0 = g * G, i1 = Math.min(nf, i0 + G);
+    let cx = 0, cy = 0, cz = 0, r = 0;
+    for (let f = i0; f < i1; f++) { cx += fb[4 * f] / (i1 - i0); cy += fb[4 * f + 1] / (i1 - i0); cz += fb[4 * f + 2] / (i1 - i0); }
+    for (let f = i0; f < i1; f++) r = Math.max(r, hyp3(fb[4 * f] - cx, fb[4 * f + 1] - cy, fb[4 * f + 2] - cz) + fb[4 * f + 3]);
+    gb[4 * g] = cx; gb[4 * g + 1] = cy; gb[4 * g + 2] = cz; gb[4 * g + 3] = r * (1 + 1e-9) + 1e-9;
+  }
+  const glb = new Float64Array(ng), W = [0, 0, 0], off = (l, r, m) => l - m > 1e-6 * (r + Math.abs(l)) + 1e-9;
+  const faceD = (f, x, y, z) => {
+    const a = 4 * T[3 * f], b = 4 * T[3 * f + 1], c = 4 * T[3 * f + 2];
+    triFoot(x, y, z, X[a], X[a + 1], X[a + 2], X[b], X[b + 1], X[b + 2], X[c], X[c + 1], X[c + 2], W);
+    const fx = W[0] * X[a] + W[1] * X[b] + W[2] * X[c], fy = W[0] * X[a + 1] + W[1] * X[b + 1] + W[2] * X[c + 1], fz = W[0] * X[a + 2] + W[1] * X[b + 2] + W[2] * X[c + 2];
+    return hyp3(x - fx, y - fy, z - fz) - (W[0] * X[a + 3] + W[1] * X[b + 3] + W[2] * X[c + 3]);
+  };
+  let last = 0;
+  const lw = [1, 0, 0];   // (the nearest face and the foot's weights there: its attributes, atf)
+  // (`cut`: the field's own bound -- a distance past it changes nothing there, its blend and its paint alike (the union
+  //  so far plus this shape's k): faces whose spheres lie past it are never measured, and one past it all returns its
+  //  bound. A minimum under the cut is the same number either way)
+  //  (the bounds by a plain root: a bound needs no exact bits -- off() allows for its rounding)
+  q.d = (x, y, z, cut = Infinity) => {
+    let lo = Infinity, j = 0;
+    for (let g = 0; g < ng; g++) {
+      const dx = x - gb[4 * g], dy = y - gb[4 * g + 1], dz = z - gb[4 * g + 2], l = Math.sqrt(dx * dx + dy * dy + dz * dz) - gb[4 * g + 3];
+      glb[g] = l; if (l < lo) { lo = l; j = g; }
+    }
+    if (lo > cut) return lo;
+    let m = Infinity;
+    for (let t = 0; t < ng; t++) {
+      const g = t === 0 ? j : t <= j ? t - 1 : t;   // (the nearest run first, then the others in order)
+      if (t && off(glb[g], gb[4 * g + 3], m < cut ? m : cut)) continue;
+      for (let f = g * G, f1 = Math.min(nf, f + G); f < f1; f++) {
+        const dx = x - fb[4 * f], dy = y - fb[4 * f + 1], dz = z - fb[4 * f + 2], l = Math.sqrt(dx * dx + dy * dy + dz * dz) - fb[4 * f + 3];
+        if (m < Infinity && off(l, fb[4 * f + 3], m < cut ? m : cut)) continue;
+        const d = faceD(f, x, y, z);
+        if (d < m) { m = d; last = f; lw[0] = W[0]; lw[1] = W[1]; lw[2] = W[2]; }
+      }
+    }
+    return m < Infinity ? m : lo;
+  };
+  // (its SKIN eased across the nearest face: each corner's bone by its weight -- skinIdx the bones' attribute slots)
+  if (q.at && p.skinIdx && p.skin) {
+    const base = q.at, buf = Float64Array.from(base), S = Int32Array.from(p.skin), own = p.ownIdx;
+    q.atf = () => {
+      if (own != null) buf[own] = 0;
+      for (const ix of p.skinIdx) buf[ix] = 0;
+      for (let j = 0; j < 3; j++) buf[p.skinIdx[S[T[3 * last + j]]]] += lw[j];
+      return buf;
+    };
+  }
+  const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+  for (let i = 0; i < n; i++) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], X[4 * i + k] - X[4 * i + 3]); hi[k] = Math.max(hi[k], X[4 * i + k] + X[4 * i + 3]); }
+  q.bc = lo.map((v, k) => (v + hi[k]) / 2); q.br = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) / 2;
+}
+// a sheet's faces as tri shapes (each on the bone most of its corners ride, its r its corners' mean)
+export function sheetTris(p) {
+  const out = [], P = p.pts, r = (i) => P[i][3] ?? p.r ?? 0;
+  const { pts, tris, skin, bones, skinIdx, ownIdx, ids, ...rest } = p, [pre, from] = ids ?? [`${p.id ?? "sheet"}_`, 0];   // (ids: [prefix, first number] -- the faces' ids, as they were written one by one)
+  for (let f = 0; f < tris.length; f += 3) {
+    const [a, b, c] = [tris[f], tris[f + 1], tris[f + 2]];
+    let bone = p.bone;
+    if (bones && skin) { const B = [skin[a], skin[b], skin[c]]; bone = bones[B[1] === B[2] ? B[1] : B[0]]; }
+    out.push({ ...rest, type: "tri", id: `${pre}${from + f / 3}`, a: P[a].slice(0, 3), b: P[b].slice(0, 3), c: P[c].slice(0, 3), r: (r(a) + r(b) + r(c)) / 3, bone });
+  }
+  return out;
+}
+// a shape list with each sheet cut into its faces (tri shapes): for whoever draws them as flat faces (the pictures' baker)
+export function sheetsLaid(prims) {
+  return prims.some((p) => p.type === "sheet") ? prims.flatMap((p) => (p.type === "sheet" ? sheetTris(p) : [p])) : prims;
+}
+
 // ---- the field ----------------------------------------------------------------------------------------------------
 // field(prims, L): { dist(x, y, z), at(x, y, z, out) -> distance with the attributes (L numbers) written to out, box }
 // (the first `sharp` attributes -- a body's paint -- blend by each primitive's kc, the rest by its k: a white muzzle
@@ -409,7 +531,7 @@ export function field(prims, L = 0, { sharp = 0 } = {}) {
       const q = P[i];
       if (q.paint) continue;   // (a paint is no shape)
       if (i && far(q, i, x, y, z, d)) continue;
-      const b = q.d(x, y, z);
+      const b = q.d(x, y, z, q.sub ? Infinity : d + q.k);   // (how far it need be exact: a sheet stops measuring past it)
       if (!i) { d = q.sub ? -b : b; continue; }
       if (q.sub) {
         if (q.k > 0) { const h = clamp01(.5 - .5 * (d + b) / q.k); d = d + (-b - d) * h + q.k * h * (1 - h); }
@@ -424,13 +546,14 @@ export function field(prims, L = 0, { sharp = 0 } = {}) {
     for (let i = 0; i < n; i++) {
       const q = P[i];
       if (q.paint) {   // (only the paint: wherever the point is inside it, kc either side of its edge to fade over; the shape and the bones' weights as they were)
+        if (q.dabs) { q.dabs(x, y, z, out, sharp); continue; }
         if (!q.at || hyp3(x - q.bc[0], y - q.bc[1], z - q.bc[2]) - q.br >= q.kc) continue;
         const b = q.d(x, y, z), hc = q.kc > 0 ? clamp01(.5 + .5 * b / q.kc) : (b < 0 ? 0 : 1);
         if (hc < 1) for (let k = 0; k < sharp; k++) out[k] = q.at[k] + (out[k] - q.at[k]) * hc;
         continue;
       }
       if (i && far(q, i, x, y, z, d)) continue;
-      const b = q.d(x, y, z), qa = q.atf ? q.atf() : q.at;   // (a sweep's attributes: where along it the point is nearest)
+      const b = q.d(x, y, z, q.sub ? Infinity : d + q.k), qa = q.atf ? q.atf() : q.at;   // (a sweep's attributes: where along it the point is nearest)
       let h, hc;   // how much of what came before stays (1: all of it) -- of its shape's attributes, and of its paint
       if (!i) { d = q.sub ? -b : b; if (qa) for (let k = 0; k < L; k++) out[k] = qa[k]; continue; }
       if (q.sub) {
@@ -468,6 +591,177 @@ export function onSurface(dist, p, steps = 3, e = 2e-4) {
     x -= d * gx / g2; y -= d * gy / g2; z -= d * gz / g2;
   }
   return [x, y, z];
+}
+
+// ---- DABS (2026-11-21): A COAT'S MARKS AS ONE SHAPE ---------------------------------------------------------------
+// `{ type: "dabs", marks: [...], axis, ... }` (bodyspec.js header: every word) -- a snake's saddles, a lizard's bands, a
+// salamander's spots: what used to be hundreds of `op: "paint"` ellipsoids, each placed by a script that probed the skin,
+// written as ONE shape whose marks are rows of a few numbers -- where along an axis, which way round it, how big. Each
+// is laid where a RAY leaves the skin (layDabs, below: from the axis point out, the first crossing of the surface the
+// field's other shapes make), so a mark follows the skin whatever the body's girth or size, and a variant's fatter
+// trunk keeps its pattern on it. Laid, a mark is the paint it always was (an ellipsoid, a box, a tube along the skin, a
+// ring round the body); and in the field the whole set is still ONE primitive (prepareDabs: a grid over its marks, so a
+// point asks only the few near it, not every one of them).
+const DAB = { soft: .18, strokeSoft: .2, ring: 2.2, ringSoft: .05, reach: .5 };
+const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const crs3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const nz3 = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+// the axis the rows are measured on -> at(s): { o (the point), F (forward: toward the axis's first point, or `along`),
+// U (up, square to F), R (the axis's radius there, when its points carry one; else null) }
+function dabAxis(p) {
+  const pts = p.axis.map((q) => [q[0], q[1], q[2] ?? 0, q[3] ?? 0]), hasR = p.axis.every((q) => q.length > 3);
+  if (p.along) {   // (STRAIGHT: s a coordinate along a fixed direction -- a lizard's x -- the axis a polyline over it)
+    const a = nz3(p.along), up = p.up ?? [0, 1, 0], U = nz3(up.map((v, k) => v - a[k] * dot3(up, a)));
+    const P = pts.map((q) => ({ x: dot3(q, a), q })).sort((A, B) => A.x - B.x), n = P.length;
+    return (s) => {
+      let i = 0;
+      while (i < n - 2 && P[i + 1].x < s) i++;
+      const A = P[i], B = P[Math.min(n - 1, i + 1)], t = B.x > A.x ? (s - A.x) / (B.x - A.x) : 0, tc = Math.max(0, Math.min(1, t));
+      const o = [0, 1, 2].map((k) => A.q[k] + (B.q[k] - A.q[k]) * tc + a[k] * (s - A.x - (B.x - A.x) * tc));   // (past an end: on along the direction)
+      return { o, F: a, U, R: hasR ? A.q[3] + (B.q[3] - A.q[3]) * tc : null };
+    };
+  }
+  // (CURVED: s the arc length from its first point -- a snake's centreline from the snout -- the frame carried along it
+  //  without twisting from `up`, as a sweep's is: sweepCurve)
+  const C = sweepCurve({ pts: pts.map((q) => [q[0], q[1], q[2], hasR ? q[3] : 1]), up: p.up }), { X, T, U, S, R, m } = C;
+  return (s) => {
+    let lo = 0, hi = m - 1;
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (S[mid] <= s) lo = mid; else hi = mid; }
+    const t = Math.max(0, Math.min(1, (s - S[lo]) / ((S[hi] - S[lo]) || 1))), l = (A, B) => [0, 1, 2].map((k) => A[k] + (B[k] - A[k]) * t);
+    const F = nz3(l(T[lo], T[hi]).map((v) => -v)), U0 = l(U[lo], U[hi]), Uq = nz3(U0.map((v, k) => v - F[k] * dot3(U0, F)));
+    return { o: l(X[lo], X[hi]), F, U: Uq, R: hasR ? R[lo] + (R[hi] - R[lo]) * t : null };   // (past an end: at it)
+  };
+}
+// THE MARKS LAID: the set's marks as plain paint shapes on the skin of `dist` (the field's other shapes) -- each an
+// { id, type: ell | box | tube, op: "paint", c | pts, r, axes, kc, color, bone }. `cell`: the grid's (the probe's step)
+export function layDabs(p, dist, cell = .005) {
+  const at = p.axis ? dabAxis(p) : null, out = [], asp = p.aspect ?? 1, reach = p.reach ?? DAB.reach, e = Math.max(1e-5, cell * .05);
+  const need = (m, what) => { if (!at) throw new Error(`dabs ${p.id ?? ""}: a mark by ${what} needs the set's axis: ${JSON.stringify(m)}`); };
+  // where the ray from o along d first crosses the surface (from inside: where it leaves; from outside: where it enters)
+  const hit = (o, d) => {
+    // (steps of at least reach / 400 -- the probe's that laid the marks before -- longer where the surface is far: never
+    //  past the distance to it, so nothing as thick as a step is stepped over, and never over a cell)
+    const f = (t) => dist(o[0] + d[0] * t, o[1] + d[1] * t, o[2] + d[2] * t), st = Math.min(reach / 400, cell / 3);
+    let v = f(0);
+    const in0 = v < 0;
+    for (let t = 0, prev = 0; t < 3 * reach;) {
+      prev = t; t += Math.max(st, Math.min(.8 * Math.abs(v), cell));
+      v = f(t);
+      if ((v < 0) !== in0) {
+        let a = prev, b = t;
+        for (let k = 0; k < 30; k++) { const mm = (a + b) / 2; if ((f(mm) < 0) === in0) a = mm; else b = mm; }
+        const h = o.map((x, k) => x + d[k] * b);
+        return { h, n: gradient(dist, h[0], h[1], h[2], e), r: b };
+      }
+    }
+    return null;
+  };
+  // a ray from a row: s along, phi degrees round from up (+: to the animal's left, F x U)
+  const rayOf = (s, phi) => {
+    const A = at(s), L = crs3(A.F, A.U), c = Math.cos(phi * Math.PI / 180) * asp, sn = Math.sin(phi * Math.PI / 180);
+    return { o: A.o, d: nz3(A.U.map((u, k) => u * c + L[k] * sn)), F: A.F, R: A.R, U: A.U, L };
+  };
+  const base = (j, o) => ({ id: `${p.id ?? "dabs"}.${j}`, op: "paint", color: o.color ?? p.color, bone: o.bone ?? p.bone ?? "body" });
+  p.marks.forEach((m, j) => {
+    if (Array.isArray(m)) {   // [s, phi, la, lr, rot, colour, { kc, depth, box, bone }]: a SPOT
+      need(m, "s and phi");
+      const [s, phi, la, lr, rot = 0, col, o = {}] = m, ray = rayOf(s, phi);
+      spot(j, ray.o, ray.d, ray.F, la, lr, rot, ray.R, { ...o, ...(col != null ? { color: col } : {}) });
+    } else if (m.ring) {   // { ring: [s0, s1] }: a band right round the body (an ellipsoid on the axis, wider than the body)
+      need(m, "ring");
+      const [s0, s1] = m.ring, A = at((s0 + s1) / 2);
+      const R = A.R ?? Math.max(...[0, 90, 180, -90].map((ph) => hit(A.o, rayOf((s0 + s1) / 2, ph).d)?.r ?? 0));
+      out.push({ ...base(j, m), type: "ell", c: A.o, r: [(s1 - s0) / 2 / .866, DAB.ring * R, DAB.ring * R], axes: [A.F, A.U, crs3(A.F, A.U)],
+                 kc: m.kc ?? p.kc ?? DAB.ringSoft * R });
+    } else if (m.stroke || m.rays) {   // { stroke: [[s, phi], ...] | rays: [[o, d], ...], w }: a band along the skin through where each leaves it
+      if (m.stroke) need(m, "stroke");
+      const R = (m.stroke ?? m.rays).map((q) => (m.stroke ? rayOf(q[0], q[1]) : { o: q[0], d: nz3(q[1]) })).map((r) => hit(r.o, r.d)).filter(Boolean);
+      if (R.length < 2) return;
+      out.push({ ...base(j, m), type: "tube", pts: R.map((r) => [...r.h, m.w / 2]), kc: m.kc ?? DAB.strokeSoft * m.w });
+    } else {   // { o, d, la, lr, along, rot, r }: a spot where a ray of its own leaves the skin (r: the radius its depth reads, else the ray's length)
+      spot(j, m.o, nz3(m.d), m.along ?? p.forward ?? [1, 0, 0], m.la, m.lr, m.rot ?? 0, m.r ?? null, m);
+    }
+  });
+  function spot(j, o, d, F, la, lr, rot, R0, ov) {
+    const H = hit(o, d);
+    if (!H) return;
+    const { h, n } = H, R = R0 ?? H.r;
+    let al = rot ? (() => { const sd = nz3(crs3(d, F)), c = Math.cos(rot * Math.PI / 180), s = Math.sin(rot * Math.PI / 180); return F.map((v, k) => v * c + sd[k] * s); })() : F;
+    al = nz3(al.map((v, k) => v - n[k] * dot3(al, n)));
+    const ar = nz3(crs3(n, al)), big = Math.max(la, lr), small = Math.min(la, lr);
+    // (depth: a share of R; or [f, m, g]: max(f small, g big) + m metres, whatever R -- a painter's own rule; else the default)
+    const depth = ov.depth ?? p.depth, dep = Array.isArray(depth) ? Math.max(depth[0] * small, (depth[2] ?? 0) * big) + (depth[1] ?? 0)
+      : depth != null ? depth * R : Math.min(1.3 * R, Math.max(.6 * small, .7 * big * big / R) + .02 * R);
+    out.push({ ...base(j, ov), type: (ov.box ?? p.box) ? "box" : "ell", c: h, r: [la, lr, dep], axes: [al, ar, n], kc: ov.kc ?? p.kc ?? (p.soft ?? DAB.soft) * small });
+  }
+  return out;
+}
+// a shape list with each dabs shape laid as its marks (plain paints): for whoever draws the marks themselves (the
+// pictures' baker), not the field -- it keeps the set whole (bodymesh.js ready)
+export function dabsLaid(prims, cell) {
+  if (!prims.some((p) => p.type === "dabs")) return prims;
+  const F = field(prims.filter((p) => p.op !== "paint"), 0);
+  return prims.flatMap((p) => (p.type === "dabs" ? layDabs(p, F.dist, cell) : [p]));
+}
+// a dabs shape at f times its size (geom.js scaleDef's young, bodymesh.js's lengths in cells): s, the sizes, strokes'
+// widths, points and kc -- never phi, rot, depth (a share) or a colour
+export function scaleDabs(p, f) {
+  const P = (v) => v.map((x, i) => (i < 3 && typeof x === "number" ? x * f : x)), L = (x) => (typeof x === "number" ? x * f : x);
+  const D = (d) => d.map((x, i) => (i === 1 ? x * f : x));   // (a depth rule's metres)
+  const mark = (m) => {
+    const ex = (x) => { const o = { ...x }; if (o.kc != null) o.kc = L(o.kc); if (o.r != null) o.r = L(o.r); if (Array.isArray(o.depth)) o.depth = D(o.depth); return o; };
+    if (Array.isArray(m)) return m.map((x, i) => (i === 0 || i === 2 || i === 3 ? L(x) : i === 6 && x ? ex(x) : x));
+    const o = ex(m);
+    for (const k of ["la", "lr", "w"]) if (o[k] != null) o[k] = L(o[k]);
+    if (o.o) o.o = P(o.o);
+    if (o.ring) o.ring = o.ring.map(L);
+    if (o.stroke) o.stroke = o.stroke.map(([s, ph]) => [L(s), ph]);
+    if (o.rays) o.rays = o.rays.map(([a, d]) => [P(a), d]);
+    return o;
+  };
+  return { ...p, ...(p.axis ? { axis: p.axis.map((q) => q.map(L)) } : {}),
+           ...(p.kc != null ? { kc: L(p.kc) } : {}), ...(Array.isArray(p.depth) ? { depth: D(p.depth) } : {}), ...(p.reach != null ? { reach: L(p.reach) } : {}), marks: p.marks.map(mark) };
+}
+// its mirror image across z (bodyspec.js twin): the axis reflected, every phi and rot turned the other way
+export function twinDabs(p) {
+  const z = (v) => [v[0], v[1], -(v[2] ?? 0), ...v.slice(3)];
+  const mark = (m) => {
+    if (Array.isArray(m)) return m.map((x, i) => (i === 1 || i === 4 ? -x : x));
+    const o = { ...m };
+    if (o.o) o.o = z(o.o); if (o.d) o.d = z(o.d); if (o.along) o.along = z(o.along);
+    if (o.rot) o.rot = -o.rot;
+    if (o.stroke) o.stroke = o.stroke.map(([s, ph]) => [s, -ph]);
+    if (o.rays) o.rays = o.rays.map(([a, d]) => [z(a), z(d)]);
+    return o;
+  };
+  return { ...(p.axis ? { axis: p.axis.map(z) } : {}), ...(p.along ? { along: z(p.along) } : {}), ...(p.forward ? { forward: z(p.forward) } : {}), marks: p.marks.map(mark) };
+}
+// the set in the field: its laid marks (`items`, each with its attributes) prepared, and a grid over them -- a point
+// asks the marks whose bounds reach its cell, in their order (the later over the earlier, as separate paints did)
+function prepareDabs(p, q) {
+  const C = (p.items ?? []).map(prepare), n = C.length;
+  q.bc = [0, 0, 0]; q.br = 0;
+  if (!n) { q.dabs = () => {}; return; }
+  const rr = C.map((c) => c.br + c.kc).sort((a, b) => a - b), h = Math.max(1e-4, 2 * rr[n >> 1]), O = 65536;
+  const G = new Map(), key = (i, j, k) => ((i + O) * 131072 + (j + O)) * 131072 + (k + O);
+  C.forEach((c, ci) => {
+    const r = c.br + c.kc, a = c.bc.map((v) => Math.floor((v - r) / h)), b = c.bc.map((v) => Math.floor((v + r) / h));
+    for (let i = a[0]; i <= b[0]; i++) for (let j = a[1]; j <= b[1]; j++) for (let k = a[2]; k <= b[2]; k++) {
+      const kk = key(i, j, k); let L = G.get(kk); if (!L) G.set(kk, (L = [])); L.push(ci);
+    }
+  });
+  const lo = [0, 1, 2].map((k) => Math.min(...C.map((c) => c.bc[k] - c.br))), hi = [0, 1, 2].map((k) => Math.max(...C.map((c) => c.bc[k] + c.br)));
+  q.bc = lo.map((v, k) => (v + hi[k]) / 2); q.br = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]) / 2;
+  q.dabs = (x, y, z, out, sharp) => {
+    const L = G.get(key(Math.floor(x / h), Math.floor(y / h), Math.floor(z / h)));
+    if (!L) return;
+    for (let t = 0; t < L.length; t++) {
+      const c = C[L[t]];
+      if (!c.at || hyp3(x - c.bc[0], y - c.bc[1], z - c.bc[2]) - c.br >= c.kc) continue;
+      const b = c.d(x, y, z), hc = c.kc > 0 ? clamp01(.5 + .5 * b / c.kc) : (b < 0 ? 0 : 1);
+      if (hc < 1) for (let k = 0; k < sharp; k++) out[k] = c.at[k] + (out[k] - c.at[k]) * hc;
+    }
+  };
 }
 
 // ---- SURFACE NETS -------------------------------------------------------------------------------------------------
@@ -601,6 +895,8 @@ export function mirrorOf(F, cell, tol = .02) {
                         || JSON.stringify(p.cut ?? null) !== JSON.stringify(q.cut ?? null) || JSON.stringify(p.shrink ?? null) !== JSON.stringify(q.shrink ?? null)) return false;
         if (p.up && q.up ? !nearV(M3(p.up), q.up) : !!p.up !== !!q.up) return false;
         return p.pts.every((t, i) => nearV(M3(t), q.pts[i]) && near(t[3], q.pts[i][3]) && near(t[4] ?? 1, q.pts[i][4] ?? 1)); }
+      case "sheet": { if (p.pts.length !== q.pts.length || p.tris.length !== q.tris.length || !near(p.r ?? 0, q.r ?? 0)) return false;
+        return p.pts.every((t, i) => nearV(M3(t), q.pts[i]) && near(t[3] ?? 0, q.pts[i][3] ?? 0)); }
       case "tri": { if (!near(p.r ?? 0, q.r ?? 0)) return false; const m = [p.a, p.b, p.c].map(M3);
         return [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]].some((o) => o.every((i, j) => nearV(m[i], [q.a, q.b, q.c][j]))); }
     }

@@ -1,0 +1,153 @@
+{
+ "kind": "item",
+ "name": "Wooden spoon",
+ "category": "tool",
+ "era": "any",
+ "region": "everywhere",
+ "_about": "a cook's wooden spoon carved from one piece: a long round handle into a shallow oval bowl -- the handle up +y, the bowl at the foot, hollow toward +z",
+ "params": {
+  "L": [
+   0.28,
+   0.34
+  ]
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "birch",
+    "ash",
+    "cherry",
+    "oak",
+    "walnut"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "bowl",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0,
+     -0.011
+    ],
+    [
+     0.016,
+     -0.009
+    ],
+    [
+     0.025,
+     -0.004
+    ],
+    [
+     0.028,
+     0.0
+    ],
+    [
+     0.024,
+     0.001
+    ],
+    [
+     0.015,
+     -0.004
+    ],
+    [
+     0,
+     -0.006
+    ]
+   ],
+   "sides": 12,
+   "stretch": [
+    1,
+    1.45,
+    1
+   ],
+   "at": [
+    0,
+    0.034,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "neck",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.0055,
+   "from": [
+    0,
+    0.07,
+    0.0
+   ],
+   "to": [
+    0,
+    0.11,
+    0.002
+   ],
+   "sides": 6,
+   "r1": 0.0065
+  },
+  {
+   "id": "handle",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.0065,
+   "from": [
+    0,
+    0.11,
+    0.002
+   ],
+   "to": [
+    0,
+    "L",
+    0.004
+   ],
+   "sides": 6,
+   "r1": 0.0085
+  },
+  {
+   "id": "end",
+   "type": "sphere",
+   "material": "wood",
+   "r": 0.0085,
+   "at": [
+    0,
+    "L",
+    0.004
+   ],
+   "sides": 6
+  }
+ ],
+ "hold": {
+  "grip": [
+   0,
+   0.22,
+   0
+  ],
+  "axis": [
+   0,
+   1,
+   0
+  ],
+  "face": [
+   0,
+   0,
+   1
+  ],
+  "carry": {
+   "axis": [
+    0,
+    -1,
+    0.2
+   ],
+   "face": [
+    0,
+    0,
+    1
+   ]
+  }
+ }
+}

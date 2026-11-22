@@ -21,6 +21,7 @@
 // nobody set. Every filled shape is OUTLINED in the "line" role (`outline: false` not; a sign's `outline` its width)
 // at one width however far down it is scaled.
 import { drawShapes, LAYER_KINDS } from "./patterns.js";
+import { rng1 as rng } from "./rng.js";
 
 const PARTS = new Map(), SIGNS = new Map(), TEXTURES = new Map();
 let COLORS = {}, MODES = {}, DOCS = [];
@@ -180,10 +181,6 @@ export function classOf(code) {
 }
 
 // ---- a text: a grid of quadrats -------------------------------------------------------------------------------------------
-function rng(seed) {
-  let a = (seed >>> 0) || 1;
-  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-}
 // the signs a text draws from, each with its weight: `pool` a list of categories and codes, or { category | code: weight }
 // ("*" every sign), times each sign's own `freq` (how common it is in texts: the alphabet's signs most)
 function poolOf(T) {

@@ -5,6 +5,11 @@ def rnd(v):
     if isinstance(v, list): return [rnd(x) for x in v]
     if isinstance(v, dict): return {k: rnd(x) for k, x in v.items()}
     return v
+def shape_line(p, line):
+    """a shape on its line -- a `dabs` shape (a coat's marks) its marks one a line under it"""
+    if not (isinstance(p, dict) and p.get("type") == "dabs" and len(p.get("marks", [])) > 3): return line(p)
+    head = line({k: v for k, v in p.items() if k != "marks"})
+    return head[:-1] + ', "marks": [\n' + ",\n".join("        " + line(m) for m in p["marks"]) + "\n      ]}"
 def dump(path, d):
     # one shape / part per line, like tiger.json
     def line(x): return json.dumps(rnd(x), separators=(", ", ": "))
@@ -19,7 +24,7 @@ def dump(path, d):
             for j, kk in enumerate(sk):
                 vv = v[kk]; c2 = "," if j < len(sk) - 1 else ""
                 if kk == "shape":
-                    inner.append('    "shape": [\n' + ",\n".join("      " + line(p) for p in vv) + f"\n    ]{c2}")
+                    inner.append('    "shape": [\n' + ",\n".join("      " + shape_line(p, line) for p in vv) + f"\n    ]{c2}")
                 else:
                     inner.append(f'    "{kk}": {line(vv)}{c2}')
             out.append('  "sculpt": {\n' + "\n".join(inner) + f"\n  }}{comma}")

@@ -1,0 +1,1477 @@
+{
+ "kind": "item",
+ "name": "Box lorry",
+ "category": "vehicle",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a two-axle rigid box lorry (12-18 t, 8.6 x 2.55 x 3.95 m, wheelbase 4.75 m): the forward-control cab over the front axle (its doors hinged, see-through windows; inside the dash, two seats, the sleeper's bunk) with grille, steps, visor, roof deflector and big mirrors; the ladder frame; the box with its rear doors swinging round to the sides (open), hinges and locking bars; fuel tank, battery box, side guards, rear under-run bar; single front and twin rear wheels -- its cab's paint drawn by the seed",
+ "params": {
+  "open": 0,
+  "steer": 0
+ },
+ "materials": {
+  "paint": {
+   "pick": [
+    "paint-white",
+    "paint-red",
+    "paint-blue",
+    "paint-orange",
+    "paint-green",
+    "paint-silver"
+   ]
+  },
+  "boxPaint": "plastic-white",
+  "glass": "glass",
+  "trim": "plastic-black",
+  "chrome": "chrome",
+  "bumper": "plastic-grey",
+  "frame": "paint-black",
+  "alu": "aluminium",
+  "well": "#141416",
+  "glazing": "window-glass",
+  "under": "#232426",
+  "rubberMat": "#2b2d30",
+  "moquette": "#3a3f4a"
+ },
+ "parts": [
+  {
+   "id": "cab",
+   "type": "loft",
+   "material": "paint",
+   "stations": [
+    [
+     2.15,
+     1.2,
+     0.72,
+     3.0,
+     1.1
+    ],
+    [
+     4.1,
+     1.22,
+     0.72,
+     3.0,
+     1.12
+    ],
+    [
+     4.3,
+     1.17,
+     0.76,
+     2.92,
+     1.06
+    ]
+   ],
+   "round": [
+    0.06,
+    0.16
+   ],
+   "seg": 3,
+   "arches": [
+    [
+     3.25,
+     0.5,
+     0.58
+    ]
+   ],
+   "double": true,
+   "bare": [
+    "bottom"
+   ],
+   "caps": [
+    true,
+    false
+   ],
+   "holes": [
+    {
+     "x": [
+      2.62,
+      3.7
+     ],
+     "y": [
+      1.12,
+      2.82
+     ],
+     "side": "both"
+    },
+    {
+     "x": [
+      3.73,
+      4.07
+     ],
+     "y": [
+      2.2,
+      2.7
+     ],
+     "side": "both"
+    }
+   ]
+  },
+  {
+   "id": "front",
+   "type": "box",
+   "material": "paint",
+   "size": [
+    0.03,
+    1.25,
+    2.26
+   ],
+   "at": [
+    4.285,
+    1.375,
+    0
+   ]
+  },
+  {
+   "id": "frontTop",
+   "type": "box",
+   "material": "paint",
+   "size": [
+    0.03,
+    0.13,
+    2.1
+   ],
+   "at": [
+    4.285,
+    2.87,
+    0
+   ]
+  },
+  {
+   "id": "frontPost",
+   "type": "box",
+   "material": "paint",
+   "size": [
+    0.03,
+    0.84,
+    0.1
+   ],
+   "at": [
+    4.285,
+    2.41,
+    1.08
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "windscreen",
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    0.02,
+    0.82,
+    2.06
+   ],
+   "at": [
+    4.3,
+    2.4,
+    0
+   ]
+  },
+  {
+   "id": "quarterWin",
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    0.35,
+    0.5,
+    0.01
+   ],
+   "at": [
+    3.9,
+    2.45,
+    1.1301
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "cabDoor",
+   "type": "hinge",
+   "pivot": [
+    3.7,
+    1.9,
+    1.1562
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": 70,
+   "parts": [
+    {
+     "type": "loft",
+     "material": "paint",
+     "stations": [
+      [
+       2.15,
+       1.2,
+       0.72,
+       3.0,
+       1.1
+      ],
+      [
+       4.1,
+       1.22,
+       0.72,
+       3.0,
+       1.12
+      ],
+      [
+       4.3,
+       1.17,
+       0.76,
+       2.92,
+       1.06
+      ]
+     ],
+     "round": [
+      0.06,
+      0.16
+     ],
+     "seg": 3,
+     "arches": [
+      [
+       3.25,
+       0.5,
+       0.58
+      ]
+     ],
+     "double": true,
+     "caps": [
+      true,
+      false
+     ],
+     "id": "skin",
+     "only": [
+      {
+       "x": [
+        2.626,
+        3.694
+       ],
+       "y": [
+        1.126,
+        2.814
+       ],
+       "side": "right"
+      }
+     ],
+     "holes": [
+      {
+       "x": [
+        2.72,
+        3.6
+       ],
+       "y": [
+        2.02,
+        2.74
+       ],
+       "side": "right"
+      }
+     ]
+    },
+    {
+     "id": "pane",
+     "type": "box",
+     "material": "glazing",
+     "size": [
+      0.9,
+      0.74,
+      0.01
+     ],
+     "at": [
+      3.16,
+      2.38,
+      1.1165
+     ]
+    },
+    {
+     "id": "handle",
+     "type": "box",
+     "material": "chrome",
+     "size": [
+      0.18,
+      0.03,
+      0.03
+     ],
+     "at": [
+      2.8,
+      1.85,
+      1.1661
+     ]
+    },
+    {
+     "id": "card",
+     "use": "items/modern/components/door-card",
+     "at": [
+      3.16,
+      1.5,
+      1.129
+     ],
+     "params": {
+      "w": 1.0,
+      "h": 0.62
+     }
+    }
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "visor",
+   "type": "box",
+   "material": "paint",
+   "size": [
+    0.28,
+    0.04,
+    2.25
+   ],
+   "at": [
+    4.4,
+    2.88,
+    0,
+    0,
+    0,
+    -8
+   ]
+  },
+  {
+   "id": "grille",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.03,
+    0.62,
+    1.7
+   ],
+   "at": [
+    4.305,
+    1.55,
+    0
+   ]
+  },
+  {
+   "id": "grilleBar",
+   "type": "box",
+   "material": "chrome",
+   "size": [
+    0.035,
+    0.03,
+    1.6
+   ],
+   "at": [
+    4.31,
+    1.55,
+    0
+   ],
+   "along": {
+    "n": 4,
+    "from": [
+     0,
+     -0.22,
+     0
+    ],
+    "to": [
+     0,
+     0.22,
+     0
+    ]
+   }
+  },
+  {
+   "id": "head",
+   "use": "items/modern/components/lamp",
+   "at": [
+    4.31,
+    1.0,
+    0.85
+   ],
+   "mirror": "z",
+   "params": {
+    "shape": "square",
+    "r": 0.18,
+    "h": 0.12
+   }
+  },
+  {
+   "id": "ind",
+   "type": "box",
+   "material": "lamp-amber",
+   "size": [
+    0.03,
+    0.08,
+    0.12
+   ],
+   "at": [
+    4.31,
+    1.0,
+    1.1
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "bumper",
+   "type": "box",
+   "material": "bumper",
+   "size": [
+    0.26,
+    0.34,
+    2.45
+   ],
+   "at": [
+    4.2,
+    0.62,
+    0
+   ]
+  },
+  {
+   "id": "plateF",
+   "type": "box",
+   "material": "plastic-white",
+   "size": [
+    0.01,
+    0.11,
+    0.52
+   ],
+   "at": [
+    4.335,
+    0.62,
+    0
+   ]
+  },
+  {
+   "id": "grab",
+   "type": "rod",
+   "material": "chrome",
+   "r": 0.015,
+   "from": [
+    2.58,
+    1.2,
+    1.24
+   ],
+   "to": [
+    2.58,
+    2.3,
+    1.24
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "step",
+   "type": "box",
+   "material": "bumper",
+   "size": [
+    0.42,
+    0.04,
+    0.26
+   ],
+   "at": [
+    [
+     2.45,
+     0.55,
+     1.08
+    ],
+    [
+     2.45,
+     0.9,
+     1.08
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "deflector",
+   "type": "loft",
+   "material": "paint",
+   "stations": [
+    [
+     2.25,
+     1.05,
+     2.98,
+     3.85,
+     0.95
+    ],
+    [
+     3.95,
+     1.0,
+     2.98,
+     3.05,
+     0.95
+    ]
+   ],
+   "round": [
+    0.02,
+    0.1
+   ],
+   "seg": 3
+  },
+  {
+   "id": "mirror",
+   "use": "items/modern/components/wing-mirror",
+   "at": [
+    4.15,
+    2.65,
+    1.12
+   ],
+   "mirror": "z",
+   "params": {
+    "ax": 0.15,
+    "ay": 0.1,
+    "az": 0.25,
+    "w": 0.22,
+    "h": 0.45,
+    "d": 0.1,
+    "out": 0,
+    "hang": 1,
+    "armR": 0.02
+   }
+  },
+  {
+   "id": "cabFloor",
+   "type": "box",
+   "material": "rubberMat",
+   "size": [
+    2.05,
+    0.04,
+    2.2
+   ],
+   "at": [
+    3.2,
+    1.12,
+    0
+   ]
+  },
+  {
+   "id": "hump",
+   "type": "box",
+   "material": "rubberMat",
+   "size": [
+    1.3,
+    0.34,
+    0.7
+   ],
+   "at": [
+    3.55,
+    1.3,
+    0
+   ]
+  },
+  {
+   "id": "dash",
+   "use": "items/modern/components/car-dash",
+   "at": [
+    4.0,
+    1.86,
+    0
+   ],
+   "params": {
+    "w": 2.2,
+    "d": 0.4,
+    "h": 0.5,
+    "sz": 0.55
+   }
+  },
+  {
+   "id": "seat",
+   "use": "items/modern/components/car-seat",
+   "at": [
+    3.35,
+    1.14,
+    0.6
+   ],
+   "mirror": "z",
+   "params": {
+    "h": 0.42,
+    "back": 0.62,
+    "heads": 0.2
+   }
+  },
+  {
+   "id": "bunk",
+   "type": "box",
+   "material": "moquette",
+   "size": [
+    0.62,
+    0.14,
+    2.2
+   ],
+   "at": [
+    2.5,
+    1.56,
+    0
+   ]
+  },
+  {
+   "id": "bunkBase",
+   "type": "box",
+   "material": "under",
+   "size": [
+    0.62,
+    0.4,
+    2.2
+   ],
+   "at": [
+    2.5,
+    1.3,
+    0
+   ]
+  },
+  {
+   "id": "curtain",
+   "type": "box",
+   "material": "moquette",
+   "size": [
+    0.02,
+    1.1,
+    2.1
+   ],
+   "at": [
+    2.86,
+    2.3,
+    0
+   ]
+  },
+  {
+   "id": "rail",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    8.3,
+    0.26,
+    0.08
+   ],
+   "at": [
+    -0.1,
+    0.92,
+    0.42
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "cross",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.1,
+    0.2,
+    0.84
+   ],
+   "at": [
+    0,
+    0.92,
+    0
+   ],
+   "along": {
+    "n": 6,
+    "from": [
+     -4.1,
+     0,
+     0
+    ],
+    "to": [
+     2.0,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "box",
+   "type": "loft",
+   "material": "boxPaint",
+   "stations": [
+    [
+     -4.3,
+     1.275,
+     1.15,
+     3.95
+    ],
+    [
+     2.05,
+     1.275,
+     1.15,
+     3.95
+    ]
+   ],
+   "round": 0.03,
+   "seg": 1,
+   "double": true,
+   "caps": [
+    false,
+    true
+   ]
+  },
+  {
+   "id": "rearDoor",
+   "type": "hinge",
+   "pivot": [
+    -4.3,
+    1.2,
+    1.285
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": 265,
+   "parts": [
+    {
+     "id": "panel",
+     "type": "box",
+     "material": "boxPaint",
+     "size": [
+      0.04,
+      2.72,
+      1.27
+     ],
+     "at": [
+      -4.32,
+      2.56,
+      0.6475
+     ]
+    },
+    {
+     "id": "hinge",
+     "type": "box",
+     "material": "alu",
+     "size": [
+      0.04,
+      0.08,
+      0.1
+     ],
+     "at": [
+      -4.34,
+      0,
+      1.2
+     ],
+     "along": {
+      "n": 4,
+      "from": [
+       0,
+       1.45,
+       0
+      ],
+      "to": [
+       0,
+       3.65,
+       0
+      ]
+     }
+    },
+    {
+     "id": "lockBar",
+     "type": "rod",
+     "material": "chrome",
+     "r": 0.018,
+     "from": [
+      -4.35,
+      1.22,
+      0
+     ],
+     "to": [
+      -4.35,
+      3.88,
+      0
+     ],
+     "sides": 6,
+     "at": [
+      [
+       0,
+       0,
+       0.3
+      ],
+      [
+       0,
+       0,
+       0.9
+      ]
+     ]
+    },
+    {
+     "id": "lockHandle",
+     "type": "box",
+     "material": "chrome",
+     "size": [
+      0.03,
+      0.03,
+      0.2
+     ],
+     "at": [
+      [
+       -4.37,
+       1.7,
+       0.2
+      ],
+      [
+       -4.37,
+       1.7,
+       0.8
+      ]
+     ]
+    }
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "edge",
+   "type": "rod",
+   "material": "alu",
+   "r": 0.025,
+   "from": [
+    -4.3,
+    3.93,
+    1.255
+   ],
+   "to": [
+    2.05,
+    3.93,
+    1.255
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "edgeLo",
+   "type": "rod",
+   "material": "alu",
+   "r": 0.03,
+   "from": [
+    -4.3,
+    1.18,
+    1.26
+   ],
+   "to": [
+    2.05,
+    1.18,
+    1.26
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "post",
+   "type": "rod",
+   "material": "alu",
+   "r": 0.03,
+   "from": [
+    0,
+    1.15,
+    1.255
+   ],
+   "to": [
+    0,
+    3.95,
+    1.255
+   ],
+   "sides": 6,
+   "at": [
+    [
+     -4.29,
+     0,
+     0
+    ],
+    [
+     2.04,
+     0,
+     0
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tail",
+   "type": "box",
+   "material": "lamp-red",
+   "size": [
+    0.05,
+    0.12,
+    0.28
+   ],
+   "at": [
+    -4.22,
+    0.92,
+    1.0
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "tailInd",
+   "type": "box",
+   "material": "lamp-amber",
+   "size": [
+    0.05,
+    0.12,
+    0.1
+   ],
+   "at": [
+    -4.22,
+    0.92,
+    0.78
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "underrun",
+   "type": "box",
+   "material": "bumper",
+   "size": [
+    0.1,
+    0.12,
+    2.25
+   ],
+   "at": [
+    -4.15,
+    0.5,
+    0
+   ]
+  },
+  {
+   "id": "underrunArm",
+   "type": "rod",
+   "material": "frame",
+   "r": 0.03,
+   "from": [
+    -4.15,
+    0.5,
+    0.42
+   ],
+   "to": [
+    -4.0,
+    0.85,
+    0.42
+   ],
+   "sides": 6,
+   "mirror": "z"
+  },
+  {
+   "id": "plateR",
+   "type": "box",
+   "material": "plastic-white",
+   "size": [
+    0.01,
+    0.11,
+    0.52
+   ],
+   "at": [
+    -4.21,
+    0.68,
+    0
+   ]
+  },
+  {
+   "id": "tank",
+   "type": "rod",
+   "material": "alu",
+   "r": 0.27,
+   "from": [
+    0.6,
+    0.78,
+    0.92
+   ],
+   "to": [
+    1.95,
+    0.78,
+    0.92
+   ],
+   "sides": 16
+  },
+  {
+   "id": "strap",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.05,
+    0.56,
+    0.6
+   ],
+   "at": [
+    [
+     0.9,
+     0.78,
+     0.92
+    ],
+    [
+     1.65,
+     0.78,
+     0.92
+    ]
+   ]
+  },
+  {
+   "id": "battery",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.6,
+    0.45,
+    0.5
+   ],
+   "at": [
+    1.0,
+    0.8,
+    -0.98
+   ]
+  },
+  {
+   "id": "guard",
+   "type": "box",
+   "material": "alu",
+   "size": [
+    1.3,
+    0.1,
+    0.03
+   ],
+   "at": [
+    [
+     -0.2,
+     0.48,
+     1.24
+    ],
+    [
+     -0.2,
+     0.8,
+     1.24
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "mudguard",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    1.35,
+    0.02,
+    0.62
+   ],
+   "at": [
+    -1.5,
+    1.1,
+    0.95
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "mudflap",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.01,
+    0.5,
+    0.6
+   ],
+   "at": [
+    -2.18,
+    0.55,
+    0.95
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "pan",
+   "type": "loft",
+   "material": "under",
+   "stations": [
+    [
+     2.15,
+     0.545,
+     0.727,
+     0.747,
+     0.545
+    ],
+    [
+     2.3889,
+     0.545,
+     0.7267,
+     0.7467,
+     0.545
+    ],
+    [
+     2.6278,
+     0.545,
+     0.7261,
+     0.7461,
+     0.545
+    ],
+    [
+     2.8667,
+     0.545,
+     0.7253,
+     0.7453,
+     0.545
+    ],
+    [
+     3.1056,
+     0.545,
+     0.7246,
+     0.7446,
+     0.545
+    ],
+    [
+     3.3444,
+     0.545,
+     0.7241,
+     0.7441,
+     0.545
+    ],
+    [
+     3.5833,
+     0.545,
+     0.7241,
+     0.7441,
+     0.545
+    ],
+    [
+     3.8222,
+     0.545,
+     0.7249,
+     0.7449,
+     0.545
+    ],
+    [
+     4.0611,
+     0.545,
+     0.7266,
+     0.7466,
+     0.545
+    ],
+    [
+     4.3,
+     0.545,
+     0.767,
+     0.787,
+     0.545
+    ]
+   ],
+   "round": 0.006,
+   "seg": 1
+  },
+  {
+   "id": "pan0",
+   "type": "loft",
+   "material": "under",
+   "stations": [
+    [
+     2.15,
+     1.1575,
+     0.724,
+     0.744,
+     1.1575
+    ],
+    [
+     2.4532,
+     1.1603,
+     0.7236,
+     0.7436,
+     1.1603
+    ],
+    [
+     2.7565,
+     1.1646,
+     0.7227,
+     0.7427,
+     1.1646
+    ]
+   ],
+   "round": 0.006,
+   "seg": 1
+  },
+  {
+   "id": "pan1",
+   "type": "loft",
+   "material": "under",
+   "stations": [
+    [
+     3.7435,
+     1.1779,
+     0.7216,
+     0.7416,
+     1.1779
+    ],
+    [
+     4.0218,
+     1.178,
+     0.7233,
+     0.7433,
+     1.178
+    ],
+    [
+     4.3,
+     1.1275,
+     0.764,
+     0.784,
+     1.1275
+    ]
+   ],
+   "round": 0.006,
+   "seg": 1
+  },
+  {
+   "id": "arch0",
+   "type": "sweep",
+   "material": "trim",
+   "path": [
+    [
+     3.7921,
+     0.7198,
+     1.1631
+    ],
+    [
+     3.7538,
+     0.7974,
+     1.2064
+    ],
+    [
+     3.7044,
+     0.8685,
+     1.2028
+    ],
+    [
+     3.645,
+     0.9315,
+     1.1993
+    ],
+    [
+     3.5771,
+     0.985,
+     1.1962
+    ],
+    [
+     3.5019,
+     1.028,
+     1.1933
+    ],
+    [
+     3.4213,
+     1.0594,
+     1.1909
+    ],
+    [
+     3.3369,
+     1.0785,
+     1.1889
+    ],
+    [
+     3.2506,
+     1.085,
+     1.1873
+    ],
+    [
+     3.1642,
+     1.0787,
+     1.1863
+    ],
+    [
+     3.0798,
+     1.0597,
+     1.1858
+    ],
+    [
+     2.9991,
+     1.0285,
+     1.186
+    ],
+    [
+     2.9239,
+     0.9857,
+     1.1868
+    ],
+    [
+     2.8558,
+     0.9322,
+     1.1883
+    ],
+    [
+     2.7963,
+     0.8693,
+     1.1903
+    ],
+    [
+     2.7468,
+     0.7984,
+     1.193
+    ],
+    [
+     2.7083,
+     0.7208,
+     1.1487
+    ]
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "seg": 2,
+   "mirror": "z",
+   "section": [
+    0.07,
+    0.05
+   ]
+  },
+  {
+   "id": "house0",
+   "type": "lathe",
+   "material": "well",
+   "profile": [
+    [
+     0.55,
+     0.55
+    ],
+    [
+     0.55,
+     1.1794
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 20,
+   "mirror": "z",
+   "arc": [
+    -156.282,
+    -23.718
+   ],
+   "at": [
+    3.25,
+    0.5,
+    0,
+    0,
+    90,
+    0
+   ]
+  },
+  {
+   "id": "subframe",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    6.3,
+    0.1,
+    0.1
+   ],
+   "at": [
+    -1.125,
+    1.1,
+    0.42
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "steer",
+   "type": "hinge",
+   "pivot": [
+    3.25,
+    0.5,
+    1.05
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": 35,
+   "parts": [
+    {
+     "id": "wheel0",
+     "use": "items/modern/components/wheel",
+     "at": [
+      3.25,
+      0.5,
+      1.05
+     ],
+     "params": {
+      "r": 0.5,
+      "w": 0.3,
+      "spokes": 0,
+      "rim": 0.58
+     }
+    }
+   ],
+   "by": "steer"
+  },
+  {
+   "id": "steerL",
+   "type": "hinge",
+   "pivot": [
+    3.25,
+    0.5,
+    1.05
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "max": -35,
+   "parts": [
+    {
+     "id": "wheel0",
+     "use": "items/modern/components/wheel",
+     "at": [
+      3.25,
+      0.5,
+      1.05
+     ],
+     "params": {
+      "r": 0.5,
+      "w": 0.3,
+      "spokes": 0,
+      "rim": 0.58
+     }
+    }
+   ],
+   "by": "steer",
+   "stretch": [
+    1,
+    1,
+    -1
+   ]
+  },
+  {
+   "id": "rearO0",
+   "use": "items/modern/components/wheel",
+   "at": [
+    -1.5,
+    0.5,
+    1.11
+   ],
+   "mirror": "z",
+   "params": {
+    "r": 0.5,
+    "w": 0.3,
+    "spokes": 0,
+    "rim": 0.58
+   }
+  },
+  {
+   "id": "rearI0",
+   "use": "items/modern/components/wheel",
+   "at": [
+    -1.5,
+    0.5,
+    0.79
+   ],
+   "mirror": "z",
+   "params": {
+    "r": 0.5,
+    "w": 0.3,
+    "spokes": 0,
+    "rim": 0.58
+   }
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    3.35,
+    1.6,
+    -0.6
+   ],
+   "data": {
+    "face": 0,
+    "driver": 1
+   }
+  }
+ ]
+}

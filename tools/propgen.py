@@ -7,8 +7,10 @@ period sources; the game builds them through items.js now (architecture.js itemG
 
     python3 tools/propgen.py
 """
-import json, math, os
+import json, math, os, sys
 from potshapes import POTS, fit, rounded
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "modern"))
+from kit import runs   # (2026-11-22: a cart's load, the woodpile's billets as `each` runs -- docs/items.md "Repeats")
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 ITEMS = os.path.join(ROOT, "assets", "items")
@@ -41,11 +43,21 @@ def rod(id_, mat, r, a, b, sides=8, **k):
 
 PROPS = {}
 
+def cord_ring(id_, mat, r, tube, at, sides, seg=6, **k):
+    """a cord, a rope or a lashing round something: a torus in the xz plane as an open LATHE of a hexagonal section (as
+    craftgen's ring) -- `sides` round, matching the body it girds. items.js `ring` (a closed sweep smoothed to twice
+    its 12..24 stations, 8 sides) made 512 triangles of a sack's neck cord and 768 of each rope round a rice bale.
+    `seg`: the section's sides (2026-11-22: 3 for a rice bale's ropes -- 1.2 cm thick, half sunk in the straw, a
+    triangle's or a hexagon's section the same at any distance a cart is seen from)"""
+    prof = [[round(r + tube * math.cos(2 * math.pi * i / seg), 5), round(tube * math.sin(2 * math.pi * i / seg), 5)] for i in range(seg + 1)]
+    return {"id": id_, "type": "lathe", "material": mat, "profile": prof, "sides": sides, "caps": False, "at": at, **k}
+
 # ---- the sack: lying along x, its bottom at the origin, the tied neck at +x
-PROPS["tools/sack"] = item("Sack", "tool", "a grain sack lying on its side, tied at the neck -- the mill's, a cart's load, the barge's cargo",
+PROPS["tools/sack"] = item("Sack", "tool", "a grain sack lying on its side, tied at the neck -- the mill's, a cart's load, the barge's cargo: one turned profile (the full belly, the gathered waist, the tied-off ear) sagging flat under its own weight, a cord round the neck",
     {}, {"cloth": "#c4a672", "neck": "#9c8258"}, [
-        {"id": "sack", "type": "sphere", "material": "cloth", "r": 0.3, "sides": 10, "at": [0, 0.24, 0], "stretch": [1.65, 0.8, 0.95]},
-        {"id": "neck", "type": "sphere", "material": "neck", "r": 0.09, "sides": 6, "at": [0.525, 0.28, 0]}],
+        {"id": "sack", "type": "lathe", "material": "cloth", "sides": 12, "at": [-0.495, 0.238, 0, 0, 0, -90], "stretch": [1, 0.82, 0.98],
+         "profile": [[0, 0], [0.18, 0.012], [0.265, 0.07], [0.29, 0.22], [0.285, 0.62], [0.25, 0.8], [0.15, 0.91], [0.07, 0.96], [0.062, 1.0], [0.085, 1.05], [0.05, 1.1], [0, 1.11]]},
+        cord_ring("neck", "neck", 0.068, 0.014, [0.48, 0.238, 0, 0, 90, 0], 10)],
     hold={"grip": [0, 0.24, 0], "axis": [1, 0, 0], "face": [0, 1, 0]})
 
 # ---- the sheaf: a bound bundle of cut corn lying along x, centred on the origin, its bottom at y 0 -- the butts at -x,
@@ -66,19 +78,21 @@ PROPS["tools/sack-standing"] = item("Sack (standing)", "tool", "a grain sack sto
 # ones (sources in the notes): the game lays or carries them by goods.json's `rest` / `carry`.
 # a TRANSPORT AMPHORA (Greek, Roman, Byzantine): plain, unglazed, a long ovoid body on a spike toe (Dressel 1 / Greek
 # trade amphorae 0.6-1.1 m, ~25 l: here 0.74 m), a narrow neck stoppered with resin-sealed clay, two strap handles
+# (2026-11-22: 12 sides, the handles 3 steps a span round 6 -- 1456 -> 974 triangles: fifteen of them in a gaulos's
+#  hold, fourteen on a freight wagon, eighty on a Roman quay)
 PROPS["tools/transport-amphora"] = item("Transport amphora", "tool", "a plain trade amphora for wine or oil: a long ovoid body on a spike toe, a narrow neck stoppered and sealed, two strap handles from the neck to the shoulder -- 0.74 m, its toe at the origin; shipped lying in straw, carried on the shoulder",
     {}, {"clay": {"pick": ["#b0643e", "#b98458", "#a85a38"]}, "seal": "#5a3a24"}, [
-        {"id": "body", "type": "lathe", "material": "clay", "sides": 14, "profile": rounded([[0, 0], [.022, .004], [.03, .05], [.04, .1], [.1, .2], [.155, .32], [.17, .42], [.16, .52], [.12, .585], [.065, .625], [.048, .65], [.044, .7], [.058, .715], [.058, .735], [.04, .738]], 2)},
+        {"id": "body", "type": "lathe", "material": "clay", "sides": 12, "profile": rounded([[0, 0], [.022, .004], [.03, .05], [.04, .1], [.1, .2], [.155, .32], [.17, .42], [.16, .52], [.12, .585], [.065, .625], [.048, .65], [.044, .7], [.058, .715], [.058, .735], [.04, .738]], 2)},
         {"id": "seal", "type": "lathe", "material": "seal", "sides": 10, "profile": [[.042, .726], [.042, .742], [0, .748]]},
-        {"id": "handles", "type": "sweep", "material": "clay", "r": .013, "path": [[.045, .69, 0], [.1, .705, 0], [.13, .655, 0], [.125, .59, 0]], "mirror": "x"}],
+        {"id": "handles", "type": "sweep", "material": "clay", "r": .013, "path": [[.045, .69, 0], [.1, .705, 0], [.13, .655, 0], [.125, .59, 0]], "mirror": "x", "seg": 3, "sides": 6}],
     hold={"grip": [0, .66, 0], "axis": [0, 1, 0], "face": [1, 0, 0]}, era="-800-700", region="the Mediterranean")
 # a PITHOS: the great storage jar (Knossos, Akrotiri: 1-2 m), kept in a store, never shipped full -- here 1.35 m, a
 # thick rolled rim, raised rope bands moulded round the belly
 PROPS["tools/pithos"] = item("Pithos", "tool", "a great storage jar for grain, oil or wine: 1.35 m on a narrow foot, a broad belly with raised rope bands, a thick rolled rim -- set in a store's row, half its height in the ground or standing",
     {}, {"clay": {"pick": ["#a8603c", "#b07a52"]}}, [
         {"id": "body", "type": "lathe", "material": "clay", "sides": 18, "profile": rounded([[0, 0], [.2, 0], [.24, .04], [.38, .3], [.47, .6], [.46, .88], [.38, 1.1], [.29, 1.22], [.3, 1.27], [.34, 1.3], [.33, 1.35], [.27, 1.34]], 2)},
-        {"id": "bands", "type": "ring", "material": "clay", "r": .475, "tube": .022, "at": [[0, .55, 0, 90, 0, 0], [0, .78, 0, 90, 0, 0]]},
-        {"id": "lugs", "type": "ring", "material": "clay", "r": .05, "tube": .016, "at": [[.4, 1.0, 0, 0, 0, 0], [-.4, 1.0, 0, 0, 0, 0]]}],
+        {"id": "bands", "type": "ring", "material": "clay", "r": .475, "tube": .022, "at": [[0, .55, 0, 90, 0, 0], [0, .78, 0, 90, 0, 0]], "smooth": False, "stations": 18, "sides": 6},
+        {"id": "lugs", "type": "ring", "material": "clay", "r": .05, "tube": .016, "at": [[.4, 1.0, 0, 0, 0, 0], [-.4, 1.0, 0, 0, 0, 0]], "smooth": False, "stations": 10, "sides": 6}],
     era="-2000-400", region="the Mediterranean")
 # a STORAGE JAR (Egypt, the Islamic lands, India, the Maya): ovoid, a short neck, a small flat foot, two lug handles,
 # the mouth tied over with cloth -- 0.62 m (the Egyptian "wine jar", the Maya olla, the Islamic zir in small)
@@ -86,17 +100,23 @@ PROPS["tools/storage-jar"] = item("Storage jar", "tool", "an earthenware jar for
     {}, {"clay": {"pick": ["#ae6a44", "#a87a54", "#c4a07a", "#8a5a3a"]}, "cloth": "linen", "cord": "hemp"}, [
         {"id": "body", "type": "lathe", "material": "clay", "sides": 14, "profile": rounded([[0, 0], [.07, 0], [.1, .03], [.19, .17], [.22, .32], [.2, .45], [.12, .54], [.075, .565], [.075, .59], [.09, .61], [.07, .615]], 2)},
         {"id": "cover", "type": "lathe", "material": "cloth", "sides": 10, "profile": [[.095, .575], [.1, .61], [.07, .63], [0, .635]]},
-        {"id": "tie", "type": "ring", "material": "cord", "r": .08, "tube": .008, "at": [0, .585, 0, 90, 0, 0]},
-        {"id": "lugs", "type": "ring", "material": "clay", "r": .035, "tube": .012, "at": [[.17, .44, 0, 0, 0, 0], [-.17, .44, 0, 0, 0, 0]]}],
+        {"id": "tie", "type": "ring", "material": "cord", "r": .08, "tube": .008, "at": [0, .585, 0, 90, 0, 0], "smooth": False, "stations": 14, "sides": 6},
+        {"id": "lugs", "type": "ring", "material": "clay", "r": .035, "tube": .012, "at": [[.17, .44, 0, 0, 0, 0], [-.17, .44, 0, 0, 0, 0]], "smooth": False, "stations": 10, "sides": 6}],
     hold={"grip": [0, .3, 0], "axis": [0, 1, 0], "face": [1, 0, 0]}, era="-3000-1900", region="Egypt, the Islamic lands, India, the Americas")
 # a HAMPER: a big lidded basket of cane or palm, lashed shut (the porters' load in Egypt, India, China, the Maya) -- 0.55 m
-PROPS["tools/hamper"] = item("Hamper", "tool", "a big round basket with a domed lid, woven of cane or palm leaf and lashed shut with cord -- 0.55 m; carried on the head, on a pole or on the back by a tumpline",
-    {}, {"wicker": {"pick": ["cane", "reed", "straw"]}, "cord": "hemp"}, [
+PROPS["tools/hamper"] = item("Hamper", "tool", "a big round basket with a domed lid, woven of cane or palm leaf and lashed shut with cord -- 0.55 m; hollow, its lid (with the cross cord) lifted on its back edge by `open` onto the grain and fruit in it; carried on the head, on a pole or on the back by a tumpline",
+    {"open": 0}, {"wicker": {"pick": ["cane", "reed", "straw"]}, "cord": "hemp", "grain": {"pick": ["#c9a85a", "#b8935a", "#8a6a3a"]}, "fruit": {"pick": ["#c8462a", "#d99a2a", "#7a9a3a"]}, "cloth": "linen"}, [
         {"id": "body", "type": "lathe", "material": "wicker", "sides": 14, "double": True, "caps": False, "profile": [[.2, 0], [.255, .07], [.27, .3], [.265, .46]]},
         {"id": "bottom", "type": "lathe", "material": "wicker", "sides": 14, "profile": [[.2, 0], [.2, .015]]},
-        {"id": "lid", "type": "lathe", "material": "wicker", "sides": 14, "profile": [[.28, .45], [.28, .49], [.2, .53], [0, .55]]},
-        {"id": "lashing", "type": "ring", "material": "cord", "r": .272, "tube": .008, "at": [[0, .15, 0, 90, 0, 0], [0, .38, 0, 90, 0, 0]]},
-        {"id": "cross cord", "type": "sweep", "material": "cord", "r": .007, "path": [[-.272, .38, 0], [-.285, .47, 0], [-.18, .54, 0], [0, .558, 0], [.18, .54, 0], [.285, .47, 0], [.272, .38, 0]]}],
+        cord_ring("lashing", "cord", .272, .008, [0, .15, 0], 14),            # (14 sides round, unturned: on the body's own corners)
+        cord_ring("lashing top", "cord", .277, .008, [0, .38, 0], 14),
+        {"id": "cord ends", "type": "sweep", "material": "cord", "r": .007, "path": [[-.274, .38, 0], [-.281, .45, 0]], "mirror": "x", "seg": 1},
+        {"id": "lid", "type": "hinge", "pivot": [0, .45, -.285], "axis": [1, 0, 0], "max": -110, "parts": [
+            {"id": "lid", "type": "lathe", "material": "wicker", "sides": 14, "profile": [[.28, .45], [.28, .49], [.2, .53], [0, .55]]},
+            {"id": "cross cord", "type": "sweep", "material": "cord", "r": .007, "path": [[-.281, .45, 0], [-.285, .47, 0], [-.18, .54, 0], [0, .558, 0], [.18, .54, 0], [.285, .47, 0], [.281, .45, 0]], "seg": 2}]},
+        {"id": "grain", "type": "lathe", "material": "grain", "sides": 14, "profile": [[.262, .3], [.2, .33], [0, .34]], "inside": True},
+        {"id": "fruit", "type": "sphere", "material": "fruit", "r": .045, "sides": 8, "at": [[.05, .345, .04], [-.06, .34, .08], [.1, .335, -.07], [-.02, .35, -.06], [-.12, .33, -.02]], "inside": True},
+        {"id": "cloth", "type": "box", "material": "cloth", "size": [.2, .03, .14], "round": .012, "at": [.02, .335, .15, 20, 0, 0], "inside": True}],
     hold={"grip": [0, .55, 0], "axis": [1, 0, 0], "face": [0, 0, 1]}, era="-3000-1900")
 # a BALE: goods (cloth, silk, cotton, wool, spice) sewn into canvas or matting and corded (the caravans' and the
 # ports' freight from Basra to Canton) -- 0.9 x 0.5 x 0.6 m, its long side along x
@@ -113,14 +133,27 @@ PROPS["tools/straw-bale"] = item("Rice bale (tawara)", "tool", "a Japanese rice 
         {"id": "roll", "type": "rod", "material": "straw", "r0": .22, "r1": .22, "from": [-.375, .25, 0], "to": [.375, .25, 0], "sides": 12},
         {"id": "belly", "type": "sphere", "material": "straw", "r": .25, "sides": 12, "at": [0, .25, 0], "stretch": [1.45, 1, 1]},
         {"id": "lids", "type": "rod", "material": "straw", "r": .2, "from": [-.39, .25, 0], "to": [-.37, .25, 0], "sides": 12, "mirror": "x"},
-        {"id": "ropes", "type": "ring", "material": "rope", "r": .245, "tube": .012, "at": [[-.24, .25, 0, 0, 90, 0], [0, .25, 0, 0, 90, 0], [.24, .25, 0, 0, 90, 0]]}],
+        cord_ring("ropes", "rope", .245, .012, [[-.24, .25, 0, 0, 90, 0], [0, .25, 0, 0, 90, 0], [.24, .25, 0, 0, 90, 0]], 12, seg=3)],   # (12 round as the roll is, 3 across: 72 triangles a rope, not 192 -- 18 bales on a freight wagon)
     hold={"grip": [0, .25, 0], "axis": [1, 0, 0], "face": [0, 1, 0]}, era="700-1900", region="Japan")
 # a CRATE: boards nailed on battens (Europe's crates for crockery, glass, tools, fruit) -- 0.8 x 0.5 x 0.55 m
-PROPS["tools/crate"] = item("Crate", "tool", "a wooden crate of boards nailed on corner battens, its lid nailed down -- 0.8 x 0.5 x 0.55 m, its long side along x; carried in the arms, stacked on carts",
-    {}, {"boards": {"pick": ["planks-pine", "planks", "planks-grey"]}, "batten": "#6a4e32"}, [
-        {"id": "box", "type": "box", "material": "boards", "size": [.8, .5, .55], "at": [0, .25, 0]},
+PROPS["tools/crate"] = item("Crate", "tool", "a wooden crate of boards nailed on corner battens, its lid nailed down -- 0.8 x 0.5 x 0.55 m, its long side along x; three boards a side with gaps between (the dark lining showing), three lid boards, cleats across the ends; hollow, its lid prised up on its back edge by `open` (as far as `lift`, degrees) onto bottles and stoneware jugs packed in straw; carried in the arms, stacked on carts",
+    {"open": 0, "lift": 105}, {"boards": {"pick": ["planks-pine", "planks", "planks-grey"]}, "batten": "#6a4e32", "inside": "#3b2d1f", "straw": "straw", "glass": "#3f6a3a", "stoneware": "#b8a88a"}, [
+        {"id": "floor", "type": "box", "material": "inside", "size": [.74, .02, .49], "at": [0, .025, 0]},
+        {"id": "liner", "type": "box", "material": "inside", "size": [.74, .44, .01], "at": [0, .255, .24], "mirror": "z"},
+        {"id": "liner ends", "type": "box", "material": "inside", "size": [.01, .44, .47], "at": [.365, .255, 0], "mirror": "x"},
+        {"id": "straw", "type": "box", "material": "straw", "size": [.72, .1, .47], "round": .04, "at": [0, .08, 0], "inside": True},
+        {"id": "bottles", "type": "lathe", "material": "glass", "sides": 8, "profile": [[0, 0], [.04, 0], [.04, .2], [.015, .26], [.015, .3], [0, .3]],
+         "at": [[x, .1, z] for x in (-.25, -.12, .01) for z in (-.15, 0, .15)], "inside": True},
+        {"id": "jugs", "type": "lathe", "material": "stoneware", "sides": 10, "profile": [[0, 0], [.07, 0], [.09, .1], [.08, .2], [.04, .26], [.045, .28], [0, .28]],
+         "at": [[.19, .1, -.11], [.2, .1, .12]], "inside": True},
+        {"id": "straw top", "type": "box", "material": "straw", "size": [.3, .06, .4], "round": .025, "at": [-.12, .33, 0, 0, 0, 6], "inside": True},
+        {"id": "sides", "type": "box", "material": "boards", "size": [.8, .148, .02], "at": [[0, .08, .265], [0, .25, .265], [0, .42, .265]], "mirror": "z"},
+        {"id": "ends", "type": "box", "material": "boards", "size": [.02, .148, .51], "at": [[.39, .08, 0], [.39, .25, 0], [.39, .42, 0]], "mirror": "x"},
+        {"id": "lid", "type": "hinge", "pivot": [0, .5, -.27], "axis": [1, 0, 0], "max": "-lift", "parts": [   # (`lift`: how far it can rise -- 0 under another crate)
+            {"id": "lid", "type": "box", "material": "boards", "size": [.8, .02, .175], "at": [[0, .49, -.183], [0, .49, 0], [0, .49, .183]]},
+            {"id": "lid battens", "type": "box", "material": "batten", "size": [.04, .02, .5], "at": [[-.3, .47, 0], [.3, .47, 0]], "inside": True}]},
         {"id": "battens", "type": "box", "material": "batten", "size": [.05, .5, .05], "at": [[.39, .25, .26], [-.39, .25, .26], [.39, .25, -.26], [-.39, .25, -.26]]},
-        {"id": "bands", "type": "box", "material": "batten", "size": [.82, .05, .57], "at": [[0, .04, 0], [0, .47, 0]]}],
+        {"id": "cleats", "type": "box", "material": "batten", "size": [.03, .05, .47], "at": [[.405, .04, 0], [.405, .46, 0]], "mirror": "x"}],
     hold={"grip": [0, .25, 0], "axis": [1, 0, 0], "face": [0, 1, 0]}, era="1300-1900", region="Europe")
 # a TUB: the Chinese and Japanese cooper's tub (taru, tong) -- straight tapered staves bound with split-bamboo hoops,
 # a lid, two staves standing up as ears with a rope between them to hang it from a carrying pole -- 0.5 m
@@ -293,8 +326,9 @@ def cultural(out, size, F):
     for c in range(2):
         for x in row(0.58 if c == 0 else 0.62, x0 + c * 0.25, x1 - c * 0.05): put(9, "bale", [x, F + c * 0.5, 0, 0, 90, 0])
     xc = row(0.6, x0, x0 + (x1 - x0) * 0.7)
-    for c in range(2):
-        for x in (xc if c == 0 else xc[:-1]): put(10, "crate", [x + c * 0.1, F + c * 0.5, 0, 0, 90, 0])
+    for c in range(2):   # (standing lid up, long side across; a crate with another on it keeps its lid down, the front one stops upright against the course above)
+        for k, x in enumerate(xc if c == 0 else xc[:-1]):
+            out.setdefault(10, []).append(("crate", ({"lift": 0} if k < len(xc) - 1 else {"lift": 88} if len(xc) > 1 else None) if c == 0 else None, [round(x + c * 0.1, 4), round(F + c * 0.5, 4), 0, 90, 0, 0]))
     for x in row(0.52, x0 + (x1 - x0) * 0.72, x1): put(10, "sack", [x, F, 0, 90, 0, 0])
     xt = row(0.56, x0, x0 + (x1 - x0) * 0.6)
     for x in xt:
@@ -323,11 +357,21 @@ for size, S in CARTS.items():
     if len(S["wheels"]) > 1:
         parts.append(box("reach", "dark", [L - 0.4, 0.08, 0.12], [0, F - 0.11, 0]))
     for v, pieces in loads(size, F).items():
+        load = []
         for j, (kind, P, at) in enumerate(pieces):
-            if kind == "cask": parts.append({"id": f"load {v} cask {j + 1}", "use": "items/furniture/cask", "params": P, "at": at, "when": {"load": v}, "seed": j})
-            elif kind == "straw": parts.append(box(f"load {v} straw", "straw", at[3:], at[:3], when={"load": v}))   # (the bed of straw the jars stand in)
-            elif kind != "sack" and kind != "sheaf": parts.append({"id": f"load {v} {kind} {j + 1}", "use": f"items/tools/{kind}", "at": at, "when": {"load": v}, "seed": j})
-            else: parts.append({"id": f"load {v} {kind} {j + 1}", "use": f"items/tools/{kind}", "at": at, "when": {"load": v}})
+            if kind == "cask": load.append({"id": f"load {v} cask {j + 1}", "use": "items/furniture/cask", "params": P, "at": at, "when": {"load": v}, "seed": j})
+            elif kind == "straw": load.append(box(f"load {v} straw", "straw", at[3:], at[:3], when={"load": v}))   # (the bed of straw the jars stand in)
+            elif kind != "sack" and kind != "sheaf": load.append({"id": f"load {v} {kind} {j + 1}", "use": f"items/tools/{kind}", **({"params": P} if P else {}), "at": at, "when": {"load": v}, "seed": j})
+            else: load.append({"id": f"load {v} {kind} {j + 1}", "use": f"items/tools/{kind}", "at": at, "when": {"load": v}})
+        # (each kind's run -- a course of sacks, a block of kegs -- one `each` part: the same pieces, seeds and places)
+        # (a crate's and a hamper's lids fold too: their joints are named by the copy, "load 10 crate#2.lid" -- docs/items.md)
+        n = {}
+        for q in runs(f"load {v}", load, key=lambda q: (q.get("use"), json.dumps(q.get("params"))), least=2):
+            if "each" in q:   # (named by what it lays: "load 0 cask", "load 0 cask 2", ..)
+                name = f"load {v} {q['use'].rsplit('/', 1)[1].replace('furniture/', '')}"
+                n[name] = n.get(name, 0) + 1
+                q["id"] = name if n[name] == 1 else f"{name} {n[name]}"
+            parts.append(q)
     PROPS[f"components/cart-{size}"] = item(S["name"], "components", f"the body of a {S['name'].lower()} ({L} m bed on {len(S['wheels'])} axle(s)): bed, sides, head- and tailboards, the driver's board, footboard, axles and bolsters -- its wheels apart (components/cart-wheel), and its LOAD by `load` (0..4: casks lying in chocked pyramids, standing casks, kegs, sacks in two courses; 5 sheaves heaped, the harvest's, never on the road; 6..12 the other cultures' -- amphorae in straw, amphorae and sacks, jars and hampers, bales, crates and sacks, tubs and bales, rice bales, as assets/world/goods.json picks them; -1 empty)",
         {"load": 0, "seatTop": round(F + 0.465, 4), "seatX": S["seatX"], "bedL": L, "bedW": W, "floor": F, "side": H,
          **{k: v for i, (x, r) in enumerate(S["wheels"]) for k, v in ((f"axle{i + 1}X", x), (f"wheel{i + 1}R", r))}}, {"wood": {"pick": ["#7a5a36", "#6f5433", "#846040", "#6a4a2c"]}, "dark": DARK, "straw": "straw"}, parts)
@@ -360,10 +404,10 @@ PROPS["ships/fisher-boat"] = item("Fisherman's boat", "ships", "the fisherman's 
              {"role": "gangplank", "at": [0, 0.3, -0.75, 90], "data": {"side": "port", "deck": 0.02}},
              {"role": "hold", "at": [1.2, 0.04, -0.3], "data": {"i": 0, "floor": 0.04}},
              {"role": "helm", "at": [-0.7, 0.33, 0]}], era="-500-1900", region="everywhere")
-PROPS["components/fisher-oar"] = item("Oar", "components", "a rowing boat's oar, hinged at its origin (the gunwale): the handle inboard, the loom and blade outboard along +z (`side` -1: along -z)",
+PROPS["components/fisher-oar"] = item("Oar", "components", "a rowing boat's oar, hinged at its origin (the gunwale): the handle inboard, the loom and blade outboard along +z (`side` -1: along -z) -- components/oar turned onto z",
     {"side": 1}, {"loom": "#7a5a36", "blade": "#6a4a2c"}, [
-        rod("loom", "loom", 0.025, [0, 0, "side * -0.4"], [0, 0, "side * 2.2"], 6),
-        box("blade", "blade", [0.14, 0.03, 0.5], [0, 0, "side * 2.0"])])
+        {"id": "oar", "use": "items/components/oar", "at": [0, 0, "side * -0.4", "side * -90", 0, 0], "materials": {"wood": "loom"},
+         "params": {"l": 2.65, "r": 0.025, "taper": 1, "sides": 6, "loomL": 2.6, "bladeL": 0.5, "bladeW": 0.14, "bladeT": 0.03}}])
 PROPS["tools/fishing-pole"] = item("Fishing pole", "tool", "a plain rod cut from a sapling, 2.4 m, thick at the hand -- along +y from its origin (an alternative to tools/fishing-rod)",
     {}, {"wood": "#8a6a3a"}, [{"id": "pole", "type": "rod", "material": "wood", "r0": 0.014, "r1": 0.006, "sides": 5, "from": [0, 0, 0], "to": [0, 2.4, 0]}],
     hold={"grip": [0, 0.3, 0], "axis": [0, 1, 0], "face": [1, 0, 0]})
@@ -381,8 +425,8 @@ PROPS["furniture/barrel"]["parts"] = [PROPS["furniture/barrel"]["parts"][0]] + [
     {"id": f"hoop {k}", "type": "lathe", "material": "hoop", "sides": 12, "caps": False,
      "profile": [[f"head + (belly - head) * (1 - abs(hoop{k} * h / 0.95 - h / 2) / (h / 2)) + 0.012", f"hoop{k} * h / 0.95 - 0.0225"],
                  [f"head + (belly - head) * (1 - abs(hoop{k} * h / 0.95 - h / 2) / (h / 2)) + 0.012", f"hoop{k} * h / 0.95 + 0.0225"]]} for k in (1, 2, 3, 4)]
-PROPS["components/meal-chute"] = item("Meal chute", "components", "the mill's meal chute: a trough of a plank sloping down from the stones (its upper end at the origin) toward -z",
-    {}, {"wood": "#6a5236"}, [box("chute", "wood", [0.35, 0.12, 1.4], [0, 0, -0.65, 0, -22, 0])])
+# (components/meal-chute, a sloping plank, retired 2026-11-22: the water mill's and the windmill's meal chute is the
+#  building's own upright duct from the tun down into the meal bin -- architecture/village/watermill, architecture/windmill)
 # the tableware: a vessel's WALLS are one lathe (id "walls": the drink's level reads its inside from it, tableware.js),
 # its floor `floor` thick; a trough's box by w, h, d, t, floor
 def vessel(key, name, about, profile, floor, colour):
@@ -395,33 +439,40 @@ vessel("bucket", "Wooden bucket", "a wooden bucket, the fountain's", [[0.11, 0],
 # ---- Greek pots: a lathe wrapped by a painting along its whole profile (items.js `wrap`), a few paintings picked by seed;
 # their shapes and where each picture goes in potshapes.py, shared with greekgen.py
 # (assets/patterns/greek.json, greek.js); handles the ware's, as black as its glaze
-def _greek(key, name, about, painting, handles, glaze="#17110e"):
+def _thin(P, tol=.0008):                         # (2026-11-22: a profile's points dropped where the curve is straight enough to
+    keep = {0, len(P) - 1}                        #  skip them: Douglas-Peucker to `tol` m -- the painting's zones stay fitted to the
+    def dp(i, j):                                 #  full rounded curve, its length near enough unchanged)
+        ax, ay, bx, by = *P[i], *P[j]; L = math.hypot(bx - ax, by - ay) or 1e-9
+        k, d = max(((k, abs((bx - ax) * (ay - P[k][1]) - (ax - P[k][0]) * (by - ay)) / L) for k in range(i + 1, j)), key=lambda q: q[1], default=(None, 0))
+        if k is not None and d > tol: keep.add(k); dp(i, k); dp(k, j)
+    dp(0, len(P) - 1)
+    return [P[k] for k in sorted(keep)]
+def _well(profile, neck):                         # the inside, all glaze, down from the lip; a narrow-necked pot's only to its neck,
+    W = [[max(r - .003, 0), y] for r, y in reversed(profile)]   # closed there (the rest is never seen)
+    if not neck: return W
+    i = max(range(3), key=lambda k: W[k][0])
+    while i + 1 < len(W) and W[i + 1][0] <= W[i][0]: i += 1
+    return W[:i + 1] + [[0, round(W[i][1] - .01, 4)]]
+def _greek(key, name, about, painting, handles, glaze="#17110e", sides=28, neck=False):
     def pick(of): return {"pick": [{"pattern": f"greek/{of}-{k}", "palette": ["#000000", "#000000", "#000000", "#000000"]} for k in range(1, 5)]}
     P = POTS[key]; profile, tondo = P["profile"], P.get("tondo")
     PROPS["tableware/" + key] = item(name, "tableware", about, {}, {"paint": pick(painting), "glaze": glaze, **({"tondo": pick(painting + "-tondo")} if tondo else {})}, [
-        {"id": "body", "type": "lathe", "material": "paint", "sides": 40, "caps": False, "wrap": [-fit(key)[0][0], 1], "profile": rounded(profile)},
-        {"id": "well", "type": "lathe", "material": "tondo" if tondo else "glaze", "sides": 32 if tondo else 24, "caps": False, **({"disc": tondo} if tondo else {}), "profile": P.get("well") or [[max(r - .003, 0), y] for r, y in reversed(profile)]},   # (inside all glaze: down from the lip)
-        {"id": "foot", "type": "lathe", "material": "glaze", "sides": 24, "profile": [[profile[0][0], 0], [profile[0][0], .004]]},
+        {"id": "body", "type": "lathe", "material": "paint", "sides": sides, "caps": False, "wrap": [-fit(key)[0][0], 1], "profile": _thin(rounded(profile))},
+        {"id": "well", "type": "lathe", "material": "tondo" if tondo else "glaze", "sides": sides if tondo or neck else 24, "caps": False, **({"disc": tondo} if tondo else {}), "profile": P.get("well") or _well(profile, neck)},
+        {"id": "foot", "type": "lathe", "material": "glaze", "sides": 16, "profile": [[profile[0][0], 0], [profile[0][0], .004]]},
         *handles], era="-700--300", region="europe")
-def _handle(id_, *pts, r=.012):                   # (a pulled strap of clay: its bends a curve)
-    P, out = list(pts), []
-    for i in range(len(P) - 1):
-        a, b, c, d = P[max(i - 1, 0)], P[i], P[i + 1], P[min(i + 2, len(P) - 1)]
-        for k in range(4):
-            t = k / 4
-            out.append([.5 * (2 * b[j] + (c[j] - a[j]) * t + (2 * a[j] - 5 * b[j] + 4 * c[j] - d[j]) * t * t + (3 * b[j] - a[j] - 3 * c[j] + d[j]) * t ** 3) for j in range(3)])
-    out.append(list(P[-1]))
-    return [rod(f"{id_} {i}", "glaze", r, out[i], out[i + 1], 8) for i in range(len(out) - 1)]
+def _handle(id_, *pts, r=.012, sides=6):          # (a pulled strap of clay: one tube along its bends; 2026-11-22, was 4 rods a bend)
+    return [{"id": id_, "type": "sweep", "material": "glaze", "path": [list(q) for q in pts], "r": r, "sides": sides, "seg": 4}]
 _greek("amphora", "Amphora (black-figure)", "an Attic neck amphora, a panel of black-figure on each side of its belly: two handles from the neck to the shoulder, lip down to foot one painted surface, its height 0.5 m", "bf-amphora",
-       _handle("handle R", (.05, .46, 0), (.1, .47, 0), (.12, .41, 0), (.12, .37, 0)) + _handle("handle L", (-.05, .46, 0), (-.1, .47, 0), (-.12, .41, 0), (-.12, .37, 0)))
+       _handle("handle R", (.05, .46, 0), (.1, .47, 0), (.12, .41, 0), (.12, .37, 0)) + _handle("handle L", (-.05, .46, 0), (-.1, .47, 0), (-.12, .41, 0), (-.12, .37, 0)), neck=True)
 _greek("krater", "Bell krater (red-figure)", "a wide red-figure mixing bowl for wine, a picture on each side of its upper body under a lip of laurel: two handles low on its sides", "rf-krater",
-       _handle("handle R", (.14, .2, 0), (.205, .23, 0), (.205, .27, 0), (.165, .28, 0), r=.011) + _handle("handle L", (-.14, .2, 0), (-.205, .23, 0), (-.205, .27, 0), (-.165, .28, 0), r=.011))
+       _handle("handle R", (.14, .2, 0), (.205, .23, 0), (.205, .27, 0), (.165, .28, 0), r=.011) + _handle("handle L", (-.14, .2, 0), (-.205, .23, 0), (-.205, .27, 0), (-.165, .28, 0), r=.011), sides=32)
 _greek("lekythos", "Lekythos (white-ground)", "a slender white-ground oil flask, a figure scene on the front of its tall body: one handle at the back from neck to shoulder", "wg-lekythos",
-       _handle("handle", (0, .27, -.012), (0, .262, -.038), (0, .24, -.036), r=.005))
+       _handle("handle", (0, .27, -.012), (0, .262, -.038), (0, .24, -.036), r=.005), sides=24, neck=True)
 _greek("hydria", "Hydria (red-figure)", "a water jar: a round shoulder, a picture on the front of its body, two side handles for lifting and a tall one at the back for pouring", "hydria-rf",
-       _handle("lift R", (.15, .2, 0), (.19, .22, 0), (.155, .25, 0), r=.009) + _handle("lift L", (-.15, .2, 0), (-.19, .22, 0), (-.155, .25, 0), r=.009) + _handle("pour", (0, .41, -.05), (0, .42, -.13), (0, .34, -.15), (0, .3, -.13), r=.011))
+       _handle("lift R", (.15, .2, 0), (.19, .22, 0), (.155, .25, 0), r=.009) + _handle("lift L", (-.15, .2, 0), (-.19, .22, 0), (-.155, .25, 0), r=.009) + _handle("pour", (0, .41, -.05), (0, .42, -.13), (0, .34, -.15), (0, .3, -.13), r=.011), neck=True)
 _greek("kylix", "Kylix (red-figure)", "a shallow two-handled wine cup on a tall stem, a round picture inside its bowl and figures round its outside", "kylix-rf",
-       _handle("handle R", (.1, .09, 0), (.155, .092, 0), (.182, .118, 0), (.158, .13, 0), (.127, .118, 0), r=.006) + _handle("handle L", (-.1, .09, 0), (-.155, .092, 0), (-.182, .118, 0), (-.158, .13, 0), (-.127, .118, 0), r=.006))
+       _handle("handle R", (.1, .09, 0), (.155, .092, 0), (.182, .118, 0), (.158, .13, 0), (.127, .118, 0), r=.006) + _handle("handle L", (-.1, .09, 0), (-.155, .092, 0), (-.182, .118, 0), (-.158, .13, 0), (-.127, .118, 0), r=.006), sides=32)
 
 PROPS["tableware/trough"] = item("Water trough", "tableware", "a stone water trough, open at the top (the water at its level: tableware.js)",
     {"w": 2.2, "h": 0.5, "d": 0.7, "t": 0.09, "floor": 0.12}, {"stone": {"pattern": "stone/ashlar", "palette": "sandstone-grey"}}, [
@@ -434,10 +485,11 @@ PROPS["food/cheese-slice"] = item("Cheese (plain)", "food/dairy", "a plain wedge
     [{"id": "wedge", "type": "plate", "material": "cheese", "thick": 0.05, "at": [-0.06, 0.04, 0.05, 0, -90, 0], "outline": [[-0.075, -0.06], [0.075, -0.06], [-0.075, 0.06]]}])
 PROPS["food/sausage"] = item("Sausage", "food/meat", "one sausage, lying on a plate", {}, {"skin": "#8a3a2a"},
     [rod("sausage", "skin", 0.02, [-0.095, 0.035, 0], [0.095, 0.035, 0], 6)])
-PROPS["food/cabbage-head"] = item("Cabbage head (field)", "food/vegetable", "a cabbage head standing in its field row: a pale round head in a cup of darker outer leaves spread open round it (2026-10-24: was one six-sided ball, which read as a green cube) -- still low-poly, for a field of hundreds", {"r": [0.16, 0.22]},
+PROPS["food/cabbage-head"] = item("Cabbage head (field)", "food/vegetable", "a cabbage head standing in its field row: a pale round head in a cup of darker outer leaves spread open round it (2026-10-24: was one six-sided ball, which read as a green cube) -- still low-poly, for a field of hundreds (2026-11-22: the head a dome of three bands, not a ball whose lower half sat in the cup; the cup's bottom band one-sided, its inside: its underside faces the ground)", {"r": [0.16, 0.22]},
     {"head": {"pick": ["#b9d18c", "#aecb82"]}, "leaf": {"pick": ["#6f9a4c", "#628f45"]}},
-    [{"id": "head", "type": "sphere", "material": "head", "r": "r * 0.62", "sides": 8, "at": [0, "r * 0.62", 0], "stretch": [1, 0.92, 1]},
-     {"id": "leaves", "type": "lathe", "material": "leaf", "profile": [["r * 0.3", 0], ["r * 0.85", "r * 0.22"], ["r * 1.05", "r * 0.6"], ["r * 0.9", "r * 0.95"]], "sides": 9, "caps": False, "double": True, "faceted": True}])
+    [{"id": "head", "type": "lathe", "material": "head", "sides": 8, "caps": False, "smooth": True, "profile": [["r * 0.42", "r * 0.12"], ["r * 0.62", "r * 0.57"], ["r * 0.44", "r * 0.97"], [0, "r * 1.14"]]},
+     {"id": "cup", "type": "lathe", "material": "leaf", "profile": [["r * 0.85", "r * 0.22"], ["r * 0.3", 0]], "sides": 9, "caps": False, "faceted": True},
+     {"id": "leaves", "type": "lathe", "material": "leaf", "profile": [["r * 0.85", "r * 0.22"], ["r * 1.05", "r * 0.6"], ["r * 0.9", "r * 0.95"]], "sides": 9, "caps": False, "double": True, "faceted": True}])
 
 PROPS["furniture/barrel-on-side"] = item("Barrel on its side", "furniture/storage", "a stave barrel laid on its side, its axis along z, chocked -- its lowest point at the origin's height (furniture/barrel turned)",
     {"h": 0.95, "belly": 0.35, "head": 0.29}, {}, [{"id": "barrel", "use": "items/furniture/barrel", "params": {"h": "h", "belly": "belly", "head": "head"}, "at": [0, "belly", "0 - h / 2", 0, 90, 0]}])
@@ -551,8 +603,9 @@ PROPS["furniture/woodpile"] = item("Chopping block and woodpile", "furniture", "
     {}, {"stump": "#7a5a3a", "bark": "#6b4f35", "split": "#b08a5a"}, [
         rod("stump", "stump", 0.24, [0, 0, 0], [0, 0.45, 0], 10),
         rod("round", "bark", 0.11, [0, 0.45, 0], [0, 0.8, 0], 8),
-        *[rod(f"pile {c} {j}", "bark" if (j + c) % 3 else "split", 0.085, [round(0.75 + j * 0.18 + (c % 2) * 0.09, 3), round(0.085 + c * 0.16, 3), -0.22], [round(0.75 + j * 0.18 + (c % 2) * 0.09, 3), round(0.085 + c * 0.16, 3), 0.22], 6)
-          for c in range(4) for j in range(6 - c)],
+        # (the billets in courses, each course in the last one's hollows, every third split face out: `each` runs)
+        *runs("pile", sorted([rod(f"pile {c} {j}", "bark" if (j + c) % 3 else "split", 0.085, [round(0.75 + j * 0.18 + (c % 2) * 0.09, 3), round(0.085 + c * 0.16, 3), -0.22], [round(0.75 + j * 0.18 + (c % 2) * 0.09, 3), round(0.085 + c * 0.16, 3), 0.22], 6)
+                               for c in range(4) for j in range(6 - c)], key=lambda q: q["material"])),
         rod("fallen 1", "split", 0.07, [-0.45, 0.07, 0.15], [-0.62, 0.07, 0.5], 6),
         rod("fallen 2", "split", 0.07, [0.25, 0.07, -0.45], [0.55, 0.07, -0.6], 6)])
 

@@ -6,7 +6,8 @@ hands (`tools.js`), and the furniture in a building (`arch/assemble.js` `item` p
 Nothing in `items.js` touches three. Out come plain arrays, one set per **material**, and the materials are named
 (oak, walnut, iron, leather, rush, damask...) and textured from the pattern library (docs/patterns.md).
 
-Everything is up to about 1800: no upholstered sofas, no revolvers. The catalogue has 56 weapons, 12 shields,
+The period catalogue below runs up to about 1800; the modern age (vehicles, the street, machines, guns, furniture,
+electronics, stations and the airport; 146 items in assets/items/modern/) is described in docs/modern.md. In the period part: no upholstered sofas, no revolvers. The catalogue has 56 weapons, 12 shields,
 28 tools, 48 pieces of furniture, 40 ships, 46 components, one kit and 63 materials, and every one is seen in `assets.html`.
 
 | folder | what |
@@ -16,7 +17,7 @@ Everything is up to about 1800: no upholstered sofas, no revolvers. The catalogu
 | `tools/` | the village's tools (scythe, spade, hoe, hammer, saw, cleaver, fishing rod, lute...) and things carried (lantern, torch, book, bucket, basket, pitcher, candlestick) |
 | `mushrooms/` | the woods' mushrooms (`tools/mushroomgen.py`, 2026-11-08): fly agaric (amanita), cep (boletus), chanterelle -- lathes at real size (6-20 cm), `s` their size and the agaric's `spin` its warts' turn, drawn by the seed; the game grows them in the trees' shade in the flowers' pool (docs/world.md) |
 | `furniture/` | seats (stools, benches, settle, divan, chairs from the klismos and curule to the Windsor and the fauteuil, thrones), tables (and the brass tray on its stand), beds (pallet, bedstead, box bed, four-poster, Chinese bed, Roman couch, Egyptian bed, charpai, hammock, cradle), storage (chests, cassone, cask, cupboard, armoire, dresser, bureau, bookcase), and the rest (lectern, harpsichord, spinning wheel, longcase clock, screen, mirror) |
-| `components/` | the reusable pieces: grip, pommel, crossguard, boss, axe head, spearhead, polearm head, blunt head, turned / square / cabriole leg, bun and bracket feet, finial, knob, ring pull, drawer, panel door, spindle, cushion, strap, rocker |
+| `components/` | the reusable pieces (68): the arms' grip, pommel, crossguard, boss, axe head, spearhead, polearm head, blunt head; the furniture's turned / square / cabriole leg, bun and bracket feet, finial, knob, ring pull, drawer (joinery or slab front, also the modern drawers'), panel door, spindle, cushion, strap, rocker; the ships' rigging and fittings (mast, yard, the sails, shrouds, bowsprit, rudder, steering oar, oar(s), hatch, bitts, cabin, castle, figurehead, anchor, cannon, gun and shield rows, awning, ram, outrigger, gangplank); the props the game places on their own (cart wheel and the three cart bodies, the water wheel, the windmill's sails and arm, the mill's gears, shaft, stones, hopper and tun, the fisherman's oar, line and hanging fish, the ice hole, the tipi's poles, the trade sign); the stork's wing. Those with no `use` in an item are the game's own (index.html, carts.js, harbour.js, architecture.js and the buildings' JSON place them) |
 | `ships/` | 40 vessels up to 1800 (`tools/shipgen.py` writes them; docs/ships.md): punt ship, gaulos, dromon, kadirga, hulk, treasure ship, bezaisen, atakebune, Maya canoe, koch, dugout, reed boat, Egyptian river boat, trireme, Roman merchantman, longship, knarr, cog, carrack, caravel, galleon, galley, dhow, junk, sampan, outrigger canoe, voyaging canoe, gondola, birchbark canoe, kayak, umiak, coracle, fishing boat, skiff, fluyt, xebec, felucca, ship of the line, frigate, East Indiaman |
 | `faces/` | the parametric head (`tools/facegen.py`): the canon `face`, and `man`, `woman`, `child`, `elder`, `beast-man` drawn from it |
 | `hair/` | 25 hairstyles grown from the head's vertices (`tools/hairgen.py`): none, crop, short, flat (under a hat), bowl, bob, Egyptian bob, long, long wavy, curly, ponytail, bun, braid, plaits, two locks, viking side plaits, topknot, tonsure, shoulder length; and as zig-zag sheets: long, bob and short in drawn locks; in thorns: spiky back, up, wild |
@@ -33,20 +34,35 @@ another (`use`, merged as every definition is: defs.js). A dagger is a sword wit
   a **range** `[lo, hi]` (a value in it, drawn by the item's seed, so every sword of a kind is a little its
   own), or `{ "pick": [...] }` (one of a list: numbers, words, whole material specs).
 - **Parts** are primitives or components, each placed by `at` (`[x, y, z, yaw, pitch, roll]`, degrees; one or a list),
-  `along` (n copies from..to), `around` (a ring: `plane` "xz" for legs and flanges turned to face out, "xy" for
+  `along` (n copies from..to), `each` (n copies, each seeing its index `i` and share `i_t` in its own expressions --
+  `{ n, as: "j" }` renames them; ids become `id#i`: a mast's shrouds fanning from one masthead along the rail, which
+  `along` cannot, since it moves both ends; a copy's `when` may name its own param, `"w{i}"` -> `w0`, `w1`, ..: a
+  footbridge's bays, each left open by its own; a hinge or slide repeated so is named by its copy, `id#i` (and
+  `id#i~2` its mirror twin), and one inside a copied `use` is `id#i.<its id>`: a cart's crates, `load 10 crate#2.lid`; a fold leaves a part's id inside the run as it is, the tram's `leaf`.
+  Nothing keys on a joint's name -- itemObject hangs each joint on a pivot named by it and `setOpen(t, prefix)` swings
+  those whose name starts so, `"load 10 crate"` every crate's lid), `around` (a ring: `plane` "xz" for legs and flanges turned to face out, "xy" for
   studs round a shield), `mirror: "x"`, `stretch` (drawn out along the parent's axes, after turning), `scale`, and
   gated by `when` (a param, a list, or `{ param: word | [words] }`). `double: true` draws a thin shell from both sides.
+- **`rnd(a, b, ...)`** in any expression (2026-11-22, expr.js) is a seeded draw: a number in [0, 1) hashed (an
+  integer hash, the same on every run and machine) from the item's seed and its arguments. The same arguments give the
+  same number anywhere in the build, so a run of copies draws by its index and a key -- `"0.02 + 0.025 * rnd(i, 1)"`,
+  `"rnd(i, 2)"` for another quantity -- and two parts that must agree (a book's right edge, its neighbour's left)
+  ask with the same arguments. A component draws with its own seed (`seed` + its part's `seed`); outside items (no
+  seed) it draws with seed 0. A packed row of different widths, which a sum of the widths before each could not
+  write, is written by its EDGES: edge j at `x0 + s * j + J * (rnd(k, j) - 0.5)`, the two ends held by a factor
+  `min(j, 1)` / `min(n - j, 1)`, each copy from edge i to edge i + 1 (modern/furniture/bookshelf, J < s: no overlap).
 
 | type | what |
 |---|---|
-| `lathe` | a profile `[[r, y], ...]` turned about y (`sides`, `caps`, `faceted` for a square leg) |
+| `lathe` | a profile `[[r, y], ...]` turned about y (`sides`, `caps` -- false, or `"top"` / `"bottom"` for only that one, `faceted` for a square leg, `smooth` to shade its bands as one round body, `arc` [a0, a1] degrees for only that span round: a beach ball's gore, no caps) |
 | `rod` | from..to, radius `r` (or `r0`..`r1`) |
 | `sphere`, `box` | `r`; `size` [x, y, z] with `round` |
 | `sweep` | a tube along a path (`r` or a list of radii, or a rectangular `section` with its `up`); `closed` |
-| `ring` | a torus: `r`, `tube` |
+| `ring` | a torus: `r`, `tube` (`sides` round the tube; by default a closed sweep smoothed to twice its stations -- `smooth: false` keeps the stations as they are, `stations` sets how many: a cord or hoop of 6 sides by 10-24 stations is 120-290 triangles, not 300-1500; opt-in, the default build unchanged) |
 | `blade` | `length`, `width` stations, `thick` [base, tip], one or two `edges`, `flat`, `curve` |
 | `plate` | an outline extruded `thick` (or tapered) |
 | `hull` | a ship's hull lofted along +x from its lines (see Ships) |
+| `loft` | rounded-rectangle sections along +x (`stations [x, hw, y0, y1, tw?]`, `round`, `holes`, `arches`, `caps`): car bodies, buses, carriages, fuselages, cabinets (docs/modern.md) |
 | `sail` | a cloth between four `corners`, bellied, with `battens` |
 | `face` | a low-poly head on the anatomy (see Faces) |
 | `hair` | strands grown from that head's scalp (see Hair) |
@@ -77,16 +93,22 @@ bow at +x, y up from the keel's lowest point, z across (starboard +z). Two primi
   flat-bottomed box) and `tumblehome` (the sides leaning in above the waterline). It also lays `deck`s where the
   hull is that high, a `rail` along both sheer lines, a `keelBeam` with its stem and sternpost, `thwarts` across
   an open boat and `ribs` inside it. `double` for an open boat seen from inside. `stations` and `sides` are its
-  detail (scaled by `detail`).
+  detail (scaled by `detail`). `lean` (2026-11-22, every shipgen hull): the rail, keel beam and ribs swept through
+  the stations themselves (no spline between them), and `double` turning only the skin and its transoms -- the rail,
+  keel, ribs and thwarts are closed solids and the decks two-sided already, so their turned copies lay inside them.
 - **`sail`** is a cloth between four `corners` in its plane (three make a lateen or a crab claw), `belly` out along
   +z, seen from both sides, with `battens` across it for a junk. A square sail is turned across the ship by its
   parent (yaw 90); a lateen, a junk sail and a spanker hang fore and aft.
 
 The rigging and fittings are components (`components/`): `mast` (`top`: topmast or crow's nest), `yard`,
-`square-sail` (`set` full or furled), `lateen-sail` (`tilt`), `junk-sail`, `crab-claw-sail`, `oar` and a bank of
-`oars` (both sides), `steering-oar`, `rudder` (stern-hung, with its tiller), `figurehead` (dragon, swan, scroll,
+`square-sail` (`set` full or furled), `lateen-sail` (`tilt`), `junk-sail`, `crab-claw-sail`, `oar` (2026-11-22:
+`loomL`, `taper`, `sides`, `bladeT` and role `blade` -- the oar's wood unless named -- so the game's `fisher-oar` is
+this oar turned onto z) and a bank of `oars` (both sides), `steering-oar` (2026-11-22: the `oar` hung blade down --
+rolled -90 from its handle at l x .25, 1.1 l long, the loom .65 l, the blade the lower .6 l, `bladeT` its bladeW and 5 cm
+across -- and its own tiller; its eight ships build the same but for the blade's texture running the other way and its
+faces' diagonals, 2 parts where it had 3), `rudder` (stern-hung, with its tiller), `figurehead` (dragon, swan, scroll,
 lion), `castle` (a fore- or aftcastle on posts, crenellated or not), `cabin` (a deckhouse with windows), `awning`,
-`outrigger`, `anchor`, `cannon`, `gun-row` (a broadside of ports and muzzles), `ram`, `shield-row` (round shields
+`outrigger`, `anchor`, `cannon`, `shrouds` (a mast's lower shrouds, ratlines and topmast shrouds by `each`: one part a mast where the ships wrote every rope, 950 → 618 ship parts, the same geometry), `gun-row` (a broadside of ports, each with its lid hinged at the top and a gun behind it; its `open`, default 1, swings the lids up over the first half and runs the guns out over the second, by joint `range`s -- galleon, frigate, ship of the line, xebec, East Indiaman), `ram`, `shield-row` (round shields
 along the gunwales), `bowsprit`. A stay is a thin `rod`. The materials added: `planks`, `planks-pine`,
 `planks-grey`, `planks-tarred`, `deck`, `sail-striped`, `sail-tan`, `matting`, `reed`, `bamboo`, `cedar`, `hide`.
 
@@ -341,9 +363,10 @@ too). Each counter placement is a little heap of three and each basket holds one
 
 **Alternatives** (the same day, later): the pieces the code still drew its own way are items too, BESIDE the
 catalogue's finer ones rather than instead of them -- `ships/fisher-boat` (the fisherman's rowing boat; `ships/skiff`
-stays), `components/fisher-oar` (`side`), `tools/fishing-pole` (beside `tools/fishing-rod`), `components/fishing-line`
+stays), `components/fisher-oar` (`side`; since 2026-11-22 a wrapper placing `components/oar` along z, its loom and blade
+colours its own, the geometry unchanged), `tools/fishing-pole` (beside `tools/fishing-rod`), `components/fishing-line`
 (1.8 m from the rod's tip; the game stretches it to the water), `furniture/barrel` (`h`, `belly`, `head`: a big barrel
-or a keg; beside `furniture/cask`) and `barrel-on-side`, `tools/sack-standing`, `components/meal-chute`,
+or a keg; beside `furniture/cask`) and `barrel-on-side`, `tools/sack-standing`, `components/meal-chute` (retired 2026-11-22: the mills' meal chute is the building's own upright duct),
 `components/fish-hanging` (from a drying rack), the tableware `mug`, `jug`, `bucket` (a vessel's walls are one lathe,
 id `walls`: tableware.js reads the drink's level from its profile and the `floor` param) and `trough` (w, h, d, t,
 floor), the plates' food `food/plain-loaf`, `cheese-slice`, `sausage`, a field's `food/cabbage-head`, and the plain
@@ -437,6 +460,108 @@ calyx of acanthus on its plinth, and a palmette fans out over them, its leaves a
 heart, the volutes gilt. Its face is the x-y plane, seen from either side, and `h` is its height. The temples put one
 on each apex of a pediment (temples.py, acropolis.py `acroteria`).
 
+## Crafts and trades (2026-11-21)
+
+Nineteen items for the musicians, the tables, the workshops and the mine, made by `tools/craftgen.py` (in the manner
+of `tools/propgen.py` and `tools/modern/kit.py`: a params block, materials as roles, most of them a seeded pick). Run
+it with `python3 tools/craftgen.py`: it writes the files and registers them in assets/index.json under its lock.
+
+- Instruments, held as the lute is: **`tools/fiddle`** (style `violin` or `vielle`, its bow across the strings),
+  **`tools/recorder`** (length `L`, optional ivory rings), **`tools/flute`** (a six-holed transverse flute, optional
+  ferrules), and **`tools/harp`** (a soundbox, a curved neck and a pillar, sixteen strings, the pins). A musician holds
+  the instrument of the song being played. The fire's and the wedding's musicians get it from index.html `bardTick`, and
+  the fountain bard gets it from village-life.js `holders()`, which now gives `bard`. tools.js `TOOL_ITEMS` names these four and
+  the lyre.
+- **`tableware/plate`**: `style` trencher, pewter (a cast bead round the rim) or ceramic (a painted band), and `well`,
+  the height of the food above the foot. In tableware.js every dish stands on a plate, a trencher unless the dish says
+  `plate`. When the food is eaten, the plate stays.
+- **`tableware/cauldron`**: a pot-bellied iron pot with a bail and ears. `mount` is `legs`, `chain` (links from `top`
+  down to the bail) or `tripod`, and `lift` is the height of the pot's foot. A house hearth (architecture/furniture/hearth)
+  hangs one on its chain over the fire.
+- Workshops (tools/archgen/village.py, in place of their box clusters):
+  - **`furniture/anvil`** on its banded stump, its horn at +x (smithy);
+  - **`furniture/bellows`**, its nozzle at +x, its top board on a hinge (`open`, the `blow` hinge) and `pipe` bending the
+    pipe toward -z (smithy, piped into the forge);
+  - **`furniture/floor-loom`**, the weaver at +z (weaver);
+  - **`furniture/workbench`** with a leg vice and a drawer, its front at +z, and **`furniture/sawhorse`** (carpenter);
+  - **`furniture/kick-wheel`**, the potter at -x and a pot on its head (pottery);
+  - **`furniture/chopping-block`** (butcher);
+  - **`furniture/dress-form`** with a garment on it, and **`tools/shears`** lying open (tailor);
+  - **`tools/oven-peel`**, which leans `lean` degrees toward -x (bakery).
+- The mine (mine.js, then `node tools/archgen/mine.mjs`):
+  - **`tools/frog-lamp`**, a miner's open lamp. Its origin is the flame, which is also its `fire` marker, so it gives
+    the light that the bare markers gave. Its spike points to -x and is driven into the rock.
+  - **`furniture/windlass`**: its axle runs along z at 1.06, with posts at z ±1.25, a roped drum of radius 0.15, and two
+    cranks half a turn apart.
+  - **`tools/kibble`**: a banded hauling tub on a bail. With `full` it holds ore.
+
+Hoops and small rings are open lathes, built by craftgen's `band()` and `ring()`, rather than items.js `ring` sweeps,
+which cost two to three times the triangles.
+
+## Everyday things (2026-11-21)
+
+Twenty-nine household, yard, farm, bath, school and music items, made by `tools/craftgen2.py`. It is a sibling of
+craftgen.py: it imports craftgen's helpers (`item`, `beam`, `band`, `ring`, `smooth`, `write`) and kit.py's parts, and
+it registers its items in assets/index.json under the same lock. Run it with `python3 tools/craftgen2.py`. Where one
+item covers an old and a modern form, `style` picks it (the seed draws one when it isn't given).
+
+- Kitchen and table (catalogued under "Items: tools", as craftgen's tableware is):
+  - **`tableware/cooking-pot`**: `style` earthen, copper or saucepan (handle along +x); `lid`; `fill` shows the stew;
+  - **`tableware/frying-pan`**: `style` iron (a skillet with a hanging hole) or steel (a non-stick floor, a long grip),
+    the handle along +x; `egg` fries two eggs in it;
+  - **`tableware/kettle`**: `style` copper (a hob kettle with a gooseneck spout at +x) or electric (a jug on its base,
+    its flip lid on the `flip` hinge);
+  - **`tableware/bowl`**: `style` wood or ceramic; with `fill` it holds food, as the mug shows its ale;
+  - **`tableware/goblet`**: `style` pewter, silver or glass (`window-glass`, so you see the wine); `fill` is the wine;
+  - **`tableware/bottle`**: `style` wine (corked, `label`) or stoneware (a Bartmann bottle with its handle and mask);
+  - **`tools/ladle`** (`style` iron or wood), **`tools/wooden-spoon`** and **`tools/kitchen-knife`** (`style` chef or
+    old). All three hang with the handle up +y, the ladle's and spoon's bowls opening toward +z.
+- Yard:
+  - **`tools/wheelbarrow`**: `style` wood (on `components/cart-wheel`) or steel (a lofted tray, open at the top, on a
+    tubular frame with a tyre); the wheel is at +x;
+  - **`tools/ladder`**: `n` rungs 0.28 m apart, `L` derived from them; `style` wood or aluminium; `lean` tips it back
+    toward -z about its feet;
+  - **`tools/watering-can`**, its spout and rose toward +x;
+  - **`tools/flowerpot`**: a terracotta pot on a saucer. `plant` names an item in assets/items/flowers, which is placed
+    in the pot and drawn at `ph` (its `h`); `""` leaves the pot empty. Each plant is its own literal `use` part,
+    gated by `when`, because loaders fetch an item's uses by their written paths. The eight whole plants it can hold
+    (tulip, daisy, rose, lavender, poppy, cornflower, iris, sunflower) are now registered under "Items: flowers",
+    since the viewer builds only from the catalogue;
+  - **`tools/suitcase`**: it lies on its back with the handle at +z; `style` leather or hard. The upper half is the
+    `lid` hinge along the back edge;
+  - **`tools/rope-coil`**: flat turns as one open lathe of bumps, a second layer, a loose turn and a trailing end;
+  - **`tools/chain`**: `n` links of length `link`, hanging from a ring, with a hook at the bottom.
+- Farm: **`tools/plough`** (`style` ard or mouldboard, the team at +x; the mouldboard turns the sod to +z),
+  **`tools/butter-churn`** (a plunge churn, its height `h`) and **`tools/quern`** (a rotary hand quern on its board).
+- Bath and medicine:
+  - **`furniture/washstand`**, on turned legs, with its basin, ewer and towel; `water` fills the basin;
+  - **`furniture/bathtub`**, along x: `style` clawfoot (a lathe drawn out 2.12 times along x, painted outside and
+    enamelled inside, on claw-and-ball feet) or built-in (a lofted basin in its apron); `water` fills it;
+  - **`modern/furniture/toilet`**, its back at -z, the `lid` hinge at the back; a `seat` marker;
+  - **`modern/furniture/wheelchair`**, its front at +z, with a `seat` marker;
+  - **`tools/crutch`**: `style` underarm or forearm.
+- School: **`tools/globe`**, its axis tilted 23.5 degrees. The continents are spherical caps in three colour roles
+  (craftgen2 `cap`).
+- Music and play:
+  - **`tools/drum`**: `style` tabor (V-laced, with a snare and a strap) or snare (lugs, rods and sticks);
+  - **`tools/ball`**: `style` leather, football (twelve 5-sided caps where an icosahedron's corners are) or beach
+    (twelve sweeps of a flat section, as gores, over a core);
+  - **`tools/guitar`**: `style` classical or steel; held as the lute is;
+  - **`tools/trumpet`**: `style` valved or natural, its bell toward +x.
+
+New helpers in craftgen2:
+- `shell(outer, t, floor)` turns a vessel's outside profile into a closed turned wall;
+- `surface()` puts a level disc (stew, water, soil) at the wall's inside radius;
+- `orient(pos, ("x", a), ("z", b))` applies turns in the order given (a side board leaned out, then the tray tipped);
+- `toward(pos, d)` points a part's +y along d;
+- `cap()` makes a spherical cap;
+- `ringx()` is a ring whose radius and tube may be expressions;
+- its `sweep` defaults to 3 samples a span, not items.js's 6.
+
+Two materials were added: `stoneware`, a salt-glazed brown, for the Bartmann bottle and as a pick for pots and bowls;
+and `copper-bright`, polished kitchen copper (the library's `copper` is roof verdigris), for the copper pot, kettle,
+watering can, ladle and a clawfoot tub's outside.
+
 ## Not there yet
 
 - `grip2` is data only: nobody's other hand is moved to it yet.
@@ -465,3 +590,234 @@ IN THE HAIR: a face's `flower` (1: worn) and `hairFlower` (a bloom's path) put t
 its face turned out (`flowerScale`, .75); a woman wears one a quarter of the time (rose, daisy, hibiscus, frangipani,
 poppy, cornflower, lily). The asset viewer's face bar has a `flower` dropdown.
 
+
+### Dense small items slimmed (2026-11-22)
+
+Small things held in a hand or set on a table that carried far more triangles than their size needs (shut, static
+triangles; renders before/after compared at full size, bounds kept within ~1 mm):
+
+| item | tris | parts | what changed |
+|---|---|---|---|
+| tableware/lekythos | 2944 → 1324 | 11 → 4 | body 24 sides (was 40), profile thinned (Douglas-Peucker 0.8 mm on the rounded curve, propgen `_thin`); inside only to the neck, closed there; foot 16 sides; handle one 6-sided sweep instead of 8 rods |
+| tableware/kylix | 3232 → 1624 | 35 → 5 | body and tondo 32 sides; handles one sweep each (were 16 rods each) |
+| tableware/hydria | 4160 → 2228 | 31 → 6 | body 28 sides, thinned; inside to the neck; three handles a sweep each |
+| tableware/krater | 3456 → 2088 | 27 → 5 | body 32 sides, thinned; handles a sweep each |
+| tableware/amphora | 4320 → 2168 | 27 → 5 | body 28 sides, thinned; inside to the neck; handles a sweep each |
+| modern/electronics/desk-phone | 2498 → 1472 | 8 | coiled cord 14 turns of 4 points, 4 sides (was 16 x 6, 5 sides; the sweep's seg 1 was clamped to 2 anyway) |
+| modern/arms/revolver | 1260 → 1188 | 30 → 20 | flutes one part, chambers one part (`at` lists), cylinder 18 sides |
+| tools/caduceus | 4296 → 1608 | 4 | the snakes' sweep `seg` 2 (its path already has 10 points a turn) |
+| jewelry/head/laurel-wreath | 2304 → 1448 | 5 | band `step` 10° (was 5); leaves 8 outline points (10), 22 a wreath (26) |
+| jewelry/head/flower-chaplet | 2236 → 2020 | 2 | cord `step` 10 only: the blooms are the shared flower assets, already lean |
+| jewelry/head/coronet | 1904 → 1240 | 4 | band `step` 10; gems `small` (6 sides, two-step dome) |
+| jewelry/head/circlet | 1584 → 864 | 7 | band `step` 10; gems `small` |
+
+Generators: tools/propgen.py (`_greek`, `_thin`, `_well`, `_handle`), tools/attributegen.py, tools/modern/electronics.py,
+tools/modern/arms.py, tools/jewelgen.py (`gem(..., small=True)`, the band's `step`).
+
+### In-game budget (2026-11-22)
+
+Ranked by what the GAME draws, not by the file: triangles of an item's static shut build times the copies a world
+places. Measured in five game loads (`?menu=0&period=` medieval, roman, industrial, japanese, maya) by walking the
+scene after load: `architecture.js itemBudget(scene, camera?)` sums every drawn mesh's triangles by the item they
+came from. The hook: items.js gives each built group a non-enumerable `src` (its path: no copy or comparison of the
+arrays sees it); `itemGeometry`, the merged furniture of a building (`itemMeshes`), tools.js `paintedGeometry` and
+merge.js's joins carry `geometry.userData.items` { path: triangles }, a batched pool its shapes (`userData.geos`).
+From the console: `(await import("./architecture.js")).itemBudget(__dbg.scene, __dbg.camera)`.
+
+Top of the ranking before (mean scene triangles over the five loads; copies = scene / one build):
+
+| # | item | scene tris | one build | copies |
+|---|---|---|---|---|
+| 1 | mushrooms/amanita | 184 722 | 991 | ~186 |
+| 2 | faces/man | 137 645 | (game face) | ~30 |
+| 3 | faces/woman | 126 015 | (game face) | ~15 |
+| 4 | mushrooms/chanterelle | 67 896 | 360 | ~189 |
+| 5 | mushrooms/boletus | 62 986 | 339 | ~186 |
+| 6 | tableware/cauldron (hearth chain) | 47 552 | 3774 | ~13 a world, 30 in a medieval town |
+| 7 | food/cabbage-head | 30 822 | 172 | ~179 |
+| 8 | faces/child | 19 360 | (game face) | ~3 |
+| 9 | furniture/cask | 16 845 | 448 | ~38 |
+| 10 | furniture/roman-table | 16 184 | 2348 | ~7 (34 in a Roman town) |
+| 11 | tools/straw-bale | 13 997 | 2592 | ~5 (27 in a Japanese one) |
+| 12 | furniture/roman-couch | 13 464 | 792 | ~17 |
+| 13 | tools/frog-lamp | 13 170 | 878 | ~15 (the mine) |
+| 14 | furniture/settle | 11 713 | 484 | ~24 |
+| 15 | furniture/chest-of-drawers | 11 704 | 3080 | ~4 |
+| 16 | stall wares (the market's, index.html) | 10 964 | | 1 |
+| 17 | tools/sack | 10 398 | 776 | ~13 |
+| 18 | furniture/bedstead | 9 623 | 460 | ~21 |
+| 19 | furniture/market-stall | 8 312 | 756 | ~11 |
+| 20 | tools/sack-standing | 6 674 | 776 | ~9 |
+
+What changed (one build's triangles; everything else builds identically, fold4/geo4):
+
+| item | tris | what changed |
+|---|---|---|
+| mushrooms/amanita | 991 → 599 | warts five-sided low domes (a lathe, 20 tris) for squashed spheres (36, half under the cap); cap and gills one-sided (the cap closes over the gills) |
+| mushrooms/boletus | 339 → 219 | cap and pores one-sided |
+| mushrooms/chanterelle | 360 → 252 | the stem one-sided, only the cap a two-sided shell; the foot's disc and the dip's last ring gone |
+| tableware/cauldron | 3774 → 2606 (on the hearth's chain; 1194 → 1146 on legs) | chain links a diamond section round 8 sides (64 tris, were 120); ears 8 sides (craftgen `ring(..., sec=4)`) |
+| tools/straw-bale | 2592 → 864 | the three ropes hexagonal-section lathes, 16 round (the `ring` primitive made 768 each) |
+| tools/hamper | 2086 → 886 | lashings lathes on the body's own 14 corners; cord ends and the lid's cross cord `seg` 1 and 2 |
+| tools/sack (and sack-standing) | 776 → 384 | the neck cord a 10-sided hexagonal lathe (was a 512-tri `ring`) |
+| components/ring-pull | 352 → 160 | the ring a hexagonal lathe of 10 sides: chest of drawers 3080 → 1544, bureau 3104 → 1568, armoire 2516 → 2132 |
+| furniture/roman-table | 2348 → 1884 | the stretcher ring a hexagonal lathe of 20 sides |
+| furniture/plank-chest | 1436 → 536 | the folded linen `inside` (seen only open) |
+| tools/frog-lamp | 878 → 608 | bowl and lid 10 sides, hanger sweep `seg` 3, swivel 8 sides |
+| components/cart-* | their loads 6..12 follow the hamper, bales and sacks |
+
+Savings: the changed items drew 460k triangles a world on average (five loads), 291k after (-37 %); in view at a
+town's market, church, houses and landing 158k → 101k. Medieval: 494k → 327k scene, 183k → 129k in view; Japanese
+458k → 261k and 168k → 79k. Whole-scene totals swing by far more from load to load (how many people are about, which
+landmarks the world drew), so the item sums are the comparison. Generators: tools/mushroomgen.py (`wart`),
+tools/craftgen.py (`ring` `sec`), tools/propgen.py (`cord_ring`); ring-pull, roman-table and plank-chest by hand.
+
+### Far heads, cheaper rings, three field items (2026-11-22)
+
+- **Far heads** (heads.js `FAR`, docs/face.md "Far heads"): past 10 m (near again inside 8) a head is drawn from its
+  `detail` .7 shape, about half (a man 4014 → 1776, a woman 4250 → 2012), built in a worker (faceworker.js) or taken
+  from pregen/, into indexed pools of their own. Near faces are byte-identical (geo4).
+- **`ring`** gained `smooth: false` (its stations as given, not a sweep smoothed to twice as many) and `stations`;
+  without them nothing changes. Converted, the ring parts' triangles: sampan hoop 3072 → 1152, reed-boat lashing
+  4608 → 1152, flail links 2808 → 576, pithos bands and lugs 2496 → 672, storage-jar 1304 → 408, outrigger lashing
+  1088 → 288, bucket 960 → 384, spinning-wheel rim 768 → 288, strongbox handles 672 → 240, anchor 672 → 144, wreath
+  456 → 192, patera 432 → 288, cornucopia 384 → 192, crossbow stirrup 360 → 120, lantern 336 → 100, threshing-flail
+  312 → 80 (and the carts, the Maya canoe and the ships that `use` the jar or the anchor with them). Generators edited
+  to match (shipgen, propgen, attributegen), not re-run.
+- **`lathe` `caps`** takes `"top"` / `"bottom"` for one cap only. **cask** 448 → 336 (one-sided staves, a chime band
+  inside the top, the head capped on top only); **settle** 484 → 268 (its panel-doors without knobs, `knob: 0`);
+  **cabbage-head** 172 → 138 (the head a three-band dome, not a ball half sunk in the cup; the cup's bottom band
+  one-sided).
+- Budget (seed 7, items in the whole scene; then the mean in view over four headings at each spot):
+
+  | period | scene total | items | faces | in view (market / church or house / landing) |
+  |---|---|---|---|---|
+  | medieval | 2.957M → 2.658M | 1.098M → 0.833M | 537k → 300k | 1.505M → 1.424M, 1.473M → 1.408M, 1.433M → 1.334M |
+  | roman | 2.828M → 2.520M | 1.177M → 0.877M | 669k → 378k | 1.424M → 1.335M, 1.462M → 1.371M, 1.534M → 1.431M |
+  | japanese | 1.691M → 1.652M | 426k → 388k | 75k → 48k | 769k → 756k, 774k → 762k, 904k → 873k |
+
+  Frame times (medieval, headless, ~30 fps): the walk unchanged within the runs' spread; the first ~5 s after the
+  world is ready a little rougher while the worker builds the 170 far shapes (it shares four cores with the game).
+  Re-running build/pregen.py records them (and the near faces, whose section is stale: 171 builds, ~4 s of main
+  thread at every load).
+
+Next: re-run build/pregen.py (done 2026-11-22, docs/pregen.md); the jewellery and hair at distance (they ride the face's detail already); the cart and
+ship hulls (done 2026-11-22, below); `ring` defaults could follow the opt-in once every user is seen.
+
+### Hulls, the amphora, flat shields (2026-11-22)
+
+Ranked over three game loads by the budget hook (seed 7, `&water=sea` so each has a harbour: medieval, roman,
+japanese), the ships and carts drew: medieval knarr 21.9k, cog 5.5k, carts 4.4k; roman transport amphorae 59.7k (82 on
+the quay and in holds), gaulos 49.4k, freight wagon 17.0k, roman merchantman 15.6k, trireme 8.3k, the other carts
+12.4k; japanese freight wagon 15.8k (rice bales), bezaisen 14.7k, sampan 3.7k. No boat is boarded or sailed by the
+player (harbour.js moves the ships, index.html rows the fisherman's boat), so nothing is held at close-up quality
+beyond what the quay shows. What a hull's triangles went to (knarr): the skin 784 doubled, the two rails 1368 (a
+6-sided round sweep along a spline through 28 stations, at two steps a station), ten ribs 2320, the keel beam 488 --
+and `double` turned ALL of it, rails, ribs and keel included. So:
+
+- **`hull` `lean`** (items.js; shipgen.py puts it on every hull it writes): the rail, keel beam and ribs go through
+  the stations themselves, and a `double` hull's back is its skin's alone. (The keel beam starting straight down its
+  sternpost then had an `up` along its first tangent: items.js `sweep` takes another axis where `up` has no part
+  across the tangent -- before, the section fell flat; nothing built before changes, geo4.)
+- **Flat shields** (items.js `shield`: no `bend`, no `dish`) are one fan in from the rim instead of eight rings -- the
+  uv is the plane's, the painting the same: a round shield 1172 → 500, a longship's or a dromon's `shield-row` 23440 →
+  10000.
+- **transport-amphora** (propgen.py): 12 sides for 14, the handles 3 steps a span round 6 -- 1456 → 974.
+
+One build (seed 1): knarr 10928 → 4672, gaulos 24760 → 17100, longship 45960 → 20364, dromon 29676 → 15324, fishing-boat
+7448 → 3044, skiff 4756 → 1808, umiak 7048 → 2548, birchbark canoe 8216 → 2748, coracle 5224 → 1964, gondola 4918 →
+2626, sampan 3668 → 2416, decked hulls ~900 less each (cog 5752 → 4840, roman merchantman 5444 → 4532, bezaisen 5048 →
+4376); freight wagon with amphorae (load 6) 24972 → 16778, load 7 17004 → 11702. geo4: those 46 items, nothing else.
+
+In the scene (same loads): medieval ships and carts 32.0k → 18.6k (knarr 21.9k → 9.4k); roman 165.5k → 117.6k
+(amphorae 59.7k → 39.9k, gaulos 49.4k → 34.1k, wagon 17.0k → 11.7k), scene 2.746M → 2.699M, in view 20-28k less at
+each spot; japanese 45.7k → 42.4k (bezaisen 14.7k → 12.7k, sampan 3.7k → 2.4k; the rice-bale wagon unchanged).
+Renders: assets viewer close and at ~2.4 x the item's size, and in game at a harbour (the Phoenician merchantman,
+the knarr) at 16 and 40 m -- no difference seen.
+
+The generators re-run (shipgen.py, propgen.py, attributegen.py) wrote the same content as the JSON but for key
+order -- the hull's `smooth`, `stations`, `sides` came before `at` where the files have them last -- and
+attributegen.py dropping index.json's final newline; both fixed in the generators, and before the trims all three
+gave the files back byte for byte (`diff -r`). After them only ships/*.json (40) and tools/transport-amphora.json
+differ, as above.
+
+Next: the rice-bale load (18 tawara at 864, 15.8k in a Japanese town: their rope lathes 6 sided, 576 of each);
+cart-wheel (328 each, 12-24 drawn in a town); the harbour builds each ship twice (moored and going) and hides one -- only the
+drawn one counts here, but both are uploaded.
+
+### Cheap items reworked (2026-11-21)
+
+- **Beach ball** (2026-11-22): six smooth `arc` lathe gores, one per colour, instead of twelve flat strips over a core sphere (1824 → 1008 tris). **Toilet**: the lid's outline fitted to the seat ring (it was mirrored 9 cm aft) and it stops at 88°, against the cistern. **Trumpet**: each valve one lathe (bottom, casing, cap) instead of three rods (2194 → 2080).
+- **furniture/sofa** is now the Louis XV canapé. It stands on the fauteuil by `use` and only says what differs: the
+  params (w 2.0, d .72, the back's height) and the `legs` part, with two more legs under the middle (parts merge by
+  id, see defs.js). It replaces the four bare boxes it was.
+- **furniture/fauteuil**'s seat rail is a closed spline through ten points round a serpentine rounded rectangle. The
+  five it had looped out at the corners once the chair was drawn wide.
+- **furniture/divan** gained a round bolster at each end, and the cushion's cloth hanging over the platform's front
+  with its fringe.
+
+- **crate** (tools/propgen.py): three side and end boards a face with gaps onto a dark inside box, three lid
+  boards, corner battens and end cleats instead of one box with bands; 288 tris; outer size kept (0.8 x 0.5 x 0.55).
+- **sack** (propgen): one turned profile (belly, gathered waist, tied-off ear) laid along +x and `stretch`ed flat
+  under its weight, a cord ring round the neck, instead of two stretched spheres; same footprint, hold and
+  `sack-standing` contract.
+- **book** (hand JSON): two boards, a round spine with three raised bands, the page block, the clasps -- spine at
+  -x where the hold grips it.
+- **drawers everywhere**: `components/drawer` is now a `slide` carrying its tray (`depth`, the tray `inside`), so
+  the chest of drawers, bureau, dresser, armoire, workbench and kitchen table open with `open` (docs/modern.md,
+  "Joints in components"); the game's static shut build leaves the trays out.
+  (2026-11-22) It is the ONE drawer: `front` "joinery" (its own front, knobs or ring pulls -- the default) or "slab"
+  (modern/components/slab-door, `t` thick from `back`), the tray's `floor`, `lift`, `wall`, `rise` (of h), `gap`,
+  `travel` (of the depth), role `tray` (the wood unless the use names it), `stock` (two packs, roles goods, goods2).
+  The modern kitchen's and desk's drawers, the fridge-freezer's freezer drawers and (2026-11-22, `stock` "sheet": a
+  baking sheet, role goods) the cooker's storage drawer place it; and (2026-11-22, `stock` "powder": two dividers,
+  role tray, and the powder, role goods) the washing machine's detergent drawer; and (2026-11-22, `stock` "veg":
+  three heads of veg, role goods, two tomatoes, role goods2) the fridge's crisper. A slab front's `stand`, `r`,
+  `sides`, `pr`, `psides` and `inset` go on to its bar handle (the cooker's: 25 mm, 7 mm, 10; posts r 5.6 mm, 8
+  sides, 15 mm in -- the oven door's kind), `gh` and `gd` size its moulded grip (20 mm high, 7 mm proud; the washing
+  machine's 12, 2.5), and `frame` makes it a shaker front (docs/modern.md, "Shaker fronts").
+- **plank-chest, gothic-chest**: hollow (floor and walls between the ends / inside the posts and panels), folded
+  linen inside, the lid -- with the plank chest's straps and hasp -- a hinge at the back edge (`open`).
+- **armoire, cupboard**: `components/panel-door` takes `swing` 1 -- the same parts in a hinge at the edge away
+  from its knob (`side`), `max` -105 x side -- so a pair is ONE door part mirrored in x. Both cases are hollow: the
+  armoire has linen shelves on the left, coats on a rail on the right and a centre muntin over the doors' meeting
+  gap; the cupboard has bowls on one shelf and pewter plates (pitched 75, stood against the back) and a jug on the
+  other. The other eight panel-door users keep `swing` 0, fixed. (2026-11-22) `anchor`: 1 (the default) its face at
+  z 0, 0 its back at z 0 -- the way modern/components/slab-door stands, which takes the same param (default 0);
+  docs/modern.md, "Which way a door stands". `knob` 0 leaves its knob off -- slab-door's shaker front (`frame`)
+  places panel-door so, with its own pull. (2026-11-22) The panel is role `panel`, `"panel": "wood"` in its own
+  materials, so it is the frame's wood unless the user names it: a shaker front's panel a shade darker (the modern
+  kitchen's colourways). A user's own role called `panel` reaches it too (roles go down by name).
+- **folding-screen**: was six boxes posed at fixed places (its `n` ignored); now a chain of nested hinges, each
+  leaf on the one before, their `open` bound to the `fold` param (a hinge's `open` may name a param): the first
+  leaf turned fold x 80, each after it back and forth by twice that, so `n` (to 8) leaves zigzag about a line --
+  0.25 as it stands, 0 flat, 1 packed up.
+- **Openings, 2026-11-22.** These all open with `open`, and their contents are `inside`, so the static shut build
+  barely grows.
+  - **crate** (propgen): the inside box is now a floor and liners. The lid is hinged at the back edge (105°) over
+    straw, nine bottles and two stoneware jugs.
+  - **hamper** (propgen): the lid and its cross cord are hinged at the back over grain, apples and a cloth. The
+    lashing rings and cord ends stay on the body.
+  - **cooking-pot** (craftgen2): each style's lid is hinged about z at the rim, away from the handle (75°). The
+    stew under a lid is `inside`.
+  - **chinese-cabinet:** the faceted case is an open arc behind the doors, with an inner lining, a front frame
+    and a central stile. The doors are one `panel-door` hinge mirrored in x, each with its half of the face plate.
+    Inside: a shelf with bound books, cloth wrappers, scrolls and a porcelain jar.
+  - **longcase-clock:** the trunk is boards round the door, which is a `panel-door` with `swing` 1. Inside: the
+    pendulum rod and bob, and two weights on cords with pulleys.
+  - **cassone:** the body lathe is open with a rimmed lining lathe. Both steps of the lid are hinged at the back
+    (105°) over linen, a bolt of brocade and a gilt casket.
+  - **sarcophagus:** the set-on lid (`lid` 1) is a slide over [0, .15] that lifts it 5 cm. A nested slide over
+    [.15, 1] pushes it .8 m along and .45 m across. Inside is a gilded mummy-case with its face and a blue band:
+    `inside` under lid 1, and plain when the lid lies aside (`lid` 2). The old gold `rim`, a solid slab across the
+    mouth, is now a band of four strips round the outside.
+  - **harpsichord:** the case is a keyhole `plate` (the outline, then the inner outline reversed), with a bottom,
+    the soundboard and the wrestplank. The lid is hinged along the straight spine (55°, over [0, .7]). Its stick
+    rises on its own hinge over [.7, 1]. Inside: fourteen strings stopping at the bentside, the bridge and a gilt
+    rose. The plates turn +90 now, so the spine is at -z where the legs were set out for it; the middle bentside
+    leg moved in to z 0.
+  - **gate-leg-table:** the top is a fixed centre strip and two leaves, each hinged at the strip's edge (z ±.21).
+    Each gate is a leg, two rails and a stile, pivoting on the stile at z ±.15. `open` (default 1, spread)
+    raises the leaves over [0, .5], then swings the gates out under them over [.5, 1]. The leaf goes first
+    because, while it hangs, it stands in the gate's path. At 0 the leaves hang and the gates lie folded along
+    the frame.

@@ -128,7 +128,7 @@ try {
     for (const [k, cv] of R.tiles) if (cv) man.tiles[k] = await file("tiles", k, "png", await png(cv));
     for (const [k, cv] of R.fabrics) man.fabrics[k] = await file("fabrics", k, "png", await png(cv));
     for (const [k, cv] of R.wings) man.wings[k] = await file("wings", k, "png", await png(cv));
-    for (const [k, f] of R.faces) man.faces[k] = { file: await file("faces", k, "bin", await gzip(f.buf)), family: f.family };
+    for (const [k, f] of R.faces) man.faces[k] = { file: await file("faces", k, "bin", await gzip(f.buf)), family: f.family, ...(f.seed !== undefined ? { seed: f.seed } : {}) };
     const groupFiles = {}, wallFiles = {};
     for (const [k, buf] of R.groups) groupFiles[k] = await file("buildings", k, "bin", await gzip(buf));
     for (const [k, buf] of R.walls) wallFiles[k] = await file("fields", k, "bin", await gzip(buf));

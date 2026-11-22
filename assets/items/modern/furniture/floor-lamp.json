@@ -1,0 +1,208 @@
+{
+ "kind": "item",
+ "name": "Floor lamp",
+ "category": "furniture/lamp",
+ "era": "1920-2030",
+ "region": "everywhere",
+ "_about": "a standard floor lamp, 1.6 m: a heavy disc base, a slender metal stem, a linen drum shade 44 cm across over the bulb and its holder, the flex with its foot switch",
+ "params": {},
+ "materials": {
+  "metal": {
+   "pick": [
+    "paint-black",
+    "brass",
+    "chrome",
+    "aluminium"
+   ]
+  },
+  "shade": {
+   "pick": [
+    "linen",
+    "#e8dfc9",
+    "#2f3236",
+    "canvas"
+   ]
+  },
+  "bulb": "lamp",
+  "flex": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "base",
+   "type": "lathe",
+   "material": "metal",
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.15,
+     0
+    ],
+    [
+     0.155,
+     0.01
+    ],
+    [
+     0.14,
+     0.03
+    ],
+    [
+     0.02,
+     0.04
+    ],
+    [
+     0,
+     0.04
+    ]
+   ],
+   "sides": 24,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "stem",
+   "type": "rod",
+   "material": "metal",
+   "r": 0.011,
+   "from": [
+    0,
+    0.03,
+    0
+   ],
+   "to": [
+    0,
+    1.4,
+    0
+   ],
+   "sides": 10
+  },
+  {
+   "id": "holder",
+   "type": "lathe",
+   "material": "metal",
+   "profile": [
+    [
+     0,
+     1.38
+    ],
+    [
+     0.022,
+     1.38
+    ],
+    [
+     0.022,
+     1.44
+    ],
+    [
+     0,
+     1.44
+    ]
+   ],
+   "sides": 10,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "bulb",
+   "type": "sphere",
+   "material": "bulb",
+   "r": 0.032,
+   "at": [
+    0,
+    1.47,
+    0
+   ],
+   "sides": 12
+  },
+  {
+   "id": "shade",
+   "type": "lathe",
+   "material": "shade",
+   "profile": [
+    [
+     0.22,
+     1.33
+    ],
+    [
+     0.215,
+     1.6
+    ]
+   ],
+   "caps": false,
+   "double": true,
+   "sides": 28,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "spider",
+   "type": "rod",
+   "material": "metal",
+   "r": 0.003,
+   "from": [
+    0,
+    1.6,
+    0
+   ],
+   "to": [
+    0.214,
+    1.6,
+    0
+   ],
+   "sides": 4,
+   "around": {
+    "n": 3,
+    "r": 0
+   }
+  },
+  {
+   "id": "flex",
+   "type": "sweep",
+   "material": "flex",
+   "path": [
+    [
+     0.01,
+     0.03,
+     -0.12
+    ],
+    [
+     0.02,
+     0.006,
+     -0.3
+    ],
+    [
+     0.1,
+     0.005,
+     -0.55
+    ]
+   ],
+   "r": 0.0035
+  },
+  {
+   "id": "switch",
+   "type": "box",
+   "material": "flex",
+   "size": [
+    0.07,
+    0.02,
+    0.04
+   ],
+   "at": [
+    0.1,
+    0.01,
+    -0.55
+   ]
+  }
+ ]
+}

@@ -96,10 +96,12 @@ M = []
 # (round 3: four layers in smaller steps, blended wider -- three left steps on the belly)
 # (round 3b: the rim layer blended TIGHT -- wider than its own 6 mm, every station where its sliver triangles meet
 # bulged into a rib: the scalloped rim and the ribbed belly)
+# (2026-11-21: each layer ONE `sheet` -- sealib.sheet, sculpt.js prepareSheet -- where it was a `tri` a face, 177 in all:
+# the same outline and faces thickened as one, each POINT on the bone its z lies in, the skin eased across a face)
+wb = lambda z: wbone_m(z)
+wb.point = lambda p: wbone_m(p[2])
 for li, (ol, r) in enumerate([(m_outline(0.0, ZM - 0.01, tip=True), 0.006), (m_outline(0.22, 0.82), 0.0085), (m_outline(0.4, 0.62), 0.012), (m_outline(0.56, 0.44), 0.016)]):
-    for q in fin(ol, r, "@body", bone="body", id=f"mwing{li}_", k=0.003 if li == 0 else 0.016, mirror=True):
-        q["bone"] = wbone_m((q["a"][2] + q["b"][2] + q["c"][2]) / 3)
-        M.append(q)
+    M.append(sheet(ol, r, "@body", bone=wb, id=f"mwing{li}", k=0.003 if li == 0 else 0.016, mirror=True))
 M += [
     S("ell", id="mhead", c=[0.12, YM + 0.004, 0], r=[0.15, 0.05, 0.12], k=0.03, color="@body"),
     S("ell", id="mback", c=[-0.1, YM + 0.008, 0], r=[0.26, 0.055, 0.15], k=0.03, color="@body"),

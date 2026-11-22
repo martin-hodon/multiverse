@@ -138,7 +138,8 @@
    "ribs": {
     "n": 10,
     "w": 0.07
-   }
+   },
+   "lean": true
   },
   {
    "id": "oars",
@@ -278,40 +279,22 @@
    "sides": 4
   },
   {
-   "id": "shroud L * 0.45 0",
-   "type": "rod",
-   "material": "rope",
-   "from": [
+   "id": "shrouds L * 0.45",
+   "use": "items/components/shrouds",
+   "at": [
     "L * 0.45",
-    "D * 0.15 + (mastH) * 0.97",
+    0,
     0
    ],
-   "to": [
-    "L * 0.45 + ((D * 0.15 + (mastH) * 0.97) - (D * 1.0188)) * -0.2",
-    "D * 1.0188",
-    "(B * 0.5) * 1.0"
-   ],
-   "r": 0.02,
-   "sides": 4,
-   "mirror": "z"
-  },
-  {
-   "id": "shroud L * 0.45 1",
-   "type": "rod",
-   "material": "rope",
-   "from": [
-    "L * 0.45",
-    "D * 0.15 + (mastH) * 0.97",
-    0
-   ],
-   "to": [
-    "L * 0.45 + ((D * 0.15 + (mastH) * 0.97) - (D * 1.0188)) * 0.1",
-    "D * 1.0188",
-    "(B * 0.5) * 1.0"
-   ],
-   "r": 0.02,
-   "sides": 4,
-   "mirror": "z"
+   "params": {
+    "top": "D * 0.15 + (mastH) * 0.97",
+    "foot": "D * 1.0188",
+    "z": "(B * 0.5) * 1.0",
+    "n": 2,
+    "r": 0.02,
+    "rat": 0,
+    "topmast": 0
+   }
   }
  ],
  "markers": [

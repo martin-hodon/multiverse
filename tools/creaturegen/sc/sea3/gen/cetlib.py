@@ -107,7 +107,7 @@ def plates(id, layers, bone, color, k=0.02, kc=None, mirror=False, pat=None):
     edges and thicker inside, its outline exact (no slice steps)"""
     out = []
     for li, (pts, r) in enumerate(layers):
-        out += fin(pts, r, color, bone=bone, id=f"{id}{li}_", k=k, kc=kc, mirror=mirror, pat=pat)
+        out.append(sheet(pts, r, color, bone=bone, id=f"{id}{li}", k=k, kc=kc, mirror=mirror, pat=pat))   # (one `sheet` a layer since 2026-11-22: its faces' ids id{li}_j as before)
     return out
 
 

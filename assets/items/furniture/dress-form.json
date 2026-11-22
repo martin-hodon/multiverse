@@ -1,0 +1,356 @@
+{
+ "kind": "item",
+ "name": "Dress form",
+ "category": "furniture",
+ "era": "1700-1950",
+ "region": "Europe",
+ "_about": "a tailor's dress form: a padded torso on a turned pole over a three-legged foot, a garment in the making on it -- the bodice pinned over the torso, the skirt flaring from the waist -- and a tape measure hung round its neck",
+ "params": {
+  "skirt": {
+   "pick": [
+    0,
+    1,
+    1
+   ]
+  }
+ },
+ "materials": {
+  "wood": {
+   "pick": [
+    "walnut",
+    "oak",
+    "mahogany"
+   ]
+  },
+  "pad": {
+   "pick": [
+    "linen",
+    "canvas"
+   ]
+  },
+  "garment": {
+   "pick": [
+    "velvet-red",
+    "damask-blue",
+    "wool",
+    "velvet-green",
+    "damask-red"
+   ]
+  },
+  "tape": "paint-yellow",
+  "brass": "brass",
+  "pin": "velvet-red"
+ },
+ "parts": [
+  {
+   "id": "feet",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.022,
+   "from": [
+    0.02,
+    0.12,
+    0
+   ],
+   "to": [
+    0.28,
+    0.01,
+    0
+   ],
+   "sides": 6,
+   "r1": 0.016,
+   "around": {
+    "n": 3,
+    "r": 0
+   }
+  },
+  {
+   "id": "hub",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0.045,
+     0.08
+    ],
+    [
+     0.045,
+     0.16
+    ],
+    [
+     0.03,
+     0.2
+    ],
+    [
+     0,
+     0.2
+    ]
+   ],
+   "sides": 10
+  },
+  {
+   "id": "pole",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.016,
+   "from": [
+    0,
+    0.16,
+    0
+   ],
+   "to": [
+    0,
+    0.98,
+    0
+   ],
+   "sides": 8
+  },
+  {
+   "id": "collar",
+   "type": "lathe",
+   "material": "brass",
+   "profile": [
+    [
+     0.03,
+     0.8
+    ],
+    [
+     0.03,
+     0.83
+    ],
+    [
+     0,
+     0.83
+    ]
+   ],
+   "sides": 10
+  },
+  {
+   "id": "torso",
+   "type": "lathe",
+   "material": "pad",
+   "profile": [
+    [
+     0,
+     0.95
+    ],
+    [
+     0.165,
+     0.95
+    ],
+    [
+     0.176,
+     1.0
+    ],
+    [
+     0.14,
+     1.11
+    ],
+    [
+     0.132,
+     1.14
+    ],
+    [
+     0.158,
+     1.24
+    ],
+    [
+     0.17,
+     1.3
+    ],
+    [
+     0.158,
+     1.38
+    ],
+    [
+     0.11,
+     1.43
+    ],
+    [
+     0.05,
+     1.46
+    ],
+    [
+     0.045,
+     1.5
+    ],
+    [
+     0,
+     1.5
+    ]
+   ],
+   "sides": 18,
+   "stretch": [
+    1,
+    1,
+    0.72
+   ]
+  },
+  {
+   "id": "neckCap",
+   "type": "lathe",
+   "material": "wood",
+   "profile": [
+    [
+     0.05,
+     1.5
+    ],
+    [
+     0.05,
+     1.515
+    ],
+    [
+     0.03,
+     1.535
+    ],
+    [
+     0,
+     1.54
+    ]
+   ],
+   "sides": 12,
+   "stretch": [
+    1,
+    1,
+    0.8
+   ]
+  },
+  {
+   "id": "bodice",
+   "type": "lathe",
+   "material": "garment",
+   "profile": [
+    [
+     0.146,
+     1.08
+    ],
+    [
+     0.145,
+     1.11
+    ],
+    [
+     0.144,
+     1.14
+    ],
+    [
+     0.17,
+     1.24
+    ],
+    [
+     0.182,
+     1.3
+    ],
+    [
+     0.171,
+     1.37
+    ],
+    [
+     0.126,
+     1.415
+    ]
+   ],
+   "sides": 18,
+   "caps": false,
+   "stretch": [
+    1,
+    1,
+    0.72
+   ]
+  },
+  {
+   "id": "skirt",
+   "type": "lathe",
+   "material": "garment",
+   "profile": [
+    [
+     0.15,
+     1.1
+    ],
+    [
+     0.2,
+     0.95
+    ],
+    [
+     0.27,
+     0.75
+    ],
+    [
+     0.31,
+     0.6
+    ]
+   ],
+   "sides": 18,
+   "caps": false,
+   "double": true,
+   "stretch": [
+    1,
+    1,
+    0.8
+   ],
+   "when": "skirt"
+  },
+  {
+   "id": "tape",
+   "type": "sweep",
+   "material": "tape",
+   "path": [
+    [
+     -0.06,
+     1.16,
+     0.115
+    ],
+    [
+     -0.068,
+     1.32,
+     0.115
+    ],
+    [
+     -0.055,
+     1.43,
+     0.06
+    ],
+    [
+     0,
+     1.455,
+     -0.045
+    ],
+    [
+     0.055,
+     1.43,
+     0.06
+    ],
+    [
+     0.068,
+     1.32,
+     0.115
+    ],
+    [
+     0.06,
+     1.2,
+     0.115
+    ]
+   ],
+   "section": [
+    0.014,
+    0.0012
+   ]
+  },
+  {
+   "id": "pincushion",
+   "type": "sphere",
+   "material": "pin",
+   "r": 0.03,
+   "at": [
+    0.13,
+    1.4,
+    0.0
+   ],
+   "sides": 8,
+   "stretch": [
+    1,
+    0.6,
+    1
+   ]
+  }
+ ]
+}

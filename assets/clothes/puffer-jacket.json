@@ -1,0 +1,55 @@
+{
+  "name": "Puffer jacket",
+  "kind": "garment",
+  "layer": 4,
+  "_about": "the puffer (down) jacket (Eddie Bauer, 1936; a city coat from the 1980s): nylon shell quilted in horizontal baffles filled with down, a zip up the front to a stand collar, to the hips, its sleeves puffed to the wrist",
+  "thick": 0.02,
+  "wear": 0,
+  "fabrics": {
+    "main": {
+      "pattern": "fabrics/hoops",
+      "palette": "navy"
+    },
+    "trim": {
+      "pattern": "fabrics/plain",
+      "palette": "rubber"
+    }
+  },
+  "use": [
+    {
+      "use": "clothes/components/bodice",
+      "params": {
+        "to": "hip + 0.05",
+        "neckline": "round",
+        "neckFront": 0.004,
+        "neckBack": 0.0
+      }
+    },
+    {
+      "use": "clothes/components/sleeve",
+      "params": {
+        "to": "wrist + 0.005"
+      }
+    },
+    {
+      "use": "clothes/components/collar",
+      "params": {
+        "height": 0.06,
+        "drop": 0.01,
+        "flare": 0.35,
+        "gap": 0
+      }
+    },
+    {
+      "use": "clothes/components/band",
+      "params": {
+        "from": "collar",
+        "to": "hip + 0.05",
+        "thick": 0.024,
+        "open": true,
+        "centre": 0,
+        "span": 2.5
+      }
+    }
+  ]
+}

@@ -1,0 +1,452 @@
+{
+ "kind": "item",
+ "name": "Footbridge",
+ "category": "infrastructure",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a covered footbridge over the tracks: a deck 28 m long along z (eight bays of 3.5 m, z +-14) and 3 m wide, its floor at D (6.6 m: over the trains' wires), steel posts, solid parapets and glazing, a roof; columns at both ends; stairs down to the ground at either end (`endA`, `endB`); any bay's side may be left open (`w0`..`w7` on -x, `e0`..`e7` on +x) for a stair from a platform.",
+ "params": {
+  "D": 6.6,
+  "endA": 1,
+  "endB": 1,
+  "mid": 0,
+  "mz": 0,
+  "w0": 1,
+  "e0": 1,
+  "w1": 1,
+  "e1": 1,
+  "w2": 1,
+  "e2": 1,
+  "w3": 1,
+  "e3": 1,
+  "w4": 1,
+  "e4": 1,
+  "w5": 1,
+  "e5": 1,
+  "w6": 1,
+  "e6": 1,
+  "w7": 1,
+  "e7": 1
+ },
+ "materials": {
+  "deck": "#7f8389",
+  "floorTop": "#56595e",
+  "roofB": "#4b5560",
+  "fasciaB": "#2f5e86",
+  "frameB": "#3d4a57",
+  "parapet": "#2f5e86",
+  "glazing": "glass-light"
+ },
+ "parts": [
+  {
+   "id": "deck",
+   "type": "box",
+   "material": "deck",
+   "size": [
+    3.2,
+    0.45,
+    28.0
+   ],
+   "at": [
+    0,
+    "D - 0.225",
+    0
+   ]
+  },
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "floorTop",
+   "size": [
+    3.0,
+    0.02,
+    28.0
+   ],
+   "at": [
+    0,
+    "D + 0.01",
+    0
+   ]
+  },
+  {
+   "id": "roof",
+   "type": "box",
+   "material": "roofB",
+   "size": [
+    3.6,
+    0.25,
+    28.4
+   ],
+   "at": [
+    0,
+    "D + 2.72",
+    0
+   ]
+  },
+  {
+   "id": "fascia",
+   "type": "box",
+   "material": "fasciaB",
+   "size": [
+    0.08,
+    0.4,
+    28.4
+   ],
+   "at": [
+    1.8,
+    "D + 2.7",
+    0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "post",
+   "type": "box",
+   "material": "frameB",
+   "size": [
+    0.15,
+    2.6,
+    0.15
+   ],
+   "at": [
+    [
+     1.5,
+     "D + 1.3",
+     -14.0
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     -14.0
+    ],
+    [
+     1.5,
+     "D + 1.3",
+     -10.5
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     -10.5
+    ],
+    [
+     1.5,
+     "D + 1.3",
+     -7.0
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     -7.0
+    ],
+    [
+     1.5,
+     "D + 1.3",
+     -3.5
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     -3.5
+    ],
+    [
+     1.5,
+     "D + 1.3",
+     0.0
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     0.0
+    ],
+    [
+     1.5,
+     "D + 1.3",
+     3.5
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     3.5
+    ],
+    [
+     1.5,
+     "D + 1.3",
+     7.0
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     7.0
+    ],
+    [
+     1.5,
+     "D + 1.3",
+     10.5
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     10.5
+    ],
+    [
+     1.5,
+     "D + 1.3",
+     14.0
+    ],
+    [
+     -1.5,
+     "D + 1.3",
+     14.0
+    ]
+   ]
+  },
+  {
+   "id": "chord",
+   "type": "box",
+   "material": "frameB",
+   "size": [
+    0.15,
+    0.2,
+    28.0
+   ],
+   "at": [
+    1.5,
+    "D + 2.5",
+    0
+   ],
+   "mirror": "x"
+  },
+  {
+   "id": "paraw",
+   "each": 8,
+   "type": "box",
+   "material": "parapet",
+   "size": [
+    0.08,
+    1.0,
+    3.35
+   ],
+   "at": [
+    -1.5,
+    "D + 0.5",
+    "-12.25 + 3.5 * i"
+   ],
+   "when": "w{i}"
+  },
+  {
+   "id": "glazew",
+   "each": 8,
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    0.03,
+    1.3,
+    3.35
+   ],
+   "at": [
+    -1.5,
+    "D + 1.65",
+    "-12.25 + 3.5 * i"
+   ],
+   "when": "w{i}"
+  },
+  {
+   "id": "handw",
+   "each": 8,
+   "type": "rod",
+   "material": "frameB",
+   "r": 0.025,
+   "from": [
+    -1.4,
+    "D + 0.95",
+    "-14 + 3.5 * i"
+   ],
+   "to": [
+    -1.4,
+    "D + 0.95",
+    "-10.5 + 3.5 * i"
+   ],
+   "sides": 6,
+   "when": "w{i}"
+  },
+  {
+   "id": "parae",
+   "each": 8,
+   "type": "box",
+   "material": "parapet",
+   "size": [
+    0.08,
+    1.0,
+    3.35
+   ],
+   "at": [
+    1.5,
+    "D + 0.5",
+    "-12.25 + 3.5 * i"
+   ],
+   "when": "e{i}"
+  },
+  {
+   "id": "glazee",
+   "each": 8,
+   "type": "box",
+   "material": "glazing",
+   "size": [
+    0.03,
+    1.3,
+    3.35
+   ],
+   "at": [
+    1.5,
+    "D + 1.65",
+    "-12.25 + 3.5 * i"
+   ],
+   "when": "e{i}"
+  },
+  {
+   "id": "hande",
+   "each": 8,
+   "type": "rod",
+   "material": "frameB",
+   "r": 0.025,
+   "from": [
+    1.4,
+    "D + 0.95",
+    "-14 + 3.5 * i"
+   ],
+   "to": [
+    1.4,
+    "D + 0.95",
+    "-10.5 + 3.5 * i"
+   ],
+   "sides": 6,
+   "when": "e{i}"
+  },
+  {
+   "id": "endAWall",
+   "type": "box",
+   "material": "parapet",
+   "size": [
+    3.0,
+    2.6,
+    0.12
+   ],
+   "at": [
+    0,
+    "D + 1.3",
+    -14.0
+   ],
+   "when": {
+    "endA": 0
+   }
+  },
+  {
+   "id": "endAStair",
+   "use": "items/modern/infra/stair-flight",
+   "at": [
+    0,
+    0,
+    "-1 * (14.0 + D * 1.7)",
+    -90,
+    0,
+    0
+   ],
+   "when": "endA",
+   "params": {
+    "H": "D",
+    "w": 2.4
+   }
+  },
+  {
+   "id": "endBWall",
+   "type": "box",
+   "material": "parapet",
+   "size": [
+    3.0,
+    2.6,
+    0.12
+   ],
+   "at": [
+    0,
+    "D + 1.3",
+    14.0
+   ],
+   "when": {
+    "endB": 0
+   }
+  },
+  {
+   "id": "endBStair",
+   "use": "items/modern/infra/stair-flight",
+   "at": [
+    0,
+    0,
+    "1 * (14.0 + D * 1.7)",
+    90,
+    0,
+    0
+   ],
+   "when": "endB",
+   "params": {
+    "H": "D",
+    "w": 2.4
+   }
+  },
+  {
+   "id": "column",
+   "type": "box",
+   "material": "frameB",
+   "size": [
+    0.4,
+    "D - 0.45",
+    0.4
+   ],
+   "at": [
+    [
+     1.3,
+     "(D - 0.45) / 2",
+     -13.7
+    ],
+    [
+     1.3,
+     "(D - 0.45) / 2",
+     13.7
+    ],
+    [
+     -1.3,
+     "(D - 0.45) / 2",
+     -13.7
+    ],
+    [
+     -1.3,
+     "(D - 0.45) / 2",
+     13.7
+    ]
+   ]
+  },
+  {
+   "id": "columnMid",
+   "type": "box",
+   "material": "frameB",
+   "size": [
+    0.4,
+    "D - 0.45",
+    0.4
+   ],
+   "at": [
+    [
+     1.3,
+     "(D - 0.45) / 2",
+     "mz"
+    ],
+    [
+     -1.3,
+     "(D - 0.45) / 2",
+     "mz"
+    ]
+   ],
+   "when": "mid"
+  }
+ ]
+}

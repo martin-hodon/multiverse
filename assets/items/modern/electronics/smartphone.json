@@ -1,0 +1,149 @@
+{
+ "kind": "item",
+ "name": "Smartphone",
+ "category": "electronics",
+ "era": "2010-2030",
+ "region": "everywhere",
+ "_about": "a smartphone of the 2020s, 14.7 x 7.15 x 0.78 cm, lying on its back: a rounded body, the glass screen in a thin border facing up, volume and power buttons on its sides, the earpiece slot -- its top toward -x",
+ "params": {},
+ "materials": {
+  "body": {
+   "pick": [
+    "#2b2d31",
+    "paint-silver",
+    "#3c4a5c",
+    "#e5ddd0",
+    "#6b2232"
+   ]
+  },
+  "case": "#0b0c0e",
+  "glass": "#18202b",
+  "slot": "#2a2b2e"
+ },
+ "parts": [
+  {
+   "id": "body",
+   "type": "loft",
+   "material": "body",
+   "stations": [
+    [
+     -0.0735,
+     0.026,
+     0,
+     0.0078
+    ],
+    [
+     -0.0723,
+     0.0325,
+     0,
+     0.0078
+    ],
+    [
+     -0.0695,
+     0.0352,
+     0,
+     0.0078
+    ],
+    [
+     -0.0635,
+     0.0358,
+     0,
+     0.0078
+    ],
+    [
+     0.0635,
+     0.0358,
+     0,
+     0.0078
+    ],
+    [
+     0.0695,
+     0.0352,
+     0,
+     0.0078
+    ],
+    [
+     0.0723,
+     0.0325,
+     0,
+     0.0078
+    ],
+    [
+     0.0735,
+     0.026,
+     0,
+     0.0078
+    ]
+   ],
+   "round": [
+    0.0028,
+    0.0028
+   ],
+   "seg": 2,
+   "corner": 3
+  },
+  {
+   "id": "screen",
+   "use": "items/modern/components/screen",
+   "at": [
+    0,
+    0.006,
+    0,
+    0,
+    0,
+    90
+   ],
+   "params": {
+    "w": 0.064,
+    "h": 0.138,
+    "b": 0.0022,
+    "t": 0.0015
+   }
+  },
+  {
+   "id": "slot",
+   "type": "box",
+   "material": "slot",
+   "size": [
+    0.0015,
+    0.0006,
+    0.01
+   ],
+   "at": [
+    -0.0712,
+    0.009,
+    0
+   ]
+  },
+  {
+   "id": "volume",
+   "type": "box",
+   "material": "body",
+   "size": [
+    0.022,
+    0.0035,
+    0.0014
+   ],
+   "at": [
+    -0.03,
+    0.0039,
+    -0.0362
+   ]
+  },
+  {
+   "id": "power",
+   "type": "box",
+   "material": "body",
+   "size": [
+    0.014,
+    0.0035,
+    0.0014
+   ],
+   "at": [
+    -0.025,
+    0.0039,
+    0.0362
+   ]
+  }
+ ]
+}

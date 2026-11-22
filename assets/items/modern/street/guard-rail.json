@@ -1,0 +1,127 @@
+{
+ "kind": "item",
+ "name": "Pedestrian guard rail",
+ "category": "street",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a pedestrian guard rail panel at the kerb: 2 m long and 1 m high, a top rail and a bottom rail with 22 vertical bars between, a square post at each end set in the pavement; galvanised or painted. It runs along z; lay them end to end every 2 m.",
+ "params": {},
+ "materials": {
+  "rail": {
+   "pick": [
+    "steel",
+    "steel",
+    "paint-green",
+    "paint-black"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "post",
+   "type": "box",
+   "material": "rail",
+   "size": [
+    0.06,
+    1.05,
+    0.06
+   ],
+   "at": [
+    [
+     0,
+     0.525,
+     -1.0
+    ],
+    [
+     0,
+     0.525,
+     1.0
+    ]
+   ]
+  },
+  {
+   "id": "postCap",
+   "type": "sphere",
+   "material": "rail",
+   "r": 0.035,
+   "at": [
+    [
+     0,
+     1.05,
+     -1.0
+    ],
+    [
+     0,
+     1.05,
+     1.0
+    ]
+   ],
+   "stretch": [
+    1,
+    0.5,
+    1
+   ],
+   "sides": 8
+  },
+  {
+   "id": "top",
+   "type": "box",
+   "material": "rail",
+   "size": [
+    0.05,
+    0.05,
+    2.0
+   ],
+   "at": [
+    0,
+    0.98,
+    0
+   ]
+  },
+  {
+   "id": "bottom",
+   "type": "box",
+   "material": "rail",
+   "size": [
+    0.04,
+    0.04,
+    2.0
+   ],
+   "at": [
+    0,
+    0.18,
+    0
+   ]
+  },
+  {
+   "id": "bar",
+   "type": "rod",
+   "material": "rail",
+   "r": 0.009,
+   "from": [
+    0,
+    0.18,
+    0
+   ],
+   "to": [
+    0,
+    0.98,
+    0
+   ],
+   "sides": 6,
+   "along": {
+    "n": 22,
+    "from": [
+     0,
+     0,
+     -0.92
+    ],
+    "to": [
+     0,
+     0,
+     0.92
+    ]
+   }
+  }
+ ]
+}

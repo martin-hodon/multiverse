@@ -1,0 +1,99 @@
+{
+ "kind": "item",
+ "name": "Road sign: stop",
+ "category": "street",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a road sign on its galvanised post (76 mm, 2.9 m): the face clamped by two bands to the post's front, its middle at 2.45 m -- `sign` stop (an octagon 750 across), give-way (a triangle 900 a side), speed (a 600 red ring, `limit`), no-entry, crossing (the walking figure in a white triangle on blue), parking (a blue square, a white P). The face looks along +x.",
+ "params": {
+  "sign": "stop",
+  "limit": {
+   "pick": [
+    20,
+    30,
+    30,
+    50,
+    50,
+    70
+   ]
+  }
+ },
+ "materials": {
+  "pole": "steel",
+  "cap": "plastic-black"
+ },
+ "parts": [
+  {
+   "id": "post",
+   "use": "items/modern/components/pole",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "params": {
+    "h": 2.9,
+    "r": 0.038,
+    "base": "none"
+   }
+  },
+  {
+   "id": "face",
+   "use": "items/modern/components/sign-face",
+   "at": [
+    0.055,
+    2.45,
+    0,
+    90,
+    0,
+    0
+   ],
+   "params": {
+    "sign": "sign",
+    "limit": "limit"
+   }
+  },
+  {
+   "id": "band",
+   "type": "ring",
+   "material": "pole",
+   "r": 0.04,
+   "tube": 0.006,
+   "at": [
+    [
+     0,
+     2.27,
+     0
+    ],
+    [
+     0,
+     2.63,
+     0
+    ]
+   ],
+   "sides": 6
+  },
+  {
+   "id": "clip",
+   "type": "box",
+   "material": "pole",
+   "size": [
+    0.03,
+    0.035,
+    0.05
+   ],
+   "at": [
+    [
+     0.04,
+     2.27,
+     0
+    ],
+    [
+     0.04,
+     2.63,
+     0
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,108 @@
+{
+ "kind": "item",
+ "name": "Lamp",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a lamp: a round or square lens in its chrome bezel, facing +x",
+ "params": {
+  "r": 0.08,
+  "h": 0.07,
+  "shape": "round"
+ },
+ "materials": {
+  "lens": "lamp",
+  "bezel": "chrome"
+ },
+ "parts": [
+  {
+   "id": "lens",
+   "type": "lathe",
+   "material": "lens",
+   "profile": [
+    [
+     0,
+     0.012
+    ],
+    [
+     "r * 0.8",
+     0.01
+    ],
+    [
+     "r * 0.95",
+     0
+    ],
+    [
+     "r * 0.95",
+     -0.02
+    ]
+   ],
+   "sides": 16,
+   "when": {
+    "shape": "round"
+   },
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "bezel",
+   "type": "ring",
+   "material": "bezel",
+   "r": "r * 0.95",
+   "tube": "r * 0.08",
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    90
+   ],
+   "when": {
+    "shape": "round"
+   }
+  },
+  {
+   "id": "lensSq",
+   "type": "box",
+   "material": "lens",
+   "size": [
+    0.03,
+    "h",
+    "r * 2"
+   ],
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "when": {
+    "shape": "square"
+   }
+  },
+  {
+   "id": "rimSq",
+   "type": "box",
+   "material": "bezel",
+   "size": [
+    0.024,
+    "h + 0.02",
+    "r * 2 + 0.02"
+   ],
+   "at": [
+    -0.006,
+    0,
+    0
+   ],
+   "when": {
+    "shape": "square"
+   }
+  }
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "kind": "item",
+ "name": "Rotor",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "blades round a hub, turning about y: a helicopter's rotor (long, thin), a propeller (short, twisted) turned by its parent",
+ "params": {
+  "n": 4,
+  "R": 5.0,
+  "c": 0.3,
+  "t": 0.04,
+  "pitch": 6,
+  "hubR": 0.18,
+  "hubH": 0.3
+ },
+ "materials": {
+  "blade": "paint-black",
+  "hub": "steel"
+ },
+ "parts": [
+  {
+   "id": "blade",
+   "type": "box",
+   "material": "blade",
+   "size": [
+    "R",
+    "t",
+    "c"
+   ],
+   "at": [
+    0,
+    0,
+    0,
+    0,
+    "pitch",
+    0
+   ],
+   "around": {
+    "n": "n",
+    "r": "R / 2 + hubR * 0.8",
+    "plane": "xz"
+   }
+  },
+  {
+   "id": "hub",
+   "type": "lathe",
+   "material": "hub",
+   "profile": [
+    [
+     0,
+     "-hubH / 2"
+    ],
+    [
+     "hubR",
+     "-hubH / 2"
+    ],
+    [
+     "hubR",
+     "hubH / 2"
+    ],
+    [
+     "hubR * 0.5",
+     "hubH * 0.8"
+    ],
+    [
+     0,
+     "hubH * 0.9"
+    ]
+   ],
+   "sides": 12,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  }
+ ]
+}

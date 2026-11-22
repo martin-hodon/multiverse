@@ -1,0 +1,250 @@
+{
+ "kind": "item",
+ "name": "Bed (modern)",
+ "category": "furniture/bed",
+ "era": "1950-2030",
+ "region": "everywhere",
+ "_about": "a modern double bed for a 160 x 200 cm mattress: an upholstered frame on short legs, a tall padded headboard, a 22 cm mattress, two pillows, a duvet over the sides and turned down at the head -- along x, its head at -x",
+ "params": {},
+ "materials": {
+  "frame": {
+   "pick": [
+    "upholstery-grey",
+    "upholstery",
+    "upholstery-red",
+    "wool",
+    "#7d8a6a",
+    "#b7ab96"
+   ]
+  },
+  "wood": "oak",
+  "sheet": "linen",
+  "duvet": {
+   "pick": [
+    "linen",
+    "#c9d4de",
+    "#e9e3d6",
+    "damask-blue",
+    "#b9a48a"
+   ]
+  },
+  "pillow": "linen"
+ },
+ "parts": [
+  {
+   "id": "frame",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    2.1,
+    0.27,
+    1.7
+   ],
+   "at": [
+    0,
+    0.235,
+    0
+   ]
+  },
+  {
+   "id": "legs",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.022,
+   "from": [
+    0,
+    0.11,
+    0
+   ],
+   "to": [
+    0.0,
+    0,
+    0.0
+   ],
+   "sides": 8,
+   "r0": 0.022,
+   "r1": 0.018,
+   "at": [
+    [
+     0.95,
+     0,
+     0.75,
+     0
+    ],
+    [
+     0.95,
+     0,
+     -0.75,
+     90
+    ],
+    [
+     -0.95,
+     0,
+     -0.75,
+     180
+    ],
+    [
+     -0.95,
+     0,
+     0.75,
+     270
+    ]
+   ]
+  },
+  {
+   "id": "headboard",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.1,
+    1.05,
+    1.74
+   ],
+   "at": [
+    -1.1,
+    0.62,
+    0
+   ]
+  },
+  {
+   "id": "headPad",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.08,
+    0.62,
+    0.55
+   ],
+   "at": [
+    -1.03,
+    0.86,
+    0
+   ],
+   "round": 0.025,
+   "along": {
+    "n": 3,
+    "from": [
+     0,
+     0,
+     -0.56
+    ],
+    "to": [
+     0,
+     0,
+     0.56
+    ]
+   }
+  },
+  {
+   "id": "mattress",
+   "type": "box",
+   "material": "sheet",
+   "size": [
+    2.0,
+    0.22,
+    1.6
+   ],
+   "at": [
+    0,
+    0.45,
+    0
+   ],
+   "round": 0.04
+  },
+  {
+   "id": "pillow",
+   "type": "box",
+   "material": "pillow",
+   "size": [
+    0.42,
+    0.13,
+    0.68
+   ],
+   "at": [
+    -0.75,
+    0.62,
+    0.38,
+    0,
+    0,
+    -12
+   ],
+   "round": 0.06,
+   "mirror": "z"
+  },
+  {
+   "id": "duvet",
+   "type": "loft",
+   "material": "duvet",
+   "stations": [
+    [
+     -0.52,
+     0.85,
+     0.33,
+     0.6
+    ],
+    [
+     0.0,
+     0.86,
+     0.32,
+     0.61
+    ],
+    [
+     0.9,
+     0.86,
+     0.32,
+     0.6
+    ],
+    [
+     1.04,
+     0.85,
+     0.32,
+     0.6
+    ]
+   ],
+   "round": [
+    0.0,
+    0.07
+   ],
+   "seg": 2
+  },
+  {
+   "id": "turnDown",
+   "type": "loft",
+   "material": "duvet",
+   "stations": [
+    [
+     -0.56,
+     0.835,
+     0.57,
+     0.645
+    ],
+    [
+     -0.3,
+     0.835,
+     0.57,
+     0.64
+    ]
+   ],
+   "round": [
+    0.0,
+    0.035
+   ],
+   "seg": 1
+  }
+ ],
+ "markers": [
+  {
+   "role": "bed",
+   "at": [
+    0,
+    0,
+    0,
+    90
+   ],
+   "data": {
+    "top": 0.6,
+    "foot": 1.35
+   }
+  }
+ ]
+}

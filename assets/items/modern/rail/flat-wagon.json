@@ -1,0 +1,561 @@
+{
+ "kind": "item",
+ "name": "Container flat wagon",
+ "category": "vehicle",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a container flat wagon (Sgns type), 19.74 m over buffers, its deck 1.155 m high: fish-bellied side and centre sills, cross members, spigots, a 40-ft and a 20-ft container, Y25 bogies, buffers and hooks",
+ "params": {},
+ "materials": {
+  "frame": {
+   "pick": [
+    "paint-black",
+    "#5a2e24",
+    "#3f4a3a"
+   ]
+  },
+  "deckc": "steel",
+  "box40": {
+   "pick": [
+    "#5d9ccb",
+    "#a8342e",
+    "#3b7148",
+    "#8c9196",
+    "#22427e"
+   ]
+  },
+  "box20": {
+   "pick": [
+    "#d9b13a",
+    "#d0642b",
+    "#2f8487",
+    "#d9d9d4",
+    "#73492f"
+   ]
+  },
+  "steel": "steel",
+  "buffer": "steel"
+ },
+ "parts": [
+  {
+   "id": "sideSill",
+   "type": "plate",
+   "material": "frame",
+   "outline": [
+    [
+     -9.2,
+     1.155
+    ],
+    [
+     9.2,
+     1.155
+    ],
+    [
+     9.2,
+     0.855
+    ],
+    [
+     5.0,
+     0.555
+    ],
+    [
+     -5.0,
+     0.555
+    ],
+    [
+     -9.2,
+     0.855
+    ]
+   ],
+   "thick": 0.2,
+   "mirror": "z",
+   "at": [
+    0,
+    0,
+    1.2
+   ]
+  },
+  {
+   "id": "centreSill",
+   "type": "plate",
+   "material": "frame",
+   "outline": [
+    [
+     -9.2,
+     1.155
+    ],
+    [
+     9.2,
+     1.155
+    ],
+    [
+     9.2,
+     0.855
+    ],
+    [
+     5.0,
+     0.555
+    ],
+    [
+     -5.0,
+     0.555
+    ],
+    [
+     -9.2,
+     0.855
+    ]
+   ],
+   "thick": 0.3,
+   "at": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "cross",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.18,
+    0.2,
+    2.4
+   ],
+   "at": [
+    0,
+    1.055,
+    0
+   ],
+   "along": {
+    "n": 11,
+    "from": [
+     -9.1,
+     0,
+     0
+    ],
+    "to": [
+     9.1,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "walk",
+   "type": "box",
+   "material": "deckc",
+   "size": [
+    18.4,
+    0.03,
+    0.3
+   ],
+   "at": [
+    0,
+    1.14,
+    1.15
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "headstock",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.25,
+    0.42,
+    2.8
+   ],
+   "at": [
+    [
+     9.08,
+     1.0,
+     0
+    ],
+    [
+     -9.08,
+     1.0,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "spigot",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.15,
+    0.06,
+    0.15
+   ],
+   "at": [
+    [
+     -9.05,
+     1.185,
+     1.13
+    ],
+    [
+     3.05,
+     1.185,
+     1.13
+    ],
+    [
+     3.12,
+     1.185,
+     1.13
+    ],
+    [
+     9.12,
+     1.185,
+     1.13
+    ]
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "box40",
+   "use": "items/modern/components/container",
+   "at": [
+    -3.0,
+    1.155,
+    0
+   ],
+   "params": {
+    "L": 12.192,
+    "ribs": 44
+   },
+   "materials": {
+    "cbox": "box40",
+    "cframe": "box40",
+    "cbar": "steel"
+   }
+  },
+  {
+   "id": "box20",
+   "use": "items/modern/components/container",
+   "at": [
+    6.12,
+    1.155,
+    0
+   ],
+   "params": {
+    "L": 6.058,
+    "ribs": 22
+   },
+   "materials": {
+    "cbox": "box20",
+    "cframe": "box20",
+    "cbar": "steel"
+   }
+  },
+  {
+   "id": "bolsterC",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.5,
+    0.3,
+    2.2
+   ],
+   "at": [
+    [
+     7.1,
+     0.86,
+     0
+    ],
+    [
+     -7.1,
+     0.86,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "bogie0",
+   "use": "items/modern/components/bogie",
+   "at": [
+    7.1,
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.46,
+    "base": 1.8
+   }
+  },
+  {
+   "id": "bogie1",
+   "use": "items/modern/components/bogie",
+   "at": [
+    -7.1,
+    0,
+    0
+   ],
+   "params": {
+    "r": 0.46,
+    "base": 1.8
+   }
+  },
+  {
+   "id": "bufBody0",
+   "type": "lathe",
+   "material": "frame",
+   "profile": [
+    [
+     0.13,
+     0
+    ],
+    [
+     0.1,
+     0.03
+    ],
+    [
+     0.1,
+     0.3
+    ],
+    [
+     0,
+     0.3
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    9.22,
+    1.06,
+    0.875,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "bufRam0",
+   "type": "lathe",
+   "material": "steel",
+   "profile": [
+    [
+     0.075,
+     0.28
+    ],
+    [
+     0.075,
+     0.5
+    ],
+    [
+     0,
+     0.5
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    9.22,
+    1.06,
+    0.875,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "bufHead0",
+   "type": "lathe",
+   "material": "buffer",
+   "profile": [
+    [
+     0,
+     0.5
+    ],
+    [
+     0.2,
+     0.5
+    ],
+    [
+     0.2,
+     0.54
+    ],
+    [
+     0.12,
+     0.57
+    ],
+    [
+     0,
+     0.575
+    ]
+   ],
+   "sides": 16,
+   "mirror": "z",
+   "at": [
+    9.22,
+    1.06,
+    0.875,
+    0,
+    0,
+    -90
+   ]
+  },
+  {
+   "id": "hook0",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.32,
+    0.12,
+    0.08
+   ],
+   "at": [
+    9.38,
+    1.06,
+    0
+   ]
+  },
+  {
+   "id": "screw0",
+   "type": "rod",
+   "material": "steel",
+   "r": 0.025,
+   "from": [
+    9.52,
+    1.06,
+    0
+   ],
+   "to": [
+    9.52,
+    0.71,
+    0
+   ],
+   "sides": 6
+  },
+  {
+   "id": "bufBody1",
+   "type": "lathe",
+   "material": "frame",
+   "profile": [
+    [
+     0.13,
+     0
+    ],
+    [
+     0.1,
+     0.03
+    ],
+    [
+     0.1,
+     0.3
+    ],
+    [
+     0,
+     0.3
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    -9.22,
+    1.06,
+    0.875,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "bufRam1",
+   "type": "lathe",
+   "material": "steel",
+   "profile": [
+    [
+     0.075,
+     0.28
+    ],
+    [
+     0.075,
+     0.5
+    ],
+    [
+     0,
+     0.5
+    ]
+   ],
+   "sides": 12,
+   "mirror": "z",
+   "at": [
+    -9.22,
+    1.06,
+    0.875,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "bufHead1",
+   "type": "lathe",
+   "material": "buffer",
+   "profile": [
+    [
+     0,
+     0.5
+    ],
+    [
+     0.2,
+     0.5
+    ],
+    [
+     0.2,
+     0.54
+    ],
+    [
+     0.12,
+     0.57
+    ],
+    [
+     0,
+     0.575
+    ]
+   ],
+   "sides": 16,
+   "mirror": "z",
+   "at": [
+    -9.22,
+    1.06,
+    0.875,
+    0,
+    0,
+    90
+   ]
+  },
+  {
+   "id": "hook1",
+   "type": "box",
+   "material": "steel",
+   "size": [
+    0.32,
+    0.12,
+    0.08
+   ],
+   "at": [
+    -9.38,
+    1.06,
+    0
+   ]
+  },
+  {
+   "id": "screw1",
+   "type": "rod",
+   "material": "steel",
+   "r": 0.025,
+   "from": [
+    -9.52,
+    1.06,
+    0
+   ],
+   "to": [
+    -9.52,
+    0.71,
+    0
+   ],
+   "sides": 6
+  }
+ ]
+}

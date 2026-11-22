@@ -1,0 +1,248 @@
+{
+ "kind": "item",
+ "name": "Seat row",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a row of n seats in one frame: cushions, raked backs, headrests (an antimacassar's white on a train), armrests between, the legs and beam under -- the fronts at +x, the origin on the floor under the row's middle; square-cut and cheap, for a carriage's or an airliner's many seats",
+ "params": {
+  "n": 3,
+  "w": 0.46,
+  "d": 0.47,
+  "h": 0.45,
+  "back": 0.66,
+  "rake": 12,
+  "headrest": 1,
+  "arms": 1
+ },
+ "materials": {
+  "cover": "upholstery",
+  "frame": "plastic-grey",
+  "head": "cover"
+ },
+ "parts": [
+  {
+   "id": "cushion",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    "d",
+    0.11,
+    "w - 0.05"
+   ],
+   "at": [
+    0,
+    "h - 0.055",
+    0
+   ],
+   "round": 0,
+   "along": {
+    "n": "n",
+    "from": [
+     0,
+     0,
+     "-(n - 1) * w / 2"
+    ],
+    "to": [
+     0,
+     0,
+     "(n - 1) * w / 2"
+    ]
+   }
+  },
+  {
+   "id": "back",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.1,
+    "back",
+    "w - 0.06"
+   ],
+   "at": [
+    "-d / 2 + 0.02",
+    "h + back / 2 - 0.04",
+    0,
+    0,
+    0,
+    "rake"
+   ],
+   "round": 0,
+   "along": {
+    "n": "n",
+    "from": [
+     0,
+     0,
+     "-(n - 1) * w / 2"
+    ],
+    "to": [
+     0,
+     0,
+     "(n - 1) * w / 2"
+    ]
+   }
+  },
+  {
+   "id": "headrest",
+   "type": "box",
+   "material": "head",
+   "size": [
+    0.11,
+    0.2,
+    "w * 0.62"
+   ],
+   "at": [
+    "-d / 2 - back * sin(rake * 0.017453) + 0.035",
+    "h + back - 0.06",
+    0,
+    0,
+    0,
+    "rake"
+   ],
+   "round": 0,
+   "along": {
+    "n": "n",
+    "from": [
+     0,
+     0,
+     "-(n - 1) * w / 2"
+    ],
+    "to": [
+     0,
+     0,
+     "(n - 1) * w / 2"
+    ]
+   },
+   "when": "headrest"
+  },
+  {
+   "id": "arm",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "d * 0.72",
+    0.05,
+    0.05
+   ],
+   "at": [
+    0,
+    "h + 0.17",
+    0
+   ],
+   "along": {
+    "n": "n + 1",
+    "from": [
+     0,
+     0,
+     "-n * w / 2"
+    ],
+    "to": [
+     0,
+     0,
+     "n * w / 2"
+    ]
+   },
+   "when": "arms"
+  },
+  {
+   "id": "armPost",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.04,
+    0.17,
+    0.04
+   ],
+   "at": [
+    "d * 0.22",
+    "h + 0.08",
+    0
+   ],
+   "along": {
+    "n": "n + 1",
+    "from": [
+     0,
+     0,
+     "-n * w / 2"
+    ],
+    "to": [
+     0,
+     0,
+     "n * w / 2"
+    ]
+   },
+   "when": "arms"
+  },
+  {
+   "id": "beam",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "d * 0.5",
+    0.06,
+    "n * w - 0.04"
+   ],
+   "at": [
+    -0.02,
+    "h - 0.14",
+    0
+   ]
+  },
+  {
+   "id": "leg",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.05,
+    "h - 0.17",
+    0.05
+   ],
+   "at": [
+    -0.02,
+    "(h - 0.17) / 2",
+    0
+   ],
+   "along": {
+    "n": 2,
+    "from": [
+     0,
+     0,
+     "-(n * w / 2 - 0.12)"
+    ],
+    "to": [
+     0,
+     0,
+     "n * w / 2 - 0.12"
+    ]
+   }
+  },
+  {
+   "id": "foot",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "d * 0.8",
+    0.03,
+    0.05
+   ],
+   "at": [
+    0,
+    0.015,
+    0
+   ],
+   "along": {
+    "n": 2,
+    "from": [
+     0,
+     0,
+     "-(n * w / 2 - 0.12)"
+    ],
+    "to": [
+     0,
+     0,
+     "n * w / 2 - 0.12"
+    ]
+   }
+  }
+ ]
+}

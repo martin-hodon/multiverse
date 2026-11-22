@@ -1,0 +1,271 @@
+{
+ "kind": "item",
+ "name": "Operator's cab",
+ "category": "components",
+ "era": "1880-2030",
+ "region": "everywhere",
+ "_about": "a machine's glazed operator's cab: four corner posts, the floor, the head and the overhanging roof, glass all round above an optional painted sill, a door's frame on one side -- the origin on its floor's middle",
+ "params": {
+  "hx": 1.9,
+  "hy": 1.7,
+  "hz": 0.95,
+  "post": 0.07,
+  "sill": 0.0,
+  "door": 0
+ },
+ "materials": {
+  "frame": "paint",
+  "roof": "paint",
+  "glass": "glass",
+  "chrome": "chrome"
+ },
+ "parts": [
+  {
+   "id": "post",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "post",
+    "hy",
+    "post"
+   ],
+   "at": [
+    [
+     "-hx / 2 + post / 2",
+     "hy / 2",
+     "-hz / 2 + post / 2"
+    ],
+    [
+     "-hx / 2 + post / 2",
+     "hy / 2",
+     "hz / 2 - post / 2"
+    ],
+    [
+     "hx / 2 - post / 2",
+     "hy / 2",
+     "-hz / 2 + post / 2"
+    ],
+    [
+     "hx / 2 - post / 2",
+     "hy / 2",
+     "hz / 2 - post / 2"
+    ]
+   ]
+  },
+  {
+   "id": "roof",
+   "type": "box",
+   "material": "roof",
+   "size": [
+    "hx + 0.14",
+    0.09,
+    "hz + 0.14"
+   ],
+   "at": [
+    0,
+    "hy + 0.04",
+    0
+   ]
+  },
+  {
+   "id": "floor",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "hx",
+    0.08,
+    "hz"
+   ],
+   "at": [
+    0,
+    0.04,
+    0
+   ]
+  },
+  {
+   "id": "glassF",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    0.02,
+    "hy - sill - 0.06",
+    "hz - post * 2"
+   ],
+   "at": [
+    "hx / 2 - 0.03",
+    "(sill + hy) / 2",
+    0
+   ]
+  },
+  {
+   "id": "glassB",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    0.02,
+    "hy - sill - 0.06",
+    "hz - post * 2"
+   ],
+   "at": [
+    "0.03 - hx / 2",
+    "(sill + hy) / 2",
+    0
+   ]
+  },
+  {
+   "id": "glassL",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    "hx - post * 2",
+    "hy - sill - 0.06",
+    0.02
+   ],
+   "at": [
+    0,
+    "(sill + hy) / 2",
+    "0.03 - hz / 2"
+   ]
+  },
+  {
+   "id": "glassR",
+   "type": "box",
+   "material": "glass",
+   "size": [
+    "hx - post * 2",
+    "hy - sill - 0.06",
+    0.02
+   ],
+   "at": [
+    0,
+    "(sill + hy) / 2",
+    "hz / 2 - 0.03"
+   ]
+  },
+  {
+   "id": "head",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "hx",
+    0.06,
+    "hz"
+   ],
+   "at": [
+    0,
+    "hy - 0.03",
+    0
+   ]
+  },
+  {
+   "id": "panelF",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.04,
+    "sill",
+    "hz"
+   ],
+   "at": [
+    "hx / 2 - 0.02",
+    "sill / 2",
+    0
+   ],
+   "when": "sill"
+  },
+  {
+   "id": "panelB",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.04,
+    "sill",
+    "hz"
+   ],
+   "at": [
+    "0.02 - hx / 2",
+    "sill / 2",
+    0
+   ],
+   "when": "sill"
+  },
+  {
+   "id": "panelS",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "hx",
+    "sill",
+    0.04
+   ],
+   "at": [
+    [
+     0,
+     "sill / 2",
+     "0.02 - hz / 2"
+    ],
+    [
+     0,
+     "sill / 2",
+     "hz / 2 - 0.02"
+    ]
+   ],
+   "when": "sill"
+  },
+  {
+   "id": "doorFrame",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    0.05,
+    "hy - 0.1",
+    0.03
+   ],
+   "at": [
+    [
+     "hx * 0.18 - hx / 2",
+     "hy / 2",
+     "door * (hz / 2 + 0.005)"
+    ],
+    [
+     "hx * 0.7 - hx / 2",
+     "hy / 2",
+     "door * (hz / 2 + 0.005)"
+    ]
+   ],
+   "when": "door"
+  },
+  {
+   "id": "doorBar",
+   "type": "box",
+   "material": "frame",
+   "size": [
+    "hx * 0.52",
+    0.05,
+    0.03
+   ],
+   "at": [
+    "hx * 0.44 - hx / 2",
+    "max(sill, 0.5 * hy)",
+    "door * (hz / 2 + 0.005)"
+   ],
+   "when": "door"
+  },
+  {
+   "id": "doorHandle",
+   "type": "box",
+   "material": "chrome",
+   "size": [
+    0.03,
+    0.12,
+    0.03
+   ],
+   "at": [
+    "hx * 0.66 - hx / 2",
+    "hy * 0.45",
+    "door * (hz / 2 + 0.005) + door * 0.02"
+   ],
+   "when": "door"
+  }
+ ]
+}

@@ -145,90 +145,14 @@
     ]
    ]
   },
-  "windlass posts": {
-   "type": "box",
-   "width": 0.18,
-   "length": 0.18,
-   "height": 1.25,
+  "windlass": {
+   "type": "item",
+   "item": "items/furniture/windlass",
    "at": [
     [
      0.3,
      0,
-     -2.55,
-     0
-    ],
-    [
-     0.3,
-     0,
-     -0.05,
-     0
-    ]
-   ]
-  },
-  "windlass drum": {
-   "type": "box",
-   "width": 0.28,
-   "length": 2.7,
-   "height": 0.28,
-   "at": [
-    [
-     0.3,
-     0.92,
      -1.3,
-     0
-    ]
-   ]
-  },
-  "windlass axle": {
-   "type": "box",
-   "width": 0.08,
-   "length": 2.9,
-   "height": 0.08,
-   "at": [
-    [
-     0.3,
-     1.02,
-     -1.3,
-     0
-    ]
-   ]
-  },
-  "windlass cranks": {
-   "type": "box",
-   "width": 0.06,
-   "length": 0.06,
-   "height": 0.4,
-   "at": [
-    [
-     0.3,
-     0.7,
-     -2.72,
-     0
-    ],
-    [
-     0.3,
-     1.02,
-     0.12,
-     0
-    ]
-   ]
-  },
-  "windlass handles": {
-   "type": "box",
-   "width": 0.05,
-   "length": 0.24,
-   "height": 0.05,
-   "at": [
-    [
-     0.3,
-     0.7,
-     -2.85,
-     0
-    ],
-    [
-     0.3,
-     1.37,
-     0.25,
      0
     ]
    ]
@@ -236,12 +160,12 @@
   "ropes": {
    "type": "column",
    "radius": 0.014,
-   "height": 10.32,
+   "height": 10.22,
    "sides": 5,
    "at": [
     [
-     0.6,
-     -9.4,
+     0.46,
+     -9.16,
      -1.3,
      0
     ]
@@ -250,12 +174,12 @@
   "rope up": {
    "type": "column",
    "radius": 0.014,
-   "height": 2.4,
+   "height": 2.12,
    "sides": 5,
    "at": [
     [
-     0,
-     -1.5,
+     0.14,
+     -1.06,
      -1.3,
      0
     ]
@@ -263,22 +187,33 @@
   },
   "kibbles": {
    "type": "item",
-   "item": "items/tools/bucket",
+   "item": "items/tools/kibble",
    "at": [
     [
-     0.6,
+     0.46,
      -10,
      -1.3,
      0
-    ],
+    ]
+   ],
+   "solid": false,
+   "params": {
+    "full": 1
+   }
+  },
+  "kibble up": {
+   "type": "item",
+   "item": "items/tools/kibble",
+   "at": [
     [
-     0,
+     0.14,
      -1.9,
      -1.3,
      0
     ]
    ],
-   "solid": false
+   "solid": false,
+   "seed": 2
   },
   "windlass men": {
    "type": "marker",
@@ -287,13 +222,13 @@
     [
      0.5,
      0,
-     -3.05,
+     -3.25,
      0
     ],
     [
      0.1,
      0,
-     0.45,
+     0.65,
      0
     ]
    ],
@@ -973,27 +908,23 @@
    }
   },
   "shaft bottom lamps": {
-   "type": "marker",
-   "role": "fire",
+   "type": "item",
+   "item": "items/tools/frog-lamp",
    "at": [
     [
-     -2.6,
+     -2.55,
      -8.1,
      -2.8,
      0
     ],
     [
-     6,
+     5.95,
      -8.1,
      0.7,
-     0
+     3.1416
     ]
    ],
-   "data": {
-    "r": 0.035,
-    "h": 0.09,
-    "candle": true
-   }
+   "solid": false
   },
   "shaft bottom cart": {
    "type": "component",
@@ -3044,81 +2975,77 @@
    ]
   },
   "gallery lamps": {
-   "type": "marker",
-   "role": "fire",
+   "type": "item",
+   "item": "items/tools/frog-lamp",
    "at": [
     [
-     -1.97,
+     -1.85,
      -8.25,
      2.45,
      0
     ],
     [
-     -1.97,
+     -1.85,
      -8.25,
      8.45,
      0
     ],
     [
-     -1.97,
+     -1.85,
      -8.25,
      14.45,
      0
     ],
     [
-     -1.97,
+     -1.85,
      -8.25,
      20.45,
      0
     ],
     [
-     -1.97,
+     -1.85,
      -8.25,
      26.45,
      0
     ],
     [
-     1.07,
+     1.15,
      -8.25,
      -5.3625,
      0
     ],
     [
-     1.07,
+     1.15,
      -8.25,
      -13.8625,
      0
     ],
     [
-     -4.6,
+     -4.55,
      -8,
      30.7,
      0
     ],
     [
-     2.2,
+     2.15,
      -8,
      33.2,
-     0
+     3.1416
     ],
     [
-     -1.6,
+     -1.55,
      -8,
      -22.3,
      0
     ],
     [
-     5.2,
+     5.15,
      -8,
      -25.8,
-     0
+     3.1416
     ]
    ],
-   "data": {
-    "r": 0.035,
-    "h": 0.09,
-    "candle": true
-   }
+   "solid": false
   },
   "lanterns": {
    "type": "item",
@@ -3147,14 +3074,11 @@
   "hauling shaft lining w",
   "shaft house",
   "shaft house roof",
-  "windlass posts",
-  "windlass drum",
-  "windlass axle",
-  "windlass cranks",
-  "windlass handles",
+  "windlass",
   "ropes",
   "rope up",
   "kibbles",
+  "kibble up",
   "windlass men",
   "walking shaft lining n",
   "walking shaft lining s",

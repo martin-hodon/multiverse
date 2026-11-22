@@ -1,0 +1,145 @@
+{
+  "name": "echidna",
+  "_about": "a SHORT-BEAKED ECHIDNA (2026-11-21, tools/creaturegen/rework/small/echidna.py, slib.py's quadruped template, the porcupine's kind of quill coat): 35 cm, a low broad dome covered in long stout spines, cream-yellow with black tips, dark brown fur between; no neck, the small furred head running out into a long thin naked tube of a snout (7 cm), dark, a little down-curved, a slit of a mouth at its end; tiny eyes, no ear flaps; short strong legs sprawled to the sides, the forefeet broad spades with five flat claws, the hind feet turned backward with long grooming claws; a stub of a tail",
+  "kind": "mammal",
+  "headForm": false,
+  "shy": 5,
+  "print": "paw",
+  "headTurn": 20,
+  "rear": [-0.06, 0.1, 0, 0.13, 0.085, 0.12],
+  "front": [0.06, 0.095, 0, 0.1, 0.075, 0.1],
+  "neck": [0.12, 0.1025, 0, 0.12, 0.07, 0, 0.0563, 0.04],
+  "head": [0.15, 0.08, 0, 0.05],
+  "muzzle": [0.2256, 0.0527, 0, 0.016, 0.0144, 0.0144],
+  "nose": [0.272, 0.036, 0, 0.0055],
+  "ears": [0.135, 0.115, 0.035, 0.13, 0.125, 0.04, 0.008, 0.005],
+  "eyes": [0.178, 0.094, 0.03, 0.0045],
+  "legs": {
+    "front": [0.075, 0.068, 0.19, 0.024],
+    "hind": [-0.1, 0.072, 0.2, 0.026],
+    "radii": [0.026, 0.019, 0.015],
+    "foot": [0.028, 0.009, 0.022],
+    "ankle": 0.0126
+  },
+  "coats": [
+    {
+      "name": "mainland"
+    },
+    {
+      "name": "mainland"
+    },
+    {
+      "name": "Tasmanian",
+      "body": "#4a3626",
+      "front": "#4a3626",
+      "head": "#4a3626",
+      "leg": "#3e2e22",
+      "belly": "#5a4432"
+    },
+    {
+      "name": "pale",
+      "body": "#5a4636",
+      "front": "#5a4636",
+      "head": "#5a4636",
+      "belly": "#6a5444"
+    }
+  ],
+  "c": {
+    "body": "#3a2c22",
+    "front": "#3a2c22",
+    "head": "#3a2c22",
+    "belly": "#4a3a2e",
+    "leg": "#34281f",
+    "foot": "#2a221c",
+    "hand": "#2a221c",
+    "snout": "#1e1a18",
+    "nose": "#141210",
+    "claw": "#cfc2a8",
+    "lid": "#141010",
+    "eye": "#0a0606",
+    "muzzle": "#2a221c",
+    "chin": "#2a221c",
+    "pad": "#2a221c",
+    "cheek": "#3a2c22",
+    "tail": "#3a2c22"
+  },
+  "sculpt": {
+    "keep": [],
+    "mesh": {
+      "tris": [4600, 1500],
+      "focus": {
+        "head": 5,
+        "footFL": 2,
+        "footHL": 2
+      }
+    },
+    "shape": [
+      {"id": "dome", "type": "ell", "c": [-0.01, 0.11, 0], "r": [0.19, 0.095, 0.13], "k": 0.03, "color": "@body", "coat": 1.0, "hair": 0.5},
+      {"id": "domeR", "type": "ell", "c": [-0.09, 0.105, 0], "r": [0.11, 0.085, 0.12], "k": 0.03, "color": "@body", "coat": 1.0, "hair": 0.5},
+      {"id": "shoulder", "type": "ell", "c": [0.08, 0.1, 0], "r": [0.09, 0.075, 0.105], "k": 0.03, "color": "@body", "coat": 1.0, "hair": 0.5},
+      {"id": "belly", "type": "ell", "c": [-0.01, 0.055, 0], "r": [0.17, 0.035, 0.11], "k": 0.025, "color": "@belly", "kc": 0.01, "hair": 0.6},
+      {"id": "skull", "type": "ell", "bone": "head", "c": [0.15, 0.084, 0], "r": [0.055, 0.045, 0.05], "k": 0.015, "color": "@head", "hair": 0.5, "coat": 0.75},
+      {"id": "beak", "type": "tube", "bone": "head", "pts": [[0.172, 0.078, 0, 0.026], [0.2, 0.068, 0, 0.0155], [0.23, 0.056, 0, 0.0108], [0.255, 0.045, 0, 0.0088], [0.272, 0.036, 0, 0.0074]], "k": 0.01, "kc": 0.004, "color": "@snout", "wet": 0.15},
+      {"id": "face", "type": "ell", "bone": "head", "c": [0.175, 0.077, 0], "r": [0.03, 0.03, 0.034], "k": 0.015, "color": "@head", "hair": 0.6},
+      {"id": "mouth", "type": "ell", "bone": "head", "c": [0.274, 0.031, 0], "r": [0.004, 0.0012, 0.0035], "k": 0.001, "color": "@nose", "op": "sub"},
+      {"id": "nostrils", "type": "ell", "bone": "head", "c": [0.276, 0.04, 0], "r": [0.003, 0.003, 0.004], "k": 0.002, "color": "@nose", "kc": 0.001, "wet": 0.4},
+      {"id": "limbF", "type": "cone", "bone": "legFLu", "a": [0.07, 0.078, 0.055], "b": [0.075, 0.063, 0.086], "ra": 0.03, "rb": 0.022, "k": 0.02, "color": "@leg", "mirror": true, "hair": 0.5},
+      {"id": "lowerF", "type": "cone", "bone": "legFLl", "a": [0.075, 0.063, 0.086], "b": [0.089, 0.018, 0.086], "ra": 0.021, "rb": 0.016, "k": 0.012, "color": "@leg", "mirror": true, "hair": 0.5},
+      {"id": "limbH", "type": "cone", "bone": "legHLu", "a": [-0.105, 0.082, 0.065], "b": [-0.1, 0.067, 0.095], "ra": 0.03, "rb": 0.022, "k": 0.02, "color": "@leg", "mirror": true, "hair": 0.5},
+      {"id": "lowerH", "type": "cone", "bone": "legHLl", "a": [-0.1, 0.067, 0.095], "b": [-0.086, 0.018, 0.095], "ra": 0.021, "rb": 0.016, "k": 0.012, "color": "@leg", "mirror": true, "hair": 0.5},
+      {"id": "hand", "type": "ell", "bone": "footFL", "c": [0.097, 0.011, 0.09], "r": [0.026, 0.01, 0.024], "k": 0.008, "color": "@foot", "rot": [0, -15, 0], "mirror": true},
+      {"id": "fclaw0", "type": "horn", "bone": "footFL", "pts": [[0.103, 0.008, 0.0733, 0.0042, 0.5], [0.115, 0.008, 0.0727, 0.0036, 0.5], [0.129, 0.003, 0.072, 0.0]], "color": "@claw", "mirror": true, "aspect": 0.5, "flat": 0.4},
+      {"id": "fclaw1", "type": "horn", "bone": "footFL", "pts": [[0.106, 0.008, 0.0809, 0.0042, 0.5], [0.118, 0.008, 0.0821, 0.0036, 0.5], [0.1319, 0.003, 0.0835, 0.0]], "color": "@claw", "mirror": true, "aspect": 0.5, "flat": 0.4},
+      {"id": "fclaw2", "type": "horn", "bone": "footFL", "pts": [[0.1092, 0.008, 0.0885, 0.0042, 0.5], [0.1208, 0.008, 0.0915, 0.0036, 0.5], [0.1344, 0.003, 0.0949, 0.0]], "color": "@claw", "mirror": true, "aspect": 0.5, "flat": 0.4},
+      {"id": "fclaw3", "type": "horn", "bone": "footFL", "pts": [[0.1064, 0.008, 0.0963, 0.0042, 0.5], [0.1176, 0.008, 0.1007, 0.0036, 0.5], [0.1306, 0.003, 0.1059, 0.0]], "color": "@claw", "mirror": true, "aspect": 0.5, "flat": 0.4},
+      {"id": "fclaw4", "type": "horn", "bone": "footFL", "pts": [[0.1037, 0.008, 0.1041, 0.0042, 0.5], [0.1143, 0.008, 0.1099, 0.0036, 0.5], [0.1265, 0.003, 0.1166, 0.0]], "color": "@claw", "mirror": true, "aspect": 0.5, "flat": 0.4},
+      {"id": "hfootB", "type": "ell", "bone": "footHL", "c": [-0.098, 0.011, 0.101], "r": [0.03, 0.01, 0.022], "k": 0.008, "color": "@foot", "rot": [0, 25, 0], "mirror": true},
+      {"id": "hclaw0", "type": "horn", "bone": "footHL", "pts": [[-0.1192, 0.009, 0.0935, 0.0035], [-0.1346, 0.009, 0.0974, 0.003], [-0.1463, 0.003, 0.1003, 0.0]], "color": "@claw", "mirror": true},
+      {"id": "hclaw1", "type": "horn", "bone": "footHL", "pts": [[-0.1156, 0.009, 0.1043, 0.0035], [-0.1331, 0.009, 0.113, 0.003], [-0.1478, 0.003, 0.1204, 0.0]], "color": "@claw", "mirror": true},
+      {"id": "hclaw2", "type": "horn", "bone": "footHL", "pts": [[-0.1202, 0.009, 0.1154, 0.0035], [-0.1329, 0.009, 0.1249, 0.003], [-0.1426, 0.003, 0.1322, 0.0]], "color": "@claw", "mirror": true},
+      {"id": "tailStub", "type": "ell", "c": [-0.235, 0.085, 0], "r": [0.025, 0.018, 0.022], "k": 0.015, "color": "@body", "hair": 0.5, "coat": 0.6}
+    ],
+    "eyes": {
+      "at": [0.178, 0.094, 0.03],
+      "from": [0.155, 0.0825, 0],
+      "r": 0.0045,
+      "iris": "@eye",
+      "pupil": "round",
+      "lid": "@lid",
+      "sink": 0.6,
+      "socket": 1.25,
+      "color": "#0a0706"
+    },
+    "shade": {
+      "back": 1.0,
+      "belly": 1.1,
+      "on": "@body"
+    },
+    "coat": {
+      "gap": 0.0105,
+      "len": 0.05,
+      "r": 0.0034,
+      "sides": 3,
+      "lean": 0.62,
+      "vary": 0.22,
+      "skirt": -0.25,
+      "drop": 0.35,
+      "face": 0.5,
+      "rise": 0.9,
+      "base": "#e4d4a8",
+      "tip": "#14100c",
+      "dark": 0.0,
+      "hold": 0.5,
+      "bands": [
+        [
+          0.68,
+          "#e8d8ac"
+        ],
+        [
+          0.72,
+          "#14100c"
+        ]
+      ]
+    }
+  }
+}

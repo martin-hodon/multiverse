@@ -4,7 +4,7 @@
  "category": "furniture/tomb",
  "era": "-2600--30",
  "region": "Egypt",
- "_about": "the stone coffin of a king's burial chamber: a basin cut from one block of red Aswan granite (Khufu's, 2.28 x 0.98 x 1.05 m, stands lidless at the west end of the King's Chamber), with its lid (`lid` 1) set on, or slid aside (`lid` 2); a band of gold round its rim",
+ "_about": "the stone coffin of a king's burial chamber: a basin cut from one block of red Aswan granite (Khufu's, 2.28 x 0.98 x 1.05 m, stands lidless at the west end of the King's Chamber), with its lid (`lid` 1) set on, or slid aside (`lid` 2); a band of gold round its rim -- the set-on lid (`lid` 1) slides with `open`: lifted clear of the rim, then pushed aside along and across the basin onto the gilded mummy-case inside (seen too when the lid lies aside)",
  "params": {
   "w": 2.28,
   "d": 0.98,
@@ -17,11 +17,14 @@
     2,
     0
    ]
-  }
+  },
+  "open": 0
  },
  "materials": {
   "stone": "granite-red",
-  "trim": "gold"
+  "trim": "gold",
+  "face": "#c99a3a",
+  "band": "#2c4f8a"
  },
  "parts": [
   {
@@ -106,31 +109,331 @@
    "size": [
     "w + 0.01",
     0.03,
-    "d + 0.01"
+    0.005
    ],
    "at": [
     0,
     "h - 0.06",
+    "d / 2 + 0.0025"
+   ],
+   "mirror": "z"
+  },
+  {
+   "id": "rim ends",
+   "type": "box",
+   "material": "trim",
+   "size": [
+    0.005,
+    0.03,
+    "d + 0.01"
+   ],
+   "at": [
+    "w / 2 + 0.0025",
+    "h - 0.06",
     0
-   ]
+   ],
+   "mirror": "x"
   },
   {
    "id": "lid",
-   "type": "box",
+   "type": "slide",
    "when": {
     "lid": 1
    },
-   "material": "stone",
-   "size": [
-    "w + 0.04",
-    0.2,
-    "d + 0.04"
+   "move": [
+    0,
+    0.05,
+    0
+   ],
+   "range": [
+    0,
+    0.15
+   ],
+   "parts": [
+    {
+     "id": "lidAside",
+     "type": "slide",
+     "move": [
+      -0.8,
+      0,
+      0.45
+     ],
+     "range": [
+      0.15,
+      1
+     ],
+     "parts": [
+      {
+       "id": "lid",
+       "type": "box",
+       "material": "stone",
+       "size": [
+        "w + 0.04",
+        0.2,
+        "d + 0.04"
+       ],
+       "at": [
+        0,
+        "h + 0.1",
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "coffin",
+   "type": "lathe",
+   "material": "trim",
+   "sides": 12,
+   "stretch": [
+    1,
+    0.72,
+    1
    ],
    "at": [
+    -0.95,
+    "wall + 0.2",
     0,
-    "h + 0.1",
+    0,
+    0,
+    -90
+   ],
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.15,
+     0.01
+    ],
+    [
+     0.17,
+     0.3
+    ],
+    [
+     0.22,
+     0.9
+    ],
+    [
+     0.25,
+     1.3
+    ],
+    [
+     0.24,
+     1.45
+    ],
+    [
+     0.19,
+     1.55
+    ],
+    [
+     0.23,
+     1.66
+    ],
+    [
+     0.22,
+     1.82
+    ],
+    [
+     0.14,
+     1.9
+    ],
+    [
+     0,
+     1.92
+    ]
+   ],
+   "when": {
+    "lid": 1
+   },
+   "inside": true
+  },
+  {
+   "id": "coffin seen",
+   "type": "lathe",
+   "material": "trim",
+   "sides": 12,
+   "stretch": [
+    1,
+    0.72,
+    1
+   ],
+   "at": [
+    -0.95,
+    "wall + 0.2",
+    0,
+    0,
+    0,
+    -90
+   ],
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.15,
+     0.01
+    ],
+    [
+     0.17,
+     0.3
+    ],
+    [
+     0.22,
+     0.9
+    ],
+    [
+     0.25,
+     1.3
+    ],
+    [
+     0.24,
+     1.45
+    ],
+    [
+     0.19,
+     1.55
+    ],
+    [
+     0.23,
+     1.66
+    ],
+    [
+     0.22,
+     1.82
+    ],
+    [
+     0.14,
+     1.9
+    ],
+    [
+     0,
+     1.92
+    ]
+   ],
+   "when": {
+    "lid": 2
+   }
+  },
+  {
+   "id": "coffin face",
+   "type": "sphere",
+   "material": "face",
+   "r": 0.11,
+   "stretch": [
+    0.9,
+    0.55,
+    1.1
+   ],
+   "at": [
+    0.83,
+    "wall + 0.34",
     0
-   ]
+   ],
+   "when": {
+    "lid": 1
+   },
+   "inside": true
+  },
+  {
+   "id": "coffin face seen",
+   "type": "sphere",
+   "material": "face",
+   "r": 0.11,
+   "stretch": [
+    0.9,
+    0.55,
+    1.1
+   ],
+   "at": [
+    0.83,
+    "wall + 0.34",
+    0
+   ],
+   "when": {
+    "lid": 2
+   }
+  },
+  {
+   "id": "coffin bands",
+   "type": "lathe",
+   "material": "band",
+   "sides": 12,
+   "stretch": [
+    1,
+    0.74,
+    1
+   ],
+   "at": [
+    [
+     -0.95,
+     "wall + 0.2",
+     0,
+     0,
+     0,
+     -90
+    ]
+   ],
+   "profile": [
+    [
+     0.255,
+     1.3
+    ],
+    [
+     0.255,
+     1.36
+    ],
+    [
+     0.235,
+     1.42
+    ]
+   ],
+   "when": {
+    "lid": 1
+   },
+   "inside": true
+  },
+  {
+   "id": "coffin bands seen",
+   "type": "lathe",
+   "material": "band",
+   "sides": 12,
+   "stretch": [
+    1,
+    0.74,
+    1
+   ],
+   "at": [
+    [
+     -0.95,
+     "wall + 0.2",
+     0,
+     0,
+     0,
+     -90
+    ]
+   ],
+   "profile": [
+    [
+     0.255,
+     1.3
+    ],
+    [
+     0.255,
+     1.36
+    ],
+    [
+     0.235,
+     1.42
+    ]
+   ],
+   "when": {
+    "lid": 2
+   }
   },
   {
    "id": "lid aside",

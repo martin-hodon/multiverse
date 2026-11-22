@@ -1,0 +1,204 @@
+{
+ "kind": "item",
+ "name": "Dining chair (modern)",
+ "category": "furniture/seat",
+ "era": "1945-2030",
+ "region": "everywhere",
+ "_about": "a Danish-modern dining chair: a padded seat on a solid frame, four tapered round legs, the back legs rising into posts that carry a curved back rail, side stretchers -- its back toward -z, the seat at 0.45 m",
+ "params": {},
+ "materials": {
+  "wood": {
+   "pick": [
+    "oak",
+    "walnut",
+    "ash"
+   ]
+  },
+  "cover": {
+   "pick": [
+    "leather-dark",
+    "upholstery-grey",
+    "wool",
+    "leather"
+   ]
+  }
+ },
+ "parts": [
+  {
+   "id": "frame",
+   "type": "box",
+   "material": "wood",
+   "size": [
+    0.44,
+    0.04,
+    0.42
+   ],
+   "at": [
+    0,
+    0.395,
+    0
+   ]
+  },
+  {
+   "id": "pad",
+   "type": "box",
+   "material": "cover",
+   "size": [
+    0.43,
+    0.045,
+    0.42
+   ],
+   "at": [
+    0,
+    0.435,
+    0.005
+   ],
+   "round": 0.02
+  },
+  {
+   "id": "front",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.018,
+   "from": [
+    0.19,
+    0.4,
+    0.18
+   ],
+   "to": [
+    0.205,
+    0,
+    0.205
+   ],
+   "sides": 8,
+   "r1": 0.012,
+   "mirror": "x"
+  },
+  {
+   "id": "back",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.018,
+   "from": [
+    0.19,
+    0.4,
+    -0.18
+   ],
+   "to": [
+    0.2,
+    0,
+    -0.225
+   ],
+   "sides": 8,
+   "r1": 0.013,
+   "mirror": "x"
+  },
+  {
+   "id": "post",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.018,
+   "from": [
+    0.19,
+    0.39,
+    -0.18
+   ],
+   "to": [
+    0.2,
+    0.79,
+    -0.235
+   ],
+   "sides": 8,
+   "r1": 0.015,
+   "mirror": "x"
+  },
+  {
+   "id": "rail",
+   "type": "sweep",
+   "material": "wood",
+   "path": [
+    [
+     -0.215,
+     0.735,
+     -0.225
+    ],
+    [
+     -0.12,
+     0.735,
+     -0.262
+    ],
+    [
+     0,
+     0.735,
+     -0.272
+    ],
+    [
+     0.12,
+     0.735,
+     -0.262
+    ],
+    [
+     0.215,
+     0.735,
+     -0.225
+    ]
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "section": [
+    0.02,
+    0.09
+   ]
+  },
+  {
+   "id": "stretcher",
+   "type": "rod",
+   "material": "wood",
+   "r": 0.01,
+   "from": [
+    0.198,
+    0.16,
+    0.185
+   ],
+   "to": [
+    0.198,
+    0.16,
+    -0.19
+   ],
+   "sides": 6,
+   "mirror": "x"
+  }
+ ],
+ "markers": [
+  {
+   "role": "seat",
+   "at": [
+    0,
+    0,
+    0
+   ],
+   "data": {
+    "w": 0.44,
+    "d": 0.42,
+    "top": 0.45
+   }
+  },
+  {
+   "role": "spot",
+   "at": [
+    [
+     0.0,
+     0.45,
+     0.0
+    ]
+   ],
+   "data": {
+    "pose": "sit",
+    "face": -1.5708
+   }
+  }
+ ]
+}
